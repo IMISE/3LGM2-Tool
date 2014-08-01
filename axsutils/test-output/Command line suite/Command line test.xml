@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite hostname="AAA2011" name="de.imise.util.PairTest" tests="1" failures="0" timestamp="1 Aug 2014 13:24:43 GMT" time="0.032" errors="0">
-  <testcase name="getFirstItemTest" time="0.016" classname="de.imise.util.PairTest"/>
-</testsuite>
