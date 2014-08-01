@@ -1,0 +1,1219 @@
+/*
+ * Created on 16.02.2004
+ *
+ * To change the template for this generated file go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+package de.imise.tool3lgm.graphtools;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import javax.swing.JOptionPane;
+
+import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
+import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
+import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.OrgAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
+import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
+import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
+import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
+import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
+import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
+import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
+import de.imise.tool3lgm.graphtools.elements.node.Organisationseinheit;
+import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
+import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
+import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
+import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
+import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.xml.Base64;
+import de.imise.tool3lgm.xml.ToolXMLParser;
+
+/**
+ * @author thomas
+ *
+ * To change the template for this generated type comment go to
+ * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ */
+public class LGMGraphDocument extends GraphDocument {
+
+
+	/** Anzeigen aller {@link ABKonfiguration}en */
+	public static boolean showAllACConfigurations = false;
+
+	/** Anzeigen aller {@link DBKonfiguration}en */
+	public static boolean showAllPDPConfigurations = false;
+
+	/**
+	 * @param _gdcoll
+	 */
+	public LGMGraphDocument(GDCollection _gdcoll) {
+		super(_gdcoll);
+		setTitle(Tool3lgmConstants.getResString("uebersicht"));
+	}
+
+	/* (non-Javadoc)
+	 * @see tool3lgm.graphtools.GraphDocument#dispatch_command(int, java.lang.String[], int)
+	 */
+	@Override
+	protected void dispatch_command(GDCommands command, String[] argv, int pid) {
+		int argc = argv.length;
+		switch (command) {
+		case COPY :
+			copyToClipboard();
+			break;
+
+		case CUT :
+			cutToClipboard();
+			break;
+
+		case PASTE :
+			pasteClipboard();
+			break;
+
+		case CLEAR_CLIPBOARD :
+			clearClipboard();
+			break;
+
+		case HIDE_UNASSOCIATED_INTERFACES:
+			for (ElementContainer ss : getElementContainer(Bausteinschnittstelle.class, true)) {
+				if (ss.getElement().getConnectedContainer(Bausteinschnittstelle.class, this).size() == 0)
+					ss.setVisible(false);
+			}
+			distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+			break;
+		case UNHIDE_ALL_INTERFACES:
+			for (ElementContainer ss : getElementContainer(Bausteinschnittstelle.class, true))
+				ss.setVisible(true);
+			distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+			break;
+		case SHOW_ALL_CONFIGS :
+		case HIDE_ALL_CONFIGS :
+			boolean visible = command == GDCommands.SHOW_ALL_CONFIGS;
+			if (argc == 0) {
+				if (!isSelection()) {
+					layer[gdcoll.getActiveLayer()].setShowAllInterLayerConnections(visible);
+					distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+				} 
+				else {
+					for (ElementContainer ec : selectedContainer) {
+						if(ModelConstants.isInterLayerStartClass(ec.getElement().getClass()))
+							((InterLayerConnectedNodeContainer)ec).setShowInterLayerConnections(visible);
+					}
+					distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+				}
+				break;
+			}
+			break;
+		case CHANGE_OS_TYPE :
+			switch (argc) {
+			case 1 :
+				changeOSType(argv[0], pid);
+				break;
+			case 2 :
+				changeOSType(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		case CHANGE_SERIAL :
+			switch (argc) {
+			case 1 :
+				changeSerial(argv[0], pid);
+				break;
+			case 2 :
+				changeSerial(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		case CHANGE_INVENTAR :
+			switch (argc) {
+			case 1 :
+				changeInventar(argv[0], pid);
+				break;
+			case 2 :
+				changeInventar(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		case CHANGE_RAMSIZE :
+			switch (argc) {
+			case 1 :
+				changeRamSize(argv[0], pid);
+				break;
+			case 2 :
+				changeRamSize(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		case CHANGE_DISKSIZE :
+			switch (argc) {
+			case 1 :
+				changeDiskSize(argv[0], pid);
+				break;
+			case 2 :
+				changeDiskSize(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		case CHANGE_PROCESSOR :
+			switch (argc) {
+			case 1 :
+				changeProcessor(argv[0], pid);
+				break;
+			case 2 :
+				changeProcessor(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		case CHANGE_DOWNTIME :
+			switch (argc) {
+			case 1 :
+				changeDowntime(argv[0], pid);
+				break;
+			case 2 :
+				changeDowntime(argv[0], argv[1], pid);
+				break;
+			default :
+				break;
+			}
+			break;
+
+		default:
+			super.dispatch_command(command, argv, pid);
+		}
+	}
+
+	/**
+	 * Instanz des Analyzers für die ganz einfache Redundanzanalyse
+	 */
+	private SimpleRedundancyAnalysis simpleRedAna = null;
+	/**
+	 * @return Instanz des Analyzers für die ganz einfache Redundanzanalyse
+	 */
+	public SimpleRedundancyAnalysis getSimpleRedundancyAnalysis(){
+		if (simpleRedAna==null)
+			simpleRedAna = new SimpleRedundancyAnalysis(this);
+		return simpleRedAna;
+	}
+
+	/* (non-Javadoc)
+	 * @see tool3lgm.graphtools.GraphDocument#distributeEventIntern(int, tool3lgm.graphtools.view.container.ElementContainer, tool3lgm.graphtools.view.container.LayerContainer, int)
+	 */
+	@Override
+	public final void distributeEventIntern(int bitmask, ElementContainer last_elem, LayerContainer last_group, int pid) {
+		if (bitmask == DATA_CHANGED) {
+			if (UserProperties.isShowDataRedundance() || UserProperties.isShowABKonfigRedundance()){
+				if (UserProperties.isShowABKonfigRedundance())
+					getSimpleRedundancyAnalysis().computeRedundance(Aufgabe.class, true);
+				if (UserProperties.isShowDataRedundance())
+					getSimpleRedundancyAnalysis().computeRedundance(Objekttyp.class, false);
+			}else{
+				simpleRedAna = null;
+			}
+		}
+		super.distributeEventIntern(bitmask, last_elem, last_group, pid);
+	}
+
+
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
+	public void _duplicateAufOrgs () {
+		for (ElementContainer aufOrgC : getElementContainer(AufOrgKombination.class)) {
+			ModelElement aufOrg = aufOrgC.getElement();
+			ArrayList<ElementContainer>  orgs = aufOrg.getConnectedContainer(Organisationseinheit.class, this);
+			while (orgs.size() > 1) {
+				NodeContainer orgC = (NodeContainer)orgs.get(0);
+				Knoten org = orgC.getKnoten();
+				gdcoll.unlink(aufOrg, org, -1, TransactionManager.STANDARD_PID);
+				NodeContainer newAufOrgC = (NodeContainer)aufOrgC.clone(true, this);
+				layer[4].add(newAufOrgC);
+				gdcoll.link(OrgAufOrgVerbindung.class, newAufOrgC.getElement(), org, TransactionManager.STANDARD_PID);
+				for (ElementContainer aufC : aufOrg.getConnectedContainer(Aufgabe.class, this)) 
+					gdcoll.link(AufAufOrgVerbindung.class, newAufOrgC.getElement(), aufC.getElement(), TransactionManager.STANDARD_PID);
+				for (ElementContainer abkC : aufOrg.getConnectedContainer(ABKonfiguration.class, this))
+					gdcoll.link(AwbkAufOrgVerbindung.class, newAufOrgC.getElement(), abkC.getElement(), TransactionManager.STANDARD_PID);
+				orgs = aufOrg.getConnectedContainer(Organisationseinheit.class, this);
+			}
+		}
+	}
+
+
+
+	/**
+	 * @deprecated
+	 */
+	@Deprecated
+	public void _duplicateABKonfs () {
+		for (ElementContainer konfC : getElementContainer(ABKonfiguration.class)) {
+			ModelElement konf = konfC.getElement();
+			ArrayList<ElementContainer>  aufOrgs = konf.getConnectedContainer(AufOrgKombination.class, this);
+			while (aufOrgs.size() > 1) {
+				ElementContainer aufOrgC = aufOrgs.get(0);
+				ModelElement aufOrg = aufOrgC.getElement();
+				gdcoll.unlink(konf, aufOrg, -1, TransactionManager.STANDARD_PID);
+
+				KonfigurationContainer newKonfC = (KonfigurationContainer)konfC.clone(true, this);
+				newKonfC.getKnoten().setContainer(this, newKonfC);
+				layer[3].add(newKonfC);
+				gdcoll.addABKonf(newKonfC);
+				gdcoll.link(AwbkAufOrgVerbindung.class, newKonfC.getElement(), aufOrg, TransactionManager.STANDARD_PID);
+				ArrayList<ElementContainer>  awbs = konf.getConnectedContainer(Anwendungsbaustein.class, this);
+				for (ElementContainer awbC : awbs) 
+					gdcoll.link(AwbAwbkVerbindung.class, newKonfC.getElement(), awbC.getElement(), TransactionManager.STANDARD_PID);
+
+				aufOrgs = konf.getConnectedContainer(AufOrgKombination.class, this);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public synchronized final void copyToClipboard() {
+		if (selectedContainer.size() == 0)
+			return;
+
+		gdcoll.setCopyAndPaste(0);
+
+		File cbPfad = new File(Tool3lgmConstants.getClipboardPath());
+		if (cbPfad.exists())
+			cbPfad.delete();
+
+		RandomAccessFile raf = null;
+		try {
+			raf = new RandomAccessFile(cbPfad, "rw");
+			raf.setLength(0);
+			//			start_transaction(TransactionManager.STANDARD_PID);
+			//			addRedoCommand(GraphDocument.CMD.COPY + " ", TransactionManager.STANDARD_PID);
+
+			raf.writeBytes(getCopyString());
+
+			//			finish_transaction(TransactionManager.STANDARD_PID);
+			distributeEventIntern(SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
+
+			raf.close();
+		} catch (Exception e) {
+			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+			Object[] buttons = new Object[] { Tool3lgmConstants.getResString("ok")};
+			JOptionPane.showOptionDialog(
+					Tool3lgm.tool,
+					Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(),
+					Tool3lgmConstants.getResString("tool3lgm"),
+					JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					buttons,
+					null);
+			e.printStackTrace();
+			return;
+		}
+
+
+		//		gdcoll.saveCopyData(raf);
+
+	}
+
+	/**
+	 * 
+	 */
+	public synchronized final void cutToClipboard() {
+		start_transaction(TransactionManager.STANDARD_PID);
+		copyToClipboard();
+		//man muss die Selektion clonen, da sie sich wärend des Löschens ändert
+		gdcoll.deleteElements(getSelectedElements(), this, TransactionManager.STANDARD_PID);
+		finish_transaction(TransactionManager.STANDARD_PID);
+		distributeEvent(DATA_CHANGED);
+	}
+
+	/**
+	 * 
+	 */
+	public synchronized final void clearClipboard() {
+		File f = new File(Tool3lgmConstants.getClipboardPath());
+		if (f.exists())
+			f.delete();
+		distributeEventIntern(SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
+	}
+
+	/**
+	 * @return
+	 */
+	public static synchronized final boolean isClipboardAvailable() {
+		return (new File(Tool3lgmConstants.getClipboardPath()).exists());
+	}
+
+	/**
+	 * @param hashString
+	 * @param osType
+	 * @param pid
+	 */
+	public final void changeOSType(String hashString, String osType, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_OS_TYPE + " " + hashString + " " + getParseSaveString(osType), pid);
+		String s = (pdvb.getOSType().equals("") ? "null" : pdvb.getOSType());
+		addUndoCommand(GDCommands.CHANGE_OS_TYPE + " " + hashString + " " + getParseSaveString(s), pid);
+		if (osType.toUpperCase().equals("NULL"))
+			osType = "";
+		//me.setName(newName.replace ('\u001e','\n'));
+		pdvb.setOSType(osType);
+		finish_transaction(pid);
+
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param osType
+	 * @param pid
+	 */
+	public final void changeOSType(String osType, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeOSType(ec.getElement().getHashString(), osType, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+	/**
+	 * @param hashString
+	 * @param serial
+	 * @param pid
+	 */
+	public final void changeSerial(String hashString, String serial, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_SERIAL + " " + hashString + " " + getParseSaveString(serial), pid);
+		String s = (pdvb.getSerial().equals("") ? "null" : pdvb.getSerial());
+		addUndoCommand(GDCommands.CHANGE_SERIAL + " " + hashString + " " + getParseSaveString(s), pid);
+		if (serial.toUpperCase().equals("NULL"))
+			serial = "";
+		pdvb.setSerial(serial.replace('\u001e', '\n'));
+		finish_transaction(pid);
+
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param serial
+	 * @param pid
+	 */
+	public final void changeSerial(String serial, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeSerial(ec.getElement().getHashString(), serial, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+	/**
+	 * @param hashString
+	 * @param inventar
+	 * @param pid
+	 */
+	public final void changeInventar(String hashString, String inventar, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_INVENTAR + " " + hashString + " " + getParseSaveString(inventar), pid);
+		String s = (pdvb.getInventar().equals("") ? "null" : pdvb.getInventar());
+		addUndoCommand(GDCommands.CHANGE_INVENTAR + " " + hashString + " " + getParseSaveString(s), pid);
+		if (inventar.toUpperCase().equals("NULL"))
+			inventar = "";
+		pdvb.setInventar(inventar.replace('\u001e', '\n'));
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param inventar
+	 * @param pid
+	 */
+	public final void changeInventar(String inventar, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeInventar(ec.getElement().getHashString(), inventar, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+	/**
+	 * @param hashString
+	 * @param ramSize
+	 * @param pid
+	 */
+	public final void changeRamSize(String hashString, String ramSize, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_RAMSIZE + " " + hashString + " " + getParseSaveString(ramSize), pid);
+		String s = (pdvb.getRamSize().equals("") ? "null" : pdvb.getRamSize());
+		addUndoCommand(GDCommands.CHANGE_RAMSIZE + " " + hashString + " " + getParseSaveString(s), pid);
+		if (ramSize.toUpperCase().equals("NULL"))
+			ramSize = "";
+		pdvb.setRamSize(ramSize.replace('\u001e', '\n'));
+		finish_transaction(pid);
+
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param ramSize
+	 * @param pid
+	 */
+	public final void changeRamSize(String ramSize, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeRamSize(ec.getElement().getHashString(), ramSize, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+	/**
+	 * @param hashString
+	 * @param diskSize
+	 * @param pid
+	 */
+	public final void changeDiskSize(String hashString, String diskSize, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_DISKSIZE + " " + hashString + " " + getParseSaveString(diskSize), pid);
+		String s = (pdvb.getDiskSize().equals("") ? "null" : pdvb.getDiskSize());
+		addUndoCommand(GDCommands.CHANGE_DISKSIZE + " " + hashString + " " + getParseSaveString(s), pid);
+		if (diskSize.toUpperCase().equals("NULL"))
+			diskSize = "";
+		pdvb.setDiskSize(diskSize.replace('\u001e', '\n'));
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param diskSize
+	 * @param pid
+	 */
+	public final void changeDiskSize(String diskSize, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeDiskSize(ec.getElement().getHashString(), diskSize, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+	/**
+	 * @param hashString
+	 * @param processor
+	 * @param pid
+	 */
+	public final void changeProcessor(String hashString, String processor, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_PROCESSOR + " " + hashString + " " + getParseSaveString(processor), pid);
+		String s = (pdvb.getProcessor().equals("") ? "null" : pdvb.getProcessor());
+		addUndoCommand(GDCommands.CHANGE_PROCESSOR + " " + hashString + " " + getParseSaveString(s), pid);
+		if (processor.toUpperCase().equals("NULL"))
+			processor = "";
+		pdvb.setProcessor(processor.replace('\u001e', '\n'));
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param processor
+	 * @param pid
+	 */
+	public final void changeProcessor(String processor, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeProcessor(ec.getElement().getHashString(), processor, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+	/**
+	 * @param hashString
+	 * @param downtime
+	 * @param pid
+	 */
+	public final void changeDowntime(String hashString, String downtime, int pid) {
+		ElementContainer mc = findNodeContainerCoded(hashString);
+		ModelElement me = mc.getElement();
+		if (!(me instanceof PhysischerDVBaustein))
+			return;
+
+		PhysischerDVBaustein pdvb = (PhysischerDVBaustein) me;
+		start_transaction(pid);
+		addRedoCommand(GDCommands.CHANGE_DOWNTIME + " " + hashString + " " + getParseSaveString(downtime), pid);
+		String s = (pdvb.getDowntimeString().equals("") ? "null" : pdvb.getDowntimeString());
+		addUndoCommand(GDCommands.CHANGE_DOWNTIME + " " + hashString + " " + getParseSaveString(s), pid);
+		if (downtime.toUpperCase().equals("NULL"))
+			downtime = "";
+		try {
+			pdvb.setDowntime(Integer.parseInt(downtime.replace('\u001e', '\n')));
+		} catch (Exception e) {
+			pdvb.setDowntime(0);
+		}
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+	}
+
+	/**
+	 * @param downtime
+	 * @param pid
+	 */
+	public final void changeDowntime(String downtime, int pid) {
+		start_transaction(pid);
+		for (ElementContainer ec : selectedContainer)
+			changeDowntime(ec.getElement().getHashString(), downtime, pid);
+		finish_transaction(pid);
+		distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+	}
+
+
+	/* (non-Javadoc)
+	 * @see tool3lgm.graphtools.GraphDocument#getCopyString()
+	 */
+	@Override
+	public final String getCopyString() {
+		return getCopyString("tool3lgm_clipboard");
+	}
+
+	/**
+	 * @param masterTag
+	 * @return
+	 */
+	public final String getCopyString(String masterTag) {
+		StringBuilder retVal = new StringBuilder(ToolXMLParser.getCurrentVersionString() + "<" + masterTag + ">"); 
+
+		ArrayList<ModelElement> elements = new ArrayList<ModelElement>(selectedContainer.size()*100);
+		HashSet<UserField> userFields = new HashSet<UserField>(selectedContainer.size()*10);
+		getCollection().resolveCopyDependencies(selectedContainer, elements, userFields);
+
+		retVal.append(gdcoll.getUserFieldDefinitions().getCopyString(userFields) + "<objects>");
+
+		for (ModelElement me : elements) {
+			if (me.avoidDuplicates())
+				retVal.append("<avoidDuplicates>" + me.toXMLString() + "</avoidDuplicates>");
+			else
+				retVal.append(me.toXMLString());
+		}
+
+		retVal.append("</objects><szenario>");
+
+		ElementContainer container;
+		HashSet<String> icons = new HashSet<String>();
+
+		for (ModelElement me : elements) {
+			if (me.isUnique())
+				continue;
+			container = me.getContainer(this);
+			if (container == null)
+				continue;
+			retVal.append(container.toXMLString());
+			if (container.get3LGMLayout() != null && container.get3LGMLayout().icon != null)
+				icons.add(container.get3LGMLayout().icon);
+		}
+		retVal.append("</szenario><images>");
+
+		for (String iconHashString : icons) {
+			retVal.append("<bitmap type=\"gif/base64\" hash=\"" + iconHashString + "\">");
+			byte[] icon = gdcoll.getIconTable().get(iconHashString);
+			try {
+				retVal.append(Base64.encode(icon));
+			} catch (Exception e) {
+				Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+			}
+			retVal.append("</bitmap>");
+		}
+		retVal.append("</images></" + masterTag + ">");
+		return retVal.toString();
+	}
+
+	/**
+	 * 
+	 */
+	public synchronized void pasteClipboard() {
+		File file = new File(Tool3lgmConstants.getClipboardPath());
+		if (!file.exists())
+			return;
+
+		int pid = TransactionManager.STANDARD_PID;
+		try {
+			start_transaction(pid);
+			addRedoCommand(GDCommands.PASTE + " ", pid);
+			addUndoCommand(GDCommands.DELETE + " ", pid);
+			deselectAll(true);	
+			getCollection().loadClipboard(file);
+		} catch (Exception e) {
+			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+			Object[] buttons = new Object[] { Tool3lgmConstants.getResString("ok")};
+			JOptionPane.showOptionDialog(
+					Tool3lgm.tool,
+					Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(),
+					Tool3lgmConstants.getResString("tool3lgm"),
+					JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					buttons,
+					null);
+			e.printStackTrace();
+			return;	
+		}
+
+		finish_transaction(pid);
+		distributeEvent(DATA_CHANGED, pid);
+	}
+
+	/**
+	 * @param istream
+	 */
+	public synchronized void pasteInputStream(InputStream istream) {
+		int pid = TransactionManager.STANDARD_PID;
+		start_transaction(pid);
+		addUndoCommand(GDCommands.DELETE + " ", pid);
+		deselectAll(true);	
+		try {
+			getCollection().loadFile(istream);
+		} catch (Exception e) {
+			undo(pid);
+			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+			Object[] buttons = new Object[] { Tool3lgmConstants.getResString("ok")};
+			JOptionPane.showOptionDialog(
+					Tool3lgm.tool,
+					"",
+					Tool3lgmConstants.getResString("tool3lgm"),
+					JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					buttons,
+					null);
+			e.printStackTrace();
+			return;	
+		}
+
+		finish_transaction(pid);
+		distributeEvent(DATA_CHANGED, pid);
+	}
+
+	/**
+	 * @param elementClass
+	 */
+	public void clearTextRightDown(Class<? extends Knoten> elementClass){
+		ArrayList<ElementContainer> elemContainer = getElementContainer(elementClass);
+		for (int i=0; i<elemContainer.size(); i++)
+			((NodeContainer)elemContainer.get(i)).setAdditionalTextRightDown(null);
+	}
+
+	/**
+	 * @param elementClass
+	 */
+	public void clearLayerText(Class<? extends ModelElement> elementClass){
+		layer[ModelConstants.layerFor(elementClass)].removeAdditionalTextAbove(elementClass);
+	}
+
+
+	/**
+	 * 
+	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
+	 * 
+	 * Kanten werden nicht richtig in das neue Modell übenommen, d.h. der Container wird in diesem
+	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Kante-Container
+	 * werden aber richtig in den Elementen eingetragen.
+	 * 
+	 * Die untere Funktion ist die alte Variante; Die hier auskommentierte sollte die neue werden.
+	 * Allerdings liegt der Fehler irgendwo anders. Hier sollte unbeding auch beachtet werden, dass
+	 * wenn man ein Element in ein anderes Modell übernimmt, dass im Ursprungsmodell Verbindungen 
+	 * zu anderen Elementen hat, auch Verbindungen zu Elementen übernommen werden, die sowohl im
+	 * Urpsungsmodell als auc im Zielmodell vorkommen. (Z.B. übernimmt man erst eine Aufgabe in ein
+	 * Modell und danach bei einer 2. Übernahme eine Unteraufgabe dieser Aufgabe in das gleiche Modell,
+	 * dann geht die Unterordnungsbeziehung im Zielmodell verloren.)
+	 *
+	 * @param dest
+	 * /
+	public void copySelectedToModel(LGMGraphDocument dest) {
+
+		GraphDocument mainDoc =  getCollection().getGraphDocument();
+		GDCollection destGDColl = dest.getCollection();
+		GraphDocument destMainDoc = destGDColl.getGraphDocument();
+
+
+		if (destGDColl.isChanged()) {
+			int value = JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("join_speicherfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+			if (value == JOptionPane.YES_OPTION) {
+				try {
+					if (!destGDColl.saveToFile())
+						return;
+				} catch (IOException exp) {
+					Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+					return;
+				}
+			} else
+				return;
+		}
+
+		ArrayList<ModelElement> copyElements = new ArrayList<ModelElement>();
+		HashSet<UserField> userFields = new HashSet<UserField>();
+		gdcoll.resolveCopyDependencies(selectedContainer, copyElements, userFields);
+		
+		//Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
+		//andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt
+		ArrayList<ModelElement> splitEdges = new ArrayList<ModelElement>();
+		
+		for (int i=0; i<copyElements.size(); i++) {
+			ModelElement me = copyElements.get(i);
+			if (me instanceof Knickpunkt)
+				continue;
+			for (Kante edge : me.getEdges()) {
+				if (copyElements.contains(edge))
+					continue;
+				ModelElement other = edge.getOther(me);
+				if (destMainDoc.findElementCoded(other.getHashString())!=null)
+					splitEdges.add(edge);
+			}
+		}
+		
+		for (UserField uf : userFields){
+			if (uf != null)
+				destGDColl.getUserFieldDefinitions().add(uf);
+		}
+
+		ModelElement newE;
+
+		ArrayList<ElementContainer> tmpActive = new ArrayList<ElementContainer>(selectedContainer);
+		ArrayList<Kante> edges = new ArrayList<Kante>();
+		ArrayList<BendpointContainer> knickpunkte = new ArrayList<BendpointContainer>();
+
+		mainDoc.deselectAll(false);
+
+		int pid = TransactionManager.STANDARD_PID;
+		destMainDoc.start_transaction(pid);
+
+		try {
+			destMainDoc.deselectAll(true);
+			destGDColl.getIconTable().putAll(getCollection().getIconTable());
+
+			// lowest bit determin whether ask user about what to do, when hashcode already exists in dest (1 == do not ask / remember last decision)
+			// OverwriteDialog.OVERWRITE
+			// OverwriteDialog.JOIN
+			// OverwriteDialog.NOTHING
+			int overwriteJoinNothing = 0;
+			for (ModelElement insert : copyElements){
+				ElementContainer insertC = insert.getContainer(this);
+				if (insertC == null)
+					insertC = insert.getContainer(mainDoc);
+
+				//wenn bereits ein Element mit dem gleichen Hash-Wert im Zieldokument existiert
+				if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
+					if ((overwriteJoinNothing & 1) == 0) {
+						select(insertC, pid);
+						distributeEvent(SELECTION_CHANGED, insertC, null, pid);
+						overwriteJoinNothing = OverwriteDialog.showDialog(Tool3lgm.tool, newE, insert);
+					}
+
+					if ((overwriteJoinNothing & OverwriteDialog.OVERWRITE) > 0) {
+
+					} else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
+						dest.joinElements(newE, insert, this, false);
+						if (newE instanceof Kante) {
+							((Kante)newE).reconnect(destGDColl);
+							((Kante)newE).refreshText();
+						}
+					} else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
+						continue;
+					}
+				//wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
+				} else {
+					ElementContainer newC;
+					newC = insertC.clone(true, dest);
+					newE = newC.getElement();
+					newE.setHashString(insert.getHashString());
+					ElementContainer newMainC = newC.clone(false, destMainDoc);
+					newMainC.setVisible(true);
+					newMainC.setExpanded(true);
+					newMainC.setHighLight(false);
+					newMainC.refreshText();
+					destMainDoc.getLayer(newE.layerFor()).add(newMainC);
+					if (newE instanceof Kante)
+						edges.add((Kante)newE);
+					else if (newE instanceof Knickpunkt)
+						knickpunkte.add((BendpointContainer)newC);
+					else {
+						if (!newE.isUnique() && (dest instanceof Szenario)) {
+							newC.refreshText();
+							dest.getLayer(newE.layerFor()).add(newC);
+						}
+						destMainDoc.addToSelection(newMainC, pid);
+					}
+				}
+			}
+			for (Kante kante : edges){
+				if (!kante.reconnect(destGDColl))
+					destGDColl.deleteElement(kante, pid);
+				else {
+					EdgeContainer edgeCont = (EdgeContainer)kante.getContainer(destMainDoc);
+					destGDColl.addEdge(edgeCont, kante.layerFor(), pid);
+					if (!kante.isUnique() && (dest instanceof Szenario)) {
+						EdgeContainer newC = (EdgeContainer)kante.getContainer(dest);
+						if (newC == null) {
+							throw new Exception(Tool3lgmConstants.getErrString("error"));
+						}
+						ArrayList<BendpointContainer> kpList = newC.getBendpointContainerList();
+						for (int j = 0; j < kpList.size(); j++) {
+							dest.getLayer(kante.layerFor()).add((BendpointContainer)kpList.get(j));
+						}
+						newC.computeBorderPoints();
+					}
+					destMainDoc.addToSelection(kante.getContainer(destMainDoc), pid);
+				}
+			}
+			ArrayList<EdgeContainer> edgeConts = new ArrayList<EdgeContainer>();
+			while (!knickpunkte.isEmpty()) {
+				BendpointContainer kp = (BendpointContainer)knickpunkte.remove(0);
+				BendpointContainer oldKP = this.findBendpointContainerCoded(kp.getHashString());
+				EdgeContainer kC = dest.findEdgeContainerCoded(kp.getKnickpunktKnoten().getKantenHash());
+				EdgeContainer oldKC = oldKP.getKnickpunktKnoten().getOwner();
+				if (oldKC == null)
+					oldKC = this.findEdgeContainerCoded(kC.getHashString());
+				if (kC != null) {
+					if (! (edges.contains(kC)))
+						edgeConts.add(kC);
+					kp.getKnickpunktKnoten().setOwner(kC);
+					kC.setKnickpunkt(kp, oldKC.getIndexOfKnickpunkt(oldKP.getKnickpunktKnoten()));
+					dest.getLayer(kC.layerFor()).add(kp);
+				}
+			}
+			for (EdgeContainer kc : edgeConts)
+				kc.computeBorderPoints();
+
+			destMainDoc.finish_transaction(pid);
+		} catch (Exception ex) {
+			destMainDoc.undo(pid);
+			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
+		}
+		destGDColl.setChanged(true);
+		start_transaction(TransactionManager.STANDARD_PID, false);
+		deselectAll (true);
+		for (int j = 0; j < tmpActive.size(); j++) {
+			addToSelection((ElementContainer)tmpActive.get(j), TransactionManager.STANDARD_PID);
+		}
+		finish_transaction(TransactionManager.STANDARD_PID, false);
+		distributeEvent(SELECTION_CHANGED);
+		dest.distributeEvent(DATA_CHANGED);
+	}	
+
+	
+	/**
+	 * @param dest
+	 */
+	public void copySelectedToModel(LGMGraphDocument dest) {
+
+		GraphDocument mainDoc =  getCollection().getMainGraphDocument();
+		GDCollection destGDColl = dest.getCollection();
+		GraphDocument destMainDoc = destGDColl.getMainGraphDocument();
+
+
+		if (destGDColl.isChanged()) {
+			int value = JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("join_speicherfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+			if (value == JOptionPane.YES_OPTION) {
+				try {
+					if (!destGDColl.saveToFile())
+						return;
+				} catch (IOException exp) {
+					Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+					return;
+				}
+			} else
+				return;
+		}
+
+		ArrayList<ModelElement> copyElements = new ArrayList<ModelElement>();
+		HashSet<UserField> userFields = new HashSet<UserField>();
+		gdcoll.resolveCopyDependencies(selectedContainer, copyElements, userFields);
+
+		for (UserField uf : userFields){
+			if (uf != null)
+				destGDColl.getUserFieldDefinitions().add(uf);
+		}
+
+		ModelElement newE;
+
+		ArrayList<Kante> edges = new ArrayList<Kante>();
+		ArrayList<BendpointContainer> knickpunkte = new ArrayList<BendpointContainer>();
+
+		ArrayList<ElementContainer> tmpActive = new ArrayList<ElementContainer>(selectedContainer);
+
+		mainDoc.deselectAll(false);
+
+		int pid = TransactionManager.STANDARD_PID;
+		destMainDoc.start_transaction(pid);
+
+		try {
+			destMainDoc.deselectAll(true);
+			destGDColl.getIconTable().putAll(getCollection().getIconTable());
+
+			/* lowest bit determin whether ask user about what to do, when hashcode already exists in dest (1 == do not ask / remember last decision)
+			 * OverwriteDialog.OVERWRITE
+			 * OverwriteDialog.JOIN
+			 * OverwriteDialog.NOTHING
+			 */
+			int overwriteJoinNothing = 0;
+			for (ModelElement insert : copyElements){
+				ElementContainer insertC = insert.getContainer(this);
+				if (insertC == null)
+					insertC = insert.getContainer(mainDoc);
+
+				if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
+					if ((overwriteJoinNothing & 1) == 0) {
+						select(insertC, pid);
+						distributeEvent(SELECTION_CHANGED, insertC, null, pid);
+						overwriteJoinNothing = OverwriteDialog.showDialog(Tool3lgm.tool, newE, insert);
+					}
+
+					if ((overwriteJoinNothing & OverwriteDialog.OVERWRITE) > 0) {
+
+					} else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
+						dest.joinElements(newE, insert, this, false);
+						if (newE instanceof Kante) {
+							((Kante)newE).reconnect(destGDColl);
+							((Kante)newE).refreshText();
+						}
+					} else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
+						continue;
+					}
+				} else {
+					ElementContainer newC;
+					newC = insertC.clone(true, dest);
+					newE = newC.getElement();
+					newE.setHashString(insert.getHashString());
+					ElementContainer newMainC = newC.clone(false, destMainDoc);
+					newMainC.setVisible(true);
+					newMainC.setExpanded(true);
+					newMainC.setHighLight(false);
+					newMainC.refreshText();
+					destMainDoc.getLayer(newE.layerFor()).add(newMainC);
+					if (newE instanceof Kante)
+						edges.add((Kante)newE);
+					else if (newE instanceof Knickpunkt)
+						knickpunkte.add((BendpointContainer)newC);
+					else {
+						if (!newE.isUnique() && (dest instanceof Szenario)) {
+							newC.refreshText();
+							dest.getLayer(newE.layerFor()).add(newC);
+						}
+						destMainDoc.addToSelection(newMainC, pid);
+					}
+				}
+			}
+			for (Kante kante : edges){
+				if (!kante.reconnect(destGDColl))
+					destGDColl.deleteElement(kante, pid);
+				//					destMainDoc.removeEdge(kante, pid);
+				else {
+					destGDColl.addEdge((EdgeContainer)kante.getContainer(destMainDoc), kante.layerFor(), pid);
+					if (!kante.isUnique() && (dest instanceof Szenario)) {
+						EdgeContainer newC = (EdgeContainer)kante.getContainer(dest);
+						if (newC == null) {
+							throw new Exception(Tool3lgmConstants.getErrString("error"));
+						}
+						dest.getLayer(kante.layerFor()).add(newC);
+						ArrayList<BendpointContainer> kpList = newC.getBendpointContainerList();
+						for (int j = 0; j < kpList.size(); j++) {
+							dest.getLayer(kante.layerFor()).add(kpList.get(j));
+						}
+						newC.computeBorderPoints();
+					}
+					destMainDoc.addToSelection(kante.getContainer(destMainDoc), pid);
+				}
+			}
+			ArrayList<EdgeContainer> edgeConts = new ArrayList<EdgeContainer>();
+			while (!knickpunkte.isEmpty()) {
+				BendpointContainer kp = knickpunkte.remove(0);
+				BendpointContainer oldKP = this.findBendpointContainerCoded(kp.getHashString());
+				EdgeContainer kC = dest.findEdgeContainerCoded(kp.getKnickpunktKnoten().getKantenHash());
+				EdgeContainer oldKC = oldKP.getKnickpunktKnoten().getOwner();
+				if (oldKC == null)
+					oldKC = this.findEdgeContainerCoded(kC.getHashString());
+				if (kC != null) {
+					if (! (edges.contains(kC)))
+						edgeConts.add(kC);
+					kp.getKnickpunktKnoten().setOwner(kC);
+					kC.setKnickpunkt(kp, oldKC.getIndexOfKnickpunkt(oldKP.getKnickpunktKnoten()));
+					dest.getLayer(kC.layerFor()).add(kp);
+				}
+			}
+			for (EdgeContainer kc : edgeConts)
+				kc.computeBorderPoints();
+
+			destMainDoc.finish_transaction(pid);
+		} catch (Exception ex) {
+			destMainDoc.undo(pid);
+			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
+		}
+		destGDColl.setChanged(true);
+		start_transaction(TransactionManager.STANDARD_PID, false);
+		deselectAll (true);
+		for (int j = 0; j < tmpActive.size(); j++) {
+			addToSelection(tmpActive.get(j), TransactionManager.STANDARD_PID);
+		}
+		finish_transaction(TransactionManager.STANDARD_PID, false);
+		distributeEvent(SELECTION_CHANGED);
+		dest.distributeEvent(DATA_CHANGED);
+	}	
+
+	
+	/**
+	 * Fuehrt selektierte ModelElemente in diesem oder in beiden Modellen zusammen
+	 * @param doc2
+	 * @param saveInBoth
+	 */
+	public void joinElements(GraphDocument doc2, boolean saveInBoth) {
+		if (this.selectedContainer.size() != 1 || doc2.selectedContainer.size() != 1)
+			return;
+
+		ModelElement me1 = this.selectedContainer.getLastSelected().getElement();
+		ModelElement me2 = doc2.selectedContainer.getLastSelected().getElement();
+
+		joinElements(me1, me2, doc2, saveInBoth);
+
+		distributeEvent(DATA_CHANGED);
+	}
+
+	/**
+	 * @param me1
+	 * @param me2
+	 * @param doc2
+	 * @param saveInBoth
+	 */
+	private void joinElements(ModelElement me1, ModelElement me2, GraphDocument doc2, boolean saveInBoth) {
+		if (me1 instanceof Knickpunkt)
+			return;
+
+		ModelElement me3 = findElementCoded(me2.getHashString());
+		if (me3 != null && me3 != me2) {
+			if (!me1.join(me2, false))
+				return;
+		} else {
+			if (!me1.join(me2, true))
+				return;
+		}
+
+		me1.refreshText();
+
+		for (Kante kante : me2.getEdges()){
+			Kante oldKante;
+			/* vorwaerts */
+			if (kante.getStart().equals(me2)) {
+				me3 = findElementCoded(kante.getEnd().getHashString());
+
+				if (me3 == null || me3 == me1) continue;
+				if (me1.isConnectedWith(me3,kante.getClass())) continue;
+
+				oldKante = kante;
+				kante = (Kante)ModelConstants.createElement(kante, true);
+				kante.setStartAndInsert(me1);
+				kante.setEndAndInsert(me3);
+				/* rueckwaerts */
+			} else if(kante.getEnd().equals(me2)) {
+				me3 = findElementCoded(kante.getStart().getHashString());
+
+				if (me3 == null || me3 == me1) continue;
+				if (me1.isConnectedWith(me3,kante.getClass())) continue;
+
+				oldKante = kante;
+				kante = (Kante)ModelConstants.createElement(kante, true);
+				kante.setStartAndInsert(me3);
+				kante.setEndAndInsert(me1);
+			} else
+				continue;
+
+			gdcoll.getMainGraphDocument().getLayer(kante.layerFor()).add(kante.createContainer(gdcoll.getMainGraphDocument()));
+
+			if (this != gdcoll.getMainGraphDocument() && me1.getContainer(this) != null && me3.getContainer(this)!= null)
+				getLayer(kante.layerFor()).add(kante.createContainer(this));
+
+			joinElements(kante, oldKante, doc2, saveInBoth);
+		}
+	}
+
+	/**
+	 * @return the showAllAbKonfigs
+	 */
+	public boolean isShowAllABKonfigs() {
+		return showAllACConfigurations;
+	}
+
+	/**
+	 * @return the showAllDBKonfigs
+	 */
+	public boolean isShowAllDBKonfigs() {
+		return showAllPDPConfigurations;
+	}
+}

@@ -1,0 +1,36 @@
+package de.imise.tool3lgm.graphtools.elements.edge;
+
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+
+/**
+ * @author AXS
+ * Created on 15.04.2008
+ */
+
+public final class PdvbVirtualPdvbVerbindung extends PdvbPdvbVerbindung {
+
+	/**
+	 * 
+	 */
+	public PdvbVirtualPdvbVerbindung() {
+		super();
+	}
+
+	/**
+	 * @param knot1
+	 * @param knot2
+	 */
+	public PdvbVirtualPdvbVerbindung(ModelElement knot1, ModelElement knot2) {
+		super(knot1, knot2);
+	}
+
+	/**
+	 * @param knot1
+	 * @param knot2
+	 * @param registerInKnots
+	 */
+	public PdvbVirtualPdvbVerbindung(ModelElement knot1, ModelElement knot2, boolean registerInKnots) {
+		super(knot1, knot2, registerInKnots);
+	}
+
+}

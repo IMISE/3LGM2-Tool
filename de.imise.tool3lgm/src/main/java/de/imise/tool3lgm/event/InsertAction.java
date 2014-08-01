@@ -1,0 +1,90 @@
+package de.imise.tool3lgm.event;
+
+import java.awt.event.ActionEvent;
+
+import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+
+/**
+ * Von {@link AbstractLGMAction} abgeleitete Klasse zum Einfügen von {@link ModelElement}en 
+ * in die 3 Ebenen.
+ * <p>
+ * Das Erzeugen von Instanzen dieser Klasse erfolgt durch die Spezifizierung der zu generierenden
+ * {@link ModelElement}-Klasse. Intern wird dann dazu über {@link ModelConstants} der passende
+ * Name für diese Action gesucht.
+ * 
+ * @author fstephan
+ */
+class InsertAction extends AbstractLGMAction {
+	
+	/** Die {@link ModelElement}-Klasse die, durch diese Action erzeugt wird */
+	private Class<ModelElement> elementClass;
+	
+	/**
+	 * Konstruktor
+	 * <p>
+	 * Erzeugt neue Instanz dieser Klasse anhand des zur spezifizierten {@link ModelElement}-Klasse
+	 * passenden {@link ActionIdentifier}
+	 * 
+	 * @param elementClass
+	 * 			{@link ModelElement}-Klasse die, durch diese Action erzeugt wird
+	 */
+	private InsertAction(Class<ModelElement> elementClass) {
+		super(ModelConstants.getDisplayableName(elementClass));
+		this.elementClass = elementClass;
+		putValue(ELEMENT_CLASS_KEY, elementClass);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+    public void actionPerformed(ActionEvent e) {
+		if(!isEnabled())
+			return;
+		createNode(elementClass);
+    }
+	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.swing.AbstractAction#isEnabled()
+	 */
+	@Override
+	public boolean isEnabled() {
+	    return getSelectedDoc() != null;
+    }
+	
+	/** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Fachlichen Ebene wieder */
+	@SuppressWarnings("unchecked")
+    public static InsertAction[] getDomainLayerActions() {
+		return getActions(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES);
+	}
+	
+	/** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Logischen Ebene wieder */
+	@SuppressWarnings("unchecked")
+	public static InsertAction[] getLogicalToolLayerActions() {
+		return getActions(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES);
+	}
+	
+	/** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Physischen Ebene wieder */
+	@SuppressWarnings("unchecked")
+	public static InsertAction[] getPhysicalToolLayerActions() {
+		return getActions(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES);
+	}
+	
+	/** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
+	private static InsertAction[] getActions(Class<ModelElement>[] treeCreatableLayerNodes) {
+		InsertAction[] actions = new InsertAction[treeCreatableLayerNodes.length];
+		for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
+			actions[c] = new InsertAction(treeCreatableLayerNodes[c]);
+		}
+		return actions;
+	}
+	
+	/** Gibt wieder, ob der aktuelle Kontext ein Einfügen von Elementen erlaubt, oder nicht */
+	public static boolean isInsertAvailable() {
+		return Tool3lgm.tool.getSelectedDoc() != null;
+	}
+}

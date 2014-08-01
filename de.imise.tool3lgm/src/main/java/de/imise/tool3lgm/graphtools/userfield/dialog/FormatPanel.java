@@ -1,0 +1,524 @@
+/*
+ * Created on 10.02.2008
+ */
+package de.imise.tool3lgm.graphtools.userfield.dialog;
+
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import de.imise.util.swing.component.AlphabeticalComboBox;
+import de.imise.util.swing.dialog.MultipleOptionPane;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+
+/**
+ * @author AXS
+ * 
+ * Das FormatPanel ist in den Definitionsdialog für <code>UserField</code> s
+ * eingebettet. In ihm werden die Anzahl der Nachkommastellen und die einheit
+ * angegeben. Wenn eine solche neue Formatvorlage angelegt wurde, wird sie in
+ * der Modelldatei als FormatUserField gespeichert und kann für beliebig vielen
+ * Kennzahlen als Formatierung für die spätere Ansicht der werte genutzt werden.
+ * Eine Formatvorlage kann nur einmal angelegt werden. Es gibt Standardvorlagen.
+ * Wenn in dem Kostenmodell die Formatierungsvorlagen noch nicht angelegt sind (
+ * neues Modell ), werden sie initial angelegt. Die Standardformatvorlage ist
+ * notwendig, da bei speziellen Einheiten die Darstelung der Werte ander ist als
+ * die Eingabe. Beispiel ist das %: Eingabe muss der auf 1 normierte Wert sein.
+ * Dargestllt wird der auch 100% normierte Wert. Eingabe: 0,5 Ausgabe 50%
+ * Deshalb benötigt man die Standardvorlage: % Standardvorlagen: * Formatvorlage
+ * mit 2 Nachkommastellen und dem %-Zeichen
+ */
+public class FormatPanel extends AbstractInputPanel implements ActionListener, ChangeListener, CaretListener {
+
+	/**
+	 * Das UserField, dessem Format mit diesem Panel geändert werden soll.
+	 */
+	private UserField userField;
+
+	/**
+	 * Definition aller <code>UserField</code> s und auch aller Formate.
+	 */
+	private UserFieldDefinitions definitions;
+
+	/**
+	 * Der Dialog, in dem das Panel dargestellt wird 
+	 */
+	private JDialog owner;
+
+	/**
+	 * In diesem Panel sind die Elemente für die Formatdefinition enthalten. 
+	 * Also die ComboBox, das Einheiten-<code>JTextField</code>, die Übernehmen und Abbrechen button..
+	 */
+	private JPanel zahlenFormatPanel;
+
+	/**
+	 * In dieser AlphabeticalComboBox sind die schon bestehenden Formate enthalten
+	 */
+	private AlphabeticalComboBox formatComboBox;
+
+	/**
+	 * Dieser Spinner gibt die anzhal der Nachkommastellen an.
+	 */
+	private JSpinner digitSpinner;
+
+	/**
+	 * In dieser editierbaren ComboBox werden für neue Formatvorlagen die Einheiten eingegeben. Schon bestehende Einheiten befinden sich in der OcmboBox zum Auswählen.
+	 */
+	private AlphabeticalComboBox unitBox;
+
+	/**
+	 * Der Button erweitert die Anzeige des Panels um die Eingabeelemente für neue Formatvorlagen.
+	 */
+	private JButton expandPanelButton;
+
+	/**
+	 * Der new-Button legt die neue Formatvorlage an.
+	 */
+	private JButton newButton;
+
+	/**
+	 * Der delete-Button löscht schon bestehende Formatvorlagen aus dem Kostenmodell.
+	 */
+	private JButton deleteButton;
+
+	/**
+	 * 
+	 */
+	private JButton refreshButton;
+
+	/**
+	 * 
+	 */
+	private HashSet<String> unitBoxElements = new HashSet<String>();
+	/**
+	 * Wenn Formate über dieses Panel gelöscht werden, dann wird in dieser Map
+	 * jeweils in einer <code>ArrayList</code> gespeichert, welche UserFields
+	 * dieses Format benutzt haben. Wenn Abbrechen aufgerufen wird, müssen die
+	 * Formate wieder alle gesetzt werden.
+	 */
+	private HashMap<UserField, ArrayList<UserField>> deletedFormatToFormatUser = new HashMap<UserField, ArrayList<UserField>>();
+
+	/**
+	 * In dieser Liste werden die neu angelegten Format- <code>UserField</code>
+	 * s gespeichert bis <code>commit()</code> aufgerufen wurde. Im Falle von
+	 * <code>cancel()</code>, werden diese dann auch wieder aus den
+	 * <code>definitions</code> entfernt.
+	 */
+	private ArrayList<UserField> newFormatesList;
+
+	/**
+	 * @param owner
+	 * @param userField
+	 * @param definitions
+	 */
+	public FormatPanel(JDialog owner, UserField userField, UserFieldDefinitions definitions) {
+		super();
+		this.owner = owner;
+		this.userField = userField;
+		this.definitions = definitions;
+		this.setLayout(new GridBagLayout());
+		newFormatesList = new ArrayList<UserField>();
+		setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("formatPaneBorder")));
+		GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
+		formatComboBox = new AlphabeticalComboBox();
+		formatComboBox.addActionListener(this);
+		SpinnerNumberModel spinnermodel = new SpinnerNumberModel(0, 0, 10, 1);
+		digitSpinner = new JSpinner(spinnermodel);
+		digitSpinner.addChangeListener(this);
+		unitBox = new AlphabeticalComboBox ();
+		unitBox.setEditable(true);
+
+		
+		unitBoxElements.add("");
+
+		String currency = Currency.getInstance(getLocale()).getSymbol(getLocale());
+		unitBoxElements.add(currency);
+		unitBoxElements.add("%");
+		DefaultComboBoxModel dcbm = new DefaultComboBoxModel(unitBoxElements.toArray());
+
+		unitBox.setModel(dcbm);
+		
+		refreshButton = new JButton(Tool3lgmConstants.getResString("refreshButtonText"));
+		refreshButton.addActionListener(this);
+		newButton = new JButton(Tool3lgmConstants.getResString("neuesFormatSpeichern"));
+		newButton.addActionListener(this);
+		deleteButton = new JButton(Tool3lgmConstants.getResString("delete"));
+		deleteButton.addActionListener(this);
+
+		initFormatComboBox();
+
+		constraints.gridx = 0;
+		constraints.gridy++;
+		constraints.weightx = 1.0;
+		add(formatComboBox, constraints);
+
+		constraints.weightx = 0.0;
+		constraints.gridx++;
+		expandPanelButton = new JButton(">>");
+		expandPanelButton.addActionListener(this);
+		add(expandPanelButton, constraints);
+
+		////////////////////// das Zahlenformatpanel
+
+		constraints.gridx = 0;
+		constraints.gridy++;
+
+		constraints.gridwidth = 2;
+		constraints.insets.top = 10;
+		constraints.insets.bottom = 5;
+		zahlenFormatPanel = new JPanel();
+		zahlenFormatPanel.setVisible(false);
+		zahlenFormatPanel.setLayout(new GridBagLayout());
+		GridBagConstraints constraintsFormat = new GridBagConstraints();
+		//		zahlenFormatPanel.setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("new_format")));
+		zahlenFormatPanel.setBorder(BorderFactory.createEtchedBorder());
+		add(zahlenFormatPanel, constraints);
+		constraintsFormat.anchor = GridBagConstraints.WEST;
+		constraintsFormat.insets.top = 5;
+		constraintsFormat.insets.left = 3;
+		constraintsFormat.insets.right = 3;
+		constraintsFormat.weightx = 0;
+		constraintsFormat.weightx = 0;
+		constraintsFormat.gridx = 0;
+		constraintsFormat.gridy = 0;
+		constraintsFormat.fill = GridBagConstraints.NONE;
+
+		zahlenFormatPanel.add(new JLabel(Tool3lgmConstants.getResString("nachkommastelle")), constraintsFormat);
+
+		constraintsFormat.weightx = 1;
+		constraintsFormat.gridx++;
+		constraintsFormat.fill = GridBagConstraints.HORIZONTAL;
+		zahlenFormatPanel.add(digitSpinner, constraintsFormat);
+
+		constraintsFormat.weightx = 0;
+		constraintsFormat.gridx = 0;
+		constraintsFormat.gridy++;
+		constraintsFormat.fill = GridBagConstraints.NONE;
+		zahlenFormatPanel.add(new JLabel(Tool3lgmConstants.getResString("einheit")), constraintsFormat);
+
+		constraintsFormat.weightx = 1;
+		constraintsFormat.gridx++;
+		constraintsFormat.fill = GridBagConstraints.HORIZONTAL;
+		zahlenFormatPanel.add(unitBox, constraintsFormat);
+
+		constraintsFormat.gridx = 1;
+		constraintsFormat.gridy++;
+		constraintsFormat.fill = GridBagConstraints.NONE;
+		constraintsFormat.anchor = GridBagConstraints.EAST;
+
+		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttonPanel.add(newButton);
+		buttonPanel.add(deleteButton);
+		buttonPanel.add(refreshButton);
+		zahlenFormatPanel.add(buttonPanel, constraintsFormat);
+
+	}
+
+	/**
+	 * Initialisiert die FormatCombobox mit den allen definierten Formaten.
+	 */
+	private void initFormatComboBox() {
+
+		// Wenn das Standardformat % mit 2 NAchkommastellen hinzugefügt wurde,
+		// wird das in <code>percentAdded</code> gemerkt.
+		boolean percentAdded = false;
+
+		//ComboBox mit allen bisher defnierten Formaten zusammenbauen
+		formatComboBox.removeAllItems();
+		formatComboBox.addItem(null, Tool3lgmConstants.getResString("standard_format"));
+		formatComboBox.addSeparator(false);
+
+		for (UserField uf : definitions.getUserFields(UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS)) {
+			if (uf.hasStyle(UserField.Style.FORMAT)) {
+				formatComboBox.addItem(uf, getFormatPatternString(uf));
+				
+				// In mehrern Formatvorlagen können selbstverständlich auch die Einheiten mehrmals vorkommen.
+				// Damit für die Definition eines neuen Formates die Einheiten nicht mehrmals angeboten werden, 
+				// müssen sie hier gefiltert werden. 
+				String formatUnit = uf.getFormatUnit();
+				if(formatUnit!=null){
+					unitBoxElements.add(formatUnit);
+					if (formatUnit.equals("%"))
+						percentAdded = true;
+				}
+			}
+		}
+		unitBox.setModel(new DefaultComboBoxModel(unitBoxElements.toArray()));
+
+		//Wenn sich das Standardformat % mit 2 Nachkommastellen noch nicht im
+		// Kostenmodell befindet, wird es hinzugefügt.
+		if (!percentAdded)
+			addStandardFormat(2, "%");
+
+		//Wenn für ein userField schon ein Format angegeben ist, setze dies.
+		formatComboBox.setSelectedObject(userField.getFormatUserField());
+	}
+
+	/**
+	 * Liefert einen Anzeige- <code>String</code> des übergebenen Format-
+	 * <code>UserField</code>s.
+	 * 
+	 * @param userField
+	 * 
+	 * @return Anzeige- <code>String</code> des Formates. Wenn kein Format
+	 *         eingestellt ist, kommt <code>null</code> zurück;
+	 */
+	private static final String getFormatPatternString(UserField formatuserField) {
+		int minimumFractionDigits = formatuserField.getFormatFractionDigits();
+		StringBuilder sb = new StringBuilder("#0");
+		if (minimumFractionDigits > 0) {
+			sb.append(".0");
+		}
+		for (int i = 1; i < minimumFractionDigits; i++)
+			sb.append("0");
+		if (minimumFractionDigits > 0) {
+			sb.append("#");
+		}
+		String formatUnit = formatuserField.getFormatUnit();
+		if (formatUnit != null) {
+			sb.append(" ");
+			sb.append(formatUnit);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Gibt zu dem selektierten Element der <code>formatComboBox</code> das
+	 * Format als <code>UserField</code> zurück.
+	 * 
+	 * @return das Objekt <code>UserField</code> zu dem selektierten Element
+	 *         der <code>formatComboBox</code>
+	 */
+	private UserField getSelectedFormatUserField() {
+		Object selectedFormatUserField = formatComboBox.getSelectedObject();
+		if (selectedFormatUserField == null)
+			return null;
+		return (UserField) selectedFormatUserField;
+	}
+
+	/**
+	 * Prüft, ob eine neu anzulegende Formatvorlage schon vorhanden ist. 2
+	 * Formate sind gleich, wenn sie die gleich Anzahl von Nachkommastellen und
+	 * die gleiche Einheit besitzen.
+	 * 
+	 * @return Wenn ein Duplikat entdeckt wird, gibt die Methode
+	 *         <code>true</code> zurück, sonst <code>false</code>.
+	 */
+	private boolean isDuplicateFormat() {
+		int spinnerFractionDigits = new Integer(digitSpinner.getValue().toString()).intValue();
+		for (UserField uf : definitions.getUserFields(UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS)) {
+			if (uf.hasStyle(UserField.Style.FORMAT)) {
+				if (uf.getFormatFractionDigits() != spinnerFractionDigits)
+					continue;
+				String formatUnit = uf.getFormatUnit();
+				if (formatUnit == null) {
+					//if (unitBox.getText()!=null)
+					if (unitBox.getSelectedItem() != null)
+						continue;
+					return true;
+				}
+				//	if (formatUnit.equals(unitBox.getText()))
+				if (formatUnit.equals(unitBox.getSelectedItem()))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Wenn die Standardformate noch nicht vorhanden sind, werden sie angelegt (
+	 * Im Kostenmodell und in der <code>formatComboBox</code>.
+	 * 
+	 * @param fractionDigits
+	 *            Die Anzahl der Nachkommastellen für die Darstellung des
+	 *            Kennzhahlwertes
+	 * @param unit
+	 *            Die Einheit, in der die Kennzahl angegeben ist.
+	 */
+	private void addStandardFormat(int fractionDigits, String unit) {
+		UserField format = new UserField(UserField.Style.FORMAT, definitions);
+		//Bei den Formaten ist der Name nicht relevant - daher ein generierter
+		format.setName("FormatTemplate" + System.currentTimeMillis());
+		format.setDescription(Tool3lgmConstants.getResString("format_template"));
+		format.setTreeVisibility(false);
+		format.setFormatFractionDigits(fractionDigits);
+		format.setFormatUnit(unit);
+		definitions.add(format);
+
+		formatComboBox.addItem(format, getFormatPatternString(format));
+	}
+
+	/**
+	 * Schreibt die neue Formatvorlage als Modellvariable in Form eines
+	 * <code>UserField</code> s in die <code>GDCollection</code>
+	 * 
+	 * @return das neu erzeugte <code>UserField</code>
+	 */
+	private UserField addNewFormat() {
+		UserField format = new UserField(UserField.Style.FORMAT, definitions);
+		//Bei den Formaten ist der Name nicht relevant - daher ein generierter
+		format.setName("FormatTemplate" + System.currentTimeMillis());
+		format.setDescription(Tool3lgmConstants.getResString("format_template"));
+		format.setTreeVisibility(false);
+		format.setFormatFractionDigits(new Integer(digitSpinner.getValue().toString()).intValue());
+		Object selectedUnitItem = unitBox.getSelectedItem();
+		String formatUnit = selectedUnitItem==null?"":selectedUnitItem.toString();
+		
+		format.setFormatUnit(formatUnit);
+		unitBoxElements.add(format.getFormatUnit());
+		definitions.add(format);
+		unitBox.setModel(new DefaultComboBoxModel(unitBoxElements.toArray()));
+		return format;
+	}
+
+	/**
+	 * Aktualisiert den Enabled-Status des Aktualisieren-Knopfes
+	 */
+	private void refreshButtonEnableStatus() {
+		Object selectedFormat = formatComboBox.getSelectedObject();
+		if (selectedFormat == null) {
+			refreshButton.setEnabled(false);
+			return;
+		}
+		UserField formatUserField = (UserField) selectedFormat;
+		//wenn sich im Spinner und im EinheitenTextfeld nichts geändert hat
+		if (((Integer) digitSpinner.getValue()).intValue() == formatUserField.getFormatFractionDigits() && unitBox.getSelectedItem().equals(formatUserField.getFormatUnit()))
+			//keinen Refresh anbieten
+			refreshButton.setEnabled(false);
+		else
+			refreshButton.setEnabled(true);
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		refreshButtonEnableStatus();
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.swing.event.CaretListener#caretUpdate(javax.swing.event.CaretEvent)
+	 */
+	@Override
+	public void caretUpdate(CaretEvent e) {
+		refreshButtonEnableStatus();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == unitBox) {
+			
+		} else if (e.getSource() == formatComboBox) {
+			Object selectedFormat = formatComboBox.getSelectedObject();
+			if (selectedFormat == null) {
+				digitSpinner.setValue(new Integer(0));
+				if (unitBox.getItemCount() > 0)
+					unitBox.setSelectedIndex(0);
+				deleteButton.setEnabled(false);
+				return;
+			}
+			UserField formatUserField = (UserField) selectedFormat;
+			digitSpinner.setValue(new Integer(formatUserField.getFormatFractionDigits()));
+			deleteButton.setEnabled(true);
+		} else if (e.getSource() == expandPanelButton) {
+			if (!zahlenFormatPanel.isVisible()) {
+				Dimension d = owner.getSize();
+				d.height += zahlenFormatPanel.getPreferredSize().height;
+				owner.setSize(d);
+				zahlenFormatPanel.setVisible(true);
+				expandPanelButton.setText("<<");
+			} else {
+				Dimension d = owner.getSize();
+				//vor dem invisible setzen abfragen
+				d.height -= zahlenFormatPanel.getHeight();
+				owner.setSize(d);
+				zahlenFormatPanel.setVisible(false);
+				expandPanelButton.setText(">>");
+			}
+		} else if (e.getSource() == newButton) {
+
+			if (!isDuplicateFormat()) {
+				UserField formatUserField = addNewFormat();
+				formatComboBox.addItem(formatUserField, getFormatPatternString(formatUserField));
+				formatComboBox.setSelectedObject(formatUserField);
+				newFormatesList.add(formatUserField);
+				userField.setFormatUserField(getSelectedFormatUserField());
+			} else
+				JOptionPane.showMessageDialog(null, Tool3lgmConstants.getErrString("format_is_existing"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+		} else if (e.getSource() == deleteButton) {
+			UserField formatToDelete = getSelectedFormatUserField();
+			//Warnen, wemm dieses Format noch woanders benutzt wird
+			ArrayList<UserField> formatUser = definitions.getFormatUser(formatToDelete);
+
+			//für cancel() merken, wer das Format alles benutzt hat
+			boolean selfUser = formatUser.remove(userField);
+			if (formatUser.size() > 0) {
+				int option = MultipleOptionPane.showConfirmDialog(owner, Tool3lgmConstants.getResString("warnung"), Tool3lgmConstants.getErrString("format_template_in_use"), MultipleOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				if (option != MultipleOptionPane.YES_OPTION)
+					return;
+			}
+			if (selfUser)
+				formatUser.add(userField);
+			deletedFormatToFormatUser.put(formatToDelete, formatUser);
+			definitions.remove(formatToDelete);
+			definitions.getCollection().setUserFieldDefinitions(definitions);
+			initFormatComboBox();
+			formatComboBox.setSelectedObject(userField.getFormatUserField());
+		}
+
+	}
+
+	/* (non-Javadoc)
+	 * @see tool3lgm.graphtools.userfield.dialog.AbstractInputPanel#cancel()
+	 */
+	@Override
+	public void cancel() {
+		for (int i = 0; i < newFormatesList.size(); i++)
+			definitions.remove(newFormatesList.remove(i));
+
+		//das löschen von Foramten zurück nehmen
+		for (UserField format : deletedFormatToFormatUser.keySet()) {
+			definitions.add(format);
+			for (UserField formatUser : deletedFormatToFormatUser.get(format))
+				formatUser.setFormatUserField(format);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see tool3lgm.graphtools.userfield.dialog.AbstractInputPanel#commit()
+	 */
+	@Override
+	public void commit() {
+		userField.setFormatUserField(getSelectedFormatUserField());
+	}
+
+}
