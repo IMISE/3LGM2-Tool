@@ -1,0 +1,244 @@
+package de.imise.util.swing.dialog;
+
+import java.awt.Component;
+import java.awt.HeadlessException;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+
+import de.imise.util.io.FileHandler;
+
+/**
+ * Erweitert die Funktionalität des {@link JFileChooser} dahin, dass im Konstruktor FileSystemView
+ * gesetzt und currentDirectory auf userPath gesetzt werden. Wenn der Rückgabewert von showDialog,
+ * showOpenDialog bzw. showSaveDialog gleich APPROVE_OPTION ist, wird userPath auf currentDirectory 
+ * gesetzt. Alle Dialoge, die mit demselben <code>pathKey</code> initialisiert werden, starten immer
+ * in dem zuletzt in einem solchen Dialog gewählten Pfad.
+ * 
+ * Außerdem wird beim Aufruf des Speichern-Dialoges und bestätigen des Benutzers mit dem Speichern-Button
+ * immer sichergestellt, dass die zu speichernde Datei existiert und überschrieben werden darf.
+ * 
+ * Weiterhin: Wenn der aktuelle {@link FileFilter} während des Speicherns ein {@link FileNameExtensionFilter} ist
+ * und der Dateiname keine Extension besitzt, die dieser {@link FileFilter} akzeptiert, dann wird die erste der 
+ * Extensions, die dieser Filter akzeptiert an die Datei angehängt.
+ * 
+ */
+public class ExtendedFileChooser extends JFileChooser {
+	
+	/** Wenn kein Verzeichnis angegeben wurde, startet eine Instanz dieses Dialoges in diesem Verzeichnis */
+	private static final File DEFAULT_PATH = FileSystemView.getFileSystemView().getDefaultDirectory();
+	
+	/** 
+	 * Mappt von einem Key-Object auf einen Pfad. Je nachdem mit welchem Key-Object eine Instanz
+	 * dieser Klasse gestartet wurde, wird sich der zuletzt gewählte Pfad in dieser Map gemerkt.
+	 * Default ist das Key-Object <code>null</code>
+	 */
+	private static final HashMap<Object, File> KEY_TO_PATH_MAP = new HashMap<Object, File>();
+
+	/** Default Key für den letzten Pfad dieses Dialoges, wenn kein anderes Key-Object gesetzt wurde. */
+	private Object pathKey = null;
+	
+	/**	ResourceHandler für alle Instanzen */
+	private static final DialogResourceHandler drh = new DialogResourceHandler(ExtendedFileChooser.class);
+	
+	/**
+	 * @param pathKey
+	 */
+	public ExtendedFileChooser(Object pathKey) {
+		super();
+		setPathKey(pathKey);
+		setFileSystemView(FileSystemView.getFileSystemView());
+		File path = KEY_TO_PATH_MAP.get(pathKey);
+		setCurrentDirectory(path == null ? DEFAULT_PATH : path);
+	}
+
+	/**
+	 * @param pathKey
+	 */
+	public void setPathKey(Object pathKey) {
+		this.pathKey = pathKey;
+	}
+	
+	/**
+	 * @return the pathKey
+	 */
+	public Object getPathKey() {
+		return pathKey;
+	}
+	
+	/**
+	 * @param pathKey
+	 * @param path
+	 */
+	public void setPath(Object pathKey, File path) {
+		setPathKey(pathKey);
+		KEY_TO_PATH_MAP.put(pathKey, path);
+		setCurrentDirectory(path);
+	}
+	
+	/**
+	 * @param path
+	 */
+	public void setPath(File path) {
+		setPath(pathKey, path);
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.JFileChooser#showDialog(java.awt.Component, java.lang.String)
+	 */
+	@Override
+	public int showDialog(Component parent, String approveButtonText) throws HeadlessException {			
+		int returnValue = super.showDialog(parent, approveButtonText);
+		//Wenn man diese Zeile rausnimmt, merkt der Dialog sich auch das aktuelle Verzeichnis, wenn ABBRECHEN gedrückt wurde
+//		if (returnValue == APPROVE_OPTION)
+			setPath(pathKey, getCurrentDirectory()); 
+		return returnValue; 
+	}
+
+	/**
+	 * Setzt die FileFilter dieses Dialoges. Der erste FileFilter aus dem Array wird als aktiv gesetzt.
+	 *
+	 * @param showAllFileFilter
+	 * @param fileFilters
+	 */
+	public void setFileFilters(boolean showAllFileFilter, FileNameExtensionFilter... fileFilters) {
+		setAcceptAllFileFilterUsed(showAllFileFilter);
+		if (fileFilters != null) {
+			for (FileNameExtensionFilter fileFilter : fileFilters) {
+				addChoosableFileFilter(fileFilter);
+			}
+			setFileFilter(fileFilters[0]);
+		}
+	}
+
+	/**
+	 * @param parent
+	 * @param showAllFileFilter
+	 * @param fileFilters
+	 * @return
+	 */
+	public int showOpenDialog(Component parent, boolean showAllFileFilter, FileNameExtensionFilter... fileFilters) {
+		setFileFilters(showAllFileFilter, fileFilters);
+		return super.showOpenDialog(parent);
+	}
+
+	/**
+	 * @param parent
+	 * @param showAllFileFilter
+	 * @param fileFilters
+	 * @return
+	 */
+	public int showSaveDialog(Component parent, boolean showAllFileFilter, FileNameExtensionFilter... fileFilters) {
+		return showSaveDialog(parent, null, showAllFileFilter, fileFilters);
+	}
+
+	/**
+	 * @param parent
+	 * @param title
+	 * @param showAllFileFilter
+	 * @param fileFilters
+	 * @return
+	 */
+	public int showSaveDialog(Component parent, String title, boolean showAllFileFilter, FileNameExtensionFilter... fileFilters) {
+		setDialogType(SAVE_DIALOG);
+		if (title != null)
+			setDialogTitle(title);
+		setFileFilters(showAllFileFilter, fileFilters);
+		
+		boolean correctFileName = false;
+		int returnValue = ERROR_OPTION;
+		//der Dialog wird solange wiederholt, bis eine beschreibbare Datei ausgewählt wurde oder Abbrechen gedrückt wurde
+		while (!correctFileName && returnValue != CANCEL_OPTION) {
+			returnValue = showDialog(parent, null);
+			
+			//wenn nicht OK gedückt wurde -> raus
+			if (returnValue != APPROVE_OPTION)
+				return returnValue;
+			
+			//ausgewählte Datei holen
+			File selectedFile = getSelectedFile();
+			
+			//Prüfen, ob ungültige Zeichen im Namen stehen
+			correctFileName = false;
+			try {
+				correctFileName = selectedFile.getCanonicalPath().endsWith(selectedFile.getName());
+			} catch (IOException e) {
+			}
+			if (!correctFileName) {
+				MultipleOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_SAVE_ERROR"), drh.getString("MESSAGE_INVALID_CHARS"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
+				continue;
+			}
+			
+			//wenn die angegebene Datei noch nicht existiert prüfe, ob eine Extension angehängt werden sollte.
+			FileFilter fileFilter = getFileFilter();
+			if (fileFilter instanceof FileNameExtensionFilter) {
+				String[] extensions = ((FileNameExtensionFilter)fileFilter).getExtensions();
+				// wenn der angegebene Dateiname keine Extension hat, aber eine gültige Extension im FileFilter existiert
+				if (extensions.length > 0) {
+					String newSelectedFileName = getSelectedFile().getPath();
+					boolean extensionFound = false;
+					//wenn der Dateiname keine der gültigen Extensions besitzt IMMER die erste Dateierweiterung des FileFilters anhängen
+					for (String extension : extensions) {
+						if (newSelectedFileName.endsWith(extension)) {
+							extensionFound = true;
+							break;
+						}
+					}
+					if (!extensionFound) {
+						setSelectedFile(new File(newSelectedFileName.concat(".").concat(extensions[0])));
+						selectedFile = getSelectedFile();
+					}
+				}
+			}
+
+			//wenn die angegebene Datei bereits existiert
+			if (selectedFile.exists()) {
+				//wenn beschreibbar -> Fragen, ob drüberspeichern
+				if (selectedFile.canWrite()) {
+					switch (JOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_OVERWRITE_1") + selectedFile.getName() + drh.getString("MESSAGE_OVERWRITE_2"))) {
+						case JOptionPane.YES_OPTION: return APPROVE_OPTION;
+						case JOptionPane.NO_OPTION: correctFileName = false; continue; 
+						case JOptionPane.CANCEL_OPTION: return CANCEL_OPTION;
+					}
+				//wenn nicht beschreibbar -> Fehler und Dialog für Dateiauswahl wiederholen
+				} else {
+					correctFileName = false;
+					showSaveErrorMessage(parent);
+					continue;
+				}
+			}
+
+			//wenn sich die neue Datei nicht anlegen lässt oder doch aus irgendwelchen Gründen nicht beschreibbar ist
+			if (!FileHandler.guaranteeWriteableFile(selectedFile)) {
+				correctFileName = false;
+				MultipleOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_SAVE_ERROR"), drh.getString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
+				continue;
+			}
+		}
+		return returnValue; 
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.JFileChooser#showSaveDialog(java.awt.Component)
+	 */
+	@Override
+	public int showSaveDialog(Component parent) throws HeadlessException {
+		return showSaveDialog(parent, (String)null, isAcceptAllFileFilterUsed(), (FileNameExtensionFilter[])null); 
+	}
+	
+	/**
+	 * Zeigt einen Hinweisdialog an, dass die Datei nicht gespiechert werden konnte.
+	 * 
+	 * @param parent
+	 */
+	public static final void showSaveErrorMessage(Component parent) {
+		MultipleOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_SAVE_ERROR"), drh.getString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
+	}
+
+}
