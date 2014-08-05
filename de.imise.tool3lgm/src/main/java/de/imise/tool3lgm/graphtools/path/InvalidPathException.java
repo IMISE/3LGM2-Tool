@@ -8,10 +8,10 @@ package de.imise.tool3lgm.graphtools.path;
  */
 public class InvalidPathException extends Exception {
 
-	/**
-	 * @param message
-	 */
-	public InvalidPathException(String message) {
-		super(message);
-	}
+    /**
+     * @param message
+     */
+    public InvalidPathException(final String message) {
+        super(message);
+    }
 }

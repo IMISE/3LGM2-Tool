@@ -1,8 +1,5 @@
 /*
- * Created on 12.01.2004
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Created on 12.01.2004 To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 package de.imise.tool3lgm.graphtools.elements.edge;
 
@@ -26,62 +23,57 @@ public final class KommBeziehung extends Doppelkante {
      * COMMENTME
      */
     @SuppressWarnings("rawtypes")
-	public static final Class[] COPY_DEPENDENCY = {
-		EreignisNachrichtenTyp.class,
-		EreignisDokumentenTyp.class,
-	};
-	
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#getCopyDependencies()
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public Class<? extends ModelElement>[] getCopyDependencies() {
-		return COPY_DEPENDENCY;
-	}
-	
-//	public static final Class[] stcl = {Bausteinschnittstelle.class};
-	public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
-	public static final int[] scard = {ModelConstants.ZERO, ModelConstants.UNLIMITED};
+    public static final Class[] COPY_DEPENDENCY = {
+            EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class,
+    };
 
-	public static final int[] ecard = {ModelConstants.ZERO, ModelConstants.UNLIMITED};
-	public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
-//	public static final Class[] etcl = {Bausteinschnittstelle.class};
-	
-//	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-//	private static Object[][] etcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends ModelElement>[] getCopyDependencies() {
+        return COPY_DEPENDENCY;
+    }
 
-	/**
+    //	public static final Class[] stcl = {Bausteinschnittstelle.class};
+    public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
+    public static final int[] scard = {
+            ModelConstants.ZERO, ModelConstants.UNLIMITED
+    };
+
+    public static final int[] ecard = {
+            ModelConstants.ZERO, ModelConstants.UNLIMITED
+    };
+    public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
+
+    //	public static final Class[] etcl = {Bausteinschnittstelle.class};
+
+    //	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] etcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+
+    /**
 	 * 
 	 */
-	public KommBeziehung() {
-		super();
-	}
+    public KommBeziehung() {
+        super();
+    }
 
-	/**
-	 * @param knot1
-	 * @param knot2
-	 */
-	public KommBeziehung(ModelElement knot1, ModelElement knot2) {
-		super(knot1, knot2);
-	}
+    /**
+     * @param knot1
+     * @param knot2
+     */
+    public KommBeziehung(final ModelElement knot1, final ModelElement knot2) {
+        super(knot1, knot2);
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-	 */
-	@Override
-	public int layerFor() {
-		return ModelConstants.LOGICAL_LAYER; 
-	}
+    @Override
+    public int layerFor() {
+        return ModelConstants.LOGICAL_LAYER;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#createPropertyDialog(tool3lgm.graphtools.GDCollection)
-	 */
-	@Override
-	public ElementPropertyDialog createPropertyDialog(GDCollection gdcoll) {
-		ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-		dialog.addTab(getResString("etntueb"),new ETNTPanel2(EtntEtdtKombination.class,dialog));
-		return dialog;
-	}
+    @Override
+    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
+        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+        dialog.addTab(getResString("etntueb"), new ETNTPanel2(EtntEtdtKombination.class, dialog));
+        return dialog;
+    }
 
 }

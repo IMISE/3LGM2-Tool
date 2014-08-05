@@ -12,74 +12,79 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 
 public abstract class AbstractAnalyse {
 
-	/** der Name der Analyse. */
-	protected String name;
-	/** der Knoten, bei dem die Analyse beginnt.*/
-	protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<Class<? extends ModelElement>>();
+    /** der Name der Analyse. */
+    protected String name;
+    /** der Knoten, bei dem die Analyse beginnt. */
+    protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<Class<? extends ModelElement>>();
 
-	/**
-	 * Gibt die Namen der Knotentypen zurück, auf die die XMLAnalyse angewandt werden kann.<br>
-	 * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse verwendet, sondern nur bei
-	 * der Zuordnung, welche Analysen für wlche Knoten zur Verfügung stehen.
-	 * @return	eine ArrayList der Startknoten.
-	 */
-	public ArrayList<Class<? extends ModelElement>> getStartknoten() {
-		return startknoten;
-	}
+    /**
+     * Gibt den Namen der XMLAnalyse zurück.
+     * 
+     * @return der Name der XMLAnalyse.
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Gibt den Namen der XMLAnalyse zurück.
-	 * @return	der Name der XMLAnalyse.
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * Gibt der XMLAnalyse einen neuen Namen.
-	 * @param name	neuer Name der XMLAnalyse.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * @return Kommaseparierten String aller Startklassen der XMLAnalyse für die aktuelle Locale
-	 */
-	public String getStartknotenString(){
-		if (startknoten == null || startknoten.size() == 0)
-			return "";
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < startknoten.size() - 1; i++) {
-			sb.append(ModelConstants.getDisplayableName(ModelConstants.getClassForName(startknoten.get(i).getName())));
-			sb.append(", ");
-		}
-		sb.append(ModelConstants.getDisplayableName(ModelConstants.getClassForName(startknoten.get(startknoten.size() - 1).getName())));
-		return sb.toString();
-	}
-	
-	/**
-	 * Liefert die Ergenis-Elemente der Analyse für die in diesem GraphDocument selektierten Elemente.
-	 * 
-	 * @param doc
-	 * @return
-	 */
-	public abstract List<ElementContainer> getResult(GraphDocument doc);
+    /**
+     * Liefert die Ergenis-Elemente der Analyse für die in diesem GraphDocument selektierten
+     * Elemente.
+     * 
+     * @param doc
+     * @return
+     */
+    public abstract List<ElementContainer> getResult(GraphDocument doc);
 
-	/**
-	 * @param result
-	 * @param doc
-	 */
-	public final void setAnalysisResult(GraphDocument doc) {
-		List<ElementContainer> result = getResult(doc);
-		if (result != null) {
-			if (UserProperties.isNewSubmodelForAnalysis())
-				doc.addContainerToNewSzenario(result, TransactionManager.STANDARD_PID);
-			else
-				doc.setAnalysisResult(result);
-				
-		}
-	}
+    /**
+     * Gibt die Namen der Knotentypen zurück, auf die die XMLAnalyse angewandt werden kann.<br>
+     * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse verwendet, sondern nur
+     * bei der Zuordnung, welche Analysen für wlche Knoten zur Verfügung stehen.
+     * 
+     * @return eine ArrayList der Startknoten.
+     */
+    public ArrayList<Class<? extends ModelElement>> getStartknoten() {
+        return startknoten;
+    }
 
-	
+    /**
+     * @return Kommaseparierten String aller Startklassen der XMLAnalyse für die aktuelle Locale
+     */
+    public String getStartknotenString() {
+        if (startknoten == null || startknoten.size() == 0) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < startknoten.size() - 1; i++) {
+            sb.append(ModelConstants.getDisplayableName(ModelConstants.getClassForName(startknoten.get(i).getName())));
+            sb.append(", ");
+        }
+        sb.append(ModelConstants.getDisplayableName(ModelConstants.getClassForName(startknoten.get(startknoten.size() - 1).getName())));
+        return sb.toString();
+    }
+
+    /**
+     * @param result
+     * @param doc
+     */
+    public final void setAnalysisResult(final GraphDocument doc) {
+        List<ElementContainer> result = getResult(doc);
+        if (result != null) {
+            if (UserProperties.isNewSubmodelForAnalysis()) {
+                doc.addContainerToNewSzenario(result, TransactionManager.STANDARD_PID);
+            } else {
+                doc.setAnalysisResult(result);
+            }
+
+        }
+    }
+
+    /**
+     * Gibt der XMLAnalyse einen neuen Namen.
+     * 
+     * @param name neuer Name der XMLAnalyse.
+     */
+    public void setName(final String name) {
+        this.name = name;
+    }
+
 }

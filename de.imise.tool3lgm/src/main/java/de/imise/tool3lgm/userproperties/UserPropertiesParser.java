@@ -19,71 +19,70 @@ import de.imise.tool3lgm.xml.XMLVersionException;
 
 /**
  * @author Thomas Rudert
- * seit Version Beta 2 P26
+ *         seit Version Beta 2 P26
  */
 public class UserPropertiesParser {
 
-	
-	/** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
-	private static String[] supportedXMLVersions = { "<?xml version='1.0' encoding='utf-8'?>", 
-		                                             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" };
-	
-	private SAXParser parser;
-	
-	private File userInfoFile;
-	
-	/**
+    /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
+    private static String[] supportedXMLVersions = {
+            "<?xml version='1.0' encoding='utf-8'?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    };
+
+    private final SAXParser parser;
+
+    private final File userInfoFile;
+
+    /**
 	 * 
 	 */
-	public UserPropertiesParser(File _userInfoFile) 
-	throws SAXException, ParserConfigurationException, IOException, XMLVersionException {
-	       	
-	    if (!_userInfoFile.canRead())
-	    	throw new IOException("Can not read file: " + _userInfoFile.toString());
-	    
-	    userInfoFile = _userInfoFile;
-	    
-		SAXParserFactory factory = SAXParserFactory.newInstance();
+    public UserPropertiesParser(final File _userInfoFile) throws SAXException, ParserConfigurationException, IOException, XMLVersionException {
 
-		parser = factory.newSAXParser();
-		parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
-		
-		if (!isParseAbleFileVersion(userInfoFile))
-			throw new XMLVersionException("Unable to read content of file: " + userInfoFile);
+        if (!_userInfoFile.canRead()) {
+            throw new IOException("Can not read file: " + _userInfoFile.toString());
+        }
 
-		parser.getXMLReader().setContentHandler(new UserPropertiesContentHandler());
-	}
+        userInfoFile = _userInfoFile;
 
-	public void parseDocument() throws SAXException, IOException  {						
-		FileInputStream stream = new FileInputStream(userInfoFile);
-						
-		XMLReader reader = parser.getXMLReader();
- 		reader.parse(new InputSource(stream));
-		
-		stream.close();
-	}
+        SAXParserFactory factory = SAXParserFactory.newInstance();
 
-	
-	/**
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 */
-	public static boolean isParseAbleFileVersion(File file) 
-	throws IOException {
-		boolean parseAble = false;
+        parser = factory.newSAXParser();
+        parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-		String line = reader.readLine();
-		
+        if (!isParseAbleFileVersion(userInfoFile)) {
+            throw new XMLVersionException("Unable to read content of file: " + userInfoFile);
+        }
 
-		for (int i=0; i<supportedXMLVersions.length; i++)
-			if (line.toLowerCase().equals(supportedXMLVersions[i].toLowerCase())) {
-				parseAble = true;
-				break;
-			}
+        parser.getXMLReader().setContentHandler(new UserPropertiesContentHandler());
+    }
 
-		reader.close();
-		return parseAble;
-	}
+    public void parseDocument() throws SAXException, IOException {
+        FileInputStream stream = new FileInputStream(userInfoFile);
+
+        XMLReader reader = parser.getXMLReader();
+        reader.parse(new InputSource(stream));
+
+        stream.close();
+    }
+
+    /**
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static boolean isParseAbleFileVersion(final File file) throws IOException {
+        boolean parseAble = false;
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        String line = reader.readLine();
+
+        for (int i = 0; i < supportedXMLVersions.length; i++) {
+            if (line.toLowerCase().equals(supportedXMLVersions[i].toLowerCase())) {
+                parseAble = true;
+                break;
+            }
+        }
+
+        reader.close();
+        return parseAble;
+    }
 }

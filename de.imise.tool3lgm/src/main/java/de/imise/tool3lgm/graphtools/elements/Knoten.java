@@ -16,100 +16,83 @@ import de.imise.tool3lgm.log.Log;
  */
 public abstract class Knoten extends ModelElement {
 
-	/**
+    /**
 	 * 
 	 */
-	public Knoten() {
-		super();
-	}
+    public Knoten() {
+        super();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#clone()
-	 */
-	@Override
-	public Object clone() {
-		Knoten retVal;
-		try {
-			retVal = (Knoten) super.clone();
-		} catch (Exception e) {
-			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-			return null;
-		}
-		return retVal;
-	}
+    @Override
+    public Object clone() {
+        Knoten retVal;
+        try {
+            retVal = (Knoten) super.clone();
+        } catch (Exception e) {
+            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            return null;
+        }
+        return retVal;
+    }
 
-	/**
-	 * @param classesToShow
-	 * @return
-	 */
-	public String getLabel(String[] classesToShow) {
-		return getName();
-	}
+    /**
+     * @param classesToShow
+     * @return
+     */
+    public String getLabel(final String[] classesToShow) {
+        return getName();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#toXMLString()
-	 */
-	@Override
-	public final String toXMLString() {
-		return super.toXMLString();
-	}
+    @Override
+    public final String toXMLString() {
+        return super.toXMLString();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#createContainer(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public ElementContainer createContainer(GraphDocument doc) {
-		if (ModelConstants.isInterLayerStartClass(getClass()))
-			return new InterLayerConnectedNodeContainer(this, doc);
-		return new NodeContainer(this, doc);
-	}
+    @Override
+    public ElementContainer createContainer(final GraphDocument doc) {
+        if (ModelConstants.isInterLayerStartClass(getClass())) {
+            return new InterLayerConnectedNodeContainer(this, doc);
+        }
+        return new NodeContainer(this, doc);
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#getXMLEntities()
-	 */
-	@Override
-	protected StringBuilder getXMLEntities() {
-		return super.getXMLEntities();
-	}
+    @Override
+    protected StringBuilder getXMLEntities() {
+        return super.getXMLEntities();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#putXMLFieldString(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public boolean putXMLFieldString(String field, String value) {
-		return super.putXMLFieldString(field, value);
-	}
+    @Override
+    public boolean putXMLFieldString(final String field, final String value) {
+        return super.putXMLFieldString(field, value);
+    }
 
-	/**
-	 * Gibt eine Liste der Container zurueck, die für diesen Knoten redundant sein koennen. 
-	 * (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
-	 * 
-	 * @param doc
-	 * @return
-	 */
-	public ArrayList<ElementContainer> getRedundanceTypes(GraphDocument doc) {
-		return null;
-	}
+    /**
+     * Gibt eine Liste der Container zurueck, die für diesen Knoten redundant sein koennen. (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
+     * 
+     * @param doc
+     * @return
+     */
+    public ArrayList<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
+        return null;
+    }
 
-	/**
-	 * Diese Funktion ist bis jetzt nur in Aufgabe überschrieben und sollte den String zurückliefern,
-	 * der ueber dem Layer angezeigt wird, wenn die Redundanzinformationen gewünscht werden.
-	 * 
-	 * @param redundance
-	 * @param saturation
-	 * @return
-	 */
-	public String getRedundanceString(float redundance, float saturation) {
-		return "";
-	}
+    /**
+     * Diese Funktion ist bis jetzt nur in Aufgabe überschrieben und sollte den String zurückliefern, der ueber dem Layer angezeigt wird, wenn die Redundanzinformationen gewünscht werden.
+     * 
+     * @param redundance
+     * @param saturation
+     * @return
+     */
+    public String getRedundanceString(final float redundance, final float saturation) {
+        return "";
+    }
 
-	/**
-	 * Gibt einen {@link ActionIdentifier} wieder, der diesen {@link Knoten} identifiziert.
-	 * 
-	 * @return
-	 */
-	public ActionIdentifier getIdentifier() {
-		return null;
-	}
+    /**
+     * Gibt einen {@link ActionIdentifier} wieder, der diesen {@link Knoten} identifiziert.
+     * 
+     * @return
+     */
+    public ActionIdentifier getIdentifier() {
+        return null;
+    }
 }

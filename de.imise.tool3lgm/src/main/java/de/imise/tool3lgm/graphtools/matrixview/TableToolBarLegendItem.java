@@ -7,49 +7,44 @@ import javax.swing.JPanel;
 
 /**
  * Repräsentiert einen Legendeneintrag in der <code>TableToolBar</code>.<br>
- * Diese Einträge werden angezeigt, wenn in der ToolBar eine gültige Auswahl von
- * 2 Klassen vorgenommen wurde, für die die Verbindungsmatrix angezeigt werden
- * soll.
+ * Diese Einträge werden angezeigt, wenn in der ToolBar eine gültige Auswahl von 2 Klassen vorgenommen wurde, für die die Verbindungsmatrix angezeigt werden soll.
  * 
  * @author Thomas Rudert
  */
 public class TableToolBarLegendItem extends JPanel {
 
-	/**
-	 * Farbe der Felder, die dieses Legenden-Item erklärt
-	 */
-	private Color color;
+    /**
+     * Farbe der Felder, die dieses Legenden-Item erklärt
+     */
+    private final Color color;
 
-	/**
-	 * Beschreibung der Felder, die dieses Legenden-Item erklärt
-	 */
-	private String description;
+    /**
+     * Beschreibung der Felder, die dieses Legenden-Item erklärt
+     */
+    private final String description;
 
-	/**
-	 * @param description
-	 * @param color
-	 */
-	public TableToolBarLegendItem(String description, Color color) {
-		this.description = description;
-		this.color = color;
-	}
+    /**
+     * @param description
+     * @param color
+     */
+    public TableToolBarLegendItem(final String description, final Color color) {
+        this.description = description;
+        this.color = color;
+    }
 
-	/* (non-Javadoc)
-	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
-	 */
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawString(description, 15, 9);
-		g.setColor(color);
-		g.fillRect(0, 0, 10, 10);
-	}
+    @Override
+    public void paintComponent(final Graphics g) {
+        super.paintComponent(g);
+        g.drawString(description, 15, 9);
+        g.setColor(color);
+        g.fillRect(0, 0, 10, 10);
+    }
 
-	/**
-	 * @return
-	 */
-	public Color getColor() {
-		return color;
-	}
+    /**
+     * @return
+     */
+    public Color getColor() {
+        return color;
+    }
 
 }

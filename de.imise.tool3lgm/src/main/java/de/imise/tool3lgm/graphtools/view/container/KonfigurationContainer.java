@@ -1,6 +1,5 @@
 /*
  * Created on 16.06.2003
- *
  * To change the template for this generated file go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
@@ -24,197 +23,189 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * @author Thomas
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ *         To change the template for this generated type comment go to
+ *         Window>Preferences>Java>Code Generation>Code and Comments
  */
 public class KonfigurationContainer extends NodeContainer {
 
-	public static Color[] farben = { Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.yellow };
-	public static int colorCounter = 0;
+    public static Color[] farben = {
+            Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.yellow
+    };
+    public static int colorCounter = 0;
 
-	public KonfigurationContainer() {
-		super();
-	}
-	
-	/**
-	 * @param neu
-	 * @param gd
-	 * @param map
-	 */
-	public KonfigurationContainer(Konfiguration neu, GraphDocument gd) {
-		super(neu, gd);
-	}
+    public KonfigurationContainer() {
+        super();
+    }
 
-	/**
-	 * @param alt
-	 * @param gd
-	 * @param map
-	 */
-	public KonfigurationContainer(KonfigurationContainer alt, GraphDocument gd) {
-		super(alt, gd);
-	}
+    /**
+     * @param neu
+     * @param gd
+     * @param map
+     */
+    public KonfigurationContainer(final Konfiguration neu, final GraphDocument gd) {
+        super(neu, gd);
+    }
 
-	/**
-	 * @param neu
-	 * @param l
-	 * @param gd
-	 * @param map
-	 */
-	public KonfigurationContainer(Konfiguration neu, GraphElementLayout l, GraphDocument gd) {
-		super(neu, l, gd);
-	}
+    /**
+     * @param alt
+     * @param gd
+     * @param map
+     */
+    public KonfigurationContainer(final KonfigurationContainer alt, final GraphDocument gd) {
+        super(alt, gd);
+    }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#clone()
-	 */
-	@Override
-	public Object clone() {
-		KonfigurationContainer retVal;
-		try {
-			retVal = (KonfigurationContainer) super.clone();
-		} catch (Exception e) {
-			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-			return null;
-		}
+    /**
+     * @param neu
+     * @param l
+     * @param gd
+     * @param map
+     */
+    public KonfigurationContainer(final Konfiguration neu, final GraphElementLayout l, final GraphDocument gd) {
+        super(neu, l, gd);
+    }
 
-		return retVal;
-	}
+    @Override
+    public Object clone() {
+        KonfigurationContainer retVal;
+        try {
+            retVal = (KonfigurationContainer) super.clone();
+        } catch (Exception e) {
+            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            return null;
+        }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.view.container.NodeContainer#getX()
-	 */
-	@Override
-	public int getX() {
-		return 0;
-	}
-	
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.view.container.NodeContainer#getY()
-	 */
-	@Override
-	public int getY() {
-		return 0;
-	}
-	
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.view.container.NodeContainer#getWidth()
-	 */
-	@Override
-	public int getWidth() {
-		return 1;
-	}
+        return retVal;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.view.container.NodeContainer#getHeight()
-	 */
-	@Override
-	public int getHeight() {
-		return 1;
-	}
+    @Override
+    public int getX() {
+        return 0;
+    }
 
-	/**
-	 * @return
-	 */
-	public boolean isKonfigurationContainer(){return true;}
+    @Override
+    public int getY() {
+        return 0;
+    }
 
-	double x_shift = 0;
-	double y_shift = 0;
-	public void setShift(double x, double y) {
-		x_shift = x;
-		y_shift = y;
-	}
+    @Override
+    public int getWidth() {
+        return 1;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.view.container.NodeContainer#paintComponent(java.awt.Graphics)
-	 */
-	@Override
-	public final void paintComponent(Graphics g) {
-		if (!isVisible() && !isHighLight()) {
-			return;
-		}
-		AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
-		if (!(frame instanceof ToolInternalFrame))
-			return;
+    @Override
+    public int getHeight() {
+        return 1;
+    }
 
-		Color elem_col = null;
-		if (UserProperties.isAssignConfigurationColors()) {
-			colorCounter = (colorCounter + 1) % farben.length;
-			elem_col = farben[colorCounter];
-		} else {
-			elem_col = Color.black;
-		}
-		if (elem_col == null)
-			elem_col = Color.black;
-		g.setColor(elem_col);
+    /**
+     * @return
+     */
+    public boolean isKonfigurationContainer() {
+        return true;
+    }
 
-		boolean multiView = ((ToolInternalFrame) frame).getInputGraphArea().isMultiViewEnabled();
+    double x_shift = 0;
+    double y_shift = 0;
 
-		GraphDocument selectedDoc = frame.getGraphDocument();
+    public void setShift(final double x, final double y) {
+        x_shift = x;
+        y_shift = y;
+    }
 
-		Konfiguration konf = ((Konfiguration) getElement());
-		ArrayList<ElementContainer> start = konf.getServerContainer(selectedDoc);
-		ArrayList<ElementContainer> end = konf.getClientContainer(selectedDoc);
+    @Override
+    public final void paintComponent(final Graphics g) {
+        if (!isVisible() && !isHighLight()) {
+            return;
+        }
+        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        if (!(frame instanceof ToolInternalFrame)) {
+            return;
+        }
 
-		for (int a = 0; a < start.size(); a++) {
-			NodeContainer c1 = (NodeContainer) start.get(a);
-			if (c1 == null)
-				continue;
-			ArrayList<ElementContainer> c1C = null;
-			if (!c1.isVisible()) {
-				c1C = c1.getSurrogateContainer();
-			} else {
-				c1C = new ArrayList<ElementContainer>(1);
-				c1C.add(c1);
-			}
+        Color elem_col = null;
+        if (UserProperties.isAssignConfigurationColors()) {
+            colorCounter = (colorCounter + 1) % farben.length;
+            elem_col = farben[colorCounter];
+        } else {
+            elem_col = Color.black;
+        }
+        if (elem_col == null) {
+            elem_col = Color.black;
+        }
+        g.setColor(elem_col);
 
-			for (int b = 0; b < c1C.size(); b++) {
-				NodeContainer kc1 = (NodeContainer) c1C.get(b);
-				if (!kc1.isVisible())
-					continue;
-				if (isSelected()) {
-					g.setColor(Color.red);
-					g.fillRect(kc1.getX() - 10, kc1.getY() - 10, 20, 20);
-					g.setColor(elem_col);
-				}
-				if (multiView) {
-					Graphics2D gc = (Graphics2D)g;
-					Stroke s = gc.getStroke();
+        boolean multiView = ((ToolInternalFrame) frame).getInputGraphArea().isMultiViewEnabled();
 
-					for (int c = 0; c < end.size(); c++) {
-						NodeContainer c2 = (NodeContainer) end.get(c);
-						if (c2 == null)
-							continue;
-						ArrayList<ElementContainer> c2C = null;
-						if (!c2.isVisible()) {
-							c2C = c2.getSurrogateContainer();
-						} else {
-							c2C = new ArrayList<ElementContainer>(1);
-							c2C.add(c2);
-						}
+        GraphDocument selectedDoc = frame.getGraphDocument();
 
-						for (int d = 0; d < c2C.size(); d++) {
-							NodeContainer kc2 = (NodeContainer) c2C.get(d);
-							if (!kc2.isVisible())
-								continue;
-							if (isHighLight()) {
-								g.setColor(Color.green);
-								gc.setStroke(meduimStroke);
-								g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
-								gc.setStroke(s);
-								g.setColor(elem_col);
-							}
+        Konfiguration konf = (Konfiguration) getElement();
+        ArrayList<ElementContainer> start = konf.getServerContainer(selectedDoc);
+        ArrayList<ElementContainer> end = konf.getClientContainer(selectedDoc);
 
-							g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
-							if (isSelected()) {
-								g.setColor(Color.red);
-								g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
-								g.setColor(elem_col);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+        for (int a = 0; a < start.size(); a++) {
+            NodeContainer c1 = (NodeContainer) start.get(a);
+            if (c1 == null) {
+                continue;
+            }
+            ArrayList<ElementContainer> c1C = null;
+            if (!c1.isVisible()) {
+                c1C = c1.getSurrogateContainer();
+            } else {
+                c1C = new ArrayList<ElementContainer>(1);
+                c1C.add(c1);
+            }
+
+            for (int b = 0; b < c1C.size(); b++) {
+                NodeContainer kc1 = (NodeContainer) c1C.get(b);
+                if (!kc1.isVisible()) {
+                    continue;
+                }
+                if (isSelected()) {
+                    g.setColor(Color.red);
+                    g.fillRect(kc1.getX() - 10, kc1.getY() - 10, 20, 20);
+                    g.setColor(elem_col);
+                }
+                if (multiView) {
+                    Graphics2D gc = (Graphics2D) g;
+                    Stroke s = gc.getStroke();
+
+                    for (int c = 0; c < end.size(); c++) {
+                        NodeContainer c2 = (NodeContainer) end.get(c);
+                        if (c2 == null) {
+                            continue;
+                        }
+                        ArrayList<ElementContainer> c2C = null;
+                        if (!c2.isVisible()) {
+                            c2C = c2.getSurrogateContainer();
+                        } else {
+                            c2C = new ArrayList<ElementContainer>(1);
+                            c2C.add(c2);
+                        }
+
+                        for (int d = 0; d < c2C.size(); d++) {
+                            NodeContainer kc2 = (NodeContainer) c2C.get(d);
+                            if (!kc2.isVisible()) {
+                                continue;
+                            }
+                            if (isHighLight()) {
+                                g.setColor(Color.green);
+                                gc.setStroke(meduimStroke);
+                                g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
+                                gc.setStroke(s);
+                                g.setColor(elem_col);
+                            }
+
+                            g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
+                            if (isSelected()) {
+                                g.setColor(Color.red);
+                                g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
+                                g.setColor(elem_col);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

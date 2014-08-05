@@ -14,55 +14,59 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
  */
 public class ToolContentHandlerV3_4 extends ToolContentHandlerV3_2 {
 
-	/**
-	 * @param coll
-	 * @param paste
-	 */
-	public ToolContentHandlerV3_4(GDCollection coll, boolean paste) {
-		super(coll, paste);
-	}
+    /**
+     * @param coll
+     * @param paste
+     */
+    public ToolContentHandlerV3_4(final GDCollection coll, final boolean paste) {
+        super(coll, paste);
+    }
 
-	@Override
-	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-		elementValue.setLength(0);
+    @Override
+    public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
+        elementValue.setLength(0);
 
-		if (qName.equals("layerHeight")) {
+        if (qName.equals("layerHeight")) {
 
-		} else if (qName.equals("layerWidth")) {
+        } else if (qName.equals("layerWidth")) {
 
-		} else if (qName.equals("fixlayersize")) {
+        } else if (qName.equals("fixlayersize")) {
 
-		//"degree" umbenannt in "angle"
-		} else if (qName.equals("angle")) {
+            //"degree" umbenannt in "angle"
+        } else if (qName.equals("angle")) {
 
-		} else
-			super.startElement(namespaceURI, localName, qName, atts);
-	}
+        } else {
+            super.startElement(namespaceURI, localName, qName, atts);
+        }
+    }
 
-	@Override
-	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-		if (qName.equals("layerHeight")) {
-			double pageSizeFactor = (double)Integer.parseInt(elementValue.toString()) / (double)GraphDocument.INITIAL_PAGE_HEIGHT;
-			System.err.println(pageSizeFactor  + " " + elementValue + " " + GraphDocument.INITIAL_PAGE_HEIGHT);
-			if (pageSizeFactor > viewParameter.pageSizeFactor)
-				viewParameter.pageSizeFactor = pageSizeFactor;
-			System.err.println("pageSizeFactor " + elementValue + " -> " + pageSizeFactor);
-		} else if (qName.equals("layerWidth")) {
-			double pageSizeFactor = (double)Integer.parseInt(elementValue.toString()) / (double)GraphDocument.INITIAL_PAGE_WIDTH;
-			System.err.println(pageSizeFactor  + " " + elementValue + " " + GraphDocument.INITIAL_PAGE_HEIGHT);
-			if (pageSizeFactor > viewParameter.pageSizeFactor)
-				viewParameter.pageSizeFactor = pageSizeFactor;
+    @Override
+    public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
+        if (qName.equals("layerHeight")) {
+            double pageSizeFactor = (double) Integer.parseInt(elementValue.toString()) / (double) GraphDocument.INITIAL_PAGE_HEIGHT;
+            System.err.println(pageSizeFactor + " " + elementValue + " " + GraphDocument.INITIAL_PAGE_HEIGHT);
+            if (pageSizeFactor > viewParameter.pageSizeFactor) {
+                viewParameter.pageSizeFactor = pageSizeFactor;
+            }
+            System.err.println("pageSizeFactor " + elementValue + " -> " + pageSizeFactor);
+        } else if (qName.equals("layerWidth")) {
+            double pageSizeFactor = (double) Integer.parseInt(elementValue.toString()) / (double) GraphDocument.INITIAL_PAGE_WIDTH;
+            System.err.println(pageSizeFactor + " " + elementValue + " " + GraphDocument.INITIAL_PAGE_HEIGHT);
+            if (pageSizeFactor > viewParameter.pageSizeFactor) {
+                viewParameter.pageSizeFactor = pageSizeFactor;
+            }
 
-		} else if (qName.equals("fixlayersize")) {
-//			viewParameter.fixLayerSize = Boolean.valueOf(elementValue.toString()).booleanValue();
+        } else if (qName.equals("fixlayersize")) {
+            //			viewParameter.fixLayerSize = Boolean.valueOf(elementValue.toString()).booleanValue();
 
-		} else if (qName.equals("angle")) {
-			String s = elementValue.toString();
-			int i = Integer.parseInt(s);
-			viewParameter.degree = i;
+        } else if (qName.equals("angle")) {
+            String s = elementValue.toString();
+            int i = Integer.parseInt(s);
+            viewParameter.degree = i;
 
-		} else
-			super.endElement(namespaceURI, localName, qName);
-	}
+        } else {
+            super.endElement(namespaceURI, localName, qName);
+        }
+    }
 
 }

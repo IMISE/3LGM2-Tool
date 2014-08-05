@@ -1,6 +1,5 @@
 /*
  * Created on 23.11.2007
- *
  */
 package de.imise.tool3lgm.graphtools.dialog.action;
 
@@ -9,70 +8,60 @@ import java.awt.event.ComponentListener;
 
 /**
  * @author fstephan
- *
-
  */
 public class LGMComponentListener implements ComponentListener {
 
-	private LGMAction componentHiddenAction;
+    private final LGMAction componentHiddenAction;
 
-	private LGMAction componentMovedAction;
+    private final LGMAction componentMovedAction;
 
-	private LGMAction componentResizedAction;
+    private final LGMAction componentResizedAction;
 
-	private LGMAction componentShownAction;
+    private final LGMAction componentShownAction;
 
-	/** ************************************************************************* */
+    /** ************************************************************************* */
 
-	/**
-	 * Konstruktor
-	 * 
-	 * @param componentHiddenAction
-	 * @param componentMovedAction
-	 * @param componentResizedAction
-	 * @param componentShownAction
-	 */
-	public LGMComponentListener(LGMAction componentHiddenAction, LGMAction componentMovedAction, LGMAction componentResizedAction, LGMAction componentShownAction) {
+    /**
+     * Konstruktor
+     * 
+     * @param componentHiddenAction
+     * @param componentMovedAction
+     * @param componentResizedAction
+     * @param componentShownAction
+     */
+    public LGMComponentListener(final LGMAction componentHiddenAction, final LGMAction componentMovedAction, final LGMAction componentResizedAction, final LGMAction componentShownAction) {
 
-		this.componentHiddenAction = componentHiddenAction;
-		this.componentMovedAction = componentMovedAction;
-		this.componentResizedAction = componentResizedAction;
-		this.componentShownAction = componentShownAction;
-	}
+        this.componentHiddenAction = componentHiddenAction;
+        this.componentMovedAction = componentMovedAction;
+        this.componentResizedAction = componentResizedAction;
+        this.componentShownAction = componentShownAction;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ComponentListener#componentHidden(java.awt.event.ComponentEvent)
-	 */
-	@Override
-	public void componentHidden(final ComponentEvent e) {
-		if (this.componentHiddenAction != null)
-			this.componentHiddenAction.execute(e);
-	}
+    @Override
+    public void componentHidden(final ComponentEvent e) {
+        if (componentHiddenAction != null) {
+            componentHiddenAction.execute(e);
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ComponentListener#componentMoved(java.awt.event.ComponentEvent)
-	 */
-	@Override
-	public void componentMoved(final ComponentEvent e) {
-		if (this.componentMovedAction != null)
-			this.componentMovedAction.execute(e);
-	}
+    @Override
+    public void componentMoved(final ComponentEvent e) {
+        if (componentMovedAction != null) {
+            componentMovedAction.execute(e);
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ComponentListener#componentResized(java.awt.event.ComponentEvent)
-	 */
-	@Override
-	public void componentResized(final ComponentEvent e) {
-		if (this.componentResizedAction != null)
-			this.componentResizedAction.execute(e);
-	}
+    @Override
+    public void componentResized(final ComponentEvent e) {
+        if (componentResizedAction != null) {
+            componentResizedAction.execute(e);
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ComponentListener#componentShown(java.awt.event.ComponentEvent)
-	 */
-	@Override
-	public void componentShown(final ComponentEvent e) {
-		if (this.componentShownAction != null)
-			this.componentShownAction.execute(e);
-	}
+    @Override
+    public void componentShown(final ComponentEvent e) {
+        if (componentShownAction != null) {
+            componentShownAction.execute(e);
+        }
+    }
 }

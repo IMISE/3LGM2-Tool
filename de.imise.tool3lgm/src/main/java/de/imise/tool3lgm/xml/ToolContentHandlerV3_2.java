@@ -1,6 +1,5 @@
 /*
  * Created on 06.02.2005
- *
  */
 package de.imise.tool3lgm.xml;
 
@@ -20,82 +19,80 @@ import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.log.Log;
 
 /**
+ * für Dateiversion mit Knickpunkten
+ * 
  * @author Thomas Wendt
- * 
- *         für Dateiversion mit Knickpunkten
- * 
  */
 public class ToolContentHandlerV3_2 extends ToolContentHandlerV3_1 {
 
-	private boolean paste = false;
-	private ArrayList<ElementContainer> pastedElements;
+    private boolean paste = false;
+    private ArrayList<ElementContainer> pastedElements;
 
-	/**
-	 * @param coll
-	 */
-	public ToolContentHandlerV3_2(GDCollection coll, boolean paste) {
-		super(coll);
-		this.paste = paste;
-		if (paste)
-			pastedElements = new ArrayList<ElementContainer>(5000);
-	}
+    /**
+     * @param coll
+     */
+    public ToolContentHandlerV3_2(final GDCollection coll, final boolean paste) {
+        super(coll);
+        this.paste = paste;
+        if (paste) {
+            pastedElements = new ArrayList<ElementContainer>(5000);
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.xml.ToolContentHandlerV3_0#endDocument()
-	 */
-	@Override
-	public void endDocument() throws SAXException {
-		try {
-			GraphDocument tmpDoc = doc;
-			super.endDocument();
-			tmpDoc.deselectAll(true);
-			if (paste)
-				for (ElementContainer ec : pastedElements)
-					tmpDoc.addToSelection(ec, 0);
-		} catch (Exception e) {
-			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void endDocument() throws SAXException {
+        try {
+            GraphDocument tmpDoc = doc;
+            super.endDocument();
+            tmpDoc.deselectAll(true);
+            if (paste) {
+                for (ElementContainer ec : pastedElements) {
+                    tmpDoc.addToSelection(ec, 0);
+                }
+            }
+        } catch (Exception e) {
+            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            e.printStackTrace();
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.xml.ToolContentHandlerV3_1#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	@Override
-	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-		elementValue.setLength(0);
-		super.startElement(namespaceURI, localName, qName, atts);
-	}
+    @Override
+    public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
+        elementValue.setLength(0);
+        super.startElement(namespaceURI, localName, qName, atts);
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.xml.ToolContentHandlerV3_1#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-		if (qName.equals("element")) {
-			if (element != null)
-				try {
-					if (!avoidDuplicates || element.getContainer(doc) == null) {
-						container = element.createContainer(doc);
-						int layer = element.layerFor();
-						if (layer < 0 || layer >= ModelConstants.LAYERS.length)
-							throw new SAXException("ModelElement hat ungueltige Ebenenangabe! hash=" + element.getHashString() + "layerFor=" + element.layerFor());
-						if (doc.getLayer(element.layerFor()).add(container) != null) {
-							if (element instanceof ABKonfiguration)
-								collection.addABKonf((KonfigurationContainer) container);
-							else if (element instanceof DBKonfiguration)
-								collection.addDBKonf((KonfigurationContainer) container);
-						}
-					}
-					if (paste)
-						pastedElements.add(container);
-					element = null;
-					container = null;
-				} catch (Exception e) {
-					Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-					e.printStackTrace();
-				}
-		} else
-			super.endElement(namespaceURI, localName, qName);
-	}
+    @Override
+    public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
+        if (qName.equals("element")) {
+            if (element != null) {
+                try {
+                    if (!avoidDuplicates || element.getContainer(doc) == null) {
+                        container = element.createContainer(doc);
+                        int layer = element.layerFor();
+                        if (layer < 0 || layer >= ModelConstants.LAYERS.length) {
+                            throw new SAXException("ModelElement hat ungueltige Ebenenangabe! hash=" + element.getHashString() + "layerFor=" + element.layerFor());
+                        }
+                        if (doc.getLayer(element.layerFor()).add(container) != null) {
+                            if (element instanceof ABKonfiguration) {
+                                collection.addABKonf((KonfigurationContainer) container);
+                            } else if (element instanceof DBKonfiguration) {
+                                collection.addDBKonf((KonfigurationContainer) container);
+                            }
+                        }
+                    }
+                    if (paste) {
+                        pastedElements.add(container);
+                    }
+                    element = null;
+                    container = null;
+                } catch (Exception e) {
+                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            super.endElement(namespaceURI, localName, qName);
+        }
+    }
 }

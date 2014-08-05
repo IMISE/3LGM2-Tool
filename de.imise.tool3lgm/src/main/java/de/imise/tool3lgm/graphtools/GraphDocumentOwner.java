@@ -5,14 +5,14 @@ package de.imise.tool3lgm.graphtools;
 
 /**
  * @author AXS
- *
  */
 public interface GraphDocumentOwner extends GDCollectionOwner {
 
-	/**
-	 * Liefert das {@link GraphDocument}, das mit diesem Objekt assoziiert wird
-	 * @return
-	 */
-	public GraphDocument getGraphDocument();
-	
+    /**
+     * Liefert das {@link GraphDocument}, das mit diesem Objekt assoziiert wird
+     * 
+     * @return
+     */
+    public GraphDocument getGraphDocument();
+
 }

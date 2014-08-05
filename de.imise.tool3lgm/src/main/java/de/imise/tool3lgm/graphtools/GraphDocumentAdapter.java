@@ -13,74 +13,47 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  */
 public abstract class GraphDocumentAdapter implements GraphDocumentListener {
 
-	/**
+    /**
 	 * 
 	 */
-	public GraphDocumentAdapter() {
-		super();
-	}
+    public GraphDocumentAdapter() {
+        super();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#dataChanged(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public void dataChanged(GraphDocument source) {
-	}
+    @Override
+    public void dataChanged(final GraphDocument source) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#elementGraphicsChanged(tool3lgm.graphtools.GraphDocument, tool3lgm.graphtools.view.container.ElementContainer)
-	 */
-	@Override
-	public void elementGraphicsChanged(GraphDocument source, ElementContainer element) {
-	}
+    @Override
+    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#layoutChanged(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public void layoutChanged(GraphDocument source) {
-	}
+    @Override
+    public void layoutChanged(final GraphDocument source) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#elementAdded(tool3lgm.graphtools.GraphDocument, tool3lgm.graphtools.view.container.ElementContainer)
-	 */
-	@Override
-	public void elementAdded(GraphDocument source, ElementContainer element) {
-	}
+    @Override
+    public void elementAdded(final GraphDocument source, final ElementContainer element) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#elementDeleted(tool3lgm.graphtools.GraphDocument, tool3lgm.graphtools.view.container.ElementContainer)
-	 */
-	@Override
-	public void elementDeleted(GraphDocument source, ElementContainer element) {
-	}
+    @Override
+    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#groupOrderChanged(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public void groupOrderChanged(GraphDocument source) {
-	}
+    @Override
+    public void groupOrderChanged(final GraphDocument source) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#activeLayerChanged(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public void activeLayerChanged(GraphDocument source) {
-	}
+    @Override
+    public void activeLayerChanged(final GraphDocument source) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#colorsChanged(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public void colorsChanged(GraphDocument source) {
-	}
+    @Override
+    public void colorsChanged(final GraphDocument source) {
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.GraphDocumentListener#selectionChanged(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public void selectionChanged(GraphDocument source) {
-	}
+    @Override
+    public void selectionChanged(final GraphDocument source) {
+    }
 
 }

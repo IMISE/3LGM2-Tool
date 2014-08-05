@@ -11,50 +11,37 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 public final class KonAnwendungsbaustein extends Anwendungsbaustein {
 
-	/**
-	 * COMMENTME
-	 */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] COPY_DEPENDENCY = {
-		Bausteinschnittstelle.class,
-		Benutzungsschnittstelle.class,
-		Dokumentensammlung.class,
-		Organisationsplan.class,
-		DBKonfiguration.class,
-		ABKonfiguration.class,
-	};
+    /**
+     * COMMENTME
+     */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] COPY_DEPENDENCY = {
+            Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Dokumentensammlung.class, Organisationsplan.class, DBKonfiguration.class, ABKonfiguration.class,
+    };
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#getCopyDependencies()
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public Class<? extends ModelElement>[] getCopyDependencies() {
-		return COPY_DEPENDENCY;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public Class<? extends ModelElement>[] getCopyDependencies() {
+        return COPY_DEPENDENCY;
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	public KonAnwendungsbaustein() {
-		super();
-	}
+    public KonAnwendungsbaustein() {
+        super();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#createPropertyDialog(tool3lgm.graphtools.GDCollection)
-	 */
-	@Override
-	public ElementPropertyDialog createPropertyDialog(GDCollection gdcoll) {
-		ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-		dialog.addTab(getResString ("strukt"),new StructurePanel(dialog));
-		dialog.addTab(getResString ("Bausteinschnittstelle_p"),new BSNPanel(Bausteinschnittstelle.class, dialog));
-		dialog.addTab(getResString ("Benutzungsschnittstelle_p"),new BSNPanel(Benutzungsschnittstelle.class, dialog));
-		dialog.addTab(getResString ("Organisationsplan"),new FreeTextPanel(Organisationsplan.class, dialog));
-		dialog.addTab(getResString("Aufgabe_p"),new AwbAufPanel(dialog));
-		dialog.addTab(getResString("PhysischerDVBaustein_p"),new PDVBKonfPanel(dialog));
-		return dialog;
-	}
-
-
+    @Override
+    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
+        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+        dialog.addTab(getResString("strukt"), new StructurePanel(dialog));
+        dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
+        dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
+        dialog.addTab(getResString("Organisationsplan"), new FreeTextPanel(Organisationsplan.class, dialog));
+        dialog.addTab(getResString("Aufgabe_p"), new AwbAufPanel(dialog));
+        dialog.addTab(getResString("PhysischerDVBaustein_p"), new PDVBKonfPanel(dialog));
+        return dialog;
+    }
 
 }

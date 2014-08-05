@@ -1,13 +1,10 @@
 /*
  * Created on 14.02.2008
- *
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
 import java.awt.GridBagConstraints;
 import java.util.Vector;
-
-import de.imise.util.NamedObjectContainer;
 
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -17,82 +14,74 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldT
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
+import de.imise.util.NamedObjectContainer;
 
 /**
  * Panel zur Eingabe von Modelvariablen
  * 
  * @author fstephan
  */
-public class ModelVariableEditorPanel extends UserFieldEditorPanel{
-	
-	/**
-	 * Kosntruktor
-	 * 
-	 * @param dialog
-	 */
-	public ModelVariableEditorPanel(UserFieldEditorDialog dialog) {
-		super(dialog);
-		drawTable();
-	}
+public class ModelVariableEditorPanel extends UserFieldEditorPanel {
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorPanel#takeOver()
-	 */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	protected void takeOver() {
-		
-		GraphDocument doc = this.getDialog().getGraphDocument();
-		GDCollection gdcoll = doc.getCollection();
-		UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
-		
-		if (!(this.table.getModel() instanceof UserFieldTableModel)) 
-			return; // noch keine Werte vorhanden
-		UserFieldTableModel uftm = (UserFieldTableModel) this.table.getModel();
-		
-		Vector<NamedObjectContainer<UserField>> rowIdentifiers = (Vector) uftm.getRowIdentifiers();
-		for (int i=0; i<rowIdentifiers.size();i++) {
-			UserField field = rowIdentifiers.get(i).getObject();
-			String value = uftm.getValueAt(i,0).toString();
-			gdcoll.setUserFieldInputValue(field, value);
-		}
-		definitions.initReset();
-		
-	}
+    /**
+     * Kosntruktor
+     * 
+     * @param dialog
+     */
+    public ModelVariableEditorPanel(final UserFieldEditorDialog dialog) {
+        super(dialog);
+        drawTable();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorPanel#initTable()
-	 */
-	@Override
-	protected UserFieldTable initTable() {
-		
-		UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForModelVariableEditorTable();
-		UserFieldTable table = new UserFieldTable(uftl);
-		
-		return table;
-	}
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    @Override
+    protected void takeOver() {
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorPanel#constraintsForTable()
-	 */
-	@Override
-	protected Object constraintsForTable() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.weightx = 1;
-		constraints.weighty = 1;
-		return constraints;
-	}
+        GraphDocument doc = getDialog().getGraphDocument();
+        GDCollection gdcoll = doc.getCollection();
+        UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorPanel#drawTable()
-	 */
-	@Override
-	protected void drawTable() {
-		UserFieldTableModel uftm = UserFieldTableModel.createClassificationModelVariableModel(this.getDialog().getGraphDocument());
-		UserFieldTableController tec = UserFieldTableController.getNewModelVariableTableController(uftm);
-		super.modifyTable(uftm,tec);
-	}
+        if (!(table.getModel() instanceof UserFieldTableModel)) {
+            return; // noch keine Werte vorhanden
+        }
+        UserFieldTableModel uftm = (UserFieldTableModel) table.getModel();
+
+        Vector<NamedObjectContainer<UserField>> rowIdentifiers = (Vector) uftm.getRowIdentifiers();
+        for (int i = 0; i < rowIdentifiers.size(); i++) {
+            UserField field = rowIdentifiers.get(i).getObject();
+            String value = uftm.getValueAt(i, 0).toString();
+            gdcoll.setUserFieldInputValue(field, value);
+        }
+        definitions.initReset();
+
+    }
+
+    @Override
+    protected UserFieldTable initTable() {
+
+        UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForModelVariableEditorTable();
+        UserFieldTable table = new UserFieldTable(uftl);
+
+        return table;
+    }
+
+    @Override
+    protected Object constraintsForTable() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        return constraints;
+    }
+
+    @Override
+    protected void drawTable() {
+        UserFieldTableModel uftm = UserFieldTableModel.createClassificationModelVariableModel(getDialog().getGraphDocument());
+        UserFieldTableController tec = UserFieldTableController.getNewModelVariableTableController(uftm);
+        super.modifyTable(uftm, tec);
+    }
 }

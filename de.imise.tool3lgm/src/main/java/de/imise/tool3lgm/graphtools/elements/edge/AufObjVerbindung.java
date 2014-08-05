@@ -7,38 +7,39 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 
-
 public final class AufObjVerbindung extends Doppelkante {
-	
-//    public static final Class[] stcl = {Aufgabe.class};  
-    public static final Class<? extends ModelElement> stcl = Aufgabe.class;  
-	public static final int[] scard = {ModelConstants.ZERO, ModelConstants.UNLIMITED};
 
-	public static final int[] ecard = {ModelConstants.ZERO, ModelConstants.UNLIMITED};
-	public static final Class<? extends ModelElement> etcl = Objekttyp.class;
-//	public static final Class[] etcl = {Objekttyp.class};
+    // public static final Class[] stcl = {Aufgabe.class};
+    public static final Class<? extends ModelElement> stcl = Aufgabe.class;
+    public static final int[] scard = {
+            ModelConstants.ZERO, ModelConstants.UNLIMITED
+    };
 
-//	private static Object[][] stcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-//	private static Object[][] etcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    public static final int[] ecard = {
+            ModelConstants.ZERO, ModelConstants.UNLIMITED
+    };
+    public static final Class<? extends ModelElement> etcl = Objekttyp.class;
 
-	public AufObjVerbindung() {
-		super();
-	}
+    // public static final Class[] etcl = {Objekttyp.class};
 
-	public AufObjVerbindung(Knoten k1, Knoten k2) {
-		super(k1,k2);
-	}
+    // private static Object[][] stcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    // private static Object[][] etcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
-	public AufObjVerbindung(Knoten k1, Knoten k2, boolean registerInKnots) {
-		super(k1,k2, registerInKnots);
-	}
+    public AufObjVerbindung() {
+        super();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-	 */
-	@Override
-	public int layerFor() {
-		return ModelConstants.DOMAIN_LAYER; 
-	}
+    public AufObjVerbindung(final Knoten k1, final Knoten k2) {
+        super(k1, k2);
+    }
+
+    public AufObjVerbindung(final Knoten k1, final Knoten k2, final boolean registerInKnots) {
+        super(k1, k2, registerInKnots);
+    }
+
+    @Override
+    public int layerFor() {
+        return ModelConstants.DOMAIN_LAYER;
+    }
 
 }

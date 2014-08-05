@@ -20,124 +20,100 @@ import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
  */
 public abstract class SubModelsBrowser extends JPanel implements MouseListener, FocusListener {
 
-	/**
-	 * Das Modell das über dieses Tab-Pane dargestellt wird
-	 */
-	protected GDCollection gdcoll;
-
-	/**
-	 * Der Baum, in dem in diesem TeilomodellBrwoser alle Daten angezeigt werden. Er wird immer in den Tab im Vordergrund eingebaut.
-	 */
-	protected DynamicTree tree;
-
-	/**
-	 * @param gdcoll
-	 */
-	public SubModelsBrowser(GDCollection gdcoll) {
-	    super(new BorderLayout());
-	    this.gdcoll = gdcoll;
-		tree = new DynamicTree(gdcoll.getMainGraphDocument());
-		tree.addMouseListener(this);
-    }
-
-	/**
-	 * @return Returns the Model.
-	 */
-	public abstract GDCollection getCollection();
-
-	/**
-	 * @param doc
-	 */
-	public abstract void addGraphDocument(GraphDocument doc);
-
-	/**
-	 * Aktualisiert den Titel des Tabs des übergebenen {@link GraphDocument}
-	 * 
-	 * @param doc
-	 */
-	public abstract void updateTitle(GraphDocument doc);
-
-	/**
-	 * Liefert das aktuell  selektierte {@link GraphDocument}
-	 * 
-	 * @return
-	 */
-	public abstract GraphDocument getSelectedDoc();
-
-	/**
-	 * @param doc
-	 */
-	public abstract void setSelectedDoc(GraphDocument doc);
-	
-	/**
-	 * @param doc
-	 */
-	public abstract void removeGraphDocument(GraphDocument doc);
-
-	/**
-	 * Liefert die Anzahl von {@link GraphDocument}, die dieser Browser darstellt
-	 * 
-	 * @return
-	 */
-	public abstract int getDocCount();
-
-	
-	/**
-	 * Aktualisiert die Komponente
-	 */
-	public abstract void update();
-	
-	/* (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+    /**
+     * Das Modell das über dieses Tab-Pane dargestellt wird
      */
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
+    protected GDCollection gdcoll;
 
-	/* (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
+    /**
+     * Der Baum, in dem in diesem TeilomodellBrwoser alle Daten angezeigt werden. Er wird immer in den Tab im Vordergrund eingebaut.
      */
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
+    protected DynamicTree tree;
 
-	/* (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
+    /**
+     * @param gdcoll
      */
-    @Override
-    public void mouseExited(MouseEvent e) {
+    public SubModelsBrowser(final GDCollection gdcoll) {
+        super(new BorderLayout());
+        this.gdcoll = gdcoll;
+        tree = new DynamicTree(gdcoll.getMainGraphDocument());
+        tree.addMouseListener(this);
     }
 
-	/* (non-Javadoc)
-     * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
+    /**
+     * @return Returns the Model.
      */
-    @Override
-    public void mousePressed(MouseEvent e) {
-    	update();
-    }
+    public abstract GDCollection getCollection();
 
-	/* (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+    /**
+     * @param doc
      */
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
+    public abstract void addGraphDocument(GraphDocument doc);
 
-	/* (non-Javadoc)
-     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+    /**
+     * Aktualisiert den Titel des Tabs des übergebenen {@link GraphDocument}
+     * 
+     * @param doc
      */
-    @Override
-    public void focusGained(FocusEvent e) {
-    	update();
-    }
+    public abstract void updateTitle(GraphDocument doc);
 
-	/* (non-Javadoc)
-     * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+    /**
+     * Liefert das aktuell selektierte {@link GraphDocument}
+     * 
+     * @return
      */
+    public abstract GraphDocument getSelectedDoc();
+
+    /**
+     * @param doc
+     */
+    public abstract void setSelectedDoc(GraphDocument doc);
+
+    /**
+     * @param doc
+     */
+    public abstract void removeGraphDocument(GraphDocument doc);
+
+    /**
+     * Liefert die Anzahl von {@link GraphDocument}, die dieser Browser darstellt
+     * 
+     * @return
+     */
+    public abstract int getDocCount();
+
+    /**
+     * Aktualisiert die Komponente
+     */
+    public abstract void update();
+
     @Override
-    public void focusLost(FocusEvent e) {
+    public void mouseClicked(final MouseEvent e) {
     }
 
+    @Override
+    public void mouseEntered(final MouseEvent e) {
+    }
 
-    
+    @Override
+    public void mouseExited(final MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(final MouseEvent e) {
+        update();
+    }
+
+    @Override
+    public void mouseReleased(final MouseEvent e) {
+    }
+
+    @Override
+    public void focusGained(final FocusEvent e) {
+        update();
+    }
+
+    @Override
+    public void focusLost(final FocusEvent e) {
+    }
+
 }

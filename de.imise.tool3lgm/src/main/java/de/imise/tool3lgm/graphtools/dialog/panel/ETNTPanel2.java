@@ -20,8 +20,8 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
+import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -40,331 +40,325 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 
 public class ETNTPanel2 extends LGMDragNDropPanel {
 
-	private LGMDragNDropTree otree, rotree, utree, rutree;
-	private DefaultTreeModel lmodel1, rmodel1, lmodel2, rmodel2;
-	private LGMTreeNode lroot1, rroot1, lroot2, rroot2;
-	private JScrollPane sp1, sp2;
-	private JPanel buttonpanel;
-	private JLabel label;
-	private Class<? extends ModelElement> searchElementClass;
-	
-	private LGMAction addAction;
-	private LGMAction removeAction;
-	
-	public ETNTPanel2(Class<? extends ModelElement> searchElementClass, ElementPropertyDialog dl) {
-		super(dl);
-		this.searchElementClass = searchElementClass;
+    private final LGMDragNDropTree otree, rotree, utree, rutree;
+    private final DefaultTreeModel lmodel1, rmodel1, lmodel2, rmodel2;
+    private final LGMTreeNode lroot1, rroot1, lroot2, rroot2;
+    private final JScrollPane sp1, sp2;
+    private final JPanel buttonpanel;
+    private final JLabel label;
+    private final Class<? extends ModelElement> searchElementClass;
 
-		GridBagLayout gbl = new GridBagLayout();
-		setLayout(gbl);
-		GridBagConstraints constraints = new GridBagConstraints();
+    private LGMAction addAction;
+    private LGMAction removeAction;
 
-		KommBeziehung kz = (KommBeziehung) getModelElement();
-		ArrayList<ElementContainer> ab = kz.getStart().getConnectedContainer(Anwendungsbaustein.class, doc);
-		ab.addAll(kz.getStart().getConnectedContainer(RechAnwendungsbaustein.class, doc));
-		ab.addAll(kz.getStart().getConnectedContainer(KonAnwendungsbaustein.class, doc));
-		Knoten ab1 = ((NodeContainer) ab.get(0)).getKnoten();
-		ab = kz.getEnd().getConnectedContainer(Anwendungsbaustein.class, doc);
-		ab.addAll(kz.getEnd().getConnectedContainer(RechAnwendungsbaustein.class, doc));
-		ab.addAll(kz.getEnd().getConnectedContainer(KonAnwendungsbaustein.class, doc));
-		Knoten ab2 = ((NodeContainer) ab.get(0)).getKnoten();
-		String abname1 = ab1.getName();
-		String abname2 = ab2.getName();
-		JLabel label1 = new JLabel(abname1.substring(0, (abname1.length() > 40) ? 40 : abname1.length()) + "\n -> \n" + abname2.substring(0, (abname2.length() > 40) ? 40 : abname2.length()));
-		lroot1 = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
-		lmodel1 = new DefaultTreeModel(lroot1);
-		otree = new LGMDragNDropTree(lmodel1);
-		otree.setRootVisible(false);
-		otree.setCellRenderer(treeRenderer);
+    public ETNTPanel2(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog dl) {
+        super(dl);
+        this.searchElementClass = searchElementClass;
 
-		otree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        GridBagLayout gbl = new GridBagLayout();
+        setLayout(gbl);
+        GridBagConstraints constraints = new GridBagConstraints();
 
-		JScrollPane sp_1 = new JScrollPane(otree);
+        KommBeziehung kz = (KommBeziehung) getModelElement();
+        ArrayList<ElementContainer> ab = kz.getStart().getConnectedContainer(Anwendungsbaustein.class, doc);
+        ab.addAll(kz.getStart().getConnectedContainer(RechAnwendungsbaustein.class, doc));
+        ab.addAll(kz.getStart().getConnectedContainer(KonAnwendungsbaustein.class, doc));
+        Knoten ab1 = ((NodeContainer) ab.get(0)).getKnoten();
+        ab = kz.getEnd().getConnectedContainer(Anwendungsbaustein.class, doc);
+        ab.addAll(kz.getEnd().getConnectedContainer(RechAnwendungsbaustein.class, doc));
+        ab.addAll(kz.getEnd().getConnectedContainer(KonAnwendungsbaustein.class, doc));
+        Knoten ab2 = ((NodeContainer) ab.get(0)).getKnoten();
+        String abname1 = ab1.getName();
+        String abname2 = ab2.getName();
+        JLabel label1 = new JLabel(abname1.substring(0, abname1.length() > 40 ? 40 : abname1.length()) + "\n -> \n" + abname2.substring(0, abname2.length() > 40 ? 40 : abname2.length()));
+        lroot1 = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        lmodel1 = new DefaultTreeModel(lroot1);
+        otree = new LGMDragNDropTree(lmodel1);
+        otree.setRootVisible(false);
+        otree.setCellRenderer(treeRenderer);
 
-		JLabel label2 = new JLabel(abname2.substring(0, (abname2.length() > 40) ? 40 : abname2.length()) + "\n -> \n" + abname1.substring(0, (abname1.length() > 40) ? 40 : abname1.length()));
-		lroot2 = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
-		lmodel2 = new DefaultTreeModel(lroot2);
-		utree = new LGMDragNDropTree(lmodel2);
-		utree.setRootVisible(false);
-		utree.setCellRenderer(treeRenderer);
+        otree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		utree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        JScrollPane sp_1 = new JScrollPane(otree);
 
-		JScrollPane sp_2 = new JScrollPane(utree);
+        JLabel label2 = new JLabel(abname2.substring(0, abname2.length() > 40 ? 40 : abname2.length()) + "\n -> \n" + abname1.substring(0, abname1.length() > 40 ? 40 : abname1.length()));
+        lroot2 = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        lmodel2 = new DefaultTreeModel(lroot2);
+        utree = new LGMDragNDropTree(lmodel2);
+        utree.setRootVisible(false);
+        utree.setCellRenderer(treeRenderer);
 
-		constraints.anchor = GridBagConstraints.EAST;
-		constraints.ipadx = -30;
-		constraints.ipady = -10;
-		add(this, this.viewButton, constraints, 0, 4, 1, 1);
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.anchor = GridBagConstraints.WEST;
-		add(this, label1, constraints, 0, 0, 3, 1);
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.anchor = GridBagConstraints.WEST;
-		add(this, label2, constraints, 0, 2, 3, 1);
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 100;
-		constraints.weighty = 50;
-		add(this, sp_1, constraints, 0, 1, 1, 1);
-		add(this, sp_2, constraints, 0, 3, 1, 1);
+        utree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		label = new JLabel("");
-		rroot1 = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
-		rmodel1 = new DefaultTreeModel(rroot1);
-		rotree = new LGMDragNDropTree(rmodel1);
-		rotree.setRootVisible(false);
-		rotree.setCellRenderer(treeRenderer);
+        JScrollPane sp_2 = new JScrollPane(utree);
 
-		rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.ipadx = -30;
+        constraints.ipady = -10;
+        add(this, viewButton, constraints, 0, 4, 1, 1);
+        constraints.ipadx = 0;
+        constraints.ipady = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, label1, constraints, 0, 0, 3, 1);
+        constraints.ipadx = 0;
+        constraints.ipady = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, label2, constraints, 0, 2, 3, 1);
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 100;
+        constraints.weighty = 50;
+        add(this, sp_1, constraints, 0, 1, 1, 1);
+        add(this, sp_2, constraints, 0, 3, 1, 1);
 
-		sp1 = new JScrollPane(rotree);
+        label = new JLabel("");
+        rroot1 = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
+        rmodel1 = new DefaultTreeModel(rroot1);
+        rotree = new LGMDragNDropTree(rmodel1);
+        rotree.setRootVisible(false);
+        rotree.setCellRenderer(treeRenderer);
 
-		rroot2 = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
-		rmodel2 = new DefaultTreeModel(rroot2);
-		rutree = new LGMDragNDropTree(rmodel2);
-		rutree.setRootVisible(false);
-		rutree.setCellRenderer(treeRenderer);
+        rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        sp1 = new JScrollPane(rotree);
 
-		sp2 = new JScrollPane(rutree);
+        rroot2 = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
+        rmodel2 = new DefaultTreeModel(rroot2);
+        rutree = new LGMDragNDropTree(rmodel2);
+        rutree.setRootVisible(false);
+        rutree.setCellRenderer(treeRenderer);
 
-		/*
-		 * Start: MouseListener erstellen und an Trees anhängen
-		 * ...
-		 */
-		LGMAction otreeMouseAction = LGMActionLibrary.getMouseAction(otree, this);
-		LGMAction utreeMouseAction = LGMActionLibrary.getMouseAction(utree, this);
-		LGMAction rotreeMouseAction = LGMActionLibrary.getMouseAction(rotree, this);
-		LGMAction rutreeMouseAction = LGMActionLibrary.getMouseAction(rutree, this);
+        rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		otree.addMouseListener(new LGMMouseListener(null, null, null, otreeMouseAction, null));
-		utree.addMouseListener(new LGMMouseListener(null, null, null, utreeMouseAction, null));
-		rotree.addMouseListener(new LGMMouseListener(null, null, null, rotreeMouseAction, null));
-		rutree.addMouseListener(new LGMMouseListener(null, null, null, rutreeMouseAction, null));
-		/*
-		 * ...
-		 * End: MouseListener erstellen und an Trees anhängen
-		 */
-		
-		/*
-		 * Start: TreeSelectionListener erstellen und an Trees anhängen
-		 * ...
-		 */
-		LGMAction otreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(otree, this);
-		LGMAction utreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(utree, this);
-		LGMAction rotreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rotree, this);
-		LGMAction rutreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rutree, this);
-		
-		otree.addTreeSelectionListener(new LGMTreeSelectionListener(otreeSelectionAction));
-		utree.addTreeSelectionListener(new LGMTreeSelectionListener(utreeSelectionAction));
-		rotree.addTreeSelectionListener(new LGMTreeSelectionListener(rotreeSelectionAction));
-		rutree.addTreeSelectionListener(new LGMTreeSelectionListener(rutreeSelectionAction));
-		/*
-		 * ...
-		 * End: TreeSelectionListener erstellen und an Trees anhängen
-		 */
-		
-		/*
-		 * Start: Buttons & Actions erstellen und registrieren
-		 * ...
-		 */
-		JButton addButton = new JButton();
-		JButton removeButton = new JButton();
-		
-		try {
-			final LGMAction addAction1 = LGMActionLibrary.getAddElementAction(rotree, otree, this, true);
-			final LGMAction addAction2 = LGMActionLibrary.getAddElementAction(rutree, utree, this, false);
-			addAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-				@Override
-				public void execute(EventObject eo) {
-					addAction1.execute(eo);
-					addAction2.execute(eo);
-				}
-			};
-			
-			final LGMAction removeAction1 = LGMActionLibrary.getDisconnectAction(otree, rotree, this, true);
-			final LGMAction removeAction2 = LGMActionLibrary.getDisconnectAction(utree, rutree, this, false);
-						
-			removeAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-				@Override
-				public void execute(EventObject eo) {
-					removeAction1.execute(eo);
-					removeAction2.execute(eo);
-				}
-			};
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		addButton.setAction(addAction);
-		removeButton.setAction(removeAction);
-		/*
-		 * ...
-		 * end: Buttons & Actions erstellen und registrieren
-		 */
-		buttonpanel = new JPanel();
-		buttonpanel.setSize(30, 250);
-		buttonpanel.setLayout(new GridLayout(3, 1));
-		buttonpanel.add(addButton);
-		buttonpanel.add(removeButton);
-/*		but = new JButton(Tool3lgmConstants.getResourceString("new"));
-		but.setActionCommand("newKnot");
-		but.addActionListener(this);
-		buttonpanel.add(but); */
+        sp2 = new JScrollPane(rutree);
 
-		init();
-	}
+        /*
+         * Start: MouseListener erstellen und an Trees anhängen ...
+         */
+        LGMAction otreeMouseAction = LGMActionLibrary.getMouseAction(otree, this);
+        LGMAction utreeMouseAction = LGMActionLibrary.getMouseAction(utree, this);
+        LGMAction rotreeMouseAction = LGMActionLibrary.getMouseAction(rotree, this);
+        LGMAction rutreeMouseAction = LGMActionLibrary.getMouseAction(rutree, this);
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#init()
-	 */
-	@Override
-	protected void init() {
-		
-		super.init();
-		
-		remove(label);
-		remove(buttonpanel);
-		remove(sp1);
-		remove(sp2);
+        otree.addMouseListener(new LGMMouseListener(null, null, null, otreeMouseAction, null));
+        utree.addMouseListener(new LGMMouseListener(null, null, null, utreeMouseAction, null));
+        rotree.addMouseListener(new LGMMouseListener(null, null, null, rotreeMouseAction, null));
+        rutree.addMouseListener(new LGMMouseListener(null, null, null, rutreeMouseAction, null));
+        /*
+         * ... End: MouseListener erstellen und an Trees anhängen
+         */
 
-		ModelElement modelElement = getModelElement();
-		ArrayList<ElementContainer> knoten1 = modelElement.getConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.BACKWARD);
-		ArrayList<ElementContainer> knoten2 = modelElement.getConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.FORWARD);
-		lroot1.removeAllChildren();
-		for (int m = 0; m < knoten1.size(); m++) {
-			LGMTreeNode node = new LGMTreeNode(knoten1.get(m), false);
-			lroot1.add(node);
-		}
-		lroot2.removeAllChildren();
-		for (int m = 0; m < knoten2.size(); m++) {
-			LGMTreeNode node = new LGMTreeNode(knoten2.get(m), false);
-			lroot2.add(node);
-		}
+        /*
+         * Start: TreeSelectionListener erstellen und an Trees anhängen ...
+         */
+        LGMAction otreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(otree, this);
+        LGMAction utreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(utree, this);
+        LGMAction rotreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rotree, this);
+        LGMAction rutreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rutree, this);
 
-		if (UserProperties.isSearchParts()) {
-			knoten1 = modelElement.getPartConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.BACKWARD);
-			knoten2 = modelElement.getPartConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.FORWARD);
-			for (int m = 0; m < knoten1.size(); m++) {
-				LGMTreeNode node = new LGMTreeNode(knoten1.get(m), false);
-				node.setSelectable(false);
-				lroot1.add(node);
-			}
-			for (int m = 0; m < knoten2.size(); m++) {
-				LGMTreeNode node = new LGMTreeNode(knoten2.get(m), false);
-				node.setSelectable(false);
-				lroot2.add(node);
-			}
-		}
-		if (UserProperties.isSearchParents()) {
-			knoten1 = (modelElement).getParentConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.BACKWARD);
-			knoten2 = (modelElement).getParentConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.FORWARD);
-			for (int m = 0; m < knoten1.size(); m++) {
-				LGMTreeNode node = new LGMTreeNode(knoten1.get(m), false);
-				node.setSelectable(false);
-				lroot1.add(node);
-			}
-			for (int m = 0; m < knoten2.size(); m++) {
-				LGMTreeNode node = new LGMTreeNode(knoten2.get(m), false);
-				node.setSelectable(false);
-				lroot2.add(node);
-			}
-		}
+        otree.addTreeSelectionListener(new LGMTreeSelectionListener(otreeSelectionAction));
+        utree.addTreeSelectionListener(new LGMTreeSelectionListener(utreeSelectionAction));
+        rotree.addTreeSelectionListener(new LGMTreeSelectionListener(rotreeSelectionAction));
+        rutree.addTreeSelectionListener(new LGMTreeSelectionListener(rutreeSelectionAction));
+        /*
+         * ... End: TreeSelectionListener erstellen und an Trees anhängen
+         */
 
-		lmodel1.reload();
-		expandTree(otree);
-		lmodel2.reload();
-		expandTree(utree);
+        /*
+         * Start: Buttons & Actions erstellen und registrieren ...
+         */
+        JButton addButton = new JButton();
+        JButton removeButton = new JButton();
 
-		revalidate();
-		repaint();
-	}
+        try {
+            final LGMAction addAction1 = LGMActionLibrary.getAddElementAction(rotree, otree, this, true);
+            final LGMAction addAction2 = LGMActionLibrary.getAddElementAction(rutree, utree, this, false);
+            addAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+                @Override
+                public void execute(final EventObject eo) {
+                    addAction1.execute(eo);
+                    addAction2.execute(eo);
+                }
+            };
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-	 */
-	@Override
-	protected void showFullDialog() {
+            final LGMAction removeAction1 = LGMActionLibrary.getDisconnectAction(otree, rotree, this, true);
+            final LGMAction removeAction2 = LGMActionLibrary.getDisconnectAction(utree, rutree, this, false);
 
-		super.showFullDialog();
+            removeAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+                @Override
+                public void execute(final EventObject eo) {
+                    removeAction1.execute(eo);
+                    removeAction2.execute(eo);
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addButton.setAction(addAction);
+        removeButton.setAction(removeAction);
+        /*
+         * ... end: Buttons & Actions erstellen und registrieren
+         */
+        buttonpanel = new JPanel();
+        buttonpanel.setSize(30, 250);
+        buttonpanel.setLayout(new GridLayout(3, 1));
+        buttonpanel.add(addButton);
+        buttonpanel.add(removeButton);
+        /*
+         * but = new JButton(Tool3lgmConstants.getResourceString("new"));
+         * but.setActionCommand("newKnot"); but.addActionListener(this); buttonpanel.add(but);
+         */
 
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.NONE;
-		add(this, buttonpanel, constraints, 1, 1, 1, 3);
-		constraints.anchor = GridBagConstraints.WEST;
-		add(this, label, constraints, 2, 0, 1, 1);
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 100;
-		constraints.weighty = 50;
-		add(this, sp1, constraints, 2, 1, 1, 1);
-		add(this, sp2, constraints, 2, 3, 1, 1);
+        init();
+    }
 
-		ArrayList<ElementContainer> nt;
-		
-		/* is searchknot abstract class ETNT_ETDT_KOMBINATION, then searchknot = { ETNT_KOMBINATION, ETDT_KOMBINATION } */
-		if (searchElementClass == EtntEtdtKombination.class) {
-			nt = mainDoc.getElementContainer(EreignisNachrichtenTyp.class);
-			nt.addAll(mainDoc.getElementContainer(EreignisDokumentenTyp.class));
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#init()
+     */
+    @Override
+    protected void init() {
 
-		} else {
-			 nt = mainDoc.getElementContainer(searchElementClass);
-		}		
+        super.init();
 
-		ArrayList<ElementContainer> knoten1 = new ArrayList<ElementContainer>();
-		ArrayList<ElementContainer> knoten2 = new ArrayList<ElementContainer>();
-		ModelElement modelElement = getModelElement();
-		for (ElementContainer ntC : nt) {
-			if (!modelElement.isConnectedFrom(ntC.getElement()))
-				knoten1.add(ntC);
-		}
-		for (ElementContainer ntC : nt) {
-			if (!(modelElement).isConnectedTo(ntC.getElement()))
-				knoten2.add(ntC);
-		}
+        remove(label);
+        remove(buttonpanel);
+        remove(sp1);
+        remove(sp2);
 
-		rroot1.removeAllChildren();
-		for (Object ec : knoten1) {
-			LGMTreeNode node = new LGMTreeNode(ec, false);
-			rroot1.add(node);
-		}
-		rmodel1.reload();
-		expandTree(rotree);
+        ModelElement modelElement = getModelElement();
+        ArrayList<ElementContainer> knoten1 = modelElement.getConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.BACKWARD);
+        ArrayList<ElementContainer> knoten2 = modelElement.getConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.FORWARD);
+        lroot1.removeAllChildren();
+        for (int m = 0; m < knoten1.size(); m++) {
+            LGMTreeNode node = new LGMTreeNode(knoten1.get(m), false);
+            lroot1.add(node);
+        }
+        lroot2.removeAllChildren();
+        for (int m = 0; m < knoten2.size(); m++) {
+            LGMTreeNode node = new LGMTreeNode(knoten2.get(m), false);
+            lroot2.add(node);
+        }
 
-		rroot2.removeAllChildren();
-		for (Object ec : knoten2) {
-			LGMTreeNode node = new LGMTreeNode(ec, false);
-			rroot2.add(node);
-		}
-		rmodel2.reload();
-		expandTree(rutree);
+        if (UserProperties.isSearchParts()) {
+            knoten1 = modelElement.getPartConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.BACKWARD);
+            knoten2 = modelElement.getPartConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.FORWARD);
+            for (int m = 0; m < knoten1.size(); m++) {
+                LGMTreeNode node = new LGMTreeNode(knoten1.get(m), false);
+                node.setSelectable(false);
+                lroot1.add(node);
+            }
+            for (int m = 0; m < knoten2.size(); m++) {
+                LGMTreeNode node = new LGMTreeNode(knoten2.get(m), false);
+                node.setSelectable(false);
+                lroot2.add(node);
+            }
+        }
+        if (UserProperties.isSearchParents()) {
+            knoten1 = modelElement.getParentConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.BACKWARD);
+            knoten2 = modelElement.getParentConnectedContainer(searchElementClass, mainDoc, KommbezEtntVerbindung.class, Doppelkante.FORWARD);
+            for (int m = 0; m < knoten1.size(); m++) {
+                LGMTreeNode node = new LGMTreeNode(knoten1.get(m), false);
+                node.setSelectable(false);
+                lroot1.add(node);
+            }
+            for (int m = 0; m < knoten2.size(); m++) {
+                LGMTreeNode node = new LGMTreeNode(knoten2.get(m), false);
+                node.setSelectable(false);
+                lroot2.add(node);
+            }
+        }
 
-		revalidate();
-		repaint();
-	}
-	
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#collectDragNDropActionChains()
-	 */
-	@Override
-	protected DragNDropActionChain[] collectDragNDropActionChains() {
-		DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rotree, otree, addAction);
-		DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(otree, rotree, removeAction);
-		DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(rutree, utree, addAction);
-		DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(utree, rutree, removeAction);
-		
-		return new DragNDropActionChain[] {tac1,tac2,tac3,tac4};
-	}
-	
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#getAllDragNDropTrees()
-	 */
-	@Override
-	public LGMDragNDropTree[] getAllDragNDropTrees() {
-		return new LGMDragNDropTree[]{otree, rotree, utree, rutree};
-	}
+        lmodel1.reload();
+        expandTree(otree);
+        lmodel2.reload();
+        expandTree(utree);
+
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    protected void showFullDialog() {
+
+        super.showFullDialog();
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.NONE;
+        add(this, buttonpanel, constraints, 1, 1, 1, 3);
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, label, constraints, 2, 0, 1, 1);
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 100;
+        constraints.weighty = 50;
+        add(this, sp1, constraints, 2, 1, 1, 1);
+        add(this, sp2, constraints, 2, 3, 1, 1);
+
+        ArrayList<ElementContainer> nt;
+
+        /*
+         * is searchknot abstract class ETNT_ETDT_KOMBINATION, then searchknot = { ETNT_KOMBINATION,
+         * ETDT_KOMBINATION }
+         */
+        if (searchElementClass == EtntEtdtKombination.class) {
+            nt = mainDoc.getElementContainer(EreignisNachrichtenTyp.class);
+            nt.addAll(mainDoc.getElementContainer(EreignisDokumentenTyp.class));
+
+        } else {
+            nt = mainDoc.getElementContainer(searchElementClass);
+        }
+
+        ArrayList<ElementContainer> knoten1 = new ArrayList<ElementContainer>();
+        ArrayList<ElementContainer> knoten2 = new ArrayList<ElementContainer>();
+        ModelElement modelElement = getModelElement();
+        for (ElementContainer ntC : nt) {
+            if (!modelElement.isConnectedFrom(ntC.getElement())) {
+                knoten1.add(ntC);
+            }
+        }
+        for (ElementContainer ntC : nt) {
+            if (!modelElement.isConnectedTo(ntC.getElement())) {
+                knoten2.add(ntC);
+            }
+        }
+
+        rroot1.removeAllChildren();
+        for (Object ec : knoten1) {
+            LGMTreeNode node = new LGMTreeNode(ec, false);
+            rroot1.add(node);
+        }
+        rmodel1.reload();
+        expandTree(rotree);
+
+        rroot2.removeAllChildren();
+        for (Object ec : knoten2) {
+            LGMTreeNode node = new LGMTreeNode(ec, false);
+            rroot2.add(node);
+        }
+        rmodel2.reload();
+        expandTree(rutree);
+
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    protected DragNDropActionChain[] collectDragNDropActionChains() {
+        DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rotree, otree, addAction);
+        DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(otree, rotree, removeAction);
+        DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(rutree, utree, addAction);
+        DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(utree, rutree, removeAction);
+
+        return new DragNDropActionChain[] {
+                tac1, tac2, tac3, tac4
+        };
+    }
+
+    @Override
+    public LGMDragNDropTree[] getAllDragNDropTrees() {
+        return new LGMDragNDropTree[] {
+                otree, rotree, utree, rutree
+        };
+    }
 }

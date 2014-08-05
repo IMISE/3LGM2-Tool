@@ -8,10 +8,9 @@ import javax.swing.Action;
  */
 public interface Plugin {
 
-	/**
-	 * Liefert die Aktion des Plugins
-	 */
-	public Action getAction();
-	
-	
+    /**
+     * Liefert die Aktion des Plugins
+     */
+    public Action getAction();
+
 }

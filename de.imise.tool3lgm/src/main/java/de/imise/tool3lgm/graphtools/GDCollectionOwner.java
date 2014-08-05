@@ -8,12 +8,11 @@ package de.imise.tool3lgm.graphtools;
  */
 public interface GDCollectionOwner {
 
-	/**
-	 * Liefert die {@link GDCollection}, die mit diesem Objekt assoziiert ist.
-	 * 
-	 * @return
-	 */
-	public GDCollection getCollection();
-	
-	
+    /**
+     * Liefert die {@link GDCollection}, die mit diesem Objekt assoziiert ist.
+     * 
+     * @return
+     */
+    public GDCollection getCollection();
+
 }

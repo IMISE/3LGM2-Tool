@@ -1,8 +1,5 @@
 /*
- * Created on 16.01.2004
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
  */
 package de.imise.tool3lgm.graphtools.elements.edge;
 
@@ -16,50 +13,49 @@ import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
  */
 public final class ObjObjVerbindung extends PartOfBeziehung {
 
-//    public static final Class[] stcl = {Objekttyp.class};
+    //    public static final Class[] stcl = {Objekttyp.class};
     public static final Class<? extends ModelElement> stcl = Objekttyp.class;
-	public static final int[] scard = {ModelConstants.ZERO, ModelConstants.UNLIMITED};
+    public static final int[] scard = {
+            ModelConstants.ZERO, ModelConstants.UNLIMITED
+    };
 
-	public static final int[] ecard = {ModelConstants.ZERO, ModelConstants.UNLIMITED};
-	public static final Class<? extends ModelElement> etcl = Objekttyp.class;
-//	public static final Class[] etcl = {Objekttyp.class};
-	
-//	private static Object[][] stcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-//	private static Object[][] etcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-	
-	/**
+    public static final int[] ecard = {
+            ModelConstants.ZERO, ModelConstants.UNLIMITED
+    };
+    public static final Class<? extends ModelElement> etcl = Objekttyp.class;
+
+    //	public static final Class[] etcl = {Objekttyp.class};
+
+    //	private static Object[][] stcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] etcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+
+    /**
 	 * 
 	 */
-	public ObjObjVerbindung() {
-		super();
-	}
+    public ObjObjVerbindung() {
+        super();
+    }
 
-	/**
-	 * @param knot1
-	 * @param knot2
-	 */
-	public ObjObjVerbindung(ModelElement knot1, ModelElement knot2) {
-		super(knot1, knot2);
-	}
+    /**
+     * @param knot1
+     * @param knot2
+     */
+    public ObjObjVerbindung(final ModelElement knot1, final ModelElement knot2) {
+        super(knot1, knot2);
+    }
 
-	/**
-	 * @param knot1
-	 * @param knot2
-	 * @param registerInKnots
-	 */
-	public ObjObjVerbindung(
-		ModelElement knot1,
-		ModelElement knot2,
-		boolean registerInKnots) {
-		super(knot1, knot2, registerInKnots);
-	}
+    /**
+     * @param knot1
+     * @param knot2
+     * @param registerInKnots
+     */
+    public ObjObjVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
+        super(knot1, knot2, registerInKnots);
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-	 */
-	@Override
-	public int layerFor() {
-		return ModelConstants.DOMAIN_LAYER; 
-	}
+    @Override
+    public int layerFor() {
+        return ModelConstants.DOMAIN_LAYER;
+    }
 
 }

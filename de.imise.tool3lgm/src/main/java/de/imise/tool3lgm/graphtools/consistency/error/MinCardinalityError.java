@@ -13,14 +13,14 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
  */
 public class MinCardinalityError extends CardinalityError {
 
-	/**
-	 * @param me
-	 * @param edgeClass
-	 * @param cardValue
-	 * @param gdcoll
-	 */
-	public MinCardinalityError(ModelElement me, Class<? extends Kante> edgeClass, int cardValue, GDCollection gdcoll) {
-		super(me, edgeClass, cardValue, gdcoll);
-	}
+    /**
+     * @param me
+     * @param edgeClass
+     * @param cardValue
+     * @param gdcoll
+     */
+    public MinCardinalityError(final ModelElement me, final Class<? extends Kante> edgeClass, final int cardValue, final GDCollection gdcoll) {
+        super(me, edgeClass, cardValue, gdcoll);
+    }
 
 }

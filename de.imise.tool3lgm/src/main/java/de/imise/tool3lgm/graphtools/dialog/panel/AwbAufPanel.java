@@ -1,4 +1,5 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,110 +24,117 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+
 /**
- * Mit diesem Panel zeigen Anwendungsbausteinkonfigurationen ihre Aufgaben  an.
+ * Mit diesem Panel zeigen Anwendungsbausteinkonfigurationen ihre Aufgaben an.
  */
 // TODO: FST: Funktionsfähigkeit testen
 public class AwbAufPanel extends ElementDialogPanel {
-	private LGMTree tree;
-	private DefaultTreeModel model;
-	private LGMTreeNode root;
+    private final LGMTree tree;
+    private final DefaultTreeModel model;
+    private final LGMTreeNode root;
 
-	public AwbAufPanel(ElementPropertyDialog pd) {
-		super(pd);
+    public AwbAufPanel(final ElementPropertyDialog pd) {
+        super(pd);
 
-		setPreferredSize(new Dimension(550, 350));
-		GridBagLayout gbl = new GridBagLayout();
-		setLayout(gbl);
-		GridBagConstraints constraints = new GridBagConstraints();
+        setPreferredSize(new Dimension(550, 350));
+        GridBagLayout gbl = new GridBagLayout();
+        setLayout(gbl);
+        GridBagConstraints constraints = new GridBagConstraints();
 
-		JLabel label = new JLabel(Tool3lgmConstants.getResString("Aufgabe_p"));
-		root = new LGMTreeNode(getModelElement().getName(), false);
-		model = new DefaultTreeModel(root);
-		tree = new LGMTree(model, mainDoc);
-		tree.setRootVisible(false);
-		tree.setShowsRootHandles(true);
-		tree.setCellRenderer(treeRenderer);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-		
-		// MouseListener erstellen und an tree anhängen
-		LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree,this);
-		tree.addMouseListener(new LGMMouseListener(null,null,null,treeMouseAction, null));
-		
-		// TreeSelectionListener erstellen und an tree anhängen
-		LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree,this);
-		tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
+        JLabel label = new JLabel(Tool3lgmConstants.getResString("Aufgabe_p"));
+        root = new LGMTreeNode(getModelElement().getName(), false);
+        model = new DefaultTreeModel(root);
+        tree = new LGMTree(model, mainDoc);
+        tree.setRootVisible(false);
+        tree.setShowsRootHandles(true);
+        tree.setCellRenderer(treeRenderer);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-		JScrollPane sp = new JScrollPane(tree);
+        // MouseListener erstellen und an tree anhängen
+        LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
+        tree.addMouseListener(new LGMMouseListener(null, null, null, treeMouseAction, null));
 
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.anchor = GridBagConstraints.WEST;
-		add(this, label, constraints, 0, 0, 1, 1);
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 100;
-		constraints.weighty = 100;
-		add(this, sp, constraints, 0, 1, 1, 4);
+        // TreeSelectionListener erstellen und an tree anhängen
+        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
+        tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
 
-		init();
-	}
-	
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-	 */
-	@Override
-	protected void init() {
-		super.init();
-		buildTree();
-		tree.expandFull();
-		revalidate();
-		repaint();
-	}
+        JScrollPane sp = new JScrollPane(tree);
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-	 */
-	@Override
-	public void showFullDialog() {
-		super.showFullDialog();
-	}
-	
-	/**
+        constraints.ipadx = 0;
+        constraints.ipady = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, label, constraints, 0, 0, 1, 1);
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 100;
+        constraints.weighty = 100;
+        add(this, sp, constraints, 0, 1, 1, 4);
+
+        init();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
+     */
+    @Override
+    protected void init() {
+        super.init();
+        buildTree();
+        tree.expandFull();
+        revalidate();
+        repaint();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
+     */
+    @Override
+    public void showFullDialog() {
+        super.showFullDialog();
+    }
+
+    /**
 	 * 
 	 */
-	private void buildTree() {
-		tree.saveExpansion();
-		tree.saveSelection();
-		root.removeAllChildren();
-		tree.reset();
-		ModelElement modelElement = getModelElement();
-		List<ElementContainer> all = modelElement.getConnectedContainer(ABKonfiguration.class, mainDoc);
-		//nur Knoten für Elemente in der all-Liste bis zur Größe der direkt vrbundenen dürfen am Ende
-		//selektierbar sein
-		int firstNonSelectableIndex = all.size();
-		if (UserProperties.isSearchParts())
-			all.addAll(modelElement.getPartConnectedContainer(ABKonfiguration.class, mainDoc));
-		if (UserProperties.isSearchParents())
-			all.addAll(modelElement.getParentConnectedContainer(ABKonfiguration.class, mainDoc));
-		for (ElementContainer ec : all) {
-			LGMTreeNode node = new LGMTreeNode(ec, false);
-			root.add(node);
-			for (ElementContainer konf : ec.getElement().getConnectedContainer(AufOrgKombination.class, mainDoc)) {
-				LGMTreeNode abkonf = new LGMTreeNode(konf, false);
-				node.add(abkonf);
-				for (ElementContainer client : konf.getElement().getConnectedContainer(Aufgabe.class, doc))
-					tree.addObject(client, abkonf, null, true, false, false);
-			}
-			//alle Elemente die von den Parts oder Parents kamen, nichtselektierbar setzen
-			if (root.getChildCount()-1>=firstNonSelectableIndex)
-				node.setSelectable(false);
-		}
+    private void buildTree() {
+        tree.saveExpansion();
+        tree.saveSelection();
+        root.removeAllChildren();
+        tree.reset();
+        ModelElement modelElement = getModelElement();
+        List<ElementContainer> all = modelElement.getConnectedContainer(ABKonfiguration.class, mainDoc);
+        // nur Knoten für Elemente in der all-Liste bis zur Größe der direkt vrbundenen dürfen am
+        // Ende
+        // selektierbar sein
+        int firstNonSelectableIndex = all.size();
+        if (UserProperties.isSearchParts()) {
+            all.addAll(modelElement.getPartConnectedContainer(ABKonfiguration.class, mainDoc));
+        }
+        if (UserProperties.isSearchParents()) {
+            all.addAll(modelElement.getParentConnectedContainer(ABKonfiguration.class, mainDoc));
+        }
+        for (ElementContainer ec : all) {
+            LGMTreeNode node = new LGMTreeNode(ec, false);
+            root.add(node);
+            for (ElementContainer konf : ec.getElement().getConnectedContainer(AufOrgKombination.class, mainDoc)) {
+                LGMTreeNode abkonf = new LGMTreeNode(konf, false);
+                node.add(abkonf);
+                for (ElementContainer client : konf.getElement().getConnectedContainer(Aufgabe.class, doc)) {
+                    tree.addObject(client, abkonf, null, true, false, false);
+                }
+            }
+            // alle Elemente die von den Parts oder Parents kamen, nichtselektierbar setzen
+            if (root.getChildCount() - 1 >= firstNonSelectableIndex) {
+                node.setSelectable(false);
+            }
+        }
 
-		
-		model.reload();
-		tree.restoreExpansion();
-		tree.restoreSelection();
+        model.reload();
+        tree.restoreExpansion();
+        tree.restoreSelection();
 
-	}
+    }
 }

@@ -16,139 +16,148 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
- * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw. anzeigt.
- * Es zeigt die Informationen nur an und ist nicht editierbar.
+ * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw. anzeigt. Es zeigt
+ * die Informationen nur an und ist nicht editierbar.
  * 
  * @author AXS
  * @create 27.09.2010
  */
 public class ElementDialogHeaderPanel extends ElementDialogPanel {
-	
-	private JLabel typeLabel, labelLabel, nameLabel, idLabel, submodelLabel, subModelLabelLabel;
-	
-	
-	public ElementDialogHeaderPanel(ElementPropertyDialog dialog) {
-		super(dialog);
-		setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 0.0;
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		add(new JLabel(Tool3lgmConstants.getResString("typ") + ": "), gbc);
-		gbc.gridx++;
-		gbc.weightx = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		typeLabel = new JLabel();
-		add(typeLabel, gbc);
-		
-		if (ModelConstants.isEdgeType(getModelElement().getClass())) {
-			gbc.gridx = 0;
-			gbc.gridy++;
-			gbc.weightx = 0.0;
-			gbc.fill = GridBagConstraints.NONE;
-			add(new JLabel(Tool3lgmConstants.getResString("name") + ": "), gbc);
-			gbc.gridx++;
-			gbc.weightx = 1.0;
-			gbc.fill = GridBagConstraints.BOTH;
-			nameLabel = new JLabel();
-			add(nameLabel, gbc);
-		}
-		
-		gbc.gridx = 0;
-		gbc.gridy++;
-		gbc.weightx = 0.0;
-		gbc.fill = GridBagConstraints.NONE;
-		add(new JLabel(Tool3lgmConstants.getResString("label") + ": "), gbc);
-		gbc.gridx++;
-		gbc.weightx = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		labelLabel = new JLabel();
-		add(labelLabel, gbc);
 
-		gbc.gridx = 0;
-		gbc.gridy++;
-		gbc.weightx = 0.0;
-		gbc.fill = GridBagConstraints.NONE;
-		add(new JLabel("ID: "), gbc);
-		gbc.gridx++;
-		gbc.weightx = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		idLabel = new JLabel();
-		add(idLabel, gbc);
+    private final JLabel typeLabel, labelLabel;
+    private JLabel nameLabel;
+    private final JLabel idLabel;
+    private JLabel submodelLabel;
+    private JLabel subModelLabelLabel;
 
-		if (ModelConstants.isNodeType(getModelElement().getClass())) {
-			gbc.gridx = 0;
-			gbc.gridy++;
-			gbc.weightx = 0.0;
-			gbc.fill = GridBagConstraints.NONE;
-			add(subModelLabelLabel = new JLabel(Tool3lgmConstants.getResString("verkn_teilmodell") + ": "), gbc);
-			gbc.gridx++;
-			gbc.weightx = 1.0;
-			gbc.fill = GridBagConstraints.BOTH;
-			submodelLabel = new JLabel();
-			add(submodelLabel, gbc);
-		}
-		setBorder(BorderFactory.createEmptyBorder(2, 5, 5, 5));
-		init();
-	}
+    public ElementDialogHeaderPanel(final ElementPropertyDialog dialog) {
+        super(dialog);
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        add(new JLabel(Tool3lgmConstants.getResString("typ") + ": "), gbc);
+        gbc.gridx++;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        typeLabel = new JLabel();
+        add(typeLabel, gbc);
 
+        if (ModelConstants.isEdgeType(getModelElement().getClass())) {
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.weightx = 0.0;
+            gbc.fill = GridBagConstraints.NONE;
+            add(new JLabel(Tool3lgmConstants.getResString("name") + ": "), gbc);
+            gbc.gridx++;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.BOTH;
+            nameLabel = new JLabel();
+            add(nameLabel, gbc);
+        }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-	 */
-	@Override
-	protected void init() {
-		ModelElement modelElement = dialog.getModelElement();
-		if (ModelConstants.isNodeType(getModelElement().getClass())) {
-			typeLabel.setText(ModelConstants.getDisplayableName(modelElement));
-			labelLabel.setText("<html><b>" + modelElement.getClearName() + "</b></html>");
-			idLabel.setText(modelElement.getHashString() + "        " + Tool3lgmConstants.getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
-			GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(((Knoten) modelElement).getAssociatedDoc());
-			if (vdoc == null) {
-				subModelLabelLabel.setVisible(false);
-				submodelLabel.setVisible(false);
-			} else {
-				subModelLabelLabel.setVisible(true);
-				submodelLabel.setVisible(true);
-				submodelLabel.setText(vdoc != null ? "<html>" + vdoc.getTitle() + "</html>" : "----------");
-			}
-		} else if (ModelConstants.isEdgeType(getModelElement().getClass())) {
-			Doppelkante edge = (Doppelkante)modelElement;
-			Class<? extends Kante> edgeClass = edge.getClass();
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        add(new JLabel(Tool3lgmConstants.getResString("label") + ": "), gbc);
+        gbc.gridx++;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        labelLabel = new JLabel();
+        add(labelLabel, gbc);
 
-//			boolean dirIsBackward = edge.getDirection() == Doppelkante.BACKWARD;
-/*			String startElementClassName = ModelConstants.getDisplayableName(dirIsBackward ? Kante.getEndClass(edgeClass): Kante.getStartClass(edgeClass));			
-			String forwardEdgeClassName = ModelConstants.getMetaAssociationName(edgeClass, false, edge.getDirection());
-			String endElementClassName = ModelConstants.getDisplayableName(dirIsBackward ? Kante.getStartClass(edgeClass): Kante.getEndClass(edgeClass));			
-*/
-			String startElementClassName = ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass));			
-			String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE) + "</i>&nbsp;&nbsp;";
-			String endElementClassName = ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass));			
-			
-			if (ModelConstants.isAssociationClass(getModelElement().getClass()))
-				typeLabel.setText("<html>" + ModelConstants.getDisplayableName(modelElement) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
-			else
-				typeLabel.setText("<html>" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + "</html>");
-			
-			String startElementName = edge.getStart().getClearName();
-			//nur die tatsächliche Richtung hinschreiben
-			forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, edge.getDirection()) + "</i>&nbsp;&nbsp;";
-			String endElementName = edge.getEnd().getClearName();
-			
-			nameLabel.setText("<html><b>" + startElementName + "</b>" + forwardEdgeClassName + "<b>" + endElementName + "</b></html>");
-			labelLabel.setText("<html>" + modelElement.getClearName() + "</html>");
-			idLabel.setText(modelElement.getHashString() + "        " + Tool3lgmConstants.getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
-		}
-	}
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        add(new JLabel("ID: "), gbc);
+        gbc.gridx++;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        idLabel = new JLabel();
+        add(idLabel, gbc);
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#update()
-	 */
-	@Override
-	public void update() {
-		init();
-	}
+        if (ModelConstants.isNodeType(getModelElement().getClass())) {
+            gbc.gridx = 0;
+            gbc.gridy++;
+            gbc.weightx = 0.0;
+            gbc.fill = GridBagConstraints.NONE;
+            add(subModelLabelLabel = new JLabel(Tool3lgmConstants.getResString("verkn_teilmodell") + ": "), gbc);
+            gbc.gridx++;
+            gbc.weightx = 1.0;
+            gbc.fill = GridBagConstraints.BOTH;
+            submodelLabel = new JLabel();
+            add(submodelLabel, gbc);
+        }
+        setBorder(BorderFactory.createEmptyBorder(2, 5, 5, 5));
+        init();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
+     */
+    @Override
+    protected void init() {
+        ModelElement modelElement = dialog.getModelElement();
+        if (ModelConstants.isNodeType(getModelElement().getClass())) {
+            typeLabel.setText(ModelConstants.getDisplayableName(modelElement));
+            labelLabel.setText("<html><b>" + modelElement.getClearName() + "</b></html>");
+            idLabel.setText(modelElement.getHashString() + "        " + Tool3lgmConstants.getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
+            GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(((Knoten) modelElement).getAssociatedDoc());
+            if (vdoc == null) {
+                subModelLabelLabel.setVisible(false);
+                submodelLabel.setVisible(false);
+            } else {
+                subModelLabelLabel.setVisible(true);
+                submodelLabel.setVisible(true);
+                submodelLabel.setText(vdoc != null ? "<html>" + vdoc.getTitle() + "</html>" : "----------");
+            }
+        } else if (ModelConstants.isEdgeType(getModelElement().getClass())) {
+            Doppelkante edge = (Doppelkante) modelElement;
+            Class<? extends Kante> edgeClass = edge.getClass();
+
+            // boolean dirIsBackward = edge.getDirection() == Doppelkante.BACKWARD;
+            /*
+             * String startElementClassName = ModelConstants.getDisplayableName(dirIsBackward ?
+             * Kante.getEndClass(edgeClass): Kante.getStartClass(edgeClass)); String
+             * forwardEdgeClassName = ModelConstants.getMetaAssociationName(edgeClass, false,
+             * edge.getDirection()); String endElementClassName =
+             * ModelConstants.getDisplayableName(dirIsBackward ? Kante.getStartClass(edgeClass):
+             * Kante.getEndClass(edgeClass));
+             */
+            String startElementClassName = ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass));
+            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE) + "</i>&nbsp;&nbsp;";
+            String endElementClassName = ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass));
+
+            if (ModelConstants.isAssociationClass(getModelElement().getClass())) {
+                typeLabel.setText("<html>" + ModelConstants.getDisplayableName(modelElement) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
+            } else {
+                typeLabel.setText("<html>" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + "</html>");
+            }
+
+            String startElementName = edge.getStart().getClearName();
+            // nur die tatsächliche Richtung hinschreiben
+            forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, edge.getDirection()) + "</i>&nbsp;&nbsp;";
+            String endElementName = edge.getEnd().getClearName();
+
+            nameLabel.setText("<html><b>" + startElementName + "</b>" + forwardEdgeClassName + "<b>" + endElementName + "</b></html>");
+            labelLabel.setText("<html>" + modelElement.getClearName() + "</html>");
+            idLabel.setText(modelElement.getHashString() + "        " + Tool3lgmConstants.getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#update()
+     */
+    @Override
+    public void update() {
+        init();
+    }
 
 }

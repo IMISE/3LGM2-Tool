@@ -15,29 +15,28 @@ import net.sf.saxon.TransformerFactoryImpl;
 
 /**
  * @author Thomas Rudert
- * Klasse zum Ausführen von Transformationen auf XML-Dokumenten mit Hilfe von
- * XSLT-Dateien
+ *         Klasse zum Ausführen von Transformationen auf XML-Dokumenten mit Hilfe von
+ *         XSLT-Dateien
  */
 public class XMLTransformer {
 
-	/**
-	 * führt eine Transformation aus
-	 * @param xsltSource Quelle mit den Transformationsvorschriften
-	 * @param xmlSource Quelle der XML-Modell-Datei
-	 * @param destination Ziel für die transformierte Datei
-	 * @return boolean with true if execution was successful
-	 */
-	public static void transform(InputStream xsltSource, String xsltName, File xmlSource, String destination) 
-	throws TransformerException, IOException
-	{
-		TransformerFactory tFactory = TransformerFactoryImpl.newInstance();
+    /**
+     * führt eine Transformation aus
+     * 
+     * @param xsltSource Quelle mit den Transformationsvorschriften
+     * @param xmlSource Quelle der XML-Modell-Datei
+     * @param destination Ziel für die transformierte Datei
+     * @return boolean with true if execution was successful
+     */
+    public static void transform(final InputStream xsltSource, final String xsltName, final File xmlSource, final String destination) throws TransformerException, IOException {
+        TransformerFactory tFactory = TransformerFactoryImpl.newInstance();
 
-		Transformer transformer = tFactory.newTransformer(new StreamSource(xsltSource));
+        Transformer transformer = tFactory.newTransformer(new StreamSource(xsltSource));
 
-		FileOutputStream result = new FileOutputStream(destination);
+        FileOutputStream result = new FileOutputStream(destination);
 
-		transformer.transform(new StreamSource(xmlSource), new StreamResult(result));
+        transformer.transform(new StreamSource(xmlSource), new StreamResult(result));
 
-		result.close();
-	}
+        result.close();
+    }
 }

@@ -17,11 +17,6 @@ import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import de.imise.util.Alphabetical;
-import de.imise.util.NamedObjectContainer;
-import de.imise.util.Pair;
-import de.imise.util.swing.menu.MenuScroller;
-
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
@@ -50,2037 +45,2099 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.menu.FSTContextMenu;
 import de.imise.tool3lgm.gui.menu.MenuCollection;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.Alphabetical;
+import de.imise.util.NamedObjectContainer;
+import de.imise.util.Pair;
+import de.imise.util.swing.menu.MenuScroller;
 
 /**
  * @author N.N., Thomas, AXS
  */
 public class ContextGenerator implements PopupMenuListener, ActionListener {
 
-	/**
-	 * COMMENTME
-	 */
-	static JMenu new_logical_tree, new_domain_tree, new_physical_tree;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenu internals;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem delete_selected, delete_selected_from_szenario, join_selected;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem properties, change_layout;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem new_fach_text, new_log_text, new_phy_text;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem unlinkToSzenario, selectLinkedSzenario;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem command_line;
-	/**
-	 * COMMENTME
-	 */
-	private static JCheckBoxMenuItem verify, interactive;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem color_layer, normalize_layer, layout_layer;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem show_configs, hide_configs, set_visible, set_invisible;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem layer_show_configs, layer_hide_configs;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem aufklappen, zuklappen;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem cb_copy, cb_cut, cb_paste, cb_clear;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenuItem undo, redo, queue, consistency;
-	/**
-	 * COMMENTME
-	 */
-	private static JMenu configuration_sub_menu;
+    /**
+     * COMMENTME
+     */
+    static JMenu new_logical_tree, new_domain_tree, new_physical_tree;
+    /**
+     * COMMENTME
+     */
+    private static JMenu internals;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem delete_selected, delete_selected_from_szenario, join_selected;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem properties, change_layout;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem new_fach_text, new_log_text, new_phy_text;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem unlinkToSzenario, selectLinkedSzenario;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem command_line;
+    /**
+     * COMMENTME
+     */
+    private static JCheckBoxMenuItem verify, interactive;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem color_layer, normalize_layer, layout_layer;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem show_configs, hide_configs, set_visible, set_invisible;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem layer_show_configs, layer_hide_configs;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem aufklappen, zuklappen;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem cb_copy, cb_cut, cb_paste, cb_clear;
+    /**
+     * COMMENTME
+     */
+    private static JMenuItem undo, redo, queue, consistency;
+    /**
+     * COMMENTME
+     */
+    private static JMenu configuration_sub_menu;
 
-	/**
-	 * COMMENTME
-	 */
-	private static LGMGraphDocument doc;
-	/**
-	 * COMMENTME
-	 */
-	static String[] fontnamestr;
-	/**
-	 * COMMENTME
-	 */
-	static JMenuItem[] fontnames, fontsizes, fontstyles;
+    /**
+     * COMMENTME
+     */
+    private static LGMGraphDocument doc;
+    /**
+     * COMMENTME
+     */
+    static String[] fontnamestr;
+    /**
+     * COMMENTME
+     */
+    static JMenuItem[] fontnames, fontsizes, fontstyles;
 
-	/**
-	 * COMMENTME
-	 */
-	static int x_space, y_space, x_content, y_content;
+    /**
+     * COMMENTME
+     */
+    static int x_space, y_space, x_content, y_content;
 
-	/**
-	 * COMMENTME
-	 */
-	static protected boolean controlled = false;
-	/**
-	 * COMMENTME
-	 */
-	static protected JPopupMenu menu = null;
-	/**
-	 * COMMENTME
-	 */
-	static protected boolean resizing = false;
+    /**
+     * COMMENTME
+     */
+    static protected boolean controlled = false;
+    /**
+     * COMMENTME
+     */
+    static protected JPopupMenu menu = null;
+    /**
+     * COMMENTME
+     */
+    static protected boolean resizing = false;
 
-	/**
-	 * COMMENTME
-	 */
-	static ImageIcon verbindung_anlegen = Tool3lgmConstants.getIcon("verbindung_anlegen.gif");
-	/**
-	 * COMMENTME
-	 */
-	static ImageIcon verbindung_trennen = Tool3lgmConstants.getIcon("verbindung_trennen.gif");
+    /**
+     * COMMENTME
+     */
+    static ImageIcon verbindung_anlegen = Tool3lgmConstants.getIcon("verbindung_anlegen.gif");
+    /**
+     * COMMENTME
+     */
+    static ImageIcon verbindung_trennen = Tool3lgmConstants.getIcon("verbindung_trennen.gif");
 
-	/**
-	 * COMMENTME
-	 */
-	protected ElementContainer mc = null;
+    /**
+     * COMMENTME
+     */
+    protected ElementContainer mc = null;
 
-	/**
-	 * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
-	 * GrapDocument sind erstmal egal, da sie beim ersten aktivieren über
-	 * changeContext(GraphDocument) eines InternalFrames auf korrekte Werte
-	 * gesetzt werden.
-	 */
-	public ContextGenerator() {
-		setControlled(false);
-		init();
-	}
+    /**
+     * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
+     * GrapDocument sind erstmal egal, da sie beim ersten aktivieren über
+     * changeContext(GraphDocument) eines InternalFrames auf korrekte Werte
+     * gesetzt werden.
+     */
+    public ContextGenerator() {
+        setControlled(false);
+        init();
+    }
 
-	/**
-	 * @param b
-	 */
-	public static final void setControlled(boolean b) {
-		controlled = b;
-	}
+    /**
+     * @param b
+     */
+    public static final void setControlled(final boolean b) {
+        controlled = b;
+    }
 
-	/**
-	 * @return
-	 */
-	public GraphDocument getDoc() {
-		return doc;
-	}
+    /**
+     * @return
+     */
+    public GraphDocument getDoc() {
+        return doc;
+    }
 
-	/**
-	 * Setzt das GraphDocument auf das übergebene und tauscht bei allen
-	 * MenuItems den ContextListener aus
-	 * 
-	 * @param GraphDocument
-	 */
-	public void changeContext(LGMGraphDocument document) {
-		doc = document;
-	}
+    /**
+     * Setzt das GraphDocument auf das übergebene und tauscht bei allen
+     * MenuItems den ContextListener aus
+     * 
+     * @param GraphDocument
+     */
+    public void changeContext(final LGMGraphDocument document) {
+        doc = document;
+    }
 
-	// --- Methoden zur Statusveraenderung --- Ende ---
+    // --- Methoden zur Statusveraenderung --- Ende ---
 
-	/**
-	 * 
-	 */
-	@SuppressWarnings("unchecked")
-	private void init() {
-		int c;
-		JMenuItem item;
-
-		new_domain_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
-		for (c = 0; c < ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
-			item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c]));
-			item.addActionListener(this);
-			item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
-			new_domain_tree.add(item);
-		}
-		new_logical_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
-		for (c = 0; c < ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
-			item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c]));
-			item.addActionListener(this);
-			item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
-			new_logical_tree.add(item);
-		}
-
-		new_physical_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
-		for (c = 0; c < ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
-			item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]));
-			item.addActionListener(this);
-			item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
-			new_physical_tree.add(item);
-		}
-
-		new_fach_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldFach.class.getName());
-		new_log_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldLog.class.getName());
-		new_phy_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldPhy.class.getName());
-
-		properties = getItem("eigenschaften", GDCommands.ELEMENT_PROPERTIES);
-		unlinkToSzenario = getItem("unlinkToSzenario", GDCommands.LINK_SELECTED_TO_SZENARIO, GraphDocument.GDCOMMAND_TEXT_SURROUNDER + "null" + GraphDocument.GDCOMMAND_TEXT_SURROUNDER);
-		selectLinkedSzenario = getItem("selectLinkedSzenario", GDCommands.SELECT_LINKED_SZENARIO);
-		delete_selected = getItem("remove_from_model", GDCommands.DELETE);
-		// der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
-		delete_selected_from_szenario = getItem("remove_from_submodel", GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, "");
-
-		join_selected = getItem("elemente_vereinigen", GDCommands.JOIN_SELECTED);
-
-		change_layout = getItem("global_layout", GDCommands.CHANGE_GLOBAL_MAPPING);
-
-		verify = new JCheckBoxMenuItem(Tool3lgmConstants.getResString("verif"));
-		verify.addActionListener(this);
-
-		interactive = new JCheckBoxMenuItem(Tool3lgmConstants.getResString("intera"));
-		interactive.addActionListener(this);
-
-		command_line = getItem("befehl", GDCommands.COMMAND_LINE);
-		queue = getItem("queue", GDCommands.PRINT_QUEUE);
-		consistency = getItem("konsistenz", GDCommands.CHECK_CONSISTENCY);
-
-		internals = new JMenu(Tool3lgmConstants.getResString("intern"));
-		internals.add(verify);
-		internals.add(interactive);
-		internals.addSeparator();
-		internals.add(command_line);
-		internals.addSeparator();
-		internals.add(queue);
-		internals.add(consistency);
-
-		// weiter mit Grafik-Sachen
-		normalize_layer = getItem("layer_reset_color", GDCommands.NORMALIZE_LAYER);
-		voll_trans_layer = getItem("layer_full_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.VOLL_TRANSPARENT);
-		halb_trans_layer = getItem("layer_semi_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.HALB_TRANSPARENT);
-		nicht_trans_layer = getItem("layer_no_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.NICHT_TRANSPARENT);
-		color_layer = getItem("layer_change_color", GDCommands.CHANGE_LAYER_COLOR);
-
-		JMenu trans_layer = new JMenu(Tool3lgmConstants.getResString("layerTransparencyMenu"));
-		trans_layer.add(nicht_trans_layer);
-		trans_layer.add(halb_trans_layer);
-		trans_layer.add(voll_trans_layer);
-
-		layout_layer = new JMenu(Tool3lgmConstants.getResString("layerLayoutMenu"));
-		layout_layer.add(normalize_layer);
-		layout_layer.add(color_layer);
-		layout_layer.add(trans_layer);
-
-		show_configs = getItem("konf_einbl", GDCommands.SHOW_ALL_CONFIGS);
-		hide_configs = getItem("konf_ausbl", GDCommands.HIDE_ALL_CONFIGS);
-		set_visible = getItem("einbl", GDCommands.SET_VISIBLE, "true");
-		set_invisible = getItem("ausbl", GDCommands.SET_VISIBLE, "false");
-
-		configuration_sub_menu = new JMenu(Tool3lgmConstants.getResString("konf"));
-		configuration_sub_menu.add(show_configs);
-		configuration_sub_menu.add(hide_configs);
-
-		layer_show_configs = getItem("konf_einbl", GDCommands.SHOW_ALL_CONFIGS);
-		layer_hide_configs = getItem("konf_ausbl", GDCommands.HIDE_ALL_CONFIGS);
-		aufklappen = getItem("aufklappen", GDCommands.AUFKLAPPEN);
-		zuklappen = getItem("zuklappen", GDCommands.ZUKLAPPEN);
-
-		JMenu linienstil = new JMenu(Tool3lgmConstants.getResString("linestyle"));
-
-		JMenuItem[] linestyles = new JMenuItem[2];
-		linestyles[0] = new JMenuItem(Tool3lgmConstants.getResString("linestyle_normal"));
-		linestyles[0].setActionCommand(GDCommands.CHANGE_LINE_STYLE + " normal");
-		linestyles[1] = new JMenuItem(Tool3lgmConstants.getResString("linestyle_dashed"));
-		linestyles[1].setActionCommand(GDCommands.CHANGE_LINE_STYLE + " dashes");
-		for (JMenuItem jItem : linestyles) {
-			jItem.addActionListener(this);
-			linienstil.add(jItem);
-		}
-
-	}
-
-	/**
-	 * @param resKeyOrString
-	 * @param command
-	 * @param arguments
-	 * @param icon
-	 * @param enabled
-	 * @param toolTip
-	 * @return
-	 */
-	private JMenuItem getItem(String resKeyOrString, GDCommands command, String arguments, ImageIcon icon, boolean enabled, String toolTip) {
-		String label = null;
-		try {
-			label = Tool3lgmConstants.getResString(resKeyOrString);
-		} catch (Exception e) {
-			label = resKeyOrString;
-		}
-		JMenuItem item = new JMenuItem(label, icon);
-		item.addActionListener(this);
-		if (arguments == null)
-			item.setActionCommand(command.toString());
-		else
-			item.setActionCommand(command + " " + arguments);
-		item.setEnabled(enabled);
-		item.setToolTipText(toolTip);
-		return item;
-	}
-
-	/**
-	 * @param resKeyOrString
-	 * @param command
-	 * @param arguments
-	 * @param icon
-	 * @return
-	 */
-	private JMenuItem getItem(String resKeyOrString, GDCommands command, String arguments, ImageIcon icon) {
-		return getItem(resKeyOrString, command, arguments, icon, true, null);
-	}
-
-	/**
-	 * @param resKey
-	 * @param command
-	 * @param arguments
-	 * @return
-	 */
-	private JMenuItem getItem(String resKey, GDCommands command, String arguments) {
-		return getItem(resKey, command, arguments, null);
-	}
-
-	/**
-	 * @param resKey
-	 * @param command
-	 * @return
-	 */
-	private JMenuItem getItem(String resKey, GDCommands command) {
-		return getItem(resKey, command, null);
-	}
-
-	/**
+    /**
 	 * 
 	 */
-	private static void checkConfigurationSubMenu() {
-		boolean b = false;
-		for (ElementContainer selectedEC : doc.selectedContainer) {
-			b = ModelConstants.isInterLayerStartClass(selectedEC.getElement().getClass());
-			if (b)
-				break;
-		}
-		show_configs.setEnabled(b);
-		hide_configs.setEnabled(b);
-	}
-
-	/**
-	 * Liefert das Menü für die untergeordneten Elemente.
-	 * 
-	 * @return
-	 */
-	private JMenu getSubElemMenu() {
-		ModelElement selected = doc.getLastSelected().getElement();
-		JMenu sub_elem = new JMenu(Tool3lgmConstants.getResString("unterg_el"));
-		HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>> slavePairs = new HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>>();
-		for (Class<? extends Composition> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
-			Class<? extends ModelElement> abstractSlaves = Composition.getSlaveType(compositionClass);
-			for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves))
-				slavePairs.add(new Pair<Class<? extends Composition>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
-		}
-
-		if (slavePairs.size() == 0)
-			return sub_elem;
-
-		ArrayList<JMenuItem> items = new ArrayList<JMenuItem>(slavePairs.size());
-
-		for (Pair<Class<? extends Composition>, Class<? extends ModelElement>> slavePair : slavePairs) {
-			Class<? extends Composition> compositionClass = slavePair.getFirstItem();
-			JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), GDCommands.CREATE_ADDICTED, doc.getHashString() + " " + selected.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-			item.setEnabled(selected.countConnections(compositionClass) < Composition.getMaxMasterToSlaveCardinality(compositionClass));
-			items.add(item);
-		}
-		Alphabetical.sort(items);
-		for (JMenuItem item : items)
-			sub_elem.add(item);
-		return sub_elem;
-	}
-
-	/**
-	 * Liefert das Menü, mit dem selektierte Elemente in andere Teilmodelle
-	 * übernommen werden können.
-	 * 
-	 * @return
-	 */
-	private JMenu getAddToSzenarioMenu() {
-		JMenu szenario_menu = new JMenu(Tool3lgmConstants.getResString("inszenario"));
-		JMenuItem item = getItem("inneuszenario", GDCommands.ADD_SELECTED_TO_NEW_SZENARIO);
-		szenario_menu.add(item);
-		szenario_menu.add(new JSeparator());
-
-		ArrayList<Szenario> szenarios = doc.getCollection().getSzenarios();
-		Alphabetical.sort(szenarios);
-
-		for (Szenario szen : szenarios) {
-			item = new JMenuItem(szen.getTitle());
-
-			szenario_menu.add(item);
-
-			if (UserProperties.isEnableSubmodelBrowser() && szen == Tool3lgm.tool.getSelectedDoc()) {
-				item.setEnabled(false);
-				continue;
-			}
-
-			item.addActionListener(this);
-			item.setActionCommand(GDCommands.ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
-		}
-
-		item = getItem("in_all_szenarios", GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS);
-		szenario_menu.add(new JSeparator());
-		szenario_menu.add(item);
-
-		if (szenarios.size() > 20)
-			MenuScroller.setScrollerFor(szenario_menu, 20, 125, 2, 2);
-
-		return szenario_menu;
-	}
-
-	/**
-	 * Menü für das verknüpfen mit einem Teilmodell
-	 * 
-	 * @return
-	 */
-	private JMenu getLinkToSzenarioMenu() {
-		JMenu link_to_szenario_menu = new JMenu(Tool3lgmConstants.getResString("verkn_mit_szen"));
-		JMenuItem item = getItem("verkn_neuszenario", GDCommands.LINK_SELECTED_TO_NEW_SZENARIO);
-		link_to_szenario_menu.add(item);
-		link_to_szenario_menu.add(new JSeparator());
-
-		ArrayList<Szenario> szenarios = doc.getCollection().getSzenarios();
-		Alphabetical.sort(szenarios);
-
-		for (Szenario szen : szenarios) {
-			item = new JMenuItem(szen.getTitle());
-
-			/* ist Knoten schon mit diesem Szenario verknüpft */
-			if (mc != null && mc.getElement() instanceof Knoten && szen.getHashString().equals(((Knoten) mc.getElement()).getAssociatedDoc()))
-				item.setEnabled(false);
-
-			item.addActionListener(this);
-			item.setActionCommand(GDCommands.LINK_SELECTED_TO_SZENARIO + " " + szen.getHashString());
-			link_to_szenario_menu.add(item);
-		}
-		return link_to_szenario_menu;
-	}
-
-	/**
-	 * Kontextmenü eines Einzelknotens
-	 * 
-	 * @param contextSource
-	 * @param ec
-	 * @return
-	 */
-	private JPopupMenu getSingleKnotContextMenu(Component contextSource, ElementContainer ec) {
-//		System.err.println("ContextGenerator.getSingleKnotContextMenu()");
-		JPopupMenu menu = new JPopupMenu();
-		mc = ec;
-		ModelElement me = ec.getElement();
-		if (!(ec instanceof BendpointContainer)) {
-			menu.add(properties);
-			menu.addSeparator();
-			JMenu subElems = getSubElemMenu();
-			if (subElems.getItemCount() > 0) {
-				menu.add(subElems);
-				menu.addSeparator();
-			}
-
-			if (!me.isUnique()) {
-				menu.add(getAddToSzenarioMenu());
-			}
-			JMenuItem addToModelMenu = getAddToModelMenu();
-			if (addToModelMenu != null) {
-				menu.add(addToModelMenu);
-			}
-
-			if (me.getAssociatedDoc() != null) {
-				menu.add(selectLinkedSzenario);
-			}
-			menu.add(getLinkToSzenarioMenu());
-			if (me.getAssociatedDoc() != null) {
-				menu.add(unlinkToSzenario);
-			}
-			if (doc instanceof Szenario) {
-				if (ec instanceof InterLayerConnectedNodeContainer && contextSource instanceof InputGraphArea) {
-					menu.addSeparator();
-					checkConfigurationSubMenu();
-					menu.add(show_configs);
-					menu.add(hide_configs);
-				}
-				if (me.isPaintable() || me instanceof Prozess) {
-					menu.addSeparator();
-					if (!ec.isVisible())
-						menu.add(set_visible);
-					else
-						menu.add(set_invisible);
-				}
-				if (contextSource instanceof InputGraphArea) {
-					if (me.canHaveParts()) {
-						// menu.addSeparator();
-						if (me.hasDirectPartContainer(doc)) {
-							aufklappen.setEnabled(true);
-							zuklappen.setEnabled(true);
-						} else {
-							aufklappen.setEnabled(false);
-							zuklappen.setEnabled(false);
-						}
-						if (!ec.isExpanded())
-							menu.add(aufklappen);
-						else
-							menu.add(zuklappen);
-					}
-					menu.addSeparator();
-					menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
-					menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
-					menu.add(getLayerMenu());
-				}
-			}
-
-			menu.addSeparator();
-
-			// Analysemenü anfügen
-			menu.add(getAnalyseMenu());
-
-			JMenuItem joinMenu = getJoinMenu();
-			if (joinMenu != null) {
-				menu.addSeparator();
-				menu.add(joinMenu);
-			}
-
-			menu.addSeparator();
-		}
-
-		if (ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS.isEnabled()) {
-			menu.add(ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS);
-		}
-
-		//bewirkt, dass "Aus Teilmodell löschen" nur angezeigt wird,
-		//wenn das selektierte Element in mehr als einem Teilmodell vorkommt
-		//und nicht der <Alle-Elemte>-Browser aktiviert ist.
-		if (!ec.getElement().isUnique() && !ec.getElement().isSlave()) {
-			if ((doc instanceof Szenario))
-				menu.add(delete_selected_from_szenario);
-		}
-
-		if (!(ec instanceof BendpointContainer)) {
-			menu.add(delete_selected);
-		}
-
-		return menu;
-	}
-
-	/**
-	 * @param contextSource
-	 * @return
-	 */
-	private JPopupMenu getMultiKnotContextMenu(Component contextSource) {
-
-		JPopupMenu menu = new JPopupMenu();
-
-		boolean knickpunkte = doc.isSelectedOnlyBendpoints();
-
-		if (!knickpunkte) {
-			ModelElement lastSelected = doc.getLastSelected().getElement();
-			Class<? extends ModelElement> lastSelectedClass = lastSelected.getClass();
-
-			ArrayList<ModelElement> selectedElements = doc.getSelectedElements();
-
-			ArrayList<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<NamedObjectContainer<JMenuItem>>();
-			ArrayList<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<NamedObjectContainer<JMenuItem>>();
-
-			for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
-				for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(lastSelectedClass, me2Class)) {
-					if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
-						if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-							String label = ModelConstants.getForwardMetaAssociationName(edgeClass, false, true);
-							String toolTip = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
-							boolean connectable = false;
-							boolean disconnectable = false;
-							for (ModelElement me2 : selectedElements) {
-								if (lastSelected == me2)
-									continue;
-								if (!lastSelected.isPartOf(me2) && !lastSelected.isParentOf(me2))
-									connectable = true;
-								if (lastSelected.isDirectPartOf(me2))
-									disconnectable = true;
-								if (connectable && disconnectable)
-									break;
-							}
-							connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen,
-									connectable, toolTip), label));
-							disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen,
-									disconnectable, toolTip), label));
-						}
-						if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-							String label = ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
-							String toolTip = ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
-							boolean connectable = false;
-							boolean disconnectable = false;
-							for (ModelElement me2 : selectedElements) {
-								if (lastSelected == me2)
-									continue;
-								if (!me2.isPartOf(lastSelected) && !me2.isParentOf(lastSelected))
-									connectable = true;
-								if (me2.isDirectPartOf(lastSelected))
-									disconnectable = true;
-								if (connectable && disconnectable)
-									break;
-							}
-							connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_anlegen,
-									connectable, toolTip), label));
-							disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_trennen,
-									disconnectable, toolTip), label));
-						}
-					} else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-						if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-							int actDir = Doppelkante.FORWARD;
-							String label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
-							String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
-							boolean connectable = false;
-							boolean disconnectable = false;
-							for (ModelElement me2 : selectedElements) {
-								if (lastSelected == me2)
-									continue;
-								if (!lastSelected.isConnectedTo(me2, edgeClass))
-									connectable = true;
-								else
-									disconnectable = true;
-								if (connectable && disconnectable)
-									break;
-							}
-
-							connectableItems.add(new NamedObjectContainer<JMenuItem>(
-									getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-							disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable,
-									toolTip), label));
-
-							actDir = Doppelkante.BACKWARD;
-							label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
-							toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
-							connectable = false;
-							disconnectable = false;
-							for (ModelElement me2 : selectedElements) {
-								if (lastSelected == me2)
-									continue;
-								if (!lastSelected.isConnectedFrom(me2, edgeClass))
-									connectable = true;
-								else
-									disconnectable = true;
-								if (connectable && disconnectable)
-									break;
-							}
-
-							connectableItems.add(new NamedObjectContainer<JMenuItem>(
-									getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-							disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable,
-									toolTip), label));
-						}
-						// Doppeldeutige Kanten mit identischer Start- und
-						// Endklasse brauchen nur 1x angeboten werden
-						if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && Kante.getStartClass(edgeClass) != Kante.getEndClass(edgeClass)) {
-							int actDir = Doppelkante.FORWARD;
-							String label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
-							String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
-							boolean connectable = false;
-							boolean disconnectable = false;
-							for (ModelElement me2 : selectedElements) {
-								if (lastSelected == me2)
-									continue;
-								if (!lastSelected.isConnectedTo(me2, edgeClass))
-									connectable = true;
-								else
-									disconnectable = true;
-								if (connectable && disconnectable)
-									break;
-							}
-
-							connectableItems.add(new NamedObjectContainer<JMenuItem>(
-									getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-							disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable,
-									toolTip), label));
-
-							actDir = Doppelkante.BACKWARD;
-							label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
-							toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
-							connectable = false;
-							disconnectable = false;
-							for (ModelElement me2 : selectedElements) {
-								if (lastSelected == me2)
-									continue;
-								if (!lastSelected.isConnectedFrom(me2, edgeClass))
-									connectable = true;
-								else
-									disconnectable = true;
-								if (connectable && disconnectable)
-									break;
-							}
-
-							connectableItems.add(new NamedObjectContainer<JMenuItem>(
-									getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-							disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable,
-									toolTip), label));
-
-						}
-					} else /*if (Kante.isConnecting(edgeClass, me1Class, me2Class))*/ {
-						String label = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getForwardMetaAssociationName(edgeClass, false, true) : ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
-						String toolTip = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
-						boolean connectable = false;
-						boolean disconnectable = false;
-						for (ModelElement me2 : selectedElements) {
-							if (lastSelected == me2)
-								continue;
-							if (!lastSelected.isConnectedWith(me2, edgeClass))
-								connectable = true;
-							else
-								disconnectable = true;
-							if (connectable && disconnectable)
-								break;
-						}
-						connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
-						disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
-					}
-				}
-			}
-
-			if (connectableItems.size() > 0) {
-				Alphabetical.sort(connectableItems);
-				menu.add(new JLabel(Tool3lgmConstants.getResString("verbinden")));
-				for (NamedObjectContainer<JMenuItem> itemContainer : connectableItems)
-					menu.add(itemContainer.getObject());
-
-			}
-			if (disconnectableItems.size() > 0) {
-				Alphabetical.sort(disconnectableItems);
-				menu.add(new JLabel(Tool3lgmConstants.getResString("trennen")));
-				for (NamedObjectContainer<JMenuItem> itemContainer : disconnectableItems)
-					menu.add(itemContainer.getObject());
-			}
-
-			if (menu.getComponentCount() > 0)
-				menu.addSeparator();
-
-			menu.add(getAddToSzenarioMenu());
-			JMenuItem addToModelMenu = getAddToModelMenu();
-			if (addToModelMenu != null) {
-				menu.add(addToModelMenu);
-			}
-
-			if (contextSource instanceof InputGraphArea) {
-				if (menu.getComponentCount() > 0)
-					menu.addSeparator();
-				checkConfigurationSubMenu();
-				menu.add(show_configs);
-				menu.add(hide_configs);
-			}
-			if (menu.getComponentCount() > 0)
-				menu.addSeparator();
-			menu.add(set_visible);
-			menu.add(set_invisible);
-
-			if (contextSource instanceof InputGraphArea) {
-				if (menu.getComponentCount() > 0)
-					menu.addSeparator();
-				if (lastSelected.hasDirectPartContainer(doc)) {
-					aufklappen.setEnabled(true);
-					zuklappen.setEnabled(true);
-				} else {
-					aufklappen.setEnabled(false);
-					zuklappen.setEnabled(false);
-				}
-				if (!doc.getLastSelected().isExpanded())
-					menu.add(aufklappen);
-				else
-					menu.add(zuklappen);
-				menu.addSeparator();
-				menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
-				menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
-				menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ALIGNMENT_MENU);
-			}
-
-			if (doc.selectedContainer.isJoinableElementsSelected()) {
-				if (menu.getComponentCount() > 0)
-					menu.addSeparator();
-				menu.add(join_selected);
-			}
-		}
-
-		if (doc instanceof Szenario && !doc.isSelectedOnlyUnique() && !doc.isSelectedOnlySlaveRealNodes() && !doc.isSelectedOnlySubmodelElements()) {
-			if (menu.getComponentCount() > 0)
-				menu.addSeparator();
-			menu.add(delete_selected_from_szenario);
-		}
-
-		if (!knickpunkte) {
-			menu.add(delete_selected);
-		}
-
-		return menu;
-	}
-
-	/**
-	 * Kontextmenü im Searchdialog
-	 */
-	public JPopupMenu getSearchDialogContextMenu() {
-		JPopupMenu menu = new JPopupMenu();
-		if (doc.isSingleSelection()) {
-			menu.add(properties);
-			menu.addSeparator();
-		}
-		if (!doc.isSelectedOnlyUnique() && !doc.isSelectedOnlySubmodelElements() && doc instanceof Szenario)
-			menu.add(delete_selected_from_szenario);
-		menu.add(delete_selected);
-		return menu;
-	}
-
-	/**
-	 * @param source
-	 * @return
-	 */
-	public final JPopupMenu getKnotContextMenu(Component source) {
-		JPopupMenu menu = new JPopupMenu();
-		if (doc.isSelectedOnlyBendpoints()) {
-			if ((doc instanceof Szenario))
-				menu.add(delete_selected_from_szenario);
-		} else {
-			if (doc.isSingleSelection())
-				menu = getSingleKnotContextMenu(source, doc.getLastSelected());
-			else if (doc.isMultipleSelection())
-				menu = getMultiKnotContextMenu(source);
-		}
-		return menu;
-	}
-
-	/**
-	 * @return
-	 */
-	private static final JPopupMenu getSingleTraceContextMenu() {
-//		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
-		JPopupMenu menu = new JPopupMenu();
-		if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer)
-			menu.add(properties);
-
-		JMenuItem addToModelMenu = getAddToModelMenu();
-		if (addToModelMenu != null) {
-			menu.addSeparator();
-			menu.add(addToModelMenu);
-		}
-		if (doc instanceof Szenario) {
-			menu.addSeparator();
-			menu.add(delete_selected);
-		}
-		return menu;
-	}
-
-	/**
-	 * @return
-	 */
-	private static final JPopupMenu getMultiTraceContextMenu() {
-		JPopupMenu menu = new JPopupMenu();
-		if (menu.getComponentCount() > 0)
-			menu.addSeparator();
-		JMenuItem addToModelMenu = getAddToModelMenu();
-		if (addToModelMenu != null) {
-			menu.add(addToModelMenu);
-		}
-
-		if (menu.getComponentCount() > 0)
-			menu.addSeparator();
-		menu.add(delete_selected);
-
-		return menu;
-	}
-
-	/**
-	 * @return
-	 */
-	private static final JPopupMenu getTraceContextMenu() {
-		if (doc.isSingleSelection())
-			return getSingleTraceContextMenu();
-		return getMultiTraceContextMenu();
-	}
-
-	/**
-	 * @return
-	 */
-	private final JPopupMenu getMultiContextMenu() {
-		JPopupMenu menu = new JPopupMenu();
-		if (menu.getComponentCount() > 0)
-			menu.addSeparator();
-		menu.add(getAddToSzenarioMenu());
-		JMenuItem addToModelMenu = getAddToModelMenu();
-		if (addToModelMenu != null) {
-			menu.add(addToModelMenu);
-		}
-
-		menu.addSeparator();
-		if (doc instanceof Szenario)
-			menu.add(delete_selected_from_szenario);
-		menu.add(delete_selected);
-
-		return menu;
-	}
-
-	/**
-	 * @return
-	 */
-	private static JMenu getNewKnotMenu() {
-		int i;
-		switch (doc.getCollection().getActiveLayer()) {
-		case 4:
-			for (i = 0; i < new_domain_tree.getItemCount(); i++)
-				new_domain_tree.getItem(i).setEnabled(true);
-			for (i = 0; i < new_logical_tree.getItemCount(); i++)
-				new_logical_tree.getItem(i).setEnabled(false);
-			for (i = 0; i < new_physical_tree.getItemCount(); i++)
-				new_physical_tree.getItem(i).setEnabled(false);
-			return new_domain_tree;
-		case 2:
-			for (i = 0; i < new_domain_tree.getItemCount(); i++)
-				new_domain_tree.getItem(i).setEnabled(false);
-			for (i = 0; i < new_logical_tree.getItemCount(); i++)
-				new_logical_tree.getItem(i).setEnabled(true);
-			for (i = 0; i < new_physical_tree.getItemCount(); i++)
-				new_physical_tree.getItem(i).setEnabled(false);
-			return new_logical_tree;
-		case 0:
-			for (i = 0; i < new_domain_tree.getItemCount(); i++)
-				new_domain_tree.getItem(i).setEnabled(false);
-			for (i = 0; i < new_logical_tree.getItemCount(); i++)
-				new_logical_tree.getItem(i).setEnabled(false);
-			for (i = 0; i < new_physical_tree.getItemCount(); i++)
-				new_physical_tree.getItem(i).setEnabled(true);
-			return new_physical_tree;
-		default:
-			return new_domain_tree;
-		}
-	}
-
-	/**
-	 * @return
-	 */
-	private static JMenu getLayerMenu() {
-		JMenu menu = new JMenu(Tool3lgmConstants.getResString("layer"));
-		JPopupMenu popup = getLayerContextMenu();
-		for (Component c : popup.getComponents()) {
-			if (c instanceof JMenu)
-				menu.add((JMenu) c);
-			else if (c instanceof JMenuItem)
-				menu.add((JMenuItem) c);
-			else if (c instanceof JPopupMenu.Separator)
-				menu.addSeparator();
-		}
-		return menu;
-	}
-
-	/**
-	 * @return
-	 */
-	public static final JPopupMenu getLayerContextMenu() {
-		JPopupMenu menu = new JPopupMenu();
-		menu.add(getNewKnotMenu());
-		switch (doc.getCollection().getActiveLayer()) {
-		case 4:
-			menu.add(new_fach_text);
-			break;
-		case 2:
-			menu.add(new_log_text);
-			break;
-		case 0:
-			menu.add(new_phy_text);
-			break;
-		}
-		menu.addSeparator();
-
-		menu.add(layer_show_configs);
-		menu.add(layer_hide_configs);
-
-		menu.addSeparator();
-		menu.add(layout_layer);
-		menu.add(change_layout);
-		menu.addSeparator();
-		menu.add(getInternalsMenu());
-		return menu;
-	}
-
-	/**
-	 * @return
-	 */
-	private static JMenu getInternalsMenu() {
-		if (!doc.isVerificationMode()) {
-			verify.setState(false);
-			verify.setActionCommand(GDCommands.VERIFY_ON.toString());
-		} else {
-			verify.setState(true);
-			verify.setActionCommand(GDCommands.VERIFY_OFF.toString());
-		}
-
-		if (!doc.getCollection().isInteractiveMode()) {
-			interactive.setState(false);
-			interactive.setActionCommand(GDCommands.INTERACTIVE_MODE_ON.toString());
-		} else {
-			interactive.setState(true);
-			interactive.setActionCommand(GDCommands.INTERACTIVE_MODE_OFF.toString());
-		}
-		return internals;
-	}
-
-	/**
+    @SuppressWarnings("unchecked")
+    private void init() {
+        int c;
+        JMenuItem item;
+
+        new_domain_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
+        for (c = 0; c < ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
+            item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c]));
+            item.addActionListener(this);
+            item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
+            new_domain_tree.add(item);
+        }
+        new_logical_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
+        for (c = 0; c < ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
+            item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c]));
+            item.addActionListener(this);
+            item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
+            new_logical_tree.add(item);
+        }
+
+        new_physical_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
+        for (c = 0; c < ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
+            item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]));
+            item.addActionListener(this);
+            item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
+            new_physical_tree.add(item);
+        }
+
+        new_fach_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldFach.class.getName());
+        new_log_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldLog.class.getName());
+        new_phy_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldPhy.class.getName());
+
+        properties = getItem("eigenschaften", GDCommands.ELEMENT_PROPERTIES);
+        unlinkToSzenario = getItem("unlinkToSzenario", GDCommands.LINK_SELECTED_TO_SZENARIO, GraphDocument.GDCOMMAND_TEXT_SURROUNDER + "null" + GraphDocument.GDCOMMAND_TEXT_SURROUNDER);
+        selectLinkedSzenario = getItem("selectLinkedSzenario", GDCommands.SELECT_LINKED_SZENARIO);
+        delete_selected = getItem("remove_from_model", GDCommands.DELETE);
+        // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
+        delete_selected_from_szenario = getItem("remove_from_submodel", GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, "");
+
+        join_selected = getItem("elemente_vereinigen", GDCommands.JOIN_SELECTED);
+
+        change_layout = getItem("global_layout", GDCommands.CHANGE_GLOBAL_MAPPING);
+
+        verify = new JCheckBoxMenuItem(Tool3lgmConstants.getResString("verif"));
+        verify.addActionListener(this);
+
+        interactive = new JCheckBoxMenuItem(Tool3lgmConstants.getResString("intera"));
+        interactive.addActionListener(this);
+
+        command_line = getItem("befehl", GDCommands.COMMAND_LINE);
+        queue = getItem("queue", GDCommands.PRINT_QUEUE);
+        consistency = getItem("konsistenz", GDCommands.CHECK_CONSISTENCY);
+
+        internals = new JMenu(Tool3lgmConstants.getResString("intern"));
+        internals.add(verify);
+        internals.add(interactive);
+        internals.addSeparator();
+        internals.add(command_line);
+        internals.addSeparator();
+        internals.add(queue);
+        internals.add(consistency);
+
+        // weiter mit Grafik-Sachen
+        normalize_layer = getItem("layer_reset_color", GDCommands.NORMALIZE_LAYER);
+        voll_trans_layer = getItem("layer_full_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.VOLL_TRANSPARENT);
+        halb_trans_layer = getItem("layer_semi_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.HALB_TRANSPARENT);
+        nicht_trans_layer = getItem("layer_no_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.NICHT_TRANSPARENT);
+        color_layer = getItem("layer_change_color", GDCommands.CHANGE_LAYER_COLOR);
+
+        JMenu trans_layer = new JMenu(Tool3lgmConstants.getResString("layerTransparencyMenu"));
+        trans_layer.add(nicht_trans_layer);
+        trans_layer.add(halb_trans_layer);
+        trans_layer.add(voll_trans_layer);
+
+        layout_layer = new JMenu(Tool3lgmConstants.getResString("layerLayoutMenu"));
+        layout_layer.add(normalize_layer);
+        layout_layer.add(color_layer);
+        layout_layer.add(trans_layer);
+
+        show_configs = getItem("konf_einbl", GDCommands.SHOW_ALL_CONFIGS);
+        hide_configs = getItem("konf_ausbl", GDCommands.HIDE_ALL_CONFIGS);
+        set_visible = getItem("einbl", GDCommands.SET_VISIBLE, "true");
+        set_invisible = getItem("ausbl", GDCommands.SET_VISIBLE, "false");
+
+        configuration_sub_menu = new JMenu(Tool3lgmConstants.getResString("konf"));
+        configuration_sub_menu.add(show_configs);
+        configuration_sub_menu.add(hide_configs);
+
+        layer_show_configs = getItem("konf_einbl", GDCommands.SHOW_ALL_CONFIGS);
+        layer_hide_configs = getItem("konf_ausbl", GDCommands.HIDE_ALL_CONFIGS);
+        aufklappen = getItem("aufklappen", GDCommands.AUFKLAPPEN);
+        zuklappen = getItem("zuklappen", GDCommands.ZUKLAPPEN);
+
+        JMenu linienstil = new JMenu(Tool3lgmConstants.getResString("linestyle"));
+
+        JMenuItem[] linestyles = new JMenuItem[2];
+        linestyles[0] = new JMenuItem(Tool3lgmConstants.getResString("linestyle_normal"));
+        linestyles[0].setActionCommand(GDCommands.CHANGE_LINE_STYLE + " normal");
+        linestyles[1] = new JMenuItem(Tool3lgmConstants.getResString("linestyle_dashed"));
+        linestyles[1].setActionCommand(GDCommands.CHANGE_LINE_STYLE + " dashes");
+        for (JMenuItem jItem : linestyles) {
+            jItem.addActionListener(this);
+            linienstil.add(jItem);
+        }
+
+    }
+
+    /**
+     * @param resKeyOrString
+     * @param command
+     * @param arguments
+     * @param icon
+     * @param enabled
+     * @param toolTip
+     * @return
+     */
+    private JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
+        String label = null;
+        try {
+            label = Tool3lgmConstants.getResString(resKeyOrString);
+        } catch (Exception e) {
+            label = resKeyOrString;
+        }
+        JMenuItem item = new JMenuItem(label, icon);
+        item.addActionListener(this);
+        if (arguments == null) {
+            item.setActionCommand(command.toString());
+        } else {
+            item.setActionCommand(command + " " + arguments);
+        }
+        item.setEnabled(enabled);
+        item.setToolTipText(toolTip);
+        return item;
+    }
+
+    /**
+     * @param resKeyOrString
+     * @param command
+     * @param arguments
+     * @param icon
+     * @return
+     */
+    private JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon) {
+        return getItem(resKeyOrString, command, arguments, icon, true, null);
+    }
+
+    /**
+     * @param resKey
+     * @param command
+     * @param arguments
+     * @return
+     */
+    private JMenuItem getItem(final String resKey, final GDCommands command, final String arguments) {
+        return getItem(resKey, command, arguments, null);
+    }
+
+    /**
+     * @param resKey
+     * @param command
+     * @return
+     */
+    private JMenuItem getItem(final String resKey, final GDCommands command) {
+        return getItem(resKey, command, null);
+    }
+
+    /**
 	 * 
 	 */
-	public void check_cb_menu() {
-		check_undo_redo();
-		if (doc == null) {
-			cb_copy.setEnabled(false);
-			cb_cut.setEnabled(false);
-			delete_selected_from_szenario.setEnabled(false);
-			delete_selected.setEnabled(false);
-			cb_paste.setEnabled(false);
-			cb_clear.setEnabled(false);
-			return;
-		}
-		if (!doc.isSelection()) {
-			cb_copy.setEnabled(false);
-			cb_cut.setEnabled(false);
-			delete_selected_from_szenario.setEnabled(false);
-			delete_selected.setEnabled(false);
-		} else {
-			cb_copy.setEnabled(true);
-			cb_cut.setEnabled(true);
-			if (doc instanceof Szenario)
-				delete_selected_from_szenario.setEnabled(true);
-			delete_selected.setEnabled(true);
-		}
-		if (!LGMGraphDocument.isClipboardAvailable()) {
-			cb_paste.setEnabled(false);
-			cb_clear.setEnabled(false);
-		} else {
-			cb_paste.setEnabled(true);
-			cb_clear.setEnabled(true);
-		}
-	}
+    private static void checkConfigurationSubMenu() {
+        boolean b = false;
+        for (ElementContainer selectedEC : doc.selectedContainer) {
+            b = ModelConstants.isInterLayerStartClass(selectedEC.getElement().getClass());
+            if (b) {
+                break;
+            }
+        }
+        show_configs.setEnabled(b);
+        hide_configs.setEnabled(b);
+    }
 
-	/**
+    /**
+     * Liefert das Menü für die untergeordneten Elemente.
+     * 
+     * @return
+     */
+    private JMenu getSubElemMenu() {
+        ModelElement selected = doc.getLastSelected().getElement();
+        JMenu sub_elem = new JMenu(Tool3lgmConstants.getResString("unterg_el"));
+        HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>> slavePairs = new HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>>();
+        for (Class<? extends Composition> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
+            Class<? extends ModelElement> abstractSlaves = Composition.getSlaveType(compositionClass);
+            for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves)) {
+                slavePairs.add(new Pair<Class<? extends Composition>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
+            }
+        }
+
+        if (slavePairs.size() == 0) {
+            return sub_elem;
+        }
+
+        ArrayList<JMenuItem> items = new ArrayList<JMenuItem>(slavePairs.size());
+
+        for (Pair<Class<? extends Composition>, Class<? extends ModelElement>> slavePair : slavePairs) {
+            Class<? extends Composition> compositionClass = slavePair.getFirstItem();
+            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), GDCommands.CREATE_ADDICTED, doc.getHashString() + " " + selected.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
+            item.setEnabled(selected.countConnections(compositionClass) < Composition.getMaxMasterToSlaveCardinality(compositionClass));
+            items.add(item);
+        }
+        Alphabetical.sort(items);
+        for (JMenuItem item : items) {
+            sub_elem.add(item);
+        }
+        return sub_elem;
+    }
+
+    /**
+     * Liefert das Menü, mit dem selektierte Elemente in andere Teilmodelle
+     * übernommen werden können.
+     * 
+     * @return
+     */
+    private JMenu getAddToSzenarioMenu() {
+        JMenu szenario_menu = new JMenu(Tool3lgmConstants.getResString("inszenario"));
+        JMenuItem item = getItem("inneuszenario", GDCommands.ADD_SELECTED_TO_NEW_SZENARIO);
+        szenario_menu.add(item);
+        szenario_menu.add(new JSeparator());
+
+        ArrayList<Szenario> szenarios = doc.getCollection().getSzenarios();
+        Alphabetical.sort(szenarios);
+
+        for (Szenario szen : szenarios) {
+            item = new JMenuItem(szen.getTitle());
+
+            szenario_menu.add(item);
+
+            if (UserProperties.isEnableSubmodelBrowser() && szen == Tool3lgm.tool.getSelectedDoc()) {
+                item.setEnabled(false);
+                continue;
+            }
+
+            item.addActionListener(this);
+            item.setActionCommand(GDCommands.ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+        }
+
+        item = getItem("in_all_szenarios", GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS);
+        szenario_menu.add(new JSeparator());
+        szenario_menu.add(item);
+
+        if (szenarios.size() > 20) {
+            MenuScroller.setScrollerFor(szenario_menu, 20, 125, 2, 2);
+        }
+
+        return szenario_menu;
+    }
+
+    /**
+     * Menü für das verknüpfen mit einem Teilmodell
+     * 
+     * @return
+     */
+    private JMenu getLinkToSzenarioMenu() {
+        JMenu link_to_szenario_menu = new JMenu(Tool3lgmConstants.getResString("verkn_mit_szen"));
+        JMenuItem item = getItem("verkn_neuszenario", GDCommands.LINK_SELECTED_TO_NEW_SZENARIO);
+        link_to_szenario_menu.add(item);
+        link_to_szenario_menu.add(new JSeparator());
+
+        ArrayList<Szenario> szenarios = doc.getCollection().getSzenarios();
+        Alphabetical.sort(szenarios);
+
+        for (Szenario szen : szenarios) {
+            item = new JMenuItem(szen.getTitle());
+
+            /* ist Knoten schon mit diesem Szenario verknüpft */
+            if (mc != null && mc.getElement() instanceof Knoten && szen.getHashString().equals(((Knoten) mc.getElement()).getAssociatedDoc())) {
+                item.setEnabled(false);
+            }
+
+            item.addActionListener(this);
+            item.setActionCommand(GDCommands.LINK_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+            link_to_szenario_menu.add(item);
+        }
+        return link_to_szenario_menu;
+    }
+
+    /**
+     * Kontextmenü eines Einzelknotens
+     * 
+     * @param contextSource
+     * @param ec
+     * @return
+     */
+    private JPopupMenu getSingleKnotContextMenu(final Component contextSource, final ElementContainer ec) {
+        //		System.err.println("ContextGenerator.getSingleKnotContextMenu()");
+        JPopupMenu menu = new JPopupMenu();
+        mc = ec;
+        ModelElement me = ec.getElement();
+        if (!(ec instanceof BendpointContainer)) {
+            menu.add(properties);
+            menu.addSeparator();
+            JMenu subElems = getSubElemMenu();
+            if (subElems.getItemCount() > 0) {
+                menu.add(subElems);
+                menu.addSeparator();
+            }
+
+            if (!me.isUnique()) {
+                menu.add(getAddToSzenarioMenu());
+            }
+            JMenuItem addToModelMenu = getAddToModelMenu();
+            if (addToModelMenu != null) {
+                menu.add(addToModelMenu);
+            }
+
+            if (me.getAssociatedDoc() != null) {
+                menu.add(selectLinkedSzenario);
+            }
+            menu.add(getLinkToSzenarioMenu());
+            if (me.getAssociatedDoc() != null) {
+                menu.add(unlinkToSzenario);
+            }
+            if (doc instanceof Szenario) {
+                if (ec instanceof InterLayerConnectedNodeContainer && contextSource instanceof InputGraphArea) {
+                    menu.addSeparator();
+                    checkConfigurationSubMenu();
+                    menu.add(show_configs);
+                    menu.add(hide_configs);
+                }
+                if (me.isPaintable() || me instanceof Prozess) {
+                    menu.addSeparator();
+                    if (!ec.isVisible()) {
+                        menu.add(set_visible);
+                    } else {
+                        menu.add(set_invisible);
+                    }
+                }
+                if (contextSource instanceof InputGraphArea) {
+                    if (me.canHaveParts()) {
+                        // menu.addSeparator();
+                        if (me.hasDirectPartContainer(doc)) {
+                            aufklappen.setEnabled(true);
+                            zuklappen.setEnabled(true);
+                        } else {
+                            aufklappen.setEnabled(false);
+                            zuklappen.setEnabled(false);
+                        }
+                        if (!ec.isExpanded()) {
+                            menu.add(aufklappen);
+                        } else {
+                            menu.add(zuklappen);
+                        }
+                    }
+                    menu.addSeparator();
+                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
+                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
+                    menu.add(getLayerMenu());
+                }
+            }
+
+            menu.addSeparator();
+
+            // Analysemenü anfügen
+            menu.add(getAnalyseMenu());
+
+            JMenuItem joinMenu = getJoinMenu();
+            if (joinMenu != null) {
+                menu.addSeparator();
+                menu.add(joinMenu);
+            }
+
+            menu.addSeparator();
+        }
+
+        if (ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS.isEnabled()) {
+            menu.add(ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS);
+        }
+
+        //bewirkt, dass "Aus Teilmodell löschen" nur angezeigt wird,
+        //wenn das selektierte Element in mehr als einem Teilmodell vorkommt
+        //und nicht der <Alle-Elemte>-Browser aktiviert ist.
+        if (!ec.getElement().isUnique() && !ec.getElement().isSlave()) {
+            if (doc instanceof Szenario) {
+                menu.add(delete_selected_from_szenario);
+            }
+        }
+
+        if (!(ec instanceof BendpointContainer)) {
+            menu.add(delete_selected);
+        }
+
+        return menu;
+    }
+
+    /**
+     * @param contextSource
+     * @return
+     */
+    private JPopupMenu getMultiKnotContextMenu(final Component contextSource) {
+
+        JPopupMenu menu = new JPopupMenu();
+
+        boolean knickpunkte = doc.isSelectedOnlyBendpoints();
+
+        if (!knickpunkte) {
+            ModelElement lastSelected = doc.getLastSelected().getElement();
+            Class<? extends ModelElement> lastSelectedClass = lastSelected.getClass();
+
+            ArrayList<ModelElement> selectedElements = doc.getSelectedElements();
+
+            ArrayList<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<NamedObjectContainer<JMenuItem>>();
+            ArrayList<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<NamedObjectContainer<JMenuItem>>();
+
+            for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
+                for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(lastSelectedClass, me2Class)) {
+                    if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+                        if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                            String label = ModelConstants.getForwardMetaAssociationName(edgeClass, false, true);
+                            String toolTip = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
+                            boolean connectable = false;
+                            boolean disconnectable = false;
+                            for (ModelElement me2 : selectedElements) {
+                                if (lastSelected == me2) {
+                                    continue;
+                                }
+                                if (!lastSelected.isPartOf(me2) && !lastSelected.isParentOf(me2)) {
+                                    connectable = true;
+                                }
+                                if (lastSelected.isDirectPartOf(me2)) {
+                                    disconnectable = true;
+                                }
+                                if (connectable && disconnectable) {
+                                    break;
+                                }
+                            }
+                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        }
+                        if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
+                            String label = ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
+                            String toolTip = ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
+                            boolean connectable = false;
+                            boolean disconnectable = false;
+                            for (ModelElement me2 : selectedElements) {
+                                if (lastSelected == me2) {
+                                    continue;
+                                }
+                                if (!me2.isPartOf(lastSelected) && !me2.isParentOf(lastSelected)) {
+                                    connectable = true;
+                                }
+                                if (me2.isDirectPartOf(lastSelected)) {
+                                    disconnectable = true;
+                                }
+                                if (connectable && disconnectable) {
+                                    break;
+                                }
+                            }
+                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        }
+                    } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                        if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                            int actDir = Doppelkante.FORWARD;
+                            String label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
+                            String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
+                            boolean connectable = false;
+                            boolean disconnectable = false;
+                            for (ModelElement me2 : selectedElements) {
+                                if (lastSelected == me2) {
+                                    continue;
+                                }
+                                if (!lastSelected.isConnectedTo(me2, edgeClass)) {
+                                    connectable = true;
+                                } else {
+                                    disconnectable = true;
+                                }
+                                if (connectable && disconnectable) {
+                                    break;
+                                }
+                            }
+
+                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+
+                            actDir = Doppelkante.BACKWARD;
+                            label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
+                            toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
+                            connectable = false;
+                            disconnectable = false;
+                            for (ModelElement me2 : selectedElements) {
+                                if (lastSelected == me2) {
+                                    continue;
+                                }
+                                if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
+                                    connectable = true;
+                                } else {
+                                    disconnectable = true;
+                                }
+                                if (connectable && disconnectable) {
+                                    break;
+                                }
+                            }
+
+                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                        }
+                        // Doppeldeutige Kanten mit identischer Start- und
+                        // Endklasse brauchen nur 1x angeboten werden
+                        if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && Kante.getStartClass(edgeClass) != Kante.getEndClass(edgeClass)) {
+                            int actDir = Doppelkante.FORWARD;
+                            String label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
+                            String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
+                            boolean connectable = false;
+                            boolean disconnectable = false;
+                            for (ModelElement me2 : selectedElements) {
+                                if (lastSelected == me2) {
+                                    continue;
+                                }
+                                if (!lastSelected.isConnectedTo(me2, edgeClass)) {
+                                    connectable = true;
+                                } else {
+                                    disconnectable = true;
+                                }
+                                if (connectable && disconnectable) {
+                                    break;
+                                }
+                            }
+
+                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+
+                            actDir = Doppelkante.BACKWARD;
+                            label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
+                            toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
+                            connectable = false;
+                            disconnectable = false;
+                            for (ModelElement me2 : selectedElements) {
+                                if (lastSelected == me2) {
+                                    continue;
+                                }
+                                if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
+                                    connectable = true;
+                                } else {
+                                    disconnectable = true;
+                                }
+                                if (connectable && disconnectable) {
+                                    break;
+                                }
+                            }
+
+                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+
+                        }
+                    } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */{
+                        String label = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getForwardMetaAssociationName(edgeClass, false, true) : ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
+                        String toolTip = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
+                        boolean connectable = false;
+                        boolean disconnectable = false;
+                        for (ModelElement me2 : selectedElements) {
+                            if (lastSelected == me2) {
+                                continue;
+                            }
+                            if (!lastSelected.isConnectedWith(me2, edgeClass)) {
+                                connectable = true;
+                            } else {
+                                disconnectable = true;
+                            }
+                            if (connectable && disconnectable) {
+                                break;
+                            }
+                        }
+                        connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                        disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                    }
+                }
+            }
+
+            if (connectableItems.size() > 0) {
+                Alphabetical.sort(connectableItems);
+                menu.add(new JLabel(Tool3lgmConstants.getResString("verbinden")));
+                for (NamedObjectContainer<JMenuItem> itemContainer : connectableItems) {
+                    menu.add(itemContainer.getObject());
+                }
+
+            }
+            if (disconnectableItems.size() > 0) {
+                Alphabetical.sort(disconnectableItems);
+                menu.add(new JLabel(Tool3lgmConstants.getResString("trennen")));
+                for (NamedObjectContainer<JMenuItem> itemContainer : disconnectableItems) {
+                    menu.add(itemContainer.getObject());
+                }
+            }
+
+            if (menu.getComponentCount() > 0) {
+                menu.addSeparator();
+            }
+
+            menu.add(getAddToSzenarioMenu());
+            JMenuItem addToModelMenu = getAddToModelMenu();
+            if (addToModelMenu != null) {
+                menu.add(addToModelMenu);
+            }
+
+            if (contextSource instanceof InputGraphArea) {
+                if (menu.getComponentCount() > 0) {
+                    menu.addSeparator();
+                }
+                checkConfigurationSubMenu();
+                menu.add(show_configs);
+                menu.add(hide_configs);
+            }
+            if (menu.getComponentCount() > 0) {
+                menu.addSeparator();
+            }
+            menu.add(set_visible);
+            menu.add(set_invisible);
+
+            if (contextSource instanceof InputGraphArea) {
+                if (menu.getComponentCount() > 0) {
+                    menu.addSeparator();
+                }
+                if (lastSelected.hasDirectPartContainer(doc)) {
+                    aufklappen.setEnabled(true);
+                    zuklappen.setEnabled(true);
+                } else {
+                    aufklappen.setEnabled(false);
+                    zuklappen.setEnabled(false);
+                }
+                if (!doc.getLastSelected().isExpanded()) {
+                    menu.add(aufklappen);
+                } else {
+                    menu.add(zuklappen);
+                }
+                menu.addSeparator();
+                menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
+                menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
+                menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ALIGNMENT_MENU);
+            }
+
+            if (doc.selectedContainer.isJoinableElementsSelected()) {
+                if (menu.getComponentCount() > 0) {
+                    menu.addSeparator();
+                }
+                menu.add(join_selected);
+            }
+        }
+
+        if (doc instanceof Szenario && !doc.isSelectedOnlyUnique() && !doc.isSelectedOnlySlaveRealNodes() && !doc.isSelectedOnlySubmodelElements()) {
+            if (menu.getComponentCount() > 0) {
+                menu.addSeparator();
+            }
+            menu.add(delete_selected_from_szenario);
+        }
+
+        if (!knickpunkte) {
+            menu.add(delete_selected);
+        }
+
+        return menu;
+    }
+
+    /**
+     * Kontextmenü im Searchdialog
+     */
+    public JPopupMenu getSearchDialogContextMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        if (doc.isSingleSelection()) {
+            menu.add(properties);
+            menu.addSeparator();
+        }
+        if (!doc.isSelectedOnlyUnique() && !doc.isSelectedOnlySubmodelElements() && doc instanceof Szenario) {
+            menu.add(delete_selected_from_szenario);
+        }
+        menu.add(delete_selected);
+        return menu;
+    }
+
+    /**
+     * @param source
+     * @return
+     */
+    public final JPopupMenu getKnotContextMenu(final Component source) {
+        JPopupMenu menu = new JPopupMenu();
+        if (doc.isSelectedOnlyBendpoints()) {
+            if (doc instanceof Szenario) {
+                menu.add(delete_selected_from_szenario);
+            }
+        } else {
+            if (doc.isSingleSelection()) {
+                menu = getSingleKnotContextMenu(source, doc.getLastSelected());
+            } else if (doc.isMultipleSelection()) {
+                menu = getMultiKnotContextMenu(source);
+            }
+        }
+        return menu;
+    }
+
+    /**
+     * @return
+     */
+    private static final JPopupMenu getSingleTraceContextMenu() {
+        //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
+        JPopupMenu menu = new JPopupMenu();
+        if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
+            menu.add(properties);
+        }
+
+        JMenuItem addToModelMenu = getAddToModelMenu();
+        if (addToModelMenu != null) {
+            menu.addSeparator();
+            menu.add(addToModelMenu);
+        }
+        if (doc instanceof Szenario) {
+            menu.addSeparator();
+            menu.add(delete_selected);
+        }
+        return menu;
+    }
+
+    /**
+     * @return
+     */
+    private static final JPopupMenu getMultiTraceContextMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        if (menu.getComponentCount() > 0) {
+            menu.addSeparator();
+        }
+        JMenuItem addToModelMenu = getAddToModelMenu();
+        if (addToModelMenu != null) {
+            menu.add(addToModelMenu);
+        }
+
+        if (menu.getComponentCount() > 0) {
+            menu.addSeparator();
+        }
+        menu.add(delete_selected);
+
+        return menu;
+    }
+
+    /**
+     * @return
+     */
+    private static final JPopupMenu getTraceContextMenu() {
+        if (doc.isSingleSelection()) {
+            return getSingleTraceContextMenu();
+        }
+        return getMultiTraceContextMenu();
+    }
+
+    /**
+     * @return
+     */
+    private final JPopupMenu getMultiContextMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        if (menu.getComponentCount() > 0) {
+            menu.addSeparator();
+        }
+        menu.add(getAddToSzenarioMenu());
+        JMenuItem addToModelMenu = getAddToModelMenu();
+        if (addToModelMenu != null) {
+            menu.add(addToModelMenu);
+        }
+
+        menu.addSeparator();
+        if (doc instanceof Szenario) {
+            menu.add(delete_selected_from_szenario);
+        }
+        menu.add(delete_selected);
+
+        return menu;
+    }
+
+    /**
+     * @return
+     */
+    private static JMenu getNewKnotMenu() {
+        int i;
+        switch (doc.getCollection().getActiveLayer()) {
+        case 4:
+            for (i = 0; i < new_domain_tree.getItemCount(); i++) {
+                new_domain_tree.getItem(i).setEnabled(true);
+            }
+            for (i = 0; i < new_logical_tree.getItemCount(); i++) {
+                new_logical_tree.getItem(i).setEnabled(false);
+            }
+            for (i = 0; i < new_physical_tree.getItemCount(); i++) {
+                new_physical_tree.getItem(i).setEnabled(false);
+            }
+            return new_domain_tree;
+        case 2:
+            for (i = 0; i < new_domain_tree.getItemCount(); i++) {
+                new_domain_tree.getItem(i).setEnabled(false);
+            }
+            for (i = 0; i < new_logical_tree.getItemCount(); i++) {
+                new_logical_tree.getItem(i).setEnabled(true);
+            }
+            for (i = 0; i < new_physical_tree.getItemCount(); i++) {
+                new_physical_tree.getItem(i).setEnabled(false);
+            }
+            return new_logical_tree;
+        case 0:
+            for (i = 0; i < new_domain_tree.getItemCount(); i++) {
+                new_domain_tree.getItem(i).setEnabled(false);
+            }
+            for (i = 0; i < new_logical_tree.getItemCount(); i++) {
+                new_logical_tree.getItem(i).setEnabled(false);
+            }
+            for (i = 0; i < new_physical_tree.getItemCount(); i++) {
+                new_physical_tree.getItem(i).setEnabled(true);
+            }
+            return new_physical_tree;
+        default:
+            return new_domain_tree;
+        }
+    }
+
+    /**
+     * @return
+     */
+    private static JMenu getLayerMenu() {
+        JMenu menu = new JMenu(Tool3lgmConstants.getResString("layer"));
+        JPopupMenu popup = getLayerContextMenu();
+        for (Component c : popup.getComponents()) {
+            if (c instanceof JMenu) {
+                menu.add((JMenu) c);
+            } else if (c instanceof JMenuItem) {
+                menu.add((JMenuItem) c);
+            } else if (c instanceof JPopupMenu.Separator) {
+                menu.addSeparator();
+            }
+        }
+        return menu;
+    }
+
+    /**
+     * @return
+     */
+    public static final JPopupMenu getLayerContextMenu() {
+        JPopupMenu menu = new JPopupMenu();
+        menu.add(getNewKnotMenu());
+        switch (doc.getCollection().getActiveLayer()) {
+        case 4:
+            menu.add(new_fach_text);
+            break;
+        case 2:
+            menu.add(new_log_text);
+            break;
+        case 0:
+            menu.add(new_phy_text);
+            break;
+        }
+        menu.addSeparator();
+
+        menu.add(layer_show_configs);
+        menu.add(layer_hide_configs);
+
+        menu.addSeparator();
+        menu.add(layout_layer);
+        menu.add(change_layout);
+        menu.addSeparator();
+        menu.add(getInternalsMenu());
+        return menu;
+    }
+
+    /**
+     * @return
+     */
+    private static JMenu getInternalsMenu() {
+        if (!doc.isVerificationMode()) {
+            verify.setState(false);
+            verify.setActionCommand(GDCommands.VERIFY_ON.toString());
+        } else {
+            verify.setState(true);
+            verify.setActionCommand(GDCommands.VERIFY_OFF.toString());
+        }
+
+        if (!doc.getCollection().isInteractiveMode()) {
+            interactive.setState(false);
+            interactive.setActionCommand(GDCommands.INTERACTIVE_MODE_ON.toString());
+        } else {
+            interactive.setState(true);
+            interactive.setActionCommand(GDCommands.INTERACTIVE_MODE_OFF.toString());
+        }
+        return internals;
+    }
+
+    /**
 	 * 
 	 */
-	private static void check_undo_redo() {
-		if (doc == null) {
-			undo.setEnabled(false);
-			redo.setEnabled(false);
-			return;
-		}
-		if (doc.getCollection().getTman().isUndoAvailable())
-			undo.setEnabled(true);
-		else
-			undo.setEnabled(false);
-		if (doc.getCollection().getTman().isRedoAvailable())
-			redo.setEnabled(true);
-		else
-			redo.setEnabled(false);
-	}
+    public void check_cb_menu() {
+        check_undo_redo();
+        if (doc == null) {
+            cb_copy.setEnabled(false);
+            cb_cut.setEnabled(false);
+            delete_selected_from_szenario.setEnabled(false);
+            delete_selected.setEnabled(false);
+            cb_paste.setEnabled(false);
+            cb_clear.setEnabled(false);
+            return;
+        }
+        if (!doc.isSelection()) {
+            cb_copy.setEnabled(false);
+            cb_cut.setEnabled(false);
+            delete_selected_from_szenario.setEnabled(false);
+            delete_selected.setEnabled(false);
+        } else {
+            cb_copy.setEnabled(true);
+            cb_cut.setEnabled(true);
+            if (doc instanceof Szenario) {
+                delete_selected_from_szenario.setEnabled(true);
+            }
+            delete_selected.setEnabled(true);
+        }
+        if (!LGMGraphDocument.isClipboardAvailable()) {
+            cb_paste.setEnabled(false);
+            cb_clear.setEnabled(false);
+        } else {
+            cb_paste.setEnabled(true);
+            cb_clear.setEnabled(true);
+        }
+    }
 
-	/**
-	 * @return
-	 */
-	public boolean getResizing() {
-		return resizing;
-	}
-
-	/**
-	 * @param b
-	 */
-	public void setResizing(boolean b) {
-		resizing = b;
-	}
-
-	/**
-	 * COMMENTME
-	 */
-	protected boolean elementGetroffen = false;
-
-	/**
-	 * @return
-	 */
-	public boolean getElementGetroffen() {
-		return elementGetroffen;
-	}
-
-	/**
-	 * @param b
-	 */
-	public void setElementGetroffen(boolean b) {
-		elementGetroffen = b;
-	}
-
-	/**
-	 * COMMENTME
-	 */
-	protected boolean ebeneGetroffen = false;
-
-	/**
-	 * @return
-	 */
-	public boolean getEbeneGetroffen() {
-		return ebeneGetroffen;
-	}
-
-	/**
-	 * @param b
-	 */
-	public void setEbeneGetroffen(boolean b) {
-		ebeneGetroffen = b;
-	}
-
-	/**
-	 * @param modelElementCont
-	 */
-	public void setModelElement(ElementContainer modelElementCont) {
-		mc = modelElementCont;
-	}
-
-	/**
-	 * @param left_button
-	 * @param right_button
-	 */
-	public void processMouseEvent(boolean left_button, boolean right_button) {
-		processMouseEventInternal(left_button, right_button, null, 0, 0);
-	}
-
-	/**
-	 * @param left_button
-	 * @param right_button
-	 * @param gdl
-	 */
-	public void processMouseEvent(boolean left_button, boolean right_button, Component gdl) {
-		processMouseEventInternal(left_button, right_button, gdl, 0, 0);
-	}
-
-	/**
-	 * @param left_button
-	 * @param right_button
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	public void processMouseEvent(boolean left_button, boolean right_button, Component gdl, int xin, int yin) {
-		// System.err.println("ContextGenerator.processMouseEvent " + xin + " " + yin + " " + gdl.getX() + " " + gdl.getY());
-		Tool3lgm.setLastActionPosition(xin + gdl.getX(), yin + gdl.getY());
-		processMouseEventInternal(left_button, right_button, gdl, xin, yin);
-	}
-
-	/**
-	 * @param left_button
-	 * @param right_button
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void processMouseEventInternal(boolean left_button, boolean right_button, Component gdl, int xin, int yin) {
-		if (resizing) {
-			if (right_button)
-				return;
-
-			// nichts selektiert
-			if (!(doc.isSelection())) {
-				return;
-			}
-			// nur Kanten selektiert
-			if (doc.isSelectedOnlyEdges()) {
-				if ((left_button) && (!controlled)) {
-					left_knothand_noshift_traces();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_knothand_shift_traces();
-					return;
-				}
-				return;
-			}
-			// nur Knoten selektiert
-			if (doc.isSelectedOnlyNodes()) {
-				if ((left_button) && (!controlled)) {
-					left_knothand_noshift_knots();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_knothand_shift_knots();
-					return;
-				}
-				return;
-			}
-			// Knoten und Kanten selektiert
-			if ((left_button) && (!controlled)) {
-				left_knothand_noshift_multi();
-				return;
-			}
-			if ((left_button) && (controlled)) {
-				left_knothand_shift_multi();
-				return;
-			}
-			return;
-		}
-
-		if (elementGetroffen) {
-			//wenn man auf einer selektierten Kante das Kontexmenü auf einem Knickpunkt öffnet,
-			//dann soll das Kontextmenü aufgehen, als wäre die Kante angeklickt worden und nicht
-			//der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
-			//anzeigen würde
-			if (mc instanceof BendpointContainer) {
-				EdgeContainer kc = ((Knickpunkt) mc.getElement()).getOwner();
-				if (doc.isSelected(kc))
-					if (left_button)
-						doc.select(mc, TransactionManager.STANDARD_PID);
-					else
-						mc = kc;
-
-			}
-
-			if (mc instanceof NodeContainer) {
-				// nichts selektiert
-				if (!(doc.isSelection())) {
-					if ((left_button) && (!controlled)) {
-						left_knot_noshift_none();
-						return;
-					}
-					if ((left_button) && (controlled)) {
-						left_knot_shift_none();
-						return;
-					}
-					if ((right_button)) {
-						right_knot_none(gdl, xin, yin);
-						return;
-					}
-					return;
-				}
-				// nur Kanten selektiert
-				if (doc.isSelectedOnlyEdges()) {
-					if ((left_button) && (!controlled)) {
-						left_knot_noshift_traces();
-						return;
-					}
-					if ((left_button) && (controlled)) {
-						left_knot_shift_traces();
-						return;
-					}
-					if ((right_button)) {
-						right_knot_traces(gdl, xin, yin);
-						return;
-					}
-					return;
-				}
-				// nur Knoten selektiert
-				if (doc.isSelectedOnlyNodes()) {
-					if ((left_button) && (!controlled)) {
-						left_knot_noshift_knots();
-						return;
-					}
-					if ((left_button) && (controlled)) {
-						left_knot_shift_knots();
-						return;
-					}
-					if ((right_button)) {
-						right_knot_knots(gdl, xin, yin);
-						return;
-					}
-					return;
-				}
-				// Knoten und Kanten selektiert
-				if ((left_button) && (!controlled)) {
-					left_knot_noshift_multi();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_knot_shift_multi();
-					return;
-				}
-				if ((right_button)) {
-					right_knot_multi(gdl, xin, yin);
-					return;
-				}
-				return;
-			} else if (mc instanceof EdgeContainer) {
-				// nichts selektiert
-				if (!(doc.isSelection())) {
-					if ((left_button) && (!controlled)) {
-						left_trace_noshift_none();
-						return;
-					}
-					if ((left_button) && (controlled)) {
-						left_trace_shift_none();
-						return;
-					}
-					if ((right_button)) {
-						right_trace_none(gdl, xin, yin);
-						return;
-					}
-					return;
-				}
-				// nur Kanten selektiert
-				if (doc.isSelectedOnlyEdges()) {
-					if ((left_button) && (!controlled)) {
-						left_trace_noshift_traces();
-						return;
-					}
-					if ((left_button) && (controlled)) {
-						left_trace_shift_traces();
-						return;
-					}
-					if ((right_button)) {
-						right_trace_traces(gdl, xin, yin);
-						return;
-					}
-					return;
-				}
-				// nur Knoten selektiert
-				if (doc.isSelectedOnlyNodes()) {
-					if ((left_button) && (!controlled)) {
-						left_trace_noshift_knots();
-						return;
-					}
-					if ((left_button) && (controlled)) {
-						left_trace_shift_knots();
-						return;
-					}
-					if ((right_button)) {
-						right_trace_knots(gdl, xin, yin);
-						return;
-					}
-					return;
-				}
-				// Knoten und Kanten selektiert
-				if ((left_button) && (!controlled)) {
-					left_trace_noshift_multi();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_trace_shift_multi();
-					return;
-				}
-				if ((right_button)) {
-					right_trace_multi(gdl, xin, yin);
-					return;
-				}
-				return;
-			}
-		}
-
-		if (ebeneGetroffen) {
-			// nichts selektiert
-			if (!(doc.isSelection())) {
-				if ((left_button) && (!controlled)) {
-					left_layer_noshift_none();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_layer_shift_none();
-					return;
-				}
-				if (right_button) {
-					right_layer_none(gdl, xin, yin);
-					return;
-				}
-				return;
-			}
-			// nur Kanten selektiert
-			if (doc.isSelectedOnlyEdges()) {
-				if ((left_button) && (!controlled)) {
-					left_layer_noshift_traces();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_layer_shift_traces();
-					return;
-				}
-				if (right_button) {
-					right_layer_traces(gdl, xin, yin);
-					return;
-				}
-				return;
-			}
-			// nur Knoten selektiert
-			if (doc.isSelectedOnlyNodes()) {
-				if ((left_button) && (!controlled)) {
-					left_layer_noshift_knots();
-					return;
-				}
-				if ((left_button) && (controlled)) {
-					left_layer_shift_knots();
-					return;
-				}
-				if (right_button) {
-					right_layer_knots(gdl, xin, yin);
-					return;
-				}
-				return;
-			}
-			// Knoten und Kanten selektiert
-			if ((left_button) && (!controlled)) {
-				left_layer_noshift_multi();
-				return;
-			}
-			if ((left_button) && (controlled)) {
-				left_layer_shift_multi();
-				return;
-			}
-			if (right_button) {
-				right_layer_multi(gdl, xin, yin);
-				return;
-			}
-			return;
-		}
-		//_general
-		if (left_button && (!controlled)) {
-			left_noshift_outside();
-			return;
-		}
-		if (left_button && controlled) {
-			left_shift_outside();
-			return;
-		}
-	}
-
-	// Methoden, die aus dem Zustand und der Aktion mit der Maus eine semantische machen
-
-	// Es sind 56 Stueck. Viel Spass beim Hacken. Wahrscheinlich werden nur wenige
-	// richtig programmiert werden, der Grossteil wird nix machen oder auf andere
-	// Methoden zeigen, die dasselbe machen
-
-	// Namensgebung: Button_ObjektTyp_Shift_Selection
-
-	/**
+    /**
 	 * 
 	 */
-	private void left_shift_outside() {
-	}
+    private static void check_undo_redo() {
+        if (doc == null) {
+            undo.setEnabled(false);
+            redo.setEnabled(false);
+            return;
+        }
+        if (doc.getCollection().getTman().isUndoAvailable()) {
+            undo.setEnabled(true);
+        } else {
+            undo.setEnabled(false);
+        }
+        if (doc.getCollection().getTman().isRedoAvailable()) {
+            redo.setEnabled(true);
+        } else {
+            redo.setEnabled(false);
+        }
+    }
 
-	/**
+    /**
+     * @return
+     */
+    public boolean getResizing() {
+        return resizing;
+    }
+
+    /**
+     * @param b
+     */
+    public void setResizing(final boolean b) {
+        resizing = b;
+    }
+
+    /**
+     * COMMENTME
+     */
+    protected boolean elementGetroffen = false;
+
+    /**
+     * @return
+     */
+    public boolean getElementGetroffen() {
+        return elementGetroffen;
+    }
+
+    /**
+     * @param b
+     */
+    public void setElementGetroffen(final boolean b) {
+        elementGetroffen = b;
+    }
+
+    /**
+     * COMMENTME
+     */
+    protected boolean ebeneGetroffen = false;
+
+    /**
+     * @return
+     */
+    public boolean getEbeneGetroffen() {
+        return ebeneGetroffen;
+    }
+
+    /**
+     * @param b
+     */
+    public void setEbeneGetroffen(final boolean b) {
+        ebeneGetroffen = b;
+    }
+
+    /**
+     * @param modelElementCont
+     */
+    public void setModelElement(final ElementContainer modelElementCont) {
+        mc = modelElementCont;
+    }
+
+    /**
+     * @param left_button
+     * @param right_button
+     */
+    public void processMouseEvent(final boolean left_button, final boolean right_button) {
+        processMouseEventInternal(left_button, right_button, null, 0, 0);
+    }
+
+    /**
+     * @param left_button
+     * @param right_button
+     * @param gdl
+     */
+    public void processMouseEvent(final boolean left_button, final boolean right_button, final Component gdl) {
+        processMouseEventInternal(left_button, right_button, gdl, 0, 0);
+    }
+
+    /**
+     * @param left_button
+     * @param right_button
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    public void processMouseEvent(final boolean left_button, final boolean right_button, final Component gdl, final int xin, final int yin) {
+        // System.err.println("ContextGenerator.processMouseEvent " + xin + " " + yin + " " + gdl.getX() + " " + gdl.getY());
+        Tool3lgm.setLastActionPosition(xin + gdl.getX(), yin + gdl.getY());
+        processMouseEventInternal(left_button, right_button, gdl, xin, yin);
+    }
+
+    /**
+     * @param left_button
+     * @param right_button
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void processMouseEventInternal(final boolean left_button, final boolean right_button, final Component gdl, final int xin, final int yin) {
+        if (resizing) {
+            if (right_button) {
+                return;
+            }
+
+            // nichts selektiert
+            if (!doc.isSelection()) {
+                return;
+            }
+            // nur Kanten selektiert
+            if (doc.isSelectedOnlyEdges()) {
+                if (left_button && !controlled) {
+                    left_knothand_noshift_traces();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_knothand_shift_traces();
+                    return;
+                }
+                return;
+            }
+            // nur Knoten selektiert
+            if (doc.isSelectedOnlyNodes()) {
+                if (left_button && !controlled) {
+                    left_knothand_noshift_knots();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_knothand_shift_knots();
+                    return;
+                }
+                return;
+            }
+            // Knoten und Kanten selektiert
+            if (left_button && !controlled) {
+                left_knothand_noshift_multi();
+                return;
+            }
+            if (left_button && controlled) {
+                left_knothand_shift_multi();
+                return;
+            }
+            return;
+        }
+
+        if (elementGetroffen) {
+            //wenn man auf einer selektierten Kante das Kontexmenü auf einem Knickpunkt öffnet,
+            //dann soll das Kontextmenü aufgehen, als wäre die Kante angeklickt worden und nicht
+            //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
+            //anzeigen würde
+            if (mc instanceof BendpointContainer) {
+                EdgeContainer kc = ((Knickpunkt) mc.getElement()).getOwner();
+                if (doc.isSelected(kc)) {
+                    if (left_button) {
+                        doc.select(mc, TransactionManager.STANDARD_PID);
+                    } else {
+                        mc = kc;
+                    }
+                }
+
+            }
+
+            if (mc instanceof NodeContainer) {
+                // nichts selektiert
+                if (!doc.isSelection()) {
+                    if (left_button && !controlled) {
+                        left_knot_noshift_none();
+                        return;
+                    }
+                    if (left_button && controlled) {
+                        left_knot_shift_none();
+                        return;
+                    }
+                    if (right_button) {
+                        right_knot_none(gdl, xin, yin);
+                        return;
+                    }
+                    return;
+                }
+                // nur Kanten selektiert
+                if (doc.isSelectedOnlyEdges()) {
+                    if (left_button && !controlled) {
+                        left_knot_noshift_traces();
+                        return;
+                    }
+                    if (left_button && controlled) {
+                        left_knot_shift_traces();
+                        return;
+                    }
+                    if (right_button) {
+                        right_knot_traces(gdl, xin, yin);
+                        return;
+                    }
+                    return;
+                }
+                // nur Knoten selektiert
+                if (doc.isSelectedOnlyNodes()) {
+                    if (left_button && !controlled) {
+                        left_knot_noshift_knots();
+                        return;
+                    }
+                    if (left_button && controlled) {
+                        left_knot_shift_knots();
+                        return;
+                    }
+                    if (right_button) {
+                        right_knot_knots(gdl, xin, yin);
+                        return;
+                    }
+                    return;
+                }
+                // Knoten und Kanten selektiert
+                if (left_button && !controlled) {
+                    left_knot_noshift_multi();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_knot_shift_multi();
+                    return;
+                }
+                if (right_button) {
+                    right_knot_multi(gdl, xin, yin);
+                    return;
+                }
+                return;
+            } else if (mc instanceof EdgeContainer) {
+                // nichts selektiert
+                if (!doc.isSelection()) {
+                    if (left_button && !controlled) {
+                        left_trace_noshift_none();
+                        return;
+                    }
+                    if (left_button && controlled) {
+                        left_trace_shift_none();
+                        return;
+                    }
+                    if (right_button) {
+                        right_trace_none(gdl, xin, yin);
+                        return;
+                    }
+                    return;
+                }
+                // nur Kanten selektiert
+                if (doc.isSelectedOnlyEdges()) {
+                    if (left_button && !controlled) {
+                        left_trace_noshift_traces();
+                        return;
+                    }
+                    if (left_button && controlled) {
+                        left_trace_shift_traces();
+                        return;
+                    }
+                    if (right_button) {
+                        right_trace_traces(gdl, xin, yin);
+                        return;
+                    }
+                    return;
+                }
+                // nur Knoten selektiert
+                if (doc.isSelectedOnlyNodes()) {
+                    if (left_button && !controlled) {
+                        left_trace_noshift_knots();
+                        return;
+                    }
+                    if (left_button && controlled) {
+                        left_trace_shift_knots();
+                        return;
+                    }
+                    if (right_button) {
+                        right_trace_knots(gdl, xin, yin);
+                        return;
+                    }
+                    return;
+                }
+                // Knoten und Kanten selektiert
+                if (left_button && !controlled) {
+                    left_trace_noshift_multi();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_trace_shift_multi();
+                    return;
+                }
+                if (right_button) {
+                    right_trace_multi(gdl, xin, yin);
+                    return;
+                }
+                return;
+            }
+        }
+
+        if (ebeneGetroffen) {
+            // nichts selektiert
+            if (!doc.isSelection()) {
+                if (left_button && !controlled) {
+                    left_layer_noshift_none();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_layer_shift_none();
+                    return;
+                }
+                if (right_button) {
+                    right_layer_none(gdl, xin, yin);
+                    return;
+                }
+                return;
+            }
+            // nur Kanten selektiert
+            if (doc.isSelectedOnlyEdges()) {
+                if (left_button && !controlled) {
+                    left_layer_noshift_traces();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_layer_shift_traces();
+                    return;
+                }
+                if (right_button) {
+                    right_layer_traces(gdl, xin, yin);
+                    return;
+                }
+                return;
+            }
+            // nur Knoten selektiert
+            if (doc.isSelectedOnlyNodes()) {
+                if (left_button && !controlled) {
+                    left_layer_noshift_knots();
+                    return;
+                }
+                if (left_button && controlled) {
+                    left_layer_shift_knots();
+                    return;
+                }
+                if (right_button) {
+                    right_layer_knots(gdl, xin, yin);
+                    return;
+                }
+                return;
+            }
+            // Knoten und Kanten selektiert
+            if (left_button && !controlled) {
+                left_layer_noshift_multi();
+                return;
+            }
+            if (left_button && controlled) {
+                left_layer_shift_multi();
+                return;
+            }
+            if (right_button) {
+                right_layer_multi(gdl, xin, yin);
+                return;
+            }
+            return;
+        }
+        //_general
+        if (left_button && !controlled) {
+            left_noshift_outside();
+            return;
+        }
+        if (left_button && controlled) {
+            left_shift_outside();
+            return;
+        }
+    }
+
+    // Methoden, die aus dem Zustand und der Aktion mit der Maus eine semantische machen
+
+    // Es sind 56 Stueck. Viel Spass beim Hacken. Wahrscheinlich werden nur wenige
+    // richtig programmiert werden, der Grossteil wird nix machen oder auf andere
+    // Methoden zeigen, die dasselbe machen
+
+    // Namensgebung: Button_ObjektTyp_Shift_Selection
+
+    /**
 	 * 
 	 */
-	private static void left_noshift_outside() {
-		doc.deselectAll(false);
-	}
+    private void left_shift_outside() {
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static void left_layer_noshift_none() {
-		doc.deselectAll(false);
-	}
+    private static void left_noshift_outside() {
+        doc.deselectAll(false);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static void left_layer_noshift_knots() {
-		doc.deselectAll(false);
-	}
+    private static void left_layer_noshift_none() {
+        doc.deselectAll(false);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static void left_layer_noshift_traces() {
-		doc.deselectAll(false);
-	}
+    private static void left_layer_noshift_knots() {
+        doc.deselectAll(false);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static void left_layer_noshift_multi() {
-		doc.deselectAll(false);
-	}
+    private static void left_layer_noshift_traces() {
+        doc.deselectAll(false);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_layer_shift_none() {
-	}
+    private static void left_layer_noshift_multi() {
+        doc.deselectAll(false);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static void left_layer_shift_knots() {
-		doc.deselectAll(false);
-	}
+    private void left_layer_shift_none() {
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static void left_layer_shift_traces() {
-		doc.deselectAll(false);
-	}
+    private static void left_layer_shift_knots() {
+        doc.deselectAll(false);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_layer_shift_multi() {
-	}
+    private static void left_layer_shift_traces() {
+        doc.deselectAll(false);
+    }
 
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private static void right_layer_none(Component gdl, int xin, int yin) {
-		//TODO: FST: showMenu
-		//FSTContextMenu.showMenu(gdl, xin, yin);
-		menu = getLayerContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private static void right_layer_knots(Component gdl, int xin, int yin) {
-		menu = getLayerContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private static void right_layer_traces(Component gdl, int xin, int yin) {
-		menu = getLayerContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private static void right_layer_multi(Component gdl, int xin, int yin) {
-		menu = getLayerContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	// Klicks in Knoten
-
-	// Rechte Maustaste auf Knoten
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_knot_none(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getKnotContextMenu(gdl);
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_knot_knots(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getKnotContextMenu(gdl);
-		//TODO: FST: showMenu
-		FSTContextMenu.showMenu(gdl, xin, yin);
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_knot_traces(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getMultiContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_knot_multi(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		//Wenn mind. 2 Knoten selektiert sind und das Kontextmenü auf einem Knoten aufgerufen wurde,
-		//kann man auch das Knotenkontextmenü anbieten
-//		menu = getMultiContextMenu();
-		menu = getMultiKnotContextMenu(gdl);
-		menu.show(gdl, xin, yin);
-	}
-
-	// Linke Maustaste auf Knoten
-
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_noshift_none() {
-		doc.select(mc, 0);
-	}
+    private void left_layer_shift_multi() {
+    }
 
-	/**
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private static void right_layer_none(final Component gdl, final int xin, final int yin) {
+        //TODO: FST: showMenu
+        //FSTContextMenu.showMenu(gdl, xin, yin);
+        menu = getLayerContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private static void right_layer_knots(final Component gdl, final int xin, final int yin) {
+        menu = getLayerContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private static void right_layer_traces(final Component gdl, final int xin, final int yin) {
+        menu = getLayerContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private static void right_layer_multi(final Component gdl, final int xin, final int yin) {
+        menu = getLayerContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    // Klicks in Knoten
+
+    // Rechte Maustaste auf Knoten
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_knot_none(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getKnotContextMenu(gdl);
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_knot_knots(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getKnotContextMenu(gdl);
+        //TODO: FST: showMenu
+        FSTContextMenu.showMenu(gdl, xin, yin);
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_knot_traces(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getMultiContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_knot_multi(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        //Wenn mind. 2 Knoten selektiert sind und das Kontextmenü auf einem Knoten aufgerufen wurde,
+        //kann man auch das Knotenkontextmenü anbieten
+        //		menu = getMultiContextMenu();
+        menu = getMultiKnotContextMenu(gdl);
+        menu.show(gdl, xin, yin);
+    }
+
+    // Linke Maustaste auf Knoten
+
+    /**
 	 * 
 	 */
-	private void left_knot_noshift_knots() {
-		doc.select(mc, 0);
-	}
+    private void left_knot_noshift_none() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_noshift_traces() {
-		doc.select(mc, 0);
-	}
+    private void left_knot_noshift_knots() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_noshift_multi() {
-		doc.select(mc, 0);
-	}
+    private void left_knot_noshift_traces() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_shift_none() {
-		doc.addToSelection(mc, 0);
-	}
+    private void left_knot_noshift_multi() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_shift_knots() {
-		if (mc.isSelected())
-			doc.deselect(mc, 0);
-		else
-			doc.addToSelection(mc, 0);
-	}
+    private void left_knot_shift_none() {
+        doc.addToSelection(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_shift_traces() {
-		left_knot_shift_knots();
-	}
+    private void left_knot_shift_knots() {
+        if (mc.isSelected()) {
+            doc.deselect(mc, 0);
+        } else {
+            doc.addToSelection(mc, 0);
+        }
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knot_shift_multi() {
-		left_knot_shift_knots();
-	}
+    private void left_knot_shift_traces() {
+        left_knot_shift_knots();
+    }
 
-	// Klicks auf die Kanten
-
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_noshift_none() {
-		doc.select(mc, 0);
-	}
+    private void left_knot_shift_multi() {
+        left_knot_shift_knots();
+    }
 
-	/**
+    // Klicks auf die Kanten
+
+    /**
 	 * 
 	 */
-	private void left_trace_noshift_knots() {
-		doc.select(mc, 0);
-	}
+    private void left_trace_noshift_none() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_noshift_traces() {
-		doc.select(mc, 0);
-	}
+    private void left_trace_noshift_knots() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_noshift_multi() {
-		doc.select(mc, 0);
-	}
+    private void left_trace_noshift_traces() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_shift_none() {
-		doc.addToSelection(mc, 0);
-	}
+    private void left_trace_noshift_multi() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_shift_knots() {
-		if (mc.isSelected())
-			doc.deselect(mc, 0);
-		else
-			doc.addToSelection(mc, 0);
-	}
+    private void left_trace_shift_none() {
+        doc.addToSelection(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_shift_traces() {
-		left_trace_shift_knots();
-	}
+    private void left_trace_shift_knots() {
+        if (mc.isSelected()) {
+            doc.deselect(mc, 0);
+        } else {
+            doc.addToSelection(mc, 0);
+        }
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_trace_shift_multi() {
-		left_trace_shift_knots();
-	}
+    private void left_trace_shift_traces() {
+        left_trace_shift_knots();
+    }
 
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_trace_none(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getTraceContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_trace_knots(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getTraceContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_trace_traces(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getTraceContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	/**
-	 * @param gdl
-	 * @param xin
-	 * @param yin
-	 */
-	private void right_trace_multi(Component gdl, int xin, int yin) {
-		doc.addToSelection(mc, 0);
-		menu = getTraceContextMenu();
-		menu.show(gdl, xin, yin);
-	}
-
-	// Klicks in die Knoten-Haende
-
-	// Klicks mit rechts
-/*
-	private void right_knothand_knots() {
-	}
-	private void right_knothand_traces() {
-	}
-	private void right_knothand_multi() {
-	}
-*/
-	// Klicks mit links
-
-	/**
+    /**
 	 * 
 	 */
-	private void left_knothand_noshift_knots() {
-		doc.select(mc, 0);
-	}
+    private void left_trace_shift_multi() {
+        left_trace_shift_knots();
+    }
 
-	/**
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_trace_none(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getTraceContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_trace_knots(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getTraceContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_trace_traces(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getTraceContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    /**
+     * @param gdl
+     * @param xin
+     * @param yin
+     */
+    private void right_trace_multi(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(mc, 0);
+        menu = getTraceContextMenu();
+        menu.show(gdl, xin, yin);
+    }
+
+    // Klicks in die Knoten-Haende
+
+    // Klicks mit rechts
+    /*
+     * private void right_knothand_knots() {
+     * }
+     * private void right_knothand_traces() {
+     * }
+     * private void right_knothand_multi() {
+     * }
+     */
+    // Klicks mit links
+
+    /**
 	 * 
 	 */
-	private void left_knothand_noshift_traces() {
-		doc.select(mc, 0);
-	}
+    private void left_knothand_noshift_knots() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knothand_noshift_multi() {
-		doc.select(mc, 0);
-	}
+    private void left_knothand_noshift_traces() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knothand_shift_knots() {
-	}
+    private void left_knothand_noshift_multi() {
+        doc.select(mc, 0);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knothand_shift_traces() {
-	}
+    private void left_knothand_shift_knots() {
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private void left_knothand_shift_multi() {
-	}
+    private void left_knothand_shift_traces() {
+    }
 
-	/**
-	 * @return
-	 */
-	public ArrayList<JMenuItem> getEinfuegenMenu() {
-		ArrayList<JMenuItem> eintraege = new ArrayList<JMenuItem>();
-		if (getDoc() == null)
-			return eintraege;
-		JMenu newKnotMenu = getNewKnotMenu();
-		int anzahl = newKnotMenu.getItemCount();
-		for (int n = 0; n < anzahl; n++) {
-			JMenuItem neu = new JMenuItem(newKnotMenu.getItem(n).getText());
-			neu.setActionCommand(getNewKnotMenu().getItem(n).getActionCommand());
-			neu.addActionListener(this);
-			eintraege.add(neu);
-		}
-		return eintraege;
-	}
-
-	/**
-	 * @return
-	 */
-	public JPopupMenu getTreeKnotContextMenu() {
-		JPopupMenu menu = new JPopupMenu();
-
-		menu.add(properties);
-		menu.addSeparator();
-
-		boolean do_join = doc.selectedContainer.isJoinableElementsSelected();
-
-		if (do_join) {
-			menu.add(join_selected);
-			menu.addSeparator();
-		}
-
-		if (doc instanceof Szenario)
-			menu.add(delete_selected_from_szenario);
-
-		menu.add(delete_selected);
-		delete_selected.setEnabled(true);
-
-//		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgeführt");
-		menu.addPopupMenuListener(this);
-		return menu;
-	}
-
-	/**
-	 * @param ec
-	 * @return
-	 */
-	public JPopupMenu getTreeKnotContextMenu(ElementContainer ec) {
-		JPopupMenu menu = new JPopupMenu();
-		doc.addSimpleToSelection(ec);
-		menu.add(properties);
-		menu.addPopupMenuListener(this);
-		return menu;
-	}
-
-	/**
-	 * Gibt ein Menü zurück, welches die Analysen für das aktuell ausgewählten
-	 * Element enthält.
+    /**
 	 * 
-	 * @return Analysemenü
 	 */
-	private static JMenu getAnalyseMenu() {
-		JMenu menu = new JMenu(Tool3lgmConstants.getResString("analysis"));
-		ElementContainer ec = doc.getLastSelected();
-		if (ec != null && ec.getElement() instanceof Knoten) {
-			// Alle Analysen für die ausgewählte Klasse holen
-			String klasse = ec.getElement().getClass().getName();
-			klasse = klasse.substring(klasse.lastIndexOf('.') + 1);
-			List<AbstractAnalyse> analysen = AnalyseRepository.getAnalysenFuerKnoten(klasse);
+    private void left_knothand_shift_multi() {
+    }
 
-			// Analysen ins Menü eintragen
-			if (analysen != null && analysen.size() > 0) {
-				for (final AbstractAnalyse ana : analysen) {
-					JMenuItem item = new JMenuItem(ana.getName());
-					menu.add(item);
-					item.addActionListener(new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							ana.setAnalysisResult(doc);
-						}
-					});
-				}
-			} else
-				menu.setEnabled(false);
-		} else
-			menu.setEnabled(false);
-		return menu;
-	}
+    /**
+     * @return
+     */
+    public ArrayList<JMenuItem> getEinfuegenMenu() {
+        ArrayList<JMenuItem> eintraege = new ArrayList<JMenuItem>();
+        if (getDoc() == null) {
+            return eintraege;
+        }
+        JMenu newKnotMenu = getNewKnotMenu();
+        int anzahl = newKnotMenu.getItemCount();
+        for (int n = 0; n < anzahl; n++) {
+            JMenuItem neu = new JMenuItem(newKnotMenu.getItem(n).getText());
+            neu.setActionCommand(getNewKnotMenu().getItem(n).getActionCommand());
+            neu.addActionListener(this);
+            eintraege.add(neu);
+        }
+        return eintraege;
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		doc.getCollection().getSelectedDoc().exec(e.getActionCommand(), TransactionManager.STANDARD_PID);
-	}
+    /**
+     * @return
+     */
+    public JPopupMenu getTreeKnotContextMenu() {
+        JPopupMenu menu = new JPopupMenu();
 
-//--------------------------------------------------------------------------------------------------------------------------------
-// PopupMenuListener-Funktionen
-	/* (non-Javadoc)
-	 * @see javax.swing.event.PopupMenuListener#popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent)
-	 */
-	@Override
-	public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
+        menu.add(properties);
+        menu.addSeparator();
 
-	/* (non-Javadoc)
-	 * @see javax.swing.event.PopupMenuListener#popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent)
-	 */
-	@Override
-	public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-		// das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulöschenden Elemnte kommen
-		delete_selected_from_szenario.setActionCommand(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO + " ");
-		delete_selected.setActionCommand(GDCommands.DELETE + " ");
-		((JPopupMenu) e.getSource()).removePopupMenuListener(this);
-	}
+        boolean do_join = doc.selectedContainer.isJoinableElementsSelected();
 
-	/* (non-Javadoc)
-	 * @see javax.swing.event.PopupMenuListener#popupMenuCanceled(javax.swing.event.PopupMenuEvent)
-	 */
-	@Override
-	public void popupMenuCanceled(PopupMenuEvent e) {}
+        if (do_join) {
+            menu.add(join_selected);
+            menu.addSeparator();
+        }
 
-//--------------------------------------------------------------------------------------------------------------------------------
+        if (doc instanceof Szenario) {
+            menu.add(delete_selected_from_szenario);
+        }
 
-	/**
-	 * @return
-	 */
-	private static JMenuItem getAddToModelMenu() {
-		if (Tool3lgm.tool.getCollectionCount() < 2)
-			return null;
-		JMenu menu = new JMenu(Tool3lgmConstants.getResString("inmodel"));
-		for (GDCollection gdcoll : Tool3lgm.tool.getCollections()) {
-			if (gdcoll != doc.getCollection())
-				menu.add(getSubModelMenu(gdcoll));
-		}
-		return menu;
-	}
+        menu.add(delete_selected);
+        delete_selected.setEnabled(true);
 
-	/**
-	 * @param collection
-	 * @return
-	 */
-	private static final JMenuItem getSubModelMenu(final GDCollection collection) {
-		JMenu menu = new JMenu(collection.getName());
-		JMenuItem item = new JMenuItem(Tool3lgmConstants.getResString("main_model"));
-		item.addActionListener(new ActionListener() {
-			/* (non-Javadoc)
-			 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				doc.copySelectedToModel(collection.getMainGraphDocument());
-			}
-		});
-		menu.add(item);
+        //		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgeführt");
+        menu.addPopupMenuListener(this);
+        return menu;
+    }
 
-		for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
-			item = new JMenuItem(collection.getSzenario(i).getTitle());
-			final Szenario szen = collection.getSzenario(i);
-			item.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doc.copySelectedToModel(szen);
-				}
-			});
-			menu.add(item);
-		}
+    /**
+     * @param ec
+     * @return
+     */
+    public JPopupMenu getTreeKnotContextMenu(final ElementContainer ec) {
+        JPopupMenu menu = new JPopupMenu();
+        doc.addSimpleToSelection(ec);
+        menu.add(properties);
+        menu.addPopupMenuListener(this);
+        return menu;
+    }
 
-		return menu;
-	}
+    /**
+     * Gibt ein Menü zurück, welches die Analysen für das aktuell ausgewählten
+     * Element enthält.
+     * 
+     * @return Analysemenü
+     */
+    private static JMenu getAnalyseMenu() {
+        JMenu menu = new JMenu(Tool3lgmConstants.getResString("analysis"));
+        ElementContainer ec = doc.getLastSelected();
+        if (ec != null && ec.getElement() instanceof Knoten) {
+            // Alle Analysen für die ausgewählte Klasse holen
+            String klasse = ec.getElement().getClass().getName();
+            klasse = klasse.substring(klasse.lastIndexOf('.') + 1);
+            List<AbstractAnalyse> analysen = AnalyseRepository.getAnalysenFuerKnoten(klasse);
 
-	/**
-	 * @return
-	 */
-	private JMenuItem getJoinMenu() {
-		if (mc == null)
-			return null;
+            // Analysen ins Menü eintragen
+            if (analysen != null && analysen.size() > 0) {
+                for (final AbstractAnalyse ana : analysen) {
+                    JMenuItem item = new JMenuItem(ana.getName());
+                    menu.add(item);
+                    item.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            ana.setAnalysisResult(doc);
+                        }
+                    });
+                }
+            } else {
+                menu.setEnabled(false);
+            }
+        } else {
+            menu.setEnabled(false);
+        }
+        return menu;
+    }
 
-		if (Tool3lgm.tool.getCollectionCount() < 2)
-			return null;
+    @Override
+    public void actionPerformed(final ActionEvent e) {
+        doc.getCollection().getSelectedDoc().exec(e.getActionCommand(), TransactionManager.STANDARD_PID);
+    }
 
-		if (!doc.isSingleSelection())
-			return null;
+    //--------------------------------------------------------------------------------------------------------------------------------
+    // PopupMenuListener-Funktionen
+    @Override
+    public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+    }
 
-		JMenu menu = new JMenu(Tool3lgmConstants.getResString("join_elements"));
-		JMenuItem item;
+    @Override
+    public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
+        // das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulöschenden Elemnte kommen
+        delete_selected_from_szenario.setActionCommand(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO + " ");
+        delete_selected.setActionCommand(GDCommands.DELETE + " ");
+        ((JPopupMenu) e.getSource()).removePopupMenuListener(this);
+    }
 
-		ModelElement me1 = doc.getLastSelected().getElement();
+    @Override
+    public void popupMenuCanceled(final PopupMenuEvent e) {
+    }
 
-		for (GDCollection gdcoll : Tool3lgm.tool.getCollections()) {
-			if (gdcoll == doc.getCollection())
-				continue;
+    //--------------------------------------------------------------------------------------------------------------------------------
 
-			final GraphDocument doc2 = Tool3lgm.tool.getPreSelectedGDCollection().getSelectedDoc();
+    /**
+     * @return
+     */
+    private static JMenuItem getAddToModelMenu() {
+        if (Tool3lgm.tool.getCollectionCount() < 2) {
+            return null;
+        }
+        JMenu menu = new JMenu(Tool3lgmConstants.getResString("inmodel"));
+        for (GDCollection gdcoll : Tool3lgm.tool.getCollections()) {
+            if (gdcoll != doc.getCollection()) {
+                menu.add(getSubModelMenu(gdcoll));
+            }
+        }
+        return menu;
+    }
 
-			if (!doc2.isSingleSelection())
-				continue;
+    /**
+     * @param collection
+     * @return
+     */
+    private static final JMenuItem getSubModelMenu(final GDCollection collection) {
+        JMenu menu = new JMenu(collection.getName());
+        JMenuItem item = new JMenuItem(Tool3lgmConstants.getResString("main_model"));
+        item.addActionListener(new ActionListener() {
 
-			ModelElement me2 = doc2.getLastSelected().getElement();
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                doc.copySelectedToModel(collection.getMainGraphDocument());
+            }
+        });
+        menu.add(item);
 
-			if (me2.getClass() != me1.getClass())
-				continue;
+        for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
+            item = new JMenuItem(collection.getSzenario(i).getTitle());
+            final Szenario szen = collection.getSzenario(i);
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    doc.copySelectedToModel(szen);
+                }
+            });
+            menu.add(item);
+        }
 
-			if (menu.getItemCount() > 0)
-				menu.addSeparator();
+        return menu;
+    }
 
-			item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc.getCollection().getName());
-			item.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					doc.joinElements(doc2, false);
-				}
-			});
-			menu.add(item);
+    /**
+     * @return
+     */
+    private JMenuItem getJoinMenu() {
+        if (mc == null) {
+            return null;
+        }
 
-			item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc2.getCollection().getName());
-			item.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					((LGMGraphDocument) doc2).joinElements(doc, false);
-				}
-			});
-			menu.add(item);
+        if (Tool3lgm.tool.getCollectionCount() < 2) {
+            return null;
+        }
 
-/*			item = new JMenuItem(Tool3lgmConstants.getResourceString("join_elements_result_both"));
-			item.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					doc.joinElements(doc2, true);
-				}
-			});
-			menu.add(item); */			
-		}
+        if (!doc.isSingleSelection()) {
+            return null;
+        }
 
-		return (menu.getItemCount() > 0 ? menu : null);
-	}
+        JMenu menu = new JMenu(Tool3lgmConstants.getResString("join_elements"));
+        JMenuItem item;
+
+        ModelElement me1 = doc.getLastSelected().getElement();
+
+        for (GDCollection gdcoll : Tool3lgm.tool.getCollections()) {
+            if (gdcoll == doc.getCollection()) {
+                continue;
+            }
+
+            final GraphDocument doc2 = Tool3lgm.tool.getPreSelectedGDCollection().getSelectedDoc();
+
+            if (!doc2.isSingleSelection()) {
+                continue;
+            }
+
+            ModelElement me2 = doc2.getLastSelected().getElement();
+
+            if (me2.getClass() != me1.getClass()) {
+                continue;
+            }
+
+            if (menu.getItemCount() > 0) {
+                menu.addSeparator();
+            }
+
+            item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc.getCollection().getName());
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    doc.joinElements(doc2, false);
+                }
+            });
+            menu.add(item);
+
+            item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc2.getCollection().getName());
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    ((LGMGraphDocument) doc2).joinElements(doc, false);
+                }
+            });
+            menu.add(item);
+
+            //			item = new JMenuItem(Tool3lgmConstants.getResourceString("join_elements_result_both"));
+            //			item.addActionListener(new ActionListener() {
+            //				public void actionPerformed(ActionEvent e) {
+            //					doc.joinElements(doc2, true);
+            //				}
+            //			});
+            //			menu.add(item); 			
+        }
+
+        return menu.getItemCount() > 0 ? menu : null;
+    }
 
 }

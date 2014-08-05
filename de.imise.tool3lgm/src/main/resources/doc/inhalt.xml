@@ -4,46 +4,47 @@
 
 <toc version="2.0" xml:lang="de_DE">
 	<tocitem text="Erste Schritte" expand="false">
-		<tocitem text="Vorwort" target="vorwort"/>
-		<tocitem text="Modelle anlegen, öffnen und speichern" target="neu"/>
-		<tocitem text="Im Modell navigieren" target="navigieren"/>
-		<tocitem text="Elemente hinzufügen" target="neueElemente"/>
+		<tocitem text="Vorwort" target="vorwort" />
+		<tocitem text="Modelle anlegen, öffnen und speichern" target="neu" />
+		<tocitem text="Im Modell navigieren" target="navigieren" />
+		<tocitem text="Elemente hinzufügen" target="neueElemente" />
 	</tocitem>
 
 	<tocitem text="Das 3LGM² Metamodell" expand="false">
-		<tocitem text="Fachliche Ebene" target="modell_fachlich"/>
-		<tocitem text="Logische Werkzeugebene" target="modell_logisch"/>
-		<tocitem text="Physische Werkzeugebene" target="modell_physisch"/>
-		<tocitem text="Inter-Ebenen-Beziehungen" target="modell_ebenen"/>
-		<tocitem text="Vergröbern und Verfeinern" target="modell_grobFein"/>
-		<tocitem text="Literatur" target="modell_literatur"/>
+		<tocitem text="Fachliche Ebene" target="modell_fachlich" />
+		<tocitem text="Logische Werkzeugebene" target="modell_logisch" />
+		<tocitem text="Physische Werkzeugebene" target="modell_physisch" />
+		<tocitem text="Inter-Ebenen-Beziehungen" target="modell_ebenen" />
+		<tocitem text="Vergröbern und Verfeinern" target="modell_grobFein" />
+		<tocitem text="Literatur" target="modell_literatur" />
 	</tocitem>
 
 	<tocitem text="Der 3LGM² Baukasten" expand="false">
-		<tocitem text="Übersicht" target="baukasten_uebersicht"/>
-		<tocitem text="Einfügen und Ändern von Modellelementen" target="dialoge"/>
-		<tocitem text="Die Matrix-Sicht" target="matrixsicht"/>
-		<tocitem text="Modellanalyse" target="analyse"/>
-		<tocitem text="Importieren/Exportieren von Modellen" target="import_export"/>
-		<tocitem text="Tastenkombinationen" target="tasten"/>
+		<tocitem text="Übersicht" target="baukasten_uebersicht" />
+		<tocitem text="Einfügen und Ändern von Modellelementen"
+			target="dialoge" />
+		<tocitem text="Die Matrix-Sicht" target="matrixsicht" />
+		<tocitem text="Modellanalyse" target="analyse" />
+		<tocitem text="Importieren/Exportieren von Modellen" target="import_export" />
+		<tocitem text="Tastenkombinationen" target="tasten" />
 	</tocitem>
 
 	<tocitem text="FAQ" expand="false">
 		<tocitem text="Fragen zur Modellierung">
-			<tocitem text="Fachliche Ebene" target="faq_mod_fachlich"/>
-			<tocitem text="Logische Werkzeugebene" target="faq_mod_logisch"/>
-			<tocitem text="Physische Werkzeugebene" target="faq_mod_physisch"/>
-			<tocitem text="Inter-Ebenen-Beziehung" target="faq_mod_ebenen"/>
-			<tocitem text="Allgemein" target="faq_mod_allgemein"/>
+			<tocitem text="Fachliche Ebene" target="faq_mod_fachlich" />
+			<tocitem text="Logische Werkzeugebene" target="faq_mod_logisch" />
+			<tocitem text="Physische Werkzeugebene" target="faq_mod_physisch" />
+			<tocitem text="Inter-Ebenen-Beziehung" target="faq_mod_ebenen" />
+			<tocitem text="Allgemein" target="faq_mod_allgemein" />
 		</tocitem>
 		<tocitem text="Fragen zum Baukasten">
-			<tocitem text="Fachliche Ebene" target="faq_bed_fachlich"/>
-			<tocitem text="Logische Werkzeugebene" target="faq_bed_logisch"/>
-			<tocitem text="Physische Werkzeugebene" target="faq_bed_physisch"/>
-			<tocitem text="Inter-Ebenen-Beziehung" target="faq_bed_ebenen"/>
-			<tocitem text="Allgemein" target="faq_bed_allgemein"/>
+			<tocitem text="Fachliche Ebene" target="faq_bed_fachlich" />
+			<tocitem text="Logische Werkzeugebene" target="faq_bed_logisch" />
+			<tocitem text="Physische Werkzeugebene" target="faq_bed_physisch" />
+			<tocitem text="Inter-Ebenen-Beziehung" target="faq_bed_ebenen" />
+			<tocitem text="Allgemein" target="faq_bed_allgemein" />
 		</tocitem>
 		<!-- <tocitem text="Ihre Frage"/> -->
 	</tocitem>
-	<tocitem text="Impressum" target="impressum"/>
+	<tocitem text="Impressum" target="impressum" />
 </toc>

@@ -7,53 +7,38 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 
 public final class Standort extends Knoten {
-	
-	/**
+
+    /**
 	 * 
 	 */
-	public Standort() {
-		super();
-	}
+    public Standort() {
+        super();
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-	 */
-	@Override
-	public int layerFor() {
-		return ModelConstants.PHYSICAL_LAYER;
-	}
+    @Override
+    public int layerFor() {
+        return ModelConstants.PHYSICAL_LAYER;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#createPropertyDialog(tool3lgm.graphtools.GraphDocument)
-	 */
-	@Override
-	public ElementPropertyDialog createPropertyDialog(GDCollection gdcoll) {
-		ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-		dialog.addTab(getResString("PhysischerDVBaustein_p"), new NConnectionPanel(PhysischerDVBaustein.class, dialog, true, true));
-		return dialog;
-	}
+    @Override
+    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
+        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+        dialog.addTab(getResString("PhysischerDVBaustein_p"), new NConnectionPanel(PhysischerDVBaustein.class, dialog, true, true));
+        return dialog;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#hasLayout()
-	 */
-	@Override
-	public boolean hasLayout() {
-		return false;
-	}
+    @Override
+    public boolean hasLayout() {
+        return false;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#hasSortedKanten()
-	 */
-	@Override
-	public boolean hasSortedKanten() {
-		return false;
-	}
+    @Override
+    public boolean hasSortedKanten() {
+        return false;
+    }
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.elements.ModelElement#avoidDuplicates()
-	 */
-	@Override
-	public boolean avoidDuplicates() {
-		return true;
-	}
+    @Override
+    public boolean avoidDuplicates() {
+        return true;
+    }
 }

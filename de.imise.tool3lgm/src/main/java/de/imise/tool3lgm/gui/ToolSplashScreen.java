@@ -18,207 +18,173 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import de.imise.util.BrowserLauncher;
-
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
-
+import de.imise.util.BrowserLauncher;
 
 /**
- * 
  * @author hboehme
- *
  * @created 02.10.2007
  */
-public class ToolSplashScreen implements MouseMotionListener, MouseListener{
-	
+public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
-	/**
-	 * Das Label in das beim Anzeigen des Dialoges das Bild gezeichnet wird.
-	 */
-	private static JLabel imageLabel = new JLabel();
-	
-	private static JDialog infoDialog;
-	
-	/**
+    /**
+     * Das Label in das beim Anzeigen des Dialoges das Bild gezeichnet wird.
+     */
+    private static JLabel imageLabel = new JLabel();
+
+    private static JDialog infoDialog;
+
+    /**
 	 * 
 	 */
-	private static Rectangle2D linkPosition = null;
-	
-	/** Zeitraum der Entwicklung (braucht man nicht auslagern) */
-	private static final String DEVELOPMENT_DURATION = "2003 - " + Math.max(2013, Calendar.getInstance().get(Calendar.YEAR));
+    private static Rectangle2D linkPosition = null;
 
-	/**
-	 * Überwacht die übergebene Componente auf Mausbewegungen
-	 * @param c
-	 */
-	private ToolSplashScreen(Component c) {
-		super();
-		c.addMouseMotionListener(this);
-		c.addMouseListener(this);
-		
-	}
+    /** Zeitraum der Entwicklung (braucht man nicht auslagern) */
+    private static final String DEVELOPMENT_DURATION = "2003 - " + Math.max(2013, Calendar.getInstance().get(Calendar.YEAR));
 
-	/**
-	 * In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
-	 */
-	public static final void update() {
-		SplashScreen sc = SplashScreen.getSplashScreen();
-		if (sc !=null) {
-			Graphics2D g = sc.createGraphics();
-			update(g);
-			sc.update();
-			
-		}
-	}
+    /**
+     * Überwacht die übergebene Componente auf Mausbewegungen
+     * 
+     * @param c
+     */
+    private ToolSplashScreen(final Component c) {
+        super();
+        c.addMouseMotionListener(this);
+        c.addMouseListener(this);
 
-	
-	
-	
-	/**
-	 * Schreibt den Link an in das Infofenster.<br>
-	 * Wird normal false übergeben, wird der Link schwarz geschrieben, sonst blau.
-	 * @param g
-	 * @param normal
-	 */
-	private static final void printLink(boolean normal) {
-		Graphics g = ((ImageIcon)imageLabel.getIcon()).getImage().getGraphics();
-		
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 13f));
-		if (normal)
-			g.setColor(new java.awt.Color(24, 76, 153));
-		else
-			{g.setColor(Color.BLUE);
-			
-			}
-		g.drawString(Tool3lgmConstants.getResString("toolWebSite"), 20, 340);
-	}
-	
-	
+    }
 
+    /**
+     * In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
+     */
+    public static final void update() {
+        SplashScreen sc = SplashScreen.getSplashScreen();
+        if (sc != null) {
+            Graphics2D g = sc.createGraphics();
+            update(g);
+            sc.update();
 
+        }
+    }
 
+    /**
+     * Schreibt den Link an in das Infofenster.<br>
+     * Wird normal false übergeben, wird der Link schwarz geschrieben, sonst blau.
+     * 
+     * @param g
+     * @param normal
+     */
+    private static final void printLink(final boolean normal) {
+        Graphics g = ((ImageIcon) imageLabel.getIcon()).getImage().getGraphics();
 
-	/**
-	 * Fügt in das übergebene Graphics-Object den Infotext ein.
-	 * @param g
-	 */
-	private static final void update(Graphics g) {
-		RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		((Graphics2D) g).setRenderingHints(qualityHints);
-		g.setColor(new java.awt.Color(40, 127, 255));
-		
-		
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 19f));
-		g.drawString(Tool3lgmConstants.getResString("tool3lgm"), 20, 25);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 16f));
-		g.setColor(new java.awt.Color(24, 76, 153));
-		g.drawString(Tool3lgmConstants.getResString("fullToolName1"), 20, 50);
-		g.drawString(Tool3lgmConstants.getResString("fullToolName2"), 20, 70);
-		g.drawString(Tool3lgmConstants.getResString("version") +" " +Tool3lgmConstants.TOOL_VERSION, 20, 100);
-		g.drawString(Tool3lgmConstants.getResString("instituteName1"), 20, 260);
-		g.drawString(Tool3lgmConstants.getResString("instituteName2"), 20, 280);
-		g.drawString(Tool3lgmConstants.getResString("instituteName3"), 20, 300);	
-		g.drawString(DEVELOPMENT_DURATION, 20, 320);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 13f));
-		g.drawString(Tool3lgmConstants.getResString("toolWebSite"), 20, 340);
-	}
-	
-	
-	/**
-	 * Liefert das Panel für den 
-	 * @return
-	 */
-	public static final void getInfoDialog() {
-		infoDialog = new JDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("about"), true);
-		infoDialog.setSize(200, 100);
-		infoDialog.setLocationRelativeTo(infoDialog.getOwner());
+        g.setFont(g.getFont().deriveFont(Font.BOLD, 13f));
+        if (normal) {
+            g.setColor(new java.awt.Color(24, 76, 153));
+        } else {
+            g.setColor(Color.BLUE);
 
-//		ImageIcon ii = Tool3lgmConstants.getIcon("splash_ohne_text2.gif");
-		ImageIcon ii = new ImageIcon(ClassLoader.getSystemClassLoader().getResource("splash.gif"));
-		
-		imageLabel = new JLabel();
-		
-		infoDialog.add(imageLabel);
-		infoDialog.pack();
-		Image image = imageLabel.createImage(ii.getIconWidth(), ii.getIconHeight());
-		Graphics g = image.getGraphics();
-		g.drawImage(ii.getImage(), 0, 0, imageLabel);
-		update(g);
-		Rectangle2D r = g.getFontMetrics().getStringBounds(Tool3lgmConstants.getResString("toolWebSite"), g);
-		r.setRect(r.getX()+20, r.getY()+340, r.getWidth(), r.getHeight());
-		linkPosition = r;
-		new ToolSplashScreen(imageLabel);
-		ii.setImage(image);
-		imageLabel.setIcon(ii);
-		infoDialog.pack();
-		infoDialog.setVisible(true);
-	}
+        }
+        g.drawString(Tool3lgmConstants.getResString("toolWebSite"), 20, 340);
+    }
 
+    /**
+     * Fügt in das übergebene Graphics-Object den Infotext ein.
+     * 
+     * @param g
+     */
+    private static final void update(final Graphics g) {
+        RenderingHints qualityHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ((Graphics2D) g).setRenderingHints(qualityHints);
+        g.setColor(new java.awt.Color(40, 127, 255));
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseDragged(MouseEvent e) {
-	}
+        g.setFont(g.getFont().deriveFont(Font.BOLD, 19f));
+        g.drawString(Tool3lgmConstants.getResString("tool3lgm"), 20, 25);
+        g.setFont(g.getFont().deriveFont(Font.BOLD, 16f));
+        g.setColor(new java.awt.Color(24, 76, 153));
+        g.drawString(Tool3lgmConstants.getResString("fullToolName1"), 20, 50);
+        g.drawString(Tool3lgmConstants.getResString("fullToolName2"), 20, 70);
+        g.drawString(Tool3lgmConstants.getResString("version") + " " + Tool3lgmConstants.TOOL_VERSION, 20, 100);
+        g.drawString(Tool3lgmConstants.getResString("instituteName1"), 20, 260);
+        g.drawString(Tool3lgmConstants.getResString("instituteName2"), 20, 280);
+        g.drawString(Tool3lgmConstants.getResString("instituteName3"), 20, 300);
+        g.drawString(DEVELOPMENT_DURATION, 20, 320);
+        g.setFont(g.getFont().deriveFont(Font.BOLD, 13f));
+        g.drawString(Tool3lgmConstants.getResString("toolWebSite"), 20, 340);
+    }
 
+    /**
+     * Liefert das Panel für den
+     * 
+     * @return
+     */
+    public static final void getInfoDialog() {
+        infoDialog = new JDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("about"), true);
+        infoDialog.setSize(200, 100);
+        infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
-			printLink(false);
-		} else {
-			printLink(true);
-		}
-		update();
-		imageLabel.revalidate();
-		imageLabel.repaint();
-	}
+        //		ImageIcon ii = Tool3lgmConstants.getIcon("splash_ohne_text2.gif");
+        ImageIcon ii = new ImageIcon(ClassLoader.getSystemClassLoader().getResource("splash.gif"));
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
-			try {
-				BrowserLauncher.openURL(Tool3lgmConstants.getResString("toolWebSite"));
-			} catch (Exception exp) {
-				Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
-			}
-		}
-	}
+        imageLabel = new JLabel();
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
+        infoDialog.add(imageLabel);
+        infoDialog.pack();
+        Image image = imageLabel.createImage(ii.getIconWidth(), ii.getIconHeight());
+        Graphics g = image.getGraphics();
+        g.drawImage(ii.getImage(), 0, 0, imageLabel);
+        update(g);
+        Rectangle2D r = g.getFontMetrics().getStringBounds(Tool3lgmConstants.getResString("toolWebSite"), g);
+        r.setRect(r.getX() + 20, r.getY() + 340, r.getWidth(), r.getHeight());
+        linkPosition = r;
+        new ToolSplashScreen(imageLabel);
+        ii.setImage(image);
+        imageLabel.setIcon(ii);
+        infoDialog.pack();
+        infoDialog.setVisible(true);
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
+    @Override
+    public void mouseDragged(final MouseEvent e) {
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
+    @Override
+    public void mouseMoved(final MouseEvent e) {
+        if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
+            printLink(false);
+        } else {
+            printLink(true);
+        }
+        update();
+        imageLabel.revalidate();
+        imageLabel.repaint();
+    }
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
+    @Override
+    public void mouseClicked(final MouseEvent e) {
+        if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
+            try {
+                BrowserLauncher.openURL(Tool3lgmConstants.getResString("toolWebSite"));
+            } catch (Exception exp) {
+                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
+            }
+        }
+    }
+
+    @Override
+    public void mouseReleased(final MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(final MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(final MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(final MouseEvent e) {
+    }
 }

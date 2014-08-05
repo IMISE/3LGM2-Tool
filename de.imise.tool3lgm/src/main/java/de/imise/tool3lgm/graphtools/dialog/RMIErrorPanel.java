@@ -24,125 +24,124 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * @author hboehme
- *
- * RMI-fehlerPanel für die RMI-Konfiguration.
- * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code>
- * Wenn die <code>JCheckBox</code> aktiviert wird, wird versucht für den RMI-Service der nächste freie Port zu finden, sonst nicht. 
- * In das <code>JTextField</code> wird vom User der Port eingetragen, auf dem der RMI-Server lauschen soll. 
- * Sollte das auch wieder fhelschlagen, wird der Dialog erneut angeuzeigt.
+ * @author hboehme RMI-fehlerPanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
+ *         <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code> Wenn
+ *         die <code>JCheckBox</code> aktiviert wird, wird versucht für den RMI-Service der nächste
+ *         freie Port zu finden, sonst nicht. In das <code>JTextField</code> wird vom User der Port
+ *         eingetragen, auf dem der RMI-Server lauschen soll. Sollte das auch wieder fhelschlagen,
+ *         wird der Dialog erneut angeuzeigt.
  */
 public class RMIErrorPanel extends JPanel implements ItemListener {
 
-	/** Hier wird festgelegt, ob automatisch ein neuer freie Port gesucht werden soll*/
-	private JCheckBox rmiAutoNextFreePortCheckBox = new JCheckBox();
+    /** Hier wird festgelegt, ob automatisch ein neuer freie Port gesucht werden soll */
+    private final JCheckBox rmiAutoNextFreePortCheckBox = new JCheckBox();
 
-	/** hier wird vom User eingetragen und dargestellt, auf welchem Pot der RMI-Server lauschen soll */
-	private JTextField rmiRegistryPortTextField = new JTextField();
+    /** hier wird vom User eingetragen und dargestellt, auf welchem Pot der RMI-Server lauschen soll */
+    private final JTextField rmiRegistryPortTextField = new JTextField();
 
-	/** Der Button setzt den Standardport 1099 in das TextField. */
-	private JButton rmiStdRegistryButton = new JButton();
-	/**
-	 * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code>
-	 * Wenn die <code>JCheckBox</code> aktiviert wird, wird versucht ein neue freier Port für den RMI-Service zu finden, sonst nicht. 
-	 * In das <code>JTextField</code> wird vom User der Port eingetragen, auf dem der RMI-Server lauschen soll.
-	 */
-	public RMIErrorPanel() {
-		super();
+    /** Der Button setzt den Standardport 1099 in das TextField. */
+    private final JButton rmiStdRegistryButton = new JButton();
 
-		setLayout(new GridBagLayout());
-		
-		rmiAutoNextFreePortCheckBox.addItemListener(this);
-		rmiRegistryPortTextField.setMinimumSize(new Dimension(100, 21));
-		rmiRegistryPortTextField.setPreferredSize(new Dimension(100, 21));
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(2, 2, 2, 3);
-		gbc.anchor = GridBagConstraints.WEST;
+    /**
+     * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein
+     * <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert wird, wird versucht ein
+     * neue freier Port für den RMI-Service zu finden, sonst nicht. In das <code>JTextField</code>
+     * wird vom User der Port eingetragen, auf dem der RMI-Server lauschen soll.
+     */
+    public RMIErrorPanel() {
+        super();
 
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		
-		///  CheckBox und Hinweistext
-				
-		gbc.gridwidth=2;
-		add(new JLabel(Tool3lgmConstants.getResString("rmiErrorDescription")), gbc);
-		gbc.gridy++;
-		gbc.gridwidth=1;
-				
+        setLayout(new GridBagLayout());
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(new JLabel(Tool3lgmConstants.getResString("rmiSearchNextFreePort")), BorderLayout.WEST);
-		panel.add(rmiAutoNextFreePortCheckBox,BorderLayout.EAST);
-		add(panel, gbc);
-		
-		gbc.gridx++;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx=1;
-		add(new JLabel(""), gbc);
-		
-		gbc.fill = GridBagConstraints.NONE;
-		gbc.weightx=0;
-		/// Bunutzereingabe für den Port
-		
-		JPanel panel2 = new JPanel(new BorderLayout(3,3));
-		
-				gbc.gridx = 0;
-		gbc.gridy++;
-		panel2.add(new JLabel(Tool3lgmConstants.getResString("registryPort")),BorderLayout.WEST);
-		panel2.add(rmiRegistryPortTextField,BorderLayout.CENTER);
-	
-		gbc.gridy++;
-		gbc.gridx=0;
-		
-		panel2.add(rmiStdRegistryButton,BorderLayout.EAST);
-		
-		gbc.fill=GridBagConstraints.HORIZONTAL;
-		gbc.weightx=1;
-		add(panel2, gbc);
-		// Wenn der Button betätig wird, wird in das TextField der Standardport eingetragen, der für RMI vorgesehen ist. Derzeit 1099.
-		rmiStdRegistryButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("standardPort")) {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				rmiRegistryPortTextField.setText("" + Registry.REGISTRY_PORT);
-			}
-		});
+        rmiAutoNextFreePortCheckBox.addItemListener(this);
+        rmiRegistryPortTextField.setMinimumSize(new Dimension(100, 21));
+        rmiRegistryPortTextField.setPreferredSize(new Dimension(100, 21));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 2, 2, 3);
+        gbc.anchor = GridBagConstraints.WEST;
 
-		gbc.gridx++;
-		add(new JLabel(""), gbc);
-		
-		if(UserProperties.getRMIRegistryPort()==null)
-			rmiRegistryPortTextField.setText("");
-		else
-			rmiRegistryPortTextField.setText(UserProperties.getRMIRegistryPort());
-		
-		rmiAutoNextFreePortCheckBox.setSelected(true);
-	}
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
-	/**
-	 * @return Returns the value of <code>rmiAutoNextFreePortCheckBox</code>.
-	 */
-	public boolean isRmiAutoNextFreePortCheckBox() {
-		return rmiAutoNextFreePortCheckBox.isSelected();
-	}
+        // / CheckBox und Hinweistext
 
-	/**
-	 * @return Returns the the value of <code>rmiRegistryPortTextField</code>.
-	 */
-	public String getRmiRegistryPortTextFieldValue() {
-		return rmiRegistryPortTextField.getText();
-	}
+        gbc.gridwidth = 2;
+        add(new JLabel(Tool3lgmConstants.getResString("rmiErrorDescription")), gbc);
+        gbc.gridy++;
+        gbc.gridwidth = 1;
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
-	 */
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (rmiAutoNextFreePortCheckBox.isSelected()) {
-			rmiRegistryPortTextField.setEditable(false);
-			rmiStdRegistryButton.setEnabled(false);
-		} else {
-			rmiRegistryPortTextField.setEditable(true);
-			rmiStdRegistryButton.setEnabled(true);
-		}
-	}
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JLabel(Tool3lgmConstants.getResString("rmiSearchNextFreePort")), BorderLayout.WEST);
+        panel.add(rmiAutoNextFreePortCheckBox, BorderLayout.EAST);
+        add(panel, gbc);
+
+        gbc.gridx++;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        add(new JLabel(""), gbc);
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
+        // / Bunutzereingabe für den Port
+
+        JPanel panel2 = new JPanel(new BorderLayout(3, 3));
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel2.add(new JLabel(Tool3lgmConstants.getResString("registryPort")), BorderLayout.WEST);
+        panel2.add(rmiRegistryPortTextField, BorderLayout.CENTER);
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+
+        panel2.add(rmiStdRegistryButton, BorderLayout.EAST);
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1;
+        add(panel2, gbc);
+        // Wenn der Button betätig wird, wird in das TextField der Standardport eingetragen, der für
+        // RMI vorgesehen ist. Derzeit 1099.
+        rmiStdRegistryButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("standardPort")) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                rmiRegistryPortTextField.setText("" + Registry.REGISTRY_PORT);
+            }
+        });
+
+        gbc.gridx++;
+        add(new JLabel(""), gbc);
+
+        if (UserProperties.getRMIRegistryPort() == null) {
+            rmiRegistryPortTextField.setText("");
+        } else {
+            rmiRegistryPortTextField.setText(UserProperties.getRMIRegistryPort());
+        }
+
+        rmiAutoNextFreePortCheckBox.setSelected(true);
+    }
+
+    /**
+     * @return Returns the value of <code>rmiAutoNextFreePortCheckBox</code>.
+     */
+    public boolean isRmiAutoNextFreePortCheckBox() {
+        return rmiAutoNextFreePortCheckBox.isSelected();
+    }
+
+    /**
+     * @return Returns the the value of <code>rmiRegistryPortTextField</code>.
+     */
+    public String getRmiRegistryPortTextFieldValue() {
+        return rmiRegistryPortTextField.getText();
+    }
+
+    @Override
+    public void itemStateChanged(final ItemEvent e) {
+        if (rmiAutoNextFreePortCheckBox.isSelected()) {
+            rmiRegistryPortTextField.setEditable(false);
+            rmiStdRegistryButton.setEnabled(false);
+        } else {
+            rmiRegistryPortTextField.setEditable(true);
+            rmiStdRegistryButton.setEnabled(true);
+        }
+    }
 }

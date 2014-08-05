@@ -14,87 +14,79 @@ import de.imise.tool3lgm.graphtools.consistency.error.CardinalityError;
 /**
  * @author AXS
  * @created 13.09.2008
- *
  */
 class ConsistencyErrorTableGenerator {
 
     /**
      * Der Baum, der aufgebaut wird
      */
-    private UneditableJTable table; 
-	
+    private final UneditableJTable table;
+
     /**
      * Der Konsistenzprüfer, der alle Fehler liefert
      */
-    private ConsistencyChecker checker;
-    
-	/**
-	 * @param checker
-	 * 		Konsistenzprüfer, der alle Fehler liefert
-	 */
-	ConsistencyErrorTableGenerator(ConsistencyChecker checker) {
-	    super();
-	    this.checker = checker;
-	    ConsistencyErrorTableModel treeModel = new ConsistencyErrorTableModel();
-	    table = new UneditableJTable(treeModel);
-	    table.addMouseListener(new ConsistencyErrorTableEvents(checker, table));
+    private final ConsistencyChecker checker;
 
-	    table.getTableHeader().setReorderingAllowed(false);
-	    table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-	    updateTable();
-	    table.getColumn(Tool3lgmConstants.getErrString(ConsistencyErrorTableModel.COL_NAMES.number.toString())).setMaxWidth(40);
-	    table.getColumn(Tool3lgmConstants.getErrString(ConsistencyErrorTableModel.COL_NAMES.errorType.toString())).setMaxWidth(40);
+    /**
+     * @param checker Konsistenzprüfer, der alle Fehler liefert
+     */
+    ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
+        super();
+        this.checker = checker;
+        ConsistencyErrorTableModel treeModel = new ConsistencyErrorTableModel();
+        table = new UneditableJTable(treeModel);
+        table.addMouseListener(new ConsistencyErrorTableEvents(checker, table));
+
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        updateTable();
+        table.getColumn(Tool3lgmConstants.getErrString(ConsistencyErrorTableModel.COL_NAMES.number.toString())).setMaxWidth(40);
+        table.getColumn(Tool3lgmConstants.getErrString(ConsistencyErrorTableModel.COL_NAMES.errorType.toString())).setMaxWidth(40);
     }
 
-	/**
+    /**
 	 * 
 	 */
-	void updateTable(){
-	    ArrayList<CardinalityError> errors = checker.getInconsistencies();
-	    ConsistencyErrorTableModel model = (ConsistencyErrorTableModel)table.getModel();
-	    model.setErrors(errors);
-	    table.clearSelection();
-	    table.revalidate();
-	    table.repaint();
-	}
+    void updateTable() {
+        ArrayList<CardinalityError> errors = checker.getInconsistencies();
+        ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
+        model.setErrors(errors);
+        table.clearSelection();
+        table.revalidate();
+        table.repaint();
+    }
 
-	/**
+    /**
      * @return the table
      */
     JTable getTable() {
-    	updateTable();
-    	return table;
+        updateTable();
+        return table;
     }
 
-	///////////////////
-	// MouseListener //
-	///////////////////
-	
-	/**
-	 * Nicht editierbarer JTable.
-	 * 
-	 * @author AXS
-	 */
-	private class UneditableJTable extends JTable{
-	
-		/**
-		 * @param model
-		 */
-		public UneditableJTable(DefaultTableModel model){
-			super(model);
-		}
+    // /////////////////
+    // MouseListener //
+    // /////////////////
 
-		/* (non-Javadoc)
-         * @see javax.swing.JTable#isCellEditable(int, int)
+    /**
+     * Nicht editierbarer JTable.
+     * 
+     * @author AXS
+     */
+    private class UneditableJTable extends JTable {
+
+        /**
+         * @param model
          */
-        @Override
-        public boolean isCellEditable(int row, int column) {
-	        return false;
+        public UneditableJTable(final DefaultTableModel model) {
+            super(model);
         }
-		
-		
-		
-	}
-	
-	
+
+        @Override
+        public boolean isCellEditable(final int row, final int column) {
+            return false;
+        }
+
+    }
+
 }

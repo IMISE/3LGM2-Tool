@@ -30,179 +30,176 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  */
 public class BSNPanel extends ElementDialogPanel {
 
-	/**
-	 * COMMENTME
-	 */
-	private JTree tree;
-	
-	/**
-	 * COMMENTME
-	 */
-	private DefaultTreeModel lmodel;
-	
-	/**
-	 * COMMENTME
-	 */
-	private LGMTreeNode lroot;
-	
-	/**
-	 * COMMENTME
-	 */
-	private JPanel workingpanel, buttonpanel;
-	
-	/**
-	 * COMMENTME
-	 */
-	private Class<? extends ModelElement> searchElementClass;
+    /**
+     * COMMENTME
+     */
+    private final JTree tree;
 
-	public Class<? extends ModelElement> getSearchElementClass() {
-    	return searchElementClass;
+    /**
+     * COMMENTME
+     */
+    private final DefaultTreeModel lmodel;
+
+    /**
+     * COMMENTME
+     */
+    private final LGMTreeNode lroot;
+
+    /**
+     * COMMENTME
+     */
+    private JPanel workingpanel;
+
+    private final JPanel buttonpanel;
+
+    /**
+     * COMMENTME
+     */
+    private final Class<? extends ModelElement> searchElementClass;
+
+    public Class<? extends ModelElement> getSearchElementClass() {
+        return searchElementClass;
     }
 
-	/**
-	 * COMMENTME
-	 */
-	private LGMAction addAction;
-	
-	/**
-	 * COMMENTME
-	 */
-	private LGMAction removeAction;
-	
-	/**
-	 * 
-	 * @param searchElementClass
-	 * @param dl
-	 */
-	public BSNPanel(Class<? extends ModelElement> searchElementClass, ElementPropertyDialog dl) {
-		super(dl);
+    /**
+     * COMMENTME
+     */
+    private LGMAction addAction;
 
-		this.searchElementClass = searchElementClass;
+    /**
+     * COMMENTME
+     */
+    private LGMAction removeAction;
 
-		GridBagLayout gbl = new GridBagLayout();
-		setLayout(gbl);
-		GridBagConstraints constraints = new GridBagConstraints();
+    /**
+     * @param searchElementClass
+     * @param dl
+     */
+    public BSNPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog dl) {
+        super(dl);
 
-		JLabel label = new JLabel(Tool3lgmConstants.getResString("verb"));
-		lroot = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
-		lmodel = new DefaultTreeModel(lroot);
-		tree = new JTree(lmodel);
-		tree.setRootVisible(false);
-		tree.setCellRenderer(treeRenderer);
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-		
-		// MouseListener erstellen und an tree anhängen
-		LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree,this);
-		tree.addMouseListener(new LGMMouseListener(null,null,null,treeMouseAction, null));
-		
-		// TreeSelectionListener erstellen und an tree anhängen
-		LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree,this);
-		tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
+        this.searchElementClass = searchElementClass;
 
+        GridBagLayout gbl = new GridBagLayout();
+        setLayout(gbl);
+        GridBagConstraints constraints = new GridBagConstraints();
 
-		/*
-		 * Start: Buttons & Actions erstellen und registrieren
-		 * ...
-		 */
-		JButton addButton = new JButton();
-		JButton removeButton = new JButton();
-		
-		try {
-			addAction = LGMActionLibrary.getAddElementAction(null, null, this, false);
-			removeAction = LGMActionLibrary.getDisconnectAction(tree, null, this, false);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		addButton.setAction(this.addAction);
-		removeButton.setAction(this.removeAction);
-		/*
-		 * ...
-		 * end: Buttons & Actions erstellen und registrieren
-		 */
-		
+        JLabel label = new JLabel(Tool3lgmConstants.getResString("verb"));
+        lroot = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        lmodel = new DefaultTreeModel(lroot);
+        tree = new JTree(lmodel);
+        tree.setRootVisible(false);
+        tree.setCellRenderer(treeRenderer);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-		
-		JScrollPane sp = new JScrollPane(tree);
+        // MouseListener erstellen und an tree anhängen
+        LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
+        tree.addMouseListener(new LGMMouseListener(null, null, null, treeMouseAction, null));
 
-		constraints.anchor = GridBagConstraints.CENTER;
-		buttonpanel = new JPanel();
-		buttonpanel.setLayout(new GridLayout(1, 2));
-		buttonpanel.add(removeButton);
-		buttonpanel.add(addButton);
-		add(this, buttonpanel, constraints, 0, 2, 3, 1);
-		
-//		add(this, viewButton, constraints, 2, 3, 1, 1);
-		constraints.ipadx = 0;
-		constraints.ipady = 0;
-		constraints.anchor = GridBagConstraints.WEST;
-		add(this, label, constraints, 0, 0, 1, 1);
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 100;
-		constraints.weighty = 100;
-		add(this, sp, constraints, 0, 1, 3, 1);
+        // TreeSelectionListener erstellen und an tree anhängen
+        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
+        tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
 
+        /*
+         * Start: Buttons & Actions erstellen und registrieren ...
+         */
+        JButton addButton = new JButton();
+        JButton removeButton = new JButton();
 
-		init();
-	}
+        try {
+            addAction = LGMActionLibrary.getAddElementAction(null, null, this, false);
+            removeAction = LGMActionLibrary.getDisconnectAction(tree, null, this, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addButton.setAction(addAction);
+        removeButton.setAction(removeAction);
+        /*
+         * ... end: Buttons & Actions erstellen und registrieren
+         */
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-	 */
-	@Override
-	protected void init() {
-		super.init();
-//		remove(workingpanel);
-		lroot.removeAllChildren();
-		ModelElement modelElement = getModelElement();
-		List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
-		for (int m = 0; m < all.size(); m++) {
-			LGMTreeNode node = new LGMTreeNode(all.get(m), false);
-			lroot.add(node);
-		}
-		if (UserProperties.isSearchParts()) {
-			all = ((Knoten) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
-			for (int m = 0; m < all.size(); m++) {
-				LGMTreeNode node = new LGMTreeNode(all.get(m), false);
-				node.setSelectable(false);
-				lroot.add(node);
-			}
-		}
-		if (UserProperties.isSearchParents()) {
-			all = ((Knoten) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
-			for (int m = 0; m < all.size(); m++) {
-				LGMTreeNode node = new LGMTreeNode(all.get(m), false);
-				node.setSelectable(false);
-				lroot.add(node);
-			}
-		}
-		lmodel.reload();
-		expandTree(tree);
-		revalidate();
-		repaint();
-	}
+        JScrollPane sp = new JScrollPane(tree);
 
-	/* (non-Javadoc)
-	 * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-	 */
-	@Override
-	protected void showFullDialog() {
+        constraints.anchor = GridBagConstraints.CENTER;
+        buttonpanel = new JPanel();
+        buttonpanel.setLayout(new GridLayout(1, 2));
+        buttonpanel.add(removeButton);
+        buttonpanel.add(addButton);
+        add(this, buttonpanel, constraints, 0, 2, 3, 1);
 
-		if (true)
-			return;
+        // add(this, viewButton, constraints, 2, 3, 1, 1);
+        constraints.ipadx = 0;
+        constraints.ipady = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, label, constraints, 0, 0, 1, 1);
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 100;
+        constraints.weighty = 100;
+        add(this, sp, constraints, 0, 1, 3, 1);
 
-		super.showFullDialog();
-		
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.weightx = 100;
-		constraints.weighty = 100;
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		add(this, workingpanel, constraints, 1, 3, 1, 3);
+        init();
+    }
 
-		revalidate();
-		repaint();
-	}
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
+     */
+    @Override
+    protected void init() {
+        super.init();
+        // remove(workingpanel);
+        lroot.removeAllChildren();
+        ModelElement modelElement = getModelElement();
+        List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
+        for (int m = 0; m < all.size(); m++) {
+            LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+            lroot.add(node);
+        }
+        if (UserProperties.isSearchParts()) {
+            all = ((Knoten) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
+            for (int m = 0; m < all.size(); m++) {
+                LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+                node.setSelectable(false);
+                lroot.add(node);
+            }
+        }
+        if (UserProperties.isSearchParents()) {
+            all = ((Knoten) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
+            for (int m = 0; m < all.size(); m++) {
+                LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+                node.setSelectable(false);
+                lroot.add(node);
+            }
+        }
+        lmodel.reload();
+        expandTree(tree);
+        revalidate();
+        repaint();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
+     */
+    @Override
+    protected void showFullDialog() {
+
+        if (true) {
+            return;
+        }
+
+        super.showFullDialog();
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 100;
+        constraints.weighty = 100;
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        add(this, workingpanel, constraints, 1, 3, 1, 3);
+
+        revalidate();
+        repaint();
+    }
 }

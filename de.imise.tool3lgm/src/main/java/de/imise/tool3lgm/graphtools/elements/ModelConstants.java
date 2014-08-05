@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.Set;
 
-import de.imise.util.collections.CollectionUtils;
-
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
@@ -90,608 +88,491 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author N.N., AXS
  */
-public final class ModelConstants{
-	
-	/**
-	 * Mappt von alten Elementklassen auf die neuen. <br>
-	 * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese
-	 * Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-	 * als Value den neuen Namen des Elementes eintragen, damit die Elemente von
-	 * alten Modellen noch korrekt eingelesen werden können.
-	 */
-	protected static HashMap<String, String> oldToNewName = new HashMap<String, String>();
-	static {
-		oldToNewName.put("KnickpunktKnoten", "Knickpunkt");
-		oldToNewName.put("RawbAwbVerbindung", "RawbRawbVerbindung");
-		oldToNewName.put("AwbKawbVerbindung", "AwbKawbVerbindung");
-		oldToNewName.put("EtntKombination", "EreignisNachrichtenTyp");
-		oldToNewName.put("EtdtKombination", "EreignisDokumentenTyp");
-		oldToNewName.put("ETNTKombination", "EreignisNachrichtenTyp");
-		oldToNewName.put("ETDTKombination", "EreignisDokumentenTyp");
-	}
-	
-	/**
-	 * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
-	 */
-	@SuppressWarnings("unchecked")
-	public static final Class<? extends ModelElement>[] EMPTY_ELEMENT_CLASS_ARRAY = new Class[0];
-	@SuppressWarnings("unchecked")
-	public static final Class<? extends Kante>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
-	@SuppressWarnings("unchecked")
-	public static final Class<? extends Composition>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
-	
-	//Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
-	//public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
-	public static final int NO_LAYER					= -1;
-	public static final int PHYSICAL_LAYER				= 0;
-	public static final int INTER_LOGICAL_PHYSICAL_LAYER= 1;
-	public static final int LOGICAL_LAYER				= 2;
-	public static final int INTER_DOMAIN_LOGICAL_LAYER	= 3;
-	public static final int DOMAIN_LAYER				= 4;
-	public static final int[] LAYERS = {PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
+public final class ModelConstants {
 
-	/** Short-Name für den beginn des HashStrings bei allen Kanten */
-	public static final String EDGE_SHORT_NAME = "DLK";
-	/** 
-	 * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code>
-	 * übergebene Klasse weder eine gültige Knoten noch Kantenklasse ist.
-	 */ 
-	public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
-	/**
-	 * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente.
-	 * Diese 3-Buchstabigen Klassenkürzel sind nicht zwangsläufig eindeutig und diesen lediglich
-	 * der besseren Lesbarkeit von Hash-Strings, denen sie immer Vorangestellt werden.
-	 */
-	private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
+    /**
+     * Mappt von alten Elementklassen auf die neuen. <br>
+     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
+     * eingelesen werden können.
+     */
+    protected static HashMap<String, String> oldToNewName = new HashMap<String, String>();
+    static {
+        oldToNewName.put("KnickpunktKnoten", "Knickpunkt");
+        oldToNewName.put("RawbAwbVerbindung", "RawbRawbVerbindung");
+        oldToNewName.put("AwbKawbVerbindung", "AwbKawbVerbindung");
+        oldToNewName.put("EtntKombination", "EreignisNachrichtenTyp");
+        oldToNewName.put("EtdtKombination", "EreignisDokumentenTyp");
+        oldToNewName.put("ETNTKombination", "EreignisNachrichtenTyp");
+        oldToNewName.put("ETDTKombination", "EreignisDokumentenTyp");
+    }
 
-	/**
-	 * Liste aller geöffneten Dialoge
-	 */
-	public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<ElementPropertyDialog>();
-	/**
-	 * Unendlich als maximaler Integer
-	 */
-	public static final Integer UNLIMITED = new Integer(Integer.MAX_VALUE);
-	/**
-	 * Null als Integer
-	 */
-	public static final Integer ZERO = new Integer(0);
+    /**
+     * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] EMPTY_ELEMENT_CLASS_ARRAY = new Class[0];
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends Kante>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends Composition>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
 
-	/**
-	 * Eins als Integer
-	 */
-	public static final Integer ONE = new Integer(1);
+    //Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
+    //public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
+    public static final int NO_LAYER = -1;
+    public static final int PHYSICAL_LAYER = 0;
+    public static final int INTER_LOGICAL_PHYSICAL_LAYER = 1;
+    public static final int LOGICAL_LAYER = 2;
+    public static final int INTER_DOMAIN_LOGICAL_LAYER = 3;
+    public static final int DOMAIN_LAYER = 4;
+    public static final int[] LAYERS = {
+            PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER
+    };
 
-	/**
-	 * Standardrückgabewert bei Fehlern = -1 ;
-	 */
-	public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
+    /** Short-Name für den beginn des HashStrings bei allen Kanten */
+    public static final String EDGE_SHORT_NAME = "DLK";
+    /**
+     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Knoten noch Kantenklasse ist.
+     */
+    public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
+    /**
+     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
+     * Vorangestellt werden.
+     */
+    private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
 
-	/** Alle Knoten der FE als Array */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_DOMAIN_LAYER_NODES = {
-		Aufgabe.class, 
-		AufOrgKombination.class,
-		Objekttyp.class, 
-		Organisationseinheit.class, 
-//		Rolle.class, 
-		Prozess.class,
-	};
-	
-	
-	/**
-	 * COMMENTME
-	 */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] TREE_DOMAIN_LAYER_NODES = {
-			Aufgabe.class, 
-//			AufOrgKombination.class,
-			Objekttyp.class, 
-			Organisationseinheit.class, 
-//			Rolle.class, 
-			Prozess.class,
-		};
+    /**
+     * Liste aller geöffneten Dialoge
+     */
+    public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<ElementPropertyDialog>();
+    /**
+     * Unendlich als maximaler Integer
+     */
+    public static final Integer UNLIMITED = new Integer(Integer.MAX_VALUE);
+    /**
+     * Null als Integer
+     */
+    public static final Integer ZERO = new Integer(0);
 
-	/** Alle Knoten der FE als HashSet */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
-	
-	/**
-	 * COMMENTME
-	 */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = {	
-			Aufgabe.class,
-			Objekttyp.class, 
-			Organisationseinheit.class, 
-			Prozess.class,
-//			Rolle.class, 
-	};
+    /**
+     * Eins als Integer
+     */
+    public static final Integer ONE = new Integer(1);
 
-	/** Alle Knoten zw. FE und LWE als Array */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
-		ABKonfiguration.class,	
-	};
-	/** Alle Knoten zw. FE und LWE als HashSet */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
-	
-	/** Alle Knoten der LWE als Array */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_LOGICAL_LAYER_NODES = {
-		RechAnwendungsbaustein.class,
-		KonAnwendungsbaustein.class,
-		Anwendungsprogramm.class,
-		Bausteinschnittstelle.class,
-		Benutzungsschnittstelle.class,
-		Datenbanksystem.class,
-		Datensatztyp.class, 
-		DBVerwaltungssystem.class,
-		Dokumentensammlung.class,
-		Dokumententyp.class,
-		Ereignistyp.class, 
-		Kommunikationsstandard.class,
-		Nachrichtentyp.class,
-		Organisationsplan.class,
-		Softwareprodukt.class,
-		EreignisNachrichtenTyp.class,
-		EreignisDokumentenTyp.class,
-		
-		//auch die Assoziationsklasse hier eintagen
-		KommBeziehung.class,
-		
-		//abstracte Knoten müssen hier auch eingetragen werden
-		Anwendungsbaustein.class,
-	};
+    /**
+     * Standardrückgabewert bei Fehlern = -1 ;
+     */
+    public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
 
-	
-	/** Alle Knoten der LWE als HashSet */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static final HashSet<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
-	
-	
-	@SuppressWarnings("rawtypes")
-	public static final Class[] TREE_LOGICAL_LAYER_NODES = {
-		RechAnwendungsbaustein.class,
-		KonAnwendungsbaustein.class,
-//		Anwendungsprogramm.class,
-		Bausteinschnittstelle.class,
-		Benutzungsschnittstelle.class,
-		Datenbanksystem.class,
-		Datensatztyp.class, 
-		DBVerwaltungssystem.class,
-		Dokumentensammlung.class,
-		Dokumententyp.class,
-		Ereignistyp.class, 
-		Kommunikationsstandard.class,
-		Nachrichtentyp.class,
-		Organisationsplan.class,
-		Softwareprodukt.class,
-		EreignisNachrichtenTyp.class,
-		EreignisDokumentenTyp.class,
-	};
+    /** Alle Knoten der FE als Array */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_DOMAIN_LAYER_NODES = {
+            Aufgabe.class, AufOrgKombination.class, Objekttyp.class, Organisationseinheit.class,
+            //		Rolle.class, 
+            Prozess.class,
+    };
 
-	@SuppressWarnings("rawtypes")
-	public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = {	
-		RechAnwendungsbaustein.class,
-		KonAnwendungsbaustein.class,
-		Softwareprodukt.class,
-		Kommunikationsstandard.class,
-		DBVerwaltungssystem.class,
-		Ereignistyp.class,
-		Nachrichtentyp.class,
-		Dokumententyp.class,
-		EreignisNachrichtenTyp.class,
-		EreignisDokumentenTyp.class, 
-	};
+    /**
+     * COMMENTME
+     */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_DOMAIN_LAYER_NODES = {
+            Aufgabe.class,
+            //			AufOrgKombination.class,
+            Objekttyp.class, Organisationseinheit.class,
+            //			Rolle.class, 
+            Prozess.class,
+    };
 
-	/** Alle Knoten zw. LWE und PWE als Array */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = {
-		DBKonfiguration.class,	
-	};
-	/** Alle Knoten zw. LWE und PWE als HashSet */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
+    /** Alle Knoten der FE als HashSet */
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
 
-	/** Alle Knoten der PWE als Array */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_PHYSICAL_LAYER_NODES = {
-		PhysischerDVBaustein.class,
-		Standort.class,
-		Bausteintyp.class,
-		Netztyp.class, 
-		Subnetz.class,
-		Netzprotokoll.class, 
-	};
-	/** Alle Knoten der PWE als HashSet */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
+    /**
+     * COMMENTME
+     */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = {
+            Aufgabe.class, Objekttyp.class, Organisationseinheit.class, Prozess.class,
+    //			Rolle.class, 
+    };
 
-	/** Alle Knoten der PWE im Baum als Array */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] TREE_PHYSICAL_LAYER_NODES = {
-		PhysischerDVBaustein.class,
-		Standort.class,
-		Bausteintyp.class,
-		Netztyp.class, 
-		Subnetz.class,
-		Netzprotokoll.class, 
-	};
+    /** Alle Knoten zw. FE und LWE als Array */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
+        ABKonfiguration.class,
+    };
+    /** Alle Knoten zw. FE und LWE als HashSet */
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
 
-	@SuppressWarnings("rawtypes")
-	public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = {
-			PhysischerDVBaustein.class,
-			Standort.class,
-			Bausteintyp.class,
-			Netztyp.class, 
-			Subnetz.class,
-			Netzprotokoll.class, 
-		};
+    /** Alle Knoten der LWE als Array */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_LOGICAL_LAYER_NODES = {
+            RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, Anwendungsprogramm.class, Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Datensatztyp.class, DBVerwaltungssystem.class, Dokumentensammlung.class,
+            Dokumententyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Organisationsplan.class, Softwareprodukt.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class,
 
+            //auch die Assoziationsklasse hier eintagen
+            KommBeziehung.class,
 
-	/** Set aller Knotenklassen */
-	public static final HashSet<Class<? extends ModelElement>> ALL_NODES_SET = new HashSet<Class<? extends ModelElement>>();
-	static {
-		ALL_NODES_SET.addAll(ALL_DOMAIN_LAYER_NODES_SET);
-		ALL_NODES_SET.addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET);
-		ALL_NODES_SET.addAll(ALL_LOGICAL_LAYER_NODES_SET);
-		ALL_NODES_SET.addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET);
-		ALL_NODES_SET.addAll(ALL_PHYSICAL_LAYER_NODES_SET);
-	}
+            //abstracte Knoten müssen hier auch eingetragen werden
+            Anwendungsbaustein.class,
+    };
 
-	/** Array aller Knotenklassen */
-	@SuppressWarnings("unchecked")
-	public static final Class<? extends ModelElement>[] ALL_NODES = new Class[ALL_NODES_SET.size()];
-	static {
-		System.arraycopy(ALL_NODES_SET.toArray(), 0, ALL_NODES, 0, ALL_NODES.length);
-	}
+    /** Alle Knoten der LWE als HashSet */
+    @SuppressWarnings({
+            "rawtypes", "unchecked"
+    })
+    public static final HashSet<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
 
-	////////////
-	// Kanten //
-	////////////
-	
-	/** Kanten FE */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_DOMAIN_LAYER_EDGES = {
-	        AufAufOrgVerbindung.class,
-	        AufAufVerbindung.class,
-	        AufObjVerbindung.class,
-	        ObjObjVerbindung.class,      
-	        OrgAufOrgVerbindung.class,
-	        OrgOrgVerbindung.class,
-	        PrzAufVerbindung.class              
-	};
-	
-	/** Kanten Inter FE -LWE */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES={
-	        AwbAwbkVerbindung.class,
-	        AwbkAufOrgVerbindung.class,
-	        EtAufVerbindung.class,
-	        ObjLogspVerbindung.class,
-	        ObjReprVerbindung.class,
-	        SwpAufVerbindung.class
-	};
-	
-	/** Kanten LWE */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_LOGICAL_LAYER_EDGES={
-	        AwbKommssVerbindung.class,
-	        AwpSwpVerbindung.class,
-	        BssEtntVerbindung.class,
-	        BssKommstVerbindung.class,
-	        DbsDatVerbindung.class,
-	        DbsDbvsVerbindung.class,
-	        DoksDokVerbindung.class,
-	        EtntDotVerbindung.class,
-	        EtntEtVerbindung.class,
-	        EtntKommstVerbindung.class,
-	        EtntNatVerbindung.class,
-	        AwbKawbVerbindung.class,
-	        KawbDoksVerbindung.class,
-	        KawbOrgpVerbindung.class,
-	        KommbezEtntVerbindung.class,
-	        KommBeziehung.class,
-	        RawbRawbVerbindung.class,
-	        RawbAwpVerbindung.class,
-	        RawbDbsVerbindung.class
-	};
-	
-	/** Kanten Inter LWE - PWE */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES={
-	        PdvbkAwbVerbindung.class,
-	        PdvbPdvbkVerbindung.class,
-	};
-	
-	/** Kanten PWE */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] ALL_PHYSICAL_LAYER_EDGES={
-	        DatenuebertragungsVerbindung.class,
-	        PdvbBtypVerbindung.class,
-	        PdvbPdvbVerbindung.class,
-	        PdvbStoVerbindung.class,
-	        PdvbSubnVerbindung.class,
-//	        PdvbVirtualPdvbVerbindung.class,
-	        SubnNetzpVerbindung.class,
-	        SubnNetztVerbindung.class
-	};
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final HashSet<Class<? extends Kante>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_LOGICAL_LAYER_NODES = {
+            RechAnwendungsbaustein.class, KonAnwendungsbaustein.class,
+            //		Anwendungsprogramm.class,
+            Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Datensatztyp.class, DBVerwaltungssystem.class, Dokumentensammlung.class, Dokumententyp.class, Ereignistyp.class, Kommunikationsstandard.class,
+            Nachrichtentyp.class, Organisationsplan.class, Softwareprodukt.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class,
+    };
 
-	/** Set aller Kantenklassen */
-	public static final HashSet<Class<? extends Kante>> ALL_EDGES_SET = new HashSet<Class<? extends Kante>>();
-	static {
-		ALL_EDGES_SET.addAll(ALL_DOMAIN_LAYER_EDGES_SET);
-		ALL_EDGES_SET.addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET);
-		ALL_EDGES_SET.addAll(ALL_LOGICAL_LAYER_EDGES_SET);
-		ALL_EDGES_SET.addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET);
-		ALL_EDGES_SET.addAll(ALL_PHYSICAL_LAYER_EDGES_SET);
-	}
-	
-	/** Array aller Kantenklassen */
-	@SuppressWarnings("unchecked")
-	public static final Class<? extends Kante>[] ALL_EDGES = new Class[ALL_EDGES_SET.size()];
-	static {
-		System.arraycopy(ALL_EDGES_SET.toArray(), 0, ALL_EDGES, 0, ALL_EDGES.length);
-	}
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = {
+            RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, Softwareprodukt.class, Kommunikationsstandard.class, DBVerwaltungssystem.class, Ereignistyp.class, Nachrichtentyp.class, Dokumententyp.class, EreignisNachrichtenTyp.class,
+            EreignisDokumentenTyp.class,
+    };
 
-	/////////////////////////
-	// alle Elementklassen //
-	/////////////////////////
-	
-	
-	/** Set aller Elementklassen */
-	public static final HashSet<Class<? extends ModelElement>> ALL_ELEMENTS_SET = new HashSet<Class<? extends ModelElement>>();
-	static {
-		ALL_ELEMENTS_SET.addAll(ALL_NODES_SET);
-		ALL_ELEMENTS_SET.addAll(ALL_EDGES_SET);
-	}
-	
-	/** Array aller Elementklassen */
-	@SuppressWarnings("unchecked")
-	public static final Class<? extends ModelElement>[] ALL_ELEMENTS = new Class[ALL_ELEMENTS_SET.size()];
-	static {
-		System.arraycopy(ALL_ELEMENTS_SET.toArray(), 0, ALL_ELEMENTS, 0, ALL_ELEMENTS.length);
-	}
+    /** Alle Knoten zw. LWE und PWE als Array */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = {
+        DBKonfiguration.class,
+    };
+    /** Alle Knoten zw. LWE und PWE als HashSet */
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
 
-	
-	
-	
-	///////////////////////////////////
-	// spezielle Knoteneigenschaften //
-	///////////////////////////////////
-	
-	/** Alle Klassen, die man über den Datenimport einlesen kann */
-	@SuppressWarnings({ "rawtypes" })
-	public static final Class[] IMPORTABLE_NODES = {
-		Aufgabe.class,
-		Bausteintyp.class,
-		DBVerwaltungssystem.class,
-		Dokumententyp.class,
-		Ereignistyp.class,
-		KommBeziehung.class,
-		Kommunikationsstandard.class,
-		Nachrichtentyp.class,
-		Netzprotokoll.class, 
-		Netztyp.class, 
-		Objekttyp.class,
-		Organisationseinheit.class,
-		Organisationsplan.class,
-		KonAnwendungsbaustein.class, 
-		PhysischerDVBaustein.class,
-		RechAnwendungsbaustein.class,
-		Softwareprodukt.class,		
-		Standort.class,	
-		Subnetz.class,
-	};
+    /** Alle Knoten der PWE als Array */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_PHYSICAL_LAYER_NODES = {
+            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
+    };
+    /** Alle Knoten der PWE als HashSet */
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
 
-	/**
-	 * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht
-	 * in jedem Teilmodell einen eigenen Container besitzen.
-	 */
-	public static final HashSet<Class<? extends ModelElement>> UNIQUE_NODES = new HashSet<Class<? extends ModelElement>>();
-	static{
-		@SuppressWarnings({ "rawtypes" })
-		Class[] uniqueNodes = {
-			ABKonfiguration.class,
-			Anwendungsprogramm.class,
-			AufOrgKombination.class,
-			Bausteintyp.class,
-			Datensatztyp.class,
-			DBKonfiguration.class,
-			DBVerwaltungssystem.class,
-			Dokumententyp.class,
-			EreignisDokumentenTyp.class,
-			EreignisNachrichtenTyp.class,
-			Ereignistyp.class,
-			Kommunikationsstandard.class,
-			Nachrichtentyp.class,
-			Netzprotokoll.class,
-			Netztyp.class,
-			Organisationseinheit.class,
-			Organisationsplan.class,
-			Softwareprodukt.class,
-			Standort.class,
-			Subnetz.class,
-		};
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		HashSet<Class<? extends ModelElement>> tmp_set = new HashSet(Arrays.asList(uniqueNodes));
-		UNIQUE_NODES.addAll(tmp_set);
-	}
+    /** Alle Knoten der PWE im Baum als Array */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_PHYSICAL_LAYER_NODES = {
+            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
+    };
 
-	///////////////////////////////////
-	// spezielle Kanteneigenschaften //
-	///////////////////////////////////
-	
-	/**
-	 * Map, bei der die Schlüssel jeweils eine Kanteklasse ist, deren Instanzen für Elemente der Value-Klasse
-	 * sortiert sind. Das bedeutet, die Reihenfolge, in der Elemente der Value-Klasse Kanten der Schlüssel-Klasse
-	 * in ihrem Kantenvektor enthalten, hat eine Bedeutung.
-	 */
-	private static final HashMap<Class<? extends Kante>, Class<? extends ModelElement>> ORDERED_EDGE_TO_ELEMENT_CLASS = new HashMap<Class<? extends Kante>, Class<? extends ModelElement>>();
-	/**
-	 * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der
-	 * Elementklasse eine Bedeutung haben.
-	 */
-	private static final HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = new HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>>();
-	static {
-		ORDERED_EDGE_TO_ELEMENT_CLASS.put(PrzAufVerbindung.class, Prozess.class);
-		for (Class<? extends Kante> edgeClass : ORDERED_EDGE_TO_ELEMENT_CLASS.keySet()){
-			Class<? extends ModelElement> elementClass = ORDERED_EDGE_TO_ELEMENT_CLASS.get(edgeClass);
-			HashSet<Class<? extends Kante>> orderedEdgeClasses = ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
-			if (orderedEdgeClasses==null) {
-				orderedEdgeClasses = new HashSet<Class<? extends Kante>>();
-				orderedEdgeClasses.add(edgeClass);
-				ELEMENT_CLASS_TO_ORDERED_EDGES.put(elementClass, orderedEdgeClasses);
-			}else{
-				orderedEdgeClasses.add(edgeClass);
-			}
-		}
-	}
-	/**
-	 * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h.
-	 * dass für Elemente der übergebenen Klasse die Reihenfolge der Instanzen der zurück gelieferten Kantenklassen
-	 * in ihrem Kantenvektor eine Bedeutung hat (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen
-	 * Prozessen und Aufgaben sind für den Prozess geordnet).
-	 *   
-	 * @param elementClass
-	 */
-	public static final HashSet<Class<? extends Kante>> getOrderedEdgeClasses(Class<? extends ModelElement> elementClass){
-		return ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
-	}
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = {
+            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
+    };
 
-	/**
-	 * Prüft, ob für die übergebene Elementklasse Reihenfolge der Kanten der übergebenen Kantenklasse relevant ist. 
-	 * 
-	 * @param elementClass
-	 * 			Elementklasse, für die Kanten der edgeClass in einer bestimmten Reihenfolge sein müssen
-	 * @param edgeClass
-	 * 			Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
-	 * @return
-	 */
-	public static final boolean isOrderedEdgeClass(Class<? extends ModelElement> elementClass, Class<? extends Kante> edgeClass) {
-		return getOrderedEdgeClasses(elementClass).contains(edgeClass);
-	}
-	
-	/**
-	 * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können. 
-	 */
-	private static final HashSet<Class<? extends Kante>> MULTIPLE_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
-	static {
-		MULTIPLE_EDGE_CLASSES.add(PrzAufVerbindung.class);
-	}
-	/**
-	 * Liefert <code>true</code>, wenn über Kanten der übergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein können.
-	 * @param edgeClass
-	 * @return
-	 */
-	public static final boolean isMultipleEdgeClass(Class<? extends Kante> edgeClass){
-		return MULTIPLE_EDGE_CLASSES.contains(edgeClass);
-	}
-	
-	/**
-	 * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten,
-	 * aber aus Unwissenheit beim Entwurf des Metamodells fehlerhafterweise in eine Assoziation verpackt
-	 * wurden, bei denen die Richtung der Kante (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE)
-	 * die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen Doppelkanten-Richtungsquatsch.
-	 * 
-	 * Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die je nach 
-	 * Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um
-	 * im View diese Assoziationen zusammenzufassen.
-	 */
-	private static final HashSet<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
-	static{
-		//vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
-		//vorwärts2: interpretiert; rückwärts2: wird interpretiert von
-		DOUBLE_MEANING_EDGE_CLASSES.add(AufObjVerbindung.class);
-		//vorwärts1: kann senden; rückwärts1: kann gesendet werden von
-		//vorwärts2: kann empfangen; rückwärts2: kann empfangen werden von
-		DOUBLE_MEANING_EDGE_CLASSES.add(BssEtntVerbindung.class);
-		//vorwärts1: sendet über; rückwärts1: wird gesendet über
-		//vorwärts2: empfängt über; rückwärts2: wird empfangen über
-		DOUBLE_MEANING_EDGE_CLASSES.add(KommbezEtntVerbindung.class);
-		//vorwärts1: sendet an; rückwärts1: empfängt von
-		//vorwärts2: sendet an; rückwärts2: empfängt von
-		//ACHTUNG: Dies ist auch eine Kante mit doppelter Bedeutung, weil sie das gerichtete
-		//Senden und Empfangen zw. Schnittstellen ausdrückt. Da aber beide Endklassen gleich sind
-		//haben sie auch in beiden Richtungen immer dieselb Bedeutung.
-		DOUBLE_MEANING_EDGE_CLASSES.add(KommBeziehung.class);
-	}	
-	/**
-	 * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante
-	 * die Bedeutung angibt.
-	 * @see #DOUBLE_MEANING_EDGE_CLASSES
-	 * @param edgeClass
-	 * @return
-	 */
-	public static final boolean isDoubleMeaningEdge(Class<?> edgeClass){
-		return DOUBLE_MEANING_EDGE_CLASSES.contains(edgeClass);
-	}
-	
-	///////////////////////////////////////////////////////////////////
-	// Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
-	///////////////////////////////////////////////////////////////////
-	
-	
-	/**
-	 * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse 
-	 * zuweisungskompatiblen ModelElement-Klassen.  
-	 */
-	public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]>();
-	
-	/**
-	 * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene
-	 * Klasse selbst ist in den Rückgabewerten enthalten, wenn sie nichtabstract ist.
-	 * 
-	 * @param elementClass
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-    public static final Class<? extends ModelElement>[] getInstanciableAssignableClasses(Class<? extends ModelElement> elementClass){
-		Class<? extends ModelElement>[] elementClasses = ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.get(elementClass);
-		if (elementClasses != null)
-			return elementClasses;
-		HashSet<Class<? extends ModelElement>> al = new HashSet<Class<? extends ModelElement>>();
-		for (Class<? extends ModelElement> clazz : ALL_NODES)
-			if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz))
-				al.add(clazz);
-		for (Class<? extends ModelElement> clazz : ALL_EDGES)
-			if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz))
-				al.add(clazz);
-		if (al.size()==0){
-			ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, EMPTY_ELEMENT_CLASS_ARRAY);
-			return EMPTY_ELEMENT_CLASS_ARRAY;
-		}
-		elementClasses = new Class[al.size()];
-		System.arraycopy(al.toArray(), 0, elementClasses, 0, elementClasses.length);
-		ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, elementClasses);
-		return elementClasses;
-	}
-	
-	
-	/**
-	 * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse selbst besitzt
-	 * oder von einer ihrer Oberklassen erbt.
-	 */
-	private static final HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
-	
-	
+    /** Set aller Knotenklassen */
+    public static final HashSet<Class<? extends ModelElement>> ALL_NODES_SET = new HashSet<Class<? extends ModelElement>>();
+    static {
+        ALL_NODES_SET.addAll(ALL_DOMAIN_LAYER_NODES_SET);
+        ALL_NODES_SET.addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET);
+        ALL_NODES_SET.addAll(ALL_LOGICAL_LAYER_NODES_SET);
+        ALL_NODES_SET.addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET);
+        ALL_NODES_SET.addAll(ALL_PHYSICAL_LAYER_NODES_SET);
+    }
+
+    /** Array aller Knotenklassen */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] ALL_NODES = new Class[ALL_NODES_SET.size()];
+    static {
+        System.arraycopy(ALL_NODES_SET.toArray(), 0, ALL_NODES, 0, ALL_NODES.length);
+    }
+
+    ////////////
+    // Kanten //
+    ////////////
+
+    /** Kanten FE */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_DOMAIN_LAYER_EDGES = {
+            AufAufOrgVerbindung.class, AufAufVerbindung.class, AufObjVerbindung.class, ObjObjVerbindung.class, OrgAufOrgVerbindung.class, OrgOrgVerbindung.class, PrzAufVerbindung.class
+    };
+
+    /** Kanten Inter FE -LWE */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = {
+            AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, EtAufVerbindung.class, ObjLogspVerbindung.class, ObjReprVerbindung.class, SwpAufVerbindung.class
+    };
+
+    /** Kanten LWE */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_LOGICAL_LAYER_EDGES = {
+            AwbKommssVerbindung.class, AwpSwpVerbindung.class, BssEtntVerbindung.class, BssKommstVerbindung.class, DbsDatVerbindung.class, DbsDbvsVerbindung.class, DoksDokVerbindung.class, EtntDotVerbindung.class, EtntEtVerbindung.class,
+            EtntKommstVerbindung.class, EtntNatVerbindung.class, AwbKawbVerbindung.class, KawbDoksVerbindung.class, KawbOrgpVerbindung.class, KommbezEtntVerbindung.class, KommBeziehung.class, RawbRawbVerbindung.class, RawbAwpVerbindung.class,
+            RawbDbsVerbindung.class
+    };
+
+    /** Kanten Inter LWE - PWE */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = {
+            PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class,
+    };
+
+    /** Kanten PWE */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] ALL_PHYSICAL_LAYER_EDGES = {
+            DatenuebertragungsVerbindung.class, PdvbBtypVerbindung.class, PdvbPdvbVerbindung.class, PdvbStoVerbindung.class, PdvbSubnVerbindung.class,
+            //	        PdvbVirtualPdvbVerbindung.class,
+            SubnNetzpVerbindung.class, SubnNetztVerbindung.class
+    };
+
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
+    public static final HashSet<Class<? extends Kante>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
+
+    /** Set aller Kantenklassen */
+    public static final HashSet<Class<? extends Kante>> ALL_EDGES_SET = new HashSet<Class<? extends Kante>>();
+    static {
+        ALL_EDGES_SET.addAll(ALL_DOMAIN_LAYER_EDGES_SET);
+        ALL_EDGES_SET.addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET);
+        ALL_EDGES_SET.addAll(ALL_LOGICAL_LAYER_EDGES_SET);
+        ALL_EDGES_SET.addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET);
+        ALL_EDGES_SET.addAll(ALL_PHYSICAL_LAYER_EDGES_SET);
+    }
+
+    /** Array aller Kantenklassen */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends Kante>[] ALL_EDGES = new Class[ALL_EDGES_SET.size()];
+    static {
+        System.arraycopy(ALL_EDGES_SET.toArray(), 0, ALL_EDGES, 0, ALL_EDGES.length);
+    }
+
+    /////////////////////////
+    // alle Elementklassen //
+    /////////////////////////
+
+    /** Set aller Elementklassen */
+    public static final HashSet<Class<? extends ModelElement>> ALL_ELEMENTS_SET = new HashSet<Class<? extends ModelElement>>();
+    static {
+        ALL_ELEMENTS_SET.addAll(ALL_NODES_SET);
+        ALL_ELEMENTS_SET.addAll(ALL_EDGES_SET);
+    }
+
+    /** Array aller Elementklassen */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] ALL_ELEMENTS = new Class[ALL_ELEMENTS_SET.size()];
+    static {
+        System.arraycopy(ALL_ELEMENTS_SET.toArray(), 0, ALL_ELEMENTS, 0, ALL_ELEMENTS.length);
+    }
+
+    ///////////////////////////////////
+    // spezielle Knoteneigenschaften //
+    ///////////////////////////////////
+
+    /** Alle Klassen, die man über den Datenimport einlesen kann */
+    @SuppressWarnings({
+        "rawtypes"
+    })
+    public static final Class[] IMPORTABLE_NODES = {
+            Aufgabe.class, Bausteintyp.class, DBVerwaltungssystem.class, Dokumententyp.class, Ereignistyp.class, KommBeziehung.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Objekttyp.class,
+            Organisationseinheit.class, Organisationsplan.class, KonAnwendungsbaustein.class, PhysischerDVBaustein.class, RechAnwendungsbaustein.class, Softwareprodukt.class, Standort.class, Subnetz.class,
+    };
+
+    /**
+     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen.
+     */
+    public static final HashSet<Class<? extends ModelElement>> UNIQUE_NODES = new HashSet<Class<? extends ModelElement>>();
+    static {
+        @SuppressWarnings({
+            "rawtypes"
+        })
+        Class[] uniqueNodes = {
+                ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class, Dokumententyp.class, EreignisDokumentenTyp.class,
+                EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class, Softwareprodukt.class, Standort.class,
+                Subnetz.class,
+        };
+        @SuppressWarnings({
+                "rawtypes", "unchecked"
+        })
+        HashSet<Class<? extends ModelElement>> tmp_set = new HashSet(Arrays.asList(uniqueNodes));
+        UNIQUE_NODES.addAll(tmp_set);
+    }
+
+    ///////////////////////////////////
+    // spezielle Kanteneigenschaften //
+    ///////////////////////////////////
+
+    /**
+     * Map, bei der die Schlüssel jeweils eine Kanteklasse ist, deren Instanzen für Elemente der Value-Klasse sortiert sind. Das bedeutet, die Reihenfolge, in der Elemente der Value-Klasse Kanten der Schlüssel-Klasse in ihrem Kantenvektor enthalten, hat
+     * eine Bedeutung.
+     */
+    private static final HashMap<Class<? extends Kante>, Class<? extends ModelElement>> ORDERED_EDGE_TO_ELEMENT_CLASS = new HashMap<Class<? extends Kante>, Class<? extends ModelElement>>();
+    /**
+     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine Bedeutung haben.
+     */
+    private static final HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = new HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>>();
+    static {
+        ORDERED_EDGE_TO_ELEMENT_CLASS.put(PrzAufVerbindung.class, Prozess.class);
+        for (Class<? extends Kante> edgeClass : ORDERED_EDGE_TO_ELEMENT_CLASS.keySet()) {
+            Class<? extends ModelElement> elementClass = ORDERED_EDGE_TO_ELEMENT_CLASS.get(edgeClass);
+            HashSet<Class<? extends Kante>> orderedEdgeClasses = ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
+            if (orderedEdgeClasses == null) {
+                orderedEdgeClasses = new HashSet<Class<? extends Kante>>();
+                orderedEdgeClasses.add(edgeClass);
+                ELEMENT_CLASS_TO_ORDERED_EDGES.put(elementClass, orderedEdgeClasses);
+            } else {
+                orderedEdgeClasses.add(edgeClass);
+            }
+        }
+    }
+
+    /**
+     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
+     * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
+     * 
+     * @param elementClass
+     */
+    public static final HashSet<Class<? extends Kante>> getOrderedEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        return ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
+    }
+
+    /**
+     * Prüft, ob für die übergebene Elementklasse Reihenfolge der Kanten der übergebenen Kantenklasse relevant ist.
+     * 
+     * @param elementClass Elementklasse, für die Kanten der edgeClass in einer bestimmten Reihenfolge sein müssen
+     * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
+     * @return
+     */
+    public static final boolean isOrderedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+        return getOrderedEdgeClasses(elementClass).contains(edgeClass);
+    }
+
+    /**
+     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
+     */
+    private static final HashSet<Class<? extends Kante>> MULTIPLE_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
+    static {
+        MULTIPLE_EDGE_CLASSES.add(PrzAufVerbindung.class);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn über Kanten der übergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein können.
+     * 
+     * @param edgeClass
+     * @return
+     */
+    public static final boolean isMultipleEdgeClass(final Class<? extends Kante> edgeClass) {
+        return MULTIPLE_EDGE_CLASSES.contains(edgeClass);
+    }
+
+    /**
+     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
+     * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
+     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen zusammenzufassen.
+     */
+    private static final HashSet<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
+    static {
+        //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
+        //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
+        DOUBLE_MEANING_EDGE_CLASSES.add(AufObjVerbindung.class);
+        //vorwärts1: kann senden; rückwärts1: kann gesendet werden von
+        //vorwärts2: kann empfangen; rückwärts2: kann empfangen werden von
+        DOUBLE_MEANING_EDGE_CLASSES.add(BssEtntVerbindung.class);
+        //vorwärts1: sendet über; rückwärts1: wird gesendet über
+        //vorwärts2: empfängt über; rückwärts2: wird empfangen über
+        DOUBLE_MEANING_EDGE_CLASSES.add(KommbezEtntVerbindung.class);
+        //vorwärts1: sendet an; rückwärts1: empfängt von
+        //vorwärts2: sendet an; rückwärts2: empfängt von
+        //ACHTUNG: Dies ist auch eine Kante mit doppelter Bedeutung, weil sie das gerichtete
+        //Senden und Empfangen zw. Schnittstellen ausdrückt. Da aber beide Endklassen gleich sind
+        //haben sie auch in beiden Richtungen immer dieselb Bedeutung.
+        DOUBLE_MEANING_EDGE_CLASSES.add(KommBeziehung.class);
+    }
+
+    /**
+     * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante die Bedeutung angibt.
+     * 
+     * @see #DOUBLE_MEANING_EDGE_CLASSES
+     * @param edgeClass
+     * @return
+     */
+    public static final boolean isDoubleMeaningEdge(final Class<?> edgeClass) {
+        return DOUBLE_MEANING_EDGE_CLASSES.contains(edgeClass);
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
+    ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
+     */
+    public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]>();
+
+    /**
+     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     * 
+     * @param elementClass
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
+        Class<? extends ModelElement>[] elementClasses = ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.get(elementClass);
+        if (elementClasses != null) {
+            return elementClasses;
+        }
+        HashSet<Class<? extends ModelElement>> al = new HashSet<Class<? extends ModelElement>>();
+        for (Class<? extends ModelElement> clazz : ALL_NODES) {
+            if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
+                al.add(clazz);
+            }
+        }
+        for (Class<? extends ModelElement> clazz : ALL_EDGES) {
+            if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
+                al.add(clazz);
+            }
+        }
+        if (al.size() == 0) {
+            ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, EMPTY_ELEMENT_CLASS_ARRAY);
+            return EMPTY_ELEMENT_CLASS_ARRAY;
+        }
+        elementClasses = new Class[al.size()];
+        System.arraycopy(al.toArray(), 0, elementClasses, 0, elementClasses.length);
+        ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, elementClasses);
+        return elementClasses;
+    }
+
+    /**
+     * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse selbst besitzt oder von einer ihrer Oberklassen erbt.
+     */
+    private static final HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
+
     /**
      * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
      * 
@@ -699,1038 +580,1014 @@ public final class ModelConstants{
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static Class<? extends Kante>[] getEdgeTypes(Class<? extends ModelElement> elementClass) {
-		Class<? extends Kante>[] edgeClasses = ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass);
-		if (edgeClasses!=null)
-			return edgeClasses;
-		ArrayList<Class<? extends Kante>> elementClassEdgeClasses = new ArrayList<Class<? extends Kante>>();
-		for (Class<? extends Kante> edgeClass : ALL_EDGES) {
-			if (Kante.isStartOrEndClass(edgeClass, elementClass))
-				elementClassEdgeClasses.add(edgeClass);
-		}
-		int size = elementClassEdgeClasses.size();
-		Class<? extends Kante>[] returnClasses = null; 
-		if (size==0){
-			returnClasses = EMPTY_EDGE_CLASS_ARRAY;
-		}else{
-			returnClasses = new Class[size];
-			System.arraycopy(elementClassEdgeClasses.toArray(), 0, returnClasses, 0, size);
-		}
-		ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass, returnClasses);
-		return returnClasses;
-	}
+    public static Class<? extends Kante>[] getEdgeTypes(final Class<? extends ModelElement> elementClass) {
+        Class<? extends Kante>[] edgeClasses = ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass);
+        if (edgeClasses != null) {
+            return edgeClasses;
+        }
+        ArrayList<Class<? extends Kante>> elementClassEdgeClasses = new ArrayList<Class<? extends Kante>>();
+        for (Class<? extends Kante> edgeClass : ALL_EDGES) {
+            if (Kante.isStartOrEndClass(edgeClass, elementClass)) {
+                elementClassEdgeClasses.add(edgeClass);
+            }
+        }
+        int size = elementClassEdgeClasses.size();
+        Class<? extends Kante>[] returnClasses = null;
+        if (size == 0) {
+            returnClasses = EMPTY_EDGE_CLASS_ARRAY;
+        } else {
+            returnClasses = new Class[size];
+            System.arraycopy(elementClassEdgeClasses.toArray(), 0, returnClasses, 0, size);
+        }
+        ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass, returnClasses);
+        return returnClasses;
+    }
 
-	/**
-	 * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat.
-	 * 
-	 * @param elementClass
-	 * @param edgeClass
-	 * @return
-	 */
-	public static final boolean hasEdgeType(Class<? extends ModelElement> elementClass, Class<? extends Kante> edgeClass){
-		return CollectionUtils.arrayContains(getEdgeTypes(elementClass), edgeClass);
-	}
-    
-    
-	/**
-	 * Mappt für eine Elementklasse auf eine weitere Map, die von einer Elementklasse auf ein Array
-	 * von Kantenklassen mappt. Das Array der Kantenklassen enthält alle Kanten, die zwischen den beiden
-	 * Schlüsselelementklassen vorhanden sein können.<br />
-	 * In der äußeren und allen inneren HashMaps sind immer dieselben Schlüsselelemente enthalten. Für ein
-	 * Paar von Schlüsselelementklassen ist immer dasselbe Kanteklassen-Array abgelegt - egal in welcher
-	 * Reihenfolge man die Elementeklassen als Schlüssel einsetzt.
-	 */
-	private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>>();
-	
-	/**
-	 * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt
-	 * es keine Kantenklasse zwischen den Elementen so kommt ein leeres Array (length==0) zurück. 
-	 * 
-	 * @param elementClass1
-	 * @param elementClass2
-	 * @return
-	 */
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat.
+     * 
+     * @param elementClass
+     * @param edgeClass
+     * @return
+     */
+    public static final boolean hasEdgeType(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+        return CollectionUtils.arrayContains(getEdgeTypes(elementClass), edgeClass);
+    }
+
+    /**
+     * Mappt für eine Elementklasse auf eine weitere Map, die von einer Elementklasse auf ein Array von Kantenklassen mappt. Das Array der Kantenklassen enthält alle Kanten, die zwischen den beiden Schlüsselelementklassen vorhanden sein können.<br />
+     * In der äußeren und allen inneren HashMaps sind immer dieselben Schlüsselelemente enthalten. Für ein Paar von Schlüsselelementklassen ist immer dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als Schlüssel
+     * einsetzt.
+     */
+    private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>>();
+
+    /**
+     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
+     * 
+     * @param elementClass1
+     * @param elementClass2
+     * @return
+     */
     @SuppressWarnings("unchecked")
-	public static final Class<? extends Kante>[] getEdgeTypes(Class<? extends ModelElement> elementClass1, Class<? extends ModelElement> elementClass2) {
-		HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass1);
-		if (elementClassToEdgeClass!=null){
-			Class<? extends Kante>[] edgeClasses = elementClassToEdgeClass.get(elementClass2);
-			if (edgeClasses!= null)
-				return edgeClasses;
-		}else{
-			elementClassToEdgeClass = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
-			ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass1, elementClassToEdgeClass);
-		}
-		ArrayList<Class<? extends Kante>> resultEdgeClasses = new ArrayList<Class<? extends Kante>>();
-		for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass1)){
-			if (Kante.isConnecting(edgeClass, elementClass1, elementClass2))
-				resultEdgeClasses.add(edgeClass);
-		}
-		Class<? extends Kante>[] returnClasses = null;
-		int size = resultEdgeClasses.size();
-		if (size==0){
-			returnClasses = EMPTY_EDGE_CLASS_ARRAY;
-		}else{
-			returnClasses = new Class[resultEdgeClasses.size()];
-			System.arraycopy(resultEdgeClasses.toArray(), 0, returnClasses, 0, size);
-		}
-		//jetzt das gefundenen Kantenklassen-Array für beide Elementklassenkombinationen in den inneren HashMaps ablegen
-		elementClassToEdgeClass.put(elementClass2, returnClasses);
-		elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass2);
-		if (elementClassToEdgeClass==null){
-			elementClassToEdgeClass = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
-			ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass2, elementClassToEdgeClass);
-		}
-		elementClassToEdgeClass.put(elementClass1, returnClasses);
-		return returnClasses;
-	}
-	
-/*	
-	static {
-		HashSet<Class<? extends ModelElement>> allElements= new HashSet<Class<? extends ModelElement>>(ALL_NODES_SET.size() + ALL_EDGES_SET.size());
-		allElements.addAll(ALL_NODES_SET);
-		allElements.addAll(ALL_EDGES_SET);
-		for (Class<? extends ModelElement> elementClass1 : allElements) {
-			for (Class<? extends ModelElement> elementClass2 : allElements) {
-				Class<? extends Kante>[] et = getEdgeTypes(elementClass1, elementClass2);
-				if (et.length==0)
-					continue;
-				System.err.println(elementClass1.getSimpleName() + "\t-\t" + elementClass2.getSimpleName());
-				System.err.println("\t" + Arrays.asList(et));
-			}
-		}
-	}
-*/	
-    
+    public static final Class<? extends Kante>[] getEdgeTypes(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass1);
+        if (elementClassToEdgeClass != null) {
+            Class<? extends Kante>[] edgeClasses = elementClassToEdgeClass.get(elementClass2);
+            if (edgeClasses != null) {
+                return edgeClasses;
+            }
+        } else {
+            elementClassToEdgeClass = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
+            ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass1, elementClassToEdgeClass);
+        }
+        ArrayList<Class<? extends Kante>> resultEdgeClasses = new ArrayList<Class<? extends Kante>>();
+        for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass1)) {
+            if (Kante.isConnecting(edgeClass, elementClass1, elementClass2)) {
+                resultEdgeClasses.add(edgeClass);
+            }
+        }
+        Class<? extends Kante>[] returnClasses = null;
+        int size = resultEdgeClasses.size();
+        if (size == 0) {
+            returnClasses = EMPTY_EDGE_CLASS_ARRAY;
+        } else {
+            returnClasses = new Class[resultEdgeClasses.size()];
+            System.arraycopy(resultEdgeClasses.toArray(), 0, returnClasses, 0, size);
+        }
+        //jetzt das gefundenen Kantenklassen-Array für beide Elementklassenkombinationen in den inneren HashMaps ablegen
+        elementClassToEdgeClass.put(elementClass2, returnClasses);
+        elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass2);
+        if (elementClassToEdgeClass == null) {
+            elementClassToEdgeClass = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
+            ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass2, elementClassToEdgeClass);
+        }
+        elementClassToEdgeClass.put(elementClass1, returnClasses);
+        return returnClasses;
+    }
+
+    //	static {
+    //		HashSet<Class<? extends ModelElement>> allElements= new HashSet<Class<? extends ModelElement>>(ALL_NODES_SET.size() + ALL_EDGES_SET.size());
+    //		allElements.addAll(ALL_NODES_SET);
+    //		allElements.addAll(ALL_EDGES_SET);
+    //		for (Class<? extends ModelElement> elementClass1 : allElements) {
+    //			for (Class<? extends ModelElement> elementClass2 : allElements) {
+    //				Class<? extends Kante>[] et = getEdgeTypes(elementClass1, elementClass2);
+    //				if (et.length==0)
+    //					continue;
+    //				System.err.println(elementClass1.getSimpleName() + "\t-\t" + elementClass2.getSimpleName());
+    //				System.err.println("\t" + Arrays.asList(et));
+    //			}
+    //		}
+    //	}
+
     static {
-//    	System.err.println(MetaPathDefinitions.AUFGABE_BEARBEITET_OBJEKTTYP.toString());
-//    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_ERLEDIGT_IN_ORGANISATIONSEINHEIT.toString());
-//    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_UNTERSTUETZT_DURCH_PHYSICHER_DV_BAUSTEIN.toString());
-//    	System.err.println(MetaPathDefinitions.TESTPFAD.toString());
-//    	System.err.println(MetaPathDefinitions.OBJEKTTYP_WIRD_GESPEICHERT_VON_LOGICSCHEM_SPEICHER.toString());
-//    	System.exit(0);
+        //    	System.err.println(MetaPathDefinitions.AUFGABE_BEARBEITET_OBJEKTTYP.toString());
+        //    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_ERLEDIGT_IN_ORGANISATIONSEINHEIT.toString());
+        //    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_UNTERSTUETZT_DURCH_PHYSICHER_DV_BAUSTEIN.toString());
+        //    	System.err.println(MetaPathDefinitions.TESTPFAD.toString());
+        //    	System.err.println(MetaPathDefinitions.OBJEKTTYP_WIRD_GESPEICHERT_VON_LOGICSCHEM_SPEICHER.toString());
+        //    	System.exit(0);
     }
-    
-	
-	/**
-	 * Liefert <code>true</code>, wenn die übergebenen Klasse eine
-	 * Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem
-	 * Teilmodell einen eigenen Container besitzt.
-	 */
-	public static final boolean isUnique(Class<?> elementClass) {
-		return UNIQUE_NODES.contains(elementClass);
-	}
 
-	/**
-	 * Prüft, ob die übergebene Klasse <code>abstract</code> ist. 
-	 * @param elementClass
-	 * @return
-	 */
-	public static final boolean isAbstract(Class<?> clazz){
-		return Modifier.isAbstract(clazz.getModifiers());
-	}
+    /**
+     * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell einen eigenen Container besitzt.
+     */
+    public static final boolean isUnique(final Class<?> elementClass) {
+        return UNIQUE_NODES.contains(elementClass);
+    }
 
-	
-	/**
-	 * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
-	 * 
-	 * @param elementClass
-	 * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
-	 */
-	public static final boolean isNodeType(Class<?> elementClass) {
-		return Knoten.class.isAssignableFrom(elementClass) || NodeContainer.class.isAssignableFrom(elementClass);
-	}
+    /**
+     * Prüft, ob die übergebene Klasse <code>abstract</code> ist.
+     * 
+     * @param elementClass
+     * @return
+     */
+    public static final boolean isAbstract(final Class<?> clazz) {
+        return Modifier.isAbstract(clazz.getModifiers());
+    }
 
-	/**
-	 * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
-	 * 
-	 * @param elementClass
-	 * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
-	 */
-	public static final boolean isBendpointType(Class<?> elementClass) {
-		return Knickpunkt.class.isAssignableFrom(elementClass) || BendpointContainer.class.isAssignableFrom(elementClass);
-	}
+    /**
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
+     * 
+     * @param elementClass
+     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     */
+    public static final boolean isNodeType(final Class<?> elementClass) {
+        return Knoten.class.isAssignableFrom(elementClass) || NodeContainer.class.isAssignableFrom(elementClass);
+    }
 
-	/**
-	 * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} ist.
-	 * 
-	 * @param elementClass
-	 * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
-	 */
-	public static final boolean isRealNodeType(Class<?> elementClass) {
-		return isNodeType(elementClass) && !isBendpointType(elementClass); 
-	}
-	
-	/**
-	 * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Kante} ist.
-	 * 
-	 * @param elementClass
-	 * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation ist, sonst <code>false</code>.
-	 */
-	public static final boolean isEdgeType(Class<?> elementClass) {
-		return Kante.class.isAssignableFrom(elementClass) || EdgeContainer.class.isAssignableFrom(elementClass);
-	}
-	
-	/**
-	 * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen
-	 * haben kann - also eine Assoziationsklasse ist.
-	 * @param elementClass
-	 * @return
-	 */
-	public static final boolean isAssociationClass(Class<?> elementClass){
-		if (!Kante.class.isAssignableFrom(elementClass))
-			return false;
-		Class<? extends Kante>[] edgeTypes = getEdgeTypes(elementClass.asSubclass(ModelElement.class));
-		return edgeTypes!=null && edgeTypes.length!=0;
-	}
-	
+    /**
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
+     * 
+     * @param elementClass
+     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     */
+    public static final boolean isBendpointType(final Class<?> elementClass) {
+        return Knickpunkt.class.isAssignableFrom(elementClass) || BendpointContainer.class.isAssignableFrom(elementClass);
+    }
 
+    /**
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} ist.
+     * 
+     * @param elementClass
+     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     */
+    public static final boolean isRealNodeType(final Class<?> elementClass) {
+        return isNodeType(elementClass) && !isBendpointType(elementClass);
+    }
 
-	/**
-	 * Array aller Pfade, die in der grafischen Ansicht als Interebenenbeziehungen
-	 * dargestellt werden. 
-	 */
-	@SuppressWarnings("unchecked")
+    /**
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Kante} ist.
+     * 
+     * @param elementClass
+     * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation ist, sonst <code>false</code>.
+     */
+    public static final boolean isEdgeType(final Class<?> elementClass) {
+        return Kante.class.isAssignableFrom(elementClass) || EdgeContainer.class.isAssignableFrom(elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse ist.
+     * 
+     * @param elementClass
+     * @return
+     */
+    public static final boolean isAssociationClass(final Class<?> elementClass) {
+        if (!Kante.class.isAssignableFrom(elementClass)) {
+            return false;
+        }
+        Class<? extends Kante>[] edgeTypes = getEdgeTypes(elementClass.asSubclass(ModelElement.class));
+        return edgeTypes != null && edgeTypes.length != 0;
+    }
+
+    /**
+     * Array aller Pfade, die in der grafischen Ansicht als Interebenenbeziehungen dargestellt werden.
+     */
+    @SuppressWarnings("unchecked")
     public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = {
-		new MetaPath(Aufgabe.class, ABKonfiguration.class, new Class[][]{{AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class}}),
-		new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][]{{PdvbkAwbVerbindung.class}}),
-	};
-	
-	/**
-	 * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.  
-	 * 
-	 * @param elementClass
-	 * @return
-	 */
-	public final static boolean isInterLayerStartClass(Class<? extends ModelElement> elementClass){
-		for (MetaPath mp : INTER_LAYER_CONNECTED_ELEMENT_PATHES)
-			if (mp.getStartClass().isAssignableFrom(elementClass))
-				return true;
-		return false;
-	}
-	
-	/**
-	 * Gibt alle Startklassen zurück, die über eine Interebenenbeziehung der spezifizierten Endklasse
-	 * verfügen.
-	 * 
-	 * @param endClass
-	 * 			Endklasse der Interebenenbeziehung
-	 * @return
-	 */
-	public final static Set<Class<? extends ModelElement>> getInterLayerStartClasses(Class<? extends ModelElement> endClass) {
-		Set<Class<? extends ModelElement>> startClasses =  new HashSet<Class<? extends ModelElement>>();
-		for (MetaPath path: INTER_LAYER_CONNECTED_ELEMENT_PATHES)
-			if(path.getEndClass().isAssignableFrom(endClass))
-				startClasses.add(path.getStartClass());
-		return startClasses;
-	}
-	
-	
+            new MetaPath(Aufgabe.class, ABKonfiguration.class, new Class[][] {
+                {
+                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class
+                }
+            }), new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
+                {
+                    PdvbkAwbVerbindung.class
+                }
+            }),
+    };
 
-	/**
-	 * Erzeugt eine neue Instanz eines Modellelementes.<br>
-	 * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte.
-	 * @param elementClass 
-	 * 		Unterklasse von <code>ModelElement</code>
-	 * @return
-	 */
-	public static final ModelElement createElement(Class<? extends ModelElement> elementClass){
-		return createElement(elementClass, true);
-	}
-	
-	/**
-	 * Erzeugt eine neue Instanz eines Modellelementes.<br>
-	 * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code>
-	 * übergeben wurde.
-	 * @param elementClass 
-	 * 		Unterklasse von <code>ModelElement</code>
-	 * @param log
-	 * 		wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
-	 * @return 
-	 * 		neues ModelElement der übergebenen Klasse oder <code>null</code>
-	 */
-	public static final ModelElement createElement(Class<? extends ModelElement> elementClass, boolean log){
-		try{
-			return elementClass.newInstance();
-		} catch (Exception e){
-			if (log)
-				Log.show(Log.ERROR, "Konnte Klasse " + elementClass.getName() + " nicht erstellen.", e);
-			return null;
-		}
-	}
-
-	/**
-	 * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
-	 * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
-	 * @param me 
-	 * 		ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
-	 * @param log
-	 * 		wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
-	 * @return 
-	 * 		neues ModelElement oder <code>null</code>
-	 */
-	public static final ModelElement createElement(ModelElement me, boolean log){
-		return createElement(me.getClass(), log);
-	}
-
-	/**
-	 * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen
-	 * Klassennamen für den übergebenen alten Klassennamen. <br>
-	 * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten
-	 * Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
-	 * aktuelle ist.
-	 * 
-	 * @param oldName
-	 * @return
-	 */
-	private static final String getActualClassName(String oldName) {
-		String newName = oldToNewName.get(oldName);
-		//wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
-		// Namen der aktuelle
-		if (newName == null)
-			return oldName;
-		//solange immer nach neuen Ersetzungen suchen, bis es keine mehr gibt
-		// -> den letzten
-		//gefundenen Namen zurückgeben
-		while (true) {
-			oldName = newName;
-			newName = oldToNewName.get(oldName);
-			if (newName == null)
-				return oldName;
-		}
-	}
-	
-	/**
-	 * Mappt vom Klassennamen auf die Klasse.
-	 */
-	private static final HashMap<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
-	
-	/**
-	 * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem
-	 * simplen Klassenamen bestehen.
-	 * 
-	 * @param classname 
-	 * 			String mit der Klassenbezeichnung
-	 * @return Class
-	 */
-	public static final Class<? extends ModelElement> getClassForName(String classname) {
-		if (classname == null || classname.trim().equals(""))
-			return null;
-
-		Class<? extends ModelElement> classObject = CLASS_NAME_TO_CLASS_MAP.get(classname);
-		if (classObject !=null)
-			return classObject;
-		
-		String fullClassName = null;
-		if (!classname.startsWith("de.imise.tool3lgm.")) {
-			//die allgemeinen (nicht metamodellabhängigen)Klassen liegen in einem anderen
-			//package als alle Metamodellklassen. Das hier sollte eigentlich nicht die
-			//ModelConstants wissen, sondern das sind Tool3lgmConstants, da die Klassen
-			//nicht modellabhängig sind
-			if (classname.equals(Knickpunkt.class.getSimpleName()) || 
-				classname.equals(TextfeldFach.class.getSimpleName()) ||
-				classname.equals(TextfeldLog.class.getSimpleName()) ||
-				classname.equals(TextfeldPhy.class.getSimpleName()))
-				fullClassName = Tool3lgmConstants.ELEMENTS_PACKAGE_NAME + classname;
-			else
-				fullClassName = Tool3lgmConstants.NODE_PACKAGE_NAME + classname;
-		}else {
-			fullClassName = classname;
-		}
-		
-		Class<? extends ModelElement> clazz = null;
-		
-		try {
-			clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
-		}catch (Exception e) {
-			try {
-				fullClassName = Tool3lgmConstants.TRACE_PACKAGE_NAME + classname;
-				clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
-			}catch (Exception ex) {
-				try {
-					fullClassName = Tool3lgmConstants.GD_PACKAGE_NAME + classname;
-					clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
-				}
-				catch(Exception exc) {
-					String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-					String actualClassName = getActualClassName(simpleClassName);
-					if (!actualClassName.equals(simpleClassName)){
-						clazz = getClassForName(actualClassName);
-						CLASS_NAME_TO_CLASS_MAP.put(simpleClassName, clazz);
-						CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
-						return clazz;
-					}
-					return null;
-				}
-			}
-		}
-		
-		CLASS_NAME_TO_CLASS_MAP.put(classname, clazz);
-		CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
-		
-		return clazz;
-	}
-
-	/**
-	 * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-	 * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell"
-	 * zurück gegeben.)
-	 * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
-	 * @return String aus dem geladenen ResourcenBundle
-	 */
-	public static final String getDisplayableName(Class<? extends ModelElement> clazz) {
-		if (clazz == null)
-			return null;
-		while (clazz != ModelElement.class) {
-			try {
-				return Tool3lgmConstants.getResString(clazz.getSimpleName());
-			} catch (MissingResourceException mre) {
-				clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Liefert den Standardanzeigenamen für ein Modelelement der übergebenen Art
-	 * @param me
-	 * @return
-	 * @see #getDisplayableName(Class)
-	 */
-	public static final String getDisplayableName(ModelElement me) {
-		return getDisplayableName(me.getClass());
-	}
-
-/*************************/
-	
-	/**
-	 * @param edgeClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getForwardMetaAssociationName(Class<? extends Kante> edgeClass) {
-		return getForwardMetaAssociationName(edgeClass, false, false);
-	}
-
-	/**
-	 * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die
-	 * Kante verbindet.
-	 * 
-	 * @param edgeClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getFullForwardMetaAssociationName(Class<? extends Kante> edgeClass){
-		return getForwardMetaAssociationName(edgeClass, true, true);
-	}
-	
-	/**
-	 * @param edgeClass
-	 * @param appendPrefixClass
-	 * @param appendPostfixClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getForwardMetaAssociationName(Class<? extends Kante> edgeClass, boolean appendPrefixClass, boolean appendPostfixClass) {
-		return getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
-	}
-
-	/**
-	 * @param edgeClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getBackwardMetaAssociationName(Class<? extends Kante> edgeClass) {
-		return getBackwardMetaAssociationName(edgeClass, false, false);
-	}
-	
-	/**
-	 * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die
-	 * Kante verbindet.
-	 * 
-	 * @param edgeClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getFullBackwardMetaAssociationName(Class<? extends Kante> edgeClass){
-		return getBackwardMetaAssociationName(edgeClass, true, true);
-	}
-
-	/**
-	 * @param edgeClass
-	 * @param appendPrefixClass
-	 * @param appendPostfixClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getBackwardMetaAssociationName(Class<? extends Kante> edgeClass, boolean appendPrefixClass, boolean appendPostfixClass) {
-		return getMetaAssociationName(edgeClass, true, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
-	}
-	
-	/**
-	 * @param edgeClass
-	 * @param switchDefinedDirection
-	 * @param direction
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getFullMetaAssociationName(Class<? extends Kante> edgeClass, boolean switchDefinedDirection, int direction) {
-		return getMetaAssociationName(edgeClass, switchDefinedDirection, direction, true, true);
-	}
-
-	
-	/**
-	 * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
-	 * 
-	 * @param edgeClass
-	 * @param switchDefinedDirection
-	 * 		gibt an, ob die Bedeutung der Kante von der Startklasse zur	Endklasse (<code>false</code>) oder von der Endklasse zur 
-	 * 		Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die beiden Elementklasse
-	 * 		gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-	 * @param direction
-	 * 		Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur eine
-	 * 		Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier die Richtung 
-	 * 		angegeben werden für die die bedeutung zurück gegeben werden soll.<br>	  
-	 * 		Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die 
-	 * 		eigentlich 2 Assoziationen sind, aber aus allerlei nicht nachvollzierbaren Gründen in eine gepackt wurden.<br>
-	 *		Beispiel 1: {@link AufObjVerbindung} = Assoziation zw. Startklasse {@link Aufgabe} und Endklasse {@link Objekttyp}.<br>
-	 *		<ul>
-	 *			<li>
-	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-	 *				"Aufgabe bearbeitet Objekttyp"
-	 *			</li>
-	 *			<li>
-	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-	 *				"Aufgabe interpretiert Objekttyp"
-	 *			</li>
-	 *			<li>
-	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-	 *				"Objekttyp wird interpretiert von Aufgabe "
-	 *			</li>
-	 *			<li>
-	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-	 *				"Objekttyp wird bearbeitet von Aufgabe"
-	 *			</li>
-	 *		</ul>
-	 * 
-	 * @return
-	 */
-	public static String getMetaAssociationName(Class<? extends Kante> edgeClass, boolean switchDefinedDirection, int direction) {
-		StringBuilder sb = new StringBuilder();
-		if (!switchDefinedDirection) {
-			try {
-				sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f"));
-			} catch (Exception e) {
-				if (direction == Doppelkante.FORWARD) {
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
-				} else if (direction == Doppelkante.BACKWARD) {
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
-				} else {
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
-					sb.append(" / ");
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
-				}
-			}
-		} else {
-			try {
-				sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b"));
-			} catch (Exception e) {
-				if (direction == Doppelkante.FORWARD) {
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
-				} else if (direction == Doppelkante.BACKWARD) {
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
-				} else {
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
-					sb.append(" / ");
-					sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
-				}
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * 
-	 * @param edgeClass
-	 * @param switchDefinedDirection
-	 * @param direction
-	 * @param appendPrefixClass
-	 * @param appendPostfixClass
-	 * @return
-	 * @see #getMetaAssociationName(Class, boolean, int)
-	 */
-	public static String getMetaAssociationName(Class<? extends Kante> edgeClass, boolean switchDefinedDirection, int direction, boolean appendPrefixClass, boolean appendPostfixClass) {
-		if (!appendPrefixClass && !appendPostfixClass)
-			return getMetaAssociationName(edgeClass, switchDefinedDirection, direction);
-		StringBuilder sb = new StringBuilder();
-		if (appendPrefixClass){
-			sb.append(getDisplayableName(!switchDefinedDirection ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass)));
-			sb.append(" ");
-		}
-		sb.append(getMetaAssociationName(edgeClass, switchDefinedDirection, direction));
-		if (appendPostfixClass){
-			sb.append(" ");
-			sb.append(getDisplayableName(!switchDefinedDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass)));
-		}
-		return sb.toString();
-	}
-
-	
-	/**
-	 * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart
-	 * Teilemente untergeordnet werden kann.
-	 */
-	private static final HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
-	/**
-	 * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart
-	 * als Teilement untergeordnet werden kann.
-	 */
-	private static final HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
-	//die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
-	//gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
-	//kann man die Warnungen nur für die ganze Datei unterdrücken
-	static{fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES();}
-	@SuppressWarnings("unchecked")
-    private static final void fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES(){
-		for (int i=0; i<ALL_NODES.length; i++){
-			//Hole alle Kantenklassen der Zielklasse und suche alle PartOfBeziehungen
-			for (Class<? extends Kante> c : getEdgeTypes(ALL_NODES[i])) {
-				if (PartOfBeziehung.class.isAssignableFrom(c)) {
-					Class<? extends PartOfBeziehung>[] edgeClasses = null; 
-					Class<? extends PartOfBeziehung> poClass = c.asSubclass(PartOfBeziehung.class);
-					if (PartOfBeziehung.isParentClass(poClass, ALL_NODES[i])){
-						edgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(ALL_NODES[i]);
-						if (edgeClasses==null){
-							edgeClasses = new Class[1];
-							edgeClasses[0] = poClass;
-							ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
-						}else{
-							Class<? extends PartOfBeziehung>[] newEdgeClasses = new Class[edgeClasses.length+1];
-							System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
-							newEdgeClasses[edgeClasses.length] = poClass;
-							ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
-						}
-					}
-					if (PartOfBeziehung.isPartClass(poClass, ALL_NODES[i])){
-						edgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(ALL_NODES[i]);
-						if (edgeClasses==null){
-							edgeClasses = new Class[1];
-							edgeClasses[0] = poClass;
-							ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
-						}else {
-							Class<? extends PartOfBeziehung>[] newEdgeClasses = new Class[edgeClasses.length+1];
-							System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
-							newEdgeClasses[edgeClasses.length] = poClass;
-							ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
-						}
-					}
-				}
-			}
-		}
-/*		System.err.println("ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES");
-		for (Class<? extends ModelElement> meClass : ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.keySet()){
-			System.err.println(meClass.getSimpleName() + " " + Arrays.asList(ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(meClass)));
-		}
-		System.err.println();
-		System.err.println("ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES");
-		for (Class<? extends ModelElement> meClass : ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.keySet()){
-			System.err.println(meClass.getSimpleName() + " " + Arrays.asList(ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(meClass)));
-		}
-*/		
-	}
-	
-	/**
-	 * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart
-	 * andere Elemente als Teile untergeordnet werden können.
-	 * 
-	 * @return
-	 */
-	public static Class<? extends PartOfBeziehung>[] getHasPartsEdgeClasses(Class<? extends ModelElement> elementClass) {
-		return ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass); 
-	}
-	
-	/**
-	 * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart
-	 * anderen Elementen als Teilelement untergeordnet werden kann.
-	 * 
-	 * @return
-	 */
-	public static Class<? extends PartOfBeziehung>[] getIsPartOfEdgeClasses(Class<? extends ModelElement> elementClass) {
-		return ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass); 
-	}
-	
-
-/*******************/
-	
-	
-	/**
-	 * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren
-	 * nicht, dass man von ihnen auf die Klasse zurückschließen kann. Sie dienen
-	 * lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei
-	 * etwas lesbarer zu gestalten.
-	 * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
-	 * @return String mit Namenskuerzel
-	 */
-	public static final String getShortName(Class<? extends ModelElement> elementClass)	{
-		
-		//HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
-		if (elementClassToHashShortName == null){
-			elementClassToHashShortName = new HashMap<Class<? extends ModelElement>, String>();
-			//Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
-			HashSet<String> allShortNames = new HashSet<String>();
-			loop1: for (int i = 0; i < ALL_NODES.length; i++) {
-				String s = ALL_NODES[i].getSimpleName();
-				//wenn der Klassenname aus weniger als 4 Zeichen besteht
-				if (s.length() <= 3) {
-					elementClassToHashShortName.put(ALL_NODES[i], s.toUpperCase());
-					continue;
-				}
-				//mehr als 3 Zeichen
-				StringBuilder shortName = new StringBuilder(3);
-				for (int j = 0; j < s.length(); j++) {
-					//suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
-					String character = s.substring(j,j+1);
-					if (character.toUpperCase().equals(character)){
-						shortName.append(character);
-						//wenn 3 Großbuchstaben gefunden wurden
-						if (shortName.length() == 3) {
-							String sn = shortName.toString();
-							//wenn es den ShortName noch nicht gibt
-							if (!allShortNames.contains(sn)){
-								allShortNames.add(sn);
-								elementClassToHashShortName.put(ALL_NODES[i], sn);
-								continue loop1;
-							}
-							//es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
-							shortName.deleteCharAt(2);
-						}
-					}
-				}
-				//hier kommt er nur hin, wenn keine 3 Großbuchstaben gefunden wurden
-				//short name hat 0 bis 2 Zeichen
-				
-				//wenn genau 2 Großbuchstaben gefunden wurden
-				if (shortName.length() == 2) {
-					int lastUpperCharInClassName = 0;
-					for (int j = 0; j < shortName.length(); j++) {
-						char shortNameChar = shortName.charAt(j);
-						for (; lastUpperCharInClassName < s.length(); lastUpperCharInClassName++) {
-							if (s.charAt(lastUpperCharInClassName) == shortNameChar) {
-								break;
-							}
-						}
-					}
-					//lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
-					
-					//solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen, 
-					//bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
-					while (++lastUpperCharInClassName < s.length()) {
-						shortName.append(s.charAt(lastUpperCharInClassName));
-						String sn = shortName.toString().toUpperCase();
-						//wenn es den ShortName noch nicht gibt
-						if (!allShortNames.contains(sn)){
-							allShortNames.add(sn);
-							elementClassToHashShortName.put(ALL_NODES[i], sn);
-							continue loop1;
-						}
-						//es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
-						shortName.deleteCharAt(2);
-					}
-				}
-
-				
-				//es wurden keine 3 eindutigen Buchstaben nach Großbuchstaben gefunden -> Nimm einfach die ersten beiden
-				//Buchstaben und suche einen Folgebuchstaben bis 3 eindeutige Zeichen gefunden werden (das geht immer gut,
-				//wenn die Klassennamen eindeutig sind (was immer der Fall ist, wenn sie im selben package liegen) und hier
-				///unten fest steht, dass der Name mind. 4 Zeichen lang ist)
-				shortName.setLength(0);
-				shortName.append(s.charAt(0));
-				shortName.append(s.charAt(1));
-				for (int j = 2; j < s.length(); j++) {
-					shortName.append(s.charAt(j));
-					String sn = shortName.toString().toUpperCase();
-					// wenn es den ShortName noch nicht gibt
-					if (!allShortNames.contains(sn)) {
-						allShortNames.add(sn);
-						elementClassToHashShortName.put(ALL_NODES[i], sn);
-						continue loop1;
-					}
-					//es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
-					shortName.deleteCharAt(2);
-				}
-				
-				//wenn auch das nicht gekalppt hat (der Fall dürfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
-				//da sie dann alle etwas eindeutiges bei s = class.getShortName() geliefert haben)
-				//-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
-				String sn = s.substring(0,3).toUpperCase();
-				allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
-				elementClassToHashShortName.put(ALL_NODES[i], sn);
-			}
-		}
-
-		//Knoten
-		if (Knoten.class.isAssignableFrom(elementClass)){
-			Object o = elementClassToHashShortName.get(elementClass);
-			//ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
-			if (o == null)
-				return NO_MODEL_ELEMENT_SHORT_NAME;
-			return elementClassToHashShortName.get(elementClass).toString();
-		//Kanten
-		} else if (Kante.class.isAssignableFrom(elementClass)) {
-			return EDGE_SHORT_NAME;
-		}
-		return NO_MODEL_ELEMENT_SHORT_NAME;
-	}
-
-	
-	/**
-	 * gibt die Ebene eine Objekttypes zurueck
-	 * @param type Typkonstante, die den Objekttypen spezifiziert
-	 * @return int Ebene
-	 */
-	public static final int layerFor(Class<? extends ModelElement> elementClass) {
-		if (Knoten.class.isAssignableFrom(elementClass)) {
-			if (ALL_DOMAIN_LAYER_NODES_SET.contains(elementClass))
-				return DOMAIN_LAYER;
-			if (ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET.contains(elementClass))
-				return INTER_DOMAIN_LOGICAL_LAYER;
-			if (ALL_LOGICAL_LAYER_NODES_SET.contains(elementClass))
-				return LOGICAL_LAYER;
-			if (ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET.contains(elementClass))
-				return INTER_LOGICAL_PHYSICAL_LAYER;
-			if (ALL_PHYSICAL_LAYER_NODES_SET.contains(elementClass))
-				return PHYSICAL_LAYER;
-		} else {
-			if (ALL_DOMAIN_LAYER_EDGES_SET.contains(elementClass))
-				return DOMAIN_LAYER;
-			if (ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET.contains(elementClass))
-				return INTER_DOMAIN_LOGICAL_LAYER;
-			if (ALL_LOGICAL_LAYER_EDGES_SET.contains(elementClass))
-				return LOGICAL_LAYER;
-			if (ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET.contains(elementClass))
-				return INTER_LOGICAL_PHYSICAL_LAYER;
-			if (ALL_PHYSICAL_LAYER_EDGES_SET.contains(elementClass))
-				return PHYSICAL_LAYER;
-
-		}
-		if (elementClass == TextfeldFach.class)
-			return DOMAIN_LAYER;
-		if (elementClass == TextfeldLog.class)
-			return LOGICAL_LAYER;
-		if (elementClass == TextfeldPhy.class)
-			return PHYSICAL_LAYER;
-		return NO_LAYER;
-	}
-
-	/**
-	 * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt
-	 * diesen ggf. zurück
-	 * 
-	 * @param obj
-	 *            Dialog zu diesem Objekt
-	 * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
-	 */
-	public static ElementPropertyDialog hasObjektDialog(ModelElement obj) {
-		for (ElementPropertyDialog pd : dialogs) {
-			if (obj == pd.getModelElement())
-				return pd;
-		}
-		return null;
-	}
-
-	/**
-	 * Gibt Verctor mit allen geoeffneten Dialogen zurueck
-	 * 
-	 * @return ArrayList mit allen geoeffneten Dialogen
-	 */
-	public static final ArrayList<ElementPropertyDialog> getDialogs() {
-		return dialogs;
-	}
-
-	/**
-	 * entfernt einen Dialog aus dem ArrayList mit allen geoeffneten Dialogen
-	 * 
-	 * @param modelElement
-	 *            Element dessen Dialog aus dem ArrayList entfernt werden soll
-	 */
-	public static final void removeDialog(ModelElement modelElement) {
-		for (int n = 0; n < dialogs.size(); n++) {
-			if (modelElement == dialogs.get(n).getModelElement())
-				dialogs.remove(n--);
-		}
-	}
-
-	/**
-	 * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen 
-	 * untergeordnet (<code>isMaster==false</code>) oder übergeordnet (<code>isMaster==true</code>)
-	 * wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen
-	 * mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse
-	 * (bei <code>isMaster==true</code>) zuweisungskompatibel zur übergebenen Elementklasse ist.
-	 * 
-	 * @param elementClass
-	 * @param isMaster
-	 * 		wenn <code>true</code> soll die übergebene Elementart die übergeordnete sein, sonst die untergeordnete
-	 * @return
-	 * 		Array von Kantenklassen, die die übergebene Elementart unterordnen
-	 */
-    @SuppressWarnings("unchecked")
-	private static Class<? extends Composition>[] getCompositionEdgeTypes(Class<? extends ModelElement> elementClass, boolean isMaster){
-		Class<? extends Kante>[] elementClassEdges = getEdgeTypes(elementClass);
-		ArrayList<Class<? extends Kante>> subEdgeTypes = new ArrayList<Class<? extends Kante>>(elementClassEdges.length);
-		for (Class<? extends Kante> edgeClass : elementClassEdges){
-			if (Composition.class.isAssignableFrom(edgeClass))
-				if (isMaster){
-					if (Kante.isStartClass(edgeClass, elementClass))
-						subEdgeTypes.add(edgeClass);
-				}else {
-					if (Kante.isEndClass(edgeClass, elementClass))
-						subEdgeTypes.add(edgeClass);
-				}
-		}
-		int size = subEdgeTypes.size();
-		if (size==0)
-			return EMPTY_COMPOSITION_CLASS_ARRAY;
-		Class<? extends Composition>[] returnClasses = new Class[size];
-		System.arraycopy(subEdgeTypes.toArray(), 0, returnClasses, 0, size);
-		return returnClasses;
-	}
-	
-/*    static{
-    	for (Class<? extends ModelElement> c : ALL_NODES){
-    		System.err.println(c.getSimpleName() + "\n\t" + Arrays.toString(getSubordinationEdgeTypesAsMaster(c)));
-    	}
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
+     * 
+     * @param elementClass
+     * @return
+     */
+    public final static boolean isInterLayerStartClass(final Class<? extends ModelElement> elementClass) {
+        for (MetaPath mp : INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
+            if (mp.getStartClass().isAssignableFrom(elementClass)) {
+                return true;
+            }
+        }
+        return false;
     }
- */   
-	/**
-	 * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen 
-	 * übergeordnet wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen
-	 * mindestens eine Startklasse zuweisungskompatibel zur übergebenen Elementklasse ist.
-	 * 
-	 * @param elementClass
-	 * @return
-	 * 		Array von Kantenklassen, die die übergebene Elementart überordnen
-	 */
-	public static Class<? extends Composition>[] getCompositionEdgeTypesForMaster(Class<? extends ModelElement> elementClass){
-		return getCompositionEdgeTypes(elementClass, true);
-	}
-	
-	/**
-	 * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen 
-	 * untergeordnet wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen
-	 * mindestens eine Endklasse zuweisungskompatibel zur übergebenen Elementklasse ist.
-	 * 
-	 * @param elementClass
-	 * @return
-	 * 		Array von Kantenklassen, die die übergebene Elementart unterordnen
-	 */
-	public static Class<? extends Composition>[] getCompositionEdgeTypesForSlave(Class<? extends ModelElement> elementClass){
-		return getCompositionEdgeTypes(elementClass, false);
-	}
-    
-	/**
-	 * Liefert alle Elementarten, die der übergebenen Elementart über eine Komposition untergeordnet sind.
-	 * 
-	 * @param masterElementClass
-	 * 		Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition
-	 * 		verbunden sein können.
-	 * @return
-	 */
+
+    /**
+     * Gibt alle Startklassen zurück, die über eine Interebenenbeziehung der spezifizierten Endklasse verfügen.
+     * 
+     * @param endClass Endklasse der Interebenenbeziehung
+     * @return
+     */
+    public final static Set<Class<? extends ModelElement>> getInterLayerStartClasses(final Class<? extends ModelElement> endClass) {
+        Set<Class<? extends ModelElement>> startClasses = new HashSet<Class<? extends ModelElement>>();
+        for (MetaPath path : INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
+            if (path.getEndClass().isAssignableFrom(endClass)) {
+                startClasses.add(path.getStartClass());
+            }
+        }
+        return startClasses;
+    }
+
+    /**
+     * Erzeugt eine neue Instanz eines Modellelementes.<br>
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte.
+     * 
+     * @param elementClass Unterklasse von <code>ModelElement</code>
+     * @return
+     */
+    public static final ModelElement createElement(final Class<? extends ModelElement> elementClass) {
+        return createElement(elementClass, true);
+    }
+
+    /**
+     * Erzeugt eine neue Instanz eines Modellelementes.<br>
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
+     * 
+     * @param elementClass Unterklasse von <code>ModelElement</code>
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
+     */
+    public static final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
+        try {
+            return elementClass.newInstance();
+        } catch (Exception e) {
+            if (log) {
+                Log.show(Log.ERROR, "Konnte Klasse " + elementClass.getName() + " nicht erstellen.", e);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
+     * 
+     * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
+     * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @return neues ModelElement oder <code>null</code>
+     */
+    public static final ModelElement createElement(final ModelElement me, final boolean log) {
+        return createElement(me.getClass(), log);
+    }
+
+    /**
+     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
+     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der aktuelle ist.
+     * 
+     * @param oldName
+     * @return
+     */
+    private static final String getActualClassName(String oldName) {
+        String newName = oldToNewName.get(oldName);
+        //wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
+        // Namen der aktuelle
+        if (newName == null) {
+            return oldName;
+        }
+        //solange immer nach neuen Ersetzungen suchen, bis es keine mehr gibt
+        // -> den letzten
+        //gefundenen Namen zurückgeben
+        while (true) {
+            oldName = newName;
+            newName = oldToNewName.get(oldName);
+            if (newName == null) {
+                return oldName;
+            }
+        }
+    }
+
+    /**
+     * Mappt vom Klassennamen auf die Klasse.
+     */
+    private static final HashMap<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
+
+    /**
+     * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
+     * 
+     * @param classname String mit der Klassenbezeichnung
+     * @return Class
+     */
+    public static final Class<? extends ModelElement> getClassForName(final String classname) {
+        if (classname == null || classname.trim().equals("")) {
+            return null;
+        }
+
+        Class<? extends ModelElement> classObject = CLASS_NAME_TO_CLASS_MAP.get(classname);
+        if (classObject != null) {
+            return classObject;
+        }
+
+        String fullClassName = null;
+        if (!classname.startsWith("de.imise.tool3lgm.")) {
+            //die allgemeinen (nicht metamodellabhängigen)Klassen liegen in einem anderen
+            //package als alle Metamodellklassen. Das hier sollte eigentlich nicht die
+            //ModelConstants wissen, sondern das sind Tool3lgmConstants, da die Klassen
+            //nicht modellabhängig sind
+            if (classname.equals(Knickpunkt.class.getSimpleName()) || classname.equals(TextfeldFach.class.getSimpleName()) || classname.equals(TextfeldLog.class.getSimpleName()) || classname.equals(TextfeldPhy.class.getSimpleName())) {
+                fullClassName = Tool3lgmConstants.ELEMENTS_PACKAGE_NAME + classname;
+            } else {
+                fullClassName = Tool3lgmConstants.NODE_PACKAGE_NAME + classname;
+            }
+        } else {
+            fullClassName = classname;
+        }
+
+        Class<? extends ModelElement> clazz = null;
+
+        try {
+            clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
+        } catch (Exception e) {
+            try {
+                fullClassName = Tool3lgmConstants.TRACE_PACKAGE_NAME + classname;
+                clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
+            } catch (Exception ex) {
+                try {
+                    fullClassName = Tool3lgmConstants.GD_PACKAGE_NAME + classname;
+                    clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
+                } catch (Exception exc) {
+                    String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+                    String actualClassName = getActualClassName(simpleClassName);
+                    if (!actualClassName.equals(simpleClassName)) {
+                        clazz = getClassForName(actualClassName);
+                        CLASS_NAME_TO_CLASS_MAP.put(simpleClassName, clazz);
+                        CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
+                        return clazz;
+                    }
+                    return null;
+                }
+            }
+        }
+
+        CLASS_NAME_TO_CLASS_MAP.put(classname, clazz);
+        CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
+
+        return clazz;
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * 
+     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public static final String getDisplayableName(Class<? extends ModelElement> clazz) {
+        if (clazz == null) {
+            return null;
+        }
+        while (clazz != ModelElement.class) {
+            try {
+                return Tool3lgmConstants.getResString(clazz.getSimpleName());
+            } catch (MissingResourceException mre) {
+                clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Liefert den Standardanzeigenamen für ein Modelelement der übergebenen Art
+     * 
+     * @param me
+     * @return
+     * @see #getDisplayableName(Class)
+     */
+    public static final String getDisplayableName(final ModelElement me) {
+        return getDisplayableName(me.getClass());
+    }
+
+    /*************************/
+
+    /**
+     * @param edgeClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+        return getForwardMetaAssociationName(edgeClass, false, false);
+    }
+
+    /**
+     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Kante verbindet.
+     * 
+     * @param edgeClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getFullForwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+        return getForwardMetaAssociationName(edgeClass, true, true);
+    }
+
+    /**
+     * @param edgeClass
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+        return getBackwardMetaAssociationName(edgeClass, false, false);
+    }
+
+    /**
+     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Kante verbindet.
+     * 
+     * @param edgeClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getFullBackwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+        return getBackwardMetaAssociationName(edgeClass, true, true);
+    }
+
+    /**
+     * @param edgeClass
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, true, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @param switchDefinedDirection
+     * @param direction
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getFullMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int direction) {
+        return getMetaAssociationName(edgeClass, switchDefinedDirection, direction, true, true);
+    }
+
+    /**
+     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
+     * 
+     * @param edgeClass
+     * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
+     *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
+     * @param direction Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
+     *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
+     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2 Assoziationen sind, aber aus allerlei nicht nachvollzierbaren Gründen in eine gepackt wurden.<br>
+     *            Beispiel 1: {@link AufObjVerbindung} = Assoziation zw. Startklasse {@link Aufgabe} und Endklasse {@link Objekttyp}.<br>
+     *            <ul>
+     *            <li>
+	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt "Aufgabe bearbeitet Objekttyp"</li>
+     *            <li>
+	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt "Aufgabe interpretiert Objekttyp"</li>
+     *            <li>
+	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt "Objekttyp wird interpretiert von Aufgabe "</li>
+     *            <li>
+	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt "Objekttyp wird bearbeitet von Aufgabe"</li>
+     *            </ul>
+     * @return
+     */
+    public static String getMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int direction) {
+        StringBuilder sb = new StringBuilder();
+        if (!switchDefinedDirection) {
+            try {
+                sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f"));
+            } catch (Exception e) {
+                if (direction == Doppelkante.FORWARD) {
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
+                } else if (direction == Doppelkante.BACKWARD) {
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
+                } else {
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
+                    sb.append(" / ");
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
+                }
+            }
+        } else {
+            try {
+                sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b"));
+            } catch (Exception e) {
+                if (direction == Doppelkante.FORWARD) {
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
+                } else if (direction == Doppelkante.BACKWARD) {
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
+                } else {
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
+                    sb.append(" / ");
+                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @param edgeClass
+     * @param switchDefinedDirection
+     * @param direction
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int direction, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        if (!appendPrefixClass && !appendPostfixClass) {
+            return getMetaAssociationName(edgeClass, switchDefinedDirection, direction);
+        }
+        StringBuilder sb = new StringBuilder();
+        if (appendPrefixClass) {
+            sb.append(getDisplayableName(!switchDefinedDirection ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass)));
+            sb.append(" ");
+        }
+        sb.append(getMetaAssociationName(edgeClass, switchDefinedDirection, direction));
+        if (appendPostfixClass) {
+            sb.append(" ");
+            sb.append(getDisplayableName(!switchDefinedDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass)));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart Teilemente untergeordnet werden kann.
+     */
+    private static final HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
+    /**
+     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart als Teilement untergeordnet werden kann.
+     */
+    private static final HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
+    //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
+    //gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
+    //kann man die Warnungen nur für die ganze Datei unterdrücken
+    static {
+        fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES();
+    }
+
     @SuppressWarnings("unchecked")
-	public static final Class<? extends ModelElement>[] getSlaveElementTypes(Class<? extends ModelElement> masterElementClass) {
-		Class<? extends Composition>[] compositions = getCompositionEdgeTypesForMaster(masterElementClass);
-		if (compositions.length == 0)
-			return EMPTY_ELEMENT_CLASS_ARRAY;
-		ArrayList<Class<? extends ModelElement>> slaveElementClasses = new ArrayList<Class<? extends ModelElement>>(compositions.length);
-		for (Class<? extends Composition> compClass : compositions) {
-			Class<? extends ModelElement> slaveType = Composition.getSlaveType(compClass);
-			if (!slaveElementClasses.contains(slaveType))
-				slaveElementClasses.add(slaveType);
-		}
-		int size = slaveElementClasses.size();
-		Class<? extends ModelElement>[] returnClasses = new Class[size];
-		System.arraycopy(slaveElementClasses.toArray(), 0, returnClasses, 0, size);
-		return returnClasses;
-	}
-	
-	/**
-	 * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen
-	 * Klasse untergeordnet ist. Das erkennt man daran, dass die übergebene Klasse zuweisungskompatibel
-	 * zu einer Endklasse einer Kantenklasse ist.
-	 * 
-	 * @param elementClass
-	 * @return
-	 * 		<code>true</code>, wenn das übergebene ein untergeordnetes Element ist
-	 */
-	public static boolean isSlaveType(Class<? extends ModelElement> elementClass) {
-		for (Class <? extends Kante> edgeClass : getEdgeTypes(elementClass)){
-			if (Composition.class.isAssignableFrom(edgeClass) && Kante.isEndClass(edgeClass, elementClass))
-				return true;
-		}
-		return false;
-	}
+    private static final void fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES() {
+        for (int i = 0; i < ALL_NODES.length; i++) {
+            //Hole alle Kantenklassen der Zielklasse und suche alle PartOfBeziehungen
+            for (Class<? extends Kante> c : getEdgeTypes(ALL_NODES[i])) {
+                if (PartOfBeziehung.class.isAssignableFrom(c)) {
+                    Class<? extends PartOfBeziehung>[] edgeClasses = null;
+                    Class<? extends PartOfBeziehung> poClass = c.asSubclass(PartOfBeziehung.class);
+                    if (PartOfBeziehung.isParentClass(poClass, ALL_NODES[i])) {
+                        edgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(ALL_NODES[i]);
+                        if (edgeClasses == null) {
+                            edgeClasses = new Class[1];
+                            edgeClasses[0] = poClass;
+                            ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
+                        } else {
+                            Class<? extends PartOfBeziehung>[] newEdgeClasses = new Class[edgeClasses.length + 1];
+                            System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
+                            newEdgeClasses[edgeClasses.length] = poClass;
+                            ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
+                        }
+                    }
+                    if (PartOfBeziehung.isPartClass(poClass, ALL_NODES[i])) {
+                        edgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(ALL_NODES[i]);
+                        if (edgeClasses == null) {
+                            edgeClasses = new Class[1];
+                            edgeClasses[0] = poClass;
+                            ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
+                        } else {
+                            Class<? extends PartOfBeziehung>[] newEdgeClasses = new Class[edgeClasses.length + 1];
+                            System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
+                            newEdgeClasses[edgeClasses.length] = poClass;
+                            ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
+                        }
+                    }
+                }
+            }
+        }
+        //		System.err.println("ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES");
+        //		for (Class<? extends ModelElement> meClass : ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.keySet()){
+        //			System.err.println(meClass.getSimpleName() + " " + Arrays.asList(ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(meClass)));
+        //		}
+        //		System.err.println();
+        //		System.err.println("ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES");
+        //		for (Class<? extends ModelElement> meClass : ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.keySet()){
+        //			System.err.println(meClass.getSimpleName() + " " + Arrays.asList(ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(meClass)));
+        //		}
 
-	/**
-	 * @param elementClass
-	 * @return
-	 */
+    }
+
+    /**
+     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden können.
+     * 
+     * @return
+     */
+    public static Class<? extends PartOfBeziehung>[] getHasPartsEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        return ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass);
+    }
+
+    /**
+     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet werden kann.
+     * 
+     * @return
+     */
+    public static Class<? extends PartOfBeziehung>[] getIsPartOfEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        return ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass);
+    }
+
+    /*******************/
+
+    /**
+     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann. Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
+     * lesbarer zu gestalten.
+     * 
+     * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
+     * @return String mit Namenskuerzel
+     */
+    public static final String getShortName(final Class<? extends ModelElement> elementClass) {
+
+        //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
+        if (elementClassToHashShortName == null) {
+            elementClassToHashShortName = new HashMap<Class<? extends ModelElement>, String>();
+            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
+            HashSet<String> allShortNames = new HashSet<String>();
+            loop1: for (int i = 0; i < ALL_NODES.length; i++) {
+                String s = ALL_NODES[i].getSimpleName();
+                //wenn der Klassenname aus weniger als 4 Zeichen besteht
+                if (s.length() <= 3) {
+                    elementClassToHashShortName.put(ALL_NODES[i], s.toUpperCase());
+                    continue;
+                }
+                //mehr als 3 Zeichen
+                StringBuilder shortName = new StringBuilder(3);
+                for (int j = 0; j < s.length(); j++) {
+                    //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
+                    String character = s.substring(j, j + 1);
+                    if (character.toUpperCase().equals(character)) {
+                        shortName.append(character);
+                        //wenn 3 Großbuchstaben gefunden wurden
+                        if (shortName.length() == 3) {
+                            String sn = shortName.toString();
+                            //wenn es den ShortName noch nicht gibt
+                            if (!allShortNames.contains(sn)) {
+                                allShortNames.add(sn);
+                                elementClassToHashShortName.put(ALL_NODES[i], sn);
+                                continue loop1;
+                            }
+                            //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
+                            shortName.deleteCharAt(2);
+                        }
+                    }
+                }
+                //hier kommt er nur hin, wenn keine 3 Großbuchstaben gefunden wurden
+                //short name hat 0 bis 2 Zeichen
+
+                //wenn genau 2 Großbuchstaben gefunden wurden
+                if (shortName.length() == 2) {
+                    int lastUpperCharInClassName = 0;
+                    for (int j = 0; j < shortName.length(); j++) {
+                        char shortNameChar = shortName.charAt(j);
+                        for (; lastUpperCharInClassName < s.length(); lastUpperCharInClassName++) {
+                            if (s.charAt(lastUpperCharInClassName) == shortNameChar) {
+                                break;
+                            }
+                        }
+                    }
+                    //lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
+
+                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen, 
+                    //bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
+                    while (++lastUpperCharInClassName < s.length()) {
+                        shortName.append(s.charAt(lastUpperCharInClassName));
+                        String sn = shortName.toString().toUpperCase();
+                        //wenn es den ShortName noch nicht gibt
+                        if (!allShortNames.contains(sn)) {
+                            allShortNames.add(sn);
+                            elementClassToHashShortName.put(ALL_NODES[i], sn);
+                            continue loop1;
+                        }
+                        //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
+                        shortName.deleteCharAt(2);
+                    }
+                }
+
+                //es wurden keine 3 eindutigen Buchstaben nach Großbuchstaben gefunden -> Nimm einfach die ersten beiden
+                //Buchstaben und suche einen Folgebuchstaben bis 3 eindeutige Zeichen gefunden werden (das geht immer gut,
+                //wenn die Klassennamen eindeutig sind (was immer der Fall ist, wenn sie im selben package liegen) und hier
+                ///unten fest steht, dass der Name mind. 4 Zeichen lang ist)
+                shortName.setLength(0);
+                shortName.append(s.charAt(0));
+                shortName.append(s.charAt(1));
+                for (int j = 2; j < s.length(); j++) {
+                    shortName.append(s.charAt(j));
+                    String sn = shortName.toString().toUpperCase();
+                    // wenn es den ShortName noch nicht gibt
+                    if (!allShortNames.contains(sn)) {
+                        allShortNames.add(sn);
+                        elementClassToHashShortName.put(ALL_NODES[i], sn);
+                        continue loop1;
+                    }
+                    //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
+                    shortName.deleteCharAt(2);
+                }
+
+                //wenn auch das nicht gekalppt hat (der Fall dürfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
+                //da sie dann alle etwas eindeutiges bei s = class.getShortName() geliefert haben)
+                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
+                String sn = s.substring(0, 3).toUpperCase();
+                allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
+                elementClassToHashShortName.put(ALL_NODES[i], sn);
+            }
+        }
+
+        //Knoten
+        if (Knoten.class.isAssignableFrom(elementClass)) {
+            Object o = elementClassToHashShortName.get(elementClass);
+            //ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
+            if (o == null) {
+                return NO_MODEL_ELEMENT_SHORT_NAME;
+            }
+            return elementClassToHashShortName.get(elementClass).toString();
+            //Kanten
+        } else if (Kante.class.isAssignableFrom(elementClass)) {
+            return EDGE_SHORT_NAME;
+        }
+        return NO_MODEL_ELEMENT_SHORT_NAME;
+    }
+
+    /**
+     * gibt die Ebene eine Objekttypes zurueck
+     * 
+     * @param type Typkonstante, die den Objekttypen spezifiziert
+     * @return int Ebene
+     */
+    public static final int layerFor(final Class<? extends ModelElement> elementClass) {
+        if (Knoten.class.isAssignableFrom(elementClass)) {
+            if (ALL_DOMAIN_LAYER_NODES_SET.contains(elementClass)) {
+                return DOMAIN_LAYER;
+            }
+            if (ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET.contains(elementClass)) {
+                return INTER_DOMAIN_LOGICAL_LAYER;
+            }
+            if (ALL_LOGICAL_LAYER_NODES_SET.contains(elementClass)) {
+                return LOGICAL_LAYER;
+            }
+            if (ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET.contains(elementClass)) {
+                return INTER_LOGICAL_PHYSICAL_LAYER;
+            }
+            if (ALL_PHYSICAL_LAYER_NODES_SET.contains(elementClass)) {
+                return PHYSICAL_LAYER;
+            }
+        } else {
+            if (ALL_DOMAIN_LAYER_EDGES_SET.contains(elementClass)) {
+                return DOMAIN_LAYER;
+            }
+            if (ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET.contains(elementClass)) {
+                return INTER_DOMAIN_LOGICAL_LAYER;
+            }
+            if (ALL_LOGICAL_LAYER_EDGES_SET.contains(elementClass)) {
+                return LOGICAL_LAYER;
+            }
+            if (ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET.contains(elementClass)) {
+                return INTER_LOGICAL_PHYSICAL_LAYER;
+            }
+            if (ALL_PHYSICAL_LAYER_EDGES_SET.contains(elementClass)) {
+                return PHYSICAL_LAYER;
+            }
+
+        }
+        if (elementClass == TextfeldFach.class) {
+            return DOMAIN_LAYER;
+        }
+        if (elementClass == TextfeldLog.class) {
+            return LOGICAL_LAYER;
+        }
+        if (elementClass == TextfeldPhy.class) {
+            return PHYSICAL_LAYER;
+        }
+        return NO_LAYER;
+    }
+
+    /**
+     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
+     * 
+     * @param obj Dialog zu diesem Objekt
+     * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
+     */
+    public static ElementPropertyDialog hasObjektDialog(final ModelElement obj) {
+        for (ElementPropertyDialog pd : dialogs) {
+            if (obj == pd.getModelElement()) {
+                return pd;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gibt Verctor mit allen geoeffneten Dialogen zurueck
+     * 
+     * @return ArrayList mit allen geoeffneten Dialogen
+     */
+    public static final ArrayList<ElementPropertyDialog> getDialogs() {
+        return dialogs;
+    }
+
+    /**
+     * entfernt einen Dialog aus dem ArrayList mit allen geoeffneten Dialogen
+     * 
+     * @param modelElement Element dessen Dialog aus dem ArrayList entfernt werden soll
+     */
+    public static final void removeDialog(final ModelElement modelElement) {
+        for (int n = 0; n < dialogs.size(); n++) {
+            if (modelElement == dialogs.get(n).getModelElement()) {
+                dialogs.remove(n--);
+            }
+        }
+    }
+
+    /**
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
+     * denen mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei <code>isMaster==true</code>) zuweisungskompatibel zur übergebenen Elementklasse ist.
+     * 
+     * @param elementClass
+     * @param isMaster wenn <code>true</code> soll die übergebene Elementart die übergeordnete sein, sonst die untergeordnete
+     * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
+     */
     @SuppressWarnings("unchecked")
-    public static final Class<? extends ModelElement>[] getSubordinatedJoinbleTypes (Class<? extends ModelElement> elementClass) {
-		if (Anwendungsbaustein.class.isAssignableFrom(elementClass))
-			return new Class[]{
-				Datenbanksystem.class,
-				Dokumentensammlung.class,
-				Anwendungsprogramm.class,
-				Organisationsplan.class,
-			};
-		if (Organisationseinheit.class.isAssignableFrom(elementClass))
-			return new Class[]{
-				AufOrgKombination.class
-		};
-		if (Aufgabe.class.isAssignableFrom(elementClass))
-			return new Class[]{
-				AufOrgKombination.class
-		};
-		return EMPTY_ELEMENT_CLASS_ARRAY;
-	}
+    private static Class<? extends Composition>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
+        Class<? extends Kante>[] elementClassEdges = getEdgeTypes(elementClass);
+        ArrayList<Class<? extends Kante>> subEdgeTypes = new ArrayList<Class<? extends Kante>>(elementClassEdges.length);
+        for (Class<? extends Kante> edgeClass : elementClassEdges) {
+            if (Composition.class.isAssignableFrom(edgeClass)) {
+                if (isMaster) {
+                    if (Kante.isStartClass(edgeClass, elementClass)) {
+                        subEdgeTypes.add(edgeClass);
+                    }
+                } else {
+                    if (Kante.isEndClass(edgeClass, elementClass)) {
+                        subEdgeTypes.add(edgeClass);
+                    }
+                }
+            }
+        }
+        int size = subEdgeTypes.size();
+        if (size == 0) {
+            return EMPTY_COMPOSITION_CLASS_ARRAY;
+        }
+        Class<? extends Composition>[] returnClasses = new Class[size];
+        System.arraycopy(subEdgeTypes.toArray(), 0, returnClasses, 0, size);
+        return returnClasses;
+    }
 
-	/**
-	 * @param elementClass
-	 * @return
-	 *TODO:AXS: das hier muss weg und statt dessen über Aggregationen laufen
-	 */
-	@SuppressWarnings("unchecked")
-    public static final Class<? extends Kante>[] getInitialSubtypes (Class<? extends ModelElement> elementClass) {
-		if (RechAnwendungsbaustein.class == elementClass){
-			return new Class[]{RawbAwpVerbindung.class};
-		}
-		if (KonAnwendungsbaustein.class == elementClass)
-			return new Class[]{KawbOrgpVerbindung.class};
-		return EMPTY_EDGE_CLASS_ARRAY;
-	}
+    //    static{
+    //    	for (Class<? extends ModelElement> c : ALL_NODES){
+    //    		System.err.println(c.getSimpleName() + "\n\t" + Arrays.toString(getSubordinationEdgeTypesAsMaster(c)));
+    //    	}
+    //    }
 
-	
-	private final static HashSet<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = new HashSet<Class<? extends ModelElement>>();
-	static {
-		GENERATE_NAME_CLASSES.add(AufOrgKombination.class);
-		GENERATE_NAME_CLASSES.add(EtntEtdtKombination.class);
-	}
-	/**
-	 * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene 
-	 * toString() besitzen, welche aus anderen Modellelementen den Namen generiert 
-	 * (siehe AufOrgKombination, EtntEtdtKombination)
-	 * 
-	 * @return
-	 */
-	public final static boolean isGenerateName(Class<? extends ModelElement> elementClass) {
-		while (elementClass != ModelElement.class) {
-			if (GENERATE_NAME_CLASSES.contains(elementClass))
-				return true;
-			elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
-		}
-		return false;
-	}
+    /**
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur übergebenen
+     * Elementklasse ist.
+     * 
+     * @param elementClass
+     * @return Array von Kantenklassen, die die übergebene Elementart überordnen
+     */
+    public static Class<? extends Composition>[] getCompositionEdgeTypesForMaster(final Class<? extends ModelElement> elementClass) {
+        return getCompositionEdgeTypes(elementClass, true);
+    }
 
-	
+    /**
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur übergebenen
+     * Elementklasse ist.
+     * 
+     * @param elementClass
+     * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
+     */
+    public static Class<? extends Composition>[] getCompositionEdgeTypesForSlave(final Class<? extends ModelElement> elementClass) {
+        return getCompositionEdgeTypes(elementClass, false);
+    }
 
+    /**
+     * Liefert alle Elementarten, die der übergebenen Elementart über eine Komposition untergeordnet sind.
+     * 
+     * @param masterElementClass Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition verbunden sein können.
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] getSlaveElementTypes(final Class<? extends ModelElement> masterElementClass) {
+        Class<? extends Composition>[] compositions = getCompositionEdgeTypesForMaster(masterElementClass);
+        if (compositions.length == 0) {
+            return EMPTY_ELEMENT_CLASS_ARRAY;
+        }
+        ArrayList<Class<? extends ModelElement>> slaveElementClasses = new ArrayList<Class<? extends ModelElement>>(compositions.length);
+        for (Class<? extends Composition> compClass : compositions) {
+            Class<? extends ModelElement> slaveType = Composition.getSlaveType(compClass);
+            if (!slaveElementClasses.contains(slaveType)) {
+                slaveElementClasses.add(slaveType);
+            }
+        }
+        int size = slaveElementClasses.size();
+        Class<? extends ModelElement>[] returnClasses = new Class[size];
+        System.arraycopy(slaveElementClasses.toArray(), 0, returnClasses, 0, size);
+        return returnClasses;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die übergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
+     * 
+     * @param elementClass
+     * @return <code>true</code>, wenn das übergebene ein untergeordnetes Element ist
+     */
+    public static boolean isSlaveType(final Class<? extends ModelElement> elementClass) {
+        for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass)) {
+            if (Composition.class.isAssignableFrom(edgeClass) && Kante.isEndClass(edgeClass, elementClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
+        if (Anwendungsbaustein.class.isAssignableFrom(elementClass)) {
+            return new Class[] {
+                    Datenbanksystem.class, Dokumentensammlung.class, Anwendungsprogramm.class, Organisationsplan.class,
+            };
+        }
+        if (Organisationseinheit.class.isAssignableFrom(elementClass)) {
+            return new Class[] {
+                AufOrgKombination.class
+            };
+        }
+        if (Aufgabe.class.isAssignableFrom(elementClass)) {
+            return new Class[] {
+                AufOrgKombination.class
+            };
+        }
+        return EMPTY_ELEMENT_CLASS_ARRAY;
+    }
+
+    /**
+     * @param elementClass
+     * @return TODO:AXS: das hier muss weg und statt dessen über Aggregationen laufen
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends Kante>[] getInitialSubtypes(final Class<? extends ModelElement> elementClass) {
+        if (RechAnwendungsbaustein.class == elementClass) {
+            return new Class[] {
+                RawbAwpVerbindung.class
+            };
+        }
+        if (KonAnwendungsbaustein.class == elementClass) {
+            return new Class[] {
+                KawbOrgpVerbindung.class
+            };
+        }
+        return EMPTY_EDGE_CLASS_ARRAY;
+    }
+
+    private final static HashSet<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = new HashSet<Class<? extends ModelElement>>();
+    static {
+        GENERATE_NAME_CLASSES.add(AufOrgKombination.class);
+        GENERATE_NAME_CLASSES.add(EtntEtdtKombination.class);
+    }
+
+    /**
+     * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen generiert (siehe AufOrgKombination, EtntEtdtKombination)
+     * 
+     * @return
+     */
+    public final static boolean isGenerateName(Class<? extends ModelElement> elementClass) {
+        while (elementClass != ModelElement.class) {
+            if (GENERATE_NAME_CLASSES.contains(elementClass)) {
+                return true;
+            }
+            elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
+        }
+        return false;
+    }
 
 }

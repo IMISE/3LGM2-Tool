@@ -19,52 +19,47 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
  * @create Very long time ago
  */
 public class ToolButton extends JToggleButton {
-	
-	/**
-	 * COMMENTME
-	 */
-	NodeContainer knot;
 
-	/**
-	 * @param k
-	 * @param gd
-	 */
-	public ToolButton(Knoten k, GraphDocument gd) {
-		super();
-		knot = new NodeContainer(k, gd);
-		knot.setSizeForButtons(18, 14);
-	}
+    /**
+     * COMMENTME
+     */
+    NodeContainer knot;
 
-	/**
-	 * @param k
-	 * @param gd
-	 */
-	public ToolButton(Kante k, GraphDocument gd) {
-		super();
-		knot = new NodeContainer(new Aufgabe(), gd);
-		knot.setSizeForButtons(18, 2);
-		knot.setForm(GraphElementLayout.SHAPE.rechteck);
-		knot.setColor(Color.BLACK);
-	}
+    /**
+     * @param k
+     * @param gd
+     */
+    public ToolButton(final Knoten k, final GraphDocument gd) {
+        super();
+        knot = new NodeContainer(k, gd);
+        knot.setSizeForButtons(18, 14);
+    }
 
-	/* (non-Javadoc)
-	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
-	 */
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
-		if (gd == null)
-			return;
-		knot.setLocation((getWidth() / 2), (getHeight() / 2));
-		knot.paint(g);
-	}
+    /**
+     * @param k
+     * @param gd
+     */
+    public ToolButton(final Kante k, final GraphDocument gd) {
+        super();
+        knot = new NodeContainer(new Aufgabe(), gd);
+        knot.setSizeForButtons(18, 2);
+        knot.setForm(GraphElementLayout.SHAPE.rechteck);
+        knot.setColor(Color.BLACK);
+    }
 
-	/* (non-Javadoc)
-	 * @see javax.swing.JComponent#getPreferredSize()
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(30, 30);
-	}
+    @Override
+    public void paint(final Graphics g) {
+        super.paint(g);
+        GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
+        if (gd == null) {
+            return;
+        }
+        knot.setLocation(getWidth() / 2, getHeight() / 2);
+        knot.paint(g);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(30, 30);
+    }
 }

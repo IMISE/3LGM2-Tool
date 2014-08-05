@@ -17,40 +17,41 @@ import org.xml.sax.XMLReader;
  */
 public class UserFieldXMLParser {
 
-	/**
-	 * Comment for <code>parser</code>
-	 */
-	private SAXParser parser;
+    /**
+     * Comment for <code>parser</code>
+     */
+    private final SAXParser parser;
 
-	/**
-	 * Comment for <code>userFieldFile</code>
-	 */
-	private File userFieldFile;
+    /**
+     * Comment for <code>userFieldFile</code>
+     */
+    private final File userFieldFile;
 
-	/**
+    /**
 	 * 
 	 */
-	public UserFieldXMLParser(File _userFieldFile, UserFieldDefinitions def) throws SAXException, ParserConfigurationException, IOException {
+    public UserFieldXMLParser(final File _userFieldFile, final UserFieldDefinitions def) throws SAXException, ParserConfigurationException, IOException {
 
-		if (!_userFieldFile.canRead())
-			throw new IOException("Can not read file: " + _userFieldFile.toString());
+        if (!_userFieldFile.canRead()) {
+            throw new IOException("Can not read file: " + _userFieldFile.toString());
+        }
 
-		userFieldFile = _userFieldFile;
+        userFieldFile = _userFieldFile;
 
-		SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
 
-		parser = factory.newSAXParser();
+        parser = factory.newSAXParser();
 
-		parser.getXMLReader().setContentHandler(new UserFieldXMLContentHandler(def));
-	}
+        parser.getXMLReader().setContentHandler(new UserFieldXMLContentHandler(def));
+    }
 
-	public void parseDocument() throws SAXException, IOException {
-		FileInputStream stream = new FileInputStream(userFieldFile);
+    public void parseDocument() throws SAXException, IOException {
+        FileInputStream stream = new FileInputStream(userFieldFile);
 
-		XMLReader reader = parser.getXMLReader();
-		reader.parse(new InputSource(stream));
+        XMLReader reader = parser.getXMLReader();
+        reader.parse(new InputSource(stream));
 
-		stream.close();
-	}
+        stream.close();
+    }
 
 }
