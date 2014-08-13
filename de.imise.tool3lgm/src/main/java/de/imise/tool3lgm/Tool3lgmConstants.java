@@ -76,7 +76,7 @@ public abstract class Tool3lgmConstants {
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren! UND DIE BEIDEN TODOS IN TOOL3LGM BEACHTEN!!!
-    public static final String TOOL_VERSION = "3.3.1";
+    public static final String TOOL_VERSION = "3.3.3";
 
     /**
      * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer toString()-Methode den Namen des Kommandos zurück. Wenn <code>false</code>,
@@ -118,8 +118,9 @@ public abstract class Tool3lgmConstants {
     public static final File USER_INFO_FILE = new File(USER_HOME_DIR_NAME, ".tool3lgmUserInfo");
 
     /** Name des Verzeichnisses in dem die lokalisierten Ressourcen liegen bedinnend mit dem Hauptpackage */
-    // public static final String RESOURCE_DIR_NAME = "tool3lgm/resources/";
     public static final String RESOURCE_DIR_NAME = "";
+    public static final String DEV_RESOURCE_DIR_NAME = "/src/main/resources/";
+    public static final String JAR_RESOURCE_DIR_NAME = "resources/";
 
     /**
      * Datei-Endung für große Icons.
@@ -156,7 +157,10 @@ public abstract class Tool3lgmConstants {
      * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
      * sind.
      */
-    public static final String RESOURCE_BASE_XSL_DIR_NAME = RESOURCE_DIR_NAME + "xslt/";
+    private static final String RESOUCE_BASE_XSL_SCRIPT_DIR_NAME = "xslt/";
+    private static final String DEV_RESOURCE_BASE_DIR_NAME = APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
+    private static final String DEV_RESOURCE_BASE_XSL_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
+    private static final String JAR_RESOURCE_BASE_XSL_DIR_NAME = JAR_RESOURCE_DIR_NAME + RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
 
     /** Dateiendung der xsl-Scripte in den Resourcen */
     public static final String XSL_SCRIPT_FILE_EXTENSION = "xsl";
@@ -243,6 +247,17 @@ public abstract class Tool3lgmConstants {
      * Fehlermeldungen sollten in errorBundle abgelegt werden.
      */
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
+
+    //    static {
+    //        try {
+    //            resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
+    //        } catch (Exception e) {
+    //            resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
+    //            String baseName = "../../../" + JAR_RESOURCE_DIR_NAME + RESOURCE_BASE_NAME;
+    //            resourceBundle = ResourceBundle.getBundle(baseName);
+    //        }
+    //    }
+
     /**
      * ResourceBundle für Fehlermeldungen
      */
@@ -599,21 +614,23 @@ public abstract class Tool3lgmConstants {
         // Zur Entwicklungszeit liegen die Scripte in einem Ordner -> Scripte von dort laden, ABER
         // bei Herausgabe des Tools liegen die Scripte in der jar-Datei im Resourcenpfad -> catch-Fall
         try {
-            String scriptPath = RESOURCE_BASE_XSL_DIR_NAME + UserProperties.getLocale().getLanguage();
+            String language = UserProperties.getLocale().getLanguage();
+            String xslScriptBaseDirName = DEV_RESOURCE_BASE_XSL_DIR_NAME;
+            String scriptPath = xslScriptBaseDirName + language;
             File dir = new File(scriptPath);
             File[] scripts = dir.listFiles();
             // wenn für die Locale keine Scripte gefunden wurde -> lade die Englischen
             if (scripts.length == 0) {
-                scriptPath = RESOURCE_DIR_NAME + "xslt/en";
+                scriptPath = xslScriptBaseDirName + "en";
                 dir = new File(scriptPath);
             }
             ArrayList<String> scriptNameList = new ArrayList<String>(scripts.length);
             for (int i = 0; i < scripts.length; i++) {
-                String s = scripts[i].getPath();
+                String s = scripts[i].getCanonicalPath();
                 if (!s.endsWith(XSL_SCRIPT_FILE_EXTENSION)) {
                     continue;
                 }
-                scriptNameList.add(s);
+                scriptNameList.add(s.substring(DEV_RESOURCE_BASE_DIR_NAME.length()));
             }
             String[] scriptNames = new String[scriptNameList.size()];
             System.arraycopy(scriptNameList.toArray(), 0, scriptNames, 0, scriptNames.length);
@@ -630,7 +647,7 @@ public abstract class Tool3lgmConstants {
                 // e1.printStackTrace();
             }
 
-            String packagePattern = RESOURCE_BASE_XSL_DIR_NAME + UserProperties.getLocale().getLanguage() + "/[^/]+\\.xsl";
+            String packagePattern = JAR_RESOURCE_BASE_XSL_DIR_NAME + UserProperties.getLocale().getLanguage() + "/[^/]+\\.xsl";
             ArrayList<JarEntry> xslEntries = new ArrayList<JarEntry>();
 
             if (entries == null) {
@@ -645,7 +662,7 @@ public abstract class Tool3lgmConstants {
             }
             // wenn für die aktuelle Locale-Sprache keine Scripte gefunden wurden -> lade die Englischen
             if (xslEntries.size() == 0) {
-                packagePattern = RESOURCE_BASE_XSL_DIR_NAME + "en/[^/]+\\.xsl";
+                packagePattern = JAR_RESOURCE_BASE_XSL_DIR_NAME + "en/[^/]+\\.xsl";
                 while (entries.hasMoreElements()) {
                     JarEntry jarEntry = entries.nextElement();
                     if (jarEntry.getName().matches(packagePattern)) {
