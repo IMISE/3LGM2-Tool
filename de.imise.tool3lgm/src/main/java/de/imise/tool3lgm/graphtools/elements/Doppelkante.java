@@ -54,8 +54,10 @@ public abstract class Doppelkante extends Kante {
     }
 
     /**
-     * Teilweise werden Kanten falschherum angelegt, was teilweise auch mal zulässig war. So konnte man "Aufgabe interpretiert Objekttyp" ausdrücken über eine Kante von der Aufgabe zum Objekttyp mit der Richtung <code>FORWARD</code> oder über eine Kante
-     * vm Objekttyp zur Aufgabe mit der Richtung <code>BACKWARD</code>. Jetzt ist nur noch eine eindeutige Richtung zulässig. Diese ergibt sich aus der Startelementklasse und der Endelementklasse, die in einer konkreten Kantenklasse angegeben sind.
+     * Teilweise werden Kanten falschherum angelegt, was teilweise auch mal zulässig war. So konnte man "Aufgabe interpretiert Objekttyp" ausdrücken
+     * über eine Kante von der Aufgabe zum Objekttyp mit der Richtung <code>FORWARD</code> oder über eine Kante
+     * vm Objekttyp zur Aufgabe mit der Richtung <code>BACKWARD</code>. Jetzt ist nur noch eine eindeutige Richtung zulässig. Diese ergibt sich aus
+     * der Startelementklasse und der Endelementklasse, die in einer konkreten Kantenklasse angegeben sind.
      * 
      * @see de.imise.tool3lgm.graphtools.elements.Kante#checkValidity()
      */

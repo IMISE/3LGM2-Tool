@@ -26,12 +26,10 @@ public final class DatenuebertragungsVerbindung extends Doppelkante {
 
     public DatenuebertragungsVerbindung() {
         super();
-        setDirection(DOUBLE);
     }
 
     public DatenuebertragungsVerbindung(final Knoten k1, final Knoten k2) {
         super(k1, k2);
-        setDirection(DOUBLE);
     }
 
     @Override

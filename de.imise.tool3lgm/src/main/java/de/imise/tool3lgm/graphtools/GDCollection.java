@@ -46,6 +46,7 @@ import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
@@ -1374,14 +1375,27 @@ public final class GDCollection extends UserFieldTarget {
                     edge.setHashString(edgeHash);
                 }
 
-                int dir = Doppelkante.FORWARD;
-                if (!(edge.getStartClass().isAssignableFrom(startElement.getClass()) && edge.getEndClass().isAssignableFrom(endElement.getClass()))) {
-                    ModelElement dummy = startElement;
-                    startElement = endElement;
-                    endElement = dummy;
-                    dir = Doppelkante.BACKWARD;
+                Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
+                Class<? extends ModelElement> startClass = startElement.getClass();
+                Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
+                Class<? extends ModelElement> endClass = endElement.getClass();
+                boolean doubleDir = edgeStartClass.isAssignableFrom(startClass) && edgeStartClass.isAssignableFrom(endClass);
+                doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
+                doubleDir = doubleDir && !edgeClass.isAssignableFrom(PartOfBeziehung.class);
+                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
+
+                if (doubleDir) {
+                    ((Doppelkante) edge).setDirection(Doppelkante.DOUBLE);
+                } else {
+                    int dir = Doppelkante.FORWARD;
+                    if (!(edgeStartClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass))) {
+                        ModelElement dummy = startElement;
+                        startElement = endElement;
+                        endElement = dummy;
+                        dir = Doppelkante.BACKWARD;
+                    }
+                    ((Doppelkante) edge).setDirection(dir);
                 }
-                ((Doppelkante) edge).setDirection(dir);
 
                 edge.setKnotsAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
 
