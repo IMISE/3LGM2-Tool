@@ -148,9 +148,6 @@ public abstract class Tool3lgmConstants {
      */
     public static final String RESOUCE_BASE_XSL_SCRIPT_DIR_NAME = "xslt/";
 
-    /** Dateiendung der xsl-Scripte in den Resourcen */
-    public static final String XSL_SCRIPT_FILE_EXTENSION = "xsl";
-
     /** Absoluter Name des Beispielmodells */
     public static final File EXAMPLE_MODEL_FILE = new File(APPLICATION_DIR, "Beispiel.z3lgm");
 

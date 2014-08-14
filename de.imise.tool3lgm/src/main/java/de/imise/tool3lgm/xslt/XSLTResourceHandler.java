@@ -15,9 +15,13 @@ public class XSLTResourceHandler {
     /** URL with standard-scripts for xslt-export */
     private final ArrayList<XSLTScript> standardXSLT;
 
-    private static final String DEV_RESOURCE_BASE_DIR_NAME = Tool3lgmConstants.APPLICATION_DIR + Tool3lgmConstants.DEV_RESOURCE_DIR_NAME;
+    /** Name des Verzeichnisses in dem die lokalisierten Ressourcen liegen bedinnend mit dem Hauptpackage */
+    public static final String DEV_RESOURCE_DIR_NAME = "/src/main/resources/";
+    public static final String JAR_RESOURCE_DIR_NAME = "";
+
+    private static final String DEV_RESOURCE_BASE_DIR_NAME = Tool3lgmConstants.APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
     private static final String DEV_RESOURCE_BASE_XSL_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + Tool3lgmConstants.RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
-    private static final String JAR_RESOURCE_BASE_XSL_DIR_NAME = Tool3lgmConstants.JAR_RESOURCE_DIR_NAME + Tool3lgmConstants.RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
+    private static final String JAR_RESOURCE_BASE_XSL_DIR_NAME = JAR_RESOURCE_DIR_NAME + Tool3lgmConstants.RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
 
     public XSLTResourceHandler() {
         // Standard-XSLT-Scripte laden
@@ -71,7 +75,7 @@ public class XSLTResourceHandler {
             ArrayList<String> scriptNameList = new ArrayList<String>(scripts.length);
             for (int i = 0; i < scripts.length; i++) {
                 String s = scripts[i].getCanonicalPath();
-                if (!s.endsWith(Tool3lgmConstants.XSL_SCRIPT_FILE_EXTENSION)) {
+                if (!s.endsWith(".xsl")) {
                     continue;
                 }
                 scriptNameList.add(s.substring(DEV_RESOURCE_BASE_DIR_NAME.length()));
@@ -125,5 +129,4 @@ public class XSLTResourceHandler {
         }
 
     }
-
 }
