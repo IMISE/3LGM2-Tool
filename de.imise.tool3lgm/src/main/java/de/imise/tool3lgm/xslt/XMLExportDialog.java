@@ -67,6 +67,8 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     /** die GDCollection, auf der die Exporte ausgeführt werden */
     private GDCollection collection;
 
+    private final XSLTResourceHandler xsltResourceHandler;
+
     /* --- swing anfang --- */
 
     /**
@@ -79,6 +81,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     public XMLExportDialog(final Frame owner, final GDCollection collection) {
         /* Besitzer, Titel, modal anzeigen */
         super(owner, Tool3lgmConstants.getResString("trans_title"), false);
+        xsltResourceHandler = new XSLTResourceHandler();
 
         //da evtl. viele Verzeichnisse nach Scripten durchsucht werden müssen, einen Fortschrittsdialog zeigen
         ProgressDialog progressDialog = new ProgressDialog(owner);
@@ -96,7 +99,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         header[4] = Tool3lgmConstants.getResString("trans_author");
 
         //Kopie der Standardscripte holen (die Kopie macht Tool3lgmConstants)
-        ArrayList<XSLTScript> scripts = Tool3lgmConstants.getStandardScripts();
+        ArrayList<XSLTScript> scripts = xsltResourceHandler.getStandardScripts();
         scripts.addAll(XSLTFileHandler.getXSLTScripts(UserProperties.getXSLSearchDirs()));
         Alphabetical.sort(scripts);
         tableModel = new TableModel(scripts);
@@ -324,7 +327,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
      */
     protected void updateTable() {
         tableModel.clear();
-        tableModel.addScripts(Tool3lgmConstants.getStandardScripts());
+        tableModel.addScripts(xsltResourceHandler.getStandardScripts());
         tableModel.addScripts(XSLTFileHandler.getXSLTScripts(UserProperties.getXSLSearchDirs()));
         tableModel.fireTableDataChanged();
     }

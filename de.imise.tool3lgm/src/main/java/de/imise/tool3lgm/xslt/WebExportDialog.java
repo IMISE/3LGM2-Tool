@@ -78,6 +78,8 @@ public class WebExportDialog extends JDialog {
 
         getContentPane().setLayout(new BorderLayout());
 
+        final XSLTResourceHandler xsltResourceHandler = new XSLTResourceHandler();
+
         checkBoxShowResult = new JCheckBox(Tool3lgmConstants.getResString("trans_browser"), true);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -95,7 +97,7 @@ public class WebExportDialog extends JDialog {
             public void actionPerformed(final ActionEvent e) {
                 new SearchPathDialog(owner, UserProperties.getXSLSearchDirs()).setVisible(true);
                 tableModel.clear();
-                tableModel.addScripts(Tool3lgmConstants.getStandardScripts());
+                tableModel.addScripts(xsltResourceHandler.getStandardScripts());
                 tableModel.addScripts(XSLTFileHandler.getXSLTScripts(UserProperties.getXSLSearchDirs()));
                 tableModel.fireTableDataChanged();
             }
@@ -140,7 +142,7 @@ public class WebExportDialog extends JDialog {
 
         getContentPane().add(new JScrollPane(table = new JTable()), BorderLayout.CENTER);
 
-        tableModel = new TableModel(Tool3lgmConstants.getStandardScripts());
+        tableModel = new TableModel(xsltResourceHandler.getStandardScripts());
         tableModel.addScripts(XSLTFileHandler.getXSLTScripts(UserProperties.getXSLSearchDirs()));
         table.setModel(tableModel);
 

@@ -7,16 +7,12 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import javax.swing.Action;
 import javax.swing.DebugGraphics;
@@ -33,7 +29,6 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xslt.XSLTScript;
 import de.imise.util.StringUtils;
 
 /**
@@ -71,9 +66,6 @@ public abstract class Tool3lgmConstants {
         }
     }
 
-    /** URL with standard-scripts for xslt-export */
-    private static ArrayList<XSLTScript> standardXSLT;
-
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren! UND DIE BEIDEN TODOS IN TOOL3LGM BEACHTEN!!!
     public static final String TOOL_VERSION = "3.3.3";
@@ -93,8 +85,10 @@ public abstract class Tool3lgmConstants {
     /** Pfad zum Installationsverzeichnis der Anwendung */
     public static final File APPLICATION_DIR = getApplicationDir();
 
+    public static final String RELATIVE_TOOL_JAR_PATH = "lib/tool3lgm.jar";
+
     /** Pfad zur Baukasten-Datei mit der Hauptklasse, wenn er ausgeliefert wird */
-    public static final String TOOL_JAR_FILE_NAME = APPLICATION_DIR.toURI().getPath() + "lib/tool3lgm.jar";
+    public static final String ABSOLUTE_TOOL_JAR_PATH = APPLICATION_DIR.toURI().getPath() + RELATIVE_TOOL_JAR_PATH;
 
     /** Pfad ins Home-Verzeichnis des Benutzers */
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
@@ -157,10 +151,7 @@ public abstract class Tool3lgmConstants {
      * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
      * sind.
      */
-    private static final String RESOUCE_BASE_XSL_SCRIPT_DIR_NAME = "xslt/";
-    private static final String DEV_RESOURCE_BASE_DIR_NAME = APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
-    private static final String DEV_RESOURCE_BASE_XSL_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
-    private static final String JAR_RESOURCE_BASE_XSL_DIR_NAME = JAR_RESOURCE_DIR_NAME + RESOUCE_BASE_XSL_SCRIPT_DIR_NAME;
+    public static final String RESOUCE_BASE_XSL_SCRIPT_DIR_NAME = "xslt/";
 
     /** Dateiendung der xsl-Scripte in den Resourcen */
     public static final String XSL_SCRIPT_FILE_EXTENSION = "xsl";
@@ -214,21 +205,6 @@ public abstract class Tool3lgmConstants {
 
         // vor allem was jetzt kommt muss einmal unbedingt die UserProperties.init() aufgerufen werden (wegen der Locale)
 
-        // Standard-XSLT-Scripte laden
-        String[] scriptFileNames = getXSLTScriptFileNames();
-
-        standardXSLT = new ArrayList<XSLTScript>();
-        for (String scriptName : scriptFileNames) {
-            try {
-                // Finger weg hiervon! Das stellt sicher, dass die XSLT-Scripte sowohl zur Entwicklungzeit als
-                // auch nach dem Herausgeben im jar-File gefunden werden.
-                standardXSLT.add(new XSLTScript(ClassLoader.getSystemClassLoader().getResource(scriptName)));
-            } catch (Exception e) {
-                // kann man ruhig ausgeben, denn wenn hier was schief geht, hat jemand Mist in die Resourcen eingefügt
-                // und solte das sofort ändern
-                e.printStackTrace();
-            }
-        }
     }
 
     /**
@@ -240,28 +216,28 @@ public abstract class Tool3lgmConstants {
      * BaseName der lokalisierten Haupt-Ressourcendateien
      */
     public static final String RESOURCE_BASE_NAME = "Tool3lgmResources";
+    public static final String RESOURCE_ERRORS_BASE_NAME = "Tool3lgmErrors";
 
     // die beiden ResourceBundles laden
     /**
      * Haupt-<code>ResoruceBundle</code> mit allen Resourcen außer ein paar speziellen Fehlermeldungen.<br>
      * Fehlermeldungen sollten in errorBundle abgelegt werden.
      */
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
-
-    //    static {
-    //        try {
-    //            resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
-    //        } catch (Exception e) {
-    //            resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
-    //            String baseName = "../../../" + JAR_RESOURCE_DIR_NAME + RESOURCE_BASE_NAME;
-    //            resourceBundle = ResourceBundle.getBundle(baseName);
-    //        }
-    //    }
-
+    private static ResourceBundle resourceBundle = null;
     /**
      * ResourceBundle für Fehlermeldungen
      */
-    private static ResourceBundle errorBundle = ResourceBundle.getBundle("Tool3lgmErrors");
+    private static ResourceBundle errorBundle = null;
+    static {
+        try {
+            resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
+            errorBundle = ResourceBundle.getBundle(RESOURCE_ERRORS_BASE_NAME);
+        } catch (Exception e) {
+            resourceBundle = ResourceBundle.getBundle(JAR_RESOURCE_DIR_NAME + RESOURCE_BASE_NAME);
+            errorBundle = ResourceBundle.getBundle(JAR_RESOURCE_DIR_NAME + RESOURCE_ERRORS_BASE_NAME);
+        }
+    }
+
     /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse
      * mal aufgerufen hat, dann gibt es mit diesem Namen
@@ -303,7 +279,7 @@ public abstract class Tool3lgmConstants {
      * 
      * @return Pfad zur Anwendung
      */
-    private static File getApplicationDir() {
+    public static File getApplicationDir() {
         File f = null;
         try {
             f = new File(".").getCanonicalFile();
@@ -585,101 +561,12 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert eine Kopie der Liste aller XSLT-Scripte.
-     * 
-     * @return
-     */
-    public final static ArrayList<XSLTScript> getStandardScripts() {
-        return new ArrayList<XSLTScript>(standardXSLT);
-    }
-
-    /**
      * für die Sanduhr...
      * 
      * @return Cursor that indicates a running process
      */
     public static Cursor getWaitCursor() {
         return waitCursor;
-    }
-
-    /**
-     * Liefert eine Liste der relativen Pfade aller XSLT-Scripte im Resourcenverzeichnis der aktuellen Locale. Werden für die aktuelle Locale keine
-     * Scripte gefunden, werden die englischen Scripte
-     * geladen.
-     * 
-     * @return Liste aller Standard-XSLT-Scripte
-     */
-    public static final String[] getXSLTScriptFileNames() {
-
-        // Zur Entwicklungszeit liegen die Scripte in einem Ordner -> Scripte von dort laden, ABER
-        // bei Herausgabe des Tools liegen die Scripte in der jar-Datei im Resourcenpfad -> catch-Fall
-        try {
-            String language = UserProperties.getLocale().getLanguage();
-            String xslScriptBaseDirName = DEV_RESOURCE_BASE_XSL_DIR_NAME;
-            String scriptPath = xslScriptBaseDirName + language;
-            File dir = new File(scriptPath);
-            File[] scripts = dir.listFiles();
-            // wenn für die Locale keine Scripte gefunden wurde -> lade die Englischen
-            if (scripts.length == 0) {
-                scriptPath = xslScriptBaseDirName + "en";
-                dir = new File(scriptPath);
-            }
-            ArrayList<String> scriptNameList = new ArrayList<String>(scripts.length);
-            for (int i = 0; i < scripts.length; i++) {
-                String s = scripts[i].getCanonicalPath();
-                if (!s.endsWith(XSL_SCRIPT_FILE_EXTENSION)) {
-                    continue;
-                }
-                scriptNameList.add(s.substring(DEV_RESOURCE_BASE_DIR_NAME.length()));
-            }
-            String[] scriptNames = new String[scriptNameList.size()];
-            System.arraycopy(scriptNameList.toArray(), 0, scriptNames, 0, scriptNames.length);
-            return scriptNames;
-            // wenn der Ordner mit den xsl-Dateien nicht gefunden wurde, weil er sich sicherlich in der
-            // herausgegebenen Jar-Datei versteckt -> lies die Scripte aus der Jar-Datei
-        } catch (Exception e) {
-
-            Enumeration<JarEntry> entries = null;
-
-            try {
-                entries = new JarFile(TOOL_JAR_FILE_NAME).entries();
-            } catch (IOException e1) {
-                // e1.printStackTrace();
-            }
-
-            String packagePattern = JAR_RESOURCE_BASE_XSL_DIR_NAME + UserProperties.getLocale().getLanguage() + "/[^/]+\\.xsl";
-            ArrayList<JarEntry> xslEntries = new ArrayList<JarEntry>();
-
-            if (entries == null) {
-                return new String[0];
-            }
-
-            while (entries.hasMoreElements()) {
-                JarEntry jarEntry = entries.nextElement();
-                if (jarEntry.getName().matches(packagePattern)) {
-                    xslEntries.add(jarEntry);
-                }
-            }
-            // wenn für die aktuelle Locale-Sprache keine Scripte gefunden wurden -> lade die Englischen
-            if (xslEntries.size() == 0) {
-                packagePattern = JAR_RESOURCE_BASE_XSL_DIR_NAME + "en/[^/]+\\.xsl";
-                while (entries.hasMoreElements()) {
-                    JarEntry jarEntry = entries.nextElement();
-                    if (jarEntry.getName().matches(packagePattern)) {
-                        xslEntries.add(jarEntry);
-                    }
-                }
-            }
-
-            String[] scriptNames = new String[xslEntries.size()];
-
-            for (int i = 0; i < scriptNames.length; i++) {
-                scriptNames[i] = xslEntries.get(i).toString();
-            }
-
-            return scriptNames;
-        }
-
     }
 
     /**
