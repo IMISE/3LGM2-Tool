@@ -74,7 +74,7 @@ public class Help {
      */
     private Help() {
         try {
-            URL url = HelpSet.findHelpSet(Tool3lgm.class.getClassLoader(), "doc/help.hs", UserProperties.getLocale());
+            URL url = HelpSet.findHelpSet(ClassLoader.getSystemClassLoader(), "doc/help.hs", UserProperties.getLocale());
             mainHS = new HelpSet(Tool3lgm.class.getClassLoader(), url);
         } catch (Exception ee) {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("keinHelpSet"), ee);
