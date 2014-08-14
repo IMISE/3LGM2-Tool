@@ -1,11 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
@@ -42,7 +44,6 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.BrowserLauncher;
 
 /**
  * @author N.N.
@@ -677,7 +678,7 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
             if (left_button && tmpUserObject != null && tmpUserObject instanceof HyperlinkString) {
                 String value = ((HyperlinkString) tmpUserObject).getValue();
                 try {
-                    BrowserLauncher.openURL(value);
+                    Desktop.getDesktop().browse(new URI(value));
                 } catch (Exception exp) {
                     Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
                 }

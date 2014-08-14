@@ -1,7 +1,11 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
+import java.net.URI;
 import java.util.Calendar;
 
 import javax.swing.ImageIcon;
@@ -21,7 +26,6 @@ import javax.swing.JLabel;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
-import de.imise.util.BrowserLauncher;
 
 /**
  * @author hboehme
@@ -135,7 +139,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
         Graphics g = image.getGraphics();
         g.drawImage(ii.getImage(), 0, 0, imageLabel);
         update(g);
-        Rectangle2D r = g.getFontMetrics().getStringBounds(Tool3lgmConstants.getResString("toolWebSite"), g);
+        Rectangle2D r = g.getFontMetrics().getStringBounds(getResString("toolWebSite"), g);
         r.setRect(r.getX() + 20, r.getY() + 340, r.getWidth(), r.getHeight());
         linkPosition = r;
         new ToolSplashScreen(imageLabel);
@@ -165,9 +169,9 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     public void mouseClicked(final MouseEvent e) {
         if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
             try {
-                BrowserLauncher.openURL(Tool3lgmConstants.getResString("toolWebSite"));
+                Desktop.getDesktop().browse(new URI(getResString("toolWebSite")));
             } catch (Exception exp) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
+                Log.show(Log.ERROR, getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
             }
         }
     }

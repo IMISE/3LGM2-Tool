@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.xslt;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -34,7 +36,6 @@ import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
-import de.imise.util.BrowserLauncher;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.ProgressDialog;
 
@@ -300,7 +301,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             try {
                 XMLTransformer.transform(tableModel.getScript(selectedRow).openStream(), tableModel.getScript(selectedRow).getSource(), tempXMLFile, fileString);
                 if (checkBoxShowResult.isSelected()) {
-                    BrowserLauncher.openURL(fileString);
+                    Desktop.getDesktop().browse(new URI(fileString));
                 }
             } catch (IOException exp) {
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
