@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
 import java.net.URI;
 import java.util.Calendar;
 
@@ -90,7 +91,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
             g.setColor(Color.BLUE);
 
         }
-        g.drawString(Tool3lgmConstants.getResString("toolWebSite"), 20, 340);
+        g.drawString(getResString("toolWebSite"), 20, 340);
     }
 
     /**
@@ -104,18 +105,18 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
         g.setColor(new java.awt.Color(40, 127, 255));
 
         g.setFont(g.getFont().deriveFont(Font.BOLD, 19f));
-        g.drawString(Tool3lgmConstants.getResString("tool3lgm"), 20, 25);
+        g.drawString(getResString("tool3lgm"), 20, 25);
         g.setFont(g.getFont().deriveFont(Font.BOLD, 16f));
         g.setColor(new java.awt.Color(24, 76, 153));
-        g.drawString(Tool3lgmConstants.getResString("fullToolName1"), 20, 50);
-        g.drawString(Tool3lgmConstants.getResString("fullToolName2"), 20, 70);
-        g.drawString(Tool3lgmConstants.getResString("version") + " " + Tool3lgmConstants.TOOL_VERSION, 20, 100);
-        g.drawString(Tool3lgmConstants.getResString("instituteName1"), 20, 260);
-        g.drawString(Tool3lgmConstants.getResString("instituteName2"), 20, 280);
-        g.drawString(Tool3lgmConstants.getResString("instituteName3"), 20, 300);
+        g.drawString(getResString("fullToolName1"), 20, 50);
+        g.drawString(getResString("fullToolName2"), 20, 70);
+        g.drawString(getResString("version") + " " + Tool3lgmConstants.TOOL_VERSION, 20, 100);
+        g.drawString(getResString("instituteName1"), 20, 260);
+        g.drawString(getResString("instituteName2"), 20, 280);
+        g.drawString(getResString("instituteName3"), 20, 300);
         g.drawString(DEVELOPMENT_DURATION, 20, 320);
         g.setFont(g.getFont().deriveFont(Font.BOLD, 13f));
-        g.drawString(Tool3lgmConstants.getResString("toolWebSite"), 20, 340);
+        g.drawString(getResString("toolWebSite"), 20, 340);
     }
 
     /**
@@ -124,12 +125,12 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
      * @return
      */
     public static final void getInfoDialog() {
-        infoDialog = new JDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("about"), true);
+        infoDialog = new JDialog(Tool3lgm.tool, getResString("about"), true);
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 
-        //		ImageIcon ii = Tool3lgmConstants.getIcon("splash_ohne_text2.gif");
-        ImageIcon ii = new ImageIcon(ClassLoader.getSystemClassLoader().getResource("splash.gif"));
+        File splashFile = new File(Tool3lgmConstants.APPLICATION_DIR, "splash.gif");
+        ImageIcon ii = new ImageIcon(splashFile.getPath());
 
         imageLabel = new JLabel();
 
