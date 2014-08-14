@@ -31,5 +31,15 @@
 			<artifactId>saxon</artifactId>
 			<version>8.7</version>
 		</dependency>
+		<dependency>
+			<groupId>de.imise</groupId>
+			<artifactId>de.imise.utils</artifactId>
+			<version>0.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>de.imise</groupId>
+			<artifactId>de.imise.twatd</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 </project>
