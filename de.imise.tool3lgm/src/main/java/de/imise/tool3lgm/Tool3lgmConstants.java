@@ -111,11 +111,6 @@ public abstract class Tool3lgmConstants {
     /** Pfad zur Datei mit den Optionen eines Benutzers */
     public static final File USER_INFO_FILE = new File(USER_HOME_DIR_NAME, ".tool3lgmUserInfo");
 
-    /** Name des Verzeichnisses in dem die lokalisierten Ressourcen liegen bedinnend mit dem Hauptpackage */
-    public static final String RESOURCE_DIR_NAME = "";
-    public static final String DEV_RESOURCE_DIR_NAME = "/src/main/resources/";
-    public static final String JAR_RESOURCE_DIR_NAME = "resources/";
-
     /**
      * Datei-Endung für große Icons.
      * <p>
@@ -145,7 +140,7 @@ public abstract class Tool3lgmConstants {
      * Name des Verzeichnisses in dem alle Icons liegen, die das Tool braucht.<br>
      * Diese können über die statische Methode <code>getIcon(String name)</code> geladen werden.
      */
-    private static final String RESOURCE_ICON_DIR_NAME = RESOURCE_DIR_NAME + "icon/";
+    private static final String RESOURCE_ICON_DIR_NAME = "icon/";
 
     /**
      * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
@@ -160,12 +155,12 @@ public abstract class Tool3lgmConstants {
     public static final File EXAMPLE_MODEL_FILE = new File(APPLICATION_DIR, "Beispiel.z3lgm");
 
     /** Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen */
-    public static final String WEB_EXPORT_RESOURCE_DIR_NAME = RESOURCE_DIR_NAME + "webexport/";
+    public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
     // Anfang FileFilter
 
     /** Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen Benutzer */
-    public static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource(RESOURCE_DIR_NAME + "DefaultUserProperties");
+    public static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 4;
@@ -223,20 +218,12 @@ public abstract class Tool3lgmConstants {
      * Haupt-<code>ResoruceBundle</code> mit allen Resourcen außer ein paar speziellen Fehlermeldungen.<br>
      * Fehlermeldungen sollten in errorBundle abgelegt werden.
      */
-    private static ResourceBundle resourceBundle = null;
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
+
     /**
      * ResourceBundle für Fehlermeldungen
      */
-    private static ResourceBundle errorBundle = null;
-    static {
-        try {
-            resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
-            errorBundle = ResourceBundle.getBundle(RESOURCE_ERRORS_BASE_NAME);
-        } catch (Exception e) {
-            resourceBundle = ResourceBundle.getBundle(JAR_RESOURCE_DIR_NAME + RESOURCE_BASE_NAME);
-            errorBundle = ResourceBundle.getBundle(JAR_RESOURCE_DIR_NAME + RESOURCE_ERRORS_BASE_NAME);
-        }
-    }
+    private static ResourceBundle errorBundle = ResourceBundle.getBundle(RESOURCE_ERRORS_BASE_NAME);
 
     /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse
@@ -247,7 +234,7 @@ public abstract class Tool3lgmConstants {
     public static final String ANALYSEN_FILE_NAME = UserProperties.getLocale().getLanguage().equals("en") ? "Tool3lgm.analysis" : "Tool3lgm_" + UserProperties.getLocale().getLanguage() + ".analysis";
 
     /** Absoluter Pfad zur Datei mit den Standardanalysen in den Resourcen */
-    public static final URL DEFAULT_ANALYSEN_RESOURCE_URL = ClassLoader.getSystemResource(RESOURCE_DIR_NAME + ANALYSEN_FILE_NAME);
+    public static final URL DEFAULT_ANALYSEN_RESOURCE_URL = ClassLoader.getSystemResource(ANALYSEN_FILE_NAME);
 
     /** Locale, mit der der Baukasten gestartet wurde. */
     public static final Locale START_LOCALE = UserProperties.getLocale();
