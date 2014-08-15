@@ -4,6 +4,7 @@
 package de.imise.util.collections;
 
 import java.util.Collection;
+import java.util.TreeSet;
 
 import de.imise.util.Alphabetical;
 
