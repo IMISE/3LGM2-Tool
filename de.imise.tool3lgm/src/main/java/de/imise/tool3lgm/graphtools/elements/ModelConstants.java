@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
@@ -88,7 +90,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author N.N., AXS
@@ -97,7 +98,8 @@ public final class ModelConstants {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
+     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
      * eingelesen werden können.
      */
     protected static HashMap<String, String> oldToNewName = new HashMap<String, String>();
@@ -136,11 +138,13 @@ public final class ModelConstants {
     /** Short-Name für den beginn des HashStrings bei allen Kanten */
     public static final String EDGE_SHORT_NAME = "DLK";
     /**
-     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Knoten noch Kantenklasse ist.
+     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Knoten noch Kantenklasse
+     * ist.
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
     /**
-     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
+     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
+     * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
      * Vorangestellt werden.
      */
     private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
@@ -429,12 +433,14 @@ public final class ModelConstants {
     ///////////////////////////////////
 
     /**
-     * Map, bei der die Schlüssel jeweils eine Kanteklasse ist, deren Instanzen für Elemente der Value-Klasse sortiert sind. Das bedeutet, die Reihenfolge, in der Elemente der Value-Klasse Kanten der Schlüssel-Klasse in ihrem Kantenvektor enthalten, hat
+     * Map, bei der die Schlüssel jeweils eine Kanteklasse ist, deren Instanzen für Elemente der Value-Klasse sortiert sind. Das bedeutet, die
+     * Reihenfolge, in der Elemente der Value-Klasse Kanten der Schlüssel-Klasse in ihrem Kantenvektor enthalten, hat
      * eine Bedeutung.
      */
     private static final HashMap<Class<? extends Kante>, Class<? extends ModelElement>> ORDERED_EDGE_TO_ELEMENT_CLASS = new HashMap<Class<? extends Kante>, Class<? extends ModelElement>>();
     /**
-     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine Bedeutung haben.
+     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Bedeutung haben.
      */
     private static final HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = new HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>>();
     static {
@@ -453,7 +459,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
+     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
+     * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
      * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
      * 
      * @param elementClass
@@ -492,9 +499,12 @@ public final class ModelConstants {
     }
 
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
-     * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen zusammenzufassen.
+     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
+     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
+     * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
+     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
+     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
+     * zusammenzufassen.
      */
     private static final HashSet<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
     static {
@@ -536,7 +546,8 @@ public final class ModelConstants {
     public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]>();
 
     /**
-     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
+     * Rückgabewerten enthalten, wenn sie nichtabstract ist.
      * 
      * @param elementClass
      * @return
@@ -611,18 +622,21 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean hasEdgeType(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return CollectionUtils.arrayContains(getEdgeTypes(elementClass), edgeClass);
+        return ArrayUtils.contains(getEdgeTypes(elementClass), edgeClass);
     }
 
     /**
-     * Mappt für eine Elementklasse auf eine weitere Map, die von einer Elementklasse auf ein Array von Kantenklassen mappt. Das Array der Kantenklassen enthält alle Kanten, die zwischen den beiden Schlüsselelementklassen vorhanden sein können.<br />
-     * In der äußeren und allen inneren HashMaps sind immer dieselben Schlüsselelemente enthalten. Für ein Paar von Schlüsselelementklassen ist immer dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als Schlüssel
+     * Mappt für eine Elementklasse auf eine weitere Map, die von einer Elementklasse auf ein Array von Kantenklassen mappt. Das Array der
+     * Kantenklassen enthält alle Kanten, die zwischen den beiden Schlüsselelementklassen vorhanden sein können.<br />
+     * In der äußeren und allen inneren HashMaps sind immer dieselben Schlüsselelemente enthalten. Für ein Paar von Schlüsselelementklassen ist immer
+     * dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als Schlüssel
      * einsetzt.
      */
     private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>>();
 
     /**
-     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
+     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
+     * zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
      * 
      * @param elementClass1
      * @param elementClass2
@@ -690,7 +704,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell einen eigenen Container besitzt.
+     * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell
+     * einen eigenen Container besitzt.
      */
     public static final boolean isUnique(final Class<?> elementClass) {
         return UNIQUE_NODES.contains(elementClass);
@@ -747,7 +762,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse
+     * ist.
      * 
      * @param elementClass
      * @return
@@ -851,7 +867,8 @@ public final class ModelConstants {
 
     /**
      * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
-     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der aktuelle ist.
+     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
+     * aktuelle ist.
      * 
      * @param oldName
      * @return
@@ -1054,21 +1071,28 @@ public final class ModelConstants {
      * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
      * 
      * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
+     * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
+     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param direction Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
+     * @param direction Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur eine
+     *            Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
      *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
-     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2 Assoziationen sind, aber aus allerlei nicht nachvollzierbaren Gründen in eine gepackt wurden.<br>
+     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
+     *            Assoziationen sind, aber aus allerlei nicht nachvollzierbaren Gründen in eine gepackt wurden.<br>
      *            Beispiel 1: {@link AufObjVerbindung} = Assoziation zw. Startklasse {@link Aufgabe} und Endklasse {@link Objekttyp}.<br>
      *            <ul>
      *            <li>
-	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt "Aufgabe bearbeitet Objekttyp"</li>
+	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            "Aufgabe bearbeitet Objekttyp"</li>
      *            <li>
-	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt "Aufgabe interpretiert Objekttyp"</li>
+	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            "Aufgabe interpretiert Objekttyp"</li>
      *            <li>
-	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt "Objekttyp wird interpretiert von Aufgabe "</li>
+	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            "Objekttyp wird interpretiert von Aufgabe "</li>
      *            <li>
-	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt "Objekttyp wird bearbeitet von Aufgabe"</li>
+	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            "Objekttyp wird bearbeitet von Aufgabe"</li>
      *            </ul>
      * @return
      */
@@ -1197,7 +1221,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden können.
+     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
+     * können.
      * 
      * @return
      */
@@ -1206,7 +1231,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet werden kann.
+     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
+     * werden kann.
      * 
      * @return
      */
@@ -1217,7 +1243,8 @@ public final class ModelConstants {
     /*******************/
 
     /**
-     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann. Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
+     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
+     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
      * lesbarer zu gestalten.
      * 
      * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
@@ -1425,8 +1452,10 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
-     * denen mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei <code>isMaster==true</code>) zuweisungskompatibel zur übergebenen Elementklasse ist.
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder
+     * übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
+     * denen mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei <code>isMaster==true</code>) zuweisungskompatibel
+     * zur übergebenen Elementklasse ist.
      * 
      * @param elementClass
      * @param isMaster wenn <code>true</code> soll die übergebene Elementart die übergeordnete sein, sonst die untergeordnete
@@ -1465,7 +1494,8 @@ public final class ModelConstants {
     //    }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur übergebenen
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse, die
+     * Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur übergebenen
      * Elementklasse ist.
      * 
      * @param elementClass
@@ -1476,7 +1506,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur übergebenen
+     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die
+     * Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur übergebenen
      * Elementklasse ist.
      * 
      * @param elementClass
@@ -1489,7 +1520,8 @@ public final class ModelConstants {
     /**
      * Liefert alle Elementarten, die der übergebenen Elementart über eine Komposition untergeordnet sind.
      * 
-     * @param masterElementClass Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition verbunden sein können.
+     * @param masterElementClass Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition verbunden
+     *            sein können.
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -1512,7 +1544,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die übergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die
+     * übergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
      * 
      * @param elementClass
      * @return <code>true</code>, wenn das übergebene ein untergeordnetes Element ist
@@ -1576,7 +1609,8 @@ public final class ModelConstants {
     }
 
     /**
-     * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen generiert (siehe AufOrgKombination, EtntEtdtKombination)
+     * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen
+     * generiert (siehe AufOrgKombination, EtntEtdtKombination)
      * 
      * @return
      */
