@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.Szenario;
 
 /**
  * @author thomas
@@ -33,10 +34,10 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
         Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("label_convert"));
         doc._createNewEdgeClasses();
         doc._removeMultipleTraces();
-        for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
-            collection.getSzenario(i).initKnotContainers();
-            collection.getSzenario(i).initTraceContainers();
-            //			collection.getSzenario(i).refreshSpecialInfoTargets();
+        for (Szenario szen : collection.getSzenarios()) {
+            szen.initKnotContainers();
+            szen.initTraceContainers();
+            //szen.refreshSpecialInfoTargets();
         }
         doc._refreshSubordinatedElementsInSzenarios();
 

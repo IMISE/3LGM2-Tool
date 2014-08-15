@@ -281,7 +281,7 @@ public class DecisionTree {
         for (AlphabeticalSet<ModelElement> set : result.equalsSets) {
             // immer nur den ersten Eintrag aus den Listen in equalsSets nehmen (es ex. mind. ein
             // Element in jeder Liste)
-            notExclusiveAWB[i++] = set.get(0);
+            notExclusiveAWB[i++] = set.first();
         }
         notExclusiveFunc = new ModelElement[notExclusiveFuncSet.size()];
         i = 0;
@@ -801,7 +801,7 @@ public class DecisionTree {
                 // in die moreUseless kopieren
                 for (int j = 0; j < result.equalsSets.size(); j++) {
                     AlphabeticalSet<ModelElement> as = result.equalsSets.get(j);
-                    if (as.get(0) == notExclusiveAWB[i]) {
+                    if (as.first() == notExclusiveAWB[i]) {
                         result.moreUselessAWB.addAll(as);
                         // dieses equalsSet entfernen
                         result.equalsSets.remove(j--);
@@ -818,7 +818,7 @@ public class DecisionTree {
                     // der Liste der Sets entfernen
                     AlphabeticalSet<ModelElement> as = result.equalsSets.get(j);
                     if (as.size() == 1) {
-                        result.moreNeededAWB.add(as.get(0));
+                        result.moreNeededAWB.add(as.first());
                         // dieses equalsSet entfernen
                         result.equalsSets.remove(j--);
                     }
@@ -885,12 +885,11 @@ public class DecisionTree {
         result.equalsSets = new ArrayList<AlphabeticalSet<ModelElement>>();
 
         // für alle AWB, auf die nur mit den exklusiven nicht verzichtet werden kann
-        for (int i = 0; i < notExclusiveAWBSet.size(); i++) {
-            //
-            Alphabetical.insert(maybeNotrequiredAWB, notExclusiveAWBSet.get(i));
+        for (ModelElement notExclusiveAWB : notExclusiveAWBSet) {
+            Alphabetical.insert(maybeNotrequiredAWB, notExclusiveAWB);
             // aus dem Set der vom AWB unterstützten Aufgaben all die entfernen, die schon
             // von den exklusiven AWBs erledigt werden (die braucht man nicht beachten)
-            AlphabeticalSet<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWBSet.get(i));
+            AlphabeticalSet<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWB);
             funcOfAWB.removeAll(exclusiveFuncs);
         }
         // aus notExclusiveButNeededAWB alle AWB entfernen, die dasselbe tun, d.h. es bleibt genau

@@ -17,6 +17,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -172,9 +173,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
         doc._cleanContainers();
         doc._removeMultipleTraces();
 
-        for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
-            collection.getSzenario(i).initKnotContainers();
-            collection.getSzenario(i).initTraceContainers();
+        for (Szenario szen : collection.getSzenarios()) {
+            szen.initKnotContainers();
+            szen.initTraceContainers();
             //			collection.getSzenario(i).refreshSpecialInfoTargets();
         }
         doc._refreshSubordinatedElementsInSzenarios();

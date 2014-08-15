@@ -15,7 +15,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.tools.ModelTools;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -529,7 +528,8 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      */
     public boolean isSelectedOnlyBendpointsAndTextfields() {
-        return CollectionUtils.containsOnlyInstancesOf(ModelTools.toModelElements(selectedRealNodeContainer), true, Textfeld.class, Knickpunkt.class);
+        Collection<?> elements = GDCollection.getModelElements(selectedRealNodeContainer);
+        return CollectionUtils.containsOnlyInstancesOf(elements, true, Textfeld.class, Knickpunkt.class);
     }
 
     /**

@@ -27,7 +27,6 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -1832,29 +1831,20 @@ public final class GDCollection extends UserFieldTarget {
         return true;
     }
 
-    /**
-     * @return
-     */
-    public int getNumberOfSzenarios() {
+    public int getSzenarioCount() {
         return szenarios.size();
     }
 
-    /**
-     * @param i
-     * @return
-     */
-    public Szenario getSzenario(final int i) {
-        return szenarios.get(i);
+    public Szenario getSzenario(final int index) {
+        return szenarios.get(index);
     }
 
-    /**
-     * Gibt den
-     * 
-     * @param szen
-     * @return
-     */
-    public int getSzenarionIndex(final Szenario szen) {
-        return szenarios.indexOf(szen);
+    public Iterable<Szenario> getSzenarios() {
+        return szenarios;
+    }
+
+    public boolean hasSzenario(final Szenario szen) {
+        return szenarios.contains(szen);
     }
 
     /**
@@ -1871,15 +1861,6 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
         return null;
-    }
-
-    /**
-     * Liefert eine Kopie der Liste aller Szenarios
-     * 
-     * @return
-     */
-    public ArrayList<Szenario> getSzenarios() {
-        return new ArrayList<Szenario>(szenarios);
     }
 
     /**
@@ -1905,52 +1886,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param szenIndex
-     * @return
-     */
-    public AbstractInternalFrame getSzenarioFrame(final int szenIndex) {
-        Szenario szen = szenarios.get(szenIndex);
-
-        JInternalFrame[] frames = Tool3lgm.tool.getAllFrames();
-        for (int c = 0; c < frames.length; c++) {
-            if (((AbstractInternalFrame) frames[c]).getGraphDocument() == szen) {
-                return (AbstractInternalFrame) frames[c];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param j
-     * @return
-     */
-    public boolean isSzenarioVisible(final int j) {
-        JInternalFrame[] frames = Tool3lgm.tool.getAllFrames();
-        for (int c = 0; c < frames.length; c++) {
-            if (((AbstractInternalFrame) frames[c]).getGraphDocument() == szenarios.get(j)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Gibt wieder, ob das spezifizierte Szenario sichtbar ist
-     * 
-     * @param szen
-     * @return
-     */
-    public static final boolean isSzenarioVisible(final Szenario szen) {
-        JInternalFrame[] frames = Tool3lgm.tool.getAllFrames();
-        for (int c = 0; c < frames.length; c++) {
-            if (((AbstractInternalFrame) frames[c]).getGraphDocument() == szen) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param elementClass
      */
     public final void clearTextRightDown(final Class<? extends Knoten> elementClass) {
@@ -1958,10 +1893,9 @@ public final class GDCollection extends UserFieldTarget {
             doc.clearTextRightDown(elementClass);
             doc.clearLayerText(elementClass);
         }
-        for (int i = 0; i < szenarios.size(); i++) {
-            Szenario s = szenarios.get(i);
-            s.clearTextRightDown(elementClass);
-            s.clearLayerText(elementClass);
+        for (Szenario szen : szenarios) {
+            szen.clearTextRightDown(elementClass);
+            szen.clearLayerText(elementClass);
         }
     }
 
@@ -2417,8 +2351,9 @@ public final class GDCollection extends UserFieldTarget {
         } else {
             importSzenarios = new LGMGraphDocument[collection.szenarios.size() + 1];
             importSzenarios[0] = collection.getMainGraphDocument();
-            for (int i = 0; i < collection.szenarios.size(); i++) {
-                importSzenarios[i + 1] = collection.szenarios.get(i);
+            int i = 1;
+            for (Szenario szenario : collection.szenarios) {
+                importSzenarios[i++] = szenario;
             }
         }
         importSzenarios(importSzenarios, collection);

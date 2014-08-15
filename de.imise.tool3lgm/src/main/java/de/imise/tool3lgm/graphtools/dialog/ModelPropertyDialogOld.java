@@ -16,6 +16,7 @@ import javax.swing.event.ChangeEvent;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.TabbedPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -98,9 +99,9 @@ public class ModelPropertyDialogOld extends PropertyDialog {
 
         tabbedPane.add(scrollPane, Tool3lgmConstants.getResString("uebersicht"));
 
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-            scrollPane = new MyScrollPane(gdcoll.getSzenario(i));
-            tabbedPane.add(scrollPane, gdcoll.getSzenario(i).getTitle());
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            scrollPane = new MyScrollPane(szen);
+            tabbedPane.add(scrollPane, szen.getTitle());
         }
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -183,11 +184,10 @@ public class ModelPropertyDialogOld extends PropertyDialog {
         ((JScrollPane) tabbedPane.getSelectedComponent()).getViewport().add(textPane, null);
         if (tabbedPane.getSelectedIndex() == 0) {
             lastActiveDoc = gdcoll.getMainGraphDocument();
-            textPane.setText(gdcoll.getMainGraphDocument().getDescription());
         } else {
             lastActiveDoc = gdcoll.getSzenario(tabbedPane.getSelectedIndex() - 1);
-            textPane.setText(gdcoll.getSzenario(tabbedPane.getSelectedIndex() - 1).getDescription());
         }
+        textPane.setText(lastActiveDoc.getDescription());
     }
 
     private void dialogPositionOrSizeChanged() {

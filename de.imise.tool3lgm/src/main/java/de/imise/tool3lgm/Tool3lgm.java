@@ -588,19 +588,17 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         createMainFrame(gdcoll.getMainGraphDocument());
 
         LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
-        if (gdcoll.getNumberOfSzenarios() > 0) {
-            for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-                Szenario szen = gdcoll.getSzenario(i);
-                if (progressDialog != null) {
-                    progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("create_frame") + szen.getTitle());
-                }
-                if (szen.getViewParameter() == null && i == 0) {
-                    selectedDoc = szen;
-                } else if (szen.getViewParameter() != null && szen.getViewParameter().selected) {
-                    selectedDoc = szen;
-                }
-                createSzenarioFrame(szen);
+        for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
+            Szenario szen = gdcoll.getSzenario(i);
+            if (progressDialog != null) {
+                progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("create_frame") + szen.getTitle());
             }
+            if (szen.getViewParameter() == null && i == 0) {
+                selectedDoc = szen;
+            } else if (szen.getViewParameter() != null && szen.getViewParameter().selected) {
+                selectedDoc = szen;
+            }
+            createSzenarioFrame(szen);
         }
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
@@ -652,7 +650,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
                 class2ElementCount.put(meClass, count);
 
-                ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>(gdcoll.getSzenarios());
+                ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>(gdcoll.getSzenarioCount() + 1);
+                for (Szenario szen : gdcoll.getSzenarios()) {
+                    docs.add(szen);
+                }
                 docs.add(mainDoc);
 
                 //Anzahl der ElementContainer der Modellelemente im Gesamtmodell hochzählen
@@ -1173,9 +1174,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     public void closeAllFramesAndTabs(final GDCollection gdcoll) {
         modelBrowserPanel.removeGraphDocument(gdcoll.getMainGraphDocument());
         closeFrame(gdcoll.getMainGraphDocument());
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-            GraphDocument doc = gdcoll.getSzenario(i);
-            closeFrame(doc);
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            closeFrame(szen);
         }
     }
 

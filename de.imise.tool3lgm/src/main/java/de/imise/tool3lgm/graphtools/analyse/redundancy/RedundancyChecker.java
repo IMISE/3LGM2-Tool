@@ -338,8 +338,9 @@ public class RedundancyChecker extends WindowAdapter {
             if (al.size() == 0) {
                 outputDialog.appendln(Tool3lgmConstants.getResString("none"));
             } else {
-                for (int k = 0; k < al.size(); k++) {
-                    outputDialog.appendln(k + 1 + ".)\t" + getElementName(al.get(k)));
+                int k = 1;
+                for (ModelElement me : al) {
+                    outputDialog.appendln(k++ + ".)\t" + getElementName(me));
                 }
             }
 
@@ -355,8 +356,9 @@ public class RedundancyChecker extends WindowAdapter {
                 for (int i = 0; i < result.equalsSets.size(); i++) {
                     AlphabeticalSet<ModelElement> as = result.equalsSets.get(i);
                     outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_equivalence_class") + " " + (i + 1) + ":");
-                    for (int j = 0; j < as.size(); j++) {
-                        outputDialog.appendln(j + 1 + ".)\t" + getElementName(as.get(j)));
+                    int j = 1;
+                    for (ModelElement me : as) {
+                        outputDialog.appendln(j++ + ".)\t" + getElementName(me));
                     }
                     outputDialog.appendln();
                 }
@@ -371,9 +373,9 @@ public class RedundancyChecker extends WindowAdapter {
             if (al.size() == 0) {
                 outputDialog.appendln(Tool3lgmConstants.getResString("none"));
             } else {
-                for (int k = 0; k < al.size(); k++) {
-                    ModelElement me = al.get(k);
-                    outputDialog.appendln(k + 1 + ".)\t" + getElementName(me) + " \n\t\t" + result.uselessToNeeded.get(me).toString().replace("-\n", "").replace('\n', ' '));
+                int k = 1;
+                for (ModelElement me : al) {
+                    outputDialog.appendln(k++ + ".)\t" + getElementName(me) + " \n\t\t" + result.uselessToNeeded.get(me).toString().replace("-\n", "").replace('\n', ' '));
                 }
             }
 
@@ -413,8 +415,9 @@ public class RedundancyChecker extends WindowAdapter {
             if (result.notSupportingAWB.size() == 0) {
                 outputDialog.appendln(Tool3lgmConstants.getResString("none"));
             } else {
-                for (int k = 0; k < result.notSupportingAWB.size(); k++) {
-                    outputDialog.appendln(k + 1 + ".)\t" + getElementName(result.notSupportingAWB.get(k)));
+                int k = 1;
+                for (ModelElement me : result.notSupportingAWB) {
+                    outputDialog.appendln(k++ + ".)\t" + getElementName(me));
                 }
             }
 

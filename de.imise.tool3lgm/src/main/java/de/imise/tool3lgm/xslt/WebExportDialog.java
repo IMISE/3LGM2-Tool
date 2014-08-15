@@ -248,13 +248,14 @@ public class WebExportDialog extends JDialog {
             tempXMLFile.delete();
 
             Szenario[] szenarios = new Szenario[1];
-            for (int j = 0; j < collection.getNumberOfSzenarios(); j++) {
-                szenarios[0] = collection.getSzenario(j);
+            int j = 0;
+            for (Szenario szen : collection.getSzenarios()) {
+                szenarios[0] = szen;
                 Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("webExport") + ": " + szenarios[0].getTitle());
 
                 raf = new RandomAccessFile(new File(filesDir, "szen" + j + "_description.html"), "rw");
                 raf.setLength(0);
-                raf.writeBytes(getDescriptionHTMLString(collection.getSzenario(j)));
+                raf.writeBytes(getDescriptionHTMLString(szen));
                 raf.close();
 
                 tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH + "temporary_XMLFile_for_XSLT-Export.xml");
@@ -271,7 +272,7 @@ public class WebExportDialog extends JDialog {
                 GDCollection gdcoll = szenarios[0].getCollection();
                 int activeLayer = gdcoll.getActiveLayer();
 
-                BasicGraphArea area = new BasicGraphArea(collection.getSzenario(j));
+                BasicGraphArea area = new BasicGraphArea(szen);
                 createImage(area, filesDir.toString() + "/szen" + j + "_3layerView.jpg", 0.8, ModelConstants.NO_LAYER);
                 gdcoll.setActiveLayer(ModelConstants.DOMAIN_LAYER);
                 createImage(area, filesDir.toString() + "/szen" + j + "_domainLayer.jpg", 0.8, ModelConstants.DOMAIN_LAYER);
@@ -280,6 +281,7 @@ public class WebExportDialog extends JDialog {
                 gdcoll.setActiveLayer(ModelConstants.PHYSICAL_LAYER);
                 createImage(area, filesDir.toString() + "/szen" + j + "_physicalLayer.jpg", 0.8, ModelConstants.PHYSICAL_LAYER);
                 gdcoll.setActiveLayer(activeLayer);
+                j++;
             }
 
         } catch (Exception exp) {
@@ -345,22 +347,24 @@ public class WebExportDialog extends JDialog {
                     + XMLCharacterCoder.encodeString(xslScriptNames[i]) + "</a></li>\n");
         }
         returnValue.append("</ul>");
-        for (int j = 0; j < collection.getNumberOfSzenarios(); j++) {
-            returnValue.append("<li>" + XMLCharacterCoder.encodeString(collection.getSzenario(j).getTitle()) + "<ul><li><a href=\"javascript:changeSelection('szen" + j + "_description.html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/"
-                    + XMLCharacterCoder.encodeString(collection.getSzenario(j).getTitle()) + "/Beschreibung')\">Beschreibung</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_3layerView.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(collection.getSzenario(j).getTitle())
+        int j = 0;
+        for (Szenario szen : collection.getSzenarios()) {
+            returnValue.append("<li>" + XMLCharacterCoder.encodeString(szen.getTitle()) + "<ul><li><a href=\"javascript:changeSelection('szen" + j + "_description.html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/"
+                    + XMLCharacterCoder.encodeString(szen.getTitle()) + "/Beschreibung')\">Beschreibung</a></li>\n");
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_3layerView.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
                     + "/3-EbenenSicht')\">3-Ebenen-Sicht</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_domainLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(collection.getSzenario(j).getTitle())
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_domainLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
                     + "/Fachliche Ebene')\">Fachliche Ebene</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_logicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(collection.getSzenario(j).getTitle())
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_logicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
                     + "/Logische Werkzeugebene')\">Logische Werkzeugebene</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_physicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(collection.getSzenario(j).getTitle())
+            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_physicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
                     + "/Physische Werkzeugebene')\">Physische Werkzeugebene</a></li>\n");
             for (int i = 0; i < xslScriptNames.length; i++) {
-                returnValue.append("<li><a href=\"javascript:changeSelection('szen" + j + "_xslt" + i + ".html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + collection.getSzenario(j).getTitle() + "/"
-                        + XMLCharacterCoder.encodeString(xslScriptNames[i]) + "')\">" + XMLCharacterCoder.encodeString(xslScriptNames[i]) + "</a></li>\n");
+                returnValue.append("<li><a href=\"javascript:changeSelection('szen" + j + "_xslt" + i + ".html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + szen.getTitle() + "/" + XMLCharacterCoder.encodeString(xslScriptNames[i])
+                        + "')\">" + XMLCharacterCoder.encodeString(xslScriptNames[i]) + "</a></li>\n");
             }
             returnValue.append("</ul></li>\n");
+            j++;
         }
         returnValue.append("</ul>\n</body>\n</html>\n");
 

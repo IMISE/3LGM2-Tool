@@ -32,11 +32,6 @@ import de.imise.util.Alphabetical;
  */
 public class DataExportModule {
 
-    //	public static final ExtendedSet<Class<? extends ModelElement>> ignoreClasses = new ExtendedSet<Class<? extends ModelElement>>(
-    //			AufOrgKombination.class,
-    //			ABKonfiguration.class
-    //			);
-
     @SuppressWarnings("unchecked")
     public static final MetaPath[] metaPaths2Export = {
         new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class)

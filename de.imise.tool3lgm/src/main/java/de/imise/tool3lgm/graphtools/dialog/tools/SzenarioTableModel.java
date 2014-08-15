@@ -22,7 +22,7 @@ public class SzenarioTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return collection.getNumberOfSzenarios();
+        return collection.getSzenarioCount();
     }
 
     @Override
@@ -40,8 +40,8 @@ public class SzenarioTableModel extends AbstractTableModel {
         super();
         this.collection = collection;
         selectionColName = selectioColName;
-        selections = new Boolean[collection.getNumberOfSzenarios()];
-        for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
+        selections = new Boolean[collection.getSzenarioCount()];
+        for (int i = 0; i < collection.getSzenarioCount(); i++) {
             selections[i] = new Boolean(false);
         }
     }
@@ -121,7 +121,7 @@ public class SzenarioTableModel extends AbstractTableModel {
     }
 
     /**
-     * gibt die ausgewählten Seznarios zurück
+     * gibt die ausgewählten Szenarios zurück
      * 
      * @return Array mit den selektierten Szenarios
      */
@@ -132,14 +132,14 @@ public class SzenarioTableModel extends AbstractTableModel {
                 counter++;
             }
         }
-        Szenario[] szenarios = new Szenario[counter];
+        Szenario[] selectedSzenarios = new Szenario[counter];
         counter = 0;
         for (int i = 0; i < selections.length; i++) {
             if (selections[i].booleanValue()) {
-                szenarios[counter++] = collection.getSzenario(i);
+                selectedSzenarios[counter++] = collection.getSzenario(i);
             }
         }
-        return szenarios;
+        return selectedSzenarios;
     }
 
 }

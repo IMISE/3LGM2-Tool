@@ -106,8 +106,8 @@ public final class ModelPropertyDialog extends PropertyDialog {
         getContentPane().add(new JScrollPane(textPane), BorderLayout.CENTER);
 
         docBox.addItem(gdcoll.getMainGraphDocument());
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-            docBox.addItem(gdcoll.getSzenario(i));
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            docBox.addItem(szen);
         }
 
         JPanel northPanel = new JPanel(new BorderLayout());
@@ -130,9 +130,8 @@ public final class ModelPropertyDialog extends PropertyDialog {
      */
     public void update() {
         // prüfen, ob alle Teilmodelle in der Auswahlbox vorhanden sind
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
+        for (Szenario szen : gdcoll.getSzenarios()) {
             boolean found = false;
-            GraphDocument szen = gdcoll.getSzenario(i);
             for (int j = 0; j < docBox.getItemCount(); j++) {
                 Object item = docBox.getItemAt(j);
                 if (!(item instanceof Szenario)) {
@@ -153,7 +152,8 @@ public final class ModelPropertyDialog extends PropertyDialog {
             if (!(item instanceof Szenario)) {
                 continue;
             }
-            if (!gdcoll.getSzenarios().contains(item)) {
+            Szenario szen = (Szenario) item;
+            if (!gdcoll.hasSzenario(szen)) {
                 docBox.removeItem(item);
             }
         }

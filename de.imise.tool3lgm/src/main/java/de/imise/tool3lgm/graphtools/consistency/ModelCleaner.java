@@ -75,7 +75,9 @@ public class ModelCleaner {
 
         ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>();
         docs.add(mainDoc);
-        docs.addAll(gdcoll.getSzenarios());
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            docs.add(szen);
+        }
 
         // Bei allen Elementen den ContainerTable mit den LayerContainern synchronisieren
         // Es kann vorkommen, dass einige Kanten einen Container auf den Layern im Hauptmodell und
@@ -182,8 +184,8 @@ public class ModelCleaner {
         // Modellen auf
         // und sollte gleich am Anfang ausgeschlossen werden
         ArrayList<ElementContainer> al = new ArrayList<ElementContainer>();
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-            for (ElementContainer kc : gdcoll.getSzenario(i).getElementContainer(Knickpunkt.class)) {
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            for (ElementContainer kc : szen.getElementContainer(Knickpunkt.class)) {
                 BendpointContainer bpc = (BendpointContainer) kc;
                 Knickpunkt kp = bpc.getKnickpunktKnoten();
                 EdgeContainer ec = kp.getOwner();
@@ -239,9 +241,7 @@ public class ModelCleaner {
         }
 
         // Alle Knoten- und KantenContainer löschen, bei denen das zugehörige ModelElement null ist
-        int numSzen = gdcoll.getNumberOfSzenarios();
-        for (int k = 0; k < numSzen; k++) {
-            Szenario szen = gdcoll.getSzenario(k);
+        for (Szenario szen : gdcoll.getSzenarios()) {
             for (int i = 0; i < Integer.MAX_VALUE; i++) {
                 LayerContainer lc = szen.getLayer(i);
                 if (lc == null) {
@@ -324,8 +324,7 @@ public class ModelCleaner {
         // Alle evtl. auch fehlenden Kanten in allen Szenarios nachtragen und die Slave-Elemente
         // an die richtige Stelle bringen
         for (ModelElement me : mainDoc.getModelItems(Knoten.class, true)) {
-            for (int k = 0; k < numSzen; k++) {
-                Szenario szen = gdcoll.getSzenario(k);
+            for (Szenario szen : gdcoll.getSzenarios()) {
                 ElementContainer ec = me.getContainer(szen);
                 if (ec == null) {
                     continue;
@@ -488,8 +487,7 @@ public class ModelCleaner {
     }
 
     /**
-     * Löscht alle <code>AufOrgKombination</code>en, die mit keiner <code>Aufgabe</code> oder keiner
-     * <code>Organisationseinheit</code> verbunden sind.
+     * Löscht alle <code>AufOrgKombination</code>en, die mit keiner <code>Aufgabe</code> oder keiner <code>Organisationseinheit</code> verbunden sind.
      * 
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
      */
@@ -514,9 +512,8 @@ public class ModelCleaner {
     // //////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen
-     * <code>ABKonfiguration</code>en und AWB. Die <code>AufOrgKombination</code> und die
-     * <code>ABKonfiguration</code>en werden neu angelegt mit allen Assoziationen, die sie zu
+     * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen <code>ABKonfiguration</code>en und AWB. Die
+     * <code>AufOrgKombination</code> und die <code>ABKonfiguration</code>en werden neu angelegt mit allen Assoziationen, die sie zu
      * anderen Elementen haben.
      * 
      * @param gdcoll

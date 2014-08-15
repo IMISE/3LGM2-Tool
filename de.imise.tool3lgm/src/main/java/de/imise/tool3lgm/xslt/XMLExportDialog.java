@@ -292,7 +292,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
             File tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH, "temporary_XMLFile_for_XSLT-Export.xml");
 
-            if (selectedSzenarios.length == collection.getNumberOfSzenarios()) {
+            if (selectedSzenarios.length == collection.getSzenarioCount()) {
                 collection.exportModel(tempXMLFile);
             } else {
                 collection.exportSzenarios(selectedSzenarios, tempXMLFile);

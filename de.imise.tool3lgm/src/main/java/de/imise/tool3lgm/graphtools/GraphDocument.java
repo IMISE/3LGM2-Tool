@@ -3507,11 +3507,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GDCollection gdcoll = doc.getCollection();
         gdcoll.link(edgeClass, master, slave, pid);
 
-        int szenCount = gdcoll.getNumberOfSzenarios();
         ArrayList<Long> times1 = new ArrayList<Long>();
         ArrayList<Long> times2 = new ArrayList<Long>();
-        for (int i = 0; i < szenCount; i++) {
-            Szenario szen = gdcoll.getSzenario(i);
+        for (Szenario szen : gdcoll.getSzenarios()) {
             if (master.getContainer(szen) != null) {
                 long l = System.currentTimeMillis();
                 szen.addElementToSzenario(szen.getHashString(), slaveContainer, pid);
@@ -3633,8 +3631,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addUndoCommand(GDCommands.COORDINATE_KNOT + " " + szenHash + " " + slaveElement.getHashString() + " " + slaveContainer.getX() + " " + slaveContainer.getY() + " " + slaveContainer.getWidth() + " " + slaveContainer.getHeight(), pid);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveContainer.getWidth(), slaveContainer.getHeight());
 
-            for (int i = 0; i < getCollection().getNumberOfSzenarios(); i++) {
-                EdgeContainer kac = (EdgeContainer) k.getContainer(getCollection().getSzenario(i));
+            for (Szenario szenario : gdcoll.getSzenarios()) {
+                EdgeContainer kac = (EdgeContainer) k.getContainer(szenario);
                 if (kac != null) {
                     kac.computeBorderPoints();
                 }
@@ -4375,9 +4373,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void addContainerToAllSzenarios(final List<ElementContainer> elements, final int pid) {
         start_transaction(pid);
-        Szenario szen;
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-            szen = gdcoll.getSzenario(i);
+        for (Szenario szen : gdcoll.getSzenarios()) {
             if (szen == this) {
                 continue;
             }
@@ -4650,12 +4646,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GraphDocument gdoc = getCollection().getMainGraphDocument();
         int pid = TransactionManager.STANDARD_PID;
         gdoc.start_transaction(pid, false);
-        int numSzen = getCollection().getNumberOfSzenarios();
         for (LayerContainer lc : gdoc.layer) {
             for (NodeContainer knotenC : new ArrayList<NodeContainer>(lc.getKnoten())) {
                 Knoten knoten = knotenC.getKnoten();
-                for (int k = 0; k < numSzen; k++) {
-                    Szenario szen = getCollection().getSzenario(k);
+                for (Szenario szen : gdcoll.getSzenarios()) {
                     ElementContainer ec = knoten.getContainer(szen);
                     if (ec == null) {
                         continue;
@@ -4666,8 +4660,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
         }
         gdoc.deselectAll(true);
-        for (int k = 0; k < numSzen; k++) {
-            getCollection().getSzenario(k).deselectAll(true);
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            szen.deselectAll(true);
         }
         gdoc.finish_transaction(pid, false);
     }
@@ -4677,7 +4671,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     @Deprecated
     public void _cleanContainers() {
-        GraphDocument gdoc = getCollection().getMainGraphDocument();
+        GraphDocument gdoc = gdcoll.getMainGraphDocument();
         final int PID = TransactionManager.STANDARD_PID;
         gdoc.start_transaction(PID, false);
         for (int i = 0; i < layer.length; i++) {
@@ -4693,9 +4687,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         gdoc.finish_transaction(PID, false);
 
-        int numSzen = getCollection().getNumberOfSzenarios();
-        for (int k = 0; k < numSzen; k++) {
-            Szenario szen = getCollection().getSzenario(k);
+        for (Szenario szen : gdcoll.getSzenarios()) {
             szen.start_transaction(PID, false);
             for (int i = 0; i < layer.length; i++) {
                 LayerContainer lc = szen.getLayer(i);

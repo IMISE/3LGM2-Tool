@@ -19,6 +19,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 
@@ -239,7 +240,10 @@ public class ToolXMLParser {
         //beim Einlesen werden Elemente mit generierten Namen evtl. nicht richtig eingelesen, weil
         //die Elemente, aus denen ihr Name generiert wird evtl. nach ihnen eingelesen werden ->
         //einfach nach dem kompletten Einlesen nochmal sortieren
-        ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>(gdcoll.getSzenarios());
+        ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>(gdcoll.getSzenarioCount() + 1);
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            docs.add(szen);
+        }
         docs.add(gdcoll.getMainGraphDocument());
         for (GraphDocument d : docs) {
             for (LayerContainer lc : d.getLayers()) {

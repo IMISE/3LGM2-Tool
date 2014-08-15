@@ -123,10 +123,10 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         doc._duplicateAufOrgs();
         doc._duplicateABKonfs();
 
-        for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
-            collection.getSzenario(i).initKnotContainers();
-            collection.getSzenario(i).initTraceContainers();
-            //			collection.getSzenario(i).refreshSpecialInfoTargets();
+        for (Szenario szen : collection.getSzenarios()) {
+            szen.initKnotContainers();
+            szen.initTraceContainers();
+            //szen.refreshSpecialInfoTargets();
         }
         doc._refreshSubordinatedElementsInSzenarios();
 

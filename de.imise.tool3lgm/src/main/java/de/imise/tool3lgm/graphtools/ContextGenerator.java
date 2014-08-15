@@ -432,10 +432,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         szenario_menu.add(item);
         szenario_menu.add(new JSeparator());
 
-        ArrayList<Szenario> szenarios = doc.getCollection().getSzenarios();
-        Alphabetical.sort(szenarios);
+        GDCollection gdcoll = doc.getCollection();
 
-        for (Szenario szen : szenarios) {
+        for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
 
             szenario_menu.add(item);
@@ -453,7 +452,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         szenario_menu.add(new JSeparator());
         szenario_menu.add(item);
 
-        if (szenarios.size() > 20) {
+        if (gdcoll.getSzenarioCount() > 20) {
             MenuScroller.setScrollerFor(szenario_menu, 20, 125, 2, 2);
         }
 
@@ -471,10 +470,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         link_to_szenario_menu.add(item);
         link_to_szenario_menu.add(new JSeparator());
 
-        ArrayList<Szenario> szenarios = doc.getCollection().getSzenarios();
-        Alphabetical.sort(szenarios);
-
-        for (Szenario szen : szenarios) {
+        GDCollection gdcoll = doc.getCollection();
+        for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
 
             /* ist Knoten schon mit diesem Szenario verknüpft */
@@ -2038,24 +2035,23 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * @param collection
+     * @param gdcoll
      * @return
      */
-    private static final JMenuItem getSubModelMenu(final GDCollection collection) {
-        JMenu menu = new JMenu(collection.getName());
+    private static final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
+        JMenu menu = new JMenu(gdcoll.getName());
         JMenuItem item = new JMenuItem(Tool3lgmConstants.getResString("main_model"));
         item.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                doc.copySelectedToModel(collection.getMainGraphDocument());
+                doc.copySelectedToModel(gdcoll.getMainGraphDocument());
             }
         });
         menu.add(item);
 
-        for (int i = 0; i < collection.getNumberOfSzenarios(); i++) {
-            item = new JMenuItem(collection.getSzenario(i).getTitle());
-            final Szenario szen = collection.getSzenario(i);
+        for (final Szenario szen : gdcoll.getSzenarios()) {
+            item = new JMenuItem(szen.getTitle());
             item.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {

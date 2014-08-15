@@ -62,6 +62,7 @@ import de.imise.tool3lgm.graphtools.ContextGenerator;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -337,9 +338,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     /**
-     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in
-     * <code>searchSet</code> Nicht erfüllte Suchkriterium werden herausgefiltert mittels
-     * <code>searchSet.remove</code>
+     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
+     * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
      * 
      * @param e - übergebener ActionEvent
      */
@@ -768,8 +768,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
         subModelBox.addItem(mainDoc, mainDoc.getTitle());
-        for (int i = 0; i < gdcoll.getNumberOfSzenarios(); i++) {
-            GraphDocument szen = gdcoll.getSzenario(i);
+        for (Szenario szen : gdcoll.getSzenarios()) {
             subModelBox.addItem(szen, szen.getTitle());
         }
         subModelBox.setSelectedObject(mainDoc);
