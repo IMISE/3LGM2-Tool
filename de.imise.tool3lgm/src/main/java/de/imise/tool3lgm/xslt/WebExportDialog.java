@@ -11,7 +11,8 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -191,22 +192,21 @@ public class WebExportDialog extends JDialog {
         if (!path.isDirectory()) {
             path.mkdir();
         }
-
         File filesDir = new File(path, "files");
-
         if (!filesDir.isDirectory()) {
             filesDir.mkdir();
         }
 
-        // die index.html ins Oberverzeichnis kopieren
-        File source = new File(Tool3lgmConstants.WEB_EXPORT_RESOURCE_DIR_NAME + WEB_EXPORT_RESOURCES_FILES[0]);
-        File dest = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
-        FileHandler.copyFile(source, dest);
-
-        // alle anderen ins files-Verzeichnis kopieren
-        for (int i = 1; i < WEB_EXPORT_RESOURCES_FILES.length; i++) {
-            source = new File(Tool3lgmConstants.WEB_EXPORT_RESOURCE_DIR_NAME + WEB_EXPORT_RESOURCES_FILES[i]);
-            dest = new File(filesDir, WEB_EXPORT_RESOURCES_FILES[i]);
+        // die index.html ins Oberverzeichnis kopieren und alle anderen ins files-Verzeichnis kopieren
+        for (int i = 0; i < WEB_EXPORT_RESOURCES_FILES.length; i++) {
+            URL fileUrl = ClassLoader.getSystemResource(Tool3lgmConstants.WEB_EXPORT_RESOURCE_DIR_NAME + WEB_EXPORT_RESOURCES_FILES[i]);
+            File source = null;
+            try {
+                source = new File(fileUrl.toURI());
+            } catch (URISyntaxException e1) {
+                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e1);
+            }
+            File dest = new File(i == 0 ? path : filesDir, WEB_EXPORT_RESOURCES_FILES[i]);
             FileHandler.copyFile(source, dest);
         }
 
@@ -292,7 +292,8 @@ public class WebExportDialog extends JDialog {
 
         if (checkBoxShowResult.isSelected()) {
             try {
-                Desktop.getDesktop().browse(new URI(path + File.separator + "index.html"));
+                File indexHtml = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
+                Desktop.getDesktop().browse(indexHtml.toURI());
             } catch (Exception exp) {
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
             }

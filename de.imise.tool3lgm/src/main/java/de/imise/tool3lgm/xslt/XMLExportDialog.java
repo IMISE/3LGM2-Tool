@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -261,7 +260,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
                 return;
             }
 
-            String fileString = Tool3lgmConstants.TEMP_PATH + "/temp_3lgm_export_file.html";
+            String fileString = Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html";
             if (checkBoxSaveResult.isSelected()) {
                 String fileExtension = tableModel.getValueAt(selectedRow, 2).toString().trim();
                 String fileBaseName = Tool3lgmConstants.getResString("export");
@@ -301,7 +300,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             try {
                 XMLTransformer.transform(tableModel.getScript(selectedRow).openStream(), tableModel.getScript(selectedRow).getSource(), tempXMLFile, fileString);
                 if (checkBoxShowResult.isSelected()) {
-                    Desktop.getDesktop().browse(new URI(fileString));
+                    Desktop.getDesktop().browse(new File(fileString).toURI());
                 }
             } catch (IOException exp) {
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
