@@ -9,9 +9,8 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -199,15 +198,9 @@ public class WebExportDialog extends JDialog {
 
         // die index.html ins Oberverzeichnis kopieren und alle anderen ins files-Verzeichnis kopieren
         for (int i = 0; i < WEB_EXPORT_RESOURCES_FILES.length; i++) {
-            URL fileUrl = ClassLoader.getSystemResource(Tool3lgmConstants.WEB_EXPORT_RESOURCE_DIR_NAME + WEB_EXPORT_RESOURCES_FILES[i]);
-            File source = null;
-            try {
-                source = new File(fileUrl.toURI());
-            } catch (URISyntaxException e1) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e1);
-            }
+            InputStream resourceStream = ClassLoader.getSystemResourceAsStream(Tool3lgmConstants.WEB_EXPORT_RESOURCE_DIR_NAME + WEB_EXPORT_RESOURCES_FILES[i]);
             File dest = new File(i == 0 ? path : filesDir, WEB_EXPORT_RESOURCES_FILES[i]);
-            FileHandler.copyFile(source, dest);
+            FileHandler.copyFile(resourceStream, dest);
         }
 
         try {
