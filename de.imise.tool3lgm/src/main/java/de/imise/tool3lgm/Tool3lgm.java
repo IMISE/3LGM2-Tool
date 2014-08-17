@@ -2,7 +2,6 @@ package de.imise.tool3lgm;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
@@ -16,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
-import java.net.URI;
 import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.Remote;
@@ -89,6 +87,7 @@ import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
+import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.tools.UnfloatableToolBar;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
@@ -1804,11 +1803,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 };
                 int value = JOptionPane.showOptionDialog(null, Tool3lgmConstants.getResString("link_oder_szen_frage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
                 if (value == JOptionPane.YES_OPTION) {
-                    try {
-                        Desktop.getDesktop().browse(new URI(hyperlink));
-                    } catch (Exception exp) {
-                        Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
-                    }
+                    BrowseUtils.browse(hyperlink);
                 } else if (value == JOptionPane.NO_OPTION) {
                     try {
                         frame.setSelected(true);
@@ -1824,11 +1819,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 }
             }
         } else if (hyperlink != null) {
-            try {
-                Desktop.getDesktop().browse(new URI(hyperlink));
-            } catch (Exception exp) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
-            }
+            BrowseUtils.browse(hyperlink);
         }
     }
 

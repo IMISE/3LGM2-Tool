@@ -4,7 +4,6 @@
 package de.imise.tool3lgm.xslt;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -40,6 +39,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.util.image.ComponentAsImageExportHandler;
@@ -291,12 +291,8 @@ public class WebExportDialog extends JDialog {
         Tool3lgm.tool.closeProgressDialog();
 
         if (checkBoxShowResult.isSelected()) {
-            try {
-                File indexHtml = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
-                Desktop.getDesktop().browse(indexHtml.toURI());
-            } catch (Exception exp) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
-            }
+            File file = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
+            BrowseUtils.browseAbsoluteFile(file);
         }
     }
 

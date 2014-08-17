@@ -1,14 +1,12 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URI;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -36,7 +34,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.NumberTextField;
 import de.imise.util.swing.component.text.ExtendedTextArea;
@@ -253,13 +251,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        try {
-                            String s = textField.getText();
-                            if (!s.trim().equals("")) {
-                                Desktop.getDesktop().browse(new URI(s));
-                            }
-                        } catch (Exception exp) {
-                            Log.show(Log.INFO, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
+                        String urlOrPath = textField.getText().trim();
+                        if (!urlOrPath.isEmpty()) {
+                            BrowseUtils.browse(urlOrPath);
                         }
                     }
                 });

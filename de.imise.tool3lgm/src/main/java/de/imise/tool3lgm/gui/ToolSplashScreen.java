@@ -1,11 +1,9 @@
 package de.imise.tool3lgm.gui;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,7 +15,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
-import java.net.URI;
 import java.util.Calendar;
 
 import javax.swing.ImageIcon;
@@ -26,7 +23,7 @@ import javax.swing.JLabel;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.tools.BrowseUtils;
 
 /**
  * @author hboehme
@@ -169,11 +166,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     @Override
     public void mouseClicked(final MouseEvent e) {
         if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
-            try {
-                Desktop.getDesktop().browse(new URI(getResString("toolWebSite")));
-            } catch (Exception exp) {
-                Log.show(Log.ERROR, getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
-            }
+            BrowseUtils.browseUrlFromResource("toolWebSite");
         }
     }
 

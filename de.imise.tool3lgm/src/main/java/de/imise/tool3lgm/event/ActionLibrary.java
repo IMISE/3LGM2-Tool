@@ -1,16 +1,12 @@
 package de.imise.tool3lgm.event;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.lang.reflect.Field;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -68,6 +64,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
@@ -1171,11 +1168,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(getResString("auswhilfe_datei")));
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + ex.getMessage() + "\n" + ex.toString(), ex);
-                }
+                BrowseUtils.browseRelativeFileFromResource("auswhilfe_datei");
             }
         };
 
@@ -1184,11 +1177,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(getResString("3lgm2tool_support_website")));
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + ex.getMessage() + "\n" + ex.toString(), ex);
-                }
+                BrowseUtils.browseUrlFromResource("3lgm2tool_support_website");
             }
         };
 
@@ -1197,11 +1186,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(getResString("3lgm2_website")));
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + ex.getMessage() + "\n" + ex.toString(), ex);
-                }
+                BrowseUtils.browseUrlFromResource("3lgm2_website");
             }
         };
 
@@ -1219,11 +1204,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(getResString("modlib_verz")));
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + ex.getMessage() + "\n" + ex.toString(), ex);
-                }
+                BrowseUtils.browseRelativeFileFromResource("modlib_verz");
             }
         };
 
@@ -1232,16 +1213,6 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-
-                // TODO:AXS:################ Das hier muss wieder raus, wenn Frank den
-                // DescriptionFrame wieder
-                // eingebaut hat
-
-                /*
-                 * GraphDocument gd = Tool3lgm.tool.getSelectedDoc(); if (gd != null)
-                 * gd.getCollection().showDescriptionFrame(true);
-                 */
-
                 ToolSplashScreen.getInfoDialog();
             }
         };

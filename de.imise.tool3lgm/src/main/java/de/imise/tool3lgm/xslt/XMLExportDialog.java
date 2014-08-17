@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.xslt;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -33,6 +32,7 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.dialog.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
@@ -300,10 +300,9 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             try {
                 XMLTransformer.transform(tableModel.getScript(selectedRow).openStream(), tableModel.getScript(selectedRow).getSource(), tempXMLFile, fileString);
                 if (checkBoxShowResult.isSelected()) {
-                    Desktop.getDesktop().browse(new File(fileString).toURI());
+                    File exportFile = new File(fileString);
+                    BrowseUtils.browseAbsoluteFile(exportFile);
                 }
-            } catch (IOException exp) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
             } catch (Exception exp) {
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
             }
