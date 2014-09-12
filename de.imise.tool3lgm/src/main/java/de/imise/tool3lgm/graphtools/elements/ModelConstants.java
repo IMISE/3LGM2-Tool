@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.Set;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
@@ -90,6 +88,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author N.N., AXS
@@ -622,7 +621,7 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean hasEdgeType(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return ArrayUtils.contains(getEdgeTypes(elementClass), edgeClass);
+        return CollectionUtils.arrayContains(getEdgeTypes(elementClass), edgeClass);
     }
 
     /**
