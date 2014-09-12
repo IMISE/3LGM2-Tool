@@ -74,6 +74,7 @@ import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.tool3lgm.xml.XMLVersionException;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.io.FileHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
@@ -2799,7 +2800,19 @@ public final class GDCollection extends UserFieldTarget {
 
         lockSupported = Tool3lgmConstants.lockSupportedByFileSystem(_file);
 
-        RandomAccessFile raf = new RandomAccessFile(_file, "rw");
+        RandomAccessFile raf = null;
+        boolean copiedToUserDir = false;
+        try {
+            raf = new RandomAccessFile(_file, "rw");
+        } catch (IOException e) {
+            File writableFile = new File(Tool3lgmConstants.USER_HOME_DIR_NAME + "/3LGM2Tool", _file.getName());
+            FileHandler.copyFile(_file, writableFile);
+            setFile(writableFile);
+            copiedToUserDir = true;
+        }
+        if (copiedToUserDir) {
+            return true;
+        }
         if (lockSupported) {
             lock = raf.getChannel().tryLock(0, Long.MAX_VALUE, true);
             if (lock == null) {
