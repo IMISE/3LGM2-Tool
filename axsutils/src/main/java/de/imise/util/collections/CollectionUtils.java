@@ -71,6 +71,24 @@ public abstract class CollectionUtils {
     }
 
     /**
+     * Fügt zwei Arrays zu einem zusammen. Zuerst kommen die Elemente
+     * des zuerst übergebenen Arrays, dann die des zweiten.
+     * 
+     * @param array1
+     *            erstes Array
+     * @param array2
+     *            zweites Array
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[] joinArrays(final T[] array1, final T[] array2) {
+        Object[] retVal = new Object[array1.length + array2.length];
+        System.arraycopy(array1, 0, retVal, 0, array1.length);
+        System.arraycopy(array2, 0, retVal, array1.length, array2.length);
+        return (T[]) retVal;
+    }
+
+    /**
      * Fügt zwei Class-Arrays zu einem zusammen. Zuerst kommen die Elemente
      * des zuerst übergebenen Arrays, dann die des zweiten.
      * 
@@ -86,6 +104,20 @@ public abstract class CollectionUtils {
         System.arraycopy(array1, 0, retVal, 0, array1.length);
         System.arraycopy(array2, 0, retVal, array1.length, array2.length);
         return retVal;
+    }
+
+    /**
+     * @param array
+     * @param element
+     * @return
+     */
+    public static boolean arrayContains(final Object[] array, final Object element) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].equals(element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
