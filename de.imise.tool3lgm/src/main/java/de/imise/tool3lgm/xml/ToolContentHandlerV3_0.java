@@ -449,6 +449,14 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             sb.append(value);
                             element.setDescription(sb.toString());
                         }
+                        //falls es noch Modelle mit separaten external IDs gibt, werden diese hier in UserFields umgewandelt
+                    } else if (field.toLowerCase().startsWith("extid")) {
+                        UserField userField = userFieldDefinitions.getUserField(element.getClass(), field);
+                        if (userField == null) {
+                            userField = new UserField(element.getClass(), UserField.Style.SINGLE_LINE, userFieldDefinitions);
+                            userFieldDefinitions.add(userField);
+                        }
+                        element.setUserFieldInputValue(userField, elementValue.toString());
                     } else if (!element.putXMLFieldString(field, elementValue.toString())) {
                         throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
                     }

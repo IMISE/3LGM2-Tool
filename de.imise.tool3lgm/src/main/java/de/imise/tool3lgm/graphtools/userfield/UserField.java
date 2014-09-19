@@ -451,8 +451,8 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Erzeugt ein globales UserField, das keiner realen Elementklasse zugeordnet ist
      * 
-     * @param targetClass
      * @param style
+     * @param definitions
      */
     public UserField(final Style style, final UserFieldDefinitions definitions) {
         this(style == Style.FORMAT ? UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS : UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS, definitions);
@@ -464,6 +464,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * 
      * @param targetClass
      * @param style
+     * @param definitions
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final Style style, final UserFieldDefinitions definitions) {
         this(targetClass, definitions);
@@ -480,6 +481,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * @param targetClass
      * @param hashCode
+     * @param definitions
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final String hashCode, final UserFieldDefinitions definitions) {
         this.hashCode = hashCode;
