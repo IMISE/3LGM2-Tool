@@ -3312,46 +3312,39 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @param idKey
-     * @param id
+     * Finds the first element with the given UserField name and the given id String.
+     * If the values are IDs a special element can be detected.
+     * 
+     * @param userFieldName
+     * @param value
      * @return
      */
-    public ModelElement findElementWithExternalID(final String idKey, final String id) {
+    public ModelElement findElementWithUserField(final String userFieldName, final String value) {
         if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findElementWithExternalID(idKey, id);
+            return getCollection().getMainGraphDocument().findElementWithUserField(userFieldName, value);
         }
 
-        if (idKey == null || id == null) {
+        if (userFieldName == null || value == null) {
             return null;
         }
-        for (int d = 0; d < 5; d++) {
-            int knotenCount = layer[d].getKnotenCount();
-            for (int c = 0; c < knotenCount; c++) {
-                ModelElement me = layer[d].getNodeContainer(c).getElement();
-                if (id.equals(me.getExternalID(idKey))) {
-                    return me;
+        //first loop for nodes, second for edges
+        for (int i = 0; i < 2; i++) {
+            for (LayerContainer lc : layer) {
+                int elementCount = i == 0 ? lc.getKnotenCount() : lc.getKantenCount();
+                for (int c = 0; c < elementCount; c++) {
+                    ElementContainer ec = i == 0 ? lc.getNodeContainer(c) : lc.getEdgeContainer(c);
+                    ModelElement me = ec.getElement();
+                    UserFieldDefinitions ufd = getCollection().getUserFieldDefinitions();
+                    UserField uf = ufd.getUserField(me.getClass(), userFieldName);
+                    if (uf == null) {
+                        continue;
+                    }
+                    if (value.equals(me.getUserFieldInputValue(uf))) {
+                        return me;
+                    }
                 }
             }
         }
-        for (int d = 0; d < 5; d++) {
-            int kantenCount = layer[d].getKantenCount();
-            for (int c = 0; c < kantenCount; c++) {
-                ModelElement me = layer[d].getEdgeContainer(c).getElement();
-                if (id.equals(me.getExternalID(idKey))) {
-                    return me;
-                }
-            }
-        }
-        for (int d = 0; d < 5; d++) {
-            int knpCount = layer[d].getKnickpunkteCount();
-            for (int c = 0; c < knpCount; c++) {
-                ModelElement me = layer[d].getBendpointContainer(c).getElement();
-                if (id.equals(me.getExternalID(idKey))) {
-                    return me;
-                }
-            }
-        }
-
         return null;
     }
 

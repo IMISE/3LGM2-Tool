@@ -2022,7 +2022,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
             doc.finish_transaction(PID, false);
             doc.distributeEvent(GraphDocument.SELECTION_CHANGED, PID);
-        } else if (command.equalsIgnoreCase("selectByExternalID")) {
+        } else if (command.equalsIgnoreCase("selectByUserField")) {
             if (params == null || params.length < 2) {
                 return;
             }
@@ -2034,7 +2034,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             doc.start_transaction(PID, false);
             doc.deselectAll(true);
             for (int i = 1; i < params.length; i++) {
-                ElementContainer ec = doc.findElementWithExternalID(params[0], params[i]).getContainer(doc);
+                ElementContainer ec = doc.findElementWithUserField(params[0], params[i]).getContainer(doc);
                 if (ec != null) {
                     doc.addToSelection(ec, PID);
                 }

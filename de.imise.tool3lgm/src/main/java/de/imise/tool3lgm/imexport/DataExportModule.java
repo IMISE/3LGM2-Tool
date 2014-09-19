@@ -9,17 +9,12 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -32,9 +27,15 @@ import de.imise.util.Alphabetical;
  */
 public class DataExportModule {
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public static final MetaPath[] metaPaths2Export = {
-        new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class)
+    //Über diese Angaben kann man abweichend vom Standardexport verbundene Elemente ebenfalls exportieren.
+    //Das macht aber Probleme in dem Fall, dass man denselben Datensatz wieder importieren möchte, da man nun anhand des Namens
+    //eines über einen Pfad verbundenen Elementes auch noch die Zwischenelemente rekonrtuieren müsste. Daher einfach alle
+    //Elemente ohne diesen Schnickschnack exportieren, dann kann man das über einen sehr simplen Import auch wieder rein bekommen.
+    //Diese Art des Exports und dazugehörigen Imports beachtet keinerlei Kanten! D.h. im Export stecken überhaupt keine Verbindungsinformationen!
+
+    //        new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class)
 
     };
 
@@ -45,7 +46,6 @@ public class DataExportModule {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ostream));
             String caption = "";
 
-            Set<String> extIDKeyList = new HashSet<String>();
             UserFieldDefinitions ufDef = doc.getCollection().getUserFieldDefinitions();
             //Elemente selektiert -> nur die selekierten exportieren
             ArrayList<ModelElement> elements = doc.getSelectedElements();
@@ -73,19 +73,13 @@ public class DataExportModule {
                     if (me.getClass() != elementClass) {
                         continue;
                     }
-                    Set<String> keySet = me.getExternalIDKeys();
-                    if (elementClass != classElement || !extIDKeyList.containsAll(keySet)) {
+                    if (elementClass != classElement) {
                         classElement = elementClass;
                         String displayableClassName = ModelConstants.isEdgeType(elementClass) ? ModelConstants.getFullForwardMetaAssociationName(elementClass.asSubclass(Kante.class)) : ModelConstants.getDisplayableName(elementClass);
-                        caption = displayableClassName + "\tName\tBeschreibung (Description)\tHashString";
+                        caption = displayableClassName + "\tName\tDescription\tHashString";
                         for (MetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
                                 caption += "\t" + ModelConstants.getDisplayableName(metaPath.getEndClass());
-                            }
-                        }
-                        for (String key : keySet) {
-                            if (extIDKeyList.add(key)) {
-                                caption += "\t" + key.replaceAll("\t", "\\\\t");
                             }
                         }
                         for (UserField uf : ufDef.getUserFields(classElement)) {
@@ -125,14 +119,6 @@ public class DataExportModule {
                         }
                     }
 
-                    for (String key : extIDKeyList) {
-                        String value = me.getExternalID(key);
-                        if (value != null) {
-                            lineBuf.append("\t" + value.toString().replaceAll("\t", "\\\\t"));
-                        } else {
-                            lineBuf.append("\t\"\"");
-                        }
-                    }
                     for (UserField uf : ufDef.getUserFields(classElement)) {
                         String value = "";
                         v = me.getUserFieldInputValue(uf);

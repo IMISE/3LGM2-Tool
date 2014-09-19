@@ -63,7 +63,6 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.imexport.DataExportModule;
-import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMInputStream;
 import de.imise.tool3lgm.xml.Base64;
@@ -2299,17 +2298,6 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void importModel(final File file) {
         importSzenarios(file, false);
-    }
-
-    /**
-     * Importiert Elemente aus einer Datei mit Tabulator-getrennten Daten
-     * 
-     * @param file
-     *            Modelldatei, aus der die Daten importiert werden sollen
-     */
-    public static final void importData(final LGMGraphDocument doc, final File file) {
-        DataImportModule importModule = new DataImportModule(Tool3lgm.tool);
-        importModule.showDialog(doc, file);
     }
 
     /**

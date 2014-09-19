@@ -21,7 +21,6 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.ExtIdPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
@@ -102,10 +101,6 @@ public class ElementPropertyDialog extends PropertyDialog implements ActionListe
         tab.addTab(Tool3lgmConstants.getResString("general"), new DescripPanel(this));
         // tab.addTab(Tool3lgmConstants.getResString("general"), new GeneralPanel(this));
 
-        // wenn es mind. 1 externe ID für diese Klasse gibt -> zeige das externe-ID-Panel
-        if (modelElement.getExternalIDKeys().size() > 0) {
-            tab.addTab(Tool3lgmConstants.getResString("extID_title"), new ExtIdPanel(this));
-        }
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
             tab.addTab(Tool3lgmConstants.getResString("userfields"), new PropertyDialogUserFieldPanel(this));

@@ -63,6 +63,7 @@ import de.imise.tool3lgm.graphtools.view.graph.KnotenRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
+import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -1037,12 +1038,7 @@ public class ActionLibrary {
                     if (!isEnabled()) {
                         return;
                     }
-                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(FileFilterType.CSV);
-                    oeffnenDialog.setMultiSelectionEnabled(false);
-                    oeffnenDialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV));
-                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        GDCollection.importData(getSelectedDoc(), oeffnenDialog.getSelectedFile());
-                    }
+                    new DataImportModule(getSelectedCollection());
                 }
             };
         }
