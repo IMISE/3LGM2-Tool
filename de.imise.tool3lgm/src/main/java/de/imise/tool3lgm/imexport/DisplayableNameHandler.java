@@ -17,6 +17,9 @@ public class DisplayableNameHandler {
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS) {
             String name = ModelConstants.getDisplayableName(elementClass);
             displayableName2ClassMap.put(name, elementClass);
+            if (ModelConstants.isEdgeType(elementClass)) {
+
+            }
         }
     }
 

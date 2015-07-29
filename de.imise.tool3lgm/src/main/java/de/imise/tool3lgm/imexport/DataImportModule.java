@@ -3,22 +3,22 @@
  */
 package de.imise.tool3lgm.imexport;
 
-import java.io.BufferedReader;
+import static javax.swing.JOptionPane.QUESTION_MESSAGE;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.YES_OPTION;
+import static javax.swing.JOptionPane.showOptionDialog;
+
+import java.awt.Component;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.StringTokenizer;
+
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.log.Log;
+import de.imise.util.io.FileHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
@@ -26,126 +26,95 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  */
 public class DataImportModule {
 
-    private final HashSet<String> allHashes = new HashSet<String>();
+    private ImportErrorConfiguration errorConfiguration;
 
-    private final List<String> errors = new ArrayList<String>();
-
-    public enum ImportError {
-
-        HEADER_UNKNOWN_ELEMENT("Unknown element type");
-
-        private String errorMessage;
-
-        private ImportError(final String errorMessage) {
-            this.errorMessage = errorMessage;
-        }
-
-        @Override
-        public String toString() {
-            return errorMessage;
-        }
-
-    }
+    //        setTitle(Tool3lgmConstants.getResString("importd"));
+    //        JLabel label = new JLabel(Tool3lgmConstants.getResString("kntyp_s"));
+    //        importBut = new JButton(Tool3lgmConstants.getResString("importButtonText"));
+    //        endeBut = new JButton(Tool3lgmConstants.getResString("exit"));
+    //        if (JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("importfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
     public DataImportModule(final GDCollection gdcoll) {
-        //        setTitle(Tool3lgmConstants.getResString("importd"));
-        //        JLabel label = new JLabel(Tool3lgmConstants.getResString("kntyp_s"));
-        //        importBut = new JButton(Tool3lgmConstants.getResString("importButtonText"));
-        //        endeBut = new JButton(Tool3lgmConstants.getResString("exit"));
-        //        if (JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("importfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
         this(gdcoll, null);
     }
 
     public DataImportModule(final GDCollection gdcoll, final File importFile) {
-        File file2Import = importFile;
-        //        setTitle(Tool3lgmConstants.getResString("importd"));
-        //        JLabel label = new JLabel(Tool3lgmConstants.getResString("kntyp_s"));
-        //        importBut = new JButton(Tool3lgmConstants.getResString("importButtonText"));
-        //        endeBut = new JButton(Tool3lgmConstants.getResString("exit"));
-        //        if (JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("importfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-        if (file2Import == null) {
-            file2Import = chooseImportFile();
-        }
+        File file2Import = chooseImportFile(importFile);
         importData(gdcoll, file2Import);
     }
 
-    private File chooseImportFile() {
-        ExtendedFileChooser chooser = new ExtendedFileChooser(FileFilterType.CSV);
-        chooser.setMultiSelectionEnabled(false);
-        chooser.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV));
-        File fileToOpen = null;
-        if (chooser.showOpenDialog(Tool3lgm.tool) == ExtendedFileChooser.APPROVE_OPTION) {
-            fileToOpen = chooser.getSelectedFile();
+    public boolean importData(final GDCollection gdcoll, final File importFile) {
+        if (hasImportFileErrors(gdcoll, importFile)) {
+            return false;
         }
-        return fileToOpen;
-    }
-
-    public void importData(final GDCollection gdcoll, final File importFile) {
-        checkFile(importFile);
-    }
-
-    private void addError(final int row, final int col, final ImportError error, final String token) {
-        errors.add("Row " + row + " Column " + col + " " + error + (token != null ? ": " + token : ""));
-    }
-
-    private void checkFile(final File importFile) {
-        BufferedReader reader = null;
-        try {
-            FileInputStream istream = new FileInputStream(importFile);
-            reader = new BufferedReader(new InputStreamReader(istream));
-            String line = null;
-            Class<? extends ModelElement> elementClass2Import;
-            DisplayableNameHandler nameHandler = new DisplayableNameHandler();
-            int row = 0;
-            while ((line = reader.readLine()) != null) {
-                row++;
-                StringTokenizer st = new StringTokenizer(line, "\t", true);
-                String firstToken = st.nextToken();
-                int col = 1;
-                //nur bei Kopfzeilen ist der erste Token kein Tab sondern der displayable Name einer Elementart
-                if (!firstToken.equals("\t")) {
-                    elementClass2Import = nameHandler.getElementClass(firstToken);
-                    if (elementClass2Import == null) {
-                        addError(row, col, ImportError.HEADER_UNKNOWN_ELEMENT, firstToken);
-                    }
-                    //Tab überspringen
-                    st.nextToken();
-                    //Spaltenkopf mit Namen überspringen
-                    st.nextToken();
-                    //Tab überspringen
-                    st.nextToken();
-                    //Spaltenkopf mit Beschreibung überspringen
-                    st.nextToken();
-                    //Tab überspringen
-                    st.nextToken();
-                    //Spaltenkopf mit HashString überspringen
-                    st.nextToken();
-                    //Tab überspringen
-                    st.nextToken();
-                    //ab jetzt kommen evtl. vorhandene 
-                }
-
-                //                line = line.replaceAll("\\\\n", "\n").replaceAll("\\\\t", "\t");
-                //                StringTokenizer tokenizer = new StringTokenizer(line, "\t");
-                //                ArrayList<String> tokens = new ArrayList<String>(10);
-                //                while (tokenizer.hasMoreTokens()) {
-                //                    tokens.add(tokenizer.nextToken());
-                //                }
-                //                data.add(tokens);
-            }
-            reader.close();
-        } catch (Exception ex) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
-            return;
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                }
-            }
+        if (!saveCollection(gdcoll)) {
+            return false;
         }
+        if (!backupModelFile(gdcoll)) {
+            return false;
+        }
+        if (!internalImportData(gdcoll, importFile)) {
+            return false;
+        }
+        return true;
     }
+
+    private File chooseImportFile(final File file) {
+        File returnFile = file;
+        if (returnFile == null) {
+            Component parent = Tool3lgm.tool;
+            FileNameExtensionFilter filter = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV);
+            Object pathKey = FileFilterType.CSV;
+            returnFile = ExtendedFileChooser.chooseFile(parent, filter, pathKey);
+        }
+        return returnFile;
+    }
+
+    public boolean hasImportFileErrors(final GDCollection gdcoll, final File importFile) {
+        DataImportVerifier dataImportVerifier = new DataImportVerifier(gdcoll, importFile);
+        errorConfiguration = dataImportVerifier.getErrors();
+        if (errorConfiguration.hasErrors()) {
+            ImportErrorConfigurationUserInterface errorUserInterface = new ImportErrorConfigurationUserInterface(errorConfiguration);
+            errorUserInterface.showErrors();
+            return true;
+        }
+        return false;
+    }
+
+    private void showErrorDialog(final String message) {
+        JOptionPane.showMessageDialog(Tool3lgm.tool, message, "Import Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private final boolean saveCollection(final GDCollection gdcoll) {
+        if (!gdcoll.isChanged()) {
+            return true;
+        }
+        String message = "The model must be saved to run an import.";
+        String title = "Save model?";
+        Object[] options = {
+                "Save", "Cancel"
+        };
+        int answer = showOptionDialog(Tool3lgm.tool, message, title, YES_NO_OPTION, QUESTION_MESSAGE, null, //do not use a custom Icon
+                options, //the titles of buttons
+                options[0]); //default button title
+        return answer == YES_OPTION && Tool3lgm.saveToFile(gdcoll);
+    }
+
+    private final boolean backupModelFile(final GDCollection gdcoll) {
+        File originalFile = gdcoll.getFile();
+        File backupFile = new File(originalFile.getPath().concat(".bak"));
+        if (!FileHandler.copyFile(originalFile, backupFile)) {
+            showErrorDialog("ErrorType while creating backup file " + backupFile.getPath());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean internalImportData(final GDCollection gdcoll, final File importFile) {
+
+        return true;
+    }
+
     //    private void importData(final GDCollection gdcoll, final File importFile) {
     //        ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>(5000);
     //
