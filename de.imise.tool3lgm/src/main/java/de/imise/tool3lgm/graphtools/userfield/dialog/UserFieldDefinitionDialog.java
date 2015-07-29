@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.PropertyDialog;
+import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -108,9 +110,7 @@ public final class UserFieldDefinitionDialog extends PropertyDialog implements A
             sb.append(Tool3lgmConstants.getResString(userField.getTargetClass().getSimpleName()));
         } else {
             if (ModelConstants.isEdgeType(userField.getTargetClass())) {
-                sb.append(Tool3lgmConstants.getResString(userField.getTargetClass().getSimpleName() + "_f"));
-                sb.append(" | ");
-                sb.append(Tool3lgmConstants.getResString(userField.getTargetClass().getSimpleName() + "_b"));
+                sb.append(ModelConstants.getMetaAssociationName(userField.getTargetClass().asSubclass(Kante.class), false, Doppelkante.DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {
                 sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
             }
