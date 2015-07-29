@@ -1319,15 +1319,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (datei == null) {
             return fileSave(true);
         }
-        try {
-            if (!gdCollection.saveToFile()) {
-                return false;
-            }
-        } catch (Exception exp) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp, exp);
+        if (!saveToFile(gdCollection)) {
             return false;
         }
-        gdCollection.setChanged(false);
 
         JInternalFrame[] allFrames = desktop.getAllFrames();
         for (JInternalFrame frame : allFrames) {
@@ -1348,6 +1342,19 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //		printStatistic(gdCollection, false, true);		
         //		System.err.println("###########################################################################");
 
+        return true;
+    }
+
+    public static final boolean saveToFile(final GDCollection gdcoll) {
+        try {
+            if (!gdcoll.saveToFile()) {
+                return false;
+            }
+        } catch (Exception exp) {
+            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp, exp);
+            return false;
+        }
+        gdcoll.setChanged(false);
         return true;
     }
 
