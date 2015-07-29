@@ -1149,19 +1149,10 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
 
                 String v = formatUserField.numberFormat.format(new Double(value));
                 String unit = "";
-                double tmpValue;
                 if (formatUserField.formatUnit != null) {
                     unit = formatUserField.formatUnit;
                 }
 
-                // Wenn es sich bei der Einheit um ein % handelt, wird der Wert für die Anzeige mit 100 multipliziert werden, 
-                // da die Eingabe immer auf 1 normiert erfolgt. 
-                if (unit.equals("%")) {
-                    tmpValue = Double.parseDouble(value);
-                    tmpValue = tmpValue * 100;
-                    v = Double.valueOf(tmpValue).toString();
-                    v = formatUserField.numberFormat.format(new Double(v));
-                }
                 StringBuilder sb = new StringBuilder(v);
                 sb.append(" ");
                 sb.append(unit);
