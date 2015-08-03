@@ -1208,10 +1208,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public ArrayList<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
         Class<? extends PartOfBeziehung>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>();
-        if (hasPartsEdgeClasses != null) {
-            for (Class<? extends PartOfBeziehung> c : hasPartsEdgeClasses) {
-                returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, PartOfBeziehung.PARENT_TO_PART_DIRECTION));
-            }
+        for (Class<? extends PartOfBeziehung> c : hasPartsEdgeClasses) {
+            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, PartOfBeziehung.PARENT_TO_PART_DIRECTION));
         }
         return returnList;
     }
@@ -1225,10 +1223,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public ArrayList<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
         Class<? extends PartOfBeziehung>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>();
-        if (isPartEdgeClasses != null) {
-            for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
-                returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, PartOfBeziehung.PART_TO_PARENT_DIRECTION));
-            }
+        for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
+            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, PartOfBeziehung.PART_TO_PARENT_DIRECTION));
         }
         return returnList;
     }
@@ -1447,10 +1443,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public final ArrayList<ModelElement> getDirectPartElements() {
         Class<? extends PartOfBeziehung>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
-        if (hasPartEdgeClasses != null) {
-            for (Class<? extends PartOfBeziehung> c : hasPartEdgeClasses) {
-                returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.BACKWARD));
-            }
+        for (Class<? extends PartOfBeziehung> c : hasPartEdgeClasses) {
+            returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.BACKWARD));
         }
         return returnList;
     }
@@ -1463,10 +1457,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public final ArrayList<ModelElement> getDirectParentElements() {
         Class<? extends PartOfBeziehung>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
-        if (isPartEdgeClasses != null) {
-            for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
-                returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.FORWARD));
-            }
+        for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
+            returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.FORWARD));
         }
         return returnList;
     }
@@ -2077,14 +2069,14 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return <code>true</code>, wenn die Elementart eine PartOfBeziehung hat
      */
     public final boolean canHaveParts() {
-        return ModelConstants.getHasPartsEdgeClasses(getClass()) != null;
+        return ModelConstants.getHasPartsEdgeClasses(getClass()).length > 0;
     }
 
     /**
      * @return <code>true</code>, wenn die Elementart eine PartOfBeziehung hat
      */
     public final boolean canHaveParents() {
-        return ModelConstants.getIsPartOfEdgeClasses(getClass()) != null;
+        return ModelConstants.getIsPartOfEdgeClasses(getClass()).length > 0;
     }
 
     /**

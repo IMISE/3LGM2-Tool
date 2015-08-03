@@ -1223,20 +1223,24 @@ public final class ModelConstants {
      * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
      * können.
      * 
-     * @return
+     * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
+    @SuppressWarnings("unchecked")
     public static Class<? extends PartOfBeziehung>[] getHasPartsEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        return ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass);
+        Class<? extends PartOfBeziehung>[] hasPartEdgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass);
+        return hasPartEdgeClasses == null ? new Class[0] : hasPartEdgeClasses;
     }
 
     /**
      * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
      * werden kann.
      * 
-     * @return
+     * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
+    @SuppressWarnings("unchecked")
     public static Class<? extends PartOfBeziehung>[] getIsPartOfEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        return ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass);
+        Class<? extends PartOfBeziehung>[] isPartOfEdgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass);
+        return isPartOfEdgeClasses == null ? new Class[0] : isPartOfEdgeClasses;
     }
 
     /*******************/

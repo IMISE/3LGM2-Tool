@@ -119,7 +119,7 @@ public class ConsistencyDefinition {
         // nur bei Elementen, die auch Teil-Von-Beziehungen haben können, ist es sinnvoll, sie sich
         // zu merken
         Class<? extends PartOfBeziehung>[] edges2parts = ModelConstants.getHasPartsEdgeClasses(elementClass);
-        if (edges2parts == null || edges2parts.length == 0) {
+        if (edges2parts.length == 0) {
             return;
         }
         Collection<Class<? extends Kante>> leafAllowedEdgeClasses = elementToOnlyLeafAllowedEdgeClasses.get(elementClass);

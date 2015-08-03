@@ -247,12 +247,11 @@ public class ModelAnalyzerCache {
     public Set<ModelElement> getMultipleParentElements(final Class<? extends ModelElement> elementClass) {
         HashSet<ModelElement> returnSet = new HashSet<ModelElement>();
         Class<? extends PartOfBeziehung>[] hierarchyEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
-        if (hierarchyEdgeClasses == null) {
-            return returnSet;
-        }
-        for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, true, true)) {
-            if (me.getDirectParentElements().size() > 1) {
-                returnSet.add(me);
+        if (hierarchyEdgeClasses.length > 0) {
+            for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, true, true)) {
+                if (me.getDirectParentElements().size() > 1) {
+                    returnSet.add(me);
+                }
             }
         }
         return returnSet;
@@ -296,8 +295,7 @@ public class ModelAnalyzerCache {
     }
 
     /**
-     * Initialisiert die <code>HashMap</code>s <code>objekttypToMasterAWBs</code> und
-     * <code>objekttypToStoringAWBs</code>.
+     * Initialisiert die <code>HashMap</code>s <code>objekttypToMasterAWBs</code> und <code>objekttypToStoringAWBs</code>.
      */
     private void initOTStorageAndMaster(final Objekttyp objectType) {
         Collection<ModelElement> otAndParents = getObjectTypeAndParents(objectType);
