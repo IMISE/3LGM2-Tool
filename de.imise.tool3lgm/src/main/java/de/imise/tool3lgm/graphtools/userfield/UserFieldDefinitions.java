@@ -288,13 +288,17 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     public String toXMLString() {
         StringBuilder retVal = new StringBuilder("<userFieldDefinitions>");
 
-        //Die ModellVariablen immer als erstes rauschreiben, damit die Formate ganz vorne stehen
+        //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
+        UserFieldList formatUserFields = classToUserFieldListMap.get(GLOBAL_FORMAT_IDENTIFIER_CLASS);
+        if (formatUserFields != null) {
+            retVal.append(formatUserFields.toXMLString());
+        }
         UserFieldList modelUserFields = classToUserFieldListMap.get(GLOBAL_USERFIELD_IDENTIFIER_CLASS);
         if (modelUserFields != null) {
             retVal.append(modelUserFields.toXMLString());
         }
         for (Class<? extends UserFieldTarget> clazz : classToUserFieldListMap.keySet()) {
-            if (clazz != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+            if (clazz != GLOBAL_FORMAT_IDENTIFIER_CLASS && clazz != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
                 retVal.append(classToUserFieldListMap.get(clazz).toXMLString());
             }
         }
