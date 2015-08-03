@@ -73,13 +73,12 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
         constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-
         constraints.weightx = 1;
-        this.add(nodeBox, constraints);
-        constraints.gridy++;
-        // radioPane anfügen
-        //		constraints.gridx = 1;
         this.add(typePane, constraints);
+        constraints.gridy++;
+        this.add(nodeBox, constraints);
+
+        typePane.setVisible(false);
     }
 
     /**
@@ -186,6 +185,10 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
             return;
         }
         Class<? extends ModelElement> selectedClass = ((Class<?>) nodeBox.getSelectedObject()).asSubclass(ModelElement.class);
+
+        if (ModelConstants.getHasPartsEdgeClasses(selectedClass).length > 0 || ModelConstants.getIsPartOfEdgeClasses(selectedClass).length > 0) {
+            typePane.setVisible(true);
+        }
 
         UserFieldTableModel uftm = UserFieldTableModel.createClassificationNumberModel(selectedClass, getDialog().getGraphDocument(), typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs());
         UserFieldTableController uftc = UserFieldTableController.getNewClassificationNumberTableController(uftm);
