@@ -39,7 +39,6 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -499,11 +498,10 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
             Class<?> selectedClass = (Class<?>) classComboBox.getSelectedObject();
 
             //wenn keine Klasse, für die man Kennzahlen und Formeln definieren kann, selektiert ist
-            if (!(ModelConstants.isNodeType(selectedClass) || ModelConstants.isEdgeType(selectedClass) || selectedClass == UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS)) {
+            if (!UserFieldTarget.class.isAssignableFrom(selectedClass)) {
                 return;
             }
-
-            Class<? extends ModelElement> selClass = selectedClass.asSubclass(ModelElement.class);
+            Class<? extends UserFieldTarget> selClass = selectedClass.asSubclass(UserFieldTarget.class);
 
             //Definitionseditor für das neue userField anzeigen
             UserField.Style style = (UserField.Style) userFieldTypeComboBox.getSelectedObject();
@@ -514,8 +512,7 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
 
             //jetzt kann nur noch ein Knoten- oder Kantentyp selektiert sein
             //-> neues userField für die selektierte Klassenart anlegen
-            UserField userField = new UserField(selClass, definitions);
-            userField.setStyle(style);
+            UserField userField = new UserField(selClass, style, definitions);
 
             //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
             definitions.add(userField);

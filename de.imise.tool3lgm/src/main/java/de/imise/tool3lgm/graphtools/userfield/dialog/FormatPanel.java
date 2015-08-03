@@ -240,7 +240,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         formatComboBox.addItem(null, Tool3lgmConstants.getResString("standard_format"));
         formatComboBox.addSeparator(false);
 
-        for (UserField uf : definitions.getUserFields(UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS)) {
+        for (UserField uf : definitions.getFormatUserFields()) {
             if (uf.hasStyle(UserField.Style.FORMAT)) {
                 formatComboBox.addItem(uf, getFormatPatternString(uf));
 
@@ -315,7 +315,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      */
     private boolean isDuplicateFormat() {
         int spinnerFractionDigits = new Integer(digitSpinner.getValue().toString()).intValue();
-        for (UserField uf : definitions.getUserFields(UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS)) {
+        for (UserField uf : definitions.getFormatUserFields()) {
             if (uf.hasStyle(UserField.Style.FORMAT)) {
                 if (uf.getFormatFractionDigits() != spinnerFractionDigits) {
                     continue;

@@ -5,7 +5,6 @@ package de.imise.tool3lgm.graphtools.userfield.dialog;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JRadioButton;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -31,9 +30,6 @@ public class OptionPanel extends AbstractInputPanel {
      */
     private JCheckBox enableClassificationNumberCalculationCheckBox;
 
-    private JRadioButton kfBut;
-    private JRadioButton kBut;
-
     /**
      * @param userField
      */
@@ -58,12 +54,6 @@ public class OptionPanel extends AbstractInputPanel {
 
         if (enableClassificationNumberCalculationCheckBox != null) {
             UserProperties.setEnableClassificationNumberCalculation(enableClassificationNumberCalculationCheckBox.isSelected());
-        }
-
-        if (kBut != null && kBut.isSelected()) {
-            userField.setStyle(UserField.Style.CLASSIFICATION_NUMBER);
-        } else if (kfBut != null && kfBut.isSelected()) {
-            userField.setStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
         }
     }
 

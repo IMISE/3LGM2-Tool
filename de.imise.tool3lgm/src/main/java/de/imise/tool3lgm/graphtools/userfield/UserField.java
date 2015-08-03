@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
+import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
+import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -455,7 +458,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * @param definitions
      */
     public UserField(final Style style, final UserFieldDefinitions definitions) {
-        this(style == Style.FORMAT ? UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS : UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS, definitions);
+        this(style == Style.FORMAT ? GLOBAL_FORMAT_IDENTIFIER_CLASS : GLOBAL_USERFIELD_IDENTIFIER_CLASS, definitions);
         this.style = style;
     }
 
@@ -488,7 +491,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         if (targetClass != null) {
             this.targetClass = targetClass;
         } else {
-            this.targetClass = UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+            this.targetClass = GLOBAL_USERFIELD_IDENTIFIER_CLASS;
         }
         this.definitions = definitions;
     }
@@ -586,6 +589,14 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
                 }
                 style = Style.values()[index];
             }
+            //beim Einlesen können Formate im ersten Schritt nur als globale Eigenschaften erkannt werden.
+            //Sie werden erstmal mit der TargetClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS angelegt. 
+            //Erst wenn hier der Style "FORMAT" erkannt werden konnte, wird die richtige TargetClass ==
+            //GLOBAL_FORMAT_IDENTIFIER_CLASS gesetzt.
+            if (style == Style.FORMAT) {
+                targetClass = GLOBAL_FORMAT_IDENTIFIER_CLASS;
+            }
+
         } else if (fieldName.equals("userFieldTreeVis")) {
             treeVisibility = Boolean.valueOf(value).booleanValue();
         } else if (fieldName.equals("userFieldStandardValue")) {
@@ -609,15 +620,6 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         if (listValues != null) {
             listValues.clear();
         }
-    }
-
-    /**
-     * Legt den <code>style</code> des <code>UserField</code> s fest
-     * 
-     * @param newStyle
-     */
-    public void setStyle(final Style newStyle) {
-        style = newStyle;
     }
 
     /**

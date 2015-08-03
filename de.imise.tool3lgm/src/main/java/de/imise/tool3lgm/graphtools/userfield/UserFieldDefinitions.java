@@ -155,8 +155,8 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             return false;
         }
         for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
-            for (Object uf : classToUserFieldListMap.get(c)) {
-                if (((UserField) uf).uses(userField)) {
+            for (UserField uf : classToUserFieldListMap.get(c)) {
+                if (uf.uses(userField)) {
                     return true;
                 }
             }
@@ -351,22 +351,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         }
         return null;
     }
-
-    //	/**
-    //	 * Liefert ein ein Benutzerfeld, das anhand des Namens herausgesucht wird. 
-    //	 * ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
-    //	 * Gebraucht werden sollte diese Funktion nur beim Import von Daten, da der
-    //	 * Name kein eindeutiges Kriterium ist.
-    //	 * 
-    //	 * @param userFieldTargetClass
-    //	 * @param name
-    //	 * @return
-    //	 * 		das erstebeste globale UserField mit dem übergebenen Namen oder <code>null</code>, wenn keins gefunden wurde
-    //	 * @see #getUserField(Class, String)
-    //	 */
-    //	public UserField getGlobalUserField(String name) {
-    //		return getUserField(GLOBAL_USERFIELD_IDENTIFIER_CLASS, name);
-    //	}
 
     /**
      * @param userFieldTargetClass
@@ -679,6 +663,24 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         }
     }
 
+    //    /**
+    //     * Diese Funktion ist nötig, da beim Einlesen der Style eines Format-UserFields noch nicht erkannt
+    //     * wird und diese Format-UserFields erstmal als globale UserFields angelegt werden. Erst wenn der
+    //     * Style.FORMAT eingelesen wird kann man wissen, dass man diese UserFields in exhte FormatUserFields
+    //     * umwandeln muss. Das geschieht hier.
+    //     * Voraussetzung ist, dass vor dem Aufrufen dieser Funktion bereits die TargetClass des UserFields
+    //     * auf GLOBAL_FORMAT_IDENTIFIER_CLASS gesetzt wurde und das UserField bereits als globale Variable
+    //     * in den Definitions steht (also als UserField für die TargetClass GLOBAL_USERFIELD_IDENTIFIER_CLASS)
+    //     * 
+    //     * @param userField
+    //     */
+    //    void MakeGlobalUserFieldToFormat(final UserField userField) {
+    //        if (userField.getTargetClass() == GLOBAL_FORMAT_IDENTIFIER_CLASS) {
+    //            classToUserFieldListMap.get(GLOBAL_USERFIELD_IDENTIFIER_CLASS).remove(userField);
+    //            add(userField);
+    //        }
+    //    }
+    //
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     // Funktionen zur Berechnung der Kennzahlformeln (das eigentliche Berechnen passiert im Calculator) //
     //////////////////////////////////////////////////////////////////////////////////////////////////////
