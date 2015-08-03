@@ -54,7 +54,14 @@ public class Calculator {
     /**
      * gibt an, auf wieviele Nachkommastellen bei der Berechnung mit BigDecimals gerundet werden soll.
      */
-    private static final int DECIMAL_PLACES_COUNT = 6;
+    private static final int DECIMAL_PLACES_COUNT = 20;
+
+    private static final int DECIMAL_ROUND_MODE = BigDecimal.ROUND_UP;
+
+    private static final BigDecimal divide(final BigDecimal dividend, final BigDecimal divisor) {
+        //Das Teilen von BigDecimal erfordert die Angabe der Nachkommastellen und des Rundungsverhaltens.
+        return dividend.divide(divisor, DECIMAL_PLACES_COUNT, DECIMAL_ROUND_MODE);
+    }
 
     /**
 	 *  
@@ -401,7 +408,8 @@ public class Calculator {
             //Das Teilen von BigDecimal erfordert die Angabe der
             // Nachkommastellen
             //und des Rundungsverhaltens.
-            return bd1.divide(bd2, DECIMAL_PLACES_COUNT, BigDecimal.ROUND_UP).toString();
+            BigDecimal quotient = divide(bd1, bd2);
+            return quotient.toString();
         }
         return null;
     }
@@ -523,7 +531,7 @@ public class Calculator {
             //wenn mit einer Gleichverteilung gerechnet werden soll, dann
             // braucht man die Kanten nur zu zählen
             if (vgUserField == null) {
-                normalizedVG = normalizedVG.divide(new BigDecimal(connectionsFrom.size()), DECIMAL_PLACES_COUNT, BigDecimal.ROUND_UP);
+                normalizedVG = divide(normalizedVG, new BigDecimal(connectionsFrom.size()));
                 //die eingegebenen Verteilungsgweichte müssen normiert werden
             } else {
                 //das Verteilungsgewicht, das an der Kante steht (erstmal
@@ -544,7 +552,7 @@ public class Calculator {
                     vgSum = vgSum.add(new BigDecimal(vgValueString.toString()));
                 }
                 if (vgSum.compareTo(new BigDecimal(0)) != 0) {
-                    normalizedVG = normalizedVG.divide(vgSum, 6, BigDecimal.ROUND_UP);
+                    normalizedVG = divide(normalizedVG, vgSum);
                 }
             }
             erg = erg.add(valueToSplit.multiply(normalizedVG));
@@ -859,7 +867,7 @@ public class Calculator {
         if (me.countConnections(edgeClass) == 0) {
             JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("fehler") + Tool3lgmConstants.getErrString("divide_zero"));
         }
-        BigDecimal erg = bd.divide(new BigDecimal(me.countConnections(edgeClass)), 6, BigDecimal.ROUND_UP);
+        BigDecimal erg = divide(bd, new BigDecimal(me.countConnections(edgeClass)));
         return erg.toString();
     }
 
