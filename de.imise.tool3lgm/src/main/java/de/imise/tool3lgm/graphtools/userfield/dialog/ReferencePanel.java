@@ -235,9 +235,8 @@ public class ReferencePanel extends JPanel implements ActionListener {
      */
     private void setClassesInLists(final AlphabeticalJList classesList) {
         for (int i = 0; i < classes.length; i++) {
-            classesList.addItem(classes[i], classes[i].getSimpleName());
+            classesList.addItem(classes[i], ModelConstants.getDisplayableName(classes[i]));
         }
-
     }
 
     /**
