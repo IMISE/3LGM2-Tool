@@ -42,7 +42,7 @@ public class DataExportModule {
     public static void exportData(final LGMGraphDocument doc, final File exportFile) {
         Class<? extends ModelElement> classElement = null;
         try {
-            FileOutputStream ostream = new FileOutputStream(exportFile);
+            FileOutputStream ostream = new FileOutputStream(exportFile, false);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(ostream));
             String caption = "";
 
@@ -121,7 +121,7 @@ public class DataExportModule {
 
                     for (UserField uf : ufDef.getUserFields(classElement)) {
                         String value = "";
-                        v = me.getUserFieldInputValue(uf);
+                        v = uf.getFormatedValue(me);
                         if (v != null && !v.equals("") && !v.equals(UserField.EMPTY_STRING)) {
                             value += v;
                         } else {
