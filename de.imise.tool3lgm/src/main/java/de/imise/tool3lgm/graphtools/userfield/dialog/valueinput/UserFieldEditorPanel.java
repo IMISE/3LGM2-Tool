@@ -5,17 +5,21 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableSumHandler;
 import de.imise.util.clipboard.ContentExchangeListener;
 
 /**
@@ -95,46 +99,36 @@ public abstract class UserFieldEditorPanel extends JPanel {
         ListSelectionListener l = new ListSelectionListener() {
             @Override
             public void valueChanged(final ListSelectionEvent e) {
+                UserFieldTableModel tableModel = (UserFieldTableModel) table.getModel();
                 int row = table.getSelectedRow();
                 int col = table.getSelectedColumn();
-                double rowSum = 0d, colSum = 0d;
-                UserFieldTableModel tableModel = (UserFieldTableModel) table.getModel();
-                if (row >= 0) {
-                    for (int i = 0; i < tableModel.getColumnCount(); i++) {
-                        double d;
-                        Object value = tableModel.getValueAt(row, i);
-                        if (value == null) {
-                            continue;
-                        }
-                        try {
-                            d = Double.parseDouble(value.toString());
-                        } catch (Exception ex) {
-                            continue;
-                        }
-                        rowSum += d;
-                    }
-                }
-                if (col >= 0) {
-                    for (int i = 0; i < tableModel.getRowCount(); i++) {
-                        double d;
-                        Object value = tableModel.getValueAt(i, col);
-                        if (value == null) {
-                            continue;
-                        }
-                        try {
-                            d = Double.parseDouble(value.toString());
-                        } catch (Exception ex) {
-                            continue;
-                        }
-                        colSum += d;
-                    }
-                }
+                String[] oldValue = elementsAtMousePointer;
+                //wenn nicht selektiert ist -> löschen
                 if (row == -1 || col == -1) {
+                    elementsAtMousePointer = new String[] {
+                            "", "", "", "",
+                    };
+                    firePropertyChange(UserFieldEditorDialog.PROPERTY_TABLE_SELECTION_CHANGED, oldValue, elementsAtMousePointer);
                     return;
                 }
-                String[] oldValue = elementsAtMousePointer;
+                //Zeilensumme
+                String rowSum = UserFieldTableSumHandler.getFormattedRowSum(tableModel, row);
+                //Spaltensumme
+                String colSum = UserFieldTableSumHandler.getFormattedColumnSum(tableModel, col);
+
+                //Zeilenname holen
+                Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
+                Object rowIdentifier = rowIdentifiers.get(row);
+                String rowIdentifierName = rowIdentifier.toString();
+
+                //Spaltenname holen
+                TableColumnModel tableColumnModel = table.getColumnModel();
+                TableColumn column = tableColumnModel.getColumn(col);
+                Object columnHeaderValue = column.getHeaderValue();
+                String columnHeaderName = columnHeaderValue.toString();
+
                 elementsAtMousePointer = new String[] {
-                        tableModel.getRowIdentifiers().get(row).toString(), table.getColumnModel().getColumn(col).getHeaderValue().toString(), new Double(rowSum).toString(), new Double(colSum).toString()
+                        rowIdentifierName, columnHeaderName, rowSum, colSum,
                 };
                 // Änderung dem Dialog mitteilen
                 firePropertyChange(UserFieldEditorDialog.PROPERTY_TABLE_SELECTION_CHANGED, oldValue, elementsAtMousePointer);

@@ -523,7 +523,7 @@ public class UserFieldTableLayout {
                 text = RENDERER_EMPTY_STRING;
                 value = new NamedObjectContainer<UserField>(userField, EDITOR_EMPTY_STRING);
             } else {
-                text = userField.getFormatedValue(value, true);
+                text = userField.getFormattedValue(value, true);
             }
         }
 
@@ -548,7 +548,7 @@ public class UserFieldTableLayout {
          * Gibt den tatsächlichen Wert dieser Zelle wieder und speicher ihn unter {@link #value} ab. <br>
          * Falls der Wert im Editor <code>""</code> entspricht, wird ein neuer {@link NamedObjectContainer} mit {@link #userField} und
          * <code>"EMPTY_STRING"</code> zurückgegeben. Falls sich der Wert im Editor nicht auf double parsen lässt, wird ein neuer
-         * {@link NamedObjectContainer} mit {@link #userField} und <code>"FORMAT_ERROR"</code> zurückgegeben. Sonst wird ein neuer
+         * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurückgegeben. Sonst wird ein neuer
          * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurückgegeben.
          * 
          * @see javax.swing.CellEditor#getCellEditorValue()
@@ -564,7 +564,7 @@ public class UserFieldTableLayout {
                 if (s.equals(EDITOR_EMPTY_STRING)) {
                     s = UserField.EMPTY_STRING;
                 } else {
-                    s = UserField.FORMAT_ERROR;
+                    s = UserField.NUMBER_FORMAT_ERROR;
                 }
             }
 

@@ -354,7 +354,7 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
                     //					System.err.println("value:\t\t"+uf.getValue(me));
                     //					System.err.println("formatetvalue:\t"+uf.getFormatedValue(me,true)+"\n");
 
-                    String label = uf.getName() + ": " + uf.getFormatedValue(me, true);
+                    String label = uf.getName() + ": " + uf.getFormattedValue(me, true);
                     LGMTreeNode childNode = new LGMTreeNode(label, true, false);
                     elementNode.add(childNode);
                 }

@@ -121,7 +121,7 @@ public class DataExportModule {
 
                     for (UserField uf : ufDef.getUserFields(classElement)) {
                         String value = "";
-                        v = uf.getFormatedValue(me);
+                        v = uf.getFormattedValue(me);
                         if (v != null && !v.equals("") && !v.equals(UserField.EMPTY_STRING)) {
                             value += v;
                         } else {

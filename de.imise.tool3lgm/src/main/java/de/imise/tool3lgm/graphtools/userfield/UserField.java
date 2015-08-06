@@ -325,18 +325,18 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
     public static final String EMPTY_STRING = "EMPTY_VALUE";
     public static final String NO_ELEMENTS_CONNECTED = "NO_ELEMENTS_CONNECTED";
     public static final String POSITIVE_VALUES_ONLY = "POSITIVE_VALUES_ONLY";
-    public static final String FORMAT_ERROR = "FORMAT_ERROR";
+    public static final String NUMBER_FORMAT_ERROR = "NUMBER_FORMAT_ERROR";
     public static final String ERROR_DIVIDE_BY_ZERO = "DIVIDE_BY_ZERO";
     public static final String ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION = "CROSS_REFERENCE";
 
     /**
      * Dieses Set beinhaltet Strings, die Formel-UserFields als Werte annehmen, wenn sie sich nicht berechnen lassen oder irgendwelche anderen
-     * Probleme auftreten. <code>FORMAT_ERROR</code> und <code>EMPTY_STRING</code> können auch bei Kennzahl-UserFields auftreten. beinhaltet:
+     * Probleme auftreten. <code>NUMBER_FORMAT_ERROR</code> und <code>EMPTY_STRING</code> können auch bei Kennzahl-UserFields auftreten. beinhaltet:
      */
     public static final HashSet<String> ERROR_SET = new HashSet<String>();
     static {
         ERROR_SET.add(POSITIVE_VALUES_ONLY);
-        ERROR_SET.add(FORMAT_ERROR);
+        ERROR_SET.add(NUMBER_FORMAT_ERROR);
         ERROR_SET.add(ERROR_DIVIDE_BY_ZERO);
         ERROR_SET.add(ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION);
     }
@@ -1094,8 +1094,8 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * @param me Modellelement, für das der formatierte Wert zurück gegeben werden soll
      * @return
      */
-    public String getFormatedValue(final ModelElement me) {
-        return getFormatedValue(me, false);
+    public String getFormattedValue(final ModelElement me) {
+        return getFormattedValue(me, false);
     }
 
     /**
@@ -1105,20 +1105,20 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * @param appendUnit wenn <code>true</code> wird auch die Einheit an den Rückgabewert angehängt
      * @return
      */
-    public String getFormatedValue(final ModelElement me, final boolean appendUnit) {
+    public String getFormattedValue(final ModelElement me, final boolean appendUnit) {
         String value = getValue(me);
-        return getFormatedValue(value, appendUnit);
+        return getFormattedValue(value, appendUnit);
     }
 
     /**
      * Formatiert den über <code>o.toString()</code> erhaltenen String gemäß der Formatvorlage.
      * 
-     * @see #getFormatedValue(ModelElement, boolean)
+     * @see #getFormattedValue(ModelElement, boolean)
      * @param o
      * @param appendUnit
      * @return
      */
-    public String getFormatedValue(final Object o, final boolean appendUnit) {
+    public String getFormattedValue(final Object o, final boolean appendUnit) {
 
         if (o == null) {
             return null;
@@ -1142,27 +1142,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
             return value;
         }
 
-        if (!appendUnit) {
-            value = formatUserField.numberFormat.format(new Double(value));
-        } else { // Mit Einheit
-
-            // Falls sich der Wert nich formatieren lässt, wird errorString zurückgegeben
-            try {
-
-                String v = formatUserField.numberFormat.format(new Double(value));
-                String unit = "";
-                if (formatUserField.formatUnit != null) {
-                    unit = formatUserField.formatUnit;
-                }
-
-                StringBuilder sb = new StringBuilder(v);
-                sb.append(" ");
-                sb.append(unit);
-                value = sb.toString();
-            } catch (NumberFormatException nfe) {
-                return FORMAT_ERROR;
-            }
-        }
+        value = getFormattedValue(value, formatUserField, appendUnit);
 
         // Falls positiveOnly=true und value mit "-" beginnt, wird errorString zurückgegeben
         if (positiveOnly == true && value.startsWith("-")) {
@@ -1170,6 +1150,34 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         }
 
         return value;
+    }
+
+    /**
+     * @param value
+     * @param formatUserField
+     * @param appendUnit
+     * @return
+     */
+    public static final String getFormattedValue(final String value, final UserField formatUserField, final boolean appendUnit) {
+        //wenn kein Format gesetzt ist 
+        if (formatUserField == null) {
+            return value;
+        }
+        // Falls sich der Wert-String nicht in einen Double umwandeln lässt, wird errorString NUMBER_FORMAT_ERROR zurückgegeben
+        try {
+            String v = formatUserField.numberFormat.format(new Double(value));
+            if (!appendUnit) {
+                return v;
+            }
+            StringBuilder sb = new StringBuilder(v);
+            if (formatUserField.formatUnit != null) {
+                sb.append(" ");
+                sb.append(formatUserField.formatUnit);
+            }
+            return sb.toString();
+        } catch (NumberFormatException nfe) {
+            return NUMBER_FORMAT_ERROR;
+        }
     }
 
     /**

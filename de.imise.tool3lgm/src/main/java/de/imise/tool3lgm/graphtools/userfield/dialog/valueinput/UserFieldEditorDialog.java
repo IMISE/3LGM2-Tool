@@ -345,11 +345,11 @@ public class UserFieldEditorDialog extends PropertyDialog {
      */
     private JPanel createElementsAtPointPane() {
 
-        final String rowTitel = Tool3lgmConstants.getResString("userFieldDialog_elementsAtPointPane_rowTitle");
-        final String colTitel = Tool3lgmConstants.getResString("userFieldDialog_elementsAtPointPane_colTitle");
+        final String rowTitel = Tool3lgmConstants.getResString("userFieldDialog_elementsAtPointPane_rowTitle") + " ";
+        final String colTitel = Tool3lgmConstants.getResString("userFieldDialog_elementsAtPointPane_colTitle") + " ";
 
-        final String rowTitel2 = Tool3lgmConstants.getResString("zeilensumme") + ":";
-        final String colTitel2 = Tool3lgmConstants.getResString("spaltensumme") + ":";
+        final String rowTitel2 = Tool3lgmConstants.getResString("zeilensumme") + ": ";
+        final String colTitel2 = Tool3lgmConstants.getResString("spaltensumme") + ": ";
 
         JPanel panel = new JPanel(new GridBagLayout());
 
@@ -363,6 +363,8 @@ public class UserFieldEditorDialog extends PropertyDialog {
         colLabel.setText(colTitel);
         rowLabel2.setText(rowTitel2);
         colLabel2.setText(colTitel2);
+        rowLabel2.setVisible(false);
+        colLabel2.setVisible(false);
 
         // Bekommt Änderungen der Selektion von den Panels übergeben
         PropertyChangeListener l = new PropertyChangeListener() {
@@ -374,6 +376,10 @@ public class UserFieldEditorDialog extends PropertyDialog {
                     colLabel.setText(colTitel.concat(news[1]));
                     rowLabel2.setText(rowTitel2.concat(news[2]));
                     colLabel2.setText(colTitel2.concat(news[3]));
+
+                    rowLabel2.setVisible(news[2].length() > 0);
+                    colLabel2.setVisible(news[3].length() > 0);
+
                     rowLabel.revalidate();
                     colLabel.revalidate();
                 }
@@ -391,7 +397,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
 
         constraints.gridy = 0;
         panel.add(rowLabel, constraints);
-        constraints.gridy = 1;
+        constraints.gridy++;
         panel.add(colLabel, constraints);
 
         panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -400,7 +406,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
         constraints.weightx = 0.0;
         constraints.gridy = 0;
         panel.add(rowLabel2, constraints);
-        constraints.gridy = 1;
+        constraints.gridy++;
         panel.add(colLabel2, constraints);
 
         return panel;

@@ -335,7 +335,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.weightx = 1;
                 constraints.gridy++;
 
-                String formattedValue = field.getFormatedValue(dialog.getModelElement(), true);
+                String formattedValue = field.getFormattedValue(dialog.getModelElement(), true);
                 ((JTextComponent) component).setText(formattedValue);
             }
         }
