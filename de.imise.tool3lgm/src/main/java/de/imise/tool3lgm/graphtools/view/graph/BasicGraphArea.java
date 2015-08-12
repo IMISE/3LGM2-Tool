@@ -630,6 +630,15 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     }
 
+    public void adaptSettings(final BasicGraphArea source) {
+        setDegree(source.page_degree);
+        setMultiViewDegree(source.getMultiViewDegree());
+        setMultiViewEnabled(source.multi_view);
+        setMultiViewPitchShift(source.getMultiViewPitchShift());
+        setPageSize(source.getPageWidth(), source.getPageHeight());
+        setZoom(source.getZoomFactor());
+    }
+
     /**
 	 * 
 	 */

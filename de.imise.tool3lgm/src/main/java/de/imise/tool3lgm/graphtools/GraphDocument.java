@@ -4355,7 +4355,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         Tool3lgm.tool.createSzenarioFrame(szen);
+        szen.setPageSizeFactor(pageSizeFactor);
+        szen.getMapping().adapt(getMapping());
+        szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
         addElementsToSzenario(szen.getHashString(), elements, pid);
+        Tool3lgm.tool.activeLayerChanged(szen);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
