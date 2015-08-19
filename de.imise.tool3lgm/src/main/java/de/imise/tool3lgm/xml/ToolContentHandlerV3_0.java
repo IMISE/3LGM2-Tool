@@ -453,7 +453,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     } else if (field.toLowerCase().startsWith("extid")) {
                         UserField userField = userFieldDefinitions.getUserField(element.getClass(), field);
                         if (userField == null) {
-                            userField = new UserField(element.getClass(), UserField.Style.SINGLE_LINE, userFieldDefinitions);
+                            userField = new UserField(element.getClass(), UserField.Style.ID, userFieldDefinitions);
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, elementValue.toString());

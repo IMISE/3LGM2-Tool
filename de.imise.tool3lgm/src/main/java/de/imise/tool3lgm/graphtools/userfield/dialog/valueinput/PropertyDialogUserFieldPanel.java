@@ -278,6 +278,24 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.gridx = 0;
                 constraints.weightx = 0;
 
+            } else if (style == UserField.Style.ID) {
+                JLabel label = new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>");
+                mp.add(label, constraints);
+                constraints.gridy++;
+                constraints.weightx = 1;
+                if (UserField.EMPTY_STRING.equals(value)) {
+                    value = "";
+                }
+                ExtendedTextField textField = new ExtendedTextField(value);
+                mp.add(textField, constraints);
+                fields.add(new AttributeComponent(field, textField));
+                constraints.gridy++;
+                constraints.gridx = 0;
+                constraints.weightx = 0;
+
+                //wenn die IDs schon bei der Eingabe auf eindeutigkeit geprüft werden sollten
+                //textField.getDocument().addDocumentListener(new UniqueValueVerifier(field, getModelElement(), textField));
+
                 //Kennzahlen:
             } else if (style == UserField.Style.CLASSIFICATION_NUMBER) {
                 String unit = field.getFormatUnit();
@@ -383,6 +401,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             } else if (style == UserField.Style.HYPERLINK) {
                 newValue = GraphDocument.getParseSaveString(((JTextComponent) comp.comp).getText(), true);
 
+            } else if (style == UserField.Style.ID) {
+                newValue = ((JTextComponent) comp.comp).getText();
+
             } else if (style == UserField.Style.CLASSIFICATION_NUMBER) {
                 Object textFieldValue = "";
                 NumberTextField textField = (NumberTextField) comp.comp;
@@ -421,4 +442,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
+    private static final void print(final GridBagConstraints c) {
+        System.err.println("anchor = " + c.anchor);
+        System.err.println("fill = " + c.fill);
+        System.err.println("gridheight = " + c.gridheight);
+        System.err.println("gridwidth = " + c.gridwidth);
+        System.err.println("gridx = " + c.gridx);
+        System.err.println("gridy = " + c.gridy);
+        System.err.println("ipadx = " + c.ipadx);
+        System.err.println("ipady = " + c.ipady);
+        System.err.println("weightx = " + c.weightx);
+        System.err.println("weighty = " + c.weighty);
+        System.err.println();
+    }
 }

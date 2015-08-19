@@ -9,8 +9,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.consistency.error.CardinalityError;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.util.NamedObjectContainer;
@@ -27,11 +26,6 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         number, errorType, elementType, element, connectionType, description
     }
 
-    /**
-     * COMMENTME
-     */
-    private static final String ERROR_DESCRIPTION_SUFFIX = "_descrip";
-
     public ConsistencyErrorTableModel() {
         super();
         COL_NAMES[] colIdentifiers = COL_NAMES.values();
@@ -45,10 +39,10 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     /**
      * @param dataVector
      */
-    public void setErrors(ArrayList<CardinalityError> dataVector) {
+    public void setErrors(ArrayList<AbstractError> dataVector) {
 
         if (dataVector == null) {
-            dataVector = new ArrayList<CardinalityError>(0);
+            dataVector = new ArrayList<AbstractError>(0);
         }
         // System.err.println(dataVector.size());
         // System.err.println(this.dataVector.size());
@@ -65,17 +59,16 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
 
         int nullRows = 0;
         for (int i = 0; i < dataVector.size(); i++) {
-            CardinalityError cardErr = dataVector.get(i);
-            String errClassName = cardErr.getClass().getSimpleName();
+            AbstractError error = dataVector.get(i);
 
             // Zeilennummer
             setValueAt(new Integer(i + 1), i, COL_NAMES.number.ordinal());
 
             // Fehlertyp
-            NamedObjectContainer<CardinalityError> type = new NamedObjectContainer<CardinalityError>(cardErr, Tool3lgmConstants.getErrString(errClassName));
+            NamedObjectContainer<AbstractError> type = new NamedObjectContainer<AbstractError>(error, error.getTypeString());
             setValueAt(type, i, COL_NAMES.errorType.ordinal());
 
-            ModelElement me = cardErr.getModelElement();
+            ModelElement me = error.getModelElement();
 
             // Elementtyp
             setValueAt(ModelConstants.getDisplayableName(me.getClass()), i, COL_NAMES.elementType.ordinal());
@@ -83,12 +76,12 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
             // Element
             setValueAt(me, i, COL_NAMES.element.ordinal());
 
-            // Verbindungsart
-            Class<? extends Kante> edgeClass = cardErr.getEdgeClass();
-            setValueAt(ModelConstants.getFullForwardMetaAssociationName(edgeClass), i, COL_NAMES.connectionType.ordinal());
+            // Verbindungsart / Feld
+            setValueAt(error.getErrorFieldString(), i, COL_NAMES.connectionType.ordinal());
 
             // Beschreibung
-            setValueAt(Tool3lgmConstants.getErrString(errClassName + ERROR_DESCRIPTION_SUFFIX), i, COL_NAMES.description.ordinal());
+            setValueAt(error.getMessage(), i, COL_NAMES.description.ordinal());
+
         }
         // System.err.println(this.dataVector.size());
         // System.err.println(getRowCount());

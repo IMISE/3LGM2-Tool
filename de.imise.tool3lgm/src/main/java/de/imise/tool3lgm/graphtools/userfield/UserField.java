@@ -99,6 +99,12 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
+        ID {
+            @Override
+            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+                return alphabeticalCompare(uf, me1, me2);
+            }
+        },
         CLASSIFICATION_NUMBER {
             @Override
             int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {

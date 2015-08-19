@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
  * @author AXS
  * @created 13.09.2008
  */
-public class MinCardinalityError extends CardinalityError {
+public class MinCardinalityError extends AbstractCardinalityError {
 
     /**
      * @param me
@@ -19,8 +19,8 @@ public class MinCardinalityError extends CardinalityError {
      * @param cardValue
      * @param gdcoll
      */
-    public MinCardinalityError(final ModelElement me, final Class<? extends Kante> edgeClass, final int cardValue, final GDCollection gdcoll) {
-        super(me, edgeClass, cardValue, gdcoll);
+    public MinCardinalityError(final ModelElement me, final Class<? extends Kante> edgeClass, final GDCollection gdcoll, final int cardValue) {
+        super(me, edgeClass, gdcoll, cardValue);
     }
 
 }

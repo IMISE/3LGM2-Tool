@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 import javax.swing.JTable;
@@ -9,7 +10,9 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.GraphDocumentAdapter;
-import de.imise.tool3lgm.graphtools.consistency.error.CardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolutionLibraryVersion;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
@@ -23,6 +26,7 @@ import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -50,13 +54,15 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      */
     private ConsistencyDefinition consistencyDefinition = null;
 
+    private final UniqueIDChecker idChecker;
+
     /**
-     * Erzeugt einen neuen <code>ConsistencyChecker</code> mit initialisierter
-     * <code>ErrorSolutionLibraryVersion</code>.
+     * Erzeugt einen neuen <code>ConsistencyChecker</code> mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
      */
     private ConsistencyChecker() {
         super();
         solutionsLibrary = new ErrorSolutionLibraryVersion();
+        idChecker = new UniqueIDChecker();
     }
 
     /**
@@ -97,8 +103,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Löscht alle Elemente komplett, die fehlerhaft sind, deren Fehler man aber nicht behandeln
-     * kann. Darunter fallen alle Fehler, für die eine Error-Solution mit einem gültigen
-     * <code>MetaPath</code> zu einem verbundenen Element hinterlegt ist hinterlegt ist, das aber
+     * kann. Darunter fallen alle Fehler, für die eine Error-Solution mit einem gültigen <code>MetaPath</code> zu einem verbundenen Element hinterlegt
+     * ist hinterlegt ist, das aber
      * nicht erreichtbar ist, weil auch die Verbindung zu diesem Element fehlt. Somit kann der
      * Fehler nirgends behoben werden und man kann das Element löschen. In Metamodell 2.7 heißt das:
      * Anwendungsbaustein-Konfigurationen ohne einen Anwendungsbautein könnte man im Dialog der
@@ -116,7 +122,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = checker.gdcoll.isBulkMode();
         checker.gdcoll.setBulkMode(true);
-        for (CardinalityError err : checker.getInconsistencies()) {
+        for (AbstractError err : checker.getAllInconsistencies()) {
             if (!checker.isSolutionExecuteable(err)) {
                 ModelElement errorElement = err.getModelElement();
                 checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
@@ -200,39 +206,58 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         dataChanged(source);
     }
 
-    /** Gibt wieder, ob Inkonsistenzen im Modell bestehen */
-    public boolean hasInconsistencies() {
-        return getInconsistencies().size() > 0;
+    /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
+    public boolean hasCardinalityInconsistencies() {
+        return getInconsistencies(AbstractCardinalityError.class).size() > 0;
+    }
+
+    public ArrayList<AbstractError> getAllInconsistencies() {
+        return getInconsistencies(AbstractError.class);
+    }
+
+    public ArrayList<AbstractError> getCardinalityInconsistencies() {
+        return getInconsistencies(AbstractCardinalityError.class);
+    }
+
+    public ArrayList<AbstractError> getIDInconsistencies() {
+        return getInconsistencies(AbstractIDError.class);
     }
 
     /**
      * @return
      */
-    public ArrayList<CardinalityError> getInconsistencies() {
-        ArrayList<CardinalityError> returnList = new ArrayList<CardinalityError>();
+    private ArrayList<AbstractError> getInconsistencies(final Class<? extends AbstractError> errorClass) {
+        ArrayList<AbstractError> errors = new ArrayList<AbstractError>();
 
         if (gdcoll == null) {
-            return returnList;
+            return errors;
         }
 
         GraphDocument doc = gdcoll.getMainGraphDocument();
 
-        ArrayList<ModelElement> elements = new ArrayList<ModelElement>();
-
-        // Klassen aller Elemente, die im Model vorkommen und wenigstens eine
-        // Kantenart besitzen einsammeln
-        HashSet<Class<? extends ModelElement>> classes = new HashSet<Class<? extends ModelElement>>();
-        ArrayList<ModelElement> allMe = doc.getModelItems(ModelElement.class, true);
-        for (ModelElement me : allMe) {
-            if (ModelConstants.getEdgeTypes(me.getClass()) != null) {
-                elements.add(me);
-                classes.add(me.getClass());
+        if (errorClass.isAssignableFrom(AbstractCardinalityError.class)) {
+            for (ModelElement me : doc.getModelItems(ModelElement.class, true)) {
+                addCardinalityErrors(me, errors);
             }
         }
+        if (errorClass.isAssignableFrom(AbstractIDError.class)) {
+            Collection<AbstractIDError> idErrors = idChecker.getIDErrors(gdcoll);
+            errors.addAll(idErrors);
+        }
+        return errors;
+    }
 
-        for (ModelElement me : elements) {
-            Class<? extends ModelElement> meClass = me.getClass();
-            Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
+    /**
+     * Fügt der übergebenen Error-Liste alle Kardinalitätsfehler des übergebenen Elementes hinzu.
+     * 
+     * @param me
+     * @param returnList
+     */
+    private void addCardinalityErrors(final ModelElement me, final ArrayList<AbstractError> returnList) {
+        Class<? extends ModelElement> meClass = me.getClass();
+        Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
+        // nur Elementarten beachten, die wenigstens eine Kante besitzen können
+        if (edgeTypes != null) {
             for (Class<? extends Kante> edgeClass : edgeTypes) {
                 if (consistencyDefinition != null && !consistencyDefinition.contains(edgeClass)) {
                     continue;
@@ -261,116 +286,65 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 // sowohl Start- als auch Endklasse sein können
                 if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
                     if (meHasStartClass && meIsStartConnections.size() < minStartCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, minEndCard, gdcoll));
+                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minEndCard));
                     }
                     if (meHasStartClass && meIsStartConnections.size() > maxStartCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, meIsStartConnections, maxEndCard, gdcoll));
+                        returnList.add(new MaxCardinalityError(me, edgeClass, meIsStartConnections, gdcoll, maxEndCard));
                     }
                     if (meHasEndClass && meIsEndConnections.size() < minEndCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, minStartCard, gdcoll));
+                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minStartCard));
                     }
                     if (meHasEndClass && meIsEndConnections.size() > maxEndCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, meIsEndConnections, maxStartCard, gdcoll));
+                        returnList.add(new MaxCardinalityError(me, edgeClass, meIsEndConnections, gdcoll, maxStartCard));
                     }
                 } else if (meHasStartClass && meHasEndClass) {
                     int card = minStartCard < minEndCard ? minEndCard : minStartCard;
                     if (connections.size() < card) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, card, gdcoll));
+                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, card));
                     }
                     card = maxStartCard < maxEndCard ? maxStartCard : maxEndCard;
                     if (connections.size() > card) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, card, gdcoll));
+                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, card));
                     }
                 } else if (meHasStartClass) {
                     if (connections.size() < minStartCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, minStartCard, gdcoll));
+                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minStartCard));
                     }
                     if (connections.size() > maxStartCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, maxStartCard, gdcoll));
+                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, maxStartCard));
                     }
                 } else if (meHasEndClass) {
                     if (connections.size() < minEndCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, minEndCard, gdcoll));
+                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minEndCard));
                     }
                     if (connections.size() > maxEndCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, maxEndCard, gdcoll));
+                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, maxEndCard));
                     }
                 } else {
                     System.err.println("Die Kante darf gar nicht für dieses Element existieren!");
                 }
             }
         }
-
-        return returnList;
     }
-
-    // /**
-    // * Prüft, ob die Kardinalitäten eines Elementes eingehalten sind. Die
-    // * erstebeste Inkonsistenz, die gefunden wird, kann in einem Dialog
-    // * angezeigt werden. Wird eine Inkonsistenz gefunden, kommt
-    // * <code>false</code> zurück.
-    // *
-    // * @param me
-    // * @param showDialog
-    // * @return
-    // */
-    // public static boolean _isConsistentMaxCardinality(ModelElement me, GDCollection gdcoll,
-    // boolean showDialog) {
-    // for (Kante edge1 : me.getEdges()) {
-    // int maxCard = (edge1.isStart(me) ? edge1.getMaxStartToEndCardinality() :
-    // edge1.getMaxEndToStartCardinality());
-    // me.getEdges(edge1.getClass());
-    // ArrayList<ModelElement> connected = me.getConnectedElements(edge1.getClass(),
-    // gdcoll.getGraphDocument());
-    // if (maxCard < connected.size()) {
-    // if (!showDialog)
-    // return false;
-    // StringBuilder sb = new StringBuilder("Das Element (!)");
-    // sb.append(" ");
-    // sb.append(ModelConstants.getDisplayableName(me.getClass()));
-    // sb.append(":\n\"");
-    // sb.append(me.getClearName());
-    // sb.append("\"\n ");
-    // sb.append("verletzt die Konsistenz des Modells. Es dürfte(n) maximal(!)");
-    // sb.append(" ");
-    // sb.append(maxCard);
-    // sb.append(" ");
-    // sb.append("Verbindung(en) zu folgenden Elementen bestehen:(!)");
-    // sb.append("\n");
-    // for (ModelElement conMe : connected) {
-    // sb.append(conMe.getClearName());
-    // sb.append("\n");
-    // }
-    // JOptionPane.showMessageDialog(Tool3lgm.tool, sb.toString(), "Inkonsistenz(!)",
-    // JOptionPane.INFORMATION_MESSAGE);
-    // return false;
-    // }
-    // }
-    // return true;
-    // }
 
     /**
      * Diese Funktion hat folgende Rückgabewerte:<br />
      * <ol>
-     * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, die einen gültigen
-     * <code>MetaPath</code> beschreibt, über den ausgehend vom Element des übergebenen Fehlers
-     * verbundene Elemente gefunden werden, dann kommen genau diese verbundenen Elemente zurück.</li>
-     * <li>Wenn die gleichen Vorbedingungen gelten, wie eben, aber keine verbundenen Elemente
-     * gefunden werden, dann kommt <code>null</code> zurück.</li>
-     * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, diese aber keinen
-     * <code>MetaPath</code> enthält, so kommt eine Liste mit dem ModelElement des Fehlers als
-     * einzigem Element zurück</li>
-     * <li>Wenn für den Fehler keine <code>ErrorSolution</code> gefunden wurde, kommt eine leere
-     * Liste zurück</li>
+     * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, die einen gültigen <code>MetaPath</code> beschreibt, über den ausgehend
+     * vom Element des übergebenen Fehlers verbundene Elemente gefunden werden, dann kommen genau diese verbundenen Elemente zurück.</li>
+     * <li>Wenn die gleichen Vorbedingungen gelten, wie eben, aber keine verbundenen Elemente gefunden werden, dann kommt <code>null</code> zurück.</li>
+     * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, diese aber keinen <code>MetaPath</code> enthält, so kommt eine Liste mit
+     * dem ModelElement des Fehlers als einzigem Element zurück</li>
+     * <li>Wenn für den Fehler keine <code>ErrorSolution</code> gefunden wurde, kommt eine leere Liste zurück</li>
      * </ol>
-     * Zusäztlich dazu wird auch <code>null</code> zurück gegeben, wenn der übergebene Fehler selbst
-     * <code>null</code> ist. Das kann man aber vorher ausschließen, so dass die eindeutige
+     * Zusäztlich dazu wird auch <code>null</code> zurück gegeben, wenn der übergebene Fehler selbst <code>null</code> ist. Das kann man aber vorher
+     * ausschließen, so dass die eindeutige
      * Unterscheidung der einzelnen Fehlerarten möglich ist.
      * 
      * @param error
      * @return
      */
-    private HashSet<ModelElement> getSolutionPropertyDialogElement(final CardinalityError error) {
+    private HashSet<ModelElement> getSolutionPropertyDialogElement(final AbstractError error) {
         if (error == null) {
             return null;
         }
@@ -395,13 +369,12 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn es für diesen Fehler eine ausführbare Lösung gibt, sonst
-     * <code>false</code>.
+     * Liefert <code>true</code>, wenn es für diesen Fehler eine ausführbare Lösung gibt, sonst <code>false</code>.
      * 
      * @param error
      * @return
      */
-    public boolean isSolutionExecuteable(final CardinalityError error) {
+    public boolean isSolutionExecuteable(final AbstractError error) {
         return getSolutionPropertyDialogElement(error) != null;
     }
 
@@ -409,30 +382,35 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param error
      * @return
      */
-    public void execSolution(final CardinalityError error) {
-        ErrorSolution es = solutionsLibrary.getSolution(error);
+    public void execSolution(final AbstractError error) {
         // 'es' ist null, wenn für den Fehler keine Solution hinterlegt wurde. Das gilt nur
         // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzliches
         // OneToNUndirectedConnectionPanel angezeigt werden soll, in dem man den Fehler beheben kann
-        if (es == null) {
-            ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog(gdcoll);
-            Class<? extends ModelElement> otherClass = Kante.getOther(error.getEdgeClass(), error.getModelElement().getClass());
-            NConnectionPanel tp = new NConnectionPanel(otherClass, dialog, error instanceof MinCardinalityError, true);
-            String errorTabName = Tool3lgmConstants.getResString("error_error_dialog_tab") + " " + ModelConstants.getDisplayableName(otherClass);
-            dialog.addTab(errorTabName, Tool3lgmConstants.getIcon("error.gif"), tp);
-            dialog.selectTab(errorTabName, tp.getClass());
-            dialog.showDialog();
-        } else {
-            HashSet<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
-            if (solutionPropertyDialogElement == null || solutionPropertyDialogElement.size() == 0) {
-                return;
-            }
-            for (ModelElement connected : solutionPropertyDialogElement) {
-                ElementPropertyDialog dialog = connected.getPropertyDialog(gdcoll);
-                dialog.selectTab(es.getPanelName(), es.getPanelClass());
+        if (error instanceof AbstractCardinalityError) {
+            ErrorSolution es = solutionsLibrary.getSolution(error);
+            if (es == null) {
+                ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog(gdcoll);
+                Class<? extends ModelElement> otherClass = Kante.getOther(((AbstractCardinalityError) error).getEdgeClass(), error.getModelElement().getClass());
+                NConnectionPanel tp = new NConnectionPanel(otherClass, dialog, error instanceof MinCardinalityError, true);
+                String errorTabName = Tool3lgmConstants.getResString("error_error_dialog_tab") + " " + ModelConstants.getDisplayableName(otherClass);
+                dialog.addTab(errorTabName, Tool3lgmConstants.getIcon("error.gif"), tp);
+                dialog.selectTab(errorTabName, tp.getClass());
                 dialog.showDialog();
+            } else {
+                HashSet<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
+                if (solutionPropertyDialogElement == null || solutionPropertyDialogElement.size() == 0) {
+                    return;
+                }
+                for (ModelElement connected : solutionPropertyDialogElement) {
+                    ElementPropertyDialog dialog = connected.getPropertyDialog(gdcoll);
+                    dialog.selectTab(es.getPanelName(), es.getPanelClass());
+                    dialog.showDialog();
+                }
             }
+        } else if (error instanceof AbstractIDError) {
+            ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog(gdcoll);
+            dialog.selectTab(PropertyDialogUserFieldPanel.class);
+            dialog.showDialog();
         }
     }
-
 }

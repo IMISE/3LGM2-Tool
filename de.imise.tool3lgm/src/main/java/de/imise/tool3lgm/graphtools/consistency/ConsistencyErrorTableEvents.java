@@ -14,9 +14,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.consistency.error.CardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.NamedObjectContainer;
@@ -36,8 +34,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
 	 */
     private final ConsistencyChecker checker;
 
-    private ArrayList<MinCardinalityError> minErrors;
-    private ArrayList<MaxCardinalityError> maxErrors;
+    private ArrayList<AbstractError> errors;
     private final ArrayList<ModelElement> selectedErrorElements = new ArrayList<ModelElement>();
 
     /**
@@ -58,21 +55,24 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
             if (rows.length == 0) {
                 return;
             }
-            minErrors = new ArrayList<MinCardinalityError>();
-            maxErrors = new ArrayList<MaxCardinalityError>();
+            errors = new ArrayList<AbstractError>();
             selectedErrorElements.clear();
             for (int r : rows) {
-                NamedObjectContainer<CardinalityError> errContainer = (NamedObjectContainer<CardinalityError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
-                CardinalityError cardErr = errContainer.getObject();
-                if (cardErr instanceof MinCardinalityError) {
-                    minErrors.add((MinCardinalityError) cardErr);
-                } else if (cardErr instanceof MaxCardinalityError) {
-                    maxErrors.add((MaxCardinalityError) cardErr);
-                }
-                selectedErrorElements.add(cardErr.getModelElement());
+                NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
+                AbstractError error = errContainer.getObject();
+                errors.add(error);
+                selectedErrorElements.add(error.getModelElement());
             }
             getPopupMenu().show(table, e.getX(), e.getY());
+        } else if (e.getClickCount() > 1) {
+            int clickedRow = table.rowAtPoint(e.getPoint());
+            int column = ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal();
+            Object value = table.getValueAt(clickedRow, column);
+            NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) value;
+            AbstractError error = errContainer.getObject();
+            checker.execSolution(error);
         }
+
     }
 
     /**
@@ -93,10 +93,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
         JMenuItem item = new JMenuItem(new AbstractAction(Tool3lgmConstants.getResString("error_element_solution_dialog")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                for (CardinalityError err : minErrors) {
-                    checker.execSolution(err);
-                }
-                for (CardinalityError err : maxErrors) {
+                for (AbstractError err : errors) {
                     checker.execSolution(err);
                 }
             }

@@ -790,6 +790,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         userFieldTypeComboBox.addItem(UserField.Style.RADIO_BUTTON, CostingUtil.getDisplayableStyleName(UserField.Style.RADIO_BUTTON));
         userFieldTypeComboBox.addItem(UserField.Style.SEPARATOR, CostingUtil.getDisplayableStyleName(UserField.Style.SEPARATOR));
         userFieldTypeComboBox.addItem(UserField.Style.SINGLE_LINE, CostingUtil.getDisplayableStyleName(UserField.Style.SINGLE_LINE));
+        userFieldTypeComboBox.addItem(UserField.Style.ID, CostingUtil.getDisplayableStyleName(UserField.Style.ID));
 
         // auswahlmodi für die checkboxen
         checkBoxAuswahl = new JComboBox();

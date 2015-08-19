@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.consistency.error.CardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 
 /**
  * @author AXS
@@ -48,7 +48,7 @@ class ConsistencyErrorTableGenerator {
 	 * 
 	 */
     void updateTable() {
-        ArrayList<CardinalityError> errors = checker.getInconsistencies();
+        ArrayList<AbstractError> errors = checker.getAllInconsistencies();
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
         model.setErrors(errors);
         table.clearSelection();

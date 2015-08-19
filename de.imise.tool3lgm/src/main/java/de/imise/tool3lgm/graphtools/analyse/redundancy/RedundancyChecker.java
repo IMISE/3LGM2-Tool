@@ -22,7 +22,7 @@ import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
-import de.imise.tool3lgm.graphtools.consistency.error.CardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -252,7 +252,7 @@ public class RedundancyChecker extends WindowAdapter {
         }
         ConsistencyChecker consistencyChecker = Tool3lgm.tool.getConsistencyChecker();
         consistencyChecker.setConsistencyDefinition(consistencyDefinition);
-        ArrayList<CardinalityError> errors = consistencyChecker.getInconsistencies();
+        ArrayList<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText

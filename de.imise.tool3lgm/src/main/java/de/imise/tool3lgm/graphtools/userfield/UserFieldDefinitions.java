@@ -388,6 +388,22 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     }
 
     /**
+     * @return all id userfields for all target classes
+     */
+    public Iterable<UserField> getIDUserFields() {
+        ArrayList<UserField> idUserFields = new ArrayList<UserField>();
+        for (Class<? extends UserFieldTarget> userFieldTargetClass : classToUserFieldListMap.keySet()) {
+            UserFieldList userFields = classToUserFieldListMap.get(userFieldTargetClass);
+            for (UserField userField : userFields) {
+                if (userField.getStyle() == UserField.Style.ID) {
+                    idUserFields.add(userField);
+                }
+            }
+        }
+        return idUserFields;
+    }
+
+    /**
      * Die Methode <code>get</code> gibt unter Angabe der zugehörigen Klasse und des entsprechenden Indices ein <code>UserField</code> zurück. Es wird
      * aus der HashMap die zur übergebenen Klasse gehörende ArrayList geladen, falls sie nicht schon geladen ist, und das Element an der Stelle
      * <code>index</code> zurückgegeben.

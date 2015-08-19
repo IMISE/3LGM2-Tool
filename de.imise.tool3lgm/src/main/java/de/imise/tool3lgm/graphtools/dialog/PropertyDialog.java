@@ -65,8 +65,7 @@ public class PropertyDialog extends JDialog implements WindowListener {
     protected int transactionID;
 
     /**
-     * Panel, das <code>applyButton</code>,<code>okButton</code> und <code>cancelButton</code>
-     * beinhaltet
+     * Panel, das <code>applyButton</code>,<code>okButton</code> und <code>cancelButton</code> beinhaltet
      */
     protected JPanel controlPanel;
 
@@ -156,7 +155,8 @@ public class PropertyDialog extends JDialog implements WindowListener {
      * Klasse der im Tabpanel enthaltenen Componente muss die gleiche oder eine Unterklasse der
      * übergebenen Klasse sein.
      * 
-     * @param title Titel des zu selektierenden Tabs
+     * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> übergeben, wird der
+     *            erstbeste passende Tab herausgesucht
      * @param tabComponentClass Oberklasse der Komponente in dem zu selektierenden Tab
      * @return <code>true</code>, wenn ein Tab der angegebenen Art gefunden und in den Vordergund
      *         geracht werden konnte
@@ -164,7 +164,7 @@ public class PropertyDialog extends JDialog implements WindowListener {
     public boolean selectTab(final String title, final Class<? extends Component> tabComponentClass) {
         for (int i = 0; i < tab.getComponentCount(); i++) {
             Component comp = tab.getComponent(i);
-            if (!tab.getTitleAt(i).equals(title)) {
+            if (title != null && !tab.getTitleAt(i).equals(title)) {
                 continue;
             }
             if (!tabComponentClass.isAssignableFrom(comp.getClass())) {
@@ -174,6 +174,15 @@ public class PropertyDialog extends JDialog implements WindowListener {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param tabComponentClass
+     * @return
+     * @see #selectTab(String, Class)
+     */
+    public boolean selectTab(final Class<? extends Component> tabComponentClass) {
+        return selectTab(null, tabComponentClass);
     }
 
     /**
