@@ -36,9 +36,9 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
-import de.imise.util.swing.component.NumberTextField;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.swing.component.text.NumberTextField;
 
 /**
  * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten UserField des Elementes angezeigt werden. In ein <code>JScrollPane</code>
