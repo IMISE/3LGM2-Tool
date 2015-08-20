@@ -133,9 +133,11 @@ public abstract class UserFieldTableController {
      * @return
      */
     boolean isCellSelected(final int row, final int col) {
-
+        if (row < 0 || col < 0) {
+            return false;
+        }
         try {
-            return (rangeSelectionMatrix[row][col] || singleSelectionMatrix[row][col]) && isEditable(row, col);
+            return rangeSelectionMatrix[row][col] || singleSelectionMatrix[row][col] && isEditable(row, col);
         } catch (NullPointerException npe) {
             return initialSelectionMatrix[row][col] && isEditable(row, col);
         }
@@ -386,11 +388,18 @@ public abstract class UserFieldTableController {
 
         clearRangeSelections();
 
-        for (int i = x1; i <= x2; i++) {
-            for (int j = y1; j <= y2; j++) {
-                rangeSelectionMatrix[i][j] = true;
+        int xMax = rangeSelectionMatrix.length - 1;
+        int yMax = rangeSelectionMatrix[0].length - 1;
+        if (x1 >= 0 && x1 <= xMax && x2 >= 0 && x2 <= xMax) {
+            if (y1 >= 0 && y1 <= yMax && y2 >= 0 && y2 <= yMax) {
+                for (int i = x1; i <= x2; i++) {
+                    for (int j = y1; j <= y2; j++) {
+                        rangeSelectionMatrix[i][j] = true;
+                    }
+                }
             }
         }
+
     }
 
     /**
