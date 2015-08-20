@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
 
-public class UserFieldGlobalNumberTableModel extends UserFieldTableModel {
+public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel {
 
     public UserFieldGlobalNumberTableModel(final GraphDocument doc) {
         super(doc);

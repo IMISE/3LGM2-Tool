@@ -25,7 +25,7 @@ import de.imise.util.NamedObjectContainer;
 /**
  * Model für alle Tables des Attributeditors
  * <p>
- * Über die statischen Methoden können vorgefertigte <code>UserFieldTableModel</code>s abgerufen werden, die auf Tabels für Kennzahlen,
+ * Über die statischen Methoden können vorgefertigte <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels für Kennzahlen,
  * Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
  * !!! Die Änderung der Daten erfolgt nicht mehr über javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
@@ -34,7 +34,7 @@ import de.imise.util.NamedObjectContainer;
  * 
  * @author fstephan
  */
-public class UserFieldTableModel extends DefaultTableModel {
+public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
 
     /* ************************ Start: Konstanten ************************************* */
 
@@ -114,7 +114,7 @@ public class UserFieldTableModel extends DefaultTableModel {
      * 
      * @param doc
      */
-    protected UserFieldTableModel(final GraphDocument doc) {
+    protected AbstractUserFieldTableModel(final GraphDocument doc) {
         super();
         this.doc = doc;
         definitions = doc.getCollection().getUserFieldDefinitions();
@@ -347,7 +347,7 @@ public class UserFieldTableModel extends DefaultTableModel {
     /**
      * Setzt die Modeldaten auf die Werte in <code>values</code>.
      * 
-     * @see UserFieldTableModel#setValuesAt(Object[][], int, int)
+     * @see AbstractUserFieldTableModel#setValuesAt(Object[][], int, int)
      * @param values neue Werte
      * @return
      */

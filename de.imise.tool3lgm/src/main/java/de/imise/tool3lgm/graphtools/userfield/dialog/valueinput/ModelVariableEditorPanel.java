@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldGlobalNumberTableModel;
 import de.imise.util.NamedObjectContainer;
 
@@ -44,10 +44,10 @@ public class ModelVariableEditorPanel extends UserFieldEditorPanel {
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
 
-        if (!(table.getModel() instanceof UserFieldTableModel)) {
+        if (!(table.getModel() instanceof AbstractUserFieldTableModel)) {
             return; // noch keine Werte vorhanden
         }
-        UserFieldTableModel uftm = (UserFieldTableModel) table.getModel();
+        AbstractUserFieldTableModel uftm = (AbstractUserFieldTableModel) table.getModel();
 
         Vector<NamedObjectContainer<UserField>> rowIdentifiers = (Vector) uftm.getRowIdentifiers();
         for (int i = 0; i < rowIdentifiers.size(); i++) {

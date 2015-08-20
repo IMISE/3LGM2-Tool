@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldWeightTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -220,10 +220,10 @@ public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
 
     @Override
     protected void takeOver() {
-        if (!(table.getModel() instanceof UserFieldTableModel)) {
+        if (!(table.getModel() instanceof AbstractUserFieldTableModel)) {
             return;
         }
-        UserFieldTableModel tableModel = (UserFieldTableModel) table.getModel();
+        AbstractUserFieldTableModel tableModel = (AbstractUserFieldTableModel) table.getModel();
         if (tableModel.dataChanged() == false) {
             return;
         }
@@ -327,7 +327,7 @@ public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
             choosedEdgeDirection = Doppelkante.BACKWARD;
         }
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
-        UserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField);
+        AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);
         super.modifyTable(uftm, tec);
     }

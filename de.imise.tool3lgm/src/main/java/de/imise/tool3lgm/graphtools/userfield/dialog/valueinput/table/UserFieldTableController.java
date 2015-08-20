@@ -14,7 +14,7 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JList;
 
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.Pair;
 
 /**
@@ -512,7 +512,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewClassificationNumberTableController(final UserFieldTableModel uftm) {
+    public static UserFieldTableController getNewClassificationNumberTableController(final AbstractUserFieldTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - unabhängig von ModelValue
@@ -526,7 +526,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewDistributionWeightTableController(final UserFieldTableModel uftm) {
+    public static UserFieldTableController getNewDistributionWeightTableController(final AbstractUserFieldTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - abhängig von ModelValue
@@ -540,7 +540,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewClassificationNumberFormulaTableController(final UserFieldTableModel uftm) {
+    public static UserFieldTableController getNewClassificationNumberFormulaTableController(final AbstractUserFieldTableModel uftm) {
 
         if (uftm.getRowCount() == 0 || uftm.getColumnCount() == 0) {
             return null;
@@ -566,7 +566,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewModelVariableTableController(final UserFieldTableModel uftm) {
+    public static UserFieldTableController getNewModelVariableTableController(final AbstractUserFieldTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte editierbar - unabhängig von ModelValue
@@ -585,7 +585,7 @@ public abstract class UserFieldTableController {
      * @param firstColumnEditable
      * @param dependsOnModelValue
      */
-    private static UserFieldTableController getNewUserFieldTableController(final UserFieldTableModel uftm, final boolean firstRowEditable, final boolean firstColumnEditable, final boolean dependsOnModelValue) {
+    private static UserFieldTableController getNewUserFieldTableController(final AbstractUserFieldTableModel uftm, final boolean firstRowEditable, final boolean firstColumnEditable, final boolean dependsOnModelValue) {
 
         if (uftm.getRowCount() == 0 || uftm.getColumnCount() == 0) {
             return null;

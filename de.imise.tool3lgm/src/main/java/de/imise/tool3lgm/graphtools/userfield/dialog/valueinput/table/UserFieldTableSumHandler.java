@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
 import java.math.BigDecimal;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
 
 public class UserFieldTableSumHandler {
@@ -17,7 +17,7 @@ public class UserFieldTableSumHandler {
      * @param row
      * @return
      */
-    public static String getFormattedRowSum(final UserFieldTableModel tableModel, final int row) {
+    public static String getFormattedRowSum(final AbstractUserFieldTableModel tableModel, final int row) {
         return getFormattedSum(tableModel, row, true);
     }
 
@@ -28,7 +28,7 @@ public class UserFieldTableSumHandler {
      * @param col
      * @return
      */
-    public static String getFormattedColumnSum(final UserFieldTableModel tableModel, final int col) {
+    public static String getFormattedColumnSum(final AbstractUserFieldTableModel tableModel, final int col) {
         return getFormattedSum(tableModel, col, false);
     }
 
@@ -40,7 +40,7 @@ public class UserFieldTableSumHandler {
      * @param useRow
      * @return
      */
-    private static String getFormattedSum(final UserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
+    private static String getFormattedSum(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
         String returnValue = "";
         BigDecimal sumValue = getSum(tableModel, rowOrColumnIndex, useRow);
         if (lastCallHadValidValues) {
@@ -61,7 +61,7 @@ public class UserFieldTableSumHandler {
      * @param useRow
      * @return
      */
-    private static BigDecimal getSum(final UserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
+    private static BigDecimal getSum(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
         BigDecimal sum = BigDecimal.ZERO;
         lastCallHadValidValues = false;
         if (rowOrColumnIndex >= 0) {
@@ -94,7 +94,7 @@ public class UserFieldTableSumHandler {
      * @param useRow
      * @return
      */
-    public static UserField getFormatSource(final UserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
+    public static UserField getFormatSource(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
         //Zeilen bzw. Spalten Header holen und das evtl. darin verpackte UserField holen
         UserField formatSource = useRow ? getRowHeaderUserField(tableModel, rowOrColumnIndex) : getColumnHeaderUserField(tableModel, rowOrColumnIndex);
         //wenn keins gefunden wurde -> dann mal in den jeweils anderen Header schauen, ob dort auch kein UserField steckt
@@ -115,7 +115,7 @@ public class UserFieldTableSumHandler {
      * @param row
      * @return
      */
-    private static UserField getRowHeaderUserField(final UserFieldTableModel tableModel, final int row) {
+    private static UserField getRowHeaderUserField(final AbstractUserFieldTableModel tableModel, final int row) {
         NamedObjectContainer<?> rowIdentifierContainer = (NamedObjectContainer<?>) tableModel.getRowIdentifiers().get(row);
         Object rowIdentifierObject = rowIdentifierContainer.getObject();
         return rowIdentifierObject instanceof UserField ? (UserField) rowIdentifierObject : null;
@@ -128,7 +128,7 @@ public class UserFieldTableSumHandler {
      * @param col
      * @return
      */
-    private static UserField getColumnHeaderUserField(final UserFieldTableModel tableModel, final int col) {
+    private static UserField getColumnHeaderUserField(final AbstractUserFieldTableModel tableModel, final int col) {
         NamedObjectContainer<?> columnIdentifierContainer = (NamedObjectContainer<?>) tableModel.getColumnIdentifiers().get(col);
         Object columnIdentifierObject = columnIdentifierContainer.getObject();
         return columnIdentifierObject instanceof UserField ? (UserField) columnIdentifierObject : null;
@@ -141,7 +141,7 @@ public class UserFieldTableSumHandler {
      * @param tableModel
      * @return
      */
-    private static UserField getCellUserField(final UserFieldTableModel tableModel) {
+    private static UserField getCellUserField(final AbstractUserFieldTableModel tableModel) {
         int rowCount = tableModel.getRowCount();
         int columnCount = tableModel.getColumnCount();
         for (int row = 0; row < rowCount; row++) {
@@ -160,11 +160,11 @@ public class UserFieldTableSumHandler {
         return null;
     }
 
-    public static final boolean hasTabelRowSum(final UserFieldTableModel tableModel) {
+    public static final boolean hasTabelRowSum(final AbstractUserFieldTableModel tableModel) {
         return getFormatSource(tableModel, 0, true) != null;
     }
 
-    public static final boolean hasTabelColumnSum(final UserFieldTableModel tableModel) {
+    public static final boolean hasTabelColumnSum(final AbstractUserFieldTableModel tableModel) {
         return getFormatSource(tableModel, 0, false) != null;
     }
 }

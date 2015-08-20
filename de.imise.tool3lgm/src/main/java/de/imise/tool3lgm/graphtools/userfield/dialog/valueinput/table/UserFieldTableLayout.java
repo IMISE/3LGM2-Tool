@@ -437,7 +437,7 @@ public class UserFieldTableLayout {
      * dienen die Methoden {@link #getTableCellEditorComponent(JTable, Object, boolean, int, int)} bzw.
      * {@link #getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)}. Die zurückgegebenen Komponenten sollten vom Table als
      * Editor- bzw. Rendererkomponente benutzt werden, um eine formatierte Darstellung der Werte zu erreichen. Außerdem wird dem
-     * <code>UserFieldTableModel</code> des <code>UserFielTable</code>s, der diese Zelle beinhaltet, mitgeteilt, ob sich der Wert der Zelle
+     * <code>AbstractUserFieldTableModel</code> des <code>UserFielTable</code>s, der diese Zelle beinhaltet, mitgeteilt, ob sich der Wert der Zelle
      * möglicherweiße geändert hat. Diese Änderungsbenachrichtigung erfolgt beim Beginn des Editierens dieser Zelle, d.h., nach dem Aufruf der Methode
      * {@link #shouldSelectCell(EventObject)} bzw. {@link #getTableCellEditorComponent(JTable, Object, boolean, int, int)}.
      * 
@@ -529,7 +529,7 @@ public class UserFieldTableLayout {
 
         /**
          * Wird beim Beginn des Editierens der Zelle durch die Tastatur aufgerufen. Der gesamte Text der Zelle wird markiert. Beim Aufruf dieser
-         * Methode wird dem <code>UserFieldTableModel</code> mittegeteilt, dass sich Daten geändert haben.
+         * Methode wird dem <code>AbstractUserFieldTableModel</code> mittegeteilt, dass sich Daten geändert haben.
          * 
          * @see TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
          */
@@ -585,7 +585,7 @@ public class UserFieldTableLayout {
 
         /**
          * Wird beim Beginn des Editierens der Zelle durch die Maus aufgerufen. Der gesamte Text der Zelle wird markiert. Beim Aufruf dieser Methode
-         * wird dem <code>UserFieldTableModel</code> mittegeteilt, dass sich Daten geändert haben.
+         * wird dem <code>AbstractUserFieldTableModel</code> mittegeteilt, dass sich Daten geändert haben.
          * 
          * @see DefaultCellEditor#shouldSelectCell(java.util.EventObject)
          */

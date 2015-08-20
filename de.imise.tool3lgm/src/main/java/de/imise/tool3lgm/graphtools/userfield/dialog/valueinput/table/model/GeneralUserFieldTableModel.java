@@ -17,7 +17,7 @@ import de.imise.util.NamedObjectContainer;
  * @author Ich
  * @create 19.08.2015
  */
-public class GeneralUserFieldTableModel extends UserFieldTableModel {
+public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * Erzeugt ein neues Model für den Table des <code>GeneralUserFieldEditorPanel</code>s

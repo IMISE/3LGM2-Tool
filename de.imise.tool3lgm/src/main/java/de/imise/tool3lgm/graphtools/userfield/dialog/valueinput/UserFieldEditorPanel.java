@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableSumHandler;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.clipboard.ContentExchangeListener;
 
 /**
@@ -99,7 +99,7 @@ public abstract class UserFieldEditorPanel extends JPanel {
         ListSelectionListener l = new ListSelectionListener() {
             @Override
             public void valueChanged(final ListSelectionEvent e) {
-                UserFieldTableModel tableModel = (UserFieldTableModel) table.getModel();
+                AbstractUserFieldTableModel tableModel = (AbstractUserFieldTableModel) table.getModel();
                 int row = table.getSelectedRow();
                 int col = table.getSelectedColumn();
                 String[] oldValue = elementsAtMousePointer;
@@ -177,7 +177,7 @@ public abstract class UserFieldEditorPanel extends JPanel {
      * @param newModel
      * @param newController
      */
-    protected void modifyTable(final UserFieldTableModel newModel, final UserFieldTableController newController) {
+    protected void modifyTable(final AbstractUserFieldTableModel newModel, final UserFieldTableController newController) {
         table.removeTableModelListener(dataChangeListener);
         table.setModel(newModel, newController);
         table.activateFormatting();

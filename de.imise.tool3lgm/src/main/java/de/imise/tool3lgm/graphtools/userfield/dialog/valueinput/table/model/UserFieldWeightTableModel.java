@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
 
-public class UserFieldWeightTableModel extends UserFieldTableModel {
+public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
     public UserFieldWeightTableModel(final GraphDocument doc) {
         super(doc);

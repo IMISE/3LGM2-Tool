@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.GeneralUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -220,10 +220,10 @@ public class GeneralUserFieldEditorPanel extends UserFieldEditorPanel {
 
     @Override
     protected void takeOver() {
-        if (!(table.getModel() instanceof UserFieldTableModel)) {
+        if (!(table.getModel() instanceof AbstractUserFieldTableModel)) {
             return; // noch keine Werte vorhanden
         }
-        UserFieldTableModel uftm = (UserFieldTableModel) table.getModel();
+        AbstractUserFieldTableModel uftm = (AbstractUserFieldTableModel) table.getModel();
         if (uftm.dataChanged() == false) {
             return;
         }
