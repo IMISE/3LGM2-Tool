@@ -137,9 +137,9 @@ public abstract class UserFieldTableController {
             return false;
         }
         try {
-            return rangeSelectionMatrix[row][col] || singleSelectionMatrix[row][col] && isEditable(row, col);
+            return rangeSelectionMatrix[row][col] || singleSelectionMatrix[row][col];
         } catch (NullPointerException npe) {
-            return initialSelectionMatrix[row][col] && isEditable(row, col);
+            return initialSelectionMatrix[row][col];
         }
     }
 
