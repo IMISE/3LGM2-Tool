@@ -18,14 +18,14 @@ import javax.swing.table.TableColumnModel;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableSumHandler;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
 import de.imise.util.clipboard.ContentExchangeListener;
 
 /**
  * Abstrake Oberklasse für alle Panels zur Massendateneingabe von Kennzahlen und Verteilungsgewichten, d.h. für:
  * <p>
- * tool3lgm.graphtools.userfield.dialog.valueinput.ClassificationNumberEditorPanel <br>
+ * tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel <br>
  * tool3lgm.graphtools.userfield.dialog.valueinput.DistributionWeigthEditorPanel <br>
  * tool3lgm.graphtools.userfield.dialog.valueinput.ModelVariableEditorPanel
  * 

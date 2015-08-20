@@ -16,15 +16,15 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.GeneralUserFieldTableModel;
 
 /**
  * Panel zur Darstellung von berechneten Kennzahlen
  * 
- * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.ClassificationNumberEditorPanel
+ * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel
  * @author fstephan
  */
-public class ClassificationNumberFormulaPanel extends ClassificationNumberEditorPanel {
+public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPanel {
 
     /**
      * zeigt an, ob sich Daten geändert haben und drawTable aufgerufen werden muss
@@ -35,17 +35,7 @@ public class ClassificationNumberFormulaPanel extends ClassificationNumberEditor
      * @param dialog
      */
     public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog) {
-        super(dialog);
-    }
-
-    @Override
-    protected boolean isNodeBoxContent(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
-        for (UserField uf : definitions.getUserFields(elementClass)) {
-            if (uf.getStyle() == UserField.Style.CLASSIFICATION_NUMBER_FORMULA) {
-                return true;
-            }
-        }
-        return false;
+        super(dialog, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
     }
 
     @Override
@@ -93,7 +83,8 @@ public class ClassificationNumberFormulaPanel extends ClassificationNumberEditor
             return;
         }
         Class<? extends ModelElement> selectedClass = (Class<? extends ModelElement>) nodeBox.getSelectedObject();
-        UserFieldTableModel uftm = UserFieldTableModel.createClassificationNumberFormulaModel(selectedClass, getDialog().getGraphDocument(), typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs());
+        GraphDocument doc = getDialog().getGraphDocument();
+        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
         UserFieldTableController tec = UserFieldTableController.getNewClassificationNumberFormulaTableController(uftm);
         super.modifyTable(uftm, tec);
     }
@@ -113,8 +104,8 @@ public class ClassificationNumberFormulaPanel extends ClassificationNumberEditor
     }
 
     /**
-     * @see ClassificationNumberEditorPanel#setActionsForNodeBox()
-     * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.ClassificationNumberEditorPanel#setActionsForNodeBox()
+     * @see GeneralUserFieldEditorPanel#setActionsForNodeBox()
+     * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel#setActionsForNodeBox()
      */
     @Override
     protected void setActionsForNodeBox() {

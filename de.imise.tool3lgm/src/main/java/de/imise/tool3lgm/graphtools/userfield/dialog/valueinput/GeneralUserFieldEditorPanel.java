@@ -6,11 +6,14 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+
+import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -18,11 +21,13 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.GeneralUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
@@ -39,13 +44,15 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorPanel
  * @author fstephan
  */
-public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
+public class GeneralUserFieldEditorPanel extends UserFieldEditorPanel {
 
     /** Auswahlbox für den Elementtyp */
     protected AlphabeticalComboBox nodeBox;
 
     /** Panel zur Auswahl der anzuzeigenden Element-Typen */
     protected ElementTypePane typePane;
+
+    protected Set<Style> visibleUserFields;
 
     /* ************************* Beginn: Initialisierungsteil *********************************** */
 
@@ -54,8 +61,23 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
      * 
      * @param dialog Dialog, der dieses Panel enthält
      */
-    public ClassificationNumberEditorPanel(final UserFieldEditorDialog dialog) {
+    /**
+     * @param dialog
+     * @param visibleUserField
+     */
+    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Style visibleUserField) {
+        this(dialog, ImmutableSet.of(visibleUserField));
+    }
+
+    /**
+     * Konstruktor
+     * 
+     * @param dialog Dialog, der dieses Panel enthält
+     * @param visibleUserFields
+     */
+    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Set<Style> visibleUserFields) {
         super(dialog);
+        this.visibleUserFields = visibleUserFields;
 
         // nodeBox initialisieren
         nodeBox = new AlphabeticalComboBox(10);
@@ -94,7 +116,7 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
         nodeBox.addSeparator(true);
 
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_NODES_SET) {
-            // Falls keine Kennzahlen für elementClass exisitieren, füge elementClass NICHT ein
+            // Falls keine User für elementClass exisitieren, füge elementClass NICHT ein
             if (!definitions.hasUserFields(elementClass)) {
                 continue;
             }
@@ -128,9 +150,9 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true; ansonsten
      *         false
      */
-    protected boolean isNodeBoxContent(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
+    protected final boolean isNodeBoxContent(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         for (UserField uf : definitions.getUserFields(elementClass)) {
-            if (uf.hasStyle(UserField.Style.CLASSIFICATION_NUMBER)) {
+            if (visibleUserFields.contains(uf.getStyle())) {
                 return true;
             }
         }
@@ -190,7 +212,7 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
             typePane.setVisible(true);
         }
 
-        UserFieldTableModel uftm = UserFieldTableModel.createClassificationNumberModel(selectedClass, getDialog().getGraphDocument(), typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs());
+        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(getDialog().getGraphDocument(), selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
         UserFieldTableController uftc = UserFieldTableController.getNewClassificationNumberTableController(uftm);
 
         super.modifyTable(uftm, uftc);
@@ -224,7 +246,7 @@ public class ClassificationNumberEditorPanel extends UserFieldEditorPanel {
                 }
             }
         }
-        ((UserFieldTableModel) table.getModel()).dataChanged(false);
+        uftm.dataChanged(false);
         //Das reset durchführen kann auch ganz auf das Ende verlegt werden
         definitions.initReset();
     }

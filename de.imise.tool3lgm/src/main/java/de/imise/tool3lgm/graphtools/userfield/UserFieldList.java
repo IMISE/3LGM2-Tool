@@ -2,6 +2,9 @@ package de.imise.tool3lgm.graphtools.userfield;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
@@ -127,5 +130,14 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
     @Override
     public Iterator<UserField> iterator() {
         return userFields.iterator();
+    }
+
+    /**
+     * Kopie
+     * 
+     * @return
+     */
+    public List<UserField> getData() {
+        return ImmutableList.copyOf(userFields);
     }
 }

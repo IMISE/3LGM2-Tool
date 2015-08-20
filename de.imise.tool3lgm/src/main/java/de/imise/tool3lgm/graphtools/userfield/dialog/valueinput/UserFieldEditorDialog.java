@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -69,7 +71,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
     /**
      * Das Panel für die Kennzahlen
      */
-    private final ClassificationNumberEditorPanel panelCN;
+    private final GeneralUserFieldEditorPanel panelCN;
 
     /**
      * Das Panel für die Verteilungsgewichte
@@ -121,7 +123,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
         cancelButton = new JButton();
 
         // panelCN + panelDW + panelMV initialisieren
-        panelCN = new ClassificationNumberEditorPanel(this);
+        panelCN = new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER);
         panelDW = new DistributionWeightEditorPanel(this);
         panelMV = new ModelVariableEditorPanel(this);
         panelCNF = new ClassificationNumberFormulaPanel(this);
@@ -433,37 +435,9 @@ public class UserFieldEditorDialog extends PropertyDialog {
     /* ********************* Beginn: get/set-Methoden ******************************** */
 
     /**
-     * @return <code>panelCN</code>
-     */
-    public ClassificationNumberEditorPanel getClassificationNumberEditorPanel() {
-        return panelCN;
-    }
-
-    /**
-     * @return <code>panelDW</code>
-     */
-    public DistributionWeightEditorPanel getDistributionWeightEditorPanel() {
-        return panelDW;
-    }
-
-    /**
-     * @return <code>panelMV</code>
-     */
-    public ModelVariableEditorPanel getModelVariableEditorPanel() {
-        return panelMV;
-    }
-
-    /**
-     * @return {@link #panelCNF}
-     */
-    public ClassificationNumberFormulaPanel getClassificationNumberFormulaPanel() {
-        return panelCNF;
-    }
-
-    /**
      * @return <code>[panelCN,panelDW,panelMV,panelCNF]</code>
      */
-    public UserFieldEditorPanel[] getEditablePanels() {
+    private UserFieldEditorPanel[] getEditablePanels() {
         return new UserFieldEditorPanel[] {
                 panelCN, panelDW, panelMV, panelCNF
         };

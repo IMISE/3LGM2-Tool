@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
+
+import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -366,11 +369,50 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * @param userFieldTargetClass
+     * @return <code>true</code> if there is at least one {@link UserField} defined for the userFieldTargetClass
+     */
+    public boolean hasNumberFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+        for (UserField uf : getUserFields(userFieldTargetClass)) {
+            if (uf.hasStyle(UserField.Style.CLASSIFICATION_NUMBER) || uf.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param userFieldTargetClass
      * @return
      */
     public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
         return fieldList != null ? fieldList : new ArrayList<UserField>(0);
+    }
+
+    /**
+     * @param userFieldTargetClass
+     * @return
+     */
+    public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final UserField.Style style) {
+        return getUserFields(userFieldTargetClass, ImmutableSet.of(style));
+    }
+
+    /**
+     * @param userFieldTargetClass
+     * @return
+     */
+    public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final Set<UserField.Style> styles) {
+        if (styles == null || styles.size() == 0) {
+            UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
+            return fieldList != null ? fieldList.getData() : new ArrayList<UserField>(0);
+        }
+        ArrayList<UserField> returnList = new ArrayList<UserField>();
+        for (UserField uf : getUserFields(userFieldTargetClass)) {
+            if (styles.contains(uf.getStyle())) {
+                returnList.add(uf);
+            }
+        }
+        return returnList;
     }
 
     /**
@@ -390,7 +432,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     /**
      * @return all id userfields for all target classes
      */
-    public Iterable<UserField> getIDUserFields() {
+    public List<UserField> getIDUserFields() {
         ArrayList<UserField> idUserFields = new ArrayList<UserField>();
         for (Class<? extends UserFieldTarget> userFieldTargetClass : classToUserFieldListMap.keySet()) {
             UserFieldList userFields = classToUserFieldListMap.get(userFieldTargetClass);

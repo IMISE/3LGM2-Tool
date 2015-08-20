@@ -1,0 +1,121 @@
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.util.NamedObjectContainer;
+
+/**
+ * Erzeugt ein neues Model für den Table des <code>GeneralUserFieldEditorPanel</code>s
+ * 
+ * @author Ich
+ * @create 19.08.2015
+ */
+public class GeneralUserFieldTableModel extends UserFieldTableModel {
+
+    /**
+     * Erzeugt ein neues Model für den Table des <code>GeneralUserFieldEditorPanel</code>s
+     * 
+     * @param doc
+     */
+    public GeneralUserFieldTableModel(final GraphDocument doc) {
+        super(doc);
+    }
+
+    /**
+     * @param doc
+     * @param elementClass in der <code>nodeBox</code> des <code>GeneralUserFieldEditorPanel</code>s ausgewählte Klasse
+     * @param elementClass
+     * @param showTopLevel
+     * @param showInner
+     * @param showLeafs
+     * @param userFieldStyle
+     */
+    public GeneralUserFieldTableModel(final GraphDocument doc, final Class<? extends ModelElement> elementClass, final boolean showTopLevel, final boolean showInner, final boolean showLeafs, final UserField.Style userFieldStyle) {
+        this(doc, elementClass, showTopLevel, showInner, showLeafs, ImmutableSet.of(userFieldStyle));
+    }
+
+    /**
+     * @param doc
+     * @param elementClass in der <code>nodeBox</code> des <code>GeneralUserFieldEditorPanel</code>s ausgewählte Klasse
+     * @param elementClass
+     * @param showTopLevel
+     * @param showInner
+     * @param showLeafs
+     * @param userFieldStyles
+     */
+    public GeneralUserFieldTableModel(final GraphDocument doc, final Class<? extends ModelElement> elementClass, final boolean showTopLevel, final boolean showInner, final boolean showLeafs, final Set<UserField.Style> userFieldStyles) {
+        super(doc);
+        setData(elementClass, showTopLevel, showInner, showLeafs, userFieldStyles);
+    }
+
+    /**
+     * Erstellt und setzt Kennzahlen-Modeldaten
+     * 
+     * @param elementClass
+     * @param showTopLevel
+     * @param showInner
+     * @param showLeafs
+     * @param userFieldStyle
+     */
+    private void setData(final Class<? extends ModelElement> elementClass, final boolean showTopLevel, final boolean showInner, final boolean showLeafs, final Set<UserField.Style> userFieldStyle) {
+        // Ermitteln der UserFields zu elementClass
+        List<UserField> userFieldList = definitions.getUserFields(elementClass, userFieldStyle);
+
+        //Ermitteln der ModelElemente zu elementClass
+        ArrayList<ModelElement> allModelElements = doc.getModelItems(elementClass, true, true);
+        ArrayList<ModelElement> modelElements = new ArrayList<ModelElement>(allModelElements.size());
+        //TODO:FST,XHB. Wenn die Kante PDVBKAWBVerb übergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt. 
+        // Dann sollte aber auch keine Exception mehr fliegen. prüf mal bitte, warum das so ist?!
+
+        for (int i = 0; i < allModelElements.size(); i++) {
+            ModelElement me = allModelElements.get(i);
+            if (showTopLevel && !me.hasDirectParentContainer(doc)) { // Top-Level-E. anfügen
+                modelElements.add(me);
+            } else if (showInner && me.hasDirectParentContainer(doc) && me.hasDirectPartContainer(doc)) { // Innere E. anfügen
+                modelElements.add(me);
+            } else if (showLeafs && !me.hasDirectPartContainer(doc)) { // Blatt-E. anfügen
+                modelElements.add(me);
+            }
+        }
+
+        if (modelElements.size() == 0 || userFieldList.size() == 0) {
+            modelElements.clear();
+            userFieldList.clear();
+        }
+
+        // RowHeader aufbauen
+        Object[] rowIdentifiers = new Object[modelElements.size()];
+        for (int i = 0; i < rowIdentifiers.length; i++) {
+            ModelElement me = modelElements.get(i);
+            rowIdentifiers[i] = new NamedObjectContainer<ModelElement>(me, me.getName());
+        }
+
+        // ColumnHeader aufbauen
+        Object[] columnIdentifiers = new Object[userFieldList.size()];
+        for (int j = 0; j < columnIdentifiers.length; j++) {
+            UserField f = userFieldList.get(j);
+            columnIdentifiers[j] = new NamedObjectContainer<UserField>(f, f.getName());
+        }
+
+        //DataVector aufbauen
+        Object[][] data = new Object[modelElements.size()][userFieldList.size()];
+        for (int i = 0; i < data.length; i++) {
+            ModelElement me = modelElements.get(i);
+            for (int j = 0; j < data[0].length; j++) {
+                UserField uf = userFieldList.get(j);
+                String value = uf.getValue(me);
+                data[i][j] = new NamedObjectContainer<UserField>(uf, value);
+            }
+        }
+
+        //Daten setzen
+        setDataVector(data, columnIdentifiers, rowIdentifiers);
+    }
+}

@@ -13,7 +13,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldGlobalNumberTableModel;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -80,7 +81,7 @@ public class ModelVariableEditorPanel extends UserFieldEditorPanel {
 
     @Override
     protected void drawTable() {
-        UserFieldTableModel uftm = UserFieldTableModel.createClassificationModelVariableModel(getDialog().getGraphDocument());
+        UserFieldGlobalNumberTableModel uftm = new UserFieldGlobalNumberTableModel(getDialog().getGraphDocument());
         UserFieldTableController tec = UserFieldTableController.getNewModelVariableTableController(uftm);
         super.modifyTable(uftm, tec);
     }

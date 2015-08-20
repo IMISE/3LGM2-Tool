@@ -33,6 +33,7 @@ import javax.swing.table.TableModel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
 import de.imise.util.clipboard.ContentExchangeListener;
@@ -474,13 +475,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param uftc
      */
     public void setModel(final UserFieldTableModel uftm, final UserFieldTableController uftc) {
-
         super.setModel(uftm);
-
         if (uftc != null) {
             setUserFieldTableController(uftc);
         }
-
     }
 
     /**
@@ -574,20 +572,20 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param col
      */
     public void clearValueAt(final int row, final int col) {
-
+        UserFieldTableModel model = (UserFieldTableModel) dataModel;
         if (!saveValues()) {
             return;
         }
 
         if (tableController == null) {
-            ((UserFieldTableModel) dataModel).clearValueAt(row, col);
+            model.clearValueAt(row, col);
             return;
         }
 
         for (int i = 0; i < getRowCount(); i++) {
             for (int j = 0; j < getColumnCount(); j++) {
                 if (isCellSelected(i, j)) {
-                    ((UserFieldTableModel) dataModel).clearValueAt(i, j);
+                    model.clearValueAt(i, j);
                 }
             }
         }

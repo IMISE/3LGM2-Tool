@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JList;
 
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
 import de.imise.util.Pair;
 
 /**

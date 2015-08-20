@@ -23,7 +23,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableLayout;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldWeightTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
@@ -109,7 +110,7 @@ public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
         UserFieldDefinitions definitions = getDialog().getGraphDocument().getCollection().getUserFieldDefinitions();
         for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
             // Falls Verteilungsgewichte exisitieren, füge Kantenklasse ein
-            if (definitions.hasUserFields(ModelConstants.ALL_EDGES[i])) {
+            if (definitions.hasNumberFields(ModelConstants.ALL_EDGES[i])) {
                 edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
                 edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
             }
@@ -222,13 +223,13 @@ public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
         if (!(table.getModel() instanceof UserFieldTableModel)) {
             return;
         }
-        if (((UserFieldTableModel) table.getModel()).dataChanged() == false) {
+        UserFieldTableModel tableModel = (UserFieldTableModel) table.getModel();
+        if (tableModel.dataChanged() == false) {
             return;
         }
         GraphDocument doc = getDialog().getGraphDocument();
         if (edgeBoxSelection != null) {
             UserField selectedWeigth = (UserField) weightBoxSelection;
-            UserFieldTableModel tableModel = (UserFieldTableModel) table.getModel();
             Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
 
@@ -288,7 +289,7 @@ public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
             }
         }
 
-        ((UserFieldTableModel) table.getModel()).dataChanged(false);
+        tableModel.dataChanged(false);
 
         //Das reset durchführen kann auch ganz auf das Ende verlegt werden
         doc.getCollection().getUserFieldDefinitions().initReset();
@@ -326,7 +327,7 @@ public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
             choosedEdgeDirection = Doppelkante.BACKWARD;
         }
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
-        UserFieldTableModel uftm = UserFieldTableModel.createClassificationWeightingModel(selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, getDialog().getGraphDocument());
+        UserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);
         super.modifyTable(uftm, tec);
     }
