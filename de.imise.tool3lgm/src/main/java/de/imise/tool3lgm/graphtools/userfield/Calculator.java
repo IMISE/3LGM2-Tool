@@ -52,15 +52,22 @@ public class Calculator {
     public static final String ALL_IN_FUNCTION_SIGNS = WHITESPACE + OPEN_BRACKET + CLOSE_BRACKET + OPERAND_DELIMITER + OPERATOR_PLUS + OPERATOR_MINUS + OPERATOR_MULT + OPERATOR_DIV;
 
     /**
-     * gibt an, auf wieviele Nachkommastellen bei der Berechnung mit BigDecimals gerundet werden soll.
+     * gibt an, auf wieviele Nachkommastellen bei der Berechnung mit BigDecimals gerechnet werden sollen.
      */
-    private static final int DECIMAL_PLACES_COUNT = 20;
+    private static final int CALCULATING_DECIMAL_PLACES_COUNT = 30;
+
+    /**
+     * Gibt an, auf wieviele Nachkommastellen die BigDecimals-Ergebnisse abgeschnitten werden sollen.
+     * Das beseitigt offensichtliche Rundungsfehler, bei der Berechnung mit 30 Nachkmmastellen
+     * Rundungsfehler ungefähr bis zur 20 Stelle durchschlagen. Also wird der Rest abgeschnitten.
+     */
+    private static final int RESULT_DECIMAL_PLACES_COUNT = 20;
 
     private static final int DECIMAL_ROUND_MODE = BigDecimal.ROUND_UP;
 
     private static final BigDecimal divide(final BigDecimal dividend, final BigDecimal divisor) {
         //Das Teilen von BigDecimal erfordert die Angabe der Nachkommastellen und des Rundungsverhaltens.
-        return dividend.divide(divisor, DECIMAL_PLACES_COUNT, DECIMAL_ROUND_MODE);
+        return dividend.divide(divisor, CALCULATING_DECIMAL_PLACES_COUNT, DECIMAL_ROUND_MODE);
     }
 
     /**
@@ -74,6 +81,20 @@ public class Calculator {
     public Calculator(final UserFieldDefinitions definitions) {
         super();
         this.definitions = definitions;
+    }
+
+    public String calculate(final UserField userField, final UserFieldTarget userFieldTarget) {
+        String result = calculateInternal(userField, userFieldTarget);
+        //        System.err.print(result);
+        //        System.err.print(" -> ");
+        if (!UserField.isErrorString(result)) {
+            int pointIndex = result.indexOf('.');
+            if (pointIndex + CALCULATING_DECIMAL_PLACES_COUNT <= result.length()) {
+                result = result.substring(0, pointIndex + RESULT_DECIMAL_PLACES_COUNT);
+            }
+        }
+        //        System.err.println(result);
+        return result;
     }
 
     /**
@@ -90,7 +111,7 @@ public class Calculator {
      * @return Das Ergebnis als String
      */
 
-    public String calculate(final UserField userField, final UserFieldTarget userFieldTarget) {
+    private String calculateInternal(final UserField userField, final UserFieldTarget userFieldTarget) {
         //Modellvariablen berechnen
         if (userField.isGlobalOrFormat()) {
             //Modellvariablen berechnen (sowas gibts im Moment noch gar nicht,
@@ -266,7 +287,7 @@ public class Calculator {
                     if (!formelStack.empty()) {
                         formelStack.push(result);
                     } else {
-                        return result;
+                        break;
                     }
                 }
             }
