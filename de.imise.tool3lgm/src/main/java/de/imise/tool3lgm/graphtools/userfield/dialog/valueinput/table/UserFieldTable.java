@@ -709,7 +709,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             for (int j = 0; j < n; j++) {
 
                 NamedObjectContainer<UserField> value = (NamedObjectContainer<UserField>) getValueAt(i + firstRow, j + firstColumn);
-                String toString = value.toString();
+                String toString = value == null ? "" : value.toString();
 
                 if (replaceIgnorableErrors && UserField.isIgnoreableErrorString(toString)) {
                     toString = "";
@@ -718,7 +718,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
                     toString = "";
                 }
 
-                values[i][j] = new NamedObjectContainer<UserField>(value.getObject(), toString);
+                values[i][j] = value == null ? null : new NamedObjectContainer<UserField>(value.getObject(), toString);
             }
         }
         return values;
