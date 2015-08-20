@@ -36,7 +36,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * 
  * @author fstephan
  */
-public class DistributionWeightEditorPanel extends UserFieldEditorPanel {
+public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel {
 
     /**
      * Auswahlbox für den Kantentyp

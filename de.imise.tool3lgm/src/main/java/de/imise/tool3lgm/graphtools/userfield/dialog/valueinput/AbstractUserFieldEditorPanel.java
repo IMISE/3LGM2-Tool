@@ -31,7 +31,7 @@ import de.imise.util.clipboard.ContentExchangeListener;
  * 
  * @author fstephan
  */
-public abstract class UserFieldEditorPanel extends JPanel {
+public abstract class AbstractUserFieldEditorPanel extends JPanel {
 
     /**
      * Beinhaltet die darzustellende Tabelle
@@ -63,7 +63,7 @@ public abstract class UserFieldEditorPanel extends JPanel {
      * 
      * @param dialog Der Dialog, der dieses Panel beinhaltet
      */
-    public UserFieldEditorPanel(final UserFieldEditorDialog dialog) {
+    public AbstractUserFieldEditorPanel(final UserFieldEditorDialog dialog) {
         super(new GridBagLayout());
         this.dialog = dialog;
         init();

@@ -41,10 +41,10 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * ii) nur toplevel Elemente anzeigen <br>
  * iii) nur Blatt-Elemente anzeigen
  * 
- * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorPanel
+ * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.AbstractUserFieldEditorPanel
  * @author fstephan
  */
-public class GeneralUserFieldEditorPanel extends UserFieldEditorPanel {
+public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     /** Auswahlbox für den Elementtyp */
     protected AlphabeticalComboBox nodeBox;
@@ -164,7 +164,7 @@ public class GeneralUserFieldEditorPanel extends UserFieldEditorPanel {
      * <code>table</code>s ausgelöst.
      */
     protected void setActionsForNodeBox() {
-        final UserFieldEditorPanel pane = this;
+        final AbstractUserFieldEditorPanel pane = this;
         nodeBox.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {

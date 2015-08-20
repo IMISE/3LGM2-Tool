@@ -22,7 +22,7 @@ import de.imise.util.NamedObjectContainer;
  * 
  * @author fstephan
  */
-public class ModelVariableEditorPanel extends UserFieldEditorPanel {
+public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
 
     /**
      * Kosntruktor

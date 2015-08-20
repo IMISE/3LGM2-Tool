@@ -109,7 +109,7 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
      */
     @Override
     protected void setActionsForNodeBox() {
-        final UserFieldEditorPanel pane = this;
+        final AbstractUserFieldEditorPanel pane = this;
         nodeBox.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {

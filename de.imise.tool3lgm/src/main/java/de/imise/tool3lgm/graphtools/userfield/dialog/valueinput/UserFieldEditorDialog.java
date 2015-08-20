@@ -163,10 +163,10 @@ public class UserFieldEditorDialog extends PropertyDialog {
 
                 boolean dataChanged = false;
 
-                UserFieldEditorPanel[] panels = finalDialog.getEditablePanels();
+                AbstractUserFieldEditorPanel[] panels = finalDialog.getEditablePanels();
 
                 for (int i = 0; i < panels.length; i++) {
-                    UserFieldEditorPanel panel = panels[i];
+                    AbstractUserFieldEditorPanel panel = panels[i];
 
                     /*
                      * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Damit können Werte auch ohne Bestätigung mit "Enter" übernommen
@@ -278,10 +278,10 @@ public class UserFieldEditorDialog extends PropertyDialog {
 
                 boolean dataChanged = false;
 
-                UserFieldEditorPanel[] panels = finalDialog.getEditablePanels();
+                AbstractUserFieldEditorPanel[] panels = finalDialog.getEditablePanels();
 
                 for (int i = 0; i < panels.length; i++) {
-                    UserFieldEditorPanel panel = panels[i];
+                    AbstractUserFieldEditorPanel panel = panels[i];
 
                     /*
                      * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Damit können Werte auch ohne Bestätigung mit "Enter" übernommen
@@ -388,7 +388,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
             }
         };
 
-        UserFieldEditorPanel[] panels = getEditablePanels();
+        AbstractUserFieldEditorPanel[] panels = getEditablePanels();
         for (int i = 0; i < panels.length; i++) {
             panels[i].addPropertyChangeListener(l);
         }
@@ -437,8 +437,8 @@ public class UserFieldEditorDialog extends PropertyDialog {
     /**
      * @return <code>[panelCN,panelDW,panelMV,panelCNF]</code>
      */
-    private UserFieldEditorPanel[] getEditablePanels() {
-        return new UserFieldEditorPanel[] {
+    private AbstractUserFieldEditorPanel[] getEditablePanels() {
+        return new AbstractUserFieldEditorPanel[] {
                 panelCN, panelDW, panelMV, panelCNF
         };
     }
