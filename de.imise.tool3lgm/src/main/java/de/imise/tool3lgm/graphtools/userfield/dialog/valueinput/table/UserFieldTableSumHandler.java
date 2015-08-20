@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
 
+import java.math.BigDecimal;
+
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.UserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
@@ -9,7 +11,7 @@ public class UserFieldTableSumHandler {
     private static boolean lastCallHadValidValues;
 
     /**
-     * Liefert die Summe aller als Double parsbaren Elemente einer Zeile formatiert mit Einheit.
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile formatiert mit Einheit.
      * 
      * @param tableModel
      * @param row
@@ -20,7 +22,7 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert die Summe aller als Double parsbaren Elemente einer Spalte formatiert mit Einheit.
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Spalte formatiert mit Einheit.
      * 
      * @param tableModel
      * @param col
@@ -31,7 +33,7 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert die Summe aller als Double parsbaren Elemente einer Zeile oder Spalte formatiert mit Einheit.
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile oder Spalte formatiert mit Einheit.
      * 
      * @param tableModel
      * @param rowOrColumnIndex
@@ -40,9 +42,9 @@ public class UserFieldTableSumHandler {
      */
     private static String getFormattedSum(final UserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
         String returnValue = "";
-        double sumValue = getSum(tableModel, rowOrColumnIndex, useRow);
+        BigDecimal sumValue = getSum(tableModel, rowOrColumnIndex, useRow);
         if (lastCallHadValidValues) {
-            String sum = Double.toString(sumValue);
+            String sum = sumValue.toString();
             UserField formatSource = getFormatSource(tableModel, rowOrColumnIndex, useRow);
             if (formatSource != null) {
                 returnValue = UserField.getFormattedValue(sum, formatSource.getFormatUserField(), true);
@@ -52,20 +54,20 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert die Summe aller als Double parsbaren Elemente einer Zeile oder Spalte.
+     * Liefert die Summe aller als BigDecimal parsbaren Elemente einer Zeile oder Spalte.
      * 
      * @param tableModel
      * @param rowOrColumnIndex
      * @param useRow
      * @return
      */
-    private static double getSum(final UserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
-        double sum = 0d;
+    private static BigDecimal getSum(final UserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
+        BigDecimal sum = BigDecimal.ZERO;
         lastCallHadValidValues = false;
         if (rowOrColumnIndex >= 0) {
             int count = useRow ? tableModel.getColumnCount() : tableModel.getRowCount();
             for (int i = 0; i < count; i++) {
-                double d;
+                BigDecimal d;
                 int rowIndex = useRow ? rowOrColumnIndex : i;
                 int colIndex = useRow ? i : rowOrColumnIndex;
                 Object value = tableModel.getValueAt(rowIndex, colIndex);
@@ -73,11 +75,11 @@ public class UserFieldTableSumHandler {
                     continue;
                 }
                 try {
-                    d = Double.parseDouble(value.toString());
+                    d = new BigDecimal(value.toString());
                 } catch (Exception ex) {
                     continue;
                 }
-                sum += d;
+                sum = sum.add(d);
                 lastCallHadValidValues = true;
             }
         }
