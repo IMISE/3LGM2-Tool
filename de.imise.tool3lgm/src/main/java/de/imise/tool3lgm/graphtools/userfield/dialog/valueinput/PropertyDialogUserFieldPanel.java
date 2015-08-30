@@ -88,7 +88,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         mp.setLayout(new GridBagLayout());
         JPanel panel;
         ButtonGroup group;
-        boolean foundEntry;
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -157,7 +156,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.weightx = 1;
                 constraints.gridy++;
                 AlphabeticalComboBox component = new AlphabeticalComboBox(true);
-                foundEntry = false;
+                boolean foundEntry = false;
                 for (int i = 0; i < field.getListValuesCount(); i++) {
                     Object listValue = field.getListValueAt(i);
                     component.addItem(listValue);
@@ -192,7 +191,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.gridy++;
                 panel = new JPanel();
                 group = new ButtonGroup();
-                foundEntry = false;
+                boolean foundEntry = false;
                 for (int i = 0; i < field.getListValuesCount(); i++) {
                     Object listValue = field.getListValueAt(i);
                     JComponent component = new JRadioButton(listValue.toString());

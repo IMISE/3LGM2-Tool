@@ -3,6 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
 
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -12,14 +15,17 @@ import java.awt.ScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.NumberFormat;
 import java.util.EventObject;
 import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
@@ -33,7 +39,9 @@ import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
+import de.imise.util.swing.component.text.NumberTextField;
 
 /**
  * Klasse repräsentiert ein konkretes Layout für einen <code>UserFieldTable</code>.
@@ -478,7 +486,7 @@ public class UserFieldTableLayout {
         /**
          * TextField, dass die Editor-Komponente repräsentiert
          */
-        private ExtendedTextField textField;
+        private JComponent editorComponent;
 
         /**
          * Konstruktor
@@ -499,8 +507,28 @@ public class UserFieldTableLayout {
          * Initialisiert den <code>editor</code>
          */
         private void initEditor() {
-            textField = new ExtendedTextField();
-            editor = new DefaultCellEditor(textField);
+            UserField userField = value.getObject();
+            UserField.Style style = userField.getStyle();
+            if (style == CLASSIFICATION_NUMBER) {
+                NumberFormat numberFormat = userField.getNumberFormat();
+                boolean isPositiveOnly = userField.isPositiveOnly();
+                editorComponent = NumberTextField.getNumberTextField(numberFormat, isPositiveOnly);
+                editor = new DefaultCellEditor((JTextField) editorComponent);
+            } else if (style == COMBO_BOX) {
+                AlphabeticalComboBox component = new AlphabeticalComboBox(true);
+                for (int i = 0; i < userField.getListValuesCount(); i++) {
+                    String listValue = userField.getListValueAt(i);
+                    component.addItem(listValue);
+                    if (listValue.equals(value == null ? "" : value.toString())) {
+                        component.setSelectedItem(listValue);
+                    }
+                }
+                editorComponent = component;
+                editor = new DefaultCellEditor(component);
+            } else {
+                editorComponent = new ExtendedTextField();
+                editor = new DefaultCellEditor((JTextField) editorComponent);
+            }
         }
 
         /**
@@ -536,12 +564,14 @@ public class UserFieldTableLayout {
         @Override
         public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected, final int row, final int column) {
             ((UserFieldTable) table).fireTableDataChanged();
-            JTextComponent c = (JTextComponent) editor.getTableCellEditorComponent(table, this.value, isSelected, row, column);
-            // Gesamten Text markieren
-            c.selectAll();
-            c.revalidate();
-
-            return c;
+            Component editorComponent = editor.getTableCellEditorComponent(table, this.value, isSelected, row, column);
+            if (editorComponent instanceof JTextComponent) {
+                JTextComponent c = (JTextComponent) editorComponent;
+                // Gesamten Text markieren
+                c.selectAll();
+                c.revalidate();
+            }
+            return editorComponent;
         }
 
         /**
@@ -556,15 +586,17 @@ public class UserFieldTableLayout {
         @Override
         public Object getCellEditorValue() {
             Object newValue = editor.getCellEditorValue();
-            String s = userField.replaceWrongDecimalSeparator(newValue, EDITOR_DECIMAL_SEPARATOR);
+            String s = newValue == null ? "" : newValue.toString();
 
-            try {
-                Double.parseDouble(s);
-            } catch (NumberFormatException e) {
-                if (s.equals(EDITOR_EMPTY_STRING)) {
-                    s = UserField.EMPTY_STRING;
-                } else {
-                    s = UserField.NUMBER_FORMAT_ERROR;
+            if (editor.getComponent() instanceof NumberTextField) {
+                try {
+                    Double.parseDouble(s);
+                } catch (NumberFormatException e) {
+                    if (s.equals(EDITOR_EMPTY_STRING)) {
+                        s = UserField.EMPTY_STRING;
+                    } else {
+                        s = UserField.NUMBER_FORMAT_ERROR;
+                    }
                 }
             }
 
@@ -593,8 +625,11 @@ public class UserFieldTableLayout {
         public boolean shouldSelectCell(final EventObject anEvent) {
             table.fireTableDataChanged();
             // Gesamten Text markieren
-            textField.selectAll();
-            textField.revalidate();
+            if (editorComponent instanceof JTextComponent) {
+                JTextComponent textField = (JTextComponent) editorComponent;
+                textField.selectAll();
+                textField.revalidate();
+            }
             return editor.shouldSelectCell(anEvent);
         }
 
