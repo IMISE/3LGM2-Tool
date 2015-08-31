@@ -370,6 +370,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_MULT);
         ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_AVG);
         ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_INDI);
+        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_REF);
     }
 
     ///////////////////////
@@ -1218,7 +1219,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * 
      * @param string
      */
-    public String replaceWrongDecimalSeparator(final Object objectToString) {
+    public static String replaceWrongDecimalSeparator(final Object objectToString) {
         char decimalSeparator = new java.text.DecimalFormatSymbols().getDecimalSeparator();
         return replaceWrongDecimalSeparator(objectToString, decimalSeparator);
     }
@@ -1231,7 +1232,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * @param decimalSeparator
      * @return
      */
-    public String replaceWrongDecimalSeparator(final Object objectToString, final char decimalSeparator) {
+    public static String replaceWrongDecimalSeparator(final Object objectToString, final char decimalSeparator) {
         if (objectToString == null) {
             return null;
         }
