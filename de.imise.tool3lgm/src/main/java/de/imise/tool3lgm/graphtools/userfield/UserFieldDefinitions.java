@@ -230,7 +230,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
             for (UserField field : userFieldsToDelete) {
                 hashStringToUserFieldMap.remove(field);
-                ufl = classToUserFieldListMap.get(userField.getTargetClass());
+                ufl = classToUserFieldListMap.get(field.getTargetClass());
                 ufl.remove(field);
             }
             deleted.addAll(userFieldsToDelete);
