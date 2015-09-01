@@ -27,7 +27,6 @@ import javax.swing.JSeparator;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
@@ -81,8 +80,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         sb.setUnitIncrement(10);
 
         //Attributdefinitionen des GraphDocumentes holen
-        GDCollection gdcol = doc.getCollection();
-        UserFieldDefinitions attributeDefs = gdcol.getUserFieldDefinitions();
+        UserFieldDefinitions attributeDefs = doc.getUserFieldDefinitions();
 
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         mp.setLayout(new GridBagLayout());

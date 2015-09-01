@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -43,9 +42,7 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
 
         super.setNodeBoxContent();
 
-        GraphDocument doc = getDialog().getGraphDocument();
-        GDCollection gdcoll = doc.getCollection();
-        UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
+        UserFieldDefinitions definitions = getDialog().getUserFieldDefinitions();
 
         // Hier werden jetzt die Kanten hinzugefügt, für die Kennzahlformeln definiert sind. 
         // Das passiert aber nur, wenn die <code>setNodeBoxContent()</code> 

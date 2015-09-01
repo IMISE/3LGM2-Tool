@@ -20,6 +20,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.TabbedPane;
 
 /**
@@ -190,6 +191,13 @@ public class PropertyDialog extends JDialog implements WindowListener {
      */
     public LGMGraphDocument getGraphDocument() {
         return doc;
+    }
+
+    /**
+     * @return
+     */
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        return gdcoll.getUserFieldDefinitions();
     }
 
     /**

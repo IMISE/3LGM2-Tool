@@ -4606,6 +4606,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * Liefert die {@link UserFieldDefinitions} der {@link GDCollection}
+     * 
+     * @return
+     */
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        return gdcoll.getUserFieldDefinitions();
+    }
+
+    /**
      * @deprecated
      */
     @Deprecated

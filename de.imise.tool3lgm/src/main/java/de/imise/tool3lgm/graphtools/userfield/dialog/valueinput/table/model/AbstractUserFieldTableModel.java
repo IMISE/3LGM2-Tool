@@ -117,7 +117,7 @@ public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
     protected AbstractUserFieldTableModel(final GraphDocument doc) {
         super();
         this.doc = doc;
-        definitions = doc.getCollection().getUserFieldDefinitions();
+        definitions = doc.getUserFieldDefinitions();
         rowIdentifiers = new Vector<Object>();
     }
 
