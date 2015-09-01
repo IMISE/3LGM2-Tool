@@ -15,34 +15,40 @@ import de.imise.tool3lgm.log.Log;
 public abstract class Kante extends ModelElement {
 
     /**
-     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Über diesen Namen werden die Startklassen per Reflection ermittelt.
+     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Über diesen
+     * Namen werden die Startklassen per Reflection ermittelt.
      */
     public static final String START_CLASS_FIELD_NAME = "stcl";
 
     /**
-     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Endklassen beschreibt. Über diesen Namen werden die Endklassen per Reflection ermittelt.
+     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Endklassen beschreibt. Über diesen
+     * Namen werden die Endklassen per Reflection ermittelt.
      */
     public static final String END_CLASS_FIELD_NAME = "etcl";
 
     /**
-     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse für Elemente der Endklasse vorhanden sein müssen.<br />
+     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse für Elemente
+     * der Endklasse vorhanden sein müssen.<br />
      * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
      */
     public static final String START_CARDINALITY_FIELD_NAME = "scard";
 
     /**
-     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für Elemente der Startklasse vorhanden sein müssen.<br />
+     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für Elemente der
+     * Startklasse vorhanden sein müssen.<br />
      * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
      */
     public static final String END_CARDINALITY_FIELD_NAME = "ecard";
 
     /**
-     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert, die getStartElementClass() und getEndElementClass() aufruft.
+     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
+     * die getStartElementClass() und getEndElementClass() aufruft.
      */
     public static final Class<? extends ModelElement> stcl = ModelElement.class;
 
     /**
-     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert, die getStartElementClass() und getEndElementClass() aufruft.
+     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
+     * die getStartElementClass() und getEndElementClass() aufruft.
      */
     public static final Class<? extends ModelElement> etcl = ModelElement.class;
 
@@ -146,7 +152,8 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Setzt fuer die Kante die Knoten Anfang=_k1 und Ende=_k2 und fügt die Kante bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos ein.
+     * Setzt fuer die Kante die Knoten Anfang=_k1 und Ende=_k2 und fügt die Kante bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
+     * ein.
      * 
      * @param _k1 Knoten
      * @param pos int Position
@@ -154,9 +161,11 @@ public abstract class Kante extends ModelElement {
      */
     /**
      * @param _k1 Startelement der Kante
-     * @param _k1EdgePos Postion der Kante in der Kantenliste von _k1. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die Kante hinten angefügt.
+     * @param _k1EdgePos Postion der Kante in der Kantenliste von _k1. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
+     *            Kante hinten angefügt.
      * @param _k2 Endelement der Kante
-     * @param _k2EdgePos Postion der Kante in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die Kante hinten angefügt.
+     * @param _k2EdgePos Postion der Kante in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
+     *            Kante hinten angefügt.
      */
     public void setKnotsAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
         k1 = _k1;
@@ -222,7 +231,8 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Wenn das übergebene Element durch diese Kante mit einem anderen Element verbunden ist, kommt das andere Element der Kante zurück, sons <code>null</code>.
+     * Wenn das übergebene Element durch diese Kante mit einem anderen Element verbunden ist, kommt das andere Element der Kante zurück, sons
+     * <code>null</code>.
      * 
      * @param me
      * @return
@@ -238,8 +248,8 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Wenn die übergebene Elementklasse durch eine Kante der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse dieser anderen Elemente zurück gegeben. Passen Kante und Elementklasse nicht zusammen, kommt
-     * <code>null</code> zurück.
+     * Wenn die übergebene Elementklasse durch eine Kante der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
+     * dieser anderen Elemente zurück gegeben. Passen Kante und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
      * 
      * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
      * @param meClass Elementklasse der Kante, deren Gegenelementklasse zurück gegeben werden soll
@@ -547,8 +557,9 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und
-     * <code>endElementClass</code> die Endklasse der Kantenklasse oder eine Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
+     * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und <code>endElementClass</code> die Endklasse
+     * der Kantenklasse oder eine Unterklasse davon ist.
      * 
      * @param edgeClass
      * @param startElementClass
