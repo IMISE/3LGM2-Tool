@@ -15,7 +15,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableSumHandler;
@@ -261,6 +263,15 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
      */
     public String[] getElementsAtMousePointer() {
         return elementsAtMousePointer;
+    }
+
+    /**
+     * Liefert die {@link UserFieldDefinitions} der {@link GDCollection} des Dialoges dieses Panels
+     * 
+     * @return
+     */
+    public UserFieldDefinitions getUserFieldDefinitions() {
+        return getDialog().getUserFieldDefinitions();
     }
 
 }

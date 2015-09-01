@@ -107,7 +107,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
      * Methode setzt den Inhalt der <code>edgeBox</code> Es werden nur Kantenklassen hinzugefügt, für die ein Verteilungsgewicht definiert ist.
      */
     private void setEdgeBoxContent() {
-        UserFieldDefinitions definitions = getDialog().getUserFieldDefinitions();
+        UserFieldDefinitions definitions = getUserFieldDefinitions();
         for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
             // Falls Verteilungsgewichte exisitieren, füge Kantenklasse ein
             if (definitions.hasNumberFields(ModelConstants.ALL_EDGES[i])) {
@@ -206,7 +206,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
 
         Class<? extends ModelElement> edgeClass = (Class<? extends ModelElement>) edgeBox.getSelectedObject();
 
-        UserFieldDefinitions definitions = getDialog().getUserFieldDefinitions();
+        UserFieldDefinitions definitions = getUserFieldDefinitions();
 
         weightBox.removeAllItems();
         weightBox.addSeparator("Verteilungsgewichte:");

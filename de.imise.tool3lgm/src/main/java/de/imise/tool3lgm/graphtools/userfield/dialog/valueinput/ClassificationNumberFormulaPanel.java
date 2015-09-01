@@ -42,7 +42,7 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
 
         super.setNodeBoxContent();
 
-        UserFieldDefinitions definitions = getDialog().getUserFieldDefinitions();
+        UserFieldDefinitions definitions = getUserFieldDefinitions();
 
         // Hier werden jetzt die Kanten hinzugefügt, für die Kennzahlformeln definiert sind. 
         // Das passiert aber nur, wenn die <code>setNodeBoxContent()</code> 
