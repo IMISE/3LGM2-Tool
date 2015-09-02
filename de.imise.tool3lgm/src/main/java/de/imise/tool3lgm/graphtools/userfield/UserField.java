@@ -12,6 +12,8 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.google.common.collect.ImmutableSet;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
@@ -130,6 +132,8 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
          * @Override int compare(UserField uf, ModelElement me1, ModelElement me2) { return alphabeticalCompare(uf, me1, me2); } }
          */
         ;
+
+        public static final Set<Style> CLASSIFICATION_NUMBER_STYLES = ImmutableSet.of(CLASSIFICATION_NUMBER, CLASSIFICATION_NUMBER_FORMULA);
 
         /**
          * Vergleicht die beiden UserFields hinsichtlich ihres Wertes bezüglich des Modelelements.
@@ -703,7 +707,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * @return
      */
     public static boolean isClassificationStyle(final Style style) {
-        return style == Style.CLASSIFICATION_NUMBER_FORMULA || style == Style.CLASSIFICATION_NUMBER;
+        return Style.CLASSIFICATION_NUMBER_STYLES.contains(style);
     }
 
     /**
