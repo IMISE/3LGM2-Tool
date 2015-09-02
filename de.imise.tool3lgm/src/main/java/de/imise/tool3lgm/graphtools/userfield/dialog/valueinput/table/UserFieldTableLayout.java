@@ -958,7 +958,7 @@ public class UserFieldTableLayout {
     }
 
     /**
-     * Gibt ein Layout für einen CN-Table (Kennzahleingabe) wieder
+     * Gibt ein Layout für einen Table zur Eingabe aller UserFields außer Kennzahlen und Kantengewichten wieder
      * 
      * @return
      */
