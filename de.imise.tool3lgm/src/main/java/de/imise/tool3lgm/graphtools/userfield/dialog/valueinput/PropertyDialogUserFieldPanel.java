@@ -439,7 +439,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         }
     }
 
-    private static final void print(final GridBagConstraints c) {
+    public static final void print(final GridBagConstraints c) {
         System.err.println("anchor = " + c.anchor);
         System.err.println("fill = " + c.fill);
         System.err.println("gridheight = " + c.gridheight);
