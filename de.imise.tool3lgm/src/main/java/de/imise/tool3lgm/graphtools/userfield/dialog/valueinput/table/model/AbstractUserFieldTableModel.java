@@ -165,7 +165,7 @@ public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
 
     /**
      * Liefert nur <code>false</code>, wenn das übergebene Object ein {@link NamedObjectContainer} ist,
-     * dessen enthaltenes Object ein UserField ist, dessen Style in UNEDITABLE_USERFIELDS steht.
+     * dessen enthaltenes Object ein UserField ist, dessen Style nicht in EDITABLE_USERFIELDS steht.
      * 
      * @param columnIdentifierObject
      * @return
