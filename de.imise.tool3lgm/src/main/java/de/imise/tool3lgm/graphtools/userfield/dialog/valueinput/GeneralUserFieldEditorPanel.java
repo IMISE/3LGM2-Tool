@@ -242,7 +242,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
                 UserField uf = ((NamedObjectContainer<UserField>) columnIdentifiers.elementAt(k)).getObject();
                 // neuen Wert setzen
                 if (!newValue.equals(uf.getValue(me))) {
-                    doc.changeUserField(me.getHashString(), uf.getHashCode(), newValue, getDialog().getTransactionID());
+                    doc.setUserFieldValue(me.getHashString(), uf.getHashCode(), newValue, getDialog().getTransactionID());
                 }
             }
         }

@@ -275,12 +275,12 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
 
                     if (newValue.equals(UserField.EMPTY_STRING)) {
                         // Neuen Wert setzen
-                        doc.changeUserField(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
+                        doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
                     } else {
                         try {
                             Double.parseDouble(newValue);
                             // Neuen Wert setzen
-                            doc.changeUserField(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
+                            doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
                         } catch (NumberFormatException nfe) {
                             continue;
                         }

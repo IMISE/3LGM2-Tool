@@ -882,7 +882,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case SET_USER_FIELD_VALUE:
             if (argc == 3) {
-                changeUserField(argv[0], argv[1], argv[2], pid);
+                setUserFieldValue(argv[0], argv[1], argv[2], pid);
             }
             break;
 
@@ -4285,14 +4285,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @param hashString
+     * @param elementHash
      * @param userFieldHash
      * @param newValue
      * @param pid
      */
-    public final void changeUserField(final String hashString, final String userFieldHash, final String newValue, final int pid) {
+    public final void setUserFieldValue(final String elementHash, final String userFieldHash, final String newValue, final int pid) {
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        ModelElement me = mainDoc.findElementCoded(hashString);
+        ModelElement me = mainDoc.findElementCoded(elementHash);
         if (me == null) {
             return;
         }
