@@ -24,6 +24,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -32,6 +33,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -96,7 +98,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         constraints.weighty = 0.0;
         constraints.insets = new Insets(1, 1, 1, 0);
         ModelElement modelElement = getModelElement();
-        for (UserField field : attributeDefs.getUserFields(getModelElement().getClass())) {
+        for (UserField field : attributeDefs.getUserFields(modelElement.getClass())) {
             String value = modelElement.getUserFieldInputValue(field).trim();
             UserField.Style style = field.getStyle();
             if (style == UserField.Style.SEPARATOR) {
@@ -341,7 +343,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
                 constraints.gridy++;
                 constraints.weightx = 1;
-                ExtendedTextField component = new ExtendedTextField(field.getValue(modelElement));
+                JTextField component = new JTextField();
 
                 component.setEditable(false);
                 mp.add(component, constraints);
@@ -350,7 +352,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.weightx = 1;
                 constraints.gridy++;
 
-                String formattedValue = field.getFormattedValue(dialog.getModelElement(), true);
+                String formattedValue = field.getFormattedValue(modelElement, true);
                 ((JTextComponent) component).setText(formattedValue);
             }
         }
@@ -371,7 +373,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     public void commit() {
         boolean changed = false;
         for (int i = 0; i < fields.size(); i++) {
-
             UserFieldEditorComponent userFieldEditorComponent = fields.get(i);
             UserField userField = userFieldEditorComponent.userField;
             JComponent editorComponent = userFieldEditorComponent.editorComponent;
@@ -387,14 +388,31 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 }
             }
         }
-        // wenn eine Kennzahl geändert wurde, wurde bei doc.exec() die Variable
-        // reset aus dem Calculator auf true gesetzt.
-        // Jetzt kann man einfach dem Calculator sagen, er soll alle
-        // Kennzahlformeln neu berechnen, wenn
+        //wenn sich irgendwas geändert hat
         if (changed) {
+            // wenn eine Kennzahl geändert wurde, wurde bei doc.exec() die Variable
+            // reset aus dem Calculator auf true gesetzt.
+            // Jetzt kann man einfach dem Calculator sagen, er soll alle
+            // Kennzahlformeln neu berechnen, wenn
             doc.getCollection().getUserFieldDefinitions().initReset();
+            updateFormulaValues();
         }
 
+    }
+
+    /**
+     * Aktualisiert die Anzeigewerte aller Formeln.
+     */
+    private void updateFormulaValues() {
+        for (int i = 0; i < fields.size(); i++) {
+            UserFieldEditorComponent userFieldEditorComponent = fields.get(i);
+            UserField userField = userFieldEditorComponent.userField;
+            if (userField.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA)) {
+                JTextField formulaTextField = (JTextField) userFieldEditorComponent.editorComponent;
+                String formattedValue = userField.getFormattedValue(getModelElement(), true);
+                formulaTextField.setText(formattedValue);
+            }
+        }
     }
 
     /**
