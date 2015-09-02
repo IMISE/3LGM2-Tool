@@ -310,7 +310,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.weightx = 1;
                 //				component = new JFormattedTextField(value);
 
-                //Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
+                // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
                 // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
                 String fieldValue = field.getValue(dialog.getModelElement());
                 NumberFormat numberFormat = field.getNumberFormat();
@@ -318,7 +318,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 if (UserField.IGNOREABLE_ERROR_SET.contains(fieldValue) || UserField.ERROR_SET.contains(fieldValue)) {
                     component = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
                 } else {
-                    //					  	Kennzahlwerte in die Felder einfügen.
+                    // Kennzahlwerte in die Felder einfügen.
                     component = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
 
                     if (!UserField.isErrorString(fieldValue) && !UserField.isIgnoreableErrorString(fieldValue)) {
@@ -340,7 +340,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
                 constraints.gridy++;
                 constraints.weightx = 1;
-                //				String tmp_str = field.getFormatedValue(modelElement, true);
                 ExtendedTextField component = new ExtendedTextField(field.getValue(modelElement));
 
                 component.setEditable(false);
@@ -369,60 +368,95 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
     @Override
     public void commit() {
-        AttributeComponent comp;
+        boolean changed = false;
         for (int i = 0; i < fields.size(); i++) {
-            String newValue = "";
-            comp = fields.get(i);
-            UserField.Style style = comp.attribute.getStyle();
-            if (style == UserField.Style.SINGLE_LINE) {
-                newValue = ((JTextComponent) comp.comp).getText();
 
-            } else if (style == UserField.Style.MULTI_LINE) {
-                newValue = GraphDocument.getParseSaveString(((JTextComponent) comp.comp).getText(), false);
-
-            } else if (style == UserField.Style.COMBO_BOX) {
-                Object selectedItem = ((JComboBox) comp.comp).getSelectedItem();
-                if (selectedItem != null) {
-                    newValue = GraphDocument.getParseSaveString(selectedItem.toString(), false);
+            AttributeComponent attributeComponent = fields.get(i);
+            UserField userField = attributeComponent.attribute;
+            JComponent editorComponent = attributeComponent.comp;
+            UserField.Style style = userField.getStyle();
+            String newValue = getNewValue(style, editorComponent);
+            ModelElement me = getModelElement();
+            //wenn bei RadioButtons noch gar nichts gesetzt war, kann newValue null sein
+            //bei UserFields die Formeln sind, kommt auch null zurück -> dann nichts setzen
+            if (newValue != null) {
+                if (hasOtherValue(me, userField, newValue)) { //wenn sich wirklich was geändert hat
+                    doc.setUserFieldValue(me, userField, newValue, dialog.getTransactionID());
+                    changed = true;
                 }
-
-            } else if (style == UserField.Style.CHECK_BOX) {
-                newValue = ((JCheckBox) comp.comp).isSelected() ? UserField.CHECKBOX_TRUE : UserField.CHECKBOX_FALSE;
-
-            } else if (style == UserField.Style.RADIO_BUTTON) {
-                if (!((JRadioButton) comp.comp).isSelected()) {
-                    continue;
-                }
-                newValue = GraphDocument.getParseSaveString(((JRadioButton) comp.comp).getText(), false);
-
-            } else if (style == UserField.Style.HYPERLINK) {
-                newValue = GraphDocument.getParseSaveString(((JTextComponent) comp.comp).getText(), true);
-
-            } else if (style == UserField.Style.ID) {
-                newValue = ((JTextComponent) comp.comp).getText();
-
-            } else if (style == UserField.Style.CLASSIFICATION_NUMBER) {
-                Object textFieldValue = "";
-                NumberTextField textField = (NumberTextField) comp.comp;
-                textFieldValue = textField.getValue();
-
-                if (textFieldValue == null || textFieldValue.equals("")) {
-                    newValue = "";
-                } else {
-                    newValue = textFieldValue.toString();
-                }
-            }
-
-            if (!newValue.equals(getModelElement().getUserFieldInputValue(comp.attribute))) {
-                doc.setUserFieldValue(getModelElement(), comp.attribute, newValue, dialog.getTransactionID());
             }
         }
         // wenn eine Kennzahl geändert wurde, wurde bei doc.exec() die Variable
         // reset aus dem Calculator auf true gesetzt.
         // Jetzt kann man einfach dem Calculator sagen, er soll alle
         // Kennzahlformeln neu berechnen, wenn
-        doc.getCollection().getUserFieldDefinitions().initReset();
+        if (changed) {
+            doc.getCollection().getUserFieldDefinitions().initReset();
+        }
 
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der übergebene <code>newValue</code> ein anderer ist, als
+     * der beim ModelElement aktuell für das übergebenen UserField gesetzte Wert.
+     * 
+     * @param me
+     * @param userField
+     * @param newValue
+     * @return
+     */
+    private boolean hasOtherValue(final ModelElement me, final UserField userField, final String newValue) {
+        String userFieldInputValue = me.getUserFieldInputValue(userField);
+        return !newValue.equals(userFieldInputValue);
+    }
+
+    /**
+     * Liefert in Abhängigkeit vom Style den aktuellen Wert der übergebenen editorComponent.
+     * 
+     * @param style
+     * @param editorComponent
+     * @return
+     */
+    private String getNewValue(final UserField.Style style, final JComponent editorComponent) {
+        String newValue = null;
+        if (style == UserField.Style.SINGLE_LINE) {
+            newValue = ((JTextComponent) editorComponent).getText();
+
+        } else if (style == UserField.Style.MULTI_LINE) {
+            newValue = GraphDocument.getParseSaveString(((JTextComponent) editorComponent).getText(), false);
+
+        } else if (style == UserField.Style.COMBO_BOX) {
+            Object selectedItem = ((JComboBox) editorComponent).getSelectedItem();
+            if (selectedItem != null) {
+                newValue = GraphDocument.getParseSaveString(selectedItem.toString(), false);
+            }
+
+        } else if (style == UserField.Style.CHECK_BOX) {
+            newValue = ((JCheckBox) editorComponent).isSelected() ? UserField.CHECKBOX_TRUE : UserField.CHECKBOX_FALSE;
+
+        } else if (style == UserField.Style.RADIO_BUTTON) {
+            JRadioButton radioButton = (JRadioButton) editorComponent;
+            //wenn nichts selektiert ist -> null zurück geben -> der Wert des UserFields wird nicht geändert
+            newValue = radioButton.isSelected() ? GraphDocument.getParseSaveString(radioButton.getText(), false) : null;
+
+        } else if (style == UserField.Style.HYPERLINK) {
+            newValue = GraphDocument.getParseSaveString(((JTextComponent) editorComponent).getText(), true);
+
+        } else if (style == UserField.Style.ID) {
+            newValue = ((JTextComponent) editorComponent).getText();
+
+        } else if (style == UserField.Style.CLASSIFICATION_NUMBER) {
+            Object textFieldValue = "";
+            NumberTextField textField = (NumberTextField) editorComponent;
+            textFieldValue = textField.getValue();
+
+            if (textFieldValue == null || textFieldValue.equals("")) {
+                newValue = "";
+            } else {
+                newValue = textFieldValue.toString();
+            }
+        }
+        return newValue;
     }
 
     /**
