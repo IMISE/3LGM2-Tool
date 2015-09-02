@@ -147,34 +147,8 @@ public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
      */
     @Override
     public boolean isCellEditable(final int row, final int column) {
-
-        // Zelle an der Stelle (row,count) hat keinen Wert
-        if (column >= 0 && getValueAt(row, column) == null) {
-            return false;
-        }
-        Object columnIdentifierObject = columnIdentifiers.get(column);
-        return isEditableColumnHeader(columnIdentifierObject);
-    }
-
-    /**
-     * Liefert nur <code>false</code>, wenn das übergebene Object ein {@link NamedObjectContainer} ist,
-     * dessen enthaltenes Object ein UserField ist, dessen Style nicht in EDITABLE_USERFIELDS steht.
-     * 
-     * @param columnIdentifierObject
-     * @return
-     */
-    private boolean isEditableColumnHeader(final Object columnIdentifierObject) {
-        if (columnIdentifierObject instanceof NamedObjectContainer) {
-            NamedObjectContainer<?> columnIdentifierContainer = (NamedObjectContainer<?>) columnIdentifierObject;
-            Object columnIdentifier = columnIdentifierContainer.getObject();
-            if (columnIdentifier instanceof UserField) {
-                UserField columnIdentifierUF = (UserField) columnIdentifier;
-                if (!EDITABLE_USERFIELDS.contains(columnIdentifierUF.getStyle())) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        // Zelle an der Stelle (row,count) hat keinen Wert -> false, sonst true
+        return column >= 0 && getValueAt(row, column) == null;
     }
 
     /**
