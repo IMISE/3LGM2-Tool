@@ -6,7 +6,6 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
 
 import java.util.Set;
@@ -95,15 +94,9 @@ public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
     protected boolean dataChanged;
 
     /**
-     * Styles aller UserFilds, die nicht angezeigt werden sollen
-     */
-    protected static final Set<Style> NOT_VISIBLE_USERFIELDS = ImmutableSet.of(SEPARATOR);
-
-    /**
      * Styles aller UserFilds, die als editable angezeigt werden dürfen
      */
-    //    protected static final Set<Style> UNEDITABLE_USERFIELDS = ImmutableSet.of(CHECK_BOX, COMBO_BOX, CLASSIFICATION_NUMBER_FORMULA, COMBO_BOX, FORMAT, MULTI_LINE, RADIO_BUTTON);
-    protected static final Set<Style> EDITABLE_USERFIELDS = ImmutableSet.of(CLASSIFICATION_NUMBER, HYPERLINK, ID, SINGLE_LINE);
+    private static final Set<Style> EDITABLE_USERFIELDS = ImmutableSet.of(CLASSIFICATION_NUMBER, HYPERLINK, ID, SINGLE_LINE);
 
     /* *********************** Ende: Deklaration ************************************* */
 
