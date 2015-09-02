@@ -1375,7 +1375,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             }
 
-            //je nach globaler Option können die geloogten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
+            //je nach globaler Option können die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
             //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
             //muss man testen, ob sich das Kommando auf int casten lässt.
             GDCommands command = null;
@@ -4296,16 +4296,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (me == null) {
             return;
         }
-
-        start_transaction(pid);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         UserField userField = userFieldDefinitions.getUserField(userFieldHash);
-        addRedoCommand(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userFieldHash + " " + getParseSaveString(newValue, true), pid);
-        addUndoCommand(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userFieldHash + " " + getParseSaveString(userField.getValue(me), true), pid);
-
-        me.setUserFieldInputValue(userField, getDecodedParseSaveString(newValue));
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        setUserFieldValue(me, userField, newValue, pid);
     }
 
     /**
@@ -4313,16 +4306,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Fügt UNDO- und REDO-Commands hinzu
      * 
      * @param me
-     * @param uf
+     * @param userField
      * @param newValue
      * @param pid
      */
-    public void setUserFieldValue(final ModelElement me, final UserField uf, final String newValue, final int pid) {
+    public void setUserFieldValue(final ModelElement me, final UserField userField, final String newValue, final int pid) {
         start_transaction(pid);
-        addRedoCommand(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + getParseSaveString(newValue), pid);
-        addUndoCommand(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + getParseSaveString(uf.getValue(me)), pid);
-        me.setUserFieldInputValue(uf, getDecodedParseSaveString(newValue));
+        addRedoCommand(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode() + " " + getParseSaveString(newValue, true), pid);
+        addUndoCommand(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode() + " " + getParseSaveString(userField.getValue(me), true), pid);
+        me.setUserFieldInputValue(userField, getDecodedParseSaveString(newValue));
         finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
     }
 
     /**
