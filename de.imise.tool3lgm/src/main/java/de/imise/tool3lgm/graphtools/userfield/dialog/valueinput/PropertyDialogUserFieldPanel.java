@@ -43,9 +43,10 @@ import de.imise.util.swing.component.text.NumberTextField;
  * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten UserField des Elementes angezeigt werden. In ein <code>JScrollPane</code>
  * wird ein <code>JPanel</code> eingefügt. In dem <code>JPanel</code> werden die Eingabemöglichkeiten für die UserField dargestellt. Die grafischen
  * Elemente werden durch <code>JComponent </code>, egal ob <code>JLabel</code>, <code>JTextfield</code> oder <code>JComboBox</code> repräsentiert. Es
- * wird eine <code>ArrayList</code> angelegt, die Objekte vom Typ <code>AttributeComponent</code> enthält. Eine <code>AttributeComponent</code>
- * enthält als Objektattribute ein Attribut einer Element- bzw. Kantenklasse und die zugehörige GUI-Komponente. Für die Datenübernahme ist die Methode
- * <code>commit()</code> zuständig. Sie prüft iterativ die Eingaben in GUI-komponenten in der <code>ArrayList</code> und vergleicht Sie mit den
+ * wird eine <code>ArrayList</code> angelegt, die Objekte vom Typ <code>UserFieldEditorComponent</code> enthält. Eine
+ * <code>UserFieldEditorComponent</code> enthält als Objektattribute ein Attribut einer Element- bzw. Kantenklasse und die zugehörige GUI-Komponente.
+ * Für die Datenübernahme ist die Methode <code>commit()</code> zuständig. Sie prüft iterativ die Eingaben in GUI-komponenten in der
+ * <code>ArrayList</code> und vergleicht Sie mit den
  * bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando <code>SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert
  * eines Attributes einer Element- bzw. Kanetenklasse geändert.
  * 
@@ -53,7 +54,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  */
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
-    private final ArrayList<AttributeComponent> fields = new ArrayList<AttributeComponent>();
+    private final ArrayList<UserFieldEditorComponent> fields = new ArrayList<UserFieldEditorComponent>();
 
     /**
      * @param pd
@@ -105,7 +106,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.gridy++;
                 JComponent component = new JLabel("<HTML><B>" + field.getName() + "</B></HTML>");
                 mp.add(component, constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridy++;
                 mp.add(new JSeparator(), constraints);
                 constraints.gridy++;
@@ -121,7 +122,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 }
                 JComponent component = new ExtendedTextField(value);
                 mp.add(component, constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridy++;
                 constraints.gridx = 0;
                 constraints.weightx = 0;
@@ -141,7 +142,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 ((JTextComponent) component).setText(value);
 
                 mp.add(new JScrollPane(component), constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridy += 2;
                 constraints.gridx = 0;
                 constraints.weightx = 0;
@@ -175,7 +176,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 }
 
                 mp.add(component, constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridy++;
                 constraints.gridx = 0;
                 constraints.weightx = 0;
@@ -195,7 +196,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                     JComponent component = new JRadioButton(listValue.toString());
                     group.add((JRadioButton) component);
                     panel.add(component);
-                    fields.add(new AttributeComponent(field, component));
+                    fields.add(new UserFieldEditorComponent(field, component));
                     if (listValue.equals(value)) {
                         foundEntry = true;
                         ((JRadioButton) component).setSelected(true);
@@ -206,7 +207,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                     JComponent component = new JRadioButton(value);
                     group.add((JRadioButton) component);
                     panel.add(component);
-                    fields.add(new AttributeComponent(field, component));
+                    fields.add(new UserFieldEditorComponent(field, component));
                     ((JRadioButton) component).setSelected(true);
                 }
                 panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
@@ -223,7 +224,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints.weightx = 1;
                 JComponent component = new JCheckBox(field.getName(), value.equals(UserField.CHECKBOX_TRUE));
                 mp.add(component, constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridy++;
                 constraints.gridx = 0;
                 constraints.weightx = 0;
@@ -240,7 +241,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 constraints_format.fill = GridBagConstraints.HORIZONTAL;
                 constraints_format.weightx = 1;
                 slp.add(textField, constraints_format);
-                fields.add(new AttributeComponent(field, textField));
+                fields.add(new UserFieldEditorComponent(field, textField));
 
                 // Der Button, der für einen Hyperlink das öffnen eines Browsers
                 // ermöglicht.
@@ -285,7 +286,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 }
                 ExtendedTextField textField = new ExtendedTextField(value);
                 mp.add(textField, constraints);
-                fields.add(new AttributeComponent(field, textField));
+                fields.add(new UserFieldEditorComponent(field, textField));
                 constraints.gridy++;
                 constraints.gridx = 0;
                 constraints.weightx = 0;
@@ -332,7 +333,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 }
 
                 mp.add(component, constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridx = 0;
                 constraints.weightx = 1;
                 constraints.gridy++;
@@ -344,7 +345,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
                 component.setEditable(false);
                 mp.add(component, constraints);
-                fields.add(new AttributeComponent(field, component));
+                fields.add(new UserFieldEditorComponent(field, component));
                 constraints.gridx = 0;
                 constraints.weightx = 1;
                 constraints.gridy++;
@@ -371,9 +372,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         boolean changed = false;
         for (int i = 0; i < fields.size(); i++) {
 
-            AttributeComponent attributeComponent = fields.get(i);
-            UserField userField = attributeComponent.attribute;
-            JComponent editorComponent = attributeComponent.comp;
+            UserFieldEditorComponent userFieldEditorComponent = fields.get(i);
+            UserField userField = userFieldEditorComponent.userField;
+            JComponent editorComponent = userFieldEditorComponent.editorComponent;
             UserField.Style style = userField.getStyle();
             String newValue = getNewValue(style, editorComponent);
             ModelElement me = getModelElement();
@@ -460,16 +461,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Für jedes Attribut eine <code>Component</code>e, die es anzeigt.
+     * Für jedes UserField eine <code>Component</code>, die es anzeigt.
      */
-    private class AttributeComponent {
-        private final JComponent comp;
+    private class UserFieldEditorComponent {
 
-        private final UserField attribute;
+        private final JComponent editorComponent;
 
-        AttributeComponent(final UserField attribute, final JComponent component) {
-            comp = component;
-            this.attribute = attribute;
+        private final UserField userField;
+
+        UserFieldEditorComponent(final UserField userField, final JComponent editorComponent) {
+            this.editorComponent = editorComponent;
+            this.userField = userField;
         }
     }
 
