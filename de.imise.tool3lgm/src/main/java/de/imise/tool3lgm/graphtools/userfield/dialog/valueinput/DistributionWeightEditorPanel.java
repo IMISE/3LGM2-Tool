@@ -209,7 +209,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         UserFieldDefinitions definitions = getUserFieldDefinitions();
 
         weightBox.removeAllItems();
-        weightBox.addSeparator("Verteilungsgewichte:");
+        weightBox.addSeparator(Tool3lgmConstants.getResString("weightings"));
 
         for (UserField uf : definitions.getUserFields(edgeClass)) {
             if (uf.isClassificationUserField()) {
