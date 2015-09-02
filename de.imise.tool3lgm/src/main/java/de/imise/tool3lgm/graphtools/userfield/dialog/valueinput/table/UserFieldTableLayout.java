@@ -957,6 +957,16 @@ public class UserFieldTableLayout {
         return new UserFieldTableLayout(true, false);
     }
 
+    /**
+     * Gibt ein Layout für einen CN-Table (Kennzahleingabe) wieder
+     * 
+     * @return
+     */
+    public final static UserFieldTableLayout getLayoutForGeneralUserFieldEditorTable() {
+        UserFieldTableLayout uf = new UserFieldTableLayout(true, false);
+        return uf;
+    }
+
     /* ************************************ Ende: statische Methoden ************************************ */
 
 }

@@ -178,7 +178,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     @Override
     protected UserFieldTable initTable() {
-        UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForClassificationNumberEditorTable();
+        UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForGeneralUserFieldEditorTable();
         UserFieldTable table = new UserFieldTable(uftl);
         return table;
     }
