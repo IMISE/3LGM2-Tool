@@ -134,7 +134,7 @@ public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
     @Override
     public boolean isCellEditable(final int row, final int column) {
         // Zelle an der Stelle (row,count) hat keinen Wert -> false, sonst true
-        return column >= 0 && getValueAt(row, column) == null;
+        return column >= 0 && getValueAt(row, column) != null;
     }
 
     /**
