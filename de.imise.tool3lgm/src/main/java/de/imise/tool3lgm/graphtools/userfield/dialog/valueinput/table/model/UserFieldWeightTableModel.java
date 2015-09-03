@@ -8,6 +8,7 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.util.NamedObjectContainer;
 
 public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
@@ -71,7 +72,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                     rowElements.add(re);
                 }
 
-                String value = field.getValue(edge);
+                //die nicht editierbaren Formeln müssen gleich formatiert dargestellt werden
+                String value = field.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA) ? field.getFormattedValue(edge, true) : field.getValue(edge);
                 temp_data[rowIndex][columnIndex] = new NamedObjectContainer<UserField>(field, value);
 
             }
@@ -105,4 +107,17 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         this.setDataVector(data, columnIdentifiers, rowIdentifiers);
     }
 
+    @Override
+    public boolean isCellEditable(final int row, final int column) {
+        //wenn die Zelle einen Formelwert (Referenz-Funktion) darstellt, darf die Zelle nicht
+        //editierbar sein
+        if (dataField[row][column] != null && dataField[row][column] instanceof NamedObjectContainer) {
+            NamedObjectContainer<UserField> cellValue = (NamedObjectContainer<UserField>) dataField[row][column];
+            UserField userField = cellValue.getObject();
+            if (userField.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA)) {
+                return false;
+            }
+        }
+        return super.isCellEditable(row, column);
+    }
 }

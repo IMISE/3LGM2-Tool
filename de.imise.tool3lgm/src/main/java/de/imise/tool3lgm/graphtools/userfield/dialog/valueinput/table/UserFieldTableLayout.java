@@ -783,7 +783,10 @@ public class UserFieldTableLayout {
         @Override
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             Component c = renderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            c.setBackground(DEACTIVATED_CELL_BACKROUND_COLOR);
+            //nur die Stellen richtig ausgrauen, die gar keinen Wert haben -> nicht editierbare Zellen sehen auf den ersten Blick wie editierbare aus
+            if (value == null) {
+                c.setBackground(DEACTIVATED_CELL_BACKROUND_COLOR);
+            }
             return c;
         }
 
