@@ -3,21 +3,12 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
-
-import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
-import com.google.common.collect.ImmutableSet;
-
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.NamedObjectContainer;
 
@@ -92,11 +83,6 @@ public abstract class AbstractUserFieldTableModel extends DefaultTableModel {
      * Gibt zurück, ob sich Daten geändert haben
      */
     protected boolean dataChanged;
-
-    /**
-     * Styles aller UserFilds, die als editable angezeigt werden dürfen
-     */
-    private static final Set<Style> EDITABLE_USERFIELDS = ImmutableSet.of(CLASSIFICATION_NUMBER, HYPERLINK, ID, SINGLE_LINE);
 
     /* *********************** Ende: Deklaration ************************************* */
 
