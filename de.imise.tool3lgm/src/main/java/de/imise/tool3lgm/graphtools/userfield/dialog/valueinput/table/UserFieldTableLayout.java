@@ -587,6 +587,7 @@ public class UserFieldTableLayout {
         public Object getCellEditorValue() {
             Object newValue = editor.getCellEditorValue();
             String s = newValue == null ? "" : newValue.toString();
+            s = UserField.replaceWrongDecimalSeparator(s, EDITOR_DECIMAL_SEPARATOR);
 
             if (editor.getComponent() instanceof NumberTextField) {
                 try {
