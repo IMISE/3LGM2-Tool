@@ -711,10 +711,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
                 NamedObjectContainer<UserField> value = (NamedObjectContainer<UserField>) getValueAt(i + firstRow, j + firstColumn);
                 String toString = value == null ? "" : value.toString();
 
-                if (replaceIgnorableErrors && UserField.isIgnoreableErrorString(toString)) {
+                if (replaceIgnorableErrors && UserField.isIgnoreableError(toString)) {
                     toString = "";
                 }
-                if (replaceErrors && UserField.isErrorString(toString)) {
+                if (replaceErrors && UserField.isCriticalError(toString)) {
                     toString = "";
                 }
 

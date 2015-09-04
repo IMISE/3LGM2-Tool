@@ -87,7 +87,7 @@ public class Calculator {
         String result = calculateInternal(userField, userFieldTarget);
         //        System.err.print(result);
         //        System.err.print(" -> ");
-        if (!UserField.isErrorString(result)) {
+        if (!UserField.isCriticalError(result)) {
             int pointIndex = result.indexOf('.');
             if (pointIndex + CALCULATING_DECIMAL_PLACES_COUNT <= result.length()) {
                 result = result.substring(0, pointIndex + RESULT_DECIMAL_PLACES_COUNT);
@@ -145,37 +145,37 @@ public class Calculator {
         //		Alle Teilwertsummen auflˆsen (das muss vor den Summen apssieren, da
         //		in TWSUM auch SUM steckt)
         String erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_TWSUM);
-        if (UserField.isErrorString(erg)) {
+        if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Summen
         erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_SUM);
-        if (UserField.isErrorString(erg)) {
+        if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Multiplikationen
         erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_MULT);
-        if (UserField.isErrorString(erg)) {
+        if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Minima
         erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_MIN);
-        if (UserField.isErrorString(erg)) {
+        if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Maxima
         erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_MAX);
-        if (UserField.isErrorString(erg)) {
+        if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
         // Alle Referenzen
         erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_REF);
-        if (UserField.isErrorString(erg)) {
+        if (UserField.isCriticalError(erg)) {
             return erg;
         }
 
@@ -185,7 +185,7 @@ public class Calculator {
         String infixString = infix.toString();
         //Wenn der Infix nur aus irgendeinem Fehlerwert besteht -> raus mit dem
         // Fehlerwert
-        if (UserField.isErrorString(infixString) || UserField.isIgnoreableErrorString(infixString)) {
+        if (UserField.isError(infixString)) {
             return infixString;
         }
 
@@ -253,7 +253,7 @@ public class Calculator {
                     }
 
                     // Fehler werden durchgereicht und nicht weiter gerechnet.
-                    if (UserField.isErrorString(ufValue)) {
+                    if (UserField.isCriticalError(ufValue)) {
                         return ufValue;
                     }
 
@@ -336,7 +336,7 @@ public class Calculator {
                 //jetzt berechnen des Durchschnittes anstoﬂen
                 value = getAvg(userField, me, arguments);
             }
-            if (UserField.isErrorString(value)) {
+            if (UserField.isCriticalError(value)) {
                 return value;
             }
             //die Funktion im Formel-StringBuilder durch den Wert ersetzen
@@ -365,10 +365,10 @@ public class Calculator {
      */
     private static final String getResult(String operand1, String operand2, final String operator) {
 
-        if (UserField.isErrorString(operand1)) {
+        if (UserField.isCriticalError(operand1)) {
             return operand1;
         }
-        if (UserField.isErrorString(operand2)) {
+        if (UserField.isCriticalError(operand2)) {
             return operand2;
         }
 
@@ -538,7 +538,7 @@ public class Calculator {
             if (UserField.NO_ELEMENTS_CONNECTED.equals(userFieldValueToSplit)) {
                 //den Wert als 0 annehmen.
                 continue;
-            } else if (UserField.EMPTY_STRING.equals(userFieldValueToSplit) || UserField.isErrorString(userFieldValueToSplit)) {
+            } else if (UserField.EMPTY_STRING.equals(userFieldValueToSplit) || UserField.isCriticalError(userFieldValueToSplit)) {
                 return userFieldValueToSplit;
             }
 
@@ -841,7 +841,7 @@ public class Calculator {
             //den Eingabewert des aufzusummierenden Feldes holen
             String value = userField.getValue(connectedElement);
 
-            if (UserField.IGNOREABLE_ERROR_SET.contains(value)) {
+            if (UserField.isIgnoreableError(value)) {
                 return value;
             }
             if (j == 0) {
@@ -873,7 +873,7 @@ public class Calculator {
     private String getAvg(final UserField resultUserField, final ModelElement me, final String avgFormula) {
         String sum = getSUM(resultUserField, me, avgFormula, UserField.ACCOUNTING_FUNCTION_SUM);
 
-        if (UserField.isErrorString(sum) || UserField.isIgnoreableErrorString(sum)) {
+        if (UserField.isError(sum)) {
             return sum;
         }
 
@@ -930,7 +930,7 @@ public class Calculator {
         //Der aktuelle Wert des UserFields, das indiziert werden soll.
         String tmp_value = definitions.getUserField(userFieldhash).getValue(target);
 
-        if (UserField.isErrorString(tmp_value) || UserField.isIgnoreableErrorString(tmp_value)) {
+        if (UserField.isError(tmp_value)) {
             return tmp_value;
         }
 

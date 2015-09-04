@@ -373,7 +373,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      */
     public boolean hasNumberFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         for (UserField uf : getUserFields(userFieldTargetClass)) {
-            if (uf.hasStyle(UserField.Style.CLASSIFICATION_NUMBER) || uf.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+            if (uf.hasClassfificationStyle()) {
                 return true;
             }
         }

@@ -133,7 +133,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
          */
         ;
 
-        public static final Set<Style> CLASSIFICATION_NUMBER_STYLES = ImmutableSet.of(CLASSIFICATION_NUMBER, CLASSIFICATION_NUMBER_FORMULA);
+        private static final Set<Style> CLASSIFICATION_NUMBER_STYLES = ImmutableSet.of(CLASSIFICATION_NUMBER, CLASSIFICATION_NUMBER_FORMULA);
 
         /**
          * Vergleicht die beiden UserFields hinsichtlich ihres Wertes bezüglich des Modelelements.
@@ -172,22 +172,22 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
             if (v2 == null) {
                 return 1;
             }
-            if (isIgnoreableErrorString(v1) && isIgnoreableErrorString(v2)) {
+            if (isIgnoreableError(v1) && isIgnoreableError(v2)) {
                 return v1.compareTo(v2);
             }
-            if (isIgnoreableErrorString(v1) && isErrorString(v2)) {
+            if (isIgnoreableError(v1) && isCriticalError(v2)) {
                 return -1;
             }
-            if (isErrorString(v1) && isIgnoreableErrorString(v2)) {
+            if (isCriticalError(v1) && isIgnoreableError(v2)) {
                 return 1;
             }
-            if (isErrorString(v1) && isErrorString(v2)) {
+            if (isCriticalError(v1) && isCriticalError(v2)) {
                 return v1.compareTo(v2);
             }
-            if (isErrorString(v1) || isIgnoreableErrorString(v1)) {
+            if (isCriticalError(v1) || isIgnoreableError(v1)) {
                 return 1;
             }
-            if (isErrorString(v2) || isIgnoreableErrorString(v2)) {
+            if (isCriticalError(v2) || isIgnoreableError(v2)) {
                 return -1;
             }
 
@@ -345,39 +345,20 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      * Dieses Set beinhaltet Strings, die Formel-UserFields als Werte annehmen, wenn sie sich nicht berechnen lassen oder irgendwelche anderen
      * Probleme auftreten. <code>NUMBER_FORMAT_ERROR</code> und <code>EMPTY_STRING</code> können auch bei Kennzahl-UserFields auftreten. beinhaltet:
      */
-    public static final HashSet<String> ERROR_SET = new HashSet<String>();
-    static {
-        ERROR_SET.add(POSITIVE_VALUES_ONLY);
-        ERROR_SET.add(NUMBER_FORMAT_ERROR);
-        ERROR_SET.add(ERROR_DIVIDE_BY_ZERO);
-        ERROR_SET.add(ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION);
-    }
+    private static final Set<String> ERROR_SET = ImmutableSet.of(POSITIVE_VALUES_ONLY, NUMBER_FORMAT_ERROR, ERROR_DIVIDE_BY_ZERO, ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION);
 
     /**
      * Dieses Set enthält alle Strings, die Werte von UserFields sein können, die bei Berechnungen ignoriert werden sollen. D.h. wenn eine
      * Summen-/Differenz/Divisions-/Multiplikationsfunktion auf ein UserField mit einem <code>String</code> aus diesem Set als value trifft, wird
      * dafür der Wert 0 angenommen.
      */
-    public static final HashSet<String> IGNOREABLE_ERROR_SET = new HashSet<String>();
-    static {
-        IGNOREABLE_ERROR_SET.add(EMPTY_STRING);
-        IGNOREABLE_ERROR_SET.add(NO_ELEMENTS_CONNECTED);
-    }
+    private static final Set<String> IGNOREABLE_ERROR_SET = ImmutableSet.of(EMPTY_STRING, NO_ELEMENTS_CONNECTED);
 
     /**
      * Dieses Set beinhaltet Strings, die interne Verrechnungsfunktionen kennzeichen beinhaltet:
      */
-    public static final HashSet<String> ACCOUNTING_FUNCTIONS_SET = new HashSet<String>();
-    static {
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_SUM);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_TWSUM);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_MAX);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_MIN);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_MULT);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_AVG);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_INDI);
-        ACCOUNTING_FUNCTIONS_SET.add(ACCOUNTING_FUNCTION_REF);
-    }
+    public static final Set<String> ACCOUNTING_FUNCTIONS_SET = ImmutableSet.of(ACCOUNTING_FUNCTION_SUM, ACCOUNTING_FUNCTION_TWSUM, ACCOUNTING_FUNCTION_MAX, ACCOUNTING_FUNCTION_MIN, ACCOUNTING_FUNCTION_MULT, ACCOUNTING_FUNCTION_AVG,
+            ACCOUNTING_FUNCTION_INDI, ACCOUNTING_FUNCTION_REF);
 
     ///////////////////////
     // Format-UserFields //
@@ -658,6 +639,16 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      */
     public boolean hasStyle(final Style style) {
         return this.style == style;
+    }
+
+    /**
+     * Liefert <code>true</code>, wemm der Style dieses UserFields <code>CLASSIFICATION_NUMBER</code> oder <code>CLASSIFICATION_NUMBER_FORMULA</code>
+     * ist.
+     * 
+     * @return
+     */
+    public boolean hasClassfificationStyle() {
+        return Style.CLASSIFICATION_NUMBER_STYLES.contains(style);
     }
 
     /**
@@ -1152,11 +1143,11 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
             return "";
         }
 
-        if (isErrorString(value)) {
+        if (isCriticalError(value)) {
             return value;
         }
 
-        if (isIgnoreableErrorString(value)) {
+        if (isIgnoreableError(value)) {
             return value;
         }
 
@@ -1348,28 +1339,34 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
     }
 
     /**
-     * Prüft, ob der übergebene Wert ein Wert aus der <code>ERROR_SET</code> ist.
+     * Prüft, ob der übergebene Wert ein Wert aus <code>ERROR_SET</code> ist.
      * 
      * @param value Der zu prüfende Wert
-     * @return true, wenn sich der übergebene Wert in der <code>errorMap</code> befindet ansonsten false
+     * @return <code>true</code>, wenn sich der übergebene Wert in <code>ERROR_SET</code> befindet sonst <code>false</code>
      */
-    public static boolean isErrorString(final String value) {
-        if (ERROR_SET.contains(value)) {
-            return true;
-        }
-        return false;
+    public static boolean isCriticalError(final String value) {
+        return ERROR_SET.contains(value);
     }
 
     /**
-     * Prüft, ob der übergebene Wert ein Wert aus der <code>IGNOREABLE_ERROR_SET</code> ist.
+     * Prüft, ob der übergebene Wert ein Wert aus <code>IGNOREABLE_ERROR_SET</code> ist.
      * 
      * @param value Der zu prüfende Wert
-     * @return true, wenn sich der übergebene Wert in der <code>errorMap</code> befindet ansonsten false
+     * @return <code>true</code>, wenn sich der übergebene Wert in <code>IGNOREABLE_ERROR_SET</code> befindet sonst <code>false</code>
      */
-    public static boolean isIgnoreableErrorString(final String value) {
-        if (IGNOREABLE_ERROR_SET.contains(value)) {
-            return true;
-        }
-        return false;
+    public static boolean isIgnoreableError(final String value) {
+        return IGNOREABLE_ERROR_SET.contains(value);
     }
+
+    /**
+     * Prüft, ob der übergebene Wert ein Wert aus <code>ERROR_SET</code> oder <code>IGNOREABLE_ERROR_SET</code> ist.
+     * 
+     * @param value Der zu prüfende Wert
+     * @return <code>true</code>, wenn sich der übergebene Wert in <code>ERROR_SET</code> oder <code>IGNOREABLE_ERROR_SET</code> befindet sonst
+     *         <code>false</code>
+     */
+    public static boolean isError(final String value) {
+        return ERROR_SET.contains(value) || IGNOREABLE_ERROR_SET.contains(value);
+    }
+
 }

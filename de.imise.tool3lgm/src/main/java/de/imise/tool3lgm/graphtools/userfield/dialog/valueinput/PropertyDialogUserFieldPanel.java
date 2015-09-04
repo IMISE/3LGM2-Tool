@@ -317,20 +317,13 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
                 String fieldValue = field.getValue(dialog.getModelElement());
                 NumberFormat numberFormat = field.getNumberFormat();
-                JComponent component;
-                if (UserField.IGNOREABLE_ERROR_SET.contains(fieldValue) || UserField.ERROR_SET.contains(fieldValue)) {
-                    component = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
-                } else {
-                    // Kennzahlwerte in die Felder einfügen.
-                    component = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
-
-                    if (!UserField.isErrorString(fieldValue) && !UserField.isIgnoreableErrorString(fieldValue)) {
-                        try {
-                            ((JFormattedTextField) component).setValue(Double.valueOf(fieldValue));
-                        } catch (NumberFormatException e1) {
-                            ((JFormattedTextField) component).setValue(fieldValue);
-
-                        }
+                // Kennzahlwerte in die Felder einfügen.
+                JComponent component = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
+                if (!UserField.isError(fieldValue)) {
+                    try {
+                        ((JFormattedTextField) component).setValue(Double.valueOf(fieldValue));
+                    } catch (NumberFormatException e1) {
+                        ((JFormattedTextField) component).setValue(fieldValue);
                     }
                 }
 
