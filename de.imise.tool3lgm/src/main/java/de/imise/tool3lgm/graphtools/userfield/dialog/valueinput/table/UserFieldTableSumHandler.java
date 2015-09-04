@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
 
 import java.math.BigDecimal;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
@@ -42,10 +44,11 @@ public class UserFieldTableSumHandler {
      */
     private static String getFormattedSum(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
         String returnValue = "";
-        BigDecimal sumValue = getSum(tableModel, rowOrColumnIndex, useRow);
+        UserField formatSource = getFormatSource(tableModel, rowOrColumnIndex, useRow);
+        String formatUnit = formatSource != null ? formatSource.getFormatUnit() : null;
+        BigDecimal sumValue = getSum(tableModel, rowOrColumnIndex, useRow, formatUnit);
         if (lastCallHadValidValues) {
             String sum = sumValue.toString();
-            UserField formatSource = getFormatSource(tableModel, rowOrColumnIndex, useRow);
             if (formatSource != null) {
                 returnValue = UserField.getFormattedValue(sum, formatSource.getFormatUserField(), true);
             }
@@ -61,7 +64,7 @@ public class UserFieldTableSumHandler {
      * @param useRow
      * @return
      */
-    private static BigDecimal getSum(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
+    private static BigDecimal getSum(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow, final String formatUnit) {
         BigDecimal sum = BigDecimal.ZERO;
         lastCallHadValidValues = false;
         if (rowOrColumnIndex >= 0) {
@@ -74,8 +77,14 @@ public class UserFieldTableSumHandler {
                 if (value == null) {
                     continue;
                 }
+                String valueString = value.toString();
+                if (!Strings.isNullOrEmpty(formatUnit)) {
+                    if (valueString.endsWith(formatUnit)) {
+                        valueString = valueString.substring(0, valueString.length() - formatUnit.length());
+                    }
+                }
                 try {
-                    d = new BigDecimal(value.toString());
+                    d = new BigDecimal(valueString.trim());
                 } catch (Exception ex) {
                     continue;
                 }
@@ -94,7 +103,7 @@ public class UserFieldTableSumHandler {
      * @param useRow
      * @return
      */
-    public static UserField getFormatSource(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
+    private static UserField getFormatSource(final AbstractUserFieldTableModel tableModel, final int rowOrColumnIndex, final boolean useRow) {
         //Zeilen bzw. Spalten Header holen und das evtl. darin verpackte UserField holen
         UserField formatSource = useRow ? getRowHeaderUserField(tableModel, rowOrColumnIndex) : getColumnHeaderUserField(tableModel, rowOrColumnIndex);
         //wenn keins gefunden wurde -> dann mal in den jeweils anderen Header schauen, ob dort auch kein UserField steckt
@@ -160,11 +169,4 @@ public class UserFieldTableSumHandler {
         return null;
     }
 
-    public static final boolean hasTabelRowSum(final AbstractUserFieldTableModel tableModel) {
-        return getFormatSource(tableModel, 0, true) != null;
-    }
-
-    public static final boolean hasTabelColumnSum(final AbstractUserFieldTableModel tableModel) {
-        return getFormatSource(tableModel, 0, false) != null;
-    }
 }
