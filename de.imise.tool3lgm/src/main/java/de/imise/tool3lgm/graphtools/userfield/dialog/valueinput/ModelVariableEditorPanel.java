@@ -62,7 +62,7 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
     @Override
     protected UserFieldTable initTable() {
 
-        UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForModelVariableEditorTable();
+        UserFieldTableLayout uftl = new UserFieldTableLayout();
         UserFieldTable table = new UserFieldTable(uftl);
 
         return table;

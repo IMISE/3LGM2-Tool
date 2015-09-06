@@ -297,7 +297,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
 
     @Override
     protected UserFieldTable initTable() {
-        UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForDistributionWeightEditorTable();
+        UserFieldTableLayout uftl = new UserFieldTableLayout(true);
         UserFieldTable table = new UserFieldTable(uftl);
         return table;
     }

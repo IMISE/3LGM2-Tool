@@ -63,7 +63,7 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
 
     @Override
     protected UserFieldTable initTable() {
-        UserFieldTableLayout uftl = UserFieldTableLayout.getLayoutForClassificationNumberFormulaTable();
+        UserFieldTableLayout uftl = new UserFieldTableLayout();
         UserFieldTable table = new UserFieldTable(uftl);
         return table;
     }
