@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell;
 
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
@@ -19,6 +19,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -38,7 +39,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  * 
  * @author fstephan
  */
-class UserFieldActivatedTableCell implements IUserFieldTableCell {
+public class UserFieldActivatedTableCell implements IUserFieldTableCell {
 
     /**
      * <code>UserField</code>, dass das Format für die Wertdarstellung enthält

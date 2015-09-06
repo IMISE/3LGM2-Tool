@@ -4,6 +4,9 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.UserFieldActivatedTableCell;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.UserFieldDeactivatedTableCell;
 import de.imise.util.NamedObjectContainer;
 
 /**

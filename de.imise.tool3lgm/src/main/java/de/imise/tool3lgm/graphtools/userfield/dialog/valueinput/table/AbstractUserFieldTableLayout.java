@@ -23,6 +23,8 @@ import javax.swing.ListModel;
 import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
+
 /**
  * Klasse repräsentiert ein konkretes Layout für einen <code>UserFieldTable</code>.
  * <p>

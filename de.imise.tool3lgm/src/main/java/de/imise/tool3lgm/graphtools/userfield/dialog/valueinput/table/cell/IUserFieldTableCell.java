@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
  * 
  * @author fstephan
  */
-interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer {
+public interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer {
 
     /**
      * Zeichen, dass im Editor als Dezimal-Trennzeichnen angezeigt wird. Sorgt dafür, dass <code>Strings</code> korrekt auf <code>Number</code>

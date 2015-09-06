@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell;
 
 import java.awt.Component;
 import java.util.EventObject;
@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * 
  * @author fstephan
  */
-class UserFieldDeactivatedTableCell implements IUserFieldTableCell {
+public class UserFieldDeactivatedTableCell implements IUserFieldTableCell {
 
     /**
      * StandardRenderer
