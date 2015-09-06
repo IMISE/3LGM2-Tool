@@ -70,7 +70,7 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
     }
 
     @Override
-    protected void takeOver() {
+    public void takeOver() {
         needsRedraw = true;
     }
 

@@ -39,7 +39,7 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
             "unchecked", "rawtypes"
     })
     @Override
-    protected void takeOver() {
+    public void takeOver() {
 
         GraphDocument doc = getDialog().getGraphDocument();
         GDCollection gdcoll = doc.getCollection();

@@ -204,7 +204,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
     /**
      * so zu überschreiben, dass Werte aus <code>table</code> im Model übernommen werden
      */
-    protected abstract void takeOver();
+    public abstract void takeOver();
 
     /**
      * so zu überschreiben, dass <code>table</code> entsprechend des Anwendungsbereiches korrekt erzeugt wird
