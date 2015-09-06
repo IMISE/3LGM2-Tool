@@ -1,7 +1,7 @@
 /*
  * Created on 14.02.2008
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -23,6 +23,7 @@ import javax.swing.ListModel;
 import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
 
 /**

@@ -34,6 +34,7 @@ import javax.swing.table.TableModel;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.UserFieldTableLayout;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
@@ -597,7 +598,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * 
      * @param tableCells
      */
-    void setTableCells(final IUserFieldTableCell[][] tableCells) {
+    public void setTableCells(final IUserFieldTableCell[][] tableCells) {
         this.tableCells = tableCells;
     }
 
