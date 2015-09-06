@@ -6,7 +6,7 @@ package de.imise.tool3lgm.graphtools.userfield.event;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.GraphDocumentAdapter;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.PropertyDialogUserFieldPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**

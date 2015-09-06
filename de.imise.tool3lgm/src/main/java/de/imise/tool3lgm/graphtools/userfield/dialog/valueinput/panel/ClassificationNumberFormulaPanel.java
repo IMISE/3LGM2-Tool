@@ -1,7 +1,7 @@
 /*
  * Created on 01.04.2008
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import java.awt.event.ActionEvent;
 
@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.UserFieldTableLayout;
@@ -20,7 +21,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.Gene
 /**
  * Panel zur Darstellung von berechneten Kennzahlen
  * 
- * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel
+ * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.GeneralUserFieldEditorPanel
  * @author fstephan
  */
 public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPanel {
@@ -102,7 +103,7 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
 
     /**
      * @see GeneralUserFieldEditorPanel#setActionsForNodeBox()
-     * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel#setActionsForNodeBox()
+     * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.GeneralUserFieldEditorPanel#setActionsForNodeBox()
      */
     @Override
     protected void setActionsForNodeBox() {

@@ -1,7 +1,7 @@
 /*
  * Created on 14.02.2008
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.UserFieldTableLayout;
@@ -41,7 +42,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * ii) nur toplevel Elemente anzeigen <br>
  * iii) nur Blatt-Elemente anzeigen
  * 
- * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.AbstractUserFieldEditorPanel
+ * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel
  * @author fstephan
  */
 public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {

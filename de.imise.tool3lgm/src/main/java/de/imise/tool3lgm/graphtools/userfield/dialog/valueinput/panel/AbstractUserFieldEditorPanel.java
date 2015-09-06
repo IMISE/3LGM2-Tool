@@ -1,7 +1,7 @@
 /*
  * Created on 14.02.2008
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
@@ -18,6 +18,7 @@ import javax.swing.table.TableColumnModel;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableSumHandler;

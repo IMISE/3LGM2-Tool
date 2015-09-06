@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
+package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
