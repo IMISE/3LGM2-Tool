@@ -129,7 +129,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /**
      * Spezielle Renderer- und Editorkomponenten für die Zellen des Tables. Werden zur formatierten Darstellung der Werte der Zellen verwendet.
      */
-    private UserFieldTableCell[][] tableCells;
+    private IUserFieldTableCell[][] tableCells;
 
     /**
      * Gibt an, ob die Werte in den {@link #tableCells} formatiert dargestellt werden sollen
@@ -596,7 +596,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * 
      * @param tableCells
      */
-    void setTableCells(final UserFieldTableCell[][] tableCells) {
+    void setTableCells(final IUserFieldTableCell[][] tableCells) {
         this.tableCells = tableCells;
     }
 
@@ -605,7 +605,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * 
      * @return {@link #tableCells}
      */
-    public UserFieldTableCell[][] getTableCells() {
+    public IUserFieldTableCell[][] getTableCells() {
         return tableCells;
     }
 

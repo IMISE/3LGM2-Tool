@@ -872,7 +872,7 @@ public abstract class UserFieldTableController {
 
             if (row != -1 && col != -1) {
                 if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                    if (table.getCellEditor(row, col).getCellEditorValue().toString().equals(UserFieldTableCell.EDITOR_EMPTY_STRING)) {
+                    if (table.getCellEditor(row, col).getCellEditorValue().toString().equals(IUserFieldTableCell.EDITOR_EMPTY_STRING)) {
                         table.stopEditing();
                     }
                 }

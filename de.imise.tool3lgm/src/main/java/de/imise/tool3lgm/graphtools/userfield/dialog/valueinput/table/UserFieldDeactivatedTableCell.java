@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * 
  * @author fstephan
  */
-class UserFieldDeactivatedTableCell implements UserFieldTableCell {
+class UserFieldDeactivatedTableCell implements IUserFieldTableCell {
 
     /**
      * StandardRenderer

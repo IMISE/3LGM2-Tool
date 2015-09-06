@@ -125,13 +125,13 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Setzt für jede Zelle des Tables ein <code>UserFieldTableCell</code> als Editor und Renderer und legt die Zeilenhöhe fest.
+     * Setzt für jede Zelle des Tables ein <code>IUserFieldTableCell</code> als Editor und Renderer und legt die Zeilenhöhe fest.
      * 
      * @param table
      */
     private void setTableCells(final UserFieldTable table) {
         updateTableCells(table);
-        table.setRowHeight(UserFieldTableCell.PREFERRED_CELL_HEIGHT);
+        table.setRowHeight(IUserFieldTableCell.PREFERRED_CELL_HEIGHT);
     }
 
     /**
@@ -146,7 +146,7 @@ public abstract class AbstractUserFieldTableLayout {
         // Minimale und initiale Größe des rowHeaders festlegen
         rowHeader.setFixedCellHeight(table.getRowHeight());
         rowHeader.setFixedCellWidth(calculateRowHeaderWidth(rowHeader));
-        Dimension minDim = new Dimension(MIN_ROW_HEADER_WIDTH, UserFieldTableCell.MIN_CELL_HEIGHT);
+        Dimension minDim = new Dimension(MIN_ROW_HEADER_WIDTH, IUserFieldTableCell.MIN_CELL_HEIGHT);
         rowHeader.setMinimumSize(minDim);
         rowHeader.setCellRenderer(new RowHeaderRenderer(table));
         rowHeader.setBackground(table.getTableHeader().getBackground());
@@ -317,11 +317,11 @@ public abstract class AbstractUserFieldTableLayout {
         if (!table.hasUserFieldTableModel() || !table.hasData()) {
             return;
         }
-        UserFieldTableCell[][] tableCells = getTableCells(table);
+        IUserFieldTableCell[][] tableCells = getTableCells(table);
         table.setTableCells(tableCells);
     }
 
-    public abstract UserFieldTableCell[][] getTableCells(final UserFieldTable table);
+    public abstract IUserFieldTableCell[][] getTableCells(final UserFieldTable table);
 
     /**
      * Deaktiviert die formatierte Darstellung der Werte, das Resizing des RowHeaders, die Tooltips des RowHeaders und die Farbänderung nicht

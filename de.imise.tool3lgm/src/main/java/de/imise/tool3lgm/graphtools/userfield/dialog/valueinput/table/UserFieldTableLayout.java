@@ -74,12 +74,12 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
      * @param table
      */
     @Override
-    public UserFieldTableCell[][] getTableCells(final UserFieldTable table) {
-        UserFieldTableCell[][] tableCells = null;
+    public IUserFieldTableCell[][] getTableCells(final UserFieldTable table) {
+        IUserFieldTableCell[][] tableCells = null;
         // Falls das Model keine Daten enthält, werden headers nicht gesetzt
         if (table.hasUserFieldTableModel() && table.hasData()) {
             if (table.isFormattingActive() == true) {
-                tableCells = new UserFieldTableCell[table.getRowCount()][table.getColumnCount()];
+                tableCells = new IUserFieldTableCell[table.getRowCount()][table.getColumnCount()];
                 for (int i = 0; i < tableCells.length; i++) {
                     for (int j = 0; j < tableCells[0].length; j++) {
                         NamedObjectContainer<UserField> container = (NamedObjectContainer<UserField>) table.getValueAt(i, j);

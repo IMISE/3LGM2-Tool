@@ -38,7 +38,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  * 
  * @author fstephan
  */
-class UserFieldActivatedTableCell implements UserFieldTableCell {
+class UserFieldActivatedTableCell implements IUserFieldTableCell {
 
     /**
      * <code>UserField</code>, dass das Format für die Wertdarstellung enthält

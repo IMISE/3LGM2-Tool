@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
  * 
  * @author fstephan
  */
-interface UserFieldTableCell extends TableCellEditor, TableCellRenderer {
+interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer {
 
     /**
      * Zeichen, dass im Editor als Dezimal-Trennzeichnen angezeigt wird. Sorgt dafür, dass <code>Strings</code> korrekt auf <code>Number</code>
