@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -1367,6 +1368,16 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      */
     public static boolean isError(final String value) {
         return ERROR_SET.contains(value) || IGNOREABLE_ERROR_SET.contains(value);
+    }
+
+    /**
+     * Prüft, ob der übergebene Wert ein Fehler oder EMPTY_VALUE oder leer oder null ist.
+     * 
+     * @param value
+     * @return <code>true</code>, wenn der der übergebene Wert ein Fehler oder EMPTY_VALUE oder leer oder null ist, sonst <code>false</code>
+     */
+    public static boolean isEmptyOrError(final String value) {
+        return Strings.isNullOrEmpty(value) || EMPTY_STRING.equals(value) || isError(value);
     }
 
 }

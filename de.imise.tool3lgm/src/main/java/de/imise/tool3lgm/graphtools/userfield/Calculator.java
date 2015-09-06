@@ -608,59 +608,28 @@ public class Calculator {
         }
 
         Kante kante = (Kante) me;
-        BigDecimal refVg = new BigDecimal(0);
+        BigDecimal refVg = BigDecimal.ZERO;
+        ModelElement elementWithUserField = null;
         // Wenn es sich um eine Teil-von-Beziehung handelt
         if (PartOfBeziehung.class.isAssignableFrom(kante.getClass()) && direction != null) {
-
             if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
-
-                ModelElement ElementWithUserField = kante.getEnd();
-                if (ElementWithUserField.getClass() == elementClass) {
-                    String value = userField.getValue(ElementWithUserField);
-                    if (!value.equals(UserField.EMPTY_STRING)) {
-                        refVg = refVg.add(new BigDecimal(value));
-                    } else {
-                        return UserField.EMPTY_STRING;
-                    }
-                }
-
+                elementWithUserField = kante.getEnd();
+            } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
+                elementWithUserField = kante.getStart();
             }
 
-            if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
-                ModelElement ElementWithUserField = kante.getStart();
-
-                if (ElementWithUserField.getClass() == elementClass) {
-                    String value = userField.getValue(ElementWithUserField);
-                    if (!value.equals(UserField.EMPTY_STRING)) {
-                        refVg = refVg.add(new BigDecimal(value));
-                    } else {
-                        return UserField.EMPTY_STRING;
-                    }
-                }
+        } else { // Wenn es sich um keine Teil-Von-Beziehung handelt
+            elementWithUserField = kante.getStart();
+            if (elementWithUserField.getClass() != elementClass) {
+                elementWithUserField = kante.getEnd();
             }
-
-        } else {
-
-            // Wenn es sich um keine Teil-Von-Beziehung handelt
-            ModelElement ElementWithUserField = kante.getStart();
-            if (ElementWithUserField.getClass() == elementClass) {
-                String value = userField.getValue(ElementWithUserField);
-                if (!value.equals(UserField.EMPTY_STRING)) {
-                    refVg = refVg.add(new BigDecimal(value));
-                } else {
-                    return UserField.EMPTY_STRING;
-                }
-            } else {
-                ElementWithUserField = kante.getEnd();
-                if (ElementWithUserField.getClass() == elementClass) {
-                    String value = userField.getValue(ElementWithUserField);
-                    if (!value.equals(UserField.EMPTY_STRING)) {
-                        refVg = refVg.add(new BigDecimal(value));
-                    } else {
-                        return UserField.EMPTY_STRING;
-                    }
-                }
+        }
+        if (elementWithUserField != null && elementWithUserField.getClass() == elementClass) {
+            String value = userField.getValue(elementWithUserField);
+            if (UserField.isEmptyOrError(value)) {
+                return UserField.EMPTY_STRING;
             }
+            refVg = refVg.add(new BigDecimal(value));
         }
         return refVg.toString();
     }
