@@ -108,16 +108,17 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     @Override
-    public boolean isCellEditable(final int row, final int column) {
+    public boolean isCellEditable(final int row, final int col) {
         //wenn die Zelle einen Formelwert (Referenz-Funktion) darstellt, darf die Zelle nicht
         //editierbar sein
-        if (dataField[row][column] != null && dataField[row][column] instanceof NamedObjectContainer) {
-            NamedObjectContainer<UserField> cellValue = (NamedObjectContainer<UserField>) dataField[row][column];
+        Object value = getValueAt(row, col);
+        if (value != null) {
+            NamedObjectContainer<UserField> cellValue = (NamedObjectContainer<UserField>) value;
             UserField userField = cellValue.getObject();
             if (userField.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA)) {
                 return false;
             }
         }
-        return super.isCellEditable(row, column);
+        return super.isCellEditable(row, col);
     }
 }
