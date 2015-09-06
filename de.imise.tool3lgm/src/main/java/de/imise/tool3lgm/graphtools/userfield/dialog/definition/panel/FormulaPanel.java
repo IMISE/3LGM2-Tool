@@ -1,7 +1,7 @@
 /*
  * Created on 10.02.2008
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.FormulaDefinitionDialog;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
 /**

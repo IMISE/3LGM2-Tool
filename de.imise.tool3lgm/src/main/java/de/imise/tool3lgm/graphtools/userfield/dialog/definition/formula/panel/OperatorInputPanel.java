@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

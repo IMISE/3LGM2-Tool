@@ -1,7 +1,7 @@
 /*
  * Created on 07.01.2008 Window - Preferences - Java - Code Style - Code Templates
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import java.awt.Dialog;
 import java.awt.GridBagConstraints;
@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.OperatorInputPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.ReferencePanel;
 
 /**
  * Der Dialog lässt die Benutzer eine Verrechnungsfunktion spezifieren. Nachdem er im Formeleditor eine Verrechungsfunktion ausgewählt hat ( durch

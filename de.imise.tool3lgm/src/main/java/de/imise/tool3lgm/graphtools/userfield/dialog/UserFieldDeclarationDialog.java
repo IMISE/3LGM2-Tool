@@ -44,6 +44,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldXMLParser;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.NamedObjectContainer;

@@ -1,7 +1,7 @@
 /*
  * Created on 13.09.2007
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import java.awt.BorderLayout;
 import java.awt.Container;

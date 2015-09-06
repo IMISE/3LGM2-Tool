@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -25,6 +25,12 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.AbstractInputPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormatPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormulaPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.ListValuePanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.NameDescripPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.OptionPanel;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**

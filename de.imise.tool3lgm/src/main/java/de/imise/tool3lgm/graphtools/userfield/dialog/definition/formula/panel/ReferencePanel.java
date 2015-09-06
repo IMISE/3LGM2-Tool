@@ -1,7 +1,7 @@
 /*
  * Created on 26.05.2008 Window - Preferences - Java - Code Style - Code Templates
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

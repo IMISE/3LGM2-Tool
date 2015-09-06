@@ -1,7 +1,7 @@
 /*
  * Created on 06.02.2008
  */
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
