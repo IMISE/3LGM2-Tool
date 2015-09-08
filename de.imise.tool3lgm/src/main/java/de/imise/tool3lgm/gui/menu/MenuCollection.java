@@ -14,6 +14,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.plugin.B1ExportPlugin;
 import de.imise.tool3lgm.plugin.ExportPdvb4AwbPlugin;
@@ -161,7 +162,7 @@ public class MenuCollection {
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu(Tool3lgmConstants.getResString("elementAlignmentMenu"), ActionLibrary.LayoutActions.ElementAlignment.Horizontal.LEFT, ActionLibrary.LayoutActions.ElementAlignment.Horizontal.CENTER,
                 ActionLibrary.LayoutActions.ElementAlignment.Horizontal.RIGHT, new JSeparator(), ActionLibrary.LayoutActions.ElementAlignment.Vertical.TOP, ActionLibrary.LayoutActions.ElementAlignment.Vertical.CENTER,
                 ActionLibrary.LayoutActions.ElementAlignment.Vertical.BOTTOM, new JSeparator(), ActionLibrary.LayoutActions.ElementAlignment.Size.WIDTH, ActionLibrary.LayoutActions.ElementAlignment.Size.HEIGTH,
-                ActionLibrary.LayoutActions.ElementAlignment.Size.WIDTH_AND_HEIGTH);
+                ActionLibrary.LayoutActions.ElementAlignment.Size.WIDTH_AND_HEIGTH, new JSeparator(), ElementAlignmentDialog.getElementAlignmentAction());
     }
 
     /** Sammlung der Unter-Menus des Optionen-Menus */
