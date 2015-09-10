@@ -43,6 +43,13 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     private ArrayList<UserField> formulaUserFieldList = new ArrayList<UserField>();
 
     /**
+     * guava-Table für die Speicherung, bei welchem ModelElement welches Verteilungsgeweichtg in
+     * Verrechnungsfunktionen, die dieses Verteilungsgewicht nutzen, durch ein anderes ersetzt
+     * werden soll.
+     */
+    private final WeightReplacer weightReplacer;
+
+    /**
      * Klasse, über die die sogenannten Modellvariablen identifiziert werden, also Variablen, die nicht für ein spezielles Element sondern für das
      * Gesamtmodell gelten und zur Verfügung stehen.
      */
@@ -97,6 +104,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     public UserFieldDefinitions(final GDCollection gdcoll) {
         super(gdcoll);
         calculator = new Calculator(this);
+        weightReplacer = new WeightReplacer();
     }
 
     /**
@@ -446,6 +454,13 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     }
 
     /**
+     * @return the weightReplacer
+     */
+    public WeightReplacer getWeightReplacer() {
+        return weightReplacer;
+    }
+
+    /**
      * Die Methode <code>get</code> gibt unter Angabe der zugehörigen Klasse und des entsprechenden Indices ein <code>UserField</code> zurück. Es wird
      * aus der HashMap die zur übergebenen Klasse gehörende ArrayList geladen, falls sie nicht schon geladen ist, und das Element an der Stelle
      * <code>index</code> zurückgegeben.
@@ -503,7 +518,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             MultipleOptionPane.showInformationMessageDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("fehler"), sb.toString());
             return true;
             //die Globale Option die Kennzahlen zu berechnen erstam abschalten
-            //			UserProperties.setEnableClassificationNumberCalculation(false);
+            //          UserProperties.setEnableClassificationNumberCalculation(false);
         }
         return false;
     }
@@ -565,15 +580,15 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         // In einer Schleife: 
         // 1) Durchsuche den Stringtokenizer nach userFieldHashes, die gleich dem eigenen userfield sind.
         // 2) Wenn so einer gefunden wurde, handelt es sich um eine interne Verrechnung. 
-        //	  Suche die Richtung: Prüfe, ob nach dem userFieldHash erst ein Verteilungsgewicht angegeben wurde. 
-        //	  (Das ist auch ein userFieldHash)
+        //    Suche die Richtung: Prüfe, ob nach dem userFieldHash erst ein Verteilungsgewicht angegeben wurde. 
+        //    (Das ist auch ein userFieldHash)
         // 3) Wenn die Richtung gefunden wurde, prüfe, ob die Variable direction noch leer ist, 
-        // 		wenn ja, setze die Variable mit den Richtungswert.
-        //		Wenn nein, dann prüfe, ob der Richtungswert gleich dem der Variable ist.
-        //			Wenn ja, in der Schelife weitermachen
-        //			Wenn nein: es liegt eine Kreisrefenz vor. Ausstieg aus der Schleife mit return true (true = es liegt eine Kreis.-ref. vor).
+        //      wenn ja, setze die Variable mit den Richtungswert.
+        //      Wenn nein, dann prüfe, ob der Richtungswert gleich dem der Variable ist.
+        //          Wenn ja, in der Schelife weitermachen
+        //          Wenn nein: es liegt eine Kreisrefenz vor. Ausstieg aus der Schleife mit return true (true = es liegt eine Kreis.-ref. vor).
         //
-        //	Durch das einmalige Setzen der Richtung, weiß man, welche Richtungen alle folgenden internen Verrechnungsfunktionen haben müssen. 
+        //  Durch das einmalige Setzen der Richtung, weiß man, welche Richtungen alle folgenden internen Verrechnungsfunktionen haben müssen. 
         //  Diese wird also als Referenzrichtung genutzt.
 
         st = new StringTokenizer(formula);
@@ -798,21 +813,21 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             return UserField.ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION;
         }
 
-        //		if (count==0){
-        //			count++;
-        //			GraphDocument doc = gdcoll.getGraphDocument();
-        //			ArrayList elems = doc.getAllModelElements(RechAnwendungsbaustein.class, true);
-        //			for (int i=0; i<getUserFieldCount(RechAnwendungsbaustein.class); i++){
-        //				UserField userField = get(RechAnwendungsbaustein.class, i);
-        //				if (userField.getStyle()==UserField.CLASSIFICATION_NUMBER_STYLE){
-        //					for (int j=0; j<elems.size(); j++){
-        //						UserFieldTarget uft = (UserFieldTarget)elems.get(j);
-        //						if (uft.getUserFieldInputValue(userField).equals(UserField.EMPTY_STRING))
-        //							uft.setUserFieldInputValue(userField, "0");
-        //					}
-        //				}
-        //			}
-        //		}
+        //      if (count==0){
+        //          count++;
+        //          GraphDocument doc = gdcoll.getGraphDocument();
+        //          ArrayList elems = doc.getAllModelElements(RechAnwendungsbaustein.class, true);
+        //          for (int i=0; i<getUserFieldCount(RechAnwendungsbaustein.class); i++){
+        //              UserField userField = get(RechAnwendungsbaustein.class, i);
+        //              if (userField.getStyle()==UserField.CLASSIFICATION_NUMBER_STYLE){
+        //                  for (int j=0; j<elems.size(); j++){
+        //                      UserFieldTarget uft = (UserFieldTarget)elems.get(j);
+        //                      if (uft.getUserFieldInputValue(userField).equals(UserField.EMPTY_STRING))
+        //                          uft.setUserFieldInputValue(userField, "0");
+        //                  }
+        //              }
+        //          }
+        //      }
 
         return calculator.calculate(userField, target);
     }
