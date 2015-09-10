@@ -108,7 +108,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     @Override
-    public boolean isCellEditable(final int row, final int col) {
+    public final boolean isCellEditable(final int row, final int col) {
         //wenn die Zelle einen Formelwert (Referenz-Funktion) darstellt, darf die Zelle nicht
         //editierbar sein
         Object value = getValueAt(row, col);
