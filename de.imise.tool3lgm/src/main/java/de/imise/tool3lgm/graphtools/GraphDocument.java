@@ -21,6 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
@@ -47,6 +49,7 @@ import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -883,6 +886,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case SET_USER_FIELD_VALUE:
             if (argc == 3) {
                 setUserFieldValue(argv[0], argv[1], argv[2], pid);
+            }
+            break;
+
+        case SET_USER_FIELD_WEIGHT_REPLACEMENT:
+            if (argc == 3) {
+                setUserFieldWeightReplacement(argv[0], argv[1], argv[2], pid);
             }
             break;
 
@@ -4317,6 +4326,66 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         me.setUserFieldInputValue(userField, getDecodedParseSaveString(newValue));
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
+    }
+
+    /**
+     * Setzt für ein ModelElement für ein UserFieldReplacmentWeigth
+     * Fügt UNDO- und REDO-Commands hinzu
+     * Fall 1: Ersetzung für Gleichverteilung:
+     * a.) durch ein anderes Kantengewicht ersetzen -> edgeClass, userFieldReplacementHash
+     * b.) löschen -> edgeClass, "" oder emptyArgumentString
+     * Fall 2: Ersetzung für Kantengewicht:
+     * a.) durch Gleichverteilung ersetzen -> userFieldHashToReplace, "" oder emptyArgumentString
+     * b.) durch ein anderes Kantengewicht ersetzen -> userFieldHashToReplace, userFieldReplacementHash
+     * c.) löschen -> userFieldHashToReplace, userFieldHashToReplace
+     * 
+     * @param modelElementHash
+     * @param userFieldHashToReplaceOrSimpleEdgeClassName
+     *            Das hier ist entweder der Hash eines UserFields oder der SimpleClassName einer Kantenklasse. Wird ein Klassenname übergeben, dann
+     *            wird beim Replacer der Ersetzungshash für die Gleichverteilung der Kante eingetragen, ansonsten wird der Erstzungshash für das
+     *            UserField mit dem angegebenen Hash eingetragen.
+     * @param userFieldHashReplacement
+     * @param pid
+     */
+    public void setUserFieldWeightReplacement(final String modelElementHash, final String userFieldHashToReplaceOrSimpleEdgeClassName, final String userFieldHashReplacement, final int pid) {
+        String emptyArgument = "null";
+        UserFieldDefinitions definitions = getUserFieldDefinitions();
+        WeightReplacer replacer = definitions.getWeightReplacer();
+        //wurde eine Kantenklasse übergeben?
+        Class<? extends ModelElement> edgeElementClass = ModelConstants.getClassForName(userFieldHashToReplaceOrSimpleEdgeClassName);
+        //falls ein null oder Leerwert als Ersetzung übergeben wurde, muss der hier in EMPTY_STRING ersetzt werden, damit die
+        //Kommandos mit der richtigen Parameteranzahl geparst werden könnnen
+        String hashReplacement = Strings.isNullOrEmpty(userFieldHashReplacement) ? emptyArgument : userFieldHashReplacement;
+        String oldUserFieldHashReplacement;
+        //je nachdem ob die Kantenklasse gefuden wurde oder nicht, wird aus dem Replacer der alte Erstzungshas geladen
+        if (edgeElementClass != null) { //Fall 1
+            Class<? extends Kante> edgeClass = edgeElementClass.asSubclass(Kante.class);
+            oldUserFieldHashReplacement = replacer.getUniformDistributionReplacement(modelElementHash, edgeClass);
+            if (emptyArgument.equals(hashReplacement)) { // Fall 1b.)
+                replacer.removeUniformDistributionReplacement(modelElementHash, edgeClass);
+            } else { //Fall 1a.)
+                replacer.setUniformDistributionReplacement(modelElementHash, edgeClass, hashReplacement);
+            }
+        } else { //Fall 2
+            oldUserFieldHashReplacement = replacer.getReplacement(modelElementHash, userFieldHashToReplaceOrSimpleEdgeClassName);
+            if (emptyArgument.equals(hashReplacement)) { // Fall 2a.)
+                replacer.setUniformDistribution(modelElementHash, userFieldHashToReplaceOrSimpleEdgeClassName);
+            } else if (hashReplacement.equals(userFieldHashToReplaceOrSimpleEdgeClassName)) { //Fall 2c.)
+                replacer.removeReplacement(modelElementHash, userFieldHashToReplaceOrSimpleEdgeClassName);
+            } else { //Fall 2b.)
+                replacer.setReplacement(modelElementHash, userFieldHashToReplaceOrSimpleEdgeClassName, hashReplacement);
+            }
+        }
+
+        //wenn es keinen alten Wert gab, wird er auch auf emptyArgument gesetzt, damit er in den UNDO_REDO-Commands richtig geparst werden kann
+        oldUserFieldHashReplacement = Strings.isNullOrEmpty(oldUserFieldHashReplacement) ? emptyArgument : oldUserFieldHashReplacement;
+
+        //UNDO und REDO Commands schreiben
+        start_transaction(pid);
+        addRedoCommand(GDCommands.SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName + " " + hashReplacement, pid);
+        addUndoCommand(GDCommands.SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName + " " + oldUserFieldHashReplacement, pid);
+        finish_transaction(pid);
+
     }
 
     /**
