@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.dialog.PropertyDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ClassificationNumberFormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightEditorPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightReplacePanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.GeneralUserFieldEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ModelVariableEditorPanel;
 import de.imise.util.swing.component.TabbedPane;
@@ -88,6 +89,11 @@ public class UserFieldEditorDialog extends PropertyDialog {
      * Das Panel für die Verteilungsgewichte
      */
     private final DistributionWeightEditorPanel panelDW;
+
+    /**
+     * Das Panel für die Ersetzung von Verteilungsgewichten
+     */
+    private final DistributionWeightReplacePanel panelDWReplace;
 
     /**
      * Das Panel für die ModelVariablen
@@ -141,6 +147,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
         // panelCN + panelDW + panelMV initialisieren
         panelCN = new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER);
         panelDW = new DistributionWeightEditorPanel(this);
+        panelDWReplace = new DistributionWeightReplacePanel(this);
         panelMV = new ModelVariableEditorPanel(this);
         panelCNF = new ClassificationNumberFormulaPanel(this);
         panelAllOther = new GeneralUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX));
@@ -262,6 +269,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
     private void initTab() {
         tab.addTab(Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER"), panelCN);
         tab.addTab(Tool3lgmConstants.getResString("userFieldEditor_classification_weighting"), panelDW);
+        tab.addTab(Tool3lgmConstants.getResString("userFieldEditor_classification_weighting_replace"), panelDWReplace);
         tab.addTab(Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable"), panelMV);
         tab.addTab(Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA"), panelCNF);
         tab.addTab(Tool3lgmConstants.getResString("userFieldDialog_other"), panelAllOther);
@@ -457,7 +465,7 @@ public class UserFieldEditorDialog extends PropertyDialog {
      */
     private AbstractUserFieldEditorPanel[] getEditablePanels() {
         return new AbstractUserFieldEditorPanel[] {
-                panelCN, panelDW, panelMV, panelCNF, panelAllOther
+                panelCN, panelDW, panelDWReplace, panelMV, panelCNF, panelAllOther
         };
     }
 
