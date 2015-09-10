@@ -134,7 +134,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
          */
         ;
 
-        private static final Set<Style> CLASSIFICATION_NUMBER_STYLES = ImmutableSet.of(CLASSIFICATION_NUMBER, CLASSIFICATION_NUMBER_FORMULA);
+        public static final Set<Style> CLASSIFICATION_NUMBER_STYLES = ImmutableSet.of(CLASSIFICATION_NUMBER, CLASSIFICATION_NUMBER_FORMULA);
 
         /**
          * Vergleicht die beiden UserFields hinsichtlich ihres Wertes bezüglich des Modelelements.
@@ -476,6 +476,7 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * @param targetClass
+     * @param definitions
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final UserFieldDefinitions definitions) {
         this(targetClass, UserField.USERFIELD_HASH_STRING_PREFIX + "_" + String.valueOf(System.currentTimeMillis()) + "_" + String.valueOf(id++), definitions);
@@ -1026,7 +1027,11 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         if (style == Style.SEPARATOR) {
             retVal = "--- " + name + " ---";
         } else {
-            retVal = name + " (" + description + ")";
+            if (Strings.isNullOrEmpty(description)) {
+                retVal = name;
+            } else {
+                retVal = name + " (" + description + ")";
+            }
         }
         return retVal;
     }
