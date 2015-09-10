@@ -484,12 +484,11 @@ public class Calculator {
             direction = st.nextToken();
         }
 
-        ArrayList<Kante> connectionsTo;
         //alle verbundenen Elemente mit einem aufzuteilenden Attribut holen
-        connectionsTo = getEdges(me, kzUserField.getTargetClass(), edgeClass, direction);
+        ArrayList<Kante> connectionsTo = getEdges(me, kzUserField.getTargetClass(), edgeClass, direction);
 
         //dies wird die Summe aller Anteilswerte
-        BigDecimal erg = new BigDecimal("0");
+        BigDecimal erg = BigDecimal.ZERO;
 
         //Wenn keine Elemente verbunden sind
         if (connectionsTo.size() == 0) {
