@@ -2101,7 +2101,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public String toXMLString() {
         StringBuilder xmlString = new StringBuilder("<modell_3lgm_2>" + "<header>" + "<title>" + XMLCharacterCoder.encodeString(name) + "</title>" + "<description>" + XMLCharacterCoder.encodeString(doc.getDescription()) + "</description>" + "<version>"
-                + XMLCharacterCoder.encodeString(getFileVersion()) + "</version>" + "</header>" + userFieldDefinitions.toXMLString() + "<objects>");
+                + XMLCharacterCoder.encodeString(getFileVersion()) + "</version>" + "</header>" + userFieldDefinitions.toXMLString(true) + "<objects>");
         xmlString.append("<model>");
         appendUserFieldXMLString(xmlString);
         xmlString.append("</model>");

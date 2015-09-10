@@ -296,7 +296,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     /**
      * @return
      */
-    public String toXMLString() {
+    public String toXMLString(final boolean appendWeightReplacer) {
         StringBuilder retVal = new StringBuilder("<userFieldDefinitions>");
 
         //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
@@ -312,6 +312,9 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             if (clazz != GLOBAL_FORMAT_IDENTIFIER_CLASS && clazz != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
                 retVal.append(classToUserFieldListMap.get(clazz).toXMLString());
             }
+        }
+        if (appendWeightReplacer) {
+            retVal.append(weightReplacer.toXMLString());
         }
         retVal.append("</userFieldDefinitions>\n");
         return retVal.toString();

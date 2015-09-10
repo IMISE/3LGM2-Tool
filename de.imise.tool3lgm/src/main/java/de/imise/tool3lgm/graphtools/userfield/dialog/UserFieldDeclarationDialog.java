@@ -446,7 +446,7 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
         try {
             RandomAccessFile raw = new RandomAccessFile(dialog.getSelectedFile(), "rw");
             raw.setLength(0);
-            raw.writeBytes(definitions.toXMLString());
+            raw.writeBytes(definitions.toXMLString(false));
             raw.close();
         } catch (Exception exp) {
             Log.show(Log.ERROR, "IOException while parsing UserFieldFile", exp);
