@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -381,6 +382,21 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 } else {
                     userField = new UserField(ModelConstants.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
                 }
+            } else if (qName.equals("replacerEntry")) {
+                String elementHash = atts.getValue("elementHash");
+                String userFieldHash = atts.getValue("userFieldHash");
+                String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
+                WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
+                replacer.setReplacement(elementHash, userFieldHash, replaceUserFieldHash);
+
+            } else if (qName.equals("standardWeigthReplacerEntry")) {
+                String elementHash = atts.getValue("elementHash");
+                String edgeClassName = atts.getValue("edgeClass");
+                String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
+                WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
+                Class<? extends Kante> edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
+                replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
+
             } else if (qName.equals("userFieldName")) {
 
             } else if (qName.equals("userFieldDescription")) {

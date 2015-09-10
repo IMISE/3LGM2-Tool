@@ -170,7 +170,7 @@ public class WeightReplacer {
                 Map<String, String> userFieldHashToReplacementMap = replacer.row(modelElementHash);
                 for (String userFieldHash : userFieldHashToReplacementMap.keySet()) {
                     final String replaceUserFieldHash = userFieldHashToReplacementMap.get(userFieldHash);
-                    retVal.append("<entry elementHash=\"");
+                    retVal.append("<replacerEntry elementHash=\"");
                     retVal.append(modelElementHash);
                     retVal.append("\" userFieldHash=\"");
                     retVal.append(userFieldHash);
@@ -187,7 +187,7 @@ public class WeightReplacer {
                 Map<Class<? extends Kante>, String> edgeClassToReplacementMap = standardWeigthReplacer.row(modelElementHash);
                 for (Class<? extends Kante> edgeClass : edgeClassToReplacementMap.keySet()) {
                     final String replaceUserFieldHash = edgeClassToReplacementMap.get(edgeClass);
-                    retVal.append("<entry elementHash=\"");
+                    retVal.append("<standardWeigthReplacerEntry elementHash=\"");
                     retVal.append(modelElementHash);
                     retVal.append("\" edgeClass=\"");
                     retVal.append(edgeClass.getSimpleName());
