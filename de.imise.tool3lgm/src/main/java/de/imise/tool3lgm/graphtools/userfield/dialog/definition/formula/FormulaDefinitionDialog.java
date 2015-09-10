@@ -35,11 +35,11 @@ import javax.swing.event.CaretListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.userfield.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 

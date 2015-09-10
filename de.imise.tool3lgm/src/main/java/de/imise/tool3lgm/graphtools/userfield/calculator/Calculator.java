@@ -2,7 +2,7 @@
  * Created on 05.11.2007
  */
 
-package de.imise.tool3lgm.graphtools.userfield;
+package de.imise.tool3lgm.graphtools.userfield.calculator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -16,6 +16,10 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
+import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 
 /**
  * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die Berechnung von Kennzahlen.
