@@ -522,6 +522,19 @@ public abstract class UserFieldTableController {
     }
 
     /**
+     * Methode gibt eine <code>TableEditCondition</code> für Tables, die Kennzahlen enthalten und <code>uftm</code> als Model besitzen zurück.
+     * 
+     * @param uftm
+     */
+    public static UserFieldTableController getNewDistributionWeightReplaceTableController(final AbstractTableModel uftm) {
+
+        /*
+         * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - unabhängig von ModelValue
+         */
+        return getNewUserFieldTableController(uftm, false, false, false);
+    }
+
+    /**
      * Methode gibt eine <code>TableEditCondition</code> für Tables, die Verteilungsgewichte enthalten und <code>uftm</code> als Model besitzen
      * zurück.
      * 
