@@ -75,20 +75,33 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * 
      * @param noc <code>NamedObjectContainer</code>, der das zur Zelle gehörige {@link UserField} und den Wert der Zelle enthält.
      * @param table <code>UserFieldTable</code>, der diese Zelle enthält
+     * @param column Spalte der Cell
      */
-    public UserFieldActivatedTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table) {
+    public UserFieldActivatedTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final int column) {
         this.table = table;
         value = noc;
         userField = noc.getObject();
-        initEditor();
+        initEditor(column);
         initRenderer();
         update();
     }
 
     /**
-     * Initialisiert den <code>editor</code>
+     * Konstruktor, wenn der Spaltenindex egal ist
+     * 
+     * @param noc <code>NamedObjectContainer</code>, der das zur Zelle gehörige {@link UserField} und den Wert der Zelle enthält.
+     * @param table <code>UserFieldTable</code>, der diese Zelle enthält
      */
-    protected void initEditor() {
+    public UserFieldActivatedTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table) {
+        this(noc, table, -1);
+    }
+
+    /**
+     * Initialisiert den <code>editor</code>
+     * 
+     * @param column
+     */
+    protected void initEditor(final int column) {
         UserField userField = value.getObject();
         UserField.Style style = userField.getStyle();
         if (style == CLASSIFICATION_NUMBER) {

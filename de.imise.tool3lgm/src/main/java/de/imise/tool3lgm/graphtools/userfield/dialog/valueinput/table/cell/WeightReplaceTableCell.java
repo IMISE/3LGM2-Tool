@@ -20,17 +20,14 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
 
     private final String modelElementHash;
 
-    private final int column;
-
     public WeightReplaceTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final ModelElement me, final Class<? extends Kante> edgeClass, final int column) {
-        super(noc, table);
+        super(noc, table, column);
         modelElementHash = me.getHashString();
         this.edgeClass = edgeClass;
-        this.column = column;
     }
 
     @Override
-    protected void initEditor() {
+    protected void initEditor(final int column) {
         Vector<NamedObjectContainer<UserField>> columnIdentifiers = (Vector<NamedObjectContainer<UserField>>) table.getColumnIdentifiers();
         UserField thisCellColumnIdentifier = columnIdentifiers.get(column).getObject();
 
