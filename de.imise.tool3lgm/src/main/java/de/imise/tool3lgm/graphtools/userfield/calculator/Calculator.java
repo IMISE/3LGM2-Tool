@@ -69,7 +69,7 @@ public class Calculator {
 
     private static final int DECIMAL_ROUND_MODE = BigDecimal.ROUND_UP;
 
-    private static final BigDecimal divide(final BigDecimal dividend, final BigDecimal divisor) {
+    public static final BigDecimal divide(final BigDecimal dividend, final BigDecimal divisor) {
         //Das Teilen von BigDecimal erfordert die Angabe der Nachkommastellen und des Rundungsverhaltens.
         return dividend.divide(divisor, CALCULATING_DECIMAL_PLACES_COUNT, DECIMAL_ROUND_MODE);
     }
@@ -320,7 +320,7 @@ public class Calculator {
 
             if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
                 //jetzt berechnen der TeilwertSumme anstoßen
-                value = getTWSUM(userField, me, arguments);
+                value = PartValueSumFunction.getTWSUM(definitions, userField, me, arguments);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
                 //jetzt berechnen der Summe anstoßen
                 value = getSUM(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_SUM);
@@ -440,151 +440,6 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechnungsfunktion TEILWERTSUMME. Die Funktion hat 2, 3 oder 4 Argumente. Das erste Argument ist in jedem Fall der
-     * Name der Assoziation über den verrechnet wird, das 2. ist immer das <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
-     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Kante über die verrechent wird eine
-     * <code>PartOfBeziehung</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
-     * immer die Richtung.
-     * 
-     * @param resultUserField
-     * @param me : Modelelemet
-     * @param twsumFormula
-     * @return
-     */
-    private String getTWSUM(final UserField resultUserField, final ModelElement me, final String twsumFormula) {
-
-        StringTokenizer st = new StringTokenizer(twsumFormula, " ()|");
-
-        //Der erste Token ist der Name der Assoziation, die das VG beherbegrt
-        // -> hole die Kantenklasse
-        Class<?> edgeClass = ModelConstants.getClassForName(st.nextToken());
-
-        String ufHash = st.nextToken();
-
-        //Das UserField, das das zu verrechnende Attribut kennzeichnet.
-        UserField kzUserField = definitions.getUserField(ufHash);
-
-        //Das UserField, das das Verteilungsgewicht kennzeichnet.
-        UserField vgUserField = null;
-
-        // Die angegebene Richtung
-        String direction = null;
-
-        //wenn es mind. 3 Argumente gibt
-        if (st.hasMoreTokens()) {
-            String nextToken = st.nextToken();
-            //wenn der nächste Token das Verteilungsgewicht angibt
-            if (nextToken.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
-                vgUserField = definitions.getUserField(nextToken);
-                //wenn es nicht das VG ist, kann es nur noch die Richtung sein
-            } else {
-                direction = nextToken;
-            }
-        }
-
-        //die Funktion hat 4 Argumente -> das 4. ist immer die Richtung der
-        // Part-Of-Verrechnung
-        if (st.hasMoreTokens()) {
-            direction = st.nextToken();
-        }
-
-        //alle verbundenen Elemente mit einem aufzuteilenden Attribut holen
-        ArrayList<Kante> connectionsTo = getEdges(me, kzUserField.getTargetClass(), edgeClass, direction);
-
-        //dies wird die Summe aller Anteilswerte
-        BigDecimal erg = BigDecimal.ZERO;
-
-        //Wenn keine Elemente verbunden sind
-        if (connectionsTo.size() == 0) {
-            return UserField.NO_ELEMENTS_CONNECTED;
-        }
-
-        //ist eine Richtung gesetzt, muss diese jetzt umgedreht werden, da von allen vorwärts verbundenen Elementen
-        //jetzt alle rückwärts verbundenen Elemente gesucht werden müssen
-        if (direction != null) {
-            if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
-                direction = UserField.DIRECTION_FROM_PART_TO_WHOLE;
-            } else {
-                direction = UserField.DIRECTION_FROM_WHOLE_TO_PART;
-            }
-        }
-
-        //jetzt von allen verbundenen den jeweiligen Anteil aufsummieren
-        for (int i = 0; i < connectionsTo.size(); i++) {
-            Kante connectionTo = connectionsTo.get(i);
-            //das Verteilungsgewicht, das an der Kante steht (erstmal
-            // gleichverteilung (also alles 1 annhmen)
-            BigDecimal normalizedVG = new BigDecimal("1");
-            //wenn mit einem explizit angegebenen Verteilungsgewicht gerechnet
-            // werden soll
-            if (vgUserField != null) {
-                String vgValueString = vgUserField.getValue(connectionTo);
-                //wenn das Verteilungsgewicht noch nicht eingegeben wurde, wird
-                // es als 0 angenommen
-                if (vgValueString.equals(UserField.EMPTY_STRING)) {
-                    //-> einfach mit der nächsten Kante weitermachen
-                    return UserField.EMPTY_STRING;
-                }
-                normalizedVG = new BigDecimal(vgValueString);
-            }
-
-            //das andere Element der Kante holen
-            ModelElement connectedElement = connectionTo.getStart();
-            if (connectedElement == me) {
-                connectedElement = connectionTo.getEnd();
-            }
-            //den aufzuteilenden eingegebenen Wert holen
-            String userFieldValueToSplit = kzUserField.getValue(connectedElement);
-
-            //Leere Eingaben und in Hierarchien Elemente, die keine Verbundenen
-            // Elemente haben
-            if (UserField.NO_ELEMENTS_CONNECTED.equals(userFieldValueToSplit)) {
-                //den Wert als 0 annehmen.
-                continue;
-            } else if (UserField.EMPTY_STRING.equals(userFieldValueToSplit) || UserField.isCriticalError(userFieldValueToSplit)) {
-                return userFieldValueToSplit;
-            }
-
-            BigDecimal valueToSplit = new BigDecimal(userFieldValueToSplit);
-
-            //Alle Kanten vom Element dessen Kennzahlwert aufgeteilt werden
-            // soll zu anderen Elementen holen, die von der
-            //gleichen Art sind, wie das Element, das den Wert bekommen soll
-            ArrayList<Kante> connectionsFrom = getEdges(connectedElement, me.getClass(), edgeClass, direction);
-
-            //wenn mit einer Gleichverteilung gerechnet werden soll, dann
-            // braucht man die Kanten nur zu zählen
-            if (vgUserField == null) {
-                normalizedVG = divide(normalizedVG, new BigDecimal(connectionsFrom.size()));
-                //die eingegebenen Verteilungsgweichte müssen normiert werden
-            } else {
-                //das Verteilungsgewicht, das an der Kante steht (erstmal
-                // gleichverteilung (also alles 1 annhmen)
-                BigDecimal vgSum = new BigDecimal(0);
-                //von all diesen Kanten die Verteilungsgewichte aufsummieren
-                // (es gibt mind. eine solche Kante = die der Hinrichtung)
-                for (int j = 0; j < connectionsFrom.size(); j++) {
-                    Kante connectionFrom = connectionsFrom.get(j);
-                    //den Wert des VG der aktuellen Kante holen
-                    String vgValueString = vgUserField.getValue(connectionFrom);
-                    //wenn für eine Kante kein Verteilungsgewicht eingegeben
-                    // wurde, wird es als 0 angenommen
-                    if (vgValueString.equals(UserField.EMPTY_STRING)) {
-                        continue;
-                    }
-                    //den gefundenen Wert ausummieren
-                    vgSum = vgSum.add(new BigDecimal(vgValueString.toString()));
-                }
-                if (vgSum.compareTo(new BigDecimal(0)) != 0) {
-                    normalizedVG = divide(normalizedVG, vgSum);
-                }
-            }
-            erg = erg.add(valueToSplit.multiply(normalizedVG));
-        }
-        return erg.toString();
-    }
-
-    /**
      * Gibt den wert des referenzierten <code>UserField</code> zurück. Die funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
      * 
      * @param resultUserField das konkrete <code>UserField</code>, auf dessen Wert referenziert wird.
@@ -646,24 +501,21 @@ public class Calculator {
      * @param direction
      * @return
      */
-    private static final ArrayList<Kante> getEdges(final ModelElement me, final Class<?> elemClass, final Class<?> edgeClass, final String direction) {
+    public static final ArrayList<Kante> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final String direction) {
         ArrayList<Kante> kanten = null;
         //Alle Kanten mit der richtigen Richtung holen
-        //TODO:XHB: Prüfen, warumhier eine EX flog. Es wurde eine SUM-Formel definiert, wobei für die Elementklasse keine userFields definiert waren.
-        //AXS: das lag sicher daran, dass der dirForwardCode nicht als Richtung sondern als Position übergeben wurde.
         if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
-            kanten = me.getEdgesTo(elemClass.asSubclass(ModelElement.class), edgeClass.asSubclass(Kante.class));
+            kanten = me.getEdgesTo(elemClass, edgeClass);
         } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
-            //			if (me!=null && elemClass!=null && edgeClass!=null)
-            kanten = me.getEdgesFrom(elemClass.asSubclass(ModelElement.class), edgeClass.asSubclass(Kante.class));
+            kanten = me.getEdgesFrom(elemClass, edgeClass);
         } else {
-            kanten = me.getEdgesWith(elemClass.asSubclass(ModelElement.class), edgeClass.asSubclass(Kante.class));
+            kanten = me.getEdgesWith(elemClass, edgeClass);
         }
         return kanten;
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion SUM oder TWSUM. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion SUM oder MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
      * 
      * @param resultUserField
      * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
@@ -686,7 +538,9 @@ public class Calculator {
         if (st.hasMoreTokens()) {
             direction = st.nextToken();
         }
-        ArrayList<Kante> kanten = getEdges(me, userField.getTargetClass(), edgeClass, direction);
+        Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
+
+        ArrayList<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
         if (kanten.size() == 0) {
@@ -782,7 +636,7 @@ public class Calculator {
 
         //nächster Token ist der Name der Kante über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        Class<?> edgeClass = ModelConstants.getClassForName(st.nextToken());
+        Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
 
         //nächster Token ist der HashString des UserFields das aufsummiert
         // werden soll -> hole dafür das UserField aus den Definitions
@@ -793,8 +647,10 @@ public class Calculator {
             direction = st.nextToken();
         }
 
+        Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
+
         //Alle Kanten mit der richtigen Richtung holen
-        ArrayList<Kante> kanten = getEdges(me, userField.getTargetClass(), edgeClass, direction);
+        ArrayList<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
         if (kanten.size() == 0) {
