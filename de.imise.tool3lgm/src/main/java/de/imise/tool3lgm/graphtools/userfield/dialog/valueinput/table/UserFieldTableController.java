@@ -15,7 +15,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JList;
 
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;
 import de.imise.util.Pair;
 
 /**
@@ -513,7 +513,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewClassificationNumberTableController(final AbstractUserFieldTableModel uftm) {
+    public static UserFieldTableController getNewClassificationNumberTableController(final AbstractTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - unabhängig von ModelValue
@@ -527,7 +527,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewDistributionWeightTableController(final AbstractUserFieldTableModel uftm) {
+    public static UserFieldTableController getNewDistributionWeightTableController(final AbstractTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - abhängig von ModelValue
@@ -541,7 +541,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewClassificationNumberFormulaTableController(final AbstractUserFieldTableModel uftm) {
+    public static UserFieldTableController getNewClassificationNumberFormulaTableController(final AbstractTableModel uftm) {
 
         if (uftm.getRowCount() == 0 || uftm.getColumnCount() == 0) {
             return null;
@@ -551,10 +551,7 @@ public abstract class UserFieldTableController {
          * Eigenschaften: - keine Zelle ist editierbar
          */
         return new UserFieldTableController(new boolean[1][1], new boolean[uftm.getRowCount()][uftm.getColumnCount()]) {
-            /*
-             * (non-Javadoc)
-             * @see tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController#isEditable(int, int)
-             */
+
             @Override
             public boolean isEditable(final int row, final int col) {
                 return false;
@@ -567,7 +564,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewModelVariableTableController(final AbstractUserFieldTableModel uftm) {
+    public static UserFieldTableController getNewModelVariableTableController(final AbstractTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte editierbar - unabhängig von ModelValue
@@ -586,7 +583,7 @@ public abstract class UserFieldTableController {
      * @param firstColumnEditable
      * @param dependsOnModelValue
      */
-    private static UserFieldTableController getNewUserFieldTableController(final AbstractUserFieldTableModel uftm, final boolean firstRowEditable, final boolean firstColumnEditable, final boolean dependsOnModelValue) {
+    private static UserFieldTableController getNewUserFieldTableController(final AbstractTableModel uftm, final boolean firstRowEditable, final boolean firstColumnEditable, final boolean dependsOnModelValue) {
 
         if (uftm.getRowCount() == 0 || uftm.getColumnCount() == 0) {
             return null;
@@ -638,7 +635,7 @@ public abstract class UserFieldTableController {
 
             @Override
             public boolean isEditable(final int row, final int col) {
-                if (dependsOnModelValue == true) {// Zellen ohne ModelValue nicht editierbar
+                if (dependsOnModelValue) {// Zellen ohne ModelValue nicht editierbar
                     return editMatrix[row + yshift][col + xshift] && uftm.isCellEditable(row, col);
                 }
                 // Zelleneditierbarkeit hängt nur von editMatrix ab

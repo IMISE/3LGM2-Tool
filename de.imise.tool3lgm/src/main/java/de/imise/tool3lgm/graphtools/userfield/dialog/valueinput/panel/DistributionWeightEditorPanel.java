@@ -220,7 +220,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
     }
 
     @Override
-    protected void takeOver() {
+    public void takeOver() {
         if (!(table.getModel() instanceof AbstractUserFieldTableModel)) {
             return;
         }

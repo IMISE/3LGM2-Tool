@@ -34,7 +34,8 @@ import javax.swing.table.TableModel;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.UserFieldTableLayout;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.AbstractUserFieldTableLayout;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
@@ -107,7 +108,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /**
      * Spezielles Layout für Cellrendering/-editing und RowHeaders
      */
-    private UserFieldTableLayout tableLayout;
+    private AbstractUserFieldTableLayout tableLayout;
 
     /**
      * Drückt aus, ob Standard-AutoResizeModes von <code>JTable</code> verwendet werden sollen, oder nicht.
@@ -155,7 +156,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param tec
      * @return
      */
-    public UserFieldTable(final AbstractUserFieldTableModel uftm, final UserFieldTableLayout uftl, final UserFieldTableController uftc) {
+    public UserFieldTable(final AbstractTableModel uftm, final AbstractUserFieldTableLayout uftl, final UserFieldTableController uftc) {
         super(uftm);
         tableController = uftc;
         tableLayout = uftl;
@@ -168,7 +169,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * 
      * @param uftl
      */
-    public UserFieldTable(final UserFieldTableLayout uftl) {
+    public UserFieldTable(final AbstractUserFieldTableLayout uftl) {
         this(null, uftl, null);
     }
 
@@ -323,7 +324,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      */
     public void fireTableDataChanged() {
         if (hasUserFieldTableModel()) {
-            ((AbstractUserFieldTableModel) dataModel).dataChanged(true);
+            ((AbstractTableModel) dataModel).dataChanged(true);
         }
     }
 
@@ -401,7 +402,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
-        if (((AbstractUserFieldTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false)
+        if (((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false)
         // Einfügen nicht erfolgreich
         {
             showWarningMessage("userFieldTable_paste_warning");
@@ -428,10 +429,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
-        redoStack.add(CollectionUtils.toStringArray(((AbstractUserFieldTableModel) dataModel).getValues()));
+        redoStack.add(CollectionUtils.toStringArray(((AbstractTableModel) dataModel).getValues()));
 
         String[][] values = undoStack.remove(n - 1);
-        ((AbstractUserFieldTableModel) dataModel).setValues(values);
+        ((AbstractTableModel) dataModel).setValues(values);
 
     }
 
@@ -445,10 +446,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
-        undoStack.add(CollectionUtils.toStringArray(((AbstractUserFieldTableModel) dataModel).getValues()));
+        undoStack.add(CollectionUtils.toStringArray(((AbstractTableModel) dataModel).getValues()));
 
         String[][] values = redoStack.remove(n - 1);
-        ((AbstractUserFieldTableModel) dataModel).setValues(values);
+        ((AbstractTableModel) dataModel).setValues(values);
 
     }
 
@@ -456,13 +457,13 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * Speichert die letzten Werte im {@link #undoStack} und löscht den {@link #redoStack}.
      */
     private boolean saveValues() {
-        Object[][] data = ((AbstractUserFieldTableModel) dataModel).getValues();
+        Object[][] data = ((AbstractTableModel) dataModel).getValues();
         if (data == null) {
             return false;
         }
 
         redoStack.clear();
-        undoStack.add(CollectionUtils.toStringArray(((AbstractUserFieldTableModel) dataModel).getValues()));
+        undoStack.add(CollectionUtils.toStringArray(((AbstractTableModel) dataModel).getValues()));
         return true;
     }
 
@@ -476,7 +477,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param uftm
      * @param uftc
      */
-    public void setModel(final AbstractUserFieldTableModel uftm, final UserFieldTableController uftc) {
+    public void setModel(final AbstractTableModel uftm, final UserFieldTableController uftc) {
         super.setModel(uftm);
         if (uftc != null) {
             setUserFieldTableController(uftc);
@@ -488,7 +489,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * 
      * @param uftl
      */
-    public void setUserFieldTableLayout(final UserFieldTableLayout uftl) {
+    public void setUserFieldTableLayout(final AbstractUserFieldTableLayout uftl) {
         if (tableLayout != null) {
             tableLayout.removeFrom(this);
         }
@@ -574,7 +575,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param col
      */
     public void clearValueAt(final int row, final int col) {
-        AbstractUserFieldTableModel model = (AbstractUserFieldTableModel) dataModel;
+        AbstractTableModel model = (AbstractTableModel) dataModel;
         if (!saveValues()) {
             return;
         }
@@ -630,22 +631,6 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      */
     public JScrollPane getLayoutContainer() {
         return layoutContainer;
-    }
-
-    /**
-     * Gibt das UserFieldTableLayout dieses Tables wieder
-     * 
-     * @return layout
-     */
-    public UserFieldTableLayout getUserFieldTableLayout() {
-        return tableLayout;
-    }
-
-    /**
-     * @return tableController
-     */
-    public UserFieldTableController getUserFieldTableController() {
-        return tableController;
     }
 
     /**
@@ -729,21 +714,21 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /**
      * Gibt die Zeilenköpfe zurück.
      * 
-     * @see AbstractUserFieldTableModel#getRowIdentifiers()
+     * @see AbstractTableModel#getRowIdentifiers()
      * @return
      */
     public Vector<?> getRowIdentifiers() {
-        return hasUserFieldTableModel() ? ((AbstractUserFieldTableModel) dataModel).getRowIdentifiers() : null;
+        return hasUserFieldTableModel() ? ((AbstractTableModel) dataModel).getRowIdentifiers() : null;
     }
 
     /**
      * Gibt die Spaltenköpfe zurück.
      * 
-     * @see AbstractUserFieldTableModel#getColumnIdentifiers()
+     * @see AbstractTableModel#getColumnIdentifiers()
      * @return
      */
     public Vector<?> getColumnIdentifiers() {
-        return hasUserFieldTableModel() ? ((AbstractUserFieldTableModel) dataModel).getColumnIdentifiers() : null;
+        return hasUserFieldTableModel() ? ((AbstractTableModel) dataModel).getColumnIdentifiers() : null;
     }
 
     /**
@@ -825,12 +810,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt zurück, ob das {@link #dataModel} eine Instanz der Klasse {@link AbstractUserFieldTableModel} ist.
+     * Gibt zurück, ob das {@link #dataModel} eine Instanz der Klasse {@link AbstractTableModel} ist.
      * 
      * @return
      */
     public boolean hasUserFieldTableModel() {
-        return dataModel instanceof AbstractUserFieldTableModel;
+        return dataModel instanceof AbstractTableModel;
     }
 
     /**
@@ -840,7 +825,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      */
     public boolean hasData() {
         if (hasUserFieldTableModel()) {
-            return ((AbstractUserFieldTableModel) dataModel).hasData();
+            return ((AbstractTableModel) dataModel).hasData();
         }
         return dataModel.getRowCount() > 0 && dataModel.getColumnCount() > 0;
     }
