@@ -232,11 +232,20 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * Liefert einen {@link NamedObjectContainer} für der an die Zelle mit den gegebenen Indizes gesetzt wird. Unterklassen
      * müssen diese Container geeignet initialisieren.
      * 
-     * @param value
+     * @param newValue
+     *            Dar neue Value, der in einen {@link NamedObjectContainer} gepackt werden muss
      * @param row
      * @param col
      */
-    public abstract NamedObjectContainer<?> getCreatedValueAt(final Object value, final int row, final int col);
+    public abstract NamedObjectContainer<?> getContainerForNewValue(final Object newValue, final int row, final int col);
+
+    /**
+     * Löscht den Wert an der angegebenen Stelle bzw. setzt einen als leer interpretierten Wert.
+     * 
+     * @param row
+     * @param col
+     */
+    public abstract void clearValueAt(int row, int col);
 
     /**
      * Übernimmt einen im Table eingegebenen Wert in dieses Model. Dabei wird ein neuer <code>NamedObjectContainer</code> aus <code>value</code> und
@@ -249,9 +258,9 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * @see javax.swing.table.DefaultTableModel#setValueAt(java.lang.Object, int, int)
      */
     @Override
-    public void setValueAt(final Object value, final int row, final int col) {
+    public final void setValueAt(final Object value, final int row, final int col) {
         // neuer Container beinhaltet altes UserField "field" aber neuen Wert "value"
-        NamedObjectContainer<?> newValue = getCreatedValueAt(value, row, col);
+        NamedObjectContainer<?> newValue = getContainerForNewValue(value, row, col);
         // dataField update
         dataField[row][col] = newValue;
         // dataVector update

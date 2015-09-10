@@ -31,10 +31,10 @@ public abstract class AbstractUserFieldTableModel extends AbstractTableModel {
     }
 
     @Override
-    public final NamedObjectContainer<UserField> getCreatedValueAt(final Object value, final int row, final int col) {
+    public final NamedObjectContainer<UserField> getContainerForNewValue(final Object value, final int row, final int col) {
         // Das UserField des NamedObjectContainers aus dataField[row][col]
-        @SuppressWarnings("unchecked")
         Object oldContainer = getValueAt(row, col);
+        @SuppressWarnings("unchecked")
         UserField field = ((NamedObjectContainer<UserField>) oldContainer).getObject();
         // neuer Container beinhaltet altes UserField "field" aber neuen Wert "value"
         NamedObjectContainer<UserField> newValue = NamedObjectContainer.of(field, value.toString());
@@ -47,6 +47,7 @@ public abstract class AbstractUserFieldTableModel extends AbstractTableModel {
      * @param row
      * @param col
      */
+    @Override
     public final void clearValueAt(final int row, final int col) {
         setValueAt(UserField.EMPTY_STRING, row, col);
     }
