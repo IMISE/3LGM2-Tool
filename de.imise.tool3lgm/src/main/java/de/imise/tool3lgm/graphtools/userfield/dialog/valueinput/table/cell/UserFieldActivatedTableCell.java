@@ -9,7 +9,6 @@ import java.text.NumberFormat;
 import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.CellEditorListener;
@@ -44,37 +43,32 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     /**
      * <code>UserField</code>, dass das Format für die Wertdarstellung enthält
      */
-    private final UserField userField;
+    protected final UserField userField;
 
     /**
      * Tatsächlicher Wert der Zelle
      */
-    private NamedObjectContainer<UserField> value;
+    protected NamedObjectContainer<UserField> value;
 
     /**
      * Angezeigter Wert in der Zelle
      */
-    private String text;
+    protected String text;
 
     /**
      * Editor der Zelle
      */
-    private DefaultCellEditor editor;
+    protected DefaultCellEditor editor;
 
     /**
      * Renderer der Zelle
      */
-    private DefaultTableCellRenderer renderer;
+    protected DefaultTableCellRenderer renderer;
 
     /**
      * Table, der diese Zelle beinhaltet
      */
-    private final UserFieldTable table;
-
-    /**
-     * TextField, dass die Editor-Komponente repräsentiert
-     */
-    private JComponent editorComponent;
+    protected final UserFieldTable table;
 
     /**
      * Konstruktor
@@ -94,14 +88,14 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     /**
      * Initialisiert den <code>editor</code>
      */
-    private void initEditor() {
+    protected void initEditor() {
         UserField userField = value.getObject();
         UserField.Style style = userField.getStyle();
         if (style == CLASSIFICATION_NUMBER) {
             NumberFormat numberFormat = userField.getNumberFormat();
             boolean isPositiveOnly = userField.isPositiveOnly();
-            editorComponent = NumberTextField.getNumberTextField(numberFormat, isPositiveOnly);
-            editor = new DefaultCellEditor((JTextField) editorComponent);
+            JTextField editorComponent = NumberTextField.getNumberTextField(numberFormat, isPositiveOnly);
+            editor = new DefaultCellEditor(editorComponent);
         } else if (style == COMBO_BOX) {
             AlphabeticalComboBox component = new AlphabeticalComboBox(true);
             for (int i = 0; i < userField.getListValuesCount(); i++) {
@@ -111,18 +105,17 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
                     component.setSelectedItem(listValue);
                 }
             }
-            editorComponent = component;
             editor = new DefaultCellEditor(component);
         } else {
-            editorComponent = new ExtendedTextField();
-            editor = new DefaultCellEditor((JTextField) editorComponent);
+            JTextField editorComponent = new ExtendedTextField();
+            editor = new DefaultCellEditor(editorComponent);
         }
     }
 
     /**
      * Initialisiert den <code>renderer</code>
      */
-    private void initRenderer() {
+    protected void initRenderer() {
         renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(HORIZONTAL_ALIGNMENT_RIGHT);
     }
@@ -134,7 +127,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * der Renderer und der Editor ein leeres Feld anzeigen. <br>
      * Die Formatierung erfolgt dabei durch die Methoden von {@link #userField}.
      */
-    private void update() {
+    protected void update() {
         if (value.toString().equals(UserField.EMPTY_STRING)) {
             text = RENDERER_EMPTY_STRING;
             value = new NamedObjectContainer<UserField>(userField, EDITOR_EMPTY_STRING);
@@ -200,7 +193,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     }
 
     @Override
-    public boolean isCellEditable(final EventObject anEvent) {
+    public final boolean isCellEditable(final EventObject anEvent) {
         return editor.isCellEditable(anEvent);
     }
 
@@ -211,9 +204,10 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * @see DefaultCellEditor#shouldSelectCell(java.util.EventObject)
      */
     @Override
-    public boolean shouldSelectCell(final EventObject anEvent) {
+    public final boolean shouldSelectCell(final EventObject anEvent) {
         table.fireTableDataChanged();
         // Gesamten Text markieren
+        Component editorComponent = editor.getComponent();
         if (editorComponent instanceof JTextComponent) {
             JTextComponent textField = (JTextComponent) editorComponent;
             textField.selectAll();
@@ -294,7 +288,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     }
 
     @Override
-    public DefaultCellEditor getEditor() {
+    public final DefaultCellEditor getEditor() {
         return editor;
     }
 
