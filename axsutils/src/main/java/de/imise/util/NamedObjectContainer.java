@@ -8,7 +8,7 @@ package de.imise.util;
  * @author AXS
  * @created 17.10.2007
  */
-public class NamedObjectContainer<E> {
+public final class NamedObjectContainer<E> {
 
     /**
      * <code>String</code> der in der Liste angezeigt wird. <br>
@@ -32,6 +32,7 @@ public class NamedObjectContainer<E> {
     public NamedObjectContainer(final E object, final String toString) {
         this.toString = toString;
         this.object = object;
+        //System.err.println(getFullString(this));
     }
 
     /**
@@ -59,6 +60,15 @@ public class NamedObjectContainer<E> {
 
     @Override
     public int hashCode() {
+        if (toString == null && object == null) {
+            return super.hashCode();
+        }
+        if (toString == null) {
+            return object.hashCode();
+        }
+        if (object == null) {
+            return toString.hashCode();
+        }
         return toString.hashCode() * object.hashCode();
     }
 
@@ -81,4 +91,9 @@ public class NamedObjectContainer<E> {
         }
         return true;
     }
+
+    public final String getFullString() {
+        return "NamedObjectContainer(" + object + ", \"" + toString + "\")";
+    }
+
 }
