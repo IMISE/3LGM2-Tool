@@ -35,13 +35,29 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     public void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field) {
         ArrayList<ModelElement> allRowElements = doc.getModelItems(Kante.getStartClass(edgeClass), false, true);
         ArrayList<ModelElement> allColumnElements = doc.getModelItems(Kante.getEndClass(edgeClass), false, true);
-        ArrayList<ModelElement> rowElements = new ArrayList<ModelElement>(allRowElements.size());
-        ArrayList<ModelElement> columnElements = new ArrayList<ModelElement>(allColumnElements.size());
+        //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehängt werden könnte
+        for (int i = allRowElements.size() - 1; i >= 0; i--) {
+            ModelElement me = allRowElements.get(i);
+            if (me.getEdges(edgeClass).isEmpty()) {
+                allRowElements.remove(i);
+            }
+        }
+        for (int i = allColumnElements.size() - 1; i >= 0; i--) {
+            ModelElement me = allColumnElements.get(i);
+            if (me.getEdges(edgeClass).isEmpty()) {
+                allColumnElements.remove(i);
+            }
+        }
+
+        ModelElement[] rowElements = new ModelElement[allRowElements.size()];
+        ModelElement[] columnElements = new ModelElement[allColumnElements.size()];
         Object[][] temp_data = new Object[allRowElements.size()][allColumnElements.size()];
 
         // temp_data, rowElements, columnElements erstellen
-        for (ModelElement re : allRowElements) {
-            for (ModelElement ce : allColumnElements) {
+        for (int r = 0; r < rowElements.length; r++) {
+            ModelElement re = allRowElements.get(r);
+            for (int c = 0; c < columnElements.length; c++) {
+                ModelElement ce = allColumnElements.get(c);
                 Kante edge = null;
 
                 if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
@@ -52,44 +68,38 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                     }
                 } else {
                     ArrayList<Kante> edges = ce.getEdgesWith(re, edgeClass);
-                    if (edges != null && edges.size() > 0) {
+                    if (!edges.isEmpty()) {
                         edge = edges.get(0);
                     }
                 }
 
+                columnElements[c] = ce;
+                rowElements[r] = re;
+
                 if (edge == null) {
                     continue;
-                }
-                int columnIndex = columnElements.indexOf(ce);
-                if (columnIndex == -1) {
-                    columnIndex = columnElements.size();
-                    columnElements.add(ce);
-                }
-
-                int rowIndex = rowElements.indexOf(re);
-                if (rowIndex == -1) {
-                    rowIndex = rowElements.size();
-                    rowElements.add(re);
                 }
 
                 //die nicht editierbaren Formeln müssen gleich formatiert dargestellt werden
                 String value = field.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA) ? field.getFormattedValue(edge, true) : field.getValue(edge);
-                temp_data[rowIndex][columnIndex] = new NamedObjectContainer<UserField>(field, value);
+                temp_data[r][c] = new NamedObjectContainer<UserField>(field, value);
 
             }
         }
 
+        //Alphabetical.sort(columnElements);
+
         // RowHeader aufbauen
-        Object[] rowIdentifiers = new Object[rowElements.size()];
+        Object[] rowIdentifiers = new Object[rowElements.length];
         for (int i = 0; i < rowIdentifiers.length; i++) {
-            ModelElement me = rowElements.get(i);
+            ModelElement me = rowElements[i];
             rowIdentifiers[i] = new NamedObjectContainer<ModelElement>(me, me.getName());
         }
 
         // ColumnHeader aufbauen
-        Object[] columnIdentifiers = new Object[columnElements.size()];
+        Object[] columnIdentifiers = new Object[columnElements.length];
         for (int j = 0; j < columnIdentifiers.length; j++) {
-            ModelElement me = columnElements.get(j);
+            ModelElement me = columnElements[j];
             columnIdentifiers[j] = new NamedObjectContainer<ModelElement>(me, me.getName());
         }
 
