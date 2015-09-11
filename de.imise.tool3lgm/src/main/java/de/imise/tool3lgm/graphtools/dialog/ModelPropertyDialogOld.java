@@ -26,7 +26,7 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * 
  * @author AXS
  */
-public class ModelPropertyDialogOld extends PropertyDialog {
+public class ModelPropertyDialogOld extends AbstractPropertyDialog {
 
     TabbedPane tabbedPane = new TabbedPane();
     ExtendedTextPane textPane;

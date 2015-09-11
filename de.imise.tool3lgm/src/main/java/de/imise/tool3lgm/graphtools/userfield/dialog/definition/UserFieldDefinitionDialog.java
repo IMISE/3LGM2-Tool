@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.dialog.PropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -40,7 +40,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * 
  * @author Thomas Rudert
  */
-public final class UserFieldDefinitionDialog extends PropertyDialog implements ActionListener {
+public final class UserFieldDefinitionDialog extends AbstractPropertyDialog implements ActionListener {
 
     /**
      * Liste, in die alle Panels, die der Dialog anzeigt

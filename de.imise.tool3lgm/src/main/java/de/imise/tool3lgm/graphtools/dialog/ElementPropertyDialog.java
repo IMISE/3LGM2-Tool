@@ -35,7 +35,7 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * 
  * @author N.N., AXS
  */
-public class ElementPropertyDialog extends PropertyDialog implements ActionListener, InTransactionListener {
+public class ElementPropertyDialog extends AbstractPropertyDialog implements ActionListener, InTransactionListener {
 
     /**
      * COMMENTME

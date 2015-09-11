@@ -31,7 +31,7 @@ import de.imise.util.swing.component.TabbedPane;
  * @author AXS
  * @created 30.10.2007
  */
-public class PropertyDialog extends JDialog implements WindowListener {
+public abstract class AbstractPropertyDialog extends JDialog implements WindowListener {
 
     /** TabbedPane in das alle Panels kommen */
     protected TabbedPane tab;
@@ -73,7 +73,7 @@ public class PropertyDialog extends JDialog implements WindowListener {
     /**
      * @param graphDocument Document in dessen Kontext der Dialog steht
      */
-    public PropertyDialog(final GDCollection gdcoll) {
+    public AbstractPropertyDialog(final GDCollection gdcoll) {
         this(Tool3lgm.tool, gdcoll);
     }
 
@@ -81,7 +81,7 @@ public class PropertyDialog extends JDialog implements WindowListener {
      * @param owner
      * @param gdcoll Modell, in dessen Kontext der Dialog steht
      */
-    public PropertyDialog(final Frame owner, final GDCollection gdcoll) {
+    public AbstractPropertyDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, "", false);
         init(gdcoll);
     }
@@ -90,7 +90,7 @@ public class PropertyDialog extends JDialog implements WindowListener {
      * @param owner
      * @param graphDocument Document in dessen Kontext der Dialog steht
      */
-    public PropertyDialog(final Dialog owner, final GDCollection gdcoll) {
+    public AbstractPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
         super(owner, "", false);
         init(gdcoll);
     }

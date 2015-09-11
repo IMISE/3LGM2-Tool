@@ -29,7 +29,7 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * 
  * @author AXS
  */
-public final class ModelPropertyDialog extends PropertyDialog {
+public final class ModelPropertyDialog extends AbstractPropertyDialog {
 
     /**
      * Textpane in dem die Beschreibungen angezeigt werden und editiert werden können.

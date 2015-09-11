@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
-import de.imise.tool3lgm.graphtools.dialog.PropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ClassificationNumberFormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightEditorPanel;
@@ -48,7 +48,7 @@ import de.imise.util.swing.component.TabbedPane;
  * 
  * @author fstephan
  */
-public class UserFieldEditorDialog extends PropertyDialog {
+public class UserFieldEditorDialog extends AbstractPropertyDialog {
 
     /**
      * Speichert die Größe des Dialogs nach dem Schließen
