@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
@@ -17,6 +18,13 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         super(doc);
     }
 
+    /**
+     * @param doc
+     * @param edgeClass
+     * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
+     *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     * @param field
+     */
     public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final UserField field) {
         super(doc);
         setData(edgeClass, direction, field);
@@ -26,15 +34,16 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * Erstellt und setzt Verteilungsgewicht-Modeldaten
      * 
      * @param edgeClass
-     * @param rowElementClasses
-     * @param colElementClasses
-     * @param field
      * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
      *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     * @param field
      */
-    public void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field) {
-        ArrayList<ModelElement> allRowElements = doc.getModelItems(Kante.getStartClass(edgeClass), false, true);
-        ArrayList<ModelElement> allColumnElements = doc.getModelItems(Kante.getEndClass(edgeClass), false, true);
+    private void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field) {
+        Class<? extends ModelElement> rowElementClass = direction == Doppelkante.FORWARD ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass);
+        Class<? extends ModelElement> colElementClass = direction == Doppelkante.FORWARD ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
+        List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
+        List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
+
         //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehängt werden könnte
         for (int i = allRowElements.size() - 1; i >= 0; i--) {
             ModelElement me = allRowElements.get(i);
@@ -86,8 +95,6 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
             }
         }
-
-        //Alphabetical.sort(columnElements);
 
         // RowHeader aufbauen
         Object[] rowIdentifiers = new Object[rowElements.length];
