@@ -11,7 +11,6 @@ import java.awt.event.WindowListener;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Help;
@@ -22,6 +21,7 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 /**
  * Allgemeiner Eigenschaftendialog.<br>
@@ -31,7 +31,7 @@ import de.imise.util.swing.component.TabbedPane;
  * @author AXS
  * @created 30.10.2007
  */
-public abstract class AbstractPropertyDialog extends JDialog implements WindowListener {
+public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRestoringDialog implements WindowListener {
 
     /** TabbedPane in das alle Panels kommen */
     protected TabbedPane tab;
@@ -218,7 +218,7 @@ public abstract class AbstractPropertyDialog extends JDialog implements WindowLi
     }
 
     @Override
-    public void windowClosed(final WindowEvent e) {
+    public void windowOpened(final WindowEvent e) {
     }
 
     @Override
@@ -226,11 +226,7 @@ public abstract class AbstractPropertyDialog extends JDialog implements WindowLi
     }
 
     @Override
-    public void windowDeactivated(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeiconified(final WindowEvent e) {
+    public void windowClosed(final WindowEvent e) {
     }
 
     @Override
@@ -238,6 +234,11 @@ public abstract class AbstractPropertyDialog extends JDialog implements WindowLi
     }
 
     @Override
-    public void windowOpened(final WindowEvent e) {
+    public void windowDeiconified(final WindowEvent e) {
     }
+
+    @Override
+    public void windowDeactivated(final WindowEvent e) {
+    }
+
 }

@@ -72,6 +72,8 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
      */
     private final UserField userField;
 
+    private static final Dimension DEFAULT_SIZE = new Dimension(500, 400);
+
     /**
      * Instanz des Dialogs zur Definition eines <code>UserField</code>
      * 
@@ -84,15 +86,13 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         this.userField = userField;
         definitions = gdcol.getUserFieldDefinitions();
         setModal(true);
-        setLocationByPlatform(true);
         setTitle(Tool3lgmConstants.getResString("userFieldEditor_title"));
-        setMinimumSize(new Dimension(500, 400));
+        setMinimumSize(DEFAULT_SIZE);
         init();
     }
 
     private void init() {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        this.setLocation(getOwner().getLocation());
 
         /*
          * schlieﬂen des Fensters abfangen (wenn nicht durch Abbrechen-Button veranlasst)
@@ -238,5 +238,10 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             cancel();
         }
 
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return DEFAULT_SIZE;
     }
 }

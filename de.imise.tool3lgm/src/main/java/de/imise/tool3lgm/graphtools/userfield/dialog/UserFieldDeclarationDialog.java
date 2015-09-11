@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -23,7 +24,6 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -49,13 +49,14 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
+import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * @author Thomas Rudert Dialog to create, edit, remove, import and export user-definied property-fields for model-elements
  */
-public final class UserFieldDeclarationDialog extends JDialog implements ActionListener, ListSelectionListener, MouseListener {
+public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener, ListSelectionListener, MouseListener {
 
     /** combobox to select a model-class */
     private AlphabeticalComboBox classComboBox;
@@ -96,6 +97,8 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
      * Clone der Definitionen vor allen Änderungen. Wird beim Abbrechen auf diese Defnition zurück gesetzt.
      */
     private final UserFieldDefinitions oldUserFieldDefionitions;
+
+    private static Dimension defaultSize = null;
 
     /**
      * return-value of dialog <br>
@@ -184,9 +187,6 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
         JScrollPane scrollPane;
         LayoutManager layout;
         GridBagConstraints constraints;
-        Point point = getOwner().getLocation();
-        point.translate(50, 50);
-        this.setLocation(point);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -302,7 +302,10 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
         panel2.add(button);
         panel1.add(panel2);
         pane.add(panel1, BorderLayout.SOUTH);
-        pack();
+        if (defaultSize == null) {
+            pack();
+            defaultSize = getSize();
+        }
     }
 
     /**
@@ -688,6 +691,11 @@ public final class UserFieldDeclarationDialog extends JDialog implements ActionL
 
     @Override
     public void mouseReleased(final MouseEvent e) {
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return defaultSize;
     }
 
 }

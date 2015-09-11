@@ -15,7 +15,6 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -49,16 +48,6 @@ import de.imise.util.swing.component.TabbedPane;
  * @author fstephan
  */
 public class UserFieldEditorDialog extends AbstractPropertyDialog {
-
-    /**
-     * Speichert die Größe des Dialogs nach dem Schließen
-     */
-    private static Dimension lastSize;
-
-    /**
-     * Speichert die letzte Postion des Dialogs nach dem Schließen
-     */
-    private static Point lastLocation;
 
     /**
      * Die Standardgröße des Dialoges
@@ -168,15 +157,6 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
     private void init() {
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-        // Setzen von alter Größe und Position
-        if (lastLocation != null && lastSize != null) {
-            setSize(lastSize);
-            setLocation(lastLocation);
-        } else {
-            setSize(DEFAULT_SIZE);
-            setLocationByPlatform(true);
-        }
 
         final UserFieldEditorDialog finalDialog = this;
 
@@ -484,23 +464,23 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
      */
     @Override
     public void dispose() {
-
         // Änderungen übernommen --> Schließe einfach
-        if (okButtonPressed == true) {
-            lastSize = getSize();
-            lastLocation = getLocation();
-            super.dispose();
-
-        } else {// Sonst zeige Datenverlust-Warnung und mache u.U. Änderungen rückgängig
+        // Sonst zeige Datenverlust-Warnung und mache u.U. Änderungen rückgängig
+        if (okButtonPressed != true) {
             cancelAction.actionPerformed(null);
             if (shouldDispose == false) {
                 shouldDispose = true;
                 return;
             }
-            super.dispose();
         }
+        super.dispose();
     }
 
     /* *********************** Ende: funktionale Methoden ******************************* */
+
+    @Override
+    public Dimension getDefaultSize() {
+        return DEFAULT_SIZE;
+    }
 
 }

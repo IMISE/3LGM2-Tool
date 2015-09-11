@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.dialog;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -73,6 +74,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
      */
     static int lastHeight = -1;
 
+    private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
+
     /**
      * @param modelElement
      * @param gdcoll
@@ -133,8 +136,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         if (lastWidth == -1) {
             // lastWidth = this.getWidth();
             // lastHeight = this.getHeight();
-            setLastWidth(600);
-            setLastHeight(500);
+            setLastWidth(DEFAULT_SIZE.width);
+            setLastHeight(DEFAULT_SIZE.height);
         } else {
             for (int i = 0; i < ModelConstants.dialogs.size(); i++) {
                 ElementPropertyDialog pd = ModelConstants.dialogs.get(i);
@@ -396,5 +399,10 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
      */
     public static void setLastWidth(final int lastWidth) {
         ElementPropertyDialog.lastWidth = lastWidth;
+    }
+
+    @Override
+    public Dimension getDefaultSize() {
+        return DEFAULT_SIZE;
     }
 }

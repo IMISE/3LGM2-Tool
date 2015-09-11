@@ -4,11 +4,10 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
@@ -37,11 +36,6 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
     private ExtendedTextPane textPane;
 
     /**
-     * Letzte Position und Größe dieses Dialogs.
-     */
-    private int lastWidth = -1, lastHeight = -1, lastPositionX = -1, lastPositionY = -1;
-
-    /**
      * Das {@link GraphDocument}, das vor einer Änderung des aktiven {@link GraphDocument} aktiv
      * war.
      */
@@ -52,33 +46,14 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
      */
     private final AlphabeticalComboBox docBox = new AlphabeticalComboBox();
 
+    private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
+
     /**
      * @param String gdcoll
      * @throws java.awt.HeadlessException
      */
     public ModelPropertyDialog(final GDCollection gdcoll) throws HeadlessException {
         super(gdcoll);
-
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentHidden(final ComponentEvent e) {
-            }
-
-            @Override
-            public void componentMoved(final ComponentEvent e) {
-                dialogPositionOrSizeChanged();
-            }
-
-            @Override
-            public void componentResized(final ComponentEvent e) {
-                dialogPositionOrSizeChanged();
-            }
-
-            @Override
-            public void componentShown(final ComponentEvent e) {
-            }
-        });
-
         try {
             init();
         } catch (Exception e) {
@@ -92,15 +67,6 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
     private void init() throws Exception {
 
         getContentPane().setLayout(new BorderLayout());
-        if (lastWidth == -1) {
-            lastWidth = 600;
-            lastHeight = 400;
-            lastPositionX = 0;
-            lastPositionY = 0;
-        }
-        setLocation(lastPositionX, lastPositionY);
-        setSize(lastWidth, lastHeight);
-
         textPane = new ExtendedTextPane();
         textPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         getContentPane().add(new JScrollPane(textPane), BorderLayout.CENTER);
@@ -215,11 +181,9 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
         }
     }
 
-    private void dialogPositionOrSizeChanged() {
-        lastWidth = getWidth();
-        lastHeight = getHeight();
-        lastPositionX = getX();
-        lastPositionY = getY();
+    @Override
+    public Dimension getDefaultSize() {
+        return DEFAULT_SIZE;
     }
 
 }
