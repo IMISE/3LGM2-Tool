@@ -793,30 +793,33 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             return null;
         }
         int counter;
-        for (counter = lc.getKnickpunkteCount() - 1; counter >= 0; counter--) {
-            BendpointContainer k = lc.getBendpointContainer(counter);
-            if (k.getElement().isUnpaintable()) {
-                continue;
+
+        if (!UserProperties.isPaintEdgesOnlyForSelectedElements()) {
+            for (counter = lc.getKnickpunkteCount() - 1; counter >= 0; counter--) {
+                BendpointContainer k = lc.getBendpointContainer(counter);
+                if (k.getElement().isUnpaintable()) {
+                    continue;
+                }
+                if (!k.isVisible()) {
+                    continue;
+                }
+                if (KnotenRenderer.isInside(k, x, y)) {
+                    return k;
+                }
             }
-            if (!k.isVisible()) {
-                continue;
-            }
-            if (KnotenRenderer.isInside(k, x, y)) {
-                return k;
-            }
-        }
-        for (counter = lc.getKantenCount() - 1; counter >= 0; counter--) {
-            EdgeContainer k = lc.getEdgeContainer(counter);
-            Kante ka = k.getEdge();
-            ModelElement s = ka.getStart();
-            ModelElement e = ka.getEnd();
-            ElementContainer sc = s.getContainer(doc);
-            ElementContainer ec = e.getContainer(doc);
-            if (s.isUnpaintable() || e.isUnpaintable() || sc == null || !sc.isVisible() || ec == null || !ec.isVisible()) {
-                continue;
-            }
-            if (k.isInside(x, y)) {
-                return k;
+            for (counter = lc.getKantenCount() - 1; counter >= 0; counter--) {
+                EdgeContainer k = lc.getEdgeContainer(counter);
+                Kante ka = k.getEdge();
+                ModelElement s = ka.getStart();
+                ModelElement e = ka.getEnd();
+                ElementContainer sc = s.getContainer(doc);
+                ElementContainer ec = e.getContainer(doc);
+                if (s.isUnpaintable() || e.isUnpaintable() || sc == null || !sc.isVisible() || ec == null || !ec.isVisible()) {
+                    continue;
+                }
+                if (k.isInside(x, y)) {
+                    return k;
+                }
             }
         }
         for (counter = lc.getKnotenCount() - 1; counter >= 0; counter--) {

@@ -464,34 +464,51 @@ public class LayerContainer extends ElementContainer {
         }
 
         for (EdgeContainer ec : edgeContainer) {
-            ec.paint(g);
-        }
-
-        for (BendpointContainer ec : bendpointContainer) {
-            ec.paint(g);
-        }
-
-        if (layerNumber == 3) {
-            KonfigurationContainer.colorCounter = 0;
-            for (KonfigurationContainer kc : doc.getCollection().getABKonf()) {
-                kc.setShift(x_shift, y_shift);
-                kc.paint(g);
-            }
-        }
-        if (layerNumber == 1) {
-            KonfigurationContainer.colorCounter = 0;
-            for (KonfigurationContainer kc : doc.getCollection().getDBKonf()) {
-                kc.setShift(x_shift, y_shift);
-                kc.paint(g);
+            if (UserProperties.isPaintEdgesOnlyForSelectedElements()) {
+                Kante edge = (Kante) ec.getElement();
+                ModelElement start = edge.getStart();
+                ElementContainer startContainer = start.getContainer(doc);
+                if (doc.isSelected(startContainer)) {
+                    ec.paint(g);
+                } else {
+                    ModelElement end = edge.getEnd();
+                    ElementContainer endContainer = end.getContainer(doc);
+                    if (doc.isSelected(endContainer)) {
+                        ec.paint(g);
+                    }
+                }
+            } else {
+                ec.paint(g);
             }
         }
 
-        paintingSurrogates = true;
-        for (EdgeContainer ec : tmpEdgeContainer) {
-            ec.paint(g);
-        }
+        if (!UserProperties.isPaintEdgesOnlyForSelectedElements()) {
 
-        paintingSurrogates = false;
+            for (BendpointContainer ec : bendpointContainer) {
+                ec.paint(g);
+            }
+            if (layerNumber == 3) {
+                KonfigurationContainer.colorCounter = 0;
+                for (KonfigurationContainer kc : doc.getCollection().getABKonf()) {
+                    kc.setShift(x_shift, y_shift);
+                    kc.paint(g);
+                }
+            }
+            if (layerNumber == 1) {
+                KonfigurationContainer.colorCounter = 0;
+                for (KonfigurationContainer kc : doc.getCollection().getDBKonf()) {
+                    kc.setShift(x_shift, y_shift);
+                    kc.paint(g);
+                }
+            }
+
+            paintingSurrogates = true;
+            for (EdgeContainer ec : tmpEdgeContainer) {
+                ec.paint(g);
+            }
+
+            paintingSurrogates = false;
+        }
 
         //		if (doc.isVerificationMode()){
         //			Rectangle r = InputGraphArea.grabbedElementsFullRect;

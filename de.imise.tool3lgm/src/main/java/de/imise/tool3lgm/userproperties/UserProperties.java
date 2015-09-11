@@ -376,6 +376,23 @@ public class UserProperties {
         showPartOfHierarchy = b;
     }
 
+    ///////////////////////////////////////
+    // paintEdgesOnlyForSelectedElements //
+    ///////////////////////////////////////
+
+    /** Kanten werden nur für selektierte Elemente gespeichert */
+    private static boolean paintEdgesOnlyForSelectedElements = false;
+
+    /** @return paintEdgesOnlyForSelectedElements */
+    public static boolean isPaintEdgesOnlyForSelectedElements() {
+        return paintEdgesOnlyForSelectedElements;
+    }
+
+    /** @param b */
+    public static void setPaintEdgesOnlyForSelectedElements(final boolean b) {
+        paintEdgesOnlyForSelectedElements = b;
+    }
+
     ///////////////////////
     // usePropertyColors //
     ///////////////////////

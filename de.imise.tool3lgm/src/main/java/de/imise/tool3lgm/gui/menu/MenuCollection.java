@@ -183,6 +183,7 @@ public class MenuCollection {
         public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu(Tool3lgmConstants.getResString("graphicOptionsMenu"),
 
         createCheckBoxItem(ActionLibrary.OptionsActions.Graphics.USE_RASTER), createCheckBoxItem(ActionLibrary.OptionsActions.Graphics.SHOW_RASTER),
+                createCheckBoxItem(ActionLibrary.OptionsActions.Graphics.PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS),
                 createCheckBoxItem(ActionLibrary.OptionsActions.Graphics.SIGNIFY_LINKED_ELEMENTS),
                 //				createCheckBoxItem(ActionLibrary.OptionsActions.Graphics.UNUSED_INTERFACES),
                 ActionLibrary.OptionsActions.Graphics.HIDE_UNASSOCIATED_INTERFACES, ActionLibrary.OptionsActions.Graphics.UNHIDE_ALL_INTERFACES, createCheckBoxItem(ActionLibrary.OptionsActions.Graphics.AUTOMATIC_COLORING),
