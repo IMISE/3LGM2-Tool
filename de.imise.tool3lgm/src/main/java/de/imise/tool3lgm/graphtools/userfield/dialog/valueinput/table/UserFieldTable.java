@@ -402,6 +402,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
+        for (int i = 0; i < internalContent.length; i++) {
+            for (int j = 0; j < internalContent[i].length; j++) {
+                internalContent[i][j] = internalContent[i][j].toString().replace(',', '.');
+            }
+        }
+
         if (((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false)
         // Einfügen nicht erfolgreich
         {
