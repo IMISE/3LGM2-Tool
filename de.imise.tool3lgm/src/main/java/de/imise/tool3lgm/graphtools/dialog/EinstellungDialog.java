@@ -108,7 +108,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
 
         JLabel textz = new JLabel(Tool3lgmConstants.getResString("page_zoom"));
         pageSizeFactorBackup = frame.getGraphDocument().getPageSizeFactor();
-        pageSizeFactorSlider = new JSlider(100, 300);
+        pageSizeFactorSlider = new JSlider(100, 1000);
         pageSizeFactorSlider.setValue((int) (pageSizeFactorBackup * 100));
         pageSizeFactorSlider.addChangeListener(this);
         textPageSizeFactor = new JTextField(4);
