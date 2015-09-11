@@ -98,7 +98,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         constraints.weightx = 1;
         constraints.weighty = 0;
 
-        edgeBox.addSeparator(Tool3lgmConstants.getResString("classification_weighting_path"));
+        edgeBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_edge_type"));
         setEdgeBoxContent();
         setActionsForEdgeBox();
         add(edgeBox, constraints);
@@ -160,7 +160,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         constraints.gridy = 2;
         constraints.weightx = 1;
         constraints.weighty = 0;
-        weightBox.addSeparator(Tool3lgmConstants.getResString("weightings"));
+        weightBox.addSeparator(Tool3lgmConstants.getResString("weighting"));
         setActionsForWeightBox();
         add(weightBox, constraints);
     }
@@ -210,7 +210,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         UserFieldDefinitions definitions = getUserFieldDefinitions();
 
         weightBox.removeAllItems();
-        weightBox.addSeparator(Tool3lgmConstants.getResString("weightings"));
+        weightBox.addSeparator(Tool3lgmConstants.getResString("weighting"));
 
         for (UserField uf : definitions.getUserFields(edgeClass)) {
             if (uf.isClassificationUserField()) {
