@@ -50,6 +50,11 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
     private final AlphabeticalComboBox weightBox = new AlphabeticalComboBox();
 
     /**
+     * Auswahlbox über die man die Tabelle auf genau ein Spaltenelement einschränken kann
+     */
+    private final AlphabeticalComboBox columnFilterBox = new AlphabeticalComboBox();
+
+    /**
      * Richtung der Kante, die in der <code>edgeBox</code> ausgewählt ist.
      */
     private int choosedEdgeDirection;
@@ -67,12 +72,17 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
     /**
      * Zuletzt ausgewähltes Element in der {@link #edgeBox}
      */
-    private Object edgeBoxSelection;
+    private Class<? extends Kante> edgeBoxSelection;
 
     /**
      * Zuletzt ausgewähltes Element in der {@link #weightBox}
      */
-    private Object weightBoxSelection;
+    private UserField weightBoxSelection;
+
+    /**
+     * Zuletzt ausgewähltes Element in der {@link #columnFilterBox}
+     */
+    private ModelElement columnFilterBoxSelection;
 
     /**
      * Konstruktor
@@ -83,6 +93,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         super(dialog);
         initEdgeBox();
         initWeightBox();
+        initColumnFilterBox();
     }
 
     /**
@@ -140,8 +151,9 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                 stopEditing();
                 takeOver();
                 // Selektion für nächstes takeOver
-                finalPanel.edgeBoxSelection = o;
+                finalPanel.edgeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
                 finalPanel.setWeightBoxContent();
+                finalPanel.columnFilterBoxSelection = null;
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
             }
@@ -160,7 +172,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         constraints.gridy = 2;
         constraints.weightx = 1;
         constraints.weighty = 0;
-        weightBox.addSeparator(Tool3lgmConstants.getResString("weighting"));
+        weightBox.setEnabled(false);
         setActionsForWeightBox();
         add(weightBox, constraints);
     }
@@ -188,12 +200,12 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                 takeOver();
 
                 // Selektion für nächstes takeOver
-                finalPanel.weightBoxSelection = o;
-
+                finalPanel.weightBoxSelection = (UserField) o;
+                finalPanel.columnFilterBoxSelection = null;
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
+                finalPanel.setColumnFilterBoxContent();
             }
-
         };
 
         weightBox.addItemListener(il);
@@ -205,18 +217,70 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
      */
     private void setWeightBoxContent() {
 
-        Class<? extends ModelElement> edgeClass = (Class<? extends ModelElement>) edgeBox.getSelectedObject();
-
         UserFieldDefinitions definitions = getUserFieldDefinitions();
 
         weightBox.removeAllItems();
         weightBox.addSeparator(Tool3lgmConstants.getResString("weighting"));
 
-        for (UserField uf : definitions.getUserFields(edgeClass)) {
+        for (UserField uf : definitions.getUserFields(edgeBoxSelection)) {
             if (uf.isClassificationUserField()) {
                 weightBox.addItem(uf);
             }
         }
+        weightBox.setEnabled(true);
+        columnFilterBox.removeAllItems();
+        columnFilterBox.setEnabled(false);
+    }
+
+    private void initColumnFilterBox() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.insets = new Insets(3, 3, 3, 3);
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.weightx = 1;
+        constraints.weighty = 0;
+        columnFilterBox.setEnabled(false);
+        setActionsForColumnFilterBox();
+        add(columnFilterBox, constraints);
+    }
+
+    private void setActionsForColumnFilterBox() {
+        final DistributionWeightEditorPanel finalPanel = this;
+        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
+        // Kantentyp gehörige Table im Panel dargestellt.
+        ItemListener il = new ItemListener() {
+            @Override
+            public void itemStateChanged(final ItemEvent e) {
+                Object o = columnFilterBox.getSelectedObject();
+                if (o != null && !(o instanceof ModelElement) || !(weightBox.getSelectedObject() instanceof UserField) || !(edgeBox.getSelectedObject() instanceof Class)) {
+                    return;
+                }
+                stopEditing();
+                takeOver();
+
+                // Selektion für nächstes takeOver
+                finalPanel.columnFilterBoxSelection = (ModelElement) o;
+                finalPanel.drawTable();
+                finalPanel.distributeSelectionChangedEvent();
+            }
+        };
+        columnFilterBox.addItemListener(il);
+    }
+
+    private void setColumnFilterBoxContent() {
+        Vector<?> columnIdentifiers = table.getColumnIdentifiers();
+        columnFilterBox.removeAllItems();
+        columnFilterBox.addSeparator(Tool3lgmConstants.getResString("filter_column"));
+        columnFilterBox.addItem(new NamedObjectContainer<ModelElement>(null, Tool3lgmConstants.getResString("show_all_columns")));
+        columnFilterBox.setSelectedIndex(1);
+        columnFilterBox.addSeparator(false);
+        if (columnIdentifiers != null) {
+            for (Object columnIdentifier : columnIdentifiers) {
+                columnFilterBox.addItem(columnIdentifier);
+            }
+        }
+        columnFilterBox.setEnabled(true);
     }
 
     @Override
@@ -230,7 +294,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         }
         GraphDocument doc = getDialog().getGraphDocument();
         if (edgeBoxSelection != null) {
-            UserField selectedWeigth = (UserField) weightBoxSelection;
+            UserField selectedWeigth = weightBoxSelection;
             Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
 
@@ -252,24 +316,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                     // Das ModelElement in der j-ten Spalte
                     ModelElement columnElement = ((NamedObjectContainer<ModelElement>) columnIdentifiers.elementAt(j)).getObject();
 
-                    Kante edge = null;
-
-                    // Richtung der Kante und die Kante selbst ermitteln
-                    if (choosedEdgeDirection == Doppelkante.FORWARD) {
-                        edge = columnElement.getEdgeTo(rowElement, ((Class<?>) edgeBoxSelection).asSubclass(Kante.class));
-
-                        if (edge == null) {
-                            edge = rowElement.getEdgeTo(columnElement, ((Class<?>) edgeBoxSelection).asSubclass(Kante.class));
-                        }
-                    }
-                    if (edge == null && choosedEdgeDirection == Doppelkante.BACKWARD) {
-                        edge = rowElement.getEdgeTo(columnElement, ((Class<?>) edgeBoxSelection).asSubclass(Kante.class));
-
-                        if (edge == null) {
-                            edge = columnElement.getEdgeTo(rowElement, ((Class<?>) edgeBoxSelection).asSubclass(Kante.class));
-                        }
-                    }
-
+                    Kante edge = getEdge(rowElement, columnElement);
                     if (edge == null) {
                         continue;
                     }
@@ -294,6 +341,26 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
 
         //Das reset durchführen kann auch ganz auf das Ende verlegt werden
         doc.getUserFieldDefinitions().initReset();
+    }
+
+    private Kante getEdge(final ModelElement rowElement, final ModelElement columnElement) {
+        Kante edge = null;
+        // Richtung der Kante und die Kante selbst ermitteln
+        if (choosedEdgeDirection == Doppelkante.FORWARD) {
+            edge = columnElement.getEdgeTo(rowElement, edgeBoxSelection);
+
+            if (edge == null) {
+                edge = rowElement.getEdgeTo(columnElement, edgeBoxSelection);
+            }
+        }
+        if (edge == null && choosedEdgeDirection == Doppelkante.BACKWARD) {
+            edge = rowElement.getEdgeTo(columnElement, edgeBoxSelection);
+
+            if (edge == null) {
+                edge = columnElement.getEdgeTo(rowElement, edgeBoxSelection);
+            }
+        }
+        return edge;
     }
 
     @Override
@@ -328,7 +395,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
             choosedEdgeDirection = Doppelkante.BACKWARD;
         }
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
-        AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField);
+        AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);
         super.modifyTable(uftm, tec);
     }
