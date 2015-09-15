@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
@@ -29,7 +27,7 @@ import de.imise.tool3lgm.xml.XMLCharacterCoder;
  * 
  * @author Thomas Rudert
  */
-public class UserField implements Cloneable, Comparator<ModelElement> {
+public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     public static enum Style {
         SEPARATOR {
@@ -396,11 +394,6 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
     private String hashCode;
 
     /**
-     * Der HashCode, der über die Funktion @Override public int hashCode() zurück gegeben wird
-     */
-    private final int javaInternalHashCode;
-
-    /**
      * Gibt an, zu welcher Klasse das <code>UserField</code> gehört.
      */
     private Class<? extends UserFieldTarget> targetClass;
@@ -489,9 +482,6 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
      */
     public UserField(final Class<? extends UserFieldTarget> targetClass, final String hashCode, final UserFieldDefinitions definitions) {
         this.hashCode = hashCode;
-        javaInternalHashCode = new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-                // if deriving: appendSuper(super.hashCode()).
-                append(hashCode).toHashCode();
         if (targetClass != null) {
             this.targetClass = targetClass;
         } else {
@@ -967,30 +957,16 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         return formatUnit;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
-        return javaInternalHashCode;
-        //	    assert false : "hashCode not designed";
-        //        return 42; // any arbitrary constant will do 
+        return hashCode.hashCode();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
         return obj instanceof UserField && ((UserField) obj).getHashCode().equals(hashCode);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#clone()
-     */
     @Override
     public final UserField clone() {
         UserField userField = null;
@@ -1017,10 +993,6 @@ public class UserField implements Cloneable, Comparator<ModelElement> {
         return userField;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         String retVal = null;
