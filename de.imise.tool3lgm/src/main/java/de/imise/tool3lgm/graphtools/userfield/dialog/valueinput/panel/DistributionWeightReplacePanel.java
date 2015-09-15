@@ -234,7 +234,6 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         if (edgeClassBoxSelection != null) {
             Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
-            int pid = getDialog().getTransactionID();
             for (int i = 0; i < rowIdentifiers.size(); i++) {
                 // Das ModelElement in der i-ten Zeile
                 ModelElement rowElement = ((NamedObjectContainer<ModelElement>) rowIdentifiers.elementAt(i)).getObject();
@@ -244,25 +243,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                     UserField replaceUserField = noc.getObject();
                     // Das UserField in der j-ten Spalte
                     UserField columnUserField = ((NamedObjectContainer<UserField>) columnIdentifiers.elementAt(j)).getObject();
-                    //wenn es NICHT das Gleichverteilungs-UserField ist, das ersetzt werden soll
-                    if (columnUserField != null) {
-                        String columnUserFieldHash = columnUserField.getHashCode();
-                        if (replaceUserField == null) { // es soll durch die Gleichverteilung ersetzt werden
-                            doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, null, pid);
-                        } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden 
-                            String userFieldHashReplacement = replaceUserField.getHashCode();
-                            //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelöscht
-                            //wenn die ungleich sind, wird die Ersetzung gesetzt
-                            doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, userFieldHashReplacement, pid);
-                        }
-                    } else { //das Gleichverteilungs-UserField soll ersetzt werden
-                        Class<? extends Kante> selectedEdgeClass = (Class<? extends Kante>) edgeClassBoxSelection;
-                        String selectedEdgeClassName = selectedEdgeClass.getSimpleName();
-                        String replaceUserFieldHash = replaceUserField == null ? null : replaceUserField.getHashCode();
-                        //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelöscht
-                        //wenn es nicht null ist, dann wird der neue Ersetzungshash gesetzt
-                        doc.setUserFieldWeightReplacement(rowElementHash, selectedEdgeClassName, replaceUserFieldHash, pid);
-                    }
+                    set(doc, rowElementHash, columnUserField, replaceUserField);
                 }
             }
         }
@@ -271,6 +252,29 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
         //Das reset durchführen kann auch ganz auf das Ende verlegt werden
         doc.getUserFieldDefinitions().initReset();
+    }
+
+    private void set(final GraphDocument doc, final String rowElementHash, final UserField columnUserField, final UserField replaceUserField) {
+        int pid = getDialog().getTransactionID();
+        //wenn es NICHT das Gleichverteilungs-UserField ist, das ersetzt werden soll
+        if (columnUserField != null) {
+            String columnUserFieldHash = columnUserField.getHashCode();
+            if (replaceUserField == null) { // es soll durch die Gleichverteilung ersetzt werden
+                doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, null, pid);
+            } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden 
+                String userFieldHashReplacement = replaceUserField.getHashCode();
+                //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelöscht
+                //wenn die ungleich sind, wird die Ersetzung gesetzt
+                doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, userFieldHashReplacement, pid);
+            }
+        } else { //das Gleichverteilungs-UserField soll ersetzt werden
+            Class<? extends Kante> selectedEdgeClass = (Class<? extends Kante>) edgeClassBoxSelection;
+            String selectedEdgeClassName = selectedEdgeClass.getSimpleName();
+            String replaceUserFieldHash = replaceUserField == null ? null : replaceUserField.getHashCode();
+            //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelöscht
+            //wenn es nicht null ist, dann wird der neue Ersetzungshash gesetzt
+            doc.setUserFieldWeightReplacement(rowElementHash, selectedEdgeClassName, replaceUserFieldHash, pid);
+        }
     }
 
     @Override
