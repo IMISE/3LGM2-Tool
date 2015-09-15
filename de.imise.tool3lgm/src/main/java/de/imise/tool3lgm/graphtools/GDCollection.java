@@ -1382,6 +1382,7 @@ public final class GDCollection extends UserFieldTarget {
                 doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
                 doubleDir = doubleDir && !edgeClass.isAssignableFrom(PartOfBeziehung.class);
                 doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
+                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
 
                 if (doubleDir) {
                     ((Doppelkante) edge).setDirection(Doppelkante.DOUBLE);
