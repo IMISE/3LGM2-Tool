@@ -117,6 +117,9 @@ public class UserPropertiesContentHandler implements ContentHandler {
         } else if (equals(qName, "showPartOfHierarchy")) {
             UserProperties.setShowPartOfHierarchy(Boolean.valueOf(value).booleanValue());
 
+        } else if (equals(qName, "paintEdgesOnlyForSelectedElements")) {
+            UserProperties.setPaintEdgesOnlyForSelectedElements(Boolean.valueOf(value).booleanValue());
+
         } else if (equals(qName, "usePropertyColors")) {
             UserProperties.setUsePropertyColors(Boolean.valueOf(value).booleanValue());
 
@@ -256,6 +259,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
             raf.writeBytes("\t<showSubModelsInBrowserSideBySide>" + UserProperties.isShowSubModelsInBrowserSideBySide() + "</showSubModelsInBrowserSideBySide>\n");
             raf.writeBytes("\t<showUserDefinedPropertiesInModelBrowser>" + UserProperties.isShowUserDefinedPropertiesInModelBrowser() + "</showUserDefinedPropertiesInModelBrowser>\n");
             raf.writeBytes("\t<showPartOfHierarchy>" + UserProperties.isShowPartOfHierarchy() + "</showPartOfHierarchy>\n");
+            raf.writeBytes("\t<paintEdgesOnlyForSelectedElements>" + UserProperties.isPaintEdgesOnlyForSelectedElements() + "</paintEdgesOnlyForSelectedElements>\n");
             raf.writeBytes("\t<usePropertyColors>" + UserProperties.isUsePropertyColors() + "</usePropertyColors>\n");
             raf.writeBytes("\t<useRaster>" + UserProperties.isUseRaster() + "</useRaster>\n");
             raf.writeBytes("\t<showRaster>" + UserProperties.isShowRaster() + "</showRaster>\n");
