@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
@@ -256,6 +257,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
     private void set(final GraphDocument doc, final String rowElementHash, final UserField columnUserField, final UserField replaceUserField) {
         int pid = getDialog().getTransactionID();
+        WeightReplacer replacer = doc.getCollection().getUserFieldDefinitions().getWeightReplacer();
         //wenn es NICHT das Gleichverteilungs-UserField ist, das ersetzt werden soll
         if (columnUserField != null) {
             String columnUserFieldHash = columnUserField.getHashCode();
@@ -263,17 +265,33 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                 doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, null, pid);
             } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden 
                 String userFieldHashReplacement = replaceUserField.getHashCode();
-                //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelöscht
-                //wenn die ungleich sind, wird die Ersetzung gesetzt
-                doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, userFieldHashReplacement, pid);
+                String oldReplacement = replacer.getReplacement(rowElementHash, columnUserFieldHash);
+                //wenn tatsächlich einer Wert übergeben wurde
+                //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden
+                boolean setOldValue1 = oldReplacement == null && columnUserFieldHash.equals(userFieldHashReplacement);
+                //Fall 2: es ist ein alter Wert gesetzt und es soll derselbe Wert nochmal gesetzt werden
+                boolean setOldvalue2 = oldReplacement != null && oldReplacement.equals(userFieldHashReplacement);
+                if (!setOldValue1 && !setOldvalue2) {
+                    //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelöscht
+                    //wenn die ungleich sind, wird die Ersetzung gesetzt
+                    doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, userFieldHashReplacement, pid);
+                }
             }
         } else { //das Gleichverteilungs-UserField soll ersetzt werden
             Class<? extends Kante> selectedEdgeClass = (Class<? extends Kante>) edgeClassBoxSelection;
             String selectedEdgeClassName = selectedEdgeClass.getSimpleName();
             String replaceUserFieldHash = replaceUserField == null ? null : replaceUserField.getHashCode();
-            //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelöscht
-            //wenn es nicht null ist, dann wird der neue Ersetzungshash gesetzt
-            doc.setUserFieldWeightReplacement(rowElementHash, selectedEdgeClassName, replaceUserFieldHash, pid);
+            String oldReplacement = replacer.getUniformDistributionReplacement(rowElementHash, selectedEdgeClass);
+            //wenn tatsächlich einer Wert übergeben wurde
+            //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden (beide null)
+            boolean setOldValue1 = oldReplacement == replaceUserFieldHash;
+            //Fall 2: es ist ein alter Wert gesetzt und es soll derselbe Wert nochmal gesetzt werden
+            boolean setOldValue2 = oldReplacement != null && oldReplacement.equals(replaceUserFieldHash);
+            if (!setOldValue1 && !setOldValue2) {
+                //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelöscht
+                //wenn es nicht null ist, dann wird der neue Ersetzungshash gesetzt
+                doc.setUserFieldWeightReplacement(rowElementHash, selectedEdgeClassName, replaceUserFieldHash, pid);
+            }
         }
     }
 
