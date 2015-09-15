@@ -37,33 +37,6 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
     }
 
     @Override
-    protected void setNodeBoxContent() {
-
-        super.setNodeBoxContent();
-
-        //UserFieldDefinitions definitions = getUserFieldDefinitions();
-
-        //AXS 10.09.2015: Ich glaube das ist Quatsch, weil Kanten als einzige Formeln Referenzen haben können und DIE Informationen,
-        //die dann angezeigt werden ohne Aussagewert sind.
-        //
-        // Hier werden jetzt die Kanten hinzugefügt, für die Kennzahlformeln definiert sind. 
-        // Das passiert aber nur, wenn die <code>setNodeBoxContent()</code> 
-        // implizit durch das super() des <code>ClassificationNumberFormulaPanel</code> aufgerufen wird.
-        // Die lokale <code>isNodeBoxContent()</code> hier lässt das hinzufügen von Kanten nicht zu - die überschriebene Methode lässt das hinzufügen zu.  
-        //        for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
-        //
-        //            // Falls Verteilungsgewichte exisitieren, füge Kantenklasse ein
-        //            if (isNodeBoxContent(ModelConstants.ALL_EDGES[i], definitions)) {
-        //
-        //                //if (definitions.getUserFieldCount(ModelConstants.ALL_EDGES[i]) > 0) {
-        //                nodeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-        //                nodeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-        //            }
-        //            // sonst, füge nicht ein
-        //        }
-    }
-
-    @Override
     protected UserFieldTable initTable() {
         UserFieldTableLayout uftl = new UserFieldTableLayout();
         UserFieldTable table = new UserFieldTable(uftl);
