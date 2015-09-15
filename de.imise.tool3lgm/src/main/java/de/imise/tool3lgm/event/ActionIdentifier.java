@@ -175,6 +175,7 @@ public enum ActionIdentifier {
     show_multiple_browsers,
     show_userdefinded_properties,
     // graphicOptions
+    paintEdgesOnlyForSelectedElements,
     analysis_color,
     rendering_options,
     useRaster,
@@ -275,8 +276,8 @@ public enum ActionIdentifier {
     /**
      * Liefert den zur {@link Locale} <code>l</code> gehörigen Identifier.
      * <p>
-     * Per Konvention wird hier der Identifier zurückgegeben, der dem Namen von <code>l</code> im
-     * Englischen in Kleinbuchstaben entspricht. Bsp.: {@link Locale#GERMAN} --> {@link #german}
+     * Per Konvention wird hier der Identifier zurückgegeben, der dem Namen von <code>l</code> im Englischen in Kleinbuchstaben entspricht. Bsp.:
+     * {@link Locale#GERMAN} --> {@link #german}
      * 
      * @param l
      * @return
@@ -297,8 +298,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt den {@link KeyStroke} zurück, der die durch diesen Identifier identifizierte
-     * {@link StaticAction} auslöst.
+     * Gibt den {@link KeyStroke} zurück, der die durch diesen Identifier identifizierte {@link StaticAction} auslöst.
      * 
      * @return
      */
@@ -307,8 +307,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt das große Icon für die durch diesen Identifier identifizierte {@link StaticAction}
-     * wieder
+     * Gibt das große Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
      * 
      * @return
      */
@@ -318,8 +317,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt ausführliche Beschreibung der durch diesen Identifier identifizierten
-     * {@link StaticAction} zurück. (Zur Verwendung bei Hilfe)
+     * Gibt ausführliche Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung bei Hilfe)
      * 
      * @param description
      */
@@ -331,8 +329,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt kurze Beschreibung der durch diesen Identifier identifizierten {@link StaticAction}
-     * zurück. (Zur Verwendung als Tooltip)
+     * Gibt kurze Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung als Tooltip)
      * 
      * @param description
      */
@@ -343,8 +340,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt das kleine Icon für die durch diesen Identifier identifizierte {@link StaticAction}
-     * wieder
+     * Gibt das kleine Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
      * 
      * @return
      */
@@ -354,8 +350,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt den anzuzeigenden Text für die durch diesen Identifier identifizierte
-     * {@link StaticAction} wieder.
+     * Gibt den anzuzeigenden Text für die durch diesen Identifier identifizierte {@link StaticAction} wieder.
      * 
      * @param
      */
