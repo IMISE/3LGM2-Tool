@@ -1392,7 +1392,10 @@ public final class GDCollection extends UserFieldTarget {
                         ModelElement dummy = startElement;
                         startElement = endElement;
                         endElement = dummy;
-                        dir = Doppelkante.BACKWARD;
+                        //nur die Rückwärtsrichtung setzen, wenn es keine Kante ist, die immer vorwärts dargestellt werden soll
+                        if (!ModelConstants.isForwardConnectedEdge(edgeClass)) {
+                            dir = Doppelkante.BACKWARD;
+                        }
                     }
                     ((Doppelkante) edge).setDirection(dir);
                 }

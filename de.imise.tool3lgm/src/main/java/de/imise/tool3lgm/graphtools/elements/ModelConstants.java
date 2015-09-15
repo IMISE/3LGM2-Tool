@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
@@ -533,6 +535,24 @@ public final class ModelConstants {
      */
     public static final boolean isDoubleMeaningEdge(final Class<?> edgeClass) {
         return DOUBLE_MEANING_EDGE_CLASSES.contains(edgeClass);
+    }
+
+    /**
+     * Liste aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
+     * der Grafik dargestelt werden.
+     */
+    private static final Set<Class<? extends Kante>> FORWARD_CONNECTED_EDGE_CLASSES = ImmutableSet.of();
+
+    /**
+     * Prüft, ob die übergebene Klasse eine Kantenklasse ist, die immer nur in Vorwärtsrichtung verbunden werden kann
+     * und somit auch in der Grafik nur in dieser Richtung dargestellt wird.
+     * 
+     * @see #FORWARD_CONNECTED_EDGE_CLASSES
+     * @param edgeClass
+     * @return
+     */
+    public static final boolean isForwardConnectedEdge(final Class<?> edgeClass) {
+        return FORWARD_CONNECTED_EDGE_CLASSES.contains(edgeClass);
     }
 
     ///////////////////////////////////////////////////////////////////
