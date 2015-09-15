@@ -123,8 +123,11 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
             // Falls Verteilungsgewichte exisitieren, füge Kantenklasse ein
             if (definitions.hasNumberFields(ModelConstants.ALL_EDGES[i])) {
-                edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-                edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
+                //nur hinzufügen, wenn es auch Elemente gibt
+                if (!getDialog().getGraphDocument().getModelItems(ModelConstants.ALL_EDGES[i]).isEmpty()) {
+                    edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
+                    edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
+                }
             }
             // sonst, füge nicht ein
         }
