@@ -388,8 +388,8 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
                     String columnIndex = news[5];
                     String rowCount = news[6];
                     String columnCount = news[7];
-                    rowLabel.setText(rowTitel.concat(rowIndex).concat("/").concat(columnCount).concat(": ").concat(rowIdentifierName));
-                    colLabel.setText(colTitel.concat(columnIndex).concat("/").concat(rowCount).concat(": ").concat(columnIdentifierName));
+                    rowLabel.setText(rowTitel.concat("\t").concat(rowIndex).concat("/").concat(columnCount).concat(": \t").concat(rowIdentifierName));
+                    colLabel.setText(colTitel.concat("\t").concat(columnIndex).concat("/").concat(rowCount).concat(": \t").concat(columnIdentifierName));
                     rowLabel2.setText(rowTitel2.concat(rowSum));
                     colLabel2.setText(colTitel2.concat(columnSum));
 
