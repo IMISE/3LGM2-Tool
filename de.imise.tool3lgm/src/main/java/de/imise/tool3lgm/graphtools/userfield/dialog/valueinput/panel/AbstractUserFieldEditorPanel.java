@@ -109,7 +109,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
                 //wenn nicht selektiert ist -> löschen
                 if (row == -1 || col == -1) {
                     elementsAtMousePointer = new String[] {
-                            "", "", "", "",
+                            "", "", "", "", "", "", "", ""
                     };
                     firePropertyChange(UserFieldEditorDialog.PROPERTY_TABLE_SELECTION_CHANGED, oldValue, elementsAtMousePointer);
                     return;
@@ -130,8 +130,14 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
                 Object columnHeaderValue = column.getHeaderValue();
                 String columnHeaderName = columnHeaderValue.toString();
 
+                String rowIndex = Integer.toString(row + 1);
+                String columnIndex = Integer.toString(col + 1);
+
+                String columnCount = Integer.toString(table.getRowCount());
+                String rowCount = Integer.toString(table.getColumnCount());
+
                 elementsAtMousePointer = new String[] {
-                        rowIdentifierName, columnHeaderName, rowSum, colSum,
+                        rowIdentifierName, columnHeaderName, rowSum, colSum, rowIndex, columnIndex, rowCount, columnCount
                 };
                 // Änderung dem Dialog mitteilen
                 firePropertyChange(UserFieldEditorDialog.PROPERTY_TABLE_SELECTION_CHANGED, oldValue, elementsAtMousePointer);

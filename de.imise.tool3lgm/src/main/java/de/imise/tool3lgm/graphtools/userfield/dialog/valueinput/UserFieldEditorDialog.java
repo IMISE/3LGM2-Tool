@@ -380,10 +380,18 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
             public void propertyChange(final PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(PROPERTY_TABLE_SELECTION_CHANGED)) {
                     String[] news = (String[]) evt.getNewValue();
-                    rowLabel.setText(rowTitel.concat(news[0]));
-                    colLabel.setText(colTitel.concat(news[1]));
-                    rowLabel2.setText(rowTitel2.concat(news[2]));
-                    colLabel2.setText(colTitel2.concat(news[3]));
+                    String rowIdentifierName = news[0];
+                    String columnIdentifierName = news[1];
+                    String rowSum = news[2];
+                    String columnSum = news[3];
+                    String rowIndex = news[4];
+                    String columnIndex = news[5];
+                    String rowCount = news[6];
+                    String columnCount = news[7];
+                    rowLabel.setText(rowTitel.concat(rowIndex).concat("/").concat(columnCount).concat(": ").concat(rowIdentifierName));
+                    colLabel.setText(colTitel.concat(columnIndex).concat("/").concat(rowCount).concat(": ").concat(columnIdentifierName));
+                    rowLabel2.setText(rowTitel2.concat(rowSum));
+                    colLabel2.setText(colTitel2.concat(columnSum));
 
                     rowLabel2.setVisible(news[2].length() > 0);
                     colLabel2.setVisible(news[3].length() > 0);
