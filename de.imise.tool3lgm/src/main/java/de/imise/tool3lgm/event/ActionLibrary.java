@@ -1594,6 +1594,15 @@ public class ActionLibrary {
          */
         public static class Graphics {
 
+            /** (De-)Aktiviert das Zeichnen von Kanten nur für selektierte Elemente */
+            public static final Action PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS = new StaticAction(ActionIdentifier.paintEdgesOnlyForSelectedElements, (Boolean) UserProperties.isPaintEdgesOnlyForSelectedElements()) {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    UserProperties.setPaintEdgesOnlyForSelectedElements(isSelected());
+                    repaintTool();
+                }
+            };
+
             /**
              * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
              * Grafik hervorgehovben werden
