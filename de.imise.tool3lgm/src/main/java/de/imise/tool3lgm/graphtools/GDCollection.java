@@ -1975,6 +1975,7 @@ public final class GDCollection extends UserFieldTarget {
                 iconKey = "IMG_" + new Date().getTime() + iconCounter++ + ".gif";
                 getIconTable().put(iconKey, img);
             }
+            imf.close();
         } catch (Exception e) {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
         }
@@ -2849,10 +2850,8 @@ public final class GDCollection extends UserFieldTarget {
         try {
             randomAccessFile.seek(0);
             String line = randomAccessFile.readLine();
-
-            LGMInputStream fis = new LGMInputStream(randomAccessFile.getFD());
-
             if (line != null) {
+                LGMInputStream fis = new LGMInputStream(randomAccessFile.getFD());
                 if (line.startsWith("<!--ziped Tool3lgmFile-->")) {
                     readingSuccessful = loadZipFile(fis);
                     if (readingSuccessful) {
@@ -2871,7 +2870,9 @@ public final class GDCollection extends UserFieldTarget {
                         isZipFile = false;
                     }
                 }
+                fis.close();
             } else {
+                randomAccessFile.close();
                 throw new IOException("Could not read file...");
             }
         } catch (Exception e) {
@@ -3019,6 +3020,8 @@ public final class GDCollection extends UserFieldTarget {
             throw new IOException("Empty file!");
         }
 
+        @SuppressWarnings("resource")
+        //der wird geclosed in forceClose()
         LGMInputStream tmpIStream = new LGMInputStream(tempFile);
         randomAccessFile.seek(0);
         randomAccessFile.setLength(0);
