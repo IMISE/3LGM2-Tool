@@ -141,10 +141,6 @@ public class BSNPanel extends ElementDialogPanel {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-     */
     @Override
     protected void init() {
         super.init();
@@ -178,10 +174,6 @@ public class BSNPanel extends ElementDialogPanel {
         repaint();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-     */
     @Override
     protected void showFullDialog() {
 

@@ -69,10 +69,6 @@ public class PhysischerDVBaustein extends Knoten {
         return retVal;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-     */
     @Override
     public int layerFor() {
         return ModelConstants.PHYSICAL_LAYER;
@@ -128,10 +124,6 @@ public class PhysischerDVBaustein extends Knoten {
         processor = in;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.Knoten#putXMLFieldString(java.lang.String, java.lang.String)
-     */
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("os_type")) {

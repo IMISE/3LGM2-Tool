@@ -42,8 +42,8 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * </ul>
  * <br>
  * an. Hinzufügen von Assoziationen zw. den Elementen und Neuanlegen von Aufgaben bzw.
- * Organisatiosneinheiten geht auch. Dieses Panel ersetzt das <code>AufOrgPanel</code> und das
- * <code>OrgAufPanel</code>. Wenn es sich bewährt, kann man die anderen beiden Panels löschen und
+ * Organisatiosneinheiten geht auch. Dieses Panel ersetzt das <code>AufOrgPanel</code> und das <code>OrgAufPanel</code>. Wenn es sich bewährt, kann
+ * man die anderen beiden Panels löschen und
  * diesen Kommentar entfernen.
  */
 public class AufOrgPanel extends LGMDragNDropPanel {
@@ -177,10 +177,6 @@ public class AufOrgPanel extends LGMDragNDropPanel {
 
     ArrayList<ElementContainer> childrenToExcludeFromRtree = new ArrayList<ElementContainer>(5000);
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#init()
-     */
     @Override
     public void init() {
         super.init();
@@ -224,10 +220,6 @@ public class AufOrgPanel extends LGMDragNDropPanel {
         repaint();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-     */
     @Override
     public void showFullDialog() {
         super.showFullDialog();
@@ -265,10 +257,6 @@ public class AufOrgPanel extends LGMDragNDropPanel {
         return elementClass;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#collectDragNDropActionChains()
-     */
     @Override
     protected DragNDropActionChain[] collectDragNDropActionChains() {
         DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rtree, ltree, addAction);
@@ -278,10 +266,6 @@ public class AufOrgPanel extends LGMDragNDropPanel {
         };
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#getAllDragNDropTrees()
-     */
     @Override
     public LGMDragNDropTree[] getAllDragNDropTrees() {
         return new LGMDragNDropTree[] {

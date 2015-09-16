@@ -101,10 +101,6 @@ public class EdgeContainer extends ElementContainer {
         computeBorderPoints();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.view.container.ElementContainer#clone(boolean, tool3lgm.graphtools.GraphDocument)
-     */
     @Override
     public ElementContainer clone(final boolean cloneModelElement, final GraphDocument _doc) {
         EdgeContainer retVal;

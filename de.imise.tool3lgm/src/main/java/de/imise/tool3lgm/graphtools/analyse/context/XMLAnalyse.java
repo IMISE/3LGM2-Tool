@@ -165,10 +165,6 @@ public class XMLAnalyse extends AbstractAnalyse {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         // wird gebraucht, um die Analysen in der Tabelle des AnalyseRepositoryDialoges richtig
@@ -177,20 +173,12 @@ public class XMLAnalyse extends AbstractAnalyse {
         // return startknoten.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         // assert false : "hashCode not designed";
         return 42; // any arbitrary constant will do
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
         if (super.equals(obj)) {

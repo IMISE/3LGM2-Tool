@@ -818,20 +818,11 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         setVisible(true);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         callSearch(e);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event
-     * .ListSelectionEvent)
-     */
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         int[] selected = table.getSelectedRows();

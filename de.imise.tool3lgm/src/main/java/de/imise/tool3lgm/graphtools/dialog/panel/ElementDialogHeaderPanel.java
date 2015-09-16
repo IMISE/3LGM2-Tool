@@ -97,10 +97,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-     */
     @Override
     protected void init() {
         ModelElement modelElement = dialog.getModelElement();
@@ -151,10 +147,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#update()
-     */
     @Override
     public void update() {
         init();

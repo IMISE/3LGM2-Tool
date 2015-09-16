@@ -61,37 +61,21 @@ public class AnalyseRepositoryFrameTable extends JTable {
             this.parent = parent;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableModel#getColumnCount()
-         */
         @Override
         public int getColumnCount() {
             return 3;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableModel#getColumnName(int)
-         */
         @Override
         public String getColumnName(final int column) {
             return colheads[column];
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableModel#getRowCount()
-         */
         @Override
         public int getRowCount() {
             return AnalyseRepositoryFrame.analysen != null ? AnalyseRepositoryFrame.analysen.size() : 0;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableModel#getValueAt(int, int)
-         */
         @Override
         public Object getValueAt(final int row, final int column) {
             if (AnalyseRepositoryFrame.analysen != null) {
@@ -109,19 +93,11 @@ public class AnalyseRepositoryFrameTable extends JTable {
             return "";
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableModel#isCellEditable(int, int)
-         */
         @Override
         public boolean isCellEditable(final int row, final int column) {
             return column > 0;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
-         */
         @Override
         public void setValueAt(final Object o, final int row, final int column) {
             switch (column) {
@@ -167,20 +143,11 @@ public class AnalyseRepositoryFrameTable extends JTable {
             super();
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.CellEditor#getCellEditorValue()
-         */
         @Override
         public Object getCellEditorValue() {
             return analyseText;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable,
-         * java.lang.Object, boolean, int, int)
-         */
         @Override
         public Component getTableCellEditorComponent(final JTable table, final Object value, final boolean isSelected, final int row, final int col) {
             analyseText = value.toString();
@@ -234,12 +201,6 @@ public class AnalyseRepositoryFrameTable extends JTable {
             return btnpick;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see
-         * javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable,
-         * java.lang.Object, boolean, boolean, int, int)
-         */
         @Override
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
             return btnpick;
@@ -267,10 +228,6 @@ public class AnalyseRepositoryFrameTable extends JTable {
     // TableModel //
     // //////////////
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JTable#getCellEditor(int, int)
-     */
     @Override
     public TableCellEditor getCellEditor(final int row, final int column) {
         if (column == 2) {
@@ -282,10 +239,6 @@ public class AnalyseRepositoryFrameTable extends JTable {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JTable#getCellRenderer(int, int)
-     */
     @Override
     public TableCellRenderer getCellRenderer(final int row, final int column) {
         if (column == 2) {
@@ -309,11 +262,6 @@ public class AnalyseRepositoryFrameTable extends JTable {
     // Renderer für die Buttons in Spalte 3//
     // ///////////////////////////////////////
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
-     */
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         super.valueChanged(e);

@@ -60,8 +60,7 @@ public class AnalyseRepositoryFrame extends JFrame {
     static boolean analysisChanged = false;
 
     /**
-     * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie nicht
-     * <code>null</code> ist und noch nicht in der Liste vorkommt.
+     * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie nicht <code>null</code> ist und noch nicht in der Liste vorkommt.
      * 
      * @param toadd
      * @param ignoreDuplicates wenn <code>true</code> werden identische Analysen auch mehrfach
@@ -171,10 +170,6 @@ public class AnalyseRepositoryFrame extends JFrame {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.Window#dispose()
-     */
     @Override
     public void dispose() {
         super.dispose();

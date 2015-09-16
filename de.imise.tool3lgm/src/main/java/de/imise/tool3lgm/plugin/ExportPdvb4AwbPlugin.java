@@ -86,10 +86,6 @@ public class ExportPdvb4AwbPlugin implements Plugin {
 
             }
 
-            /*
-             * (non-Javadoc)
-             * @see javax.swing.AbstractAction#isEnabled()
-             */
             @Override
             public boolean isEnabled() {
                 return Tool3lgm.tool.getSelectedDoc() != null;

@@ -169,10 +169,6 @@ public class DecisionTreeNode {
         return needed;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         return super.toString() + " [" + needed + ", " + (deleted ? "deleted" : "not deleted") + ", " + (isLeaf() ? new Integer(getValue()).toString() : "-1") + "]";
@@ -215,19 +211,11 @@ public class DecisionTreeNode {
             this.value = value;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see tool3lgm.graphtools.analyse.redundancy.DecisionTreeNode#getValue()
-         */
         @Override
         public final int getValue() {
             return value;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see tool3lgm.graphtools.analyse.redundancy.DecisionTreeNode#isLeaf()
-         */
         @Override
         public final boolean isLeaf() {
             return true;

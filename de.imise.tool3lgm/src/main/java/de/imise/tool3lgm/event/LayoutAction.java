@@ -10,8 +10,8 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 /**
  * Von {@link StaticAction} abgeleitet Klasse zur Änderung von Layer- und Element-Layout.
  * <p>
- * Das im Konstruktor spezifizierte Kommando wird inklusive eventueller Argumente beim Auslösen
- * dieser {@link Action} im aktuellen {@link GraphDocument} ausgeführt.
+ * Das im Konstruktor spezifizierte Kommando wird inklusive eventueller Argumente beim Auslösen dieser {@link Action} im aktuellen
+ * {@link GraphDocument} ausgeführt.
  * 
  * @author fstephan
  */
@@ -151,10 +151,6 @@ class LayoutAction extends StaticAction {
         putValue(ARGUMENT_KEY, argument);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (!isEnabled()) {

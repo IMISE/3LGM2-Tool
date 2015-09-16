@@ -238,12 +238,6 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         * @see
-         * javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent
-         * )
-         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             setValuesInNewList(false);
@@ -332,8 +326,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
     private JPanel pathStepMainPanel;
 
     /**
-     * Die Constraints mit denen die einzelnen <code>PathStepComponent</code>s in das
-     * <code>pathStepMainPanel</code> eingefügt werden.
+     * Die Constraints mit denen die einzelnen <code>PathStepComponent</code>s in das <code>pathStepMainPanel</code> eingefügt werden.
      */
     private final GridBagConstraints pathStepMainPanelConstraints = new GridBagConstraints();
 
@@ -355,10 +348,6 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         String str = e.getActionCommand();
@@ -442,10 +431,6 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.Window#dispose()
-     */
     @Override
     public void dispose() {
         super.dispose();

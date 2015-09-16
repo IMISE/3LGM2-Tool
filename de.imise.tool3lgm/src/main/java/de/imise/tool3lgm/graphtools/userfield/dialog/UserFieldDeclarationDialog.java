@@ -459,10 +459,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getActionCommand().equals("ok")) {

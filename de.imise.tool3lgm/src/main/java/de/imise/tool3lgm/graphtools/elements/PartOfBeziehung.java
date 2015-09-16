@@ -4,7 +4,8 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Kante ist immer das Kindelement, das Ende der Kante ist immer das Elternelement. Dir Richtung der Kante ist immer forward.
+ * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Kante ist immer das Kindelement,
+ * das Ende der Kante ist immer das Elternelement. Dir Richtung der Kante ist immer forward.
  */
 public abstract class PartOfBeziehung extends Doppelkante {
 
@@ -70,7 +71,8 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Kante zuweisungskompatibel ist, ide nicht die Teilelementklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Kante zuweisungskompatibel ist, ide nicht
+     * die Teilelementklasse ist.
      * 
      * @param poClass
      * @param meClass
@@ -90,19 +92,11 @@ public abstract class PartOfBeziehung extends Doppelkante {
      */
     public static final int PARENT_TO_PART_DIRECTION = Doppelkante.BACKWARD;
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.edge.Doppelkante#getState() bitte so lassen, wegen XSLT-Scripte (PartOfBeziehung muss immer FORWARD sein)
-     */
     @Override
     public final int getDirection() {
         return PART_TO_PARENT_DIRECTION;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.ModelElement#putXMLFieldString(java.lang.String, java.lang.String) bitte so lassen, wegen XSLT-Scripte (PartOfBeziehung muss immer FORWARD sein)
-     */
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("state")) {
@@ -117,10 +111,6 @@ public abstract class PartOfBeziehung extends Doppelkante {
         return super.putXMLFieldString(field, value);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.edge.Doppelkante#setDirection(int) bitte so lassen, wegen XSLT-Scripte (PartOfBeziehung muss immer FORWARD sein)
-     */
     @Override
     public final void setDirection(final int _state) {
         ModelElement start = k1;

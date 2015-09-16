@@ -10,9 +10,8 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
  * Von {@link AbstractLGMAction} abgeleitete Klasse zum Einfügen von {@link ModelElement}en in die 3
  * Ebenen.
  * <p>
- * Das Erzeugen von Instanzen dieser Klasse erfolgt durch die Spezifizierung der zu generierenden
- * {@link ModelElement}-Klasse. Intern wird dann dazu über {@link ModelConstants} der passende Name
- * für diese Action gesucht.
+ * Das Erzeugen von Instanzen dieser Klasse erfolgt durch die Spezifizierung der zu generierenden {@link ModelElement}-Klasse. Intern wird dann dazu
+ * über {@link ModelConstants} der passende Name für diese Action gesucht.
  * 
  * @author fstephan
  */
@@ -56,8 +55,7 @@ class InsertAction extends AbstractLGMAction {
     /**
      * Konstruktor
      * <p>
-     * Erzeugt neue Instanz dieser Klasse anhand des zur spezifizierten {@link ModelElement}-Klasse
-     * passenden {@link ActionIdentifier}
+     * Erzeugt neue Instanz dieser Klasse anhand des zur spezifizierten {@link ModelElement}-Klasse passenden {@link ActionIdentifier}
      * 
      * @param elementClass {@link ModelElement}-Klasse die, durch diese Action erzeugt wird
      */
@@ -67,10 +65,6 @@ class InsertAction extends AbstractLGMAction {
         putValue(ELEMENT_CLASS_KEY, elementClass);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (!isEnabled()) {
@@ -79,10 +73,6 @@ class InsertAction extends AbstractLGMAction {
         createNode(elementClass);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.AbstractAction#isEnabled()
-     */
     @Override
     public boolean isEnabled() {
         return getSelectedDoc() != null;

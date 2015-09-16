@@ -135,10 +135,6 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         initSelection();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == noAccountingBut) {

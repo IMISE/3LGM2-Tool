@@ -97,9 +97,6 @@ public final class GDCollection extends UserFieldTarget {
     private final Hashtable<Integer, Integer> transStackTable = new Hashtable<Integer, Integer>();
     //	/*{
     //
-    //		/* (non-Javadoc)
-    //		 * @see java.util.Hashtable#get(java.lang.Object)
-    //		 * /
     //		@Override
     //		public synchronized Integer get(Object key) {
     //			Integer getted = super.get(key);
@@ -107,18 +104,12 @@ public final class GDCollection extends UserFieldTarget {
     //			return super.get(key);
     //		}
     //
-    //		/* (non-Javadoc)
-    //		 * @see java.util.Hashtable#put(java.lang.Object, java.lang.Object)
-    //		 * /
     //		@Override
     //		public synchronized Integer put(Integer key, Integer value) {
     //			System.err.println("put(Integer key, Integer value):  key=" + key + " value =" + value);
     //			return super.put(key, value);
     //		}
     //
-    //		/* (non-Javadoc)
-    //		 * @see java.util.Hashtable#remove(java.lang.Object)
-    //		 * /
     //		@Override
     //		public synchronized Integer remove(Object key) {
     //			Integer removed = super.remove(key);

@@ -284,9 +284,6 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     // this.dialogPanel = dialogPanel;
     // this.selectionSource = selectionSource;
     // }
-    // /* (non-Javadoc)
-    // * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-    // */
     // public void actionPerformed(ActionEvent e) {
     // GraphDocument doc = dialogPanel.doc;
     // int id = dialogPanel.dialog.getID();

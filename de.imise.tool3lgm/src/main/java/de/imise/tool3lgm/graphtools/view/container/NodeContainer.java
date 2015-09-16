@@ -458,10 +458,6 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.view.container.ElementContainer#setExpanded(boolean)
-     */
     @Override
     public void setExpanded(final boolean exp) {
         super.setExpanded(exp);

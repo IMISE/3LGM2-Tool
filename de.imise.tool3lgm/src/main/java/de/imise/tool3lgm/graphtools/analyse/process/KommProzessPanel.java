@@ -184,10 +184,6 @@ public class KommProzessPanel extends ElementDialogPanel {
         add(optionPanel, BorderLayout.SOUTH);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#update()
-     */
     @Override
     public void update() {
         // System.out.println("update() mit visible==" + isVisible());
@@ -582,19 +578,11 @@ public class KommProzessPanel extends ElementDialogPanel {
             setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.JTable#isCellEditable(int, int)
-         */
         @Override
         public boolean isCellEditable(final int col, final int row) {
             return false;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.JTable#valueChanged(javax.swing.event.ListSelectionEvent)
-         */
         @Override
         public void valueChanged(final ListSelectionEvent e) {
             super.valueChanged(e);

@@ -252,21 +252,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         return deleted;
     }
 
-    /**
-     * Gibt die Anzahl der UserField zurück.
-     * 
-     * @param userFieldTargetClass
-     * @return Anzahl der userFields / public int getUserFieldCount(Class<? extends ModelElement> userFieldTargetClass) { if
-     *         (!classToUserFieldListMap.containsKey(userFieldTargetClass)) return 0; UserFieldList ufl = (UserFieldList)
-     *         classToUserFieldListMap.get(userFieldTargetClass); return ufl.getUserFieldsCount(); } /** Gibt die Anzahl der globalen UserField
-     *         zurück.
-     * @return Anzahl der globalen userFields / public int getGlobalUserFieldCount() { return getUserFieldCount(GLOBAL_USERFIELD_IDENTIFIER_CLASS); }
-     */
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#clone()
-     */
     @Override
     public Object clone() {
         UserFieldDefinitions def = null;

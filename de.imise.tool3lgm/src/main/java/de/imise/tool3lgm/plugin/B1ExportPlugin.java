@@ -93,10 +93,6 @@ public class B1ExportPlugin implements Plugin {
 
             }
 
-            /*
-             * (non-Javadoc)
-             * @see javax.swing.AbstractAction#isEnabled()
-             */
             @Override
             public boolean isEnabled() {
                 return Tool3lgm.tool.getSelectedDoc() != null;

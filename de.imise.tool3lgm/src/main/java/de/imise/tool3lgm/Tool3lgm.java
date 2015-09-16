@@ -414,8 +414,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
         // TODO:____###### Größenänderung des Tools
-        //		screenSize.height -= 400;
-        //		screenSize.width -= 50;
+        //        screenSize.height -= 400;
+        //        screenSize.width -= 50;
         setSize(screenSize);
 
         //Arbeitsfläche mit SplitPane (rechts JDesktopPane für InternalFrame,
@@ -473,10 +473,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         return contextGenerator;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.Window#setCursor(java.awt.Cursor)
-     */
     @Override
     public void setCursor(final Cursor cursor) {
         if (activeFrame != null) {

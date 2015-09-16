@@ -41,10 +41,6 @@ public abstract class AbstractError extends Error {
         this.gdcoll = gdcoll;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Throwable#getMessage()
-     */
     @Override
     public final String getMessage() {
         return getMessageBuilder().toString();

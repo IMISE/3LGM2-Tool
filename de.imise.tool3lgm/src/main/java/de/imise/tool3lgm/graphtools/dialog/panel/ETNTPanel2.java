@@ -212,10 +212,6 @@ public class ETNTPanel2 extends LGMDragNDropPanel {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#init()
-     */
     @Override
     protected void init() {
 

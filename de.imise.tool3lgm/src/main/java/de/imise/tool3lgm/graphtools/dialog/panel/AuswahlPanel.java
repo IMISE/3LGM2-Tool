@@ -108,10 +108,6 @@ public class AuswahlPanel extends ElementDialogPanel {
         return westLabel;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-     */
     @Override
     protected void init() {
         super.init();
@@ -156,10 +152,6 @@ public class AuswahlPanel extends ElementDialogPanel {
         box.addItemListener(itemListener);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-     */
     @Override
     protected void showFullDialog() {
         super.showFullDialog();

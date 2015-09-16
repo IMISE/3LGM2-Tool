@@ -389,10 +389,6 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     // Methoden des MouseListener-Interfaces --- Anfang ---
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-     */
     @Override
     public final void mouseClicked(final MouseEvent e) {
         if (e.getClickCount() <= 1) {

@@ -54,10 +54,6 @@ public final class AwbkAufOrgVerbindung extends Doppelkante {
         super(knot1, knot2, registerInKnots);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-     */
     @Override
     public int layerFor() {
         return ModelConstants.INTER_DOMAIN_LOGICAL_LAYER;

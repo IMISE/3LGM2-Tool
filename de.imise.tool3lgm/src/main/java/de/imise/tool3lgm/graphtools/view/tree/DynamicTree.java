@@ -693,10 +693,6 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseEntered(final MouseEvent e) {
     }

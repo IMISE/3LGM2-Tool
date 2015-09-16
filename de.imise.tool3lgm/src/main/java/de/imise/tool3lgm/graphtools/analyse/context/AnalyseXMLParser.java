@@ -82,20 +82,11 @@ public class AnalyseXMLParser extends DefaultHandler {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xml.sax.ContentHandler#characters(char[], int, int)
-     */
     @Override
     public void characters(final char[] ch, final int start, final int length) {
         elementTextBuf.append(ch, start, length);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xml.sax.ContentHandler#endElement(java.lang.String, java.lang.String,
-     * java.lang.String)
-     */
     @Override
     public void endElement(final String namespaceURI, final String localName, final String rawName) {
         /*
@@ -227,11 +218,6 @@ public class AnalyseXMLParser extends DefaultHandler {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String,
-     * java.lang.String, org.xml.sax.Attributes)
-     */
     @Override
     public void startElement(final String namespaceURI, final String localName, final String rawName, final Attributes atts) {
 

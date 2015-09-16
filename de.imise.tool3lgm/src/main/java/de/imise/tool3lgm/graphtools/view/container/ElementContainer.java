@@ -685,10 +685,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         super.setFont(getFont());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JLabel#setText(java.lang.String)
-     */
     @Override
     public final void setText(final String text) {
         if (me == null) {

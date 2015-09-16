@@ -74,10 +74,6 @@ public class AwbAufPanel extends ElementDialogPanel {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-     */
     @Override
     protected void init() {
         super.init();
@@ -87,10 +83,6 @@ public class AwbAufPanel extends ElementDialogPanel {
         repaint();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-     */
     @Override
     public void showFullDialog() {
         super.showFullDialog();

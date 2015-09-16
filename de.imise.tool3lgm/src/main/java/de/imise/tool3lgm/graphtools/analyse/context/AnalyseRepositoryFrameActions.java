@@ -31,10 +31,6 @@ public class AnalyseRepositoryFrameActions {
      * Aktion für das Schließen des Dialoges
      */
     static final Action ACTION_CLOSE_DIALOG = new AbstractAction(Tool3lgmConstants.getResString("close")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             if (AnalyseRepositoryFrame.analysisChanged) {
@@ -58,10 +54,6 @@ public class AnalyseRepositoryFrameActions {
      * Datei hinzu.
      */
     static final Action ACTION_IMPORT_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_import")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             File lastUsedAnalyseFile = AnalyseRepositoryFrame.analyseFile;
@@ -98,10 +90,6 @@ public class AnalyseRepositoryFrameActions {
      * Aktion für das Exportieren von Analysen
      */
     static final Action ACTION_EXPORT_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_export")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             // Speichert die aktuellen Analysen in einer vom Benutzer ausgewählten Datei
@@ -148,10 +136,7 @@ public class AnalyseRepositoryFrameActions {
      * Aktion für das Zurücksetzen des Repositories auf das Standardrepository
      */
     static final Action ACTION_LOAD_STANDARD_REPOSITORY = new AbstractAction(Tool3lgmConstants.getResString("ana_load_standard_repository")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
+
         @Override
         public void actionPerformed(final ActionEvent e) {
             if (AnalyseRepositoryFrame.analysisChanged == true) {
@@ -166,10 +151,6 @@ public class AnalyseRepositoryFrameActions {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.Action#isEnabled()
-         */
         @Override
         public boolean isEnabled() {
             return AnalyseRepositoryFrame.analysisChanged;
@@ -180,10 +161,7 @@ public class AnalyseRepositoryFrameActions {
      * Action für das Speichern des Repositories
      */
     static final Action ACTION_SAVE_REPOSITORY = new AbstractAction(Tool3lgmConstants.getResString("ana_save_repository")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
+
         @Override
         public void actionPerformed(final ActionEvent e) {
             if (!AnalyseRepository.setXMLAnalysen(AnalyseRepositoryFrame.analysen)) {
@@ -194,10 +172,6 @@ public class AnalyseRepositoryFrameActions {
             AnalyseRepositoryFrame.refreshActionStates();
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.Action#isEnabled()
-         */
         @Override
         public boolean isEnabled() {
             return AnalyseRepositoryFrame.analysisChanged;
@@ -208,10 +182,6 @@ public class AnalyseRepositoryFrameActions {
      * Action für das Zurücksetzen des Analyseergebnisses in der Grafik
      */
     static final Action ACTION_RESET_ANALYSIS_RESULT = new AbstractAction(Tool3lgmConstants.getResString("reset_result")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
@@ -227,15 +197,11 @@ public class AnalyseRepositoryFrameActions {
      * Action für das starten der ausgewählten Analysen
      */
     static final Action ACTION_START_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_start")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
+
         @Override
         public void actionPerformed(final ActionEvent e) {
             GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
             if (doc == null) {
-                return;
             }
             int[] selection = AnalyseRepositoryFrame.table.getSelectedRows();
             for (int i = 0; i < selection.length; i++) {
@@ -245,10 +211,6 @@ public class AnalyseRepositoryFrameActions {
             AnalyseRepositoryFrame.refreshActionStates();
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.Action#isEnabled()
-         */
         @Override
         public boolean isEnabled() {
             GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
@@ -264,10 +226,6 @@ public class AnalyseRepositoryFrameActions {
      * Action für das starten der ausgewählten Analysen
      */
     static final Action ACTION_NEW_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_new")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             try {
@@ -285,10 +243,6 @@ public class AnalyseRepositoryFrameActions {
      * Action für das starten der ausgewählten Analysen
      */
     static final Action ACTION_DELETE_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_delete")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             int[] selection = AnalyseRepositoryFrame.table.getSelectedRows();
@@ -300,10 +254,6 @@ public class AnalyseRepositoryFrameActions {
             AnalyseRepositoryFrame.refreshActionStates();
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.Action#isEnabled()
-         */
         @Override
         public boolean isEnabled() {
             if (AnalyseRepositoryFrame.table == null) {
@@ -317,23 +267,9 @@ public class AnalyseRepositoryFrameActions {
      * Action für das Starten des AnalyseEditors
      */
     static final Action ACTION_ANALYSIS_EDITOR = new AbstractAction(Tool3lgmConstants.getResString("analysis_editor")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent e) {
             AnalyseEditor.showDialog(AnalyseRepositoryFrame.dialog);
-        }
-    };
-
-    static final Action ACTION_SHOW_ANALYSE_XML_EDITOR = new AbstractAction(Tool3lgmConstants.getResString("analysis_editor")) {
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
-        @Override
-        public void actionPerformed(final ActionEvent e) {
         }
     };
 

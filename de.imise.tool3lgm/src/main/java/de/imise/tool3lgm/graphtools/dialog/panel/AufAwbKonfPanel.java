@@ -150,10 +150,6 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#init()
-     */
     @Override
     public void init() {
         super.init();
@@ -165,10 +161,6 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
         repaint();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-     */
     @Override
     public void showFullDialog() {
         super.showFullDialog();
@@ -261,10 +253,6 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
         rtree.restoreSelection();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#collectDragNDropActionChains()
-     */
     @Override
     protected DragNDropActionChain[] collectDragNDropActionChains() {
         DragNDropActionChain dndAC1 = DragNDropInitializer.createNewDragNDropActionChain(rtree, ltree, addAction);
@@ -276,10 +264,6 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel#getAllDragNDropTrees()
-     */
     @Override
     public LGMDragNDropTree[] getAllDragNDropTrees() {
         return new LGMDragNDropTree[] {

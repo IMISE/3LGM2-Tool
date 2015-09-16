@@ -65,7 +65,8 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>... associations) {
@@ -75,7 +76,8 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path) {
@@ -85,7 +87,8 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @param description String with description for associations (in legend)
      * @throws InvalidPathException
      */
@@ -96,9 +99,11 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @param description String with description for associations (in legend)
-     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for function reads objecttype )
+     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for
+     *            function reads objecttype )
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final String description, final boolean directional) {
@@ -109,7 +114,8 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @param color Color for item in legend and cell
      * @param description String with description for associations (in legend)
      * @throws InvalidPathException
@@ -123,7 +129,8 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @param color Color[] for items in legend and cell (one color for DOUBLE / FORWARD / BACKWARD)
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
      * @throws InvalidPathException
@@ -135,11 +142,13 @@ public class MetaPath {
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
+     *            end)
      * @param color Color[] for items in legend and cell (one color for DOUBLE / FORWARD / BACKWARD)
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
      * @parma int control index of connections in associations, which control direction of associations
-     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for function reads objecttype )
+     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for
+     *            function reads objecttype )
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color[] color, final String[] description, final int control, final boolean directional) {
@@ -160,7 +169,8 @@ public class MetaPath {
     }
 
     /**
-     * Es wird sicher gestellt, dass die Assoziationen einen Pfad von der Start- zur Zielklasse des Pfades beschreiben. Im Moment wird noch nicht die Konsistenz geprüft, sondern nur, ob die erste Assoziation zur Startklasse und die letzte Assoziation zur
+     * Es wird sicher gestellt, dass die Assoziationen einen Pfad von der Start- zur Zielklasse des Pfades beschreiben. Im Moment wird noch nicht die
+     * Konsistenz geprüft, sondern nur, ob die erste Assoziation zur Startklasse und die letzte Assoziation zur
      * Endklasse passen.
      */
     private final void ensureAssociationOrder() {
@@ -197,7 +207,8 @@ public class MetaPath {
     /**
      * @param edgeClass
      * @return /
-     * @SuppressWarnings("unchecked") private static final Class<? extends Kante>[][] getPathForAssociation(Class<? extends Kante> edgeClass){ Class<? extends Kante>[][] associations = new Class[1][1]; associations[0][0] = edgeClass; return associations;
+     * @SuppressWarnings("unchecked") private static final Class<? extends Kante>[][] getPathForAssociation(Class<? extends Kante> edgeClass){ Class<?
+     *                                extends Kante>[][] associations = new Class[1][1]; associations[0][0] = edgeClass; return associations;
      *                                } /**
      * @param edgeClass
      * @return
@@ -240,10 +251,6 @@ public class MetaPath {
         return getLength(pathIndex) == 1;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public final String toString() {
         StringBuilder sb = new StringBuilder();

@@ -882,20 +882,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         getModel().removeTableModelListener(l);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.util.clipboard.ContentExchanger#setContentExchangeListener()
-     */
     @Override
     public void addContentExchangeListener(final ContentExchangeListener l) {
         removeContentExchangeListener(l);
         addKeyListener(l);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.util.clipboard.ContentExchanger#removeContentExchangeListener()
-     */
     @Override
     public void removeContentExchangeListener(final ContentExchangeListener l) {
         removeKeyListener(l);

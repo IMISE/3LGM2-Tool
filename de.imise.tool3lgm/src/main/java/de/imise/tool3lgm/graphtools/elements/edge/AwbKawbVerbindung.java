@@ -48,10 +48,6 @@ public final class AwbKawbVerbindung extends PartOfBeziehung {
         super(knot1, knot2, registerInKnots);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.elements.ModelElement#layerFor()
-     */
     @Override
     public int layerFor() {
         return ModelConstants.LOGICAL_LAYER;

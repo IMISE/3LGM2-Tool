@@ -683,20 +683,12 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         ltree.repaint();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#update()
-     */
     @Override
     public void update() {
         // System.out.println("update");
         init();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-     */
     @Override
     public void init() {
         super.init();
@@ -714,10 +706,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#showFullDialog()
-     */
     @Override
     protected void showFullDialog() {
         super.showFullDialog();
@@ -966,11 +954,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
            * return; } /*
            */// }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * javax.swing.event.TreeWillExpandListener#treeWillExpand(javax.swing.event.TreeExpansionEvent)
-     */
     @Override
     public void treeWillExpand(final TreeExpansionEvent e) throws ExpandVetoException {
         // System.out.println("will-expand");
@@ -987,12 +970,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * javax.swing.event.TreeWillExpandListener#treeWillCollapse(javax.swing.event.TreeExpansionEvent
-     * )
-     */
     @Override
     public void treeWillCollapse(final TreeExpansionEvent e) throws ExpandVetoException {
         // System.out.println("will-collapse");
@@ -1193,10 +1170,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#expandTree(javax.swing.JTree)
-     */
     @Override
     protected void expandTree(final JTree tree) {
         expandFullPath = true;

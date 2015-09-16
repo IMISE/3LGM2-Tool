@@ -460,10 +460,6 @@ public class RedundancyChecker extends WindowAdapter {
         return retVal;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
-     */
     @Override
     public void windowClosing(final WindowEvent e) {
         redundancyThread.interrupt();
@@ -549,11 +545,6 @@ public class RedundancyChecker extends WindowAdapter {
             resultList = resultsToFill;
         }
 
-        /*
-         * (non-Javadoc)
-         * @see java.lang.Thread#run()
-         */
-        @SuppressWarnings("unused")
         @Override
         public void run() {
 
@@ -574,10 +565,6 @@ public class RedundancyChecker extends WindowAdapter {
             RedundancyChecker.showResult(resultList);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see java.lang.Thread#interrupt()
-         */
         @Override
         public void interrupt() {
             if (decisionTree10 != null) {

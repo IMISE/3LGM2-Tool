@@ -310,10 +310,6 @@ public class DescripPanel extends ElementDialogPanel {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
-     */
     @Override
     protected void init() {
         ModelElement modelElement = getModelElement();

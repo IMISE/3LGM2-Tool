@@ -43,10 +43,6 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
         name = "Wohin kann Objekttyp X gesendet werden?";
     }
 
-    /*
-     * (non-Javadoc)
-     * @see tool3lgm.graphtools.analyse.AbstractAnalyse#getResult(tool3lgm.graphtools.GraphDocument)
-     */
     @Override
     public List<ElementContainer> getResult(final GraphDocument doc) {
         HashSet<ModelElement> result = new HashSet<ModelElement>();

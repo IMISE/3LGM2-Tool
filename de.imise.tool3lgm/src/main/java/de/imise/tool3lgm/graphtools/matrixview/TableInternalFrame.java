@@ -75,7 +75,8 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
      * @param rowClass Zeilenelementklasse
      * @param colClass Spaltenelementklasse
      * @param metaPath Metapfad über den Elemente der Zeilen und Splaten miteinander verbunden sein können
-     * @param showPartsOnly legt fest, ob nur absolute Teilelemente angezeigt werden sollen (absolut heiß, dass sie im Gesamtmodell keine Teile haben dürfen)
+     * @param showPartsOnly legt fest, ob nur absolute Teilelemente angezeigt werden sollen (absolut heiß, dass sie im Gesamtmodell keine Teile haben
+     *            dürfen)
      */
     public void update(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean showPartsOnly) {
         tableModel.fillTableModel(rowClass, colClass, metaPath, showPartsOnly);
@@ -110,27 +111,15 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
-     */
     @Override
     public final void mouseDragged(final MouseEvent e) {
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
-     */
     @Override
     public final void mouseMoved(final MouseEvent e) {
         ((TableToolBar) getToolBar()).positionChanged(colHeaderPanel.getCol(e.getX()), rowHeaderPanel.getRow(e.getY()));
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-     */
     @Override
     public final void mouseClicked(final MouseEvent e) {
     }
