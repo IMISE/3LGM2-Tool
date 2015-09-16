@@ -44,16 +44,59 @@ public class ExtendedFileChooser extends JFileChooser {
     /** ResourceHandler für alle Instanzen */
     private static final DialogResourceHandler drh = new DialogResourceHandler(ExtendedFileChooser.class);
 
+    private String fileName = null;
+
     /**
      * @param pathKey
      *            Anhand des PathKeys wird festgestellt in welchem Pfad ein Chooser mit diesem PathKey zuletzt geöffnet war
      *            und auf diese Weise wiederhersgestellt.
      */
     public ExtendedFileChooser(final Object pathKey) {
+        this(pathKey, (File) null);
+    }
+
+    /**
+     * @param pathKey
+     *            Anhand des PathKeys wird festgestellt in welchem Pfad ein Chooser mit diesem PathKey zuletzt geöffnet war
+     *            und auf diese Weise wiederhersgestellt.
+     * @param defaultPath
+     *            Wenn noch keine Pfad für den pathKey gefunden wird, wird der übergebene DefaulPath gesetzt. Ist der ungültig
+     *            landet man im Hauptverzeichnis des Benutzers
+     */
+    public ExtendedFileChooser(final Object pathKey, final File defaultPath) {
+        this(pathKey, defaultPath, null);
+    }
+
+    /**
+     * @param pathKey
+     *            Anhand des PathKeys wird festgestellt in welchem Pfad ein Chooser mit diesem PathKey zuletzt geöffnet war
+     *            und auf diese Weise wiederhersgestellt.
+     * @param fileName
+     *            Name der Datei, der schon veriengestellt sein soll
+     */
+    public ExtendedFileChooser(final Object pathKey, final String fileName) {
+        this(pathKey, null, fileName);
+    }
+
+    /**
+     * @param pathKey
+     *            Anhand des PathKeys wird festgestellt in welchem Pfad ein Chooser mit diesem PathKey zuletzt geöffnet war
+     *            und auf diese Weise wiederhersgestellt.
+     * @param defaultPath
+     *            Wenn noch keine Pfad für den pathKey gefunden wird, wird der übergebene DefaulPath gesetzt. Ist der ungültig
+     *            landet man im Hauptverzeichnis des Benutzers
+     * @param fileName
+     *            Name der Datei, der schon veriengestellt sein soll
+     */
+    public ExtendedFileChooser(final Object pathKey, final File defaultPath, final String fileName) {
         super();
         setPathKey(pathKey);
         setFileSystemView(FileSystemView.getFileSystemView());
         File path = KEY_TO_PATH_MAP.get(pathKey);
+        if (path == null && defaultPath != null && defaultPath.isDirectory() && defaultPath.exists()) {
+            path = defaultPath;
+        }
+        this.fileName = fileName;
         setCurrentDirectory(path == null ? DEFAULT_PATH : path);
     }
 
@@ -94,9 +137,10 @@ public class ExtendedFileChooser extends JFileChooser {
      */
     @Override
     public int showDialog(final Component parent, final String approveButtonText) throws HeadlessException {
+        if (fileName != null && !fileName.trim().isEmpty()) {
+            setSelectedFile(new File(fileName));
+        }
         int returnValue = super.showDialog(parent, approveButtonText);
-        //Wenn man diese Zeile rausnimmt, merkt der Dialog sich auch das aktuelle Verzeichnis, wenn ABBRECHEN gedrückt wurde
-        //		if (returnValue == APPROVE_OPTION)
         setPath(pathKey, getCurrentDirectory());
         return returnValue;
     }
