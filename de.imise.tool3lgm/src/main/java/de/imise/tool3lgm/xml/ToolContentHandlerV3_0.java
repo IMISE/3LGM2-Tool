@@ -602,7 +602,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 color = null;
 
             } else if (qName.equals("form")) {
-                layout.form = GraphElementLayout.SHAPE.values()[Integer.parseInt(elementValue.toString())];
+                String elementValueString = elementValue.toString();
+                int formIndex = Integer.parseInt(elementValueString);
+                GraphElementLayout.SHAPE[] shapes = GraphElementLayout.SHAPE.values();
+                layout.form = shapes[formIndex];
 
             } else if (qName.equals("font_family")) {
                 if (layout == null) {
