@@ -47,7 +47,7 @@ public class DataExportModule {
         GDCollection gdcoll = doc.getCollection();
         File docFile = gdcoll.getFile();
         File docDir = docFile == null ? null : docFile.getParentFile();
-        String exportFileName = gdcoll.getName() + "_" + doc.getTitle().replace(' ', '_') + ".csv";
+        String exportFileName = gdcoll.getTitle() + "_-_" + doc.getTitle().replace(' ', '_') + ".csv";
         ExtendedFileChooser saveDialog = new ExtendedFileChooser(FileFilterType.CSV, docDir, exportFileName);
         saveDialog.setMultiSelectionEnabled(false);
         saveDialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV));

@@ -2024,6 +2024,21 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
+     */
+    public String getTitle() {
+        int lastPointIndex = name.lastIndexOf('.');
+        String title = name;
+        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
+            String extension = title.substring(lastPointIndex + 1);
+            if (Tool3lgmConstants.isExtension(extension)) {
+                title = title.substring(0, lastPointIndex);
+            }
+        }
+        return title;
+    }
+
+    /**
 	 * 
 	 */
     private void createName() {
