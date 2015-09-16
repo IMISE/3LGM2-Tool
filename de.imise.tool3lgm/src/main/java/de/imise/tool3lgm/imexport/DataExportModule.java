@@ -10,8 +10,11 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.LGMGraphDocument;
+import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
+import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -21,6 +24,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
+import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
  * @author thomas
@@ -39,7 +43,21 @@ public class DataExportModule {
 
     };
 
-    public static void exportData(final LGMGraphDocument doc, final File exportFile) {
+    public static void exportData(final GraphDocument doc) {
+        GDCollection gdcoll = doc.getCollection();
+        File docFile = gdcoll.getFile();
+        File docDir = docFile == null ? null : docFile.getParentFile();
+        String exportFileName = gdcoll.getName() + "_" + doc.getTitle().replace(' ', '_') + ".csv";
+        ExtendedFileChooser saveDialog = new ExtendedFileChooser(FileFilterType.CSV, docDir, exportFileName);
+        saveDialog.setMultiSelectionEnabled(false);
+        saveDialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV));
+        if (saveDialog.showSaveDialog(Tool3lgm.tool) == ExtendedFileChooser.APPROVE_OPTION) {
+            exportData(doc, saveDialog.getSelectedFile());
+        }
+
+    }
+
+    private static void exportData(final GraphDocument doc, final File exportFile) {
         Class<? extends ModelElement> classElement = null;
         try {
             FileOutputStream ostream = new FileOutputStream(exportFile, false);
