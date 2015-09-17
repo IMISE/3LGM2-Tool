@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -69,35 +70,19 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
      */
     private static UserFieldEditorDialog editor = null;
 
-    /**
-     * Das Panel für die Kennzahlen
-     */
-    private final GeneralUserFieldEditorPanel panelCN;
-
-    /**
-     * Das Panel für die Verteilungsgewichte
-     */
-    private final DistributionWeightEditorPanel panelDW;
-
-    /**
-     * Das Panel für die Ersetzung von Verteilungsgewichten
-     */
-    private final DistributionWeightReplacePanel panelDWReplace;
-
-    /**
-     * Das Panel für die ModelVariablen
-     */
-    private final ModelVariableEditorPanel panelMV;
-
-    /**
-     * Das Panel für die berechneten Kennzahlen
-     */
-    private final ClassificationNumberFormulaPanel panelCNF;
-
-    /**
-     * Das Panel für alle anderen benutzerdefinierten Eigenschaften
-     */
-    private final GeneralUserFieldEditorPanel panelAllOther;
+    private final ImmutableList<AbstractUserFieldEditorPanel> tablePanels = ImmutableList.of(
+    //Kennzahlen
+            new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER")),
+            //Verteilungsgewichte
+            new DistributionWeightEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting")),
+            //Verteilungsgewichtsersetzung
+            new DistributionWeightReplacePanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting_replace")),
+            //Modellvariablen
+            new ModelVariableEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable")),
+            //Kennzahlformeln
+            new ClassificationNumberFormulaPanel(this, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA")),
+            //Weitere...
+            new GeneralUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other")));
 
     /**
      * Bei Abbruch, wird diese Aktion ausgelöst
@@ -133,14 +118,6 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
         okButton = new JButton();
         cancelButton = new JButton();
 
-        // panelCN + panelDW + panelMV initialisieren
-        panelCN = new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER"));
-        panelDW = new DistributionWeightEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting"));
-        panelDWReplace = new DistributionWeightReplacePanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting_replace"));
-        panelMV = new ModelVariableEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable"));
-        panelCNF = new ClassificationNumberFormulaPanel(this, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA"));
-        panelAllOther = new GeneralUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other"));
-
         // TabPanel initialisieren
         tab = new TabbedPane();
 
@@ -167,19 +144,16 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
 
                 boolean dataChanged = false;
 
-                AbstractUserFieldEditorPanel[] panels = finalDialog.getEditablePanels();
-
-                for (int i = 0; i < panels.length; i++) {
-                    AbstractUserFieldEditorPanel panel = panels[i];
+                for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
 
                     /*
                      * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Damit können Werte auch ohne Bestätigung mit "Enter" übernommen
                      * werden.
                      */
-                    panel.stopEditing();
+                    tablePanel.stopEditing();
 
                     // Falls in einem Table Änderungen aufgetreten sind, wird das in dataChanged festgehalten
-                    dataChanged = dataChanged || panel.dataChanged();
+                    dataChanged = dataChanged || tablePanel.dataChanged();
                 }
 
                 /*
@@ -247,12 +221,9 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
      * Methode fügt panelCN, panelDW, panelMV und panelCNF an <code>tab</code> an
      */
     private void initTab() {
-        tab.addTab(panelCN.getName(), panelCN);
-        tab.addTab(panelDW.getName(), panelDW);
-        tab.addTab(panelDWReplace.getName(), panelDWReplace);
-        tab.addTab(panelMV.getName(), panelMV);
-        tab.addTab(panelCNF.getName(), panelCNF);
-        tab.addTab(panelAllOther.getName(), panelAllOther);
+        for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
+            tab.addTab(tablePanel.getName(), tablePanel);
+        }
     }
 
     /**
@@ -284,23 +255,20 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
 
                 boolean dataChanged = false;
 
-                AbstractUserFieldEditorPanel[] panels = finalDialog.getEditablePanels();
-
-                for (int i = 0; i < panels.length; i++) {
-                    AbstractUserFieldEditorPanel panel = panels[i];
+                for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
 
                     /*
                      * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Damit können Werte auch ohne Bestätigung mit "Enter" übernommen
                      * werden.
                      */
-                    panel.stopEditing();
+                    tablePanel.stopEditing();
 
                     // Falls in einem Table Änderungen aufgetreten sind, wird das in dataChanged festgehalten
-                    dataChanged = dataChanged || panel.dataChanged();
+                    dataChanged = dataChanged || tablePanel.dataChanged();
 
-                    panel.takeOver();
+                    tablePanel.takeOver();
 
-                    panel.dataChanged(false);
+                    tablePanel.dataChanged(false);
 
                 }
                 // Alte Transaktion beenden
@@ -402,9 +370,8 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
             }
         };
 
-        AbstractUserFieldEditorPanel[] panels = getEditablePanels();
-        for (int i = 0; i < panels.length; i++) {
-            panels[i].addPropertyChangeListener(l);
+        for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
+            tablePanel.addPropertyChangeListener(l);
         }
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -445,19 +412,6 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
     }
 
     /* ********************* Ende: statische Methoden ****************************** */
-
-    /* ********************* Beginn: get/set-Methoden ******************************** */
-
-    /**
-     * @return <code>[panelCN,panelDW,panelMV,panelCNF]</code>
-     */
-    private AbstractUserFieldEditorPanel[] getEditablePanels() {
-        return new AbstractUserFieldEditorPanel[] {
-                panelCN, panelDW, panelDWReplace, panelMV, panelCNF, panelAllOther
-        };
-    }
-
-    /* ********************* Ende: get/set-Methoden ******************************** */
 
     /* *********************** Start: funktionale Methoden ******************************* */
 
