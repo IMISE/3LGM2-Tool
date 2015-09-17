@@ -245,7 +245,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                     UserField replaceUserField = noc.getObject();
                     // Das UserField in der j-ten Spalte
                     UserField columnUserField = ((NamedObjectContainer<UserField>) columnIdentifiers.elementAt(j)).getObject();
-                    set(doc, rowElementHash, columnUserField, replaceUserField);
+                    setReplacement(doc, rowElementHash, columnUserField, replaceUserField);
                 }
             }
         }
@@ -256,7 +256,15 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         doc.getUserFieldDefinitions().initReset();
     }
 
-    private void set(final GraphDocument doc, final String rowElementHash, final UserField columnUserField, final UserField replaceUserField) {
+    /**
+     * Setzt über das GraphDocument im Replacer ein neues Replacement
+     * 
+     * @param doc
+     * @param rowElementHash
+     * @param columnUserField
+     * @param replaceUserField
+     */
+    private void setReplacement(final GraphDocument doc, final String rowElementHash, final UserField columnUserField, final UserField replaceUserField) {
         int pid = getDialog().getTransactionID();
         WeightReplacer replacer = doc.getCollection().getUserFieldDefinitions().getWeightReplacer();
         //wenn es NICHT das Gleichverteilungs-UserField ist, das ersetzt werden soll
