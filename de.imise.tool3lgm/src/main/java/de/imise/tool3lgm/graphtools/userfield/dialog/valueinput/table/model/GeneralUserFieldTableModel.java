@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -90,18 +91,18 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
             userFieldList.clear();
         }
 
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(modelElements.size());
         // RowHeader aufbauen
-        Object[] rowIdentifiers = new Object[modelElements.size()];
-        for (int i = 0; i < rowIdentifiers.length; i++) {
-            ModelElement me = modelElements.get(i);
-            rowIdentifiers[i] = new NamedObjectContainer<ModelElement>(me, me.getName());
+        for (ModelElement me : modelElements) {
+            NamedObjectContainer<ModelElement> rowElementContainer = new NamedObjectContainer<ModelElement>(me, me.getName());
+            rowIdentifiers.add(rowElementContainer);
         }
 
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(userFieldList.size());
         // ColumnHeader aufbauen
-        Object[] columnIdentifiers = new Object[userFieldList.size()];
-        for (int j = 0; j < columnIdentifiers.length; j++) {
-            UserField f = userFieldList.get(j);
-            columnIdentifiers[j] = new NamedObjectContainer<UserField>(f, f.getName());
+        for (UserField userField : userFieldList) {
+            NamedObjectContainer<UserField> columnUserFieldContainer = new NamedObjectContainer<UserField>(userField, userField.getName());
+            columnIdentifiers.add(columnUserFieldContainer);
         }
 
         //DataVector aufbauen

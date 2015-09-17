@@ -299,7 +299,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         GraphDocument doc = getDialog().getGraphDocument();
         if (edgeBoxSelection != null) {
             UserField selectedWeigth = weightBoxSelection;
-            Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
+            Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
 
             for (int i = 0; i < rowIdentifiers.size(); i++) {

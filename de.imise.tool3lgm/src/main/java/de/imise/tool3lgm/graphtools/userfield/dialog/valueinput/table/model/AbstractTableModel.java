@@ -69,7 +69,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /**
      * Daten für die Zeilenköpfe des Tables
      */
-    private Vector<Object> rowIdentifiers;
+    private Vector<NamedObjectContainer<?>> rowIdentifiers;
 
     /**
      * Daten des tables Beinhaltet im Gegensatz zum {@link DefaultTableModel#dataVector} die aus <code>UserField</code> und anzuzeigendem Wert
@@ -96,7 +96,6 @@ public abstract class AbstractTableModel extends DefaultTableModel {
         super();
         this.doc = doc;
         definitions = doc.getUserFieldDefinitions();
-        rowIdentifiers = new Vector<Object>();
     }
 
     /* *********************** Ende: Initialisierung ************************************* */
@@ -153,35 +152,25 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * @param columnIdentifiers
      * @param rowIdentifiers
      */
-    public void setDataVector(final Object[][] data, final Object[] columnIdentifiers, final Object[] rowIdentifiers) {
+    public void setDataVector(final Object[][] data, final Vector<NamedObjectContainer<?>> columnIdentifiers, final Vector<NamedObjectContainer<?>> rowIdentifiers) {
 
         if (data == null || data.length == 0) {
-            super.setDataVector(data, columnIdentifiers);
+            super.setDataVector(convertToVector(data), columnIdentifiers);
             return;
         }
 
-        if (this.rowIdentifiers == null) {
-            this.rowIdentifiers = new Vector<Object>();
-        }
-
-        for (int i = 0; i < rowIdentifiers.length; i++) {
-            this.rowIdentifiers.add(rowIdentifiers[i]);
-        }
+        this.rowIdentifiers = rowIdentifiers;
+        this.columnIdentifiers = columnIdentifiers;
 
         dataField = new Object[data.length][data[0].length];
-        dataField = new Object[rowIdentifiers.length][columnIdentifiers.length];
+        dataField = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
         for (int i = 0; i < dataField.length; i++) {
             for (int j = 0; j < dataField[0].length; j++) {
                 dataField[i][j] = data[i][j];
             }
         }
-        super.setDataVector(data, columnIdentifiers);
+        super.setDataVector(convertToVector(data), columnIdentifiers);
 
-        Vector<Object> cIdentifiers = new Vector<Object>();
-        for (int j = 0; j < columnIdentifiers.length; j++) {
-            cIdentifiers.add(columnIdentifiers[j]);
-        }
-        this.columnIdentifiers = cIdentifiers;
     }
 
     /**
@@ -320,7 +309,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * 
      * @return rowIdentifiers
      */
-    public Vector<Object> getRowIdentifiers() {
+    public Vector<NamedObjectContainer<?>> getRowIdentifiers() {
         return rowIdentifiers;
     }
 

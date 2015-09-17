@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -27,9 +28,8 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
 
         // columIdentifiers erzeugen
         String columnHeader = Tool3lgmConstants.getResString("value");
-        Object[] columnIdentifiers = new NamedObjectContainer[] {
-            new NamedObjectContainer(columnHeader, columnHeader)
-        };
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(1);
+        columnIdentifiers.add(new NamedObjectContainer(columnHeader, columnHeader));
 
         // Liste aller globalen UserFields erstellen
         ArrayList<UserField> userFieldList = new ArrayList<UserField>();
@@ -45,12 +45,13 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
         }
 
         // rowIdentifiers und dataVector erzeugen
-        Object[] rowIdentifiers = new Object[userFieldList.size()];
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>();
+
         Object[][] data = new Object[userFieldList.size()][1];
-        for (int i = 0; i < rowIdentifiers.length; i++) {
+        for (int i = 0; i < userFieldList.size(); i++) {
             UserField uf = userFieldList.get(i);
             NamedObjectContainer<UserField> noc = new NamedObjectContainer<UserField>(uf, uf.getName());
-            rowIdentifiers[i] = noc;
+            rowIdentifiers.add(noc);
             String value = uf.getValue(gdcoll);
             data[i][0] = new NamedObjectContainer<UserField>(uf, value);
         }

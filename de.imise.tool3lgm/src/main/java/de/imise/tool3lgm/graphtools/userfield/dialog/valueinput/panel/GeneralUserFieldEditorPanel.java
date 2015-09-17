@@ -231,7 +231,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
             return;
         }
         GraphDocument doc = getDialog().getGraphDocument();
-        Vector<Object> rowIdentifiers = uftm.getRowIdentifiers();
+        Vector<NamedObjectContainer<?>> rowIdentifiers = uftm.getRowIdentifiers();
         Vector<Object> columnIdentifiers = uftm.getColumnIdentifiers();
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();

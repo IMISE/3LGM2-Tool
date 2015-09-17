@@ -234,7 +234,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         }
         GraphDocument doc = getDialog().getGraphDocument();
         if (edgeClassBoxSelection != null) {
-            Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
+            Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
             for (int i = 0; i < rowIdentifiers.size(); i++) {
                 // Das ModelElement in der i-ten Zeile

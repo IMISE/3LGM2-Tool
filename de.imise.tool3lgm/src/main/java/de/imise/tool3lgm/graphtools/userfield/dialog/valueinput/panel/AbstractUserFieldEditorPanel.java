@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldT
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableSumHandler;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;
+import de.imise.util.NamedObjectContainer;
 import de.imise.util.clipboard.ContentExchangeListener;
 
 /**
@@ -121,7 +122,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
                 String colSum = UserFieldTableSumHandler.getFormattedColumnSum(tableModel, col);
 
                 //Zeilenname holen
-                Vector<Object> rowIdentifiers = tableModel.getRowIdentifiers();
+                Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
                 Object rowIdentifier = rowIdentifiers.get(row);
                 String rowIdentifierName = rowIdentifier.toString();
 

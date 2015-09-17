@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -106,24 +107,22 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
             }
         }
 
-        //Alphabetical.sort(columnElements);
-
         // RowHeader aufbauen
-        Object[] rowIdentifiers = new Object[rowElements.length];
-        for (int i = 0; i < rowIdentifiers.length; i++) {
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(rowElements.length);
+        for (int i = 0; i < rowElements.length; i++) {
             ModelElement me = rowElements[i];
-            rowIdentifiers[i] = new NamedObjectContainer<ModelElement>(me, me.getName());
+            rowIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
         // ColumnHeader aufbauen
-        Object[] columnIdentifiers = new Object[columnElements.length];
-        for (int j = 0; j < columnIdentifiers.length; j++) {
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.length);
+        for (int j = 0; j < columnElements.length; j++) {
             ModelElement me = columnElements[j];
-            columnIdentifiers[j] = new NamedObjectContainer<ModelElement>(me, me.getName());
+            columnIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
         // DataVector aufbauen
-        Object[][] data = new Object[rowIdentifiers.length][columnIdentifiers.length];
+        Object[][] data = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[0].length; j++) {
                 if (temp_data[i][j] != null) {
@@ -206,27 +205,22 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
             }
         }
 
-        //Alphabetical.sort(columnElements);
-
         // RowHeader aufbauen
-        Object[] rowIdentifiers = new Object[rowElements.length];
-        for (int i = 0; i < rowIdentifiers.length; i++) {
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(rowElements.length);
+        for (int i = 0; i < rowElements.length; i++) {
             ModelElement me = rowElements[i];
-            rowIdentifiers[i] = new NamedObjectContainer<ModelElement>(me, me.getName());
+            rowIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
         // ColumnHeader aufbauen
-        Object[] columnIdentifiers = new Object[columnElements.length];
-        for (int j = 0; j < columnIdentifiers.length; j++) {
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.length);
+        for (int j = 0; j < columnElements.length; j++) {
             ModelElement me = columnElements[j];
-            if (me == null) {
-                System.err.println("Das Ding ist null");
-            }
-            columnIdentifiers[j] = new NamedObjectContainer<ModelElement>(me, me.getName());
+            columnIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
         // DataVector aufbauen
-        Object[][] data = new Object[rowIdentifiers.length][columnIdentifiers.length];
+        Object[][] data = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[0].length; j++) {
                 if (temp_data[i][j] != null) {

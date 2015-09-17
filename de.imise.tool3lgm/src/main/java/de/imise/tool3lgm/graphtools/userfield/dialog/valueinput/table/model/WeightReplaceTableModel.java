@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import java.util.List;
+import java.util.Vector;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -78,22 +79,22 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         }
 
         // RowHeader aufbauen
-        Object[] rowIdentifiers = new Object[rowElements.size()];
-        for (int i = 0; i < rowIdentifiers.length; i++) {
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(rowElements.size());
+        for (int i = 0; i < rowElements.size(); i++) {
             ModelElement me = rowElements.get(i);
-            rowIdentifiers[i] = new NamedObjectContainer<ModelElement>(me, me.getName());
+            rowIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
         // ColumnHeader aufbauen
-        Object[] columnIdentifiers = new Object[columnElements.size()];
-        for (int j = 0; j < columnIdentifiers.length; j++) {
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.size());
+        for (int j = 0; j < columnElements.size(); j++) {
             UserField userField = columnElements.get(j);
             //wenn das UserField null ist, dann ist das der Platzhalter für die Gleichverteilung
-            columnIdentifiers[j] = getValueContainer(userField);
+            columnIdentifiers.add(getValueContainer(userField));
         }
 
         // DataVector aufbauen
-        Object[][] data = new Object[rowIdentifiers.length][columnIdentifiers.length];
+        Object[][] data = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[0].length; j++) {
                 if (temp_data[i][j] != null) {
