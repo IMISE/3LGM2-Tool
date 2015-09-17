@@ -72,13 +72,6 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     private Vector<NamedObjectContainer<?>> rowIdentifiers;
 
     /**
-     * Daten des tables Beinhaltet im Gegensatz zum {@link DefaultTableModel#dataVector} die aus <code>UserField</code> und anzuzeigendem Wert
-     * bestehenden <code>NamedObjectContainer</code>. Mittels der <code>UserField</code>s ist es dann für den <code>TableCellRenderer</code> möglich,
-     * formatierte Werte darstellen zu können.
-     */
-    private Object[][] dataField;
-
-    /**
      * Gibt zurück, ob sich Daten geändert haben
      */
     protected boolean dataChanged;
@@ -162,26 +155,17 @@ public abstract class AbstractTableModel extends DefaultTableModel {
         this.rowIdentifiers = rowIdentifiers;
         this.columnIdentifiers = columnIdentifiers;
 
-        dataField = new Object[data.length][data[0].length];
-        dataField = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
-        for (int i = 0; i < dataField.length; i++) {
-            for (int j = 0; j < dataField[0].length; j++) {
-                dataField[i][j] = data[i][j];
-            }
-        }
         super.setDataVector(convertToVector(data), columnIdentifiers);
 
     }
 
     /**
-     * Methode gibt den <code>NamedObjectContainer</code> zurück, der das <code>UserField</code> und den Wert an der Stelle (row,col) enthält.
-     * Überschreibt die Methode der Superklasse, damit der CellRenderer das Format feststellen kann.
+     * Gibt eine Kopie des gesamten Datenfeldes zurück
      * 
-     * @see javax.swing.table.DefaultTableModel#getValueAt(int, int)
+     * @return
      */
-    @Override
-    public final Object getValueAt(final int row, final int col) {
-        return dataField[row][col];
+    public NamedObjectContainer<?>[][] getValues() {
+        return getValues(0, rowIdentifiers.size() - 1, 0, columnIdentifiers.size() - 1);
     }
 
     /**
@@ -193,28 +177,18 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * @param lastColumn letzte Spalte, bis zu der die Werte zurückgegeben werden sollen
      * @return
      */
-    public Object[][] getValues(final int firstRow, final int lastRow, final int firstColumn, final int lastColumn) {
+    private NamedObjectContainer<?>[][] getValues(final int firstRow, final int lastRow, final int firstColumn, final int lastColumn) {
         int m = lastRow - firstRow + 1;
         int n = lastColumn - firstColumn + 1;
 
-        Object[][] values = new Object[m][n];
+        NamedObjectContainer<?>[][] values = new NamedObjectContainer<?>[m][n];
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                values[i][j] = getValueAt(i + firstRow, j + firstColumn);
+                values[i][j] = (NamedObjectContainer<?>) getValueAt(i + firstRow, j + firstColumn);
             }
         }
         return values;
-    }
-
-    /**
-     * Gibt alle Werte des Models in einem <code>Object[][]</code> wieder.
-     * 
-     * @see #getValues(int, int, int, int)
-     * @return
-     */
-    public Object[][] getValues() {
-        return dataField;
     }
 
     /**
@@ -238,28 +212,33 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Übernimmt einen im Table eingegebenen Wert in dieses Model. Dabei wird ein neuer <code>NamedObjectContainer</code> aus <code>value</code> und
-     * dem bereits in {@link #dataField} enthaltenen <code>UserField</code> erstellt und als neuer Wert in {@link DefaultTableModel#dataVector} und
-     * {@link #dataField} gesetzt.
+     * dem bereits in {@link #dataField} enthaltenen <code>UserField</code> erstellt und als neuer Wert in {@link DefaultTableModel#dataVector}
+     * gesetzt.
      * 
      * @param value
      * @param row
-     * @param col
+     * @param column
      * @see javax.swing.table.DefaultTableModel#setValueAt(java.lang.Object, int, int)
      */
     @Override
-    public final void setValueAt(final Object value, final int row, final int col) {
-        NamedObjectContainer<?> oldValueContainer = (NamedObjectContainer<?>) dataField[row][col];
-        Object oldValue = oldValueContainer.toString();
-        //nur was machen, wenn sich wirklich etwas geändert hat
-        if (oldValue.equals(value)) {
+    public final void setValueAt(final Object value, final int row, final int column) {
+        NamedObjectContainer<?> oldValueContainer = (NamedObjectContainer<?>) getValueAt(row, column);
+        //tritt nur ein, wenn beide Werte null sind. oldValueContainer == null tritt nur in Tables auf, in denen
+        //Leezellen sind (z.B. für Verteilungsgewichte, an denen keine Knate vorkommt = graue Zellen)
+        if (oldValueContainer == value) {
             return;
         }
+        if (oldValueContainer != null) {
+            Object oldValue = oldValueContainer.toString();
+            //nur was machen, wenn sich wirklich etwas geändert hat
+            if (oldValue.equals(value)) {
+                return;
+            }
+        }
         // neuer Container beinhaltet altes UserField "field" aber neuen Wert "value"
-        NamedObjectContainer<?> newValue = getContainerForNewValue(value, row, col);
-        // dataField update
-        dataField[row][col] = newValue;
+        NamedObjectContainer<?> newValue = value == null ? null : getContainerForNewValue(value, row, column);
         // dataVector update
-        super.setValueAt(newValue, row, col);
+        super.setValueAt(newValue, row, column);
     }
 
     /**
@@ -335,7 +314,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * @return
      */
     public boolean hasData() {
-        return dataField != null && dataField.length > 0;
+        return dataVector != null && dataVector.size() > 0;
     }
 
     /**
