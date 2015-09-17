@@ -137,17 +137,15 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     private void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
         Pair<List<ModelElement>, List<ModelElement>> rowColumnElements = initRowAndColumnElements(edgeClass, direction, columnElement);
         List<ModelElement> allRowElements = rowColumnElements.getFirstItem();
-        List<ModelElement> allColumnElements = rowColumnElements.getSecondItem();
+        List<ModelElement> columnElements = rowColumnElements.getSecondItem();
 
-        ModelElement[] rowElements = new ModelElement[allRowElements.size()];
-        ModelElement[] columnElements = new ModelElement[allColumnElements.size()];
-        Object[][] temp_data = new Object[allRowElements.size()][allColumnElements.size()];
+        Object[][] temp_data = new Object[allRowElements.size()][columnElements.size()];
 
         // temp_data, rowElements, columnElements erstellen
-        for (int r = 0; r < rowElements.length; r++) {
+        for (int r = 0; r < allRowElements.size(); r++) {
             ModelElement re = allRowElements.get(r);
-            for (int c = 0; c < columnElements.length; c++) {
-                ModelElement ce = allColumnElements.get(c);
+            for (int c = 0; c < columnElements.size(); c++) {
+                ModelElement ce = columnElements.get(c);
                 Kante edge = null;
 
                 if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
@@ -163,9 +161,6 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                     }
                 }
 
-                columnElements[c] = ce;
-                rowElements[r] = re;
-
                 if (edge == null) {
                     continue;
                 }
@@ -178,16 +173,16 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         }
 
         // RowHeader aufbauen
-        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(rowElements.length);
-        for (int i = 0; i < rowElements.length; i++) {
-            ModelElement me = rowElements[i];
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(allRowElements.size());
+        for (int i = 0; i < allRowElements.size(); i++) {
+            ModelElement me = allRowElements.get(i);
             rowIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
         // ColumnHeader aufbauen
-        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.length);
-        for (int j = 0; j < columnElements.length; j++) {
-            ModelElement me = columnElements[j];
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.size());
+        for (int j = 0; j < columnElements.size(); j++) {
+            ModelElement me = columnElements.get(j);
             columnIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
         }
 
