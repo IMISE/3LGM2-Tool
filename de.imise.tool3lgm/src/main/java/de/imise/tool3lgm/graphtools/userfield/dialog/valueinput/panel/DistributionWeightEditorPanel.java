@@ -88,9 +88,10 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
      * Konstruktor
      * 
      * @param dialog Dialog, der dieses Panel enthält
+     * @param name
      */
-    public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog) {
-        super(dialog);
+    public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog, final String name) {
+        super(dialog, name);
         initEdgeBox();
         initWeightBox();
         initColumnFilterBox();

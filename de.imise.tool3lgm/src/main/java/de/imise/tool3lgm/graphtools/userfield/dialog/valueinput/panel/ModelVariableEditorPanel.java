@@ -29,9 +29,10 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
      * Kosntruktor
      * 
      * @param dialog
+     * @param name
      */
-    public ModelVariableEditorPanel(final UserFieldEditorDialog dialog) {
-        super(dialog);
+    public ModelVariableEditorPanel(final UserFieldEditorDialog dialog, final String name) {
+        super(dialog, name);
         drawTable();
     }
 

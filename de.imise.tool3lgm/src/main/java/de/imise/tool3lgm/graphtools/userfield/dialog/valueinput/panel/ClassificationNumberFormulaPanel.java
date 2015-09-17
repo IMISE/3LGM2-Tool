@@ -31,9 +31,10 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
 
     /**
      * @param dialog
+     * @param name
      */
-    public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog) {
-        super(dialog, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
+    public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final String name) {
+        super(dialog, UserField.Style.CLASSIFICATION_NUMBER_FORMULA, name);
     }
 
     @Override

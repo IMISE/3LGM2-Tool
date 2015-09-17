@@ -65,9 +65,10 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
     /**
      * @param dialog
      * @param visibleUserField
+     * @param name
      */
-    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Style visibleUserField) {
-        this(dialog, ImmutableSet.of(visibleUserField));
+    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Style visibleUserField, final String name) {
+        this(dialog, ImmutableSet.of(visibleUserField), name);
     }
 
     /**
@@ -75,9 +76,10 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
      * 
      * @param dialog Dialog, der dieses Panel enthält
      * @param visibleUserFields
+     * @param name
      */
-    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Set<Style> visibleUserFields) {
-        super(dialog);
+    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Set<Style> visibleUserFields, final String name) {
+        super(dialog, name);
         this.visibleUserFields = visibleUserFields;
 
         // nodeBox initialisieren

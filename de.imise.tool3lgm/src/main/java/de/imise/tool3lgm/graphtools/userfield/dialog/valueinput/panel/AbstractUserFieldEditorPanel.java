@@ -66,9 +66,10 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
      * 
      * @param dialog Der Dialog, der dieses Panel beinhaltet
      */
-    public AbstractUserFieldEditorPanel(final UserFieldEditorDialog dialog) {
+    public AbstractUserFieldEditorPanel(final UserFieldEditorDialog dialog, final String name) {
         super(new GridBagLayout());
         this.dialog = dialog;
+        setName(name);
         init();
 
     }

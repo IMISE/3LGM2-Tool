@@ -134,12 +134,12 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
         cancelButton = new JButton();
 
         // panelCN + panelDW + panelMV initialisieren
-        panelCN = new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER);
-        panelDW = new DistributionWeightEditorPanel(this);
-        panelDWReplace = new DistributionWeightReplacePanel(this);
-        panelMV = new ModelVariableEditorPanel(this);
-        panelCNF = new ClassificationNumberFormulaPanel(this);
-        panelAllOther = new GeneralUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX));
+        panelCN = new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER"));
+        panelDW = new DistributionWeightEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting"));
+        panelDWReplace = new DistributionWeightReplacePanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting_replace"));
+        panelMV = new ModelVariableEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable"));
+        panelCNF = new ClassificationNumberFormulaPanel(this, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA"));
+        panelAllOther = new GeneralUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other"));
 
         // TabPanel initialisieren
         tab = new TabbedPane();
@@ -247,12 +247,12 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
      * Methode fügt panelCN, panelDW, panelMV und panelCNF an <code>tab</code> an
      */
     private void initTab() {
-        tab.addTab(Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER"), panelCN);
-        tab.addTab(Tool3lgmConstants.getResString("userFieldEditor_classification_weighting"), panelDW);
-        tab.addTab(Tool3lgmConstants.getResString("userFieldEditor_classification_weighting_replace"), panelDWReplace);
-        tab.addTab(Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable"), panelMV);
-        tab.addTab(Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA"), panelCNF);
-        tab.addTab(Tool3lgmConstants.getResString("userFieldDialog_other"), panelAllOther);
+        tab.addTab(panelCN.getName(), panelCN);
+        tab.addTab(panelDW.getName(), panelDW);
+        tab.addTab(panelDWReplace.getName(), panelDWReplace);
+        tab.addTab(panelMV.getName(), panelMV);
+        tab.addTab(panelCNF.getName(), panelCNF);
+        tab.addTab(panelAllOther.getName(), panelAllOther);
     }
 
     /**
