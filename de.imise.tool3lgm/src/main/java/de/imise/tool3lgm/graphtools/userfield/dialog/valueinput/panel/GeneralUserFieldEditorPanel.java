@@ -232,17 +232,17 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
         }
         GraphDocument doc = getDialog().getGraphDocument();
         Vector<NamedObjectContainer<?>> rowIdentifiers = uftm.getRowIdentifiers();
-        Vector<Object> columnIdentifiers = uftm.getColumnIdentifiers();
+        Vector<NamedObjectContainer<?>> columnIdentifiers = uftm.getColumnIdentifiers();
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         for (int i = 0; i < uftm.getRowCount(); i++) {
             // Das ModelElement in der i-ten Zeile
-            ModelElement me = ((NamedObjectContainer<ModelElement>) rowIdentifiers.elementAt(i)).getObject();
+            ModelElement me = (ModelElement) rowIdentifiers.elementAt(i).getObject();
             for (int k = 0; k < uftm.getColumnCount(); k++) {
                 // Wert an der Stelle (i,k)
                 String newValue = uftm.getValueAt(i, k).toString();
                 // Die Kennzahl in der Spalte k
-                UserField uf = ((NamedObjectContainer<UserField>) columnIdentifiers.elementAt(k)).getObject();
+                UserField uf = (UserField) columnIdentifiers.elementAt(k).getObject();
                 // neuen Wert setzen
                 if (!newValue.equals(uf.getValue(me))) {
                     doc.setUserFieldValue(me.getHashString(), uf.getHashCode(), newValue, getDialog().getTransactionID());

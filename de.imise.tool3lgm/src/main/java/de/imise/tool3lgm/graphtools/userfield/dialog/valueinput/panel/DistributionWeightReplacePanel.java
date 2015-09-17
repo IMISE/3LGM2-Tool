@@ -235,16 +235,16 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         GraphDocument doc = getDialog().getGraphDocument();
         if (edgeClassBoxSelection != null) {
             Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
-            Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
+            Vector<NamedObjectContainer<?>> columnIdentifiers = tableModel.getColumnIdentifiers();
             for (int i = 0; i < rowIdentifiers.size(); i++) {
                 // Das ModelElement in der i-ten Zeile
-                ModelElement rowElement = ((NamedObjectContainer<ModelElement>) rowIdentifiers.elementAt(i)).getObject();
+                ModelElement rowElement = (ModelElement) rowIdentifiers.elementAt(i).getObject();
                 String rowElementHash = rowElement.getHashString();
                 for (int j = 0; j < columnIdentifiers.size(); j++) {
                     NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) tableModel.getValueAt(i, j);
                     UserField replaceUserField = noc.getObject();
                     // Das UserField in der j-ten Spalte
-                    UserField columnUserField = ((NamedObjectContainer<UserField>) columnIdentifiers.elementAt(j)).getObject();
+                    UserField columnUserField = (UserField) columnIdentifiers.elementAt(j).getObject();
                     setReplacement(doc, rowElementHash, columnUserField, replaceUserField);
                 }
             }

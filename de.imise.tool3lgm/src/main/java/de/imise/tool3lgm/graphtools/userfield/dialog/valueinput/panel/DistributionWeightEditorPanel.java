@@ -300,11 +300,11 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         if (edgeBoxSelection != null) {
             UserField selectedWeigth = weightBoxSelection;
             Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
-            Vector<Object> columnIdentifiers = tableModel.getColumnIdentifiers();
+            Vector<NamedObjectContainer<?>> columnIdentifiers = tableModel.getColumnIdentifiers();
 
             for (int i = 0; i < rowIdentifiers.size(); i++) {
                 // Das ModelElement in der i-ten Zeile
-                ModelElement rowElement = ((NamedObjectContainer<ModelElement>) rowIdentifiers.elementAt(i)).getObject();
+                ModelElement rowElement = (ModelElement) rowIdentifiers.elementAt(i).getObject();
 
                 for (int j = 0; j < columnIdentifiers.size(); j++) {
                     String newValue = null;
@@ -318,7 +318,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                         continue;
                     }
                     // Das ModelElement in der j-ten Spalte
-                    ModelElement columnElement = ((NamedObjectContainer<ModelElement>) columnIdentifiers.elementAt(j)).getObject();
+                    ModelElement columnElement = (ModelElement) columnIdentifiers.elementAt(j).getObject();
 
                     Kante edge = getEdge(rowElement, columnElement);
                     if (edge == null) {

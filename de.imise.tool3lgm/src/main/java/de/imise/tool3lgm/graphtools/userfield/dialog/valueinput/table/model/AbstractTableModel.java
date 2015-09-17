@@ -140,7 +140,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * 
      * @return <code>columnIdentifiers</code>
      */
-    public Vector<Object> getColumnIdentifiers() {
+    public Vector<NamedObjectContainer<?>> getColumnIdentifiers() {
         return columnIdentifiers;
     }
 
