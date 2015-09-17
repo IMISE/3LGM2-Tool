@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.Pair;
 
 public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
@@ -44,6 +45,88 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
+     * Sucht die RowElements und ColumnElements für alle Elemente heraus, die durch die übergebene Kantenart in der übergebenen
+     * Richtung verbunden sein können. Dabei sind die RowElements immer die Start-Elemente der Kante in der angegebenen Richtung (!) und die
+     * ColumnElements immer die EndElemente in der angegebenen Kantenrichtung
+     * 
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction) {
+        Class<? extends ModelElement> rowElementClass = direction == Doppelkante.FORWARD ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass);
+        Class<? extends ModelElement> colElementClass = direction == Doppelkante.FORWARD ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
+        List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
+        List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
+
+        //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehängt werden könnte
+        for (int i = allRowElements.size() - 1; i >= 0; i--) {
+            ModelElement me = allRowElements.get(i);
+            if (me.getEdges(edgeClass).isEmpty()) {
+                allRowElements.remove(i);
+            }
+        }
+        for (int i = allColumnElements.size() - 1; i >= 0; i--) {
+            ModelElement me = allColumnElements.get(i);
+            if (me.getEdges(edgeClass).isEmpty()) {
+                allColumnElements.remove(i);
+            }
+        }
+        return new Pair<List<ModelElement>, List<ModelElement>>(allRowElements, allColumnElements);
+    }
+
+    /**
+     * Sucht die RowElements genau für das eine übergebene columnElement heraus.
+     * 
+     * @param edgeClass
+     * @param direction
+     * @param columnElement
+     * @return
+     */
+    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction, final ModelElement columnElement) {
+        List<Kante> edges;
+        if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+            if (direction == Doppelkante.FORWARD) {
+                edges = columnElement.getEdgesFrom(Kante.getStartClass(edgeClass), edgeClass);
+            } else {
+                edges = columnElement.getEdgesTo(Kante.getEndClass(edgeClass), edgeClass);
+            }
+        } else {
+            edges = columnElement.getEdges(edgeClass);
+        }
+
+        List<ModelElement> allRowElements = Lists.newArrayList();
+        for (Kante edge : edges) {
+            ModelElement rowElement = edge.getOther(columnElement);
+            allRowElements.add(rowElement);
+        }
+        Alphabetical.sort(allRowElements);
+
+        List<ModelElement> allColumnElements = ImmutableList.of(columnElement);
+
+        return new Pair<List<ModelElement>, List<ModelElement>>(allRowElements, allColumnElements);
+    }
+
+    /**
+     * Wenn das übergebene <code>columnElement</code> null ist, wird {@link #getRowAndColumnElements(Class, int)} aufgetrufen, sonst
+     * {@link #getRowAndColumnElements(Class, int, ModelElement)}
+     * 
+     * @param edgeClass
+     * @param direction
+     * @param columnElement
+     * @return
+     */
+    private Pair<List<ModelElement>, List<ModelElement>> initRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction, final ModelElement columnElement) {
+        Pair<List<ModelElement>, List<ModelElement>> rowColumnElements;
+        if (columnElement == null) {
+            rowColumnElements = getRowAndColumnElements(edgeClass, direction);
+        } else {
+            rowColumnElements = getRowAndColumnElements(edgeClass, direction, columnElement);
+        }
+        return rowColumnElements;
+    }
+
+    /**
      * Erstellt und setzt Verteilungsgewicht-Modeldaten
      * 
      * @param edgeClass
@@ -52,49 +135,9 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param field
      */
     private void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
-        List<ModelElement> allRowElements;
-        List<ModelElement> allColumnElements;
-        if (columnElement == null) {
-            Class<? extends ModelElement> rowElementClass = direction == Doppelkante.FORWARD ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass);
-            Class<? extends ModelElement> colElementClass = direction == Doppelkante.FORWARD ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
-            allRowElements = doc.getModelItems(rowElementClass, false, true);
-            allColumnElements = doc.getModelItems(colElementClass, false, true);
-
-            //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehängt werden könnte
-            for (int i = allRowElements.size() - 1; i >= 0; i--) {
-                ModelElement me = allRowElements.get(i);
-                if (me.getEdges(edgeClass).isEmpty()) {
-                    allRowElements.remove(i);
-                }
-            }
-            for (int i = allColumnElements.size() - 1; i >= 0; i--) {
-                ModelElement me = allColumnElements.get(i);
-                if (me.getEdges(edgeClass).isEmpty()) {
-                    allColumnElements.remove(i);
-                }
-            }
-        } else {
-            List<Kante> edges;
-            if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
-                if (direction == Doppelkante.FORWARD) {
-                    edges = columnElement.getEdgesFrom(Kante.getStartClass(edgeClass), edgeClass);
-                } else {
-                    edges = columnElement.getEdgesTo(Kante.getEndClass(edgeClass), edgeClass);
-                }
-            } else {
-                edges = columnElement.getEdges(edgeClass);
-            }
-
-            allRowElements = Lists.newArrayList();
-            for (Kante edge : edges) {
-                ModelElement rowElement = edge.getOther(columnElement);
-                allRowElements.add(rowElement);
-            }
-            Alphabetical.sort(allRowElements);
-
-            allColumnElements = ImmutableList.of(columnElement);
-
-        }
+        Pair<List<ModelElement>, List<ModelElement>> rowColumnElements = initRowAndColumnElements(edgeClass, direction, columnElement);
+        List<ModelElement> allRowElements = rowColumnElements.getFirstItem();
+        List<ModelElement> allColumnElements = rowColumnElements.getSecondItem();
 
         ModelElement[] rowElements = new ModelElement[allRowElements.size()];
         ModelElement[] columnElements = new ModelElement[allColumnElements.size()];
