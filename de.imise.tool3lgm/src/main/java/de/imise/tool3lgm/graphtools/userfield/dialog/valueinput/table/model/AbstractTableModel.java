@@ -259,6 +259,12 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      */
     @Override
     public final void setValueAt(final Object value, final int row, final int col) {
+        NamedObjectContainer<?> oldValueContainer = (NamedObjectContainer<?>) dataField[row][col];
+        Object oldValue = oldValueContainer.toString();
+        //nur was machen, wenn sich wirklich etwas geändert hat
+        if (oldValue.equals(value)) {
+            return;
+        }
         // neuer Container beinhaltet altes UserField "field" aber neuen Wert "value"
         NamedObjectContainer<?> newValue = getContainerForNewValue(value, row, col);
         // dataField update
