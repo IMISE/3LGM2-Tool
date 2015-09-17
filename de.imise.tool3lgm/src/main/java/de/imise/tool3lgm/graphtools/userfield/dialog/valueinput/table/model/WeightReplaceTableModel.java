@@ -43,7 +43,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         //Analgo zu den anderen Panels
         List<ModelElement> rowElements = Lists.newArrayList();
         List<UserField> columnElements = Lists.newArrayList();
-        Object[][] temp_data = new Object[allRowElements.size()][allColumnElements.size()];
+        Object[][] data = new Object[allRowElements.size()][allColumnElements.size()];
 
         // temp_data, rowElements, columnElements erstellen
         for (ModelElement re : allRowElements) {
@@ -71,9 +71,9 @@ public class WeightReplaceTableModel extends AbstractTableModel {
                 //wenn ein Ersetzungshash gefunden wurde
                 if (!Strings.isNullOrEmpty(replaceUserFieldHash)) {
                     UserField replaceUserField = definitions.getUserField(replaceUserFieldHash);
-                    temp_data[rowIndex][columnIndex] = getValueContainer(replaceUserField);
+                    data[rowIndex][columnIndex] = getValueContainer(replaceUserField);
                 } else {
-                    temp_data[rowIndex][columnIndex] = getBlankValueContainer(ce);
+                    data[rowIndex][columnIndex] = getBlankValueContainer(ce);
                 }
             }
         }
@@ -91,16 +91,6 @@ public class WeightReplaceTableModel extends AbstractTableModel {
             UserField userField = columnElements.get(j);
             //wenn das UserField null ist, dann ist das der Platzhalter für die Gleichverteilung
             columnIdentifiers.add(getValueContainer(userField));
-        }
-
-        // DataVector aufbauen
-        Object[][] data = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
-        for (int i = 0; i < data.length; i++) {
-            for (int j = 0; j < data[0].length; j++) {
-                if (temp_data[i][j] != null) {
-                    data[i][j] = temp_data[i][j];
-                }
-            }
         }
 
         // Daten setzen
