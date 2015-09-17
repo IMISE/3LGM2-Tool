@@ -139,9 +139,9 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         List<ModelElement> allRowElements = rowColumnElements.getFirstItem();
         List<ModelElement> columnElements = rowColumnElements.getSecondItem();
 
-        Object[][] temp_data = new Object[allRowElements.size()][columnElements.size()];
+        Object[][] data = new Object[allRowElements.size()][columnElements.size()];
 
-        // temp_data, rowElements, columnElements erstellen
+        // DataVector aufbauen
         for (int r = 0; r < allRowElements.size(); r++) {
             ModelElement re = allRowElements.get(r);
             for (int c = 0; c < columnElements.size(); c++) {
@@ -167,7 +167,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
                 //die nicht editierbaren Formeln müssen gleich formatiert dargestellt werden
                 String value = field.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA) ? field.getFormattedValue(edge, true) : field.getValue(edge);
-                temp_data[r][c] = new NamedObjectContainer<UserField>(field, value);
+                data[r][c] = new NamedObjectContainer<UserField>(field, value);
 
             }
         }
@@ -184,16 +184,6 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         for (int j = 0; j < columnElements.size(); j++) {
             ModelElement me = columnElements.get(j);
             columnIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
-        }
-
-        // DataVector aufbauen
-        Object[][] data = new Object[rowIdentifiers.size()][columnIdentifiers.size()];
-        for (int i = 0; i < data.length; i++) {
-            for (int j = 0; j < data[0].length; j++) {
-                if (temp_data[i][j] != null) {
-                    data[i][j] = temp_data[i][j];
-                }
-            }
         }
 
         // Daten setzen
