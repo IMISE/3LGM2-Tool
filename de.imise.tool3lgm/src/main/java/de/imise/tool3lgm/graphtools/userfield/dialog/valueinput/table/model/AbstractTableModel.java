@@ -146,15 +146,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
      * @param rowIdentifiers
      */
     public void setDataVector(final Object[][] data, final Vector<NamedObjectContainer<?>> columnIdentifiers, final Vector<NamedObjectContainer<?>> rowIdentifiers) {
-
-        if (data == null || data.length == 0) {
-            super.setDataVector(convertToVector(data), columnIdentifiers);
-            return;
-        }
-
         this.rowIdentifiers = rowIdentifiers;
-        this.columnIdentifiers = columnIdentifiers;
-
         super.setDataVector(convertToVector(data), columnIdentifiers);
 
     }
