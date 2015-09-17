@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
@@ -18,6 +19,8 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -44,7 +47,6 @@ import de.imise.util.clipboard.ContentExchanger;
 import de.imise.util.clipboard.ContentManagerImpl;
 import de.imise.util.clipboard.IllegalContentException;
 import de.imise.util.clipboard.SimpleContentParser;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * Klasse repräsentiert einen speziellen <code>JTable</code>, der zur Eingabe und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen
@@ -140,10 +142,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     private boolean doFormatting;
 
     /** Speichert alle gemachten Wertänderung */
-    private ArrayList<String[][]> undoStack;
+    private ArrayList<NamedObjectContainer<?>[][]> undoStack;
 
     /** Speichert alle rückgängig gemachten Änderunge */
-    private ArrayList<String[][]> redoStack;
+    private ArrayList<NamedObjectContainer<?>[][]> redoStack;
+
+    private static final int MAX_UNDO_REDO_STACK_SIZE = 10;
 
     /* ************************ Beginn: Initialisierungsteil ***************************************** */
 
@@ -202,8 +206,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         this.setAutoResizeMode(AUTO_RESIZE_OFF, AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
         // undo & redo
-        undoStack = new ArrayList<String[][]>(100);
-        redoStack = new ArrayList<String[][]>(100);
+        undoStack = new ArrayList<NamedObjectContainer<?>[][]>(MAX_UNDO_REDO_STACK_SIZE);
+        redoStack = new ArrayList<NamedObjectContainer<?>[][]>(MAX_UNDO_REDO_STACK_SIZE);
         InputMap im = getInputMap();
         ActionMap am = getActionMap();
 
@@ -408,10 +412,11 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             }
         }
 
-        if (((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false)
-        // Einfügen nicht erfolgreich
-        {
+        saveValues();
+        if (((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false) {
+            // Einfügen nicht erfolgreich
             showWarningMessage("userFieldTable_paste_warning");
+            undo();
         }
     }
 
@@ -421,7 +426,17 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param key
      */
     private void showWarningMessage(final String key) {
-        JOptionPane.showMessageDialog(this, Tool3lgmConstants.getResString(key), Tool3lgmConstants.getResString("userFieldTable_warning"), JOptionPane.WARNING_MESSAGE);
+        Component parentComponent = getParent();
+        if (parentComponent == null) {
+            return;
+        }
+        while (parentComponent != null) {
+            if (parentComponent instanceof JDialog || parentComponent instanceof JFrame) {
+                break;
+            }
+            parentComponent = parentComponent.getParent();
+        }
+        JOptionPane.showMessageDialog(parentComponent, Tool3lgmConstants.getResString(key), Tool3lgmConstants.getResString("userFieldTable_warning"), JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -435,9 +450,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
-        redoStack.add(CollectionUtils.toStringArray(((AbstractTableModel) dataModel).getValues()));
+        if (redoStack.size() > MAX_UNDO_REDO_STACK_SIZE) {
+            redoStack.remove(0);
+        }
+        redoStack.add(((AbstractTableModel) dataModel).getValues());
 
-        String[][] values = undoStack.remove(n - 1);
+        Object[][] values = undoStack.remove(n - 1);
         ((AbstractTableModel) dataModel).setValues(values);
 
     }
@@ -452,9 +470,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             return;
         }
 
-        undoStack.add(CollectionUtils.toStringArray(((AbstractTableModel) dataModel).getValues()));
+        if (undoStack.size() > MAX_UNDO_REDO_STACK_SIZE) {
+            undoStack.remove(0);
+        }
+        undoStack.add(((AbstractTableModel) dataModel).getValues());
 
-        String[][] values = redoStack.remove(n - 1);
+        Object[][] values = redoStack.remove(n - 1);
         ((AbstractTableModel) dataModel).setValues(values);
 
     }
@@ -469,7 +490,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         }
 
         redoStack.clear();
-        undoStack.add(CollectionUtils.toStringArray(((AbstractTableModel) dataModel).getValues()));
+        if (undoStack.size() > MAX_UNDO_REDO_STACK_SIZE) {
+            undoStack.remove(0);
+        }
+        undoStack.add(((AbstractTableModel) dataModel).getValues());
         return true;
     }
 
