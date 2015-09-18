@@ -204,7 +204,7 @@ public class TransactionManager {
     /**
      * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt und fürgt ein neues Kommando mit dem <code>commadPrefix</code>
      * und den <code>commandArguments</code> am Ende an. <br />
-     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu specihern. Für das Redo benötigt man immer nur
+     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
      * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
      * 
      * @param commandPrefix
@@ -224,7 +224,7 @@ public class TransactionManager {
     }
 
     /**
-     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese
+     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandPrefix</code> in dieser Transaktion vorkommt. Diese
      * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
      * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
      * 
