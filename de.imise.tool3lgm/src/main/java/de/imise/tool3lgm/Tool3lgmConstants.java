@@ -30,6 +30,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.StringUtils;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author Thomas Rudert, AXS Klasse, die alle global benötigten Parameter, und deren Zugriffsmethoden, des Programms enthält
@@ -357,6 +358,24 @@ public abstract class Tool3lgmConstants {
      */
     public static String getErrString(final String key) {
         return errorBundle.getString(key);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der übergebene String eine Extension eines {@link FileNameExtensionFilter} in
+     * FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER ist.
+     * 
+     * @param extension
+     * @return
+     */
+    public static boolean isExtension(final String extension) {
+        for (FileFilterType extensionType : FileFilterType.values()) {
+            FileNameExtensionFilter filter = getFileNameExtensionFilter(extensionType);
+            String[] extensions = filter.getExtensions();
+            if (CollectionUtils.arrayContains(extensions, extension)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
