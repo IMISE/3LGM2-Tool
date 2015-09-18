@@ -406,7 +406,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param commandArguments
      * @param pid
      */
-    public void addOrReplaceRedoCommand(final String commandPrefix, final String commandArguments, final int pid) {
+    private void addOrReplaceRedoCommand(final String commandPrefix, final String commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
             getCollection().getTman().addOrReplaceRedoCommand(commandPrefix, commandArguments, pid);
         }
@@ -421,7 +421,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param commandArguments
      * @param pid
      */
-    public void addUndoCommandIfNotExist(final String commandPrefix, final String commandArguments, final int pid) {
+    private void addUndoCommandIfNotExist(final String commandPrefix, final String commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
             getCollection().getTman().addUndoCommandIfNotExist(commandPrefix, commandArguments, pid);
         }
@@ -4215,9 +4215,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid);
-        addRedoCommand(GDCommands.SET_NAME + " " + me.getHashString() + " " + getParseSaveString(newName), pid);
-        addUndoCommand(GDCommands.SET_NAME + " " + me.getHashString() + " " + getParseSaveString(me.getName()), pid);
+        //falls in derselben Transaction der Name mehrfach geändert wird, soll das nur 1 Mal geloggt werden
+        addOrReplaceRedoCommand(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(newName), pid);
+        addUndoCommandIfNotExist(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(me.getName()), pid);
         //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
+        //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
         //		ArrayList<ModelElement> connected = me.getConnectedElements(ModelElement.class);
         //		for (ModelElement connMe : connected) {
         //			String name = connMe.getName();
