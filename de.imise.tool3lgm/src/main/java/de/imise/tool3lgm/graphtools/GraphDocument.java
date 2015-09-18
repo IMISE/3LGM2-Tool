@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools;
 
+import static de.imise.tool3lgm.graphtools.GDCommands.COORDINATE_KNOT;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -399,6 +401,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * @param commandPrefix
+     * @param undoCommandArguments
+     * @param redoCommandArguments
+     * @param pid
+     */
+    public void addReplaceUndoRedo(final String commandPrefix, final Object undoCommandArguments, final Object redoCommandArguments, final int pid) {
+        addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
+        addOrReplaceRedoCommand(commandPrefix, redoCommandArguments, pid);
+    }
+
+    /**
      * Wenn bereits bei der selben Transaktion ein Redo-Kommando gespeichert ist, das den
      * gleichen Prefix besitzt, dann wird das vorhandene Kommando durch das übergebene ersetzt.
      * 
@@ -406,9 +419,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param commandArguments
      * @param pid
      */
-    private void addOrReplaceRedoCommand(final String commandPrefix, final String commandArguments, final int pid) {
+    private void addOrReplaceRedoCommand(final String commandPrefix, final Object commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
-            getCollection().getTman().addOrReplaceRedoCommand(commandPrefix, commandArguments, pid);
+            getCollection().getTman().addOrReplaceRedoCommand(commandPrefix, commandArguments.toString(), pid);
         }
     }
 
@@ -421,9 +434,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param commandArguments
      * @param pid
      */
-    private void addUndoCommandIfNotExist(final String commandPrefix, final String commandArguments, final int pid) {
+    private void addUndoCommandIfNotExist(final String commandPrefix, final Object commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
-            getCollection().getTman().addUndoCommandIfNotExist(commandPrefix, commandArguments, pid);
+            getCollection().getTman().addUndoCommandIfNotExist(commandPrefix, commandArguments.toString(), pid);
         }
     }
 
@@ -2117,8 +2130,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         szen.start_transaction(pid);
-        addRedoCommand(GDCommands.NORMALIZE_LAYER + " " + szenHash + " " + layer_idx, pid);
-        addUndoCommand(GDCommands.CHANGE_LAYER_ALPHA + " " + szenHash + " " + layer_idx + " " + szen.layer[layer_idx].getAlpha(), pid);
+
+        addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
+        addOrReplaceRedoCommand(GDCommands.NORMALIZE_LAYER + " " + szenHash + " " + layer_idx, "", pid);
         if (szen.layer[layer_idx].getColor() == null) {
             addUndoCommand(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx + " null", pid);
         } else {
@@ -2143,16 +2157,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GraphDocument ecDoc = ec.getGraphDocument();
         ecDoc.start_transaction(pid);
         String szenHash = ecDoc.hashString;
-        if (ec.isStandardFont(font)) {
-            addRedoCommand(GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString(), pid);
-        } else {
-            addRedoCommand(GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString() + " " + GDCOMMAND_TEXT_SURROUNDER + font.getName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + font.getSize() + " " + font.getStyle(), pid);
-        }
-        if (ec.hasStandardFont()) {
-            addUndoCommand(GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString(), pid);
-        } else {
-            addUndoCommand(GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString() + " " + GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
-        }
+
+        String undoCommandArguments = ec.hasStandardFont() ? "" : GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle();
+        String redoCommandArguments = ec.isStandardFont(font) ? "" : GDCOMMAND_TEXT_SURROUNDER + font.getName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + font.getSize() + " " + font.getStyle();
+        addReplaceUndoRedo(GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString(), undoCommandArguments, redoCommandArguments, pid);
+
         ec.setFont(font);
         ec.refreshText();
         ecDoc.finish_transaction(pid);
@@ -2225,8 +2234,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         szen.start_transaction(pid);
-        addRedoCommand(GDCommands.CHANGE_LINE_STYLE + " " + szenHash + " " + mc.getHashString() + " " + lineStyle, pid);
-        addUndoCommand(GDCommands.CHANGE_LINE_STYLE + " " + szenHash + " " + mc.getHashString() + " " + mc.getLineStyle(), pid);
+        addReplaceUndoRedo(GDCommands.CHANGE_LINE_STYLE + " " + szenHash + " " + mc.getHashString(), mc.getLineStyle(), lineStyle, pid);
         mc.setLineStyle(lineStyle);
         szen.finish_transaction(pid);
         szen.distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
@@ -2264,8 +2272,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(pid);
         String szenHash = nc.getGraphDocument().hashString;
 
-        addUndoCommandIfNotExist(GDCommands.COORDINATE_KNOT + " " + szenHash + " " + nc.getHashString(), nc.getX() + " " + nc.getY() + " " + nc.getWidth() + " " + nc.getHeight(), pid);
-        addOrReplaceRedoCommand(GDCommands.COORDINATE_KNOT + " " + szenHash + " " + nc.getHashString(), x + " " + y + " " + width + " " + height, pid);
+        String undoCommandArguments = nc.getX() + " " + nc.getY() + " " + nc.getWidth() + " " + nc.getHeight();
+        String redoCommandArguments = x + " " + y + " " + width + " " + height;
+        addReplaceUndoRedo(COORDINATE_KNOT + " " + szenHash + " " + nc.getHashString(), undoCommandArguments, redoCommandArguments, pid);
         nc.setCoordinates(x, y, width, height);
 
         //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
