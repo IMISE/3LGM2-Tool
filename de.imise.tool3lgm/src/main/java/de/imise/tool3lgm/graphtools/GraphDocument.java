@@ -876,7 +876,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case SET_DESCRIPTION:
             //[1] = ElementHashString, [2] = Beschreibung
-            setDescription(argv[0], argv[1], pid);
+            setDescription(findElementCoded(argv[0]), argv[1], pid);
             break;
 
         case SET_USER_FIELD_VALUE:
@@ -4238,12 +4238,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param newDescr
      * @param pid
      */
-    public final void setDescription(final String hashString, final String newDescr, final int pid) {
-        ElementContainer mc = findContainerCoded(hashString);
-        if (mc == null) {
-            return;
-        }
-        ModelElement me = mc.getElement();
+    public final void setDescription(final ModelElement me, final String newDescr, final int pid) {
         if (me == null) {
             return;
         }
@@ -4252,9 +4247,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommand(GDCommands.SET_DESCRIPTION + " " + me.getHashString() + " " + getParseSaveString(newDescr), pid);
         addUndoCommand(GDCommands.SET_DESCRIPTION + " " + me.getHashString() + " " + getParseSaveString(me.getDescription()), pid);
         me.setDescription(getDecodedParseSaveString(newDescr));
-        mc.refreshText();
+        for (ElementContainer ec : me.getContainerTable().values()) {
+            ec.refreshText();
+        }
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, mc, layer[me.layerFor()], pid);
+        distributeEvent(DATA_CHANGED, pid);
     }
 
     /**

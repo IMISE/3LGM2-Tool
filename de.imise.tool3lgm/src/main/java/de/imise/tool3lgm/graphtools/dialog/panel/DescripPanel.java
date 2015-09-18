@@ -372,7 +372,7 @@ public class DescripPanel extends ElementDialogPanel {
         String newDescrip = descriptionTextPane.getText();
         String descrip = me.getDescription();
         if (newDescrip != null && !newDescrip.equals(descrip)) {
-            doc.setDescription(me.getHashString(), GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
+            doc.setDescription(me, GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
         }
         me.refreshText();
     }

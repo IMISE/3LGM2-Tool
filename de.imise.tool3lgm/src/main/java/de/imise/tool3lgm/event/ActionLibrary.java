@@ -767,7 +767,7 @@ public class ActionLibrary {
                                 gdcoll.unlink(edge.getEnd(), edge.getStart(), edge.getClass(), TransactionManager.STANDARD_PID);
                             }
                             doc.setName(newEdge, edgeName, TransactionManager.STANDARD_PID);
-                            doc.setDescription(newEdge.getHashString(), edgeDescrip, TransactionManager.STANDARD_PID);
+                            doc.setDescription(newEdge, edgeDescrip, TransactionManager.STANDARD_PID);
                         }
                     }
                     gdcoll.deleteElement(part, doc, TransactionManager.STANDARD_PID);

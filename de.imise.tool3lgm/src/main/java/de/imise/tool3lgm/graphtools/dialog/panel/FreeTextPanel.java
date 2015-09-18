@@ -146,7 +146,7 @@ public class FreeTextPanel extends ElementDialogPanel {
         }
         String newDescrip = descriptionTextPane.getText();
         if (newDescrip != null && !olddescrip.equals(newDescrip)) {
-            doc.setDescription(dataElement.getHashString(), GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
+            doc.setDescription(dataElement, GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
         }
         dataElement.refreshText();
     }
