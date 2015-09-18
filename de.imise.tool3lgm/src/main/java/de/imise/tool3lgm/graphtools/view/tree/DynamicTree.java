@@ -33,6 +33,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
+import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -46,7 +47,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author N.N.
  */
-public final class DynamicTree extends JTree implements MouseListener, ActionListener, GraphDocumentListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
+public final class DynamicTree extends JTree implements MouseListener, ActionListener, GraphDocumentListener, InTransactionListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
 
     /**
      * COMMENTME
@@ -149,8 +150,10 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
     public void setGraphDocument(final GraphDocument doc) {
         if (this.doc != null) {
             this.doc.removeGraphDocumentListener(this);
+            getCollection().getMainGraphDocument().removeInTransactionListener(this);
             if (doc != null) {
                 doc.addGraphDocumentListener(this);
+                getCollection().getMainGraphDocument().addInTransactionListener(this);
             }
             this.doc = doc;
         }
@@ -517,7 +520,7 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
     /**
 	 * 
 	 */
-    public void buildTree() {
+    private void buildTree() {
         if (doc == null) {
             return;
         }
@@ -842,11 +845,15 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
     }
 
     @Override
+    public void dataChanged(final GraphDocument source, final int pid) {
+        dataChanged(source);
+    }
+
+    @Override
     public void dataChanged(final GraphDocument source) {
         if (Tool3lgm.DEBUG) {
-            System.err.println(getClass().getSimpleName() + "dataChanged() " + source);
+            System.err.println(getClass().getSimpleName() + " dataChanged() " + source);
         }
-        //		System.out.println("dataChanged");
         buildTree();
     }
 
@@ -992,4 +999,5 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
             refreshTree();
         }
     }
+
 }
