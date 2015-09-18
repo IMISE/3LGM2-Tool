@@ -15,12 +15,12 @@ public final class NamedObjectContainer<E> {
      * Dies ist also der String, der über <code>toString()</code> zurück
      * gegeben wird.
      */
-    protected final String toString;
+    protected final String toString; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
 
     /**
      * Das Objekt das durch den angezeigten String dargestellt wird
      */
-    protected final E object;
+    protected final E object; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
 
     /**
      * Legt ein Obekt an, das über die <code>toString()</code> -Methode den <code>toString</code> zurück liefert und zusätzlich das Objekt
