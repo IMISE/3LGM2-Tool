@@ -865,10 +865,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case SET_NAME:
             switch (argc) {
-            case 1:
-                //[0] = newName
-                setName(argv[0], pid);
-                break;
             case 2:
                 //[0] = elementHash, [1] = newName
                 setName(findElementCoded(argv[0]), argv[1], pid);
@@ -4235,40 +4231,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
-    }
-
-    /**
-     * @param newName
-     * @param pid
-     */
-    public final void setName(final String newName, final int pid) {
-        if (selectedContainer.size() == 0) {
-            return;
-        }
-        if (selectedContainer.size() > 1) {
-            if (gdcoll.isInteractiveMode()) {
-                JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("nur_eins_umben"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
-            }
-            return;
-        }
-        setName(getLastSelected().getElement(), newName, pid);
-    }
-
-    /**
-     * @param newDescr
-     * @param pid
-     */
-    public final void _setDescription(final String newDescr, final int pid) {
-        if (selectedContainer.size() == 0) {
-            return;
-        }
-        if (selectedContainer.size() > 1) {
-            if (gdcoll.isInteractiveMode()) {
-                JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("nur_eins_umbeschr"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
-            }
-            return;
-        }
-        setDescription(getLastSelected().getHashString(), newDescr, pid);
     }
 
     /**
