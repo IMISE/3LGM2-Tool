@@ -1,10 +1,12 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -23,12 +25,13 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
-public class DynamicTreeMouseAdapter implements MouseListener {
+public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
     private final DynamicTree tree;
 
     public DynamicTreeMouseAdapter(final DynamicTree tree) {
         this.tree = tree;
+        tree.addMouseListener(this);
     }
 
     /**
@@ -203,13 +206,32 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         JMenuItem item;
 
         item = new JMenuItem(Tool3lgmConstants.getResString("neue_instanz"));
-        item.addActionListener(tree);
+        item.addActionListener(this);
         item.setActionCommand("newInstanze " + str);
         menu.add(item);
         Tool3lgm.setLastActionPosition(x + tree.getX(), y + tree.getY());
         menu.show(tree, x, y);
 
         return menu;
+    }
+
+    @Override
+    public final void actionPerformed(final ActionEvent e) {
+        GraphDocument doc = tree.getGraphDocument();
+        if (doc == null) {
+            return;
+        }
+        String str = e.getActionCommand();
+        if (str.startsWith("newInstanze ")) {
+            StringTokenizer s = new StringTokenizer(str, " ");
+            if (s.countTokens() < 2) {
+                return;
+            }
+            s.nextToken();
+            String klassenname = s.nextToken();
+            doc.createKnotenWithContainer(Tool3lgmConstants.NODE_PACKAGE_NAME + klassenname, DynamicTree.PID);
+            return;
+        }
     }
 
 }

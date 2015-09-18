@@ -1,11 +1,8 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
@@ -38,7 +35,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author N.N.
  */
-public final class DynamicTree extends JTree implements ActionListener, GraphDocumentListener, InTransactionListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
+public final class DynamicTree extends JTree implements GraphDocumentListener, InTransactionListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
 
     /**
      * COMMENTME
@@ -592,24 +589,6 @@ public final class DynamicTree extends JTree implements ActionListener, GraphDoc
      */
     public static final int getLayerOf(final Knoten knot) {
         return knot.layerFor();
-    }
-
-    @Override
-    public final void actionPerformed(final ActionEvent e) {
-        if (doc == null) {
-            return;
-        }
-        String str = e.getActionCommand();
-        if (str.startsWith("newInstanze ")) {
-            StringTokenizer s = new StringTokenizer(str, " ");
-            if (s.countTokens() < 2) {
-                return;
-            }
-            s.nextToken();
-            String klassenname = s.nextToken();
-            doc.createKnotenWithContainer(Tool3lgmConstants.NODE_PACKAGE_NAME + klassenname, PID);
-            return;
-        }
     }
 
     /**
