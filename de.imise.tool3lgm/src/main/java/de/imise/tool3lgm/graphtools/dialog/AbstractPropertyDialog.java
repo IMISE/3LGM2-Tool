@@ -5,6 +5,7 @@ package de.imise.tool3lgm.graphtools.dialog;
 
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -105,6 +106,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
         okButton = new JButton(Tool3lgmConstants.getResString("ok"));
         cancelButton = new JButton(Tool3lgmConstants.getResString("cancel"));
         applyButton = new JButton(Tool3lgmConstants.getResString("apply"));
+        setSameButtonSize(okButton, cancelButton, applyButton);
         String helpID = Help.getHelp().getHelpID(this);
         if (helpID != null && helpID.length() > 0) {
             helpButton = new JButton(Tool3lgmConstants.getResString("hilfeButtonText"));
@@ -112,6 +114,21 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
             Help.getHelp().enableHelpOnButton(helpButton, helpID);
         }
         createNewTransactionID();
+    }
+
+    private static final void setSameButtonSize(final JButton... buttons) {
+        if (buttons == null || buttons.length == 0) {
+            return;
+        }
+        Dimension dim = buttons[0].getPreferredSize();
+        for (int i = 1; i < buttons.length; i++) {
+            Dimension otherDim = buttons[i].getPreferredSize();
+            dim.width = Math.max(dim.width, otherDim.width);
+            dim.height = Math.max(dim.height, otherDim.height);
+        }
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setPreferredSize(dim);
+        }
     }
 
     /**
