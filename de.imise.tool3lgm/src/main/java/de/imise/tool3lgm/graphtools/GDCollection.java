@@ -3274,7 +3274,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param layer
      */
     public void setActiveLayer(final int layer) {
-        if (layer < 0 || layer > 4) {
+        if (layer < 0 || layer > 4 || active_layer == layer) {
             return;
         }
         active_layer = layer;
