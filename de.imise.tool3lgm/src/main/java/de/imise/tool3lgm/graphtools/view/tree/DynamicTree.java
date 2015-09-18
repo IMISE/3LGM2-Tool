@@ -5,8 +5,6 @@ import java.util.Enumeration;
 import java.util.Set;
 
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -35,24 +33,24 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author N.N.
  */
-public final class DynamicTree extends JTree implements GraphDocumentListener, InTransactionListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
+public final class DynamicTree extends JTree implements GraphDocumentListener, InTransactionListener, UserFieldListener, GraphDocumentOwner {
 
     /**
-     * COMMENTME
+     * Knoten für die Fachliche Ebene
      */
-    private LGMTreeNode fachebene = null;
+    private final LGMTreeNode fachebene = new LGMTreeNode(Tool3lgmConstants.getResString("domain_layer"), false, true);
+    /**
+     * Knoten für die Logische Werkzeugebene
+     */
+    private final LGMTreeNode logebene = new LGMTreeNode(Tool3lgmConstants.getResString("logical_tool_layer"), false, true);
+    /**
+     * Knoten für die physische Werkzeugebene
+     */
+    private final LGMTreeNode phyebene = new LGMTreeNode(Tool3lgmConstants.getResString("physical_tool_layer"), false, true);
     /**
      * COMMENTME
      */
-    private LGMTreeNode logebene = null;
-    /**
-     * COMMENTME
-     */
-    private LGMTreeNode phyebene = null;
-    /**
-     * COMMENTME
-     */
-    private LGMTreeNode awb = null;
+    private final LGMTreeNode awb = new LGMTreeNode(Tool3lgmConstants.getResString("Anwendungsbaustein_p"), false, true);;
     /**
      * COMMENTME
      */
@@ -70,6 +68,8 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
      * COMMENTME
      */
     private GraphDocument doc;
+
+    private final DynamicTreeSelectionListener selectionListener;
 
     /**
      * Alle Knoten deren Kinder immer wieder removed und neu angelegt werden.
@@ -99,6 +99,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
         doc = d;
         addMouseListener(new DynamicTreeMouseAdapter(this));
+        selectionListener = new DynamicTreeSelectionListener(this);
 
         setCellRenderer(new TreeRenderer(doc));
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
@@ -162,9 +163,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
     private void createTree() {
         LGMTreeNode top = (LGMTreeNode) treeModel.getRoot();
         if (top.getChildCount() == 0) {
-            //der Baum muss die Knoten sortieren, an denen nicht direkt Modelemente hängen (da Reihenfolge je nach Sprache differieren kann)
-            //alle anderen Knoten erhalten Sortierung durch Abfragen der alphabetischen Knotenlisten
-            fachebene = new LGMTreeNode(Tool3lgmConstants.getResString("domain_layer"), false, true);
+            fachebene.removeAllChildren();
             top.add(fachebene);
 
             int nodesToClearIndex = 0;
@@ -175,9 +174,9 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
                 fachebene.add(node);
                 nodesToClear[nodesToClearIndex++] = node;
             }
-            logebene = new LGMTreeNode(Tool3lgmConstants.getResString("logical_tool_layer"), false, true);
+            logebene.removeAllChildren();
             top.add(logebene);
-            awb = new LGMTreeNode(Tool3lgmConstants.getResString("Anwendungsbaustein_p"), false, true);
+            awb.removeAllChildren();
             logebene.add(awb);
             for (int c = 0; c < ModelConstants.TREE_LOGICAL_LAYER_NODES.length; c++) {
                 Class<? extends ModelElement> clazz = ((Class<?>) ModelConstants.TREE_LOGICAL_LAYER_NODES[c]).asSubclass(ModelElement.class);
@@ -189,7 +188,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
                 }
                 nodesToClear[nodesToClearIndex++] = node;
             }
-            phyebene = new LGMTreeNode(Tool3lgmConstants.getResString("physical_tool_layer"), false, true);
+            phyebene.removeAllChildren();
             top.add(phyebene);
             for (int c = 0; c < ModelConstants.TREE_PHYSICAL_LAYER_NODES.length; c++) {
                 @SuppressWarnings("unchecked")
@@ -499,8 +498,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
             return;
         }
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-
-        removeTreeSelectionListener(this);
+        selectionListener.setInactive();
         createTree();
         saveExpansionState();
         showPartOfHierarchy = UserProperties.isShowPartOfHierarchy();
@@ -533,34 +531,15 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         }
         ((DefaultTreeModel) treeModel).reload();
         restoreExpansionState();
-        addTreeSelectionListener(this);
+        selectionListener.setActive();
         selectObjects();
-    }
-
-    /**
-     * @param layer
-     */
-    public void changeActiveLayer(final int layer) {
-        changingLayer = true;
-        switch (layer) {
-        case 4:
-            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene)));
-            break;
-        case 2:
-            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene)));
-            break;
-        case 0:
-            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene)));
-            break;
-        }
-        changingLayer = false;
     }
 
     /**
      * Selektiert im Baum alle Elemente, die im dazugehörigen {@link GraphDocument} selektiert sind.
      */
     public void selectObjects() {
-        removeTreeSelectionListener(this);
+        selectionListener.setInactive();
         TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
@@ -580,7 +559,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         if (path.length > 0) {
             scrollPathToVisible(path[path.length - 1]);
         }
-        addTreeSelectionListener(this);
+        selectionListener.setActive();
     }
 
     /**
@@ -611,16 +590,44 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         }
     }
 
-    /**
-     * COMMENTME
-     */
-    boolean changingLayer = false;
-
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        changingLayer = true;
-        changeActiveLayer(doc.getCollection().getActiveLayer());
-        changingLayer = false;
+        selectionListener.setInactive();
+        int layer = doc.getCollection().getActiveLayer();
+        switch (layer) {
+        case 4:
+            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene)));
+            break;
+        case 2:
+            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene)));
+            break;
+        case 0:
+            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene)));
+            break;
+        }
+        selectionListener.setActive();
+    }
+
+    /**
+     * Über diese Funktion kann der {@link DynamicTreeSelectionListener} den Layer wechseln, wenn
+     * ein Layerknoten im Baum selektiert wurde.
+     * 
+     * @param node
+     * @return
+     */
+    public boolean setActiveLayer(final LGMTreeNode node) {
+        boolean layerChanged = false;
+        if (node == fachebene) {
+            layerChanged = true;
+            doc.getCollection().setActiveLayer(4);
+        } else if (node == logebene) {
+            layerChanged = true;
+            doc.getCollection().setActiveLayer(2);
+        } else if (node == phyebene) {
+            layerChanged = true;
+            doc.getCollection().setActiveLayer(0);
+        }
+        return layerChanged;
     }
 
     @Override
@@ -683,69 +690,13 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
     //	----------------------------------------------------------------------------------------------------------------------------------
     //	TreeSelectionListener 
 
-    /**
-     * COMMENTME
-     */
-    int correctingSelectionCount = 0;
-
-    @Override
-    public void valueChanged(final TreeSelectionEvent e) {
-        if (correctingSelectionCount > 0) {
-            return;
-        }
-        if (changingLayer) {
-            return;
-        }
-
-        JTree tree = (JTree) e.getSource();
-
-        doc.removeGraphDocumentListener(this);
-        doc.start_transaction(PID, false);
-        doc.deselectAll(true);
-        TreePath[] paths = tree.getSelectionPaths();
-        boolean layerChanged = false;
-        if (paths != null) {
-            for (int i = 0; i < paths.length; i++) {
-                LGMTreeNode node = (LGMTreeNode) paths[i].getLastPathComponent();
-                Object uo = node.getUserObject();
-                if (uo != null) {
-                    if (uo instanceof NodeContainer) {
-                        if (node.isSelectable()) {
-                            NodeContainer knot = (NodeContainer) uo;
-                            doc.addToSelection(knot, PID);
-                        } else {
-                            correctingSelectionCount++;
-                            tree.removeSelectionPath(paths[i]);
-                            correctingSelectionCount--;
-                        }
-                    } else if (node == fachebene) {
-                        layerChanged = true;
-                        doc.getCollection().setActiveLayer(4);
-                    } else if (node == logebene) {
-                        layerChanged = true;
-                        doc.getCollection().setActiveLayer(2);
-                    } else if (node == phyebene) {
-                        layerChanged = true;
-                        doc.getCollection().setActiveLayer(0);
-                    }
-                }
-            }
-        }
-        doc.finish_transaction(PID, false);
-        doc.distributeEvent(GraphDocument.SELECTION_CHANGED);
-        if (layerChanged) {
-            doc.distributeEvent(GraphDocument.ACTIVE_LAYER_CHANGED);
-        }
-        doc.addGraphDocumentListener(this);
-    }
-
     Enumeration<TreePath> expansionEnum = null;
 
-    void saveExpansionState() {
+    private void saveExpansionState() {
         expansionEnum = getExpandedDescendants(rootPath);
     }
 
-    void restoreExpansionState() {
+    private void restoreExpansionState() {
         if (expansionEnum != null) {
             while (expansionEnum.hasMoreElements()) {
                 TreePath path = expansionEnum.nextElement();
