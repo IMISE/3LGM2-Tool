@@ -2,18 +2,11 @@ package de.imise.tool3lgm.graphtools.view.tree;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import javax.swing.AbstractAction;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -23,7 +16,6 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.ContextGenerator;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.GraphDocumentListener;
@@ -40,14 +32,13 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * @author N.N.
  */
-public final class DynamicTree extends JTree implements MouseListener, ActionListener, GraphDocumentListener, InTransactionListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
+public final class DynamicTree extends JTree implements ActionListener, GraphDocumentListener, InTransactionListener, TreeSelectionListener, UserFieldListener, GraphDocumentOwner {
 
     /**
      * COMMENTME
@@ -110,7 +101,7 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
 
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
         doc = d;
-        addMouseListener(this);
+        addMouseListener(new DynamicTreeMouseAdapter(this));
 
         setCellRenderer(new TreeRenderer(doc));
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
@@ -158,6 +149,14 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
             this.doc = doc;
         }
         buildTree();
+    }
+
+    public boolean isLayerNode(final Object o) {
+        return o == fachebene || o == logebene || o == phyebene;
+    }
+
+    public boolean isAbstractElementNode(final Object o) {
+        return o == awb;
     }
 
     /**
@@ -296,28 +295,6 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
             LGMTreeNode childNode = new LGMTreeNode(pc, true, false);
             elementNode.add(childNode);
             addChildren(childNode, performingRebuild, selDoc);
-        }
-    }
-
-    /**
-     * @author N.N.
-     */
-    private class HyperlinkString {
-        private String name = "";
-        private String value = "";
-
-        public HyperlinkString(final String name, final String value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
         }
     }
 
@@ -610,25 +587,6 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
     }
 
     /**
-     * @param str
-     * @return
-     */
-    private final JPopupMenu showNewInstanceContextMenu(final String str, final int x, final int y) {
-        JPopupMenu menu = new JPopupMenu();
-
-        JMenuItem item;
-
-        item = new JMenuItem(Tool3lgmConstants.getResString("neue_instanz"));
-        item.addActionListener(this);
-        item.setActionCommand("newInstanze " + str);
-        menu.add(item);
-        Tool3lgm.setLastActionPosition(x + getX(), y + getY());
-        menu.show(this, x, y);
-
-        return menu;
-    }
-
-    /**
      * @param knot
      * @return
      */
@@ -652,164 +610,6 @@ public final class DynamicTree extends JTree implements MouseListener, ActionLis
             doc.createKnotenWithContainer(Tool3lgmConstants.NODE_PACKAGE_NAME + klassenname, PID);
             return;
         }
-    }
-
-    /**
-     * COMMENTME
-     */
-    private Object tmpUserObject = null; // Aus Performancegründen hier global
-
-    // für die Kommunikation zwischen mousePressed und mouseClicked 
-
-    @Override
-    public void mouseClicked(final MouseEvent e) {
-        if (e.getClickCount() <= 1) {
-            return;
-        }
-        boolean left_button = false;
-
-        if (!Tool3lgmConstants.isPopupTrigger(e)) {
-            left_button = true;
-        }
-        // Hyprlink öffnen
-        if ((e.getModifiers() & InputEvent.ALT_MASK) != 0) {
-            //Component source, int id, long when, int modifiers,
-            //int keyCode, char keyChar, int keyLocation
-            dispatchEvent(new KeyEvent(this, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
-            if (left_button && tmpUserObject != null && tmpUserObject instanceof HyperlinkString) {
-                String value = ((HyperlinkString) tmpUserObject).getValue();
-                BrowseUtils.browse(value);
-                return;
-            }
-            Tool3lgm.tool.changeToLinked(doc);
-            return;
-        }
-
-        // Teilobjkete zeigen oder verstecken
-        if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
-            doc.auf_zuklappen(PID);
-            return;
-        }
-
-        if (left_button && tmpUserObject != null && tmpUserObject instanceof NodeContainer) {
-            doc.showPropertyDialog(((NodeContainer) tmpUserObject).getElement());
-        }
-    }
-
-    @Override
-    public void mouseEntered(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(final MouseEvent e) {
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void mousePressed(final MouseEvent e) {
-
-        if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
-            ContextGenerator.setControlled(true);
-        }
-
-        boolean right_button = false;
-        int xin = e.getX();
-        int yin = e.getY();
-
-        final JTree sourceTree = (JTree) e.getComponent();
-        TreePath path = sourceTree.getPathForLocation(xin, yin);
-
-        //Wenn die rechte Maustaste gedrückt wurde, wird <code>right_button</code> true;
-        if (Tool3lgmConstants.isPopupTrigger(e)) {
-            right_button = true;
-
-            if (path != null) {
-                LGMTreeNode lastNode = (LGMTreeNode) path.getLastPathComponent();
-                // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen, 
-                // so dass hier keine weiter Selektion erstellt werden muss.
-                if (!(lastNode.getUserObject() instanceof ElementContainer)) {
-                    selectionModel.setSelectionPath(getPathForLocation(xin, yin));
-                }
-            } else {
-                JPopupMenu menu = new JPopupMenu();
-                JMenuItem item = new JMenuItem(new AbstractAction(Tool3lgmConstants.getResString("expand_all")) {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent arg0) {
-                        for (int i = 0; i < sourceTree.getRowCount(); i++) {
-                            sourceTree.expandRow(i);
-                        }
-                    }
-                });
-                menu.add(item);
-                menu.show(this, xin + 3, yin + 3);
-            }
-        }
-
-        if (path != null) {
-            Object knot = ((LGMTreeNode) path.getLastPathComponent()).getUserObject();
-            tmpUserObject = knot;
-
-            Object lastPathComponent = path.getLastPathComponent();
-            if (lastPathComponent == fachebene || lastPathComponent == logebene || lastPathComponent == phyebene) {
-                if (right_button) {
-                    JPopupMenu pm = ContextGenerator.getLayerContextMenu();
-                    if (pm != null) {
-                        pm.show(this, xin + 3, yin + 3);
-                    }
-                }
-                return;
-            }
-
-            // TODO:FST: Actions für Item aus GlobalActionLibrary holen und setzen
-            TreePath parent = path.getParentPath();
-            if (parent != null) {
-                if (parent.getLastPathComponent() == fachebene || parent.getLastPathComponent() == logebene || parent.getLastPathComponent() == phyebene || parent.getLastPathComponent() == awb) {
-                    if (right_button) {
-                        String label = path.getLastPathComponent().toString();
-                        Class<? extends ModelElement> elementClass = null;
-                        for (int c = 0; c < ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
-                            if (ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c]).equals(label)) {
-                                elementClass = ((Class<?>) ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c]).asSubclass(ModelElement.class);
-                            }
-                        }
-                        for (int c = 0; c < ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
-                            if (ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c]).equals(label)) {
-                                elementClass = ((Class<?>) ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c]).asSubclass(ModelElement.class);
-                            }
-                        }
-                        for (int c = 0; c < ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
-                            if (ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]).equals(label)) {
-                                elementClass = ((Class<?>) ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]).asSubclass(ModelElement.class);
-                            }
-                        }
-                        if (elementClass == null) {
-                            return;
-                        }
-
-                        showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
-                    }
-                }
-            }
-            if (knot instanceof ElementContainer) {
-                if (right_button) {
-                    ElementContainer elem = (ElementContainer) knot;
-                    //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
-                    //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                    elem.getGraphDocument().addToSelection(elem, PID);
-                    JPopupMenu pm = Tool3lgm.getContextGenerator().getKnotContextMenu(this);
-                    if (pm != null) {
-                        pm.show(this, xin + 3, yin + 3);
-                    }
-                    return;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void mouseReleased(final MouseEvent e) {
-        ContextGenerator.setControlled(false);
     }
 
     /**
