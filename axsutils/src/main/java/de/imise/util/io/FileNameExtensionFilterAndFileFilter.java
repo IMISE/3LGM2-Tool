@@ -2,12 +2,14 @@ package de.imise.util.io;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FilenameFilter;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Ein {@link FileFilter} und {@link FilenameFilter}, der intern einen {@link FileNameExtensionFilter} hält
+ * Ein {@link FileFilter}, der sich genauso verhält wie ein {@link FileNameExtensionFilter}, bei dem man aber
+ * optional das Akzeptieren von Verzeichnissen abschalten kann, die der {@link FileNameExtensionFilter} in jedem
+ * Fall akzeptiert.
+ * Da {@link FileNameExtensionFilter} leider final ist, kann man ihn nicht direkt als Oberklasse nehmen.
  * 
  * @author AXS
  * @create 06.07.2012
@@ -113,10 +115,6 @@ public class FileNameExtensionFilterAndFileFilter implements FileFilter {
         return fileNameExtensionFilter.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.io.FileFilter#accept(java.io.File)
-     */
     @Override
     public boolean accept(final File f) {
         if (!acceptDirectories && f != null && f.isDirectory()) {
