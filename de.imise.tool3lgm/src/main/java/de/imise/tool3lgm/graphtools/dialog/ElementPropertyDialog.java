@@ -12,7 +12,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgm;
@@ -115,11 +114,10 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         JPanel bp = new JPanel();
         okButton.addActionListener(this);
         bp.add(okButton);
-        cancelButton.addActionListener(this);
-        bp.add(cancelButton);
-        applyButton = new JButton(Tool3lgmConstants.getResString("apply"));
         applyButton.addActionListener(this);
         bp.add(applyButton);
+        cancelButton.addActionListener(this);
+        bp.add(cancelButton);
         if (helpButton != null) {
             bp.add(helpButton);
         }
@@ -134,8 +132,6 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         int xx = de.imise.tool3lgm.Tool3lgm.tool.getX() + 100;
         int yy = de.imise.tool3lgm.Tool3lgm.tool.getY() + 100;
         if (lastWidth == -1) {
-            // lastWidth = this.getWidth();
-            // lastHeight = this.getHeight();
             setLastWidth(DEFAULT_SIZE.width);
             setLastHeight(DEFAULT_SIZE.height);
         } else {
