@@ -592,20 +592,23 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        selectionListener.setInactive();
         int layer = doc.getCollection().getActiveLayer();
+        TreePath path = null;
         switch (layer) {
         case 4:
-            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene)));
+            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene));
+            setSelectionPath(path);
             break;
         case 2:
-            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene)));
+            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene));
+            setSelectionPath(path);
             break;
         case 0:
-            setSelectionPath(new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene)));
+            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene));
+            setSelectionPath(path);
             break;
         }
-        selectionListener.setActive();
+        scrollPathToVisible(path);
     }
 
     /**
