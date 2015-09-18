@@ -26,9 +26,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.TabbedPane;
-import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Knoten und Kanten.<br>
@@ -40,27 +38,11 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     /**
      * COMMENTME
      */
-    private LimitedSizeScrollTextPane nameTextPane;
-
-    /**
-     * COMMENTME
-     */
-    private ExtendedTextPane descripPane;
-
-    /**
-     * COMMENTME
-     */
-    private String oldname, olddescrip;
-
-    /**
-     * COMMENTME
-     */
     private final ModelElement modelElement;
 
     /**
      * COMMENTME
      */
-    // private ExtendedTextPane nameLabel;
     private final ElementDialogHeaderPanel headerPanel;
 
     /**
@@ -92,16 +74,12 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         JPanel up = new JPanel(new GridLayout(1, 1));
         tab = new TabbedPane();
         tab.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-        /*
-         * nameLabel = new ExtendedTextPane(); nameLabel.setEditable(false);
-         * nameLabel.setBackground(up.getBackground()); up.add(nameLabel);
-         */
+
         headerPanel = new ElementDialogHeaderPanel(this);
         up.add(headerPanel);
         update();
 
         tab.addTab(Tool3lgmConstants.getResString("general"), new DescripPanel(this));
-        // tab.addTab(Tool3lgmConstants.getResString("general"), new GeneralPanel(this));
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
@@ -178,8 +156,6 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
 	 * 
 	 */
     public void showDialog() {
-        oldname = nameTextPane.getText();
-        olddescrip = descripPane.getText();
         doc.start_transaction(getTransactionID());
         doc.addInTransactionListener(this);
         setVisible(true);
@@ -193,54 +169,17 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     /**
-     * @param textPane
-     */
-    public void setName(final LimitedSizeScrollTextPane textPane) {
-        nameTextPane = textPane;
-    }
-
-    /**
-     * @param descrip
-     */
-    public void setDescrip(final ExtendedTextPane descrip) {
-        descripPane = descrip;
-    }
-
-    /**
 	 * 
 	 */
     private void commit() {
-        // TODO: diese Aufrufe sollten bei Gelegenheit in der Methode commit von DescriptionPanel
-
-        if (descripPane != null && nameTextPane != null) {
-            String newName = nameTextPane.getText();
-            // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion
-            // ändern
-            if (newName != null && !oldname.equals(newName)) {
-                doc.setName(modelElement, newName, getTransactionID());
-                // wenn der Name gleich gebleiben ist, kann aber trotzdem der HTML-Name in der
-                // Grafik sich geändert haben,
-                // wenn in dem Dialog ein Element verknüpft wurde, das auch im Namen in der Grafik
-                // angezeigt wird -> einfach
-                // ohne Transaktion in jedem Fall mal setName() mit dem alten Namen für das Element
-                // aufrufen
-            } else {
-                modelElement.setName(oldname);
-            }
-            String newDescrip = descripPane.getText();
-            if (newDescrip != null && !olddescrip.equals(newDescrip)) {
-                doc.setDescription(modelElement.getHashString(), GraphDocument.getParseSaveString(newDescrip), getTransactionID());
-            }
-        }
-
-        modelElement.refreshText();
-
+        //alle Panels committen
         for (int m = 0; m < tab.getTabCount(); m++) {
             Component comp = tab.getComponentAt(m);
             if (comp instanceof ElementDialogPanel) {
                 ((ElementDialogPanel) tab.getComponentAt(m)).commit();
             }
         }
+        //alle anderen Dialoge updaten
         for (ElementPropertyDialog pd : ModelConstants.getDialogs()) {
             TabbedPane tp = pd.tab;
             // this wird in update klargemacht...
@@ -267,8 +206,6 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         }
         doc.finish_transaction(getTransactionID());
         doc.distributeEvent(GraphDocument.DATA_CHANGED, getTransactionID());
-        oldname = nameTextPane.getText();
-        olddescrip = descripPane.getText();
         doc.start_transaction(createNewTransactionID());
     }
 
@@ -360,19 +297,6 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         if (closing) {
             return;
         }
-
-        // String tmname = "";
-        // boolean isKnoten = Knoten.class.isAssignableFrom(modelElement.getClass());
-        // if (isKnoten) {
-        // GraphDocument vdoc = doc.getCollection().getGraphDocumentCoded(((Knoten)
-        // modelElement).getAssociatedDoc());
-        // tmname = (vdoc != null ? vdoc.getTitle() : "----------");
-        // }
-        // nameLabel.setText(ModelConstants.getDisplayableName(modelElement) + "\n" +
-        // Tool3lgmConstants.getResString("bez") + ":\t\t" + modelElement.getClearName() +
-        // "\nID:\t\t" + modelElement.getHashString()
-        // + (isKnoten ? "\n" + Tool3lgmConstants.getResString("verkn_teilmodell") + ":\t" + tmname
-        // : ""));
 
         headerPanel.update();
         for (int i = 0; i < tab.getTabCount(); i++) {

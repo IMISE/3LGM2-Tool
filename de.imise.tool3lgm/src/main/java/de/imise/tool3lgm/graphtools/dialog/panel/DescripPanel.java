@@ -13,6 +13,7 @@ import javax.swing.JSeparator;
 import javax.swing.border.Border;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -51,17 +52,21 @@ public class DescripPanel extends ElementDialogPanel {
     /**
      * COMMENTME
      */
-    ExtendedTextPane descriptionTextPane, etDescriptionTextPane, ntDescriptionTextPane;
+    private final ExtendedTextPane descriptionTextPane;
+
+    private ExtendedTextPane etDescriptionTextPane;
+
+    private ExtendedTextPane ntDescriptionTextPane;
 
     /**
      * COMMENTME
      */
-    LimitedSizeScrollTextPane nameTextPane;
+    private final LimitedSizeScrollTextPane nameTextPane;
 
     /**
      * COMMENTME
      */
-    ArrayList<ElementDialogPanel> panelVector = new ArrayList<ElementDialogPanel>();
+    private final ArrayList<ElementDialogPanel> panelVector = new ArrayList<ElementDialogPanel>();
 
     /**
      * @param prop
@@ -77,7 +82,6 @@ public class DescripPanel extends ElementDialogPanel {
     public DescripPanel(final ElementPropertyDialog prop, final boolean callInit) {
         super(prop);
         int gridy = 0;
-        // setPreferredSize(new Dimension(450, 280));
 
         setLayout(new GridBagLayout());
 
@@ -86,12 +90,10 @@ public class DescripPanel extends ElementDialogPanel {
         gbc.insets = new Insets(1, 0, 1, 3);
 
         // Bezeichung und Eingabefeld
-
         JLabel label2 = new JLabel(Tool3lgmConstants.getResString("bez"));
         add(this, label2, gbc, 0, gridy, 1, 1);
 
         nameTextPane = new LimitedSizeScrollTextPane(4);
-        dialog.setName(nameTextPane);
         gbc.weightx = 1;
         add(this, nameTextPane, gbc, 1, gridy++, 1, 1);
         gbc.weightx = 0;
@@ -101,7 +103,6 @@ public class DescripPanel extends ElementDialogPanel {
         add(this, label, gbc, 0, gridy, 1, 1);
 
         descriptionTextPane = new ExtendedTextPane();
-        dialog.setDescrip(descriptionTextPane);
         gbc.weighty = 1;
         add(this, new JScrollPane(descriptionTextPane), gbc, 1, gridy++, 1, 1);
         gbc.weighty = 0;
@@ -351,6 +352,32 @@ public class DescripPanel extends ElementDialogPanel {
     }
 
     @Override
+    public void commit() {
+        ModelElement me = getModelElement();
+        String newName = nameTextPane.getText();
+        // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion
+        // ändern
+        String name = me.getName();
+        if (newName != null && !newName.equals(name)) {
+            doc.setName(me, newName, dialog.getTransactionID());
+        } else {
+            // wenn der Name gleich gebleiben ist, kann aber trotzdem der HTML-Name in der
+            // Grafik sich geändert haben,
+            // wenn in dem Dialog ein Element verknüpft wurde, das auch im Namen in der Grafik
+            // angezeigt wird -> einfach
+            // ohne Transaktion in jedem Fall mal setName() mit dem alten Namen für das Element
+            // aufrufen
+            me.setName(name);
+        }
+        String newDescrip = descriptionTextPane.getText();
+        String descrip = me.getDescription();
+        if (newDescrip != null && !newDescrip.equals(descrip)) {
+            doc.setDescription(me.getHashString(), GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
+        }
+        me.refreshText();
+    }
+
+    @Override
     public void update() {
         ModelElement modelElement = getModelElement();
         if (modelElement instanceof EtntEtdtKombination) {
@@ -387,4 +414,5 @@ public class DescripPanel extends ElementDialogPanel {
             panelVector.get(m).update();
         }
     }
+
 }
