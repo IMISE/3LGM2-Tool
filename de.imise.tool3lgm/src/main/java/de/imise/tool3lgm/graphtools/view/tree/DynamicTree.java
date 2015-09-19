@@ -9,7 +9,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -20,7 +19,6 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -33,7 +31,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author N.N.
  */
-public final class DynamicTree extends JTree implements GraphDocumentListener, InTransactionListener, UserFieldListener, GraphDocumentOwner {
+public final class DynamicTree extends JTree implements UserFieldListener, GraphDocumentOwner {
 
     /**
      * Knoten für die Fachliche Ebene
@@ -71,6 +69,8 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
 
     private final DynamicTreeSelectionListener selectionListener;
 
+    private final DynamicTreeGraphDocumentAndInTransactionListener transactionListener;
+
     /**
      * Alle Knoten deren Kinder immer wieder removed und neu angelegt werden.
      */
@@ -100,6 +100,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         doc = d;
         addMouseListener(new DynamicTreeMouseAdapter(this));
         selectionListener = new DynamicTreeSelectionListener(this);
+        transactionListener = new DynamicTreeGraphDocumentAndInTransactionListener(this);
 
         setCellRenderer(new TreeRenderer(doc));
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
@@ -138,13 +139,11 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
      */
     public void setGraphDocument(final GraphDocument doc) {
         if (this.doc != null) {
-            this.doc.removeGraphDocumentListener(this);
-            getCollection().getMainGraphDocument().removeInTransactionListener(this);
-            if (doc != null) {
-                doc.addGraphDocumentListener(this);
-                getCollection().getMainGraphDocument().addInTransactionListener(this);
-            }
+            transactionListener.remove();
             this.doc = doc;
+        }
+        if (doc != null) {
+            transactionListener.add();
         }
         buildTree();
     }
@@ -155,6 +154,10 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
 
     public boolean isAbstractElementNode(final Object o) {
         return o == awb;
+    }
+
+    public void setTransactionListenerActive(final boolean active) {
+        transactionListener.setActive(active);
     }
 
     /**
@@ -493,12 +496,12 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
     /**
 	 * 
 	 */
-    private void buildTree() {
+    void buildTree() {
         if (doc == null) {
             return;
         }
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-        selectionListener.setInactive();
+        selectionListener.setActive(false);
         createTree();
         saveExpansionState();
         showPartOfHierarchy = UserProperties.isShowPartOfHierarchy();
@@ -531,7 +534,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         }
         ((DefaultTreeModel) treeModel).reload();
         restoreExpansionState();
-        selectionListener.setActive();
+        selectionListener.setActive(true);
         selectObjects();
     }
 
@@ -539,7 +542,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
      * Selektiert im Baum alle Elemente, die im dazugehörigen {@link GraphDocument} selektiert sind.
      */
     public void selectObjects() {
-        selectionListener.setInactive();
+        selectionListener.setActive(false);
         TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
@@ -559,7 +562,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         if (path.length > 0) {
             scrollPathToVisible(path[path.length - 1]);
         }
-        selectionListener.setActive();
+        selectionListener.setActive(true);
     }
 
     /**
@@ -590,25 +593,27 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         }
     }
 
-    @Override
-    public void activeLayerChanged(final GraphDocument source) {
-        int layer = doc.getCollection().getActiveLayer();
+    /**
+     * Wenn die Layer-Nummer gültig ist, wird der zugehörige Ebenenknoten selektiert und ggf. zu ihm hingescollt.
+     * 
+     * @param layer
+     */
+    public void selectLayerNode(final int layer) {
         TreePath path = null;
         switch (layer) {
         case 4:
             path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene));
-            setSelectionPath(path);
             break;
         case 2:
             path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene));
-            setSelectionPath(path);
             break;
         case 0:
             path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene));
-            setSelectionPath(path);
             break;
         }
+        setSelectionPath(path);
         scrollPathToVisible(path);
+
     }
 
     /**
@@ -633,65 +638,7 @@ public final class DynamicTree extends JTree implements GraphDocumentListener, I
         return layerChanged;
     }
 
-    @Override
-    public void dataChanged(final GraphDocument source, final int pid) {
-        dataChanged(source);
-    }
-
-    @Override
-    public void dataChanged(final GraphDocument source) {
-        if (Tool3lgm.DEBUG) {
-            System.err.println(getClass().getSimpleName() + " dataChanged() " + source);
-        }
-        buildTree();
-    }
-
-    @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        //		System.out.println("elementGraphicsChanged");
-        refreshTree();
-        //		repaint();
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-        //		System.out.println("layoutChanged");
-    }
-
-    @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        //		System.out.println("elementAdded");
-        buildTree();
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        //		System.out.println("elementDeleted");
-        buildTree();
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-        //		System.out.println("groupOrderChanged");
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-        //		System.out.println("colorsChanged");
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
-        //		System.out.println("selectionChanged");
-        //		long start = System.currentTimeMillis();
-        selectObjects();
-        //		long end = System.currentTimeMillis();
-        //		System.err.println("DynamicTree.selectionChanged()");
-        //		System.err.println(end - start);
-    }
-
     //	----------------------------------------------------------------------------------------------------------------------------------
-    //	TreeSelectionListener 
 
     Enumeration<TreePath> expansionEnum = null;
 

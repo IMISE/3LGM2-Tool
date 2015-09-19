@@ -13,6 +13,8 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
 
     private final DynamicTree tree;
 
+    private boolean active = true;
+
     public DynamicTreeSelectionListener(final DynamicTree tree) {
         this.tree = tree;
         tree.addTreeSelectionListener(this);
@@ -26,12 +28,12 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
 
     @Override
     public void valueChanged(final TreeSelectionEvent e) {
-        if (correctingSelectionCount > 0) {
+        if (!active || correctingSelectionCount > 0) {
             return;
         }
         GraphDocument doc = tree.getGraphDocument();
-        //keine von sich selbst ausgelösten SelectionChangeEvents empfangen -> removen und zum Schluss wieder adden
-        doc.removeGraphDocumentListener(tree);
+        //keine von sich selbst ausgelösten SelectionChangeEvents empfangen -> deaktivieren und zum Schnluss wieder anschalten
+        tree.setTransactionListenerActive(false);
         doc.start_transaction(DynamicTree.PID, false);
         doc.deselectAll(true);
         TreePath[] paths = tree.getSelectionPaths();
@@ -62,7 +64,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         if (layerChanged) {
             doc.distributeEvent(GraphDocument.ACTIVE_LAYER_CHANGED);
         }
-        doc.addGraphDocumentListener(tree);
+        tree.setTransactionListenerActive(true);
     }
 
     /**
@@ -84,13 +86,8 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         return null;
     }
 
-    public void setInactive() {
-        tree.removeTreeSelectionListener(this);
-    }
-
-    public void setActive() {
-        tree.removeTreeSelectionListener(this);
-        tree.addTreeSelectionListener(this);
+    public void setActive(final boolean active) {
+        this.active = active;
     }
 
 }

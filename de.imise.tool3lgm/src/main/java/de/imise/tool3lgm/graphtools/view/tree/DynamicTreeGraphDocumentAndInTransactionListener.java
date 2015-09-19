@@ -1,0 +1,117 @@
+package de.imise.tool3lgm.graphtools.view.tree;
+
+import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.GraphDocumentListener;
+import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+
+public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDocumentListener, InTransactionListener {
+
+    private final DynamicTree tree;
+
+    private boolean active = true;
+
+    public DynamicTreeGraphDocumentAndInTransactionListener(final DynamicTree tree) {
+        this.tree = tree;
+        add();
+    }
+
+    @Override
+    public void dataChanged(final GraphDocument source, final int pid) {
+        dataChanged(source);
+    }
+
+    @Override
+    public void dataChanged(final GraphDocument source) {
+        if (active) {
+            if (Tool3lgm.DEBUG) {
+                System.err.println(getClass().getSimpleName() + " dataChanged() " + source);
+            }
+            tree.buildTree();
+        }
+    }
+
+    @Override
+    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+        if (active) {
+            //      System.out.println("elementGraphicsChanged");
+            tree.refreshTree();
+            //      repaint();
+        }
+    }
+
+    @Override
+    public void layoutChanged(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("layoutChanged");
+        }
+    }
+
+    @Override
+    public void elementAdded(final GraphDocument source, final ElementContainer element) {
+        //      System.out.println("elementAdded");
+        if (active) {
+            tree.buildTree();
+        }
+    }
+
+    @Override
+    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
+        //      System.out.println("elementDeleted");
+        if (active) {
+            tree.buildTree();
+        }
+    }
+
+    @Override
+    public void groupOrderChanged(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("groupOrderChanged");
+        }
+    }
+
+    @Override
+    public void colorsChanged(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("colorsChanged");
+        }
+    }
+
+    @Override
+    public void selectionChanged(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("selectionChanged");
+            //      long start = System.currentTimeMillis();
+            tree.selectObjects();
+            //      long end = System.currentTimeMillis();
+            //      System.err.println("DynamicTree.selectionChanged()");
+            //      System.err.println(end - start);
+        }
+    }
+
+    @Override
+    public void activeLayerChanged(final GraphDocument source) {
+        if (active) {
+            GraphDocument doc = tree.getGraphDocument();
+            int layer = doc.getCollection().getActiveLayer();
+            tree.selectLayerNode(layer);
+        }
+    }
+
+    public void remove() {
+        tree.getGraphDocument().removeGraphDocumentListener(this);
+        tree.getGraphDocument().getCollection().getMainGraphDocument().removeInTransactionListener(this);
+    }
+
+    public void add() {
+        remove(); //zur Sicherheit erstmal removen
+        tree.getGraphDocument().addGraphDocumentListener(this);
+        tree.getGraphDocument().getCollection().getMainGraphDocument().addInTransactionListener(this);
+    }
+
+    public void setActive(final boolean active) {
+        this.active = active;
+    }
+
+}
