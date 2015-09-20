@@ -172,4 +172,19 @@ public class ToolInternalFrame extends AbstractInternalFrame implements ActionLi
         return getGraphDocument();
     }
 
+    @Override
+    public void elementNameChanged(final ElementContainer ec) {
+        refreshElementContainer(ec);
+    }
+
+    private void refreshElementContainer(final ElementContainer ec) {
+        GraphDocument ecDoc = ec.getGraphDocument();
+        GraphDocument doc = getGraphDocument();
+        ElementContainer thisEc = ecDoc == doc ? ec : ec.getElement().getContainer(doc);
+        ec.refreshText();
+        elementGraphicsChanged(getGraphDocument(), thisEc);
+        revalidate();
+        repaint();
+    }
+
 }

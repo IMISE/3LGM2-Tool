@@ -99,6 +99,12 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDo
         }
     }
 
+    @Override
+    public void elementNameChanged(final ElementContainer ec) {
+        tree.revalidate();
+        tree.repaint();
+    }
+
     public void remove() {
         tree.getGraphDocument().removeGraphDocumentListener(this);
         tree.getGraphDocument().getCollection().getMainGraphDocument().removeInTransactionListener(this);

@@ -278,6 +278,11 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
     }
 
+    @Override
+    public void elementNameChanged(final ElementContainer ec) {
+        update();
+    }
+
     // InTransactionListener Ende
     // ####################################################################################
 
@@ -325,4 +330,5 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     public Dimension getDefaultSize() {
         return DEFAULT_SIZE;
     }
+
 }

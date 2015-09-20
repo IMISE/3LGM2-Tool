@@ -223,4 +223,9 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
     public final void selectionChanged(final GraphDocument source) {
     }
 
+    @Override
+    public void elementNameChanged(final ElementContainer ec) {
+        dataChanged(ec.getGraphDocument());
+    }
+
 }

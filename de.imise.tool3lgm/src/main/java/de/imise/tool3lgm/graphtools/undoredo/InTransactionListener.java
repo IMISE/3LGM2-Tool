@@ -9,11 +9,15 @@ public interface InTransactionListener {
     public void dataChanged(GraphDocument source, int pid);
 
     /** Hier reagiert bisher niemand, da Dialogen sowas egal ist */
-    public void elementGraphicsChanged(GraphDocument source, ElementContainer element);
+    public void elementGraphicsChanged(GraphDocument source, ElementContainer ec);
 
     /** Hier reagieren alle -> erneuern */
-    public void elementAdded(GraphDocument source, ElementContainer element);
+    public void elementAdded(GraphDocument source, ElementContainer ec);
 
     /** Hier reagieren alle -> erneuern */
-    public void elementDeleted(GraphDocument source, ElementContainer element);
+    public void elementDeleted(GraphDocument source, ElementContainer ec);
+
+    /** Hier reagieren alle, die den Namen und oder die Beschreibung anzeigen */
+    public void elementNameChanged(ElementContainer ec);
+
 }

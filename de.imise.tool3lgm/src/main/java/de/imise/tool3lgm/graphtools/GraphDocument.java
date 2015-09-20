@@ -82,6 +82,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public static final int ACTIVE_LAYER_CHANGED = 1 << 6;
     public static final int COLORS_CHANGED = 1 << 8;
     public static final int SELECTION_CHANGED = 1 << 9;
+    public static final int ELEMENT_NAME_CHANGED = 1 << 10;
 
     /**
      * COMMENTME
@@ -2761,6 +2762,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         itl.elementGraphicsChanged(this, last_elem);
                     }
                     break;
+                case ELEMENT_NAME_CHANGED:
+                    for (InTransactionListener itl : inlistener) {
+                        itl.elementNameChanged(last_elem);
+                    }
+                    break;
                 default:
                     break;
                 }
@@ -4235,11 +4241,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //		}
 
         me.setName(getDecodedParseSaveString(newName));
-        for (ElementContainer ec : me.getContainerTable().values()) {
-            ec.refreshText();
-        }
+        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selsbt wichtig wäre
+        ElementContainer ec = me.getContainer(this);
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        distributeEvent(ELEMENT_NAME_CHANGED, ec, null, pid);
     }
 
     /**
@@ -4256,9 +4261,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommand(GDCommands.SET_DESCRIPTION + " " + me.getHashString() + " " + getParseSaveString(newDescr), pid);
         addUndoCommand(GDCommands.SET_DESCRIPTION + " " + me.getHashString() + " " + getParseSaveString(me.getDescription()), pid);
         me.setDescription(getDecodedParseSaveString(newDescr));
-        for (ElementContainer ec : me.getContainerTable().values()) {
-            ec.refreshText();
-        }
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
