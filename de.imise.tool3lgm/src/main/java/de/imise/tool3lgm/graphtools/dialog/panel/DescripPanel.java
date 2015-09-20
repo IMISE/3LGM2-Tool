@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -47,7 +49,7 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * @author N.N.
  * @create Long time ago
  */
-public class DescripPanel extends ElementDialogPanel {
+public class DescripPanel extends ElementDialogPanel implements DocumentListener {
 
     /**
      * COMMENTME
@@ -315,6 +317,7 @@ public class DescripPanel extends ElementDialogPanel {
     protected void init() {
         ModelElement modelElement = getModelElement();
         nameTextPane.setText(modelElement.getName());
+        nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhängen, sonst wird gleich commit aufgerufen
         descriptionTextPane.setText(modelElement.getDescription());
         nameTextPane.setCaretPosition(0);
         descriptionTextPane.setCaretPosition(0);
@@ -415,4 +418,18 @@ public class DescripPanel extends ElementDialogPanel {
         }
     }
 
+    @Override
+    public void insertUpdate(final DocumentEvent e) {
+        commit();
+    }
+
+    @Override
+    public void removeUpdate(final DocumentEvent e) {
+        commit();
+    }
+
+    @Override
+    public void changedUpdate(final DocumentEvent e) {
+        commit();
+    }
 }
