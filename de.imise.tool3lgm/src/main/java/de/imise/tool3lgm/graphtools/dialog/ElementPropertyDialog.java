@@ -233,11 +233,9 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
             closing = true;
             commit(false);
             close();
-            closing = false;
         } else if (e.getSource() == cancelButton) {
             closing = true;
             cancel();
-            closing = false;
         } else if (e.getSource() == applyButton) {
             commit(true);
         }
@@ -249,6 +247,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     protected void processWindowEvent(final WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            closing = true;
             cancel();
         }
     }
