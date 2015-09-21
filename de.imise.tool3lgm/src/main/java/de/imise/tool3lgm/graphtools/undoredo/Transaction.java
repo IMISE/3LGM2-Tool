@@ -126,39 +126,44 @@ public class Transaction {
     }
 
     /**
-     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt, wenn es ein solches gibt und fügt ein neues Kommando mit dem <code>commadPrefix</code> und den <code>commandArguments</code> am Ende an. <br />
-     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
+     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt, wenn es ein solches gibt und fügt ein neues Kommando mit dem
+     * <code>commadPrefix</code> und den <code>commandArguments</code> am Ende an. <br />
+     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
+     * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
      * 
      * @param commandPrefix
      * @param commandArguments
      */
     final void addOrReplaceRedoCommand(final String commandPrefix, final String commandArguments) {
-        if (commandPrefix != null && !commandPrefix.trim().equals("")) {
+        if (commandPrefix != null && !commandPrefix.trim().isEmpty()) {
             for (int i = redo.size() - 1; i >= 0; i--) {
                 if (redo.get(i).startsWith(commandPrefix)) {
                     redo.remove(i);
                     break;
                 }
             }
-            redo.add(commandPrefix + " " + commandArguments);
+            String command = commandArguments.isEmpty() ? commandPrefix : commandPrefix + " " + commandArguments;
+            redo.add(command);
         }
     }
 
     /**
-     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
+     * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese
+     * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
      * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
      * 
      * @param commandPrefix
      * @param commandArguments
      */
     final void addUndoCommandIfNotExist(final String commandPrefix, final String commandArguments) {
-        if (commandPrefix != null && !commandPrefix.trim().equals("")) {
+        if (commandPrefix != null && !commandPrefix.trim().isEmpty()) {
             for (int i = undo.size() - 1; i >= 0; i--) {
                 if (undo.get(i).startsWith(commandPrefix)) {
                     return;
                 }
             }
-            undo.add(commandPrefix + " " + commandArguments);
+            String command = commandArguments.isEmpty() ? commandPrefix : commandPrefix + " " + commandArguments;
+            undo.add(command);
         }
     }
 
