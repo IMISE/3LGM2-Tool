@@ -290,8 +290,17 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
                 }
                 p = (LGMTreeNode) p.getParent();
             }
-
-            LGMTreeNode childNode = new LGMTreeNode(pc, true, false);
+            LGMTreeNode childNode = null;
+            //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
+            if (pc instanceof NodeContainer) {
+                NodeContainer nc = (NodeContainer) pc;
+                childNode = nc.getTreeNode();
+            }
+            if (childNode == null) {
+                childNode = new LGMTreeNode(pc, true, false);
+            } else {
+                childNode.removeAllChildren();
+            }
             elementNode.add(childNode);
             addChildren(childNode, performingRebuild, selDoc);
         }
