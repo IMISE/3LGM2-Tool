@@ -58,6 +58,11 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
 
     /**
+     * Wird <code>true</code>, wenn der Ok oder der Cancel Button gedrückt wurde
+     */
+    boolean closing = false;
+
+    /**
      * @param modelElement
      * @param gdcoll
      */
@@ -222,11 +227,6 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         dispose();
     }
 
-    /**
-     * COMMENTME
-     */
-    boolean closing = false;
-
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == okButton) {
@@ -246,7 +246,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     @Override
     protected void processWindowEvent(final WindowEvent e) {
         super.processWindowEvent(e);
-        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+        if (!closing && e.getID() == WindowEvent.WINDOW_CLOSING) {
             closing = true;
             cancel();
         }
