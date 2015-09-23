@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgm;
@@ -382,8 +383,34 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * @return
      */
     public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
-        UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
-        return fieldList != null ? fieldList : new ArrayList<UserField>(0);
+        final UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
+        if (fieldList == null) {
+            return ImmutableList.of();
+        }
+        final Iterator<UserField> userFieldsIterator = fieldList.iterator();
+        Iterable<UserField> userFieldsIterable = new Iterable<UserField>() {
+            @Override
+            public Iterator<UserField> iterator() {
+                return new Iterator<UserField>() {
+
+                    @Override
+                    public boolean hasNext() {
+                        return userFieldsIterator.hasNext();
+                    }
+
+                    @Override
+                    public UserField next() {
+                        return userFieldsIterator.next();
+                    }
+
+                    @Override
+                    public void remove() {
+                        userFieldsIterator.remove();
+                    }
+                };
+            }
+        };
+        return userFieldsIterable;
     }
 
     /**
