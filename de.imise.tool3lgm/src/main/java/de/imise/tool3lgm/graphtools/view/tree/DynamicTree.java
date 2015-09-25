@@ -293,8 +293,15 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             LGMTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                NodeContainer nc = (NodeContainer) pc;
-                childNode = nc.getTreeNode();
+                ArrayList<ElementContainer> directParentElements = pc.getElement().getDirectParentContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
+                // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
+                //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
+                //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
+                //nur in diesem seltenen Fals den expansionState von allen Knoten retten würde, die mehr als einen Parent haben.
+                if (directParentElements.size() < 2) {
+                    NodeContainer nc = (NodeContainer) pc;
+                    childNode = nc.getTreeNode();
+                }
             }
             if (childNode == null) {
                 childNode = new LGMTreeNode(pc, true, false);
