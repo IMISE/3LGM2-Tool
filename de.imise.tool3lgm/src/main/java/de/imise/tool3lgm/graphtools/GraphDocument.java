@@ -2810,6 +2810,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         itl.elementGraphicsChanged(this, last_elem);
                     }
                     break;
+                case ELEMENT_NAME_CHANGED:
+                    for (InTransactionListener itl : inlistener) {
+                        itl.elementNameChanged(last_elem);
+                    }
+                    break;
                 default:
                     break;
                 }
