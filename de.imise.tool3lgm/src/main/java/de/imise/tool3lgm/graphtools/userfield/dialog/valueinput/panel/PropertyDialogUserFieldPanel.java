@@ -1,6 +1,21 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_FALSE;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_TRUE;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER_FORMULA;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
+
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,15 +24,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -25,10 +41,13 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.JViewport;
+import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -52,11 +71,13 @@ import de.imise.util.swing.component.text.NumberTextField;
  * bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando <code>SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert
  * eines Attributes einer Element- bzw. Kanetenklasse geändert.
  * 
- * @author Thomas Rudert, xhb
+ * @author Thomas Rudert, xhb, AXS
  */
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
-    private final ArrayList<UserFieldEditorComponent> fields = new ArrayList<UserFieldEditorComponent>();
+    private final ArrayList<UserFieldEditorComponent> fieldComponents = new ArrayList<UserFieldEditorComponent>();
+
+    private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 
     /**
      * @param pd
@@ -64,7 +85,65 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     public PropertyDialogUserFieldPanel(final ElementPropertyDialog pd) {
         super(pd);
         create();
+    }
 
+    private GridBagConstraints getDefaultConstraints() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        constraints.weighty = 0d;
+        constraints.weightx = 1d;
+        constraints.insets = new Insets(1, 1, 1, 0);
+        return constraints;
+    }
+
+    private JScrollPane getScrollPane(final JComponent content) {
+        JScrollPane scrollPane = new JScrollPane(content);
+        JScrollBar scrollbar = scrollPane.getVerticalScrollBar();
+        scrollbar.setBlockIncrement(20);
+        scrollbar.setUnitIncrement(10);
+        scrollbar = scrollPane.getHorizontalScrollBar();
+        scrollbar.setBlockIncrement(20);
+        scrollbar.setUnitIncrement(10);
+        return scrollPane;
+    }
+
+    /**
+     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
+     * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
+     * echten Leerstring "" ersetzt.
+     * 
+     * @param userField
+     * @return
+     */
+    private String getFormattedValue(final UserField userField) {
+        ModelElement me = getModelElement();
+        String value = getUserFieldValue(me, userField, true);
+        return value;
+    }
+
+    /**
+     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
+     * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
+     * echten Leerstring "" ersetzt.
+     * 
+     * @param me
+     * @param userField
+     * @param format
+     * @return
+     */
+    public static String getUserFieldValue(final ModelElement me, final UserField userField, final boolean format) {
+        String value = format ? userField.getFormattedValue(me, true) : userField.getValue(me);
+        UserField.Style style = userField.getStyle();
+        if (style != CLASSIFICATION_NUMBER_FORMULA) {
+            if (value.equals(EMPTY_STRING)) {
+                value = "";
+            }
+        }
+        return value;
     }
 
     /**
@@ -72,290 +151,250 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
      */
     private void create() {
         setLayout(new BorderLayout());
-        JPanel mp = new JPanel();
-        JScrollPane sp = new JScrollPane(mp);
+        Border mainPanelBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+        setBorder(mainPanelBorder);
+        JPanel mp = new JPanel(new GridBagLayout());
+        mainPanelBorder = BorderFactory.createEmptyBorder(0, 5, 5, 5);
+        mp.setBorder(mainPanelBorder);
+        JScrollPane sp = getScrollPane(mp);
         add(sp);
-        JScrollBar sb = sp.getVerticalScrollBar();
-        sb.setBlockIncrement(20);
-        sb.setUnitIncrement(10);
-        sb = sp.getHorizontalScrollBar();
-        sb.setBlockIncrement(20);
-        sb.setUnitIncrement(10);
+
+        GridBagConstraints constraints = getDefaultConstraints();
 
         //Attributdefinitionen des GraphDocumentes holen
-        UserFieldDefinitions attributeDefs = doc.getUserFieldDefinitions();
+        UserFieldDefinitions definitions = doc.getUserFieldDefinitions();
+        ModelElement me = getModelElement();
+        Class<? extends ModelElement> meClass = me.getClass();
 
-        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        mp.setLayout(new GridBagLayout());
-        JPanel panel;
-        ButtonGroup group;
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.NORTHWEST;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 2;
-        constraints.weighty = 0.0;
-        constraints.insets = new Insets(1, 1, 1, 0);
-        ModelElement modelElement = getModelElement();
-        for (UserField field : attributeDefs.getUserFields(modelElement.getClass())) {
-            String value = modelElement.getUserFieldInputValue(field).trim();
-            UserField.Style style = field.getStyle();
-            if (style == UserField.Style.SEPARATOR) {
-                constraints.gridx = 0;
-                constraints.weightx = 1;
-                mp.add(new JSeparator(), constraints);
-                constraints.gridy++;
-                JComponent component = new JLabel("<HTML><B>" + field.getName() + "</B></HTML>");
-                mp.add(component, constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridy++;
-                mp.add(new JSeparator(), constraints);
-                constraints.gridy++;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-            } else if (style == UserField.Style.SINGLE_LINE) {
-                JLabel label = new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>");
-                mp.add(label, constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                if (value.equals(UserField.EMPTY_STRING)) {
-                    value = "";
-                }
-                JComponent component = new ExtendedTextField(value);
-                mp.add(component, constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridy++;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-            } else if (style == UserField.Style.MULTI_LINE) {
-                mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                int gridheight = constraints.gridheight;
-                constraints.gridheight = 2;
-                JComponent component = new ExtendedTextArea(3, 10);
-                ((ExtendedTextArea) component).setFont(new ExtendedTextField().getFont());
-                ((ExtendedTextArea) component).setLineWrap(true);
-                ((ExtendedTextArea) component).setWrapStyleWord(true);
-                if (value.equals(UserField.EMPTY_STRING)) {
-                    value = "";
-                }
-                ((JTextComponent) component).setText(value);
+        for (UserField field : definitions.getUserFields(meClass)) {
+            List<JComponent> labelAndEditor = createLabelAndEditor(field);
+            JComponent label = labelAndEditor.get(0);
+            JComponent editor = labelAndEditor.get(1);
+            constraints.insets.top = 5;
+            mp.add(label, constraints);
+            constraints.insets.top = 0;
+            constraints.gridy++;
+            mp.add(editor, constraints);
+            constraints.gridy += constraints.gridheight;
+        }
+        addFillSpacePanel(mp, constraints);
+    }
 
-                mp.add(new JScrollPane(component), constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridy += 2;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-                constraints.gridheight = gridheight;
-            } else if (style == UserField.Style.COMBO_BOX) {
-                if (value.equals(UserField.EMPTY_STRING)) {
-                    value = "";
+    /**
+     * Für das übergebene Userfield wird eine 2 elementige Liste erzeugt. Die erste Komponente ist das
+     * Label, das im Dialog für das UserField angezeigt werden soll und die zweite Komponente ist der
+     * zugehörige Editor. Bei Separatoren ist der Editor die Separator-Komponente und bei Formeln ist
+     * der Editor deaktiviert.
+     * 
+     * @param field
+     * @return
+     */
+    private List<JComponent> createLabelAndEditor(final UserField field) {
+        String value = getFormattedValue(field);
+        UserField.Style style = field.getStyle();
+        JLabel label = getLabel(field);
+        JComponent editorComponent = null;
+        if (style == SEPARATOR) {
+            editorComponent = new JSeparator();
+        } else if (style == SINGLE_LINE || style == ID) {
+            ExtendedTextField textField = new ExtendedTextField(value);
+            editorComponent = textField;
+        } else if (style == MULTI_LINE) {
+            ExtendedTextArea textArea = new ExtendedTextArea(3, 10);
+            textArea.setFont(new ExtendedTextField().getFont());
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setText(value);
+            editorComponent = new JScrollPane(textArea);
+        } else if (style == COMBO_BOX) {
+            AlphabeticalComboBox comboBox = new AlphabeticalComboBox(true);
+            boolean foundEntry = false;
+            for (int i = 0; i < field.getListValuesCount(); i++) {
+                Object listValue = field.getListValueAt(i);
+                comboBox.addItem(listValue);
+                if (listValue.equals(value)) {
+                    comboBox.setSelectedItem(listValue);
+                    foundEntry = true;
                 }
-                mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.weightx = 1;
-                constraints.gridy++;
-                AlphabeticalComboBox component = new AlphabeticalComboBox(true);
-                boolean foundEntry = false;
-                for (int i = 0; i < field.getListValuesCount(); i++) {
-                    Object listValue = field.getListValueAt(i);
-                    component.addItem(listValue);
-                    if (listValue.equals(value)) {
-                        component.setSelectedItem(listValue);
-                        foundEntry = true;
-                    }
-                }
-                if (!foundEntry) {
-                    if (value.length() > 0) {
-                        field.addListValue(value);
-                        component.addItem(value);
-                        component.setSelectedItem(value);
-                        foundEntry = true;
-                    } else {
-                        component.setSelectedIndex(-1);
-                    }
-                }
-
-                mp.add(component, constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridy++;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-            } else if (style == UserField.Style.RADIO_BUTTON) {
-                if (value.equals(UserField.EMPTY_STRING)) {
-                    value = "";
-                }
-                mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.weightx = 1;
-                constraints.gridwidth = 1;
-                constraints.gridy++;
-                panel = new JPanel();
-                group = new ButtonGroup();
-                boolean foundEntry = false;
-                for (int i = 0; i < field.getListValuesCount(); i++) {
-                    Object listValue = field.getListValueAt(i);
-                    JComponent component = new JRadioButton(listValue.toString());
-                    group.add((JRadioButton) component);
-                    panel.add(component);
-                    fields.add(new UserFieldEditorComponent(field, component));
-                    if (listValue.equals(value)) {
-                        foundEntry = true;
-                        ((JRadioButton) component).setSelected(true);
-                    }
-                }
-                if (value.length() > 0 && !foundEntry) {
+            }
+            if (!foundEntry) {
+                if (value.length() > 0) {
                     field.addListValue(value);
-                    JComponent component = new JRadioButton(value);
-                    group.add((JRadioButton) component);
-                    panel.add(component);
-                    fields.add(new UserFieldEditorComponent(field, component));
-                    ((JRadioButton) component).setSelected(true);
+                    comboBox.addItem(value);
+                    comboBox.setSelectedItem(value);
+                    foundEntry = true;
+                } else {
+                    comboBox.setSelectedIndex(-1);
                 }
-                panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
-                mp.add(panel, constraints);
-                constraints.gridy++;
-                constraints.weightx = 0;
-                constraints.gridwidth = 1;
-            } else if (style == UserField.Style.CHECK_BOX) {
-                if (value.equals(UserField.EMPTY_STRING)) {
-                    value = "";
+            }
+            editorComponent = comboBox;
+        } else if (style == RADIO_BUTTON) {
+            JPanel flowLayoutPanel = new JPanel();
+            flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
+            //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
+            if (!field.containsListValue(value)) {
+                field.addListValue(value);
+            }
+            ButtonGroup group = new ButtonGroup();
+            for (int i = 0; i < field.getListValuesCount(); i++) {
+                Object listValue = field.getListValueAt(i);
+                JRadioButton radioButton = new JRadioButton(listValue.toString());
+                group.add(radioButton);
+                flowLayoutPanel.add(radioButton);
+                if (listValue.equals(value)) {
+                    radioButton.setSelected(true);
                 }
-                mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                JComponent component = new JCheckBox(field.getName(), value.equals(UserField.CHECKBOX_TRUE));
-                mp.add(component, constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridy++;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-            } else if (style == UserField.Style.HYPERLINK) {
-                if (value.equals(UserField.EMPTY_STRING)) {
-                    value = "";
-                }
-                mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                final ExtendedTextField textField = new ExtendedTextField(value);
-                JPanel slp = new JPanel(new GridBagLayout());
-                GridBagConstraints constraints_format = new GridBagConstraints();
-                constraints_format.fill = GridBagConstraints.HORIZONTAL;
-                constraints_format.weightx = 1;
-                slp.add(textField, constraints_format);
-                fields.add(new UserFieldEditorComponent(field, textField));
+            }
+            editorComponent = flowLayoutPanel;
+        } else if (style == CHECK_BOX) {
+            editorComponent = new JCheckBox(field.getName(), value.equals(CHECKBOX_TRUE));
+        } else if (style == HYPERLINK) {
+            final ExtendedTextField textField = new ExtendedTextField(value);
+            JPanel hyperlinkPanel = new JPanel();
+            hyperlinkPanel.setLayout(new BorderLayout());
+            hyperlinkPanel.add(textField, BorderLayout.CENTER);
+            final JButton button = getHyperlinkButton(textField);
+            hyperlinkPanel.add(button, BorderLayout.EAST);
+            editorComponent = hyperlinkPanel;
+            //Kennzahlen:
+        } else if (style == CLASSIFICATION_NUMBER) {
+            // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
+            // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
+            NumberFormat numberFormat = field.getNumberFormat();
+            // Kennzahlwerte in die Felder einfügen. 
+            NumberTextField numberTextField = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
+            if (!UserField.isError(value)) {
+                numberTextField.setValue(value);
+            }
+            editorComponent = numberTextField;
+        } else if (style == CLASSIFICATION_NUMBER_FORMULA) {
+            JTextField textField = new JTextField();
+            textField.setEditable(false);
+            String formattedValue = field.getFormattedValue(getModelElement(), true);
+            textField.setText(formattedValue);
+            editorComponent = textField;
+        }
+        addEditorComponentsToList(field, editorComponent);
+        return ImmutableList.of(label, editorComponent);
+    }
 
-                // Der Button, der für einen Hyperlink das öffnen eines Browsers
-                // ermöglicht.
-                final JButton button = new JButton(new AbstractAction(">>") {
-
-                    @Override
-                    public void actionPerformed(final ActionEvent e) {
-                        String urlOrPath = textField.getText().trim();
-                        if (!urlOrPath.isEmpty()) {
-                            BrowseUtils.browse(urlOrPath);
-                        }
-                    }
-                });
-                //auch bei Doppelklick oder Klick mit STRG den Link öffnen
-                textField.addMouseListener(new MouseAdapter() {
-
-                    @Override
-                    public void mouseClicked(final MouseEvent e) {
-                        if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
-                            button.doClick();
-                        }
-                    }
-                });
-
-                constraints_format.gridx = 1;
-                constraints_format.weightx = 0;
-                slp.add(button, constraints_format);
-                constraints.weightx = 1;
-
-                mp.add(slp, constraints);
-                constraints.gridy++;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-
-            } else if (style == UserField.Style.ID) {
-                JLabel label = new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>");
-                mp.add(label, constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                if (UserField.EMPTY_STRING.equals(value)) {
-                    value = "";
-                }
-                ExtendedTextField textField = new ExtendedTextField(value);
-                mp.add(textField, constraints);
-                fields.add(new UserFieldEditorComponent(field, textField));
-                constraints.gridy++;
-                constraints.gridx = 0;
-                constraints.weightx = 0;
-
-                //wenn die IDs schon bei der Eingabe auf eindeutigkeit geprüft werden sollten
-                //textField.getDocument().addDocumentListener(new UniqueValueVerifier(field, getModelElement(), textField));
-
-                //Kennzahlen:
-            } else if (style == UserField.Style.CLASSIFICATION_NUMBER) {
-                String unit = field.getFormatUnit();
-                StringBuilder einheit = new StringBuilder("");
-                if (unit != null) {
-                    einheit.append(" ");
-                    einheit.append(Tool3lgmConstants.getResString("in"));
-                    einheit.append(" ");
-                    einheit.append(unit);
-                    einheit.append(" ");
-                }
-
-                mp.add(new JLabel("<HTML><B>" + field.getName() + einheit + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                //				component = new JFormattedTextField(value);
-
-                // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
-                // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
-                String fieldValue = field.getValue(dialog.getModelElement());
-                NumberFormat numberFormat = field.getNumberFormat();
-                // Kennzahlwerte in die Felder einfügen.
-                JComponent component = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
-                if (!UserField.isError(fieldValue)) {
-                    try {
-                        ((JFormattedTextField) component).setValue(Double.valueOf(fieldValue));
-                    } catch (NumberFormatException e1) {
-                        ((JFormattedTextField) component).setValue(fieldValue);
+    /**
+     * Speichert für jedes UserField alle Editoren als Eingabefelder.
+     * 
+     * @param userField
+     * @param editorComponent
+     */
+    private void addEditorComponentsToList(final UserField userField, final JComponent editorComponent) {
+        if (editorComponent != null) {
+            JComponent realEditor = editorComponent;
+            //die übergebene Komponente ist ein Scrollpane -> das ist nur bei Multiline-Textfeldern
+            if (editorComponent instanceof JScrollPane) {
+                //hole das Multiline-TextFeld und speichere dieses als echten Editor
+                JViewport viewport = ((JScrollPane) editorComponent).getViewport();
+                realEditor = (JComponent) viewport.getView();
+                fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
+                registerChangeListener(realEditor, userField);
+                //die übergebene Komponente ist ein Panel (bei RadioButtons und bei Hyperlinks)
+            } else if (editorComponent instanceof JPanel) {
+                //alle Komponenten des Panels durchgehen
+                for (int i = 0; i < editorComponent.getComponentCount(); i++) {
+                    Component comp = editorComponent.getComponent(i);
+                    //der JButton im Hyprlink-Panel darf nicht mitregistriert werden, daher nur JTextComponent und JRadioButtons
+                    if (comp instanceof JRadioButton || comp instanceof JTextComponent) {
+                        realEditor = (JComponent) comp;
+                        fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
+                        registerChangeListener(realEditor, userField);
                     }
                 }
-
-                mp.add(component, constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridx = 0;
-                constraints.weightx = 1;
-                constraints.gridy++;
-            } else if (style == UserField.Style.CLASSIFICATION_NUMBER_FORMULA) {
-                mp.add(new JLabel("<HTML><B>" + field.getName() + "</B><BR>" + field.getDescription() + "</HTML>"), constraints);
-                constraints.gridy++;
-                constraints.weightx = 1;
-                JTextField component = new JTextField();
-
-                component.setEditable(false);
-                mp.add(component, constraints);
-                fields.add(new UserFieldEditorComponent(field, component));
-                constraints.gridx = 0;
-                constraints.weightx = 1;
-                constraints.gridy++;
-
-                String formattedValue = field.getFormattedValue(modelElement, true);
-                ((JTextComponent) component).setText(formattedValue);
+            } else {
+                //die übergebene Kompoente muss selbst der Editor sein
+                fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
+                registerChangeListener(realEditor, userField);
             }
         }
+    }
+
+    private void registerChangeListener(final JComponent component, final UserField userField) {
+        if (component instanceof JTextComponent) {
+            JTextComponent textComponent = (JTextComponent) component;
+            if (userField.hasStyle(CLASSIFICATION_NUMBER)) {
+                PropertyDialogUserFieldPanelNumberInputFocusListener inputFieldFocusListener = new PropertyDialogUserFieldPanelNumberInputFocusListener(changeHandler, getModelElement(), userField);
+                textComponent.addFocusListener(inputFieldFocusListener);
+            } else if (textComponent.isEditable()) {
+                textComponent.getDocument().addDocumentListener(changeHandler);
+            }
+        } else if (component instanceof AbstractButton) {
+            AbstractButton radioButton = (AbstractButton) component;
+            radioButton.addActionListener(changeHandler);
+        } else if (component instanceof JComboBox<?>) {
+            JComboBox<?> comboBox = (JComboBox<?>) component;
+            comboBox.addActionListener(changeHandler);
+        }
+    }
+
+    private JButton getHyperlinkButton(final JTextComponent hyperlinkText) {
+        // Der Button, der für einen Hyperlink das öffnen eines Browsers
+        // ermöglicht.
+        final JButton button = new JButton(new AbstractAction(">>") {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                String urlOrPath = hyperlinkText.getText().trim();
+                if (!urlOrPath.isEmpty()) {
+                    BrowseUtils.browse(urlOrPath);
+                }
+            }
+        });
+        //auch bei Doppelklick oder Klick mit STRG den Link öffnen
+        hyperlinkText.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                if (e.getClickCount() == 1 && e.isControlDown() || e.getClickCount() > 1) {
+                    button.doClick();
+                }
+            }
+        });
+        return button;
+    }
+
+    private void addFillSpacePanel(final JPanel panel2Fill, final GridBagConstraints constraints) {
         constraints.gridy++;
-        constraints.gridx = 0;
-        constraints.weightx = 0;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weighty = 1.0;
         constraints.gridheight = GridBagConstraints.REMAINDER;
-        mp.add(new JPanel(), constraints);
+        panel2Fill.add(new JPanel(), constraints);
+    }
+
+    private JLabel getLabel(final UserField field) {
+        Style style = field.getStyle();
+        if (style == CLASSIFICATION_NUMBER || style == CLASSIFICATION_NUMBER_FORMULA) {
+            String unit = field.getFormatUnit();
+            StringBuilder einheit = new StringBuilder("");
+            if (unit != null) {
+                einheit.append(" ");
+                einheit.append(Tool3lgmConstants.getResString("in"));
+                einheit.append(" ");
+                einheit.append(unit);
+                einheit.append(" ");
+            }
+            String htmlString = toHTML(field.getName() + einheit, field.getDescription());
+            return new JLabel(htmlString);
+        }
+        return new JLabel(toHTML(field.getName(), field.getDescription()));
+    }
+
+    /**
+     * Erzeugt einen HTML-String, bei dem der übergebenen <code>fieldName</code> fett in der 1. Zeile und
+     * darunter die übergebene <code>fieldDescription</code> steht.
+     * 
+     * @param fieldName
+     * @param fieldDescription
+     * @return
+     */
+    private String toHTML(final String fieldName, final String fieldDescription) {
+        String htmlString = "<HTML><B>" + fieldName + "</B><BR>" + fieldDescription + "</HTML>";
+        return htmlString;
     }
 
     @Override
@@ -365,17 +404,28 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     @Override
     public void commit() {
         boolean changed = false;
-        for (int i = 0; i < fields.size(); i++) {
-            UserFieldEditorComponent userFieldEditorComponent = fields.get(i);
+        for (int i = 0; i < fieldComponents.size(); i++) {
+            UserFieldEditorComponent userFieldEditorComponent = fieldComponents.get(i);
             UserField userField = userFieldEditorComponent.userField;
             JComponent editorComponent = userFieldEditorComponent.editorComponent;
+            //Der Wert sollte sich nur geändert haben können, wenn diese Komponente auch den Focus hat.
+            //Das ist besonders bei Kennzahlen wichtig, da diese, wenn sie nicht den Focus haben, immer
+            //den formatierten Wert (also evtl. mit Einheit und im Gegensatz zum eigentlichen Eingabewert
+            //mit einer anderen Anzahl von Nachkommastellen) anzeigen. Das würde hier als Änderung erkannt
+            //werden und somit der formatierte Wert als Eingabewert gesetzt werden (was ei Einheiten zu
+            //NUMBER_FORMAT_ERROR führt und ansonsten die Anzahl der angeblich eingegebenen Nachkommastellen
+            //ändern kann.
+            if (!editorComponent.hasFocus()) {
+                continue;
+            }
+
             UserField.Style style = userField.getStyle();
             String newValue = getNewValue(style, editorComponent);
             ModelElement me = getModelElement();
             //wenn bei RadioButtons noch gar nichts gesetzt war, kann newValue null sein
             //bei UserFields die Formeln sind, kommt auch null zurück -> dann nichts setzen
             if (newValue != null) {
-                if (hasOtherValue(me, userField, newValue)) { //wenn sich wirklich was geändert hat
+                if (isNewValue(me, userField, newValue)) { //wenn sich wirklich was geändert hat
                     doc.setUserFieldValue(me, userField, newValue, dialog.getTransactionID());
                     changed = true;
                 }
@@ -388,19 +438,24 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             // Jetzt kann man einfach dem Calculator sagen, er soll alle
             // Kennzahlformeln neu berechnen, wenn
             doc.getCollection().getUserFieldDefinitions().initReset();
-            updateFormulaValues();
         }
 
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        updateFormulaValues();
     }
 
     /**
      * Aktualisiert die Anzeigewerte aller Formeln.
      */
     private void updateFormulaValues() {
-        for (int i = 0; i < fields.size(); i++) {
-            UserFieldEditorComponent userFieldEditorComponent = fields.get(i);
+        for (int i = 0; i < fieldComponents.size(); i++) {
+            UserFieldEditorComponent userFieldEditorComponent = fieldComponents.get(i);
             UserField userField = userFieldEditorComponent.userField;
-            if (userField.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA)) {
+            if (userField.hasStyle(CLASSIFICATION_NUMBER_FORMULA)) {
                 JTextField formulaTextField = (JTextField) userFieldEditorComponent.editorComponent;
                 String formattedValue = userField.getFormattedValue(getModelElement(), true);
                 formulaTextField.setText(formattedValue);
@@ -417,8 +472,11 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
      * @param newValue
      * @return
      */
-    private boolean hasOtherValue(final ModelElement me, final UserField userField, final String newValue) {
+    private static boolean isNewValue(final ModelElement me, final UserField userField, final String newValue) {
         String userFieldInputValue = me.getUserFieldInputValue(userField);
+        if (userFieldInputValue.equals(EMPTY_STRING)) {
+            userFieldInputValue = "";
+        }
         return !newValue.equals(userFieldInputValue);
     }
 
@@ -429,44 +487,40 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
      * @param editorComponent
      * @return
      */
-    private String getNewValue(final UserField.Style style, final JComponent editorComponent) {
+    private String getNewValue(final Style style, final JComponent editorComponent) {
         String newValue = null;
-        if (style == UserField.Style.SINGLE_LINE) {
+        if (style == SINGLE_LINE) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == UserField.Style.MULTI_LINE) {
-            newValue = GraphDocument.getParseSaveString(((JTextComponent) editorComponent).getText(), false);
+        } else if (style == MULTI_LINE) {
+            newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == UserField.Style.COMBO_BOX) {
-            Object selectedItem = ((JComboBox) editorComponent).getSelectedItem();
+        } else if (style == COMBO_BOX) {
+            Object selectedItem = ((JComboBox<?>) editorComponent).getSelectedItem();
             if (selectedItem != null) {
-                newValue = GraphDocument.getParseSaveString(selectedItem.toString(), false);
+                newValue = selectedItem.toString();
             }
 
-        } else if (style == UserField.Style.CHECK_BOX) {
-            newValue = ((JCheckBox) editorComponent).isSelected() ? UserField.CHECKBOX_TRUE : UserField.CHECKBOX_FALSE;
+        } else if (style == CHECK_BOX) {
+            newValue = ((JCheckBox) editorComponent).isSelected() ? CHECKBOX_TRUE : CHECKBOX_FALSE;
 
-        } else if (style == UserField.Style.RADIO_BUTTON) {
+        } else if (style == RADIO_BUTTON) {
             JRadioButton radioButton = (JRadioButton) editorComponent;
             //wenn nichts selektiert ist -> null zurück geben -> der Wert des UserFields wird nicht geändert
-            newValue = radioButton.isSelected() ? GraphDocument.getParseSaveString(radioButton.getText(), false) : null;
+            newValue = radioButton.isSelected() ? radioButton.getText() : null;
 
-        } else if (style == UserField.Style.HYPERLINK) {
-            newValue = GraphDocument.getParseSaveString(((JTextComponent) editorComponent).getText(), true);
-
-        } else if (style == UserField.Style.ID) {
+        } else if (style == HYPERLINK) {
             newValue = ((JTextComponent) editorComponent).getText();
 
-        } else if (style == UserField.Style.CLASSIFICATION_NUMBER) {
+        } else if (style == ID) {
+            newValue = ((JTextComponent) editorComponent).getText();
+
+        } else if (style == CLASSIFICATION_NUMBER) {
             Object textFieldValue = "";
             NumberTextField textField = (NumberTextField) editorComponent;
-            textFieldValue = textField.getValue();
+            textFieldValue = textField.getText();
 
-            if (textFieldValue == null || textFieldValue.equals("")) {
-                newValue = "";
-            } else {
-                newValue = textFieldValue.toString();
-            }
+            newValue = textFieldValue == null ? "" : textFieldValue.toString();
         }
         return newValue;
     }
@@ -499,4 +553,5 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         System.err.println("weighty = " + c.weighty);
         System.err.println();
     }
+
 }
