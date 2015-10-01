@@ -165,6 +165,11 @@ public class ToolInternalFrame extends AbstractInternalFrame implements ActionLi
         area.repaint();
     }
 
+    @Override
+    public void userFieldValueChanged(final ElementContainer ec) {
+        area.repaint();
+    }
+
     /**
      * @return
      */

@@ -2762,6 +2762,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         itl.elementNameChanged(last_elem);
                     }
                     break;
+                case USER_FIELD_VALUE_CHANGED:
+                    for (InTransactionListener itl : inlistener) {
+                        itl.userFieldValueChanged(last_elem);
+                    }
+                    break;
                 default:
                     break;
                 }
@@ -2813,6 +2818,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 case ELEMENT_NAME_CHANGED:
                     for (InTransactionListener itl : inlistener) {
                         itl.elementNameChanged(last_elem);
+                    }
+                    break;
+                case USER_FIELD_VALUE_CHANGED:
+                    for (InTransactionListener itl : inlistener) {
+                        itl.userFieldValueChanged(last_elem);
                     }
                     break;
                 default:
@@ -4297,7 +4307,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommandIfNotExist(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(userField.getValue(me), true), pid);
         me.setUserFieldInputValue(userField, getDecodedParseSaveString(newValue));
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        distributeEvent(USER_FIELD_VALUE_CHANGED, pid);
     }
 
     /**

@@ -17,7 +17,10 @@ public interface InTransactionListener {
     /** Hier reagieren alle -> erneuern */
     public void elementDeleted(GraphDocument source, ElementContainer ec);
 
-    /** Hier reagieren alle, die den Namen und oder die Beschreibung anzeigen */
+    /** Hier reagieren alle, die den Namen anzeigen */
     public void elementNameChanged(ElementContainer ec);
+
+    /** Hier reagieren alle, die UserFields anzeigen */
+    public void userFieldValueChanged(ElementContainer ec);
 
 }

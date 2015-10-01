@@ -282,6 +282,11 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         update();
     }
 
+    @Override
+    public void userFieldValueChanged(final ElementContainer ec) {
+        update();
+    }
+
     // InTransactionListener Ende
     // ####################################################################################
 

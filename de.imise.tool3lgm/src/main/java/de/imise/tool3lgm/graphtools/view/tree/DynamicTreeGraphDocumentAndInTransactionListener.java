@@ -105,6 +105,13 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDo
         tree.repaint();
     }
 
+    @Override
+    public void userFieldValueChanged(final ElementContainer ec) {
+        if (active) {
+            tree.buildTree();
+        }
+    }
+
     public void remove() {
         tree.getGraphDocument().removeGraphDocumentListener(this);
         tree.getGraphDocument().getCollection().getMainGraphDocument().removeInTransactionListener(this);

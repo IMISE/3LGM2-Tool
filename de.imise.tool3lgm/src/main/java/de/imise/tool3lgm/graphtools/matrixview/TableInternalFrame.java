@@ -228,4 +228,8 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
         dataChanged(ec.getGraphDocument());
     }
 
+    @Override
+    public void userFieldValueChanged(final ElementContainer ec) {
+    }
+
 }
