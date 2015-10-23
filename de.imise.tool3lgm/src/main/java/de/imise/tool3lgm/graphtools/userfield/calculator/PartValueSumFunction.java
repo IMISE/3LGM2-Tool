@@ -99,7 +99,7 @@ public class PartValueSumFunction {
             } else {
                 //das Verteilungsgewicht, das an der Kante steht (erstmal
                 // gleichverteilung (also alles 1 annhmen)
-                BigDecimal vgSum = new BigDecimal(0);
+                BigDecimal vgSum = BigDecimal.ZERO;
                 //von all diesen Kanten die Verteilungsgewichte aufsummieren
                 // (es gibt mind. eine solche Kante = die der Hinrichtung)
                 for (int j = 0; j < connectionsFrom.size(); j++) {
@@ -114,7 +114,7 @@ public class PartValueSumFunction {
                     //den gefundenen Wert ausummieren
                     vgSum = vgSum.add(new BigDecimal(vgValueString.toString()));
                 }
-                if (vgSum.compareTo(new BigDecimal(0)) != 0) {
+                if (vgSum.compareTo(BigDecimal.ZERO) != 0) {
                     normalizedVG = Calculator.divide(normalizedVG, vgSum);
                 }
             }
