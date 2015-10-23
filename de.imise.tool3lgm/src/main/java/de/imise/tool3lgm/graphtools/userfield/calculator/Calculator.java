@@ -426,7 +426,7 @@ public class Calculator {
             return bd1.multiply(bd2).toString();
             //Durch
         } else if (OPERATOR_DIV.equals(operator)) {
-            if (bd2.compareTo(new BigDecimal(0)) == 0) {
+            if (bd2.compareTo(BigDecimal.ZERO) == 0) {
                 return UserField.ERROR_DIVIDE_BY_ZERO;
             }
 
@@ -765,9 +765,8 @@ public class Calculator {
         BigDecimal value = new BigDecimal(tmp_value);
         int anzWerte = stacksize;
         int indicator = 0;
-        BigDecimal valueOne = new BigDecimal(0);
-        BigDecimal valueTwo = new BigDecimal(0);
-        valueOne = new BigDecimal(stack.pop().toString());
+        BigDecimal valueOne = new BigDecimal(stack.pop().toString());
+        BigDecimal valueTwo = BigDecimal.ZERO;
         for (int i = 1; i < anzWerte; i++) {
             if (value.compareTo(valueOne) > 0) {
                 valueTwo = new BigDecimal(stack.pop().toString());
