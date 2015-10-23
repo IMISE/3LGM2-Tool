@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.EventObject;
 
@@ -171,7 +172,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     /**
      * Gibt den tatsächlichen Wert dieser Zelle wieder und speicher ihn unter {@link #value} ab. <br>
      * Falls der Wert im Editor <code>""</code> entspricht, wird ein neuer {@link NamedObjectContainer} mit {@link #userField} und
-     * <code>"EMPTY_STRING"</code> zurückgegeben. Falls sich der Wert im Editor nicht auf double parsen lässt, wird ein neuer
+     * <code>"EMPTY_STRING"</code> zurückgegeben. Falls sich der Wert im Editor nicht auf BigDecimal parsen lässt, wird ein neuer
      * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurückgegeben. Sonst wird ein neuer
      * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurückgegeben.
      * 
@@ -182,10 +183,10 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
         Object newValue = editor.getCellEditorValue();
         String s = newValue == null ? "" : newValue.toString();
         s = UserField.replaceWrongDecimalSeparator(s, EDITOR_DECIMAL_SEPARATOR);
-
+        //hier werden die Eingabedaten im Fehlerfall hart ersetzt in den Tabellenzellen
         if (editor.getComponent() instanceof NumberTextField) {
             try {
-                Double.parseDouble(s);
+                new BigDecimal(s);
             } catch (NumberFormatException e) {
                 if (s.equals(EDITOR_EMPTY_STRING)) {
                     s = UserField.EMPTY_STRING;
