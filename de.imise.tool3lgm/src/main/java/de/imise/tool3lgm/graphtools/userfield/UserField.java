@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -191,7 +192,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
             }
 
             try {
-                return Double.valueOf(v1).compareTo(Double.valueOf(v2));
+                return new BigDecimal(v1).compareTo(new BigDecimal(v2));
             } catch (NumberFormatException e) {
                 return v1.compareTo(v2);
             }
@@ -1127,6 +1128,10 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
         String value = o.toString();
 
+        if (!hasClassfificationStyle()) {
+            return value;
+        }
+
         if (value == null || value.equals("")) {
             return "";
         }
@@ -1136,10 +1141,6 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
         }
 
         if (isIgnoreableError(value)) {
-            return value;
-        }
-
-        if (formatUserField == null) {
             return value;
         }
 
@@ -1160,13 +1161,15 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      * @return
      */
     public static final String getFormattedValue(final String value, final UserField formatUserField, final boolean appendUnit) {
-        //wenn kein Format gesetzt ist 
-        if (formatUserField == null) {
-            return value;
-        }
-        // Falls sich der Wert-String nicht in einen Double umwandeln lässt, wird errorString NUMBER_FORMAT_ERROR zurückgegeben
+        // Falls sich der Wert-String nicht in einen BigDecimal umwandeln lässt, wird errorString NUMBER_FORMAT_ERROR zurückgegeben
         try {
-            String v = formatUserField.numberFormat.format(new Double(value));
+            //hier prüfen, ob sich der String überhaupt in eine Zahl umwandeln lässt
+            BigDecimal numberValue = new BigDecimal(value);
+            //wenn kein Format gesetzt ist 
+            if (formatUserField == null) {
+                return value;
+            }
+            String v = formatUserField.numberFormat.format(numberValue);
             if (!appendUnit) {
                 return v;
             }
@@ -1354,7 +1357,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      *         <code>false</code>
      */
     public static boolean isError(final String value) {
-        return ERROR_SET.contains(value) || IGNOREABLE_ERROR_SET.contains(value);
+        return IGNOREABLE_ERROR_SET.contains(value) || ERROR_SET.contains(value);
     }
 
     /**
@@ -1364,7 +1367,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      * @return <code>true</code>, wenn der der übergebene Wert ein Fehler oder EMPTY_VALUE oder leer oder null ist, sonst <code>false</code>
      */
     public static boolean isEmptyOrError(final String value) {
-        return Strings.isNullOrEmpty(value) || EMPTY_STRING.equals(value) || isError(value);
+        return Strings.isNullOrEmpty(value) || isError(value);
     }
 
 }
