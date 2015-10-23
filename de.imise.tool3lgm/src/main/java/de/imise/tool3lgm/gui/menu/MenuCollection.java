@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.plugin.B1ExportPlugin;
 import de.imise.tool3lgm.plugin.ExportPdvb4AwbPlugin;
+import de.imise.tool3lgm.plugin.ilv.ILVServiceImportDialog;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.menu.DynamicMenu;
@@ -214,7 +215,10 @@ public class MenuCollection {
     /** Sammlung der Unter-Menus des Extras-Menus */
     static class ExtrasSubMenus {
 
-        public static final JMenu PLUGIN_MENU = createMenu(Tool3lgmConstants.getResString("plugin"), new B1ExportPlugin().getAction(), new ExportPdvb4AwbPlugin().getAction());
+        /** Name dieses Menus */
+        public static final String title = Tool3lgmConstants.getResString("plugin");
+
+        public static final JMenu PLUGIN_MENU = createMenu(title, new B1ExportPlugin().getAction(), new ExportPdvb4AwbPlugin().getAction(), ILVServiceImportDialog.getNewAction());
 
     }
 
