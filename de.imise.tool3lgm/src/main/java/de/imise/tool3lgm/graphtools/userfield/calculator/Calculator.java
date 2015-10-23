@@ -75,13 +75,13 @@ public class Calculator {
     }
 
     /**
-	 *  
-	 */
+     *  
+     */
     private UserFieldDefinitions definitions;
 
     /**
-	 *  
-	 */
+     *  
+     */
     public Calculator(final UserFieldDefinitions definitions) {
         super();
         this.definitions = definitions;
@@ -146,8 +146,8 @@ public class Calculator {
             return getIndi(me, infix.toString());
         }
 
-        //		Alle Teilwertsummen auflösen (das muss vor den Summen apssieren, da
-        //		in TWSUM auch SUM steckt)
+        //      Alle Teilwertsummen auflösen (das muss vor den Summen apssieren, da
+        //      in TWSUM auch SUM steckt)
         String erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_TWSUM);
         if (UserField.isCriticalError(erg)) {
             return erg;
@@ -399,20 +399,15 @@ public class Calculator {
             return UserField.EMPTY_STRING;
         }
 
-        //Es wird BigDecimal verwendet, um zu verhindern, dass Rundungsfehler
-        // beim Konvertienen
-        //von String in double das ergebniss verfälschen. Bsp: 0,9992 + 0,0004
-        // + 0,0004 = 0,9999
+        //      System.err.println("\""+operand1+"\"\t" + "\""+operator+"\"\t\""+operand2+"\"");
 
-        //		System.err.println("\""+operand1+"\"\t" + "\""+operator+"\"\t\""+operand2+"\"");
-
-        //Falls die eingegebenen Werte irgendweswegen nicht alz Zahl erkannt werden -> EMPTY_STRING
+        //Falls die eingegebenen Werte irgendweswegen nicht als Zahl erkannt werden -> NUMBER_FORMAT_ERROR
         BigDecimal bd1 = null, bd2 = null;
         try {
             bd1 = new BigDecimal(operand1);
             bd2 = new BigDecimal(operand2);
         } catch (Exception e) {
-            return UserField.EMPTY_STRING;
+            return UserField.NUMBER_FORMAT_ERROR;
         }
 
         //Plus
@@ -523,7 +518,7 @@ public class Calculator {
      * @return Ergebnis der Verrechungsfunktion SUM
      */
     private String getResultOfVF(final UserField resultUserField, final ModelElement me, final String formula, final String accountingFunction) {
-        //    	ArrayList elements = gd.getAllModelElements(me.getClass(), true);
+        //      ArrayList elements = gd.getAllModelElements(me.getClass(), true);
         StringTokenizer st = new StringTokenizer(formula, " (|)");
 
         //nächster Token ist der Name der Kante über die UserFields der
@@ -631,7 +626,7 @@ public class Calculator {
      * @return Ergebnis der Verrechungsfunktion MIN bzw MAX
      */
     private String getMINMAX(final UserField resultUserField, final ModelElement me, final String minMaxFormula, final String accountingFunction) {
-        //	ArrayList elements = gd.getAllModelElements(me.getClass(), true);
+        //  ArrayList elements = gd.getAllModelElements(me.getClass(), true);
         StringTokenizer st = new StringTokenizer(minMaxFormula, " (|)");
 
         //nächster Token ist der Name der Kante über die UserFields der
