@@ -1245,7 +1245,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         gdcoll.simpleRemoveGraphDocuments();
 
         if (gdcoll.descriptionFrame != null) {
-            gdcoll.descriptionFrame.setVisible(false);
+            gdcoll.descriptionFrame.dispose();
         }
 
         ignoreDocSelection = true;
