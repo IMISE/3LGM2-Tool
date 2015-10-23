@@ -843,6 +843,16 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     }
 
     /**
+     * Prüft ob der übergebene String in den Listenwerten dieses Userfields steht.
+     * 
+     * @param value
+     * @return
+     */
+    public boolean containsListValue(final String value) {
+        return listValues != null && listValues.contains(value);
+    }
+
+    /**
      * Liefert den <code>String</code>, der in Modeldatein oder in der Export von <code>UserField</code>s geschrieben wird.
      * 
      * @return
