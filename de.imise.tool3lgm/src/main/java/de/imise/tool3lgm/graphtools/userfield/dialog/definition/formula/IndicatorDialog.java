@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -373,11 +374,10 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         //Die eingaben dürfen nicht leer sein  
         for (int i = 0; i < gwList.size(); i++) {
             try {
-                //Die Eingabenb müssen gülte Werte sein, die sich auf Double parsen lassen müssen.  
-                //TODO :XHB: Den Vergleich müsste man über einen regulären Ausdrück durchführen. 
+                //Die Eingabenb müssen gülte Werte sein, die sich auf BigDecimal parsen lassen müssen.  
                 String tmp_string = gwList.get(i).inputField.getText().trim();
                 tmp_string = tmp_string.replace(",", ".");
-                Double.parseDouble(tmp_string);
+                new BigDecimal(tmp_string);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("invalid_values"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                 return false;
