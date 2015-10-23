@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigDecimal;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -330,7 +331,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                         doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
                     } else {
                         try {
-                            Double.parseDouble(newValue);
+                            new BigDecimal(newValue);
                             // Neuen Wert setzen
                             doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
                         } catch (NumberFormatException nfe) {
