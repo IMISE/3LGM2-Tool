@@ -131,24 +131,17 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             definitions = userField.getDefinitions();
         }
 
-        // Hier wird die ComboBox mit den indizierbaren userfields gefüllt.
-        //		alte Variante zur Kontrolle		
-        //		for (int i = 0; i < definitions.getUserFieldCount(userField.getTargetClass()); i++) {
-        //			UserField tmp_userField = definitions.get(userField.getTargetClass(), i);
-        //			//Es dürfen nur kennzahlen und Kennzahlformel indiziert werden.
-        //			if (tmp_userField.isClassificationUserField())
-        //				//Wenn es sich um eine Kennzahlformel handelt und diese selbst auch ein Indikator ist, dann darf es NICHT hinzugefügt werden.
-        //				if (tmp_userField.getStyle()==UserField.CLASSIFICATION_NUMBER_FORMULA_STYLE && !(tmp_userField.getFormula()==null || !tmp_userField.getFormula().trim().startsWith(UserField.ACCOUNTING_FUNCTION_INDI)))
-        //					continue;
-        //				userFieldComboBox.addItem(tmp_userField);
-        //		}
-
         // Hier wird die ComboBox mit den indizierbaren userfields gefüllt. 
-
         for (UserField uf : definitions.getUserFields(userField.getTargetClass())) {
-            //Es dürfen nur Kennzahlen und Kennzahlformeln, die keine Indikatoren sind indiziert werden.
-            if (uf.isClassificationUserField() && !uf.isIndicatorFormula()) {
-                userFieldComboBox.addItem(uf);
+            //das UserField selbst soll nicht mit eingefügt werden (hier ist die Formual noch null, so dass die untere
+            //Anfrage, isIndicatorFormula() noch nicht greift. Daher hier explizit ausschließen)
+            if (uf != userField) {
+                //Es dürfen nur Kennzahlen und Kennzahlformeln, die keine Indikatoren sind indiziert werden.
+                //AXS 23.01.15: Indikatoren haben als Value aus irgendwelchen Gründen immer ihre Formel!?, daher kann
+                //man keine Inidikatoren für Indikatoren definieren. Warum die nicht auch den Wert zurück geben, ist mir nicht klar
+                if (uf.isClassificationUserField() && !uf.isIndicatorFormula()) {
+                    userFieldComboBox.addItem(uf);
+                }
             }
         }
 
