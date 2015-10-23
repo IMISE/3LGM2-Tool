@@ -1360,14 +1360,4 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
         return IGNOREABLE_ERROR_SET.contains(value) || ERROR_SET.contains(value);
     }
 
-    /**
-     * Prüft, ob der übergebene Wert ein Fehler oder EMPTY_VALUE oder leer oder null ist.
-     * 
-     * @param value
-     * @return <code>true</code>, wenn der der übergebene Wert ein Fehler oder EMPTY_VALUE oder leer oder null ist, sonst <code>false</code>
-     */
-    public static boolean isEmptyOrError(final String value) {
-        return Strings.isNullOrEmpty(value) || isError(value);
-    }
-
 }
