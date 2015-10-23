@@ -80,7 +80,8 @@ public class PartValueSumFunction {
             if (UserField.NO_ELEMENTS_CONNECTED.equals(userFieldValueToSplit)) {
                 //den Wert als 0 annehmen.
                 continue;
-            } else if (UserField.EMPTY_STRING.equals(userFieldValueToSplit) || UserField.isCriticalError(userFieldValueToSplit)) {
+                //irgend ein anderer Fehler-Wert -> den Fehler selbst zurück geben
+            } else if (UserField.isError(userFieldValueToSplit)) {
                 return userFieldValueToSplit;
             }
 
