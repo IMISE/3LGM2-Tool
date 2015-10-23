@@ -479,10 +479,13 @@ public class Calculator {
         }
         if (elementWithUserField != null && elementWithUserField.getClass() == elementClass) {
             String value = userField.getValue(elementWithUserField);
-            if (UserField.isEmptyOrError(value)) {
-                return UserField.EMPTY_STRING;
+            //wenn der referenzierte Wert bereits ein Fehler ist, dann wird dieser Fehler zurück gegeben
+            if (UserField.isError(value)) {
+                return value;
             }
-            refVg = refVg.add(new BigDecimal(value));
+            //der Wert hier muss sich immer als BigDecimal parsen lassen, da vorher alle Fehler ausgeschlossen sein sollten
+            BigDecimal numberValue = new BigDecimal(value);
+            refVg = refVg.add(numberValue);
         }
         return refVg.toString();
     }
