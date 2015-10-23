@@ -64,7 +64,13 @@ public class PartValueSumFunction {
                     //-> einfach mit der nächsten Kante weitermachen
                     return UserField.EMPTY_STRING;
                 }
-                normalizedVG = new BigDecimal(vgValueString);
+
+                //wenn sich der Verteilungsgewichtwert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+                try {
+                    normalizedVG = new BigDecimal(vgValueString);
+                } catch (Exception e) {
+                    return UserField.NUMBER_FORMAT_ERROR;
+                }
             }
 
             //das andere Element der Kante holen
@@ -85,7 +91,13 @@ public class PartValueSumFunction {
                 return userFieldValueToSplit;
             }
 
-            BigDecimal valueToSplit = new BigDecimal(userFieldValueToSplit);
+            BigDecimal valueToSplit = null;
+            //wenn sich der aufzuteilende Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+            try {
+                valueToSplit = new BigDecimal(userFieldValueToSplit);
+            } catch (Exception e) {
+                return UserField.NUMBER_FORMAT_ERROR;
+            }
 
             //Alle Kanten vom Element dessen Kennzahlwert aufgeteilt werden
             // soll zu anderen Elementen holen, die von der
@@ -113,7 +125,13 @@ public class PartValueSumFunction {
                         continue;
                     }
                     //den gefundenen Wert ausummieren
-                    vgSum = vgSum.add(new BigDecimal(vgValueString.toString()));
+                    //wenn sich der gefundenen Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+                    try {
+                        BigDecimal vgValue = new BigDecimal(vgValueString.toString());
+                        vgSum = vgSum.add(vgValue);
+                    } catch (Exception e) {
+                        return UserField.NUMBER_FORMAT_ERROR;
+                    }
                 }
                 if (vgSum.compareTo(BigDecimal.ZERO) != 0) {
                     normalizedVG = Calculator.divide(normalizedVG, vgSum);
