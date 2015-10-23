@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssEtntVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ClientExternalServiceEdge;
 import de.imise.tool3lgm.graphtools.elements.edge.DatenuebertragungsVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
@@ -31,6 +32,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntKommstVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ExternalServiceInternalServiceEdge;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbOrgpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
@@ -61,6 +63,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteintyp;
 import de.imise.tool3lgm.graphtools.elements.node.Benutzungsschnittstelle;
+import de.imise.tool3lgm.graphtools.elements.node.Client;
 import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.DBVerwaltungssystem;
 import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
@@ -71,6 +74,8 @@ import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
 import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
+import de.imise.tool3lgm.graphtools.elements.node.ExternalService;
+import de.imise.tool3lgm.graphtools.elements.node.InternalService;
 import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsstandard;
 import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
@@ -178,7 +183,7 @@ public final class ModelConstants {
     public static final Class[] ALL_DOMAIN_LAYER_NODES = {
             Aufgabe.class, AufOrgKombination.class, Objekttyp.class, Organisationseinheit.class,
             //		Rolle.class, 
-            Prozess.class,
+            Prozess.class, Client.class, ExternalService.class, InternalService.class
     };
 
     /**
@@ -190,7 +195,7 @@ public final class ModelConstants {
             //			AufOrgKombination.class,
             Objekttyp.class, Organisationseinheit.class,
             //			Rolle.class, 
-            Prozess.class,
+            Prozess.class, Client.class, ExternalService.class, InternalService.class
     };
 
     /** Alle Knoten der FE als HashSet */
@@ -204,7 +209,7 @@ public final class ModelConstants {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = {
-            Aufgabe.class, Objekttyp.class, Organisationseinheit.class, Prozess.class,
+            Aufgabe.class, Objekttyp.class, Organisationseinheit.class, Prozess.class, Client.class, ExternalService.class, InternalService.class
     //			Rolle.class, 
     };
 
@@ -309,7 +314,8 @@ public final class ModelConstants {
     /** Kanten FE */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_DOMAIN_LAYER_EDGES = {
-            AufAufOrgVerbindung.class, AufAufVerbindung.class, AufObjVerbindung.class, ObjObjVerbindung.class, OrgAufOrgVerbindung.class, OrgOrgVerbindung.class, PrzAufVerbindung.class
+            AufAufOrgVerbindung.class, AufAufVerbindung.class, AufObjVerbindung.class, ObjObjVerbindung.class, OrgAufOrgVerbindung.class, OrgOrgVerbindung.class, PrzAufVerbindung.class, ExternalServiceInternalServiceEdge.class,
+            ClientExternalServiceEdge.class
     };
 
     /** Kanten Inter FE -LWE */
@@ -406,7 +412,8 @@ public final class ModelConstants {
     })
     public static final Class[] IMPORTABLE_NODES = {
             Aufgabe.class, Bausteintyp.class, DBVerwaltungssystem.class, Dokumententyp.class, Ereignistyp.class, KommBeziehung.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Objekttyp.class,
-            Organisationseinheit.class, Organisationsplan.class, KonAnwendungsbaustein.class, PhysischerDVBaustein.class, RechAnwendungsbaustein.class, Softwareprodukt.class, Standort.class, Subnetz.class,
+            Organisationseinheit.class, Organisationsplan.class, KonAnwendungsbaustein.class, PhysischerDVBaustein.class, RechAnwendungsbaustein.class, Softwareprodukt.class, Standort.class, Subnetz.class, Client.class, ExternalService.class,
+            InternalService.class
     };
 
     /**
@@ -541,7 +548,11 @@ public final class ModelConstants {
      * Liste aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
      * der Grafik dargestelt werden.
      */
-    private static final Set<Class<? extends Kante>> FORWARD_CONNECTED_EDGE_CLASSES = ImmutableSet.of();
+    private static final Set<Class<? extends Kante>> FORWARD_CONNECTED_EDGE_CLASSES = ImmutableSet.of(
+    //immer die Kanten vom Kunden zum Externen Servie verbinden
+            ClientExternalServiceEdge.class.asSubclass(Kante.class),
+            //immer die Kante vom Externen Service zum Internen Service verbinden
+            ExternalServiceInternalServiceEdge.class.asSubclass(Kante.class));
 
     /**
      * Prüft, ob die übergebene Klasse eine Kantenklasse ist, die immer nur in Vorwärtsrichtung verbunden werden kann

@@ -15,8 +15,11 @@ import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.Benutzungsschnittstelle;
+import de.imise.tool3lgm.graphtools.elements.node.Client;
 import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
 import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
+import de.imise.tool3lgm.graphtools.elements.node.ExternalService;
+import de.imise.tool3lgm.graphtools.elements.node.InternalService;
 import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.Organisationsplan;
@@ -221,6 +224,15 @@ public class Mapping {
 
     public void loadDefaults() {
         elementClassToStandardLayoutMap.clear();
+
+        setStandardBackGroundColor(Client.class, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
+        setStandardForm(Client.class, GraphElementLayout.SHAPE.rechteck);
+
+        setStandardBackGroundColor(InternalService.class, GraphElementLayout.COLORS[GraphElementLayout.RED]);
+        setStandardForm(Client.class, GraphElementLayout.SHAPE.rechteck);
+
+        setStandardBackGroundColor(ExternalService.class, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
+        setStandardForm(ExternalService.class, GraphElementLayout.SHAPE.rechteck);
 
         setStandardBackGroundColor(Aufgabe.class, GraphElementLayout.COLORS[GraphElementLayout.RED]);
         setStandardForm(Aufgabe.class, GraphElementLayout.SHAPE.rechteck);

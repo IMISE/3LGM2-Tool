@@ -14,6 +14,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
@@ -26,12 +27,14 @@ import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssEtntVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ClientExternalServiceEdge;
 import de.imise.tool3lgm.graphtools.elements.edge.DatenuebertragungsVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.DoksDokVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtAufVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ExternalServiceInternalServiceEdge;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbOrgpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
@@ -57,11 +60,14 @@ import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteintyp;
 import de.imise.tool3lgm.graphtools.elements.node.Benutzungsschnittstelle;
+import de.imise.tool3lgm.graphtools.elements.node.Client;
 import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
 import de.imise.tool3lgm.graphtools.elements.node.Datensatztyp;
 import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
 import de.imise.tool3lgm.graphtools.elements.node.Dokumententyp;
 import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
+import de.imise.tool3lgm.graphtools.elements.node.ExternalService;
+import de.imise.tool3lgm.graphtools.elements.node.InternalService;
 import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsstandard;
 import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
@@ -163,7 +169,8 @@ public final class PathFinder {
      * @param element2
      * @param metaPath
      * @param doc
-     * @return Doppelkante.NOTCONNECTED / Doppelkante.FORWARD / Doppelkante.BACKWARD / Doppelkante.DOUBLE if path.isImmediate otherwise Doppelkante.NOTCONNECTED / Doppelkante.DOUBLE
+     * @return Doppelkante.NOTCONNECTED / Doppelkante.FORWARD / Doppelkante.BACKWARD / Doppelkante.DOUBLE if path.isImmediate otherwise
+     *         Doppelkante.NOTCONNECTED / Doppelkante.DOUBLE
      */
     public static final int isConnected(ModelElement element1, ModelElement element2, final MetaPath metaPath) {
         if (!UserProperties.isSearchParts() && !UserProperties.isSearchParents()) {
@@ -378,7 +385,8 @@ public final class PathFinder {
      * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den angegebenen Pfad verbunden Elemente zurück.
      * 
      * @param me
-     * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades übereinstimmen, sondern kann eine spezielle Unterklasse sein.
+     * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
+     *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
      * @param metaPath
      * @return
      */
@@ -711,7 +719,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("PhysischerDVBaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("PhysischerDVBaustein"))
         });
 
         /* Organisationseinheit - Anwendungsbaustein */
@@ -720,7 +728,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Anwendungsbaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Organisationseinheit - RechAnwendungsbaustein */
@@ -729,7 +737,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Anwendungsbaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Organisationseinheit - KonAnwendungsbaustein */
@@ -738,7 +746,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Anwendungsbaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Objekttyp - Objekttyp */
@@ -814,7 +822,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Softwareprodukt"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Softwareprodukt"))
         });
 
         /* Anwendungsbaustein - Kommunikationsstandard */
@@ -823,7 +831,7 @@ public final class PathFinder {
                 {
                         AwbKommssVerbindung.class, BssKommstVerbindung.class
                 }
-            }, s("Anwendungsbaustein") + " " + s("text_benutzt") + " " + s("Kommunikationsstandard"))
+            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* RechAnwendungsbaustein - Kommunikationsstandard */
@@ -832,7 +840,7 @@ public final class PathFinder {
                 {
                         AwbKommssVerbindung.class, BssKommstVerbindung.class
                 }
-            }, s("Anwendungsbaustein") + " " + s("text_benutzt") + " " + s("Kommunikationsstandard"))
+            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* KonAnwendungsbaustein - Kommunikationsstandard */
@@ -841,7 +849,7 @@ public final class PathFinder {
                 {
                         AwbKommssVerbindung.class, BssKommstVerbindung.class
                 }
-            }, s("Anwendungsbaustein") + " " + s("text_benutzt") + " " + s("Kommunikationsstandard"))
+            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* RechAnwendungsbaustein - Softwareprodukt */
@@ -981,6 +989,47 @@ public final class PathFinder {
             }, new String[] {
                     s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
             }, 1, true)
+        });
+
+        /* Kunde - Externer Service */
+        put(new MetaPath[] {
+            new MetaPath(Client.class, ExternalService.class, new Class[][] {
+                {
+                    ClientExternalServiceEdge.class
+                }
+            }, ModelConstants.getForwardMetaAssociationName(ClientExternalServiceEdge.class))
+        });
+        /* Externer Service - Kunde */
+        put(new MetaPath[] {
+            new MetaPath(ExternalService.class, Client.class, new Class[][] {
+                {
+                    ClientExternalServiceEdge.class
+                }
+            }, ModelConstants.getBackwardMetaAssociationName(ClientExternalServiceEdge.class))
+        });
+        /* Externer Service - Interner Service */
+        put(new MetaPath[] {
+            new MetaPath(ExternalService.class, InternalService.class, new Class[][] {
+                {
+                    ExternalServiceInternalServiceEdge.class
+                }
+            }, ModelConstants.getForwardMetaAssociationName(ExternalServiceInternalServiceEdge.class))
+        });
+        /* Interner Service - Externer Service */
+        put(new MetaPath[] {
+            new MetaPath(ExternalService.class, InternalService.class, new Class[][] {
+                {
+                    ExternalServiceInternalServiceEdge.class
+                }
+            }, ModelConstants.getBackwardMetaAssociationName(ExternalServiceInternalServiceEdge.class))
+        });
+        /* Kunde - Interner Service */
+        put(new MetaPath[] {
+            new MetaPath(Client.class, InternalService.class, new Class[][] {
+                {
+                        ClientExternalServiceEdge.class, ExternalServiceInternalServiceEdge.class
+                }
+            }, ModelConstants.getDisplayableName(Client.class) + " " + s("text_nutzt") + " " + ModelConstants.getDisplayableName(InternalService.class))
         });
 
         initElementTypesInPathes();
