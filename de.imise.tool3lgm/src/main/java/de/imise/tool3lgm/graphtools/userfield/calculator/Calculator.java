@@ -483,9 +483,15 @@ public class Calculator {
             if (UserField.isError(value)) {
                 return value;
             }
-            //der Wert hier muss sich immer als BigDecimal parsen lassen, da vorher alle Fehler ausgeschlossen sein sollten
-            BigDecimal numberValue = new BigDecimal(value);
-            refVg = refVg.add(numberValue);
+            //zur Sicherheit alle BigDecimal-Umwandlungen mit einem try-catch ausführen - egal, ob vorher angeblich
+            //schon alle Fehler ausgeschlossen wurden. Denn wenn hier an irgend einer Stelle der Berechnung eine
+            //exception fliegt, sind einige Werte neu und andere veraltet.
+            try {
+                BigDecimal numberValue = new BigDecimal(value);
+                refVg = refVg.add(numberValue);
+            } catch (Exception e) {
+                return UserField.NUMBER_FORMAT_ERROR;
+            }
         }
         return refVg.toString();
     }
@@ -673,8 +679,14 @@ public class Calculator {
             if (j == 0) {
                 result = value;
             } else {
-                BigDecimal valueOne = new BigDecimal(result);
-                BigDecimal valueTwo = new BigDecimal(value);
+                BigDecimal valueOne = null;
+                BigDecimal valueTwo = null;
+                try {
+                    valueOne = new BigDecimal(result);
+                    valueTwo = new BigDecimal(value);
+                } catch (Exception e) {
+                    return UserField.NUMBER_FORMAT_ERROR;
+                }
                 if (valueTwo.compareTo(valueOne) == -1) {
                     if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
                         result = value;
@@ -710,11 +722,16 @@ public class Calculator {
         Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
 
         me.countConnections(edgeClass);
-        BigDecimal bd = new BigDecimal(sum);
+        BigDecimal sumNum = null;
+        try {
+            sumNum = new BigDecimal(sum);
+        } catch (Exception e) {
+            return UserField.NUMBER_FORMAT_ERROR;
+        }
         if (me.countConnections(edgeClass) == 0) {
             JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("fehler") + Tool3lgmConstants.getErrString("divide_zero"));
         }
-        BigDecimal erg = divide(bd, new BigDecimal(me.countConnections(edgeClass)));
+        BigDecimal erg = divide(sumNum, new BigDecimal(me.countConnections(edgeClass)));
         return erg.toString();
     }
 
@@ -760,28 +777,33 @@ public class Calculator {
             return tmp_value;
         }
 
-        BigDecimal value = new BigDecimal(tmp_value);
-        int anzWerte = stacksize;
-        int indicator = 0;
-        BigDecimal valueOne = new BigDecimal(stack.pop().toString());
-        BigDecimal valueTwo = BigDecimal.ZERO;
-        for (int i = 1; i < anzWerte; i++) {
-            if (value.compareTo(valueOne) > 0) {
-                valueTwo = new BigDecimal(stack.pop().toString());
-                if (value.compareTo(valueTwo) <= 0) {
+        //alle new BigDecimal()-Aufrufe müssen mit try-catch unmantelt werden
+        try {
+            BigDecimal value = new BigDecimal(tmp_value);
+            int anzWerte = stacksize;
+            int indicator = 0;
+            BigDecimal valueOne = new BigDecimal(stack.pop().toString());
+            BigDecimal valueTwo = BigDecimal.ZERO;
+            for (int i = 1; i < anzWerte; i++) {
+                if (value.compareTo(valueOne) > 0) {
+                    valueTwo = new BigDecimal(stack.pop().toString());
+                    if (value.compareTo(valueTwo) <= 0) {
+                        indicator = i;
+                    }
+                    valueOne = valueTwo;
+                }
+                if (i == anzWerte - 1 && indicator == 0) {
+                    //Dieser Fall tritt ein, wenn der Wert größer ist als die größte untere Grenze.
                     indicator = i;
                 }
-                valueOne = valueTwo;
             }
-            if (i == anzWerte - 1 && indicator == 0) {
-                //Dieser Fall tritt ein, wenn der Wert größer ist als die größte untere Grenze.
-                indicator = i;
-            }
+            // Indikationsbereich: " + indicator + " von " + (anzWerte - 1);
+            //String erg = "Indi " + value + " | " + indicator + " | " + (anzWerte - 1);
+            String erg = Integer.toString(indicator);
+            return erg;
+        } catch (Exception e) {
+            return UserField.NUMBER_FORMAT_ERROR;
         }
-
-        // Indikationsbereich: " + indicator + " von " + (anzWerte - 1);
-        String erg = "Indi " + value + " | " + indicator + " | " + (anzWerte - 1);
-        return erg;
     }
 
     /**
