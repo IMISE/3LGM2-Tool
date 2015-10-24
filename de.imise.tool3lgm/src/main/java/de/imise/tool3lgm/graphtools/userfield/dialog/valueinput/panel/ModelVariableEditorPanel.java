@@ -51,14 +51,15 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
         }
         AbstractUserFieldTableModel uftm = (AbstractUserFieldTableModel) table.getModel();
 
-        Vector<NamedObjectContainer<UserField>> rowIdentifiers = (Vector) uftm.getRowIdentifiers();
-        for (int i = 0; i < rowIdentifiers.size(); i++) {
-            UserField field = rowIdentifiers.get(i).getObject();
-            String value = uftm.getValueAt(i, 0).toString();
-            gdcoll.setUserFieldInputValue(field, value);
+        if (uftm.hasRowIdentifiers()) {
+            Vector<NamedObjectContainer<UserField>> rowIdentifiers = (Vector) uftm.getRowIdentifiers();
+            for (int i = 0; i < rowIdentifiers.size(); i++) {
+                UserField field = rowIdentifiers.get(i).getObject();
+                String value = uftm.getValueAt(i, 0).toString();
+                gdcoll.setUserFieldInputValue(field, value);
+            }
+            definitions.initReset();
         }
-        definitions.initReset();
-
     }
 
     @Override
