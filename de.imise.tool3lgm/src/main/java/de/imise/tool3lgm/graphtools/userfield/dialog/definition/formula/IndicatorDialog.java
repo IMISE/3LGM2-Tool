@@ -137,8 +137,9 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             //Anfrage, isIndicatorFormula() noch nicht greift. Daher hier explizit ausschließen)
             if (uf != userField) {
                 //Es dürfen nur Kennzahlen und Kennzahlformeln, die keine Indikatoren sind indiziert werden.
-                //AXS 23.01.15: Indikatoren haben als Value aus irgendwelchen Gründen immer ihre Formel!?, daher kann
-                //man keine Inidikatoren für Indikatoren definieren. Warum die nicht auch den Wert zurück geben, ist mir nicht klar
+                //die Funktion private String getIndi(final UserFieldTarget target, final String indicatorFormula) im Calculator
+                //setzt den Wert eines Indikators auf einen String, der sich nicht mehr in BigDecimal() umwandeln lässt. Daher kann
+                //man keine Inidikatoren für Indikatoren definieren, was aber auch nicht umbedingt notwendig ist.
                 if (uf.isClassificationUserField() && !uf.isIndicatorFormula()) {
                     userFieldComboBox.addItem(uf);
                 }
