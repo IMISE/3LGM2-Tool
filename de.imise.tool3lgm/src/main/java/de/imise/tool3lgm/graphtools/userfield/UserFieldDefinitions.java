@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
+import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -38,6 +39,9 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /** Berechnet für diese Defnition alle Kennzahlen der konkreten Elemente */
     private final Calculator calculator;
+
+    /** Enthält für alle einfachen Teilwertsummen alle Zwischenergebnisse **/
+    private final PartValueSumSinglePartResults partValueSumSinglePartResults;
 
     /**
      * Liste aller UserFields, die Formeln darstellen
@@ -106,6 +110,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     public UserFieldDefinitions(final GDCollection gdcoll) {
         super(gdcoll);
         calculator = new Calculator(this);
+        partValueSumSinglePartResults = new PartValueSumSinglePartResults();
         weightReplacer = new WeightReplacer();
     }
 
@@ -782,6 +787,8 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     protected void clearCalculatedUserFieldValues() {
         //für alle Elementklassen alle berechneten Werte zurück setzen - also löschen
 
+        partValueSumSinglePartResults.clear();
+
         //Menge alle Elementklassen, für die bereits alle UserFields gelöscht wurden (alle
         //FormelUserFields werden für alle Elemente einer Art immer komplett gelöscht, sobald
         //in der Liste aller Formel-UserFields (formulaUserFieldList) ein UserField für die
@@ -813,7 +820,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                 userFieldTarget.resetCalculatedUserFieldMap();
             }
         }
-        return;
     }
 
     /**
@@ -879,6 +885,13 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             }
         }
         return returnList;
+    }
+
+    /**
+     * @return the partValueSumSinglePartResults
+     */
+    public PartValueSumSinglePartResults getPartValueSumSinglePartResults() {
+        return partValueSumSinglePartResults;
     }
 
     @Override
