@@ -312,8 +312,8 @@ public class Calculator {
 
         int startIndexOfFunction = infix.indexOf(accountingFunction);
         while (startIndexOfFunction >= 0) {
-            int firstBracketIndex = infix.indexOf("(", startIndexOfFunction);
-            int secondBracketIndex = infix.indexOf(")", firstBracketIndex);
+            int firstBracketIndex = infix.indexOf(OPEN_BRACKET, startIndexOfFunction);
+            int secondBracketIndex = infix.indexOf(CLOSE_BRACKET, firstBracketIndex);
             String arguments = infix.substring(firstBracketIndex + 1, secondBracketIndex);
 
             String value = "";
