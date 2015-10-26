@@ -22,7 +22,7 @@ public class PartValueSumFunction {
      * 
      * @param definitions
      * @param resultUserField
-     * @param me : Modelelemet
+     * @param me : Modelelement
      * @param twsumFormula
      * @return
      */
@@ -44,6 +44,10 @@ public class PartValueSumFunction {
 
         //dies wird die Summe aller Anteilswerte
         BigDecimal erg = BigDecimal.ZERO;
+        //dieser String bleibt in der folgenden Schleife solange null, bis irgendein Fehlerwert einer Einzelrechnung zurück kommt
+        String fullErgString = null;
+
+        PartValueSumSinglePartResults partResults = definitions.getPartValueSumSinglePartResults();
 
         //jetzt von allen verbundenen den jeweiligen Anteil aufsummieren
         for (Kante connectionTo : connectionsTo) {
@@ -51,94 +55,114 @@ public class PartValueSumFunction {
             ModelElement other = connectionTo.getOther(me);
             UserField vgUserField = getReplacer(definitions, other, args.edgeClass, args.vgUserField);
 
+            String ergString = getPartValueSumSingleResult(me, connectionTo, vgUserField, args, backDirection);
+            //den Wert als 0 annehmen, wenn keine Verbindungen bestehen
+            if (UserField.NO_ELEMENTS_CONNECTED.equals(ergString)) {
+                continue;
+            } else if (UserField.isError(ergString)) {
+                fullErgString = ergString;
+            } else {
+                //wenn noch kein Zwischenergebnis einen Fehler zurück gegeben hat
+                if (fullErgString == null) {
+                    //das muss auf jeden Fall als BigDecimal umwandelbar sein
+                    erg = erg.add(new BigDecimal(ergString));
+                }
+            }
+            if (resultUserField.isSimplePartValueSumFormula()) {
+                partResults.add(me, resultUserField, other, ergString);
+            }
+        }
+        if (fullErgString == null) {
+            fullErgString = erg.toString();
+        }
+        return fullErgString;
+    }
+
+    private static String getPartValueSumSingleResult(final ModelElement me, final Kante connectionTo, final UserField vgUserField, final TWSumArguments args, final String backDirection) {
+
+        //das Verteilungsgewicht, das an der Kante steht (erstmal Gleichverteilung (also alles 1 annhmen))
+        BigDecimal normalizedVG = BigDecimal.ONE;
+        //wenn mit einem explizit angegebenen Verteilungsgewicht gerechnet werden soll
+        if (vgUserField != null) {
+            String vgValueString = vgUserField.getValue(connectionTo);
+            //wenn das Verteilungsgewicht noch nicht eingegeben wurde, kann das Ergebnis nicht berechnet werden
+            if (vgValueString.equals(UserField.EMPTY_STRING)) {
+                //Gesamtergebnis ist EMPTY_STRING
+                return UserField.EMPTY_STRING;
+            }
+
+            //wenn sich der Verteilungsgewichtwert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+            try {
+                normalizedVG = new BigDecimal(vgValueString);
+            } catch (Exception e) {
+                return UserField.NUMBER_FORMAT_ERROR;
+            }
+        }
+
+        //das andere Element der Kante holen
+        ModelElement connectedElement = connectionTo.getStart();
+        if (connectedElement == me) {
+            connectedElement = connectionTo.getEnd();
+        }
+        //den aufzuteilenden eingegebenen Wert holen
+        String userFieldValueToSplit = args.kzUserField.getValue(connectedElement);
+
+        //Leere Eingaben und in Hierarchien Elemente, die keine Verbundenen
+        // Elemente haben
+        if (UserField.NO_ELEMENTS_CONNECTED.equals(userFieldValueToSplit)) {
+            return UserField.NO_ELEMENTS_CONNECTED;
+            //irgend ein anderer Fehler-Wert -> den Fehler selbst zurück geben
+        } else if (UserField.isError(userFieldValueToSplit)) {
+            return userFieldValueToSplit;
+        }
+
+        BigDecimal valueToSplit = null;
+        //wenn sich der aufzuteilende Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+        try {
+            valueToSplit = new BigDecimal(userFieldValueToSplit);
+        } catch (Exception e) {
+            return UserField.NUMBER_FORMAT_ERROR;
+        }
+
+        //Alle Kanten vom Element dessen Kennzahlwert aufgeteilt werden
+        // soll zu anderen Elementen holen, die von der
+        //gleichen Art sind, wie das Element, das den Wert bekommen soll
+        ArrayList<Kante> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
+
+        //wenn mit einer Gleichverteilung gerechnet werden soll, dann
+        // braucht man die Kanten nur zu zählen
+        if (vgUserField == null) {
+            normalizedVG = Calculator.divide(normalizedVG, new BigDecimal(connectionsFrom.size()));
+            //die eingegebenen Verteilungsgweichte müssen normiert werden
+        } else {
             //das Verteilungsgewicht, das an der Kante steht (erstmal
             // gleichverteilung (also alles 1 annhmen)
-            BigDecimal normalizedVG = BigDecimal.ONE;
-            //wenn mit einem explizit angegebenen Verteilungsgewicht gerechnet
-            // werden soll
-            if (vgUserField != null) {
-                String vgValueString = vgUserField.getValue(connectionTo);
-                //wenn das Verteilungsgewicht noch nicht eingegeben wurde, wird
-                // es als 0 angenommen
+            BigDecimal vgSum = BigDecimal.ZERO;
+            //von all diesen Kanten die Verteilungsgewichte aufsummieren
+            // (es gibt mind. eine solche Kante = die der Hinrichtung)
+            for (int j = 0; j < connectionsFrom.size(); j++) {
+                Kante connectionFrom = connectionsFrom.get(j);
+                //den Wert des VG der aktuellen Kante holen
+                String vgValueString = vgUserField.getValue(connectionFrom);
+                //wenn für eine Kante kein Verteilungsgewicht eingegeben
+                // wurde, wird es als 0 angenommen
                 if (vgValueString.equals(UserField.EMPTY_STRING)) {
-                    //-> einfach mit der nächsten Kante weitermachen
-                    return UserField.EMPTY_STRING;
+                    continue;
                 }
-
-                //wenn sich der Verteilungsgewichtwert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+                //den gefundenen Wert ausummieren
+                //wenn sich der gefundenen Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
                 try {
-                    normalizedVG = new BigDecimal(vgValueString);
+                    BigDecimal vgValue = new BigDecimal(vgValueString.toString());
+                    vgSum = vgSum.add(vgValue);
                 } catch (Exception e) {
                     return UserField.NUMBER_FORMAT_ERROR;
                 }
             }
-
-            //das andere Element der Kante holen
-            ModelElement connectedElement = connectionTo.getStart();
-            if (connectedElement == me) {
-                connectedElement = connectionTo.getEnd();
+            if (vgSum.compareTo(BigDecimal.ZERO) != 0) {
+                normalizedVG = Calculator.divide(normalizedVG, vgSum);
             }
-            //den aufzuteilenden eingegebenen Wert holen
-            String userFieldValueToSplit = args.kzUserField.getValue(connectedElement);
-
-            //Leere Eingaben und in Hierarchien Elemente, die keine Verbundenen
-            // Elemente haben
-            if (UserField.NO_ELEMENTS_CONNECTED.equals(userFieldValueToSplit)) {
-                //den Wert als 0 annehmen.
-                continue;
-                //irgend ein anderer Fehler-Wert -> den Fehler selbst zurück geben
-            } else if (UserField.isError(userFieldValueToSplit)) {
-                return userFieldValueToSplit;
-            }
-
-            BigDecimal valueToSplit = null;
-            //wenn sich der aufzuteilende Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
-            try {
-                valueToSplit = new BigDecimal(userFieldValueToSplit);
-            } catch (Exception e) {
-                return UserField.NUMBER_FORMAT_ERROR;
-            }
-
-            //Alle Kanten vom Element dessen Kennzahlwert aufgeteilt werden
-            // soll zu anderen Elementen holen, die von der
-            //gleichen Art sind, wie das Element, das den Wert bekommen soll
-            ArrayList<Kante> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
-
-            //wenn mit einer Gleichverteilung gerechnet werden soll, dann
-            // braucht man die Kanten nur zu zählen
-            if (vgUserField == null) {
-                normalizedVG = Calculator.divide(normalizedVG, new BigDecimal(connectionsFrom.size()));
-                //die eingegebenen Verteilungsgweichte müssen normiert werden
-            } else {
-                //das Verteilungsgewicht, das an der Kante steht (erstmal
-                // gleichverteilung (also alles 1 annhmen)
-                BigDecimal vgSum = BigDecimal.ZERO;
-                //von all diesen Kanten die Verteilungsgewichte aufsummieren
-                // (es gibt mind. eine solche Kante = die der Hinrichtung)
-                for (int j = 0; j < connectionsFrom.size(); j++) {
-                    Kante connectionFrom = connectionsFrom.get(j);
-                    //den Wert des VG der aktuellen Kante holen
-                    String vgValueString = vgUserField.getValue(connectionFrom);
-                    //wenn für eine Kante kein Verteilungsgewicht eingegeben
-                    // wurde, wird es als 0 angenommen
-                    if (vgValueString.equals(UserField.EMPTY_STRING)) {
-                        continue;
-                    }
-                    //den gefundenen Wert ausummieren
-                    //wenn sich der gefundenen Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
-                    try {
-                        BigDecimal vgValue = new BigDecimal(vgValueString.toString());
-                        vgSum = vgSum.add(vgValue);
-                    } catch (Exception e) {
-                        return UserField.NUMBER_FORMAT_ERROR;
-                    }
-                }
-                if (vgSum.compareTo(BigDecimal.ZERO) != 0) {
-                    normalizedVG = Calculator.divide(normalizedVG, vgSum);
-                }
-            }
-            erg = erg.add(valueToSplit.multiply(normalizedVG));
         }
+        BigDecimal erg = valueToSplit.multiply(normalizedVG);
         return erg.toString();
     }
 
