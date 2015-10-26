@@ -320,7 +320,7 @@ public class Calculator {
 
             if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
                 //jetzt berechnen der TeilwertSumme anstoﬂen
-                value = PartValueSumFunction.getTWSUM(definitions, userField, me, arguments);
+                value = PartValueSumFunction.getTWSUM(definitions, me, arguments);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
                 //jetzt berechnen der Summe anstoﬂen
                 value = getSUM(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_SUM);
