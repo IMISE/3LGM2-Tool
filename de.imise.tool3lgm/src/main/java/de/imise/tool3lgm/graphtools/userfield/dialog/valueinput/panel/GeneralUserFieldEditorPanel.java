@@ -171,10 +171,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
         nodeBox.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                stopEditing();
-                takeOver();
-                drawTable();
-                pane.distributeSelectionChangedEvent();
+                pane.update();
             }
         });
     }
@@ -222,6 +219,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
         GraphDocument doc = getDialog().getGraphDocument();
         GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
 
+        //falls SubClasses andere Cotroller brauchen, müssen sie die getTableController überschreiben
         UserFieldTableController uftc = getTableController(uftm);
 
         super.modifyTable(uftm, uftc);
