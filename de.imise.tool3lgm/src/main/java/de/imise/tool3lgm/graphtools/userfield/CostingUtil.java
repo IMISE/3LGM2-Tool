@@ -8,6 +8,8 @@ import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
@@ -155,6 +157,68 @@ public class CostingUtil {
     }
 
     /**
+     * Prüft, ob die Formel des übergebenen UserFields eine einfache Teilwertsummenformel ist.
+     * Diese Funktion setzt vorraus, dass die Formel valide ist!
+     * 
+     * @param userField
+     * @return
+     */
+    public static final boolean isSimplePartValueSumFormula(final UserField userField) {
+        String formula = userField.getFormula().trim();
+        if (Strings.isNullOrEmpty(formula)) {
+            return false;
+        }
+
+        //alle whitespaces in der Formel löschen
+        formula = formula.replaceAll("\\s", "");
+
+        //evtl. vorhandene äußere Klammern beachten und entfernen
+        // ((( TWSUM (UF1, UF2, VG1) ))) wird zu TWSUM (UF1, UF2, VG1)
+        int initialBrackets = 0;
+        int formulaLenght = formula.length();
+        for (int i = 0; i < formulaLenght; i++) {
+            if (Character.isWhitespace(formula.charAt(i))) {
+                continue;
+            }
+            if (!formula.startsWith(Calculator.OPEN_BRACKET, i)) {
+                break;
+            }
+            initialBrackets++;
+        }
+        int endBrackets = 0;
+        for (int i = 1; i < formulaLenght; i++) {
+            int offset = formulaLenght - i;
+            if (Character.isWhitespace(formula.charAt(offset))) {
+                continue;
+            }
+            if (!formula.startsWith(Calculator.CLOSE_BRACKET, offset)) {
+                break;
+            }
+            endBrackets++;
+        }
+
+        //am Ende muss eine Klammer mehr stehen, weil die eigenliche Funktion auch eine schließende Klammer hat
+        if (initialBrackets != endBrackets - 1) {
+            return false;
+        }
+        //äußere Klammern entfernen
+        if (initialBrackets > 0) {
+            formula = formula.substring(initialBrackets, formulaLenght - 2 * initialBrackets);
+        }
+
+        //jetzt muss die Formel mit TWSUM beginnen
+        if (!formula.startsWith(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+            return false;
+        }
+        //die nächste gefundene schließende Klammer muss ganz am Ende stehen
+        int closeBracketIndex = formula.indexOf(Calculator.CLOSE_BRACKET, UserField.ACCOUNTING_FUNCTION_TWSUM.length());
+        if (closeBracketIndex != formula.length() - 1) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Gibt zu dem übergebenen {@link Style} den Lokalisierten Anzeigenamen des Styles zurück.
      * 
      * @param styleValue
@@ -204,4 +268,5 @@ public class CostingUtil {
         }
         return stack;
     }
+
 }
