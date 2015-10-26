@@ -203,6 +203,10 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     /* ************************* Beginn: Funktionale Methoden *********************************** */
 
+    protected UserFieldTableController getTableController(final GeneralUserFieldTableModel uftm) {
+        return UserFieldTableController.getNewClassificationNumberTableController(uftm);
+    }
+
     @Override
     protected void drawTable() {
         table.removeFromLayoutContainer();
@@ -217,7 +221,8 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
         GraphDocument doc = getDialog().getGraphDocument();
         GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
-        UserFieldTableController uftc = UserFieldTableController.getNewClassificationNumberTableController(uftm);
+
+        UserFieldTableController uftc = getTableController(uftm);
 
         super.modifyTable(uftm, uftc);
     }
