@@ -66,9 +66,4 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
             }
         });
     }
-
-    @Override
-    public void stopEditing() {
-        // tue nichts, weil keine Zelle editierbar ist
-    }
 }
