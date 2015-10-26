@@ -9,8 +9,6 @@ import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.UserFieldTableLayout;
 
 /**
  * Panel zur Darstellung von berechneten Kennzahlen
@@ -31,13 +29,6 @@ public class ClassificationNumberFormulaPanel extends GeneralUserFieldEditorPane
      */
     public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final String name) {
         super(dialog, UserField.Style.CLASSIFICATION_NUMBER_FORMULA, name);
-    }
-
-    @Override
-    protected UserFieldTable initTable() {
-        UserFieldTableLayout uftl = new UserFieldTableLayout();
-        UserFieldTable table = new UserFieldTable(uftl);
-        return table;
     }
 
     @Override
