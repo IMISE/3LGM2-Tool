@@ -215,7 +215,8 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
             typePane.setVisible(true);
         }
 
-        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(getDialog().getGraphDocument(), selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
+        GraphDocument doc = getDialog().getGraphDocument();
+        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
         UserFieldTableController uftc = UserFieldTableController.getNewClassificationNumberTableController(uftm);
 
         super.modifyTable(uftm, uftc);
