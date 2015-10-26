@@ -431,6 +431,11 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     private String formulaString;
 
     /**
+     * <code>true</code>, wenn die Formel dieses UserFields eine einfache Teilwertsumme mit oder ohne Verteilungsgewicht ist.
+     */
+    private boolean simplePartValueSumFormula;
+
+    /**
      * Die Definition in der sich dieses UserField befindet. Wird gebraucht, um z.B. das Format-<code>UserField</code> zu finden.
      */
     private UserFieldDefinitions definitions;
@@ -715,6 +720,10 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
         return style == Style.CLASSIFICATION_NUMBER_FORMULA && formulaString != null && formulaString.trim().startsWith(ACCOUNTING_FUNCTION_INDI);
     }
 
+    public final boolean isSimplePartValueSumFormula() {
+        return simplePartValueSumFormula;
+    }
+
     /**
      * Prüft, ob dieses {@link UserField} ein UserField ist, das einen Wert in sich tragen kann (also kein Format-, kein Separator- und kein
      * Panel-USerfield ist).
@@ -747,6 +756,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
             return false;
         }
         this.formulaString = formulaString;
+        simplePartValueSumFormula = CostingUtil.isSimplePartValueSumFormula(this);
         return true;
     }
 
