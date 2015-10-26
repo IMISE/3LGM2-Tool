@@ -26,7 +26,7 @@ public class PartValueSumFunction {
      * @param twsumFormula
      * @return
      */
-    public static String getTWSUM(final UserFieldDefinitions definitions, final ModelElement me, final String twsumFormula) {
+    public static String getTWSUM(final UserFieldDefinitions definitions, final UserField resultUserField, final ModelElement me, final String twsumFormula) {
 
         TWSumArguments args = new TWSumArguments(twsumFormula, definitions);
 
