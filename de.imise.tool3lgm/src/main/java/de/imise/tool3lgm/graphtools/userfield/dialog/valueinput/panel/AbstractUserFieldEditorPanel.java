@@ -5,6 +5,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -35,7 +37,7 @@ import de.imise.util.clipboard.ContentExchangeListener;
  * 
  * @author fstephan
  */
-public abstract class AbstractUserFieldEditorPanel extends JPanel {
+public abstract class AbstractUserFieldEditorPanel extends JPanel implements ComponentListener {
 
     /**
      * Beinhaltet die darzustellende Tabelle
@@ -70,9 +72,9 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
     public AbstractUserFieldEditorPanel(final UserFieldEditorDialog dialog, final String name) {
         super(new GridBagLayout());
         this.dialog = dialog;
+        addComponentListener(this);
         setName(name);
         init();
-
     }
 
     /**
@@ -274,6 +276,13 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
         return elementsAtMousePointer;
     }
 
+    protected void update() {
+        stopEditing();
+        takeOver();
+        drawTable();
+        distributeSelectionChangedEvent();
+    }
+
     /**
      * Liefert die {@link UserFieldDefinitions} der {@link GDCollection} des Dialoges dieses Panels
      * 
@@ -281,6 +290,24 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel {
      */
     public UserFieldDefinitions getUserFieldDefinitions() {
         return getDialog().getUserFieldDefinitions();
+    }
+
+    @Override
+    public void componentResized(final ComponentEvent e) {
+    }
+
+    @Override
+    public void componentMoved(final ComponentEvent e) {
+    }
+
+    @Override
+    public void componentShown(final ComponentEvent e) {
+        drawTable();
+    }
+
+    @Override
+    public void componentHidden(final ComponentEvent e) {
+        update();
     }
 
 }
