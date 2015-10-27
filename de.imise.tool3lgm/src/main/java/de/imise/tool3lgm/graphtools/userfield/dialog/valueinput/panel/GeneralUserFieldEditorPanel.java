@@ -200,8 +200,15 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     /* ************************* Beginn: Funktionale Methoden *********************************** */
 
-    protected UserFieldTableController getTableController(final GeneralUserFieldTableModel uftm) {
+    protected UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm) {
         return UserFieldTableController.getNewClassificationNumberTableController(uftm);
+    }
+
+    protected AbstractUserFieldTableModel getTableModel() {
+        Class<? extends ModelElement> selectedClass = ((Class<?>) nodeBox.getSelectedObject()).asSubclass(ModelElement.class);
+        GraphDocument doc = getDialog().getGraphDocument();
+        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
+        return uftm;
     }
 
     @Override
@@ -216,8 +223,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
             typePane.setVisible(true);
         }
 
-        GraphDocument doc = getDialog().getGraphDocument();
-        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
+        AbstractUserFieldTableModel uftm = getTableModel();
 
         //falls SubClasses andere Cotroller brauchen, müssen sie die getTableController überschreiben
         UserFieldTableController uftc = getTableController(uftm);
