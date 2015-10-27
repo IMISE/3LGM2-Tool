@@ -756,7 +756,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
             return false;
         }
         this.formulaString = formulaString;
-        simplePartValueSumFormula = CostingUtil.isSimplePartValueSumFormula(this);
+        simplePartValueSumFormula = CostingUtil.isSimpleFractionValueSumFormula(this);
         return true;
     }
 
