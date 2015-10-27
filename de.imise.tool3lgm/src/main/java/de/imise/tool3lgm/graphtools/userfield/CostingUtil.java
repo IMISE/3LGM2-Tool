@@ -163,7 +163,7 @@ public class CostingUtil {
      * @param userField
      * @return
      */
-    public static final boolean isSimplePartValueSumFormula(final UserField userField) {
+    public static final boolean isSimpleFractionValueSumFormula(final UserField userField) {
         String formula = userField.getFormula().trim();
         if (Strings.isNullOrEmpty(formula)) {
             return false;
