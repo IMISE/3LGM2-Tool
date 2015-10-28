@@ -141,6 +141,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                 // Selektion für nächstes takeOver
                 finalPanel.elementClassBoxSelection = o;
                 finalPanel.setEdgeClassBoxContent();
+                finalPanel.selectFirstItem();
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
             }
@@ -324,10 +325,28 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     @Override
+    public boolean hasSelectedItem() {
+        boolean hasSelectedItem = edgeClassBox.getSelectedObject() != null;
+        return hasSelectedItem;
+    }
+
+    @Override
+    public void selectFirstItem() {
+        //das erste Item ist immer ein Separator
+        if (elementClassBox.getSelectedIndex() < 0 && elementClassBox.getItemCount() > 1) {
+            elementClassBox.setSelectedIndex(1);
+        }
+        //das erste Item ist immer ein Separator
+        if (edgeClassBox.getItemCount() > 1) {
+            edgeClassBox.setSelectedIndex(1);
+        }
+    }
+
+    @Override
     protected void drawTable() {
         table.removeFromLayoutContainer();
         //keine Kantenklase ausgewählt -> nichts zu ersetzen
-        if (edgeClassBox.getSelectedObject() == null) {
+        if (!hasSelectedItem()) {
             return;
         }
         //selektierte Element- und Kantenklasse holen 

@@ -112,8 +112,8 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         constraints.weighty = 0;
 
         edgeBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_edge_type"));
-        setEdgeBoxContent();
         setActionsForEdgeBox();
+        setEdgeBoxContent();
         add(edgeBox, constraints);
     }
 
@@ -158,6 +158,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                 // Selektion für nächstes takeOver
                 finalPanel.edgeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
                 finalPanel.setWeightBoxContent();
+                finalPanel.selectFirstItem();
                 finalPanel.columnFilterBoxSelection = null;
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
@@ -388,9 +389,27 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
     }
 
     @Override
+    public boolean hasSelectedItem() {
+        boolean hasSelectedItem = weightBox.getSelectedObject() != null;
+        return hasSelectedItem;
+    }
+
+    @Override
+    public void selectFirstItem() {
+        //es gibt mind 1 Item außer dem Separator am Anfang
+        if (edgeBox.getSelectedIndex() < 0 && edgeBox.getItemCount() > 1) {
+            edgeBox.setSelectedIndex(1);
+        }
+        //auch in der WightBox steh an Index 0 immer ein Separator
+        if (weightBox.getItemCount() > 1) {
+            weightBox.setSelectedIndex(1);
+        }
+    }
+
+    @Override
     protected void drawTable() {
         table.removeFromLayoutContainer();
-        if (weightBox.getSelectedObject() == null) {
+        if (!hasSelectedItem()) {
             return;
         }
         Class<? extends Kante> selectedEdgeClass = ((Class<?>) edgeBox.getSelectedObject()).asSubclass(Kante.class);
