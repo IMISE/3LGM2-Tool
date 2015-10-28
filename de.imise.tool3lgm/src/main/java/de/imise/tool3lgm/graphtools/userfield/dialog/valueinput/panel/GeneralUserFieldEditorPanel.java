@@ -211,23 +211,23 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
         return uftm;
     }
 
-    /**
-     * Wenn in diesem Panel noch gar nichts selektiert war, wird automatisch das erste Item selektiert
-     * 
-     * @return <code>true</code>, wenn bereits etwas selektiert war oder durch diese Funktion selektiert
-     *         wurde, also wenn es mind. einen selektiertbaren Eintrag gibt
-     */
-    private boolean preSelectFirstItem() {
-        if (nodeBox.getSelectedIndex() == -1) {
-            nodeBox.setSelectedIndex(1);
-        }
-        return nodeBox.getSelectedObject() instanceof Class;
+    @Override
+    public boolean hasSelectedItem() {
+        boolean hasSelectedItem = nodeBox.getSelectedObject() instanceof Class;
+        return hasSelectedItem;
+    }
+
+    @Override
+    public void selectFirstItem() {
+        //das erste Item ist entweder das Dummy-LeerItem oder eine Elemnent-Klasse
+        nodeBox.setSelectedIndex(1);
     }
 
     @Override
     protected void drawTable() {
         table.removeFromLayoutContainer();
-        if (!preSelectFirstItem()) {
+
+        if (!hasSelectedItem()) {
             return;
         }
         Class<? extends ModelElement> selectedClass = ((Class<?>) nodeBox.getSelectedObject()).asSubclass(ModelElement.class);
