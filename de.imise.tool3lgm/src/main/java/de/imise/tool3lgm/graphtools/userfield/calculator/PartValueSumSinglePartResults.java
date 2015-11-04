@@ -48,13 +48,6 @@ public class PartValueSumSinglePartResults {
         return result;
     }
 
-    //    public boolean hasResult(final ModelElement fullResultElement, final UserField partValueSumField) {
-    //        ResultList result = results.get(fullResultElement, partValueSumField);
-    //        boolean hasResult = result != null;
-    //        return hasResult;
-    //    }
-    //
-
     @Override
     public String toString() {
         return results.toString();

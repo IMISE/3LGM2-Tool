@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
@@ -203,21 +204,37 @@ public class PartValueSumFunction {
         return backDirection;
     }
 
-    private static class TWSumArguments {
+    /**
+     * Liefert
+     * 
+     * @param userField
+     * @return
+     */
+    public static TWSumArguments getTWSumArguments(final UserField userField) {
+        if (!CostingUtil.isSimpleFractionValueSumFormula(userField)) {
+            return null;
+        }
+        String formula = userField.getFormula();
+        UserFieldDefinitions definitions = userField.getDefinitions();
+        TWSumArguments arguments = new TWSumArguments(formula, definitions);
+        return arguments;
+    }
 
-        private final Class<? extends Kante> edgeClass;
+    public static class TWSumArguments {
 
-        private final UserField kzUserField;
+        public final Class<? extends Kante> edgeClass;
 
-        private final Class<? extends ModelElement> elementClass;
+        public final UserField kzUserField;
+
+        public final Class<? extends ModelElement> elementClass;
 
         //Das UserField, das das Verteilungsgewicht kennzeichnet.
-        private final UserField vgUserField;
+        public final UserField vgUserField;
 
         // Die angegebene Richtung
-        private final String direction;
+        public final String direction;
 
-        public TWSumArguments(final String formula, final UserFieldDefinitions definitions) {
+        private TWSumArguments(final String formula, final UserFieldDefinitions definitions) {
             StringTokenizer st = new StringTokenizer(formula, " ()|");
 
             //Der erste Token ist der Name der Assoziation, die das VG beherbegrt
