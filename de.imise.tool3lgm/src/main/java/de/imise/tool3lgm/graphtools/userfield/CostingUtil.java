@@ -157,16 +157,16 @@ public class CostingUtil {
     }
 
     /**
-     * Prüft, ob die Formel des übergebenen UserFields eine einfache Teilwertsummenformel ist.
-     * Diese Funktion setzt vorraus, dass die Formel valide ist!
+     * Wenn das übergebene UserField eine eifache Teilwertsummenformel ist, dann kommt hier die Formel ohne
+     * alle WhiteSpaces und ohne die evtl. vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
      * 
      * @param userField
      * @return
      */
-    public static final boolean isSimpleFractionValueSumFormula(final UserField userField) {
+    private static String getSimpleFractionValueSumFormula(final UserField userField) {
         String formula = userField.getFormula().trim();
         if (Strings.isNullOrEmpty(formula)) {
-            return false;
+            return null;
         }
 
         //alle whitespaces in der Formel löschen
@@ -199,7 +199,7 @@ public class CostingUtil {
 
         //am Ende muss eine Klammer mehr stehen, weil die eigenliche Funktion auch eine schließende Klammer hat
         if (initialBrackets != endBrackets - 1) {
-            return false;
+            return null;
         }
         //äußere Klammern entfernen
         if (initialBrackets > 0) {
@@ -208,14 +208,26 @@ public class CostingUtil {
 
         //jetzt muss die Formel mit TWSUM beginnen
         if (!formula.startsWith(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
-            return false;
+            return null;
         }
         //die nächste gefundene schließende Klammer muss ganz am Ende stehen
         int closeBracketIndex = formula.indexOf(Calculator.CLOSE_BRACKET, UserField.ACCOUNTING_FUNCTION_TWSUM.length());
         if (closeBracketIndex != formula.length() - 1) {
-            return false;
+            return null;
         }
-        return true;
+        return formula;
+    }
+
+    /**
+     * Prüft, ob die Formel des übergebenen UserFields eine einfache Teilwertsummenformel ist.
+     * Diese Funktion setzt vorraus, dass die Formel valide ist!
+     * 
+     * @param userField
+     * @return
+     */
+    public static final boolean isSimpleFractionValueSumFormula(final UserField userField) {
+        String formula = getSimpleFractionValueSumFormula(userField);
+        return formula != null;
     }
 
     /**
