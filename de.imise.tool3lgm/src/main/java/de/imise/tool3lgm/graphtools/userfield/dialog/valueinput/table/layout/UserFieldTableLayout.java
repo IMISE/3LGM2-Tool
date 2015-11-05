@@ -87,7 +87,7 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
                 for (int i = 0; i < tableCells.length; i++) {
                     for (int j = 0; j < tableCells[0].length; j++) {
                         NamedObjectContainer<UserField> container = (NamedObjectContainer<UserField>) table.getValueAt(i, j);
-                        if (changeDeactivatedCellColor && !table.isCellEditable(i, j)) { // nicht editierbare Zellen grau
+                        if (changeDeactivatedCellColor && container == null) { // nicht editierbare Zellen grau
                             tableCells[i][j] = new UserFieldDeactivatedTableCell();
                         } else {
                             tableCells[i][j] = new UserFieldActivatedTableCell(container, table);
@@ -101,5 +101,4 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
         }
         return tableCells;
     }
-
 }
