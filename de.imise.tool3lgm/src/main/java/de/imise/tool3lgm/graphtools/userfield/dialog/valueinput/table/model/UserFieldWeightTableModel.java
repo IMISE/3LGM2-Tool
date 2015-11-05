@@ -165,8 +165,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                     continue;
                 }
 
-                //die nicht editierbaren Formeln müssen gleich formatiert dargestellt werden
-                String value = field.hasStyle(Style.CLASSIFICATION_NUMBER_FORMULA) ? field.getFormattedValue(edge, true) : field.getValue(edge);
+                String value = field.getValue(edge);
                 data[r][c] = new NamedObjectContainer<UserField>(field, value);
 
             }

@@ -125,7 +125,7 @@ public class UserFieldTableSumHandler {
      * @return
      */
     private static UserField getRowHeaderUserField(final AbstractTableModel tableModel, final int row) {
-        NamedObjectContainer<?> rowIdentifierContainer = (NamedObjectContainer<?>) tableModel.getRowIdentifiers().get(row);
+        NamedObjectContainer<?> rowIdentifierContainer = tableModel.getRowIdentifiers().get(row);
         Object rowIdentifierObject = rowIdentifierContainer.getObject();
         return rowIdentifierObject instanceof UserField ? (UserField) rowIdentifierObject : null;
     }
@@ -138,7 +138,7 @@ public class UserFieldTableSumHandler {
      * @return
      */
     private static UserField getColumnHeaderUserField(final AbstractTableModel tableModel, final int col) {
-        NamedObjectContainer<?> columnIdentifierContainer = (NamedObjectContainer<?>) tableModel.getColumnIdentifiers().get(col);
+        NamedObjectContainer<?> columnIdentifierContainer = tableModel.getColumnIdentifiers().get(col);
         Object columnIdentifierObject = columnIdentifierContainer.getObject();
         return columnIdentifierObject instanceof UserField ? (UserField) columnIdentifierObject : null;
     }
