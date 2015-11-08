@@ -513,7 +513,7 @@ public abstract class UserFieldTableController {
      * 
      * @param uftm
      */
-    public static UserFieldTableController getNewClassificationNumberTableController(final AbstractTableModel uftm) {
+    public static UserFieldTableController getNewGeneralUserFieldTableController(final AbstractTableModel uftm) {
 
         /*
          * Eigenschaften: - erste Zeile NICHT editierbar - erste Spalte NICHT editierbar - unabhängig von ModelValue

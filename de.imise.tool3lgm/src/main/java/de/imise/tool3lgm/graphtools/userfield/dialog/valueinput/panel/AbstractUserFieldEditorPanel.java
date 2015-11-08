@@ -227,15 +227,9 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     protected abstract Object constraintsForTable();
 
     /**
-     * @return <code>true</code>, wenn bereits etwas selektiert war oder durch diese Funktion selektiert
-     *         wurde, also wenn es mind. einen selektiertbaren Eintrag gibt
-     */
-    protected abstract boolean hasSelectedItem();
-
-    /**
      * Wenn in diesem Panel noch gar nichts selektiert war, wird automatisch das erste Item selektiert.
      */
-    protected abstract void selectFirstItem();
+    protected abstract void initSelectFirstItem();
 
     /**
      * so zu überschreiben, dass <code>table</code> korrekt dargestellt wird
@@ -313,15 +307,14 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     @Override
     public void componentShown(final ComponentEvent e) {
-        if (!hasSelectedItem()) {
-            selectFirstItem();
-        }
+        initSelectFirstItem();
         drawTable();
     }
 
     @Override
     public void componentHidden(final ComponentEvent e) {
-        update();
+        stopEditing();
+        takeOver();
     }
 
 }

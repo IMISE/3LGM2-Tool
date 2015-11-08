@@ -38,17 +38,17 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     ///////////////////////////////////////////////
 
     /**
-     * Löst das Anzeigen aller ModelElemente im Table des <code>GeneralUserFieldEditorPanel</code>s aus
+     * Löst das Anzeigen aller ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
      */
     public static final int SHOW_ALL_ELEMENTS = 1;
 
     /**
-     * Löst das Anzeigen der Blatt-ModelElemente im Table des <code>GeneralUserFieldEditorPanel</code>s aus
+     * Löst das Anzeigen der Blatt-ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
      */
     public static final int SHOW_LEAVES_ONLY = 2;
 
     /**
-     * Löst das Anzeigen der Toplevel-ModelElemente im Table des <code>GeneralUserFieldEditorPanel</code>s aus
+     * Löst das Anzeigen der Toplevel-ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
      */
     public static final int SHOW_TOPLEVEL_ELEMENTS_ONLY = 3;
 
