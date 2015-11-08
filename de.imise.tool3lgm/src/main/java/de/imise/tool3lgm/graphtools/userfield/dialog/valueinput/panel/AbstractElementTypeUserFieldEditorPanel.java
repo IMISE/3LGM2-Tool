@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.google.common.collect.ImmutableSet;
@@ -18,6 +19,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -33,65 +35,69 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
- * Panel zur Darstellung und Eingabe von Kennzahlen
+ * Panel zur Darstellung und Eingabe von UserFields
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von Knotenelementen separat - die Auswahl der Klasse erfolgt in der enthaltenen <code>nodeBox</code>.
+ * Die Dateneingabe erfolgt für jede Klasse von Knotenelementen separat - die Auswahl der Klasse erfolgt in der enthaltenen
+ * <code>elementTypeBox</code>.
  * <p>
- * Mittels der enthaltenen Auswahlbuttons kann eine Auswahl der anzuzeigenden Elemente vorgenommenwerden: <br>
+ * Wenn es sich um eine Elementklasse mit Tiel-Von-Beziehungen handelt, kann mittels der enthaltenen Auswahlbuttons eine Auswahl der anzuzeigenden
+ * Elemente vorgenommenwerden: <br>
  * i) alle Elemente anzeigen <br>
  * ii) nur toplevel Elemente anzeigen <br>
  * iii) nur Blatt-Elemente anzeigen
  * 
  * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel
- * @author fstephan
+ * @author fstephan, AXS
  */
-public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
+public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     /** Auswahlbox für den Elementtyp */
-    protected AlphabeticalComboBox nodeBox;
+    protected AlphabeticalComboBox elementTypeBox;
 
-    /** Panel zur Auswahl der anzuzeigenden Element-Typen */
-    protected ElementTypePane typePane;
+    /**
+     * Panel zur Auswahl wleche Elemente in einer Hierarchie gezeigt werden sollen. Nur absolute Oberelemente,
+     * Elemente mit Parents und Parts oder nur Blattelemente der Elementhiearchie
+     */
+    private ElementTypePane hierarchyTypeFilterPane;
 
-    protected Set<Style> visibleUserFields;
+    private final Set<Style> visibleUserFields;
+
+    private GridBagConstraints constraints;
+
+    private final Class<? extends ModelElement> selectableElementsClass;
 
     /* ************************* Beginn: Initialisierungsteil *********************************** */
-
     /**
      * Konstruktor
      * 
      * @param dialog Dialog, der dieses Panel enthält
+     * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
+     * @param visibleUserField Style der UserFields, die angezeigt werden sollen
+     * @param name Name des Panels
      */
-    /**
-     * @param dialog
-     * @param visibleUserField
-     * @param name
-     */
-    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Style visibleUserField, final String name) {
-        this(dialog, ImmutableSet.of(visibleUserField), name);
+    public AbstractElementTypeUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Class<? extends ModelElement> selectableElementClass, final Style visibleUserField, final String name) {
+        this(dialog, selectableElementClass, ImmutableSet.of(visibleUserField), name);
     }
 
     /**
      * Konstruktor
      * 
      * @param dialog Dialog, der dieses Panel enthält
-     * @param visibleUserFields
-     * @param name
+     * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
+     * @param visibleUserFields Styles der UserFields, die angezeigt werden sollen
+     * @param name Name des Panels
      */
-    public GeneralUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Set<Style> visibleUserFields, final String name) {
+    public AbstractElementTypeUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Class<? extends ModelElement> selectableElementsClass, final Set<Style> visibleUserFields, final String name) {
         super(dialog, name);
+        this.selectableElementsClass = selectableElementsClass;
         this.visibleUserFields = visibleUserFields;
 
-        // nodeBox initialisieren
-        nodeBox = new AlphabeticalComboBox(10);
+        addTypePane();
+        addElementTypeBox();
+    }
 
-        setActionsForNodeBox();
-        setNodeBoxContent();
-
-        typePane = new ElementTypePane();
-
-        // nodeBox anfügen
-        GridBagConstraints constraints = new GridBagConstraints();
+    private void initConstraints() {
+        constraints = new GridBagConstraints();
         constraints.insets = new Insets(0, 5, 0, 5);
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -99,47 +105,82 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 1;
-        this.add(typePane, constraints);
-        constraints.gridy++;
-        this.add(nodeBox, constraints);
+    }
 
-        typePane.setVisible(false);
+    private void addTypePane() {
+        hierarchyTypeFilterPane = new ElementTypePane();
+        hierarchyTypeFilterPane.setVisible(false);
+        addComponent(hierarchyTypeFilterPane);
+    }
+
+    private void addElementTypeBox() {
+        // elementTypeBox initialisieren
+        elementTypeBox = new AlphabeticalComboBox(10);
+        setActionsForElementTypeBox();
+        setElementTypeBoxContent();
+        addComponent(elementTypeBox);
+    }
+
+    protected void addComponent(final JComponent component) {
+        if (constraints == null) {
+            initConstraints();
+        }
+        this.add(component, constraints);
+        constraints.gridy++;
+        constraints.insets.set(3, 3, 3, 3);
     }
 
     /**
-     * Methode setzt den Inhalt der <code>nodeBox</code> Es werden nur die Klassen von Knotenelementen aufgelistet, für die mindestens ein Kennzahl
+     * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur die Klassen von Knotenelementen aufgelistet, für die mindestens ein
+     * Kennzahl
      * vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code> definiert ist.
      */
-    protected void setNodeBoxContent() {
+    private void setElementTypeBoxContent() {
 
         GraphDocument doc = getDialog().getGraphDocument();
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
 
-        nodeBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_element_type"));
+        boolean isEdgeType = ModelConstants.isEdgeType(selectableElementsClass);
 
-        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_NODES_SET) {
-            // Falls keine User für elementClass exisitieren, füge elementClass NICHT ein
+        String resKey = isEdgeType ? "userFieldEditor_edge_type" : "userFieldEditor_element_type";
+        elementTypeBox.addSeparator(Tool3lgmConstants.getResString(resKey));
+
+        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
+
+            //von allen Elementklassen nur die zulassen, die im Konstruktor angegeben wurde
+            if (!selectableElementsClass.isAssignableFrom(elementClass)) {
+                continue;
+            }
+
+            // Falls keine UserFields für elementClass exisitieren, füge elementClass NICHT ein
             if (!definitions.hasUserFields(elementClass)) {
                 continue;
             }
 
             // Falls kein Element der Klasse elementClass exisitiert, füge elementClass NICHT ein
-            if (doc.getModelItems(elementClass).size() == 0) {
+            if (doc.getModelItems(elementClass).isEmpty()) {
                 continue;
             }
 
-            // füge elementClass in die nodeBox ein
-            if (isNodeBoxContent(elementClass, definitions)) {
-                nodeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+            // füge elementClass in die elementTypeBox ein
+            if (isElementTypeBoxContent(elementClass, definitions)) {
+                if (isEdgeType) {
+                    Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
+                    elementTypeBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
+                } else {
+                    elementTypeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+                }
             }
+
         }
 
         // Falls kein Item enthalten ist, wird ein null-Item hinzugefügt, weil es sonst
-        // zu inkorrekter Darstellung der nodeBox kommt
+        // zu inkorrekter Darstellung der elementTypeBox kommt
 
-        if (nodeBox.getItemCount() == 1) {
-            nodeBox.addItem(new Object(), "         ");
+        if (elementTypeBox.getItemCount() == 1) {
+            elementTypeBox.addItem(new Object(), "         ");
         }
 
     }
@@ -153,7 +194,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true; ansonsten
      *         false
      */
-    protected final boolean isNodeBoxContent(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
+    protected boolean isElementTypeBoxContent(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         for (UserField uf : definitions.getUserFields(elementClass)) {
             if (visibleUserFields.contains(uf.getStyle())) {
                 return true;
@@ -163,12 +204,12 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>nodeBox</code>. Bei Änderung der Auswahl wird das Neuzeichnen des
-     * <code>table</code>s ausgelöst.
+     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>elementTypeBox</code>. Bei Änderung der Auswahl wird das
+     * Neuzeichnen des <code>table</code>s ausgelöst.
      */
-    protected void setActionsForNodeBox() {
+    protected void setActionsForElementTypeBox() {
         final AbstractUserFieldEditorPanel pane = this;
-        nodeBox.setAction(new AbstractAction() {
+        elementTypeBox.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 pane.update();
@@ -200,27 +241,26 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
     /* ************************* Beginn: Funktionale Methoden *********************************** */
 
-    protected UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm) {
-        return UserFieldTableController.getNewClassificationNumberTableController(uftm);
-    }
+    protected abstract UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm);
 
     protected AbstractUserFieldTableModel getTableModel() {
-        Class<? extends ModelElement> selectedClass = ((Class<?>) nodeBox.getSelectedObject()).asSubclass(ModelElement.class);
+        Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
         GraphDocument doc = getDialog().getGraphDocument();
-        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, typePane.showTopLevel(), typePane.showInner(), typePane.showLeafs(), visibleUserFields);
+        GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, hierarchyTypeFilterPane.showTopLevel(), hierarchyTypeFilterPane.showInner(), hierarchyTypeFilterPane.showLeafs(), visibleUserFields);
         return uftm;
     }
 
-    @Override
-    public boolean hasSelectedItem() {
-        boolean hasSelectedItem = nodeBox.getSelectedObject() instanceof Class;
+    private boolean hasSelectedItem() {
+        boolean hasSelectedItem = elementTypeBox.getSelectedObject() instanceof Class;
         return hasSelectedItem;
     }
 
     @Override
-    public void selectFirstItem() {
-        //das erste Item ist entweder das Dummy-LeerItem oder eine Elemnent-Klasse
-        nodeBox.setSelectedIndex(1);
+    protected void initSelectFirstItem() {
+        if (!hasSelectedItem()) {
+            //das erste Item ist entweder das Dummy-LeerItem oder eine Elemnent-Klasse
+            elementTypeBox.setSelectedIndex(1);
+        }
     }
 
     @Override
@@ -230,10 +270,10 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
         if (!hasSelectedItem()) {
             return;
         }
-        Class<? extends ModelElement> selectedClass = ((Class<?>) nodeBox.getSelectedObject()).asSubclass(ModelElement.class);
+        Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
 
         if (ModelConstants.getHasPartsEdgeClasses(selectedClass).length > 0 || ModelConstants.getIsPartOfEdgeClasses(selectedClass).length > 0) {
-            typePane.setVisible(true);
+            hierarchyTypeFilterPane.setVisible(true);
         }
 
         AbstractUserFieldTableModel uftm = getTableModel();
@@ -282,12 +322,12 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
     /* ************************* Beginn: get/set - Methoden *********************************** */
 
     /**
-     * Gibt die <code>nodeBox</code> zurück
+     * Gibt die <code>elementTypeBox</code> zurück
      * 
-     * @return <code>nodeBox</code>
+     * @return <code>elementTypeBox</code>
      */
-    public AlphabeticalComboBox getNodeBox() {
-        return nodeBox;
+    public AlphabeticalComboBox getElementTypeBox() {
+        return elementTypeBox;
     }
 
     /* ************************* Ende: get/set - Methoden *********************************** */
@@ -328,7 +368,7 @@ public class GeneralUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
             return new AbstractAction(buttonLabel) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    AlphabeticalComboBox box = getNodeBox();
+                    AlphabeticalComboBox box = getElementTypeBox();
                     if (box.getSelectedObject() == null || !(box.getSelectedObject() instanceof Class)) {
                         return;
                     }

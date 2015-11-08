@@ -141,7 +141,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                 // Selektion für nächstes takeOver
                 finalPanel.elementClassBoxSelection = o;
                 finalPanel.setEdgeClassBoxContent();
-                finalPanel.selectFirstItem();
+                finalPanel.initSelectFirstItem();
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
             }
@@ -324,21 +324,23 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         return constraints;
     }
 
-    @Override
-    public boolean hasSelectedItem() {
+    private boolean hasSelectedItem() {
         boolean hasSelectedItem = edgeClassBox.getSelectedObject() != null;
         return hasSelectedItem;
     }
 
     @Override
-    public void selectFirstItem() {
-        //das erste Item ist immer ein Separator
-        if (elementClassBox.getSelectedIndex() < 0 && elementClassBox.getItemCount() > 1) {
-            elementClassBox.setSelectedIndex(1);
-        }
-        //das erste Item ist immer ein Separator
-        if (edgeClassBox.getItemCount() > 1) {
-            edgeClassBox.setSelectedIndex(1);
+    protected void initSelectFirstItem() {
+        if (!hasSelectedItem()) {
+            //das erste Item ist immer ein Separator
+            if (elementClassBox.getSelectedIndex() < 0 && elementClassBox.getItemCount() > 1) {
+                elementClassBox.setSelectedIndex(1);
+            }
+            //das erste Item ist immer ein Separator
+            if (edgeClassBox.getItemCount() > 1) {
+                edgeClassBox.setSelectedIndex(1);
+            }
+
         }
     }
 

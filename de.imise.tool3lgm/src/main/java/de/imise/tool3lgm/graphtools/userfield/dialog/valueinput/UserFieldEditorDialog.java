@@ -39,7 +39,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUs
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ClassificationNumberFormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightReplacePanel;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.GeneralUserFieldEditorPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.NodeTypeUserFieldEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ModelVariableEditorPanel;
 import de.imise.util.swing.component.TabbedPane;
 
@@ -72,7 +72,7 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
 
     private final ImmutableList<AbstractUserFieldEditorPanel> tablePanels = ImmutableList.of(
     //Kennzahlen
-            new GeneralUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER")),
+            new NodeTypeUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER")),
             //Verteilungsgewichte
             new DistributionWeightEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting")),
             //Verteilungsgewichtsersetzung
@@ -82,7 +82,7 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
             //Kennzahlformeln
             new ClassificationNumberFormulaPanel(this, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA")),
             //Weitere...
-            new GeneralUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other")));
+            new NodeTypeUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other")));
 
     /**
      * Bei Abbruch, wird diese Aktion ausgelöst

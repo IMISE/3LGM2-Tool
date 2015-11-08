@@ -38,12 +38,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * 
  * @author fstephan
  */
-public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel {
-
-    /**
-     * Auswahlbox für den Kantentyp
-     */
-    private final AlphabeticalComboBox edgeBox = new AlphabeticalComboBox();
+public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldEditorPanel {
 
     /**
      * Auswahlbox für die Verteilungsgewichte des in <code>edgeBox</code> ausgewählten Kantentyps
@@ -92,54 +87,17 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
      * @param name
      */
     public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog, final String name) {
-        super(dialog, name);
-        initEdgeBox();
+        super(dialog, Kante.class, UserField.Style.CLASSIFICATION_NUMBER_STYLES, name);
         initWeightBox();
         initColumnFilterBox();
-    }
-
-    /**
-     * Initialisierung von <code>edgeBox</code>
-     */
-    private void initEdgeBox() {
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.insets = new Insets(3, 3, 3, 3);
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.weightx = 1;
-        constraints.weighty = 0;
-
-        edgeBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_edge_type"));
-        setActionsForEdgeBox();
-        setEdgeBoxContent();
-        add(edgeBox, constraints);
-    }
-
-    /**
-     * Methode setzt den Inhalt der <code>edgeBox</code> Es werden nur Kantenklassen hinzugefügt, für die ein Verteilungsgewicht definiert ist.
-     */
-    private void setEdgeBoxContent() {
-        UserFieldDefinitions definitions = getUserFieldDefinitions();
-        for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
-            // Falls Verteilungsgewichte exisitieren, füge Kantenklasse ein
-            if (definitions.hasNumberFields(ModelConstants.ALL_EDGES[i])) {
-                //nur hinzufügen, wenn es auch Elemente gibt
-                if (!getDialog().getGraphDocument().getModelItems(ModelConstants.ALL_EDGES[i]).isEmpty()) {
-                    edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-                    edgeBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-                }
-            }
-            // sonst, füge nicht ein
-        }
     }
 
     /**
      * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
      * zur gewählten Kantenart gehörigen Verteilungsgewichte in die <code>weightBox</code> eingefügt.
      */
-    private void setActionsForEdgeBox() {
+    @Override
+    protected void setActionsForElementTypeBox() {
 
         final DistributionWeightEditorPanel finalPanel = this;
 
@@ -149,7 +107,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         AbstractAction action = new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                Object o = edgeBox.getSelectedObject();
+                Object o = elementTypeBox.getSelectedObject();
                 if (!(o instanceof Class)) {
                     return;
                 }
@@ -158,29 +116,22 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                 // Selektion für nächstes takeOver
                 finalPanel.edgeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
                 finalPanel.setWeightBoxContent();
-                finalPanel.selectFirstItem();
+                finalPanel.initSelectFirstItem();
                 finalPanel.columnFilterBoxSelection = null;
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
             }
         };
-        edgeBox.setAction(action);
+        elementTypeBox.setAction(action);
     }
 
     /**
      * Initialisiert die <code>weightBox</code>
      */
     private void initWeightBox() {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.insets = new Insets(3, 3, 3, 3);
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.weightx = 1;
-        constraints.weighty = 0;
         weightBox.setEnabled(false);
         setActionsForWeightBox();
-        add(weightBox, constraints);
+        addComponent(weightBox);
     }
 
     /**
@@ -199,7 +150,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                 if (o == null) {
                     return;
                 }
-                if (!o.getClass().isAssignableFrom(UserField.class) || !(edgeBox.getSelectedObject() instanceof Class)) {
+                if (!o.getClass().isAssignableFrom(UserField.class) || !(elementTypeBox.getSelectedObject() instanceof Class)) {
                     return;
                 }
                 stopEditing();
@@ -239,16 +190,9 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
     }
 
     private void initColumnFilterBox() {
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.insets = new Insets(3, 3, 3, 3);
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.weightx = 1;
-        constraints.weighty = 0;
         columnFilterBox.setEnabled(false);
         setActionsForColumnFilterBox();
-        add(columnFilterBox, constraints);
+        addComponent(columnFilterBox);
     }
 
     private void setActionsForColumnFilterBox() {
@@ -259,7 +203,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
             @Override
             public void itemStateChanged(final ItemEvent e) {
                 Object o = columnFilterBox.getSelectedObject();
-                if (o != null && !(o instanceof ModelElement) || !(weightBox.getSelectedObject() instanceof UserField) || !(edgeBox.getSelectedObject() instanceof Class)) {
+                if (o != null && !(o instanceof ModelElement) || !(weightBox.getSelectedObject() instanceof UserField) || !(elementTypeBox.getSelectedObject() instanceof Class)) {
                     return;
                 }
                 stopEditing();
@@ -332,6 +276,7 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
                         doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
                     } else {
                         try {
+                            //Warum soll man hier keine falschen Werte setzen dürfen, die dann bei Berechnungen zu NUMBER_FORMAT_ERRORS werden
                             new BigDecimal(newValue);
                             // Neuen Wert setzen
                             doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
@@ -347,6 +292,11 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
 
         //Das reset durchführen kann auch ganz auf das Ende verlegt werden
         doc.getUserFieldDefinitions().initReset();
+    }
+
+    @Override
+    protected UserFieldTableController getTableController(final AbstractUserFieldTableModel uftm) {
+        return UserFieldTableController.getNewDistributionWeightTableController(uftm);
     }
 
     private Kante getEdge(final ModelElement rowElement, final ModelElement columnElement) {
@@ -388,21 +338,19 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         return constraints;
     }
 
-    @Override
-    public boolean hasSelectedItem() {
+    private boolean hasSelectedItem() {
         boolean hasSelectedItem = weightBox.getSelectedObject() != null;
         return hasSelectedItem;
     }
 
     @Override
-    public void selectFirstItem() {
-        //es gibt mind 1 Item außer dem Separator am Anfang
-        if (edgeBox.getSelectedIndex() < 0 && edgeBox.getItemCount() > 1) {
-            edgeBox.setSelectedIndex(1);
-        }
-        //auch in der WightBox steh an Index 0 immer ein Separator
-        if (weightBox.getItemCount() > 1) {
-            weightBox.setSelectedIndex(1);
+    protected void initSelectFirstItem() {
+        super.initSelectFirstItem();
+        if (!hasSelectedItem()) {
+            //auch in der WeightBox steh an Index 0 immer ein Separator
+            if (weightBox.getItemCount() > 1) {
+                weightBox.setSelectedIndex(1);
+            }
         }
     }
 
@@ -412,8 +360,8 @@ public class DistributionWeightEditorPanel extends AbstractUserFieldEditorPanel 
         if (!hasSelectedItem()) {
             return;
         }
-        Class<? extends Kante> selectedEdgeClass = ((Class<?>) edgeBox.getSelectedObject()).asSubclass(Kante.class);
-        String selectedEdgeName = edgeBox.getSelectedItem().toString();
+        Class<? extends Kante> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Kante.class);
+        String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
         choosedEdgeDirection = Doppelkante.FORWARD;
         if (!selectedEdgeName.equals(ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass))) {
             choosedEdgeDirection = Doppelkante.BACKWARD;

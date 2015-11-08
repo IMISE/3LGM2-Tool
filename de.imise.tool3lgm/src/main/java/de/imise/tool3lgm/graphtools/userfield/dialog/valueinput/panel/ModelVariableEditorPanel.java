@@ -83,20 +83,14 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
     }
 
     @Override
-    public boolean hasSelectedItem() {
-        //nothing to select -> always true
-        return true;
-    }
-
-    @Override
-    public void selectFirstItem() {
-        //nothing to do
-    }
-
-    @Override
     protected void drawTable() {
         UserFieldGlobalNumberTableModel uftm = new UserFieldGlobalNumberTableModel(getDialog().getGraphDocument());
         UserFieldTableController tec = UserFieldTableController.getNewModelVariableTableController(uftm);
         super.modifyTable(uftm, tec);
+    }
+
+    @Override
+    protected void initSelectFirstItem() {
+        //nothing to do
     }
 }
