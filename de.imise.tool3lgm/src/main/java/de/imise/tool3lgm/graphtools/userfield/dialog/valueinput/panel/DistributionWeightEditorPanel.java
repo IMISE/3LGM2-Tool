@@ -56,7 +56,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     private int choosedEdgeDirection;
 
     //////////////////////////////////////////////////
-    /// edgeBoxSelection und weightBoxSelection   ///
+    /// elementTypeBoxSelection und weightBoxSelection   ///
     ///	sind notwendig, damit beim temporären      ///
     /// takeover(), d.h., beim Ändern der Auswahl  ///
     /// in einer der beiden ComboBoxes die Werte   ///
@@ -68,7 +68,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     /**
      * Zuletzt ausgewähltes Element in der {@link #edgeBox}
      */
-    private Class<? extends Kante> edgeBoxSelection;
+    private Class<? extends Kante> elementTypeBoxSelection;
 
     /**
      * Zuletzt ausgewähltes Element in der {@link #weightBox}
@@ -98,7 +98,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
      */
     @Override
     protected void setActionsForElementTypeBox() {
-
+        super.setActionsForElementTypeBox();
         final DistributionWeightEditorPanel finalPanel = this;
 
         /*
@@ -114,7 +114,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                 stopEditing();
                 takeOver();
                 // Selektion für nächstes takeOver
-                finalPanel.edgeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
+                finalPanel.elementTypeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
                 finalPanel.setWeightBoxContent();
                 finalPanel.initSelectFirstItem();
                 finalPanel.columnFilterBoxSelection = null;
@@ -179,7 +179,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         weightBox.removeAllItems();
         weightBox.addSeparator(Tool3lgmConstants.getResString("weighting"));
 
-        for (UserField uf : definitions.getUserFields(edgeBoxSelection)) {
+        for (UserField uf : definitions.getUserFields(elementTypeBoxSelection)) {
             if (uf.isClassificationUserField()) {
                 weightBox.addItem(uf);
             }
@@ -243,7 +243,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
             return;
         }
         GraphDocument doc = getDialog().getGraphDocument();
-        if (edgeBoxSelection != null) {
+        if (elementTypeBoxSelection != null) {
             UserField selectedWeigth = weightBoxSelection;
             Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<NamedObjectContainer<?>> columnIdentifiers = tableModel.getColumnIdentifiers();
@@ -303,17 +303,17 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         Kante edge = null;
         // Richtung der Kante und die Kante selbst ermitteln
         if (choosedEdgeDirection == Doppelkante.FORWARD) {
-            edge = columnElement.getEdgeTo(rowElement, edgeBoxSelection);
+            edge = columnElement.getEdgeTo(rowElement, elementTypeBoxSelection);
 
             if (edge == null) {
-                edge = rowElement.getEdgeTo(columnElement, edgeBoxSelection);
+                edge = rowElement.getEdgeTo(columnElement, elementTypeBoxSelection);
             }
         }
         if (edge == null && choosedEdgeDirection == Doppelkante.BACKWARD) {
-            edge = rowElement.getEdgeTo(columnElement, edgeBoxSelection);
+            edge = rowElement.getEdgeTo(columnElement, elementTypeBoxSelection);
 
             if (edge == null) {
-                edge = columnElement.getEdgeTo(rowElement, edgeBoxSelection);
+                edge = columnElement.getEdgeTo(rowElement, elementTypeBoxSelection);
             }
         }
         return edge;
