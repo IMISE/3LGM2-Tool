@@ -39,8 +39,9 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUs
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ClassificationNumberFormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightReplacePanel;
-import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.NodeTypeUserFieldEditorPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.FractionValueSumPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ModelVariableEditorPanel;
+import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.NodeTypeUserFieldEditorPanel;
 import de.imise.util.swing.component.TabbedPane;
 
 /**
@@ -81,6 +82,8 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
             new ModelVariableEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable")),
             //Kennzahlformeln
             new ClassificationNumberFormulaPanel(this, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA")),
+            //Teilwertsummen
+            new FractionValueSumPanel(this, Tool3lgmConstants.getResString("userFieldDialog_partValueSum")),
             //Weitere...
             new NodeTypeUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other")));
 

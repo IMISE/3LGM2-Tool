@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTableController;
@@ -22,7 +23,16 @@ public class ClassificationNumberFormulaPanel extends AbstractElementTypeUserFie
      * @param name
      */
     public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final String name) {
-        super(dialog, Knoten.class, UserField.Style.CLASSIFICATION_NUMBER_FORMULA, name);
+        this(dialog, Knoten.class, name);
+    }
+
+    /**
+     * @param dialog
+     * @param selectableElementClass
+     * @param name
+     */
+    public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final Class<? extends ModelElement> selectableElementClass, final String name) {
+        super(dialog, selectableElementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA, name);
     }
 
     @Override
