@@ -115,6 +115,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                 takeOver();
                 // Selektion für nächstes takeOver
                 finalPanel.elementTypeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
+                //sobald sich in dieser Box die Selektion ändert, dann gleich in der anderen Box das erste Item auswählen
                 finalPanel.setWeightBoxContent();
                 finalPanel.initSelectFirstItem();
                 finalPanel.columnFilterBoxSelection = null;
@@ -338,7 +339,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         return constraints;
     }
 
-    private boolean hasSelectedItem() {
+    @Override
+    protected boolean hasSelectedItem() {
         boolean hasSelectedItem = weightBox.getSelectedObject() != null;
         return hasSelectedItem;
     }
@@ -346,7 +348,9 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     @Override
     protected void initSelectFirstItem() {
         super.initSelectFirstItem();
-        if (!hasSelectedItem()) {
+        //das hier darf man nicht durch hasSelectedItem() ersetzen, falls eine Unterklasse diese
+        //Funktion überschreibt
+        if (weightBox.getSelectedObject() == null) {
             //auch in der WeightBox steh an Index 0 immer ein Separator
             if (weightBox.getItemCount() > 1) {
                 weightBox.setSelectedIndex(1);
