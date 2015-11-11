@@ -3,6 +3,10 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD_AND_BACKWARD;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_MODELELEMENT;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.NO;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -55,10 +59,20 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     protected AlphabeticalComboBox elementTypeBox;
 
     /**
+     * Rückgabewerte für die Funktion, die prüft, ob eine Elementklasse
+     * 
+     * @author Ich
+     * @create 10.11.2015
+     */
+    protected static enum InsertType {
+        NO, AS_MODELELEMENT, AS_EDGE_FORWARD, AS_EDGE_BACKWARD, AS_EDGE_FORWARD_AND_BACKWARD
+    }
+
+    /**
      * Panel zur Auswahl wleche Elemente in einer Hierarchie gezeigt werden sollen. Nur absolute Oberelemente,
      * Elemente mit Parents und Parts oder nur Blattelemente der Elementhiearchie
      */
-    private ElementTypePane hierarchyTypeFilterPane;
+    protected ElementTypePane hierarchyTypeFilterPane;
 
     private final Set<Style> visibleUserFields;
 
@@ -142,7 +156,6 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
 
         boolean isEdgeType = ModelConstants.isEdgeType(selectableElementsClass);
-
         String resKey = isEdgeType ? "userFieldEditor_edge_type" : "userFieldEditor_element_type";
         elementTypeBox.addSeparator(Tool3lgmConstants.getResString(resKey));
 
@@ -164,13 +177,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             }
 
             // füge elementClass in die elementTypeBox ein
-            if (isElementTypeBoxContent(elementClass, definitions)) {
-                if (isEdgeType) {
-                    Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
+            InsertType insertType = getInsertType(elementClass, definitions);
+
+            if (insertType == AS_MODELELEMENT) {
+                elementTypeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+            } else if (insertType != NO) {
+                Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
+                if (insertType == InsertType.AS_EDGE_FORWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
                     elementTypeBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
-                    elementTypeBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
                 } else {
-                    elementTypeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+                    elementTypeBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
                 }
             }
 
@@ -194,13 +210,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true; ansonsten
      *         false
      */
-    protected boolean isElementTypeBoxContent(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
+    protected InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
+        InsertType insertType = NO;
         for (UserField uf : definitions.getUserFields(elementClass)) {
             if (visibleUserFields.contains(uf.getStyle())) {
-                return true;
+                boolean isEdgeType = Kante.class.isAssignableFrom(elementClass);
+                insertType = isEdgeType ? AS_EDGE_FORWARD_AND_BACKWARD : AS_MODELELEMENT;
+                break;
             }
         }
-        return false;
+        return insertType;
     }
 
     /**
@@ -250,14 +269,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         return uftm;
     }
 
-    private boolean hasSelectedItem() {
+    protected boolean hasSelectedItem() {
         boolean hasSelectedItem = elementTypeBox.getSelectedObject() instanceof Class;
         return hasSelectedItem;
     }
 
     @Override
     protected void initSelectFirstItem() {
-        if (!hasSelectedItem()) {
+        //das hier darf man nicht durch hasSelectedItem() ersetzen, weil das in den Unterklassen
+        //überschrieben sein kann
+        if (!(elementTypeBox.getSelectedObject() instanceof Class)) {
             //das erste Item ist entweder das Dummy-LeerItem oder eine Elemnent-Klasse
             elementTypeBox.setSelectedIndex(1);
         }
