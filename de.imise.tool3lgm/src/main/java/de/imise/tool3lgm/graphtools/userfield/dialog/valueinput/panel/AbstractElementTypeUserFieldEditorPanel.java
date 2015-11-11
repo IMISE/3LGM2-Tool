@@ -185,7 +185,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
                 if (insertType == InsertType.AS_EDGE_FORWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
                     elementTypeBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
-                } else {
+                }
+                if (insertType == InsertType.AS_EDGE_BACKWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
                     elementTypeBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
                 }
             }
