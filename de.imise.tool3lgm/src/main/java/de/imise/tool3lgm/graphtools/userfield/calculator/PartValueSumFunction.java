@@ -58,15 +58,15 @@ public class PartValueSumFunction {
 
             String ergString = getPartValueSumSingleResult(me, connectionTo, vgUserField, args, backDirection);
             //den Wert als 0 annehmen, wenn keine Verbindungen bestehen
-            if (UserField.NO_ELEMENTS_CONNECTED.equals(ergString)) {
-                continue;
-            } else if (UserField.isError(ergString)) {
-                fullErgString = ergString;
-            } else {
-                //wenn noch kein Zwischenergebnis einen Fehler zurück gegeben hat
-                if (fullErgString == null) {
-                    //das muss auf jeden Fall als BigDecimal umwandelbar sein
-                    erg = erg.add(new BigDecimal(ergString));
+            if (!UserField.NO_ELEMENTS_CONNECTED.equals(ergString)) {
+                if (UserField.isError(ergString)) {
+                    fullErgString = ergString;
+                } else {
+                    //wenn noch kein Zwischenergebnis einen Fehler zurück gegeben hat
+                    if (fullErgString == null) {
+                        //das muss auf jeden Fall als BigDecimal umwandelbar sein
+                        erg = erg.add(new BigDecimal(ergString));
+                    }
                 }
             }
             if (resultUserField.isSimplePartValueSumFormula()) {
@@ -234,12 +234,21 @@ public class PartValueSumFunction {
         // Die angegebene Richtung
         public final String direction;
 
+        /**
+         * @param formula
+         *            Die Formel kann entweder die ganze Formel oder nur noch die Argumente sein
+         * @param definitions
+         */
         private TWSumArguments(final String formula, final UserFieldDefinitions definitions) {
             StringTokenizer st = new StringTokenizer(formula, " ()|");
 
+            String token = st.nextToken();
+            if (UserField.ACCOUNTING_FUNCTION_TWSUM.equals(token)) {
+                token = st.nextToken();
+            }
             //Der erste Token ist der Name der Assoziation, die das VG beherbegrt
             // -> hole die Kantenklasse
-            edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
+            edgeClass = ModelConstants.getClassForName(token).asSubclass(Kante.class);
 
             String ufHash = st.nextToken();
 
