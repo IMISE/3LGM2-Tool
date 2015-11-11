@@ -433,7 +433,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * <code>true</code>, wenn die Formel dieses UserFields eine einfache Teilwertsumme mit oder ohne Verteilungsgewicht ist.
      */
-    private boolean simplePartValueSumFormula;
+    private boolean simplePartValueSumFormula = false;
 
     /**
      * Die Definition in der sich dieses UserField befindet. Wird gebraucht, um z.B. das Format-<code>UserField</code> zu finden.
