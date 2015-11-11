@@ -16,7 +16,6 @@ public class PropertyDialogUserFieldPanelChangeListener implements DocumentListe
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        System.err.println("actionPerformed");
         panel.commit();
     }
 
