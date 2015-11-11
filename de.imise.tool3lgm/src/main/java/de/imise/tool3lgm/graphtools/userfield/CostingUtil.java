@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.FormulaDefinitionDialog;
@@ -157,7 +159,7 @@ public class CostingUtil {
     }
 
     /**
-     * Wenn das übergebene UserField eine eifache Teilwertsummenformel ist, dann kommt hier die Formel ohne
+     * Wenn das übergebene UserField eine einfache Teilwertsummenformel ist, dann kommt hier die Formel ohne
      * alle WhiteSpaces und ohne die evtl. vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
      * 
      * @param userField
@@ -228,6 +230,32 @@ public class CostingUtil {
     public static final boolean isSimpleFractionValueSumFormula(final UserField userField) {
         String formula = getSimpleFractionValueSumFormula(userField);
         return formula != null;
+    }
+
+    private static String extractSimpleFractionValueSumFormulaEdgeClassName(final UserField userField) {
+        String edgeClassName = null;
+        String formula = getSimpleFractionValueSumFormula(userField);
+        if (formula != null) {
+            int startIndex = formula.indexOf(Calculator.OPEN_BRACKET) + 1;
+            int endIndex = formula.indexOf(Calculator.OPERAND_DELIMITER);
+            edgeClassName = formula.substring(startIndex, endIndex).trim();
+        }
+        return edgeClassName;
+    }
+
+    /**
+     * Wenn das übergebene UserField eine einfache Teilwertsumme ist, dann wird hier die Kantenklasse der Formel extrahiert.
+     * 
+     * @param userField
+     * @return Kantenklasse der einfachenTeilwertsummenformel oder <code>null</code>
+     */
+    public static final Class<? extends Kante> getSimpleFractionValueSumFormulaEdgeClass(final UserField userField) {
+        Class<? extends Kante> edgeClass = null;
+        String edgeClassName = extractSimpleFractionValueSumFormulaEdgeClassName(userField);
+        if (edgeClassName != null) {
+            edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
+        }
+        return edgeClass;
     }
 
     /**
