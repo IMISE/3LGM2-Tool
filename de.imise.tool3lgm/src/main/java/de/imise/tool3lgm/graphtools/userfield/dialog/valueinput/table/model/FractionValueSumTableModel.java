@@ -8,8 +8,6 @@ import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
-import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.util.NamedObjectContainer;
 
 public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
@@ -21,28 +19,6 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
     public FractionValueSumTableModel(final ModelElement me, final Class<? extends Kante> edgeClass, final boolean edgeForwardDirection, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
         super(me.getCollection().getMainGraphDocument());
         setData(me, edgeClass, edgeForwardDirection, showTopLevel, showInner, showLeafs);
-    }
-
-    /**
-     * Liefert eine Liste aller UserFields mit Teilwertsummenformeln und den aus der Formel geparsten Argumenten, die
-     * für die übergebene Element- und Kantenklasse definiert sind.
-     * 
-     * @param me
-     * @param edgeClass
-     * @return
-     */
-    private List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        List<UserField> userFieldList = definitions.getUserFields(elementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
-        for (int i = userFieldList.size() - 1; i >= 0; i--) {
-            UserField userField = userFieldList.get(i);
-            if (userField.isSimplePartValueSumFormula()) {
-                TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(userField);
-                if (!edgeClass.isAssignableFrom(arguments.edgeClass)) {
-                    userFieldList.remove(i);
-                }
-            }
-        }
-        return userFieldList;
     }
 
     /**
@@ -74,7 +50,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
         //alle Teilwersummen Userfields des Elementes holen
         // Ermitteln der UserFields zu elementClass
         Class<? extends ModelElement> elementClass = me.getClass();
-        List<UserField> fractionValueSumUserFields = getFractionValueSumUserFields(elementClass, edgeClass);
+        List<UserField> fractionValueSumUserFields = definitions.getFractionValueSumUserFields(elementClass, edgeClass);
 
         Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
 

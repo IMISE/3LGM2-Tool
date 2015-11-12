@@ -17,8 +17,11 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
+import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
+import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.tool3lgm.log.Log;
@@ -442,6 +445,27 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             }
         }
         return returnList;
+    }
+
+    /**
+     * Liefert eine Liste aller UserFields mit einfachen Teilwertsummenformeln, die für die übergebene Element- und Kantenklasse definiert sind.
+     * 
+     * @param me Elementklasse, für die das UserField mit der einfachen Teilwertsummenformel definiert ist
+     * @param edgeClass Kantenklasse über die die einfache Teilwertsummenformel rechnnetr
+     * @return
+     */
+    public List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+        List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
+        for (int i = userFieldList.size() - 1; i >= 0; i--) {
+            UserField userField = userFieldList.get(i);
+            if (userField.isSimplePartValueSumFormula()) {
+                TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(userField);
+                if (!edgeClass.isAssignableFrom(arguments.edgeClass)) {
+                    userFieldList.remove(i);
+                }
+            }
+        }
+        return userFieldList;
     }
 
     /**

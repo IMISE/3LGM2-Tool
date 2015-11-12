@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 
@@ -53,19 +54,17 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
             Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
             //vorwärts
             Class<? extends ModelElement> startElementClass = Kante.getStartClass(edgeClass);
-            for (UserField uf : definitions.getUserFields(startElementClass)) {
-                if (uf.isSimplePartValueSumFormula()) {
-                    insertType = AS_EDGE_FORWARD;
-                    break;
-                }
+            //alle einfachen Teilwertsummen-UserFields holen, die für die startElementClass über die edgeClass definiert sind
+            List<UserField> fractionValueSumUserFields = definitions.getFractionValueSumUserFields(startElementClass, edgeClass);
+            if (!fractionValueSumUserFields.isEmpty()) {
+                insertType = AS_EDGE_FORWARD;
             }
             //rückwärts
             Class<? extends ModelElement> endElementClass = Kante.getEndClass(edgeClass);
-            for (UserField uf : definitions.getUserFields(endElementClass)) {
-                if (uf.isSimplePartValueSumFormula()) {
-                    insertType = insertType == AS_EDGE_FORWARD ? AS_EDGE_FORWARD_AND_BACKWARD : AS_EDGE_BACKWARD;
-                    break;
-                }
+            //alle einfachen Teilwertsummen-UserFields holen, die für die endElementClass über die edgeClass definiert sind
+            fractionValueSumUserFields = definitions.getFractionValueSumUserFields(endElementClass, edgeClass);
+            if (!fractionValueSumUserFields.isEmpty()) {
+                insertType = insertType == AS_EDGE_FORWARD ? AS_EDGE_FORWARD_AND_BACKWARD : AS_EDGE_BACKWARD;
             }
         }
         return insertType;
