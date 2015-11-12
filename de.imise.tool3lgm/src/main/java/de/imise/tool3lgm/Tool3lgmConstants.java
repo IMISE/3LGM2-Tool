@@ -161,7 +161,7 @@ public abstract class Tool3lgmConstants {
     public static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
-    public static final int LAST_USED_MODEL_FILES_IN_MENU = 4;
+    public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;
 
     /**
      * Anfang des ResourceString, mit dem bei jedem über die Funktion zu ladenden FileFilter der Key-String der Beschreibung und der
