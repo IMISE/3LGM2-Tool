@@ -1,12 +1,9 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell;
 
-import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 
 import java.awt.Component;
 import java.awt.Point;
-import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
@@ -19,11 +16,11 @@ import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
-import de.imise.util.swing.component.text.NumberTextField;
 
 /**
  * Repräsentiert genau eine Zelle eines UserFieldTables. Ist Editor- und die Renderer-Komponente für eine Zelle. Sorgt dafür, dass der
@@ -105,12 +102,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     protected void initEditor(final int column) {
         UserField userField = value.getObject();
         UserField.Style style = userField.getStyle();
-        if (style == CLASSIFICATION_NUMBER) {
-            NumberFormat numberFormat = userField.getNumberFormat();
-            boolean isPositiveOnly = userField.isPositiveOnly();
-            JTextField editorComponent = NumberTextField.getNumberTextField(numberFormat, isPositiveOnly);
-            editor = new DefaultCellEditor(editorComponent);
-        } else if (style == COMBO_BOX) {
+        if (style == COMBO_BOX) {
             AlphabeticalComboBox component = new AlphabeticalComboBox(true);
             for (int i = 0; i < userField.getListValuesCount(); i++) {
                 String listValue = userField.getListValueAt(i);
@@ -142,7 +134,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * Die Formatierung erfolgt dabei durch die Methoden von {@link #userField}.
      */
     protected void update() {
-        if (value.toString().equals(UserField.EMPTY_STRING)) {
+        if (!(userField.getStyle() == Style.CLASSIFICATION_NUMBER_FORMULA) && value.toString().equals(UserField.EMPTY_STRING)) {
             text = RENDERER_EMPTY_STRING;
             value = new NamedObjectContainer<UserField>(userField, EDITOR_EMPTY_STRING);
         } else {
@@ -182,20 +174,10 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     public Object getCellEditorValue() {
         Object newValue = editor.getCellEditorValue();
         String s = newValue == null ? "" : newValue.toString();
-        s = UserField.replaceWrongDecimalSeparator(s, EDITOR_DECIMAL_SEPARATOR);
-        //hier werden die Eingabedaten im Fehlerfall hart ersetzt in den Tabellenzellen
-        if (editor.getComponent() instanceof NumberTextField) {
-            try {
-                new BigDecimal(s);
-            } catch (NumberFormatException e) {
-                if (s.equals(EDITOR_EMPTY_STRING)) {
-                    s = UserField.EMPTY_STRING;
-                } else {
-                    s = UserField.NUMBER_FORMAT_ERROR;
-                }
-            }
+        //bei Kennzahlen die evtl. falschen Decimal-Separatoren ersetzen
+        if (userField.hasStyle(Style.CLASSIFICATION_NUMBER)) {
+            s = UserField.replaceWrongDecimalSeparator(s, EDITOR_DECIMAL_SEPARATOR);
         }
-
         value = new NamedObjectContainer<UserField>(userField, s);
         update();
         return value;
