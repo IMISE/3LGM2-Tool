@@ -73,7 +73,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
         super(new GridBagLayout());
         this.dialog = dialog;
         addComponentListener(this);
-        setName(name);
+        setName("  " + name + "  ");
         init();
     }
 
