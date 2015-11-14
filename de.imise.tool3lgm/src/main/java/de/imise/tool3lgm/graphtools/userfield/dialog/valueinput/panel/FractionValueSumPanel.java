@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.FractionValueSumTableModel;
@@ -181,4 +182,11 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         return uftm;
     }
 
+    @Override
+    public boolean hasValues() {
+        UserFieldDefinitions definitions = dialog.getUserFieldDefinitions();
+        UserFieldDefinitionsAnalyzer analyzer = definitions.getAnalyzer();
+        boolean hasValues = analyzer.hasSimpleFractionValueSums();
+        return hasValues;
+    }
 }

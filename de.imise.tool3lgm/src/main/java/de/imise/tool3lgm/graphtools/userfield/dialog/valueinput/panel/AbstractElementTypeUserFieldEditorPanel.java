@@ -74,7 +74,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      */
     protected ElementTypePane hierarchyTypeFilterPane;
 
-    private final Set<Style> visibleUserFields;
+    protected final Set<Style> visibleUserFields;
 
     private GridBagConstraints constraints;
 
