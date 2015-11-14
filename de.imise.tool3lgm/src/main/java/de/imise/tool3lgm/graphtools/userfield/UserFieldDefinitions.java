@@ -59,6 +59,11 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     private final WeightReplacer weightReplacer;
 
     /**
+     * Analyzer, über den der Zustand dieser {@link UserFieldDefinitions} abgefragt werden kann
+     */
+    private final UserFieldDefinitionsAnalyzer definitionsAnalyzer;
+
+    /**
      * Klasse, über die die sogenannten Modellvariablen identifiziert werden, also Variablen, die nicht für ein spezielles Element sondern für das
      * Gesamtmodell gelten und zur Verfügung stehen.
      */
@@ -115,6 +120,14 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         calculator = new Calculator(this);
         partValueSumSinglePartResults = new PartValueSumSinglePartResults();
         weightReplacer = new WeightReplacer();
+        definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(this);
+    }
+
+    /**
+     * @return Analyzer, über den der Zustand dieser {@link UserFieldDefinitions} abgefragt werden kann
+     */
+    public UserFieldDefinitionsAnalyzer getAnalyzer() {
+        return definitionsAnalyzer;
     }
 
     /**
@@ -371,19 +384,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      */
     public boolean hasUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
         return getUserFields(userFieldTargetClass).iterator().hasNext();
-    }
-
-    /**
-     * @param userFieldTargetClass
-     * @return <code>true</code> if there is at least one {@link UserField} defined for the userFieldTargetClass
-     */
-    public boolean hasNumberFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
-        for (UserField uf : getUserFields(userFieldTargetClass)) {
-            if (uf.hasClassfificationStyle()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -916,6 +916,10 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      */
     public PartValueSumSinglePartResults getPartValueSumSinglePartResults() {
         return partValueSumSinglePartResults;
+    }
+
+    public Set<Class<? extends UserFieldTarget>> getUserFieldTargets() {
+        return classToUserFieldListMap.keySet();
     }
 
     @Override

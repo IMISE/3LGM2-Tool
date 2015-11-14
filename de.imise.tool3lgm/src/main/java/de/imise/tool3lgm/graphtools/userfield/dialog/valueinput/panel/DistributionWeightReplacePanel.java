@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
@@ -111,7 +112,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             //mind. eine Kantenklase mit Kennzahlen oder Kennzahlformeln?
             for (int k = 0; k < edgeTypes.length; k++) {
                 Class<? extends Kante> edgeClass = edgeTypes[k];
-                if (definitions.hasNumberFields(edgeClass)) {
+                if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
                     elementClassBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
                     continue loop;
                 }
@@ -217,7 +218,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         //mind. eine Kantenklase mit Kennzahlen oder Kennzahlformeln?
         for (int k = 0; k < edgeTypes.length; k++) {
             Class<? extends Kante> edgeClass = edgeTypes[k];
-            if (definitions.hasNumberFields(edgeClass)) {
+            if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
                 edgeClassBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
                 //                edgeClassBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
             }
@@ -360,4 +361,11 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         super.modifyTable(uftm, tec);
     }
 
+    @Override
+    public boolean hasValues() {
+        UserFieldDefinitions definitions = dialog.getUserFieldDefinitions();
+        UserFieldDefinitionsAnalyzer analyzer = definitions.getAnalyzer();
+        boolean hasValues = analyzer.hasDistributionWeights();
+        return hasValues;
+    }
 }

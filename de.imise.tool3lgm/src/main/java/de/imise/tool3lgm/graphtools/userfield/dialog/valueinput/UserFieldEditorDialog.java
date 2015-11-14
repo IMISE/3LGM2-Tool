@@ -225,7 +225,9 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
      */
     private void initTab() {
         for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
-            tab.addTab(tablePanel.getName(), tablePanel);
+            if (tablePanel.hasValues()) {
+                tab.addTab(tablePanel.getName(), tablePanel);
+            }
         }
     }
 

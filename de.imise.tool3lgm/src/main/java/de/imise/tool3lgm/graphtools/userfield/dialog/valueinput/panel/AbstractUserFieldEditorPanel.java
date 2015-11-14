@@ -47,7 +47,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     /**
      * Der Dialog, der dieses Panel beinhaltet
      */
-    private final UserFieldEditorDialog dialog;
+    protected final UserFieldEditorDialog dialog;
 
     /**
      * das Reihen- und Spaltenelement an der aktuellen Mouse-Position im Table
@@ -210,6 +210,11 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     public UserFieldEditorDialog getDialog() {
         return dialog;
     }
+
+    /**
+     * @return <code>true</code> wenn es mindestens ein anzuzeigendes Ergebnis in diesem Panel gibt sonst <code>false</code>
+     */
+    public abstract boolean hasValues();
 
     /**
      * so zu überschreiben, dass Werte aus <code>table</code> im Model übernommen werden
