@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -181,6 +182,14 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
         // Anfügen von panelCN + panelDW + panelMV an das HauptPanel
         initTab();
 
+        if (tab.getComponentCount() > 0) {
+            initDialogWithTabContent();
+        } else {
+            initDialogWithNoContentMessage();
+        }
+    }
+
+    private void initDialogWithTabContent() {
         // Constraints für das Anfügen von tab
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -220,6 +229,24 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
         doc.start_transaction(getTransactionID());
     }
 
+    private void initDialogWithNoContentMessage() {
+        setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+
+        JLabel messageLabel = new JLabel(Tool3lgmConstants.getResString("userFieldEditor_no_content_message"));
+        add(messageLabel, constraints);
+        constraints.gridy++;
+        constraints.weighty = 0;
+        JButton okButton = new JButton(getCloseDialogAction());
+        add(okButton, constraints);
+    }
+
     /**
      * Methode fügt panelCN, panelDW, panelMV und panelCNF an <code>tab</code> an
      */
@@ -229,6 +256,17 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
                 tab.addTab(tablePanel.getName(), tablePanel);
             }
         }
+    }
+
+    private Action getCloseDialogAction() {
+        final UserFieldEditorDialog dialog = this;
+        Action action = new AbstractAction(Tool3lgmConstants.getResString("ok")) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                dialog.dispose();
+            }
+        };
+        return action;
     }
 
     /**
