@@ -59,7 +59,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
 
         int direction = edgeForwardDirection ? Doppelkante.FORWARD : Doppelkante.BACKWARD;
         //alle mit dem Element über die Kante verbundenen Elemente holen
-        List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction);
+        List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction, true);
 
         removeNotVisibleHierarchyElements(modelElements, showTopLevel, showInner, showLeafs);
 
