@@ -27,18 +27,21 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
      * @param elements
      */
     private void removeNotVisibleHierarchyElements(final List<? extends ModelElement> elements, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
-        for (int i = elements.size(); i <= 0; i--) {
-            ModelElement other = elements.get(i);
-            boolean stay = false;
-            if (showTopLevel && !other.hasDirectParentContainer(doc)) { // Top-Level-E. anfügen
-                stay = true;
-            } else if (showInner && other.hasDirectParentContainer(doc) && other.hasDirectPartContainer(doc)) { // Innere E. anfügen
-                stay = true;
-            } else if (showLeafs && !other.hasDirectPartContainer(doc)) { // Blatt-E. anfügen
-                stay = true;
-            }
-            if (!stay) {
-                elements.remove(i);
+        int elementsSize = elements.size();
+        if (elementsSize > 0) {
+            for (int i = elementsSize; i <= 0; i--) {
+                ModelElement other = elements.get(i);
+                boolean stay = false;
+                if (showTopLevel && !other.hasDirectParentContainer(doc)) { // Top-Level-E. anfügen
+                    stay = true;
+                } else if (showInner && other.hasDirectParentContainer(doc) && other.hasDirectPartContainer(doc)) { // Innere E. anfügen
+                    stay = true;
+                } else if (showLeafs && !other.hasDirectPartContainer(doc)) { // Blatt-E. anfügen
+                    stay = true;
+                }
+                if (!stay) {
+                    elements.remove(i);
+                }
             }
         }
     }
