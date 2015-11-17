@@ -175,7 +175,6 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     @Override
     protected AbstractUserFieldTableModel getTableModel() {
         Class<? extends Kante> edgeClass = getSelectedEdgeClass();
-        GraphDocument doc = getDialog().getGraphDocument();
         boolean edgeForwardDirection = isSelectedEdgeDirectionForward();
         ModelElement me = (ModelElement) elementBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new FractionValueSumTableModel(me, edgeClass, edgeForwardDirection, hierarchyTypeFilterPane.showTopLevel(), hierarchyTypeFilterPane.showInner(), hierarchyTypeFilterPane.showLeafs());
