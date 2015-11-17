@@ -166,8 +166,9 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 continue;
             }
 
-            // Falls keine UserFields für elementClass exisitieren, füge elementClass NICHT ein
-            if (!definitions.hasUserFields(elementClass)) {
+            // füge elementClass in die elementTypeBox ein
+            InsertType insertType = getInsertType(elementClass, definitions);
+            if (insertType == NO) {
                 continue;
             }
 
@@ -175,9 +176,6 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             if (doc.getModelItems(elementClass).isEmpty()) {
                 continue;
             }
-
-            // füge elementClass in die elementTypeBox ein
-            InsertType insertType = getInsertType(elementClass, definitions);
 
             if (insertType == AS_MODELELEMENT) {
                 elementTypeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
