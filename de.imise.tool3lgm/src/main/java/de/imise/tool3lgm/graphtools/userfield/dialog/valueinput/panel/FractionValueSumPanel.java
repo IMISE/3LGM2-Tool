@@ -83,10 +83,31 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     protected boolean hasSelectedItem() {
         boolean hasSelectedItem = super.hasSelectedItem();
         if (hasSelectedItem) {
-            Object selectedElement = elementBox.getSelectedObject();
-            hasSelectedItem = selectedElement != null && selectedElement instanceof ModelElement;
+            hasSelectedItem = hasSelectedElement();
         }
         return hasSelectedItem;
+    }
+
+    /**
+     * @return <code>true</code>, if in the elementBox a ModelElement is selected
+     */
+    private boolean hasSelectedElement() {
+        Object selectedElement = elementBox.getSelectedObject();
+        boolean hasSelectedElement = selectedElement != null && selectedElement instanceof ModelElement;
+        return hasSelectedElement;
+    }
+
+    @Override
+    protected void initSelectFirstItem() {
+        super.initSelectFirstItem();
+        if (!hasSelectedElement()) {
+            for (int i = 0; i < elementBox.getItemCount(); i++) {
+                if (elementBox.getItemAt(i) instanceof ModelElement) {
+                    elementBox.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
     }
 
     /**
