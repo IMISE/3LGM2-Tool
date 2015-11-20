@@ -458,7 +458,9 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
         for (int i = userFieldList.size() - 1; i >= 0; i--) {
             UserField userField = userFieldList.get(i);
-            if (userField.isSimplePartValueSumFormula()) {
+            if (!userField.isSimplePartValueSumFormula()) {
+                userFieldList.remove(i);
+            } else {
                 TWSumArguments arguments = PartValueSumFunction.getTWSumArguments(userField);
                 if (!edgeClass.isAssignableFrom(arguments.edgeClass)) {
                     userFieldList.remove(i);
