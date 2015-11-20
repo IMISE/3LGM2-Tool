@@ -98,7 +98,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
         doc = d;
-        addMouseListener(new DynamicTreeMouseAdapter(this));
+        DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
         transactionListener = new DynamicTreeGraphDocumentAndInTransactionListener(this);
 

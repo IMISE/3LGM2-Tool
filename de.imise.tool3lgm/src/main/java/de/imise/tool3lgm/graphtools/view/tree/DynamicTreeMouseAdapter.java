@@ -29,9 +29,18 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
     private final DynamicTree tree;
 
-    public DynamicTreeMouseAdapter(final DynamicTree tree) {
+    private DynamicTreeMouseAdapter(final DynamicTree tree) {
         this.tree = tree;
-        tree.addMouseListener(this);
+    }
+
+    public static void addAdapter(final DynamicTree tree) {
+        for (MouseListener listener : tree.getMouseListeners()) {
+            if (listener instanceof DynamicTreeMouseAdapter) {
+                return;
+            }
+        }
+        DynamicTreeMouseAdapter dynamicTreeMouseAdapter = new DynamicTreeMouseAdapter(tree);
+        tree.addMouseListener(dynamicTreeMouseAdapter);
     }
 
     /**
