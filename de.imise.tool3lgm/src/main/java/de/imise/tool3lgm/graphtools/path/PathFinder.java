@@ -163,7 +163,8 @@ public final class PathFinder {
      * @param element2
      * @param metaPath
      * @param doc
-     * @return Doppelkante.NOTCONNECTED / Doppelkante.FORWARD / Doppelkante.BACKWARD / Doppelkante.DOUBLE if path.isImmediate otherwise Doppelkante.NOTCONNECTED / Doppelkante.DOUBLE
+     * @return Doppelkante.NOTCONNECTED / Doppelkante.FORWARD / Doppelkante.BACKWARD / Doppelkante.DOUBLE if path.isImmediate otherwise
+     *         Doppelkante.NOTCONNECTED / Doppelkante.DOUBLE
      */
     public static final int isConnected(ModelElement element1, ModelElement element2, final MetaPath metaPath) {
         if (!UserProperties.isSearchParts() && !UserProperties.isSearchParents()) {
@@ -378,7 +379,8 @@ public final class PathFinder {
      * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den angegebenen Pfad verbunden Elemente zurück.
      * 
      * @param me
-     * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades übereinstimmen, sondern kann eine spezielle Unterklasse sein.
+     * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
+     *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
      * @param metaPath
      * @return
      */
@@ -711,7 +713,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("PhysischerDVBaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("PhysischerDVBaustein"))
         });
 
         /* Organisationseinheit - Anwendungsbaustein */
@@ -720,7 +722,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Anwendungsbaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Organisationseinheit - RechAnwendungsbaustein */
@@ -729,7 +731,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Anwendungsbaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Organisationseinheit - KonAnwendungsbaustein */
@@ -738,7 +740,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Anwendungsbaustein"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Objekttyp - Objekttyp */
@@ -814,7 +816,7 @@ public final class PathFinder {
                 {
                         OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class
                 }
-            }, s("Organisationseinheit") + " " + s("text_benutzt") + " " + s("Softwareprodukt"))
+            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Softwareprodukt"))
         });
 
         /* Anwendungsbaustein - Kommunikationsstandard */
@@ -823,7 +825,7 @@ public final class PathFinder {
                 {
                         AwbKommssVerbindung.class, BssKommstVerbindung.class
                 }
-            }, s("Anwendungsbaustein") + " " + s("text_benutzt") + " " + s("Kommunikationsstandard"))
+            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* RechAnwendungsbaustein - Kommunikationsstandard */
@@ -832,7 +834,7 @@ public final class PathFinder {
                 {
                         AwbKommssVerbindung.class, BssKommstVerbindung.class
                 }
-            }, s("Anwendungsbaustein") + " " + s("text_benutzt") + " " + s("Kommunikationsstandard"))
+            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* KonAnwendungsbaustein - Kommunikationsstandard */
@@ -841,7 +843,7 @@ public final class PathFinder {
                 {
                         AwbKommssVerbindung.class, BssKommstVerbindung.class
                 }
-            }, s("Anwendungsbaustein") + " " + s("text_benutzt") + " " + s("Kommunikationsstandard"))
+            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* RechAnwendungsbaustein - Softwareprodukt */
