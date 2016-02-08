@@ -602,6 +602,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 color = null;
 
             } else if (qName.equals("form")) {
+                if (layout == null) {
+                    return;
+                }
                 String elementValueString = elementValue.toString();
                 int formIndex = Integer.parseInt(elementValueString);
                 GraphElementLayout.SHAPE[] shapes = GraphElementLayout.SHAPE.values();
