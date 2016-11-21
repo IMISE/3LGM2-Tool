@@ -1,0 +1,733 @@
+Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Auf welchen phys. DV-Bausteinen ist er installiert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Anwendungsbaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>		
+		<typ>
+			<eintrag>DBKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Aufgaben werden damit unterstützt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Anwendungsbaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ABKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Aufgabe</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Objekttypen werden gespeichert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Anwendungsbaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Datenbanksystem</eintrag>
+			<eintrag>Dokumentensammlung</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Datensatztyp</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Objekttypen können gesendet oder empfangen werden?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Anwendungsbaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Bausteinschnittstelle</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Kommunikationsbeziehungen hat er?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Anwendungsbaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Bausteinschnittstelle</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Bausteinschnittstelle</eintrag>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+			<eintrag>Ereignistyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur Erfüllung benötigt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Aufgabe"/>
+	<suche>		
+		<typ>
+			<eintrag>Aufgabe</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ABKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>DBKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Anwendungsbausteine werden zur Erfüllung benötigt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Aufgabe"/>
+	<suche>		
+		<typ>
+			<eintrag>Aufgabe</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ABKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo werden Nachrichtentypen/Dokumententypen dazu übermittelt und welche Objekttypen werden kommuniziert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Ereignistyp"/>
+	<suche>		
+		<typ>
+			<eintrag>Ereignistyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>KommBeziehung</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo wird sie übermittelt und welche Objekttypen werden kommuniziert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="EreignisNachrichtenTyp"/>
+	<suche>		
+		<typ>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>KommBeziehung</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo wird sie übermittelt und welche Objekttypen werden kommuniziert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="EreignisDokumentenTyp"/>
+	<suche>		
+		<typ>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>KommBeziehung</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo wird er angewendet?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Kommunikationsstandard"/>
+	<suche>		
+		<typ>
+			<eintrag>Kommunikationsstandard</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Bausteinschnittstelle</eintrag>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Bausteinschnittstelle</eintrag>
+			<eintrag>KommBeziehung</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo wird er übermittelt und welche Objekttypen werden kommuniziert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Nachrichtentyp"/>
+	<startknoten name="Dokumententyp"/>
+	<suche>		
+		<typ>
+			<eintrag>Nachrichtentyp</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>	
+	<suche>
+		<typ>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>KommBeziehung</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo wird er kommuniziert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Objekttyp"/>
+	<suche>		
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>	
+	<suche>
+		<typ>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>KommBeziehung</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Bausteinschnittstellen können ihn kommunizieren?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Objekttyp"/>
+	<suche>		
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>Nachrichtentyp</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>EreignisNachrichtenTyp</eintrag>
+			<eintrag>EreignisDokumentenTyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Bausteinschnittstelle</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Wo wird er gespeichert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Objekttyp"/>
+	<suche>		
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Datensatztyp</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Datenbanksystem</eintrag>
+			<eintrag>Dokumentensammlung</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Datendomäne zum Objekttyp X
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Objekttyp"/>
+	<suche>		
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Aufgabe</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ABKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Szenario zur Organisationseinheit X
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Organisationseinheit"/>
+	<suche>		
+		<typ>
+			<eintrag>Organisationseinheit</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ABKonfiguration</eintrag>
+			<eintrag>Aufgabe</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			
+			<eintrag>Datenbanksystem</eintrag>		
+			<eintrag>Anwendungsprogramm</eintrag>
+			<eintrag>Bausteinschnittstelle</eintrag>
+			<eintrag>DBKonfiguration</eintrag>
+		</typ>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Softwareprodukt</eintrag>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Datenbanksysteme sind darauf installiert und welche Objekttypen sind darin gespeichert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="PhysischerDVBaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>DBKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Datenbanksystem</eintrag>
+			<eintrag>Dokumentensammlung</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Datensatztyp</eintrag>
+			<eintrag>Dokumententyp</eintrag>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Objekttyp</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Anwendungsbausteine sind darauf installiert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="PhysischerDVBaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>DBKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Anwendungsbausteine sind darauf installiert und welche Aufgaben werden damit unterstützt?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="PhysischerDVBaustein"/>
+	<suche>		
+		<typ>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>DBKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsbaustein</eintrag>
+			<eintrag>KonAnwendungsbaustein</eintrag>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>ABKonfiguration</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>AufOrgKombination</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Aufgabe</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Welche Phys. DV-Bausteine stehen dort?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Standort"/>
+	<suche>		
+		<typ>
+			<eintrag>Standort</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>PhysischerDVBaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator
+Content-Type: text/xml
+Content-ID: Auf welchem Anwendungsbaustein ist es installiert?
+<?xml version="1.0" encoding="ISO-8559-15"?>
+<analyse>
+	<startknoten name="Softwareprodukt"/>
+	<suche>
+		<typ>
+			<eintrag>Softwareprodukt</eintrag>
+		</typ>
+		<verbundenstate>wahr</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>Anwendungsprogramm</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+	<suche>
+		<typ>
+			<eintrag>RechAnwendungsbaustein</eintrag>
+		</typ>
+		<verbundenstate>true</verbundenstate>
+	</suche>
+</analyse>
+--multipart_3lgm_query_separator

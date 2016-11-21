@@ -1,0 +1,378 @@
+/*
+ * Created on 20.07.2004
+ */
+package de.imise.tool3lgm.graphtools.path;
+
+import java.awt.Color;
+import java.util.Arrays;
+
+import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+
+/**
+ * @author Thomas Rudert
+ * @author AXS (5.10.2007)
+ */
+public class MetaPath {
+
+    /** Startelementtyp des Pfades */
+    private final Class<? extends ModelElement> startClass;
+
+    /** Endelementtyp des Pfades */
+    private final Class<? extends ModelElement> endClass;
+
+    /**
+     * Assoziationen des Pfades.<br>
+     * Index 1: Index der Metapfade<br>
+     * Index 2: Index der Metapfadschritte (Assoziationstypen) im Metpfad
+     */
+    private Class<? extends Kante>[][] associations;
+
+    /**
+     * COMMENTME
+     */
+    private final Color[] color;
+
+    /**
+     * COMMENTME
+     */
+    private final String[] description;
+
+    /**
+     * COMMENTME
+     */
+    private final int control;
+
+    /**
+     * COMMENTME
+     */
+    private final boolean directional;
+
+    /**
+     * COMMENTME
+     */
+    private static final Color[] defaultColor = {
+        Color.BLUE
+    };
+
+    /**
+     * COMMENTME
+     */
+    private static final String[] defaultDescritpion = {
+        ""
+    };
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>... associations) {
+        this(startClass, endClass, getPathForAssociations(associations), defaultColor, defaultDescritpion);
+    }
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path) {
+        this(startClass, endClass, path, defaultColor, defaultDescritpion);
+    }
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param description String with description for associations (in legend)
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final String description) {
+        this(startClass, endClass, path, description, false);
+    }
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param description String with description for associations (in legend)
+     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for function reads objecttype )
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final String description, final boolean directional) {
+        this(startClass, endClass, path, defaultColor, new String[1], -1, directional);
+        this.description[0] = description;
+    }
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param color Color for item in legend and cell
+     * @param description String with description for associations (in legend)
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color color, final String description) {
+        this(startClass, endClass, path, new Color[1], new String[1]);
+        this.description[0] = description;
+        this.color[0] = color;
+    }
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param color Color[] for items in legend and cell (one color for DOUBLE / FORWARD / BACKWARD)
+     * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color[] color, final String[] description) {
+        this(startClass, endClass, path, color, description, -1, false);
+    }
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to end)
+     * @param color Color[] for items in legend and cell (one color for DOUBLE / FORWARD / BACKWARD)
+     * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
+     * @parma int control index of connections in associations, which control direction of associations
+     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for function reads objecttype )
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color[] color, final String[] description, final int control, final boolean directional) {
+        this.directional = directional;
+        this.startClass = startClass;
+        this.endClass = endClass;
+        this.control = path[0].length - (control + 1);
+        associations = path;
+        ensureAssociationOrder();
+        this.color = color;
+        this.description = description;
+
+        for (int i = 0; i < countPathes(); i++) {
+            if (control >= getLength(i)) {
+                throw new Error("MetaPath: controlIndex is out of range!");
+            }
+        }
+    }
+
+    /**
+     * Es wird sicher gestellt, dass die Assoziationen einen Pfad von der Start- zur Zielklasse des Pfades beschreiben. Im Moment wird noch nicht die Konsistenz geprüft, sondern nur, ob die erste Assoziation zur Startklasse und die letzte Assoziation zur
+     * Endklasse passen.
+     */
+    private final void ensureAssociationOrder() {
+        boolean switchAssociations = false;
+        for (int ep = 0; ep < countPathes(); ep++) {
+            Class<? extends Kante>[] edgeClasses = getEdgeClasses(ep);
+            int lastIndex = edgeClasses.length - 1;
+            if (Kante.isStartOrEndClass(edgeClasses[0], startClass) && Kante.isStartOrEndClass(edgeClasses[lastIndex], endClass)) {
+                return;
+            }
+            if (Kante.isStartOrEndClass(edgeClasses[0], endClass) && Kante.isStartOrEndClass(edgeClasses[lastIndex], startClass)) {
+                switchAssociations = true;
+            }
+        }
+        //wenn switchAssociations immer noch false ist und er bis hier gekommen ist, dann passt der MetaPath gar
+        //nicht zu den Start und Zielklassen -> einfach raus gehen
+        if (!switchAssociations) {
+            throw new Error("MetaPath: start and end class doesn't match");
+        }
+
+        @SuppressWarnings("unchecked")
+        Class<? extends Kante>[][] path = new Class[countPathes()][getEdgeClasses(0).length];
+        //von allen Assoziationslisten alle Assoziationen umdrehen
+        for (int ep = 0; ep < countPathes(); ep++) {
+            Class<? extends Kante>[] edgeClasses = getEdgeClasses(ep);
+            int lastIndex = edgeClasses.length - 1;
+            for (int i = 0; i < edgeClasses.length; i++) {
+                path[ep][lastIndex - i] = edgeClasses[i];
+            }
+        }
+        associations = path;
+    }
+
+    /**
+     * @param edgeClass
+     * @return /
+     * @SuppressWarnings("unchecked") private static final Class<? extends Kante>[][] getPathForAssociation(Class<? extends Kante> edgeClass){ Class<? extends Kante>[][] associations = new Class[1][1]; associations[0][0] = edgeClass; return associations;
+     *                                } /**
+     * @param edgeClass
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends Kante>[][] getPathForAssociations(final Class<? extends Kante>... edgeClasses) {
+        Class<? extends Kante>[][] associations = new Class[1][edgeClasses.length];
+        for (int i = 0; i < edgeClasses.length; i++) {
+            associations[0][i] = edgeClasses[i];
+        }
+        return associations;
+    }
+
+    /**
+     * Gibt die Länge des Metapfades an Position <code>pathIndex</code> zurück.
+     * 
+     * @param Index des Metapfades, dessen Länge zurück gegeben werden soll
+     * @return Länge des Metapfades an Position <code>pathIndex</code>
+     */
+    public final int getLength(final int pathIndex) {
+        return associations[pathIndex].length;
+    }
+
+    /**
+     * Gibt die Länge des ersten Metapfades zurück.
+     * 
+     * @return Länge des Metapfades an Position 0
+     */
+    public final int getLength() {
+        return associations[0].length;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad an Position <code>pathIndex</code> die Länge 1 besitzt.
+     * 
+     * @param pathIndex
+     * @return <code>true</code>, wenn der Metapfad an Position <code>pathIndex</code> die Länge 1 besitzt.
+     */
+    public final boolean isImmediate(final int pathIndex) {
+        return getLength(pathIndex) == 1;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public final String toString() {
+        StringBuilder sb = new StringBuilder();
+        boolean useDescrip = !"".equals(description[0].trim());
+        if (useDescrip) {
+            sb.append(description[0]);
+            for (int i = 1; i < description.length; i++) {
+                sb.append(", ");
+                sb.append(description[i]);
+            }
+        } else {
+            sb.append(Arrays.asList(associations[0]));
+            for (int i = 1; i < associations.length; i++) {
+                sb.append(", ");
+                sb.append(Arrays.asList(associations[i]));
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Liefert die Klasse des Startelementtyps dieses Pfades
+     * 
+     * @see <code>ModelConstants</code>
+     * @return ID des Startelementtyps dieses Pfades
+     */
+    public final Class<? extends ModelElement> getStartClass() {
+        return startClass;
+    }
+
+    /**
+     * Liefert die Klasse des Endelementtyps dieses Pfades
+     * 
+     * @see <code>ModelConstants</code>
+     * @return ID des Endelementtyps dieses Pfades
+     */
+    public final Class<? extends ModelElement> getEndClass() {
+        return endClass;
+    }
+
+    /**
+     * Liefert die Anzahl der Metapfade des Pfades
+     * 
+     * @return Anzahl der Metapfade
+     */
+    public final int countPathes() {
+        return associations.length;
+    }
+
+    /**
+     * Liefert die IDs der Assoziationstypen des Pfades an Position <code>pathIndex</code>
+     * 
+     * @param pathIndex Index des Pfadschrittes
+     * @return IDs der Assoziationstypen des Pfades an Position <code>pathIndex</code>
+     */
+    public final Class<? extends Kante>[] getEdgeClasses(final int pathIndex) {
+        return associations[pathIndex];
+    }
+
+    /**
+     * @param direction
+     * @return
+     */
+    public final Color getColor(final int direction) {
+        return direction < 0 || direction > 2 ? null : color[direction < color.length ? direction : 0];
+    }
+
+    /**
+     * @param direction
+     * @return
+     */
+    public final String getDescription(final int direction) {
+        return direction < 0 || direction > 2 ? null : description[direction < description.length ? direction : 0];
+    }
+
+    /**
+     * @return
+     */
+    public int countOptions() {
+        return Math.min(color.length, description.length);
+    }
+
+    /**
+     * @return
+     */
+    public final int getControl() {
+        return control;
+    }
+
+    /**
+     * @return
+     */
+    public final boolean isDirectional() {
+        return directional;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!MetaPath.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        MetaPath mp = (MetaPath) obj;
+        //Start- und Endklasse müssen gleich sein
+        if (mp.startClass != startClass || mp.endClass != endClass) {
+            return false;
+        }
+        //die Anzahl der verschiedenen Pfade muss gleich sein
+        if (mp.associations.length != associations.length) {
+            return false;
+        }
+        for (int x = 0; x < associations.length; x++) {
+            //Anzahl der Assoziationen in den einzelnen Pfaden muss gleich sein
+            if (mp.associations[x].length != associations[x].length) {
+                return false;
+            }
+            //jede einzelne Assoziation der einzelnen Pfade muss identisch sein
+            for (int y = 0; y < associations[x].length; y++) {
+                if (mp.associations[x][y] != associations[x][y]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+}

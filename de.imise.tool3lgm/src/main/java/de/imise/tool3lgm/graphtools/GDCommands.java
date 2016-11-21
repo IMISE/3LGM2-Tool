@@ -1,0 +1,160 @@
+package de.imise.tool3lgm.graphtools;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+
+public enum GDCommands {
+
+    CREATE_KNOT, LINK,
+    //	LINK_REVERSE,
+    ADDICT,
+    UNLINK,
+    //	UNLINK_REVERSE,
+    SWAP_EDGE_POSITIONS,
+    CREATE_ADDICTED,
+
+    SET_VISIBLE,
+
+    DELETE,
+
+    SET_NAME,
+    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
+    CHANGE_FORM,
+    CHANGE_COLOR,
+    CHANGE_ALPHA,
+    CHANGE_LAYER_COLOR,
+    CHANGE_LAYER_ALPHA,
+    CHANGE_LAYER_SIZE_FACTOR,
+    CHANGE_GLOBAL_NAME,
+    CHANGE_GLOBAL_MAPPING,
+    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
+    HIDE_ELEM,
+    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
+    UNHIDE_ELEM,
+    Z_STEP_UP,
+    Z_STEP_DOWN,
+    Z_MOVE_UP,
+    Z_MOVE_DOWN,
+    Z_MOVE,
+
+    NORMALIZE_FONT,
+    NORMALIZE_COLOR,
+    NORMALIZE_TRANSPARENCY,
+    NORMALIZE,
+    NORMALIZE_LAYER,
+
+    COORDINATE_KNOT,
+    AUFKLAPPEN,
+    ZUKLAPPEN,
+
+    ELEMENT_PROPERTIES,
+
+    INSERT_BENDING_POINT,
+    VALIGN_CENTER,
+    VALIGN_TOP,
+    VALIGN_BOTTOM,
+    HALIGN_CENTER,
+    HALIGN_LEFT,
+    HALIGN_RIGHT,
+    ALIGN_WIDTH,
+    ALIGN_HEIGHT,
+    ALIGN_WIDTH_AND_HEIGTH,
+
+    LABEL_VALIGN_CENTER,
+    LABEL_VALIGN_TOP,
+    LABEL_VALIGN_BOTTOM,
+    LABEL_HALIGN_CENTER,
+    LABEL_HALIGN_LEFT,
+    LABEL_HALIGN_RIGHT,
+    LABEL_VALIGN,
+    LABEL_HALIGN,
+
+    SET_USER_FIELD_VALUE,
+    SET_DESCRIPTION,
+
+    INTERACTIVE_MODE_OFF,
+    INTERACTIVE_MODE_ON,
+    VERIFY_OFF,
+    VERIFY_ON,
+
+    UNDO,
+    REDO,
+
+    SET_ICON,
+    UNSET_ICON,
+    CHANGE_FONT,
+    CHOOSE_ICON,
+
+    CHANGE_LINE_STYLE,
+
+    CREATE_SZENARIO,
+    REMOVE_SZENARIO,
+    ADD_ELEMENT_TO_SZENARIO,
+    ADD_SELECTED_TO_SZENARIO,
+    SHOW_SZENARIO,
+    REMOVE_ELEMENT_FROM_SZENARIO,
+    REMOVE_ELEMENT,
+
+    JOIN_SELECTED,
+
+    ADD_SELECTED_TO_NEW_SZENARIO,
+    ADD_SELECTED_TO_ALL_SZENARIOS,
+    LINK_SELECTED_TO_NEW_SZENARIO,
+    LINK_SELECTED_TO_SZENARIO,
+    LINK_ELEMENT_TO_SZENARIO,
+    SELECT_LINKED_SZENARIO,
+
+    //Die Kommandos ab hier werden in LGMGraphDocument ausgewertet
+    COPY,
+    CUT,
+    PASTE,
+    CLEAR_CLIPBOARD,
+
+    SHOW_ALL_CONFIGS,
+    HIDE_ALL_CONFIGS,
+    HIDE_UNASSOCIATED_INTERFACES,
+    UNHIDE_ALL_INTERFACES,
+
+    CHANGE_OS_TYPE,
+    CHANGE_SERIAL,
+    CHANGE_INVENTAR,
+    CHANGE_DISKSIZE,
+    CHANGE_RAMSIZE,
+    CHANGE_PROCESSOR,
+    CHANGE_DOWNTIME,
+
+    //spezielle Kommandos
+    COMMAND_LINE,
+    PRINT_QUEUE,
+    CHECK_CONSISTENCY;
+
+    //Ungültige Werte für alle Kommandos
+    public static final int INVALID_POSITION_X = -1;
+    public static final int INVALID_POSITION_Y = -1;
+    public static final int INVALID_WIDTH = -1;
+    public static final int INVALID_HEIGHT = -1;
+    public static final int INVALID_COLOR_RGB = -1;
+    public static final SHAPE INVALID_SHAPE = null;
+    public static final String INVALID_HASH_STRING = "";
+    public static final String INVALID_NAME = "";
+    public static final String INVALID_DESCRIPTION = "";
+    public static final int INVALID_BENDPOINT_INDEX = -1;
+    public static final int INVALID_EDGE_INDEX = -1;
+    public static final Class<? extends Kante> INVALID_EDGE_CLASS = null;
+    public static final String INVALID_EDGE_CLASS_NAME = "";
+
+    @Override
+    public String toString() {
+        //wenn lesbare Undo-Kommandos ausgegeben werden sollen
+        if (Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
+            //den normalen Kommando-String zurück geben
+            return super.toString();
+        }
+        //den Index des Komandos als String zurück geben (der auch eindeutig, aber
+        //viel kürzer ist als der Komandoname und somit nicht soviel Speicher verbraucht
+        //beim Loggen der Undo-redo-Kommandos
+        return new Integer(ordinal()).toString();
+    }
+
+}

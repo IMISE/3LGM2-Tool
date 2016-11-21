@@ -1,0 +1,811 @@
+package de.imise.tool3lgm.graphtools.userfield;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.swing.JOptionPane;
+
+import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
+import de.imise.tool3lgm.log.Log;
+import de.imise.util.swing.dialog.MultipleOptionPane;
+
+/**
+ * Beinhaltet alle <code>UserField</code>s in einer <code>HashMap</code>, die für Knoten, Kanten und das Modell deklariert und definiert wurden.
+ * 
+ * @author Thomas Rudert
+ */
+public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
+
+    /** Mappt von der Elementklasse auf die dafür definierte Liste von <code>UserField</code>s */
+    private HashMap<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<Class<? extends UserFieldTarget>, UserFieldList>();
+
+    /** Mappt von den HashCodes der UserFields auf das UserField */
+    private HashMap<String, UserField> hashStringToUserFieldMap = new HashMap<String, UserField>();
+
+    /** Berechnet für diese Defnition alle Kennzahlen der konkreten Elemente */
+    private final Calculator calculator;
+
+    /**
+     * Liste aller UserFields, die Formeln darstellen
+     */
+    private ArrayList<UserField> formulaUserFieldList = new ArrayList<UserField>();
+
+    /**
+     * Klasse, über die die sogenannten Modellvariablen identifiziert werden, also Variablen, die nicht für ein spezielles Element sondern für das
+     * Gesamtmodell gelten und zur Verfügung stehen.
+     */
+    public static final Class<? extends UserFieldTarget> GLOBAL_USERFIELD_IDENTIFIER_CLASS = GDCollection.class;
+
+    /**
+     * Klasse, über die alle Formate identifiziert werden.
+     */
+    private static final class GlobalFormatIdentifierClass extends UserFieldTarget {
+    }
+
+    public static final Class<? extends UserFieldTarget> GLOBAL_FORMAT_IDENTIFIER_CLASS = GlobalFormatIdentifierClass.class;
+
+    /**
+     * Liefert einen anzeigbaren String für den globalen Identifier (da es Modellvariablen sind wird hier der Res-String für Model zurück gegeben)
+     * 
+     * @return
+     */
+    public static String getDisplayableGlobalFieldIdentifierName() {
+        return Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable");
+    }
+
+    /**
+     * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code> anzugeben, dass alle darin befindlichen Formeln berechnet werden können.
+     */
+    private static final int NO_INCONSISTENCE_INDEX_FOUND = -1;
+
+    /**
+     * Maximale Anzahl der abhängigen <code>UserField</code>s, die im Warnungsdialog vor dem Löschen eines <code>UserField</code>s angezeigt werden.
+     */
+    private static final int MAX_USED_USERFIELD_DELETE_NUMBER = 10;
+
+    /**
+     * Konstante um für <code>firstInconsistentUserFieldFormulaIndex</code> anzugeben, dass die Liste <code>formulaUserFieldList</code> neu sortiert
+     * werden müsste, um festzustellen, ob sich alle Formeln berechnen lassen bzw. welche inkonsitent sind.
+     */
+    private static final int FORMULA_INCONSITENCE_INDEX_UNKNOWN = -2;
+
+    /**
+     * Die Liste <code>formulaUserFieldList</code> wird (wenn keine Kreisreferenzen in den Formeln vorkommen) so sortiert, dass sich jede Formel in
+     * der Liste berechnen lässt, wenn alle Formeln berechnet wurden, die sich in der Liste davor befinden. Sollte doch mind. eine Kreisreferenz
+     * vorliegen, wird in dieser Variable hier der Index des ersten <code>UserField</code>s in <code>formulaUserFieldList</code> gespeichert, der sich
+     * nicht mehr berechnen lässt. Lassen sich alle Formeln berechnen, dann ist der Index -1.
+     */
+    private int firstInconsistentUserFieldFormulaIndex = FORMULA_INCONSITENCE_INDEX_UNKNOWN;
+
+    /**
+     * Erzeugt eine neue UserFielddefinition für das übergebene Modell
+     * 
+     * @param gdcoll
+     */
+    public UserFieldDefinitions(final GDCollection gdcoll) {
+        super(gdcoll);
+        calculator = new Calculator(this);
+    }
+
+    /**
+     * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode erwartet beim Aufruf ein <code>UserField</code>. Das <code>UserField</code>
+     * wird an eine Liste, die sich in der <code>classToUserFieldListMap</code>- HashMap befindet, angehangen. Methode wird beim Laden des Modells
+     * aufgerufen.
+     * 
+     * @param userField
+     */
+    public void add(final UserField userField) {
+        if (userField == null) {
+            return;
+        }
+        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
+        if (ufl == null) {
+            ufl = new UserFieldList(userField.getTargetClass());
+            classToUserFieldListMap.put(userField.getTargetClass(), ufl);
+        }
+        ufl.add(userField);
+        hashStringToUserFieldMap.put(userField.getHashCode(), userField);
+        //Formeln extra merken
+        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+            formulaUserFieldList.add(userField);
+            setConsistencyUnknown();
+        }
+    }
+
+    /**
+     * Fügt der zuletzt benutzen Liste ein neues Element ein. Positioniert am übergebenen Index.
+     * 
+     * @param userField
+     * @param index
+     */
+    public void insert(final UserField userField, final int index) {
+        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
+        if (ufl == null) {
+            return;
+        }
+        ufl.insert(userField, index);
+        hashStringToUserFieldMap.put(userField.getHashCode(), userField);
+        //Formeln extra merken
+        if (userField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+            formulaUserFieldList.add(userField);
+            setConsistencyUnknown();
+        }
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn das übergebene <code>UserField</code> von anderen <code>UserField</code>s benutzt wird.<br>
+     * Das trifft bei Kennzahlformeln, Knenzahlen und Verteilungsgewichten zu, die in anderen Kennzahlformeln verwendet werden. Außerdem wird für zu
+     * löschende Format-UserFields geprüft, ob sie mind. einem anderen UserField als Format zugewiesen sind.
+     * 
+     * @param userField
+     * @return
+     */
+    public final boolean isInUse(final UserField userField) {
+        //wenn es nichts mit Kennzahlen zu tun hat -> false
+        if (!userField.isClassificationUserField()) {
+            return false;
+        }
+        for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
+            for (Object uf : classToUserFieldListMap.get(c)) {
+                if (((UserField) uf).uses(userField)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param userField
+     * @return Liste aller gelöschten <code>UserField</code>s
+     */
+    public ArrayList<UserField> remove(final UserField userField) {
+        ArrayList<UserField> deleted = new ArrayList<UserField>();
+        UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
+        if (ufl == null) {
+            return deleted;
+        }
+        //wenn das userField irgendwo anders noch benutzt wird -> lösche die Referenzen ebenfalls
+        //wenn das zu löschende Field ein Format ist -> bei allen anderen Fields, bei denen es als Format gesetzt ist, das Format null setzen
+        if (userField.hasStyle(UserField.Style.FORMAT)) {
+            for (Class<? extends UserFieldTarget> c : getClassToUserFieldKeys()) {
+                Iterator<UserField> userFieldListIt = classToUserFieldListMap.get(c).iterator();
+                while (userFieldListIt.hasNext()) {
+                    UserField listField = userFieldListIt.next();
+                    if (listField.uses(userField)) {
+                        listField.setFormatUserField(null);
+                    }
+                }
+            }
+            hashStringToUserFieldMap.remove(userField.getHashCode());
+            ufl.remove(userField);
+            deleted.add(userField);
+            //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
+        } else if (userField.isClassificationUserField()) {
+
+            ArrayList<UserField> userFieldsToDelete = new ArrayList<UserField>();
+            userFieldsToDelete.add(userField);
+            for (int i = 0; i < userFieldsToDelete.size(); i++) {
+                UserField uncheckedField = userFieldsToDelete.get(i);
+                for (int j = 0; j < formulaUserFieldList.size(); j++) {
+                    UserField formulaUserField = formulaUserFieldList.get(j);
+                    if (userFieldsToDelete.contains(formulaUserField)) {
+                        continue;
+                    }
+                    if (formulaUserField.uses(uncheckedField)) {
+                        userFieldsToDelete.add(formulaUserField);
+                    }
+                }
+            }
+            //wenn mehr als ein Feld gelöscht werden soll, warnen
+            if (userFieldsToDelete.size() > 1) {
+                ArrayList<UserField> tmpList = new ArrayList<UserField>(userFieldsToDelete);
+                if (userFieldsToDelete.size() > MAX_USED_USERFIELD_DELETE_NUMBER) {
+                    tmpList.clear();
+                    for (int i = 0; i < 10; i++) {
+                        tmpList.add(userFieldsToDelete.get(i));
+                    }
+                }
+                int answer = MultipleOptionPane.showConfirmDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("warnung"), Tool3lgmConstants.getErrString("userfield_still_in_use") + "\n" + Tool3lgmConstants.getResString("insgesamt") + ": "
+                        + userFieldsToDelete.size() + "\n" + tmpList + " ... ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (answer != JOptionPane.YES_OPTION) {
+                    return deleted;
+                }
+            }
+            if (formulaUserFieldList.removeAll(userFieldsToDelete)) {
+                setConsistencyUnknown();
+            }
+
+            for (UserField field : userFieldsToDelete) {
+                hashStringToUserFieldMap.remove(field);
+                ufl = classToUserFieldListMap.get(userField.getTargetClass());
+                ufl.remove(field);
+            }
+            deleted.addAll(userFieldsToDelete);
+            //bei allem, was nicht mit Kennzahlen zu tun hat -> einfach löschen
+        } else {
+            hashStringToUserFieldMap.remove(userField.getHashCode());
+            ufl.remove(userField);
+            deleted.add(userField);
+        }
+        return deleted;
+    }
+
+    /**
+     * Gibt die Anzahl der UserField zurück.
+     * 
+     * @param userFieldTargetClass
+     * @return Anzahl der userFields / public int getUserFieldCount(Class<? extends ModelElement> userFieldTargetClass) { if
+     *         (!classToUserFieldListMap.containsKey(userFieldTargetClass)) return 0; UserFieldList ufl = (UserFieldList)
+     *         classToUserFieldListMap.get(userFieldTargetClass); return ufl.getUserFieldsCount(); } /** Gibt die Anzahl der globalen UserField
+     *         zurück.
+     * @return Anzahl der globalen userFields / public int getGlobalUserFieldCount() { return getUserFieldCount(GLOBAL_USERFIELD_IDENTIFIER_CLASS); }
+     */
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
+    @Override
+    public Object clone() {
+        UserFieldDefinitions def = null;
+        try {
+            def = (UserFieldDefinitions) super.clone();
+        } catch (Exception e) {
+            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            return null;
+        }
+        def.gdcoll = getCollection();
+        def.classToUserFieldListMap = new HashMap<Class<? extends UserFieldTarget>, UserFieldList>(classToUserFieldListMap);
+        for (Class<? extends UserFieldTarget> key : classToUserFieldListMap.keySet()) {
+            def.classToUserFieldListMap.put(key, (UserFieldList) def.classToUserFieldListMap.get(key).clone());
+        }
+
+        def.formulaUserFieldList = new ArrayList<UserField>(formulaUserFieldList);
+        def.hashStringToUserFieldMap = new HashMap<String, UserField>(hashStringToUserFieldMap);
+        for (String key : hashStringToUserFieldMap.keySet()) {
+            def.hashStringToUserFieldMap.put(key, def.hashStringToUserFieldMap.get(key).clone());
+        }
+
+        // Dem Calculator muss man die extra noch mitgeben, da er sonst mit einer alten Definitions rechnet.
+        calculator.setUserFieldDefinitions(def.getCollection().getUserFieldDefinitions());
+
+        return def;
+    }
+
+    /**
+     * @return
+     */
+    public String toXMLString() {
+        StringBuilder retVal = new StringBuilder("<userFieldDefinitions>");
+
+        //Die ModellVariablen immer als erstes rauschreiben, damit die Formate ganz vorne stehen
+        UserFieldList modelUserFields = classToUserFieldListMap.get(GLOBAL_USERFIELD_IDENTIFIER_CLASS);
+        if (modelUserFields != null) {
+            retVal.append(modelUserFields.toXMLString());
+        }
+        for (Class<? extends UserFieldTarget> clazz : classToUserFieldListMap.keySet()) {
+            if (clazz != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+                retVal.append(classToUserFieldListMap.get(clazz).toXMLString());
+            }
+        }
+        retVal.append("</userFieldDefinitions>\n");
+        return retVal.toString();
+    }
+
+    /**
+     * @param otherDef
+     */
+    public void addAll(final UserFieldDefinitions otherDef) {
+        for (Class<? extends UserFieldTarget> clazz : classToUserFieldListMap.keySet()) {
+            for (UserField uf : classToUserFieldListMap.get(clazz)) {
+                add(uf);
+            }
+        }
+    }
+
+    /**
+     * @param keySet
+     * @return
+     */
+    public String getCopyString(final Set<UserField> userFields) {
+        if (userFields.isEmpty()) {
+            return "";
+        }
+        StringBuilder retVal = new StringBuilder("<userFieldDefinitions>");
+        for (UserField uf : userFields) {
+            retVal.append(uf.toXMLString());
+        }
+        retVal.append("</userFieldDefinitions>\n");
+        return retVal.toString();
+    }
+
+    /**
+     * Liefert ein Benutzerfeld, das anhand des Namens herausgesucht wird. ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
+     * Gebraucht werden sollte diese Funktion nur beim Import von Daten, da der Name kein eindeutiges Kriterium ist.
+     * 
+     * @param userFieldTargetClass
+     * @param name
+     * @return das erstebeste UserField mit dem übergebenen Namen oder <code>null</code>, wenn keins gefunden wurde
+     */
+    public UserField getUserField(final Class<? extends UserFieldTarget> userFieldTargetClass, final String name) {
+        for (Class<?> clazz : classToUserFieldListMap.keySet()) {
+            UserFieldList userFields = classToUserFieldListMap.get(clazz);
+            if (userFields == null) {
+                continue;
+            }
+            for (UserField uf : userFields) {
+                if (uf.getTargetClass().equals(userFieldTargetClass) && uf.getName().equals(name)) {
+                    return uf;
+                }
+            }
+        }
+        return null;
+    }
+
+    //	/**
+    //	 * Liefert ein ein Benutzerfeld, das anhand des Namens herausgesucht wird. 
+    //	 * ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
+    //	 * Gebraucht werden sollte diese Funktion nur beim Import von Daten, da der
+    //	 * Name kein eindeutiges Kriterium ist.
+    //	 * 
+    //	 * @param userFieldTargetClass
+    //	 * @param name
+    //	 * @return
+    //	 * 		das erstebeste globale UserField mit dem übergebenen Namen oder <code>null</code>, wenn keins gefunden wurde
+    //	 * @see #getUserField(Class, String)
+    //	 */
+    //	public UserField getGlobalUserField(String name) {
+    //		return getUserField(GLOBAL_USERFIELD_IDENTIFIER_CLASS, name);
+    //	}
+
+    /**
+     * @param userFieldTargetClass
+     * @return <code>true</code> if there is at least one {@link UserField} defined for the userFieldTargetClass
+     */
+    public boolean hasUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+        return getUserFields(userFieldTargetClass).iterator().hasNext();
+    }
+
+    /**
+     * @param userFieldTargetClass
+     * @return
+     */
+    public Iterable<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass) {
+        UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
+        return fieldList != null ? fieldList : new ArrayList<UserField>(0);
+    }
+
+    /**
+     * @return
+     */
+    public Iterable<UserField> getGlobalUserFields() {
+        return getUserFields(GLOBAL_USERFIELD_IDENTIFIER_CLASS);
+    }
+
+    /**
+     * @return
+     */
+    public Iterable<UserField> getFormatUserFields() {
+        return getUserFields(GLOBAL_FORMAT_IDENTIFIER_CLASS);
+    }
+
+    /**
+     * Die Methode <code>get</code> gibt unter Angabe der zugehörigen Klasse und des entsprechenden Indices ein <code>UserField</code> zurück. Es wird
+     * aus der HashMap die zur übergebenen Klasse gehörende ArrayList geladen, falls sie nicht schon geladen ist, und das Element an der Stelle
+     * <code>index</code> zurückgegeben.
+     * 
+     * @param userFieldTargetClass
+     * @param index
+     * @return UserField / public UserField get(Class<?> userFieldTargetClass, int index) { UserFieldList ufl =
+     *         classToUserFieldListMap.get(userFieldTargetClass); if (ufl != null) return ufl.get(index); return null; } /** Liefert das globale
+     *         {@link UserField} mit dem entsprechenden Index (oder <code>null</code> wenn es kein solches gibt.
+     * @param index
+     * @return
+     * @see #get(Class, int) / public UserField getGlobal(int index) { return get(GLOBAL_USERFIELD_IDENTIFIER_CLASS, index); } /** Gibt
+     *      <code>UserField</code> zurück, für das der <code>hashString</code> angegeben wurde.
+     * @param hashString
+     * @return <code>UserField</code>
+     */
+    public UserField getUserField(final String hashString) {
+        return hashStringToUserFieldMap.get(hashString);
+    }
+
+    /**
+     * Prüft für ein übergebenes <code>UserField</code>, ob es zu den berechenbaren Formel-UserFields gehört.
+     * 
+     * @param formulaUserField
+     * @return <code>true</code>, wenn es ein Formel-UserField ist, das berechnet werden kann, sonst <code>false</code>
+     */
+    public boolean isCalculatable(final UserField formulaUserField) {
+        int index = formulaUserFieldList.indexOf(formulaUserField);
+        if (index >= 0 && index < firstInconsistentUserFieldFormulaIndex) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Prüft, ob die Formeldefinitionen konsistent sind - also ob sich die Formeln nicht im Kreis referenzieren.
+     * 
+     * @return <code>false</code>, wenn alle Formeln berechnet werden können, sonst <code>true</code>
+     */
+    public boolean hasCrossReferences() {
+        //wenn irgendwas an den Kennzahlformeldefinitionen geändert wurde -> prüfe die Kreisreferenzen in den Formeln
+        if (firstInconsistentUserFieldFormulaIndex == FORMULA_INCONSITENCE_INDEX_UNKNOWN) {
+            ArrayList<UserField> inconsistentUserFields = makeFormulaUserFieldListConsistent();
+            if (inconsistentUserFields == null) {
+                firstInconsistentUserFieldFormulaIndex = NO_INCONSISTENCE_INDEX_FOUND;
+                return false;
+            }
+            //den Index des ersten nicht konsistenten UserFields in der Formel-UserField-Liste merken
+            firstInconsistentUserFieldFormulaIndex = formulaUserFieldList.size() - inconsistentUserFields.size();
+            StringBuilder sb = new StringBuilder(Tool3lgmConstants.getErrString("circuit_reference"));
+            for (int i = 0; i < inconsistentUserFields.size(); i++) {
+                sb.append("\n");
+                sb.append(inconsistentUserFields.get(i).getName());
+            }
+            MultipleOptionPane.showInformationMessageDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("fehler"), sb.toString());
+            return true;
+            //die Globale Option die Kennzahlen zu berechnen erstam abschalten
+            //			UserProperties.setEnableClassificationNumberCalculation(false);
+        }
+        return false;
+    }
+
+    /**
+     * Prüft, ob sich ein FormeluserField in seiner Formel außerhalb einer verrechnungsfunktion selbst referenziert.
+     * 
+     * @param userField
+     * @return
+     */
+    public static boolean hasSimpleCrossReferences(final UserField userField) {
+        String formula = userField.getFormula();
+
+        if (formula == null) {
+            return false;
+            // UserFields dürfen sich nur in PartOf-Beziehungen in
+            // Verrechnungsfunktionen selbst referenzieren,
+            // da dann ja immer nur das UserField der verbundenen Elemente abgefragt
+            // wird.
+            // Es darf aber nicht außerhalb einer Verrechnungfunktion in der Formel
+            // auftauchen, da es sich dann
+            // für ein und dasselbe Element (für das es berechnet werden soll) auf
+            // sich selbst bezieht
+        }
+
+        // Prüfen kann man das, in dem man darauf hin prüft, ob vor dem
+        // userFieldHash, der KEnnzahl, die überprüft werden soll, ein "|" (
+        // Calculator.OPERAND_DELIMITER ) steht. Dann und nur dann, liegt keine
+        // Kreisreferenz vor.
+        // Das ist nämlich genau dann der Fall, wenn das userField in einer
+        // Verrechnungsfunktion vorkommt und in diesem Fall, ist es gestattet.
+
+        StringTokenizer st = new StringTokenizer(formula);
+
+        String firstString = "";
+        String secondString = "";
+
+        if (st.hasMoreTokens()) {
+            firstString = st.nextToken();
+        }
+        // Hier wird geprüft, ob immer vor dem userField der Delimiter steht.
+        // Wenn das nicht der Fall ist, ist dieFormel nicht korrekt und es liegt
+        // eine Kreisreferenz vor.
+        while (st.hasMoreTokens()) {
+            secondString = st.nextToken();
+
+            if (secondString.equals(userField.getHashCode())) {
+                if (!firstString.equals(Calculator.OPERAND_DELIMITER)) {
+                    return true;
+                }
+            }
+            firstString = secondString;
+        }
+
+        // Prüfen, ob in der einen Formel mind. zwei Verrechnungsfunktionen
+        // angegeben sind, die aus unterschiedlichen Richtungen rechnen wollen.
+
+        // Das Vorgehen:
+        // In einer Schleife: 
+        // 1) Durchsuche den Stringtokenizer nach userFieldHashes, die gleich dem eigenen userfield sind.
+        // 2) Wenn so einer gefunden wurde, handelt es sich um eine interne Verrechnung. 
+        //	  Suche die Richtung: Prüfe, ob nach dem userFieldHash erst ein Verteilungsgewicht angegeben wurde. 
+        //	  (Das ist auch ein userFieldHash)
+        // 3) Wenn die Richtung gefunden wurde, prüfe, ob die Variable direction noch leer ist, 
+        // 		wenn ja, setze die Variable mit den Richtungswert.
+        //		Wenn nein, dann prüfe, ob der Richtungswert gleich dem der Variable ist.
+        //			Wenn ja, in der Schelife weitermachen
+        //			Wenn nein: es liegt eine Kreisrefenz vor. Ausstieg aus der Schleife mit return true (true = es liegt eine Kreis.-ref. vor).
+        //
+        //	Durch das einmalige Setzen der Richtung, weiß man, welche Richtungen alle folgenden internen Verrechnungsfunktionen haben müssen. 
+        //  Diese wird also als Referenzrichtung genutzt.
+
+        st = new StringTokenizer(formula);
+
+        firstString = "";
+        secondString = "";
+        String direction = "";
+
+        while (st.hasMoreTokens()) {
+            firstString = st.nextToken();
+
+            if (firstString.equals(userField.getHashCode())) {
+
+                // Das nächtse Zeichen holen, wenn es ein Delimiter ist, steht
+                // dahinter entweder die Richtung oder im Falle einer TWSUM kann
+                // auch erst noch das zu nuzende VG stehen und dann erst die
+                // Richtung.
+                // Diese muss gemerkt werden.
+                if (st.hasMoreTokens()) {
+                    secondString = st.nextToken();
+                }
+                if (secondString.equals(Calculator.OPERAND_DELIMITER)) {
+                    if (st.hasMoreTokens()) {
+                        secondString = st.nextToken();
+                    }
+                    // Wenn wieder auf das eigene UserField gestoßen wird, muss
+                    // geprüft werden, ob erst ein Verteilungsgewicht angegeben
+                    // wurde.
+                    if (secondString.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                        // Wenn erst ein Verteilungsgewicht angegeben wurde,
+                        // muss als nächstes der Delimiter und als nächstes die
+                        // Richtung geholt werden
+                        if (st.hasMoreTokens()) {
+                            secondString = st.nextToken();
+                        }
+                        if (secondString.equals(Calculator.OPERAND_DELIMITER)) {
+                            if (st.hasMoreTokens()) {
+                                // spätestens an dieser Stelle kommt auf jeden
+                                // Fall die Richtung
+                                secondString = st.nextToken();
+                            }
+                        }
+
+                        if (secondString.equals(UserField.DIRECTION_FROM_PART_TO_WHOLE) || secondString.equals(UserField.DIRECTION_FROM_WHOLE_TO_PART)) {
+                            direction = secondString;
+                        }
+                    } else
+                    // Wenn es kein Verteilungsgewicht ist, gehts gleich hier weiter.
+                    if (direction.equals("")) {
+                        //Die erste Richtung, die gefunden wurde, wird als die Vergleichsrichtung angesegen. 
+                        //Alle anderen Richtungen in Verrechnungsfuntionen, die sich selbst verrechnen, müssen die selbe Richtung haben.
+                        direction = secondString;
+                    } else if (!direction.equals(secondString)) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return Iterator aller Schlüsselwerte der Map, die von den Klassen auf die für sie definierten UserFields mappt
+     */
+    public Set<Class<? extends UserFieldTarget>> getClassToUserFieldKeys() {
+        return classToUserFieldListMap.keySet();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    // Util-Funktionen zur Sicherung der Konsistenz der UserFields mit Formeln //
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Sortiert die Liste <code>formulaUserFieldList</code> so, dass sie konsistent ist. Siehe Kommentar zur Variable
+     * <code>formulaUserFieldList</code>.
+     * 
+     * @return Liste von <code>UserField</code>s, die sich im Kreus referenzieren oder von solchen Elementen abhängig sind bzw. <code>null</code>,
+     *         wenn es keine Kreisreferenzen gibt
+     */
+    private ArrayList<UserField> makeFormulaUserFieldListConsistent() {
+        ArrayList<UserField> calculateableFormulaList = new ArrayList<UserField>(formulaUserFieldList.size());
+        while (true) {
+            //Größe der Liste der berechenbaren USerFields merken -> nur wenn sie in jedem
+            //Durchlauf wächst, sind die Formeln konsistent
+            int lastSortedListSize = calculateableFormulaList.size();
+            for (int i = 0; i < formulaUserFieldList.size(); i++) {
+                UserField u = formulaUserFieldList.get(i);
+
+                if (hasSimpleCrossReferences(u)) {
+                    continue;
+                }
+
+                boolean allDependingAreCalculateable = true;
+                String formula = u.getFormula();
+                if (formula == null) {
+                    return null;
+                }
+                StringTokenizer st = new StringTokenizer(formula, Calculator.ALL_IN_FUNCTION_SIGNS);
+                while (st.hasMoreElements()) {
+                    String token = st.nextToken();
+                    if (token.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
+                        //hole das UserField von dem die aktuelle Formel abhängig ist
+                        UserField dependingUserField = getUserField(token);
+                        //wenn jetzt die Formel sich selbst enthält, dann ist das zulässig (oben wurden alle
+                        //unzulässigen Selbstreferenzen von UserFilds schon geprüft)
+                        if (u.equals(dependingUserField)) {
+                            continue;
+                        }
+                        //wenn das auch eine Formel ist
+                        if (dependingUserField != null && dependingUserField.hasStyle(UserField.Style.CLASSIFICATION_NUMBER_FORMULA)) {
+                            //wenn die abhängige Formel noch nicht in der Liste der berechenbaren Formeln vorkommt
+                            if (!calculateableFormulaList.contains(dependingUserField)) {
+                                allDependingAreCalculateable = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                //wenn alle UserFields in der aktuellen Formel bereits in der Liste der berechenbaren vorkommen
+                if (allDependingAreCalculateable) {
+                    //füge diese Formel zur Liste der berechenbaren Formeln hinzu
+                    calculateableFormulaList.add(u);
+                    //das UserField aus der Urprungsliste entfernen und den Index dementsprechend verringern
+                    formulaUserFieldList.remove(i--);
+                    //prüfe das nächste UserField aus der unsortierten Liste
+                    break;
+                }
+
+            }
+            //wenn alle Formeln in die Liste der berechenbaren einsortiert werden konnten
+            if (formulaUserFieldList.size() == 0) {
+                //setzte die glovlae Liste auf die nun sortierte Liste
+                formulaUserFieldList = calculateableFormulaList;
+                return null;
+            }
+            //wenn die ganze Liste durchlaufen wurde, aber keine Kennzahlformel mehr zu den berechenbaren hinzugefügt 
+            //werden konnte, obwohl noch welche in der unsortierten Liste sind -> die noch in der Liste formulaUserFieldList
+            //enthaltenen UserFields refrenzieren sich an mindesten einer Stelle in ihren Formeln gegenseitig (es reicht
+            //schon, dass sich 2 Formeln gegenseitig referenzieren, von denen dann der ganze Rest abhängt) 
+            if (lastSortedListSize == calculateableFormulaList.size()) {
+                ArrayList<UserField> inconsistentUserFields = new ArrayList<UserField>(formulaUserFieldList);
+                //füge zur globalen Liste wieder alle entfernten Elemente hinzu
+                calculateableFormulaList.addAll(formulaUserFieldList);
+                formulaUserFieldList = calculateableFormulaList;
+                //gib die Elemente zurück, in denen sich mind. ein Kreis befindet
+                return inconsistentUserFields;
+            }
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Funktionen zur Berechnung der Kennzahlformeln (das eigentliche Berechnen passiert im Calculator) //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    protected void clearCalculatedUserFieldValues() {
+        //für alle Elementklassen alle berechneten Werte zurück setzen - also löschen
+
+        //Menge alle Elementklassen, für die bereits alle UserFields gelöscht wurden (alle
+        //FormelUserFields werden für alle Elemente einer Art immer komplett gelöscht, sobald
+        //in der Liste aller Formel-UserFields (formulaUserFieldList) ein UserField für die
+        //betreffende Elementart gefunden wurde. Beim nächsten UserField für diese Elementart
+        //braucht man nicht noch einmal alle UserFields zu löschen) 
+        HashSet<Class<?>> resetedElementClasses = new HashSet<Class<?>>(15);
+
+        //Das Hauptdokument der GDCollection holen (UserField-Änderungen gelten immer für alle
+        //Elemente, also immer im Hauptdokument arbeiten)
+        GraphDocument doc = gdcoll.getMainGraphDocument();
+
+        //Für alle Kennzahlformel-UserFields
+        for (UserField userField : formulaUserFieldList) {
+            Class<? extends UserFieldTarget> userFieldTargetClass = userField.getTargetClass();
+            //Wenn bereits alle Formel-UserFields der Elementart des aktuellen UserFields gelöscht wurden
+            if (resetedElementClasses.contains(userFieldTargetClass)) {
+                //nächstes Formel-UserField prüfen
+                continue;
+            }
+            //Elementklasse des UserFields als bereits zurück gesetzt merken
+            resetedElementClasses.add(userFieldTargetClass);
+            //alle berechneten Modellvariablen zurück setzen
+            if (userField.isGlobalOrFormat()) {
+                gdcoll.resetCalculatedUserFieldMap();
+                continue;
+            }
+            //alle berechnten Elementvariablen zurück setzen (das kann hier nur noch eine Unterklasse von ModelElement sein)
+            for (UserFieldTarget userFieldTarget : doc.getModelItems(userFieldTargetClass.asSubclass(ModelElement.class))) {
+                userFieldTarget.resetCalculatedUserFieldMap();
+            }
+        }
+        return;
+    }
+
+    /**
+     * Berechnet den Wert des übergebenen <code>UserField</code>s für das übergebene <code>UserFieldTarget</code>.
+     * 
+     * @param userField
+     * @param target
+     * @return <code>UserField.ERROR_OBJECT_VALUE</code>, wenn die Berechnung nicht durchgeführt werden konnte oder den <code>Double</code>-Wert als
+     *         <code>String</code>
+     */
+    protected final String calculate(final UserField userField, final UserFieldTarget target) {
+        if (!isCalculatable(userField)) {
+            return UserField.ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION;
+        }
+
+        //		if (count==0){
+        //			count++;
+        //			GraphDocument doc = gdcoll.getGraphDocument();
+        //			ArrayList elems = doc.getAllModelElements(RechAnwendungsbaustein.class, true);
+        //			for (int i=0; i<getUserFieldCount(RechAnwendungsbaustein.class); i++){
+        //				UserField userField = get(RechAnwendungsbaustein.class, i);
+        //				if (userField.getStyle()==UserField.CLASSIFICATION_NUMBER_STYLE){
+        //					for (int j=0; j<elems.size(); j++){
+        //						UserFieldTarget uft = (UserFieldTarget)elems.get(j);
+        //						if (uft.getUserFieldInputValue(userField).equals(UserField.EMPTY_STRING))
+        //							uft.setUserFieldInputValue(userField, "0");
+        //					}
+        //				}
+        //			}
+        //		}
+
+        return calculator.calculate(userField, target);
+    }
+
+    /**
+     * Immer wenn sich was an den Definitionen ändert muss diese Funktion aufgerufen werden, damit die Definition auf CrossReferences geprüft wird.
+     * Beim Hinzufügen oder Entfernen von UserFields macht die Definition das allein, aber wenn von einer Kennzahlformel der FormelString geändert
+     * wird, muss das der Ändernde machen.
+     */
+    public void setConsistencyUnknown() {
+        firstInconsistentUserFieldFormulaIndex = FORMULA_INCONSITENCE_INDEX_UNKNOWN;
+        initReset();
+    }
+
+    /**
+     * @param format Format-UserField, für das alle Kennzahlen zurück gegeben werden sollen, die es benutzen
+     * @return Liste aller USerFields, die das übergebene Format-Userfield als benutzen
+     */
+    public ArrayList<UserField> getFormatUser(final UserField format) {
+        ArrayList<UserField> returnList = new ArrayList<UserField>();
+
+        if (!format.hasStyle(UserField.Style.FORMAT)) {
+            return returnList;
+        }
+
+        //Iterator aller Keys der Map von den Elementklassen auf die UserFields
+        // holen
+        for (Class<? extends UserFieldTarget> elementClass : getClassToUserFieldKeys()) {
+            for (UserField uf : getUserFields(elementClass)) {
+                if (format == uf.getFormatUserField()) {
+                    returnList.add(uf);
+                }
+            }
+        }
+        return returnList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Class<?> keyClass : getClassToUserFieldKeys()) {
+            sb.append(keyClass.getSimpleName());
+            sb.append("\n");
+            for (Object o : classToUserFieldListMap.get(keyClass)) {
+                UserField uf = (UserField) o;
+                if (uf == null) {
+                    sb.append("null#############\n");
+                    continue;
+                }
+                sb.append("\t");
+                sb.append(uf.getHashCode());
+                sb.append("\n\t\t");
+                sb.append(uf.getName());
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+}

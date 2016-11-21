@@ -1,0 +1,89 @@
+<!ELEMENT modell_3lgm_2 (header?,userFieldDefinitions,objects,szenario+,images)>
+
+<!ELEMENT header (title?,version?,author?,description?)>
+<!ELEMENT objects (element*)>
+<!ELEMENT userFieldDefinitions (userFieldDef*)>
+<!ELEMENT images (bitmap*)>
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT userFieldDef (userFieldName, userFieldDescription, userFieldStyle, userFieldStandardValue*)>
+<!ATTLIST userFieldDef
+	hash	CDATA #REQUIRED
+	elementClass CDATA #REQUIRED
+>
+
+<!ELEMENT userFieldName (#PCDATA)>
+<!ELEMENT userFieldDescription (#PCDATA)>
+<!ELEMENT userFieldStyle (#PCDATA)>
+<!ELEMENT userFieldStandardValue (#PCDATA)>
+
+<!ELEMENT element (field*,userField*)> 
+<!ATTLIST element 
+    class	CDATA #REQUIRED 
+    hash	CDATA #REQUIRED
+    layer	CDATA #REQUIRED
+>
+
+<!ELEMENT szenario (title, mapping?, view? layer*)>
+
+<!ELEMENT view (selected, x, y, zoom, shift, degree, multiView)>
+
+<!ELEMENT bitmap (#PCDATA)>
+<!ATTLIST bitmap
+	type CDATA #REQUIRED
+	hash CDATA #REQUIRED
+>
+
+<!ELEMENT userField (#PCDATA)>
+<!ATTLIST userField
+	hash	CDATA #REQUIRED
+>
+
+<!ELEMENT field (#PCDATA)> 
+<!ATTLIST field 
+    name	CDATA #REQUIRED 
+>
+
+<!ELEMENT layout (color?, form?, x?, y?, width?, height?, icon?)>
+<!ATTLIST layout
+	class	CDATA #IMPLIED
+>
+
+<!ELEMENT mapping (layout*)> 
+
+<!ELEMENT layer (layout*, container*)>
+<!ATTLIST layer
+	number	CDATA #REQUIRED
+>
+
+<!ELEMENT container (layout?)>
+<!ATTLIST container
+	hash	CDATA #REQUIRED
+>
+
+<!ELEMENT color (red, green, blue)> 
+
+<!ELEMENT red (#PCDATA)> 
+<!ELEMENT green (#PCDATA)> 
+<!ELEMENT blue (#PCDATA)> 
+
+<!ELEMENT form (#PCDATA)> 
+<!ELEMENT x (#PCDATA)> 
+<!ELEMENT y (#PCDATA)>
+<!ELEMENT width (#PCDATA)> 
+<!ELEMENT height (#PCDATA)>
+<!ELEMENT icon (#PCDATA)>
+<!ELEMENT line_style (#PCDATA)>
+<!ELEMENT line_thickness (#PCDATA)>
+<!ELEMENT font_family (#PCDATA)>
+<!ELEMENT font_style (#PCDATA)>
+<!ELEMENT font_size (#PCDATA)>
+<!ELEMENT zoom (#PCDATA)>
+<!ELEMENT shif (#PCDATA)>
+<!ELEMENT degree (#PCDATA)>
+<!ELEMENT multiView (#PCDATA)>
+<!ELEMENT selected (#PCDATA)>

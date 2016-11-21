@@ -1,0 +1,66 @@
+<!ELEMENT modell_3lgm_2 (header?,objects,szenario+,images)>
+
+<!ELEMENT header (title?,version?,author?,description?)>
+<!ELEMENT objects (element*)>
+<!ELEMENT images (bitmap*)>
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT element (field*)> 
+
+<!ATTLIST element 
+    class	CDATA #REQUIRED 
+    hash	CDATA #REQUIRED
+    layer	CDATA #REQUIRED
+>
+
+<!ELEMENT szenario (title, mapping?, layer*)>
+
+<!ELEMENT bitmap (#PCDATA)>
+<!ATTLIST bitmap
+	type CDATA #REQUIRED
+	hash CDATA #REQUIRED
+>
+
+<!ELEMENT field (#PCDATA)> 
+<!ATTLIST field 
+    name	CDATA #REQUIRED 
+>
+
+<!ELEMENT layout (color?, form?, x?, y?, width?, height?, icon?)>
+<!ATTLIST layout
+	class	CDATA #IMPLIED
+>
+
+<!ELEMENT mapping (layout*)> 
+
+<!ELEMENT layer (layout*, container*)>
+<!ATTLIST layer
+	number	CDATA #REQUIRED
+>
+
+<!ELEMENT container (layout?)>
+<!ATTLIST container
+	hash	CDATA #REQUIRED
+>
+
+<!ELEMENT color (red, green, blue)> 
+
+<!ELEMENT red (#PCDATA)> 
+<!ELEMENT green (#PCDATA)> 
+<!ELEMENT blue (#PCDATA)> 
+
+<!ELEMENT form (#PCDATA)> 
+<!ELEMENT x (#PCDATA)> 
+<!ELEMENT y (#PCDATA)> 
+<!ELEMENT width (#PCDATA)> 
+<!ELEMENT height (#PCDATA)>
+<!ELEMENT icon (#PCDATA)>
+<!ELEMENT line_style (#PCDATA)>
+<!ELEMENT line_thickness (#PCDATA)>
+<!ELEMENT font_family (#PCDATA)>
+<!ELEMENT font_style (#PCDATA)>
+<!ELEMENT font_size (#PCDATA)>
