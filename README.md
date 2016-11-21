@@ -2,6 +2,8 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
+call: java -Xmx512m -Xss20m -splash:splash.gif -jar lib/tool3lgm.jar %1 %2 %3 %4 %5 %6 %7 %8 %9
+
 ### What is this repository for? ###
 
 * Quick summary
