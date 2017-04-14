@@ -40,7 +40,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
  * Stellt Funktionen, mit denen das Modell bereinigt werden kann.
- * 
+ *
  * @author AXS created on 03.07.2007
  */
 public class ModelCleaner {
@@ -55,7 +55,7 @@ public class ModelCleaner {
 
     /**
      * Initialisiert einen neuen <code>ModelCleaner</code>.
-     * 
+     *
      * @param gdcoll
      */
     public ModelCleaner(final GDCollection gdcoll) {
@@ -206,9 +206,15 @@ public class ModelCleaner {
         }
 
         for (ElementContainer kpc2delete : al) {
-            for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                kpc2delete.getGraphDocument().getLayer(ModelConstants.LAYERS[i]).remove(kpc2delete);
-                gdcoll.delete(kpc2delete.getElement());
+            //da die hier zu löschenden Knickpunkte keinen Owner haben, muss man sie einfach aus
+            //all ihren GraphDocuments löschen. Da nicht sicher ist, ob layerFor() des Bendpoints
+            //den richtigen Layer zurück liefert -> einfach auf allen Layern löschen (wo sie nicht
+            //enthalten sind, passiert einfach nichts)
+            ModelElement bendpoint = kpc2delete.getElement();
+            for (GraphDocument doc : bendpoint.getMySzenarios()) {
+                for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
+                    doc.getLayer(ModelConstants.LAYERS[i]).remove(kpc2delete);
+                }
             }
         }
 
@@ -365,7 +371,7 @@ public class ModelCleaner {
      * verschiedene String durch "-ZUSAMMENGEFÜHRT-" getrennt im Ausgangstring stehen, dann kommt
      * der Ausgangstring zurück. (also das "-ZUSAMMENGEFÜHRT-" bleibt erhalten) @ param sourceString
      * String der bereinigt werden soll
-     * 
+     *
      * @param newDelimiter Yeichenkette, die als neuer Trenner im Rückgabestring eingebaut werden
      *            soll, wenn 2 verschiedene Zeichenketten duruch einen der 'alten' Delimiter aus
      *            delimiter getrennt waren
@@ -474,7 +480,7 @@ public class ModelCleaner {
     /**
      * Löscht alle inkonsitenten Anwendungsbaustein-Konfigurationen aus dem Gesamtmodell.<br>
      * Inkonsitente Anwendungsbaustein-Konfigurationen sind mit keinem Anwendungsbaustein verbunden.
-     * 
+     *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
      */
     @SuppressWarnings("unchecked")
@@ -488,7 +494,7 @@ public class ModelCleaner {
 
     /**
      * Löscht alle <code>AufOrgKombination</code>en, die mit keiner <code>Aufgabe</code> oder keiner <code>Organisationseinheit</code> verbunden sind.
-     * 
+     *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
      */
     void removeInconsistentAufOrgKombinations(final boolean showResultDialog) {
@@ -500,7 +506,7 @@ public class ModelCleaner {
      * Gesamtmodell.<br>
      * Inkonsitente Physischen Datenverarbeitungsbaustein-Konfigurationen sind mit keinem physischen
      * Datenverarbeitungsbaustein verbunden.
-     * 
+     *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
      */
     void removeInconsistentPDVBConfigurations(final boolean showResultDialog) {
@@ -515,7 +521,7 @@ public class ModelCleaner {
      * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen <code>ABKonfiguration</code>en und AWB. Die
      * <code>AufOrgKombination</code> und die <code>ABKonfiguration</code>en werden neu angelegt mit allen Assoziationen, die sie zu
      * anderen Elementen haben.
-     * 
+     *
      * @param gdcoll
      * @param auf
      * @param aufOrg
@@ -628,7 +634,7 @@ public class ModelCleaner {
     /**
      * Prüft, ob die übergebene <code>Aufgabe</code> Konfigurationen besitzt, die sie an vorhandene
      * Teilaufgaben weitergeben kann.
-     * 
+     *
      * @param auf
      * @return
      */
@@ -664,7 +670,7 @@ public class ModelCleaner {
     /**
      * Gibt alle Konfigurationen der übergebenen Aufgabe an ihre Teilaufgaben weiter.<br>
      * Im Einzelnen werden für jede Teilaufgabe alle Konfigurationen mit allen
-     * 
+     *
      * @param auf
      * @param transactionId
      */
@@ -713,7 +719,7 @@ public class ModelCleaner {
     /**
      * Klont von Aufgaben sämtliche AufOrgKombinationen mit sämtlichen AWB-Konfigurationen an die
      * Teilaufgaben und entfernt die Originale von der Oberaufgabe.
-     * 
+     *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
      */
     public final void copyAufOrgKombinationsToAufLeafs(final boolean showResultDialog) {
@@ -760,7 +766,7 @@ public class ModelCleaner {
     public static final void removeInconsistentElements(final GDCollection gdcoll, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement> connectedElementClass, final String resultStringKey) {
         @SuppressWarnings("rawtypes")
         Class[] connectedElementClasses = {
-            connectedElementClass
+                connectedElementClass
         };
         removeInconsistentElements(gdcoll, searchElementClass, connectedElementClasses, resultStringKey);
     }
@@ -772,7 +778,7 @@ public class ModelCleaner {
      * Das Ergebnis wird ausgegeben, wenn ein nicht leerer <code>resultStringKey</code> angegeben
      * wird, der aus den Resourcen einen String lädt, wlcher beschreibt, was gelöscht wurde. Die
      * Anzahl der gelöschten Elemente wird diesem String in der Ausgabe vorangestellt.
-     * 
+     *
      * @param doc
      * @param searchElementClass
      * @param connectedElementClasses
@@ -798,7 +804,7 @@ public class ModelCleaner {
     /**
      * Liefert alle Elemente der Art <code>searchType</code>, die im angegebenen Modell nicht mit
      * Elementen der Art <code>connectedTypes</code> verbunden sind.
-     * 
+     *
      * @param doc Modell in dem gesucht wird
      * @param searchElementClass Art der Elemente, die gesucht werden sollen
      * @param connectedTypes Arten der Elemente, mit denen die gesuchten Elemente nicht verbunden

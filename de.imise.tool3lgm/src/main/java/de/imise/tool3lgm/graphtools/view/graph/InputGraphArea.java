@@ -34,7 +34,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * COMMENTME
- * 
+ *
  * @author N.N., AXS
  */
 public class InputGraphArea extends BasicGraphArea implements MouseListener, MouseMotionListener, MouseWheelListener {
@@ -124,7 +124,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @param gdoc
      */
     public InputGraphArea(final GraphDocument gdoc) {
@@ -160,7 +160,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @param k
      */
     public final void setNextKnot(final Knoten k) {
@@ -173,7 +173,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @return
      */
     public final Knoten getNextKnot() {
@@ -182,7 +182,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @param b
      */
     public final void setMouseMakesKnot(final boolean b) {
@@ -199,7 +199,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @param b
      */
     public final void setMouseMakesTrace(final boolean b) {
@@ -256,7 +256,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * zurück gegeben.
      * Die Weite und Höhe des {@link Rectangle} geben Koordinaten an und nicht die Weite und Höhe im eigentlichen
      * Sinne
-     * 
+     *
      * @param rect
      *            {@link Rectangle}, die verändert wird, falls die Koordinaten des übergebenen {@link ElementContainer}s
      *            außerhalb der vorher bestehenden Dimasion lagen
@@ -280,7 +280,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * zurück gegeben.
      * Die Weite und Höhe des {@link Rectangle} geben Koordinaten an und nicht die Weite und Höhe im eigentlichen
      * Sinne
-     * 
+     *
      * @param rect
      *            {@link Rectangle}, die verändert wird, falls die Koordinaten des übergebenen {@link ElementContainer}s
      *            außerhalb der vorher bestehenden Dimasion lagen
@@ -636,7 +636,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
                     //wenn ein Knickpunkt gedraggt wurde
                     if (mouse_dragged && ka != null && ka instanceof BendpointContainer) {
-                        //Prüfe ob er gelöscht werden soll. Das soll er, wenn er auf einer Linie 
+                        //Prüfe ob er gelöscht werden soll. Das soll er, wenn er auf einer Linie
                         //zwischen den anderen Knickpunkten oder den Endpunkten der Kante liegt
                         BendpointContainer kpc = (BendpointContainer) ka;
                         Point pos = kpc.getPosition();
@@ -645,8 +645,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
                         //wenn der Knickpunkt auf seinen Vorgänger- oder Nachfolgerknickpunkt gedragged
                         //wurde -> lösche ihn
-                        if (Math.abs(prePos.x - pos.x) < BENDPOINT_OVERLAY_TOLERANCE && Math.abs(prePos.y - pos.y) < BENDPOINT_OVERLAY_TOLERANCE || Math.abs(postPos.x - pos.x) < BENDPOINT_OVERLAY_TOLERANCE
-                                && Math.abs(postPos.y - pos.y) < BENDPOINT_OVERLAY_TOLERANCE) {
+                        if (Math.abs(prePos.x - pos.x) < BENDPOINT_OVERLAY_TOLERANCE && Math.abs(prePos.y - pos.y) < BENDPOINT_OVERLAY_TOLERANCE
+                                || Math.abs(postPos.x - pos.x) < BENDPOINT_OVERLAY_TOLERANCE && Math.abs(postPos.y - pos.y) < BENDPOINT_OVERLAY_TOLERANCE) {
                             doc.getCollection().removeBendpoint(kpc.getKnickpunktKnoten(), TransactionManager.STANDARD_PID);
                             //prüfe, ob der Knickpunkt mit einer gewissen Toleranz auf fast einer Linie mit seinen Außenpunkten
                             //liegt -> wenn ja -> lösche ihn
@@ -692,15 +692,14 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                                 //Strecke zw. Vorgängerknickpunkt und Nachfolger
                                 double c = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 
-                                //Cosinus des Winkels zw. a und c 
+                                //Cosinus des Winkels zw. a und c
                                 double cosAlpha = (-(a * a) + b * b + c * c) / (2d * b * c);
 
-                                //Wenn die Differenz der beiden Winkel die Toleranz unterschreitet = die Knickpunkte 
+                                //Wenn die Differenz der beiden Winkel die Toleranz unterschreitet = die Knickpunkte
                                 //liegen nahezu auf einer Linie (der Cosinus ist 1, wenn der Winkel 0 Grad beträgt ->
                                 //daher die Abweichung von 1 bestimmen)
                                 if (Math.abs(1d - cosAlpha) < BENDPOINT_LINE_DIFFERENCE_ANGLE_IN_DEG) {
                                     //Lösche den aktuellen Knickpunkt
-                                    //									doc.getCollection().removeBendpoint(kpc, TransactionManager.STANDARD_PID);
                                     doc.getCollection().removeBendpoint(kpc.getKnickpunktKnoten(), TransactionManager.STANDARD_PID);
                                 }
 
@@ -748,7 +747,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @param lc
      * @param x
      * @param y
@@ -778,7 +777,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * COMMENTME
-     * 
+     *
      * @param lc
      * @param x
      * @param y
@@ -1116,7 +1115,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
                 //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Kante gedragged werden, da grabbed
                 //nur bei Knoten oder Kanten true gesetzt wird
-            } else /* if (ka instanceof EdgeContainer) */{
+            } else /* if (ka instanceof EdgeContainer) */ {
                 //der Einfügepunkt muss der Punkt sein, an dem die Maus vor dem Draggen war, denn sonst kann es vorkommen, dass bei mouseKlicked()
                 //die Kante getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
                 //des Kantenbereichs liegen und der Index des neuen Knickpunktes nicht korrekt bestimmt werden kann.

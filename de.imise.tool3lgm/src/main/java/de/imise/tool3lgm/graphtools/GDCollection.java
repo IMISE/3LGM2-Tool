@@ -116,7 +116,7 @@ public final class GDCollection extends UserFieldTarget {
     //			System.err.println("remove(Object key): key=" + key + " removed=" + removed);
     //			return removed;
     //		}
-    //		
+    //
     //	}*/;
 
     /** Definition der benutzerdefinierten Eigenschaften, Kennzahlen, Kanennzahlformel und Formaten */
@@ -204,8 +204,8 @@ public final class GDCollection extends UserFieldTarget {
     private int active_layer = 4;
 
     /**
-	 * 
-	 */
+     *
+     */
     public GDCollection() {
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
@@ -388,7 +388,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Setzt das übergebene <code>GraphDocument</code> als das aktuell selektierte.
-     * 
+     *
      * @param doc
      */
     public void setActiveGraphDocument(final GraphDocument doc) {
@@ -409,7 +409,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Entfernt das alle <code>GraphDocument</code>s aus der Liste der Teilmodelle. Sonst passiert
      * hier nichts!
-     * 
+     *
      * @return
      */
     public void simpleRemoveGraphDocuments() {
@@ -473,7 +473,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Fügt unter der angegebenen PID die UndoKommandos ein, um das Layout des übergebenen Containers
      * wieder herzustellen.
-     * 
+     *
      * @param ec
      * @param pid
      */
@@ -530,7 +530,7 @@ public final class GDCollection extends UserFieldTarget {
      * deren {@link EdgeContainer} und alle von den übergebenen Elementen abhängigen Elemente. Abhängige Elemente
      * selbst oder Kanten in der übergebenen Liste werden übergangen und nicht gelöscht, wenn das Element
      * von dem sie abhängen nicht gelöscht wird.
-     * 
+     *
      * @param elementsToRemove
      * @param pid
      */
@@ -540,7 +540,7 @@ public final class GDCollection extends UserFieldTarget {
         ArrayList<ElementContainer> reallyContainerToRemove = new ArrayList<ElementContainer>();
         for (ElementContainer ec : elementsToRemove) {
             GraphDocument ecDoc = ec.getGraphDocument();
-            //man kann hier nur Elemente aus demselben Szenario (also nicht aus dem Hauptmodell und alle aus dem 
+            //man kann hier nur Elemente aus demselben Szenario (also nicht aus dem Hauptmodell und alle aus dem
             //gleichen Teilmodell löschen)
             if (ecDoc == doc || szen != null && szen != ecDoc) {
                 continue;
@@ -604,7 +604,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Entfernt den {@link EdgeContainer} und alle seine Knickpunkte aus seinem GraphDocument.
-     * 
+     *
      * @param edgeContainer
      * @param pid
      * @return <code>true</code> wenn der Container nicht <code>null</code> war, sonst <code>false</code>
@@ -632,7 +632,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Entfernt die übergebenen ElementContainer aus dem Szenario des ersten Containers in der Liste ohne dabei
      * irgendwelche Konsistenzprüfungen vorzunehmen.
-     * 
+     *
      * @param containerToRemove
      * @param pid
      */
@@ -855,7 +855,7 @@ public final class GDCollection extends UserFieldTarget {
                     ks.removeEdge(edge);
                     ke.removeEdge(edge);
                 }
-                //TODO:AXS:				
+                //TODO:AXS:
                 //				ElementContainer edgeCont = edge.getContainer(this.doc);
                 //				int layer = ModelConstants.layerFor(edge.getClass());
                 //				this.doc.layer[layer].remove(edgeCont);
@@ -889,10 +889,10 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Entfernt den übergebenen {@link BendpointContainer} aus dem Haupt-{@link GraphDocument} und
+     * Entfernt den übergebenen {@link Knickpunkt} aus dem Haupt-{@link GraphDocument} und
      * dem Szenario, in dem er dargestellt wird (das ist immer nur 1). Es werden die Undo-Redo-Kommandos geloggt.
-     * 
-     * @param kc
+     *
+     * @param kpk
      * @param pid
      */
     public final void removeBendpoint(final Knickpunkt kpk, final int pid) {
@@ -917,7 +917,7 @@ public final class GDCollection extends UserFieldTarget {
         int layerIndex = edgeC.layerFor();
         //den Knickpunkt im Teilmodell löschen
         szenario.getLayer(layerIndex).remove(kc);
-        //den Knickpunkt im Hauptmodell löschen 
+        //den Knickpunkt im Hauptmodell löschen
         doc.getLayer(layerIndex).remove(kp.getContainer(doc));
         kcDoc.addRedoCommand(GDCommands.DELETE + " " + kp.getHashString(), pid);
         kcDoc.addUndoCommand(GDCommands.INSERT_BENDING_POINT + " " + szenario.getHashString() + " " + edgeC.getHashString() + " " + kc.getHashString() + " " + kc.getX() + " " + kc.getY() + " " + oldIndex, pid);
@@ -979,7 +979,7 @@ public final class GDCollection extends UserFieldTarget {
             bendpointIndex = kc.getKnickpunktInsertIndex(x, y);
         }
 
-        //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante, 
+        //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante,
         szen.addRedoCommand(GDCommands.INSERT_BENDING_POINT + " " + szenHashString + " " + kc.getHashString() + " " + kp.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
         szen.addUndoCommand(GDCommands.DELETE + " " + kp.getHashString(), pid);
 
@@ -1085,7 +1085,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Legt für das übergebene Element alle initialen Unterelemente an, wenn diese noch nicht vorhanden sind.
-     * 
+     *
      * @param me
      * @param pid
      */
@@ -1116,7 +1116,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Überprüft, in welchen {@link Szenario}s, Interebenenbeziehung angezeigt werden sollen und aktiviert
      * gegeben Falls das Anzeigen der neu anglegten Instanz.
-     * 
+     *
      * @param interLayerEndClass
      */
     void checkInterLayerConnectionVisibility(final KonfigurationContainer konfC) {
@@ -1185,7 +1185,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert.<br>
-     * 
+     *
      * @param edgeClassName
      * @param hashString
      * @param startElementHash
@@ -1205,7 +1205,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert.<br>
-     * 
+     *
      * @param startElement
      * @param endElement
      * @param pid
@@ -1259,7 +1259,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert. Die Verbindung
      * entsteht immer in Vorwärtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
-     * 
+     *
      * @param edgeClassName
      *            Klassenname der kante, die angelegt werden soll. Ist nur relevant, wenn es mehrere Kantenarten zwischen den Elementen geben kann.
      * @param edgeHash
@@ -1449,10 +1449,10 @@ public final class GDCollection extends UserFieldTarget {
     //
     //		Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
     //		Class<? extends Kante> edgeClass = edgeClassOrNull==null ? null : edgeClassOrNull.asSubclass(Kante.class);
-    //		
+    //
     //		if (edgeClass!=null && !Kante.isConnecting(edgeClass, me1.getClass(), me2.getClass()))
     //			return null;
-    //		
+    //
     //		doc.start_transaction(pid);
     //
     //		try {
@@ -1482,7 +1482,7 @@ public final class GDCollection extends UserFieldTarget {
     //			}
     //
     //			edge = me1.getEdgeTo(me2, edgeClass, edgeIndex);
-    //			
+    //
     //			if (edge!=null) {
     //				doc.finish_transaction(pid);
     //				return edge;
@@ -1501,7 +1501,7 @@ public final class GDCollection extends UserFieldTarget {
     //					doc.undo(pid);
     //					return null;
     //				}
-    //	
+    //
     //				if ((edgeHash != null) && (!edgeHash.equals("")))
     //					edge.setHashString(edgeHash);
     //
@@ -1509,7 +1509,7 @@ public final class GDCollection extends UserFieldTarget {
     //					edge.setKnotsAndInsert(me1, edgeIndex, me2);
     //				else
     //					edge.setKnots(me1, me2);
-    //				
+    //
     //				if ((edge.getStart() != null) && (edge.getEnd() != null)) {
     //					kac = new EdgeContainer(edge, doc);
     //					edge.setName(doc.getNextNewName(edge), false);
@@ -1539,15 +1539,15 @@ public final class GDCollection extends UserFieldTarget {
     //				edgeList.remove(edge);
     //				if (edgeList.size()>0 && edgeList.size() == maxElemCardinality)
     //					deleteElement(edgeList.get(0), doc, pid);
-    //				
-    //				
+    //
+    //
     //			}
     //		} catch (Exception e) {
     //			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
     //			doc.undo(pid);
     //			return null;
     //		}
-    //		
+    //
     //
     //		doc.finish_transaction(pid);
     //		doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
@@ -1817,7 +1817,7 @@ public final class GDCollection extends UserFieldTarget {
             szen.finish_transaction(pid, false);
         }
 
-        //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig 
+        //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig
         tman.clearTransactionQueue();
 
         doc.finish_transaction(pid);
@@ -1896,7 +1896,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * show wird in LGMGraphDocument ausgewertet und legt fest, ob ein Text bezüglich der
      * allgemeinen Redundanz über dem Layer angezeigt werden soll (momentan nur bei Aufgabe)
-     * 
+     *
      * @param elementClass
      * @param show
      */
@@ -1912,7 +1912,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Wenn die anderen Parameter aus der Methode <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code> nicht angegeben
      * werden können, kann man hiermit ein allgemeines Ereignis feuern.
-     * 
+     *
      * @param bitmask
      */
     public final void distribute(final int bitmask) {
@@ -2030,8 +2030,8 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void createName() {
         int counter = 0;
         String newName = createName(counter);
@@ -2091,7 +2091,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * build the String for saving the collection
-     * 
+     *
      * @return byte[] String with FileVersionInfo and toXMLString()
      */
     private byte[] getSaveString() {
@@ -2170,7 +2170,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Speichert das Modell in der angegeben Datei im XML-Format (File wird
      * geschlossen)
-     * 
+     *
      * @param f
      *            Ziel-Datei beim Speichern
      */
@@ -2193,7 +2193,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Speichert das Modell in der angegeben Datei im XML-Format
      * (RandomAccessFile wird nicht geschlossen, um Datei zu sperren)
-     * 
+     *
      * @param f
      *            Ziel-Datei beim Speichern
      */
@@ -2312,7 +2312,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Importiert Szenarios aus einem anderem Modell in dieses Modell
-     * 
+     *
      * @param file
      *            Modelldatei, aus der Szenarios importiert werden sollen
      * @param chooseSzenarioDialog
@@ -2456,7 +2456,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * exportiert die übergebenen Szenarios in eine neue Datei
-     * 
+     *
      * @param export Array mit den zu exportierenden Szenarios
      * @param file Datei in die exportiert werden soll
      */
@@ -2522,7 +2522,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Sucht alle Element und Icons, die kopiert werden müssen
-     * 
+     *
      * @param export
      *            Array von Szenarios, die zu kopieren sind
      * @param elements
@@ -2605,7 +2605,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * sucht alle Element, die beim kopieren eines Knotens ebenfalls kopiert werden sollen (rekursiv, auch für die gefundenen Element)
-     * 
+     *
      * @param knoten der dessen abhängige Element gefunden werden sollen
      * @return HashSet mit den HashStrings der gefundenen Elementen
      */
@@ -2671,9 +2671,9 @@ public final class GDCollection extends UserFieldTarget {
 
     }
 
-    //	/*	
+    //	/*
     //	nach getCopyDependencies() suchen
-    //	
+    //
     //	Aufgabe
     //	AufOrgKombination
     //
@@ -2696,13 +2696,13 @@ public final class GDCollection extends UserFieldTarget {
     //		lege neue Verbindung zum gleichen Element an
     //	wenn ja
     //		kopiere das ganze Element rekursiv
-    //	
+    //
     //*/
 
     /**
      * gibt String mit Versionsdaten der Datei zurück<br>
      * setzt sich zusammen aus fileVersion_Benutzername_currentTimeMillis()
-     * 
+     *
      * @return String mit Versionsdaten der Datei
      */
     private String getFileVersion() {
@@ -2711,7 +2711,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * setzt die int-Variable mit der Dateiversion
-     * 
+     *
      * @param String der dim Aufbau dem Rueckgabe-String der Methode getFileVersion() gleicht
      */
     public void setFileVersion(final String string) {
@@ -2768,7 +2768,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * set the file modelElement for this collection
-     * 
+     *
      * @param _file the new File for this collection
      * @return boolean with false, if file is shared (--> readOnly) otherwise true
      * @author Thomas Rudert
@@ -2819,7 +2819,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * sets flag isZipFile<br/>
      * if isZipFile is true, collection will be saved into packed zip-File, when saveToFile() is called next time
-     * 
+     *
      * @param _zipFile new value for isZipFile
      * @author Thomas Rudert
      */
@@ -2837,7 +2837,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Load collection from file which is specified in field file
-     * 
+     *
      * @return true if reading was successful
      * @throws Exception; throws all exceptions happens during reading
      * @author Thomas Rudert
@@ -2900,7 +2900,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * load collection from packed zipFile
-     * 
+     *
      * @param fileStream the FileInputStream to the file which will be read
      * @return true, if reading was successful
      * @throws IOException if something wrong with the FileInputStream or the zip-format
@@ -2920,7 +2920,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * load collection from (not packed) file
-     * 
+     *
      * @param fileStream the FileInputStream to the File to load
      * @return true, if reading was successful
      * @throws IOException
@@ -2941,7 +2941,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * load collection from xml-source
-     * 
+     *
      * @param inputStream an InputStream to the xml-source
      * @return true, if reading was successful
      * @author Thomas Rudert
@@ -2991,7 +2991,7 @@ public final class GDCollection extends UserFieldTarget {
      * if isReadOnly is true do nothing and return false<br/>
      * if isZipFile write content into compressed file<br/>
      * create temporary file for writing and if all actions are completed successfully overwrites original file
-     * 
+     *
      * @return boolean with true, if and only if filewriting was successful
      * @author Thomas Rudert
      */
@@ -3052,7 +3052,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * save collection as xml-string into an packed zip-file
-     * 
+     *
      * @param fileStream FileOutputStream to write in
      * @throws IOException
      */
@@ -3100,8 +3100,8 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void close() {
         try {
             if (lock != null) {
@@ -3258,7 +3258,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Bildet aus der Liste der Container eine Liste von Elementen.
-     * 
+     *
      * @param elementContainer
      * @return
      */
@@ -3311,7 +3311,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Löscht aus allen <code>UserFieldTarget</code> s der Collection die
      * Eingabewerte der übergebenen <code>UserField</code>s.
-     * 
+     *
      * @param userFieldsToRemove
      *            <code>UserField</code> s deren Eingabewerte gelöscht werden
      *            sollen
