@@ -29,7 +29,17 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 public class KonfigurationContainer extends NodeContainer {
 
     public static Color[] farben = {
-            Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.yellow
+            Color.black,
+            Color.blue,
+            Color.cyan,
+            Color.darkGray,
+            Color.gray,
+            Color.green,
+            Color.magenta,
+            Color.orange,
+            Color.pink,
+            Color.red,
+            Color.yellow
     };
     public static int colorCounter = 0;
 
@@ -96,13 +106,6 @@ public class KonfigurationContainer extends NodeContainer {
     @Override
     public int getHeight() {
         return 1;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isKonfigurationContainer() {
-        return true;
     }
 
     double x_shift = 0;
