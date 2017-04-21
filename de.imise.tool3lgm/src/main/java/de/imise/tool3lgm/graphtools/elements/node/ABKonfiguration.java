@@ -19,28 +19,10 @@ public final class ABKonfiguration extends Konfiguration {
 
     @Override
     public ArrayList<ElementContainer> getClientContainer(final GraphDocument doc) {
-        return getClientContainer(doc, false);
-    }
-
-    /**
-     * @param doc
-     * @param testOnlyIfExistOne
-     * @return
-     */
-    private ArrayList<ElementContainer> getClientContainer(final GraphDocument doc, final boolean testOnlyIfExistOne) {
         ArrayList<ElementContainer> v = new ArrayList<ElementContainer>();
         ArrayList<ElementContainer> aufOrg = getConnectedContainer(AufOrgKombination.class, doc);
-        if (!testOnlyIfExistOne) {
-            for (int i = 0; i < aufOrg.size(); i++) {
-                v.addAll(((NodeContainer) aufOrg.get(i)).getKnoten().getConnectedContainer(Aufgabe.class, doc));
-            }
-        } else {
-            for (int i = 0; i < aufOrg.size(); i++) {
-                v = ((NodeContainer) aufOrg.get(i)).getKnoten().getConnectedContainer(Aufgabe.class, doc);
-                if (v.size() > 0) {
-                    return v;
-                }
-            }
+        for (int i = 0; i < aufOrg.size(); i++) {
+            v.addAll(((NodeContainer) aufOrg.get(i)).getKnoten().getConnectedContainer(Aufgabe.class, doc));
         }
         return v;
     }
