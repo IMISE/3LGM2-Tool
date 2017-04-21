@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -133,7 +135,11 @@ public final class ModelConstants {
     public static final int INTER_DOMAIN_LOGICAL_LAYER = 3;
     public static final int DOMAIN_LAYER = 4;
     public static final int[] LAYERS = {
-            PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER
+            PHYSICAL_LAYER,
+            INTER_LOGICAL_PHYSICAL_LAYER,
+            LOGICAL_LAYER,
+            INTER_DOMAIN_LOGICAL_LAYER,
+            DOMAIN_LAYER
     };
 
     /** Short-Name für den beginn des HashStrings bei allen Kanten */
@@ -176,8 +182,11 @@ public final class ModelConstants {
     /** Alle Knoten der FE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_DOMAIN_LAYER_NODES = {
-            Aufgabe.class, AufOrgKombination.class, Objekttyp.class, Organisationseinheit.class,
-            //		Rolle.class, 
+            Aufgabe.class,
+            AufOrgKombination.class,
+            Objekttyp.class,
+            Organisationseinheit.class,
+            //		Rolle.class,
             Prozess.class,
     };
 
@@ -188,14 +197,16 @@ public final class ModelConstants {
     public static final Class[] TREE_DOMAIN_LAYER_NODES = {
             Aufgabe.class,
             //			AufOrgKombination.class,
-            Objekttyp.class, Organisationseinheit.class,
-            //			Rolle.class, 
+            Objekttyp.class,
+            Organisationseinheit.class,
+            //			Rolle.class,
             Prozess.class,
     };
 
     /** Alle Knoten der FE als HashSet */
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
 
@@ -204,26 +215,45 @@ public final class ModelConstants {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = {
-            Aufgabe.class, Objekttyp.class, Organisationseinheit.class, Prozess.class,
-    //			Rolle.class, 
+            Aufgabe.class,
+            Objekttyp.class,
+            Organisationseinheit.class,
+            Prozess.class,
+            //			Rolle.class,
     };
 
     /** Alle Knoten zw. FE und LWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
-        ABKonfiguration.class,
+            ABKonfiguration.class,
     };
     /** Alle Knoten zw. FE und LWE als HashSet */
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
 
     /** Alle Knoten der LWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, Anwendungsprogramm.class, Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Datensatztyp.class, DBVerwaltungssystem.class, Dokumentensammlung.class,
-            Dokumententyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Organisationsplan.class, Softwareprodukt.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class,
+            RechAnwendungsbaustein.class,
+            KonAnwendungsbaustein.class,
+            Anwendungsprogramm.class,
+            Bausteinschnittstelle.class,
+            Benutzungsschnittstelle.class,
+            Datenbanksystem.class,
+            Datensatztyp.class,
+            DBVerwaltungssystem.class,
+            Dokumentensammlung.class,
+            Dokumententyp.class,
+            Ereignistyp.class,
+            Kommunikationsstandard.class,
+            Nachrichtentyp.class,
+            Organisationsplan.class,
+            Softwareprodukt.class,
+            EreignisNachrichtenTyp.class,
+            EreignisDokumentenTyp.class,
 
             //auch die Assoziationsklasse hier eintagen
             KommBeziehung.class,
@@ -234,55 +264,94 @@ public final class ModelConstants {
 
     /** Alle Knoten der LWE als HashSet */
     @SuppressWarnings({
-            "rawtypes", "unchecked"
+            "rawtypes",
+            "unchecked"
     })
     public static final HashSet<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
 
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class, KonAnwendungsbaustein.class,
+            RechAnwendungsbaustein.class,
+            KonAnwendungsbaustein.class,
             //		Anwendungsprogramm.class,
-            Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Datensatztyp.class, DBVerwaltungssystem.class, Dokumentensammlung.class, Dokumententyp.class, Ereignistyp.class, Kommunikationsstandard.class,
-            Nachrichtentyp.class, Organisationsplan.class, Softwareprodukt.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class,
+            Bausteinschnittstelle.class,
+            Benutzungsschnittstelle.class,
+            Datenbanksystem.class,
+            Datensatztyp.class,
+            DBVerwaltungssystem.class,
+            Dokumentensammlung.class,
+            Dokumententyp.class,
+            Ereignistyp.class,
+            Kommunikationsstandard.class,
+            Nachrichtentyp.class,
+            Organisationsplan.class,
+            Softwareprodukt.class,
+            EreignisNachrichtenTyp.class,
+            EreignisDokumentenTyp.class,
     };
 
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, Softwareprodukt.class, Kommunikationsstandard.class, DBVerwaltungssystem.class, Ereignistyp.class, Nachrichtentyp.class, Dokumententyp.class, EreignisNachrichtenTyp.class,
+            RechAnwendungsbaustein.class,
+            KonAnwendungsbaustein.class,
+            Softwareprodukt.class,
+            Kommunikationsstandard.class,
+            DBVerwaltungssystem.class,
+            Ereignistyp.class,
+            Nachrichtentyp.class,
+            Dokumententyp.class,
+            EreignisNachrichtenTyp.class,
             EreignisDokumentenTyp.class,
     };
 
     /** Alle Knoten zw. LWE und PWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = {
-        DBKonfiguration.class,
+            DBKonfiguration.class,
     };
     /** Alle Knoten zw. LWE und PWE als HashSet */
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
 
     /** Alle Knoten der PWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
+            PhysischerDVBaustein.class,
+            Standort.class,
+            Bausteintyp.class,
+            Netztyp.class,
+            Subnetz.class,
+            Netzprotokoll.class,
     };
     /** Alle Knoten der PWE als HashSet */
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
 
     /** Alle Knoten der PWE im Baum als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
+            PhysischerDVBaustein.class,
+            Standort.class,
+            Bausteintyp.class,
+            Netztyp.class,
+            Subnetz.class,
+            Netzprotokoll.class,
     };
 
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
+            PhysischerDVBaustein.class,
+            Standort.class,
+            Bausteintyp.class,
+            Netztyp.class,
+            Subnetz.class,
+            Netzprotokoll.class,
     };
 
     /** Set aller Knotenklassen */
@@ -309,55 +378,93 @@ public final class ModelConstants {
     /** Kanten FE */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_DOMAIN_LAYER_EDGES = {
-            AufAufOrgVerbindung.class, AufAufVerbindung.class, AufObjVerbindung.class, ObjObjVerbindung.class, OrgAufOrgVerbindung.class, OrgOrgVerbindung.class, PrzAufVerbindung.class
+            AufAufOrgVerbindung.class,
+            AufAufVerbindung.class,
+            AufObjVerbindung.class,
+            ObjObjVerbindung.class,
+            OrgAufOrgVerbindung.class,
+            OrgOrgVerbindung.class,
+            PrzAufVerbindung.class
     };
 
     /** Kanten Inter FE -LWE */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = {
-            AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, EtAufVerbindung.class, ObjLogspVerbindung.class, ObjReprVerbindung.class, SwpAufVerbindung.class
+            AwbAwbkVerbindung.class,
+            AwbkAufOrgVerbindung.class,
+            EtAufVerbindung.class,
+            ObjLogspVerbindung.class,
+            ObjReprVerbindung.class,
+            SwpAufVerbindung.class
     };
 
     /** Kanten LWE */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_LOGICAL_LAYER_EDGES = {
-            AwbKommssVerbindung.class, AwpSwpVerbindung.class, BssEtntVerbindung.class, BssKommstVerbindung.class, DbsDatVerbindung.class, DbsDbvsVerbindung.class, DoksDokVerbindung.class, EtntDotVerbindung.class, EtntEtVerbindung.class,
-            EtntKommstVerbindung.class, EtntNatVerbindung.class, AwbKawbVerbindung.class, KawbDoksVerbindung.class, KawbOrgpVerbindung.class, KommbezEtntVerbindung.class, KommBeziehung.class, RawbRawbVerbindung.class, RawbAwpVerbindung.class,
+            AwbKommssVerbindung.class,
+            AwpSwpVerbindung.class,
+            BssEtntVerbindung.class,
+            BssKommstVerbindung.class,
+            DbsDatVerbindung.class,
+            DbsDbvsVerbindung.class,
+            DoksDokVerbindung.class,
+            EtntDotVerbindung.class,
+            EtntEtVerbindung.class,
+            EtntKommstVerbindung.class,
+            EtntNatVerbindung.class,
+            AwbKawbVerbindung.class,
+            KawbDoksVerbindung.class,
+            KawbOrgpVerbindung.class,
+            KommbezEtntVerbindung.class,
+            KommBeziehung.class,
+            RawbRawbVerbindung.class,
+            RawbAwpVerbindung.class,
             RawbDbsVerbindung.class
     };
 
     /** Kanten Inter LWE - PWE */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = {
-            PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class,
+            PdvbkAwbVerbindung.class,
+            PdvbPdvbkVerbindung.class,
     };
 
     /** Kanten PWE */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_PHYSICAL_LAYER_EDGES = {
-            DatenuebertragungsVerbindung.class, PdvbBtypVerbindung.class, PdvbPdvbVerbindung.class, PdvbStoVerbindung.class, PdvbSubnVerbindung.class,
+            DatenuebertragungsVerbindung.class,
+            PdvbBtypVerbindung.class,
+            PdvbPdvbVerbindung.class,
+            PdvbStoVerbindung.class,
+            PdvbSubnVerbindung.class,
             //	        PdvbVirtualPdvbVerbindung.class,
-            SubnNetzpVerbindung.class, SubnNetztVerbindung.class
+            SubnNetzpVerbindung.class,
+            SubnNetztVerbindung.class
     };
 
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
     @SuppressWarnings({
-            "unchecked", "rawtypes"
+            "unchecked",
+            "rawtypes"
     })
     public static final HashSet<Class<? extends Kante>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
 
@@ -402,11 +509,28 @@ public final class ModelConstants {
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     @SuppressWarnings({
-        "rawtypes"
+            "rawtypes"
     })
     public static final Class[] IMPORTABLE_NODES = {
-            Aufgabe.class, Bausteintyp.class, DBVerwaltungssystem.class, Dokumententyp.class, Ereignistyp.class, KommBeziehung.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Objekttyp.class,
-            Organisationseinheit.class, Organisationsplan.class, KonAnwendungsbaustein.class, PhysischerDVBaustein.class, RechAnwendungsbaustein.class, Softwareprodukt.class, Standort.class, Subnetz.class,
+            Aufgabe.class,
+            Bausteintyp.class,
+            DBVerwaltungssystem.class,
+            Dokumententyp.class,
+            Ereignistyp.class,
+            KommBeziehung.class,
+            Kommunikationsstandard.class,
+            Nachrichtentyp.class,
+            Netzprotokoll.class,
+            Netztyp.class,
+            Objekttyp.class,
+            Organisationseinheit.class,
+            Organisationsplan.class,
+            KonAnwendungsbaustein.class,
+            PhysischerDVBaustein.class,
+            RechAnwendungsbaustein.class,
+            Softwareprodukt.class,
+            Standort.class,
+            Subnetz.class,
     };
 
     /**
@@ -415,15 +539,33 @@ public final class ModelConstants {
     public static final HashSet<Class<? extends ModelElement>> UNIQUE_NODES = new HashSet<Class<? extends ModelElement>>();
     static {
         @SuppressWarnings({
-            "rawtypes"
+                "rawtypes"
         })
         Class[] uniqueNodes = {
-                ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class, Dokumententyp.class, EreignisDokumentenTyp.class,
-                EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class, Softwareprodukt.class, Standort.class,
+                ABKonfiguration.class,
+                Anwendungsprogramm.class,
+                AufOrgKombination.class,
+                Bausteintyp.class,
+                Datensatztyp.class,
+                DBKonfiguration.class,
+                DBVerwaltungssystem.class,
+                Dokumententyp.class,
+                EreignisDokumentenTyp.class,
+                EreignisNachrichtenTyp.class,
+                Ereignistyp.class,
+                Kommunikationsstandard.class,
+                Nachrichtentyp.class,
+                Netzprotokoll.class,
+                Netztyp.class,
+                Organisationseinheit.class,
+                Organisationsplan.class,
+                Softwareprodukt.class,
+                Standort.class,
                 Subnetz.class,
         };
         @SuppressWarnings({
-                "rawtypes", "unchecked"
+                "rawtypes",
+                "unchecked"
         })
         HashSet<Class<? extends ModelElement>> tmp_set = new HashSet(Arrays.asList(uniqueNodes));
         UNIQUE_NODES.addAll(tmp_set);
@@ -434,20 +576,15 @@ public final class ModelConstants {
     ///////////////////////////////////
 
     /**
-     * Map, bei der die Schlüssel jeweils eine Kanteklasse ist, deren Instanzen für Elemente der Value-Klasse sortiert sind. Das bedeutet, die
-     * Reihenfolge, in der Elemente der Value-Klasse Kanten der Schlüssel-Klasse in ihrem Kantenvektor enthalten, hat
-     * eine Bedeutung.
-     */
-    private static final HashMap<Class<? extends Kante>, Class<? extends ModelElement>> ORDERED_EDGE_TO_ELEMENT_CLASS = new HashMap<Class<? extends Kante>, Class<? extends ModelElement>>();
-    /**
      * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
     private static final HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = new HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>>();
     static {
-        ORDERED_EDGE_TO_ELEMENT_CLASS.put(PrzAufVerbindung.class, Prozess.class);
-        for (Class<? extends Kante> edgeClass : ORDERED_EDGE_TO_ELEMENT_CLASS.keySet()) {
-            Class<? extends ModelElement> elementClass = ORDERED_EDGE_TO_ELEMENT_CLASS.get(edgeClass);
+        HashMap<Class<? extends Kante>, Class<? extends ModelElement>> orderedEdgeToElementClass = new HashMap<Class<? extends Kante>, Class<? extends ModelElement>>();
+        orderedEdgeToElementClass.put(PrzAufVerbindung.class, Prozess.class);
+        for (Class<? extends Kante> edgeClass : orderedEdgeToElementClass.keySet()) {
+            Class<? extends ModelElement> elementClass = orderedEdgeToElementClass.get(edgeClass);
             HashSet<Class<? extends Kante>> orderedEdgeClasses = ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
             if (orderedEdgeClasses == null) {
                 orderedEdgeClasses = new HashSet<Class<? extends Kante>>();
@@ -463,7 +600,7 @@ public final class ModelConstants {
      * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
      * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
      * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
-     * 
+     *
      * @param elementClass
      */
     public static final HashSet<Class<? extends Kante>> getOrderedEdgeClasses(final Class<? extends ModelElement> elementClass) {
@@ -472,7 +609,7 @@ public final class ModelConstants {
 
     /**
      * Prüft, ob für die übergebene Elementklasse Reihenfolge der Kanten der übergebenen Kantenklasse relevant ist.
-     * 
+     *
      * @param elementClass Elementklasse, für die Kanten der edgeClass in einer bestimmten Reihenfolge sein müssen
      * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
      * @return
@@ -491,7 +628,7 @@ public final class ModelConstants {
 
     /**
      * Liefert <code>true</code>, wenn über Kanten der übergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein können.
-     * 
+     *
      * @param edgeClass
      * @return
      */
@@ -528,7 +665,7 @@ public final class ModelConstants {
 
     /**
      * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante die Bedeutung angibt.
-     * 
+     *
      * @see #DOUBLE_MEANING_EDGE_CLASSES
      * @param edgeClass
      * @return
@@ -546,7 +683,7 @@ public final class ModelConstants {
     /**
      * Prüft, ob die übergebene Klasse eine Kantenklasse ist, die immer nur in Vorwärtsrichtung verbunden werden kann
      * und somit auch in der Grafik nur in dieser Richtung dargestellt wird.
-     * 
+     *
      * @see #FORWARD_CONNECTED_EDGE_CLASSES
      * @param edgeClass
      * @return
@@ -567,7 +704,7 @@ public final class ModelConstants {
     /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
      * Rückgabewerten enthalten, wenn sie nichtabstract ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -605,7 +742,7 @@ public final class ModelConstants {
 
     /**
      * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -635,7 +772,7 @@ public final class ModelConstants {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat.
-     * 
+     *
      * @param elementClass
      * @param edgeClass
      * @return
@@ -656,7 +793,7 @@ public final class ModelConstants {
     /**
      * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
      * zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
-     * 
+     *
      * @param elementClass1
      * @param elementClass2
      * @return
@@ -732,7 +869,7 @@ public final class ModelConstants {
 
     /**
      * Prüft, ob die übergebene Klasse <code>abstract</code> ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -742,7 +879,7 @@ public final class ModelConstants {
 
     /**
      * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
-     * 
+     *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
@@ -752,7 +889,7 @@ public final class ModelConstants {
 
     /**
      * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
-     * 
+     *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
@@ -762,7 +899,7 @@ public final class ModelConstants {
 
     /**
      * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} ist.
-     * 
+     *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
@@ -772,7 +909,7 @@ public final class ModelConstants {
 
     /**
      * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Kante} ist.
-     * 
+     *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation ist, sonst <code>false</code>.
      */
@@ -783,7 +920,7 @@ public final class ModelConstants {
     /**
      * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse
      * ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -801,19 +938,20 @@ public final class ModelConstants {
     @SuppressWarnings("unchecked")
     public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = {
             new MetaPath(Aufgabe.class, ABKonfiguration.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class
-                }
+                    {
+                            AufAufOrgVerbindung.class,
+                            AwbkAufOrgVerbindung.class
+                    }
             }), new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
-                {
-                    PdvbkAwbVerbindung.class
-                }
+                    {
+                            PdvbkAwbVerbindung.class
+                    }
             }),
     };
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -828,7 +966,7 @@ public final class ModelConstants {
 
     /**
      * Gibt alle Startklassen zurück, die über eine Interebenenbeziehung der spezifizierten Endklasse verfügen.
-     * 
+     *
      * @param endClass Endklasse der Interebenenbeziehung
      * @return
      */
@@ -845,7 +983,7 @@ public final class ModelConstants {
     /**
      * Erzeugt eine neue Instanz eines Modellelementes.<br>
      * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte.
-     * 
+     *
      * @param elementClass Unterklasse von <code>ModelElement</code>
      * @return
      */
@@ -856,7 +994,7 @@ public final class ModelConstants {
     /**
      * Erzeugt eine neue Instanz eines Modellelementes.<br>
      * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
-     * 
+     *
      * @param elementClass Unterklasse von <code>ModelElement</code>
      * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
      * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
@@ -874,7 +1012,7 @@ public final class ModelConstants {
 
     /**
      * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
-     * 
+     *
      * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
      * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
      * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
@@ -888,7 +1026,7 @@ public final class ModelConstants {
      * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
      * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
      * aktuelle ist.
-     * 
+     *
      * @param oldName
      * @return
      */
@@ -918,7 +1056,7 @@ public final class ModelConstants {
 
     /**
      * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
-     * 
+     *
      * @param classname String mit der Klassenbezeichnung
      * @return Class
      */
@@ -982,7 +1120,7 @@ public final class ModelConstants {
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     * 
+     *
      * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
@@ -1002,7 +1140,7 @@ public final class ModelConstants {
 
     /**
      * Liefert den Standardanzeigenamen für ein Modelelement der übergebenen Art
-     * 
+     *
      * @param me
      * @return
      * @see #getDisplayableName(Class)
@@ -1024,7 +1162,7 @@ public final class ModelConstants {
 
     /**
      * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Kante verbindet.
-     * 
+     *
      * @param edgeClass
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
@@ -1055,7 +1193,7 @@ public final class ModelConstants {
 
     /**
      * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Kante verbindet.
-     * 
+     *
      * @param edgeClass
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
@@ -1088,7 +1226,7 @@ public final class ModelConstants {
 
     /**
      * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
-     * 
+     *
      * @param edgeClass
      * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
      *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
@@ -1101,16 +1239,16 @@ public final class ModelConstants {
      *            Beispiel 1: {@link AufObjVerbindung} = Assoziation zw. Startklasse {@link Aufgabe} und Endklasse {@link Objekttyp}.<br>
      *            <ul>
      *            <li>
-	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
      *            "Aufgabe bearbeitet Objekttyp"</li>
      *            <li>
-	 *				<code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
      *            "Aufgabe interpretiert Objekttyp"</li>
      *            <li>
-	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
      *            "Objekttyp wird interpretiert von Aufgabe "</li>
      *            <li>
-	 *				<code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
      *            "Objekttyp wird bearbeitet von Aufgabe"</li>
      *            </ul>
      * @return
@@ -1242,7 +1380,7 @@ public final class ModelConstants {
     /**
      * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
      * können.
-     * 
+     *
      * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
     @SuppressWarnings("unchecked")
@@ -1254,7 +1392,7 @@ public final class ModelConstants {
     /**
      * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
      * werden kann.
-     * 
+     *
      * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
     @SuppressWarnings("unchecked")
@@ -1269,7 +1407,7 @@ public final class ModelConstants {
      * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
      * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
      * lesbarer zu gestalten.
-     * 
+     *
      * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
      * @return String mit Namenskuerzel
      */
@@ -1324,7 +1462,7 @@ public final class ModelConstants {
                     }
                     //lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
 
-                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen, 
+                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen,
                     //bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
                     while (++lastUpperCharInClassName < s.length()) {
                         shortName.append(s.charAt(lastUpperCharInClassName));
@@ -1386,7 +1524,7 @@ public final class ModelConstants {
 
     /**
      * gibt die Ebene eine Objekttypes zurueck
-     * 
+     *
      * @param type Typkonstante, die den Objekttypen spezifiziert
      * @return int Ebene
      */
@@ -1439,7 +1577,7 @@ public final class ModelConstants {
 
     /**
      * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
-     * 
+     *
      * @param obj Dialog zu diesem Objekt
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
      */
@@ -1454,7 +1592,7 @@ public final class ModelConstants {
 
     /**
      * Gibt Verctor mit allen geoeffneten Dialogen zurueck
-     * 
+     *
      * @return ArrayList mit allen geoeffneten Dialogen
      */
     public static final ArrayList<ElementPropertyDialog> getDialogs() {
@@ -1463,7 +1601,7 @@ public final class ModelConstants {
 
     /**
      * entfernt einen Dialog aus dem ArrayList mit allen geoeffneten Dialogen
-     * 
+     *
      * @param modelElement Element dessen Dialog aus dem ArrayList entfernt werden soll
      */
     public static final void removeDialog(final ModelElement modelElement) {
@@ -1479,7 +1617,7 @@ public final class ModelConstants {
      * übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
      * denen mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei <code>isMaster==true</code>) zuweisungskompatibel
      * zur übergebenen Elementklasse ist.
-     * 
+     *
      * @param elementClass
      * @param isMaster wenn <code>true</code> soll die übergebene Elementart die übergeordnete sein, sonst die untergeordnete
      * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
@@ -1520,7 +1658,7 @@ public final class ModelConstants {
      * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse, die
      * Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur übergebenen
      * Elementklasse ist.
-     * 
+     *
      * @param elementClass
      * @return Array von Kantenklassen, die die übergebene Elementart überordnen
      */
@@ -1532,7 +1670,7 @@ public final class ModelConstants {
      * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die
      * Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur übergebenen
      * Elementklasse ist.
-     * 
+     *
      * @param elementClass
      * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
      */
@@ -1542,7 +1680,7 @@ public final class ModelConstants {
 
     /**
      * Liefert alle Elementarten, die der übergebenen Elementart über eine Komposition untergeordnet sind.
-     * 
+     *
      * @param masterElementClass Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition verbunden
      *            sein können.
      * @return
@@ -1569,7 +1707,7 @@ public final class ModelConstants {
     /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die
      * übergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
-     * 
+     *
      * @param elementClass
      * @return <code>true</code>, wenn das übergebene ein untergeordnetes Element ist
      */
@@ -1583,46 +1721,52 @@ public final class ModelConstants {
     }
 
     /**
+     * Liefert für die übergebene Elementklasse alle Elementtypen, die ihr untergeordnet sind und die nicht unendlich oft
+     * an ihr hängen dürfen. Diese müssen beim Join ebenfalls zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein
+     * laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei Rechanwendungsbausteine mit jeweils einem Datenbanksystem
+     * gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
+     *
      * @param elementClass
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public static final Class<? extends ModelElement>[] getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
-        if (Anwendungsbaustein.class.isAssignableFrom(elementClass)) {
-            return new Class[] {
-                    Datenbanksystem.class, Dokumentensammlung.class, Anwendungsprogramm.class, Organisationsplan.class,
-            };
+    public static final Set<Class<? extends ModelElement>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
+        ImmutableSet.Builder<Class<? extends ModelElement>> subordinatedJoinbleTypes = ImmutableSet.<Class<? extends ModelElement>> builder();
+        Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
+        for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
+            if (Composition.getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
+                Class<? extends ModelElement> slaveType = Composition.getSlaveType(compositionEdgeType);
+                Class<? extends ModelElement>[] instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
+                for (Class<? extends ModelElement> instanciableAssignableClass : instanciableAssignableClasses) {
+                    subordinatedJoinbleTypes.add(instanciableAssignableClass);
+                }
+            }
         }
-        if (Organisationseinheit.class.isAssignableFrom(elementClass)) {
-            return new Class[] {
-                AufOrgKombination.class
-            };
-        }
-        if (Aufgabe.class.isAssignableFrom(elementClass)) {
-            return new Class[] {
-                AufOrgKombination.class
-            };
-        }
-        return EMPTY_ELEMENT_CLASS_ARRAY;
+        return subordinatedJoinbleTypes.build();
     }
 
+    /** Cache für die Funktion {@link #getInitialSubtypes(Class)} */
+    private static Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> INITIAL_SUBTYPES = Maps.newHashMap();
+
     /**
+     * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also über eine Komposition mit
+     * ihr verbunden sind, bei der sie der Master ist) und die minimale Kardinlität der Unterklassen > 0 ist.
+     *
      * @param elementClass
-     * @return TODO:AXS: das hier muss weg und statt dessen über Aggregationen laufen
      */
-    @SuppressWarnings("unchecked")
-    public static final Class<? extends Kante>[] getInitialSubtypes(final Class<? extends ModelElement> elementClass) {
-        if (RechAnwendungsbaustein.class == elementClass) {
-            return new Class[] {
-                RawbAwpVerbindung.class
-            };
+    public static final Set<Class<? extends Kante>> getInitialSubtypes(final Class<? extends ModelElement> elementClass) {
+        Set<Class<? extends Kante>> initialSubtypes = INITIAL_SUBTYPES.get(elementClass);
+        if (initialSubtypes == null) {
+            ImmutableSet.Builder<Class<? extends Kante>> initialSubtypesBuilder = ImmutableSet.<Class<? extends Kante>> builder();
+            Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
+            for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
+                if (Composition.getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
+                    initialSubtypesBuilder.add(compositionEdgeType);
+                }
+            }
+            initialSubtypes = initialSubtypesBuilder.build();
+            INITIAL_SUBTYPES.put(elementClass, initialSubtypes);
         }
-        if (KonAnwendungsbaustein.class == elementClass) {
-            return new Class[] {
-                KawbOrgpVerbindung.class
-            };
-        }
-        return EMPTY_EDGE_CLASS_ARRAY;
+        return initialSubtypes;
     }
 
     private final static HashSet<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = new HashSet<Class<? extends ModelElement>>();
@@ -1634,7 +1778,7 @@ public final class ModelConstants {
     /**
      * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen
      * generiert (siehe AufOrgKombination, EtntEtdtKombination)
-     * 
+     *
      * @return
      */
     public final static boolean isGenerateName(Class<? extends ModelElement> elementClass) {
