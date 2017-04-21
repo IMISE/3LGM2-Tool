@@ -8,7 +8,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Stroke;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -50,7 +50,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * COMMENTME
      */
     protected static Stroke neStroke = new BasicStroke(4, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 1, new float[] {
-        10
+            10
     }, 10);
 
     /**
@@ -95,8 +95,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     protected Color lastColor = null;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public ElementContainer() {
         super();
 
@@ -329,7 +329,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     public final void setVisible(final boolean v) {
         super.setVisible(v);
         if (v) {
-            HashSet<Class<? extends Kante>> orderedEdgeClasses = ModelConstants.getOrderedEdgeClasses(me.getClass());
+            Set<Class<? extends Kante>> orderedEdgeClasses = ModelConstants.getOrderedEdgeClasses(me.getClass());
             if (orderedEdgeClasses != null) {
                 for (Class<? extends Kante> edgeClass : orderedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {
@@ -366,7 +366,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * Erzeugt die angezeigte Bezeichnung. Für Knoten werden in eckigen Klammern durch Kommas getrennt
      * alle Szenarien aufgelistet, in denen sie ausser im momentan angezeigten noch vorkommen.
-     * 
+     *
      * @see java.awt.Component#toString()
      */
     @Override
@@ -424,8 +424,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public final void resetLayout() {
         if (layout != null) {
             layout.reset();
@@ -472,7 +472,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * Setzt die Form
-     * 
+     *
      * @param form
      */
     public final void setForm(final GraphElementLayout.SHAPE form) {
@@ -484,7 +484,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * Setzt die Linienstaerke
-     * 
+     *
      * @param c
      */
     public final void setStrokeWidth(final int c) {
@@ -508,7 +508,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * Setzt den Linienstil
-     * 
+     *
      * @param c
      */
     public final void setLineStyle(final int c) {
@@ -532,7 +532,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * Setzt die Farbe des Objektes
-     * 
+     *
      * @param c
      */
     public final void setColor(final Color c) {
@@ -573,7 +573,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * Setzt die Transparenz des Objektes
-     * 
+     *
      * @param alpha
      */
     public final void setAlpha(int alpha) {
@@ -648,7 +648,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * Für das GraphElementLayout bei expanded = true
-     * 
+     *
      * @param preString
      * @param forCopy
      * @return
@@ -660,7 +660,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * für das GraphElementLayout bei expanded = false
-     * 
+     *
      * @param preString
      * @param forCopy
      * @return
@@ -679,8 +679,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void refreshFont() {
         super.setFont(getFont());
     }
@@ -711,8 +711,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     static StringBuilder textBuf = new StringBuilder("");
 
     /**
-	 * 
-	 */
+     * 
+     */
     public abstract void refreshText();
 
     /**
@@ -842,8 +842,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void checkTreeIcon() {
         if (lastColor == null || !lastColor.equals(layout.bg_color)) {
             lastColor = layout.bg_color;
@@ -952,8 +952,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void removeAllSpecialInfosFromThisContainer() {
         removeSpecialInfoFromThisContainer(null, -1);
     }

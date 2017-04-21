@@ -14,79 +14,6 @@ import com.google.common.collect.Maps;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AufAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKawbVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.BssEtntVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DatenuebertragungsVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DbsDatVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DoksDokVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntKommstVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KawbOrgpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommbezEtntVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjObjVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.OrgAufOrgVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.OrgOrgVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbBtypVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbSubnVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbRawbVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.SubnNetzpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.SubnNetztVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.SwpAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsprogramm;
-import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteintyp;
-import de.imise.tool3lgm.graphtools.elements.node.Benutzungsschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.DBVerwaltungssystem;
-import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
-import de.imise.tool3lgm.graphtools.elements.node.Datensatztyp;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumententyp;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
-import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsstandard;
-import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
-import de.imise.tool3lgm.graphtools.elements.node.Netzprotokoll;
-import de.imise.tool3lgm.graphtools.elements.node.Netztyp;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationseinheit;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationsplan;
-import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
-import de.imise.tool3lgm.graphtools.elements.node.Standort;
-import de.imise.tool3lgm.graphtools.elements.node.Subnetz;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -99,22 +26,15 @@ import de.imise.util.collections.CollectionUtils;
  */
 public final class ModelConstants {
 
+    private static MetaModel metaModel = new TLGMOriginalMetaModel();
+
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
      * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
      * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
      * eingelesen werden können.
      */
-    protected static HashMap<String, String> oldToNewName = new HashMap<String, String>();
-    static {
-        oldToNewName.put("KnickpunktKnoten", "Knickpunkt");
-        oldToNewName.put("RawbAwbVerbindung", "RawbRawbVerbindung");
-        oldToNewName.put("AwbKawbVerbindung", "AwbKawbVerbindung");
-        oldToNewName.put("EtntKombination", "EreignisNachrichtenTyp");
-        oldToNewName.put("EtdtKombination", "EreignisDokumentenTyp");
-        oldToNewName.put("ETNTKombination", "EreignisNachrichtenTyp");
-        oldToNewName.put("ETDTKombination", "EreignisDokumentenTyp");
-    }
+    private static Map<String, String> OLD_TO_NEW_CLASS_NAME = metaModel.getOldToNewClassName();
 
     /**
      * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
@@ -144,11 +64,13 @@ public final class ModelConstants {
 
     /** Short-Name für den beginn des HashStrings bei allen Kanten */
     public static final String EDGE_SHORT_NAME = "DLK";
+
     /**
      * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Knoten noch Kantenklasse
      * ist.
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
+
     /**
      * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
      * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
@@ -160,10 +82,12 @@ public final class ModelConstants {
      * Liste aller geöffneten Dialoge
      */
     public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<ElementPropertyDialog>();
+
     /**
      * Unendlich als maximaler Integer
      */
     public static final Integer UNLIMITED = new Integer(Integer.MAX_VALUE);
+
     /**
      * Null als Integer
      */
@@ -181,188 +105,83 @@ public final class ModelConstants {
 
     /** Alle Knoten der FE als Array */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_DOMAIN_LAYER_NODES = {
-            Aufgabe.class,
-            AufOrgKombination.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            //		Rolle.class,
-            Prozess.class,
-    };
+    public static final Class[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
 
-    /**
-     * COMMENTME
-     */
+    /** Alle im Baum sichtbaren Knoten */
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_DOMAIN_LAYER_NODES = {
-            Aufgabe.class,
-            //			AufOrgKombination.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            //			Rolle.class,
-            Prozess.class,
-    };
+    public static final Class[] TREE_DOMAIN_LAYER_NODES = metaModel.getTreeDomainLayerNodes();
 
     /** Alle Knoten der FE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
 
-    /**
-     * COMMENTME
-     */
+    /** Alle im Baum auf der FE anlegbaren Knoten */
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = {
-            Aufgabe.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            Prozess.class,
-            //			Rolle.class,
-    };
+    public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = metaModel.getTreeCreatableDomainLayerNodes();
 
     /** Alle Knoten zw. FE und LWE als Array */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
-            ABKonfiguration.class,
-    };
+    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = metaModel.getAllInterDomainLogicalLayerNodes();
+
     /** Alle Knoten zw. FE und LWE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
 
     /** Alle Knoten der LWE als Array */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class,
-            KonAnwendungsbaustein.class,
-            Anwendungsprogramm.class,
-            Bausteinschnittstelle.class,
-            Benutzungsschnittstelle.class,
-            Datenbanksystem.class,
-            Datensatztyp.class,
-            DBVerwaltungssystem.class,
-            Dokumentensammlung.class,
-            Dokumententyp.class,
-            Ereignistyp.class,
-            Kommunikationsstandard.class,
-            Nachrichtentyp.class,
-            Organisationsplan.class,
-            Softwareprodukt.class,
-            EreignisNachrichtenTyp.class,
-            EreignisDokumentenTyp.class,
-
-            //auch die Assoziationsklasse hier eintagen
-            KommBeziehung.class,
-
-            //abstracte Knoten müssen hier auch eingetragen werden
-            Anwendungsbaustein.class,
-    };
+    public static final Class[] ALL_LOGICAL_LAYER_NODES = metaModel.getAllLogicalLayerNodes();
 
     /** Alle Knoten der LWE als HashSet */
     @SuppressWarnings({
             "rawtypes",
             "unchecked"
     })
-    public static final HashSet<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
 
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class,
-            KonAnwendungsbaustein.class,
-            //		Anwendungsprogramm.class,
-            Bausteinschnittstelle.class,
-            Benutzungsschnittstelle.class,
-            Datenbanksystem.class,
-            Datensatztyp.class,
-            DBVerwaltungssystem.class,
-            Dokumentensammlung.class,
-            Dokumententyp.class,
-            Ereignistyp.class,
-            Kommunikationsstandard.class,
-            Nachrichtentyp.class,
-            Organisationsplan.class,
-            Softwareprodukt.class,
-            EreignisNachrichtenTyp.class,
-            EreignisDokumentenTyp.class,
-    };
+    public static final Class[] TREE_LOGICAL_LAYER_NODES = metaModel.getTreeLogicalLayerNodes();
 
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class,
-            KonAnwendungsbaustein.class,
-            Softwareprodukt.class,
-            Kommunikationsstandard.class,
-            DBVerwaltungssystem.class,
-            Ereignistyp.class,
-            Nachrichtentyp.class,
-            Dokumententyp.class,
-            EreignisNachrichtenTyp.class,
-            EreignisDokumentenTyp.class,
-    };
+    public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = metaModel.getTreeCreatableLogicalLayerNodes();
 
     /** Alle Knoten zw. LWE und PWE als Array */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = {
-            DBKonfiguration.class,
-    };
+    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
+
     /** Alle Knoten zw. LWE und PWE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
 
     /** Alle Knoten der PWE als Array */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class,
-            Standort.class,
-            Bausteintyp.class,
-            Netztyp.class,
-            Subnetz.class,
-            Netzprotokoll.class,
-    };
+    public static final Class[] ALL_PHYSICAL_LAYER_NODES = metaModel.getAllPhysicalLayerNodes();
+
     /** Alle Knoten der PWE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
 
     /** Alle Knoten der PWE im Baum als Array */
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class,
-            Standort.class,
-            Bausteintyp.class,
-            Netztyp.class,
-            Subnetz.class,
-            Netzprotokoll.class,
-    };
+    public static final Class[] TREE_PHYSICAL_LAYER_NODES = metaModel.getTreePhysicalLayerNodes();
 
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class,
-            Standort.class,
-            Bausteintyp.class,
-            Netztyp.class,
-            Subnetz.class,
-            Netzprotokoll.class,
-    };
+    public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = metaModel.getTreeCreatablePhysicalLayerNodes();
 
     /** Set aller Knotenklassen */
-    public static final HashSet<Class<? extends ModelElement>> ALL_NODES_SET = new HashSet<Class<? extends ModelElement>>();
-    static {
-        ALL_NODES_SET.addAll(ALL_DOMAIN_LAYER_NODES_SET);
-        ALL_NODES_SET.addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET);
-        ALL_NODES_SET.addAll(ALL_LOGICAL_LAYER_NODES_SET);
-        ALL_NODES_SET.addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET);
-        ALL_NODES_SET.addAll(ALL_PHYSICAL_LAYER_NODES_SET);
-    }
+    public static final Set<Class<? extends ModelElement>> ALL_NODES_SET = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(ALL_DOMAIN_LAYER_NODES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET).addAll(ALL_LOGICAL_LAYER_NODES_SET)
+            .addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET).addAll(ALL_PHYSICAL_LAYER_NODES_SET).build();
 
     /** Array aller Knotenklassen */
     @SuppressWarnings("unchecked")
@@ -377,106 +196,53 @@ public final class ModelConstants {
 
     /** Kanten FE */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_DOMAIN_LAYER_EDGES = {
-            AufAufOrgVerbindung.class,
-            AufAufVerbindung.class,
-            AufObjVerbindung.class,
-            ObjObjVerbindung.class,
-            OrgAufOrgVerbindung.class,
-            OrgOrgVerbindung.class,
-            PrzAufVerbindung.class
-    };
+    public static final Class[] ALL_DOMAIN_LAYER_EDGES = metaModel.getAllDomainLayerEdges();
 
     /** Kanten Inter FE -LWE */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = {
-            AwbAwbkVerbindung.class,
-            AwbkAufOrgVerbindung.class,
-            EtAufVerbindung.class,
-            ObjLogspVerbindung.class,
-            ObjReprVerbindung.class,
-            SwpAufVerbindung.class
-    };
+    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = metaModel.getAllInterDomainLogicalLayerEdges();
 
     /** Kanten LWE */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_LOGICAL_LAYER_EDGES = {
-            AwbKommssVerbindung.class,
-            AwpSwpVerbindung.class,
-            BssEtntVerbindung.class,
-            BssKommstVerbindung.class,
-            DbsDatVerbindung.class,
-            DbsDbvsVerbindung.class,
-            DoksDokVerbindung.class,
-            EtntDotVerbindung.class,
-            EtntEtVerbindung.class,
-            EtntKommstVerbindung.class,
-            EtntNatVerbindung.class,
-            AwbKawbVerbindung.class,
-            KawbDoksVerbindung.class,
-            KawbOrgpVerbindung.class,
-            KommbezEtntVerbindung.class,
-            KommBeziehung.class,
-            RawbRawbVerbindung.class,
-            RawbAwpVerbindung.class,
-            RawbDbsVerbindung.class
-    };
+    public static final Class[] ALL_LOGICAL_LAYER_EDGES = metaModel.getAllLogicalLayerEdges();
 
     /** Kanten Inter LWE - PWE */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = {
-            PdvbkAwbVerbindung.class,
-            PdvbPdvbkVerbindung.class,
-    };
+    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = metaModel.getAllInterLogicalPhysicalLayerEdges();
 
     /** Kanten PWE */
     @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_PHYSICAL_LAYER_EDGES = {
-            DatenuebertragungsVerbindung.class,
-            PdvbBtypVerbindung.class,
-            PdvbPdvbVerbindung.class,
-            PdvbStoVerbindung.class,
-            PdvbSubnVerbindung.class,
-            //	        PdvbVirtualPdvbVerbindung.class,
-            SubnNetzpVerbindung.class,
-            SubnNetztVerbindung.class
-    };
+    public static final Class[] ALL_PHYSICAL_LAYER_EDGES = metaModel.getAllPhysicalLayerEdges();
 
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
+    public static final Set<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final HashSet<Class<? extends Kante>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Kante>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
 
     /** Set aller Kantenklassen */
-    public static final HashSet<Class<? extends Kante>> ALL_EDGES_SET = new HashSet<Class<? extends Kante>>();
-    static {
-        ALL_EDGES_SET.addAll(ALL_DOMAIN_LAYER_EDGES_SET);
-        ALL_EDGES_SET.addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET);
-        ALL_EDGES_SET.addAll(ALL_LOGICAL_LAYER_EDGES_SET);
-        ALL_EDGES_SET.addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET);
-        ALL_EDGES_SET.addAll(ALL_PHYSICAL_LAYER_EDGES_SET);
-    }
+    public static final Set<Class<? extends Kante>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Kante>> builder().addAll(ALL_DOMAIN_LAYER_EDGES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET).addAll(ALL_LOGICAL_LAYER_EDGES_SET)
+            .addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET).addAll(ALL_PHYSICAL_LAYER_EDGES_SET).build();
 
     /** Array aller Kantenklassen */
     @SuppressWarnings("unchecked")
@@ -490,11 +256,7 @@ public final class ModelConstants {
     /////////////////////////
 
     /** Set aller Elementklassen */
-    public static final HashSet<Class<? extends ModelElement>> ALL_ELEMENTS_SET = new HashSet<Class<? extends ModelElement>>();
-    static {
-        ALL_ELEMENTS_SET.addAll(ALL_NODES_SET);
-        ALL_ELEMENTS_SET.addAll(ALL_EDGES_SET);
-    }
+    public static final Set<Class<? extends ModelElement>> ALL_ELEMENTS_SET = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(ALL_NODES_SET).addAll(ALL_EDGES_SET).build();
 
     /** Array aller Elementklassen */
     @SuppressWarnings("unchecked")
@@ -511,65 +273,10 @@ public final class ModelConstants {
     @SuppressWarnings({
             "rawtypes"
     })
-    public static final Class[] IMPORTABLE_NODES = {
-            Aufgabe.class,
-            Bausteintyp.class,
-            DBVerwaltungssystem.class,
-            Dokumententyp.class,
-            Ereignistyp.class,
-            KommBeziehung.class,
-            Kommunikationsstandard.class,
-            Nachrichtentyp.class,
-            Netzprotokoll.class,
-            Netztyp.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            Organisationsplan.class,
-            KonAnwendungsbaustein.class,
-            PhysischerDVBaustein.class,
-            RechAnwendungsbaustein.class,
-            Softwareprodukt.class,
-            Standort.class,
-            Subnetz.class,
-    };
+    public static final Class[] IMPORTABLE_NODES = metaModel.getImportableNodes();
 
-    /**
-     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen.
-     */
-    public static final HashSet<Class<? extends ModelElement>> UNIQUE_NODES = new HashSet<Class<? extends ModelElement>>();
-    static {
-        @SuppressWarnings({
-                "rawtypes"
-        })
-        Class[] uniqueNodes = {
-                ABKonfiguration.class,
-                Anwendungsprogramm.class,
-                AufOrgKombination.class,
-                Bausteintyp.class,
-                Datensatztyp.class,
-                DBKonfiguration.class,
-                DBVerwaltungssystem.class,
-                Dokumententyp.class,
-                EreignisDokumentenTyp.class,
-                EreignisNachrichtenTyp.class,
-                Ereignistyp.class,
-                Kommunikationsstandard.class,
-                Nachrichtentyp.class,
-                Netzprotokoll.class,
-                Netztyp.class,
-                Organisationseinheit.class,
-                Organisationsplan.class,
-                Softwareprodukt.class,
-                Standort.class,
-                Subnetz.class,
-        };
-        @SuppressWarnings({
-                "rawtypes",
-                "unchecked"
-        })
-        HashSet<Class<? extends ModelElement>> tmp_set = new HashSet(Arrays.asList(uniqueNodes));
-        UNIQUE_NODES.addAll(tmp_set);
-    }
+    /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
+    public static final Set<Class<? extends Knoten>> UNIQUE_NODES = metaModel.getUniqueNodes();
 
     ///////////////////////////////////
     // spezielle Kanteneigenschaften //
@@ -579,22 +286,7 @@ public final class ModelConstants {
      * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    private static final HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = new HashMap<Class<? extends ModelElement>, HashSet<Class<? extends Kante>>>();
-    static {
-        HashMap<Class<? extends Kante>, Class<? extends ModelElement>> orderedEdgeToElementClass = new HashMap<Class<? extends Kante>, Class<? extends ModelElement>>();
-        orderedEdgeToElementClass.put(PrzAufVerbindung.class, Prozess.class);
-        for (Class<? extends Kante> edgeClass : orderedEdgeToElementClass.keySet()) {
-            Class<? extends ModelElement> elementClass = orderedEdgeToElementClass.get(edgeClass);
-            HashSet<Class<? extends Kante>> orderedEdgeClasses = ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
-            if (orderedEdgeClasses == null) {
-                orderedEdgeClasses = new HashSet<Class<? extends Kante>>();
-                orderedEdgeClasses.add(edgeClass);
-                ELEMENT_CLASS_TO_ORDERED_EDGES.put(elementClass, orderedEdgeClasses);
-            } else {
-                orderedEdgeClasses.add(edgeClass);
-            }
-        }
-    }
+    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = metaModel.getElementClassToOrderedEdges();
 
     /**
      * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
@@ -603,7 +295,7 @@ public final class ModelConstants {
      *
      * @param elementClass
      */
-    public static final HashSet<Class<? extends Kante>> getOrderedEdgeClasses(final Class<? extends ModelElement> elementClass) {
+    public static final Set<Class<? extends Kante>> getOrderedEdgeClasses(final Class<? extends ModelElement> elementClass) {
         return ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
     }
 
@@ -621,10 +313,7 @@ public final class ModelConstants {
     /**
      * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
      */
-    private static final HashSet<Class<? extends Kante>> MULTIPLE_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
-    static {
-        MULTIPLE_EDGE_CLASSES.add(PrzAufVerbindung.class);
-    }
+    private static final Set<Class<? extends Kante>> MULTIPLE_EDGE_CLASSES = metaModel.getMultipleEdgeClasses();
 
     /**
      * Liefert <code>true</code>, wenn über Kanten der übergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein können.
@@ -644,24 +333,7 @@ public final class ModelConstants {
      * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
      * zusammenzufassen.
      */
-    private static final HashSet<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = new HashSet<Class<? extends Kante>>();
-    static {
-        //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
-        //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
-        DOUBLE_MEANING_EDGE_CLASSES.add(AufObjVerbindung.class);
-        //vorwärts1: kann senden; rückwärts1: kann gesendet werden von
-        //vorwärts2: kann empfangen; rückwärts2: kann empfangen werden von
-        DOUBLE_MEANING_EDGE_CLASSES.add(BssEtntVerbindung.class);
-        //vorwärts1: sendet über; rückwärts1: wird gesendet über
-        //vorwärts2: empfängt über; rückwärts2: wird empfangen über
-        DOUBLE_MEANING_EDGE_CLASSES.add(KommbezEtntVerbindung.class);
-        //vorwärts1: sendet an; rückwärts1: empfängt von
-        //vorwärts2: sendet an; rückwärts2: empfängt von
-        //ACHTUNG: Dies ist auch eine Kante mit doppelter Bedeutung, weil sie das gerichtete
-        //Senden und Empfangen zw. Schnittstellen ausdrückt. Da aber beide Endklassen gleich sind
-        //haben sie auch in beiden Richtungen immer dieselb Bedeutung.
-        DOUBLE_MEANING_EDGE_CLASSES.add(KommBeziehung.class);
-    }
+    private static final Set<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = metaModel.getDoubleMeaningEdgeClasses();
 
     /**
      * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante die Bedeutung angibt.
@@ -936,18 +608,7 @@ public final class ModelConstants {
      * Array aller Pfade, die in der grafischen Ansicht als Interebenenbeziehungen dargestellt werden.
      */
     @SuppressWarnings("unchecked")
-    public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = {
-            new MetaPath(Aufgabe.class, ABKonfiguration.class, new Class[][] {
-                    {
-                            AufAufOrgVerbindung.class,
-                            AwbkAufOrgVerbindung.class
-                    }
-            }), new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
-                    {
-                            PdvbkAwbVerbindung.class
-                    }
-            }),
-    };
+    public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = metaModel.getInterLayerConnectedElementPathes();
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
@@ -1031,7 +692,7 @@ public final class ModelConstants {
      * @return
      */
     private static final String getActualClassName(String oldName) {
-        String newName = oldToNewName.get(oldName);
+        String newName = OLD_TO_NEW_CLASS_NAME.get(oldName);
         //wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
         // Namen der aktuelle
         if (newName == null) {
@@ -1042,7 +703,7 @@ public final class ModelConstants {
         //gefundenen Namen zurückgeben
         while (true) {
             oldName = newName;
-            newName = oldToNewName.get(oldName);
+            newName = OLD_TO_NEW_CLASS_NAME.get(oldName);
             if (newName == null) {
                 return oldName;
             }
@@ -1052,7 +713,7 @@ public final class ModelConstants {
     /**
      * Mappt vom Klassennamen auf die Klasse.
      */
-    private static final HashMap<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
+    private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
 
     /**
      * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
@@ -1236,7 +897,7 @@ public final class ModelConstants {
      *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
      *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
      *            Assoziationen sind, aber aus allerlei nicht nachvollzierbaren Gründen in eine gepackt wurden.<br>
-     *            Beispiel 1: {@link AufObjVerbindung} = Assoziation zw. Startklasse {@link Aufgabe} und Endklasse {@link Objekttyp}.<br>
+     *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
      *            <ul>
      *            <li>
      *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
@@ -1316,11 +977,11 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart Teilemente untergeordnet werden kann.
      */
-    private static final HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
+    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
     /**
      * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart als Teilement untergeordnet werden kann.
      */
-    private static final HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
+    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
     //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
     //gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
     //kann man die Warnungen nur für die ganze Datei unterdrücken
@@ -1769,11 +1430,7 @@ public final class ModelConstants {
         return initialSubtypes;
     }
 
-    private final static HashSet<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = new HashSet<Class<? extends ModelElement>>();
-    static {
-        GENERATE_NAME_CLASSES.add(AufOrgKombination.class);
-        GENERATE_NAME_CLASSES.add(EtntEtdtKombination.class);
-    }
+    private final static Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = metaModel.getGenerateNameClasses();
 
     /**
      * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen
