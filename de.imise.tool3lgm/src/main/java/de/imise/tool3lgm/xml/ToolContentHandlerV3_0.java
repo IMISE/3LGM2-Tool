@@ -47,7 +47,7 @@ import de.imise.tool3lgm.log.Log;
  * bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
  * ContentHandler zu schreiben.
  * erkennt Modell mit 3lgm2_v3_0.dtd Version 3.0
- * 
+ *
  * @author Thomas Rudert
  */
 public class ToolContentHandlerV3_0 implements ContentHandler {
@@ -134,7 +134,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
     /**
      * option beim Kopieren <br>
-     * 
+     *
      * @see ModelElement.avoidDuplicates()
      */
     protected boolean avoidDuplicates = false;
@@ -165,7 +165,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr
      * aufgerufen werden, da diese nur Fehler korrigert haben, die dann nicht
      * mehr auftreten duerften
-     * 
+     *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
     @SuppressWarnings("deprecation")
@@ -233,11 +233,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     element = ModelConstants.createElement(elementClass, false);
                 }
 
-                if (element == null) {
-                    XMLInformationMessenger.showElementNoLongerSupportedMessage(collection, elementClass, true);
-                    //					ToolXMLParser.addDeprecatedElementHashes(atts.getValue("hash"));
-                } else {
-
+                if (element != null) {
                     if (copyAndPaste > 0) {
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
                         if (element instanceof Kante) {
@@ -485,7 +481,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (element != null) {
                     element.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
                 }
-                //Benutzerdefinierte Eigenschaft für das Modell (GDCollection) 
+                //Benutzerdefinierte Eigenschaft für das Modell (GDCollection)
                 else {
                     collection.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
                 }

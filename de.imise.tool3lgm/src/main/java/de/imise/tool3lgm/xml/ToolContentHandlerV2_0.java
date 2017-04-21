@@ -40,7 +40,7 @@ import de.imise.tool3lgm.log.Log;
  * nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit
  * einen völlig neuen ContentHandler zu schreiben.
  * erkennt Modell mit 3lgm2_v2_0.dtd Version 2.0
- * 
+ *
  * @author Thomas Rudert
  */
 public class ToolContentHandlerV2_0 implements ContentHandler {
@@ -102,14 +102,14 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
     /**
      * option beim Kopieren<br>
-     * 
+     *
      * @see ModelElement.avoidDuplicates()
      */
     protected boolean avoidDuplicates = false;
 
     /**
-	 * 
-	 */
+     *
+     */
     public ToolContentHandlerV2_0(final GDCollection coll) {
         super();
         collection = coll;
@@ -128,7 +128,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
      * null;
      * in der naechsten Version (V1_2) sollte diese Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr aufgerufen werden, da diese nur
      * Fehler korrigert haben, die dann nicht mehr auftreten duerften
-     * 
+     *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
     @SuppressWarnings("deprecation")
@@ -172,7 +172,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
         try {
             elementValue.setLength(0);
 
-            //		System.out.println("start: " + qName + (atts.getValue("hash") != null ? " hash="+atts.getValue("hash") : "") + (atts.getValue("name") != null ? " name="+atts.getValue("name") : ""));		
+            //		System.out.println("start: " + qName + (atts.getValue("hash") != null ? " hash="+atts.getValue("hash") : "") + (atts.getValue("name") != null ? " name="+atts.getValue("name") : ""));
 
             if (qName.equals("field")) {
                 field = atts.getValue("name");
@@ -191,12 +191,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                     element = ModelConstants.createElement(elementClass, false);
                 }
 
-                if (element == null) {
-                    XMLInformationMessenger.showElementNoLongerSupportedMessage(collection, elementClass, true);
-                    //				ToolXMLParser.addDeprecatedElementHashes(atts.getValue("hash"));
-                } else {
+                if (element != null) {
                     if (copyAndPaste > 0) {
-
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
                         if (element instanceof Kante) {
                             kanten.add((Kante) element);

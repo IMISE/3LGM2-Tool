@@ -7,6 +7,7 @@ package de.imise.tool3lgm.xml;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
@@ -90,8 +91,8 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<NodeContainer>();
 
     /**
-	 * 
-	 */
+     *
+     */
     public ToolContentHandlerV1_0(final GDCollection coll) {
         super();
         collection = coll;
@@ -110,7 +111,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
      * null;
      * in der naechsten Version (V1_2) sollte diese Funktion ueberschrieben werden, damit die 3 Funktionen nicht mehr aufgerufen werden, da diese nur
      * Fehler korrigert haben, die dann nicht mehr auftreten duerften
-     * 
+     *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
     @SuppressWarnings("deprecation")
@@ -154,16 +155,11 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
         } else if (qName.equals("element")) {
             Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(atts.getValue("class"));
-            if (elementClass == null) {
+            if (elementClass == null || Modifier.isAbstract(elementClass.getModifiers())) {
                 throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
             }
-
             element = ModelConstants.createElement(elementClass, false);
-
-            if (element == null) {
-                XMLInformationMessenger.showElementNoLongerSupportedMessage(collection, elementClass, true);
-                //				ToolXMLParser.addDeprecatedElementHashes(atts.getValue("hash"));
-            } else {
+            if (element != null) {
                 element.setHashString(atts.getValue("hash"));
 
                 if (atts.getValue("layer") != null) {
