@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -274,7 +275,8 @@ public class ModelCleaner {
         // Leeerzeilen
         // sowie das "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" löschen
         final String[] superflousStrings = {
-                "-ZUSAMMENGEFÜHRT-", "-JOINED-"
+                "-ZUSAMMENGEFÜHRT-",
+                "-JOINED-"
         };
         for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(ModelElement.class, true)) {
             // Element-Namen und Beschreibungen bereinigen
@@ -343,8 +345,8 @@ public class ModelCleaner {
         // Alle initial vorhandenen untergeordneten Elemente erzeugen, die nicht mehr da sind.
         // Diese kann man nicht von Hand neu erzeugen
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_NODES_SET) {
-            Class<? extends Kante>[] subTypeEdges = ModelConstants.getInitialSubtypes(elementClass);
-            if (subTypeEdges == null || subTypeEdges.length == 0) {
+            Set<Class<? extends Kante>> subTypeEdges = ModelConstants.getInitialSubtypes(elementClass);
+            if (subTypeEdges == null || subTypeEdges.size() == 0) {
                 continue;
             }
             for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, false)) {
@@ -487,7 +489,9 @@ public class ModelCleaner {
     void removeInconsistentAWBConfigurationsWithoutAWB(final boolean showResultDialog) {
         @SuppressWarnings("rawtypes")
         Class[] connectedElementClasses = {
-                Anwendungsbaustein.class, RechAnwendungsbaustein.class, KonAnwendungsbaustein.class,
+                Anwendungsbaustein.class,
+                RechAnwendungsbaustein.class,
+                KonAnwendungsbaustein.class,
         };
         removeInconsistentElements(gdcoll, ABKonfiguration.class, connectedElementClasses, "clean_result_inconsistent_abwconfig");
     }
