@@ -710,10 +710,30 @@ public final class ModelConstants {
         }
     }
 
-    /**
-     * Mappt vom Klassennamen auf die Klasse.
-     */
+    /** Mappt vom Klassennamen auf die Klasse. Ist der Cache für die Funktion {@link #getClassForName(String)} */
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
+
+    /** Alle Modellelementklassen, die instaziierbar sind und in jedem Metamodell automatisch enthalten sind */
+    private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class.getSimpleName(), TextfeldFach.class.getSimpleName(), TextfeldLog.class.getSimpleName(), TextfeldPhy.class.getSimpleName());
+
+    /**
+     * Prüft, ob in dem übergebenen className mindestens 2 Punkte stehen.
+     *
+     * @param className
+     * @return
+     */
+    private static final boolean isFullQualifiedClassName(final String className) {
+        int firstPoint = className.indexOf('.');
+        if (firstPoint < 0) {
+            return false;
+        }
+        int secondPoint = className.lastIndexOf('.');
+        return firstPoint < secondPoint;
+    }
+
+    public static final String NODE_PACKAGE_NAME = ALL_NODES.length > 0 ? ALL_NODES[0].getPackage().getName() + "." : "";
+
+    public static final String EDGE_PACKAGE_NAME = ALL_EDGES.length > 0 ? ALL_EDGES[0].getPackage().getName() + "." : "";
 
     /**
      * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
@@ -732,15 +752,15 @@ public final class ModelConstants {
         }
 
         String fullClassName = null;
-        if (!classname.startsWith("de.imise.tool3lgm.")) {
+        if (!isFullQualifiedClassName(classname)) {
             //die allgemeinen (nicht metamodellabhängigen)Klassen liegen in einem anderen
             //package als alle Metamodellklassen. Das hier sollte eigentlich nicht die
             //ModelConstants wissen, sondern das sind Tool3lgmConstants, da die Klassen
             //nicht modellabhängig sind
-            if (classname.equals(Knickpunkt.class.getSimpleName()) || classname.equals(TextfeldFach.class.getSimpleName()) || classname.equals(TextfeldLog.class.getSimpleName()) || classname.equals(TextfeldPhy.class.getSimpleName())) {
+            if (META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES.contains(classname)) {
                 fullClassName = Tool3lgmConstants.ELEMENTS_PACKAGE_NAME + classname;
             } else {
-                fullClassName = Tool3lgmConstants.NODE_PACKAGE_NAME + classname;
+                fullClassName = NODE_PACKAGE_NAME + classname;
             }
         } else {
             fullClassName = classname;
@@ -752,7 +772,7 @@ public final class ModelConstants {
             clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
         } catch (Exception e) {
             try {
-                fullClassName = Tool3lgmConstants.TRACE_PACKAGE_NAME + classname;
+                fullClassName = EDGE_PACKAGE_NAME + classname;
                 clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
             } catch (Exception ex) {
                 try {

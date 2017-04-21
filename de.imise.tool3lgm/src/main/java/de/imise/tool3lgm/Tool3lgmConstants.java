@@ -46,12 +46,18 @@ public abstract class Tool3lgmConstants {
      * {@link Tool3lgmConstants#FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
      */
     public static enum FileFilterType {
-        LGM3, LGM3_ZIP, LGM3_UNZIPPED, USERFIELD, LIC, XSL, CSV
+        LGM3,
+        LGM3_ZIP,
+        LGM3_UNZIPPED,
+        USERFIELD,
+        LIC,
+        XSL,
+        CSV
     }
 
     /**
      * Hilfsklasse zum Aufbau der {@link #KEYSTROKES}-<code>Map</code>
-     * 
+     *
      * @author fstephan
      */
     private static final class KeyStrokeMap extends HashMap<ActionIdentifier, KeyStroke> {
@@ -96,12 +102,6 @@ public abstract class Tool3lgmConstants {
 
     /** Name des Packages in dem alle Knoten-Klassen liegen, die allgemein gebraucht werden (Knickpunkte, Textfelder) */
     public static final String ELEMENTS_PACKAGE_NAME = "de.imise.tool3lgm.graphtools.elements.";
-
-    /** Name des Packages in dem alle Knoten-Klassen liegen */
-    public static final String NODE_PACKAGE_NAME = "de.imise.tool3lgm.graphtools.elements.node.";
-
-    /** Name des Packages in dem alle Kanten-Klasse liegen */
-    public static final String TRACE_PACKAGE_NAME = "de.imise.tool3lgm.graphtools.elements.edge.";
 
     /** Name des Packages in dem die GDCollection liegt */
     public static final String GD_PACKAGE_NAME = "de.imise.tool3lgm.graphtools.";
@@ -251,7 +251,7 @@ public abstract class Tool3lgmConstants {
      * Liefert den command-<code>String</code> für das {@link KeyEvent}, das durch die durch <code>key</code> identifizierte {@link StaticAction}
      * ausgelöst wird.<br>
      * Im Moment wird hier <code>key</code> selbst zurückgegeben.
-     * 
+     *
      * @param identifier
      * @return
      */
@@ -261,7 +261,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
-     * 
+     *
      * @return Pfad zur Anwendung
      */
     public static File getApplicationDir() {
@@ -276,7 +276,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * gibt String für die Dateiangabe des programminternen Zwischenspeichers zurück
-     * 
+     *
      * @return String mit Verzeichnis- und Dateiangabe des Zwischenspeichers
      */
     public static String getClipboardPath() {
@@ -285,7 +285,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * gibt die Debug-Option fuer Swing-Komponenten zurueck
-     * 
+     *
      * @return int
      */
     public static int getDebugGraphicsOption() {
@@ -295,7 +295,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Liefert eine kurze Beschreibung für die durch <code>key</code> identifizierte {@link StaticAction}. (Zur Verwendung als Tooltip)
-     * 
+     *
      * @param identifier
      * @return
      */
@@ -306,7 +306,7 @@ public abstract class Tool3lgmConstants {
     /**
      * Gibt fuer eine ArrayList von {@link NodeContainer}n oder {@link ModelElement}s einen String des Inhalts zurück. Ist insertNewLines==false, wird
      * eine kommaseparierte Liste zurückgegeben.
-     * 
+     *
      * @param ArrayList
      * @param boolean
      * @param boolean TODO:AXS:in eine eigene Klasse verlegen
@@ -352,7 +352,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Gets a string for the given key from the error resource bundleor one of its parents.
-     * 
+     *
      * @param key
      * @return String with value of resource
      */
@@ -363,7 +363,7 @@ public abstract class Tool3lgmConstants {
     /**
      * Liefert <code>true</code>, wenn der übergebene String eine Extension eines {@link FileNameExtensionFilter} in
      * FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER ist.
-     * 
+     *
      * @param extension
      * @return
      */
@@ -380,7 +380,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Liefert für den übergebenen {@link FileFilterType} den {@link FileNameExtensionFilter}
-     * 
+     *
      * @param filterName
      * @return
      */
@@ -395,7 +395,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Liefert eine Liste von {@link FileNameExtensionFilter}.
-     * 
+     *
      * @param fileFilterType
      *            Array von Objecten, deren jeweilige toString()-Methode den Filternamen angibt, der an dieser Stelle im Rückgabearray stehen soll.
      * @return
@@ -418,7 +418,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * gibt das spezifiziert ImageIcon aus dem Standard-Iconpfad zurück
-     * 
+     *
      * @param name
      * @return ImageIcon
      */
@@ -428,7 +428,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu laden und es wiederzugeben
-     * 
+     *
      * @param dir
      *            Verzeichnis des tatsächlichen Bilds
      * @return
@@ -450,7 +450,7 @@ public abstract class Tool3lgmConstants {
      * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt. Es wird davon
      * ausgegangen, dass auf jeden Fall englische Ressourcen
      * existieren, die in der Datei "Tool3lgmResources.properties" hinterlegt sind.<br>
-     * 
+     *
      * @return alle Locales, für die Ressourcen existieren
      */
     public static final Locale[] getInstalledLanguages() {
@@ -499,7 +499,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Liefert den auslösenden {@link KeyStroke} für die durch <code>key</code> identifizierte {@link StaticAction}.
-     * 
+     *
      * @param identifier
      * @return
      */
@@ -509,15 +509,25 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Gibt ein Array aller {@link Action}s wieder, die im gesamten Baukasten durch ihre dazugehörigen {@link KeyStroke}s ausgelöst werden können.
-     * 
+     *
      * @see #KEYSTROKES
      * @return
      */
     public static Action[] getKeyStrokeActions() {
         if (KEYSTROKE_ACTIONS == null) {
             KEYSTROKE_ACTIONS = new Action[] {
-                    ActionLibrary.FileActions.ACTION_NEW_MODEL, ActionLibrary.FileActions.OPEN, ActionLibrary.FileActions.SAVE, ActionLibrary.EditActions.REMOVE, ActionLibrary.EditActions.UNDO, ActionLibrary.EditActions.REDO,
-                    ActionLibrary.EditActions.SELECT_ALL, ActionLibrary.EditActions.CUT, ActionLibrary.EditActions.COPY, ActionLibrary.EditActions.PASTE, ActionLibrary.AnalysisActions.OPEN_REPOSITORY, ActionLibrary.AnalysisActions.OPEN_EDITOR,
+                    ActionLibrary.FileActions.ACTION_NEW_MODEL,
+                    ActionLibrary.FileActions.OPEN,
+                    ActionLibrary.FileActions.SAVE,
+                    ActionLibrary.EditActions.REMOVE,
+                    ActionLibrary.EditActions.UNDO,
+                    ActionLibrary.EditActions.REDO,
+                    ActionLibrary.EditActions.SELECT_ALL,
+                    ActionLibrary.EditActions.CUT,
+                    ActionLibrary.EditActions.COPY,
+                    ActionLibrary.EditActions.PASTE,
+                    ActionLibrary.AnalysisActions.OPEN_REPOSITORY,
+                    ActionLibrary.AnalysisActions.OPEN_EDITOR,
                     ActionLibrary.AnalysisActions.RESET_RESULT
             };
         }
@@ -527,7 +537,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * gibt das spezifiziert ImageIcon aus dem lokalisierten Iconpfad zurück
-     * 
+     *
      * @param name
      * @return ImageIcon
      */
@@ -545,7 +555,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * wenn die Sanduhr abgelaufen ist...
-     * 
+     *
      * @return Default system cursor
      */
     public static Cursor getNormalCursor() {
@@ -554,7 +564,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Gets a string for the given key from this resource bundle or one of its parents.
-     * 
+     *
      * @param key
      *            String with key for resource
      * @return String with value of resource
@@ -565,7 +575,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * für die Sanduhr...
-     * 
+     *
      * @return Cursor that indicates a running process
      */
     public static Cursor getWaitCursor() {
@@ -574,7 +584,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Wenn nicht die linke Maustaste gedrückt wurde, wird true zurück gegeben.
-     * 
+     *
      * @param e
      * @return
      */
@@ -584,7 +594,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * check, wheter thread can get the exclusive read/write-permission for a file
-     * 
+     *
      * @param f
      *            the file to check the permission
      * @return true, if thread can get exclusive read/write-permission for file TODO:AXS:prüfen was das hier soll
@@ -599,7 +609,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * setzt die Dateiangabe des programminternen Zwischenspeichers
-     * 
+     *
      * @param _path
      *            String mit Verzeichnis- und Dateiangabe des Zwischenspeichers
      */
@@ -609,7 +619,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * setzt die Debug-Optionen fuer Swing-Komponenten
-     * 
+     *
      * @param LOG
      *            boolean; Ausgabe der Ereignisse?
      * @param FLASH

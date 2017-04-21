@@ -48,7 +48,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
      */
     private Object tmpUserObject = null;
 
-    // für die Kommunikation zwischen mousePressed und mouseClicked 
+    // für die Kommunikation zwischen mousePressed und mouseClicked
 
     @Override
     public void mouseClicked(final MouseEvent e) {
@@ -115,7 +115,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
             if (path != null) {
                 LGMTreeNode lastNode = (LGMTreeNode) path.getLastPathComponent();
-                // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen, 
+                // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen,
                 // so dass hier keine weiter Selektion erstellt werden muss.
                 if (!(lastNode.getUserObject() instanceof ElementContainer)) {
                     tree.getSelectionModel().setSelectionPath(tree.getPathForLocation(xin, yin));
@@ -238,7 +238,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             }
             s.nextToken();
             String klassenname = s.nextToken();
-            doc.createKnotenWithContainer(Tool3lgmConstants.NODE_PACKAGE_NAME + klassenname, DynamicTree.PID);
+            doc.createKnotenWithContainer(ModelConstants.NODE_PACKAGE_NAME + klassenname, DynamicTree.PID);
             return;
         }
     }
