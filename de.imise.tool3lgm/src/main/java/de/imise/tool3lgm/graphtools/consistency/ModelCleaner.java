@@ -82,11 +82,9 @@ public class ModelCleaner {
 
         // Bei allen Elementen den ContainerTable mit den LayerContainern synchronisieren
         // Es kann vorkommen, dass einige Kanten einen Container auf den Layern im Hauptmodell und
-        // einem
-        // Teilmodell haben, aber in ihrem ContainerTable nur ein Container für das Hauptmodell
-        // eingetragen
-        // ist, der aber eigentlich der Container aus dem Teilmodell ist. Das ist absoluter Mist und
-        // wird hier berichtigt.
+        // einem Teilmodell haben, aber in ihrem ContainerTable nur ein Container für das Hauptmodell
+        // eingetragen ist, der aber eigentlich der Container aus dem Teilmodell ist. Das ist absoluter
+        // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
             for (LayerContainer lc : doc.getLayers()) {
                 ArrayList<ElementContainer> allEc = new ArrayList<ElementContainer>(lc.getKnoten());
@@ -106,9 +104,8 @@ public class ModelCleaner {
                     }
                     if (doc instanceof Szenario) {
                         // wenn das Element zwar in einem Teilmodell, aber nicht im Gesamtmodell
-                        // vorkommt -> Container im
-                        // Gesamtmodell erzeugen und adden (dieser Fehler trat noch nie auf, aber
-                        // sicher ist sicher)
+                        // vorkommt -> Container im Gesamtmodell erzeugen und adden (dieser Fehler
+                        // trat noch nie auf, aber sicher ist sicher)
                         if (layerElemMe.getContainer(mainDoc) == null) {
                             if (PRINT_ERRORS) {
                                 System.err.println("2: " + layerElemMe.getClass().getSimpleName() + " " + doc + " " + layerElemMe.getClearName() + " " + layerElemMe.getHashString() + " " + layerElemMe.getCreationDate());
@@ -135,8 +132,7 @@ public class ModelCleaner {
         // Jetzt ist sicher gestellt, dass alle Container, die bei den Layern eingetragen sind auch
         // bei allen Elementen eingetragen sind.
         // Nun für alle Modellelemente alle ihre Container überprüfen, ob es diese überhaupt geben
-        // darf und wenn ja, ob sie auch korrekt
-        // auf den Layern eingetragen sind.
+        // darf und wenn ja, ob sie auch korrekt auf den Layern eingetragen sind.
         // Dieser Fehler trat bisher noch nicht auf, aber es ist besser, das noch einmal explizit
         // sicher zu stellen!
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
@@ -144,8 +140,7 @@ public class ModelCleaner {
                 // Unique Elemente dürfen keinen Container außerhalb des Hauptmodells haben
                 if (me.isUnique() && doc instanceof Szenario) {
                     me.removeContainer(doc);
-                    // prüfen, ob alle Container im ContainerTable des Elements auch auf dem Layer
-                    // liegen
+                    // prüfen, ob alle Container im ContainerTable des Elements auch auf dem Layer liegen
                 } else {
                     ElementContainer ec = me.getContainer(doc);
                     LayerContainer lc = doc.getLayer(me.layerFor());
@@ -176,14 +171,12 @@ public class ModelCleaner {
         }
 
         // Alle ABKonfigurationen löschen, die keiner AufOrgKombination zugeordnet sind. Davon gibt
-        // es in alten
-        // Modellen aus irgend einem Grund sehr viele
-        // removeInconsistentElements(gdcoll, ABKonfiguration.class, AufOrgKombination.class, null);
+        // es in alten Modellen aus irgend einem Grund sehr viele removeInconsistentElements(gdcoll,
+        // ABKonfiguration.class, AufOrgKombination.class, null);
 
         int pid = TransactionManager.STANDARD_PID;
-        // Alle Knickpunkte löschen, die keiner Kante zugeordnet sind. So etwas trat in alten
-        // Modellen auf
-        // und sollte gleich am Anfang ausgeschlossen werden
+        // Alle Knickpunkte löschen, die keiner Kante zugeordnet sind. So etwas trat in alten Modellen
+        // auf und sollte gleich am Anfang ausgeschlossen werden
         ArrayList<ElementContainer> al = new ArrayList<ElementContainer>();
         for (Szenario szen : gdcoll.getSzenarios()) {
             for (ElementContainer kc : szen.getElementContainer(Knickpunkt.class)) {
@@ -191,8 +184,7 @@ public class ModelCleaner {
                 Knickpunkt kp = bpc.getKnickpunktKnoten();
                 EdgeContainer ec = kp.getOwner();
                 // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
-                // KnickpunktContainerListe
-                // seines Owners steht -> löschen
+                // KnickpunktContainerListe seines Owners steht -> löschen
                 if (ec == null) {
                     // System.err.println("nullllll");
                     // System.err.println(gdcoll.getSzenario(i));
@@ -220,8 +212,7 @@ public class ModelCleaner {
         }
 
         // Alle inkonsistenten Kanten löschen = alle Kanten, denen Start- oder Endelement fehlen
-        // oder die
-        // dieselben Elemente mehrfach verbinden, obwohl sie nur 1 mal verbunden sein sollten
+        // oder die dieselben Elemente mehrfach verbinden, obwohl sie nur 1 mal verbunden sein sollten
         ArrayList<ModelElement> edges = mainDoc.getModelItems(Kante.class, true);
         for (int i = 0; i < edges.size(); i++) {
             Kante edge = (Kante) edges.get(i);
@@ -239,9 +230,8 @@ public class ModelCleaner {
                 if (edge != edge2) {
                     gdcoll.deleteElement(edge2, mainDoc, pid);
                     // edge2 befindet sich auf jeden Fall hinter edge in der Liste edges, sonst wäre
-                    // vorher edge2 schon mal edge gewesen und edge
-                    // wäre dann edge2 gewesen. ALso kann man edge2 einfach hinten aus der Liste
-                    // entfernen
+                    // vorher edge2 schon mal edge gewesen und edge wäre dann edge2 gewesen. ALso kann
+                    // man edge2 einfach hinten aus der Liste entfernen.
                     edges.remove(edge2);
                 }
             }
@@ -272,8 +262,7 @@ public class ModelCleaner {
         }
 
         // die ganzen irgendwann beim Zusammenführen mal sinnlos reingekommenen LeerZeichen und
-        // Leeerzeilen
-        // sowie das "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" löschen
+        // Leeerzeilen sowie das "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" löschen
         final String[] superflousStrings = {
                 "-ZUSAMMENGEFÜHRT-",
                 "-JOINED-"
@@ -284,8 +273,7 @@ public class ModelCleaner {
             me.setDescription(getCleanString(me.getDescription(), Tool3lgmConstants.getResString("joined"), superflousStrings));
 
             // alle Radiobuttons, Comboboxes und Kennzahlen, die beim Zusammenführen irgendwelche
-            // komischen Werte zusammengeführt bekommen haben,
-            // wieder berichtigen
+            // komischen Werte zusammengeführt bekommen haben, wieder berichtigen
             for (UserField uf : new ArrayList<UserField>(me.getUserFieldInputValueKeys())) {
                 if (uf == null) {
                     continue;
@@ -305,9 +293,8 @@ public class ModelCleaner {
             for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
                 for (UserField uf : definitions.getUserFields(elementClass)) {
                     // eigentlich haben Checkboxen keine Listenwerte, da sie nur true oder false für
-                    // eine einzelne Box darsellen, aber falls
-                    // aus der einzelnen Checkbox mal eine ButtonGroup mit mehreren Checkboxes
-                    // gemacht wird, haut das hier gleich hin
+                    // eine einzelne Box darsellen, aber falls aus der einzelnen Checkbox mal eine
+                    // ButtonGroup mit mehreren Checkboxes gemacht wird, haut das hier gleich hin.
                     if (uf.getStyle() != Style.RADIO_BUTTON && uf.getStyle() != Style.COMBO_BOX || uf.getStyle() == Style.CHECK_BOX) {
                         continue;
                     }
@@ -355,10 +342,8 @@ public class ModelCleaner {
         }
 
         // Sicher stellen, dass bei allen berichtigten Kanten und Knickpunkten die Container richtig
-        // positioniert sind
-        // also einfach nochmal pauzschal alle Kanten-Container initialisieren (das wird und muss
-        // bereits einmal nach
-        // dem Beenden des Einlesens im ToolContentHanlder getan werden)
+        // positioniert sind also einfach nochmal pauzschal alle Kanten-Container initialisieren (das
+        // wird und muss bereits einmal nach dem Beenden des Einlesens im ToolContentHanlder getan werden)
         for (GraphDocument doc : docs) {
             doc.initKnotContainers();
             doc.initTraceContainers();
@@ -404,8 +389,7 @@ public class ModelCleaner {
                 // wenn davor wenigstens ein Inhaltszeichen stand
                 if (startIndex < endIndex) {
                     // merke den aktuellen TeilString zwischen startIndex und dem Beginn von
-                    // "-ZUSAMMENGEFÜHRT-"
-                    // in der Tokenliste
+                    // "-ZUSAMMENGEFÜHRT-" in der Tokenliste
                     subStringList.add(sourceString.substring(startIndex, endIndex).trim());
                     // subStringDelimiterStringList.add(superflousStrings[superflousStringIndex]);
                 }
@@ -413,8 +397,7 @@ public class ModelCleaner {
                 startIndex = endIndex + delimiter[superflousStringIndex].length();
                 // ab da wieder nach dem Auftreten von "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" suchen
                 // (solange ein "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" gefunden wurde, wiederholt er
-                // diese
-                // for -Schleife immer mit aktuellen Zeichenindex im Ausgangsstring)
+                // diese for -Schleife immer mit aktuellen Zeichenindex im Ausgangsstring)
                 superflousStringIndex = -1;
                 continue loop;
             }
@@ -432,8 +415,7 @@ public class ModelCleaner {
             return "";
         }
         // Der Ausgangsstring hatte gar kein "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" in sich oder diese
-        // Zeichenketten
-        // standen ganz am Anfang oder ganz hinten
+        // Zeichenketten standen ganz am Anfang oder ganz hinten
         if (subStringList.size() == 1) {
             // gib den einzigen vorhandenen Token zurück
             return subStringList.get(0);
@@ -461,8 +443,7 @@ public class ModelCleaner {
                 }
             }
             // der aktuelle Token muss dem RückgabeString angefügt werden, wenn davor schon was
-            // steht,
-            // dann wieder das "-ZUSAMMENGEFÜHRT-" dazwischen schreiben
+            // steht, dann wieder das "-ZUSAMMENGEFÜHRT-" dazwischen schreiben
             if (sb.length() > 0) {
                 sb.append("\n\n-");
                 sb.append(newDelimiter);
