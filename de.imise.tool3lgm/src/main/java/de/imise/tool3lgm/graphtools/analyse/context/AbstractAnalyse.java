@@ -14,12 +14,13 @@ public abstract class AbstractAnalyse {
 
     /** der Name der Analyse. */
     protected String name;
+
     /** der Knoten, bei dem die Analyse beginnt. */
     protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<Class<? extends ModelElement>>();
 
     /**
      * Gibt den Namen der XMLAnalyse zurück.
-     * 
+     *
      * @return der Name der XMLAnalyse.
      */
     public String getName() {
@@ -29,7 +30,7 @@ public abstract class AbstractAnalyse {
     /**
      * Liefert die Ergenis-Elemente der Analyse für die in diesem GraphDocument selektierten
      * Elemente.
-     * 
+     *
      * @param doc
      * @return
      */
@@ -39,7 +40,7 @@ public abstract class AbstractAnalyse {
      * Gibt die Namen der Knotentypen zurück, auf die die XMLAnalyse angewandt werden kann.<br>
      * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse verwendet, sondern nur
      * bei der Zuordnung, welche Analysen für wlche Knoten zur Verfügung stehen.
-     * 
+     *
      * @return eine ArrayList der Startknoten.
      */
     public ArrayList<Class<? extends ModelElement>> getStartknoten() {
@@ -80,7 +81,7 @@ public abstract class AbstractAnalyse {
 
     /**
      * Gibt der XMLAnalyse einen neuen Namen.
-     * 
+     *
      * @param name neuer Name der XMLAnalyse.
      */
     public void setName(final String name) {

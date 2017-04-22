@@ -24,11 +24,11 @@ import de.imise.tool3lgm.log.Log;
  * Analysen die im 3LGM-Baukasten verwendet werden, verwaltet. Achtung: Es existiert noch kein
  * Listener-Mechanismus, der Klassen, welche das AnalyseRepository verwenden, über Änderungen im
  * Repository informiert.
- * 
+ *
  * @author Thomas Wendt, Sebastian Weber, AXS
  */
-
 public class AnalyseRepository {
+
     /** Datei, aus der zuletzt Analysen geladen oder in die zuletzt Analysen gespeichert wurden */
     private static File file;
 
@@ -39,7 +39,7 @@ public class AnalyseRepository {
 
     /**
      * Fügt eine neue XMLAnalyse ins Repository ein, wenn sie noch nicht enthalten ist.
-     * 
+     *
      * @param xmlAnalysen Liste zu der die übergebene XMLAnalyse hinzugefügt werden soll
      * @param toadd die XMLAnalyse, die hinzugefügt werden soll
      */
@@ -53,6 +53,9 @@ public class AnalyseRepository {
         if (xmlAnalysen.contains(toadd)) {
             return false;
         }
+        if (toadd.startknoten == null || toadd.startknoten.isEmpty()) {
+            return false;
+        }
         xmlAnalysen.add(toadd);
         return true;
     }
@@ -60,7 +63,7 @@ public class AnalyseRepository {
     /**
      * Prüft, ob der übergebene <code>name</code> bei irgend einer anderen als der einzeln
      * übergebenen XMLAnalyse vorkommt.
-     * 
+     *
      * @param xmlAnalysen eine ArrayList der Analysen.
      * @param xMLAnalyse die XMLAnalyse, der ein neuer Name gegeben werden soll.
      * @param name der Name für die übergebene XMLAnalyse.
@@ -84,7 +87,7 @@ public class AnalyseRepository {
 
     /**
      * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Knoten entspricht.
-     * 
+     *
      * @param elementClassName
      * @return ArrayList, in der jeder Eintrag eine XMLAnalyse ist.
      */
@@ -125,7 +128,7 @@ public class AnalyseRepository {
      * zusammen, dass der Benutzer immer auf einer Datei arbeitet, die er auch möglichst beschreiben
      * kann. Das Speichern der Analysendatei im Installationsverzeichnis hat den Vorteil, dass die
      * Analysen allen Benutzern dieser Installation zu Verfügung stehen.
-     * 
+     *
      * @return
      */
     public static File getRepositoryFile() {
@@ -183,7 +186,7 @@ public class AnalyseRepository {
 
     /**
      * Gibt alle Abfragen zurück, die sich im Analyserepository befinden.
-     * 
+     *
      * @return eine ArrayList der Abfragen. Jeder Eintrag des ArrayList ist eine XMLAnalyse.
      */
     public static List<XMLAnalyse> getXMLAnalysen() {
@@ -202,7 +205,7 @@ public class AnalyseRepository {
 
     /**
      * Gibt eine Liste aller Analysen zurück, die sich in dem übergebenen File befinden.
-     * 
+     *
      * @param file
      * @return
      */
@@ -218,7 +221,7 @@ public class AnalyseRepository {
     /**
      * Gibt eine Liste aller Analysen zurück, die sich in der Datei mit der übergebenen URL
      * befinden.
-     * 
+     *
      * @param f
      * @return
      */
@@ -269,7 +272,7 @@ public class AnalyseRepository {
     /**
      * Speichert die Analysen in die übergebene Analysedatei. Die übergebene Datei muss nicht
      * existieren, aber erzeugbar und beschreibbar sein.
-     * 
+     *
      * @param f die Datei, in die die Analysen gespeichert werden sollen.
      */
     public static void saveAnalyseFile(final File f, final List<XMLAnalyse> analysen) {
@@ -315,7 +318,7 @@ public class AnalyseRepository {
     /**
      * Übernimmt die übergebenen Abfragen in das Repository. Der aktuelle Inhalt des Repository wird
      * dadurch überschrieben.
-     * 
+     *
      * @param newAbfragen eine ArrayList der neuen Abfragen. Jeder Eintrag des ArrayList ist eine
      *            XMLAnalyse.
      */

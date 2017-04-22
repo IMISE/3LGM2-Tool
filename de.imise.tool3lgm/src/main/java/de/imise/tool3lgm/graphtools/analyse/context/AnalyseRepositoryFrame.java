@@ -32,7 +32,9 @@ public class AnalyseRepositoryFrame extends JFrame {
     static AnalyseRepositoryFrameTable table;
 
     private static AbstractButton[] buttons = {
-            new JButton(AnalyseRepositoryFrameActions.ACTION_START_ANALYSIS), new JButton(AnalyseRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT), new JButton(AnalyseRepositoryFrameActions.ACTION_CLOSE_DIALOG),
+            new JButton(AnalyseRepositoryFrameActions.ACTION_START_ANALYSIS),
+            new JButton(AnalyseRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT),
+            new JButton(AnalyseRepositoryFrameActions.ACTION_CLOSE_DIALOG),
     };
 
     /**
@@ -61,7 +63,7 @@ public class AnalyseRepositoryFrame extends JFrame {
 
     /**
      * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie nicht <code>null</code> ist und noch nicht in der Liste vorkommt.
-     * 
+     *
      * @param toadd
      * @param ignoreDuplicates wenn <code>true</code> werden identische Analysen auch mehrfach
      *            eingefügt, sonst nicht
@@ -110,6 +112,12 @@ public class AnalyseRepositoryFrame extends JFrame {
      */
     static void setAnalysen(final List<XMLAnalyse> analysen) {
         Alphabetical.sort(analysen);
+        for (int i = analysen.size() - 1; i >= 0; i--) {
+            XMLAnalyse analyse = analysen.get(i);
+            if (analyse.startknoten.isEmpty()) {
+                analysen.remove(i);
+            }
+        }
         AnalyseRepositoryFrame.analysen = analysen;
     }
 
@@ -125,7 +133,7 @@ public class AnalyseRepositoryFrame extends JFrame {
 
     /**
      * Konstruktor. Zugriff auf diese Klasse ist über die Methode showDialog möglich.
-     * 
+     *
      * @param t die Tool3lgm Klasse, in der dieser Dialog angezeigt wird.
      */
     private AnalyseRepositoryFrame() {

@@ -26,7 +26,7 @@ import de.imise.tool3lgm.log.Log;
 
 /**
  * Diese Klasse repräsentiert eine einzelne XMLAnalyse.
- * 
+ *
  * @author Sebastian Weber
  */
 public class XMLAnalyse extends AbstractAnalyse {
@@ -36,7 +36,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
-     * 
+     *
      * @param analyseText die XMLAnalyse als XML-Text.
      * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
      *         den übergebenen Parametern zurück gegeben.
@@ -50,7 +50,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
-     * 
+     *
      * @param name Name der XMLAnalyse.
      * @param analyseText die XMLAnalyse als XML-Text.
      * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
@@ -66,7 +66,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * Gibt den Analysetext zurück.
-     * 
+     *
      * @return der Text der die XMLAnalyse beschreibt.
      */
     public String getXMLText() {
@@ -75,7 +75,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * Setzt eine neue Beschreibung für diese XMLAnalyse.
-     * 
+     *
      * @param xmlText der Text der die XMLAnalyse beschreibt.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
@@ -100,11 +100,14 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * Fügt einen neuen Startknoten hinzu.
-     * 
+     *
      * @param startknoten der neue Name des Startknotens.
      */
     private void addStartknoten(final String startknoten) {
-        this.startknoten.add(ModelConstants.getClassForName(startknoten));
+        Class<? extends ModelElement> startClass = ModelConstants.getClassForName(startknoten);
+        if (startClass != null) {
+            this.startknoten.add(startClass);
+        }
     }
 
     /**
@@ -118,7 +121,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * DocumentHandler für den XML-Analysetext.
-     * 
+     *
      * @author Sebastian Weber
      */
     private class AnalyseParser extends DefaultHandler {
@@ -140,7 +143,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     /**
      * Parst einen Analysetext.
-     * 
+     *
      * @param analyseText der Analysetext.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
