@@ -24,7 +24,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.StaticAction;
+import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GDCommands;
+import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -101,10 +103,10 @@ public abstract class Tool3lgmConstants {
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
 
     /** Name des Packages in dem alle Knoten-Klassen liegen, die allgemein gebraucht werden (Knickpunkte, Textfelder) */
-    public static final String ELEMENTS_PACKAGE_NAME = "de.imise.tool3lgm.graphtools.elements.";
+    public static final String ELEMENTS_PACKAGE_NAME = Knoten.class.getPackage().getName() + ".";
 
     /** Name des Packages in dem die GDCollection liegt */
-    public static final String GD_PACKAGE_NAME = "de.imise.tool3lgm.graphtools.";
+    public static final String GD_PACKAGE_NAME = GDCollection.class.getPackage().getName() + ".";
 
     /** path for temp-files */
     public static final String TEMP_PATH = USER_HOME_DIR_NAME + "/";
