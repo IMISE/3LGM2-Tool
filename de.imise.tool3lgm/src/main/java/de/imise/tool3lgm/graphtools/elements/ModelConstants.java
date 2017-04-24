@@ -864,7 +864,19 @@ public final class ModelConstants {
      * @see #getMetaAssociationName(Class, boolean, int)
      */
     public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return getForwardMetaAssociationName(edgeClass, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, false, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -895,7 +907,19 @@ public final class ModelConstants {
      * @see #getMetaAssociationName(Class, boolean, int)
      */
     public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getMetaAssociationName(edgeClass, true, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return getBackwardMetaAssociationName(edgeClass, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @return
+     * @see #getMetaAssociationName(Class, boolean, int)
+     */
+    public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, true, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -916,11 +940,11 @@ public final class ModelConstants {
      * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
      *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param direction Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur eine
-     *            Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
+     * @param connectionState Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur
+     *            eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
      *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
      *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
-     *            Assoziationen sind, aber aus allerlei nicht nachvollzierbaren Gründen in eine gepackt wurden.<br>
+     *            Assoziationen sind, aber aus allerlei Gründen in eine gepackt wurden.<br>
      *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
      *            <ul>
      *            <li>
@@ -938,15 +962,15 @@ public final class ModelConstants {
      *            </ul>
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int direction) {
+    public static String getMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int connectionState) {
         StringBuilder sb = new StringBuilder();
         if (!switchDefinedDirection) {
             try {
                 sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f"));
             } catch (Exception e) {
-                if (direction == Doppelkante.FORWARD) {
+                if (connectionState == Doppelkante.FORWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
-                } else if (direction == Doppelkante.BACKWARD) {
+                } else if (connectionState == Doppelkante.BACKWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
                 } else {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
@@ -958,9 +982,9 @@ public final class ModelConstants {
             try {
                 sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b"));
             } catch (Exception e) {
-                if (direction == Doppelkante.FORWARD) {
+                if (connectionState == Doppelkante.FORWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
-                } else if (direction == Doppelkante.BACKWARD) {
+                } else if (connectionState == Doppelkante.BACKWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
                 } else {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));

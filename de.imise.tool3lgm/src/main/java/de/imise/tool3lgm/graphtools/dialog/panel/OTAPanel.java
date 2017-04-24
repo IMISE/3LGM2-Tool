@@ -22,9 +22,10 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -39,7 +40,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * an. Hinzufügen von Assoziationen zw. den Elementen und Neuanlegen von Aufgaben bzw. Objekttypen
  * geht auch.
  */
-public class OTAPanel extends LGMDragNDropPanel {
+public class OTAPanel extends AbstractSingleEdgeConnectionPanel {
 
     private final LGMDragNDropTree otree, utree;
     private final LGMDragNDropTree rotree, rutree;
@@ -48,29 +49,22 @@ public class OTAPanel extends LGMDragNDropPanel {
     private final JPanel buttonpanel1, buttonpanel2;
     private final JLabel oben2, unten2;
     private final JScrollPane sp3, sp4;
-    private final Class<? extends ModelElement> searchElementClass;
 
     private LGMAction addUeberAction;
     private LGMAction removeUeberAction;
     private LGMAction addUnterAction;
     private LGMAction removeUnterAction;
 
-    public OTAPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog pd) {
-        super(pd);
-        this.searchElementClass = searchElementClass;
+    public OTAPanel(final Class<? extends Kante> edgeClass, final ElementPropertyDialog pd) {
+        super(edgeClass, pd);
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel oben;
-        if (getModelElement() instanceof Aufgabe) {
-            oben = new JLabel(Tool3lgmConstants.getResString("interp"));
-        } else {
-            oben = new JLabel(Tool3lgmConstants.getResString("bearbn"));
-        }
+        JLabel oben = new JLabel(getEdgeDisplayName(Doppelkante.BACKWARD));
 
-        oroot = new LGMTreeNode(Tool3lgmConstants.getResString("bearbn"), false);
+        oroot = new LGMTreeNode("invisible root", false);
         omodel = new DefaultTreeModel(oroot);
         otree = new LGMDragNDropTree(omodel, mainDoc);
         otree.setRootVisible(false);
@@ -79,14 +73,9 @@ public class OTAPanel extends LGMDragNDropPanel {
         otree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp1 = new JScrollPane(otree);
 
-        JLabel unten;
-        if (getModelElement() instanceof Aufgabe) {
-            unten = new JLabel(Tool3lgmConstants.getResString("bearbn"));
-        } else {
-            unten = new JLabel(Tool3lgmConstants.getResString("interp"));
-        }
+        JLabel unten = new JLabel(getEdgeDisplayName(Doppelkante.FORWARD));
 
-        uroot = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        uroot = new LGMTreeNode("invisible root", false);
         umodel = new DefaultTreeModel(uroot);
         utree = new LGMDragNDropTree(umodel, mainDoc);
         utree.setRootVisible(false);
@@ -203,6 +192,10 @@ public class OTAPanel extends LGMDragNDropPanel {
         buttonpanel2.add(removeUnterButton);
 
         init();
+    }
+
+    protected String getEdgeDisplayName(final int connectionState) {
+        return edgeIsForward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
     ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<ElementContainer>(500);
@@ -340,14 +333,20 @@ public class OTAPanel extends LGMDragNDropPanel {
         DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(utree, rutree, removeUnterAction);
 
         return new DragNDropActionChain[] {
-                tac1, tac2, tac3, tac4
+                tac1,
+                tac2,
+                tac3,
+                tac4
         };
     }
 
     @Override
     public LGMDragNDropTree[] getAllDragNDropTrees() {
         return new LGMDragNDropTree[] {
-                otree, rotree, utree, rutree
+                otree,
+                rotree,
+                utree,
+                rutree
         };
     }
 }

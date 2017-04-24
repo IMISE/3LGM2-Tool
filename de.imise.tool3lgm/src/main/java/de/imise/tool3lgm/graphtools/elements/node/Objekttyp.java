@@ -11,12 +11,13 @@ import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 public class Objekttyp extends Knoten {
 
     /**
-     * 
+     *
      */
     public Objekttyp() {
         super();
@@ -32,7 +33,7 @@ public class Objekttyp extends Knoten {
         ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
         //dialog.addTab(getResourceBundle().getString("merkm_p"),new
         // MerkmalPanel(dialog));
-        dialog.addTab(getResString("Aufgabe_p"), new OTAPanel(Aufgabe.class, dialog));
+        dialog.addTab(new OTAPanel(AufObjVerbindung.class, dialog));
         dialog.addTab(getResString("Repraesentationsform_p"), new TabbedPanel(dialog, new NConnectionPanel(Nachrichtentyp.class, getResString(Nachrichtentyp.class.getSimpleName()), dialog, false, true),
                 new NConnectionPanel(Dokumententyp.class, getResString(Dokumententyp.class.getSimpleName()), dialog, false, true), new NConnectionPanel(Datensatztyp.class, getResString(Datensatztyp.class.getSimpleName()), dialog, false, true)));
         return dialog;
