@@ -25,8 +25,6 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.Konfiguration;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -286,13 +284,7 @@ public class LgmXMLParser extends DefaultHandler {
                 state = IN_GRAPH;
                 return;
             }
-            if (doc.getLayer(me.layerFor()).add(ec) != null) {
-                if (me instanceof ABKonfiguration) {
-                    doc.getCollection().addABKonf((KonfigurationContainer) ec);
-                } else if (me instanceof DBKonfiguration) {
-                    doc.getCollection().addDBKonf((KonfigurationContainer) ec);
-                }
-            }
+            doc.getLayer(me.layerFor()).add(ec);
 
             if (rawName.equals("line_style")) {
                 return;
@@ -427,14 +419,7 @@ public class LgmXMLParser extends DefaultHandler {
                     state = IN_GRAPH;
                     return;
                 }
-                if (doc.getLayer(me.layerFor()).add(ec) != null) {
-                    if (me instanceof ABKonfiguration) {
-                        doc.getCollection().addABKonf((KonfigurationContainer) ec);
-                    } else if (me instanceof DBKonfiguration) {
-                        doc.getCollection().addDBKonf((KonfigurationContainer) ec);
-                    }
-                }
-
+                doc.getLayer(me.layerFor()).add(ec);
                 me = null;
                 ec = null;
                 file_state = IN_GRAPH;

@@ -22,11 +22,8 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -286,13 +283,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("element")) {
             if (element != null) {
                 container = element.createContainer(doc);
-                if (doc.getLayer(element.layerFor()).add(container) != null) {
-                    if (element instanceof ABKonfiguration) {
-                        collection.addABKonf((KonfigurationContainer) container);
-                    } else if (element instanceof DBKonfiguration) {
-                        collection.addDBKonf((KonfigurationContainer) container);
-                    }
-                }
+                doc.getLayer(element.layerFor()).add(container);
             }
             element = null;
             container = null;

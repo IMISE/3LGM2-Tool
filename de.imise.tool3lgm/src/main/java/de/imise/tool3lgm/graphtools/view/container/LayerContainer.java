@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
+import de.imise.util.ReflectionUtils;
 
 /**
  * @author Thomas
@@ -38,18 +39,18 @@ import de.imise.util.Alphabetical;
 public class LayerContainer extends ElementContainer {
 
     /**
-	 * 
-	 */
+     *
+     */
     private static BasicStroke dick = new BasicStroke((float) 3.0);
 
     /**
-	 * 
-	 */
+     *
+     */
     private static BasicStroke duenn = new BasicStroke((float) 1.0);
 
     /**
-	 * 
-	 */
+     *
+     */
     private int layerNumber = -1;
 
     /**
@@ -63,13 +64,13 @@ public class LayerContainer extends ElementContainer {
     private ArrayList<NodeContainer> alphabeticalNodeContainer;
 
     /**
-	 * 
-	 */
+     *
+     */
     private ArrayList<EdgeContainer> edgeContainer;
 
     /**
-	 * 
-	 */
+     *
+     */
     private ArrayList<BendpointContainer> bendpointContainer;
 
     /**
@@ -78,8 +79,8 @@ public class LayerContainer extends ElementContainer {
     private ArrayList<NodeContainer> numberedEdgesNodeContainer;
 
     /**
-	 * 
-	 */
+     *
+     */
     private ArrayList<EdgeContainer> tmpEdgeContainer;
 
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
@@ -140,8 +141,8 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void init() {
         if (doc instanceof Szenario) {
             nodeContainer = new ArrayList<NodeContainer>(100);
@@ -396,7 +397,8 @@ public class LayerContainer extends ElementContainer {
                 //kann man auch höher setzen
                 float dashWidth = 1.0f;
                 float dash[] = {
-                        dashWidth, rasterWidth - dashWidth
+                        dashWidth,
+                        rasterWidth - dashWidth
                 };
                 Stroke rasterStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0.0f, dash, 0.0f);
                 int diff = (int) dashWidth / 2;
@@ -409,7 +411,7 @@ public class LayerContainer extends ElementContainer {
                     g.drawLine(-x, -maxY, -x, maxY);
                 }
                 //	Dies hier würde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
-                //				
+                //
                 //				div = maxX/rasterWidth;
                 //				maxX = div*rasterWidth+diff;
                 //				gc.setStroke(rasterStroke);
@@ -487,16 +489,10 @@ public class LayerContainer extends ElementContainer {
             for (BendpointContainer ec : bendpointContainer) {
                 ec.paint(g);
             }
-            if (layerNumber == 3) {
+            if (ModelConstants.isInterLayer(layerNumber)) {
                 KonfigurationContainer.colorCounter = 0;
-                for (KonfigurationContainer kc : doc.getCollection().getABKonf()) {
-                    kc.setShift(x_shift, y_shift);
-                    kc.paint(g);
-                }
-            }
-            if (layerNumber == 1) {
-                KonfigurationContainer.colorCounter = 0;
-                for (KonfigurationContainer kc : doc.getCollection().getDBKonf()) {
+                for (NodeContainer nc : doc.getCollection().getMainGraphDocument().getLayer(layerNumber).nodeContainer) {
+                    KonfigurationContainer kc = (KonfigurationContainer) nc;
                     kc.setShift(x_shift, y_shift);
                     kc.paint(g);
                 }
@@ -518,7 +514,7 @@ public class LayerContainer extends ElementContainer {
         //				g.drawLine(r.x, r.height, r.width, r.height);
         //				g.drawLine(r.width, r.height, r.width, r.y);
         //				g.drawLine(r.width, r.y, r.x, r.y);
-        //			}			
+        //			}
         //			r = InputGraphArea.grabbedElementsRasteredRect;
         //			if (r!=null) {
         //				g.setColor(Color.green);
@@ -526,7 +522,7 @@ public class LayerContainer extends ElementContainer {
         //				g.drawLine(r.x, r.height, r.width, r.height);
         //				g.drawLine(r.width, r.height, r.width, r.y);
         //				g.drawLine(r.width, r.y, r.x, r.y);
-        //			}			
+        //			}
         //			r = InputGraphArea.grabbedElementsRealRect;
         //			if (r!=null) {
         //				g.setColor(Color.blue);
@@ -534,8 +530,8 @@ public class LayerContainer extends ElementContainer {
         //				g.drawLine(r.x, r.height, r.width, r.height);
         //				g.drawLine(r.width, r.height, r.width, r.y);
         //				g.drawLine(r.width, r.y, r.x, r.y);
-        //			}			
-        //			
+        //			}
+        //
         //		}
     }
 
@@ -804,7 +800,7 @@ public class LayerContainer extends ElementContainer {
 
     /**
      * (De-)Aktiviert das Anzeigen aller Interebenenbeziehungen
-     * 
+     *
      * @param showInterLayerConnections
      *            aktiviren / deaktivieren
      * @param doc
@@ -819,7 +815,7 @@ public class LayerContainer extends ElementContainer {
 
     /**
      * (De-)Aktiviert das Anzeigen der Interebenenbeziehungen für den spezifizierten {@link ElementContainer}
-     * 
+     *
      * @param showInterLayerConnections
      *            aktiviren / deaktivieren
      * @param doc
@@ -1033,4 +1029,9 @@ public class LayerContainer extends ElementContainer {
     public int getLayerNumber() {
         return layerNumber;
     }
+
+    public void printStatistics() {
+        System.err.println("Layer " + layerNumber + "    nodeContainer: " + nodeContainer.size() + " -> " + ReflectionUtils.getCommonSuperClass(nodeContainer));
+    }
+
 }

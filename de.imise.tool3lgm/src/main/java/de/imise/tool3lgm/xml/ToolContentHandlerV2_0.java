@@ -21,11 +21,8 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -367,13 +364,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                     if (element.layerFor() < 0 || element.layerFor() >= ModelConstants.LAYERS.length) {
                         throw new SAXException("ModelElement hat ungueltige Ebenenangabe! hash=" + element.getHashString() + "layerFor=" + element.layerFor());
                     }
-                    if (doc.getLayer(element.layerFor()).add(container) != null) {
-                        if (element instanceof ABKonfiguration) {
-                            collection.addABKonf((KonfigurationContainer) container);
-                        } else if (element instanceof DBKonfiguration) {
-                            collection.addDBKonf((KonfigurationContainer) container);
-                        }
-                    }
+                    doc.getLayer(element.layerFor()).add(container);
                 }
                 element = null;
                 container = null;

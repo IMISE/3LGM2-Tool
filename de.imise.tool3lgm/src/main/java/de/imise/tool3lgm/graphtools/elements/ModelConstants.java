@@ -62,6 +62,10 @@ public final class ModelConstants {
             DOMAIN_LAYER
     };
 
+    public static final boolean isInterLayer(final int layerIndex) {
+        return layerIndex % 2 == 1;
+    }
+
     /** Short-Name für den beginn des HashStrings bei allen Kanten */
     public static final String EDGE_SHORT_NAME = "DLK";
 

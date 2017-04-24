@@ -47,8 +47,6 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -183,16 +181,6 @@ public final class GDCollection extends UserFieldTarget {
      * COMMENTME
      */
     private int iconCounter = 0;
-
-    /**
-     * COMMENTME
-     */
-    private final ArrayList<KonfigurationContainer> abconf = new ArrayList<KonfigurationContainer>(100);
-
-    /**
-     * COMMENTME
-     */
-    private final ArrayList<KonfigurationContainer> dbconf = new ArrayList<KonfigurationContainer>(100);
 
     /**
      * COMMENTME
@@ -765,12 +753,8 @@ public final class GDCollection extends UserFieldTarget {
                 dialog.performOK();
             }
 
-            if (me instanceof ABKonfiguration) {
-                removeABKonf(me.getContainer(doc));
-            } else if (me instanceof DBKonfiguration) {
-                removeDBKonf(me.getContainer(doc));
-                //Knickpunkte kann man gleich löschen
-            } else if (me instanceof Knickpunkt) {
+            //Knickpunkte kann man gleich löschen
+            if (me instanceof Knickpunkt) {
                 ElementContainer kpc = me.getContainer(gdoc);
                 if (kpc == null) {
                     kpc = me.getContainer(doc);
@@ -1062,12 +1046,6 @@ public final class GDCollection extends UserFieldTarget {
         if (lc.add(nc) == null) {
             doc.undo(pid);
             return null;
-        }
-
-        if (me instanceof ABKonfiguration) {
-            addABKonf((KonfigurationContainer) nc);
-        } else if (me instanceof DBKonfiguration) {
-            addDBKonf((KonfigurationContainer) nc);
         }
 
         boolean old_mode = isInteractiveMode();
@@ -2229,84 +2207,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @return
-     */
-    public final ArrayList<KonfigurationContainer> getABKonf() {
-        return abconf;
-    }
-
-    /**
-     * @param index
-     * @return
-     */
-    public final KonfigurationContainer getABKonf(final int index) {
-        if (index < 0 || abconf.size() <= index || !(((NodeContainer) abconf.get(index)).getKnoten() instanceof ABKonfiguration)) {
-            return null;
-        }
-        return abconf.get(index);
-    }
-
-    /**
-     * @return
-     */
-    public final int countABKonf() {
-        return abconf.size();
-    }
-
-    /**
-     * @param abk
-     */
-    public final void addABKonf(final KonfigurationContainer abk) {
-        abconf.add(abk);
-    }
-
-    /**
-     * @param abk
-     */
-    private final void removeABKonf(final ElementContainer abk) {
-        abconf.remove(abk);
-    }
-
-    /**
-     * @param index
-     * @return
-     */
-    public final KonfigurationContainer getDBKonf(final int index) {
-        if (index < 0 || dbconf.size() <= index || !(((NodeContainer) dbconf.get(index)).getKnoten() instanceof DBKonfiguration)) {
-            return null;
-        }
-        return dbconf.get(index);
-    }
-
-    /**
-     * @return
-     */
-    public final ArrayList<KonfigurationContainer> getDBKonf() {
-        return dbconf;
-    }
-
-    /**
-     * @return
-     */
-    public final int countDBKonf() {
-        return dbconf.size();
-    }
-
-    /**
-     * @param dbk
-     */
-    public final void addDBKonf(final KonfigurationContainer dbk) {
-        dbconf.add(dbk);
-    }
-
-    /**
-     * @param dbk
-     */
-    private final void removeDBKonf(final ElementContainer dbk) {
-        dbconf.remove(dbk);
-    }
-
-    /**
      * @param file
      */
     public void importModel(final File file) {
@@ -2386,13 +2286,7 @@ public final class GDCollection extends UserFieldTarget {
         for (ModelElement element : elements) {
             element.removeAllContainer();
             ElementContainer container = element.createContainer(doc);
-            if (doc.getLayer(element.layerFor()).add(container) != null) {
-                if (element instanceof ABKonfiguration) {
-                    addABKonf((KonfigurationContainer) container);
-                } else if (element instanceof DBKonfiguration) {
-                    addDBKonf((KonfigurationContainer) container);
-                }
-            }
+            doc.getLayer(element.layerFor()).add(container);
         }
 
         for (int szenarioIndex = 0; szenarioIndex < importSzenarios.length; szenarioIndex++) {

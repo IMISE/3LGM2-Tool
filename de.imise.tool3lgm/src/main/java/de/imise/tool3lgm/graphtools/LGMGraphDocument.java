@@ -291,7 +291,6 @@ public class LGMGraphDocument extends GraphDocument {
                 KonfigurationContainer newKonfC = (KonfigurationContainer) konfC.clone(true, this);
                 newKonfC.getKnoten().setContainer(this, newKonfC);
                 layer[3].add(newKonfC);
-                gdcoll.addABKonf(newKonfC);
                 gdcoll.link(AwbkAufOrgVerbindung.class, newKonfC.getElement(), aufOrg, TransactionManager.STANDARD_PID);
                 ArrayList<ElementContainer> awbs = konf.getConnectedContainer(Anwendungsbaustein.class, this);
                 for (ElementContainer awbC : awbs) {
