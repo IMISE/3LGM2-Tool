@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.OTAPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -63,7 +63,7 @@ public final class Aufgabe extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
         ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-        dialog.addTab(new OTAPanel(AufObjVerbindung.class, dialog));
+        dialog.addTab(new DoubleMeaningEdgePanel(AufObjVerbindung.class, dialog));
         dialog.addTab(getResString("Organisationseinheit"), new AufOrgPanel(Organisationseinheit.class, dialog, true));
         dialog.addTab(getResString("Ereignistyp"), new NConnectionPanel(Ereignistyp.class, dialog, true, true));
         dialog.addTab(getResString("ABKonfiguration"), new AufAwbKonfPanel(dialog));

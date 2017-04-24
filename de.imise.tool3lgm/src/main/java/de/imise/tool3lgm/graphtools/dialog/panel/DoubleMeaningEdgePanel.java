@@ -40,7 +40,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * an. Hinzufügen von Assoziationen zw. den Elementen und Neuanlegen von Aufgaben bzw. Objekttypen
  * geht auch.
  */
-public class OTAPanel extends AbstractSingleEdgeConnectionPanel {
+public class DoubleMeaningEdgePanel extends AbstractSingleEdgeConnectionPanel {
 
     private final LGMDragNDropTree otree, utree;
     private final LGMDragNDropTree rotree, rutree;
@@ -55,7 +55,7 @@ public class OTAPanel extends AbstractSingleEdgeConnectionPanel {
     private LGMAction addUnterAction;
     private LGMAction removeUnterAction;
 
-    public OTAPanel(final Class<? extends Kante> edgeClass, final ElementPropertyDialog pd) {
+    public DoubleMeaningEdgePanel(final Class<? extends Kante> edgeClass, final ElementPropertyDialog pd) {
         super(edgeClass, pd);
 
         GridBagLayout gbl = new GridBagLayout();

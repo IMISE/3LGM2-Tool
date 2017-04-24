@@ -38,7 +38,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.OTAPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -103,7 +103,7 @@ public class LGMActionLibrary {
 
             final LGMDragNDropPanel dndPanel = (LGMDragNDropPanel) edp;
 
-            if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof ETNTPanel2 || edp instanceof ETNTPanel || edp instanceof OTAPanel || edp instanceof KomPanel) {
+            if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof ETNTPanel2 || edp instanceof ETNTPanel || edp instanceof DoubleMeaningEdgePanel || edp instanceof KomPanel) {
                 return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
                     @Override
                     public void execute(final EventObject e) {
@@ -373,7 +373,7 @@ public class LGMActionLibrary {
         final ElementDialogPanel pane = edp;
         final ModelElement modelElement = edp.getModelElement();
 
-        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof ETNTPanel || edp instanceof ETNTPanel2 || edp instanceof BSNPanel || edp instanceof OTAPanel || edp instanceof KomPanel) {
+        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof ETNTPanel || edp instanceof ETNTPanel2 || edp instanceof BSNPanel || edp instanceof DoubleMeaningEdgePanel || edp instanceof KomPanel) {
 
             LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
