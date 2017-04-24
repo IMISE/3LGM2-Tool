@@ -1,12 +1,13 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
@@ -18,7 +19,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 /**
  * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw. anzeigt. Es zeigt
  * die Informationen nur an und ist nicht editierbar.
- * 
+ *
  * @author AXS
  * @create 27.09.2010
  */
@@ -39,7 +40,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         gbc.weightx = 0.0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        add(new JLabel(Tool3lgmConstants.getResString("typ") + ": "), gbc);
+        add(new JLabel(getResString("typ") + ": "), gbc);
         gbc.gridx++;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -51,7 +52,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             gbc.gridy++;
             gbc.weightx = 0.0;
             gbc.fill = GridBagConstraints.NONE;
-            add(new JLabel(Tool3lgmConstants.getResString("name") + ": "), gbc);
+            add(new JLabel(getResString("name") + ": "), gbc);
             gbc.gridx++;
             gbc.weightx = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
@@ -63,7 +64,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         gbc.gridy++;
         gbc.weightx = 0.0;
         gbc.fill = GridBagConstraints.NONE;
-        add(new JLabel(Tool3lgmConstants.getResString("label") + ": "), gbc);
+        add(new JLabel(getResString("label") + ": "), gbc);
         gbc.gridx++;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -86,7 +87,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             gbc.gridy++;
             gbc.weightx = 0.0;
             gbc.fill = GridBagConstraints.NONE;
-            add(subModelLabelLabel = new JLabel(Tool3lgmConstants.getResString("verkn_teilmodell") + ": "), gbc);
+            add(subModelLabelLabel = new JLabel(getResString("verkn_teilmodell") + ": "), gbc);
             gbc.gridx++;
             gbc.weightx = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
@@ -103,7 +104,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         if (ModelConstants.isNodeType(getModelElement().getClass())) {
             typeLabel.setText(ModelConstants.getDisplayableName(modelElement));
             labelLabel.setText("<html><b>" + modelElement.getClearName() + "</b></html>");
-            idLabel.setText(modelElement.getHashString() + "        " + Tool3lgmConstants.getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
+            idLabel.setText(modelElement.getHashString() + "        " + getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
             GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(((Knoten) modelElement).getAssociatedDoc());
             if (vdoc == null) {
                 subModelLabelLabel.setVisible(false);
@@ -117,15 +118,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             Doppelkante edge = (Doppelkante) modelElement;
             Class<? extends Kante> edgeClass = edge.getClass();
 
-            // boolean dirIsBackward = edge.getDirection() == Doppelkante.BACKWARD;
-            /*
-             * String startElementClassName = ModelConstants.getDisplayableName(dirIsBackward ?
-             * Kante.getEndClass(edgeClass): Kante.getStartClass(edgeClass)); String
-             * forwardEdgeClassName = ModelConstants.getMetaAssociationName(edgeClass, false,
-             * edge.getDirection()); String endElementClassName =
-             * ModelConstants.getDisplayableName(dirIsBackward ? Kante.getStartClass(edgeClass):
-             * Kante.getEndClass(edgeClass));
-             */
             String startElementClassName = ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass));
             String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE) + "</i>&nbsp;&nbsp;";
             String endElementClassName = ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass));
@@ -143,7 +135,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
             nameLabel.setText("<html><b>" + startElementName + "</b>" + forwardEdgeClassName + "<b>" + endElementName + "</b></html>");
             labelLabel.setText("<html>" + modelElement.getClearName() + "</html>");
-            idLabel.setText(modelElement.getHashString() + "        " + Tool3lgmConstants.getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
+            idLabel.setText(modelElement.getHashString() + "        " + getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
         }
     }
 

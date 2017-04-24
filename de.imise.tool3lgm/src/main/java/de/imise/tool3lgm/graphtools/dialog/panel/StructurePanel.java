@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -33,37 +35,37 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 public class StructurePanel extends LGMDragNDropPanel {
 
     /**
-     * 
+     *
      */
     private final LGMDragNDropTree lotree, lutree;
 
     /**
-     * 
+     *
      */
     private final LGMDragNDropTree rtree;
 
     /**
-     * 
+     *
      */
     private final DefaultTreeModel lomodel, lumodel, rmodel;
 
     /**
-     * 
+     *
      */
     private final LGMTreeNode loroot, luroot, rroot;
 
     /**
-     * 
+     *
      */
     private final JPanel control1, control2;
 
     /**
-     * 
+     *
      */
     private final JLabel label2;
 
     /**
-     * 
+     *
      */
     private final JScrollPane sp2;
 

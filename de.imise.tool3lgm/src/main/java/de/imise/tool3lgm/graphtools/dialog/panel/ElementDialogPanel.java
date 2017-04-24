@@ -374,8 +374,4 @@ public abstract class ElementDialogPanel extends JPanel {
         };
     }
 
-    protected static final String getResString(final String key) {
-        return Tool3lgmConstants.getResString(key);
-    }
-
 }
