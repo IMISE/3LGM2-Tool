@@ -353,15 +353,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     private Tool3lgm() {
 
-        licenseItems
-                .put("g",
+        licenseItems.put("g",
                         "174068207532402095185811980123523436538604490794561350978495831040599953488455823147851597408940950725307797094915759492368300574252438761037084473467180148876118103083043754985190983472601550494691329488083395492313850000361646482644608492304078721818959999056496097769368017749273708962006689187956744210730");
-        licenseItems
-                .put("p",
+        licenseItems.put("p",
                         "178011905478542266528237562450159990145232156369120674273274450314442865788737020770612695252123463079567156784778466449970650770920727857050009668388144034129745221171818506047231150039301079959358067395348717066319802262019714966524135060945913707594956514672855690606794135837542707371727429551343320695239");
         licenseItems.put("q", "864205495604807476120572616017955259175325408501");
-        licenseItems
-                .put("y",
+        licenseItems.put("y",
                 //Key der bis Version 3.2 Beta benutzt wurde
                 //"14300627371230228950169601901505470128925284120125584820959612014086342028994560433627164468322417150724888119951832411281916807062298007963159103404336774085891061191128715953217021296723250723500408671825275650987665439945908447793990133826618450011753407968612194841395971300289629133573910203377535518349");
                 //Key ab Version 3.2
@@ -512,9 +509,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             };
             JOptionPane.showOptionDialog(this, Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons,
                     null);
-            if (progressDialog != null) {
                 closeProgressDialog();
-            }
             return false;
         }
     }
@@ -1186,7 +1181,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return true;
         }
         Object[] buttons = new Object[] {
-                Tool3lgmConstants.getResString("yes"), Tool3lgmConstants.getResString("no"), Tool3lgmConstants.getResString("cancel")
+                Tool3lgmConstants.getResString("yes"),
+                Tool3lgmConstants.getResString("no"),
+                Tool3lgmConstants.getResString("cancel")
         };
         int answer = JOptionPane.showOptionDialog(this, Tool3lgmConstants.getResString("speicherfrage") + "\n" + (gdcoll.getFile() == null ? gdcoll.getName() : gdcoll.getFile().getName()), Tool3lgmConstants.getResString("tool3lgm"),
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, null);
@@ -1803,7 +1800,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (frame != null) {
             if (hyperlink != null) {
                 Object[] buttons = new Object[] {
-                        Tool3lgmConstants.getResString("hyperlink"), Tool3lgmConstants.getResString("submodel"), Tool3lgmConstants.getResString("cancel")
+                        Tool3lgmConstants.getResString("hyperlink"),
+                        Tool3lgmConstants.getResString("submodel"),
+                        Tool3lgmConstants.getResString("cancel")
                 };
                 int value = JOptionPane.showOptionDialog(null, Tool3lgmConstants.getResString("link_oder_szen_frage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
                 if (value == JOptionPane.YES_OPTION) {

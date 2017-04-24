@@ -224,7 +224,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Liefert den Zoom-Faktor
-     * 
+     *
      * @return
      *         <code>double</code>-Wert des Zoomfaktors
      */
@@ -234,7 +234,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Setzt den pageSizeFactor auf den übergebenen Wert ohne es UndoRedo-mäßig zu loggen.
-     * 
+     *
      * @param newPageSizeFactor
      */
     public void setPageSizeFactor(final double newPageSizeFactor) {
@@ -288,7 +288,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert eine eindeutige Nummer, die als Transaktionsnummer genutzt werden kann.<br>
      * Bei jedem Aufruf wird die Nummer einfach um 1 erhöht.
-     * 
+     *
      * @return
      *         eindeutige Nummer
      */
@@ -305,7 +305,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Wiederholt das Transaktionskommandp mit der angegebenen ID
-     * 
+     *
      * @param pid
      */
     public final void redo(final int pid) {
@@ -347,7 +347,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Macht die Transaktion mit der angegebenen ID rückgängig
-     * 
+     *
      * @param pid
      */
     public final void undo(final int pid) {
@@ -404,7 +404,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Wenn bereits bei der selben Transaktion ein Redo-Kommando gespeichert ist, das den
      * gleichen Prefix besitzt, dann wird das vorhandene Kommando durch das übergebene ersetzt.
-     * 
+     *
      * @param commandPrefix
      * @param commandArguments
      * @param pid
@@ -419,7 +419,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Das übergebene Undo-Kommanmdo wird nur geloggt, wenn nicht bereits ein Undo-Komamndo
      * mit dem gleichen Prefix in derselben Tansaktion geloggt wurde. Hiermit kann man das
      * Logging von Zwischenschritten unterbinden (z.B. beim Draggen von Elementen in der Grafik)
-     * 
+     *
      * @param commandPrefix
      * @param commandArguments
      * @param pid
@@ -521,7 +521,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
 
-            //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden			
+            //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden
             //			for (Class<? extends ModelElement> meClass : ModelConstants.ALL_NODES){
             //				GraphDocument doc = gdcoll.getGraphDocument();
             //				ArrayList<ModelElement> al = doc.getModelItems(meClass, false);
@@ -545,7 +545,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Führt das angegebene
-     * 
+     *
      * @param command
      * @param pid
      */
@@ -556,7 +556,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Methode zur Steuerung des Löschens von Elementen (nur aus Teilmodell,oder aus allen Modellen).<br>
      * Gegebenfalls werden Dialoge angezeigt, die den Nutzer beim Löschen unterstützen.
-     * 
+     *
      * @param argv
      * @param pid
      */
@@ -569,13 +569,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // Elemente sind nicht aus einem Teilmodell sondern nur aus dem Gesamtmodell löschbar, wenn
         // - aktuelles Modell = Hauptdokument
         // - alle selektierten Elemente sind unique (= ohne grafische Repräsentation sind sie immer in allen Teilmodellen)
-        // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell	
+        // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
             if ((Boolean) ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING.getValue(Action.SELECTED_KEY)) {
                 JCheckBox cb = new JCheckBox(Tool3lgmConstants.getResString("dont_ask_again"));
                 cb.setSelected(false);
                 Object[] cont = new Object[] {
-                        Tool3lgmConstants.getResString("remove_element_warning"), cb
+                        Tool3lgmConstants.getResString("remove_element_warning"),
+                        cb
                 };
                 int value = JOptionPane.showConfirmDialog(Tool3lgm.tool, cont, Tool3lgmConstants.getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
@@ -589,7 +590,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // Auswahl in einem Teilmodell
         else {
             Object[] buttons = new Object[] {
-                    Tool3lgmConstants.getResString("submodel"), Tool3lgmConstants.getResString("whole_model"), Tool3lgmConstants.getResString("cancel")
+                    Tool3lgmConstants.getResString("submodel"),
+                    Tool3lgmConstants.getResString("whole_model"),
+                    Tool3lgmConstants.getResString("cancel")
             };
             int value = JOptionPane.showOptionDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("loeschfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
             if (value == JOptionPane.YES_OPTION) {
@@ -942,7 +945,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case INSERT_BENDING_POINT:
-            //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante, 
+            //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante,
             gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
             break;
 
@@ -992,7 +995,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             if (argc == 3) {
                 try {
-                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode 
+                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
                     GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
                     ElementContainer ec = szen.findContainerCoded(argv[1]);
                     int mode = Integer.parseInt(argv[2]);
@@ -1013,7 +1016,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             if (argc == 3) {
                 try {
-                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode 
+                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
                     GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
                     ElementContainer ec = szen.findContainerCoded(argv[1]);
                     int mode = Integer.parseInt(argv[2]);
@@ -1274,15 +1277,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     //	/** Puffer für Kommandoargumente. Mehr als 100 Argumente sind absolut unwahrscheinlich * /
     //	private static final ArrayList<String> commandBuffer = new ArrayList<String>();
-    //	
+    //
     //	/**
     //	 * AXS dachte mal, dass die Lange Zeit beim Undo ganz vieler Aktionen vielleicht mit dem aufwendigen Parsen der
     //	 * Undo-Kommandos zusammenhängt. Dabei ist diese Funktion entstanden, die dasselbe macht wie die darunter, aber
-    //	 * auf ganz andere Weise. 
+    //	 * auf ganz andere Weise.
     //	 *
     //	 * @param line
     //	 * 		Eine gültiges Kommando in <code>line</code> besteht immer aus einem GDCommand an Position 0 und dann duch Leerzeichen
-    //	 * 		getrennte Argumente. Die Argumente können auch Leerzeichen enthalten. Solche Argumente sollten durch 
+    //	 * 		getrennte Argumente. Die Argumente können auch Leerzeichen enthalten. Solche Argumente sollten durch
     //	 * 		{@link GraphDocument#GDCOMMAND_TEXT_SURROUNDER} umschlossen sein, damit sie als zusammenghörig erkannt werden.
     //	 * @param pid
     //	 * /
@@ -1291,7 +1294,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //		try {
     //			if (isVerificationMode())
     //				System.out.println(line);
-    //			
+    //
     //			StringTokenizer st1 = new StringTokenizer(line);
     //
     //			//als erstes das Kommado ganz vorne parsen
@@ -1339,7 +1342,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //						System.err.println("GraphDocument.exec_command(String line, int pid): wrong line argument: " + line);
     //						return;
     //					}
-    //				//keine Hochkommata um das Argument -> LineEnd oder nächstes char <= 32 suchen 
+    //				//keine Hochkommata um das Argument -> LineEnd oder nächstes char <= 32 suchen
     //				} else {
     //					i2 = i1;
     //					//LineEnd oder nächstes Leerzeichen suchen
@@ -1361,8 +1364,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //*/
 
     /**
-	 * 
-	 */
+     *
+     */
     private void exec_command(final String line, final int pid) {
         try {
             if (isVerificationMode()) {
@@ -1393,7 +1396,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 //wenn undo und redo mit den Komandoindizes geloggt werden
             } else {
                 try {
-                    //versuche den Index zu parsen und das Kommando 
+                    //versuche den Index zu parsen und das Kommando
                     command = GDCommands.values()[new Integer(tokens.get(0)).intValue()];
                 } catch (Exception e) {
                     command = GDCommands.valueOf(tokens.get(0));
@@ -1681,7 +1684,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * COMMENTME
-     * 
+     *
      * @param ec
      * @param pid
      */
@@ -1771,7 +1774,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * einem Knoten ein Symbol zuweisen
-     * 
+     *
      * @param hashCode
      * @param iconKey
      * @param pid
@@ -1871,7 +1874,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Ändert die Farbe aller selektierten Elemente. Die Farbe wird mit einem
      * JColorChooser erfragt.
-     * 
+     *
      * @param pid
      */
     public final void changeColor(final int pid) {
@@ -2014,7 +2017,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * den Alpha-Wert eines ModelElements aendern
-     * 
+     *
      * @param alphaMode
      * @param pid
      */
@@ -2297,7 +2300,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Verschiebt alle {@link NodeContainer} und {@link BendpointContainer} in der Selektion. Je nach
      * gewählter Option {@link UserProperties#isMoveSubelements()} werden untergordnete Elemente, die nicht
      * selektiert sind, ebenfalls verschoben. {@link ModelConstants#NO_LAYER}
-     * 
+     *
      * @param deltax
      *            Anzahl der Pixel, um die in X-Richtung verschoben werden soll
      * @param deltay
@@ -2363,7 +2366,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert <code>true</code>, wenn selektierte Knoten aneinander ausgerichtet
      * werden können.
-     * 
+     *
      * @return
      */
     public boolean isAlignable() {
@@ -2433,7 +2436,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Erweitert die Selektion, um alle Teilelemente der selektierten Elemente, die bisher nicht in
      * der Selektion waren.
-     * 
+     *
      * @param addAllParts
      *            Wenn <code>true</code> werden alle über {@link PartOfBeziehung}en verbunden Elemente
      *            in die Selektion mit aufgenommen.
@@ -2486,7 +2489,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Setzt die übergebene Collection als Selektion. Ist diese Collection eine
      * Liste, wird das letzte Element in der Liste als lastSelected gesetzt, sonst
      * ist es zufällig eines der selektierten.
-     * 
+     *
      * @param selection
      */
     private void setSelection(final ArrayList<ElementContainer> selection) {
@@ -2523,7 +2526,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * für vergröbern und verfeinern
-     * 
+     *
      * @param elementHash
      * @param pid
      */
@@ -2556,7 +2559,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 aufklappen(gdcoll, szenHash, c.getHashString(), pid);
             }
         }
-        // Anpassen der Kanten 
+        // Anpassen der Kanten
         for (Kante edge : ec.getElement().getEdges()) {
             EdgeContainer kc = (EdgeContainer) edge.getContainer(szen);
             if (kc == null) {
@@ -2572,7 +2575,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * für vergröbern und verfeinern
-     * 
+     *
      * @param pid
      */
     public final void zuklappen(final int pid) {
@@ -2586,7 +2589,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * für vergröbern und verfeinern
-     * 
+     *
      * @param gdcoll
      * @param szenHash
      * @param elementHash
@@ -2644,7 +2647,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * für vergröbern und verfeinern
-     * 
+     *
      * @param pid
      */
     public final void auf_zuklappen(final int pid) {
@@ -2703,7 +2706,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
      * können, kann man hiermit ein allgemeines Ereignis feuern.
-     * 
+     *
      * @param bitmask
      */
     public final void distributeEvent(final int bitmask) {
@@ -2713,7 +2716,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
      * können, kann man hiermit ein allgemeines Ereignis feuern.
-     * 
+     *
      * @param bitmask
      * @param pid
      */
@@ -3032,8 +3035,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void selectAll() {
         final int PID = TransactionManager.STANDARD_PID;
         start_transaction(PID, false);
@@ -3070,8 +3073,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public final void clearAnalysisResult() {
         analysisResult.clear();
         deselectAll(true);
@@ -3105,7 +3108,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Ein Element selektieren
-     * 
+     *
      * @param mc
      * @param pid
      */
@@ -3142,7 +3145,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert eine Liste aller selektierten {@link ElementContainer}, bei der alle {@link NodeContainer} am Anfang stehen und genau in der
      * Reihenfolge sind, in der sie in der Grafik dargstellt werden.
-     * 
+     *
      * @return
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
@@ -3344,7 +3347,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Finds the first element with the given UserField name and the given id String.
      * If the values are IDs a special element can be detected.
-     * 
+     *
      * @param userFieldName
      * @param value
      * @return
@@ -3497,7 +3500,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Legt ein untergerodnetes Element an und fügt es in jedes Szenario ein, in dem sein übergeordnetes
      * Element vorkommt.
-     * 
+     *
      * @param doc
      * @param master
      * @param edgeClass
@@ -3669,7 +3672,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Berechnet die Position untergeordneter Elemente auf einem Oberelementcontainer.
-     * 
+     *
      * @param kc
      *            Oberelementcontainer auf dem untergeordnete Elemente positioniert werden sollen
      * @return
@@ -3869,7 +3872,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * übergebenen Indizes. Diese Funktion spielt nur bei Elementen eine Rolle, bei
      * denen die Reihenfolge der Kanten eine Bedeutung hat. Z.B. Prozesse in Bezug auf
      * Aufgaben = Reihenfolge, in der die Aufgaben in dem Prozess ablaufen.
-     * 
+     *
      * @param knothash
      * @param edgeIndex1
      * @param edgeIndex2
@@ -3894,7 +3897,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * übergebenen Positionen. Diese Funktion spielt nur bei Elementen eine Rolle, bei
      * denen die Reihenfolge der Kanten eine Bedeutung hat. Z.B. Prozesse in Bezug auf
      * Aufgaben = Reihenfolge, in der die Aufgaben in dem Prozess ablaufen.
-     * 
+     *
      * @param me
      * @param edgeIndex1
      * @param edgeIndex2
@@ -4142,8 +4145,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void showPropertyDialog() {
         ElementContainer ec = getLastSelected();
         if (ec != null) {
@@ -4295,7 +4298,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Setzt den Wert von <code>uf</code> für <code>me</code> auf <code>newValue</code>.
      * Fügt UNDO- und REDO-Commands hinzu
-     * 
+     *
      * @param me
      * @param userField
      * @param newValue
@@ -4320,7 +4323,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * a.) durch Gleichverteilung ersetzen -> userFieldHashToReplace, "" oder emptyArgumentString
      * b.) durch ein anderes Kantengewicht ersetzen -> userFieldHashToReplace, userFieldReplacementHash
      * c.) löschen -> userFieldHashToReplace, userFieldHashToReplace
-     * 
+     *
      * @param modelElementHash
      * @param userFieldHashToReplaceOrSimpleEdgeClassName
      *            Das hier ist entweder der Hash eines UserFields oder der SimpleClassName einer Kantenklasse. Wird ein Klassenname übergeben, dann
@@ -4440,7 +4443,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * COMMENTME
-     * 
+     *
      * @param szenHashString
      * @param elements
      * @param pid
@@ -4619,7 +4622,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * 2 Elemente vereinen,
-     * 
+     *
      * @param hashString1
      *            das abschliessend zu löschende Element
      * @param hashString2
@@ -4652,7 +4655,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Liefert die {@link UserFieldDefinitions} der {@link GDCollection}
-     * 
+     *
      * @return
      */
     public UserFieldDefinitions getUserFieldDefinitions() {
@@ -4853,8 +4856,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void relinkETNT() {
         start_transaction(TransactionManager.STANDARD_PID);
 
@@ -4897,10 +4900,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     ////////////////////////////
 
     /**
-     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
-     * der übergebenen Klasse ist.<br>
-     * Unterklassen werden nicht beachtet.
-     * 
+     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement zuweisungskompatibel
+     * zur übergebenen Klasse ist.<br>
+     *
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
      * @return Liste mit ElementContainer oder <code>null</code>
      */
@@ -4912,7 +4914,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
      * der übergebenen Klasse ist.<br>
      * Unterklassen werden nicht beachtet.
-     * 
+     *
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
      * @param subClassElements wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
      * @return Liste mit ElementContainer oder <code>null</code>
@@ -4922,15 +4924,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle eine nach der <code>toString()<code>-Methode der ElementContainer
+     * Gibt alle eine nach der <code>toString()</code>-Methode der ElementContainer
      * sortierte Liste von ElementContainern zurück, deren gekapseltes Modellelement
      * von der übergebenen Klasse ist.<br>
-     * 
+     *
      * @param clazz
-     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
-     * @param alphabetical wenn <code>true</code> wird ist die Rückgabeliste alphabetisch sortiert (das betrifft nur die KnotenContainer, aber nicht
-     *            die KantenContainer)
-     * @return Liste mit <code>ElementContainer</code>n oder <code>null</code>
+     * @param includeSubClasseswenn <code>true</code> wird ist die Rückgabeliste alphabetisch
+     *            sortiert (das betrifft nur die KnotenContainer, aber nicht die KantenContainer)
+     * @param alphabetical
+     * @return
      */
     public final ArrayList<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
 
@@ -5008,7 +5010,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
      * Es werden nur Instanzen genau dieser Klasse zurück gegeben.
-     * 
+     *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @return ArrayList mit allen gefundenen Elementen
      */
@@ -5018,7 +5020,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
-     * 
+     *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @param includeSubClasses boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt auch
      *            RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
@@ -5030,7 +5032,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
-     * 
+     *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
@@ -5045,7 +5047,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
-     * 
+     *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
@@ -5110,7 +5112,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert alle Elemente aller übergebenen Klasse, die im übergebenen Graphdocument vorkommen. Diese Funktion sucht immer nur im genau übergebenen
      * GraphDocument
-     * 
+     *
      * @param doc
      * @param searchClasses
      * @param absolutePartsOnly
@@ -5209,7 +5211,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Liefert den Container in diesem GraphDocument für ein übergebenes ModellElement.
-     * 
+     *
      * @param modelElement
      * @return
      */
@@ -5223,7 +5225,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert den Container in diesem GraphDocument für einen übergebenen anderen Container
      * aus einem beliebigen GraphDocument.
-     * 
+     *
      * @param modelElement
      * @return
      */
@@ -5237,7 +5239,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert alle Container in diesem GraphDocument für eine Liste von <code>ModellElement</code>s oder
      * von anderen Containern aus einem beliebigen GraphDocument.
-     * 
+     *
      * @param modelElementOrContainerList
      * @return
      */
@@ -5264,8 +5266,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public abstract String getCopyString();
 
     /**
-	 * 
-	 */
+     *
+     */
     public void sortKanten() {
         for (int i = 0; i < layer.length; i++) {
             layer[i].sortKanten();
@@ -5273,8 +5275,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void initKnotContainers() {
         for (int i = 0; i < layer.length; i++) {
             for (NodeContainer kc : layer[i].getKnoten()) {
@@ -5292,8 +5294,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void initTraceContainers() {
         for (int i = 0; i < layer.length; i++) {
             for (BendpointContainer kpC : layer[i].getKnickpunkte()) {
@@ -5322,7 +5324,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     //	/**
-    //	 * 
+    //	 *
     //	 * /
     //	public void refreshSpecialInfoTargets () {
     //		for (int i = 0; i < layer.length; i++) {
@@ -5390,7 +5392,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
      * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
      * benutzt werden sollte.
-     * 
+     *
      * @param s
      * @return
      */
@@ -5409,7 +5411,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
      * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
      * benutzt werden sollte.
-     * 
+     *
      * @param s
      * @return
      */
@@ -5420,7 +5422,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * Liefert einen übergebenen String, in dem die Transformationen der Zeilenumbrüche durch die Funktion <code>getParseSaveString(String s)</code>
      * wieder rückgängig gemacht werden.
-     * 
+     *
      * @param s
      * @return
      */
