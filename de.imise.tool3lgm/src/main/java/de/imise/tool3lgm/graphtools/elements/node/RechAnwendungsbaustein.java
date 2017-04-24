@@ -6,7 +6,6 @@ import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.FreeTextPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 public final class RechAnwendungsbaustein extends Anwendungsbaustein {
@@ -16,7 +15,12 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-            Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Anwendungsprogramm.class, DBKonfiguration.class, ABKonfiguration.class,
+            Bausteinschnittstelle.class,
+            Benutzungsschnittstelle.class,
+            Datenbanksystem.class,
+            Anwendungsprogramm.class,
+            DBKonfiguration.class,
+            ABKonfiguration.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -26,8 +30,8 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public RechAnwendungsbaustein() {
         super();
     }
@@ -35,7 +39,6 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
     @Override
     public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
         ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-        dialog.addTab(getResString("strukt"), new StructurePanel(dialog));
         dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
         dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
         dialog.addTab(getResString("Anwendungsprogramm"), new FreeTextPanel(Anwendungsprogramm.class, dialog));

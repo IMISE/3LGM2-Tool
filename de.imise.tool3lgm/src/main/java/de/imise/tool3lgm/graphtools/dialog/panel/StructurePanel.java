@@ -33,38 +33,38 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 public class StructurePanel extends LGMDragNDropPanel {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final LGMDragNDropTree lotree, lutree;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final LGMDragNDropTree rtree;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final DefaultTreeModel lomodel, lumodel, rmodel;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final LGMTreeNode loroot, luroot, rroot;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final JPanel control1, control2;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final JLabel label2;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final JScrollPane sp2;
 
     /**
@@ -81,7 +81,7 @@ public class StructurePanel extends LGMDragNDropPanel {
      * @param pd
      */
     public StructurePanel(final ElementPropertyDialog pd) {
-        super(pd);
+        super(pd, getResString("strukt"));
 
         // lotree
         JLabel oben = new JLabel(Tool3lgmConstants.getResString("ueberg"));
@@ -292,18 +292,29 @@ public class StructurePanel extends LGMDragNDropPanel {
          * alle Aktionen zwischen lotree <-> lutree
          */
         DragNDropInitializer.DragNDropActionChain tac5 = DragNDropInitializer.createNewDragNDropActionChain(new LGMDragNDropTree[] {
-                lotree, rtree, lutree
+                lotree,
+                rtree,
+                lutree
         }, new LGMAction[] {
-                removeUeberAction, addUnterAction
+                removeUeberAction,
+                addUnterAction
         });
         DragNDropInitializer.DragNDropActionChain tac6 = DragNDropInitializer.createNewDragNDropActionChain(new LGMDragNDropTree[] {
-                lutree, rtree, lotree
+                lutree,
+                rtree,
+                lotree
         }, new LGMAction[] {
-                removeUnterAction, addUeberAction
+                removeUnterAction,
+                addUeberAction
         });
 
         DragNDropInitializer.DragNDropActionChain[] allDndActionChains = new DragNDropInitializer.DragNDropActionChain[] {
-                tac1, tac2, tac3, tac4, tac5, tac6
+                tac1,
+                tac2,
+                tac3,
+                tac4,
+                tac5,
+                tac6
         };
 
         return allDndActionChains;
@@ -313,7 +324,9 @@ public class StructurePanel extends LGMDragNDropPanel {
     @Override
     public LGMDragNDropTree[] getAllDragNDropTrees() {
         return new LGMDragNDropTree[] {
-                rtree, lotree, lutree
+                rtree,
+                lotree,
+                lutree
         };
     }
 

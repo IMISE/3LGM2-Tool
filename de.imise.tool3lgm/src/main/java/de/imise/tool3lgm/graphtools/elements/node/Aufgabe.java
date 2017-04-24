@@ -10,7 +10,6 @@ import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.OTAPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -24,10 +23,10 @@ public final class Aufgabe extends Knoten {
      * COMMENTME
      */
     @SuppressWarnings({
-        "rawtypes"
+            "rawtypes"
     })
     public static final Class[] COPY_DEPENDENCY = {
-        AufOrgKombination.class,
+            AufOrgKombination.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -37,8 +36,8 @@ public final class Aufgabe extends Knoten {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public Aufgabe() {
         super();
     }
@@ -63,7 +62,6 @@ public final class Aufgabe extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
         ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-        dialog.addTab(getResString("strukt"), new StructurePanel(dialog));
         dialog.addTab(getResString("Objekttyp"), new OTAPanel(Objekttyp.class, dialog));
         dialog.addTab(getResString("Organisationseinheit"), new AufOrgPanel(Organisationseinheit.class, dialog, true));
         dialog.addTab(getResString("Ereignistyp"), new NConnectionPanel(Ereignistyp.class, dialog, true, true));
@@ -72,8 +70,9 @@ public final class Aufgabe extends Knoten {
     }
 
     /**
-     * Gibt eine Liste aller ABKonfigurationConatiner zurueck, die mit dieser Aufgabe, bzw. je nach uebergebener Option mit ihren Parents oder Parts verknüpft sind.
-     * 
+     * Gibt eine Liste aller ABKonfigurationConatiner zurueck, die mit dieser Aufgabe, bzw. je nach uebergebener Option mit ihren Parents oder Parts
+     * verknüpft sind.
+     *
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
      */
@@ -108,9 +107,10 @@ public final class Aufgabe extends Knoten {
     }
 
     /**
-     * Gibt eine Liste aller ABKonfigurationConatiner zurueck, die mit dieser Aufgabe, bzw. je nach uebergebener Option mit ihren Parents oder Parts verknüpft sind. Es sind nur die zuerst gefundenen Konfigurationen enthalten, die sich bezueglich ihrer
+     * Gibt eine Liste aller ABKonfigurationConatiner zurueck, die mit dieser Aufgabe, bzw. je nach uebergebener Option mit ihren Parents oder Parts
+     * verknüpft sind. Es sind nur die zuerst gefundenen Konfigurationen enthalten, die sich bezueglich ihrer
      * Liste der Anwendungsbausteine unterscheiden.
-     * 
+     *
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
      */

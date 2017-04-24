@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
@@ -158,6 +159,13 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
             }
         });
 
+        addPartOfStructurePanel();
+    }
+
+    private void addPartOfStructurePanel() {
+        if (modelElement.canHaveParts()) {
+            addTab(new StructurePanel(this));
+        }
     }
 
     /**

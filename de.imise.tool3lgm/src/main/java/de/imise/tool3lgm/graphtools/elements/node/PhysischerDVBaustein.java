@@ -6,7 +6,6 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel2;
-import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TechnikPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -21,7 +20,10 @@ public class PhysischerDVBaustein extends Knoten {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-            Standort.class, Bausteintyp.class, Subnetz.class, DBKonfiguration.class,
+            Standort.class,
+            Bausteintyp.class,
+            Subnetz.class,
+            DBKonfiguration.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -162,8 +164,7 @@ public class PhysischerDVBaustein extends Knoten {
     public StringBuilder getXMLEntities() {
         return super.getXMLEntities().append(os_type.length() > 0 ? "<field name=\"os_type\">" + XMLCharacterCoder.encodeString(os_type) + "</field>" : "")
                 .append(serial.length() > 0 ? "<field name=\"serial\">" + XMLCharacterCoder.encodeString(serial) + "</field>" : "").append(inventar.length() > 0 ? "<field name=\"inventar\">" + XMLCharacterCoder.encodeString(inventar) + "</field>" : "")
-                .append(disksize.length() > 0 ? "<field name=\"disksize\">" + XMLCharacterCoder.encodeString(disksize) + "</field>" : "")
-                .append(ramsize.length() > 0 ? "<field name=\"ramsize\">" + XMLCharacterCoder.encodeString(ramsize) + "</field>" : "")
+                .append(disksize.length() > 0 ? "<field name=\"disksize\">" + XMLCharacterCoder.encodeString(disksize) + "</field>" : "").append(ramsize.length() > 0 ? "<field name=\"ramsize\">" + XMLCharacterCoder.encodeString(ramsize) + "</field>" : "")
                 .append(processor.length() > 0 ? "<field name=\"processor\">" + XMLCharacterCoder.encodeString(processor) + "</field>" : "")
                 .append(downtime > -1 ? "<field name=\"downtime\">" + XMLCharacterCoder.encodeString(new Integer(downtime).toString()) + "</field>" : "");
     }
@@ -172,7 +173,6 @@ public class PhysischerDVBaustein extends Knoten {
     public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
         ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
         dialog.addTab(getResString("tm"), new TechnikPanel(dialog));
-        dialog.addTab(Tool3lgmConstants.getResString("strukt"), new StructurePanel(dialog));
         dialog.addTab(Tool3lgmConstants.getResString("Subnetz"), new NConnectionPanel(Subnetz.class, dialog, true, true));
         dialog.addTab(Tool3lgmConstants.getResString("Anwendungsbaustein_p"), new PDVBKonfPanel2(dialog));
         return dialog;

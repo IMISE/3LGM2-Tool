@@ -148,6 +148,16 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     }
 
     /**
+     * Fügt dem Dialog einen neuen Tab mit der übergebenen Componente hinzu. Der Titel des Tabs ist der
+     * wird über die getName()-Funktion der Componente ermittelt.
+     *
+     * @param component
+     */
+    public void addTab(final Component component) {
+        addTab(component.getName(), component);
+    }
+
+    /**
      * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel und der Komponente hinzu.
      *
      * @param title

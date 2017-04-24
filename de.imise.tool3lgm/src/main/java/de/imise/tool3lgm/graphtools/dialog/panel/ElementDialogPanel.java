@@ -122,7 +122,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * TODO: die Konstruktoren braucht man sicher nicht mehr, wenn alle Panels mit Kanten oder
      * Pfaden initialisiert werden
-     * 
+     *
      * @param dialog Dialog, der dieses Panel enthält
      */
     public ElementDialogPanel(final ElementPropertyDialog dialog) {
@@ -253,8 +253,8 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void clearHighlight() {
         highlight.clear();
     }
@@ -344,7 +344,7 @@ public abstract class ElementDialogPanel extends JPanel {
      * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte Panel anzeigen lässt.
      * Diese <code>LGMAction</code> sollte an den "viewButton" eines Panels angefügt werden, falls
      * der Inhalt des Panels nur teilweise zu sehen ist.
-     * 
+     *
      * @param edp
      */
     public static final LGMAction getShowAllAction(final ElementDialogPanel edp) {
@@ -361,7 +361,7 @@ public abstract class ElementDialogPanel extends JPanel {
      * Methode liefert eine <code>LGMAction</code> zurück, die nur einen Teil des Panels anzeigen
      * lässt. Diese <code>LGMAction</code> sollte an den "viewButton" eines Panels angefügt werden,
      * falls der Inhalt des Panels vollständig zu sehen ist.
-     * 
+     *
      * @param edp
      */
     public static final LGMAction getShowPartlyAction(final ElementDialogPanel edp) {
@@ -372,6 +372,10 @@ public abstract class ElementDialogPanel extends JPanel {
                 panel.showFullDialog(false);
             }
         };
+    }
+
+    protected static final String getResString(final String key) {
+        return Tool3lgmConstants.getResString(key);
     }
 
 }
