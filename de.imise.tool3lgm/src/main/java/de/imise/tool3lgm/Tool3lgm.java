@@ -119,9 +119,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** date and time when calling constructor */
     public Date date;
 
-    /** instance of Tool3lgm */
-    public static Tool3lgm tool;
-
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
 
@@ -173,7 +170,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
      * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     * 
+     *
      * @return
      */
     public static final Point getLastActionPosition() {
@@ -183,7 +180,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
      * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     * 
+     *
      * @param x
      * @param y
      */
@@ -198,7 +195,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Wenn der Baukasten mit RMI gestartet werden soll, wird <code>activateRMI</code> ausgeführt.
-     * 
+     *
      * @param args
      * @return true, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind, false.
      */
@@ -245,7 +242,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     }
                 }
                 try {
-                    //TODO:############# auf jeden Fall wieder reinnehmen!!!					
+                    //TODO:############# auf jeden Fall wieder reinnehmen!!!
                     remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
                 } catch (Exception innerEx) {
                 }
@@ -253,19 +250,19 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 if (remote == null || !(remote instanceof Tool3lgmServer)) {
 
                     // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
-                    if (tool == null) {
-                        tool = new Tool3lgm();
+                    if (Static.tool == null) {
+                        Static.tool = new Tool3lgm();
                         menuBar = new MenuBar();
                         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
                         registerPublicKeyStrokes();
-                        tool.setJMenuBar(menuBar);
-                        tool.setVisible(visible);
+                        Static.tool.setJMenuBar(menuBar);
+                        Static.tool.setVisible(visible);
                     }
 
                     // Hier ist die kritische Stelle. Das Rebind schlägt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.
                     try {
                         // System.err.println("try port: "+regPort);
-                        Naming.rebind("//127.0.0.1:" + regPort + "/Tool3lgmServer", new Tool3lgmServerImpl(tool));
+                        Naming.rebind("//127.0.0.1:" + regPort + "/Tool3lgmServer", new Tool3lgmServerImpl(Static.tool));
 
                         // Wenn der RMI-Server erfolgreich gestartet werden konnte, wird bound true.
                         // Wenn nicht, ist eine Exception geflogen und ist in die catch () gesprungen. bound wurde nicht true.
@@ -274,7 +271,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
                             UserProperties.setRMIRegistryPort("" + regPort);
-                            JOptionPane.showMessageDialog(tool, Tool3lgmConstants.getResString("rmiNewRegPortIs") + " " + regPort);
+                            JOptionPane.showMessageDialog(Static.tool, Tool3lgmConstants.getResString("rmiNewRegPortIs") + " " + regPort);
                         }
 
                     } catch (RemoteException e) {
@@ -284,7 +281,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         RMIErrorPanel rmip = new RMIErrorPanel();
 
                         if (showErrorDialog) {
-                            if (JOptionPane.showOptionDialog(tool, rmip, Tool3lgmConstants.getResString("rmiError"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+                            if (JOptionPane.showOptionDialog(Static.tool, rmip, Tool3lgmConstants.getResString("rmiError"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
                                 if (rmip.isRmiAutoNextFreePortCheckBox()) {
                                     // Es wird ein neue Port bis 65500 gesucht, wenn bis dahin keiner frei ist, wird wieder beim standardPort begonnen
                                     if (regPort < 65500) {
@@ -348,21 +345,21 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * constructor
-     * 
+     *
      * @see java.lang.Object#Object()
      */
     private Tool3lgm() {
 
         licenseItems.put("g",
-                        "174068207532402095185811980123523436538604490794561350978495831040599953488455823147851597408940950725307797094915759492368300574252438761037084473467180148876118103083043754985190983472601550494691329488083395492313850000361646482644608492304078721818959999056496097769368017749273708962006689187956744210730");
+                "174068207532402095185811980123523436538604490794561350978495831040599953488455823147851597408940950725307797094915759492368300574252438761037084473467180148876118103083043754985190983472601550494691329488083395492313850000361646482644608492304078721818959999056496097769368017749273708962006689187956744210730");
         licenseItems.put("p",
-                        "178011905478542266528237562450159990145232156369120674273274450314442865788737020770612695252123463079567156784778466449970650770920727857050009668388144034129745221171818506047231150039301079959358067395348717066319802262019714966524135060945913707594956514672855690606794135837542707371727429551343320695239");
+                "178011905478542266528237562450159990145232156369120674273274450314442865788737020770612695252123463079567156784778466449970650770920727857050009668388144034129745221171818506047231150039301079959358067395348717066319802262019714966524135060945913707594956514672855690606794135837542707371727429551343320695239");
         licenseItems.put("q", "864205495604807476120572616017955259175325408501");
         licenseItems.put("y",
                 //Key der bis Version 3.2 Beta benutzt wurde
                 //"14300627371230228950169601901505470128925284120125584820959612014086342028994560433627164468322417150724888119951832411281916807062298007963159103404336774085891061191128715953217021296723250723500408671825275650987665439945908447793990133826618450011753407968612194841395971300289629133573910203377535518349");
                 //Key ab Version 3.2
-                        "50130353173738973728122117307050982303325240535281983843066456949452369361589860322851251253694135519121623652865168517743221242969658663504859944420599589281036527851748542030299809821557170181016869364580930185375665744420760918986875024780360963498505654004927815814220720267469598144682653844939860413572");
+                "50130353173738973728122117307050982303325240535281983843066456949452369361589860322851251253694135519121623652865168517743221242969658663504859944420599589281036527851748542030299809821557170181016869364580930185375665744420760918986875024780360963498505654004927815814220720267469598144682653844939860413572");
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -407,7 +404,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         date = new Date();
 
-        //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können 
+        //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
         // TODO:____###### Größenänderung des Tools
@@ -458,7 +455,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             im.put((KeyStroke) action.getValue(Action.ACCELERATOR_KEY), action);
             am.put(action, action);
         }
-        JRootPane pane = tool.getRootPane();
+        JRootPane pane = Static.tool.getRootPane();
         pane.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
         pane.setActionMap(am);
     }
@@ -505,11 +502,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         } catch (Exception e) {
             Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                Tool3lgmConstants.getResString("ok")
+                    Tool3lgmConstants.getResString("ok")
             };
             JOptionPane.showOptionDialog(this, Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons,
                     null);
-                closeProgressDialog();
+            closeProgressDialog();
             return false;
         }
     }
@@ -523,7 +520,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Legt ein neues Modell an oder lädt ein bestehendes aus einer Datei.
-     * 
+     *
      * @param open
      *            wenn <code>true</code>, wird ein FileChooser geöffnet, über
      *            den der Benutzer zu ladende Modelldatei auswählen kann. Diese
@@ -602,11 +599,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //		System.err.println("###########################################################################");
         //		printStatistic(gdcoll, true, false);
         //		System.err.println();
-        //		printStatistic(gdcoll, false, false);		
+        //		printStatistic(gdcoll, false, false);
         //		System.err.println();
         //		printStatistic(gdcoll, true, true);
         //		System.err.println();
-        //		printStatistic(gdcoll, false, true);		
+        //		printStatistic(gdcoll, false, true);
         //		System.err.println("###########################################################################");
 
         return true;
@@ -686,7 +683,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             System.err.println("-------------------------------------");
             ArrayList<Class<? extends ModelElement>> classList = new ArrayList<Class<? extends ModelElement>>(class2ElementCount.keySet());
             Alphabetical.sort(classList);
-            //für jede Elementklasse		
+            //für jede Elementklasse
             for (Class<? extends ModelElement> elementClass : classList) {
                 //				Integer integer = class2ElementCount.get(elementClass);
                 //				int count = integer == null ? 0 : integer.intValue();
@@ -775,7 +772,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Create new MatrixViewFrame and add it to parent GraphDocument
-     * 
+     *
      * @author Thomas Rudert
      * @param _graphDocument
      *            parent
@@ -820,7 +817,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * set parameters of InputGraphArea to standard
-     * 
+     *
      * @param InputGraphArea to set
      */
     public void setWorkArea(final ToolInternalFrame frame) {
@@ -833,7 +830,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * set parameters of InputGraphArea to standard
-     * 
+     *
      * @param InputGraphArea
      *            to set
      */
@@ -849,10 +846,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Liefert das aktuelle selektierte Modell
-     * 
+     *
      * @return
      */
-    public GDCollection getSelectedGDCollection() {
+    GDCollection getSelectedGDCollection() {
         int collectionCount = collections.size();
         if (collectionCount == 0) {
             return null;
@@ -862,10 +859,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Liefert das Modell, das vor dem aktuell selektierten Modell selektiert war
-     * 
+     *
      * @return
      */
-    public GDCollection getPreSelectedGDCollection() {
+    GDCollection getPreSelectedGDCollection() {
         int collectionCount = collections.size();
         if (collectionCount < 2) {
             return null;
@@ -875,10 +872,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Liefert das aktive Teilmodell
-     * 
+     *
      * @return selektiertes Teilmodell
      */
-    public LGMGraphDocument getSelectedDoc() {
+    LGMGraphDocument getSelectedDoc() {
         GDCollection gdcoll = getSelectedGDCollection();
         if (gdcoll == null) {
             return null;
@@ -917,21 +914,21 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
-     * 
+     *
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
      * @param activateGraphView
      *            Wenn <code>true</code> ist, wird auch das dazugehörige
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
-    public void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
+    void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
         if (ignoreDocSelection) {
             return;
         }
 
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
         //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
-        //Teilmodell-Tabs immer diese Funktion hier aufgerufen. 
+        //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         if (doc == null) {
             setCheckConsistencyState(UserProperties.isCheckConsistency());
             toolbar.setSaveEnabled(false);
@@ -986,7 +983,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 }
 
                 //wenn vorher ein Matrix-View diese Funktion ausgelöst hat, dann nur merken, dass beim
-                //nächsten Kontextwechsel wieder auch der grafische View gewechselt werden soll 
+                //nächsten Kontextwechsel wieder auch der grafische View gewechselt werden soll
             } else {
                 Tool3lgm.activateGraphView = true;
             }
@@ -1026,7 +1023,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * Je nach Paramter wir die Konsitenzprüfung bei <code>true</code> ein und bei <code>false</code> ausgeschaltet. Das beinhaltet auch das Anzeigen
      * der Fehlertabelle.
-     * 
+     *
      * @param state
      *            wenn <code>true</code> wird die Konsistenzprüfung eingeschaltet, sonst wird sie abgeschaltet
      */
@@ -1172,7 +1169,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Fragt den Benutzer, ob ein geändertes Modell gepsiechert werden soll.
-     * 
+     *
      * @param gdcoll
      * @return
      */
@@ -1282,7 +1279,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * save the model, which have the focus to file
-     * 
+     *
      * @param saveAs,
      *            boolean with true if model, is to save with new filename
      * @return boolean with true if save was successful or save was cancelled
@@ -1328,12 +1325,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //		long end = System.currentTimeMillis();
         //		System.out.println("Time to write file " + datei.getName() + " (" + datei.length() + " Bytes): " + (end - start) + " Milliseconds");
-        //		
+        //
         //		System.err.println();
         //		System.err.println("###########################################################################");
         //		printStatistic(gdCollection, true, true);
         //		System.err.println();
-        //		printStatistic(gdCollection, false, true);		
+        //		printStatistic(gdCollection, false, true);
         //		System.err.println("###########################################################################");
 
         return true;
@@ -1605,7 +1602,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return all InternalFrames at desktop
-     * 
+     *
      * @return JInternalFrame[]
      */
     public AbstractInternalFrame[] getAllFrames() {
@@ -1617,7 +1614,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return the toolbar of application
-     * 
+     *
      * @return ToolBar
      */
     public ToolBar getToolBar() {
@@ -1626,7 +1623,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return the workarea of application
-     * 
+     *
      * @return JPanel
      */
     public JPanel getWorkArea() {
@@ -1635,7 +1632,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return the verticalSplitPane of application
-     * 
+     *
      * @return JSplitPane
      */
     public JSplitPane getVerticalSplitPane() {
@@ -1644,7 +1641,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return the horizontalSplitPane of application
-     * 
+     *
      * @return JSplitPane
      */
     public JSplitPane getHorizontalSplitPane() {
@@ -1653,7 +1650,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return the werkzeugleiste of application
-     * 
+     *
      * @return UnfloatableToolBar
      */
     public UnfloatableToolBar getWerkzeugleiste() {
@@ -1686,7 +1683,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt existiert;
      * ansonsten passiert nichts
-     * 
+     *
      * @param xmlText String mit dem neuen Titel
      */
     public void setProgressDialogTitle(final String text) {
@@ -1711,7 +1708,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
      * ansonsten passiert nichts
-     * 
+     *
      * @param xmlText String mit neuen Statustext
      */
     public void setProgressDialogStatusLabel(final String text) {
@@ -1743,7 +1740,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * return GDCollection with the specified index in ArrayList collections
-     * 
+     *
      * @param index int with index of collection in ArrayList collection
      * @return null if index < 0 or index >= collections.size(); otherwise the GDCollection with specified index
      */
@@ -1784,7 +1781,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return;
         }
         ToolInternalFrame frame = null;
-        JInternalFrame[] frames = Tool3lgm.tool.getAllFrames();
+        JInternalFrame[] frames = getAllFrames();
         for (int i = 0; i < frames.length; i++) {
             if (frames[i] instanceof ToolInternalFrame) {
                 ToolInternalFrame f = (ToolInternalFrame) frames[i];
@@ -1835,7 +1832,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Überprüft, ob die übergeben Datei eine gültige Lizenzdatei ist.
-     * 
+     *
      * @param licenseFile
      * @return
      * @throws InvalidKeyException
@@ -1914,18 +1911,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public final boolean checkLicenses() {
         try {
-            if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de")) {
-                return true;
-            }
-            if (TwatdLicenseLibrary.checkHostName("medizin.uni-leipzig.de")) {
-                return true;
-            }
-            if (TwatdLicenseLibrary.checkHostName("AAA2011")) {
+            if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de", "medizin.uni-leipzig.de", "AAA2011")) {
                 return true;
             }
         } catch (Exception e) {
         }
-        FileNameExtensionFilterAndFileFilter licenseFileFilter = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC));
+        FileNameExtensionFilterAndFileFilter licenseFileFilter = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC), false);
         File[] licenseFilesArray = Tool3lgmConstants.APPLICATION_DIR.listFiles(licenseFileFilter);
         ArrayList<File> licenseFiles = new ArrayList<File>();
         for (File licenseFile : licenseFilesArray) {

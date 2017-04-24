@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -35,7 +35,8 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
 
     /** Styles, die für die Anzeige der Teilmodelle einer {@link GDCollection} zur Verfügung stehen. */
     public enum STYLE {
-        tab, combobox
+        tab,
+        combobox
     }
 
     /** Aktueller Style dieses Browsers */
@@ -55,7 +56,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
 
     /**
      * Tab für eine {@link GDCollection} wird hinzugefügt
-     * 
+     *
      * @param gdcoll
      * @return
      */
@@ -220,7 +221,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     public void stateChanged(final ChangeEvent e) {
         updateActiveBrowserTab();
         GraphDocument doc = getSelectedDoc();
-        Tool3lgm.tool.setSelectedDoc(doc, doc != null);
+        Static.setSelectedDoc(doc, doc != null);
     }
 
     @Override

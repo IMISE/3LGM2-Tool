@@ -25,7 +25,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.Szenario;
@@ -73,7 +73,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
     /**
      * Konstruktor
-     * 
+     *
      * @see java.awt.Window#Window(Frame)
      * @param owner, besitzendes Fenster des Dialogs
      * @param collection, die GDCollection, auf der die Exporte ausgeführt werden
@@ -204,7 +204,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     /**
      * erzeugt einen neuen Button, und fuegt den Dialog als ActionListener zum
      * Button hinzu
-     * 
+     *
      * @param text, Schluessel fuer Resourcenpaket fuer die Beschriftung des
      *            Buttons; text wird zusaetzlich als ActionCommand gesetzt
      * @return JButton der erzeugte Button
@@ -218,7 +218,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
     /**
      * Abfangen der ActionEvents und Behandlung dieser
-     * 
+     *
      * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
      */
     @Override
@@ -286,8 +286,8 @@ public class XMLExportDialog extends JDialog implements ActionListener {
                 fileString = file.toString();
             }
 
-            Tool3lgm.tool.showProgressDialog();
-            Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("trans_title"));
+            Static.showProgressDialog();
+            Static.setProgressDialogStatusLabel("trans_title");
 
             File tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH, "temporary_XMLFile_for_XSLT-Export.xml");
 
@@ -308,7 +308,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             }
 
             tempXMLFile.delete();
-            Tool3lgm.tool.closeProgressDialog();
+            Static.closeProgressDialog();
         }
 
         if (e.getActionCommand().equals("trans_close")) {
@@ -334,7 +334,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     /* --- tabelle ende --- */
 
     private static final String getDefaultXSLFile() {
-        //total ineffizient, wird aber nicht sooft aufgerufen. Daher kann man auf das 
+        //total ineffizient, wird aber nicht sooft aufgerufen. Daher kann man auf das
         //Zusammenbauen per StringBuilder verzichten
         return "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n\n" + "<!--name: name -->\n" + "<!--type: doctype -->\n" + "<!--description: beschreibung -->\n" + "<!--author: autor -->\n\n" + "<xsl:stylesheet\n"
                 + "\txmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\n" + "\txmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\n" + "\txmlns:str=\"http://whatever\"\n" + "\tversion=\"2.0\"\n" + "\texclude-result-prefixes=\"str\">\n\n" +
@@ -362,8 +362,8 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         }
 
         /**
-		 * 
-		 */
+         *
+         */
         public void clear() {
             xslScripts.clear();
         }

@@ -15,7 +15,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.Szenario;
@@ -117,7 +117,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
-        de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("label_convert"));
+        Static.setProgressDialogStatusLabel("label_convert");
         doc._cleanContainers();
         doc._createNewEdgeClasses();
         doc._removeMultipleTraces();
@@ -243,7 +243,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             layer = szenario.getLayer(Integer.parseInt(atts.getValue("number")));
 
         } else if (qName.equals("szenario")) {
-            de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadSzenario") + atts.getValue("titel") + " ...");
+            Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
             szenario = collection.createSzenario(atts.getValue("titel"), false, "", null, false);
 
         } else if (qName.equals("description")) {
@@ -257,7 +257,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             }
 
         } else if (qName.equals("images")) {
-            de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadIcons"));
+            Static.setProgressDialogStatusLabel("labelReadIcons");
 
         } else if (qName.equals("header")) {
 
@@ -269,7 +269,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             doc = collection.getMainGraphDocument();
 
         } else if (qName.equals("objects")) {
-            de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadElements"));
+            Static.setProgressDialogStatusLabel("labelReadElements");
 
         }
     }
@@ -445,7 +445,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             collection.setFileVersion(elementValue.toString());
 
         } else if (qName.equals("modell_3lgm_2")) {
-            de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReferenceIcons"));
+            Static.setProgressDialogStatusLabel("labelReferenceIcons");
 
             /* Icons in den Container einlesen */
 
@@ -455,7 +455,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
         } else if (qName.equals("objects")) {
 
-            de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelConnectTraces"));
+            Static.setProgressDialogStatusLabel("labelConnectTraces");
 
             /* die HashStrings für das Start- bzw. End-Objekt einer Kante auflösen und die wirklichen Knoten setzten */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {

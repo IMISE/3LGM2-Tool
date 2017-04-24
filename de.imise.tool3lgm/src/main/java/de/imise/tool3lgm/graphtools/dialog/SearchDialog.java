@@ -1,9 +1,5 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-import gnu.regexp.REMatch;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -56,6 +52,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ContextGenerator;
@@ -75,6 +72,9 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
+import gnu.regexp.RE;
+import gnu.regexp.REException;
+import gnu.regexp.REMatch;
 
 public class SearchDialog extends JDialog implements ActionListener, ListSelectionListener, WindowListener, ItemListener {
 
@@ -152,7 +152,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
     /**
      * Konstruiert auf dem Frame den Dialog.
-     * 
+     *
      * @param owner
      */
     public SearchDialog(final Frame owner) {
@@ -340,7 +340,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     /**
      * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
      * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
-     * 
+     *
      * @param e - übergebener ActionEvent
      */
     private void callSearch(final ActionEvent e) {
@@ -456,8 +456,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         String string = me.getUserFieldInputValue(key);
                         // im all-modus und im checkboxmodus muss auf TRUE/FALSE abgefragt werden
                         // + zusätzlich muss label stimmen
-                        if (userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all")) || ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX)
-                                && key.getStyle().equals(UserField.Style.CHECK_BOX)) {
+                        if (userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"))
+                                || ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX) && key.getStyle().equals(UserField.Style.CHECK_BOX)) {
                             // -> Checkbox suchen
 
                             boolean nameOfCheckBoxMatched = false;// (+ zusätzlich muss label
@@ -477,8 +477,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         }
                         // im allmodus und wenn der attributtyp übereinstimmt muss im inhalt gesucht
                         // werden
-                        if (userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all")) || !((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX)
-                                && ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(key.getStyle())) {
+                        if (userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"))
+                                || !((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX) && ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(key.getStyle())) {
                             // -> keine Checkbox suchen, sondern Inhalte
                             // Punkte in Kommas umwandeln
                             if (Pattern.matches("[0-9]+\\.[0-9]+", string)) {
@@ -528,7 +528,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
     /**
      * TabellenModell Initialisieren initialisieren
-     * 
+     *
      * @return DefaultTableModel
      */
     private static final DefaultTableModel getDefaultTableModel() {
@@ -541,7 +541,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
     /**
      * Tabelle initialisieren Listener dranhängen Sortierung
-     * 
+     *
      * @return DefaultTableModel
      */
     private JTable initialiseTable(final DefaultTableModel mod) {
@@ -749,11 +749,11 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * Befüllt die modelBox
      */
     private void fillModelBox() {
-        for (int i = 0; i < Tool3lgm.tool.getCollectionCount(); i++) {
-            GDCollection gdcoll = Tool3lgm.tool.getCollection(i);
+        for (int i = 0; i < Static.getCollectionCount(); i++) {
+            GDCollection gdcoll = Static.getCollection(i);
             modelBox.addItem(gdcoll, gdcoll.getName());
         }
-        modelBox.setSelectedObject(Tool3lgm.tool.getSelectedGDCollection());
+        modelBox.setSelectedObject(Static.getSelectedGDCollection());
         fillSubModelBox();
     }
 
@@ -812,8 +812,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void showDialog() {
         setVisible(true);
     }
@@ -827,7 +827,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     public void valueChanged(final ListSelectionEvent e) {
         int[] selected = table.getSelectedRows();
         TableModel tablemodel = table.getModel();
-        GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument doc = Static.getSelectedDoc();
         if (doc == null) {
             return;
         }

@@ -14,6 +14,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ContextGenerator;
@@ -71,7 +72,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 BrowseUtils.browse(value);
                 return;
             }
-            Tool3lgm.tool.changeToLinked(doc);
+            Static.getTool().changeToLinked(doc);
             return;
         }
 

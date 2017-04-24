@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.node.Konfiguration;
@@ -121,7 +121,7 @@ public class KonfigurationContainer extends NodeContainer {
         if (!isVisible() && !isHighLight()) {
             return;
         }
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         if (!(frame instanceof ToolInternalFrame)) {
             return;
         }

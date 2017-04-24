@@ -11,6 +11,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ContextGenerator;
@@ -134,7 +135,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
-            Tool3lgm.tool.getContentPane().addMouseListener(this);
+            Static.getTool().getContentPane().addMouseListener(this);
         }
 
         xin = 0;
@@ -424,7 +425,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             //Component source, int id, long when, int modifiers,
             //int keyCode, char keyChar, int keyLocation
             dispatchEvent(new KeyEvent(this, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
-            Tool3lgm.tool.changeToLinked(doc);
+            Static.getTool().changeToLinked(doc);
             return;
         }
 
@@ -1146,7 +1147,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             getParent().dispatchEvent(e);
             return;
         }
-        UnfloatableToolBar utb = Tool3lgm.tool.getWerkzeugleiste();
+        UnfloatableToolBar utb = Static.getTool().getWerkzeugleiste();
         double zoomStep = zoom - 0.05 * e.getWheelRotation();
         if (utb == null || !(utb instanceof Werkzeugleiste)) {
             setZoom(zoomStep);
@@ -1161,7 +1162,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * Entfernt dieses Panel aus den Listener/Listen, in denen es vorkommt.
      */
     public void dispose() {
-        Tool3lgm.tool.getContentPane().removeMouseListener(this);
+        Static.getTool().getContentPane().removeMouseListener(this);
     }
 
 }

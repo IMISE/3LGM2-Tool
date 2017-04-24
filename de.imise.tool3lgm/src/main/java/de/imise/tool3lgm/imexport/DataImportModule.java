@@ -8,12 +8,12 @@ import static javax.swing.JOptionPane.YES_NO_OPTION;
 import static javax.swing.JOptionPane.YES_OPTION;
 import static javax.swing.JOptionPane.showOptionDialog;
 
-import java.awt.Component;
 import java.io.File;
 
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
@@ -62,10 +62,9 @@ public class DataImportModule {
     private File chooseImportFile(final File file) {
         File returnFile = file;
         if (returnFile == null) {
-            Component parent = Tool3lgm.tool;
             FileNameExtensionFilter filter = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV);
             Object pathKey = FileFilterType.CSV;
-            returnFile = ExtendedFileChooser.chooseFile(parent, filter, pathKey);
+            returnFile = ExtendedFileChooser.chooseFile(Static.getMainFrame(), filter, pathKey);
         }
         return returnFile;
     }
@@ -82,7 +81,7 @@ public class DataImportModule {
     }
 
     private void showErrorDialog(final String message) {
-        JOptionPane.showMessageDialog(Tool3lgm.tool, message, "Import Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(Static.getMainFrame(), message, "Import Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private final boolean saveCollection(final GDCollection gdcoll) {
@@ -92,9 +91,10 @@ public class DataImportModule {
         String message = "The model must be saved to run an import.";
         String title = "Save model?";
         Object[] options = {
-                "Save", "Cancel"
+                "Save",
+                "Cancel"
         };
-        int answer = showOptionDialog(Tool3lgm.tool, message, title, YES_NO_OPTION, QUESTION_MESSAGE, null, //do not use a custom Icon
+        int answer = showOptionDialog(Static.getMainFrame(), message, title, YES_NO_OPTION, QUESTION_MESSAGE, null, //do not use a custom Icon
                 options, //the titles of buttons
                 options[0]); //default button title
         return answer == YES_OPTION && Tool3lgm.saveToFile(gdcoll);
@@ -323,7 +323,7 @@ public class DataImportModule {
     //                    String hash = realIndex < userFieldHashStrings.size() ? userFieldHashStrings.get(realIndex) : "" + realIndex;
     //                    String value = tokens.get(j);
     //                    int index = value.indexOf("_rangedef_");
-    //                    //AXS: die RangeDefs sind komplett rausgeflogen. Da ich die Konsequenzen von Änderungen an dieser Stelle nicht kenne, lasse 
+    //                    //AXS: die RangeDefs sind komplett rausgeflogen. Da ich die Konsequenzen von Änderungen an dieser Stelle nicht kenne, lasse
     //                    //ich den Code hier stehen. nur unten das anhängen der Range-De-Information an den XML-String habe ich rausgenommen.
     //                    @SuppressWarnings("unused")
     //                    String rangeDef = "";

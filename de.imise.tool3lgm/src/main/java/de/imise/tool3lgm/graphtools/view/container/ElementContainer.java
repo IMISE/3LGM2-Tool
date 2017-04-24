@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.Szenario;
@@ -95,7 +95,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     protected Color lastColor = null;
 
     /**
-     * 
+     *
      */
     public ElementContainer() {
         super();
@@ -424,7 +424,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * 
+     *
      */
     public final void resetLayout() {
         if (layout != null) {
@@ -679,7 +679,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * 
+     *
      */
     public void refreshFont() {
         super.setFont(getFont());
@@ -711,7 +711,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     static StringBuilder textBuf = new StringBuilder("");
 
     /**
-     * 
+     *
      */
     public abstract void refreshText();
 
@@ -842,12 +842,12 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * 
+     *
      */
     public void checkTreeIcon() {
         if (lastColor == null || !lastColor.equals(layout.bg_color)) {
             lastColor = layout.bg_color;
-            Image image = Tool3lgm.tool.createImage(14, 14);
+            Image image = Static.getMainFrame().createImage(14, 14);
             Graphics g = image.getGraphics();
             g.setColor(lastColor);
             g.fillRect(0, 0, 14, 14);
@@ -952,7 +952,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * 
+     *
      */
     public void removeAllSpecialInfosFromThisContainer() {
         removeSpecialInfoFromThisContainer(null, -1);

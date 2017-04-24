@@ -18,6 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -81,7 +82,7 @@ public class LGMActionLibrary {
      * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
      * sollte an die "addButtons" der Panels angefügt werden.
-     * 
+     *
      * @param srcTree
      * @param targetTree
      * @param edp
@@ -354,7 +355,7 @@ public class LGMActionLibrary {
      * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
      * sollte an die "removeButtons" der Panels angefügt werden.
-     * 
+     *
      * @param srcTree
      * @param targetTree
      * @param edp
@@ -543,7 +544,7 @@ public class LGMActionLibrary {
 
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
-     * 
+     *
      * @param jTree
      * @param edp
      * @return
@@ -586,7 +587,7 @@ public class LGMActionLibrary {
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die auf das Selektieren von Elementen in
      * Trees reagiert.
-     * 
+     *
      * @param jTree
      * @param edp
      * @return
@@ -649,7 +650,7 @@ public class LGMActionLibrary {
      * DragNDrop in einem Panel. Alle Panels, die DragNDrop-Funktionalität bieten wollen, müssen
      * diese Action über einen MouseListener an ihre Trees anfügen. Dabei sollte diese Action sowohl
      * bei mousePressed als auch bei mouseEntered aufgerufen werden.
-     * 
+     *
      * @param dndActionChains
      */
     public static final LGMAction getDragNDropInitAction(final DragNDropInitializer.DragNDropActionChain[] dndActionChains) {
@@ -683,7 +684,7 @@ public class LGMActionLibrary {
              * die Maus über einen Tree bewegt bzw. ein Element des Trees angeklickt wurde, die
              * Methode <code>mouseEntered(MouseEvent me)</code> bzw.
              * <code>mousePressed(MouseEvent me)</code> aufgerufen.
-             * 
+             *
              * @param e
              */
             @Override
@@ -710,7 +711,7 @@ public class LGMActionLibrary {
              * vermieden. Solang die Mousetaste gedrückt bleibt, ist das Initialisieren einer neuen
              * DragNDrop-Aktion deaktiviert, um das Auführen der aktuellen DragNDrop-Aktion nicht zu
              * behindern.
-             * 
+             *
              * @param me
              */
             private void mousePressed(final MouseEvent me) {
@@ -741,7 +742,7 @@ public class LGMActionLibrary {
             /**
              * Methode ruft <code>activateDragNDrop(LGMDragNDropTree focusedTree)</code> auf, falls
              * sich die Mouse über einen der Trees des Panels befindet.
-             * 
+             *
              * @param me
              */
             private void mouseEntered(final MouseEvent me) {
@@ -754,7 +755,7 @@ public class LGMActionLibrary {
             /**
              * Methode aktiviert die DragNDrop-Funktion vom <code>focusedTree</code> auf alle Trees,
              * die in den <code>dndActionChains</code> als targetTree dieses Trees vorkommen.
-             * 
+             *
              * @param focusedTree
              */
             private void activateDragNDrop(final LGMDragNDropTree focusedTree) {
@@ -781,7 +782,7 @@ public class LGMActionLibrary {
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das Erzeugen eines neuen Elements
      * realisiert.
-     * 
+     *
      * @param panel
      * @param elementClass
      * @throws ActionNotDefinedForClassException
@@ -1009,7 +1010,7 @@ public class LGMActionLibrary {
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
      * einem Tree realisiert.
-     * 
+     *
      * @param tree
      * @param edp
      * @throws ActionNotDefinedForClassException
@@ -1078,7 +1079,7 @@ public class LGMActionLibrary {
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
      * einem Tree realisiert.
-     * 
+     *
      * @param tree
      * @param edp
      * @throws ActionNotDefinedForClassException
@@ -1182,7 +1183,7 @@ public class LGMActionLibrary {
      * und in
      * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
      * aufgerufen --> Panel muss sich also darum nicht kümmern
-     * 
+     *
      * @param jTree
      */
     private static final LGMAction getDragNDropLocateElementAsTargetAction(final JTree jTree) {
@@ -1211,7 +1212,7 @@ public class LGMActionLibrary {
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die beim Schließen eines Panels alle
      * WindowListener des Panels entfernt.
-     * 
+     *
      * @param edp
      */
     public static final LGMAction getWindowClosedAction(final ElementDialogPanel edp) {
@@ -1230,7 +1231,7 @@ public class LGMActionLibrary {
                 for (int i = 0; i < listeners.length; i++) {
                     dialog.removeWindowListener(listeners[i]);
                 }
-                Tool3lgm.tool.repaint();
+                Static.getMainFrame().repaint();
             }
         };
     }
@@ -1257,7 +1258,7 @@ public class LGMActionLibrary {
     /**
      * Gibt das <code>ModelElement</code> des <code>ElementPropertyDialog</code> s wieder, in dem
      * sich der <code>tree</code> befindet.
-     * 
+     *
      * @param tree TODO: diese Funktion hat jetzt das {@link LGMDragNDropPanel}, so dass das hier
      *            irgendwann mal weg kann
      */

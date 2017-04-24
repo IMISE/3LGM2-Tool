@@ -15,13 +15,13 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 
 /**
  * Dieser Dialog stellt Optionen zur Auswahl, Modelle hinsichtlich auszuwählender Bereiche
  * bereinigen zu lassen.
- * 
+ *
  * @author AXS created on 03.07.2007
  */
 public class CleanModelDialog extends JDialog implements WindowListener {
@@ -59,7 +59,12 @@ public class CleanModelDialog extends JDialog implements WindowListener {
      * Liste aller Chekcboxes, damit man den Wert von allen auf einmal setzen kann.
      */
     private final Checkbox[] boxes = {
-            inconsistentAWBConfigsBox, inconsistentAufOrgBox, inconsistentPDVBConfigsBox, copyAWBConfigToLeafBox, multipleAWBConfigBox, identicalAWBConfigBox
+            inconsistentAWBConfigsBox,
+            inconsistentAufOrgBox,
+            inconsistentPDVBConfigsBox,
+            copyAWBConfigToLeafBox,
+            multipleAWBConfigBox,
+            identicalAWBConfigBox
     };
 
     /**
@@ -136,7 +141,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 setVisible(false);
-                ModelCleaner mc = new ModelCleaner(Tool3lgm.tool.getSelectedDoc().getCollection());
+                ModelCleaner mc = new ModelCleaner(Static.getSelectedGDCollection());
                 if (inconsistentAWBConfigsBox.getState()) {
                     mc.removeInconsistentAWBConfigurationsWithoutAWB(true);
                 }
@@ -178,7 +183,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
 
     /**
      * Liefert den über den Schlüssel in den Resoucen auffindbaren String.
-     * 
+     *
      * @param resourceKey
      * @return
      */
@@ -188,12 +193,12 @@ public class CleanModelDialog extends JDialog implements WindowListener {
 
     /**
      * Liefert einen <code>CleanModelDialog</code>
-     * 
+     *
      * @return
      */
     public static final CleanModelDialog getDialog() {
         if (dialog == null) {
-            dialog = new CleanModelDialog(Tool3lgm.tool);
+            dialog = new CleanModelDialog(Static.getMainFrame());
         }
         return dialog;
     }
@@ -239,7 +244,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
     /**
      * Ein Hilfebutton mit einer bestimmten Darstellung, der bei Aktivierung einen Dialog mit dem
      * Hilfetext präsentiert.
-     * 
+     *
      * @author AXS created on 03.07.2007
      */
     private class HelpButton extends JButton {
@@ -263,7 +268,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
             setAction(new AbstractAction(getString("help_icon")) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    JOptionPane.showMessageDialog(Tool3lgm.tool, CleanModelDialog.getString(helpKey), CleanModelDialog.getString(titleKey), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(Static.getMainFrame(), CleanModelDialog.getString(helpKey), CleanModelDialog.getString(titleKey), JOptionPane.INFORMATION_MESSAGE);
                 }
             });
         }

@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.log.Log;
@@ -184,7 +184,7 @@ public class AnalyseRepositoryFrameActions {
     static final Action ACTION_RESET_ANALYSIS_RESULT = new AbstractAction(Tool3lgmConstants.getResString("reset_result")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
+            GraphDocument gd = Static.getSelectedDoc();
             if (gd == null) {
                 return;
             }
@@ -200,7 +200,7 @@ public class AnalyseRepositoryFrameActions {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+            GraphDocument doc = Static.getSelectedDoc();
             if (doc == null) {
             }
             int[] selection = AnalyseRepositoryFrame.table.getSelectedRows();
@@ -213,7 +213,7 @@ public class AnalyseRepositoryFrameActions {
 
         @Override
         public boolean isEnabled() {
-            GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
+            GraphDocument gd = Static.getSelectedDoc();
             if (gd == null) {
                 return false;
             }

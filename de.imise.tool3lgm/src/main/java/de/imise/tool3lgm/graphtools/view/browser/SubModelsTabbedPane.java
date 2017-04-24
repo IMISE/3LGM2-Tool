@@ -9,7 +9,7 @@ import java.awt.Component;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -20,7 +20,7 @@ import de.imise.util.swing.component.TabbedPane;
 /**
  * Tab-Pane, in dem alle Teilmodelle eines Modells aufgelistet werden. Es besitzt einen {@link DynamicTree}, der immer in das ScrollPane des im
  * Vordergrund befindlichen Tabs gelegt wird.
- * 
+ *
  * @author imi0wendt, AXS
  */
 public class SubModelsTabbedPane extends SubModelsBrowser implements GDCollectionOwner, ChangeListener {
@@ -91,7 +91,7 @@ public class SubModelsTabbedPane extends SubModelsBrowser implements GDCollectio
 
     /**
      * Liefert den Indes des Tab, an dem sich das übergebene {@link GraphDocument} befindet oder -1;
-     * 
+     *
      * @param doc
      * @return
      */
@@ -122,8 +122,8 @@ public class SubModelsTabbedPane extends SubModelsBrowser implements GDCollectio
         if (tree.getGraphDocument() != selDoc) {
             tree.setGraphDocument(selDoc);
         }
-        if (selDoc != Tool3lgm.tool.getSelectedDoc()) {
-            Tool3lgm.tool.setSelectedDoc(selDoc, true);
+        if (selDoc != Static.getSelectedDoc()) {
+            Static.setSelectedDoc(selDoc, true);
         }
     }
 

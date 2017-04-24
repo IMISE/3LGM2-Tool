@@ -14,6 +14,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -43,8 +44,8 @@ public class TypDialog extends JDialog implements ActionListener, KeyListener {
     protected JButton button;
 
     /**
-	 * 
-	 */
+     *
+     */
     public TypDialog() {
         super();
         addKeyListener(this);
@@ -59,8 +60,9 @@ public class TypDialog extends JDialog implements ActionListener, KeyListener {
     public Class<? extends ModelElement> showDialog(final String t, final String question, final String object) {
         dialog = new TypDialog();
         JDialog aktdia = dialog.createDialog(t, question, object);
-        if (Tool3lgm.tool != null) {
-            aktdia.setLocation(Tool3lgm.tool.getX() + 100, Tool3lgm.tool.getY() + 100);
+        Tool3lgm tool = Static.getTool();
+        if (tool != null) {
+            aktdia.setLocation(tool.getX() + 100, tool.getY() + 100);
         }
         aktdia.setVisible(true);
 

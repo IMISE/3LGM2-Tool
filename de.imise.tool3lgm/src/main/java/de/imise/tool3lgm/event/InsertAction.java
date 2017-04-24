@@ -2,7 +2,7 @@ package de.imise.tool3lgm.event;
 
 import java.awt.event.ActionEvent;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
  * <p>
  * Das Erzeugen von Instanzen dieser Klasse erfolgt durch die Spezifizierung der zu generierenden {@link ModelElement}-Klasse. Intern wird dann dazu
  * über {@link ModelConstants} der passende Name für diese Action gesucht.
- * 
+ *
  * @author fstephan
  */
 class InsertAction extends AbstractLGMAction {
@@ -46,7 +46,7 @@ class InsertAction extends AbstractLGMAction {
 
     /** Gibt wieder, ob der aktuelle Kontext ein Einfügen von Elementen erlaubt, oder nicht */
     public static boolean isInsertAvailable() {
-        return Tool3lgm.tool.getSelectedDoc() != null;
+        return Static.getSelectedDoc() != null;
     }
 
     /** Die {@link ModelElement}-Klasse die, durch diese Action erzeugt wird */
@@ -56,7 +56,7 @@ class InsertAction extends AbstractLGMAction {
      * Konstruktor
      * <p>
      * Erzeugt neue Instanz dieser Klasse anhand des zur spezifizierten {@link ModelElement}-Klasse passenden {@link ActionIdentifier}
-     * 
+     *
      * @param elementClass {@link ModelElement}-Klasse die, durch diese Action erzeugt wird
      */
     private InsertAction(final Class<ModelElement> elementClass) {

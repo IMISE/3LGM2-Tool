@@ -17,7 +17,7 @@ public class DirectHelp extends JWindow {
     //   static private boolean open;
 
     public DirectHelp() {
-        GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument doc = Static.getSelectedDoc();
         if (doc == null) {
             return;
         }
@@ -25,7 +25,7 @@ public class DirectHelp extends JWindow {
             return;
         }
         ElementContainer me = doc.getLastSelected();
-        Point p = Tool3lgm.tool.getLocationOnScreen();
+        Point p = Static.getMainFrame().getLocationOnScreen();
         ExtendedTextArea area = new ExtendedTextArea(30, 10);
         area.setBackground(new Color(240, 210, 125));
         area.setLineWrap(true);

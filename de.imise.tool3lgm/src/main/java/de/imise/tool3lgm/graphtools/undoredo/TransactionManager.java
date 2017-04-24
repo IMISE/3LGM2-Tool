@@ -3,13 +3,13 @@ package de.imise.tool3lgm.graphtools.undoredo;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 
 /**
  * Verwaltet die Undo-/Redo-Steuerung
- * 
+ *
  * @author N.N., AXS
  */
 public class TransactionManager {
@@ -64,8 +64,8 @@ public class TransactionManager {
     private boolean is_doing;
 
     /**
-	 * 
-	 */
+     *
+     */
     public TransactionManager() {
         cur_pos = last_pos = INVALID_POS;
         trans_q = new Transaction[TRANSQ_SIZE];
@@ -73,8 +73,8 @@ public class TransactionManager {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public final void clearTransactionQueue() {
         if (is_doing) {
             return;
@@ -139,7 +139,7 @@ public class TransactionManager {
 
     /**
      * Prüft, ob das übergebene Kommando als Undo oder Redo-Kommando hinzugefügt werden kann.
-     * 
+     *
      * @param command
      * @return Das getrimmte Kommando, wenn es ein valides ist, oder <code>null</code> sonst.
      */
@@ -159,7 +159,7 @@ public class TransactionManager {
 
     /**
      * Fügt ein neues Kommando als Undo- oder Redo-Kommando hinzu.
-     * 
+     *
      * @param command hinzuzufügendes Kommando
      * @param pid ID der Transaktion
      * @param undo Wenn <code>true</code> wird das Kommando als Undo-Kommando hinzugefügt, sonst als Redo-Kommando
@@ -182,7 +182,7 @@ public class TransactionManager {
     /**
      * Fügt der Transaktion mit der angegebenen ID das neue Redo-Kommando hinzu. Die Kommandos werden beim Aufruf der Funktion <code>redo(int)</code>
      * in der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt wurden.
-     * 
+     *
      * @param command
      * @param pid
      */
@@ -193,7 +193,7 @@ public class TransactionManager {
     /**
      * Fügt der Transaktion mit der angegebenen ID das neue Undo-Kommando hinzu. Die Kommandos werden beim Aufruf der Funktion <code>redo(int)</code>
      * in der gleichen Reihenfolge erneut ausgeführt, in der sie hier hinztugefügt wurden.
-     * 
+     *
      * @param command
      * @param pid
      */
@@ -206,7 +206,7 @@ public class TransactionManager {
      * und den <code>commandArguments</code> am Ende an. <br />
      * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
      * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
-     * 
+     *
      * @param commandPrefix
      * @param commandArguments
      * @param pid
@@ -227,7 +227,7 @@ public class TransactionManager {
      * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandPrefix</code> in dieser Transaktion vorkommt. Diese
      * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
      * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
-     * 
+     *
      * @param commandPrefix
      * @param commandArguments
      * @param pid
@@ -350,7 +350,7 @@ public class TransactionManager {
 
     /**
      * Liefert den Index der Transaktion in der Transaktionsliste <code>trans_q</code>, deren ID der übergebenen <code>pid</code> entspricht.
-     * 
+     *
      * @param pid ID der Transaktion, die gesucht werden soll. Wird <code>UNSPECIFIC_PID</code> übergeben, kommt der Index der letzten Transaktion
      *            zurück.
      * @param undo bei <code>true</code> werden inklusive des aktuellen Transaktionsindex auch die davor liegenden Transaktionen geprüft, bei
@@ -381,7 +381,7 @@ public class TransactionManager {
     /**
      * Nimmt die Transaktion mit der angegebenen ID zurück. Alle Undo-Kommandos der Transaktion werden in der gleichen Reihenfolge ausgeführt, in der
      * sie hinzugefügt wurden.
-     * 
+     *
      * @param pid
      * @return
      */
@@ -419,7 +419,7 @@ public class TransactionManager {
         int transactions = trans_q[j].getUndoSize();
         boolean showProgressDialog = transactions > 1000;
         if (showProgressDialog) {
-            Tool3lgm.tool.showProgressDialog();
+            Static.showProgressDialog();
         }
 
         for (int i2 = transactions - 1; i2 >= 0; i2--) {
@@ -429,7 +429,7 @@ public class TransactionManager {
             String undoCommand = trans_q[j].getUndoCommand(i2);
             doc.getCollection().getMainGraphDocument().exec(undoCommand, pid);
             if (showProgressDialog) {
-                Tool3lgm.tool.setProgressDialogStatusLabel("Undo " + (transactions - i2) + " / " + transactions);
+                Static.setProgressDialogStatusLabel("undo", transactions - i2 + " / " + transactions);
             }
         }
         doc.deselectAll(true);
@@ -451,7 +451,7 @@ public class TransactionManager {
         gdcoll.setBulkMode(bulkMode);
 
         if (showProgressDialog) {
-            Tool3lgm.tool.closeProgressDialog();
+            Static.closeProgressDialog();
         }
         return true;
     }
@@ -459,7 +459,7 @@ public class TransactionManager {
     /**
      * Führt die Transaktion mit der angegebenen ID erneut aus. Alle Redo-Kommandos der Transaktion werden in der gleichen Reihenfolge ausgeführt, in
      * der sie hinzugefügt wurden.
-     * 
+     *
      * @param pid
      * @return
      */
@@ -499,7 +499,7 @@ public class TransactionManager {
 
     /**
      * Scheibt <code>entryCount</code> Elemente der Transaktionsliste in die Standardausgabe.
-     * 
+     *
      * @param entryCount Anzahl der Elemente ab dem ersten, die ausgegeben werden sollen
      */
     public final void printQueue(final int entryCount) {
@@ -508,7 +508,7 @@ public class TransactionManager {
 
     /**
      * Liefert eine lesbare Ausgabe der ersten <code>entryCount</code> Einträge der Transaktionsliste <code>trans_q</code>.
-     * 
+     *
      * @param entryCount Anzahl der Elemente ab dem ersten, die ausgegeben werden sollen
      * @return lesbaren String des Transaktionsstacks
      */
@@ -557,7 +557,7 @@ public class TransactionManager {
 
     /**
      * Liefert <code>true</code>, wenn wenigstens eine offene Transaktion existiert.
-     * 
+     *
      * @return <code>true</code>, wenn eine Transaktion offen ist
      */
     public final boolean isInTransaction() {

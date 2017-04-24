@@ -26,7 +26,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.xml.transform.TransformerException;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -54,7 +54,10 @@ public class WebExportDialog extends JDialog {
 
     /** Rssourcendateien, die der Webexportdialog braucht. Achtung: die Reihenfolge ist wichtig! index.html muss als erste stehen. */
     public static final String[] WEB_EXPORT_RESOURCES_FILES = {
-            "index.html", "start.html", "tool3lgm.gif", "icon.jpg",
+            "index.html",
+            "start.html",
+            "tool3lgm.gif",
+            "icon.jpg",
     };
 
     private final GDCollection collection;
@@ -185,8 +188,8 @@ public class WebExportDialog extends JDialog {
             }
         }
 
-        Tool3lgm.tool.showProgressDialog(this);
-        Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("webExport"));
+        Static.showProgressDialog(this);
+        Static.setProgressDialogStatusLabel("webExport");
 
         if (!path.isDirectory()) {
             path.mkdir();
@@ -244,7 +247,7 @@ public class WebExportDialog extends JDialog {
             int j = 0;
             for (Szenario szen : collection.getSzenarios()) {
                 szenarios[0] = szen;
-                Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("webExport") + ": " + szenarios[0].getTitle());
+                Static.setProgressDialogStatusLabel("webExport", ": " + szenarios[0].getTitle());
 
                 raf = new RandomAccessFile(new File(filesDir, "szen" + j + "_description.html"), "rw");
                 raf.setLength(0);
@@ -281,7 +284,7 @@ public class WebExportDialog extends JDialog {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
         }
 
-        Tool3lgm.tool.closeProgressDialog();
+        Static.closeProgressDialog();
 
         if (checkBoxShowResult.isSelected()) {
             File file = new File(path, WEB_EXPORT_RESOURCES_FILES[0]);
@@ -291,7 +294,7 @@ public class WebExportDialog extends JDialog {
 
     /**
      * export layer of gcdollection to jpg-File
-     * 
+     *
      * @param area
      * @param filename
      *            String with jpg-File
@@ -341,8 +344,8 @@ public class WebExportDialog extends JDialog {
         for (Szenario szen : collection.getSzenarios()) {
             returnValue.append("<li>" + XMLCharacterCoder.encodeString(szen.getTitle()) + "<ul><li><a href=\"javascript:changeSelection('szen" + j + "_description.html','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/"
                     + XMLCharacterCoder.encodeString(szen.getTitle()) + "/Beschreibung')\">Beschreibung</a></li>\n");
-            returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_3layerView.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
-                    + "/3-EbenenSicht')\">3-Ebenen-Sicht</a></li>\n");
+            returnValue.append(
+                    "<li><a href=\"javascript:showPicture('szen" + j + "_3layerView.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle()) + "/3-EbenenSicht')\">3-Ebenen-Sicht</a></li>\n");
             returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_domainLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
                     + "/Fachliche Ebene')\">Fachliche Ebene</a></li>\n");
             returnValue.append("<li><a href=\"javascript:showPicture('szen" + j + "_logicalLayer.jpg','/" + XMLCharacterCoder.encodeString(collection.getName()) + "/" + XMLCharacterCoder.encodeString(szen.getTitle())
@@ -386,7 +389,7 @@ public class WebExportDialog extends JDialog {
 
     /**
      * Gibt wieder, ob Inkonsistenzen im Modell bestehen
-     * 
+     *
      * @return
      */
     private boolean hasInconsistencies() {
@@ -394,7 +397,7 @@ public class WebExportDialog extends JDialog {
     }
 
     /**
-	 */
+     */
     private class TableModel extends AbstractTableModel {
         private Boolean[] selections;
         private final ArrayList<XSLTScript> xslScripts;
@@ -405,8 +408,8 @@ public class WebExportDialog extends JDialog {
         }
 
         /**
-		 * 
-		 */
+         *
+         */
         public void clear() {
             xslScripts.clear();
             selections = new Boolean[0];
@@ -524,7 +527,7 @@ public class WebExportDialog extends JDialog {
 
         /**
          * gibt die ausgewählten Seznarios zurück
-         * 
+         *
          * @return Array mit den selektierten Szenarios
          */
         public ArrayList<XSLTScript> getSelectedScripts() {

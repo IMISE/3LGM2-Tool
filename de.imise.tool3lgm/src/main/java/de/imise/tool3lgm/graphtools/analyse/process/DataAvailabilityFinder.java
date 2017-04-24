@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
@@ -80,7 +80,7 @@ public class DataAvailabilityFinder {
 
     /**
      * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird.
-     * 
+     *
      * @param objecttype
      * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo gespeichert wird, sonst
      *         <code>false</code>
@@ -93,7 +93,7 @@ public class DataAvailabilityFinder {
 
     /**
      * Prüft, ob der übergebenene Objekttyp einen Master-Speicher besitzt.
-     * 
+     *
      * @param objecttype
      * @return <code>true</code>, wenn der übergebenene Objekttyp einen Master-Speicher besitzt,
      *         sonst <code>false</code>
@@ -107,7 +107,7 @@ public class DataAvailabilityFinder {
     /**
      * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird und ob er einen
      * Master-Speicher besitzt.
-     * 
+     *
      * @param objecttype
      * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo gespeichert wird und er
      *         einen Master-Speicher besitzt, sonst <code>false</code>
@@ -126,7 +126,7 @@ public class DataAvailabilityFinder {
      * Objekte enthalten, aber beide in jeweils umgekehrter Reihenfolge. Ist nur eine
      * kommunikationsrichtung nicht gegeben, dann ist nur das entsprechend gerichtete
      * <code>SameTypePair</code> in der Liste.
-     * 
+     *
      * @param objecttype
      * @return
      */
@@ -173,7 +173,7 @@ public class DataAvailabilityFinder {
      * Gibt den minimalen Kommunikationsweg zwischen den Anwendungssystemen der Konfiguration der
      * Aufgabe und den speichernden Anwendungssystemen des Objekttyps zurück. Wenn die Aufgabe keine
      * Anwendungssysteme in ihrer Konfiguration
-     * 
+     *
      * @param function
      * @param objecttype
      * @return
@@ -200,7 +200,7 @@ public class DataAvailabilityFinder {
      * Kommunikation vom Master-Anwendungssystem des Objekttyps besteht. Dies kann daran liegen,
      * dass der Objekttyp kein Master-Anwenungssystem besitzt oder keine Kommunikationsverbindung
      * zwischen dem Master- und dem speichernden Anwendungssystem besteht.
-     * 
+     *
      * @param objekttyp
      * @return alle Anwendungssysteme, die den Objekttyp inkonsistent speichern TODO: implementieren
      */
@@ -213,8 +213,8 @@ public class DataAvailabilityFinder {
     // ///////////
 
     /**
-	 * 
-	 */
+     *
+     */
     private void showReport() {
 
         ModelAnalyzerCache mac = commPathFinder.getAnalyzerCache();
@@ -274,7 +274,7 @@ public class DataAvailabilityFinder {
         // System.err.println("*************************************************");
         // }
 
-        OutputDialog outputDialog = new OutputDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("data_availability"));
+        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("data_availability"));
 
         outputDialog.appendln("##############################################################");
         outputDialog.appendln("#                        UnavailableET                       #");
@@ -443,7 +443,7 @@ public class DataAvailabilityFinder {
         }
 
         outputDialog.setVisible(true);
-        outputDialog.setLocationRelativeTo(Tool3lgm.tool);
+        outputDialog.setLocationRelativeTo(Static.getMainFrame());
 
     }
 }

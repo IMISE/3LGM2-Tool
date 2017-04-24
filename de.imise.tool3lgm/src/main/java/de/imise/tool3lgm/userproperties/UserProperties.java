@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import javax.swing.filechooser.FileSystemView;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
@@ -24,17 +25,17 @@ public class UserProperties {
 
     //	static final File USER_PROPERTIES_FILE = new File(System.getProperty("user.home") + "/" + ".too3lgmUserInfo.xml");
 
-    //	/** 
+    //	/**
     //	 * Stellt Property-Change-Funktionalität zur Verfügung. <br>
     //	 * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-    //	 * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt. 
+    //	 * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
     //	 * /
     //	private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
-    //	
+    //
     //	///////////////////////////////////////////////////
     //	// Listener hinzufügen/entfernen/benachrichtigen //
     //	///////////////////////////////////////////////////
-    //	
+    //
     //	/**
     //	 * Fügt einen <code>PropertyChangeListener</code> hinzu
     //	 * @param listener
@@ -105,7 +106,7 @@ public class UserProperties {
      * Da das <code>ResourceBundle</code> für die vorher selektierte Sprache nicht neu geladen wird
      * und das Hauptfenster nicht zur Laufzeit neu initialisiert werden kann, wird das Umstellen der
      * locale dort erst nach einem Neustart sichtbar.
-     * 
+     *
      * @param locale
      */
     public static final Locale setLocale(final Locale locale) {
@@ -152,7 +153,7 @@ public class UserProperties {
      * bit5: FRACTIONALMETRICS
      * bit6: INTERPOLATION
      * bit7: TEXT_ANTIALIASING
-     * 
+     *
      * @return int with bit-pattern
      */
     public static int getRenderingHints() {
@@ -169,7 +170,7 @@ public class UserProperties {
      * bit5: FRACTIONALMETRICS
      * bit6: INTERPOLATION
      * bit7: TEXT_ANTIALIASING
-     * 
+     *
      * @param int with bit-pattern
      */
     public static void setRenderingHints(final int renderingHints) {
@@ -270,7 +271,7 @@ public class UserProperties {
 
     /**
      * Wenn <code>true</code>, werden alle Modelbrowser nebeneinander angezeigt, bei <code>false</code> werden alle in einem TabPanel untergebracht.
-     * 
+     *
      * @return multipleModelBrowser from <code>ModelBrowserPanel</code>
      */
     public static boolean isShowModelsInSeparateBrowser() {
@@ -282,11 +283,11 @@ public class UserProperties {
      */
     public static void setShowModelsInSeparateBrowser(final boolean b) {
         showModelsInSeparateBrowser = b;
-        Tool3lgm tool = Tool3lgm.tool;
+        Tool3lgm tool = Static.getTool();
         if (tool == null) {
             return;
         }
-        ModelBrowserPanel mbp = Tool3lgm.tool.getModelBrowserPanel();
+        ModelBrowserPanel mbp = tool.getModelBrowserPanel();
         if (mbp != null) {
             mbp.updateShowModelsInSeparateBrowser();
         }
@@ -301,7 +302,7 @@ public class UserProperties {
     /**
      * Wenn <code>true</code>, werden die Tabs der Teilmodelle im Modelbrowser nebeneinander angezeigt
      * und nicht alle gleichzeitig untereinander.
-     * 
+     *
      * @return multipleModelBrowser from <code>ModelBrowserPanel</code>
      */
     public static boolean isShowSubModelsInBrowserSideBySide() {
@@ -311,7 +312,7 @@ public class UserProperties {
     /**
      * Wenn <code>true</code>, werden die Tabs der Teilmodelle im Modelbrowser nebeneinander angezeigt
      * und nicht alle gleichzeitig untereinander.
-     * 
+     *
      * @param b
      */
     public static void setShowSubModelsInBrowserSideBySide(final boolean b) {
@@ -595,7 +596,7 @@ public class UserProperties {
 
     /**
      * gibt die zuletzt benutzen Datei zurück
-     * 
+     *
      * @return ArrayList mit File-Objekten
      */
     public static ArrayList<File> getLastUsedFiles() {
@@ -604,7 +605,7 @@ public class UserProperties {
 
     /**
      * fügt eine Datei zu der List mit den zuletzt geöffenten Datei hinzu
-     * 
+     *
      * @param file Datei, die benutzt wurde
      */
     public static void addUsedFile(final File file) {
@@ -653,7 +654,7 @@ public class UserProperties {
     /**
      * setzt das Standardverzeichnis zum Laden und Speichern von Modellen und
      * Exportdateien
-     * 
+     *
      * @param path File mit Pfandangabe
      */
     public static void setUserHomePath(final File path) {
@@ -663,7 +664,7 @@ public class UserProperties {
     /**
      * gibt das Standardverzeichnis zum Laden und Speichern von Modellen und
      * Exportdateien zurueck
-     * 
+     *
      * @return File des Standardverzeichnisses
      */
     public static File getUserHomePath() {
@@ -679,7 +680,7 @@ public class UserProperties {
 
     /**
      * setzt das Standardverzeichnis Importieren von Icons
-     * 
+     *
      * @param path File mit Icon-Pfandangabe
      */
     public static void setIconPath(final File path) {
@@ -688,7 +689,7 @@ public class UserProperties {
 
     /**
      * gibt das Standardverzeichnis zum importieren von Icons zurueck
-     * 
+     *
      * @return File des Icon-Standardverzeichnisses
      */
     public static File getIconPath() {

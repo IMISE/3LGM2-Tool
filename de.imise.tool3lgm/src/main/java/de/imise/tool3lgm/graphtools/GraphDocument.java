@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
@@ -578,7 +578,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         Tool3lgmConstants.getResString("remove_element_warning"),
                         cb
                 };
-                int value = JOptionPane.showConfirmDialog(Tool3lgm.tool, cont, Tool3lgmConstants.getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, Tool3lgmConstants.getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
                     dispatch_command(GDCommands.DELETE, argv, pid);
                 }
@@ -594,7 +594,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     Tool3lgmConstants.getResString("whole_model"),
                     Tool3lgmConstants.getResString("cancel")
             };
-            int value = JOptionPane.showOptionDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("loeschfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
+            int value = JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("loeschfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
             if (value == JOptionPane.YES_OPTION) {
                 dispatch_command(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, argv, pid);
             } else if (value == JOptionPane.NO_OPTION) {
@@ -1171,7 +1171,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 finish_transaction(pid);
                 return;
             }
-            Tool3lgm.tool.createSzenarioFrame(szen);
+            Static.getTool().createSzenarioFrame(szen);
             //Selection clonen, weil sie sich während der Ausführung ändert!
             addElementsToSzenario(szen.getHashString(), new ArrayList<ElementContainer>(selectedContainer), pid);
             break;
@@ -1219,7 +1219,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case SELECT_LINKED_SZENARIO:
-            Tool3lgm.tool.changeToLinked(this);
+            Static.getTool().changeToLinked(this);
             break;
 
         case LINK_SELECTED_TO_SZENARIO:
@@ -1264,7 +1264,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case SHOW_SZENARIO:
-            Tool3lgm.tool.createSzenarioFrame(gdcoll.getSzenario(Integer.parseInt(argv[argc - 1])));
+            Static.getTool().createSzenarioFrame(gdcoll.getSzenario(Integer.parseInt(argv[argc - 1])));
             break;
 
         case JOIN_SELECTED:
@@ -2199,7 +2199,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(pid);
         if (selectedContainer.size() != 0) {
             if (font == null) {
-                font = EasyDialogAccess.getFontByChooser(Tool3lgm.tool, getLastSelected().getFont());
+                font = EasyDialogAccess.getFontByChooser(Static.getMainFrame(), getLastSelected().getFont());
             }
             if (font != null) {
                 for (ElementContainer ec : selectedContainer) {
@@ -2877,7 +2877,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (GraphDocumentListener gdl : listener) {
                 gdl.activeLayerChanged(this);
             }
-            Tool3lgm.tool.getToolBar().setActiveLayer(gdcoll.getActiveLayer());
+            Static.getTool().getToolBar().setActiveLayer(gdcoll.getActiveLayer());
             break;
         case COLORS_CHANGED:
             for (GraphDocumentListener gdl : listener) {
@@ -4402,12 +4402,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             finish_transaction(pid);
             return;
         }
-        Tool3lgm.tool.createSzenarioFrame(szen);
+        Static.getTool().createSzenarioFrame(szen);
         szen.setPageSizeFactor(pageSizeFactor);
         szen.getMapping().adapt(getMapping());
         szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
         addElementsToSzenario(szen.getHashString(), elements, pid);
-        Tool3lgm.tool.activeLayerChanged(szen);
+        Static.getTool().activeLayerChanged(szen);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
@@ -4469,7 +4469,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             finish_transaction(pid);
             return;
         }
-        Tool3lgm.tool.createSzenarioFrame(szen);
+        Static.getTool().createSzenarioFrame(szen);
         for (ElementContainer ec : elements) {
             linkElementToSzenario(szen.getHashString(), ec.getHashString(), pid);
         }

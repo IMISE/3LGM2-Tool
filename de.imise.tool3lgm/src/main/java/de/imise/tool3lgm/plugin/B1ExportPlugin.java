@@ -13,7 +13,7 @@ import javax.swing.Action;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
@@ -33,7 +33,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  * Exportiert eine Tabelle mit den Spalten
  * "Aufgabe_ID", "Aufgabe", "Teilaufgabe_ID", "Teilaufgabe", "Beschreibung", "Ort der Durchführung", "Verantwortliche Rolle", "Anwendungssystem",
  * "Physischer DV-Baustein", "Benötiger Speicherplatz"
- * 
+ *
  * @author AXS
  * @create 02.07.2012
  */
@@ -47,7 +47,7 @@ public class B1ExportPlugin implements Plugin {
         return new AbstractAction("Bereich 1 Tabellenexport") {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+                GraphDocument doc = Static.getSelectedDoc();
                 if (doc == null) {
                     return;
                 }
@@ -72,7 +72,7 @@ public class B1ExportPlugin implements Plugin {
                 fileChooser.addChoosableFileFilter(filter);
                 fileChooser.setFileFilter(filter);
                 fileChooser.setSelectedFile(lastSelectedFile);
-                if (fileChooser.showSaveDialog(Tool3lgm.tool) != ExtendedFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showSaveDialog(Static.getMainFrame()) != ExtendedFileChooser.APPROVE_OPTION) {
                     return;
                 }
                 lastSelectedFile = fileChooser.getSelectedFile();
@@ -88,21 +88,21 @@ public class B1ExportPlugin implements Plugin {
                 try {
                     FileHandler.writeFile(lastSelectedFile, is);
                 } catch (IOException e1) {
-                    ExtendedFileChooser.showSaveErrorMessage(Tool3lgm.tool);
+                    ExtendedFileChooser.showSaveErrorMessage(Static.getMainFrame());
                 }
 
             }
 
             @Override
             public boolean isEnabled() {
-                return Tool3lgm.tool.getSelectedDoc() != null;
+                return Static.getSelectedDoc() != null;
             }
         };
     }
 
     /**
      * Schreibt die Zeile für die übergebene Aufgabe, die eine Blattaufgabe im Hierarchiebaum sein sollte
-     * 
+     *
      * @param functionLeafEc
      */
     private static final String getLine(final ElementContainer leafFuncEc, final int maxHierarchyDepth) {
@@ -210,7 +210,7 @@ public class B1ExportPlugin implements Plugin {
             linePartBuilder.append("\t");
 
             //Physische DV-Baustein-Konfigs holen. ACHTUNG: Auch hier werden einfach alle Konfigurationen in einen
-            //Topf geworfen, also alle PDVB 
+            //Topf geworfen, also alle PDVB
             ArrayList<ElementContainer> pdvbKonfigs = new ArrayList<ElementContainer>();
             for (ElementContainer awb : awbs) {
                 pdvbKonfigs.addAll(awb.getElement().getConnectedContainer(DBKonfiguration.class, doc));
@@ -261,7 +261,7 @@ public class B1ExportPlugin implements Plugin {
      * Fügt dem übergebenen {@link StringBuilder} die Info an, dass keine Organisationseinheit
      * mit der Aufgabe aus dieser Zeile verknüpft ist und füllt die hinteren Spalten mit Leerspalten
      * und schließt die Gesamtzeile mit einem Zeilenumbruch ab.
-     * 
+     *
      * @param sb
      */
     private static final void appendNoOeConnected(final StringBuilder sb) {
@@ -317,7 +317,7 @@ public class B1ExportPlugin implements Plugin {
 
     /**
      * Gibt den Tabellenkopf aus
-     * 
+     *
      * @param hierarchyDepth
      *            Tiefe der Aufgabenhierarchie
      */
@@ -346,7 +346,7 @@ public class B1ExportPlugin implements Plugin {
     /**
      * Liefert die Anzahl an mit Teil-Von-Beziehungen übergeordneten Elementen im selben {@link GraphDocument} des
      * übergebenen Containers.
-     * 
+     *
      * @param ec
      * @return
      */

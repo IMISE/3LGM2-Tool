@@ -14,7 +14,7 @@ import javax.swing.Action;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -36,7 +36,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  * die Anzahl der mit dem jeweiligen Anwendungssystem verknüpften phys. Datenverarbeitungsbausteine.
  * Die dargstellten Anwendungssysteme kommen aus dem aktuell selketierten Teilmodell, die verbundenen Phys.
  * Datenverabeitungsbausteine werden im Gesamtmodell gesucht.
- * 
+ *
  * @author AXS
  * @create 07.09.2012
  */
@@ -55,7 +55,7 @@ public class ExportPdvb4AwbPlugin implements Plugin {
         return new AbstractAction(german ? "CSV-Export Anwendungssysteme -> Phys. Datenverabeitungsbausteine" : "CSV Export Application Systems -> Phys. Data Processing Components") {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+                GraphDocument doc = Static.getSelectedDoc();
                 if (doc == null) {
                     return;
                 }
@@ -65,7 +65,7 @@ public class ExportPdvb4AwbPlugin implements Plugin {
                 fileChooser.addChoosableFileFilter(filter);
                 fileChooser.setFileFilter(filter);
                 fileChooser.setSelectedFile(lastSelectedFile);
-                if (fileChooser.showSaveDialog(Tool3lgm.tool) != ExtendedFileChooser.APPROVE_OPTION) {
+                if (fileChooser.showSaveDialog(Static.getMainFrame()) != ExtendedFileChooser.APPROVE_OPTION) {
                     return;
                 }
                 lastSelectedFile = fileChooser.getSelectedFile();
@@ -81,21 +81,21 @@ public class ExportPdvb4AwbPlugin implements Plugin {
                 try {
                     FileHandler.writeFile(lastSelectedFile, is);
                 } catch (IOException e1) {
-                    ExtendedFileChooser.showSaveErrorMessage(Tool3lgm.tool);
+                    ExtendedFileChooser.showSaveErrorMessage(Static.getMainFrame());
                 }
 
             }
 
             @Override
             public boolean isEnabled() {
-                return Tool3lgm.tool.getSelectedDoc() != null;
+                return Static.getSelectedDoc() != null;
             }
         };
     }
 
     /**
      * Erzeugt den gesamten Eintrag für ein einzelnes Anwendungssystem.
-     * 
+     *
      * @param applicationSystem
      *            Anwendungssystem, für das alle Datenverabeitungsbausteine angehängt werden sollen.
      * @param entryBuilder
@@ -131,7 +131,7 @@ public class ExportPdvb4AwbPlugin implements Plugin {
             if (pdvbList.size() > 0) {
                 pdvbList.remove(0);
             }
-            //alle anderen Spalten nur den aktuellen Pdvb eintragen 
+            //alle anderen Spalten nur den aktuellen Pdvb eintragen
             for (ModelElement pdvb : pdvbList) {
                 entryBuilder.append(GraphDocument.getParseSaveString(""));
                 entryBuilder.append("\t");

@@ -13,7 +13,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -299,7 +299,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 layer = szenario.getLayer(Integer.parseInt(atts.getValue("number")));
 
             } else if (qName.equals("szenario")) {
-                Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadSzenario") + atts.getValue("titel") + " ...");
+                Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
 
                 if (copyAndPaste <= 0) {
                     szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
@@ -316,7 +316,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("images")) {
-                Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadIcons"));
+                Static.setProgressDialogStatusLabel("labelReadIcons");
 
             } else if (qName.equals("header")) {
 
@@ -330,7 +330,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 copyAndPaste = collection.getCopyAndPaste();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
-                doc = Tool3lgm.tool.getSelectedDoc().getCollection().getMainGraphDocument();
+                doc = Static.getSelectedGDCollection().getMainGraphDocument();
                 copyAndPaste = collection.getCopyAndPaste();
                 collection.setCopyAndPaste(copyAndPaste + 1);
                 copyAndPaste = collection.getCopyAndPaste();
@@ -341,7 +341,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 kantenContainer = new ArrayList<EdgeContainer>();
 
             } else if (qName.equals("objects")) {
-                Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadElements"));
+                Static.setProgressDialogStatusLabel("labelReadElements");
 
             }
         } catch (Exception e) {
@@ -572,7 +572,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 collection.setFileVersion(elementValue.toString());
 
             } else if (qName.equals("modell_3lgm_2")) {
-                de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReferenceIcons"));
+                Static.setProgressDialogStatusLabel("labelReferenceIcons");
 
                 /* Icons in den Container einlesen */
                 for (NodeContainer kc : containerWithIcon) {
@@ -587,7 +587,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
             } else if (qName.equals("objects")) {
 
-                Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelConnectTraces"));
+                Static.setProgressDialogStatusLabel("labelConnectTraces");
 
                 /* die HashStrings für das Start- bzw. End-Objekt einer Kante auflösen und die wirklichen Knoten setzten */
                 if (copyAndPaste > 0) {

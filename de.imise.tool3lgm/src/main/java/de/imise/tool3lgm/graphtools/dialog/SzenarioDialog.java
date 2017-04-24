@@ -23,7 +23,7 @@ import javax.swing.JTable;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -133,7 +133,7 @@ public class SzenarioDialog extends JDialog {
     /**
      * zeigt einen Dialog zum auswählen der Szenarios, die exportiert werden sollen und zur Auswahl
      * der Zieldatei, und exportiert die Szenarios anschließend in die Zieldatei
-     * 
+     *
      * @param owner das übergeordnete JFrame
      * @param collection die GDCollection aus der die Szenarios exportiert werden sollen
      */
@@ -144,7 +144,7 @@ public class SzenarioDialog extends JDialog {
 
     /**
      * zeigt einen Dialog zum auswählen der Szenarios, die importiert werden sollen
-     * 
+     *
      * @param owner das übergeordnete JFrame
      * @param collection die GDCollection aus der die Szenarios importiert werden sollen
      * @return Array mit den Szenarios die importiert werden sollen
@@ -170,10 +170,10 @@ public class SzenarioDialog extends JDialog {
                 return false;
             }
 
-            Tool3lgm.tool.showProgressDialog();
-            Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("exportSzenario"));
+            Static.showProgressDialog();
+            Static.setProgressDialogStatusLabel("exportSzenario");
             collection.exportSzenarios(((SzenarioTableModel) table.getModel()).getSelectedSzenarios(), file);
-            Tool3lgm.tool.closeProgressDialog();
+            Static.closeProgressDialog();
         }
 
         return true;

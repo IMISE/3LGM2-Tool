@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
@@ -304,8 +304,8 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public synchronized final void copyToClipboard() {
         if (selectedContainer.size() == 0) {
             return;
@@ -334,10 +334,10 @@ public class LGMGraphDocument extends GraphDocument {
         } catch (Exception e) {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                Tool3lgmConstants.getResString("ok")
+                    Tool3lgmConstants.getResString("ok")
             };
-            JOptionPane.showOptionDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null,
-                    buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION,
+                    JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -347,8 +347,8 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public synchronized final void cutToClipboard() {
         start_transaction(TransactionManager.STANDARD_PID);
         copyToClipboard();
@@ -359,8 +359,8 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public synchronized final void clearClipboard() {
         File f = new File(Tool3lgmConstants.getClipboardPath());
         if (f.exists()) {
@@ -711,8 +711,8 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public synchronized void pasteClipboard() {
         File file = new File(Tool3lgmConstants.getClipboardPath());
         if (!file.exists()) {
@@ -729,10 +729,10 @@ public class LGMGraphDocument extends GraphDocument {
         } catch (Exception e) {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                Tool3lgmConstants.getResString("ok")
+                    Tool3lgmConstants.getResString("ok")
             };
-            JOptionPane.showOptionDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null,
-                    buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
+                    null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -755,9 +755,9 @@ public class LGMGraphDocument extends GraphDocument {
             undo(pid);
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                Tool3lgmConstants.getResString("ok")
+                    Tool3lgmConstants.getResString("ok")
             };
-            JOptionPane.showOptionDialog(Tool3lgm.tool, "", Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), "", Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -784,16 +784,16 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     //	/**
-    //	 * 
+    //	 *
     //	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
-    //	 * 
+    //	 *
     //	 * Kanten werden nicht richtig in das neue Modell übenommen, d.h. der Container wird in diesem
     //	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Kante-Container
     //	 * werden aber richtig in den Elementen eingetragen.
-    //	 * 
+    //	 *
     //	 * Die untere Funktion ist die alte Variante; Die hier auskommentierte sollte die neue werden.
     //	 * Allerdings liegt der Fehler irgendwo anders. Hier sollte unbeding auch beachtet werden, dass
-    //	 * wenn man ein Element in ein anderes Modell übernimmt, dass im Ursprungsmodell Verbindungen 
+    //	 * wenn man ein Element in ein anderes Modell übernimmt, dass im Ursprungsmodell Verbindungen
     //	 * zu anderen Elementen hat, auch Verbindungen zu Elementen übernommen werden, die sowohl im
     //	 * Urpsungsmodell als auc im Zielmodell vorkommen. (Z.B. übernimmt man erst eine Aufgabe in ein
     //	 * Modell und danach bei einer 2. Übernahme eine Unteraufgabe dieser Aufgabe in das gleiche Modell,
@@ -825,11 +825,11 @@ public class LGMGraphDocument extends GraphDocument {
     //		ArrayList<ModelElement> copyElements = new ArrayList<ModelElement>();
     //		HashSet<UserField> userFields = new HashSet<UserField>();
     //		gdcoll.resolveCopyDependencies(selectedContainer, copyElements, userFields);
-    //		
+    //
     //		//Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
     //		//andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt
     //		ArrayList<ModelElement> splitEdges = new ArrayList<ModelElement>();
-    //		
+    //
     //		for (int i=0; i<copyElements.size(); i++) {
     //			ModelElement me = copyElements.get(i);
     //			if (me instanceof Knickpunkt)
@@ -842,7 +842,7 @@ public class LGMGraphDocument extends GraphDocument {
     //					splitEdges.add(edge);
     //			}
     //		}
-    //		
+    //
     //		for (UserField uf : userFields){
     //			if (uf != null)
     //				destGDColl.getUserFieldDefinitions().add(uf);
@@ -970,7 +970,7 @@ public class LGMGraphDocument extends GraphDocument {
     //		finish_transaction(TransactionManager.STANDARD_PID, false);
     //		distributeEvent(SELECTION_CHANGED);
     //		dest.distributeEvent(DATA_CHANGED);
-    //	}	
+    //	}
 
     /**
      * @param dest
@@ -1039,7 +1039,7 @@ public class LGMGraphDocument extends GraphDocument {
                     if ((overwriteJoinNothing & 1) == 0) {
                         select(insertC, pid);
                         distributeEvent(SELECTION_CHANGED, insertC, null, pid);
-                        overwriteJoinNothing = OverwriteDialog.showDialog(Tool3lgm.tool, newE, insert);
+                        overwriteJoinNothing = OverwriteDialog.showDialog(Static.getMainFrame(), newE, insert);
                     }
 
                     if ((overwriteJoinNothing & OverwriteDialog.OVERWRITE) > 0) {
@@ -1137,7 +1137,7 @@ public class LGMGraphDocument extends GraphDocument {
 
     /**
      * Fuehrt selektierte ModelElemente in diesem oder in beiden Modellen zusammen
-     * 
+     *
      * @param doc2
      * @param saveInBoth
      */

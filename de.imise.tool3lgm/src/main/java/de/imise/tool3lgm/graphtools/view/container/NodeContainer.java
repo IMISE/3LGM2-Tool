@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.Szenario;
@@ -26,7 +26,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
  * @author N.N.
  * @create Very long time ago
  */
-public class NodeContainer extends ElementContainer/* implements GraphDocumentListener, InTransactionListener */{
+public class NodeContainer extends ElementContainer/* implements GraphDocumentListener, InTransactionListener */ {
 
     /**
      * COMMENTME
@@ -50,7 +50,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     //dieser Wert steht für alles Mögliche zur Verfügung (daher der unspezifische Name)
     //Momentane Verwenung:
     //	- AufgabenContainer:	Anzahl ihrer redundanten Konfigs
-    //	- ObjekttypContainer:	Anzahl der DBS und Dokumentensammlungen, in denen sie redundant gespeichert werden  
+    //	- ObjekttypContainer:	Anzahl der DBS und Dokumentensammlungen, in denen sie redundant gespeichert werden
     private int variable;
 
     /**
@@ -76,8 +76,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     protected LGMTreeNode treeNode = null;
 
     /**
-	 * 
-	 */
+     *
+     */
     public NodeContainer() {
         super();
         init();
@@ -112,8 +112,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void init() {
         if (doc == null) {
             return;
@@ -130,7 +130,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
                 lastColor = Prozess.farben[((Prozess) me).color];
                 layout.bg_color = lastColor;
             }
-            Image image = Tool3lgm.tool.createImage(14, 14);
+            Image image = Static.getMainFrame().createImage(14, 14);
             Graphics g = image.getGraphics();
             g.setColor(layout.bg_color);
             g.fillRect(0, 0, 14, 14);
@@ -159,7 +159,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Setzt die Koordinaten des Knotens.
-     * 
+     *
      * @see java.awt.Component#setLocation(int, int)
      */
     @Override
@@ -173,7 +173,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Setzt die Koordinaten des Knotens.
-     * 
+     *
      * @param x
      * @param y
      * @param w
@@ -189,7 +189,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Gibt die X-Koordinate des Mittelpunktes zurueck
-     * 
+     *
      * @see javax.swing.JComponent#getX()
      */
     @Override
@@ -215,7 +215,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Gibt die Y-Koordinate des Mittelpunktes zurueck
-     * 
+     *
      * @see javax.swing.JComponent#getY()
      */
     @Override
@@ -284,7 +284,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Gibt die Breite zurueck
-     * 
+     *
      * @see javax.swing.JComponent#getWidth()
      */
     @Override
@@ -297,7 +297,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Gibt die Hoehe zurueck
-     * 
+     *
      * @see javax.swing.JComponent#getHeight()
      */
     @Override
@@ -310,7 +310,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Setzt die Breite des Objektes, bei Symmetrie auch die Hoehe.
-     * 
+     *
      * @param w
      */
     public final void setWidth(final int w) {
@@ -319,7 +319,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Setzt die Hoehe des Objektes, bei Symmetrie auch die Breite.
-     * 
+     *
      * @param h
      */
     public final void setHeight(final int h) {
@@ -328,7 +328,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Setzt die Groesse des Knotens. Bei Symmetrie geht die Breite vor.
-     * 
+     *
      * @see java.awt.Component#setSize(int, int)
      */
     @Override
@@ -351,7 +351,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Setzt die Groesse des Knotens für die Buttons
-     * 
+     *
      * @param w
      * @param h
      */
@@ -364,9 +364,9 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         refreshText();
     }
 
-    //	public final void setSymmetric(boolean b) { 
+    //	public final void setSymmetric(boolean b) {
     //        ((Knoten)me).setSymmetric(b);
-    //        if (((Knoten)me).Symmetric()) layout.height=layout.width; 
+    //        if (((Knoten)me).Symmetric()) layout.height=layout.width;
     //		refreshText();
     //	}
 
@@ -423,7 +423,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     /**
      * Verannlasst das Zeichen des Containers über die übergeordnete Implementierung.
-     * 
+     *
      * @param g
      */
     public final void paintSuperComponent(final Graphics g) {
@@ -450,8 +450,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void setIcon() {
         if (layout != null) {
             setIcon(layout.icon, doc.getCollection().getIconTable());
@@ -467,17 +467,17 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     //### Beginn GraphDocumentListener #######################################################################################
 
-    //	
+    //
     //	public void dataChanged(GraphDocument source,int pid){
     //		dataChanged(source);
     //	}
-    //	
+    //
     //	public void dataChanged(GraphDocument source){
     //		if ((me instanceof Prozess) && (isVisible()) && (doc instanceof Szenario)){
     //			deleteSpecialInfoFromMyTargets();
     //			specialInfoTargets = me.getConnectedContainer(Aufgabe.class,doc,PrzAufVerbindung.class,Doppelkante.FORWARD, false);
     //			addSpecialInfoToMyTargets(false);
-    //		}			
+    //		}
     //	}
     //
     //	public void elementGraphicsChanged(GraphDocument source, ElementContainer element){

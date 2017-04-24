@@ -17,6 +17,7 @@ import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
@@ -193,7 +194,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * Setzt das GraphDocument auf das übergebene und tauscht bei allen
      * MenuItems den ContextListener aus
-     * 
+     *
      * @param GraphDocument
      */
     public void changeContext(final LGMGraphDocument document) {
@@ -203,8 +204,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     // --- Methoden zur Statusveraenderung --- Ende ---
 
     /**
-	 * 
-	 */
+     *
+     */
     @SuppressWarnings("unchecked")
     private void init() {
         int c;
@@ -371,8 +372,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void checkConfigurationSubMenu() {
         boolean b = false;
         for (ElementContainer selectedEC : doc.selectedContainer) {
@@ -387,7 +388,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     /**
      * Liefert das Menü für die untergeordneten Elemente.
-     * 
+     *
      * @return
      */
     private JMenu getSubElemMenu() {
@@ -423,7 +424,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * Liefert das Menü, mit dem selektierte Elemente in andere Teilmodelle
      * übernommen werden können.
-     * 
+     *
      * @return
      */
     private JMenu getAddToSzenarioMenu() {
@@ -439,7 +440,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             szenario_menu.add(item);
 
-            if (UserProperties.isEnableSubmodelBrowser() && szen == Tool3lgm.tool.getSelectedDoc()) {
+            if (UserProperties.isEnableSubmodelBrowser() && szen == Static.getSelectedDoc()) {
                 item.setEnabled(false);
                 continue;
             }
@@ -461,7 +462,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     /**
      * Menü für das verknüpfen mit einem Teilmodell
-     * 
+     *
      * @return
      */
     private JMenu getLinkToSzenarioMenu() {
@@ -488,7 +489,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     /**
      * Kontextmenü eines Einzelknotens
-     * 
+     *
      * @param contextSource
      * @param ec
      * @return
@@ -754,7 +755,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                         }
-                    } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */{
+                    } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
                         String label = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getForwardMetaAssociationName(edgeClass, false, true) : ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
                         String toolTip = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
                         boolean connectable = false;
@@ -1089,8 +1090,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void check_cb_menu() {
         check_undo_redo();
         if (doc == null) {
@@ -1125,8 +1126,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void check_undo_redo() {
         if (doc == null) {
             undo.setEnabled(false);
@@ -1517,69 +1518,69 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     // Namensgebung: Button_ObjektTyp_Shift_Selection
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_shift_outside() {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_noshift_outside() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_layer_noshift_none() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_layer_noshift_knots() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_layer_noshift_traces() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_layer_noshift_multi() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_layer_shift_none() {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_layer_shift_knots() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static void left_layer_shift_traces() {
         doc.deselectAll(false);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_layer_shift_multi() {
     }
 
@@ -1681,43 +1682,43 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     // Linke Maustaste auf Knoten
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_noshift_none() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_noshift_knots() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_noshift_traces() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_noshift_multi() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_shift_none() {
         doc.addToSelection(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_shift_knots() {
         if (mc.isSelected()) {
             doc.deselect(mc, 0);
@@ -1727,15 +1728,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_shift_traces() {
         left_knot_shift_knots();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knot_shift_multi() {
         left_knot_shift_knots();
     }
@@ -1743,43 +1744,43 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     // Klicks auf die Kanten
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_noshift_none() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_noshift_knots() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_noshift_traces() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_noshift_multi() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_shift_none() {
         doc.addToSelection(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_shift_knots() {
         if (mc.isSelected()) {
             doc.deselect(mc, 0);
@@ -1789,15 +1790,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_shift_traces() {
         left_trace_shift_knots();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_trace_shift_multi() {
         left_trace_shift_knots();
     }
@@ -1860,41 +1861,41 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     // Klicks mit links
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knothand_noshift_knots() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knothand_noshift_traces() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knothand_noshift_multi() {
         doc.select(mc, 0);
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knothand_shift_knots() {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knothand_shift_traces() {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void left_knothand_shift_multi() {
     }
 
@@ -1960,7 +1961,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * Gibt ein Menü zurück, welches die Analysen für das aktuell ausgewählten
      * Element enthält.
-     * 
+     *
      * @return Analysemenü
      */
     private static JMenu getAnalyseMenu() {
@@ -2022,11 +2023,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private static JMenuItem getAddToModelMenu() {
-        if (Tool3lgm.tool.getCollectionCount() < 2) {
+        if (Static.getCollectionCount() < 2) {
             return null;
         }
         JMenu menu = new JMenu(Tool3lgmConstants.getResString("inmodel"));
-        for (GDCollection gdcoll : Tool3lgm.tool.getCollections()) {
+        for (GDCollection gdcoll : Static.getCollections()) {
             if (gdcoll != doc.getCollection()) {
                 menu.add(getSubModelMenu(gdcoll));
             }
@@ -2072,7 +2073,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             return null;
         }
 
-        if (Tool3lgm.tool.getCollectionCount() < 2) {
+        if (Static.getCollectionCount() < 2) {
             return null;
         }
 
@@ -2085,12 +2086,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         ModelElement me1 = doc.getLastSelected().getElement();
 
-        for (GDCollection gdcoll : Tool3lgm.tool.getCollections()) {
+        for (GDCollection gdcoll : Static.getCollections()) {
             if (gdcoll == doc.getCollection()) {
                 continue;
             }
 
-            final GraphDocument doc2 = Tool3lgm.tool.getPreSelectedGDCollection().getSelectedDoc();
+            final GraphDocument doc2 = Static.getPreSelectedGDCollection().getSelectedDoc();
 
             if (!doc2.isSingleSelection()) {
                 continue;
@@ -2130,7 +2131,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             //					doc.joinElements(doc2, true);
             //				}
             //			});
-            //			menu.add(item); 			
+            //			menu.add(item);
         }
 
         return menu.getItemCount() > 0 ? menu : null;

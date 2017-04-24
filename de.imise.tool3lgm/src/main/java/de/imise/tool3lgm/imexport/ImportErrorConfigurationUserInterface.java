@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 
 public class ImportErrorConfigurationUserInterface {
 
@@ -52,7 +52,7 @@ public class ImportErrorConfigurationUserInterface {
     }
 
     private void showErrorDialog(final String message) {
-        JOptionPane.showMessageDialog(Tool3lgm.tool, message, "Import Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(Static.getMainFrame(), message, "Import Error", JOptionPane.ERROR_MESSAGE);
     }
 
 }

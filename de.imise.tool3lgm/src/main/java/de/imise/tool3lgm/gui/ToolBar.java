@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.ToolTipManager;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -47,7 +47,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     //	 }
     //	 }
     //	 }
-    //	 }); 
+    //	 });
     //	 */
 
     int windowIndex = -1;
@@ -179,7 +179,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     }
 
     public void checkUndoandRedo() {
-        GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument gd = Static.getSelectedDoc();
         if (gd == null) {
             undo.setEnabled(false);
             redo.setEnabled(false);
@@ -198,7 +198,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     }
 
     public void checkMulti() {
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         if (frame == null) {
             return;
         }
@@ -221,7 +221,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     public void changeMultiSingleView() {
 
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         if (!(frame instanceof ToolInternalFrame)) {
             return;
         }
@@ -235,7 +235,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
             multi.setIcon(Tool3lgmConstants.getIcon("singelview.gif"));
         }
 
-        Tool3lgm.tool.activeLayerChanged(Tool3lgm.tool.getSelectedDoc());
+        Static.getTool().activeLayerChanged(Static.getSelectedDoc());
     }
 
     @Override
@@ -273,7 +273,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
             return;
         }
 
-        GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument doc = Static.getSelectedDoc();
         if (doc == null) {
             return;
         }
@@ -410,10 +410,10 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void checkLayer() {
-        GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument doc = Static.getSelectedDoc();
         if (doc != null) {
             setActiveLayer(doc.getCollection().getActiveLayer());
         }
@@ -448,10 +448,10 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void updateUndoRedoToolTips() {
-        GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument doc = Static.getSelectedDoc();
 
         if (doc == null || !doc.isVerificationMode()) {
             undo.setToolTipText(Tool3lgmConstants.getResString("undo"));

@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.util.Alphabetical;
 
@@ -138,7 +138,7 @@ public class AnalyseRepositoryFrame extends JFrame {
      */
     private AnalyseRepositoryFrame() {
         super(Tool3lgmConstants.getResString("repository"));
-        setIconImage(Tool3lgm.tool.getIconImage());
+        setIconImage(Static.getMainFrame().getIconImage());
 
         JMenu menuFile = new JMenu(Tool3lgmConstants.getResString("file"));
         menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_LOAD_STANDARD_REPOSITORY));

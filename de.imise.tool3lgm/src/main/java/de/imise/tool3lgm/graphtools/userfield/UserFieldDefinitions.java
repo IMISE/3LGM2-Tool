@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -29,7 +29,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * Beinhaltet alle <code>UserField</code>s in einer <code>HashMap</code>, die für Knoten, Kanten und das Modell deklariert und definiert wurden.
- * 
+ *
  * @author Thomas Rudert
  */
 public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
@@ -79,7 +79,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Liefert einen anzeigbaren String für den globalen Identifier (da es Modellvariablen sind wird hier der Res-String für Model zurück gegeben)
-     * 
+     *
      * @return
      */
     public static String getDisplayableGlobalFieldIdentifierName() {
@@ -112,7 +112,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Erzeugt eine neue UserFielddefinition für das übergebene Modell
-     * 
+     *
      * @param gdcoll
      */
     public UserFieldDefinitions(final GDCollection gdcoll) {
@@ -134,7 +134,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * Hängt der zuletzt benutzen Liste ein neues Element an. Die Methode erwartet beim Aufruf ein <code>UserField</code>. Das <code>UserField</code>
      * wird an eine Liste, die sich in der <code>classToUserFieldListMap</code>- HashMap befindet, angehangen. Methode wird beim Laden des Modells
      * aufgerufen.
-     * 
+     *
      * @param userField
      */
     public void add(final UserField userField) {
@@ -157,7 +157,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Fügt der zuletzt benutzen Liste ein neues Element ein. Positioniert am übergebenen Index.
-     * 
+     *
      * @param userField
      * @param index
      */
@@ -179,7 +179,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * Liefert <code>true</code>, wenn das übergebene <code>UserField</code> von anderen <code>UserField</code>s benutzt wird.<br>
      * Das trifft bei Kennzahlformeln, Knenzahlen und Verteilungsgewichten zu, die in anderen Kennzahlformeln verwendet werden. Außerdem wird für zu
      * löschende Format-UserFields geprüft, ob sie mind. einem anderen UserField als Format zugewiesen sind.
-     * 
+     *
      * @param userField
      * @return
      */
@@ -249,8 +249,8 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                         tmpList.add(userFieldsToDelete.get(i));
                     }
                 }
-                int answer = MultipleOptionPane.showConfirmDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("warnung"), Tool3lgmConstants.getErrString("userfield_still_in_use") + "\n" + Tool3lgmConstants.getResString("insgesamt") + ": "
-                        + userFieldsToDelete.size() + "\n" + tmpList + " ... ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int answer = MultipleOptionPane.showConfirmDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("warnung"),
+                        Tool3lgmConstants.getErrString("userfield_still_in_use") + "\n" + Tool3lgmConstants.getResString("insgesamt") + ": " + userFieldsToDelete.size() + "\n" + tmpList + " ... ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (answer != JOptionPane.YES_OPTION) {
                     return deleted;
                 }
@@ -358,7 +358,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     /**
      * Liefert ein Benutzerfeld, das anhand des Namens herausgesucht wird. ACHTUNG: Es wird immer nur das erste mit dem übergebenen Namen gefunden.
      * Gebraucht werden sollte diese Funktion nur beim Import von Daten, da der Name kein eindeutiges Kriterium ist.
-     * 
+     *
      * @param userFieldTargetClass
      * @param name
      * @return das erstebeste UserField mit dem übergebenen Namen oder <code>null</code>, wenn keins gefunden wurde
@@ -449,7 +449,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Liefert eine Liste aller UserFields mit einfachen Teilwertsummenformeln, die für die übergebene Element- und Kantenklasse definiert sind.
-     * 
+     *
      * @param me Elementklasse, für die das UserField mit der einfachen Teilwertsummenformel definiert ist
      * @param edgeClass Kantenklasse über die die einfache Teilwertsummenformel rechnnetr
      * @return
@@ -511,7 +511,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * Die Methode <code>get</code> gibt unter Angabe der zugehörigen Klasse und des entsprechenden Indices ein <code>UserField</code> zurück. Es wird
      * aus der HashMap die zur übergebenen Klasse gehörende ArrayList geladen, falls sie nicht schon geladen ist, und das Element an der Stelle
      * <code>index</code> zurückgegeben.
-     * 
+     *
      * @param userFieldTargetClass
      * @param index
      * @return UserField / public UserField get(Class<?> userFieldTargetClass, int index) { UserFieldList ufl =
@@ -530,7 +530,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Prüft für ein übergebenes <code>UserField</code>, ob es zu den berechenbaren Formel-UserFields gehört.
-     * 
+     *
      * @param formulaUserField
      * @return <code>true</code>, wenn es ein Formel-UserField ist, das berechnet werden kann, sonst <code>false</code>
      */
@@ -544,7 +544,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Prüft, ob die Formeldefinitionen konsistent sind - also ob sich die Formeln nicht im Kreis referenzieren.
-     * 
+     *
      * @return <code>false</code>, wenn alle Formeln berechnet werden können, sonst <code>true</code>
      */
     public boolean hasCrossReferences() {
@@ -562,7 +562,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                 sb.append("\n");
                 sb.append(inconsistentUserFields.get(i).getName());
             }
-            MultipleOptionPane.showInformationMessageDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("fehler"), sb.toString());
+            MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("fehler"), sb.toString());
             return true;
             //die Globale Option die Kennzahlen zu berechnen erstam abschalten
             //          UserProperties.setEnableClassificationNumberCalculation(false);
@@ -572,7 +572,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Prüft, ob sich ein FormeluserField in seiner Formel außerhalb einer verrechnungsfunktion selbst referenziert.
-     * 
+     *
      * @param userField
      * @return
      */
@@ -624,18 +624,18 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         // angegeben sind, die aus unterschiedlichen Richtungen rechnen wollen.
 
         // Das Vorgehen:
-        // In einer Schleife: 
+        // In einer Schleife:
         // 1) Durchsuche den Stringtokenizer nach userFieldHashes, die gleich dem eigenen userfield sind.
-        // 2) Wenn so einer gefunden wurde, handelt es sich um eine interne Verrechnung. 
-        //    Suche die Richtung: Prüfe, ob nach dem userFieldHash erst ein Verteilungsgewicht angegeben wurde. 
+        // 2) Wenn so einer gefunden wurde, handelt es sich um eine interne Verrechnung.
+        //    Suche die Richtung: Prüfe, ob nach dem userFieldHash erst ein Verteilungsgewicht angegeben wurde.
         //    (Das ist auch ein userFieldHash)
-        // 3) Wenn die Richtung gefunden wurde, prüfe, ob die Variable direction noch leer ist, 
+        // 3) Wenn die Richtung gefunden wurde, prüfe, ob die Variable direction noch leer ist,
         //      wenn ja, setze die Variable mit den Richtungswert.
         //      Wenn nein, dann prüfe, ob der Richtungswert gleich dem der Variable ist.
         //          Wenn ja, in der Schelife weitermachen
         //          Wenn nein: es liegt eine Kreisrefenz vor. Ausstieg aus der Schleife mit return true (true = es liegt eine Kreis.-ref. vor).
         //
-        //  Durch das einmalige Setzen der Richtung, weiß man, welche Richtungen alle folgenden internen Verrechnungsfunktionen haben müssen. 
+        //  Durch das einmalige Setzen der Richtung, weiß man, welche Richtungen alle folgenden internen Verrechnungsfunktionen haben müssen.
         //  Diese wird also als Referenzrichtung genutzt.
 
         st = new StringTokenizer(formula);
@@ -685,7 +685,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                     } else
                     // Wenn es kein Verteilungsgewicht ist, gehts gleich hier weiter.
                     if (direction.equals("")) {
-                        //Die erste Richtung, die gefunden wurde, wird als die Vergleichsrichtung angesegen. 
+                        //Die erste Richtung, die gefunden wurde, wird als die Vergleichsrichtung angesegen.
                         //Alle anderen Richtungen in Verrechnungsfuntionen, die sich selbst verrechnen, müssen die selbe Richtung haben.
                         direction = secondString;
                     } else if (!direction.equals(secondString)) {
@@ -712,7 +712,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     /**
      * Sortiert die Liste <code>formulaUserFieldList</code> so, dass sie konsistent ist. Siehe Kommentar zur Variable
      * <code>formulaUserFieldList</code>.
-     * 
+     *
      * @return Liste von <code>UserField</code>s, die sich im Kreus referenzieren oder von solchen Elementen abhängig sind bzw. <code>null</code>,
      *         wenn es keine Kreisreferenzen gibt
      */
@@ -772,10 +772,10 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                 formulaUserFieldList = calculateableFormulaList;
                 return null;
             }
-            //wenn die ganze Liste durchlaufen wurde, aber keine Kennzahlformel mehr zu den berechenbaren hinzugefügt 
+            //wenn die ganze Liste durchlaufen wurde, aber keine Kennzahlformel mehr zu den berechenbaren hinzugefügt
             //werden konnte, obwohl noch welche in der unsortierten Liste sind -> die noch in der Liste formulaUserFieldList
             //enthaltenen UserFields refrenzieren sich an mindesten einer Stelle in ihren Formeln gegenseitig (es reicht
-            //schon, dass sich 2 Formeln gegenseitig referenzieren, von denen dann der ganze Rest abhängt) 
+            //schon, dass sich 2 Formeln gegenseitig referenzieren, von denen dann der ganze Rest abhängt)
             if (lastSortedListSize == calculateableFormulaList.size()) {
                 ArrayList<UserField> inconsistentUserFields = new ArrayList<UserField>(formulaUserFieldList);
                 //füge zur globalen Liste wieder alle entfernten Elemente hinzu
@@ -795,7 +795,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     //     * Voraussetzung ist, dass vor dem Aufrufen dieser Funktion bereits die TargetClass des UserFields
     //     * auf GLOBAL_FORMAT_IDENTIFIER_CLASS gesetzt wurde und das UserField bereits als globale Variable
     //     * in den Definitions steht (also als UserField für die TargetClass GLOBAL_USERFIELD_IDENTIFIER_CLASS)
-    //     * 
+    //     *
     //     * @param userField
     //     */
     //    void MakeGlobalUserFieldToFormat(final UserField userField) {
@@ -819,7 +819,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         //FormelUserFields werden für alle Elemente einer Art immer komplett gelöscht, sobald
         //in der Liste aller Formel-UserFields (formulaUserFieldList) ein UserField für die
         //betreffende Elementart gefunden wurde. Beim nächsten UserField für diese Elementart
-        //braucht man nicht noch einmal alle UserFields zu löschen) 
+        //braucht man nicht noch einmal alle UserFields zu löschen)
         HashSet<Class<?>> resetedElementClasses = new HashSet<Class<?>>(15);
 
         //Das Hauptdokument der GDCollection holen (UserField-Änderungen gelten immer für alle
@@ -850,7 +850,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     /**
      * Berechnet den Wert des übergebenen <code>UserField</code>s für das übergebene <code>UserFieldTarget</code>.
-     * 
+     *
      * @param userField
      * @param target
      * @return <code>UserField.ERROR_OBJECT_VALUE</code>, wenn die Berechnung nicht durchgeführt werden konnte oder den <code>Double</code>-Wert als

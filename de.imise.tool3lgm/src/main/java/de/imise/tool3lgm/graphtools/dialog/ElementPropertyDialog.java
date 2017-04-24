@@ -12,8 +12,10 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -30,7 +32,7 @@ import de.imise.util.swing.component.TabbedPane;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Knoten und Kanten.<br>
- * 
+ *
  * @author N.N., AXS
  */
 public class ElementPropertyDialog extends AbstractPropertyDialog implements ActionListener, InTransactionListener {
@@ -112,8 +114,9 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         getContentPane().add(buttonpanel, BorderLayout.SOUTH);
 
         pack();
-        int xx = de.imise.tool3lgm.Tool3lgm.tool.getX() + 100;
-        int yy = de.imise.tool3lgm.Tool3lgm.tool.getY() + 100;
+        JFrame mainFrame = Static.getMainFrame();
+        int xx = mainFrame.getX() + 100;
+        int yy = mainFrame.getY() + 100;
         if (lastWidth == -1) {
             setLastWidth(DEFAULT_SIZE.width);
             setLastHeight(DEFAULT_SIZE.height);
@@ -127,8 +130,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
                 }
             }
             if (Toolkit.getDefaultToolkit().getScreenSize().width - xx < 150 || Toolkit.getDefaultToolkit().getScreenSize().height - yy < 150) {
-                xx = de.imise.tool3lgm.Tool3lgm.tool.getX() + 100;
-                yy = de.imise.tool3lgm.Tool3lgm.tool.getY() + 100;
+                xx = mainFrame.getX() + 100;
+                yy = mainFrame.getY() + 100;
             }
         }
 
@@ -158,8 +161,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void showDialog() {
         doc.start_transaction(getTransactionID());
         doc.addInTransactionListener(this);
@@ -174,8 +177,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void commit() {
         //alle Panels committen
         for (int m = 0; m < tab.getTabCount(); m++) {
@@ -291,16 +294,16 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     // ####################################################################################
 
     /**
-	 * 
-	 */
+     *
+     */
     private void dialogPositionOrSizeChanged() {
         lastWidth = getWidth();
         lastHeight = getHeight();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void update() {
 
         if (closing) {

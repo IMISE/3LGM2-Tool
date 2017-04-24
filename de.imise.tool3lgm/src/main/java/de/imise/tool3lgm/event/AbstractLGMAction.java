@@ -6,6 +6,7 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GDCommands;
@@ -19,7 +20,7 @@ import de.imise.util.swing.event.ExtendedAction;
 
 /**
  * Oberklasse aller Actions in diesem Package. Ist die einzige nach außen hin sichtbare Klasse.
- * 
+ *
  * @author fstephan
  */
 public abstract class AbstractLGMAction extends ExtendedAction {
@@ -110,27 +111,22 @@ public abstract class AbstractLGMAction extends ExtendedAction {
 
     /** Gibt das gerade aktivierte Frame zurück */
     AbstractInternalFrame getActiveFrame() {
-        return getTool().getActiveFrame();
+        return Static.getActiveFrame();
     }
 
     /** Gibt die momentan ausgewählte {@link GDCollection} zurück */
     GDCollection getSelectedCollection() {
-        return getSelectedDoc().getCollection();
+        return Static.getSelectedGDCollection();
     }
 
     /** Gibt das momentan ausgewählte {@link GraphDocument} zurück */
     LGMGraphDocument getSelectedDoc() {
-        Tool3lgm tool = getTool();
-        // kommt beim Initialisieren des Tools und der Actions vor
-        if (tool == null) {
-            return null;
-        }
-        return tool.getSelectedDoc();
+        return Static.getSelectedDoc();
     }
 
     /** Gibt die gerade laufende Instanz von 3lgm wieder */
     Tool3lgm getTool() {
-        return Tool3lgm.tool;
+        return Static.getTool();
     }
 
     /** Gibt zurück, ob ein gültiges aktives Frame existiert */

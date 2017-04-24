@@ -7,7 +7,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -731,7 +731,7 @@ public class ModelCleaner {
         mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, transactionId);
         if (showResultDialog) {
             String resultString = "Es wurde von " + aufCount + " Aufgaben Konfigurationen an Teilaufgaben übertragen.";
-            JOptionPane.showMessageDialog(Tool3lgm.tool, resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(Static.getMainFrame(), resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
         }
 
     }
@@ -782,7 +782,7 @@ public class ModelCleaner {
         String resultString = null;
         if (resultStringKey != null && !resultStringKey.trim().equals("")) {
             resultString = elems.size() + " " + Tool3lgmConstants.getResString(resultStringKey);
-            JOptionPane.showMessageDialog(Tool3lgm.tool, resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(Static.getMainFrame(), resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

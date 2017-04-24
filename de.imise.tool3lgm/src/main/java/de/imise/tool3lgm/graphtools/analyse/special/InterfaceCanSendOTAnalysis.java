@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
@@ -35,8 +35,8 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
 
     /**
-	 * 
-	 */
+     *
+     */
     public InterfaceCanSendOTAnalysis() {
         super();
         startknoten.add(Bausteinschnittstelle.class);
@@ -61,13 +61,13 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
 
         // die Schnittstelle versendet nichts
         if (connectedObjectTypes.size() == 0) {
-            MultipleOptionPane.showInformationMessageDialog(Tool3lgm.tool, resHandler.getString("NOT_SENDING_INTERFACE_DIALOG_TITLE"), resHandler.getString("NOT_SENDING_INTERFACE_DIALOG_MESSAGE"));
+            MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), resHandler.getString("NOT_SENDING_INTERFACE_DIALOG_TITLE"), resHandler.getString("NOT_SENDING_INTERFACE_DIALOG_MESSAGE"));
             return null;
         }
         // Dialog zur Auswahl der interessierenden OT anbieten
         AlphabeticalJList objectTypeList = new AlphabeticalJList(connectedObjectTypes);
         objectTypeList.setBorder(BorderFactory.createEtchedBorder());
-        if (new MultipleOptionPane().showComponentDialog(Tool3lgm.tool, resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
+        if (new MultipleOptionPane().showComponentDialog(Static.getMainFrame(), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
             return null;
         }
         List<ModelElement> objectTypes = new ArrayList<ModelElement>();
@@ -128,7 +128,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     /**
      * Liefert alle Objekttypen, die über Kommunikationsbeziehungen, die von der übergebenen
      * Schnittstelle ausgehen, versendet werden können.
-     * 
+     *
      * @param bs
      * @return
      */
@@ -144,7 +144,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     /**
      * Liefert für die übergebene Kommunikationsbeziehung alle Objekttypen, die die übergebene
      * Schnittstelle über sie versendet.
-     * 
+     *
      * @param bs
      * @param communicationLink
      * @return
@@ -163,7 +163,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     /**
      * Liefert für eine übergebene Schnittstelle alle Kommunikatinsbezeihungen, die die übergebenen
      * Objekttypen versenden können.
-     * 
+     *
      * @param bs
      * @param objectTypes
      * @return

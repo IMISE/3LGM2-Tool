@@ -6,7 +6,7 @@ import java.awt.Graphics;
 
 import javax.swing.JToggleButton;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -50,7 +50,7 @@ public class ToolButton extends JToggleButton {
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
-        GraphDocument gd = Tool3lgm.tool.getSelectedDoc();
+        GraphDocument gd = Static.getSelectedDoc();
         if (gd == null) {
             return;
         }

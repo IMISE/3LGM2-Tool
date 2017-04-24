@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -192,8 +193,9 @@ public class KommProzessPanel extends ElementDialogPanel {
         setAlreadyInitialized(false);
         // das Panel braucht nur geupdatet zu werden, wenn es sichtbar ist
         if (isVisible()) { // componentShown(new ComponentEvent(this, -1));
-            Cursor cursor = Tool3lgm.tool.getCursor();
-            Tool3lgm.tool.setCursor(Tool3lgmConstants.getWaitCursor());
+            Tool3lgm tool = Static.getTool();
+            Cursor cursor = tool.getCursor();
+            tool.setCursor(Tool3lgmConstants.getWaitCursor());
 
             setColumnWidth = true;
             updateTable(true);
@@ -205,7 +207,7 @@ public class KommProzessPanel extends ElementDialogPanel {
             showKonfsCheck.setSelected(showKonfs);
             highlightAllCommElementsCheck.setSelected(highlightAllCommElements);
 
-            Tool3lgm.tool.setCursor(cursor);
+            tool.setCursor(cursor);
         }
     }
 
@@ -561,8 +563,8 @@ public class KommProzessPanel extends ElementDialogPanel {
     }
 
     /**
-	 *
-	 */
+     *
+     */
     private class MyTable extends JTable {
         KommProzessPanel parent;
 

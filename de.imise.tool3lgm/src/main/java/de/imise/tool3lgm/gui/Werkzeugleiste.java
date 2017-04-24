@@ -12,7 +12,7 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -205,7 +205,7 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
     }
 
     private void addSlider() {
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         if (frame == null) {
             return;
         }
@@ -240,7 +240,7 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         }
 
         clearButtons();
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         if (frame == null) {
             return;
         }
@@ -262,7 +262,7 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
             return;
         }
 
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         if (frame == null) {
             return;
         }
@@ -297,7 +297,7 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
             return;
         }
 
-        AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
+        AbstractInternalFrame frame = Static.getActiveFrame();
         InputGraphArea area = null;
         if (frame != null && frame instanceof ToolInternalFrame) {
             area = ((ToolInternalFrame) frame).getInputGraphArea();

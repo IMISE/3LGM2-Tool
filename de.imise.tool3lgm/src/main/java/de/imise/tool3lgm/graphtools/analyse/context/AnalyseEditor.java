@@ -26,7 +26,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -145,7 +145,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         /**
          * Initialisiert die Listen und Labels Ruft initial die Methode auf, die die GUI-Elemente
          * zum <code>pathStepMainPanel</code> hinzufügt.
-         * 
+         *
          * @param listener
          */
         private void config(final ActionListener listener) {
@@ -191,7 +191,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
         /**
          * Füllt die nachfolgenden Listen
-         * 
+         *
          * @param newList
          */
         public void setValuesInNewList(final boolean newList) {
@@ -247,7 +247,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
     /**
      * Liefert ein Array der Klassen aller Elemente, die mit Elementen der übergebenen Art über
      * irgendeine Art von Kanten verbunden sein können.
-     * 
+     *
      * @param elementClassArray
      */
     @SuppressWarnings("unchecked")
@@ -282,7 +282,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
     /**
      * Zeigt den AnalyseEditor an.
-     * 
+     *
      * @param owner
      */
     public static void showDialog(final JDialog owner) {
@@ -294,7 +294,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
     /**
      * Zeigt den AnalyseEditor an.
-     * 
+     *
      * @param owner
      */
     public static void showDialog(final JFrame owner) {
@@ -354,7 +354,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         if (str.equals(Tool3lgmConstants.getResString("exit"))) {
             dispose();
         } else if (str.equals(Tool3lgmConstants.getResString("ana_start"))) {
-            GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+            GraphDocument doc = Static.getSelectedDoc();
             if (doc == null) {
                 return;
             }
@@ -442,7 +442,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
     /**
      * Liefert den XML-String
-     * 
+     *
      * @return XML-String der XMLAnalyse
      */
     public String getAnalyseString() {

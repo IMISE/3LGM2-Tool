@@ -18,7 +18,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
@@ -27,7 +27,7 @@ import de.imise.tool3lgm.tools.UnfloatableToolBar;
 
 /**
  * Klasse für die Werkzeugleiste eines InternalFrame mit Matrixdarstellung
- * 
+ *
  * @author Thomas Rudert, AXS (22.10.07)
  */
 public class TableToolBar extends UnfloatableToolBar implements ChangeListener, ActionListener {
@@ -63,13 +63,15 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     private final MetaPathSelector metaPathSelector;
 
     /**
-     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne eigene Teilelemente) angezeigt werden soll. Diese Box ist disabled, wenn weder in den Zeilen noch in den Spalten Elemente angezeigt werden, die in
+     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne eigene Teilelemente) angezeigt werden soll. Diese
+     * Box ist disabled, wenn weder in den Zeilen noch in den Spalten Elemente angezeigt werden, die in
      * Teil-Von-Beziehung stehen können.
      */
     private final JCheckBox showPartsOnlyCheckBox;
 
     /**
-     * Über diesen <code>boolean</code> wird sich die zuletzt gewählte Option aller geöffneten <code>showPartsOnlyCheckBox</code>es gemerkt, so dass eine neue Checkbox gleich mit diesem Wert initialisiert werden kann.
+     * Über diesen <code>boolean</code> wird sich die zuletzt gewählte Option aller geöffneten <code>showPartsOnlyCheckBox</code>es gemerkt, so dass
+     * eine neue Checkbox gleich mit diesem Wert initialisiert werden kann.
      */
     private static boolean lastShowPartsOnlyChoice = false;
 
@@ -109,12 +111,20 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
         showPartsOnlyCheckBox.addActionListener(this);
 
         JComponent[] child1 = {
-                rowLabel, metaPathSelector.getClass1ComboBox(), colLabel, metaPathSelector.getClass2ComboBox(), null, showPartsOnlyCheckBox
+                rowLabel,
+                metaPathSelector.getClass1ComboBox(),
+                colLabel,
+                metaPathSelector.getClass2ComboBox(),
+                null,
+                showPartsOnlyCheckBox
         };
         setGridBagLayout(choicePanel, child1, 2);
 
         JComponent[] child2 = {
-                new JLabel(Tool3lgmConstants.getResString("zeile") + ":"), rowElementLabel, new JLabel(Tool3lgmConstants.getResString("spalte") + ":"), colElementLabel
+                new JLabel(Tool3lgmConstants.getResString("zeile") + ":"),
+                rowElementLabel,
+                new JLabel(Tool3lgmConstants.getResString("spalte") + ":"),
+                colElementLabel
         };
         setGridBagLayout(positionPanel, child2, 2);
 
@@ -126,8 +136,9 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     }
 
     /**
-     * erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der linken oberen Ecke angefangen und dann zeilenweise angeordnet
-     * 
+     * erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der
+     * linken oberen Ecke angefangen und dann zeilenweise angeordnet
+     *
      * @param owner Componente, die die child-Componenten besitzen soll
      * @param childs Array mit den child-Componenten
      * @param columns Anzahl der Spalten in jeder Zeile
@@ -187,8 +198,9 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     }
 
     /**
-     * Aktualisiert die Positionslabels, die die Elemente der Zeile und Spalte darstellen. (Wird aufgerufen, wenn sich die Mausposition in der Matrix ändert)
-     * 
+     * Aktualisiert die Positionslabels, die die Elemente der Zeile und Spalte darstellen. (Wird aufgerufen, wenn sich die Mausposition in der Matrix
+     * ändert)
+     *
      * @param col {@link ModelElement}, das in der Spalte dargestellt werden soll
      * @param row {@link ModelElement}, das in der Zeile dargestellt werden soll
      */
@@ -210,11 +222,12 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
             //Dialog anzeigen, in dem man einen Pfad auswählen kann
             if (metaPathSelector.getSelectableMetaPathes() != null && metaPathSelector.getSelectableMetaPathes().length > 1) {
                 Object[] msg = {
-                        Tool3lgmConstants.getResString("text_path"), metaPathSelector.getMetaPathJList()
+                        Tool3lgmConstants.getResString("text_path"),
+                        metaPathSelector.getMetaPathJList()
                 };
                 JOptionPane optionPane = new JOptionPane();
                 optionPane.setMessage(msg);
-                JDialog dialog = optionPane.createDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("choice"));
+                JDialog dialog = optionPane.createDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("choice"));
                 dialog.setVisible(true);
             }
             update();

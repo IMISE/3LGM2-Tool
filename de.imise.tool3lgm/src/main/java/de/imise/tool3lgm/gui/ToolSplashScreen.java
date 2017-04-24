@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.tools.BrowseUtils;
 
@@ -39,8 +39,8 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     private static JDialog infoDialog;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static Rectangle2D linkPosition = null;
 
     /** Zeitraum der Entwicklung (braucht man nicht auslagern) */
@@ -48,7 +48,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
     /**
      * Überwacht die übergebene Componente auf Mausbewegungen
-     * 
+     *
      * @param c
      */
     private ToolSplashScreen(final Component c) {
@@ -74,7 +74,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     /**
      * Schreibt den Link an in das Infofenster.<br>
      * Wird normal false übergeben, wird der Link schwarz geschrieben, sonst blau.
-     * 
+     *
      * @param g
      * @param normal
      */
@@ -93,7 +93,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
     /**
      * Fügt in das übergebene Graphics-Object den Infotext ein.
-     * 
+     *
      * @param g
      */
     private static final void update(final Graphics g) {
@@ -118,11 +118,11 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
     /**
      * Liefert das Panel für den
-     * 
+     *
      * @return
      */
     public static final void getInfoDialog() {
-        infoDialog = new JDialog(Tool3lgm.tool, getResString("about"), true);
+        infoDialog = new JDialog(Static.getMainFrame(), getResString("about"), true);
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 

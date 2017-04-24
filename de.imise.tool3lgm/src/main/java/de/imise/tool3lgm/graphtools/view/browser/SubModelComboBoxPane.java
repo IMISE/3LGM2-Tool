@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.view.browser;
 
@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -105,8 +105,8 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
         if (tree.getGraphDocument() != mySelDoc) {
             tree.setGraphDocument(mySelDoc);
         }
-        if (mySelDoc != Tool3lgm.tool.getSelectedDoc()) {
-            Tool3lgm.tool.setSelectedDoc(mySelDoc, true);
+        if (mySelDoc != Static.getSelectedDoc()) {
+            Static.setSelectedDoc(mySelDoc, true);
         }
     }
 

@@ -11,7 +11,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -40,8 +40,8 @@ public final class ModelBrowserPanel extends JPanel {
     protected static Color inactiveColor;
 
     /**
-	 * 
-	 */
+     *
+     */
     public ModelBrowserPanel() {
         super();
         setLayout(new GridLayout(1, 1, 0, 0));
@@ -71,7 +71,7 @@ public final class ModelBrowserPanel extends JPanel {
 
     /**
      * Liefert den ersten ModelBrowser.
-     * 
+     *
      * @return
      */
     private ModelBrowser getFirstBrowser() {
@@ -92,7 +92,7 @@ public final class ModelBrowserPanel extends JPanel {
     /**
      * Entfernt ein Teil-Modell aus dem dazugehörigen Browser. Wenn das letzte Teilmodell eines Modells entfernt wird, dann wird das ganze Modell
      * entfernt.
-     * 
+     *
      * @param doc
      */
     public void removeGraphDocument(final GraphDocument doc) {
@@ -198,9 +198,7 @@ public final class ModelBrowserPanel extends JPanel {
             setLayout(new GridLayout(1, 1, 0, 0));
         }
 
-        if (Tool3lgm.tool != null) {
-            Tool3lgm.tool.setSelectedDoc(activeDoc, true);
-        }
+        Static.setSelectedDoc(activeDoc, true);
 
         revalidate();
     }

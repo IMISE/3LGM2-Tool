@@ -20,7 +20,7 @@ import javax.swing.event.ChangeListener;
 
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -58,9 +58,9 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
     private final GraphDocument doc;
 
     public ElementAlignmentDialog() {
-        super(Tool3lgm.tool, getResString("ALIGN_DIALOG_TITLE"));
-        doc = Tool3lgm.tool.getSelectedDoc();
-        setLocationRelativeTo(Tool3lgm.tool);
+        super(Static.getMainFrame(), getResString("ALIGN_DIALOG_TITLE"));
+        doc = Static.getSelectedDoc();
+        setLocationRelativeTo(getOwner());
         initSelectedElementContainer();
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -240,7 +240,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
 
             @Override
             public boolean isEnabled() {
-                return Tool3lgm.tool.getSelectedDoc() != null;
+                return Static.getSelectedDoc() != null;
             }
         };
     }

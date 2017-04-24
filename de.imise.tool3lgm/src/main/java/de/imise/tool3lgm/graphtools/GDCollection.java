@@ -32,6 +32,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
@@ -211,7 +212,7 @@ public final class GDCollection extends UserFieldTarget {
         userFieldDefinitions = new UserFieldDefinitions(this);
         doc.addGraphDocumentListener(userFieldDefinitions);
         createName();
-        tman.addTransActionListener(Tool3lgm.tool);
+        tman.addTransActionListener(Static.getTool());
         activeGraphDocumentsList.add(doc);
         //		transStackTable.clear();
         //		transStackTable.put(new Integer(0), new Integer(0));
@@ -360,7 +361,7 @@ public final class GDCollection extends UserFieldTarget {
             //			descriptionFrame.removeTab(szenario);
         }
 
-        Tool3lgm.tool.closeFrame(szenario);
+        Static.getTool().closeFrame(szenario);
 
         doc.finish_transaction(pid);
         changed = true;
@@ -381,7 +382,7 @@ public final class GDCollection extends UserFieldTarget {
             descriptionFrame.update();
         }
         //			descriptionFrame.renameTab(szen);
-        Tool3lgm.tool.getModelBrowserPanel().updateTitle(szen);
+        Static.getTool().getModelBrowserPanel().updateTitle(szen);
         distribute(GraphDocument.DATA_CHANGED, null, null, doc, TransactionManager.STANDARD_PID);
         return true;
     }
@@ -431,7 +432,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     private static final String askName(final String szenname) {
-        NameAndColorInputDialog d = new NameAndColorInputDialog(Tool3lgm.tool);
+        NameAndColorInputDialog d = new NameAndColorInputDialog(Static.getMainFrame());
         d.showDialog(Tool3lgmConstants.getResString("szenario_name_anfrage"), szenname);
         return d.getInputString();
     }
@@ -443,7 +444,7 @@ public final class GDCollection extends UserFieldTarget {
     private static final boolean askNameAndColor(final ElementContainer ec) {
         ModelElement me = ec.getElement();
         while (true) {
-            NameAndColorInputDialog d = new NameAndColorInputDialog(Tool3lgm.tool);
+            NameAndColorInputDialog d = new NameAndColorInputDialog(Static.getMainFrame());
             //TODO:Prozess gegen etwas allg. ersetzen (z. B. coloredElement als Eigenschaft von Element-Klassen)
 
             Point dialogPosition = Tool3lgm.getLastActionPosition();
@@ -783,7 +784,8 @@ public final class GDCollection extends UserFieldTarget {
                 //wenn durch das Löschen der Kante auch die Kardinalität für eins oder beide der durch die Kante verbundenen
                 //Elemente unterschritten wurde -> die Elemente auch löschen
                 ModelElement[] startEnd = {
-                        edge.getStart(), edge.getEnd()
+                        edge.getStart(),
+                        edge.getEnd()
                 };
                 for (ModelElement elem : startEnd) {
                     //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
@@ -1328,7 +1330,7 @@ public final class GDCollection extends UserFieldTarget {
                         }
                     }
                     JOptionPane optionPane = new JOptionPane(messagePanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-                    JDialog dialog = optionPane.createDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("choose_trace"));
+                    JDialog dialog = optionPane.createDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("choose_trace"));
                     dialog.setVisible(true);
                     edgeClassName = buttonGroup.getSelection().getActionCommand();
                     edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
@@ -1639,7 +1641,7 @@ public final class GDCollection extends UserFieldTarget {
                 buttonGroup.add(b);
             }
             JOptionPane optionPane = new JOptionPane(messagePanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-            JDialog dialog = optionPane.createDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("choose_trace"));
+            JDialog dialog = optionPane.createDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("choose_trace"));
             dialog.setVisible(true);
             int index = Integer.parseInt(buttonGroup.getSelection().getActionCommand());
             ka = edges.get(index);
@@ -1696,7 +1698,7 @@ public final class GDCollection extends UserFieldTarget {
 
         //prüfen, ob es sich um Knoten gleichen Typs handelt (nur diese können vereint werden)
         if (!(modelElement1 instanceof Knoten && modelElement2 instanceof Knoten)) {
-            JOptionPane.showMessageDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("nur_knoten_sel"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("nur_knoten_sel"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
         Knoten knoten1 = (Knoten) modelElement1;
@@ -2036,13 +2038,14 @@ public final class GDCollection extends UserFieldTarget {
         int counter = 0;
         String newName = createName(counter);
 
-        if (Tool3lgm.tool == null) {
+        int collectionsCount = Static.getCollectionCount();
+        if (collectionsCount < 0) {
             return;
         }
 
         GDCollection temp;
-        for (int index = 0; index < Tool3lgm.tool.getCollectionCount(); index++) {
-            temp = Tool3lgm.tool.getCollection(index);
+        for (int index = 0; index < collectionsCount; index++) {
+            temp = Static.getCollection(index);
             if (temp.equals(this)) {
                 continue;
             }
@@ -2055,10 +2058,10 @@ public final class GDCollection extends UserFieldTarget {
 
         name = newName + (isReadOnly ? " " + Tool3lgmConstants.getResString("text_readOnly") : "");
 
-        for (AbstractInternalFrame f : Tool3lgm.tool.getAllFrames()) {
+        for (AbstractInternalFrame f : Static.getAllFrames()) {
             if (f.getCollection().equals(this)) {
                 f.setTitle(getName());
-                Tool3lgm.tool.getModelBrowserPanel().updateTitle(this);
+                Static.getTool().getModelBrowserPanel().updateTitle(this);
             }
         }
     }
@@ -2175,7 +2178,7 @@ public final class GDCollection extends UserFieldTarget {
      *            Ziel-Datei beim Speichern
      */
     public void exportModel(final File f) {
-        if (!Tool3lgm.tool.checkLicenses()) {
+        if (!Static.getTool().checkLicenses()) {
             return;
         }
         if (f.exists()) {
@@ -2198,7 +2201,7 @@ public final class GDCollection extends UserFieldTarget {
      *            Ziel-Datei beim Speichern
      */
     public void saveXMLFile(final RandomAccessFile f) throws IOException {
-        if (!Tool3lgm.tool.checkLicenses()) {
+        if (!Static.getTool().checkLicenses()) {
             return;
         }
         f.seek(0);
@@ -2321,9 +2324,9 @@ public final class GDCollection extends UserFieldTarget {
     public void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
         GDCollection collection = new GDCollection();
 
-        Tool3lgm.tool.showProgressDialog();
-        Tool3lgm.tool.setProgressDialogTitle(Tool3lgmConstants.getResString("load_model") + " " + file.getName());
-        Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("read_progress"));
+        Static.showProgressDialog();
+        Static.setProgressDialogTitle(Tool3lgmConstants.getResString("load_model") + " " + file.getName());
+        Static.setProgressDialogStatusLabel("read_progress");
 
         try {
             collection.setFile(file);
@@ -2332,11 +2335,11 @@ public final class GDCollection extends UserFieldTarget {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
         }
 
-        Tool3lgm.tool.closeProgressDialog();
+        Static.closeProgressDialog();
 
         LGMGraphDocument[] importSzenarios = null;
         if (chooseSzenarioDialog) {
-            importSzenarios = SzenarioDialog.showImportDialog(Tool3lgm.tool, collection);
+            importSzenarios = SzenarioDialog.showImportDialog(Static.getMainFrame(), collection);
         } else {
             importSzenarios = new LGMGraphDocument[collection.szenarios.size() + 1];
             importSzenarios[0] = collection.getMainGraphDocument();
@@ -2354,8 +2357,8 @@ public final class GDCollection extends UserFieldTarget {
      */
     private void importSzenarios(final LGMGraphDocument[] importSzenarios, final GDCollection collection) {
 
-        Tool3lgm.tool.showProgressDialog();
-        Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("importSzenario"));
+        Static.showProgressDialog();
+        Static.setProgressDialogStatusLabel("importSzenario");
         int size = 0;
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = collection.doc.getLayer(ModelConstants.LAYERS[i]);
@@ -2447,9 +2450,9 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
 
-            Tool3lgm.tool.createSzenarioFrame(newSzenario);
+            Static.getTool().createSzenarioFrame(newSzenario);
         }
-        Tool3lgm.tool.closeProgressDialog();
+        Static.closeProgressDialog();
         userFieldDefinitions.hasCrossReferences();
         distribute(GraphDocument.DATA_CHANGED);
     }
@@ -2461,7 +2464,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param file Datei in die exportiert werden soll
      */
     public void exportSzenarios(final Szenario[] export, final File file) {
-        if (!Tool3lgm.tool.checkLicenses()) {
+        if (!Static.getTool().checkLicenses()) {
             return;
         }
         int size = 0;
@@ -2843,7 +2846,7 @@ public final class GDCollection extends UserFieldTarget {
      * @author Thomas Rudert
      */
     public boolean loadFromRAF(final File file) throws Exception {
-        Tool3lgm.tool.setCursor(Tool3lgmConstants.getWaitCursor());
+        Static.getTool().setCursor(Tool3lgmConstants.getWaitCursor());
 
         RandomAccessFile randomAccessFile;
         if (file != null) {
@@ -2893,7 +2896,7 @@ public final class GDCollection extends UserFieldTarget {
             randomAccessFile.close();
         }
         setBulkMode(false);
-        Tool3lgm.tool.setCursor(Tool3lgmConstants.getNormalCursor());
+        Static.getTool().setCursor(Tool3lgmConstants.getNormalCursor());
         return readingSuccessful;
 
     }
@@ -2970,7 +2973,7 @@ public final class GDCollection extends UserFieldTarget {
         if (getFile() != null) {
             fileChooser.setSelectedFile(getFile());
         }
-        if (fileChooser.showSaveDialog(Tool3lgm.tool) != ExtendedFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(Static.getMainFrame()) != ExtendedFileChooser.APPROVE_OPTION) {
             return false;
         }
         File pfad = fileChooser.getSelectedFile();

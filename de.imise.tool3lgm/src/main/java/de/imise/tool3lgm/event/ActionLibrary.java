@@ -17,6 +17,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
@@ -263,7 +264,7 @@ public class ActionLibrary {
          */
         private static Action[] getConnectionActions(final GDCommands command, final ImageIcon icon) {
 
-            GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+            GraphDocument doc = Static.getSelectedDoc();
             boolean knickpunkte = doc.isSelectedOnlyBendpoints();
             ArrayList<Action> actions = new ArrayList<Action>();
 
@@ -439,7 +440,7 @@ public class ActionLibrary {
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        Tool3lgm.tool.openFile(true, file);
+                        Static.getTool().openFile(true, file);
                     }
                 };
             }
@@ -456,9 +457,8 @@ public class ActionLibrary {
         /** Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der Teilmodell-Frames sind */
         public static final Action[] getSelectInternalFrameActions() {
 
-            Tool3lgm tool = Tool3lgm.tool;
-            AbstractInternalFrame[] internalFrames = tool.getAllFrames();
-            AbstractInternalFrame selectedFrame = tool.getActiveFrame();
+            AbstractInternalFrame[] internalFrames = Static.getAllFrames();
+            AbstractInternalFrame selectedFrame = Static.getActiveFrame();
 
             Action[] actions = new Action[internalFrames.length];
             int index = 0, next;
@@ -834,10 +834,10 @@ public class ActionLibrary {
                 if (!isEnabled()) {
                     return;
                 }
-                Tool3lgm.tool.showProgressDialog();
-                Tool3lgm.tool.setProgressDialogTitle(Tool3lgmConstants.getResString("select_all"));
+                Static.showProgressDialog();
+                Static.setProgressDialogTitle(Tool3lgmConstants.getResString("select_all"));
                 getSelectedDoc().selectAll();
-                Tool3lgm.tool.closeProgressDialog();
+                Static.closeProgressDialog();
             }
         };
     }
@@ -1190,7 +1190,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                Tool3lgm.tool.openFile(false, Tool3lgmConstants.EXAMPLE_MODEL_FILE);
+                Static.getTool().openFile(false, Tool3lgmConstants.EXAMPLE_MODEL_FILE);
             }
         };
 
@@ -1217,7 +1217,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                Tool3lgm.tool.importLicenseFile();
+                Static.getTool().importLicenseFile();
             }
         };
     }

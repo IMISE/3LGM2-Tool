@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -144,7 +144,7 @@ public class ToolXMLParser {
 
     public void parseDocument() throws SAXException, IOException {
         //		deprecatedElementHashes = new HashSet();
-        de.imise.tool3lgm.Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReadFile"));
+        Static.setProgressDialogStatusLabel("labelReadFile");
 
         XMLReader reader = parser.getXMLReader();
         reader.parse(new InputSource(parseStream));
@@ -246,7 +246,7 @@ public class ToolXMLParser {
         // 		}
         // */
 
-        Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelCleanModel"));
+        Static.setProgressDialogStatusLabel("labelCleanModel");
         new ModelCleaner(gdcoll).cleanModel();
 
         //beim Einlesen werden Elemente mit generierten Namen evtl. nicht richtig eingelesen, weil
@@ -262,7 +262,7 @@ public class ToolXMLParser {
                 lc.refreshAlpahbetical();
             }
         }
-        Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelReady"));
+        Static.setProgressDialogStatusLabel("labelReady");
 
         ///*		AlphabeticalSet<Class<? extends ModelElement>> allUsedElementClasses = new AlphabeticalSet<Class<? extends ModelElement>>();
         //		for (ModelElement me : gdcoll.getGraphDocument().getModelItems(ModelElement.class, true))

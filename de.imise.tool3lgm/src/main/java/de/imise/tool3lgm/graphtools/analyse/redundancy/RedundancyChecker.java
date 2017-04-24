@@ -15,7 +15,7 @@ import java.util.Calendar;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.StaticAction;
@@ -46,7 +46,7 @@ import de.imise.util.swing.dialog.ProgressDialog;
 
 /**
  * Stellt Funktionen bereit, die die funktionale Redundanz von Modellen untersuchen.
- * 
+ *
  * @author AXS
  */
 public class RedundancyChecker extends WindowAdapter {
@@ -88,7 +88,7 @@ public class RedundancyChecker extends WindowAdapter {
 
     /**
      * Generiert einen Redundanzbericht für das übergebene Modell.<br>
-     * 
+     *
      * @param gdcoll Modell das analysiert werden soll
      * @return Redundanzreport
      */
@@ -125,7 +125,7 @@ public class RedundancyChecker extends WindowAdapter {
 
             // null wenn Abrechen gedrückt wurde, sonst ein gültiges
             // Boolean-Array
-            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("redundancy_analysis"), message, options, null);
+            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("redundancy_analysis"), message, options, null);
 
             // wenn abgebrochen werden soll
             if (selectedOptions == null) {
@@ -247,23 +247,25 @@ public class RedundancyChecker extends WindowAdapter {
         }
         // eigentlich sollte hier immer schon dieselbe GDCollection selektiert sein, aber zur
         // Sicherheit wird mal dahin gewechselt
-        if (Tool3lgm.tool.getSelectedGDCollection() != gdcoll) {
-            Tool3lgm.tool.setSelectedDoc(gdcoll.getSelectedDoc(), true);
+        if (Static.getSelectedGDCollection() != gdcoll) {
+            Static.setSelectedDoc(gdcoll.getSelectedDoc(), true);
         }
-        ConsistencyChecker consistencyChecker = Tool3lgm.tool.getConsistencyChecker();
+        ConsistencyChecker consistencyChecker = Static.getTool().getConsistencyChecker();
         consistencyChecker.setConsistencyDefinition(consistencyDefinition);
         ArrayList<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText
             Object[] options = {
-                    Tool3lgmConstants.getResString("ana_fr_resolve_errors"), Tool3lgmConstants.getResString("ana_fr_ignore_errors"), Tool3lgmConstants.getResString("cancel")
+                    Tool3lgmConstants.getResString("ana_fr_resolve_errors"),
+                    Tool3lgmConstants.getResString("ana_fr_ignore_errors"),
+                    Tool3lgmConstants.getResString("cancel")
             };
-            int answer = JOptionPane.showOptionDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("ana_fr_error_message"), Tool3lgmConstants.getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                    null, options, options[2]);
+            int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("ana_fr_error_message"), Tool3lgmConstants.getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
                 ((StaticAction) ActionLibrary.AnalysisActions.ACTIVATE_CONSISTENCY_CHECK).setSelected(true);
-                Tool3lgm.tool.setCheckConsistencyState(true);
+                Static.getTool().setCheckConsistencyState(true);
                 return;
             } else if (answer == JOptionPane.CANCEL_OPTION) {
                 return;
@@ -275,7 +277,7 @@ public class RedundancyChecker extends WindowAdapter {
 
         rc.redundancyThread.setPriority(Thread.MIN_PRIORITY);
 
-        ProgressDialog pd = new ProgressDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("ana_fr_wait_message_title"), true, rc.redundancyThread);
+        ProgressDialog pd = new ProgressDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("ana_fr_wait_message_title"), true, rc.redundancyThread);
         pd.addWindowListener(rc);
         pd.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pd.setStatusLabelText(Tool3lgmConstants.getResString("message_wait"));
@@ -286,7 +288,7 @@ public class RedundancyChecker extends WindowAdapter {
 
     /**
      * Gibt das Ergebnis der Redundanzanalyse in einem Ausgabedialog aus.
-     * 
+     *
      * @param doc Modell für das die XMLAnalyse durchgeführt wurde
      * @param redundancyAnalysisResults
      */
@@ -306,7 +308,7 @@ public class RedundancyChecker extends WindowAdapter {
         // Titel des Dialoges
         String title = Tool3lgmConstants.getResString("redundancy_analysis") + " - " + col.getName();
 
-        outputDialog = new OutputDialog(Tool3lgm.tool, title);
+        outputDialog = new OutputDialog(Static.getMainFrame(), title);
 
         // Titel, Modell, Teilmodell
         outputDialog.appendln(Tool3lgmConstants.getResString("redundancy_analysis"), true);
@@ -430,7 +432,7 @@ public class RedundancyChecker extends WindowAdapter {
         }
 
         outputDialog.setVisible(true);
-        outputDialog.setLocationRelativeTo(Tool3lgm.tool);
+        outputDialog.setLocationRelativeTo(Static.getMainFrame());
 
     }
 
@@ -467,7 +469,7 @@ public class RedundancyChecker extends WindowAdapter {
 
     /**
      * Gibt das Datenfeld aus.
-     * 
+     *
      * @param matrix
      */
     public static void printData(final int[][] matrix) {
@@ -476,7 +478,7 @@ public class RedundancyChecker extends WindowAdapter {
 
     /**
      * Gibt das Datenfeld aus. Optinal als Java-Code.
-     * 
+     *
      * @param matrix
      * @param asJava
      */
@@ -522,7 +524,7 @@ public class RedundancyChecker extends WindowAdapter {
 
     /**
      * Führt die Redundanzberechnug aus. Man kann diese Abbrechen.
-     * 
+     *
      * @author AXS
      */
     private static final class RedundancyThread extends Thread {

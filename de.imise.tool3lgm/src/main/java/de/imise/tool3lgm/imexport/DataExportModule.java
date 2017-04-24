@@ -10,7 +10,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -33,13 +33,13 @@ public class DataExportModule {
 
     //@SuppressWarnings("unchecked")
     public static final MetaPath[] metaPaths2Export = {
-    //Über diese Angaben kann man abweichend vom Standardexport verbundene Elemente ebenfalls exportieren.
-    //Das macht aber Probleme in dem Fall, dass man denselben Datensatz wieder importieren möchte, da man nun anhand des Namens
-    //eines über einen Pfad verbundenen Elementes auch noch die Zwischenelemente rekonrtuieren müsste. Daher einfach alle
-    //Elemente ohne diesen Schnickschnack exportieren, dann kann man das über einen sehr simplen Import auch wieder rein bekommen.
-    //Diese Art des Exports und dazugehörigen Imports beachtet keinerlei Kanten! D.h. im Export stecken überhaupt keine Verbindungsinformationen!
+            //Über diese Angaben kann man abweichend vom Standardexport verbundene Elemente ebenfalls exportieren.
+            //Das macht aber Probleme in dem Fall, dass man denselben Datensatz wieder importieren möchte, da man nun anhand des Namens
+            //eines über einen Pfad verbundenen Elementes auch noch die Zwischenelemente rekonrtuieren müsste. Daher einfach alle
+            //Elemente ohne diesen Schnickschnack exportieren, dann kann man das über einen sehr simplen Import auch wieder rein bekommen.
+            //Diese Art des Exports und dazugehörigen Imports beachtet keinerlei Kanten! D.h. im Export stecken überhaupt keine Verbindungsinformationen!
 
-    //        new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class)
+            //        new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class)
 
     };
 
@@ -51,7 +51,7 @@ public class DataExportModule {
         ExtendedFileChooser saveDialog = new ExtendedFileChooser(FileFilterType.CSV, docDir, exportFileName);
         saveDialog.setMultiSelectionEnabled(false);
         saveDialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.CSV));
-        if (saveDialog.showSaveDialog(Tool3lgm.tool) == ExtendedFileChooser.APPROVE_OPTION) {
+        if (saveDialog.showSaveDialog(Static.getMainFrame()) == ExtendedFileChooser.APPROVE_OPTION) {
             exportData(doc, saveDialog.getSelectedFile());
         }
 

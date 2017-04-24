@@ -6,8 +6,7 @@ package de.imise.tool3lgm.xml;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.Szenario;
 
@@ -25,13 +24,13 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
 
     /**
      * setzt doc, container, collection, elementValue auf null;
-     * 
+     *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
     @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
-        Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("label_convert"));
+        Static.setProgressDialogStatusLabel("label_convert");
         doc._createNewEdgeClasses();
         doc._removeMultipleTraces();
         for (Szenario szen : collection.getSzenarios()) {
@@ -49,7 +48,7 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
 
     /**
      * es muss gewaehrleistet werden, dass elementValue.setLength(0) aufgerufen wird
-     * 
+     *
      * @see de.imise.tool3lgm.xml.ToolContentHandlerV1_0#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
      */
     @Override

@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Help;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -28,7 +29,7 @@ import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
  * Allgemeiner Eigenschaftendialog.<br>
  * In dieser Form kann er als Eigenschaftendialog für ein Modell genutzt werden. Der
  * Eigenschaftendialog von Modellelementen ist eine spezielle Unterklasse dieser Dialogklasse.
- * 
+ *
  * @author AXS
  * @created 30.10.2007
  */
@@ -75,7 +76,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param graphDocument Document in dessen Kontext der Dialog steht
      */
     public AbstractPropertyDialog(final GDCollection gdcoll) {
-        this(Tool3lgm.tool, gdcoll);
+        this(Static.getMainFrame(), gdcoll);
     }
 
     /**
@@ -148,7 +149,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
 
     /**
      * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel und der Komponente hinzu.
-     * 
+     *
      * @param title
      * @param component
      */
@@ -158,7 +159,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
 
     /**
      * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel, Icon und der Komponente hinzu.
-     * 
+     *
      * @param title
      * @param icon
      * @param component
@@ -172,7 +173,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * übergebene Klasse mit der Klasse der Componente in dem Tab zuweisungskompatibel ist. Die
      * Klasse der im Tabpanel enthaltenen Componente muss die gleiche oder eine Unterklasse der
      * übergebenen Klasse sein.
-     * 
+     *
      * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> übergeben, wird der
      *            erstbeste passende Tab herausgesucht
      * @param tabComponentClass Oberklasse der Komponente in dem zu selektierenden Tab

@@ -10,7 +10,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.Help;
-import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -317,7 +317,7 @@ public class MenuCollection {
 
             removeAll();
 
-            int layerID = Tool3lgm.tool.getSelectedGDCollection().getActiveLayer();
+            int layerID = Static.getSelectedGDCollection().getActiveLayer();
             switch (layerID) {
             case ModelConstants.DOMAIN_LAYER:
                 MenuCreator.addAll(this, MENU_ENTRIES_DOMAIN);
@@ -361,7 +361,7 @@ public class MenuCollection {
         protected void updateItems() {
             removeAll();
 
-            GraphDocument doc = Tool3lgm.tool.getSelectedDoc();
+            GraphDocument doc = Static.getSelectedDoc();
             if (doc == null) {
                 return;
             }
