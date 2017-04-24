@@ -75,14 +75,14 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
  * Sammlung global einsetzbarer {@link Action}s.
- * 
+ *
  * @author fstephan
  */
 public class ActionLibrary {
 
     /**
      * Actions für Analysen
-     * 
+     *
      * @author fstephan
      */
     public static class AnalysisActions {
@@ -248,7 +248,7 @@ public class ActionLibrary {
      * Sammlung von Methoden, die häufig verwendete {@link Action}s generieren. <br>
      * Das Generieren ist notwendig, weil sich diese Actions wärend der Programmausführung ändern
      * können und damit nicht statisch definierbar sind.
-     * 
+     *
      * @author fstephan
      */
     public static class DynamicActions {
@@ -256,7 +256,7 @@ public class ActionLibrary {
         /**
          * Erzeugt ein Array von Actions zum Vervinden bzw. Trennen der momentan selektierten
          * Elemente
-         * 
+         *
          * @param command trennen/verbinden ({@link GDCommands#LINK}/{@link GDCommands#UNLINK})
          * @param icon Trennen- bzw. Verbinden-Icon
          * @return
@@ -399,7 +399,7 @@ public class ActionLibrary {
                                 actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, connectable));
 
                             }
-                        } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */{
+                        } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
                             String label = ModelConstants.getForwardMetaAssociationName(edgeClass);
                             boolean connectable = false;
                             boolean disconnectable = false;
@@ -495,7 +495,7 @@ public class ActionLibrary {
 
     /**
      * Actions, wie z.B. UNDO, REDO, Löschen, ...
-     * 
+     *
      * @author fstephan
      */
     public static class EditActions {
@@ -648,7 +648,7 @@ public class ActionLibrary {
              * Gibt eine Liste aller Elemente zurück, die dupliziert werden müssten, um die
              * Konsistenz zu erhalten, wenn ein anderes Element die gleichen Verbindungen bekommen
              * sollte wie das übergebene.
-             * 
+             *
              * @param elementsList Liste aller Elemente, die dupliziert werden sollen
              * @param sourceIndex Index des Elementes, dessen Verbindungen darauf geprüft werden
              *            sollen, ob die verbundenen Elemente dupliziert werden müssten, wenn es
@@ -834,14 +834,17 @@ public class ActionLibrary {
                 if (!isEnabled()) {
                     return;
                 }
+                Tool3lgm.tool.showProgressDialog();
+                Tool3lgm.tool.setProgressDialogTitle(Tool3lgmConstants.getResString("select_all"));
                 getSelectedDoc().selectAll();
+                Tool3lgm.tool.closeProgressDialog();
             }
         };
     }
 
     /**
      * Actions Extras, wie z.B. Benutzdefinierte Felder
-     * 
+     *
      * @author fstephan
      */
     public static class ExtrasActions {
@@ -901,14 +904,14 @@ public class ActionLibrary {
 
     /**
      * Actions für das Erstellen, Laden, Speichern, ... von Dateien.
-     * 
+     *
      * @author fstephan
      */
     public static class FileActions {
 
         /**
          * Actions für den Daten-Export
-         * 
+         *
          * @author fstephan
          */
         public static class ExportActions {
@@ -987,7 +990,7 @@ public class ActionLibrary {
 
         /**
          * Actions für den Daten-Import
-         * 
+         *
          * @author fstephan
          */
         public static class ImportActions {
@@ -1130,7 +1133,7 @@ public class ActionLibrary {
 
     /**
      * Actions für die Benutzer-Hilfe
-     * 
+     *
      * @author fstephan
      */
     public static class HelpActions {
@@ -1221,7 +1224,7 @@ public class ActionLibrary {
 
     /**
      * Actions für das Einfügen von Elementen in die 3 Ebenen.
-     * 
+     *
      * @author fstephan
      */
     public static class InsertActions {
@@ -1243,7 +1246,7 @@ public class ActionLibrary {
 
     /**
      * Actions für die grafische Darstellung von Ebenen und Elementen
-     * 
+     *
      * @author fstephan
      */
     public static class LayoutActions {
@@ -1252,14 +1255,14 @@ public class ActionLibrary {
          * Actions für die relative Ausrichtung der Elemente zueinander<br>
          * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend
          * ausgerichtet.
-         * 
+         *
          * @author fstephan
          */
         public static class ElementAlignment {
 
             /**
              * Horizonzale Ausrichtung
-             * 
+             *
              * @author fstephan
              */
             public static class Horizontal {
@@ -1276,7 +1279,7 @@ public class ActionLibrary {
 
             /**
              * Größenanpassung
-             * 
+             *
              * @author astruebi
              * @create 13.02.2013
              */
@@ -1295,7 +1298,7 @@ public class ActionLibrary {
 
             /**
              * Vertikale Ausrichtung
-             * 
+             *
              * @author fstephan
              */
             public static class Vertical {
@@ -1319,7 +1322,7 @@ public class ActionLibrary {
          * auch {@link EdgeContainer} aus. <br>
          * Im Falle des Einführens eines Kanten-Layouts sollte hier paralle zu dieser Klasse eine
          * separate Klasse mit den jeweiligen Actions erstellt werden
-         * 
+         *
          * @author fstephan
          */
         public static class ElementLayout {
@@ -1333,7 +1336,7 @@ public class ActionLibrary {
 
             /**
              * Actions für die Auswahl von Icons für Elemente
-             * 
+             *
              * @author fstephan
              */
             public static class Icon {
@@ -1347,14 +1350,14 @@ public class ActionLibrary {
 
             /**
              * Actions für die Auswahl der Ausrichtung der Elementbeschriftungen
-             * 
+             *
              * @author fstephan
              */
             public static class TextAlignment {
 
                 /**
                  * Horizonzale Ausrichtung
-                 * 
+                 *
                  * @author fstephan
                  */
                 public static class Horizontal {
@@ -1371,7 +1374,7 @@ public class ActionLibrary {
 
                 /**
                  * Vertikale Ausrichtung
-                 * 
+                 *
                  * @author fstephan
                  */
                 public static class Vertical {
@@ -1389,7 +1392,7 @@ public class ActionLibrary {
 
             /**
              * Actions für die Transparenz der Elemente
-             * 
+             *
              * @author fstephan
              */
             public static class Transparency {
@@ -1425,14 +1428,14 @@ public class ActionLibrary {
 
         /**
          * Actions für die grafische Darstellung der Ebenen
-         * 
+         *
          * @author fstephan
          */
         public static class LayerLayout {
 
             /**
              * Actions für die Transparenz der Ebenen
-             * 
+             *
              * @author fstephan
              */
             public static class Transparency {
@@ -1457,7 +1460,7 @@ public class ActionLibrary {
         /**
          * Actions für die "Höhe" von Elementen innerhalb einer Ebene <br>
          * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewählte(n) Element(e).
-         * 
+         *
          * @author fstephan
          */
         public static class Level {
@@ -1490,14 +1493,14 @@ public class ActionLibrary {
 
     /**
      * Actions XMLAnalyse-Optionen, Graphik-Optionen, usw.
-     * 
+     *
      * @author fstephan
      */
     public static class OptionsActions {
 
         /**
          * XMLAnalyse-Optionen
-         * 
+         *
          * @author fstephan
          */
         public static class Analysis {
@@ -1567,7 +1570,7 @@ public class ActionLibrary {
 
         /**
          * Allgemeine Optionen
-         * 
+         *
          * @author fstephan
          */
         public static class Gerneral {
@@ -1585,7 +1588,7 @@ public class ActionLibrary {
 
         /**
          * Graphik-Optionen
-         * 
+         *
          * @author fstephan
          */
         public static class Graphics {
@@ -1701,7 +1704,7 @@ public class ActionLibrary {
 
         /**
          * Sprach-Optionen
-         * 
+         *
          * @author fstephan
          */
         public static class Locale {
@@ -1712,7 +1715,7 @@ public class ActionLibrary {
 
         /**
          * Browser-Optionen
-         * 
+         *
          * @author fstephan
          */
         public static class ModelBrowser {
@@ -1750,7 +1753,7 @@ public class ActionLibrary {
 
         /**
          * Teil-Von-Beziehnung-Optionen
-         * 
+         *
          * @author fstephan
          */
         public static class PartOf {
@@ -1819,7 +1822,7 @@ public class ActionLibrary {
 
     /**
      * Actions für das Erstellen, Löschen, ... von Teilmodellen
-     * 
+     *
      * @author fstephan
      */
     public static class SubmodelActions {
@@ -1876,14 +1879,14 @@ public class ActionLibrary {
 
     /**
      * Actions für das Wechseln der Ebenen-Ansicht, Anzeigen der Toolbars, etc.
-     * 
+     *
      * @author fstephan
      */
     public static class ViewActions {
 
         /**
          * Actions für das (De-)aktivieren der Zeichnen- und Standard-Toolbar
-         * 
+         *
          * @author fstephan
          */
         public static class ToolbarActions {
@@ -1942,7 +1945,7 @@ public class ActionLibrary {
          * SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE = new
          * StaticAction(ActionIdentifier.showSubModelsInBrowserSideBySide, false,
          * UserProperties.isShowSubModelsInBrowserSideBySide()) {
-         * 
+         *
          * @Override public void actionPerformed(ActionEvent e) {
          *           UserProperties.setShowSubModelsInBrowserSideBySide(isSelected()); ModelBrowser
          *           br = getTool().getModelBrowserPanel().getActiveBrowser(); if (br != null) {
@@ -2084,7 +2087,7 @@ public class ActionLibrary {
 
     /**
      * Actions für Fenster-Einstellungen
-     * 
+     *
      * @author fstephan
      */
     public static class WindowActions {
