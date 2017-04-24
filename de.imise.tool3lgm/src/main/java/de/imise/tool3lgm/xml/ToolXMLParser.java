@@ -35,7 +35,7 @@ public class ToolXMLParser {
     //	 * Elementen aber auch untergeordnete Elemente haben können, müssen diese auch entfernt werden. Um diese
     //	 * Assoziationen und Elemente zu finden, muss man sich alle Hashes der nicht mehr unterstützten Elemente
     //	 * merken.
-    //	 * 
+    //	 *
     //	 * TODO:implementieren
     //	 */
     //	private static HashSet<String> _deprecatedElementHashes;
@@ -47,24 +47,34 @@ public class ToolXMLParser {
 
     /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
     private static String[] supportedXMLVersions = {
-            "<?xml version='1.0' encoding='utf-8'?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            "<?xml version='1.0' encoding='utf-8'?>",
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     };
     private static String[] supportedFileVersions = {
-            "<!--Tool3lgmFile version='1.0'-->", "<!--Tool3lgmFile version='1.1'-->", "<!--Tool3lgmFile version='1.2'-->", "<!--Tool3lgmFile version='2.0'-->", "<!--Tool3lgmFile version='3.0'-->", "<!--Tool3lgmFile version='3.1'-->",
-            "<!--Tool3lgmFile version='3.2'-->", "<!--Tool3lgmFile version='3.3'-->", "<!--Tool3lgmFile version='3.4'-->",
+            "<!--Tool3lgmFile version='1.0'-->",
+            "<!--Tool3lgmFile version='1.1'-->",
+            "<!--Tool3lgmFile version='1.2'-->",
+            "<!--Tool3lgmFile version='2.0'-->",
+            "<!--Tool3lgmFile version='3.0'-->",
+            "<!--Tool3lgmFile version='3.1'-->",
+            "<!--Tool3lgmFile version='3.2'-->",
+            "<!--Tool3lgmFile version='3.3'-->",
+            "<!--Tool3lgmFile version='3.4'-->",
+            "<!--Tool3lgmFile version='3.5'-->",
     };
 
     private final SAXParser parser;
 
     private int[] version = {
-            -1, -1
+            -1,
+            -1
     };
 
     private final InputStream parseStream;
 
     /**
-	 * 
-	 */
+     *
+     */
     public ToolXMLParser(final GDCollection collection, final InputStream inputStream, final boolean paste) throws SAXException, ParserConfigurationException, FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
 
         parseStream = inputStream;
@@ -117,6 +127,8 @@ public class ToolXMLParser {
             break;
 
         case 8:
+        case 9: //3.4 und 3.5 haben denselben Parser, aber die 8 kann die 9 nicht lesen, weil Elementklassen
+                    //umbeannt wurden, was aber den Parser nicht kümmert)
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_4(collection, paste));
             break;
 
@@ -141,14 +153,14 @@ public class ToolXMLParser {
         //Elementen entfernen
         // 		GraphDocument mainDoc = gdcoll.getGraphDocument();
 
-        ////TODO:AXS: sauberes Entfernen nicht mehr unterstützter Elemente beenden		
+        ////TODO:AXS: sauberes Entfernen nicht mehr unterstützter Elemente beenden
         ///*
         // 		//HashSet, in das die HashStrings aller Elemente kommen, die gelöscht werden müssen,
-        // 		//weil sie von einem anderen Element abhängig sind (untergeordnete Elemente), 
+        // 		//weil sie von einem anderen Element abhängig sind (untergeordnete Elemente),
         //
         // 		HashSet alreadyRemovedHashes = new HashSet();
         // 		System.err.println(deprecatedElementHashes);
-        // 		
+        //
         // 		//für alle HashWerte von ModellElementen, die nicht mehr unterstützt werden
         // 		for (Iterator it=deprecatedElementHashes.iterator(); it.hasNext();){
         // 			String deprecatedElementHash = it.next().toString();
@@ -205,11 +217,11 @@ public class ToolXMLParser {
         // 	 			}
         // 			}
         // 		}
-        //*/ 		
+        //*/
         ///* 		deprecatedElementHashes.clear();
         // 		deprecatedElementHashes = null;
-        //*/		
-        // 		//Bis zur version[1] == 7 (= FileVersion V3_4)haben die x- und Y-Koordinaten der Elemente den Mittelpunkt 
+        //*/
+        // 		//Bis zur version[1] == 7 (= FileVersion V3_4)haben die x- und Y-Koordinaten der Elemente den Mittelpunkt
         // 		//beschrieben, danach den oberen linken Eckpunkt. Das hier war nur nötig, weil die alte version auch Modelle
         // 		//aus dem 3LGM²-Reporter einlesen können sollte, die mit der neuen Version gechrieben worden waren
         //// 		System.err.println(version[1]);
@@ -232,7 +244,7 @@ public class ToolXMLParser {
         // 				}
         // 			}
         // 		}
-        // */		
+        // */
 
         Tool3lgm.tool.setProgressDialogStatusLabel(Tool3lgmConstants.getResString("labelCleanModel"));
         new ModelCleaner(gdcoll).cleanModel();
@@ -280,22 +292,23 @@ public class ToolXMLParser {
     private static int[] getVersion(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         String line;
         int[] version = {
-                -1, -1
+                -1,
+                -1
         };
 
-        ///*		
+        ///*
         //		byte[] byteBuffer = new byte[30];
         //		inputStream.read(byteBuffer);
         //		String s = new String(byteBuffer);
         //		System.err.println(s);
-        //*/		
+        //*/
         DataInputStream dataStream = new DataInputStream(inputStream) {
             @Override
             public void close() {
             }
         };
 
-        ///*Das hier geht aus irgend einem Grund nicht. Der Stream haut beim Parser nicht mehr hin. Wahrscheinlich wird 
+        ///*Das hier geht aus irgend einem Grund nicht. Der Stream haut beim Parser nicht mehr hin. Wahrscheinlich wird
         // * der Zeiger innerhalb der Datei nicht mehr korrekt weitergesetzt.
         //		InputStreamReader is = new InputStreamReader(inputStream) {public void close() {}};
         //		BufferedReader dataStream = new BufferedReader(is) {public void close() {}};
@@ -334,11 +347,11 @@ public class ToolXMLParser {
 
     //	/**
     //	 * Fügt zu den Hashes der Elemente, die nicht mehr unterstützt werden den übergebenen hinzu.
-    //	 * 
+    //	 *
     //	 * @param hash
     //	 */
     ///*	public static void addDeprecatedElementHashes(String hash) {
     //		deprecatedElementHashes.add(hash);
     //	}
-    //*/	
+    //*/
 }
