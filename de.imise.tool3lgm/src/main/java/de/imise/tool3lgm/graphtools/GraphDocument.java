@@ -726,7 +726,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ModelElement master = doc.findElementCoded(argv[1]);
             edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Kante.class);
             Class<? extends ModelElement> slaveClass = ModelConstants.getClassForName(argv[3]);
-            createAddicted(doc, master, edgeClass, slaveClass, pid);
+            createAddicted(doc, master, edgeClass.asSubclass(Composition.class), slaveClass, pid);
             break;
 
         case ELEMENT_PROPERTIES:
@@ -3510,7 +3510,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final String slaveHashString,
+    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Composition> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final String slaveHashString,
             final int pid) {
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
@@ -3561,7 +3561,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final int pid) {
+    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Composition> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final int pid) {
         return createAddicted(doc, master, edgeClass, slaveClass, slaveName, GDCommands.INVALID_HASH_STRING, pid);
     }
 
@@ -3573,7 +3573,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
+    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Composition> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
         return createAddicted(doc, master, edgeClass, slaveClass, GDCommands.INVALID_NAME, pid);
     }
 
@@ -3584,7 +3584,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Kante addict(final ModelElement me1, final ModelElement me2, final Class<? extends Kante> edgeClass, final int pid) {
+    public final Kante addict(final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
         return addict(hashString, me1, me2, edgeClass, pid);
     }
 
@@ -3596,7 +3596,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Kante addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends Kante> edgeClass, final int pid) {
+    public final Kante addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
         return addict(szenHash, edgeClass.getSimpleName(), null, me1, me2, -1, pid);
     }
 
