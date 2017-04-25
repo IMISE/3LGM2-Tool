@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -250,6 +251,17 @@ public abstract class ElementDialogPanel extends JPanel {
      */
     public GraphDocument getGraphDocument() {
         return doc;
+    }
+
+    /**
+     * @return Das selektierte {@link GraphDocument} der {@link GDCollection} des {@link GraphDocument} des Dialoges.
+     */
+    public GraphDocument getSelectedGraphDocument() {
+        return doc.getCollection().getSelectedDoc();
+    }
+
+    public int getTransactionID() {
+        return dialog.getTransactionID();
     }
 
     /**
