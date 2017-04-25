@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -13,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
@@ -38,8 +39,8 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     private final DefaultTreeModel lmodel, rmodel;
     private final LGMTreeNode lroot, rroot;
     private final boolean mw;
-    private final JLabel label2;
-    private final JScrollPane sp2;
+    private final JLabel rtreeLabel;
+    private final JScrollPane rtreeScollPane;
     private final JPanel buttonpanel;
     private final Class<? extends ModelElement> searchElementClass;
 
@@ -79,8 +80,8 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel label = new JLabel(Tool3lgmConstants.getResString("verb"));
-        lroot = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        JLabel ltreeLabel = new JLabel(getResString("verb"));
+        lroot = new LGMTreeNode(getResString("verb"), false);
         lmodel = new DefaultTreeModel(lroot);
 
         // FST: geändert!
@@ -91,26 +92,31 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        JScrollPane sp = new JScrollPane(ltree);
+        JScrollPane ltreeScollPane = new JScrollPane(ltree);
 
+        //View-Button zum Auf- und Zuklappen des rechten Baumes
         constraints.anchor = GridBagConstraints.EAST;
+        constraints.weightx = 0d;
+        constraints.weighty = 0d;
         constraints.ipadx = -30;
         constraints.ipady = -10;
         if (editable) {
             add(this, viewButton, constraints, 0, 2, 1, 1);
         }
+
+        //linker Baum direkt über dem ViewButton
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, label, constraints, 0, 0, 1, 1);
+        add(this, ltreeLabel, constraints, 0, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp, constraints, 0, 1, 1, 1);
+        add(this, ltreeScollPane, constraints, 0, 1, 1, 1);
 
-        label2 = new JLabel(Tool3lgmConstants.getResString("frei"));
-        rroot = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
+        rtreeLabel = new JLabel(getResString("frei"));
+        rroot = new LGMTreeNode(getResString("frei"), false);
         rmodel = new DefaultTreeModel(rroot);
 
         // FST: geändert!
@@ -120,7 +126,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        sp2 = new JScrollPane(rtree);
+        rtreeScollPane = new JScrollPane(rtree);
 
         /*
          * Start: MouseListener erstellen und an Trees anhängen ...
@@ -198,8 +204,8 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     protected void init() {
         super.init();
         remove(buttonpanel);
-        remove(label2);
-        remove(sp2);
+        remove(rtreeLabel);
+        remove(rtreeScollPane);
 
         childrenToExcludeFromRtree.clear();
         lroot.removeAllChildren();
@@ -245,15 +251,15 @@ public class NConnectionPanel extends LGMDragNDropPanel {
 
         if (editable) {
             GridBagConstraints constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.NONE;
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1;
             add(this, buttonpanel, constraints, 1, 1, 1, 1);
             constraints.anchor = GridBagConstraints.WEST;
-            add(this, label2, constraints, 2, 0, 1, 1);
+            add(this, rtreeLabel, constraints, 2, 0, 1, 1);
             constraints.anchor = GridBagConstraints.CENTER;
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 100;
-            constraints.weighty = 100;
-            add(this, sp2, constraints, 2, 1, 1, 1);
+            add(this, rtreeScollPane, constraints, 2, 1, 1, 1);
 
             rroot.removeAllChildren();
             rtree.reset();
@@ -321,14 +327,16 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(ltree, rtree, removeAction);
 
         return new DragNDropActionChain[] {
-                tac1, tac2
+                tac1,
+                tac2
         };
     }
 
     @Override
     public LGMDragNDropTree[] getAllDragNDropTrees() {
         return new LGMDragNDropTree[] {
-                rtree, ltree
+                rtree,
+                ltree
         };
     }
 
