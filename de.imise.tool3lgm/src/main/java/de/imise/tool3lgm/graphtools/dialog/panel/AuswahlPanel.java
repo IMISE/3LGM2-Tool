@@ -6,6 +6,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 
 import javax.swing.JLabel;
 
@@ -17,17 +18,14 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
+import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsprogramm;
-import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
 import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -37,7 +35,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * @author AXS
  */
-public class AuswahlPanel extends ElementDialogPanel {
+public class AuswahlPanel extends AbstractPathConnectionPanel {
 
     /**
      * COMMENTME
@@ -52,11 +50,6 @@ public class AuswahlPanel extends ElementDialogPanel {
     /**
      * COMMENTME
      */
-    private final Class<? extends ModelElement> searchElementClass;
-
-    /**
-     * COMMENTME
-     */
     private NamedObjectContainer<?> createNew = null;
 
     /**
@@ -65,12 +58,11 @@ public class AuswahlPanel extends ElementDialogPanel {
     private final ItemListener itemListener;
 
     /**
-     * @param searchElementClass
-     * @param p
+     * @param dialog
+     * @param edgeClasses
      */
-    public AuswahlPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog p) {
-        super(p);
-        this.searchElementClass = searchElementClass;
+    public AuswahlPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+        super(dialog, edgeClasses);
         setLayout(new BorderLayout());
         box = new AlphabeticalComboBox();
         // Action erstell und Listener an Panel und Box anhängen
@@ -90,12 +82,12 @@ public class AuswahlPanel extends ElementDialogPanel {
     }
 
     /**
-     * @param searchElementClass
-     * @param p
+     * @param dialog
      * @param addLabel
+     * @param edgeClasses
      */
-    public AuswahlPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog p, final boolean addLabel) {
-        this(searchElementClass, p);
+    public AuswahlPanel(final ElementPropertyDialog dialog, final boolean addLabel, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, edgeClasses);
         if (addLabel == false) {
             remove(westLabel);
         }
@@ -117,36 +109,15 @@ public class AuswahlPanel extends ElementDialogPanel {
         box.addItem("");
         box.addItem(createNew);
         box.addSeparator(false);
-        ArrayList<ElementContainer> connect = mainDoc.getElementContainer(searchElementClass);
-        ModelElement modelElement = getModelElement();
-        if (modelElement instanceof Anwendungsbaustein) {
-            if (Datenbanksystem.class.isAssignableFrom(searchElementClass) || Dokumentensammlung.class.isAssignableFrom(searchElementClass)) {
-                connect = ((Knoten) modelElement).getConnectedContainer(searchElementClass, mainDoc);
-            } else if (Softwareprodukt.class.isAssignableFrom(searchElementClass)) {
-                for (int m = 0; m < connect.size(); m++) {
-                    box.addItem(connect.get(m));
-                }
-
-                connect = new ArrayList<ElementContainer>();
-                ArrayList<ElementContainer> awp = ((Knoten) modelElement).getConnectedContainer(Anwendungsprogramm.class, mainDoc);
-                if (awp.size() > 0) {
-                    connect = ((NodeContainer) awp.get(0)).getKnoten().getConnectedContainer(searchElementClass, mainDoc);
-                }
-            }
-        } else {
-            for (int m = 0; m < connect.size(); m++) {
-                box.addItem(connect.get(m));
-            }
-            connect = ((Knoten) modelElement).getConnectedContainer(searchElementClass, mainDoc);
+        List<ElementContainer> connected = getConnectedContainer();
+        List<ElementContainer> available = isLastEdgeComposition() ? connected : mainDoc.getElementContainer(searchElementClass);
+        box.addAll(available);
+        for (ElementContainer ec : connected) {
+            box.removeItem(ec);
+            box.addItem(ec);
         }
-
-        for (int m = 0; m < connect.size(); m++) {
-            NodeContainer kc = (NodeContainer) connect.get(m);
-            box.removeItem(kc);
-            box.addItem(kc);
-        }
-        if (connect.size() > 0) {
-            box.setSelectedItem(connect.get(0));
+        if (connected.size() > 0) {
+            box.setSelectedItem(connected.get(0));
         }
         doc.finish_transaction(dialog.getTransactionID(), false);
         box.addItemListener(itemListener);
@@ -191,52 +162,16 @@ public class AuswahlPanel extends ElementDialogPanel {
                 // Verbindung trennen
                 if (e.getStateChange() == ItemEvent.DESELECTED) {
                     if (selected instanceof NodeContainer) {
-                        if (Softwareprodukt.class.isAssignableFrom(searchElementClass)) {
-                            Softwareprodukt swp = (Softwareprodukt) ((NodeContainer) selected).getElement();
-                            for (ModelElement awp : modelElement.getConnectedElements(Anwendungsprogramm.class)) {
-                                gdcoll.unlink(awp, swp, dialog.getTransactionID());
-                            }
-                        } else {
-                            NodeContainer knot = (NodeContainer) selected;
-                            gdcoll.unlink(modelElement, knot.getElement(), dialog.getTransactionID());
-                        }
+                        panel.unlinkAll();
                         modelElement.getContainer(mainDoc).refreshText();
                         mainDoc.finish_transaction(dialog.getTransactionID());
                         return;
                     }
                 }
 
-                // Neues Eley
+                // Neues Element anlegen
                 if (selected == panel.createNew) {
-                    if (Softwareprodukt.class.isAssignableFrom(searchElementClass)) {
-                        NodeContainer nc = mainDoc.createKnotenWithContainer(Softwareprodukt.class, dialog.getTransactionID());
-                        if (nc != null) {
-                            ModelElement swp = nc.getElement();
-                            ElementContainer awp = null;
-                            ArrayList<ElementContainer> awpl = modelElement.getConnectedContainer(Anwendungsprogramm.class, mainDoc.getCollection().getMainGraphDocument());
-                            if (awpl.size() > 0) {
-                                awp = awpl.get(0);
-                            }
-                            if (awp == null) {
-                                boolean old_mode = gdcoll.isInteractiveMode();
-                                gdcoll.setInteractiveMode(false);
-                                GraphDocument.createAddicted(mainDoc.getCollection().getSelectedDoc(), modelElement, RawbAwpVerbindung.class, Anwendungsprogramm.class, modelElement.getClearName() + "_" + swp.getName(), dialog.getTransactionID());
-                                gdcoll.setInteractiveMode(old_mode);
-                                awp = mainDoc.getLastCreated();
-                            }
-                            gdcoll.link(AwpSwpVerbindung.class, awp.getElement(), swp, dialog.getTransactionID());
-                        }
-                    } else if (Datenbanksystem.class.isAssignableFrom(searchElementClass)) {
-                        GraphDocument.createAddicted(mainDoc.getCollection().getSelectedDoc(), modelElement, RawbDbsVerbindung.class, Datenbanksystem.class, dialog.getTransactionID());
-                    } else if (Dokumentensammlung.class.isAssignableFrom(searchElementClass)) {
-                        GraphDocument.createAddicted(mainDoc.getCollection().getSelectedDoc(), modelElement, KawbDoksVerbindung.class, Dokumentensammlung.class, dialog.getTransactionID());
-                    } else {
-                        mainDoc.createKnotenWithContainer(searchElementClass, dialog.getTransactionID());
-                        NodeContainer nc = mainDoc.getLastCreated();
-                        if (nc != null) {
-                            gdcoll.link(modelElement, nc.getElement(), dialog.getTransactionID());
-                        }
-                    }
+                    panel.createNew();
                 } else if (selected instanceof NodeContainer) {
                     if (Softwareprodukt.class.isAssignableFrom(searchElementClass)) {
                         Softwareprodukt swp = (Softwareprodukt) ((NodeContainer) selected).getElement();
@@ -276,7 +211,7 @@ public class AuswahlPanel extends ElementDialogPanel {
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Panels
      * reagiert.
-     * 
+     *
      * @param edp
      */
     private final LGMAction getMouseAction() {
@@ -297,6 +232,16 @@ public class AuswahlPanel extends ElementDialogPanel {
                 }
             }
         };
+    }
+
+    @Override
+    protected DragNDropActionChain[] collectDragNDropActionChains() {
+        return new DragNDropActionChain[] {};
+    }
+
+    @Override
+    public LGMDragNDropTree[] getAllDragNDropTrees() {
+        return new LGMDragNDropTree[] {};
     }
 
 }

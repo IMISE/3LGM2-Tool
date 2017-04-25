@@ -20,10 +20,19 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbBtypVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteintyp;
-import de.imise.tool3lgm.graphtools.elements.node.DBVerwaltungssystem;
 import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
 import de.imise.tool3lgm.graphtools.elements.node.Datensatztyp;
 import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
@@ -32,14 +41,11 @@ import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
 import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsstandard;
 import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
-import de.imise.tool3lgm.graphtools.elements.node.Standort;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
@@ -112,7 +118,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         ModelElement modelElement = getModelElement();
         if (modelElement instanceof Anwendungsbaustein) {
             if (modelElement instanceof RechAnwendungsbaustein) {
-                AuswahlPanel ap = new AuswahlPanel(Datenbanksystem.class, dialog);
+                AuswahlPanel ap = new AuswahlPanel(dialog, RawbDbsVerbindung.class);
                 panelVector.add(ap);
 
                 add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
@@ -120,7 +126,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 add(this, ap, gbc, 1, gridy++, 1, 1);
 
-                ap = new AuswahlPanel(Softwareprodukt.class, dialog);
+                ap = new AuswahlPanel(dialog, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
                 panelVector.add(ap);
 
                 gbc.fill = GridBagConstraints.NONE;
@@ -130,30 +136,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
 
             } else if (modelElement instanceof KonAnwendungsbaustein) {
                 AuswahlPanel ap;
-                ap = new AuswahlPanel(Dokumentensammlung.class, dialog);
-                panelVector.add(ap);
-                gbc.weightx = 0;
-                add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-                gbc.weightx = 1;
-                add(this, ap, gbc, 1, gridy++, 1, 1);
-
-            } else {
-                AuswahlPanel ap;
-                ap = new AuswahlPanel(Datenbanksystem.class, dialog);
-                panelVector.add(ap);
-                gbc.weightx = 0;
-                add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-                gbc.weightx = 1;
-                add(this, ap, gbc, 1, gridy++, 1, 1);
-
-                ap = new AuswahlPanel(Softwareprodukt.class, dialog);
-                panelVector.add(ap);
-                gbc.weightx = 0;
-                add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-                gbc.weightx = 1;
-                add(this, ap, gbc, 1, gridy++, 1, 1);
-
-                ap = new AuswahlPanel(Dokumentensammlung.class, dialog);
+                ap = new AuswahlPanel(dialog, KawbDoksVerbindung.class);
                 panelVector.add(ap);
                 gbc.weightx = 0;
                 add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
@@ -180,7 +163,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
                 }
             }
             AuswahlPanel ap;
-            ap = new AuswahlPanel(DBVerwaltungssystem.class, dialog);
+            ap = new AuswahlPanel(dialog, DbsDbvsVerbindung.class);
             panelVector.add(ap);
             add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
             add(this, ap, gbc, 1, gridy++, 0, 1);
@@ -196,7 +179,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
                 }
             }
             AuswahlPanel ap;
-            ap = new AuswahlPanel(Kommunikationsstandard.class, dialog);
+            ap = new AuswahlPanel(dialog, BssKommstVerbindung.class);
             panelVector.add(ap);
             add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
             add(this, ap, gbc, 1, gridy++, 1, 1);
@@ -210,7 +193,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             JSeparator sep = new JSeparator();
             add(this, sep, gbc, 0, gridy++, 2, 0);
 
-            AuswahlPanel etPanel = new AuswahlPanel(Ereignistyp.class, dialog, false);
+            AuswahlPanel etPanel = new AuswahlPanel(dialog, false, EtntEtVerbindung.class);
             etPanel.setBorder(topBorder);
             panelVector.add(etPanel);
             gbc.fill = GridBagConstraints.NONE;
@@ -239,7 +222,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             add(this, sep, gbc, 0, gridy++, 2, 0);
 
             if (modelElement instanceof EreignisNachrichtenTyp) {
-                AuswahlPanel ntPanel = new AuswahlPanel(Nachrichtentyp.class, dialog, false);
+                AuswahlPanel ntPanel = new AuswahlPanel(dialog, false, EtntNatVerbindung.class);
                 panelVector.add(ntPanel);
                 ntPanel.setBorder(topBorder);
                 gbc.fill = GridBagConstraints.NONE;
@@ -252,7 +235,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
                 add(this, ntPanel, gbc, 1, gridy++, 1, 1);
             } else if (modelElement instanceof EreignisDokumentenTyp) {
 
-                AuswahlPanel dtPanel = new AuswahlPanel(Dokumententyp.class, dialog, false);
+                AuswahlPanel dtPanel = new AuswahlPanel(dialog, false, EtntDotVerbindung.class);
                 panelVector.add(dtPanel);
                 gbc.fill = GridBagConstraints.NONE;
                 gbc.weighty = 0;
@@ -274,14 +257,14 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
 
         } else if (modelElement instanceof PhysischerDVBaustein) {
             AuswahlPanel ap;
-            ap = new AuswahlPanel(Standort.class, dialog);
+            ap = new AuswahlPanel(dialog, PdvbStoVerbindung.class);
             panelVector.add(ap);
             gridy++;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
             add(this, ap, gbc, 1, gridy++, 1, 1);
 
-            ap = new AuswahlPanel(Bausteintyp.class, dialog);
+            ap = new AuswahlPanel(dialog, PdvbBtypVerbindung.class);
             panelVector.add(ap);
 
             add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
@@ -383,11 +366,14 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
     @Override
     public void update() {
         ModelElement modelElement = getModelElement();
-        if (modelElement instanceof EtntEtdtKombination) {
-            nameTextPane.setText(modelElement.getName());
-        }
 
         if (modelElement instanceof EtntEtdtKombination) {
+            try {
+                nameTextPane.setText(modelElement.getName());
+            } catch (Exception e) {
+                //beim Visible schalten wird dieses Update aufgerufen, was gleich nach dem Init zu einer
+                //Exception im LimitedSizeScrollTextPane führt -> try-catch
+            }
             String text = "";
             ArrayList<ElementContainer> all = modelElement.getConnectedContainer(Ereignistyp.class, mainDoc);
             if (all.size() > 0) {
