@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -12,7 +14,6 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
@@ -101,7 +102,7 @@ public class DoubleMeaningEdgePanel extends AbstractSingleEdgeConnectionPanel {
         add(this, sp1, constraints, 0, 1, 1, 1);
         add(this, sp2, constraints, 0, 3, 1, 1);
 
-        roroot = new LGMTreeNode(Tool3lgmConstants.getResString("frei1"), false);
+        roroot = new LGMTreeNode(getResString("frei1"), false);
         romodel = new DefaultTreeModel(roroot);
         rotree = new LGMDragNDropTree(romodel, mainDoc);
         rotree.setRootVisible(false);
@@ -110,9 +111,9 @@ public class DoubleMeaningEdgePanel extends AbstractSingleEdgeConnectionPanel {
         rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         sp3 = new JScrollPane(rotree);
 
-        oben2 = new JLabel(Tool3lgmConstants.getResString("frei"));
-        unten2 = new JLabel(Tool3lgmConstants.getResString("frei"));
-        ruroot = new LGMTreeNode(Tool3lgmConstants.getResString("frei2"), false);
+        oben2 = new JLabel(getResString("frei"));
+        unten2 = new JLabel(getResString("frei"));
+        ruroot = new LGMTreeNode(getResString("frei2"), false);
         rumodel = new DefaultTreeModel(ruroot);
         rutree = new LGMDragNDropTree(rumodel, mainDoc);
         rutree.setRootVisible(false);
