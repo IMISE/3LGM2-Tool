@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
@@ -23,10 +22,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsprogramm;
-import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
@@ -171,33 +166,10 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
 
                 // Neues Element anlegen
                 if (selected == panel.createNew) {
-                    panel.createNew();
-                } else if (selected instanceof NodeContainer) {
-                    if (Softwareprodukt.class.isAssignableFrom(searchElementClass)) {
-                        Softwareprodukt swp = (Softwareprodukt) ((NodeContainer) selected).getElement();
+                    panel.createNew(null);
 
-                        NodeContainer awp = null;
-                        ArrayList<ElementContainer> awpl = modelElement.getConnectedContainer(Anwendungsprogramm.class, mainDoc);
-                        if (awpl.size() > 0) {
-                            awp = (NodeContainer) awpl.get(0);
-                        }
-
-                        if (awp == null) {
-                            boolean old_mode = gdcoll.isInteractiveMode();
-                            gdcoll.setInteractiveMode(false);
-                            // mainDoc.createAWPforABS(modelElement.
-                            // getHashString(), modelElement.getClearName()
-                            // + "_" + swp.getName(),
-                            // dialog.getTransactionID());
-                            GraphDocument.createAddicted(mainDoc.getCollection().getSelectedDoc(), modelElement, RawbAwpVerbindung.class, Anwendungsprogramm.class, modelElement.getClearName() + "_" + swp.getName(), dialog.getTransactionID());
-                            gdcoll.setInteractiveMode(old_mode);
-                            awp = mainDoc.getLastCreated();
-                        }
-                        gdcoll.link(AwpSwpVerbindung.class, awp.getElement(), swp, dialog.getTransactionID());
-                    } else {
-                        NodeContainer knot = (NodeContainer) selected;
-                        gdcoll.link(modelElement, knot.getElement(), dialog.getTransactionID());
-                    }
+                } else if (selected instanceof NodeContainer) { //vorhandemes Element verknüpfen
+                    panel.createNew((NodeContainer) selected);
                 }
 
                 modelElement.getContainer(mainDoc).refreshText();

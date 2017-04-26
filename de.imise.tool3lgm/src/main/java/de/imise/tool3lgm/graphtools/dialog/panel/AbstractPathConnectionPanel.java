@@ -147,8 +147,14 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * ACHTUNG: Sollten auf dem Pfad Kanten mit abstrackten Klassen liegen und diese verbundenen Elemente nicht
      * existieren, dann kommt es zu einem Fehler, der hier nicht abgefangen wird.
      * Was auch ungünstig wäre, ist ein Pfad der mit Compositionen von einem Sclave zu einem Master verläuft.
+     * Die abgeleiteten Panels sollten dafür sorgen, dass als targetElement keine untergeordneten Elemente übergeben
+     * werden. Beim AuswahlPanel ist das sicher gestellt, da es bei Compositionen immer nur das evtl. breits
+     * verknüpfte Unterelement in der Auswahlbox anzeigt.
+     *
+     * @param targetElementContainer wenn hier ein nicht null-Element übergeben wird, dann wird dieses als letztes verknüpft.
+     *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
      */
-    protected void createNew() {
+    protected void createNew(final NodeContainer targetElementContainer) {
         ModelElement me = dialog.getModelElement();
         GraphDocument selDoc = getSelectedGraphDocument();
         //für den gesamten Pfad
@@ -170,8 +176,17 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
                     me = GraphDocument.createAddicted(selDoc, me, (Class<? extends Composition>) edgeClasses[i], elementClass2Create, pid);
                 } else {
                     //wenn es keine Composition ist, sondern eine 'normale Kante'
-                    //lege ein neues Element an (im gerade selektierten doc
-                    NodeContainer nc = selDoc.createKnotenWithContainer(elementClass2Create, pid);
+
+                    //NodeContainer, der in diesem Pfadschritt angehängt werden soll
+                    NodeContainer nc;
+                    //wenn ein targetElement übergeben wurde und wir bei der letzten Kante sind
+                    if (targetElementContainer != null && i == edgeClasses.length - 1) {
+                        //anzuhängender Container ist der übergebene
+                        nc = targetElementContainer;
+                    } else {
+                        //lege ein neues Element an (im gerade selektierten doc)
+                        nc = selDoc.createKnotenWithContainer(elementClass2Create, pid);
+                    }
                     ModelElement created = nc.getElement();
                     //verbinde das aktuelle me mit dem neuen Element in der angegebenen Richtung
                     if (directions[i] == FORWARD) {
