@@ -63,8 +63,8 @@ public abstract class Kante extends ModelElement {
     private String start_hash, end_hash;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public Kante() {
     }
 
@@ -106,7 +106,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * liefert true, wenn beide Knoten, die die Kante verbindet identisch sind und die Kante von derselben Art ist (Richtung ist egal)
-     * 
+     *
      * @param kante
      * @return
      */
@@ -147,14 +147,14 @@ public abstract class Kante extends ModelElement {
         checkValidity();
         //		if (!checkValidity());
         //			System.err.println(getClass().getSimpleName() + " : Edge with Node1 = "  + k1.getClearName() + " and Node2 " + k2.getClearName() + " is not valid. ");
-        //		
+        //
 
     }
 
     /**
      * Setzt fuer die Kante die Knoten Anfang=_k1 und Ende=_k2 und fügt die Kante bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
      * ein.
-     * 
+     *
      * @param _k1 Knoten
      * @param pos int Position
      * @param _k2 Knoten
@@ -170,7 +170,7 @@ public abstract class Kante extends ModelElement {
     public void setKnotsAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
         k1 = _k1;
         k2 = _k2;
-        //wenn PartOfBeziheungen im Kreis modelliert wurden, wird die falsche Beziehung glpeich wieder entfernt 
+        //wenn PartOfBeziheungen im Kreis modelliert wurden, wird die falsche Beziehung glpeich wieder entfernt
         //und ihre alten Start- und Endelemente gesetzt, die bei einer neuen Kante immer null waren -> null hier abfangen
         if (_k1 != null) {
             _k1.insertEdge(this, _k1EdgePos);
@@ -233,7 +233,7 @@ public abstract class Kante extends ModelElement {
     /**
      * Wenn das übergebene Element durch diese Kante mit einem anderen Element verbunden ist, kommt das andere Element der Kante zurück, sons
      * <code>null</code>.
-     * 
+     *
      * @param me
      * @return
      */
@@ -250,7 +250,7 @@ public abstract class Kante extends ModelElement {
     /**
      * Wenn die übergebene Elementklasse durch eine Kante der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
      * dieser anderen Elemente zurück gegeben. Passen Kante und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
-     * 
+     *
      * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
      * @param meClass Elementklasse der Kante, deren Gegenelementklasse zurück gegeben werden soll
      * @return die andere Elementklasse der Kante, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
@@ -360,7 +360,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
-     * 
+     *
      * @return <code>true</code>, wenn die Kante vollständig richtig ist
      */
     public boolean checkValidity() {
@@ -368,7 +368,7 @@ public abstract class Kante extends ModelElement {
         boolean switchStart = false, switchEnd = false;
         if (k1 != null && k2 != null) {
             Class<? extends ModelElement> clazz = k1.getClass();
-            //prüfen, ob das StartElement von einer der Startklassen ist 
+            //prüfen, ob das StartElement von einer der Startklassen ist
             if (!isStartClass(clazz)) {
                 //wenn nicht
                 switchStart = isEndClass(clazz);
@@ -376,7 +376,7 @@ public abstract class Kante extends ModelElement {
                 startClassOk = true;
             }
             clazz = k2.getClass();
-            //prüfen, ob das EndElement von einer der Endklassen ist 
+            //prüfen, ob das EndElement von einer der Endklassen ist
             if (!isEndClass(clazz)) {
                 //wenn nicht
                 switchEnd = isStartClass(clazz);
@@ -405,7 +405,7 @@ public abstract class Kante extends ModelElement {
             k2 = dummy;
             return true;
         }
-        //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen 
+        //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
         //der Start- und Endelemente mit den Metaklassen üerbeinstimmen.
         return startClassOk && endClassOk;
     }
@@ -491,7 +491,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
-     * 
+     *
      * @param edgeClass
      * @param elementClass
      * @return
@@ -503,7 +503,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -513,7 +513,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
-     * 
+     *
      * @param edgeClass
      * @param elementClass
      * @return
@@ -525,7 +525,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -535,7 +535,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
-     * 
+     *
      * @param edgeClass
      * @param elementClass
      * @return
@@ -546,7 +546,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
-     * 
+     *
      * @param edgeClass
      * @param elementClass1
      * @param elementClass2
@@ -560,7 +560,7 @@ public abstract class Kante extends ModelElement {
      * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
      * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und <code>endElementClass</code> die Endklasse
      * der Kantenklasse oder eine Unterklasse davon ist.
-     * 
+     *
      * @param edgeClass
      * @param startElementClass
      * @param endElementClass
@@ -572,7 +572,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben muss.
-     * 
+     *
      * @param edgeClass
      * @param elementClass
      * @return
@@ -589,7 +589,7 @@ public abstract class Kante extends ModelElement {
 
     /**
      * Liefert die maximale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben kann.
-     * 
+     *
      * @param edgeClass
      * @param elementClass
      * @return
@@ -704,10 +704,10 @@ public abstract class Kante extends ModelElement {
             return false;
         }
 
-        k1.addEdge(this);
-        k2.addEdge(this);
+        boolean reconnectFirst = k1.addEdge(this);
+        boolean reconnectSecond = k2.addEdge(this);
 
-        return true;
+        return reconnectFirst || reconnectSecond;
     }
 
     @Override
