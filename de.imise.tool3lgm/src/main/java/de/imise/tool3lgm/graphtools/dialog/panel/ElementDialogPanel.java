@@ -46,7 +46,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * Der Dialog in dem sich dieses Panel befindet
      */
-    protected ElementPropertyDialog dialog;
+    protected final ElementPropertyDialog dialog;
     /**
      * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere Bäume enthalten
      * kann, wird sich in dieser Liste sozusagen die Gesamtselektion gemerkt.
@@ -136,6 +136,7 @@ public abstract class ElementDialogPanel extends JPanel {
      */
     public ElementDialogPanel(final ElementPropertyDialog dialog, final String name) {
         super();
+        this.dialog = dialog;
         internalInit(dialog, name);
     }
 
@@ -148,7 +149,6 @@ public abstract class ElementDialogPanel extends JPanel {
 
         doc = dialog.getGraphDocument();
         mainDoc = doc.getCollection().getMainGraphDocument();
-        this.dialog = dialog;
         treeRenderer = new TreeRenderer(doc);
         setBorder(BorderFactory.createEmptyBorder(1, 1, 0, 0));
         highlight = new ArrayList<ElementContainer>();

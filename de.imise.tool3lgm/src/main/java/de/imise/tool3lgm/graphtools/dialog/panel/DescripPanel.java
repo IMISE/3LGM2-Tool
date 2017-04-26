@@ -84,11 +84,11 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
     }
 
     /**
-     * @param prop
+     * @param dialog
      * @param callInit
      */
-    public DescripPanel(final ElementPropertyDialog prop, final boolean callInit) {
-        super(prop);
+    public DescripPanel(final ElementPropertyDialog dialog, final boolean callInit) {
+        super(dialog);
         int gridy = 0;
 
         setLayout(new GridBagLayout());
@@ -154,14 +154,10 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             add(this, mp, gbc, 1, gridy++, 1, 1);
 
         } else if (modelElement instanceof Datenbanksystem) {
+            NotEditableSingleConnectionInfoPanel awbPanel = new NotEditableSingleConnectionInfoPanel(dialog, RawbDbsVerbindung.class);
+            add(this, awbPanel.getWestLabel(), gbc, 0, gridy, 1, 1);
+            add(this, awbPanel, gbc, 1, gridy++, 1, 1);
 
-            add(this, new JLabel(Tool3lgmConstants.getResString("gehawb")), gbc, 0, gridy, 1, 1);
-            ArrayList<Kante> traces = ((Knoten) modelElement).getEdges();
-            for (int n = 0; n < traces.size(); n++) {
-                if (traces.get(n).getStart() instanceof RechAnwendungsbaustein) {
-                    add(this, new Label(traces.get(n).getStart().toString()), gbc, 1, gridy++, 1, 1);
-                }
-            }
             AuswahlPanel ap;
             ap = new AuswahlPanel(dialog, DbsDbvsVerbindung.class);
             panelVector.add(ap);
@@ -193,7 +189,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             JSeparator sep = new JSeparator();
             add(this, sep, gbc, 0, gridy++, 2, 0);
 
-            AuswahlPanel etPanel = new AuswahlPanel(dialog, false, EtntEtVerbindung.class);
+            AuswahlPanel etPanel = new AuswahlPanel(dialog, EtntEtVerbindung.class);
             etPanel.setBorder(topBorder);
             panelVector.add(etPanel);
             gbc.fill = GridBagConstraints.NONE;
@@ -222,7 +218,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             add(this, sep, gbc, 0, gridy++, 2, 0);
 
             if (modelElement instanceof EreignisNachrichtenTyp) {
-                AuswahlPanel ntPanel = new AuswahlPanel(dialog, false, EtntNatVerbindung.class);
+                AuswahlPanel ntPanel = new AuswahlPanel(dialog, EtntNatVerbindung.class);
                 panelVector.add(ntPanel);
                 ntPanel.setBorder(topBorder);
                 gbc.fill = GridBagConstraints.NONE;
@@ -235,7 +231,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
                 add(this, ntPanel, gbc, 1, gridy++, 1, 1);
             } else if (modelElement instanceof EreignisDokumentenTyp) {
 
-                AuswahlPanel dtPanel = new AuswahlPanel(dialog, false, EtntDotVerbindung.class);
+                AuswahlPanel dtPanel = new AuswahlPanel(dialog, EtntDotVerbindung.class);
                 panelVector.add(dtPanel);
                 gbc.fill = GridBagConstraints.NONE;
                 gbc.weighty = 0;
