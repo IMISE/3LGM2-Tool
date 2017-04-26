@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.zip.CRC32;
 import java.util.zip.DataFormatException;
@@ -825,16 +826,16 @@ public final class GDCollection extends UserFieldTarget {
                     //alle Kanten sind Doppelkanten, deswegen hier keine Prüfung
                     switch (((Doppelkante) edge).getDirection()) {
                     case Doppelkante.FORWARD:
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdges().indexOf(edge) + " " + ke.getEdges().indexOf(edge), pid);
+                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdgeIndex(edge) + " " + ke.getEdgeIndex(edge), pid);
                         doc.addRedoCommand(GDCommands.DELETE + " " + edge.getHashString(), pid);
                         break;
                     case Doppelkante.BACKWARD:
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ke.getHashString() + " " + ks.getHashString() + " " + ke.getEdges().indexOf(edge) + " " + ks.getEdges().indexOf(edge), pid);
+                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ke.getHashString() + " " + ks.getHashString() + " " + ke.getEdgeIndex(edge) + " " + ks.getEdgeIndex(edge), pid);
                         doc.addRedoCommand(GDCommands.DELETE + " " + edge.getHashString(), pid);
                         break;
                     case Doppelkante.DOUBLE:
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ke.getHashString() + " " + ks.getHashString() + " " + ke.getEdges().indexOf(edge) + " " + ks.getEdges().indexOf(edge), pid);
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdges().indexOf(edge) + " " + ke.getEdges().indexOf(edge), pid);
+                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ke.getHashString() + " " + ks.getHashString() + " " + ke.getEdgeIndex(edge) + " " + ks.getEdgeIndex(edge), pid);
+                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdgeIndex(edge) + " " + ke.getEdgeIndex(edge), pid);
                         doc.addRedoCommand(GDCommands.DELETE + " " + edge.getHashString(), pid);
                         break;
                     }
@@ -1639,10 +1640,10 @@ public final class GDCollection extends UserFieldTarget {
             Doppelkante dlk = (Doppelkante) ka;
             if (dlk.getDirection() == Doppelkante.DOUBLE) {
                 if (dlk.getStart() == k1) {
-                    doc.addUndoCommand(GDCommands.LINK + " " + dlk.getClass().getName() + " " + dlk.getHashString() + " " + k1.getHashString() + " " + k2.getHashString() + " " + k1.getEdges().indexOf(dlk) + " " + k2.getEdges().indexOf(dlk), pid);
+                    doc.addUndoCommand(GDCommands.LINK + " " + dlk.getClass().getName() + " " + dlk.getHashString() + " " + k1.getHashString() + " " + k2.getHashString() + " " + k1.getEdgeIndex(dlk) + " " + k2.getEdgeIndex(dlk), pid);
                     dlk.setDirection(Doppelkante.BACKWARD);
                 } else {
-                    doc.addUndoCommand(GDCommands.LINK + " " + dlk.getClass().getName() + " " + dlk.getHashString() + " " + k2.getHashString() + " " + k1.getHashString() + " " + k2.getEdges().indexOf(dlk) + " " + k1.getEdges().indexOf(dlk), pid);
+                    doc.addUndoCommand(GDCommands.LINK + " " + dlk.getClass().getName() + " " + dlk.getHashString() + " " + k2.getHashString() + " " + k1.getHashString() + " " + k2.getEdgeIndex(dlk) + " " + k1.getEdgeIndex(dlk), pid);
                     dlk.setDirection(Doppelkante.FORWARD);
                 }
             } else {
@@ -1698,8 +1699,8 @@ public final class GDCollection extends UserFieldTarget {
         //knoten2.createNameWithSzens(doc);
 
         for (Class<? extends ModelElement> clazz : ModelConstants.getSubordinatedJoinbleTypes(knoten2.getClass())) {
-            ArrayList<ModelElement> sjt1 = knoten1.getConnectedElements(clazz);
-            ArrayList<ModelElement> sjt2 = knoten2.getConnectedElements(clazz);
+            List<ModelElement> sjt1 = knoten1.getConnectedElements(clazz);
+            List<ModelElement> sjt2 = knoten2.getConnectedElements(clazz);
             if (sjt1.size() > 0 && sjt2.size() > 0) {
                 ModelElement me1 = sjt1.get(0);
                 ModelElement me2 = knoten2.getConnectedElements(clazz).get(0);
@@ -1707,8 +1708,9 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
 
-        ArrayList<Kante> kantenVector1 = knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
-        ArrayList<Kante> kantenVector2 = knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
+        //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Kante selbst irgenwie darum kümmern!
+        List<Kante> kantenVector1 = (List<Kante>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        List<Kante> kantenVector2 = (List<Kante>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
 
         //für jede Kante vom zu löschenden Knoten

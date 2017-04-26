@@ -314,8 +314,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             layout = nonExpandedLayout;
         }
 
-        ArrayList<Kante> edges = me.getEdges();
-        for (Kante edge : edges) {
+        for (Kante edge : me.getEdges()) {
             ElementContainer kc = edge.getContainer(doc);
             if (kc == null) {
                 continue;

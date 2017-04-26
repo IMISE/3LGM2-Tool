@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -62,7 +65,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liste aller Assoziationen zu anderen Elementen
      */
-    private ArrayList<Kante> edges = new ArrayList<Kante>(3);
+    private List<Kante> edges = Lists.newArrayList();
 
     /**
      * Ein StringBuilder, der gebraucht wird, um die Namen der Elemente zusammen zu bauen. Er ist statisch, damit man ihn nicht ständig neu anlegen
@@ -120,7 +123,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Liefert den Index der Ebene, auf dem das Element liegt. Diese Funktion wird von den konkreten Elementen überschrieben. Das braucht man neben
      * den der Möglichkeit das für eine Klasse über die {@link ModelConstants} zu sagen, weil es nicht bei allen
      * Klassen der Layer feststeht (Knickpunkte)
-     * 
+     *
      * @return
      */
     public int layerFor() {
@@ -130,7 +133,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * does nothing because layer ist defined by 3lgm-specifications <br/>
      * overwrite method in classes with no definite layer, like oldTrace
-     * 
+     *
      * @param layer
      */
     public final void setLayer(final int layer) {
@@ -181,8 +184,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public final void removeAllContainer() {
         containerTable.clear();
         nameWithSzens = null;
@@ -237,7 +240,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Berechnet aus dem HashString das Datum, an dem das Element erstellt wurde. Lässt sich das Datum aus irgendwelchen Gründen nicht berechnen kommt
      * new STANDARD_CREATION_DATE = new Date(0) zurück.
-     * 
+     *
      * @return
      */
     public Date getCreationDate() {
@@ -276,7 +279,7 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         while (nameBuffer.charAt(0) == '\n' || nameBuffer.charAt(0) == ' ' || nameBuffer.charAt(0) == '\t') {
             nameBuffer.deleteCharAt(0);
-            //Diese zusätzliche Abfrage verhindert die Exception, die flog, wenn man den Eigenschaftendialog öffnete und die Bedingungen aus Bug-Meldung vom <08.11.06 LI> galt. 
+            //Diese zusätzliche Abfrage verhindert die Exception, die flog, wenn man den Eigenschaftendialog öffnete und die Bedingungen aus Bug-Meldung vom <08.11.06 LI> galt.
             if (nameBuffer.length() == 0) {
                 return "";
             }
@@ -333,8 +336,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public final void invalidateNameWithSzens() {
         nameWithSzens = null;
     }
@@ -356,7 +359,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Setzt den Namen des Objektes und sortiert die Liste der {@link NodeContainer} im LayerContainer
-     * 
+     *
      * @param name
      */
     public void setName(final String name) {
@@ -365,7 +368,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Setzt den Namen des Objektes und sortiert die Liste der {@link NodeContainer} im LayerContainer, wenn sort==true
-     * 
+     *
      * @param name
      * @param sort
      */
@@ -464,8 +467,8 @@ public abstract class ModelElement extends UserFieldTarget {
     //	}
 
     /**
-	 * 
-	 */
+     *
+     */
     public void refreshText() {
         for (ElementContainer ec : containerTable.values()) {
             ec.refreshText();
@@ -506,7 +509,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * if you overwrite this methode in a sub-class nevertheless please always call this methode by super.getXMLEntities()
-     * 
+     *
      * @return xml-tags for name, description and userFields
      */
     protected StringBuilder getXMLEntities() {
@@ -528,7 +531,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * setzt die UserField(Felder) zu einem Objekt
-     * 
+     *
      * @param field Bezeichnung des Feldes
      * @param value Wert des Feldes (als unkodierte String)
      * @return true, wenn das Feld existiert und der Wert gesetzt werden konnte
@@ -580,7 +583,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * set a property / field of the ModelElement possible fieldNames: name, description
-     * 
+     *
      * @author Thomas Rudert
      * @param fieldName String with the name of the field
      * @param value String with the value for this field
@@ -615,7 +618,6 @@ public abstract class ModelElement extends UserFieldTarget {
     /* --- Funktionen im Netzwerk --- Anfang --- */
 
     /** Fuegt diesem Knoten eine Kante zu. */
-
     public boolean addEdge(final Kante kante) {
         if (kante == null || edges.contains(kante)) {
             return false;
@@ -681,7 +683,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /** Gibt den Vektor der Verbindungen zurueck */
-    public final ArrayList<Kante> getEdges() {
+    public final Iterable<Kante> getEdges() {
         return edges;
     }
 
@@ -691,6 +693,10 @@ public abstract class ModelElement extends UserFieldTarget {
             return null;
         }
         return edges.get(index);
+    }
+
+    public int getEdgeIndex(final Kante edge) {
+        return edges.indexOf(edge);
     }
 
     //###############################################################################
@@ -762,7 +768,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Prüft, ob zwischen diesem und dem übergebenen Element eine Kante der angegebenen Art existiert. Die Richtung ist dabei egal.
-     * 
+     *
      * @param modelElement Element zu dem die Existenz einer Verbindung geprüft werden soll
      * @param edgeClass Art der Kante, die gesucht werden soll
      * @return <code>true</code>, wenn eine Kante zwischen diesem und dem übergebenen Element besteht
@@ -797,7 +803,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Gibt die erste Kante vom Typ <code>edgeClass</code> zurück, die von diesem <code>ModelElement</code> zum <code>ModelElement k</code> geht.
      * Führt <code>getConnectionTo(ModelElement, Class, int)</code> für alle Positionen aus.
-     * 
+     *
      * @param modelElement
      * @param edgeClasses
      * @return
@@ -916,7 +922,7 @@ public abstract class ModelElement extends UserFieldTarget {
     //		}
     //		return retVal;
     //	}
-    //*/	
+    //*/
 
     /**
      * @param modelElement
@@ -974,7 +980,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Sucht alle Kanten, die diesen Knoten mit Knoten des angegebenen Typs verbinden.
-     * 
+     *
      * @param elementClass Klasse der verbundenen Knoten
      * @return ArrayList mit allen gefundenen Kanten
      */
@@ -985,7 +991,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Sucht alle Kanten des angegebenen Typs, die diesen Knoten mit Knoten des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
      * <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
-     * 
+     *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @return ArrayList mit allen gefundenen Kanten
@@ -997,7 +1003,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Sucht alle Kanten des angegebenen Typs, die diesen Knoten in Vorwärtsrichtung mit Knoten des angegebenen Typs verbinden. Wird als
      * <code>edgeClass</code> <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
-     * 
+     *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @return ArrayList mit allen gefundenen Kanten
@@ -1009,7 +1015,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Sucht alle Kanten des angegebenen Typs, die diesen Knoten in Rückwärtsrichtung mit Knoten des angegebenen Typs verbinden. Wird als
      * <code>edgeClass</code> <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
-     * 
+     *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @return ArrayList mit allen gefundenen Kanten
@@ -1021,7 +1027,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Sucht alle Kanten des angegebenen Typs, die diesen Knoten mit Knoten des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
      * <code>null</code> übergeben, werden alle Kanten zurückgegeben.
-     * 
+     *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @param Richtung der Kante nach der gesucht werden soll (<code>Doppelkante.ANY</code>, <code>Doppelkante.FORWARD</code> oder
@@ -1054,7 +1060,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Gibt eine alphabetisch sortierte Liste aller ElementContainer der mit diesem Knoten verbundenen Knoten der Klasse
      * <code>searchElementClass</code>, die in doc enthalten, sind zurueck
-     * 
+     *
      * @param searchElementClass Art der verbundenen Elemente, deren Container geliefert werden sollen
      * @param doc Knoten aus diesem Dokument
      * @return ArrayList mit ElementContainer der gefundenen Knoten
@@ -1065,7 +1071,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Knoten übder die angegebene Kantenart verbundenen sind.
-     * 
+     *
      * @param doc Knoten aus diesem Dokument
      * @param searchEdgeClass Art der zu suchenden verbindungen
      * @return ArrayList mit ElementContainer der gefundenen Knoten
@@ -1098,7 +1104,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Gibt eine alphabetisch sotrierte Liste aller ElementContainer der mit diesem Knoten verbundenen Knoten des Klasse searchElementClass, die in
      * doc enthalten, sind zurueck
-     * 
+     *
      * @param searchElementClass Elementklasse deren Objekte zurück gegeben werden sollen
      * @param doc Knoten aus diesem Dokument
      * @param start true = Verbindungen beginnen nicht bei diesem Knoten
@@ -1117,7 +1123,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert eine Liste aller Elemente der angegebenen Art, die über irgendeine Kantenart mit den direkten und indirekten Teilelementen dieses
      * Elementes verbunden sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht:
-     * 
+     *
      * @param searchElementClass Elementart nach der gesucht werden soll
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @return Liste mit verbundenen <code>ModelElement</code>s
@@ -1130,7 +1136,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert eine Liste aller Elemente die über die übergebene Kantenart mit den direkten und indirekten Teilelementen dieses Elementes verbunden
      * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht:
-     * 
+     *
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @param searchEdgeClass Kantenart nach der gesucht werden soll
      * @return Liste mit verbundenen <code>ModelElement</code>s
@@ -1144,7 +1150,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit den direkten und indirekten Teilelementen dieses Elementes verbunden
      * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht und nur in der angegebenen
      * Richtung der Kante.
-     * 
+     *
      * @param searchElementClass Elementart nach der gesucht werden soll
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @param edgeClass Art der Kante, über die Elemente mit den Teilen dieses Elementes verbunden sein sollen
@@ -1165,7 +1171,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert eine Liste aller Elemente der angegebenen Art, die über irgendeine Kantenart mit den direkten und indirekten Oberelementen dieses
      * Elementes verbunden sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht.
-     * 
+     *
      * @param searchElementClass Elementart nach der gesucht werden soll
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @return Liste mit verbundenen <code>ModelElement</code>s
@@ -1179,7 +1185,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Liefert eine Liste aller Elemente, die über die angegebene Kantenart mit den direkten und indirekten Oberelementen dieses Elementes verbunden
      * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht und nur in der angegebenen
      * Richtung der Kante.
-     * 
+     *
      * @param searchElementClass Elementart nach der gesucht werden soll
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @param edgeClass Art der Kante, über die Elemente mit den Teilen dieses Elementes verbunden sein sollen
@@ -1201,7 +1207,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert eine Liste mit den ElementContainer der direkten Teilelemente im aktuellen <code>GraphDocument</code>
-     * 
+     *
      * @param doc
      * @return Liste mit den Containern der direkten Teilelemente
      */
@@ -1216,7 +1222,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert eine Liste mit den ElementContainer der direkten Oberelemente im aktuellen <code>GraphDocument</code>
-     * 
+     *
      * @param doc
      * @return Liste mit den Containern der direkten oberelemente
      */
@@ -1232,7 +1238,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Prüft, ob im übergebenen GraphDocument der Container eines direkt verbundenen Parent-Elementes von <code>this</code> existiert. Wenn ja, kommt
      * <code>true</code> zurück.
-     * 
+     *
      * @param doc
      * @return
      */
@@ -1243,7 +1249,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Prüft, ob im übergebenen GraphDocument ein Container eines Part-Elementes von <code>this</code> existiert. Wenn ja, kommt <code>true</code>
      * zurück.
-     * 
+     *
      * @param doc
      * @return
      */
@@ -1254,7 +1260,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert ein <code>ArrayList</code> aller <code>ElementContainer</code>, deren Elemente Teil dieses Elementes sind, aber selbst keine Teile
      * besitzen. <br>
-     * 
+     *
      * @return Liste mit <code>ElementContainer</code>n, die die absoluten Kindelemente sind
      */
     public final ArrayList<ElementContainer> getAbsolutePartContainer(final GraphDocument doc) {
@@ -1272,7 +1278,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Füllt die übergebene Liste <code>returnList</code> mit allen hierarschich verbundenen Elementen.
-     * 
+     *
      * @param returnList Liste mit <code>ElementContainer</code>n
      * @param doc (Teil-)Modell in dem gesucht werden soll
      * @param parts Wenn <code>true</code> wird nach allen Teilen gesucht, sonst nach allen Oberelementen
@@ -1313,7 +1319,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert alle Eltern, Kinder und Geschwister dieses Elementes und das Element selbst. Es werden also alle Elemente gesucht, die mit diesem
      * Element über eine beliebigen Pfad von PartOfVerbindungen zusammenhängen.
-     * 
+     *
      * @return Liste mit <code>ModelElement</code>en
      */
     public final ArrayList<ModelElement> getPartAndParentElements() {
@@ -1331,7 +1337,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert alle Eltern, Kinder und Geschwister dieses Elementes und das Element selbst. Es werden also alle Elemente gesucht, die mit diesem
      * Element über eine beliebigen Pfad von PartOfVerbindungen zusammenhängen.
-     * 
+     *
      * @param doc <code>GraphDocument</code> in dem gesucht werden soll
      * @return Liste mit <code>ElementContainer</code>n
      */
@@ -1365,7 +1371,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt die Parts in Form von <code>ElementContainer</code> zurück.
-     * 
+     *
      * @param doc
      * @param addMeAsFirst
      * @return Eine <code>ArrayList</code> gefüllt mit <code>ElementContainer</code>n.
@@ -1376,7 +1382,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt die Parts in Form von <code>ModelElement</code> zurück.
-     * 
+     *
      * @param addMeAsFirst
      * @return Eine <code>ArrayList</code> gefüllt mit <code>ModelElement</code>s.
      */
@@ -1437,7 +1443,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert die direkten Teilelemente dieses Elements
-     * 
+     *
      * @return
      */
     public final ArrayList<ModelElement> getDirectPartElements() {
@@ -1451,7 +1457,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert die direkten Oberelemente dieses Elements
-     * 
+     *
      * @return
      */
     public final ArrayList<ModelElement> getDirectParentElements() {
@@ -1465,7 +1471,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt die Parents in Form von <code>ElementContainer</code> zurück.
-     * 
+     *
      * @param doc
      * @param addMeAsFirst
      * @return Eine <code>ArrayList</code> gefüllt mit <code>ElementContainer</code>n.
@@ -1476,7 +1482,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt die Parents in Form von <code>ModelElement</code> zurück.
-     * 
+     *
      * @param doc
      * @param addMeAsFirst
      * @return Eine <code>ArrayList</code> gefüllt mit <code>ModelElement</code>s.
@@ -1494,7 +1500,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle absoluten Teilelemente zurück
-     * 
+     *
      * @return
      */
     public final HashSet<ModelElement> getAbsolutePartElements() {
@@ -1540,7 +1546,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert <code>true</code>, wenn <code>this</code> und <code>me</code> direkt über eine <code>PartOfBeziehung</code> verbunden sind und
      * <code>this</code> ein Teil von <code>me</code> ist.
-     * 
+     *
      * @param me
      * @return
      */
@@ -1551,7 +1557,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert <code>true</code>, wenn <code>me</code> und <code>this</code> direkt über eine <code>PartOfBeziehung</code> verbunden sind und
      * <code>me</code> ein Teil von <code>this</code> ist.
-     * 
+     *
      * @param me
      * @return
      */
@@ -1569,7 +1575,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt wieder, ob dieses Modelelement Parent eines anderen ist.
-     * 
+     *
      * @return
      */
     public final boolean hasPart() {
@@ -1578,7 +1584,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt wieder, ob dieses Modelelement Part eines anderen ist.
-     * 
+     *
      * @return
      */
     public final boolean hasParent() {
@@ -1595,7 +1601,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Füllt die übergebene Liste <code>returnList</code> mit allen hierarschich verbundenen Elementen.
-     * 
+     *
      * @param returnList Liste mit <code>ElementContainer</code>n
      * @param doc (Teil-)Modell in dem gesucht werden soll
      * @param parts Wenn <code>true</code> wird nach allen Teilen gesucht, sonst nach allen Oberelementen
@@ -1614,7 +1620,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * COMMENTME
-     * 
+     *
      * @return
      */
     public final ArrayList<? extends ModelElement> getDirectCompositionSlaveElements() {
@@ -1633,7 +1639,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert eine Liste aller Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine {@link Composition} verbunden
      * sind, wobei das verbundene Element diesem Element übergeordnet ist.
-     * 
+     *
      * @return
      */
     public final ArrayList<? extends ModelElement> getDirectCompositionMasterElements() {
@@ -1653,7 +1659,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert eine Liste aller Container der Slaveelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
      * {@link Composition} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
-     * 
+     *
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return
      */
@@ -1664,7 +1670,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert eine Liste aller Container der Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
      * {@link Composition} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
-     * 
+     *
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return
      */
@@ -1676,7 +1682,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Liefert eine Liste mit allen Containern, die die übergebenen Elemente im übergebenen {@link GraphDocument} haben. Wenn ein Element der
      * übergebenen Collection keinen Container im {@link GraphDocument} hat, dann wird auch kein Eintrag in der
      * Rückgabeliste hinzugefügt. Die Rückgabeliste kann also kleiner sein, als die übergebene Liste.
-     * 
+     *
      * @param elements
      * @param doc
      * @return
@@ -1712,7 +1718,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementOrTraceClass</code>
      * zurueck.
-     * 
+     *
      * @param searchElementClass
      * @return
      */
@@ -1722,7 +1728,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
-     * 
+     *
      * @param searchElementClass
      * @param edgeClass
      * @return
@@ -1733,7 +1739,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
-     * 
+     *
      * @param searchElementClass
      * @param edgeClass
      * @param direction
@@ -1745,7 +1751,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
-     * 
+     *
      * @param searchElementClass
      * @param edgeClass
      * @param direction
@@ -1758,7 +1764,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s der Klasse <code>searchElementClass</code> zurueck.
-     * 
+     *
      * @param searchElementClass
      * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht werden sollen. Wird <code>null</code> übergeben, werden alle
      *            verbundenen Elemente zurück gegeben, was der Suche im Hauptmodell entspricht.
@@ -1775,7 +1781,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s der Klasse <code>searchElementClass</code> zurueck oder
      * deren <code>ElementContainer</code>.
-     * 
+     *
      * @param searchElementClass
      * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht werden sollen. Wird <code>null</code> übergeben, werden alle
      *            verbundenen Elemente zurück gegeben, was der Suche im Hauptmodell entspricht. Will man aber <code>ElementContainer</code> aus dem
@@ -1875,7 +1881,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle <code>ModelElement</code>s zurück, die mit diesem <code>ModelElement</code> im angegebenen <code>GraphDocument</code> verbunden sind.
-     * 
+     *
      * @param edgeClass alle Kanten des Types
      * @return ArrayList mit den verbundenen ModelElementen
      */
@@ -1885,7 +1891,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Gibt alle <code>ModelElement</code>s zurück, die mit diesem <code>ModelElement</code> im angegebenen <code>GraphDocument</code> verbunden sind.
-     * 
+     *
      * @param edgeClass alle Kanten des Types
      * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
      *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
@@ -1907,7 +1913,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Liefert einen Eigenschafts-Dialog für dieses Element. Wenn bereits einer existiert, wird dieser zurück gegeben, sonst wird ein neuer Dialog
      * angelegt. Der Dialog wird sofort angezeigt oder wenn er bereits angezeigt wird in den Vordergrund gebracht.
-     * 
+     *
      * @param gdcoll GDCollection, in der sich das Element befinden sollte
      * @return
      */
@@ -1931,7 +1937,7 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Gibt eine Liste aller Verbindungen der angegebenen Art zurück.<br>
      * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder eine Oberklasse davon sein.
-     * 
+     *
      * @param edgeClass Klasse der zu suchenden Kanten
      * @return
      */
@@ -1947,7 +1953,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Counts the edges
-     * 
+     *
      * @param edgeClass Type of edges to count
      * @return Number of edges with the specified type
      */
@@ -1957,7 +1963,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Counts the edges
-     * 
+     *
      * @param edgeClass Type of edges to count
      * @param direction Direction of the edge in relation to this
      * @return Number of edges with the specified type
@@ -1984,7 +1990,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Counts the edges starting by this
-     * 
+     *
      * @param edgeClass Type of edges to count
      * @return Number of edges with the specified type
      */
@@ -1994,7 +2000,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Counts the edges ending by this
-     * 
+     *
      * @param edgeClass Type of edges to count
      * @return Number of edges with the specified type
      */
@@ -2004,7 +2010,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Reicht die selbe Methode die von <code>Tool3lgmConstants</code> einfach nur durch.
-     * 
+     *
      * @param key
      * @return
      */
@@ -2034,7 +2040,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Ueberprueft, ob der Knoten ein untergeodnetes Element ist.
-     * 
+     *
      * @return
      */
     public boolean isSlave() {
@@ -2081,14 +2087,14 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Testet, ob das Modelelement this in der Richtung direction zu dem ModelElement eine Kante haben kann
-     * 
+     *
      * @param me
      * @param direction {@link Doppelkante}.FORWARD, {@link Doppelkante}.BACKWARD
      * @param testCardinality wenn <code>true</code>, wird auch noch getestet, ob die maximale Kardinalität der Verbindungen bereits erreicht ist
      * @return
      */
     public final boolean isForwardLinkable(final ModelElement me, final Class<? extends Kante> edgeClass, final boolean testCardinality) {
-        //wenn die Kante die beiden Elemente nicht in Vorwärtsrichtung verbinden kann 
+        //wenn die Kante die beiden Elemente nicht in Vorwärtsrichtung verbinden kann
         if (!Kante.isConnectingForward(edgeClass, getClass(), me.getClass())) {
             return false;
         }
@@ -2125,7 +2131,7 @@ public abstract class ModelElement extends UserFieldTarget {
     //	/**
     //	 * Testet, ob das Modelelement this in der Richtung direction zu dem
     //	 * ModelElement eine Kante haben kann
-    //	 * 
+    //	 *
     //     * @param me
     //     * @param direction
     //     * 		{@link Doppelkante}.FORWARD, {@link Doppelkante}.BACKWARD
@@ -2181,7 +2187,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert das Modell, in dem dieses Element vorkommt oder <code>null</code>.
-     * 
+     *
      * @return
      */
     public final GDCollection getCollection() {

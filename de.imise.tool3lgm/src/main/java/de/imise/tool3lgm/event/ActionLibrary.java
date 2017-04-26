@@ -731,9 +731,7 @@ public class ActionLibrary {
                     removeChilds(part, doc);
                     // sicher ist sicher -> Kopie anlegen, falls durch irgendwelche Seiteneffekte
                     // sich die Kantenliste nochmal ändert
-                    ArrayList<Kante> partEdges = new ArrayList<Kante>(part.getEdges());
-                    for (int i = 0; i < partEdges.size(); i++) {
-                        Doppelkante edge = (Doppelkante) partEdges.get(i);
+                    for (Kante edge : part.getEdges()) {
                         // Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
                         // Eigenschaften des Teilelementes
                         // Bekommen soll, werden nicht umgehängt (eigentlich kann das nur die
@@ -750,7 +748,7 @@ public class ActionLibrary {
                             if (minElemCardinality > 0) {
                                 continue;
                             }
-                            int dir = edge.getDirection();
+                            int dir = ((Doppelkante) edge).getDirection();
                             String edgeName = edge.getName();
                             String edgeDescrip = edge.getDescription();
                             Kante newEdge = null;
