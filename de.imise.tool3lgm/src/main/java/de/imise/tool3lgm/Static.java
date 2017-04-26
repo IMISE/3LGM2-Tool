@@ -308,6 +308,15 @@ public class Static {
         return doc.getSelectedRealElementContainerIterable();
     }
 
+    public static void out(final String message) {
+        System.out.println(message);
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (int i = 2; i < 10; i++) {
+            System.out.println(stackTrace[i]);
+        }
+        System.out.println();
+    }
+
     // ??? //
 
 }
