@@ -77,17 +77,10 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
     private final ArrayList<ElementDialogPanel> panelVector = new ArrayList<ElementDialogPanel>();
 
     /**
-     * @param prop
-     */
-    public DescripPanel(final ElementPropertyDialog prop) {
-        this(prop, true);
-    }
-
-    /**
      * @param dialog
      * @param callInit
      */
-    public DescripPanel(final ElementPropertyDialog dialog, final boolean callInit) {
+    public DescripPanel(final ElementPropertyDialog dialog) {
         super(dialog);
         int gridy = 0;
 
@@ -287,9 +280,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
                 }
             }
         }
-        if (callInit) {
-            init();
-        }
+        init();
     }
 
     @Override
