@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+import javax.swing.JLabel;
+
 import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgm;
@@ -41,6 +43,9 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     //die sind entweder Dopplekante.FORWARD oder Doppelkante.BACKWARD
     protected final int[] directions;
 
+    /** Label vor dem verbundenen Element mit der Art des Elementes */
+    private final JLabel westLabel;
+
     /**
      * Panel für eine einfache Assoziation
      *
@@ -48,11 +53,40 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * @param dialog
      */
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, false, edgeClasses);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param edgeClass
+     * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
+     *            letzten Kante aus den edgeClasses geschrieben.
+     * @param dialog
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         super(dialog);
         this.edgeClasses = edgeClasses;
         directions = getEdgeDirections();
         searchElementClass = getSearchElementClass();
         setName(ModelConstants.getDisplayableName(searchElementClass));
+
+        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann
+        // hinzugefügt werden
+        westLabel = new JLabel();
+        String westLabelText;
+        if (labelLastEdgeName) {
+            if (Kante.isEndClass(edgeClasses[0], searchElementClass)) {
+                westLabelText = ModelConstants.getForwardMetaAssociationName(edgeClasses[0]);
+            } else {
+                westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClasses[0]);
+            }
+        } else {
+            westLabelText = ModelConstants.getDisplayableName(searchElementClass);
+        }
+        westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1);
+        westLabel.setText(westLabelText);
+
     }
 
     private int[] getEdgeDirections() {
@@ -71,6 +105,13 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
             searchElementClass = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
         }
         return searchElementClass;
+    }
+
+    /**
+     * @return
+     */
+    public final JLabel getWestLabel() {
+        return westLabel;
     }
 
     /**

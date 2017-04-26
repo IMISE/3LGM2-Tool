@@ -6,8 +6,6 @@ import java.awt.event.ItemListener;
 import java.util.EventObject;
 import java.util.List;
 
-import javax.swing.JLabel;
-
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -43,12 +41,7 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
     /**
      * COMMENTME
      */
-    private final JLabel westLabel;
-
-    /**
-     * COMMENTME
-     */
-    private NamedObjectContainer<?> createNew = null;
+    private final NamedObjectContainer<?> createNew;
 
     /**
      * COMMENTME
@@ -60,7 +53,17 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
      * @param edgeClasses
      */
     public AuswahlPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
-        super(dialog, edgeClasses);
+        this(dialog, false, edgeClasses);
+    }
+
+    /**
+     * @param dialog
+     * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
+     *            letzten Kante aus den edgeClasses geschrieben.
+     * @param edgeClasses
+     */
+    public AuswahlPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
         box = new AlphabeticalComboBox();
         // Action erstellen und Listener an Panel und Box anhängen
@@ -71,19 +74,8 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
 
         add(box, BorderLayout.CENTER);
 
-        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann
-        // hinzugefügt werden
-        westLabel = new JLabel();
-        westLabel.setText(Tool3lgmConstants.getResString(searchElementClass.getSimpleName()));
-        createNew = new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass));
+        createNew = ModelConstants.isAbstract(searchElementClass) ? null : new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass));
         init();
-    }
-
-    /**
-     * @return
-     */
-    public JLabel getWestLabel() {
-        return westLabel;
     }
 
     @Override
@@ -92,8 +84,10 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
         doc.start_transaction(dialog.getTransactionID(), false);
         box.removeItemListener(itemListener);
         box.removeAllItems();
-        box.addItem("");
-        box.addItem(createNew);
+        box.addItem(" ");
+        if (createNew != null) {
+            box.addItem(createNew);
+        }
         box.addSeparator(false);
         List<ElementContainer> connected = getConnectedContainer();
         List<ElementContainer> available = isLastEdgeComposition() ? connected : mainDoc.getElementContainer(searchElementClass);

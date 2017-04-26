@@ -10,7 +10,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDr
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -29,9 +28,6 @@ public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnection
     /** Label in dem der Name des verbundenen Elementes angezeit wird */
     private final JLabel connectedElementLabel;
 
-    /** Label vor dem verbundenen Element mit der Art des Elementes */
-    private final JLabel westLabel;
-
     /** Das verbundene Element das angezeigt wird (wenn es mind. eins gibt) */
     private ModelElement connectedElement;
 
@@ -40,7 +36,17 @@ public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnection
      * @param edgeClasses
      */
     public NotEditableSingleConnectionInfoPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
-        super(dialog, edgeClasses);
+        this(dialog, false, edgeClasses);
+    }
+
+    /**
+     * @param dialog
+     * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
+     *            letzten Kante aus den edgeClasses geschrieben.
+     * @param edgeClasses
+     */
+    public NotEditableSingleConnectionInfoPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
         connectedElementLabel = new JLabel();
         // Action erstellen und Listener an Panel und Box anhängen
@@ -48,18 +54,7 @@ public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnection
 
         add(connectedElementLabel, BorderLayout.CENTER);
 
-        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann
-        // hinzugefügt werden
-        westLabel = new JLabel();
-        westLabel.setText(ModelConstants.getDisplayableName(searchElementClass));
         init();
-    }
-
-    /**
-     * @return
-     */
-    public JLabel getWestLabel() {
-        return westLabel;
     }
 
     @Override
