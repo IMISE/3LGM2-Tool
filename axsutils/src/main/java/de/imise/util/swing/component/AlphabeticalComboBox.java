@@ -24,7 +24,7 @@ import de.imise.util.NamedObjectContainer;
  * von Leerzeichen nach rechts einrücken.<br>
  * Separatoren können wahlweise unsichtbar oder als nicht selektierbare Einträge mit einem
  * eigenen Label in die Liste eingefügt werden.
- * 
+ *
  * @see <code>Alphabetical</code>
  * @author AXS
  *         created on 15.08.2007
@@ -70,7 +70,7 @@ public class AlphabeticalComboBox extends JComboBox {
 
     /**
      * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
-     * 
+     *
      * @param Leerfeld?
      */
     public AlphabeticalComboBox(final boolean nullAble) {
@@ -81,7 +81,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
      * Die Auswahlliste wird mit den Elementen der übergebenen Liste gefüllt.
-     * 
+     *
      * @param objects
      *            Initiale Liste von Elementen in der Auswahlliste
      */
@@ -93,7 +93,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Legt eine neue ComboBox an, die ihre Einträge alphabetisch sortiert.<br>
      * Allen Einträge der Auswahlliste, die hinzugefügt werden, werden in der
      * Darstellung der Auswahlliste <code>shift</code> Leerzeichen vorangestellt.
-     * 
+     *
      * @param shift
      *            Anzahl der Leerzeichen, die vor jedem Listeneintrag dargestellt werden sollen
      */
@@ -110,7 +110,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Die Auswahlliste wird mit den Elementen der übergebenen Liste gefüllt.
      * Allen Einträge der Auswahlliste, die hinzugefügt werden, werden in der
      * Darstellung der Auswahlliste <code>shift</code> Leerzeichen vorangestellt.
-     * 
+     *
      * @param objects
      *            Initiale Liste von Elementen in der Auswahlliste
      * @param shift
@@ -178,10 +178,10 @@ public class AlphabeticalComboBox extends JComboBox {
 
     /**
      * Fügt alle Einträge in diese ComboBox ein.
-     * 
+     *
      * @param entries
      */
-    public void addAll(final Object[] entries) {
+    public void addAll(final Iterable<?> entries) {
         for (Object o : entries) {
             addItem(o);
         }
@@ -193,7 +193,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * <code>getObject()<code> aufgerufen und das übergebene Objekt mit diesem dann vergleichen.
      * Sind sie gleich, wird die Zeile selektiert. Ist das Objekt in der Liste kein <code>NamedObjectContainer</code>,
      * wird einfach damit verglichen.
-     * 
+     *
      * @param o
      */
     public int setSelectedObject(final Object o) {
@@ -219,7 +219,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Wenn ein <code>NamedObjectContainer</code> selektiert ist, wird von diesem die Methode
      * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
      * das <code>Object</code> am selektierten Index zurückgegeben.
-     * 
+     *
      * @return selektierte Objekt
      */
     public Object getSelectedObject() {
@@ -231,7 +231,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Wenn das ein <code>NamedObjectContainer</code> ist, wird von diesem die Methode
      * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
      * das <code>Object</code> am Index <code>index</code> zurückgegeben.
-     * 
+     *
      * @return selektierte Objekt
      */
     @SuppressWarnings("rawtypes")
@@ -249,7 +249,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Der Parameter <code>showSeparatorLine</code> legt fest, ob eine Zeichenkette
      * bestehend aus Minuszeichen angezeigt werden soll. Wird fals übergeben, werden
      * alle neu hinzugefügten Elemente ab diesem Separator wieder neu aplhabetisch sortiert.
-     * 
+     *
      * @param showSeparatorLine
      *            wird <code>true</code> übergeben, wird in der Auswahlliste eine Zeichenkette aus Minuszeichen angezeigt
      */
@@ -263,7 +263,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * Fügt am Ende der bestehenden Liste ein <code>SeparatorItem</code> ein
      * und beginnt eine neue alphabetisch sortierte Liste.
-     * 
+     *
      * @name <code>String</code> der als Separator angezeigt werden soll
      */
     public void addSeparator(final String name) {
@@ -274,7 +274,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code> als Objekt und dem Anzeige-String
      * <code>anObject.toString()</code>, dem <code>shift</code> Leerzeichen vorangestellt werden.
-     * 
+     *
      * @param anObject
      * @param shift
      */
@@ -285,7 +285,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code> als Objekt und dem Anzeige-String <code>displayName</code>
      * .
-     * 
+     *
      * @param anObject
      * @param displayName
      */
@@ -296,7 +296,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code> als Objekt und dem Anzeige-String <code>displayName</code>
      * .
-     * 
+     *
      * @param anObject
      * @param displayName
      * @param shift
@@ -340,7 +340,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * mehrere Listen voneinander zu trennen.<br>
      * Wird dem Separator kein eigener <code>String</code> übergeben, wird er als <code>JSeparator</code> gerendert. Wird ein <code>String name</code>
      * übergeben, so wird dieser angezeigt.
-     * 
+     *
      * @author AXS
      * @created 19.10.2007
      */
@@ -376,7 +376,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * Sorgt dafür, dass <code>SeparatorItem</code>s nicht selektierbar und nicht enabled
      * dargestellt werden. Der Rest der Liste wird defaultmäßig gerendert.
-     * 
+     *
      * @author AXS
      * @created 19.10.2007
      */
@@ -391,7 +391,7 @@ public class AlphabeticalComboBox extends JComboBox {
 
         /**
          * Erzeugt einen neuen Renderer, der alle Einträge, die keinen Separatoren sind um <code>shift</code> Leerzeichen nach rechts verschiebt.
-         * 
+         *
          * @param shift
          *            Anzahl der Leerzeichen, um die Einträge verschoben werden sollen.
          */
@@ -410,7 +410,7 @@ public class AlphabeticalComboBox extends JComboBox {
         @Override
         public Component getListCellRendererComponent(final JList list, final Object value, final int index, boolean isSelected, boolean cellHasFocus) {
             JLabel c = null;
-            //Separatoren 
+            //Separatoren
             if (value instanceof SeparatorItem) {
                 //disabled und nicht selektierbar darstellen
                 cellHasFocus = false;
@@ -463,7 +463,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Zuerst wird versucht, das übergebene Object zu entfernen. Wenn es sich nicht entfernen ließ,
      * werden alle <code>NamedObjectContainer</code> durchsucht, ob sie das übergebene Object einthalten,
      * bis der erste von hinten gefunden wurde. Dieser wird dann entfernt.
-     * 
+     *
      * @see javax.swing.JComboBox#removeItem(java.lang.Object)
      */
     @Override
@@ -511,7 +511,7 @@ public class AlphabeticalComboBox extends JComboBox {
     /**
      * setter für Leerfeld, ruft zusätzlich jeweilige Methode auf
      * auf private gesetzt: nur einmal beim konstruktor gültig!
-     * 
+     *
      * @param nullAble
      */
     private void setNullAble(final boolean nullAble) {
