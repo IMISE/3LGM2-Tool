@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Label;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -18,8 +17,9 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbBtypVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
@@ -34,20 +35,13 @@ import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
-import de.imise.tool3lgm.graphtools.elements.node.Datensatztyp;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumententyp;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
 import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
 import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -57,36 +51,28 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  */
 public class DescripPanel extends ElementDialogPanel implements DocumentListener {
 
-    /**
-     * COMMENTME
-     */
     private final ExtendedTextPane descriptionTextPane;
 
     private ExtendedTextPane etDescriptionTextPane;
 
     private ExtendedTextPane ntDescriptionTextPane;
 
-    /**
-     * COMMENTME
-     */
     private final LimitedSizeScrollTextPane nameTextPane;
 
-    /**
-     * COMMENTME
-     */
-    private final ArrayList<ElementDialogPanel> panelVector = new ArrayList<ElementDialogPanel>();
+    private final ArrayList<ElementDialogPanel> panels = new ArrayList<ElementDialogPanel>();
+
+    private final GridBagConstraints gbc = new GridBagConstraints();
+
+    private int gridy = 0;
 
     /**
      * @param dialog
-     * @param callInit
      */
     public DescripPanel(final ElementPropertyDialog dialog) {
         super(dialog);
-        int gridy = 0;
 
         setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(1, 0, 1, 3);
 
@@ -95,6 +81,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         add(this, label2, gbc, 0, gridy, 1, 1);
 
         nameTextPane = new LimitedSizeScrollTextPane(4);
+        nameTextPane.setEditable(!ModelConstants.isGenerateName(getModelElement().getClass()));
         gbc.weightx = 1;
         add(this, nameTextPane, gbc, 1, gridy++, 1, 1);
         gbc.weightx = 0;
@@ -103,182 +90,40 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         JLabel label = new JLabel(Tool3lgmConstants.getResString("description"));
         add(this, label, gbc, 0, gridy, 1, 1);
 
-        descriptionTextPane = new ExtendedTextPane();
         gbc.weighty = 1;
+        descriptionTextPane = new ExtendedTextPane();
         add(this, new JScrollPane(descriptionTextPane), gbc, 1, gridy++, 1, 1);
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
 
         ModelElement modelElement = getModelElement();
         if (modelElement instanceof Anwendungsbaustein) {
             if (modelElement instanceof RechAnwendungsbaustein) {
-                AuswahlPanel ap = new AuswahlPanel(dialog, RawbDbsVerbindung.class);
-                panelVector.add(ap);
-
-                add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                add(this, ap, gbc, 1, gridy++, 1, 1);
-
-                ap = new AuswahlPanel(dialog, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
-                panelVector.add(ap);
-
-                gbc.fill = GridBagConstraints.NONE;
-                add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                add(this, ap, gbc, 1, gridy++, 1, 1);
-
+                addSingleConnectionPanel(RawbDbsVerbindung.class);
+                addSingleConnectionPanel(RawbAwpVerbindung.class, AwpSwpVerbindung.class);
             } else if (modelElement instanceof KonAnwendungsbaustein) {
-                AuswahlPanel ap;
-                ap = new AuswahlPanel(dialog, KawbDoksVerbindung.class);
-                panelVector.add(ap);
-                gbc.weightx = 0;
-                add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-                gbc.weightx = 1;
-                add(this, ap, gbc, 1, gridy++, 1, 1);
-
+                addSingleConnectionPanel(KawbDoksVerbindung.class);
             }
         } else if (modelElement instanceof Objekttyp) {
-            MasterDBSPanel mp = new MasterDBSPanel(dialog, false);
-            panelVector.add(mp);
-
-            add(this, mp.getWestLabel(), gbc, 0, gridy, 1, 1);
-            gbc.weighty = 0;
-            gbc.fill = GridBagConstraints.BOTH;
-            add(this, mp, gbc, 1, gridy++, 1, 1);
-
+            addSingleConnectionPanel(true, ObjLogspVerbindung.class);
         } else if (modelElement instanceof Datenbanksystem) {
-            NotEditableSingleConnectionInfoPanel awbPanel = new NotEditableSingleConnectionInfoPanel(dialog, RawbDbsVerbindung.class);
-            add(this, awbPanel.getWestLabel(), gbc, 0, gridy, 1, 1);
-            add(this, awbPanel, gbc, 1, gridy++, 1, 1);
-
-            AuswahlPanel ap;
-            ap = new AuswahlPanel(dialog, DbsDbvsVerbindung.class);
-            panelVector.add(ap);
-            add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-            add(this, ap, gbc, 1, gridy++, 0, 1);
+            addSingleConnectionInfoPanel(true, RawbDbsVerbindung.class);
+            addSingleConnectionPanel(DbsDbvsVerbindung.class);
 
         } else if (modelElement instanceof Bausteinschnittstelle) {
-
-            add(this, new JLabel(Tool3lgmConstants.getResString("gehawb")), gbc, 0, gridy, 1, 1);
-
-            ArrayList<Kante> traces = ((Knoten) modelElement).getEdges();
-            for (int n = 0; n < traces.size(); n++) {
-                if (traces.get(n).getStart() instanceof Anwendungsbaustein) {
-                    add(this, new Label(traces.get(n).getStart().toString()), gbc, 1, gridy++, 1, 1);
-                }
-            }
-            AuswahlPanel ap;
-            ap = new AuswahlPanel(dialog, BssKommstVerbindung.class);
-            panelVector.add(ap);
-            add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-            add(this, ap, gbc, 1, gridy++, 1, 1);
-
+            addSingleConnectionInfoPanel(true, AwbKommssVerbindung.class);
+            addSingleConnectionPanel(BssKommstVerbindung.class);
         } else if (modelElement instanceof EtntEtdtKombination) {
-            nameTextPane.setEditable(false);
-
-            Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
-            JLabel westLabel;
-
-            JSeparator sep = new JSeparator();
-            add(this, sep, gbc, 0, gridy++, 2, 0);
-
-            AuswahlPanel etPanel = new AuswahlPanel(dialog, EtntEtVerbindung.class);
-            etPanel.setBorder(topBorder);
-            panelVector.add(etPanel);
-            gbc.fill = GridBagConstraints.NONE;
-
-            westLabel = etPanel.getWestLabel();
-
-            westLabel.setBorder(topBorder);
-            add(this, westLabel, gbc, 0, gridy, 1, 1);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            add(this, etPanel, gbc, 1, gridy++, 1, 1);
-
-            label = new JLabel(Tool3lgmConstants.getResString("description"));
-            gbc.fill = GridBagConstraints.NONE;
-            add(this, label, gbc, 0, gridy, 1, 1);
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.weighty = 1;
-            gbc.weightx = 1;
-            etDescriptionTextPane = new ExtendedTextPane();
-            etDescriptionTextPane.setEditable(false);
-            add(this, new JScrollPane(etDescriptionTextPane), gbc, 1, gridy++, 1, 1);
-            gbc.weightx = 0;
-            gbc.weighty = 0;
-
-            sep = new JSeparator();
-            gridy++;
-            add(this, sep, gbc, 0, gridy++, 2, 0);
-
+            addDescriptedSingleConnectionPanel(EtntEtVerbindung.class);
             if (modelElement instanceof EreignisNachrichtenTyp) {
-                AuswahlPanel ntPanel = new AuswahlPanel(dialog, EtntNatVerbindung.class);
-                panelVector.add(ntPanel);
-                ntPanel.setBorder(topBorder);
-                gbc.fill = GridBagConstraints.NONE;
-                gbc.weighty = 0;
-                gbc.weightx = 0;
-                westLabel = ntPanel.getWestLabel();
-                westLabel.setBorder(topBorder);
-                add(this, westLabel, gbc, 0, gridy, 1, 1);
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                add(this, ntPanel, gbc, 1, gridy++, 1, 1);
+                addDescriptedSingleConnectionPanel(EtntNatVerbindung.class);
             } else if (modelElement instanceof EreignisDokumentenTyp) {
-
-                AuswahlPanel dtPanel = new AuswahlPanel(dialog, EtntDotVerbindung.class);
-                panelVector.add(dtPanel);
-                gbc.fill = GridBagConstraints.NONE;
-                gbc.weighty = 0;
-                gbc.weightx = 0;
-                add(this, dtPanel.getWestLabel(), gbc, 0, gridy, 1, 1);
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                add(this, dtPanel, gbc, 1, gridy++, 1, 1);
+                addDescriptedSingleConnectionPanel(EtntDotVerbindung.class);
             }
-            label = new JLabel(Tool3lgmConstants.getResString("description"));
-            gbc.fill = GridBagConstraints.NONE;
-            add(this, label, gbc, 0, gridy, 1, 1);
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.weighty = 1;
-            gbc.weightx = 1;
-            ntDescriptionTextPane = new ExtendedTextPane();
-            ntDescriptionTextPane.setEditable(false);
-            add(this, new JScrollPane(ntDescriptionTextPane), gbc, 1, gridy++, 1, 1);
-            gbc.weightx = 0;
-
         } else if (modelElement instanceof PhysischerDVBaustein) {
-            AuswahlPanel ap;
-            ap = new AuswahlPanel(dialog, PdvbStoVerbindung.class);
-            panelVector.add(ap);
-            gridy++;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-            add(this, ap, gbc, 1, gridy++, 1, 1);
-
-            ap = new AuswahlPanel(dialog, PdvbBtypVerbindung.class);
-            panelVector.add(ap);
-
-            add(this, ap.getWestLabel(), gbc, 0, gridy, 1, 1);
-            add(this, ap, gbc, 1, gridy++, 1, 1);
-
-        } else if (modelElement instanceof Datensatztyp) {
-
-            add(this, new JLabel(Tool3lgmConstants.getResString("gehdbs")), gbc, 0, gridy++, 1, 1);
-
-            ArrayList<Kante> traces = ((Knoten) modelElement).getEdges();
-            for (int n = 0; n < traces.size(); n++) {
-                if (traces.get(n).getStart() instanceof Datenbanksystem) {
-                    add(this, new Label(traces.get(n).getStart().toString()), gbc, 0, gridy++, 2, 1);
-                }
-            }
-
-        } else if (modelElement instanceof Dokumentensammlung) {
-
-            add(this, new JLabel(Tool3lgmConstants.getResString("gehawb")), gbc, 0, gridy, 1, 1);
-            ArrayList<Kante> traces = ((Knoten) modelElement).getEdges();
-            for (int n = 0; n < traces.size(); n++) {
-                if (traces.get(n).getStart() instanceof Anwendungsbaustein) {
-                    add(this, new Label(traces.get(n).getStart().toString()), gbc, 1, gridy++, 1, 1);
-                }
-            }
+            addSingleConnectionPanel(PdvbStoVerbindung.class);
+            addSingleConnectionPanel(PdvbBtypVerbindung.class);
         }
         init();
     }
@@ -292,32 +137,61 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         nameTextPane.setCaretPosition(0);
         descriptionTextPane.setCaretPosition(0);
 
-        if (modelElement instanceof EtntEtdtKombination) {
-            String text = "";
-            ArrayList<ElementContainer> all = modelElement.getConnectedContainer(Ereignistyp.class, mainDoc);
-            if (all.size() > 0) {
-                NodeContainer kc = (NodeContainer) all.get(0);
-                text += kc.getKnoten().getDescription();
-                for (int i = 1; i < all.size(); i++) {
-                    NodeContainer lc = (NodeContainer) all.get(i);
-                    text += "\n\n" + lc.getKnoten().getDescription();
-                }
-            }
-            etDescriptionTextPane.setCaretPosition(0);
-            etDescriptionTextPane.setText(text);
-            text = "";
-            all = modelElement.getConnectedContainer(Nachrichtentyp.class, mainDoc);
-            all.addAll(modelElement.getConnectedContainer(Dokumententyp.class, mainDoc));
-            if (all.size() > 0) {
-                NodeContainer kc = (NodeContainer) all.get(0);
-                text += kc.getKnoten().getDescription();
-                for (int i = 1; i < all.size(); i++) {
-                    NodeContainer lc = (NodeContainer) all.get(i);
-                    text += "\n\n" + lc.getKnoten().getDescription();
-                }
-            }
-            ntDescriptionTextPane.setText(text);
+    }
+
+    public void addSingleConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
+        addSingleConnectionInfoPanel(false, edgeClasses);
+    }
+
+    public void addSingleConnectionInfoPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addSubPanel(new SingleConnectionInfoPanel(dialog, labelLastEdgeName, edgeClasses));
+    }
+
+    public void addDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+        addDescriptedSingleConnectionPanel(false, edgeClasses);
+    }
+
+    public void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
+    }
+
+    public void addSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+        addSingleConnectionPanel(false, edgeClasses);
+    }
+
+    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
+    }
+
+    private void addSubPanel(final AbstractPathConnectionPanel panel) {
+        panels.add(panel);
+        if (panel instanceof DescriptedSingleConnectionPanel) {
+            addSeparator();
+            JLabel westLabel = panel.getWestLabel();
+            DescriptedSingleConnectionPanel descriptedPanel = (DescriptedSingleConnectionPanel) panel;
+            Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
+            westLabel.setBorder(topBorder);
+            descriptedPanel.setBorder(topBorder);
+            gbc.fill = GridBagConstraints.NONE;
+            add(this, westLabel, gbc, 0, gridy, 1, 1);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            add(this, descriptedPanel, gbc, 1, gridy++, 1, 1);
+            gbc.fill = GridBagConstraints.NONE;
+            add(this, descriptedPanel.getDescriptionWestLabel(), gbc, 0, gridy, 1, 1);
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.weighty = 1;
+            gbc.weightx = 1;
+            add(this, new JScrollPane(descriptedPanel.getDescriptionTextPane()), gbc, 1, gridy++, 1, 1);
+            gbc.weightx = 0;
+            gbc.weighty = 0;
+        } else {
+            add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
+            add(this, panel, gbc, 1, gridy++, 1, 1);
         }
+    }
+
+    public void addSeparator() {
+        add(this, new JSeparator(), gbc, 0, gridy++, 2, 1);
     }
 
     @Override
@@ -352,42 +226,8 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
 
     @Override
     public void update() {
-        ModelElement modelElement = getModelElement();
-
-        if (modelElement instanceof EtntEtdtKombination) {
-            try {
-                nameTextPane.setText(modelElement.getName());
-            } catch (Exception e) {
-                //beim Visible schalten wird dieses Update aufgerufen, was gleich nach dem Init zu einer
-                //Exception im LimitedSizeScrollTextPane führt -> try-catch
-            }
-            String text = "";
-            ArrayList<ElementContainer> all = modelElement.getConnectedContainer(Ereignistyp.class, mainDoc);
-            if (all.size() > 0) {
-                NodeContainer kc = (NodeContainer) all.get(0);
-                text += kc.getKnoten().getDescription();
-                for (int i = 1; i < all.size(); i++) {
-                    NodeContainer lc = (NodeContainer) all.get(i);
-                    text += "\n\n" + lc.getKnoten().getDescription();
-                }
-            }
-            etDescriptionTextPane.setText(text);
-            text = "";
-            all = modelElement.getConnectedContainer(Nachrichtentyp.class, mainDoc);
-            all.addAll(modelElement.getConnectedContainer(Dokumententyp.class, mainDoc));
-            if (all.size() > 0) {
-                NodeContainer kc = (NodeContainer) all.get(0);
-                text += kc.getKnoten().getDescription();
-                for (int i = 1; i < all.size(); i++) {
-                    NodeContainer lc = (NodeContainer) all.get(i);
-                    text += "\n\n" + lc.getKnoten().getDescription();
-                }
-            }
-            ntDescriptionTextPane.setText(text);
-        }
-
-        for (int m = 0; m < panelVector.size(); m++) {
-            panelVector.get(m).update();
+        for (int m = 0; m < panels.size(); m++) {
+            panels.get(m).update();
         }
     }
 
