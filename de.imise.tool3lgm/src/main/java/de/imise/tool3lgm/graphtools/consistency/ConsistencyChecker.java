@@ -32,7 +32,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
  * fehlerhafte Elemente zurück gegeben.
- * 
+ *
  * @author AXS created on 06.08.2008
  */
 public class ConsistencyChecker extends GraphDocumentAdapter {
@@ -68,7 +68,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     /**
      * Legt einen neuen Consistency-Checker an, der sich als Listener beim HauptModell der
      * übergebenen Collection registeriert.
-     * 
+     *
      * @param gdcoll
      */
     public ConsistencyChecker(final GDCollection gdcoll) {
@@ -78,7 +78,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Setzt die übergebene Collection als aktuelle Collection
-     * 
+     *
      * @param gscoll
      */
     public void changeContext(final GDCollection gdcoll) {
@@ -148,7 +148,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Liefert das Modell, das dieser Checker überprüft.
-     * 
+     *
      * @return überprüftes Modell
      */
     GDCollection getGDCollection() {
@@ -166,7 +166,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Liefert einen JTable, in dem alle Inkonsistenzen aufgelistet werden.
-     * 
+     *
      * @return
      */
     public JTable getErrorTable() {
@@ -249,7 +249,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Fügt der übergebenen Error-Liste alle Kardinalitätsfehler des übergebenen Elementes hinzu.
-     * 
+     *
      * @param me
      * @param returnList
      */
@@ -332,7 +332,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * <ol>
      * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, die einen gültigen <code>MetaPath</code> beschreibt, über den ausgehend
      * vom Element des übergebenen Fehlers verbundene Elemente gefunden werden, dann kommen genau diese verbundenen Elemente zurück.</li>
-     * <li>Wenn die gleichen Vorbedingungen gelten, wie eben, aber keine verbundenen Elemente gefunden werden, dann kommt <code>null</code> zurück.</li>
+     * <li>Wenn die gleichen Vorbedingungen gelten, wie eben, aber keine verbundenen Elemente gefunden werden, dann kommt <code>null</code>
+     * zurück.</li>
      * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, diese aber keinen <code>MetaPath</code> enthält, so kommt eine Liste mit
      * dem ModelElement des Fehlers als einzigem Element zurück</li>
      * <li>Wenn für den Fehler keine <code>ErrorSolution</code> gefunden wurde, kommt eine leere Liste zurück</li>
@@ -340,7 +341,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * Zusäztlich dazu wird auch <code>null</code> zurück gegeben, wenn der übergebene Fehler selbst <code>null</code> ist. Das kann man aber vorher
      * ausschließen, so dass die eindeutige
      * Unterscheidung der einzelnen Fehlerarten möglich ist.
-     * 
+     *
      * @param error
      * @return
      */
@@ -370,7 +371,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Liefert <code>true</code>, wenn es für diesen Fehler eine ausführbare Lösung gibt, sonst <code>false</code>.
-     * 
+     *
      * @param error
      * @return
      */
@@ -389,7 +390,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         if (error instanceof AbstractCardinalityError) {
             ErrorSolution es = solutionsLibrary.getSolution(error);
             if (es == null) {
-                ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog(gdcoll);
+                ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog();
                 Class<? extends ModelElement> otherClass = Kante.getOther(((AbstractCardinalityError) error).getEdgeClass(), error.getModelElement().getClass());
                 NConnectionPanel tp = new NConnectionPanel(otherClass, dialog, error instanceof MinCardinalityError, true);
                 String errorTabName = Tool3lgmConstants.getResString("error_error_dialog_tab") + " " + ModelConstants.getDisplayableName(otherClass);
@@ -402,13 +403,13 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                     return;
                 }
                 for (ModelElement connected : solutionPropertyDialogElement) {
-                    ElementPropertyDialog dialog = connected.getPropertyDialog(gdcoll);
+                    ElementPropertyDialog dialog = connected.getPropertyDialog();
                     dialog.selectTab(es.getPanelName(), es.getPanelClass());
                     dialog.showDialog();
                 }
             }
         } else if (error instanceof AbstractIDError) {
-            ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog(gdcoll);
+            ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog();
             dialog.selectTab(PropertyDialogUserFieldPanel.class);
             dialog.showDialog();
         }

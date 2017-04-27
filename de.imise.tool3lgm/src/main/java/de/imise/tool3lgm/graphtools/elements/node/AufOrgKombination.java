@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.elements.node;
 import java.util.ArrayList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -20,10 +19,11 @@ public class AufOrgKombination extends Knoten {
      * COMMENTME
      */
     @SuppressWarnings({
-        "rawtypes"
+            "rawtypes"
     })
     public static final Class[] COPY_DEPENDENCY = {
-            ABKonfiguration.class, Organisationseinheit.class,
+            ABKonfiguration.class,
+            Organisationseinheit.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -33,8 +33,8 @@ public class AufOrgKombination extends Knoten {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public AufOrgKombination() {
         super();
     }
@@ -62,8 +62,8 @@ public class AufOrgKombination extends Knoten {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Organisationseinheit"), new NConnectionPanel(Organisationseinheit.class, dialog, true, true));
         dialog.addTab(getResString("Aufgabe"), new NConnectionPanel(Aufgabe.class, dialog, true, true));
         return dialog;

@@ -4158,7 +4158,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param me
      */
     public void showPropertyDialog(final ModelElement me) {
-        me.getPropertyDialog(gdcoll).showDialog();
+        me.getPropertyDialog().showDialog();
     }
 
     /**

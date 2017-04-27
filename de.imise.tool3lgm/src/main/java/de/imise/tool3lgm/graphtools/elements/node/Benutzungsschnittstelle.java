@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 
 public final class Benutzungsschnittstelle extends Schnittstelle {
@@ -10,8 +9,8 @@ public final class Benutzungsschnittstelle extends Schnittstelle {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        return super.createPropertyDialog(gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        return super.createPropertyDialog();
     }
 
     @Override
@@ -29,7 +28,7 @@ public final class Benutzungsschnittstelle extends Schnittstelle {
     //		RechAnwendungsbaustein.class,
     //		KonAnwendungsbaustein.class,
     //	};
-    //	
+    //
     //	public final Class[] getMasterTypes()  {
     //		return MASTER_TYPES;
     //	}

@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -13,7 +12,7 @@ public final class Dokumentensammlung extends LogischerSpeicher {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-        Dokumententyp.class,
+            Dokumententyp.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -23,8 +22,8 @@ public final class Dokumentensammlung extends LogischerSpeicher {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public Dokumentensammlung() {
         super();
     }
@@ -35,8 +34,8 @@ public final class Dokumentensammlung extends LogischerSpeicher {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Dokumententyp"), new NConnectionPanel(Dokumententyp.class, dialog, true, true));
         dialog.addTab(getResString("masterfuer"), new NConnectionPanel(Objekttyp.class, dialog, true, true));
         return dialog;
@@ -45,7 +44,7 @@ public final class Dokumentensammlung extends LogischerSpeicher {
     //	public static final Class[] MASTER_TYPES = {
     //		KonAnwendungsbaustein.class,
     //	};
-    //	
+    //
     //	public final Class[] getMasterTypes()  {
     //		return MASTER_TYPES;
     //	}

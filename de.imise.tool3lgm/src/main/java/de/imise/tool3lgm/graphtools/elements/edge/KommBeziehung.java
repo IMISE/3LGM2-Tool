@@ -3,7 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.elements.edge;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel2;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
@@ -24,7 +23,8 @@ public final class KommBeziehung extends Doppelkante {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-            EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class,
+            EreignisNachrichtenTyp.class,
+            EreignisDokumentenTyp.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -36,22 +36,24 @@ public final class KommBeziehung extends Doppelkante {
     //	public static final Class[] stcl = {Bausteinschnittstelle.class};
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
 
     //	public static final Class[] etcl = {Bausteinschnittstelle.class};
 
-    //	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public KommBeziehung() {
         super();
     }
@@ -70,8 +72,8 @@ public final class KommBeziehung extends Doppelkante {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("etntueb"), new ETNTPanel2(EtntEtdtKombination.class, dialog));
         return dialog;
     }

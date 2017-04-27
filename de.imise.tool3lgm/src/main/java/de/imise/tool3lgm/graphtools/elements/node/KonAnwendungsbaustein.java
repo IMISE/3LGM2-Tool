@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
@@ -30,15 +29,15 @@ public final class KonAnwendungsbaustein extends Anwendungsbaustein {
     }
 
     /**
-     * 
+     *
      */
     public KonAnwendungsbaustein() {
         super();
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
         dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
         dialog.addTab(getResString("Organisationsplan"), new FreeTextPanel(Organisationsplan.class, dialog));

@@ -1917,20 +1917,20 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param gdcoll GDCollection, in der sich das Element befinden sollte
      * @return
      */
-    public ElementPropertyDialog getPropertyDialog(final GDCollection gdcoll) {
+    public ElementPropertyDialog getPropertyDialog() {
         ElementPropertyDialog prop = ModelConstants.hasObjektDialog(this);
         if (prop == null) {
-            prop = createPropertyDialog(gdcoll);
+            prop = createPropertyDialog();
             ModelConstants.dialogs.add(prop);
         }
         return prop;
     }
 
-    /**
-     * @param gdcoll
-     * @return
-     */
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
+    protected ElementPropertyDialog createPropertyDialog() {
+        GDCollection gdcoll = getCollection();
+        if (gdcoll == null) {
+            return null;
+        }
         return new ElementPropertyDialog(this, gdcoll);
     }
 

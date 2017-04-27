@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.analyse.process.LGMProzessStep;
 import de.imise.tool3lgm.graphtools.analyse.process.ProzessStructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -22,12 +21,23 @@ import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 
 /**
- * @author AXS Ein Prozess ist ein Knoten der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt den Prozessablauf fest.
+ * @author AXS Ein Prozess ist ein Knoten der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt
+ *         den Prozessablauf fest.
  */
 public final class Prozess extends Knoten {
 
     public static Color[] farben = {
-            Color.black, Color.blue, Color.cyan, Color.darkGray, Color.gray, Color.green, Color.magenta, Color.orange, Color.pink, Color.red, Color.yellow
+            Color.black,
+            Color.blue,
+            Color.cyan,
+            Color.darkGray,
+            Color.gray,
+            Color.green,
+            Color.magenta,
+            Color.orange,
+            Color.pink,
+            Color.red,
+            Color.yellow
     };
     public static int colorCounter = 0;
     public int color;
@@ -37,7 +47,7 @@ public final class Prozess extends Knoten {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-        Aufgabe.class,
+            Aufgabe.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -47,8 +57,8 @@ public final class Prozess extends Knoten {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public Prozess() {
         super();
         // das hier ist insofern problematisch, als dass beim Erstellen (nicht aus Datei) eines Prozeses immer der Konstruktor
@@ -65,8 +75,8 @@ public final class Prozess extends Knoten {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Aufgabe_p"), new ProzessStructurePanel(dialog));
         //		dialog.addTab(getResString("Kommunikationsprozess_p"),new KommProzessPanel(dialog));
         return dialog;
@@ -81,11 +91,15 @@ public final class Prozess extends Knoten {
 
     //----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe, endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der Aufgabe an Position pos aus
-     * der Liste der Prozessaufgaben. Es ist also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im gegebenen GraphDocument bearbeiteten Objekttypen, die von der Aufgabe an pos gleichzeitig interpretiert
-     * werden. Ex. kein Objekttyp den die Aufgabe an pos interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben, in dem nur die endAufgabe der Aufgabe an pos entspricht und der Rest null ist. Wird testOnly=true
-     * uebergeben, dann werden nicht alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner existiert. Pos wird wie immer ab 0 gezaehlt.
-     * 
+     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
+     * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der Aufgabe an Position pos aus
+     * der Liste der Prozessaufgaben. Es ist also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im
+     * gegebenen GraphDocument bearbeiteten Objekttypen, die von der Aufgabe an pos gleichzeitig interpretiert
+     * werden. Ex. kein Objekttyp den die Aufgabe an pos interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben,
+     * in dem nur die endAufgabe der Aufgabe an pos entspricht und der Rest null ist. Wird testOnly=true
+     * uebergeben, dann werden nicht alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner
+     * existiert. Pos wird wie immer ab 0 gezaehlt.
+     *
      * @param ModelElement
      * @param int
      * @param GraphDocument
@@ -97,11 +111,15 @@ public final class Prozess extends Knoten {
 
     //----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe, endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der uebergebenen Aufgabe. Es ist
-     * also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im gegebenen GraphDocument bearbeiteten Objekttypen, die von der übergebenen Aufgabe gleichzeitig interpretiert werden. Ex. kein Objekttyp den die
-     * uebergebene Aufgabe interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben, in dem nur die endAufgabe der uebergebenen Aufgabe entspricht und der Rest null ist. Wird testOnly=true uebergeben, dann werden nicht
-     * alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner existiert. Pos wird wie immer ab 0 gezaehlt.
-     * 
+     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
+     * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der uebergebenen Aufgabe. Es ist
+     * also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im gegebenen GraphDocument bearbeiteten
+     * Objekttypen, die von der übergebenen Aufgabe gleichzeitig interpretiert werden. Ex. kein Objekttyp den die
+     * uebergebene Aufgabe interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben, in dem nur die endAufgabe der
+     * uebergebenen Aufgabe entspricht und der Rest null ist. Wird testOnly=true uebergeben, dann werden nicht
+     * alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner existiert. Pos wird wie immer ab 0
+     * gezaehlt.
+     *
      * @param ArrayList Liste mit Elementen der Klasse <code>Aufgabe</code>.
      * @param ModelElement
      * @param int
@@ -155,7 +173,7 @@ public final class Prozess extends Knoten {
                 }
             }
         }
-        //testOnly==false -> es soll nicht nur irgendein vollständiger Prozessschritt gesucht werden und 
+        //testOnly==false -> es soll nicht nur irgendein vollständiger Prozessschritt gesucht werden und
         //returnList.size()==0 -> es wurde keiner gefunden
         //=> einen LGMProzessStep anlegen, der nur die uebergebene Aufgabe ale endAufgabe enthaelt
         //		if (!testOnly && returnList.size()==0)
@@ -170,11 +188,15 @@ public final class Prozess extends Knoten {
     }
 
     /**
-     * Liefert eine Liste aller Prozesschritte und all ihrer Kombinationen, die sich aus unterschiedlichen Konfigurationen der Aufgaben ergeben. Die aufgaben muss eine Liste der ElementContainer von Aufgaben aus dem selben GraphDocument sein. Es wird null
-     * zurückgegeben, wenn die ArrayList aufgaben weniger als 2 Elemente hat. Folgende Arten von Schritten koennen in der Rueckgabeliste stehen: 1.) vollstaendige Schritte, also Schritte fuer die nach einem Kommunikationsprozess gesucht werden kann (alle
-     * ElementContainer des LGMProzessStep (Startaufgabe, Endaufgabe, Objekttyp, Startkonfiguration, Endkonfiguration) sind nicht null) 2.) LGMProzessStep, in dem nur die endAufgabe gesetzt ist ( = endAufgabe hat keinen Objekttyp interpretiert, den eine
-     * der Aufgaben davor im Prozess bearbeitet hat (siehe getBuisnessProcessSteps)) 3.) LGMProzessStep, in dem eine oder beide Konfigurationen null sind ( = mind. eine Aufgabe hat keine Konfiguration)
-     * 
+     * Liefert eine Liste aller Prozesschritte und all ihrer Kombinationen, die sich aus unterschiedlichen Konfigurationen der Aufgaben ergeben. Die
+     * aufgaben muss eine Liste der ElementContainer von Aufgaben aus dem selben GraphDocument sein. Es wird null
+     * zurückgegeben, wenn die ArrayList aufgaben weniger als 2 Elemente hat. Folgende Arten von Schritten koennen in der Rueckgabeliste stehen: 1.)
+     * vollstaendige Schritte, also Schritte fuer die nach einem Kommunikationsprozess gesucht werden kann (alle
+     * ElementContainer des LGMProzessStep (Startaufgabe, Endaufgabe, Objekttyp, Startkonfiguration, Endkonfiguration) sind nicht null) 2.)
+     * LGMProzessStep, in dem nur die endAufgabe gesetzt ist ( = endAufgabe hat keinen Objekttyp interpretiert, den eine
+     * der Aufgaben davor im Prozess bearbeitet hat (siehe getBuisnessProcessSteps)) 3.) LGMProzessStep, in dem eine oder beide Konfigurationen null
+     * sind ( = mind. eine Aufgabe hat keine Konfiguration)
+     *
      * @param ArrayList
      */
     public List<LGMProzessStep> getKommProzessStepCombinations(final List<ModelElement> aufgaben) {
@@ -187,7 +209,7 @@ public final class Prozess extends Knoten {
         @SuppressWarnings("unchecked")
         ArrayList<ModelElement>[] konfigs = new ArrayList[aufgaben.size()];
 
-        //steht die gleiche Aufgabe mehrmals in aufgaben, so bekommt sie an jeder Stelle die gleiche 
+        //steht die gleiche Aufgabe mehrmals in aufgaben, so bekommt sie an jeder Stelle die gleiche
         //Konfigurationsreferenz -> diese braucht dann nur 1x gesetzt werden
         for (int i = 0; i < aufgaben.size(); i++) {
             ModelElement auf = aufgaben.get(i);
@@ -244,16 +266,16 @@ public final class Prozess extends Knoten {
     }
 
     //	/*
-    //	
-    //	
+    //
+    //
     //	public ArrayList _getKommProzessStepCombinations(GraphDocument doc, ArrayList aufgaben){
     //		if (aufgaben.size()<2) return null;
     ////		System.out.println("aufgaben besteht aus " + aufgabenAnzahl + " Aufgaben");
-    //		
+    //
     //		//Array von ArrayListen der Konfigurationen aller Aufgaben
     //		ArrayList[] konfigs = new ArrayList[aufgaben.size()];
     //
-    //		//steht die gleiche Aufgabe mehrmals in aufgaben, so bekommt sie an jeder Stelle die gleiche 
+    //		//steht die gleiche Aufgabe mehrmals in aufgaben, so bekommt sie an jeder Stelle die gleiche
     //		//Konfigurationsreferenz -> diese braucht dann nur 1x gesetzt werden
     //		for (int i=0; i<aufgaben.size(); i++){
     //			if (konfigs[i]==null){
@@ -272,7 +294,7 @@ public final class Prozess extends Knoten {
     //		//hat die i-te Aufgabe keine Konfiguration, ist nach der Schleife konfigs[i]==new ArrayList()
     //		for (int i=0; i<abKonfigurationen.size(); i++){
     //			KonfigurationContainer abkonf = (KonfigurationContainer)abKonfigurationen.get(i);
-    //			ArrayList tempList = ((ABKonfiguration)abkonf.getElement()).getClients(doc);  
+    //			ArrayList tempList = ((ABKonfiguration)abkonf.getElement()).getClients(doc);
     //			if (tempList.size()<1)
     //				continue;
     //			Object aufgabe = tempList.get(0);
@@ -322,10 +344,10 @@ public final class Prozess extends Knoten {
     //				}
     //			}
     //		}
-    //		return varianten;	
+    //		return varianten;
     //	}
-    //	
-    //	
+    //
+    //
     //	*/
 
     @Override

@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.elements.node;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -17,8 +16,8 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 public abstract class EtntEtdtKombination extends Knoten {
 
     /**
-	 * 
-	 */
+     * 
+     */
     public EtntEtdtKombination() {
         super();
     }
@@ -65,8 +64,8 @@ public abstract class EtntEtdtKombination extends Knoten {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Kommunikationsstandard"), new NConnectionPanel(Kommunikationsstandard.class, dialog, true, true));
         return dialog;
     }

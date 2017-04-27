@@ -2,11 +2,10 @@ package de.imise.tool3lgm.graphtools.elements.node;
 
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -29,10 +28,8 @@ public class Objekttyp extends Knoten {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
-        //dialog.addTab(getResourceBundle().getString("merkm_p"),new
-        // MerkmalPanel(dialog));
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(new DoubleMeaningEdgePanel(AufObjVerbindung.class, dialog));
         dialog.addTab(getResString("Repraesentationsform_p"), new TabbedPanel(dialog, new NConnectionPanel(Nachrichtentyp.class, getResString(Nachrichtentyp.class.getSimpleName()), dialog, false, true),
                 new NConnectionPanel(Dokumententyp.class, getResString(Dokumententyp.class.getSimpleName()), dialog, false, true), new NConnectionPanel(Datensatztyp.class, getResString(Datensatztyp.class.getSimpleName()), dialog, false, true)));

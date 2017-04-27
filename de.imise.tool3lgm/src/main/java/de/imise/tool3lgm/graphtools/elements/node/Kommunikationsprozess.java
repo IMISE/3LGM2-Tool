@@ -3,7 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -16,8 +15,8 @@ public class Kommunikationsprozess extends Knoten {
     protected Prozess prozess;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public Kommunikationsprozess() {
         super();
     }
@@ -28,8 +27,8 @@ public class Kommunikationsprozess extends Knoten {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        return super.createPropertyDialog(gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        return super.createPropertyDialog();
     }
 
     /**

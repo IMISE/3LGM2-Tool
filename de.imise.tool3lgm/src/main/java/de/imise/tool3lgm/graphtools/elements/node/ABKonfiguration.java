@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.elements.node;
 
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
@@ -28,8 +27,8 @@ public final class ABKonfiguration extends Konfiguration {
     }
 
     @Override
-    public ElementPropertyDialog createPropertyDialog(final GDCollection gdcoll) {
-        ElementPropertyDialog dialog = new ElementPropertyDialog(this, gdcoll);
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Anwendungsbaustein"), new NConnectionPanel(Anwendungsbaustein.class, dialog, true, true));
         dialog.addTab(getResString("AufOrgKombination"), new NConnectionPanel(AufOrgKombination.class, dialog, false, false));
         return dialog;
