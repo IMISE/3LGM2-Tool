@@ -1297,20 +1297,22 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (doc == null) {
             return false;
         }
-        GDCollection gdCollection = doc.getCollection();
+        GDCollection gdcoll = doc.getCollection();
 
-        saveAs = gdCollection.isReadOnly() || saveAs;
+        new ModelCleaner(gdcoll).cleanModel();
+
+        saveAs = gdcoll.isReadOnly() || saveAs;
 
         if (saveAs) {
-            if (!gdCollection.chooseFile()) {
+            if (!gdcoll.chooseFile()) {
                 return true;
             }
         }
-        File datei = gdCollection.getFile();
+        File datei = gdcoll.getFile();
         if (datei == null) {
             return fileSave(true);
         }
-        if (!saveToFile(gdCollection)) {
+        if (!saveToFile(gdcoll)) {
             return false;
         }
 
