@@ -8,6 +8,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
 
 /**
  * @author N.N.
@@ -16,7 +17,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 public abstract class EtntEtdtKombination extends Knoten {
 
     /**
-     * 
+     *
      */
     public EtntEtdtKombination() {
         super();
@@ -66,6 +67,7 @@ public abstract class EtntEtdtKombination extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripDescriptedSingleConnectionPanel(EtntEtVerbindung.class);
         dialog.addTab(getResString("Kommunikationsstandard"), new NConnectionPanel(Kommunikationsstandard.class, dialog, true, true));
         return dialog;
     }

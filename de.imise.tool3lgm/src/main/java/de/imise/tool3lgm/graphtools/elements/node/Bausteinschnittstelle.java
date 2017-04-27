@@ -4,6 +4,8 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
 
 public final class Bausteinschnittstelle extends Schnittstelle {
 
@@ -24,7 +26,7 @@ public final class Bausteinschnittstelle extends Schnittstelle {
     }
 
     /**
-     * 
+     *
      */
     public Bausteinschnittstelle() {
         super();
@@ -33,6 +35,8 @@ public final class Bausteinschnittstelle extends Schnittstelle {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripSingleConnectionInfoPanel(true, AwbKommssVerbindung.class);
+        dialog.addDescripSingleConnectionPanel(BssKommstVerbindung.class);
         dialog.addTab(getResString("KommBeziehung"), new KomPanel(Bausteinschnittstelle.class, dialog, true));
         dialog.addTab(getResString("etntges") + " + " + getResString("etntempf"), new ETNTPanel(EtntEtdtKombination.class, dialog));
         return dialog;

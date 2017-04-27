@@ -19,43 +19,16 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbBtypVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
-import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
- * @author N.N.
+ * @author N.N., AXS (4/2017)
  * @create Long time ago
  */
 public class DescripPanel extends ElementDialogPanel implements DocumentListener {
 
     private final ExtendedTextPane descriptionTextPane;
-
-    private ExtendedTextPane etDescriptionTextPane;
-
-    private ExtendedTextPane ntDescriptionTextPane;
 
     private final LimitedSizeScrollTextPane nameTextPane;
 
@@ -97,34 +70,6 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
 
-        ModelElement modelElement = getModelElement();
-        if (modelElement instanceof Anwendungsbaustein) {
-            if (modelElement instanceof RechAnwendungsbaustein) {
-                addSingleConnectionPanel(RawbDbsVerbindung.class);
-                addSingleConnectionPanel(RawbAwpVerbindung.class, AwpSwpVerbindung.class);
-            } else if (modelElement instanceof KonAnwendungsbaustein) {
-                addSingleConnectionPanel(KawbDoksVerbindung.class);
-            }
-        } else if (modelElement instanceof Objekttyp) {
-            addSingleConnectionPanel(true, ObjLogspVerbindung.class);
-        } else if (modelElement instanceof Datenbanksystem) {
-            addSingleConnectionInfoPanel(true, RawbDbsVerbindung.class);
-            addSingleConnectionPanel(DbsDbvsVerbindung.class);
-
-        } else if (modelElement instanceof Bausteinschnittstelle) {
-            addSingleConnectionInfoPanel(true, AwbKommssVerbindung.class);
-            addSingleConnectionPanel(BssKommstVerbindung.class);
-        } else if (modelElement instanceof EtntEtdtKombination) {
-            addDescriptedSingleConnectionPanel(EtntEtVerbindung.class);
-            if (modelElement instanceof EreignisNachrichtenTyp) {
-                addDescriptedSingleConnectionPanel(EtntNatVerbindung.class);
-            } else if (modelElement instanceof EreignisDokumentenTyp) {
-                addDescriptedSingleConnectionPanel(EtntDotVerbindung.class);
-            }
-        } else if (modelElement instanceof PhysischerDVBaustein) {
-            addSingleConnectionPanel(PdvbStoVerbindung.class);
-            addSingleConnectionPanel(PdvbBtypVerbindung.class);
-        }
         init();
     }
 
@@ -208,12 +153,10 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         if (newName != null && !newName.equals(name)) {
             doc.setName(me, newName, dialog.getTransactionID());
         } else {
-            // wenn der Name gleich gebleiben ist, kann aber trotzdem der HTML-Name in der
-            // Grafik sich geändert haben,
-            // wenn in dem Dialog ein Element verknüpft wurde, das auch im Namen in der Grafik
-            // angezeigt wird -> einfach
-            // ohne Transaktion in jedem Fall mal setName() mit dem alten Namen für das Element
-            // aufrufen
+            // wenn der Name gleich geblieben ist, kann aber trotzdem der HTML-Name in der Grafik
+            // sich geändert haben, wenn in dem Dialog ein Element verknüpft wurde, das auch im
+            // Namen in der Grafik angezeigt wird -> einfach ohne Transaktion in jedem Fall mal
+            // setName() mit dem alten Namen für das Element aufrufen
             me.setName(name);
         }
         String newDescrip = descriptionTextPane.getText();

@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
@@ -65,6 +66,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
      */
     boolean closing = false;
 
+    private final DescripPanel descripPanel;
+
     /**
      * @param modelElement
      * @param gdcoll
@@ -87,7 +90,8 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         up.add(headerPanel);
         update();
 
-        tab.addTab(Tool3lgmConstants.getResString("general"), new DescripPanel(this));
+        descripPanel = new DescripPanel(this);
+        tab.addTab(Tool3lgmConstants.getResString("general"), descripPanel);
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
@@ -344,6 +348,34 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     @Override
     public Dimension getDefaultSize() {
         return DEFAULT_SIZE;
+    }
+
+    ///////////////////////////////////////
+    // DescriptionPanel -> add SubPanels //
+    ///////////////////////////////////////
+
+    public void addDescripSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+        addDescripSingleConnectionPanel(false, edgeClasses);
+    }
+
+    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        descripPanel.addSingleConnectionPanel(labelLastEdgeName, edgeClasses);
+    }
+
+    public void addDescripSingleConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
+        addDescripSingleConnectionInfoPanel(false, edgeClasses);
+    }
+
+    public void addDescripSingleConnectionInfoPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        descripPanel.addSingleConnectionInfoPanel(labelLastEdgeName, edgeClasses);
+    }
+
+    public void addDescripDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+        addDescripDescriptedSingleConnectionPanel(false, edgeClasses);
+    }
+
+    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
 }

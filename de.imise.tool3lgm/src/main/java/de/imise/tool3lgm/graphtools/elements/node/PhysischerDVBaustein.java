@@ -9,6 +9,8 @@ import de.imise.tool3lgm.graphtools.dialog.panel.TechnikPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbBtypVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
 
@@ -171,6 +173,8 @@ public class PhysischerDVBaustein extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripSingleConnectionPanel(PdvbStoVerbindung.class);
+        dialog.addDescripSingleConnectionPanel(PdvbBtypVerbindung.class);
         dialog.addTab(getResString("tm"), new TechnikPanel(dialog));
         dialog.addTab(Tool3lgmConstants.getResString("Subnetz"), new NConnectionPanel(Subnetz.class, dialog, true, true));
         dialog.addTab(Tool3lgmConstants.getResString("Anwendungsbaustein_p"), new PDVBKonfPanel2(dialog));

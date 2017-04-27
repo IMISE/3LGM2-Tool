@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 public class Objekttyp extends Knoten {
@@ -30,6 +31,7 @@ public class Objekttyp extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripSingleConnectionPanel(true, ObjLogspVerbindung.class);
         dialog.addTab(new DoubleMeaningEdgePanel(AufObjVerbindung.class, dialog));
         dialog.addTab(getResString("Repraesentationsform_p"), new TabbedPanel(dialog, new NConnectionPanel(Nachrichtentyp.class, getResString(Nachrichtentyp.class.getSimpleName()), dialog, false, true),
                 new NConnectionPanel(Dokumententyp.class, getResString(Dokumententyp.class.getSimpleName()), dialog, false, true), new NConnectionPanel(Datensatztyp.class, getResString(Datensatztyp.class.getSimpleName()), dialog, false, true)));

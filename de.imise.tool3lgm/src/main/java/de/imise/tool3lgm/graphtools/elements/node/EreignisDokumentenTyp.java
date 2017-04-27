@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
+import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
 
 /**
  * @author Thomas Rudert
@@ -12,7 +14,9 @@ public final class EreignisDokumentenTyp extends EtntEtdtKombination {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-            Ereignistyp.class, Dokumententyp.class, Kommunikationsstandard.class,
+            Ereignistyp.class,
+            Dokumententyp.class,
+            Kommunikationsstandard.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -22,10 +26,17 @@ public final class EreignisDokumentenTyp extends EtntEtdtKombination {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public EreignisDokumentenTyp() {
         super();
+    }
+
+    @Override
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripDescriptedSingleConnectionPanel(EtntDotVerbindung.class);
+        return dialog;
     }
 
 }

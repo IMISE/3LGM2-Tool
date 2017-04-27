@@ -6,6 +6,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.FreeTextPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
 
 public final class KonAnwendungsbaustein extends Anwendungsbaustein {
 
@@ -38,6 +39,7 @@ public final class KonAnwendungsbaustein extends Anwendungsbaustein {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripSingleConnectionPanel(KawbDoksVerbindung.class);
         dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
         dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
         dialog.addTab(getResString("Organisationsplan"), new FreeTextPanel(Organisationsplan.class, dialog));

@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
+import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
 
 /**
  * @author Thomas Rudert
@@ -12,7 +14,9 @@ public final class EreignisNachrichtenTyp extends EtntEtdtKombination {
      */
     @SuppressWarnings("rawtypes")
     public static final Class[] COPY_DEPENDENCY = {
-            Ereignistyp.class, Nachrichtentyp.class, Kommunikationsstandard.class,
+            Ereignistyp.class,
+            Nachrichtentyp.class,
+            Kommunikationsstandard.class,
     };
 
     @SuppressWarnings("unchecked")
@@ -22,10 +26,17 @@ public final class EreignisNachrichtenTyp extends EtntEtdtKombination {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public EreignisNachrichtenTyp() {
         super();
+    }
+
+    @Override
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripDescriptedSingleConnectionPanel(EtntNatVerbindung.class);
+        return dialog;
     }
 
 }
