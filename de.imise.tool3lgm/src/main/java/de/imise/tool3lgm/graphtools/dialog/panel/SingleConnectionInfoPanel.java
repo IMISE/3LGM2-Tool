@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *         das erste gefundene angezeigt (was die Verwendung dieses Panels für mehrfach verknüpfte
  *         Elemente nicht besonders sinnvoll macht).
  */
-public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnectionPanel {
+public class SingleConnectionInfoPanel extends AbstractPathConnectionPanel {
 
     /** Label in dem der Name des verbundenen Elementes angezeit wird */
     private final JLabel connectedElementLabel;
@@ -35,7 +35,7 @@ public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnection
      * @param dialog
      * @param edgeClasses
      */
-    public NotEditableSingleConnectionInfoPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+    public SingleConnectionInfoPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
         this(dialog, false, edgeClasses);
     }
 
@@ -45,7 +45,7 @@ public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnection
      *            letzten Kante aus den edgeClasses geschrieben.
      * @param edgeClasses
      */
-    public NotEditableSingleConnectionInfoPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public SingleConnectionInfoPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
         connectedElementLabel = new JLabel();
@@ -64,7 +64,7 @@ public class NotEditableSingleConnectionInfoPanel extends AbstractPathConnection
         if (connected.size() > 0) {
             ElementContainer ec = connected.get(0);
             connectedElement = ec.getElement();
-            connectedElementLabel.setText(ec.toString());
+            connectedElementLabel.setText(connectedElement.toString());
         }
     }
 
