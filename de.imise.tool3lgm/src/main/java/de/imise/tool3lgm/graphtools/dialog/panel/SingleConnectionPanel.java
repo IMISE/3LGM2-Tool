@@ -7,7 +7,6 @@ import java.util.EventObject;
 import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -31,7 +30,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  *         Elemente zur Verknüpfung angeboten {@link Kante}) oder nicht ({@link Composition}).
  *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
  */
-public class AuswahlPanel extends AbstractPathConnectionPanel {
+public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
     /**
      * COMMENTME
@@ -52,7 +51,7 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
-    public AuswahlPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
         this(dialog, false, edgeClasses);
     }
 
@@ -62,7 +61,7 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
      *            letzten Kante aus den edgeClasses geschrieben.
      * @param edgeClasses
      */
-    public AuswahlPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
         box = new AlphabeticalComboBox();
@@ -113,13 +112,10 @@ public class AuswahlPanel extends AbstractPathConnectionPanel {
      * @param elementClass
      * @return
      */
-    private static final LGMAction getItemStateChangedAction(final AuswahlPanel occp, final Class<? extends ModelElement> elementClass) {
-        final GraphDocument mainDoc = occp.getGraphDocument();
-        final GDCollection gdcoll = mainDoc.getCollection();
-        final Class<? extends ModelElement> searchElementClass = elementClass;
-        final ElementPropertyDialog dialog = occp.getDialog();
-        final AuswahlPanel panel = occp;
-        final ModelElement modelElement = occp.getModelElement();
+    private static final LGMAction getItemStateChangedAction(final SingleConnectionPanel panel, final Class<? extends ModelElement> elementClass) {
+        final GraphDocument mainDoc = panel.getGraphDocument();
+        final ElementPropertyDialog dialog = panel.getDialog();
+        final ModelElement modelElement = panel.getModelElement();
 
         return new LGMAction() {
             @Override
