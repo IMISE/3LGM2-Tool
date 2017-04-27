@@ -36,7 +36,7 @@
 			<artifactId>saxon</artifactId>
 			<version>8.7</version>
 		</dependency>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>de.imise</groupId>
 			<artifactId>de.imise.utils</artifactId>
 			<version>0.0.8</version>
@@ -46,7 +46,7 @@
 			<artifactId>de.imise.twatd</artifactId>
 			<version>0.0.1</version>
 		</dependency>
-		<dependency>
+ -->		<dependency>
 			<groupId>org.jmockit</groupId>
 			<artifactId>jmockit</artifactId>
 			<version>1.18</version>
