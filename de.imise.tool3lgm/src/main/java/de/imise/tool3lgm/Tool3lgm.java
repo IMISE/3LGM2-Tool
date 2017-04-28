@@ -64,6 +64,7 @@ import de.imise.tool3lgm.graphtools.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.ViewParameter;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
+import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.graphtools.elements.Kante;
