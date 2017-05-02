@@ -24,8 +24,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationseinheit;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -49,7 +47,6 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     private LGMAction addAction;
     private LGMAction removeAction;
     private LGMAction newElementAction;
-    private LGMAction splitAction;
 
     /**
      * @param searchElementClass
@@ -158,41 +155,30 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         JButton addButton = new JButton();
         JButton removeButton = new JButton();
         JButton newElementButton = new JButton();
-        JButton splitButton = new JButton();
 
         try {
             addAction = LGMActionLibrary.getAddElementAction(rtree, ltree, this, false);
             removeAction = LGMActionLibrary.getDisconnectAction(ltree, rtree, this, false);
             newElementAction = LGMActionLibrary.getNewElementAction(this, searchElementClass);
-            splitAction = LGMActionLibrary.getSplitAction(ltree, this, searchElementClass);
         } catch (Exception e) {
             e.printStackTrace();
         }
         addButton.setAction(addAction);
         removeButton.setAction(removeAction);
         newElementButton.setAction(newElementAction);
-        splitButton.setAction(splitAction);
         /*
          * ... end: Buttons & Actions erstellen und registrieren
          */
 
         buttonpanel = new JPanel();
         buttonpanel.setSize(30, 250);
-        ModelElement modelElement = getModelElement();
-        if (modelElement instanceof AufOrgKombination && searchElementClass == Organisationseinheit.class) {
-            buttonpanel.setLayout(new GridLayout(4, 1));
-        } else {
-            buttonpanel.setLayout(new GridLayout(3, 1));
-        }
+        buttonpanel.setLayout(new GridLayout(3, 1));
 
         buttonpanel.add(addButton);
         buttonpanel.add(removeButton);
 
         if (mw) {
             buttonpanel.add(newElementButton);
-        }
-        if (modelElement instanceof AufOrgKombination && searchElementClass == Organisationseinheit.class) {
-            buttonpanel.add(splitButton);
         }
 
         init();

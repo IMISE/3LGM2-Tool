@@ -32,13 +32,13 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel2;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -50,11 +50,8 @@ import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Konfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationseinheit;
 import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
@@ -864,147 +861,6 @@ public class LGMActionLibrary {
         }
         return null;
 
-    }
-
-    /**
-     * @param jTree
-     * @param edp
-     * @param elementClass
-     * @throws ActionNotDefinedForClassException
-     */
-    public static final LGMAction getSplitAction(final JTree jTree, final ElementDialogPanel edp, final Class<? extends ModelElement> elementClass) throws ActionNotDefinedForClassException {
-
-        final ElementDialogPanel panel = edp;
-        final GraphDocument doc = edp.getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
-        final ElementPropertyDialog dialog = edp.getDialog();
-        final ModelElement modelElement = edp.getModelElement();
-        final JTree tree = jTree;
-
-        if (edp instanceof NConnectionPanel) {
-            // TODO: UNDO scheint nicht zu gehen
-            return new LGMAction(Tool3lgmConstants.getResString("abkonfSplitButtonText")) {
-
-                @Override
-                public void execute(final EventObject eo) {
-                    // wenn diese AufOrgKombination mit keiner Aufgabe verbunden
-                    // ist (was eigentlich gar
-                    // nicht sein darf)
-                    ArrayList<ModelElement> elems = modelElement.getConnectedElements(Aufgabe.class);
-                    if (elems == null || elems.size() == 0) {
-                        return;
-                    }
-                    // es sollte nur eine Aufgabe geben -> diese holen
-                    Aufgabe auf = (Aufgabe) elems.get(0);
-
-                    // wenn keine oder nur 1 Organisationseinheiten dieser
-                    // AufOrgKombination zugeordnet
-                    // ist, braucht man nichts aufsplitten -> zurück
-                    elems = modelElement.getConnectedElements(Organisationseinheit.class);
-                    if (elems == null || elems.size() <= 1) {
-                        return;
-                    }
-
-                    // Transaktion starten
-                    doc.start_transaction(dialog.getTransactionID());
-                    boolean old_mode = gdcoll.isInteractiveMode();
-                    gdcoll.setInteractiveMode(false);
-
-                    // kopieren
-
-                    // hole die Anwendungsbausteinkonfigurationen, die der zu
-                    // zerlegenden AufOrgKombination
-                    // zugeordnet sind
-                    ArrayList<ModelElement> abKonfs = modelElement.getConnectedElements(ABKonfiguration.class);
-
-                    // die Selektierten OEs holen
-                    TreePath[] selpaths = tree.getSelectionPaths();
-
-                    // Liste, in die alle neu entstandenen AufOrgKombinationen
-                    // gelegt werden
-                    ArrayList<ModelElement> newAufOrgs = new ArrayList<ModelElement>();
-
-                    NConnectionPanel tp = (NConnectionPanel) panel;
-
-                    // wenn nichts selktiert war -> alle OEs ab der 2.ten kommen
-                    // an eine eigene
-                    // AufOrgKombination an der Aufgabe, die der zu zerlegenden
-                    // AufOgrKombination
-                    // zugeordnet ist und an dieser AufOrgKombination bleibt nur
-                    // die erste OE.
-                    if (selpaths == null || selpaths.length == 0) {
-                        // für alle Organisationseinheiten an der zweiten
-                        for (ModelElement oe : elems) {
-                            // trenne die Kante zur AufOrgKombination
-                            gdcoll.unlink(modelElement, oe, dialog.getTransactionID());
-                            // lege eine neue AufOgrKombination an und hole diese neue
-                            // AufOrgKombination
-                            ModelElement newAufOrg = doc.createKnotenWithContainer(AufOrgKombination.class, dialog.getTransactionID()).getElement();
-                            // verbinde die neue AufOrgKombination mit der
-                            // Aufgabe der originalen AufOrgKombination
-                            gdcoll.link(tp.getEdgeType(auf, newAufOrg), auf, newAufOrg, dialog.getTransactionID());
-                            // verbinde die neue AufOrgKombination mit der
-                            // Aufgabe der aktuellen OE
-                            gdcoll.link(tp.getEdgeType(newAufOrg, oe), newAufOrg, oe, dialog.getTransactionID());
-                            // merke die neue AufOrgKombination
-                            newAufOrgs.add(newAufOrg);
-                        }
-                        // es ist etwas selektiert -> alle selektierten OEs an eine neue
-                        // AufOrgKombination
-                        // hängen und aus dieser AufOrgKombination löschen
-                    } else {
-                        // lege eine neue AufOgrKombination an und hole diese neue AufOrgKombination
-                        ModelElement newAufOrg = doc.createKnotenWithContainer(AufOrgKombination.class, dialog.getTransactionID()).getElement();
-                        // verbinde die neue AufOrgKombination mit der Aufgabe
-                        // der originalen AufOrgKombination
-                        gdcoll.link(((LGMDragNDropPanel) panel).getEdgeType(auf, newAufOrg), auf, newAufOrg, dialog.getTransactionID());
-                        // trenne jede selektierte OE von der originalen AufOrgKombination und
-                        // verbinde sie
-                        // alle mit der neu angelegten AufOrgKombination
-                        for (int n = 0; n < selpaths.length; n++) {
-                            NodeContainer knotCont = (NodeContainer) ((LGMTreeNode) selpaths[n].getLastPathComponent()).getUserObject();
-                            ModelElement oe = knotCont.getElement();
-                            gdcoll.unlink(modelElement, oe, dialog.getTransactionID());
-                            gdcoll.link(tp.getEdgeType(newAufOrg, oe), newAufOrg, oe, dialog.getTransactionID());
-                        }
-                        // speichere die neu angelegte AufOrgKombination
-                        newAufOrgs.add(newAufOrg);
-                    }
-
-                    // alle neuen AufOrgKombinationen bekommen genau solche Konfigurationen
-                    // zugeordnet, die der Ausgangs-AufOrgKombination zugordnet waren
-                    for (int i = 0; i < newAufOrgs.size(); i++) {
-                        // hole die i-te neu angelegte AufOrgKombination
-                        AufOrgKombination newAufOrg = (AufOrgKombination) newAufOrgs.get(i);
-                        // für alle ABKonfigurationen der originalen AufOgrKombination
-                        for (int j = 0; j < abKonfs.size(); j++) {
-                            // lege eine neue ABKonfiguration an und hole diese neue ABKonfiguration
-                            ModelElement newABKonf = doc.createKnotenWithContainer(ABKonfiguration.class, dialog.getTransactionID()).getElement();
-                            // verbinde diese neue ABKonfiguration mit der aktuellen neuen
-                            // AufOrgKombination
-                            gdcoll.link(tp.getEdgeType(newAufOrg, newABKonf), newAufOrg, newABKonf, dialog.getTransactionID());
-                            // hole die j-te ABKonfiguration der originalen AufOgrKombination
-                            ABKonfiguration abKonf = (ABKonfiguration) abKonfs.get(j);
-                            // erstelle eine Liste aller Anwendungsbausteine, die die
-                            // ABKonfiguration enthält
-                            ArrayList<ModelElement> awbs = abKonf.getConnectedElements(Anwendungsbaustein.class);
-                            awbs.addAll(abKonf.getConnectedElements(RechAnwendungsbaustein.class));
-                            awbs.addAll(abKonf.getConnectedElements(KonAnwendungsbaustein.class));
-                            // für jeden der Anwendungsbausteine der originalen ABKonfiguration
-                            for (int k = 0; k < awbs.size(); k++) {
-                                // verbinde ihn mit der neuen ABKonfiguration
-                                gdcoll.link(tp.getEdgeType(newABKonf, awbs.get(k)), newABKonf, awbs.get(k), dialog.getTransactionID());
-                            }
-                        }
-                    }
-                    // doc.finish_transaction()
-                    gdcoll.setInteractiveMode(old_mode);
-
-                }
-
-            };
-        }
-        throw new ActionNotDefinedForClassException(panel.getClass().getName());
     }
 
     /**
