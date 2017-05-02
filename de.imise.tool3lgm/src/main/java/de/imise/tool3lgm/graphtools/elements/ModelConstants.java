@@ -75,6 +75,8 @@ public final class ModelConstants {
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
 
+    private static final String PLURAL_NAME_RES_KEY_SUFFIX = "_p";
+
     /**
      * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
      * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
@@ -807,20 +809,47 @@ public final class ModelConstants {
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      *
      * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
      * @return String aus dem geladenen ResourcenBundle
      */
-    public static final String getDisplayableName(Class<? extends ModelElement> clazz) {
+    private static final String getDisplayableName(Class<? extends ModelElement> clazz, final boolean plural) {
         if (clazz == null) {
             return null;
         }
         while (clazz != ModelElement.class) {
             try {
-                return Tool3lgmConstants.getResString(clazz.getSimpleName());
+                String resKey = clazz.getSimpleName();
+                if (plural) {
+                    resKey += PLURAL_NAME_RES_KEY_SUFFIX;
+                }
+                return Tool3lgmConstants.getResString(resKey);
             } catch (MissingResourceException mre) {
                 clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
             }
         }
         return null;
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     *
+     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public static final String getDisplayablePluralName(final Class<? extends ModelElement> clazz) {
+        return getDisplayableName(clazz, true);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     *
+     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public static final String getDisplayableName(final Class<? extends ModelElement> clazz) {
+        return getDisplayableName(clazz, false);
     }
 
     /**

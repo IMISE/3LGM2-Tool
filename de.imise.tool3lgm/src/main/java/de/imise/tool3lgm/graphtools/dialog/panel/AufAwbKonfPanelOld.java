@@ -27,16 +27,10 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -45,28 +39,24 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * Mit diesem Panel zeigen Aufgaben ihre Anwendungsbausteinkonfigurationen an.
  */
-public class AufAwbKonfPanel extends LGMDragNDropPanel {
+public class AufAwbKonfPanelOld extends LGMDragNDropPanel {
 
     private final LGMDragNDropTree ltree;
     private final LGMDragNDropTree rtree;
     private final DefaultTreeModel model, abmodel;
     private final LGMTreeNode root, abroot;
-    private final JLabel rtreeLabel, redundanzLabel;
+    private final JLabel label2, redundanzLabel;
     private final JScrollPane sp2;
     private final JPanel buttonpanel;
     private static String teilmodell = Tool3lgmConstants.getResString("submodel");
     private static String gesamtmodell = Tool3lgmConstants.getResString("whole_model");
     private static String redundanteKonfs = Tool3lgmConstants.getResString("redundante_Konfigs");
-    private final MetaPath metaPath;
 
     private LGMAction addAction;
     private LGMAction removeAction;
 
-    public AufAwbKonfPanel(final ElementPropertyDialog pd) {
+    public AufAwbKonfPanelOld(final ElementPropertyDialog pd) {
         super(pd);
-        metaPath = new MetaPath(pd.getModelElement().getClass(), Anwendungsbaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
-        Class<? extends ModelElement> connectedMainClass = metaPath.getEndClass(metaPath.getEdgeClasses().length - 2); // das vorletzte EndElement des Pfades gibt vor, wie der linkte Baum heiﬂt
-        Class<? extends ModelElement> rtreeClass = metaPath.getEndClass();
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -74,7 +64,7 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
 
         redundanzLabel = new JLabel();
 
-        JLabel ltreeLabel = new JLabel(ModelConstants.getDisplayablePluralName(connectedMainClass));
+        JLabel label = new JLabel(Tool3lgmConstants.getResString("ABKonfiguration_p"));
         root = new LGMTreeNode(getModelElement().getName(), false);
         model = new DefaultTreeModel(root);
         ltree = new LGMDragNDropTree(model, mainDoc);
@@ -91,7 +81,7 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, ltreeLabel, constraints, 0, 0, 1, 1);
+        add(this, label, constraints, 0, 0, 1, 1);
         add(this, redundanzLabel, constraints, 0, 5, 5, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
@@ -99,9 +89,8 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
         constraints.weighty = 100;
         add(this, sp, constraints, 0, 1, 1, 4);
 
-        String rtreeLabelString = ModelConstants.getDisplayablePluralName(rtreeClass);
-        rtreeLabel = new JLabel(rtreeLabelString);
-        abroot = new LGMTreeNode(rtreeLabelString, false);
+        label2 = new JLabel(Tool3lgmConstants.getResString("Anwendungsbaustein_p"));
+        abroot = new LGMTreeNode(Tool3lgmConstants.getResString("Anwendungsbaustein_p"), false);
         abmodel = new DefaultTreeModel(abroot);
         rtree = new LGMDragNDropTree(abmodel, mainDoc);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
@@ -165,7 +154,7 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
     public void init() {
         super.init();
         remove(buttonpanel);
-        remove(rtreeLabel);
+        remove(label2);
         remove(sp2);
         buildTree();
         revalidate();
@@ -179,7 +168,7 @@ public class AufAwbKonfPanel extends LGMDragNDropPanel {
         constraints.fill = GridBagConstraints.NONE;
         add(this, buttonpanel, constraints, 1, 3, 1, 2);
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, rtreeLabel, constraints, 2, 0, 1, 1);
+        add(this, label2, constraints, 2, 0, 1, 1);
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
