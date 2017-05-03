@@ -2,23 +2,16 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
-import java.awt.Component;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JLabel;
 
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -44,7 +37,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     protected final int[] directions;
 
     /** Label vor dem verbundenen Element mit der Art des Elementes */
-    private final JLabel westLabel;
+    protected final JLabel westLabel;
 
     /**
      * Panel für eine einfache Assoziation
@@ -249,55 +242,4 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
 
         }
     }
-
-    /**
-     * Fügt der übergebenen Komponente die Doppelklick-Öffne-Eigenschaftsdialog-des-selektierten-Elementes-Action
-     * hinzu und die Rechte-Maustastae-Öffnet-KontextMenü-Action.
-     *
-     * @param component
-     */
-    public void addMouseActions(final Component component) {
-        component.addMouseListener(new LGMMouseListener(getMouseAction(), null, null, getMouseAction(), null));
-    }
-
-    /**
-     * Liefert das Element für das das ContextMenü angezeigt werden soll. Das muss ein {@link NodeContainer}
-     * sein, damit das klappt.
-     *
-     * @return
-     */
-    protected abstract Object getMouseSelectedItem();
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Panels
-     * reagiert.
-     *
-     * @param edp
-     */
-    private final LGMAction getMouseAction() {
-        final AbstractPathConnectionPanel panel = this;
-        final GraphDocument doc = panel.getGraphDocument();
-        final ElementPropertyDialog dialog = panel.getDialog();
-        return new LGMAction() {
-            @Override
-            public void execute(final EventObject eo) {
-                MouseEvent e = (MouseEvent) eo;
-                boolean popup = Tool3lgmConstants.isPopupTrigger(e);
-                boolean doubleClick = !popup && e.getClickCount() > 1;
-                if (popup || doubleClick) {
-                    Object item = panel.getMouseSelectedItem();
-                    if (item != null && item instanceof NodeContainer) {
-                        NodeContainer knot = (NodeContainer) item;
-                        if (popup) {
-                            doc.select(knot, dialog.getTransactionID());
-                            Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
-                        } else if (doubleClick) {
-                            doc.showPropertyDialog(knot.getElement());
-                        }
-                    }
-                }
-            }
-        };
-    }
-
 }

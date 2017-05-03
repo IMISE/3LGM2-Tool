@@ -11,8 +11,6 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -30,12 +28,12 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  *         Elemente zur Verknüpfung angeboten {@link Kante}) oder nicht ({@link Composition}).
  *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
  */
-public class SingleConnectionPanel extends AbstractPathConnectionPanel {
+public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
     /**
      * COMMENTME
      */
-    private final AlphabeticalComboBox box;
+    private final AlphabeticalComboBox box = new AlphabeticalComboBox();
 
     /**
      * COMMENTME
@@ -64,9 +62,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
-        box = new AlphabeticalComboBox();
-        // Action erstellen und Listener an Panel und Box anhängen
-        addMouseActions(box);
 
         itemListener = new LGMItemListener(getItemStateChangedAction(this, searchElementClass));
         box.addItemListener(itemListener);
@@ -100,6 +95,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         }
         doc.finish_transaction(dialog.getTransactionID(), false);
         box.addItemListener(itemListener);
+        addMouseActions(box);
     }
 
     @Override
@@ -108,7 +104,9 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * @param occp
+     * Dies ist die Action, wenn sich die Combobox-Auswahl ändert
+     *
+     * @param panel
      * @param elementClass
      * @return
      */
@@ -155,17 +153,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     @Override
-    protected DragNDropActionChain[] collectDragNDropActionChains() {
-        return new DragNDropActionChain[] {};
-    }
-
-    @Override
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {};
-    }
-
-    @Override
-    protected Object getMouseSelectedItem() {
+    public Object getSelection() {
         return box.getSelectedItem();
     }
 

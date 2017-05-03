@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.EventObject;
 
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
@@ -29,6 +31,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
@@ -340,9 +343,7 @@ public class LGMActionLibrary {
                     }
                 }
             };
-        }
-
-        else {
+        } else {
             throw new ActionNotDefinedForClassException(edp.getClass().getName());
         }
         return null;
@@ -472,14 +473,10 @@ public class LGMActionLibrary {
                 }
             };
         } else if (edp instanceof ProzessStructurePanel) {
-
             return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-
                 @Override
                 public void execute(final EventObject e) {
-
                     getDragNDropLocateElementAsTargetAction(tree2).execute(e);
-
                     TreeModel lmodel = tree1.getModel();
                     LGMTreeNode lroot = (LGMTreeNode) lmodel.getRoot();
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
@@ -529,52 +526,102 @@ public class LGMActionLibrary {
                         }
                         return;
                     }
-
                 }
-
             };
-
         } else {
             throw new ActionNotDefinedForClassException(pane.getClass().getName());
         }
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in AbstractSingleConnectionPanel reagiert.
      *
-     * @param jTree
+     * @param panel
      * @param edp
      * @return
      */
-    public static final LGMAction getMouseAction(final JTree jTree, final ElementDialogPanel edp) {
+    public static final LGMAction getMouseAction(final AbstractSingleConnectionPanel panel) {
+        return getMouseActionInternal(panel, panel);
+    }
 
-        final JTree tree = jTree;
-        final ElementDialogPanel panel = edp;
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in ComboBoxes reagiert.
+     *
+     * @param comboBox
+     * @param edp
+     * @return
+     */
+    public static final LGMAction getMouseAction(final JComboBox<?> comboBox, final ElementDialogPanel edp) {
+        return getMouseActionInternal(comboBox, edp);
+    }
 
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
+     *
+     * @param tree
+     * @param edp
+     * @return
+     */
+    public static final LGMAction getMouseAction(final JTree tree, final ElementDialogPanel edp) {
+        return getMouseActionInternal(tree, edp);
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
+     *
+     * @param component
+     * @param panel
+     * @return
+     */
+    private static final LGMAction getMouseActionInternal(final JComponent component, final ElementDialogPanel panel) {
         return new LGMAction() {
-
             @Override
             public void execute(final EventObject eo) {
-
                 MouseEvent e = (MouseEvent) eo;
-
-                if (Tool3lgmConstants.isPopupTrigger(e)) {
+                boolean popup = Tool3lgmConstants.isPopupTrigger(e);
+                boolean doubleClick = !popup && e.getClickCount() > 1;
+                if (popup || doubleClick) {
                     int xin = e.getX();
                     int yin = e.getY();
-                    TreePath path = tree.getPathForLocation(xin, yin);
-                    if (path == null) {
-                        return;
-                    }
-                    LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
-                    if (node == null) {
-                        return;
-                    }
-                    Object knot = node.getUserObject();
-                    if (knot instanceof ElementContainer) {
-                        if (!((ElementContainer) knot).isSelected()) {
-                            panel.getGraphDocument().select((ElementContainer) knot, panel.getDialog().getTransactionID());
+                    Object selection = null;
+                    if (component instanceof JTree) {
+                        JTree tree = (JTree) component;
+                        TreePath path = tree.getPathForLocation(xin, yin);
+                        if (path == null) {
+                            return;
                         }
-                        Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+                        LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
+                        if (node == null) {
+                            return;
+                        }
+                        selection = node.getUserObject();
+                    } else if (component instanceof JComboBox) {
+                        JComboBox<?> combobox = (JComboBox<?>) component;
+                        selection = combobox.getSelectedItem();
+                    } else if (panel instanceof AbstractSingleConnectionPanel) {
+                        AbstractSingleConnectionPanel singleSelectionPanel = (AbstractSingleConnectionPanel) panel;
+                        selection = singleSelectionPanel.getSelection();
+                    }
+                    GraphDocument doc = panel.getGraphDocument();
+                    ElementContainer selected = null;
+                    if (selection instanceof ElementContainer) {
+                        selected = (ElementContainer) selection;
+                    } else if (selection instanceof ModelElement) {
+                        //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
+                        //den Container aus dem Hauptdokument zu ersetzen
+                        ModelElement me = (ModelElement) selection;
+                        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+                        selected = me.getContainer(mainDoc);
+                    }
+                    if (selected != null) {
+                        ElementContainer ec = (ElementContainer) selection;
+                        doc.select(ec, panel.getTransactionID());
+                        if (popup) {
+                            Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+                        } else if (doubleClick) {
+                            doc.showPropertyDialog(ec.getElement());
+                        }
+
                     }
                 }
             }
@@ -594,7 +641,6 @@ public class LGMActionLibrary {
         final ElementDialogPanel panel = edp;
 
         return new LGMAction() {
-
             @Override
             public void execute(final EventObject e) {
                 if (panel.getCorrectingSelectionCount() > 0) {
@@ -634,11 +680,8 @@ public class LGMActionLibrary {
                         }
                     }
                 }
-
                 panel.getGraphDocument().distributeEvent(GraphDocument.SELECTION_CHANGED, panel.getDialog().getTransactionID());
-
             }
-
         };
     }
 
@@ -821,16 +864,10 @@ public class LGMActionLibrary {
                         // doc.distributeEvent(GraphDocument.DATA_CHANGED, null,
                         // null, dialog.getTransactionID());
                         return;
-
                     }
-
                 };
-
-            }
-
-            else if (panel instanceof AufOrgPanel) {
+            } else if (panel instanceof AufOrgPanel) {
                 return new LGMAction(Tool3lgmConstants.getResString("new")) {
-
                     @Override
                     public void execute(final EventObject eo) {
                         // doc.start_transaction(dialog.getTransactionID());
@@ -853,6 +890,7 @@ public class LGMActionLibrary {
                         // null, dialog.getTransactionID());
                         return;
                     }
+
                 };
             }
 

@@ -38,15 +38,18 @@ public abstract class ElementDialogPanel extends JPanel {
      * automatisch in diesem GraphDocument enthalten.
      */
     protected GraphDocument doc;
+
     /**
      * Das Hauptdokument des Modells. In den Dialogen werden immer alle Verbindungen angezeigt, die
      * in diesem Dokument vorkommen.
      */
     protected GraphDocument mainDoc;
+
     /**
      * Der Dialog in dem sich dieses Panel befindet
      */
     protected final ElementPropertyDialog dialog;
+
     /**
      * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere Bäume enthalten
      * kann, wird sich in dieser Liste sozusagen die Gesamtselektion gemerkt.

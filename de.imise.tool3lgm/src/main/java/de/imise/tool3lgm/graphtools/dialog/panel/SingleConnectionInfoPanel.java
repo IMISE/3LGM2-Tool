@@ -6,8 +6,6 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -23,7 +21,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *         das erste gefundene angezeigt (was die Verwendung dieses Panels für mehrfach verknüpfte
  *         Elemente nicht besonders sinnvoll macht).
  */
-public class SingleConnectionInfoPanel extends AbstractPathConnectionPanel {
+public class SingleConnectionInfoPanel extends AbstractSingleConnectionPanel {
 
     /** Label in dem der Name des verbundenen Elementes angezeit wird */
     private final JLabel connectedElementLabel;
@@ -65,6 +63,9 @@ public class SingleConnectionInfoPanel extends AbstractPathConnectionPanel {
             ElementContainer ec = connected.get(0);
             connectedElement = ec.getElement();
             connectedElementLabel.setText(connectedElement.toString());
+        } else {
+            connectedElement = null;
+            connectedElementLabel.setText("");
         }
     }
 
@@ -74,18 +75,8 @@ public class SingleConnectionInfoPanel extends AbstractPathConnectionPanel {
     }
 
     @Override
-    protected DragNDropActionChain[] collectDragNDropActionChains() {
-        return new DragNDropActionChain[] {};
-    }
-
-    @Override
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {};
-    }
-
-    @Override
-    protected Object getMouseSelectedItem() {
-        return connectedElement.getContainer(getSelectedGraphDocument());
+    public Object getSelection() {
+        return connectedElement;
     }
 
 }
