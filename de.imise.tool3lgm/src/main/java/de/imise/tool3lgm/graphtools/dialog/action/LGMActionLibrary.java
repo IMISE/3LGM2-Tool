@@ -890,10 +890,8 @@ public class LGMActionLibrary {
                         // null, dialog.getTransactionID());
                         return;
                     }
-
                 };
             }
-
         } else {
             throw new ActionNotDefinedForClassException(panel.getClass().getName());
         }
@@ -920,14 +918,10 @@ public class LGMActionLibrary {
         final ElementPropertyDialog dialog = edp.getDialog();
 
         if (pane instanceof ProzessStructurePanel) {
-
             return new LGMAction("", Tool3lgmConstants.getIcon("runter2.gif")) {
-
                 @Override
                 public void execute(final EventObject eo) {
-
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
-
                     // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
                     // die 1)
                     TreePath selPath = ltree.getSelectionPath();
@@ -989,14 +983,10 @@ public class LGMActionLibrary {
         final ElementPropertyDialog dialog = edp.getDialog();
 
         if (pane instanceof ProzessStructurePanel) {
-
             return new LGMAction("", Tool3lgmConstants.getIcon("hoch2.gif")) {
-
                 @Override
                 public void execute(final EventObject eo) {
-
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
-
                     // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
                     // die 1)
                     TreePath selPath = ltree.getSelectionPath();
@@ -1085,19 +1075,14 @@ public class LGMActionLibrary {
         final JTree tree = jTree;
 
         return new LGMAction() {
-
             @Override
             public void execute(final EventObject eo) {
-
                 if (!(eo instanceof DropTargetDropEvent)) {
                     return;
                 }
-
                 DropTargetDropEvent dtde = (DropTargetDropEvent) eo;
-
                 Point p = dtde.getLocation();
                 TreePath path = tree.getPathForLocation(p.x, p.y);
-
                 tree.setSelectionPath(path);
             }
         };
@@ -1115,13 +1100,10 @@ public class LGMActionLibrary {
         final ElementPropertyDialog dialog = panel.getDialog();
 
         return new LGMAction() {
-
             @Override
             public void execute(final EventObject eo) {
                 panel.removeHighLightsAndSpecialInfos();
-
                 WindowListener[] listeners = dialog.getWindowListeners();
-
                 for (int i = 0; i < listeners.length; i++) {
                     dialog.removeWindowListener(listeners[i]);
                 }
@@ -1138,7 +1120,6 @@ public class LGMActionLibrary {
         final ElementDialogPanel panel = edp;
 
         return new LGMAction() {
-
             @Override
             public void execute(final EventObject eo) {
                 if (!panel.isAlreadyInitialized()) {
