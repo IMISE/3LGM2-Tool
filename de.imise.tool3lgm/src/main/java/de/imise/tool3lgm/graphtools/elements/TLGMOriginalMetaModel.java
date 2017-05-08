@@ -67,6 +67,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
 import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsstandard;
 import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
+import de.imise.tool3lgm.graphtools.elements.node.LogischerSpeicher;
 import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
 import de.imise.tool3lgm.graphtools.elements.node.Netzprotokoll;
 import de.imise.tool3lgm.graphtools.elements.node.Netztyp;
@@ -76,6 +77,8 @@ import de.imise.tool3lgm.graphtools.elements.node.Organisationsplan;
 import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
+import de.imise.tool3lgm.graphtools.elements.node.Repraesentationsform;
+import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
 import de.imise.tool3lgm.graphtools.elements.node.Standort;
 import de.imise.tool3lgm.graphtools.elements.node.Subnetz;
@@ -158,6 +161,10 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
             //abstracte Knoten müssen hier auch eingetragen werden
             Anwendungsbaustein.class,
+            EtntEtdtKombination.class,
+            Schnittstelle.class,
+            Repraesentationsform.class,
+            LogischerSpeicher.class,
     };
 
     private final Class[] TREE_LOGICAL_LAYER_NODES = {
