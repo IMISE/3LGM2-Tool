@@ -482,8 +482,8 @@ public final class GDCollection extends UserFieldTarget {
             ecDoc.addUndoCommand(GDCommands.CHANGE_FORM + " " + ecDoc.hashString + " " + ecHash + " " + ec.getForm(), pid);
         }
         if (!ec.hasStandardFont()) {
-            ecDoc.addUndoCommand(
-                    GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+            ecDoc.addUndoCommand(GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(),
+                    pid);
         }
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
@@ -1392,7 +1392,7 @@ public final class GDCollection extends UserFieldTarget {
 
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
-                //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolegn, sonst stimmt die Reihenfolge der Kommando nicht.
+                //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
                     int maxElemCardinality = edge.isStartClass(startElement.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
                     ArrayList<Kante> edgeList = startElement.getEdgesWith(edge.isStartClass(startElement.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
