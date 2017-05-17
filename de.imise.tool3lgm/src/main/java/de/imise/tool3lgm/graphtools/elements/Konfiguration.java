@@ -1,10 +1,9 @@
-package de.imise.tool3lgm.graphtools.elements.node;
+package de.imise.tool3lgm.graphtools.elements;
 
 import java.util.ArrayList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.log.Log;

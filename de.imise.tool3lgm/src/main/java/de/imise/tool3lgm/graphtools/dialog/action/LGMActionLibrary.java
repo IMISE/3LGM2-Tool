@@ -33,6 +33,7 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDr
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanelOld;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
@@ -45,6 +46,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
@@ -53,7 +55,6 @@ import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -1068,12 +1069,9 @@ public class LGMActionLibrary {
      * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
      * aufgerufen --> Panel muss sich also darum nicht kümmern
      *
-     * @param jTree
+     * @param tree
      */
-    private static final LGMAction getDragNDropLocateElementAsTargetAction(final JTree jTree) {
-
-        final JTree tree = jTree;
-
+    public static final LGMAction getDragNDropLocateElementAsTargetAction(final JTree tree) {
         return new LGMAction() {
             @Override
             public void execute(final EventObject eo) {
@@ -1082,7 +1080,7 @@ public class LGMActionLibrary {
                 }
                 DropTargetDropEvent dtde = (DropTargetDropEvent) eo;
                 Point p = dtde.getLocation();
-                TreePath path = tree.getPathForLocation(p.x, p.y);
+                TreePath path = tree.getClosestPathForLocation(p.x, p.y);
                 tree.setSelectionPath(path);
             }
         };
