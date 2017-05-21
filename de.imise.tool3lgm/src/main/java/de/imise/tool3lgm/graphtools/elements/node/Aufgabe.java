@@ -12,7 +12,10 @@ import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
@@ -65,7 +68,8 @@ public final class Aufgabe extends Knoten {
         dialog.addTab(new DoubleMeaningEdgePanel(AufObjVerbindung.class, dialog));
         dialog.addTab(getResString("Organisationseinheit"), new AufOrgPanel(Organisationseinheit.class, dialog, true));
         dialog.addTab(getResString("Ereignistyp"), new NConnectionPanel(Ereignistyp.class, dialog, true, true));
-        dialog.addTab(getResString("ABKonfiguration"), new AufAwbKonfPanel(dialog));
+        //dialog.addTab(getResString("ABKonfiguration"), new AufAwbKonfPanelOld(dialog));
+        dialog.addTab(getResString("ABKonfiguration"), new AufAwbKonfPanel(dialog, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
         return dialog;
     }
 

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -84,7 +86,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         }
         box.addSeparator(false);
         List<ElementContainer> connected = getConnectedContainer();
-        List<ElementContainer> available = isLastEdgeComposition() ? connected : mainDoc.getElementContainer(searchElementClass);
+        List<ElementContainer> available = isLastEdgeCompositionFromMasterToSlave() ? connected : mainDoc.getElementContainer(searchElementClass);
         box.addAll(available);
         for (ElementContainer ec : connected) {
             box.removeItem(ec);
@@ -101,6 +103,11 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     @Override
     protected void showFullDialog() {
         super.showFullDialog();
+    }
+
+    @Override
+    public Object getSelection() {
+        return box.getSelectedItem();
     }
 
     /**
@@ -138,10 +145,10 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
                 // Neues Element anlegen
                 if (selected == panel.createNew) {
-                    panel.createNew(null);
+                    panel.connect(null);
 
                 } else if (selected instanceof NodeContainer) { //vorhandemes Element verknüpfen
-                    panel.createNew((NodeContainer) selected);
+                    panel.connect((NodeContainer) selected);
                 }
 
                 modelElement.getContainer(mainDoc).refreshText();
@@ -152,9 +159,65 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         };
     }
 
-    @Override
-    public Object getSelection() {
-        return box.getSelectedItem();
-    }
+    /**
+     * Legt den kompletten Pfad bei jeweils dem ersten Element an, das ausgehend vom ModelElement des Dialoges
+     * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
+     * angelegt.
+     * ACHTUNG: Sollten auf dem Pfad Kanten mit abstrackten Klassen liegen und diese verbundenen Elemente nicht
+     * existieren, dann kommt es zu einem Fehler, der hier nicht abgefangen wird.
+     * Was auch ungünstig wäre, ist ein Pfad der mit Compositionen von einem Slave zu einem Master verläuft.
+     * Die abgeleiteten Panels sollten dafür sorgen, dass als targetElement keine untergeordneten Elemente übergeben
+     * werden. Beim AuswahlPanel ist das sicher gestellt, da es bei Compositionen immer nur das evtl. breits
+     * verknüpfte Unterelement in der Auswahlbox anzeigt.
+     *
+     * @param targetElementContainer wenn hier ein nicht null-Element übergeben wird, dann wird dieses als letztes verknüpft.
+     *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
+     */
+    private void connect(final NodeContainer targetElementContainer) {
+        ModelElement me = dialog.getModelElement();
+        GraphDocument selDoc = getSelectedGraphDocument();
+        //für den gesamten Pfad
+        for (int i = 0; i < edgeClasses.length; i++) {
+            //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
+            List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i]);
+            //wenn bereits mind. ein verbundenes Element ex.
+            if (!connectedElements.isEmpty()) {
+                //hole das erste
+                me = connectedElements.get(0);
+            } else {
+                //wenn kein verbundenes Element ex.
+                int pid = getTransactionID();
+                //hole die Elementart, die als nächstes angelegt werden soll
+                Class<? extends ModelElement> elementClass2Create = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
+                //wenn die Kantenart eine Composition ist
+                if (isCompositionFromMasterToSlave(i)) {
+                    //erzeuge ein untergeordnetes Element
+                    me = GraphDocument.createAddicted(selDoc, me, (Class<? extends Composition>) edgeClasses[i], elementClass2Create, pid);
+                } else {
+                    //wenn es keine Composition ist, sondern eine 'normale Kante'
 
+                    //NodeContainer, der in diesem Pfadschritt angehängt werden soll
+                    NodeContainer nc;
+                    //wenn ein targetElement übergeben wurde und wir bei der letzten Kante sind
+                    if (targetElementContainer != null && i == edgeClasses.length - 1) {
+                        //anzuhängender Container ist der übergebene
+                        nc = targetElementContainer;
+                    } else {
+                        //lege ein neues Element an (im gerade selektierten doc)
+                        nc = selDoc.createKnotenWithContainer(elementClass2Create, pid);
+                    }
+                    ModelElement created = nc.getElement();
+                    //verbinde das aktuelle me mit dem neuen Element in der angegebenen Richtung
+                    if (directions[i] == FORWARD) {
+                        selDoc.getCollection().link(edgeClasses[i], me, created, pid);
+                    } else {
+                        selDoc.getCollection().link(edgeClasses[i], created, me, pid);
+                    }
+                    //setze das neu angelegte Element als das nächste me
+                    me = created;
+                }
+            }
+
+        }
+    }
 }

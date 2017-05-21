@@ -10,7 +10,6 @@ import javax.swing.JLabel;
 import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
@@ -18,7 +17,6 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
  * Panel für alle einfachen Verbindungen zwischen 2 Elementen
@@ -31,7 +29,19 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     /** Die Kantenklasse zum anderen Element */
     protected final Class<? extends Kante>[] edgeClasses;
 
+    /**
+     * Die Elementklasse die im Panel angezeigt wird. Das muss nicht das Ende des durch die edgeClasses vorgegebenen Pfades
+     * sein, sondern kann auch eine Kante in der Mitte sein.
+     *
+     * @see #searchEdgeIndex
+     */
     protected final Class<? extends ModelElement> searchElementClass;
+
+    /**
+     * Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
+     * wird. Der Pfad muss mindestens searchEdgeIndex + 1 Elemente haben, kann aber auch länger sein.
+     */
+    protected final int searchEdgeIndex;
 
     //die sind entweder Dopplekante.FORWARD oder Doppelkante.BACKWARD
     protected final int[] directions;
@@ -40,7 +50,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     protected final JLabel westLabel;
 
     /**
-     * Panel für eine einfache Assoziation
+     * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
      * @param edgeClass
      * @param dialog
@@ -50,34 +60,62 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     }
 
     /**
+     * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Kante oder die letzte Kante selbst.
+     *
+     * @param dialog
+     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Kante im Pfad verbundenen
+     *            Elementart der Name der letzten Kante selbst ans Label geschrieben.
+     * @param edgeClasses
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, edgeClasses.length - 1, labelEdgeName, edgeClasses);
+    }
+
+    /**
      * Panel für eine einfache Assoziation
      *
-     * @param edgeClass
-     * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
-     *            letzten Kante aus den edgeClasses geschrieben.
      * @param dialog
+     * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
+     *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiliegn Index ans Label geschrieben.
+     * @param edgeClasses
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, searchEdgeIndex, false, edgeClasses);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param dialog
+     * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
+     *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiliegn Index ans Label geschrieben.
+     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
+     *            der Name der Kante selbst ans Label geschrieben. Welche Kante im Pfad das ist, wird durch connectionLabelIndex
+     *            festgelegt.
+     * @param edgeClasses
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Kante>... edgeClasses) {
         super(dialog);
+        this.searchEdgeIndex = searchEdgeIndex;
         this.edgeClasses = edgeClasses;
         directions = getEdgeDirections();
-        searchElementClass = getSearchElementClass();
+        searchElementClass = getPathStepEndElementClass(searchEdgeIndex);
         setName(ModelConstants.getDisplayableName(searchElementClass));
 
-        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann
-        // hinzugefügt werden
+        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         String westLabelText;
-        if (labelLastEdgeName) {
-            if (Kante.isEndClass(edgeClasses[0], searchElementClass)) {
-                westLabelText = ModelConstants.getForwardMetaAssociationName(edgeClasses[0]);
+        Class<? extends Kante> edgeClass = edgeClasses[searchEdgeIndex];
+        if (labelEdgeName) {
+            if (directions[searchEdgeIndex] == FORWARD) {
+                westLabelText = ModelConstants.getForwardMetaAssociationName(edgeClass);
             } else {
-                westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClasses[0]);
+                westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClass);
             }
         } else {
-            westLabelText = ModelConstants.getDisplayableName(searchElementClass);
+            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
         }
-        westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1);
+        westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Der ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
 
     }
@@ -92,12 +130,16 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         return returnValue;
     }
 
-    private Class<? extends ModelElement> getSearchElementClass() {
-        Class<? extends ModelElement> searchElementClass = ModelElement.class;
-        for (int i = 0; i < edgeClasses.length; i++) {
-            searchElementClass = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
-        }
-        return searchElementClass;
+    protected Class<? extends ModelElement> getPathStepEndElementClass(final int edgeIndex) {
+        return directions[edgeIndex] == FORWARD ? Kante.getEndClass(edgeClasses[edgeIndex]) : Kante.getStartClass(edgeClasses[edgeIndex]);
+    }
+
+    /**
+     * @return <code>true</code>, wenn maximal 1 Element der {@link #searchElementClass} mit dem Ausgangselement über den
+     *         angegebenen Pfad verbunden sein kann.
+     */
+    private boolean isSingleConnectionPath() {
+        return (directions[searchEdgeIndex] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClasses[searchEdgeIndex]) : Kante.getMaxEndToStartCardinality(edgeClasses[searchEdgeIndex])) == 1;
     }
 
     /**
@@ -164,82 +206,32 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     }
 
     /**
+     * Liefert true, wenn die übergebene Kantenklasse eine Composition ist und die
+     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     *
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    protected static boolean isCompositionFromMasterToSlave(final Class<? extends Kante> edgeClass, final int direction) {
+        boolean isEdgeComposition = Composition.class.isAssignableFrom(edgeClass);
+        isEdgeComposition &= direction == FORWARD;
+        return isEdgeComposition;
+    }
+
+    /**
      * Liefert true, wenn die Kantenklasse am übergebenen Index eine Composition ist und die
      * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
      *
      * @param index
      * @return
      */
-    protected boolean isEdgeCompostion(final int index) {
-        Class<? extends Kante> edgeInPath = edgeClasses[index];
-        boolean isEdgeComposition = Composition.class.isAssignableFrom(edgeInPath);
-        isEdgeComposition &= directions[index] == FORWARD;
-        return isEdgeComposition;
+    protected boolean isCompositionFromMasterToSlave(final int index) {
+        return isCompositionFromMasterToSlave(edgeClasses[index], directions[index]);
     }
 
-    protected boolean isLastEdgeComposition() {
-        return isEdgeCompostion(edgeClasses.length - 1);
+    protected boolean isLastEdgeCompositionFromMasterToSlave() {
+        return isCompositionFromMasterToSlave(edgeClasses.length - 1);
     }
 
-    /**
-     * Legt den kompletten Pfad bei jeweils dem ersten Element an, das ausgehend vom ModelElement des Dialoges
-     * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
-     * angelegt.
-     * ACHTUNG: Sollten auf dem Pfad Kanten mit abstrackten Klassen liegen und diese verbundenen Elemente nicht
-     * existieren, dann kommt es zu einem Fehler, der hier nicht abgefangen wird.
-     * Was auch ungünstig wäre, ist ein Pfad der mit Compositionen von einem Sclave zu einem Master verläuft.
-     * Die abgeleiteten Panels sollten dafür sorgen, dass als targetElement keine untergeordneten Elemente übergeben
-     * werden. Beim AuswahlPanel ist das sicher gestellt, da es bei Compositionen immer nur das evtl. breits
-     * verknüpfte Unterelement in der Auswahlbox anzeigt.
-     *
-     * @param targetElementContainer wenn hier ein nicht null-Element übergeben wird, dann wird dieses als letztes verknüpft.
-     *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
-     */
-    protected void createNew(final NodeContainer targetElementContainer) {
-        ModelElement me = dialog.getModelElement();
-        GraphDocument selDoc = getSelectedGraphDocument();
-        //für den gesamten Pfad
-        for (int i = 0; i < edgeClasses.length; i++) {
-            //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
-            List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i]);
-            //wenn bereits mind. ein verbundenes Element ex.
-            if (!connectedElements.isEmpty()) {
-                //hole das erste
-                me = connectedElements.get(0);
-            } else {
-                //wenn kein verbundenes Element ex.
-                int pid = getTransactionID();
-                //hole die Elementart, die als nächstes angelegt werden soll
-                Class<? extends ModelElement> elementClass2Create = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
-                //wenn die Kantenart eine Composition ist
-                if (isEdgeCompostion(i)) {
-                    //erzeuge ein untergeordnetes Element
-                    me = GraphDocument.createAddicted(selDoc, me, (Class<? extends Composition>) edgeClasses[i], elementClass2Create, pid);
-                } else {
-                    //wenn es keine Composition ist, sondern eine 'normale Kante'
-
-                    //NodeContainer, der in diesem Pfadschritt angehängt werden soll
-                    NodeContainer nc;
-                    //wenn ein targetElement übergeben wurde und wir bei der letzten Kante sind
-                    if (targetElementContainer != null && i == edgeClasses.length - 1) {
-                        //anzuhängender Container ist der übergebene
-                        nc = targetElementContainer;
-                    } else {
-                        //lege ein neues Element an (im gerade selektierten doc)
-                        nc = selDoc.createKnotenWithContainer(elementClass2Create, pid);
-                    }
-                    ModelElement created = nc.getElement();
-                    //verbinde das aktuelle me mit dem neuen Element in der angegebenen Richtung
-                    if (directions[i] == FORWARD) {
-                        selDoc.getCollection().link(edgeClasses[i], me, created, pid);
-                    } else {
-                        selDoc.getCollection().link(edgeClasses[i], created, me, pid);
-                    }
-                    //setze das neu angelegte Element als das nächste me
-                    me = created;
-                }
-            }
-
-        }
-    }
 }
