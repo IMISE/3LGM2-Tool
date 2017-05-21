@@ -572,7 +572,11 @@ public abstract class Tool3lgmConstants {
      * @return String with value of resource
      */
     public static String getResString(final String key) {
-        return resourceBundle.getString(key);
+        try {
+            return resourceBundle.getString(key);
+        } catch (Exception e) {
+            return key;
+        }
     }
 
     /**
