@@ -26,7 +26,7 @@ public abstract class LGMDragNDropPanel extends ElementDialogPanel {
 
     /**
      * Konstruktor Ruft den Super-Konstruktor auf. Setzt Klassen-Attribute auf default-Werte
-     * 
+     *
      * @param dialog
      */
     public LGMDragNDropPanel(final ElementPropertyDialog dialog) {
@@ -44,7 +44,7 @@ public abstract class LGMDragNDropPanel extends ElementDialogPanel {
     /**
      * Methode muss von allen erbenden Klassen aufgerufen werden! Hier wird die
      * DragNDrop-Funktionalität dieses Panels aktiviert.
-     * 
+     *
      * @see de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel#init()
      */
     @Override
@@ -58,7 +58,7 @@ public abstract class LGMDragNDropPanel extends ElementDialogPanel {
      * Methode erstellt anhand der übergeben <code>LGMAction</code> einen MouseListener, der an alle
      * Trees, die durch <code>getAllDragNDropTrees()</code> zurückgegeben werden, angeheftet wird.
      * Damit werden nun alle Trees kontrolliert und DragNDrop kann stattfinden.
-     * 
+     *
      * @param action
      */
     private void initDragNDropAction(final LGMAction action) {
@@ -87,12 +87,11 @@ public abstract class LGMDragNDropPanel extends ElementDialogPanel {
     /**
      * Gibt die Kante zurück, die man zwischen Elementen der übergebenen Art in diesem Panel neu
      * erzeugen kann.
-     * 
+     *
      * @param me1
      * @param me2
      * @return
      */
-    // public abstract Class<? extends Kante> getEdgeType(ModelElement me1, ModelElement me2);
     public Class<? extends Kante> getEdgeType(final ModelElement me1, final ModelElement me2) {
         return null;
     }
@@ -100,7 +99,7 @@ public abstract class LGMDragNDropPanel extends ElementDialogPanel {
     /**
      * Gibt das <code>ModelElement</code> des <code>ElementPropertyDialog</code> s wieder, in dem
      * sich der <code>tree</code> befindet.
-     * 
+     *
      * @param tree
      */
     protected final ModelElement getTopLevelModelElement(final JTree tree) {
