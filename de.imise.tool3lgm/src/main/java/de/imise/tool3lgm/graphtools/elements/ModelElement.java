@@ -2032,6 +2032,42 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
+     * @return <code>true</code>, wenn das Elemente alle Kanten in ausreichender Anzahl hat, die es haben muss
+     *         (= Kanten, bei denen die minimale Kardinalität > 0 ist)
+     */
+    public boolean isConsistent() {
+        Class<? extends ModelElement> meClass = getClass();
+        Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
+        //für alle Kantenarten dieser ModelElement-Klasse
+        for (Class<? extends Kante> edgeType : edgeTypes) {
+            //minimale Kardinalität wird erst einmal als 0 angenommen
+            int minCardinality = 0;
+            //wenn diese Elementart Startklasse der aktuellen Kantenart ist
+            if (Kante.isStartClass(edgeType, meClass)) {
+                //minimale Kardinalität zur Endklasse holen
+                minCardinality = Kante.getMinStartToEndCardinality(edgeType);
+                //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten zu anderen Elementen hat, als nötig
+                if (minCardinality > 0 && getEdgesTo(ModelElement.class, edgeType).size() < minCardinality) {
+                    //nicht konsistent
+                    return false;
+                }
+            }
+            //OHNE ELSE-IF! Wenn diese Elementart Endklasse der aktuellen Kantenart ist
+            if (Kante.isEndClass(edgeType, meClass)) {
+                //minimale Kardinalität zur Startklasse holen
+                minCardinality = Kante.getMinEndToStartCardinality(edgeType);
+                //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten von anderen Elementen zu sich hat, als nötig
+                if (minCardinality > 0 && getEdgesFrom(ModelElement.class, edgeType).size() < minCardinality) {
+                    //nicht konsistent
+                    return false;
+                }
+            }
+        }
+        //alle notwendigen Kanten in ausreichender Anzahl vorhanden
+        return true;
+    }
+
+    /**
      * Ueberprueft, ob der Knoten zur Menge der UNIQUE_KNOTS gehoert, ob er also ein Knoten ist, der im gesamten Modell nur einmal vorkommt
      */
     public boolean isUnique() {
