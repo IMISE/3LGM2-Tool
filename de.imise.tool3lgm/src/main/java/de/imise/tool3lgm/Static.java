@@ -3,10 +3,13 @@
  */
 package de.imise.tool3lgm;
 
+import java.awt.Component;
 import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import com.google.common.base.Strings;
 
@@ -308,6 +311,24 @@ public class Static {
         return doc.getSelectedRealElementContainerIterable();
     }
 
-    // ??? //
+    // MessageDialoge //
+
+    /**
+     * Unter OS-X reagieren modale Dialoge, die aus Drag&Drop-Ereignissen heraus gestartet werden nicht mehr auf die
+     * Maus. Sie tun es erst wieder, wenn sie in einem eigenen Thread gestartet werden. Daher das hier.
+     *
+     * @param parenComponent
+     * @param messageResKey
+     */
+    public static void showMessgae(final Component parenComponent, final String messageResKey) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                String message = Tool3lgmConstants.getResString(messageResKey);
+                JOptionPane.showMessageDialog(parenComponent, message);
+            }
+        });
+        return;
+    }
 
 }
