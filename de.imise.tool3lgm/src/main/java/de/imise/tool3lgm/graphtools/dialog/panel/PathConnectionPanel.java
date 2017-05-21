@@ -48,9 +48,10 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Mit diesem Panel zeigen Aufgaben ihre Anwendungsbausteinkonfigurationen an.
+ * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
+ * angezeigt, hinzugefügt und entfernt werden.
  */
-public class AufAwbKonfPanel extends AbstractPathConnectionPanel {
+public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
     /**
      * Da die {@link AbstractPathConnectionPanel#searchElementClass} hier in diesem Panel nicht die letzte Klasse
@@ -73,7 +74,7 @@ public class AufAwbKonfPanel extends AbstractPathConnectionPanel {
     private LGMAction addAction;
     private LGMAction removeAction;
 
-    public AufAwbKonfPanel(final ElementPropertyDialog pd, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionPanel(final ElementPropertyDialog pd, final Class<? extends Kante>... edgeClasses) {
         super(pd, edgeClasses.length - 2, edgeClasses);
         connectableElementClass = getPathStepEndElementClass(edgeClasses.length - 1);
         setPreferredSize(new Dimension(550, 350));
@@ -299,7 +300,7 @@ public class AufAwbKonfPanel extends AbstractPathConnectionPanel {
         };
     }
 
-    public final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree, final AufAwbKonfPanel panel) throws ActionNotDefinedForClassException {
+    public final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree, final PathConnectionPanel panel) throws ActionNotDefinedForClassException {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
             @Override
             public void execute(final EventObject eo) {
@@ -361,7 +362,7 @@ public class AufAwbKonfPanel extends AbstractPathConnectionPanel {
      * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
      * @param panel
      */
-    public static final LGMAction getDisconnectAction(final JTree srcTree, final AufAwbKonfPanel panel) {
+    public static final LGMAction getDisconnectAction(final JTree srcTree, final PathConnectionPanel panel) {
 
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
@@ -376,8 +377,8 @@ public class AufAwbKonfPanel extends AbstractPathConnectionPanel {
                 for (int i = 0; i < path2disconnect.length; i++) {
                     //das ist der Index der Kante im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = path2disconnect[i].getPathCount() - 2;
-                    ModelElement element2Unlink = AufAwbKonfPanel.getPathModelElement(path2disconnect[i]);
-                    ModelElement parentOfElement2Unlink = AufAwbKonfPanel.getPathModelElement(path2disconnect[i].getParentPath());
+                    ModelElement element2Unlink = PathConnectionPanel.getPathModelElement(path2disconnect[i]);
+                    ModelElement parentOfElement2Unlink = PathConnectionPanel.getPathModelElement(path2disconnect[i].getParentPath());
                     panel.disconnect(parentOfElement2Unlink, element2Unlink, treePathEdgeIndex);
                 }
             }

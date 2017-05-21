@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
@@ -68,8 +68,7 @@ public final class Aufgabe extends Knoten {
         dialog.addTab(new DoubleMeaningEdgePanel(AufObjVerbindung.class, dialog));
         dialog.addTab(getResString("Organisationseinheit"), new AufOrgPanel(Organisationseinheit.class, dialog, true));
         dialog.addTab(getResString("Ereignistyp"), new NConnectionPanel(Ereignistyp.class, dialog, true, true));
-        //dialog.addTab(getResString("ABKonfiguration"), new AufAwbKonfPanelOld(dialog));
-        dialog.addTab(getResString("ABKonfiguration"), new AufAwbKonfPanel(dialog, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
+        dialog.addTab(getResString("ABKonfiguration"), new PathConnectionPanel(dialog, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
         return dialog;
     }
 

@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
@@ -70,7 +70,7 @@ public class ErrorSolutionLibraryVersion {
     @SuppressWarnings("unchecked")
     private final ErrorSolution[] CARDINALITY_ERROR_SOLUTIONS = {
             new ErrorSolution(AufOrgKombination.class, AufAufOrgVerbindung.class, NConnectionPanel.class, "Aufgabe"),
-            new ErrorSolution(ABKonfiguration.class, AwbAwbkVerbindung.class, new MetaPath(ABKonfiguration.class, Aufgabe.class, abKonfigToAufgabeEdgeClasses), AufAwbKonfPanel.class, "ABKonfiguration"),
+            new ErrorSolution(ABKonfiguration.class, AwbAwbkVerbindung.class, new MetaPath(ABKonfiguration.class, Aufgabe.class, abKonfigToAufgabeEdgeClasses), PathConnectionPanel.class, "ABKonfiguration"),
             new ErrorSolution(ABKonfiguration.class, AwbkAufOrgVerbindung.class, new MetaPath(ABKonfiguration.class, Anwendungsbaustein.class, abKonfigToAnwendungsbausteinEdgeClasses), AwbAufPanel.class, "Aufgabe_p"),
             new ErrorSolution(Anwendungsprogramm.class, RawbAwpVerbindung.class, NConnectionPanel.class, "Anwendungsbaustein"),
             // new ErrorSolution(Bausteinschnittstelle.class, AwbKommssVerbindung.class, ???),

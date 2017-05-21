@@ -32,7 +32,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
@@ -43,6 +42,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
@@ -150,75 +150,6 @@ public class LGMActionLibrary {
 
                 };
 
-            } else if (edp instanceof AufAwbKonfPanel) {
-
-                return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-
-                    @Override
-                    public void execute(final EventObject eo) {
-
-                        getDragNDropLocateElementAsTargetAction(tree2).execute(eo);
-
-                        // Anzahl der selektierten AWBs, die verbunden werden
-                        // sollen, ermitteln
-                        int abselrows = tree1.getSelectionCount();
-                        // Anzahl der selektieten Zeilen im Konfigurationsbaum
-                        // ermitteln
-                        int selrows = tree2.getSelectionCount();
-
-                        // wenn im Baum der Konfigurationen nur eine
-                        // AufOrgKombination enthalten ist,
-                        // die bisher keine Konfiguration besitzt -> gehe davon aus,
-                        // dass für diese eine
-                        // AufOrgKombination eine neue Konfiguration angelegt werden
-                        // soll -> also einfach
-                        // diese eine AufOrgKombination selektieren
-                        if (selrows == 0 && tree2.getRowCount() == 1) {
-                            tree2.setSelectionRow(0);
-                            selrows = 1;
-                        }
-
-                        if (abselrows < 1 || selrows != 1) {
-                            JOptionPane.showMessageDialog(dndPanel, Tool3lgmConstants.getResString("abverbinden_fehler1"));
-                            return;
-                        }
-
-                        LGMTreeNode orgnode = (LGMTreeNode) tree2.getLastSelectedPathComponent();
-
-                        NodeContainer leftC = (NodeContainer) orgnode.getUserObject();
-                        TreePath[] abpath = tree1.getSelectionPaths();
-
-                        if (leftC.getElement() instanceof AufOrgKombination || orgnode.getUserObject() instanceof String) {
-
-                            boolean old_mode = gdcoll.isInteractiveMode();
-                            gdcoll.setInteractiveMode(false);
-                            NodeContainer abkC = doc.createKnotenWithContainer(ABKonfiguration.class, dialog.getTransactionID());
-                            gdcoll.setInteractiveMode(old_mode);
-
-                            gdcoll.link(dndPanel.getEdgeType(abkC.getElement(), leftC.getElement()), abkC.getElement(), leftC.getElement(), dialog.getTransactionID());
-                            leftC = abkC;
-
-                        }
-                        if (leftC.getElement() instanceof ABKonfiguration || leftC.getKnoten() instanceof DBKonfiguration) {
-                            for (int i = 0; i < abpath.length; i++) {
-                                NodeContainer rightC = (NodeContainer) ((LGMTreeNode) abpath[i].getLastPathComponent()).getUserObject();
-                                gdcoll.link(dndPanel.getEdgeType(rightC.getElement(), leftC.getElement()), rightC.getElement(), leftC.getElement(), dialog.getTransactionID());
-                            }
-                        }
-                        // Falls der hinzuzufügende awb auf einen bereits hinzugefügten awb
-                        // "gedroped" wird,
-                        // so wird er zur AWBKonf des bereits hinzugefügten awbs hinzugefügt
-                        if (leftC.getElement() instanceof Anwendungsbaustein || leftC.getKnoten() instanceof PhysischerDVBaustein) {
-                            tree2.setSelectionPath(tree2.getSelectionPath().getParentPath());
-                            // this.execute(eo);
-                            actionPerformed(new ActionEvent(eo.getSource(), 0, ""));
-                        }
-                        tree2.expandPath(tree2.getSelectionPath());
-                        tree2.clearSelection();
-
-                        return;
-                    }
-                };
             } else if (edp instanceof PDVBKonfPanel) {
 
                 return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
@@ -429,7 +360,7 @@ public class LGMActionLibrary {
             };
         }
 
-        else if (edp instanceof AufAwbKonfPanel || edp instanceof PDVBKonfPanel) {
+        else if (edp instanceof PathConnectionPanel || edp instanceof PDVBKonfPanel) {
 
             return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
