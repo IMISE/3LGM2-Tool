@@ -33,7 +33,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDr
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.AufAwbKonfPanelOld;
 import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
@@ -1080,7 +1079,7 @@ public class LGMActionLibrary {
                 }
                 DropTargetDropEvent dtde = (DropTargetDropEvent) eo;
                 Point p = dtde.getLocation();
-                TreePath path = tree.getClosestPathForLocation(p.x, p.y);
+                TreePath path = tree.getPathForLocation(p.x, p.y);
                 tree.setSelectionPath(path);
             }
         };
