@@ -429,7 +429,9 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
             Class<? extends Kante> edgeClass2Create = edgeClasses[i];
             int edgeClass2CreateDirection = directions[i];
             Class<? extends Kante> nextEdgeClass2Create = i + 1 < edgeClasses.length ? edgeClasses[i + 1] : null;
-            targetElement = createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, pid);
+            //wenn es noch eine nächte Kante gibt, dann gibt es auch noch eine nächste direction. Wenn nicht wird einfach FORWARD übergeben, weil das egal ist
+            int nextEdgeClass2CreateDirection = nextEdgeClass2Create != null ? directions[i + 1] : FORWARD;
+            targetElement = createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
         }
 
         //die im rechten Baum (sourceTreePath) selektierten Elemente an das vorletzte Pfadelement im targetTree anhängen (linken)
@@ -463,7 +465,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      *         angelegt werden soll)
      */
     private static ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Kante> edgeClassToNewElement, final int directionToNewElement,
-            final Class<? extends Kante> edgeClassFromNewElement, final int pid) {
+            final Class<? extends Kante> edgeClassFromNewElement, final int directionFromNewElement, final int pid) {
         //Collection des übergebenen doc holen
         GDCollection gdcoll = doc.getCollection();
         //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
@@ -473,6 +475,15 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
         //Richtung der Kante FORWARD -> die Endklasse muss angelegt werden, sonst die Startklasse
         Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? Kante.getEndClass(edgeClassToNewElement) : Kante.getStartClass(edgeClassToNewElement);
+        //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncähsten Kante ermittelt werden können.
+        if (ModelConstants.isAbstract(elementClass2Create)) {
+            //Richtung der nächsten Kante FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
+            elementClass2Create = directionFromNewElement == FORWARD ? Kante.getStartClass(edgeClassFromNewElement) : Kante.getEndClass(edgeClassFromNewElement);
+        }
+        //abstracte Elemente können nicht angelegt werden!
+        if (ModelConstants.isAbstract(elementClass2Create)) {
+            return null;
+        }
 
         ModelElement createdDependent;
 
@@ -510,8 +521,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
                 //wenn weitere Kanten angelegt werden müssen
                 while (minCardinalityForwardToOther - edgesForwardToCount > 0) {
                     //für das neu angelegte Element müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                    //geht, ist die edgeCLassFromNewElement null
-                    createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, pid);
+                    //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
+                    createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, FORWARD, pid);
                     edgesForwardToCount++;
                 }
                 //wenn das neu angelegte Element EndElement der Kante ist
@@ -525,8 +536,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
                 //wenn weitere Kanten angelegt werden müssen
                 while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
                     //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                    //geht, ist die edgeCLassFromNewElement null
-                    createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, pid);
+                    //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
+                    createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, FORWARD, pid);
                     edgesBackwardToCount++;
                 }
             }
