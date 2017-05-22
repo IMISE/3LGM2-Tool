@@ -436,10 +436,13 @@ public class AlphabeticalComboBox extends JComboBox {
                     setForeground(list.getSelectionForeground());
                     if (index > -1) {
                         list.setToolTipText(null);
-                        String itemToString = list.getSelectedValue().toString();
-                        int stringWidth = list.getFontMetrics(list.getFont()).stringWidth(itemToString);
-                        if (stringWidth > list.getVisibleRect().width) {
-                            list.setToolTipText(itemToString);
+                        Object selectedValue = list.getSelectedValue();
+                        if (selectedValue != null) {
+                            String itemToString = list.getSelectedValue().toString();
+                            int stringWidth = list.getFontMetrics(list.getFont()).stringWidth(itemToString);
+                            if (stringWidth > list.getVisibleRect().width) {
+                                list.setToolTipText(itemToString);
+                            }
                         }
                     }
                 } else {
