@@ -5,16 +5,13 @@ package de.imise.tool3lgm.graphtools.dialog.action;
 
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.EventObject;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -41,23 +38,16 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
-import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -148,55 +138,6 @@ public class LGMActionLibrary {
                         return;
                     }
 
-                };
-
-            } else if (edp instanceof PDVBKonfPanel) {
-
-                return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-
-                    @Override
-                    public void execute(final EventObject eo) {
-
-                        getDragNDropLocateElementAsTargetAction(tree2).execute(eo);
-                        int pdvbselrows = tree1.getSelectionCount();
-                        int selrows = tree2.getSelectionCount();
-                        if (pdvbselrows < 1) {
-                            return;
-                        }
-
-                        LGMTreeNode leftnode = null;
-                        if (selrows == 0) {
-                            leftnode = (LGMTreeNode) tree2.getModel().getRoot();
-                        } else {
-                            leftnode = (LGMTreeNode) tree2.getLastSelectedPathComponent();
-                        }
-
-                        TreePath[] pdvbpath = tree1.getSelectionPaths();
-
-                        NodeContainer leftC = null;
-                        if (leftnode.getUserObject() instanceof String) {
-                            boolean old_mode = gdcoll.isInteractiveMode();
-                            gdcoll.setInteractiveMode(false);
-                            NodeContainer pdvbkC = doc.createKnotenWithContainer(DBKonfiguration.class, dialog.getTransactionID());
-                            gdcoll.setInteractiveMode(old_mode);
-
-                            gdcoll.link(dndPanel.getEdgeType(pdvbkC.getElement(), modelElement), pdvbkC.getElement(), modelElement, dialog.getTransactionID());
-                            leftC = pdvbkC;
-                        } else {
-                            leftC = (NodeContainer) leftnode.getUserObject();
-                        }
-                        if (leftC.getKnoten() instanceof DBKonfiguration) {
-                            for (int i = 0; i < pdvbpath.length; i++) {
-                                NodeContainer rightC = (NodeContainer) ((LGMTreeNode) pdvbpath[i].getLastPathComponent()).getUserObject();
-                                gdcoll.link(dndPanel.getEdgeType(rightC.getElement(), leftC.getElement()), rightC.getElement(), leftC.getElement(), dialog.getTransactionID());
-                            }
-                        }
-                        if (leftC.getKnoten() instanceof PhysischerDVBaustein) {
-                            tree2.setSelectionPath(tree2.getSelectionPath().getParentPath());
-                            actionPerformed(new ActionEvent(eo.getSource(), ((ActionEvent) eo).getID(), "pdvbverbinden"));
-                        }
-                        return;
-                    }
                 };
             }
         } else if (edp instanceof BSNPanel) {
@@ -356,51 +297,6 @@ public class LGMActionLibrary {
                         }
                     }
                     return;
-                }
-            };
-        }
-
-        else if (edp instanceof PathConnectionPanel || edp instanceof PDVBKonfPanel) {
-
-            return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-
-                @Override
-                public void execute(final EventObject eo) {
-                    getDragNDropLocateElementAsTargetAction(tree2).execute(eo);
-
-                    int selrows = tree1.getSelectionCount();
-                    if (selrows < 1) {
-                        JOptionPane.showMessageDialog(pane, Tool3lgmConstants.getResString("abverbinden_fehler2"));
-                        return;
-                    }
-
-                    TreePath[] path = tree1.getSelectionPaths();
-                    for (int i = 0; i < path.length; i++) {
-                        LGMTreeNode bNode = (LGMTreeNode) path[i].getLastPathComponent();
-                        NodeContainer bC = (NodeContainer) bNode.getUserObject();
-                        ModelElement b = bC.getElement();
-
-                        // Wenn ganze Konfiguration ausgew‰hlt ist, werden alle Bausteine entfernt
-                        ArrayList<ModelElement> bs = new ArrayList<ModelElement>();
-                        if (b instanceof Konfiguration) {
-                            if (b instanceof ABKonfiguration) {
-                                bs = ((Konfiguration) b).getConnectedElements(Anwendungsbaustein.class);
-                            } else if (b instanceof DBKonfiguration) {
-                                bs = ((Konfiguration) b).getConnectedElements(PhysischerDVBaustein.class);
-                            }
-                            for (ModelElement k : bs) {
-                                gdcoll.unlink(k, b, -1, dialog.getTransactionID());
-                            }
-                            gdcoll.deleteElement(b, doc, dialog.getTransactionID());
-                        }
-                        // ist nur ein Baustein ausgew‰hlt, bleibt die Konfiguration bestehen (auﬂer
-                        // es ist der letzte Baustein)
-                        else if (b instanceof Anwendungsbaustein || b instanceof PhysischerDVBaustein) {
-                            KonfigurationContainer konfC = (KonfigurationContainer) ((LGMTreeNode) bNode.getParent()).getUserObject();
-                            Konfiguration konf = (Konfiguration) konfC.getElement();
-                            gdcoll.unlink(bC.getElement(), konf, -1, dialog.getTransactionID());
-                        }
-                    }
                 }
             };
         } else if (edp instanceof ProzessStructurePanel) {
