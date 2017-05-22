@@ -1,12 +1,11 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
@@ -35,21 +34,22 @@ public class ErrorSolutionLibraryVersion {
 
     @SuppressWarnings("rawtypes")
     private static Class[][] abKonfigToAufgabeEdgeClasses = {
-        {
-                AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class
-        }
+            {
+                    AwbkAufOrgVerbindung.class,
+                    AufAufOrgVerbindung.class
+            }
     };
     @SuppressWarnings("rawtypes")
     private static Class[][] abKonfigToAnwendungsbausteinEdgeClasses = {
-        {
-            AwbAwbkVerbindung.class
-        }
+            {
+                    AwbAwbkVerbindung.class
+            }
     };
     @SuppressWarnings("rawtypes")
     private static Class[][] dbKonfigToAnwendungsbausteinEdgeClasses = {
-        {
-            PdvbkAwbVerbindung.class
-        }
+            {
+                    PdvbkAwbVerbindung.class
+            }
     };
 
     /**
@@ -76,16 +76,18 @@ public class ErrorSolutionLibraryVersion {
             // new ErrorSolution(Bausteinschnittstelle.class, AwbKommssVerbindung.class, ???),
             // new ErrorSolution(Anwendungsprogramm.class, AwpSwpVerbindung.class) nur max
             // BssKommstVerbindung.class, Bausteinschnittstelle.class, nur max
-            new ErrorSolution(Datensatztyp.class, DbsDatVerbindung.class, NConnectionPanel.class, "Datenbanksystem"), new ErrorSolution(Dokumententyp.class, DoksDokVerbindung.class, NConnectionPanel.class, "Dokumentensammlung"),
-            new ErrorSolution(Dokumententyp.class, DoksDokVerbindung.class, NConnectionPanel.class, "Dokumentensammlung"), new ErrorSolution(EtntEtdtKombination.class, EtntKommstVerbindung.class, NConnectionPanel.class, "Kommunikationsstandard"),
+            new ErrorSolution(Datensatztyp.class, DbsDatVerbindung.class, NConnectionPanel.class, "Datenbanksystem"),
+            new ErrorSolution(Dokumententyp.class, DoksDokVerbindung.class, NConnectionPanel.class, "Dokumentensammlung"),
+            new ErrorSolution(Dokumententyp.class, DoksDokVerbindung.class, NConnectionPanel.class, "Dokumentensammlung"),
+            new ErrorSolution(EtntEtdtKombination.class, EtntKommstVerbindung.class, NConnectionPanel.class, "Kommunikationsstandard"),
             new ErrorSolution(AufOrgKombination.class, OrgAufOrgVerbindung.class, NConnectionPanel.class, "Organisationseinheit"),
-            new ErrorSolution(DBKonfiguration.class, PdvbPdvbkVerbindung.class, new MetaPath(DBKonfiguration.class, Anwendungsbaustein.class, dbKonfigToAnwendungsbausteinEdgeClasses), PDVBKonfPanel.class, "PhysischerDVBaustein_p"),
+            new ErrorSolution(DBKonfiguration.class, PdvbPdvbkVerbindung.class, new MetaPath(DBKonfiguration.class, Anwendungsbaustein.class, dbKonfigToAnwendungsbausteinEdgeClasses), PathConnectionPanel.class, "PhysischerDVBaustein_p"),
     };
 
     /**
      * Liste aller Elementarten, die bei Unterschreitung der Anzahl der zugehörigen Kantenart sofort
      * gelöscht werden.
-     * 
+     *
      * @return / private final Pair[] MINCARDINALITY_NO_SOLUTION_ERRORS = { new Pair<Class<? extends
      *         ModelElement>, Class<? extends Kante>>(DBKonfiguration.class,
      *         PdvbkAwbVerbindung.class), new Pair<Class<? extends ModelElement>, Class<? extends
