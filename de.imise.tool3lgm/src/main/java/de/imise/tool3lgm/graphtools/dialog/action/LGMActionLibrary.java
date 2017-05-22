@@ -372,17 +372,6 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in ComboBoxes reagiert.
-     *
-     * @param comboBox
-     * @param edp
-     * @return
-     */
-    public static final LGMAction getMouseAction(final JComboBox<?> comboBox, final ElementDialogPanel edp) {
-        return getMouseActionInternal(comboBox, edp);
-    }
-
-    /**
      * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
      *
      * @param tree
