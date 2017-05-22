@@ -60,12 +60,9 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     private final LGMDragNDropTree rtree;
     private final DefaultTreeModel model, abmodel;
     private final LGMTreeNode root, abroot;
-    private final JLabel rtreeLabel, redundanzLabel;
+    private final JLabel rtreeLabel;
     private final JScrollPane sp2;
     private final JPanel buttonpanel;
-    //    private static String teilmodell = Tool3lgmConstants.getResString("submodel");
-    //    private static String gesamtmodell = Tool3lgmConstants.getResString("whole_model");
-    //    private static String redundanteKonfs = Tool3lgmConstants.getResString("redundante_Konfigs");
 
     private LGMAction addAction;
     private LGMAction removeAction;
@@ -76,8 +73,6 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
-
-        redundanzLabel = new JLabel();
 
         String ltreeLabelString = getResString("verb");
         String rtreeLabelString = getResString("frei");
@@ -104,7 +99,6 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
         add(this, ltreeLabel, constraints, 0, 0, 1, 1);
-        add(this, redundanzLabel, constraints, 0, 5, 5, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
@@ -248,21 +242,6 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         ltree.restoreExpansion();
         ltree.restoreSelection();
 
-        //        StringBuilder sb = new StringBuilder(60);
-        //        sb.append(redundanteKonfs);
-        //        sb.append(" ");
-        //        GraphDocument selDoc = getSelectedGraphDocument();
-        //        if (selDoc instanceof Szenario) {
-        //            sb.append(((Aufgabe) getModelElement()).getAllDifferentKonfigs(selDoc).size() - 1);
-        //            sb.append(" (");
-        //            sb.append(teilmodell);
-        //            sb.append(") ");
-        //        }
-        //        sb.append(((Aufgabe) getModelElement()).getAllDifferentKonfigs(mainDoc).size() - 1);
-        //        sb.append(" (");
-        //        sb.append(gesamtmodell);
-        //        sb.append(")");
-        //        redundanzLabel.setText(sb.toString());
     }
 
     /**
