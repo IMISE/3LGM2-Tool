@@ -77,18 +77,6 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * @param dialog
      * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
      *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiliegn Index ans Label geschrieben.
-     * @param edgeClasses
-     */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final Class<? extends Kante>... edgeClasses) {
-        this(dialog, searchEdgeIndex, false, edgeClasses);
-    }
-
-    /**
-     * Panel für eine einfache Assoziation
-     *
-     * @param dialog
-     * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiliegn Index ans Label geschrieben.
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Kante selbst ans Label geschrieben. Welche Kante im Pfad das ist, wird durch connectionLabelIndex
      *            festgelegt.
@@ -106,6 +94,11 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         westLabel = new JLabel();
         String westLabelText;
         Class<? extends Kante> edgeClass = edgeClasses[searchEdgeIndex];
+
+        //Name des Panels ist immer der Name der über die letzte Kante verbundenen Elemente
+        String panelName = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
+        setName(panelName);
+
         if (labelEdgeName) {
             if (directions[searchEdgeIndex] == FORWARD) {
                 westLabelText = ModelConstants.getForwardMetaAssociationName(edgeClass);
@@ -113,11 +106,10 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
                 westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClass);
             }
         } else {
-            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
+            westLabelText = panelName;
         }
         westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Der ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
-
     }
 
     private int[] getEdgeDirections() {

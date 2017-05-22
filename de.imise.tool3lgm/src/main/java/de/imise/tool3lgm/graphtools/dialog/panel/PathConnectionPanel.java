@@ -54,13 +54,6 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  */
 public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
-    /**
-     * Da die {@link AbstractPathConnectionPanel#searchElementClass} hier in diesem Panel nicht die letzte Klasse
-     * im Pfad ist, wird hier die wirklich letzte Klasse im Pfad gespeicehrt, die auch im rechten Baum zum Verbinden
-     * zur Auswahl gestellt wird.
-     */
-    private final Class<? extends ModelElement> connectableElementClass;
-
     private final LGMDragNDropTree ltree;
     private final LGMDragNDropTree rtree;
     private final DefaultTreeModel model, abmodel;
@@ -76,8 +69,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     private LGMAction removeAction;
 
     public PathConnectionPanel(final ElementPropertyDialog pd, final Class<? extends Kante>... edgeClasses) {
-        super(pd, edgeClasses.length - 2, edgeClasses);
-        connectableElementClass = getPathStepEndElementClass(edgeClasses.length - 1);
+        super(pd, edgeClasses);
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -275,7 +267,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         rtree.saveSelection();
         abroot.removeAllChildren();
         rtree.reset();
-        for (ElementContainer ec : mainDoc.getElementContainer(connectableElementClass, true, true)) {
+        for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass, true, true)) {
             rtree.addObject(ec, abroot, null, false, true);
         }
         abmodel.reload();
