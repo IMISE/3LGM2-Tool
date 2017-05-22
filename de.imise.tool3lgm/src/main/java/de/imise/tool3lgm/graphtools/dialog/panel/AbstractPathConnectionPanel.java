@@ -128,10 +128,22 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
 
     /**
      * @return <code>true</code>, wenn maximal 1 Element der {@link #searchElementClass} mit dem Ausgangselement über den
-     *         angegebenen Pfad verbunden sein kann.
+     *         angegebenen Pfad verbunden sein kann. Wenn irgendeine Kante des Pfades mehrfach verbunden sein kann, dann
+     *         ist es kein SingleConnectionPath
      */
     private boolean isSingleConnectionPath() {
-        return (directions[searchEdgeIndex] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClasses[searchEdgeIndex]) : Kante.getMaxEndToStartCardinality(edgeClasses[searchEdgeIndex])) == 1;
+        for (int i = 0; i < edgeClasses.length; i++) {
+            if (directions[i] == FORWARD) {
+                if (Kante.getMaxStartToEndCardinality(edgeClasses[searchEdgeIndex]) > 1) {
+                    return false;
+                }
+            } else {
+                if (Kante.getMaxEndToStartCardinality(edgeClasses[searchEdgeIndex]) > 1) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
