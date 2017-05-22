@@ -4,9 +4,11 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.FreeTextPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PDVBKonfPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
 
 public final class KonAnwendungsbaustein extends Anwendungsbaustein {
 
@@ -44,7 +46,7 @@ public final class KonAnwendungsbaustein extends Anwendungsbaustein {
         dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
         dialog.addTab(getResString("Organisationsplan"), new FreeTextPanel(Organisationsplan.class, dialog));
         dialog.addTab(getResString("Aufgabe_p"), new AwbAufPanel(dialog));
-        dialog.addTab(getResString("PhysischerDVBaustein_p"), new PDVBKonfPanel(dialog));
+        dialog.addTab(new PathConnectionPanel(dialog, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class));
         return dialog;
     }
 
