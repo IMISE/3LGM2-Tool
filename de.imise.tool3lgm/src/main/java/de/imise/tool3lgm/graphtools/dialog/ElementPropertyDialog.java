@@ -380,7 +380,11 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     public void addPathConnectionPanel(final Class<? extends Kante>... edgeClasses) {
-        addTab(new PathConnectionPanel(this, edgeClasses));
+        addTab(new PathConnectionPanel(this, true, edgeClasses));
+    }
+
+    public void addPathConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
+        addTab(new PathConnectionPanel(this, false, edgeClasses));
     }
 
 }
