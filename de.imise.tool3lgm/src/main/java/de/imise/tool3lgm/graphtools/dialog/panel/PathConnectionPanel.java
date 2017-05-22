@@ -47,6 +47,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.Pair;
+import de.imise.util.StringUtils;
 
 /**
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
@@ -78,6 +80,11 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         redundanzLabel = new JLabel();
 
         String ltreeLabelString = getResString("verb");
+        String rtreeLabelString = getResString("frei");
+        Pair<String, String> treeLabels = StringUtils.makeSameLength(ltreeLabelString, rtreeLabelString);
+        ltreeLabelString = treeLabels.getFirstItem();
+        rtreeLabelString = treeLabels.getSecondItem();
+
         westLabel.setText(ltreeLabelString);
         JLabel ltreeLabel = westLabel;
         root = new LGMTreeNode(getModelElement().getContainer(mainDoc), false);
@@ -104,7 +111,6 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         constraints.weighty = 100;
         add(this, sp, constraints, 0, 1, 1, 4);
 
-        String rtreeLabelString = getResString("frei");
         rtreeLabel = new JLabel(rtreeLabelString);
         abroot = new LGMTreeNode(rtreeLabelString, false);
         abmodel = new DefaultTreeModel(abroot);
