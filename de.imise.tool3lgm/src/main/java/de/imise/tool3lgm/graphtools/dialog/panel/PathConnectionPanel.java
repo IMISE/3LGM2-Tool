@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
@@ -84,6 +85,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
         redundanzLabel = new JLabel();
 
+        String ltreeLabelString = getResString("verb");
+        westLabel.setText(ltreeLabelString);
         JLabel ltreeLabel = westLabel;
         root = new LGMTreeNode(getModelElement().getContainer(mainDoc), false);
         model = new DefaultTreeModel(root);
@@ -109,7 +112,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         constraints.weighty = 100;
         add(this, sp, constraints, 0, 1, 1, 4);
 
-        String rtreeLabelString = ModelConstants.getDisplayablePluralName(connectableElementClass);
+        String rtreeLabelString = getResString("frei");
         rtreeLabel = new JLabel(rtreeLabelString);
         abroot = new LGMTreeNode(rtreeLabelString, false);
         abmodel = new DefaultTreeModel(abroot);
