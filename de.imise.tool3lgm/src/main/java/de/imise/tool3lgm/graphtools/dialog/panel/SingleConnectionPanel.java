@@ -70,7 +70,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
         add(box, BorderLayout.CENTER);
 
-        createNew = ModelConstants.isAbstract(searchElementClass) ? null : new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass));
+        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass)) : null;
         init();
     }
 
