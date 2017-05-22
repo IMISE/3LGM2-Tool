@@ -63,12 +63,14 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     private final JLabel rtreeLabel;
     private final JScrollPane sp2;
     private final JPanel buttonpanel;
+    private final boolean showRightTree;
 
     private LGMAction addAction;
     private LGMAction removeAction;
 
-    public PathConnectionPanel(final ElementPropertyDialog pd, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionPanel(final ElementPropertyDialog pd, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
         super(pd, edgeClasses);
+        this.showRightTree = showRightTree;
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -91,10 +93,12 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         ltree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp = new JScrollPane(ltree);
 
-        constraints.anchor = GridBagConstraints.EAST;
-        constraints.ipadx = -30;
-        constraints.ipady = -10;
-        add(this, viewButton, constraints, 0, 5, 1, 1);
+        if (showRightTree) {
+            constraints.anchor = GridBagConstraints.EAST;
+            constraints.ipadx = -30;
+            constraints.ipady = -10;
+            add(this, viewButton, constraints, 0, 5, 1, 1);
+        }
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
@@ -179,22 +183,24 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
     @Override
     public void showFullDialog() {
-        super.showFullDialog();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.NONE;
-        add(this, buttonpanel, constraints, 1, 3, 1, 2);
-        constraints.anchor = GridBagConstraints.WEST;
-        add(this, rtreeLabel, constraints, 2, 0, 1, 1);
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 100;
-        constraints.weighty = 100;
-        add(this, sp2, constraints, 2, 1, 1, 4);
+        if (showRightTree) {
+            super.showFullDialog();
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.fill = GridBagConstraints.NONE;
+            add(this, buttonpanel, constraints, 1, 3, 1, 2);
+            constraints.anchor = GridBagConstraints.WEST;
+            add(this, rtreeLabel, constraints, 2, 0, 1, 1);
+            constraints.anchor = GridBagConstraints.WEST;
+            constraints.fill = GridBagConstraints.BOTH;
+            constraints.weightx = 100;
+            constraints.weighty = 100;
+            add(this, sp2, constraints, 2, 1, 1, 4);
 
-        buildRightTree();
+            buildRightTree();
 
-        revalidate();
-        repaint();
+            revalidate();
+            repaint();
+        }
     }
 
     private void buildTree() {
