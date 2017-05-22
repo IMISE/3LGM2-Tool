@@ -238,4 +238,26 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         return isCompositionFromMasterToSlave(edgeClasses.length - 1);
     }
 
+    /**
+     * Liefert <code>true</code>, wenn der durch die Kanten angegebene Pfad anlegbar ist (also nicht über abstracte Klassen läuft).
+     *
+     * @return
+     */
+    protected boolean isPathCreatable() {
+        for (int i = 0; i < edgeClasses.length; i++) {
+            Class<? extends ModelElement> class2Create = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
+            //wenn die anzulegende End-Klasse der aktuellen Kante abstract ist
+            if (ModelConstants.isAbstract(class2Create)) {
+                //prüfe, ob die anzulegende StartKlasse der nächsten Kante nicht abstract und somit eindeutig ist
+                if (i + 1 < edgeClasses.length) {
+                    class2Create = directions[i + 1] == FORWARD ? Kante.getStartClass(edgeClasses[i + 1]) : Kante.getEndClass(edgeClasses[i + 1]);
+                }
+                if (ModelConstants.isAbstract(class2Create)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
