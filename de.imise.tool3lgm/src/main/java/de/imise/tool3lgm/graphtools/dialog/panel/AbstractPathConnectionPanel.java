@@ -386,6 +386,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         //bei der letzten Kante sollte man bei neuen Elementen nach dem Namen fragen
         boolean newInteractiveMode = edgeClassFromNewElement == null;
         //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
         if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
             newInteractiveMode = false;
         }
