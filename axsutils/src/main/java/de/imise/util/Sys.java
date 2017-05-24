@@ -29,7 +29,7 @@ public class Sys {
         }
     }
 
-    public static void out1(String message) {
+    public static void out1(final String message) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         System.out.println(message);
         System.out.print("      ");
@@ -39,7 +39,7 @@ public class Sys {
         }
     }
 
-    public static void err1(String message) {
+    public static void err1(final String message) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         System.err.println(message);
         System.err.print("      ");
@@ -47,6 +47,17 @@ public class Sys {
         if (insertBlankLineAfterOutput) {
             System.err.println();
         }
+    }
+
+    public static boolean stackTraceContains(final Class<?> clazz) {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        String className = clazz.getCanonicalName();
+        for (StackTraceElement traceElement : stackTrace) {
+            if (traceElement.toString().startsWith(className)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
