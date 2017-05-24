@@ -1,12 +1,16 @@
 package de.imise.tool3lgm.tools;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -28,17 +32,17 @@ public class LGMTree extends JTree {
         super(treeModel);
     }
 
-    ArrayList<ElementContainer> elementsAdded = new ArrayList<ElementContainer>(500);
+    Collection<ElementContainer> elementsAdded = Sets.newHashSet();
 
     public void reset() {
         elementsAdded.clear();
     }
 
-    public LGMTreeNode addObject(final ElementContainer objekt, final LGMTreeNode parent, final ArrayList<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+    public LGMTreeNode addObject(final ElementContainer objekt, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
         return addObject(objekt, parent, excludeChildren, force, true, childrenAreSelectable);
     }
 
-    public LGMTreeNode addObject(final ElementContainer objekt, final LGMTreeNode parent, final ArrayList<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    public LGMTreeNode addObject(final ElementContainer objekt, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         if (objekt instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) objekt;
             if (checkAlreadyAdded && elementsAdded.contains(kc)) {
@@ -65,10 +69,10 @@ public class LGMTree extends JTree {
         return null;
     }
 
-    private void addChildren(final LGMTreeNode elementNode, final ArrayList<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+    private void addChildren(final LGMTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         NodeContainer kc = (NodeContainer) elementNode.getUserObject();
 
-        ArrayList<ElementContainer> all = kc.getKnoten().getDirectPartContainer(doc);
+        List<ElementContainer> all = kc.getKnoten().getDirectPartContainer(doc);
         for (int i = 0; i < all.size(); i++) {
             NodeContainer pc = (NodeContainer) all.get(i);
 
@@ -94,7 +98,7 @@ public class LGMTree extends JTree {
     /**
      * <code>ArrayList</code> mit den <code>String</code>s der expandierten Pfade
      */
-    private final ArrayList<String> expandedPathStrings = new ArrayList<String>();
+    private final List<String> expandedPathStrings = Lists.newArrayList();
 
     /**
      * Aktuelle Expansion merken
@@ -126,8 +130,7 @@ public class LGMTree extends JTree {
                 }
                 String actPathString = p.toString();
                 boolean expanded = false;
-                for (int j = expandedPathStrings.size() - 1; j >= 0; j--) {
-                    String nextExpandedPathString = expandedPathStrings.get(j).toString();
+                for (String nextExpandedPathString : expandedPathStrings) {
                     if (actPathString.equals(nextExpandedPathString)) {
                         expanded = true;
                         break;
@@ -210,7 +213,7 @@ public class LGMTree extends JTree {
      * Diese Funktion ist hilfreich, falls in Dialogen "von einem Baum in einen anderen" etwas übernommen
      * wurde. Im Quellbaum ist das Element dann häufig nicht mehr selektierbar, im Zielbaum erkennt man
      * nicht, dass es selektiert sein soll, außer man sicht nach den Knoten mit dem gleichen UserObject.
-     * 
+     *
      * @param selectionSource Der Baum dessen Selektion nachgebildet werden soll
      */
     public void restoreSelection(final LGMTree selectionSource) {
@@ -232,7 +235,7 @@ public class LGMTree extends JTree {
     /**
      * Macht dasselbe wie <code>restoreSelectionAndScroll(LGMTree selectionSource)</code> und
      * scrollt die erste selektierte Zeile in den sichtbaren Bereich.
-     * 
+     *
      * @param selectionSource
      */
     public void restoreSelectionAndScroll(final LGMTree selectionSource) {
