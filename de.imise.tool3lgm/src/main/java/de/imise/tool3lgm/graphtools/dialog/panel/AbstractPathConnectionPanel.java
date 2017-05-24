@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
+import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.Sys;
 
 /**
  * Panel für alle einfachen Verbindungen zwischen 2 Elementen
@@ -380,7 +382,14 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
         //bei denen der Namen normalerweise nicht generiert wird
         boolean isInteractiveMode = gdcoll.isInteractiveMode();
-        gdcoll.setInteractiveMode(edgeClassFromNewElement == null);
+
+        //bei der letzten Kante sollte man bei neuen Elementen nach dem Namen fragen
+        boolean newInteractiveMode = edgeClassFromNewElement == null;
+        //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
+            newInteractiveMode = false;
+        }
+        gdcoll.setInteractiveMode(newInteractiveMode);
 
         //Richtung der Kante FORWARD -> die Endklasse muss angelegt werden, sonst die Startklasse
         Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? Kante.getEndClass(edgeClassToNewElement) : Kante.getStartClass(edgeClassToNewElement);
