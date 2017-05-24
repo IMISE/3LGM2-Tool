@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
+import java.awt.Component;
 /**
  * @author AXS created on 20.05.2007
  */
@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
@@ -24,6 +23,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
@@ -39,9 +39,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
-import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
@@ -67,6 +65,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
     private LGMAction addAction;
     private LGMAction removeAction;
+    private LGMAction newElementAction;
 
     public PathConnectionPanel(final ElementPropertyDialog pd, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
         super(pd, edgeClasses);
@@ -146,17 +145,15 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         /*
          * Start: Buttons & Actions erstellen, Actions setzen ...
          */
-        JButton addButton = new JButton();
-        JButton removeButton = new JButton();
 
         try {
-            addAction = getAddElementAction(rtree, ltree, this);
-            removeAction = getDisconnectAction(ltree, this);
+            addAction = getAddElementAction(rtree, ltree);
+            removeAction = getDisconnectAction(ltree);
+            newElementAction = getNewConnectedElementAction();
         } catch (ActionNotDefinedForClassException e) {
             Log.log(Log.DEBUG, e.getMessage());
         }
-        addButton.setAction(addAction);
-        removeButton.setAction(removeAction);
+
         /*
          * ... end: Buttons & Actions erstellen, Actions setzen
          */
@@ -164,8 +161,11 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         buttonpanel = new JPanel();
         buttonpanel.setSize(30, 250);
         buttonpanel.setLayout(new GridLayout(3, 1));
-        buttonpanel.add(addButton);
-        buttonpanel.add(removeButton);
+        buttonpanel.add(new JButton(addAction));
+        buttonpanel.add(new JButton(removeAction));
+        if (newElementAction != null) {
+            buttonpanel.add(new JButton(newElementAction));
+        }
 
         init();
     }
@@ -286,7 +286,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         };
     }
 
-    public final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree, final PathConnectionPanel panel) throws ActionNotDefinedForClassException {
+    public final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree) throws ActionNotDefinedForClassException {
+        final Component panel = this;
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
             @Override
             public void execute(final EventObject eo) {
@@ -346,10 +347,9 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      *
      * @param srcTree linker Baum mit dem verknüpften Pfaden
      * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
-     * @param panel
      */
-    public static final LGMAction getDisconnectAction(final JTree srcTree, final PathConnectionPanel panel) {
-
+    private final LGMAction getDisconnectAction(final JTree srcTree) {
+        final PathConnectionPanel panel = this;
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
             @Override
@@ -372,7 +372,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
     }
 
-    protected void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
+    private void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
         int pid = getTransactionID();
@@ -404,9 +404,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      * @param targetTreePath
      * @param sourceTreePaths
      */
-    protected void connect(final TreePath targetTreePath, final TreePath... sourceTreePaths) {
-        GraphDocument selDoc = getSelectedGraphDocument();
-        GDCollection gdcoll = selDoc.getCollection();
+    private void connect(final TreePath targetTreePath, final TreePath... sourceTreePaths) {
 
         //das ist der Index der Kante im Pfad, ab der hinzugefügt werden soll
         int targetTreePathEdgeIndex = targetTreePath.getPathCount() - 1;
@@ -423,128 +421,32 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         //Element holen, an das der Pfad angehängt werden soll
         ModelElement targetElement = getPathModelElement(realTargetTreePath);
 
-        //wenn kein Pfad bis zum vorletzten Element angegeben wurde -> den Pfad bis zum vorletzten Element neu erstellen
-        int pid = getTransactionID();
-        for (int i = targetTreePathEdgeIndex; i < edgeClasses.length - 1; i++) {
-            Class<? extends Kante> edgeClass2Create = edgeClasses[i];
-            int edgeClass2CreateDirection = directions[i];
-            Class<? extends Kante> nextEdgeClass2Create = i + 1 < edgeClasses.length ? edgeClasses[i + 1] : null;
-            //wenn es noch eine nächte Kante gibt, dann gibt es auch noch eine nächste direction. Wenn nicht wird einfach FORWARD übergeben, weil das egal ist
-            int nextEdgeClass2CreateDirection = nextEdgeClass2Create != null ? directions[i + 1] : FORWARD;
-            targetElement = createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
-        }
-
-        //die im rechten Baum (sourceTreePath) selektierten Elemente an das vorletzte Pfadelement im targetTree anhängen (linken)
-        int direction = directions[directions.length - 1];
-        Class<? extends Kante> edgeClass2Create = edgeClasses[edgeClasses.length - 1];
+        ImmutableList.Builder<ModelElement> elements2Connect = ImmutableList.builder();
         for (TreePath sourceTreePath : sourceTreePaths) {
-            ModelElement sourceElement = getPathModelElement(sourceTreePath);
-            link(gdcoll, targetElement, sourceElement, edgeClass2Create, direction, pid);
+            ModelElement element2Connect = getPathModelElement(sourceTreePath);
+            elements2Connect.add(element2Connect);
         }
+        connect(targetElement, elements2Connect.build(), targetTreePathEdgeIndex);
 
     }
 
-    protected static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Kante> edgeClass, final int direction, final int pid) {
-        //das neue Element mit dem startElement verknüpfen
-        if (direction == FORWARD) {
-            gdcoll.link(edgeClass, startElement, endElement, pid);
-        } else {
-            gdcoll.link(edgeClass, endElement, startElement, pid);
-        }
-    }
+    private LGMAction getNewConnectedElementAction() {
 
-    /**
-     * @param doc GraphDocument, in dem die anzulegenden Container landen sollen (wenn sie teilmodellspezifisch sind)
-     * @param startElement Element, von dem aus die Kanten angelegt werden sollen
-     * @param edgeClassToNewElement Kantenklasse, die zwischen dem startContainer und dem anzulegenden Element bestehen soll
-     * @param directionToNewElement Richtung der neu anzulegenden Kante ausgehend vom startContainer
-     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die Kardinalität das bedingen würde. Da diese Funktion hier
-     *            für einen anzulegenden Pfad aufgerufen wird, dürfen die Kante, dieses Pfades eben nicht schon hier automatisch angelegt werden.
-     * @param pid Process-ID des Dialoges
-     * @return den neu angelegten ElementContainer mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
-     *         angelegt werden soll)
-     */
-    private static ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Kante> edgeClassToNewElement, final int directionToNewElement,
-            final Class<? extends Kante> edgeClassFromNewElement, final int directionFromNewElement, final int pid) {
-        //Collection des übergebenen doc holen
-        GDCollection gdcoll = doc.getCollection();
-        //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
-        //bei denen der Namen normalerweise nicht generiert wird
-        boolean isInteractiveMode = gdcoll.isInteractiveMode();
-        gdcoll.setInteractiveMode(false);
-
-        //Richtung der Kante FORWARD -> die Endklasse muss angelegt werden, sonst die Startklasse
-        Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? Kante.getEndClass(edgeClassToNewElement) : Kante.getStartClass(edgeClassToNewElement);
-        //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncähsten Kante ermittelt werden können.
-        if (ModelConstants.isAbstract(elementClass2Create)) {
-            //Richtung der nächsten Kante FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
-            elementClass2Create = directionFromNewElement == FORWARD ? Kante.getStartClass(edgeClassFromNewElement) : Kante.getEndClass(edgeClassFromNewElement);
-        }
-        //abstracte Elemente können nicht angelegt werden!
-        if (ModelConstants.isAbstract(elementClass2Create)) {
+        if (!isPathCreatable()) {
             return null;
         }
-
-        ModelElement createdDependent;
-
-        //wenn die Kantenart eine Composition ist
-        if (isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
-            //erzeuge ein untergeordnetes Element
-            createdDependent = GraphDocument.createAddicted(doc, startElement, edgeClassToNewElement.asSubclass(Composition.class), elementClass2Create, pid);
-        } else {
-            //das neue Element gleich mit Container im doc anlegen
-            ElementContainer createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
-            //das Element des neu angelgten Containers holen
-            createdDependent = createdContainer.getElement();
-
-            //das neue Element mit dem startElement verknüpfen
-            link(gdcoll, startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
-        }
-        //alle Kantentpyen der neu angelegten Elementart holen
-        Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
-        //für jede dieser Kantenarten
-        for (int i = 0; i < edgeTypes.length; i++) {
-            //aktuelle Kantenart holen
-            Class<? extends Kante> edgeType = edgeTypes[i];
-            //die Kanten, die über den Pfad als nächstes angelegt werden sollen, dürfen hier nicht angelegt werden
-            if (edgeType == edgeClassFromNewElement) {
-                continue;
-            }
-            //wenn das neu angelegte Element StartElement der Kante ist
-            if (Kante.isStartClass(edgeType, elementClass2Create)) {
-                //hole die MinKardnalität zu dem anderen Element der Kante
-                int minCardinalityForwardToOther = Kante.getMinStartToEndCardinality(edgeType);
-                //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
-                ArrayList<Kante> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
-                //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
-                int edgesForwardToCount = edgesForwardTo.size();
-                //wenn weitere Kanten angelegt werden müssen
-                while (minCardinalityForwardToOther - edgesForwardToCount > 0) {
-                    //für das neu angelegte Element müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                    //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
-                    createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, FORWARD, pid);
-                    edgesForwardToCount++;
-                }
-                //wenn das neu angelegte Element EndElement der Kante ist
-            } else {
-                //hole die MinKardnalität zu dem anderen Element der Kante
-                int minCardinalityBackwardToOther = Kante.getMinEndToStartCardinality(edgeType);
-                //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
-                ArrayList<Kante> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);
-                //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
-                int edgesBackwardToCount = edgesBackwardTo.size();
-                //wenn weitere Kanten angelegt werden müssen
-                while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
-                    //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                    //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
-                    createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, FORWARD, pid);
-                    edgesBackwardToCount++;
+        return new LGMAction(Tool3lgmConstants.getResString("new")) {
+            @Override
+            public void execute(final EventObject eo) {
+                //wenn eindutig fest steht, an welchen Knoten ein neues Element gehängt werden sollte, dann wird
+                //es auch gleich angehängt
+                if (isConnectionPointUnique()) {
+                    connectToFirstPath(null);
+                } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
+                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[edgeClasses.length - 1], directions[directions.length - 1], null, FORWARD, getTransactionID());
                 }
             }
-
-        }
-        gdcoll.setInteractiveMode(isInteractiveMode);
-        return createdDependent;
+        };
     }
 
 }
