@@ -328,7 +328,6 @@ public class Static {
                 JOptionPane.showMessageDialog(parenComponent, message);
             }
         });
-        return;
     }
 
 }
