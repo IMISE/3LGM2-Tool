@@ -47,6 +47,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Pair;
 import de.imise.util.StringUtils;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
@@ -209,15 +210,17 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         root.removeAllChildren();
         ltree.reset();
 
-        Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(0);
-        List<ElementContainer> all = getModelElement().getConnectedContainer(pathStepEndClass, mainDoc);
+        int edgeIndex = 0;
+        Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
+        ModelElement me = getModelElement();
+        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc);
         // nur Knoten für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.isSearchParts()) {
-            all.addAll(getModelElement().getPartConnectedContainer(pathStepEndClass, mainDoc));
+            CollectionUtils.addNonMultiples(all, me.getPartConnectedContainer(pathStepEndClass, mainDoc));
         }
         if (UserProperties.isSearchParents()) {
-            all.addAll(getModelElement().getParentConnectedContainer(pathStepEndClass, mainDoc));
+            CollectionUtils.addNonMultiples(all, me.getParentConnectedContainer(pathStepEndClass, mainDoc));
         }
         List<LGMTreeNode> firstLevelNodes = Lists.newArrayListWithCapacity(all.size());
         for (ElementContainer ec : all) {
@@ -225,12 +228,12 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
             firstLevelNodes.add(node);
         }
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
-        for (int edgeIndex = 1; edgeIndex < edgeClasses.length; edgeIndex++) {
+        for (edgeIndex = 1; edgeIndex < edgeClasses.length; edgeIndex++) {
             pathStepEndClass = getPathStepEndElementClass(edgeIndex);
             List<LGMTreeNode> newNextStartNodes = Lists.newArrayList();
             for (LGMTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
-                ModelElement me = nodeElementContainer.getElement();
+                me = nodeElementContainer.getElement();
                 List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
@@ -238,10 +241,10 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
                 }
             }
             nextStepStartNodes = newNextStartNodes;
-            // alle Elemente die von den Parts oder Parents kamen, nichtselektierbar setzen
-            for (int i = firstLevelNodes.size() - 1; i >= firstNonSelectableIndex; i--) {
-                firstLevelNodes.get(i).setSelectable(false);
-            }
+        }
+        // alle Elemente die von den Parts oder Parents kamen, nichtselektierbar setzen
+        for (int i = firstLevelNodes.size() - 1; i >= firstNonSelectableIndex; i--) {
+            firstLevelNodes.get(i).setSelectable(false);
         }
 
         model.reload();
