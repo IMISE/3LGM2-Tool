@@ -54,6 +54,9 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     /** Label vor dem verbundenen Element mit der Art des Elementes */
     protected final JLabel westLabel;
 
+    /** Index der letzten Kante im Pfad */
+    protected final int lastEdgeIndex;
+
     /**
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
@@ -91,6 +94,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         super(dialog);
         this.searchEdgeIndex = searchEdgeIndex;
         this.edgeClasses = edgeClasses;
+        lastEdgeIndex = edgeClasses.length - 1;
         directions = getEdgeDirections();
         searchElementClass = getPathStepEndElementClass(searchEdgeIndex);
         setName(ModelConstants.getDisplayableName(searchElementClass));
@@ -169,8 +173,8 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
         List<ElementContainer> connectedElements = Lists.newArrayList();
         connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
-        int edgeSearchIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
-        for (int i = 0; i < edgeSearchIndex; i++) {
+        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
+        for (int i = 0; i < edgeSearchStopIndex; i++) {
             List<ElementContainer> tempConnectedElements = Lists.newArrayList();
             for (ElementContainer ec : connectedElements) {
                 tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
@@ -202,7 +206,6 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     protected void unlinkAll() {
         List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
         GDCollection gdcoll = mainDoc.getCollection();
-        int lastEdgeIndex = edgeClasses.length - 1;
         Class<? extends Kante> lastEdgeInPath = edgeClasses[lastEdgeIndex];
         int lastEdgeDirection = directions[lastEdgeIndex];
         for (ElementContainer ec : searchElementConnectedContainer) {
@@ -269,7 +272,6 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * @return
      */
     protected boolean isLastPathElementDependent() {
-        int lastEdgeIndex = edgeClasses.length - 1;
         Class<? extends Kante> edgeClass = edgeClasses[lastEdgeIndex];
         int direction = directions[lastEdgeIndex];
         int minCardinality = direction == FORWARD ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
@@ -285,7 +287,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      */
     protected boolean isConnectionPointUnique() {
         //für alle Kanten außer der letzten
-        for (int i = 0; i < edgeClasses.length - 1; i++) {
+        for (int i = 0; i < lastEdgeIndex; i++) {
             //hole die maximale Verbindungsanzahl zum nächsten Element
             int maxCardinality = directions[i] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClasses[i]) : Kante.getMaxEndToStartCardinality(edgeClasses[i]);
             //wenn dieses Zwischenelement mehrfach verbunden sein kann
@@ -321,8 +323,8 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         int pid = getTransactionID();
         //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Kante
         //anlegen, sonst bis einschließlich zur letzten
-        int firstNotCreatedEdgeIndex = elements2Connect == null ? edgeClasses.length : edgeClasses.length - 1;
-        for (int i = startEdgeIndex; i < firstNotCreatedEdgeIndex; i++) {
+        int edgeSearchStopIndex = elements2Connect != null ? edgeClasses.length - 1 : edgeClasses.length;
+        for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
             Class<? extends Kante> edgeClass2Create = edgeClasses[i];
             int edgeClass2CreateDirection = directions[i];
             Class<? extends Kante> nextEdgeClass2Create = i + 1 < edgeClasses.length ? edgeClasses[i + 1] : null;
@@ -331,9 +333,9 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
             targetElement = createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
         }
         //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
-        if (firstNotCreatedEdgeIndex < edgeClasses.length) {
-            int direction = directions[firstNotCreatedEdgeIndex];
-            Class<? extends Kante> edgeClass2Create = edgeClasses[firstNotCreatedEdgeIndex];
+        if (edgeSearchStopIndex < edgeClasses.length) {
+            int direction = directions[edgeSearchStopIndex];
+            Class<? extends Kante> edgeClass2Create = edgeClasses[edgeSearchStopIndex];
             for (ModelElement element2Connect : elements2Connect) {
                 link(gdcoll, targetElement, element2Connect, edgeClass2Create, direction, pid);
             }
@@ -487,7 +489,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
             //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
             List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i]);
             //wenn bereits mind. ein verbundenes Element ex.
-            if (i < edgeClasses.length - 1 && !connectedElements.isEmpty()) {
+            if (i < lastEdgeIndex && !connectedElements.isEmpty()) {
                 //hole das erste
                 me = connectedElements.get(0);
                 continue;
