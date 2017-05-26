@@ -58,6 +58,12 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     protected final int lastEdgeIndex;
 
     /**
+     * Indikator, ob über den Pfad verbundene Elemente immer eindeutig an einem Punkt angehängt werden können (=<code>true</code>) oder
+     * ob es mehrere Möglichkeiten gibt, weil Zwischenpfade mehrfach existieren können.
+     */
+    protected final boolean isConnectionPointUnique;
+
+    /**
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
      * @param edgeClass
@@ -94,9 +100,10 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         super(dialog);
         this.searchEdgeIndex = searchEdgeIndex;
         this.edgeClasses = edgeClasses;
-        lastEdgeIndex = edgeClasses.length - 1;
         directions = getEdgeDirections();
         searchElementClass = getPathStepEndElementClass(searchEdgeIndex);
+        lastEdgeIndex = edgeClasses.length - 1;
+        isConnectionPointUnique = isConnectionPointUnique();
         setName(ModelConstants.getDisplayableName(searchElementClass));
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
@@ -285,7 +292,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      *
      * @return
      */
-    protected boolean isConnectionPointUnique() {
+    private boolean isConnectionPointUnique() {
         //für alle Kanten außer der letzten
         for (int i = 0; i < lastEdgeIndex; i++) {
             //hole die maximale Verbindungsanzahl zum nächsten Element
@@ -415,6 +422,9 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         } else {
             //das neue Element gleich mit Container im doc anlegen
             ElementContainer createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
+            if (createdContainer == null) {
+                return null;
+            }
             //das Element des neu angelgten Containers holen
             createdDependent = createdContainer.getElement();
 
@@ -426,7 +436,8 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         //alle Kantentpyen der neu angelegten Elementart holen
         Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
         //für jede dieser Kantenarten
-        for (int i = 0; i < edgeTypes.length; i++) {
+        boolean interrupted = false;
+        for (int i = 0; i < edgeTypes.length && !interrupted; i++) {
             //aktuelle Kantenart holen
             Class<? extends Kante> edgeType = edgeTypes[i];
             //die Kanten, die über den Pfad als nächstes angelegt werden sollen, dürfen hier nicht angelegt werden
@@ -446,7 +457,11 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
                     while (minCardinalityForwardToOther - edgesForwardToCount > 0) {
                         //für das neu angelegte Element müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
                         //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
-                        createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, FORWARD, pid);
+                        ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, FORWARD, pid);
+                        if (created == null) {
+                            interrupted = true;
+                            break;
+                        }
                         edgesForwardToCount++;
                     }
                 }
@@ -463,7 +478,11 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
                     while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
                         //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
                         //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
-                        createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, FORWARD, pid);
+                        ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, FORWARD, pid);
+                        if (created == null) {
+                            interrupted = true;
+                            break;
+                        }
                         edgesBackwardToCount++;
                     }
                 }

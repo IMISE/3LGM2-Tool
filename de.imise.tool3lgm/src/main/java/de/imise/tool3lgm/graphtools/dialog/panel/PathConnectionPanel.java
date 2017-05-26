@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.beust.jcommander.internal.Sets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -47,7 +49,6 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Pair;
 import de.imise.util.StringUtils;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
@@ -204,6 +205,30 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         }
     }
 
+    private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
+
+    /**
+     * Sammelt für die letzte Kante alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
+     * sie bereits verknüpft sind und kein weiteres Mal verknüpft werden können.
+     *
+     * @param edgeIndex
+     * @param potentialExcludeChildren
+     * @param clear
+     */
+    private void addChildrenToExcludeFromRtree(final int edgeIndex, final Collection<ElementContainer> potentialExcludeChildren, final boolean clear) {
+        //nur bei Panels, bei denen der Pfad eindeutig verknüpfbar ist, kann man Elemente im rechten Baum ausschließen
+        if (isConnectionPointUnique) {
+            //beim ersten Durchlauf sollte die alte Collecion geleert werden
+            if (clear) {
+                childrenToExcludeFromRtree.clear();
+            }
+            //wenn es der Index der letzten Kante ist -> zu den Ausschlusselementen hinzufügen
+            if (edgeIndex == lastEdgeIndex) {
+                childrenToExcludeFromRtree.addAll(potentialExcludeChildren);
+            }
+        }
+    }
+
     private void buildTree() {
         ltree.saveExpansion();
         ltree.saveSelection();
@@ -214,13 +239,14 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
         ModelElement me = getModelElement();
         List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc);
+        addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Knoten für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.isSearchParts()) {
-            CollectionUtils.addNonMultiples(all, me.getPartConnectedContainer(pathStepEndClass, mainDoc));
+            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc));
         }
         if (UserProperties.isSearchParents()) {
-            CollectionUtils.addNonMultiples(all, me.getParentConnectedContainer(pathStepEndClass, mainDoc));
+            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc));
         }
         List<LGMTreeNode> firstLevelNodes = Lists.newArrayListWithCapacity(all.size());
         for (ElementContainer ec : all) {
@@ -235,6 +261,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
                 me = nodeElementContainer.getElement();
                 List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc);
+                addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
                     newNextStartNodes.add(newNode);
@@ -262,7 +289,9 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         abroot.removeAllChildren();
         rtree.reset();
         for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass, true, true)) {
-            rtree.addObject(ec, abroot, null, false, true);
+            if (!childrenToExcludeFromRtree.contains(ec)) {
+                rtree.addObject(ec, abroot, null, false, true);
+            }
         }
         abmodel.reload();
         rtree.restoreExpansion();
@@ -294,6 +323,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
             @Override
             public void execute(final EventObject eo) {
+
                 //falls in den TargetTree gedroppt wurde -> selektiere den zur DropPosition nächstegelegenen TreePath
                 LGMActionLibrary.getDragNDropLocateElementAsTargetAction(targetTree).execute(eo);
                 // Anzahl der selektierten Elemente im rechten Baum, die verbunden werden sollen, ermitteln
@@ -443,10 +473,10 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
             public void execute(final EventObject eo) {
                 //wenn eindutig fest steht, an welchen Knoten ein neues Element gehängt werden sollte, dann wird
                 //es auch gleich angehängt
-                if (isConnectionPointUnique()) {
+                if (isConnectionPointUnique) {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
-                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[edgeClasses.length - 1], directions[directions.length - 1], null, FORWARD, getTransactionID());
+                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[lastEdgeIndex], directions[lastEdgeIndex], null, FORWARD, getTransactionID());
                 }
             }
         };
