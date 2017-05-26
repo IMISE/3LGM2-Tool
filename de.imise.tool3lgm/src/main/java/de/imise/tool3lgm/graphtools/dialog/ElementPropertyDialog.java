@@ -383,6 +383,10 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         addTab(new PathConnectionPanel(this, true, edgeClasses));
     }
 
+    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addTab(new PathConnectionPanel(this, labelLastEdgeName, true, edgeClasses));
+    }
+
     public void addPathConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
         addTab(new PathConnectionPanel(this, false, edgeClasses));
     }

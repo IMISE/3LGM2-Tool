@@ -104,16 +104,11 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         searchElementClass = getPathStepEndElementClass(searchEdgeIndex);
         lastEdgeIndex = edgeClasses.length - 1;
         isConnectionPointUnique = isConnectionPointUnique();
-        setName(ModelConstants.getDisplayableName(searchElementClass));
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         String westLabelText;
         Class<? extends Kante> edgeClass = edgeClasses[searchEdgeIndex];
-
-        //Name des Panels ist immer der Name der über die letzte Kante verbundenen Elemente
-        String panelName = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
-        setName(panelName);
 
         if (labelEdgeName) {
             if (directions[searchEdgeIndex] == FORWARD) {
@@ -122,10 +117,11 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
                 westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClass);
             }
         } else {
-            westLabelText = panelName;
+            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
         }
         westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Der ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
+        setName(westLabelText);
     }
 
     private int[] getEdgeDirections() {

@@ -69,8 +69,12 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     private LGMAction removeAction;
     private LGMAction newElementAction;
 
-    public PathConnectionPanel(final ElementPropertyDialog pd, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
-        super(pd, edgeClasses);
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, false, showRightTree, edgeClasses);
+    }
+
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
+        super(dialog, labelLastEdgeName, edgeClasses);
         this.showRightTree = showRightTree;
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
