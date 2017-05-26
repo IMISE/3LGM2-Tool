@@ -42,6 +42,7 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
@@ -464,12 +465,13 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
             elements2Connect.add(element2Connect);
         }
         connect(targetElement, elements2Connect.build(), targetTreePathEdgeIndex);
-
     }
 
     private LGMAction getNewConnectedElementAction() {
-
         if (!isPathCreatable()) {
+            return null;
+        }
+        if (ModelConstants.isSlaveType(searchElementClass)) {
             return null;
         }
         return new LGMAction(Tool3lgmConstants.getResString("new")) {
