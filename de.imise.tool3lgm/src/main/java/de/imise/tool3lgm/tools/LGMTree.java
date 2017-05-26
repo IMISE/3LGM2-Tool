@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -16,8 +15,9 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
-public class LGMTree extends JTree {
+public class LGMTree extends CorrectSelectionTree {
 
     private GraphDocument doc;
 
