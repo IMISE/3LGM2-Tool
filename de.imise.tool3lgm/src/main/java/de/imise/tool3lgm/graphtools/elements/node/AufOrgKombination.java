@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.OrgAufOrgVerbindung;
 
 /**
  * @author N.N.
@@ -33,7 +34,7 @@ public class AufOrgKombination extends Knoten {
     }
 
     /**
-     * 
+     *
      */
     public AufOrgKombination() {
         super();
@@ -64,8 +65,8 @@ public class AufOrgKombination extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Organisationseinheit"), new NConnectionPanel(Organisationseinheit.class, dialog, true, true));
-        dialog.addTab(getResString("Aufgabe"), new NConnectionPanel(Aufgabe.class, dialog, true, true));
+        dialog.addPathConnectionPanel(OrgAufOrgVerbindung.class);
+        dialog.addPathConnectionPanel(AufAufOrgVerbindung.class);
         return dialog;
     }
 

@@ -1,10 +1,11 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
 
 public final class Datenbanksystem extends LogischerSpeicher {
@@ -41,18 +42,9 @@ public final class Datenbanksystem extends LogischerSpeicher {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionInfoPanel(true, RawbDbsVerbindung.class);
         dialog.addDescripSingleConnectionPanel(DbsDbvsVerbindung.class);
-        dialog.addTab(getResString("Datensatztyp"), new NConnectionPanel(Datensatztyp.class, dialog, true, true));
-        dialog.addTab(getResString("masterfuer"), new NConnectionPanel(Objekttyp.class, dialog, true, true));
+        dialog.addPathConnectionPanel(DbsDatVerbindung.class);
+        dialog.addPathConnectionPanel(true, ObjLogspVerbindung.class);
         return dialog;
     }
-
-    //	public static final Class[] MASTER_TYPES = {
-    //		Anwendungsbaustein.class,
-    //		RechAnwendungsbaustein.class,
-    //	};
-    //
-    //	public final Class[] getMasterTypes()  {
-    //		return MASTER_TYPES;
-    //	}
 
 }

@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.DoksDokVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
 
 public final class Dokumentensammlung extends LogischerSpeicher {
 
@@ -22,7 +23,7 @@ public final class Dokumentensammlung extends LogischerSpeicher {
     }
 
     /**
-     * 
+     *
      */
     public Dokumentensammlung() {
         super();
@@ -36,8 +37,8 @@ public final class Dokumentensammlung extends LogischerSpeicher {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Dokumententyp"), new NConnectionPanel(Dokumententyp.class, dialog, true, true));
-        dialog.addTab(getResString("masterfuer"), new NConnectionPanel(Objekttyp.class, dialog, true, true));
+        dialog.addPathConnectionPanel(DoksDokVerbindung.class);
+        dialog.addPathConnectionPanel(true, ObjLogspVerbindung.class);
         return dialog;
     }
 

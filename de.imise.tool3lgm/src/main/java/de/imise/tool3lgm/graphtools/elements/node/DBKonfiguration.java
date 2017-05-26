@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 public final class DBKonfiguration extends Konfiguration {
@@ -39,8 +40,8 @@ public final class DBKonfiguration extends Konfiguration {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(ModelConstants.getDisplayableName(Anwendungsbaustein.class), new NConnectionPanel(Anwendungsbaustein.class, dialog, false, true));
-        dialog.addTab(ModelConstants.getDisplayableName(PhysischerDVBaustein.class), new NConnectionPanel(PhysischerDVBaustein.class, dialog, false, true));
+        dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class);
+        dialog.addPathConnectionPanel(PdvbPdvbkVerbindung.class);
         return dialog;
     }
 

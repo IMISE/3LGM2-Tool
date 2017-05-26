@@ -1,7 +1,8 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
 
 public final class Nachrichtentyp extends Repraesentationsform {
 
@@ -12,8 +13,8 @@ public final class Nachrichtentyp extends Repraesentationsform {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Objekttyp"), new NConnectionPanel(Objekttyp.class, dialog, true, true));
-        dialog.addTab(getResString("EreignisNachrichtenTyp"), new NConnectionPanel(EreignisNachrichtenTyp.class, dialog, true, true));
+        dialog.addPathConnectionPanel(ObjReprVerbindung.class);
+        dialog.addPathConnectionPanel(EtntNatVerbindung.class);
         return dialog;
     }
 

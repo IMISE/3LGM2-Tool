@@ -5,6 +5,8 @@ import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
 
 public final class Anwendungsprogramm extends Knoten {
 
@@ -23,7 +25,7 @@ public final class Anwendungsprogramm extends Knoten {
     }
 
     /**
-     * 
+     *
      */
     public Anwendungsprogramm() {
         super();
@@ -38,7 +40,9 @@ public final class Anwendungsprogramm extends Knoten {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(getResString("Softwareprodukt"), new NConnectionPanel(Softwareprodukt.class, dialog, true, true));
+        dialog.addPathConnectionPanel(AwpSwpVerbindung.class);
         dialog.addTab(getResString("Anwendungsbaustein"), new NConnectionPanel(RechAnwendungsbaustein.class, dialog, false, false));
+        dialog.addPathConnectionInfoPanel(RawbAwpVerbindung.class);
         return dialog;
     }
 

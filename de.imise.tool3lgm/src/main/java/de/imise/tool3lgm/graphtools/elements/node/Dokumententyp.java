@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
+import de.imise.tool3lgm.graphtools.elements.edge.DoksDokVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
 
 public class Dokumententyp extends Repraesentationsform {
 
@@ -12,9 +14,9 @@ public class Dokumententyp extends Repraesentationsform {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Objekttyp"), new NConnectionPanel(Objekttyp.class, dialog, true, true));
-        dialog.addTab(getResString("Dokumentensammlung"), new NConnectionPanel(Dokumentensammlung.class, dialog, false, true));
-        dialog.addTab(getResString("EreignisDokumentenTyp"), new NConnectionPanel(EreignisDokumentenTyp.class, dialog, true, true));
+        dialog.addPathConnectionPanel(ObjReprVerbindung.class);
+        dialog.addPathConnectionPanel(DoksDokVerbindung.class);
+        dialog.addPathConnectionPanel(EtntDotVerbindung.class);
         return dialog;
     }
 

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.EtntEtVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntKommstVerbindung;
 
 /**
  * @author N.N.
@@ -68,7 +68,7 @@ public abstract class EtntEtdtKombination extends Knoten {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripDescriptedSingleConnectionPanel(EtntEtVerbindung.class);
-        dialog.addTab(getResString("Kommunikationsstandard"), new NConnectionPanel(Kommunikationsstandard.class, dialog, true, true));
+        dialog.addPathConnectionPanel(EtntKommstVerbindung.class);
         return dialog;
     }
 

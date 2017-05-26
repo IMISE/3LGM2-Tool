@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.DbsDbvsVerbindung;
 
 public final class DBVerwaltungssystem extends Knoten {
 
     /**
-     * 
+     *
      */
     public DBVerwaltungssystem() {
         super();
@@ -22,7 +22,7 @@ public final class DBVerwaltungssystem extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("dbs"), new NConnectionPanel(Datenbanksystem.class, dialog, false, true));
+        dialog.addPathConnectionPanel(DbsDbvsVerbindung.class);
         return dialog;
     }
 

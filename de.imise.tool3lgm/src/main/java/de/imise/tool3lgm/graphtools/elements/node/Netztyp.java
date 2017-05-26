@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.SubnNetztVerbindung;
 
 public final class Netztyp extends Knoten {
 
@@ -19,7 +19,7 @@ public final class Netztyp extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Subnetz"), new NConnectionPanel(Subnetz.class, dialog, true, true));
+        dialog.addPathConnectionPanel(SubnNetztVerbindung.class);
         return dialog;
     }
 

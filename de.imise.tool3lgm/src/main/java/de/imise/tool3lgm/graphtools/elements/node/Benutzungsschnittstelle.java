@@ -23,14 +23,4 @@ public final class Benutzungsschnittstelle extends Schnittstelle {
         return false;
     }
 
-    //	public static final Class[] MASTER_TYPES = {
-    //		Anwendungsbaustein.class,
-    //		RechAnwendungsbaustein.class,
-    //		KonAnwendungsbaustein.class,
-    //	};
-    //
-    //	public final Class[] getMasterTypes()  {
-    //		return MASTER_TYPES;
-    //	}
-
 }

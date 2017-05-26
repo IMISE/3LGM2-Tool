@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
@@ -30,8 +31,8 @@ public final class ABKonfiguration extends Konfiguration {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Anwendungsbaustein"), new NConnectionPanel(Anwendungsbaustein.class, dialog, true, true));
-        dialog.addTab(getResString("AufOrgKombination"), new NConnectionPanel(AufOrgKombination.class, dialog, false, false));
+        dialog.addPathConnectionPanel(AwbAwbkVerbindung.class);
+        dialog.addPathConnectionInfoPanel(AwbkAufOrgVerbindung.class);
         return dialog;
     }
 

@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.EtntKommstVerbindung;
 
 public final class Kommunikationsstandard extends Knoten {
 
@@ -19,8 +20,8 @@ public final class Kommunikationsstandard extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("EtntEtdtKombination"), new NConnectionPanel(EtntEtdtKombination.class, dialog, true, true));
-        dialog.addTab(getResString("Bausteinschnittstelle_p"), new NConnectionPanel(Bausteinschnittstelle.class, dialog, false, true));
+        dialog.addPathConnectionPanel(EtntKommstVerbindung.class);
+        dialog.addPathConnectionPanel(BssKommstVerbindung.class);
         return dialog;
     }
 

@@ -1,7 +1,8 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
+import de.imise.tool3lgm.graphtools.elements.edge.DbsDatVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
 
 public class Datensatztyp extends Repraesentationsform {
 
@@ -12,8 +13,8 @@ public class Datensatztyp extends Repraesentationsform {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Objekttyp"), new NConnectionPanel(Objekttyp.class, dialog, true, true));
-        dialog.addTab(getResString("Datenbanksystem"), new NConnectionPanel(Datenbanksystem.class, dialog, false, false));
+        dialog.addPathConnectionPanel(ObjReprVerbindung.class);
+        dialog.addPathConnectionInfoPanel(DbsDatVerbindung.class);
         return dialog;
     }
 
