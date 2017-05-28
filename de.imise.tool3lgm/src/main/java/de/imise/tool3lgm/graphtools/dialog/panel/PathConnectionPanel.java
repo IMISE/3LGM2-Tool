@@ -79,7 +79,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
-        this(dialog, showRightTree, labelLastEdgeName, null, edgeClasses);
+        this(dialog, labelLastEdgeName, showRightTree, null, edgeClasses);
     }
 
     private PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
