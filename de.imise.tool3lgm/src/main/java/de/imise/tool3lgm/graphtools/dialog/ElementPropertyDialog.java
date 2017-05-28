@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -354,6 +355,22 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     ///////////////////////////////////////
     // DescriptionPanel -> add SubPanels //
     ///////////////////////////////////////
+
+    private TabbedPanel lastCreatedTabbedPanel;
+
+    public void addTabbedPanel(final String nameResKey) {
+        lastCreatedTabbedPanel = new TabbedPanel(this);
+        lastCreatedTabbedPanel.setName(Tool3lgmConstants.getResString(nameResKey));
+        addTab(lastCreatedTabbedPanel);
+    }
+
+    public void addTabbedPanelPathConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+        lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, edgeClasses));
+    }
+
+    public void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, searchElementClass, edgeClasses));
+    }
 
     public void addDescripSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
         addDescripSingleConnectionPanel(false, edgeClasses);
