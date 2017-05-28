@@ -86,6 +86,19 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     }
 
     /**
+     * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Kante oder die letzte Kante selbst.
+     *
+     * @param dialog
+     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Kante im Pfad verbundenen
+     *            Elementart der Name der letzten Kante selbst ans Label geschrieben.
+     * @param searchElementClass
+     * @param edgeClasses
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, edgeClasses.length - 1, labelEdgeName, searchElementClass, edgeClasses);
+    }
+
+    /**
      * Panel für eine einfache Assoziation
      *
      * @param dialog
@@ -97,11 +110,29 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * @param edgeClasses
      */
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, searchEdgeIndex, labelEdgeName, null, edgeClasses);
+
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param dialog
+     * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
+     *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiliegn Index ans Label geschrieben.
+     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
+     *            der Name der Kante selbst ans Label geschrieben. Welche Kante im Pfad das ist, wird durch connectionLabelIndex
+     *            festgelegt.
+     * @param searchElementClass wird hier <code>null</code> übergeben, wird diese Klasse aus den edgeClasses bestimmt, sond wird die übergebene
+     *            Klasse genommen
+     * @param edgeClasses
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
         super(dialog);
         this.searchEdgeIndex = searchEdgeIndex;
         this.edgeClasses = edgeClasses;
         directions = getEdgeDirections();
-        searchElementClass = getPathStepEndElementClass(searchEdgeIndex);
+        this.searchElementClass = searchElementClass != null ? searchElementClass : getPathStepEndElementClass(searchEdgeIndex);
         lastEdgeIndex = edgeClasses.length - 1;
         isConnectionPointUnique = isConnectionPointUnique();
 
@@ -119,7 +150,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         } else {
             westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
         }
-        westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Der ersten Buchstaben des Labels immer groß schreiben
+        westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Den ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
         setName(westLabelText);
     }
