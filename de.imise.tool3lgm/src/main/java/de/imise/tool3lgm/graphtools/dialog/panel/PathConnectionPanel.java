@@ -90,7 +90,14 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        String ltreeLabelString = getResString("verb");
+        //wenn der Pfad aus mehr als einer Kante besteht, dann soll über dem linken Baum einfach "verbunden" stehen
+        String ltreeLabelString = lastEdgeIndex > 0 ? getResString("verb") : null;
+        //wenn der Pfad aus nur einer Kante besteht
+        if (ltreeLabelString == null) {
+            //schreibe den Namen der Kante in der richtigen Richtung über den linken Baum
+            Class<? extends Kante> lastEdge = edgeClasses[lastEdgeIndex];
+            ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
+        }
         String rtreeLabelString = getResString("frei");
         Pair<String, String> treeLabels = StringUtils.makeSameLength(ltreeLabelString, rtreeLabelString);
         ltreeLabelString = treeLabels.getFirstItem();
