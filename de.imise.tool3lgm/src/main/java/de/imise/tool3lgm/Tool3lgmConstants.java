@@ -568,15 +568,14 @@ public abstract class Tool3lgmConstants {
      * Gets a string for the given key from this resource bundle or one of its parents.
      *
      * @param key
-     *            String with key for resource
+     *            String with key for resource or the key
      * @return String with value of resource
      */
     public static String getResString(final String key) {
-        try {
-            return resourceBundle.getString(key);
-        } catch (Exception e) {
-            return key;
-        }
+        //das hier darf auf keinen Fall mit try-catch umrandet werden, da mehrere Funktionen auf die
+        //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
+        //Kanten mit doppelter Bedeutung
+        return resourceBundle.getString(key);
     }
 
     /**
