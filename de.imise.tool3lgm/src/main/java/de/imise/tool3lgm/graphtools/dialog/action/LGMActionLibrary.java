@@ -430,12 +430,11 @@ public class LGMActionLibrary {
                         selected = me.getContainer(mainDoc);
                     }
                     if (selected != null) {
-                        ElementContainer ec = (ElementContainer) selection;
-                        doc.select(ec, panel.getTransactionID());
+                        doc.select(selected, panel.getTransactionID());
                         if (popup) {
                             Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
                         } else if (doubleClick) {
-                            doc.showPropertyDialog(ec.getElement());
+                            doc.showPropertyDialog(selected.getElement());
                         }
 
                     }
