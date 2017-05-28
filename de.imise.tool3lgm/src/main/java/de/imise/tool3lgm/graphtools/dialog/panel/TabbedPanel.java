@@ -12,7 +12,7 @@ import de.imise.util.swing.component.TabbedPane;
 /**
  * EIn {@link ElementDialogPanel}, das andere {@link ElementDialogPanel} auf Tabs in sich aufnehmen
  * kann.
- * 
+ *
  * @author AXS
  */
 public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
@@ -23,21 +23,27 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
     private final TabbedPane rf;
 
     /**
-     * @param dl
+     * @param dialog
      * @param dialogPanels
      */
-    public TabbedPanel(final ElementPropertyDialog dl, final ElementDialogPanel... dialogPanels) {
-        super(dl);
+    public TabbedPanel(final ElementPropertyDialog dialog, final ElementDialogPanel... dialogPanels) {
+        super(dialog);
 
         rf = new TabbedPane();
-        for (ElementDialogPanel pane : dialogPanels) {
-            rf.addTab(pane.getName(), pane);
-        }
         rf.addChangeListener(this);
+
+        for (ElementDialogPanel dialogPanel : dialogPanels) {
+            rf.addTab(dialogPanel.getName(), dialogPanel);
+        }
 
         setLayout(new GridLayout(1, 1));
         add(rf);
 
+        init();
+    }
+
+    public void addTab(final ElementDialogPanel dialogPanel) {
+        rf.addTab(dialogPanel.getName(), dialogPanel);
         init();
     }
 
