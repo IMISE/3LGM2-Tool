@@ -148,7 +148,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
                 westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClass);
             }
         } else {
-            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(searchElementClass) : ModelConstants.getDisplayablePluralName(searchElementClass);
+            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(this.searchElementClass) : ModelConstants.getDisplayablePluralName(this.searchElementClass);
         }
         westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Den ersten Buchstaben des Labels immer groﬂ schreiben
         westLabel.setText(westLabelText);
