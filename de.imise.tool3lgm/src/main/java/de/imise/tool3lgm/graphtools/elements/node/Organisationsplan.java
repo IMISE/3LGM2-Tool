@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.KawbOrgpVerbindung;
 
 public final class Organisationsplan extends Knoten {
 
@@ -19,7 +19,7 @@ public final class Organisationsplan extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Anwendungsbaustein_p"), new NConnectionPanel(KonAnwendungsbaustein.class, dialog, false, false));
+        dialog.addDescripSingleConnectionInfoPanel(KawbOrgpVerbindung.class);
         return dialog;
     }
 
