@@ -164,7 +164,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param component
      */
     public void addTab(final String title, final Component component) {
-        tab.addTab(title, component);
+        addTab(title, null, component);
     }
 
     /**
