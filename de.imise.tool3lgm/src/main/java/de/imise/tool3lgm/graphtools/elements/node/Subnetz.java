@@ -1,10 +1,12 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbSubnVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.SubnNetzpVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.SubnNetztVerbindung;
 
 public final class Subnetz extends Knoten {
 
@@ -23,7 +25,7 @@ public final class Subnetz extends Knoten {
     }
 
     /**
-     * 
+     *
      */
     public Subnetz() {
         super();
@@ -37,9 +39,9 @@ public final class Subnetz extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("PhysischerDVBaustein_p"), new NConnectionPanel(PhysischerDVBaustein.class, dialog, true, true));
-        dialog.addTab(getResString("Netztyp"), new NConnectionPanel(Netztyp.class, dialog, true, true));
-        dialog.addTab(getResString("Netzprotokoll"), new NConnectionPanel(Netzprotokoll.class, dialog, true, true));
+        dialog.addPathConnectionPanel(PdvbSubnVerbindung.class);
+        dialog.addPathConnectionPanel(SubnNetztVerbindung.class);
+        dialog.addPathConnectionPanel(SubnNetzpVerbindung.class);
         return dialog;
     }
 

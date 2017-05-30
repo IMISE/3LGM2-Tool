@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
 
 public final class Standort extends Knoten {
 
     /**
-     * 
+     *
      */
     public Standort() {
         super();
@@ -22,7 +22,7 @@ public final class Standort extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("PhysischerDVBaustein_p"), new NConnectionPanel(PhysischerDVBaustein.class, dialog, true, true));
+        dialog.addPathConnectionPanel(PdvbStoVerbindung.class);
         return dialog;
     }
 

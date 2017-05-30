@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.elements.node;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TechnikPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -11,6 +10,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbBtypVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbStoVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PdvbSubnVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
@@ -177,7 +177,7 @@ public class PhysischerDVBaustein extends Knoten {
         dialog.addDescripSingleConnectionPanel(PdvbStoVerbindung.class);
         dialog.addDescripSingleConnectionPanel(PdvbBtypVerbindung.class);
         dialog.addTab(getResString("tm"), new TechnikPanel(dialog));
-        dialog.addTab(Tool3lgmConstants.getResString("Subnetz"), new NConnectionPanel(Subnetz.class, dialog, true, true));
+        dialog.addPathConnectionPanel(PdvbSubnVerbindung.class);
         dialog.addPathConnectionInfoPanel(PdvbPdvbkVerbindung.class, PdvbkAwbVerbindung.class);
         return dialog;
     }
