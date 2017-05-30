@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
+import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 
 /**
  * @author AXS
@@ -30,10 +31,16 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  */
 public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
-    /**
-     * COMMENTME
-     */
-    private final AlphabeticalComboBox box = new AlphabeticalComboBox();
+    /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
+    protected final AlphabeticalComboBox connectedElementsBox;
+
+    /** Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und geändert werden kann. */
+    protected final LimitedSizeScrollTextPane connectedElementName;
+
+    /** Das verbundene Element das angezeigt wird (wenn es mind. eins gibt) */
+    private ModelElement connectedElement;
+
+    private String oldname = "";
 
     /**
      * COMMENTME
@@ -63,10 +70,23 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
 
-        itemListener = new LGMItemListener(getItemStateChangedAction(this, searchElementClass));
-        box.addItemListener(itemListener);
+        if (isLastPathElementNeededForExistence()) {
+            connectedElementsBox = null;
+            itemListener = null;
+            connectedElementName = new LimitedSizeScrollTextPane(4);
 
-        add(box, BorderLayout.CENTER);
+            // Action erstellen und Listener an Panel und Box anhängen
+            addMouseActions(connectedElementName);
+            add(connectedElementName, BorderLayout.CENTER);
+
+        } else {
+            connectedElementsBox = new AlphabeticalComboBox();
+            itemListener = new LGMItemListener(getItemStateChangedAction(this, searchElementClass));
+            connectedElementName = null;
+
+            connectedElementsBox.addItemListener(itemListener);
+            add(connectedElementsBox, BorderLayout.CENTER);
+        }
 
         createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass)) : null;
         init();
@@ -74,45 +94,62 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
     @Override
     protected void init() {
-        super.init();
-        doc.start_transaction(dialog.getTransactionID(), false);
-        box.removeItemListener(itemListener);
-        box.removeAllItems();
-        box.addItem(" ");
-        List<ElementContainer> connected = getConnectedContainer();
-        List<ElementContainer> available = isLastPathElementDependent() ? connected : mainDoc.getElementContainer(searchElementClass);
+        List<ElementContainer> allConnectedContainers = getConnectedContainer();
+        ElementContainer connectedContainer = allConnectedContainers.isEmpty() ? null : allConnectedContainers.get(0);
+        connectedElement = connectedContainer == null ? null : connectedContainer.getElement();
 
-        //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
-        //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
-        boolean showNewEntry = createNew != null;
-        if (showNewEntry && isLastPathElementDependent() && !connected.isEmpty()) {
-            showNewEntry = false;
-        }
-        if (showNewEntry) {
-            box.addItem(createNew);
-        }
-        box.addSeparator(false);
-        box.addAll(available);
-        for (ElementContainer ec : connected) {
-            box.removeItem(ec);
-            box.addItem(ec);
-        }
-        if (connected.size() > 0) {
-            box.setSelectedItem(connected.get(0));
-        }
-        doc.finish_transaction(dialog.getTransactionID(), false);
-        box.addItemListener(itemListener);
-        addMouseActions(box);
-    }
+        if (connectedElementsBox != null) {
+            boolean isLastPathElementDependent = isLastPathElementDependent();
+            connectedElementsBox.removeItemListener(itemListener);
+            connectedElementsBox.removeAllItems();
+            connectedElementsBox.addItem(" ");
+            //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle
+            List<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : mainDoc.getElementContainer(searchElementClass);
 
-    @Override
-    protected void showFullDialog() {
-        super.showFullDialog();
+            //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
+            //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
+            boolean showNewEntry = createNew != null;
+            if (showNewEntry && isLastPathElementDependent && !allConnectedContainers.isEmpty()) {
+                showNewEntry = false;
+            }
+            if (showNewEntry) {
+                connectedElementsBox.addItem(createNew);
+            }
+            connectedElementsBox.addSeparator(false);
+            connectedElementsBox.addAll(available);
+            for (ElementContainer ec : allConnectedContainers) {
+                connectedElementsBox.removeItem(ec);
+                connectedElementsBox.addItem(ec);
+            }
+            connectedElementsBox.setSelectedItem(connectedContainer);
+            connectedElementsBox.addItemListener(itemListener);
+            addMouseActions(connectedElementsBox);
+        } else /* if (connectedElementName != null) */ {
+            if (connectedElement != null) {
+                oldname = connectedElement.getName();
+                connectedElementName.setText(oldname);
+            } else {
+                connectedElementName.setText("");
+            }
+        }
     }
 
     @Override
     public Object getSelection() {
-        return box.getSelectedItem();
+        return connectedElementsBox != null ? connectedElementsBox.getSelectedItem() : connectedElement;
+    }
+
+    @Override
+    public void commit() {
+        // Ist null, wenn kein verbundenes Element vorhanden ist
+        if (connectedElementName == null || connectedElement == null) {
+            return;
+        }
+        String newName = connectedElementName.getText();
+        if (newName != null && !oldname.equals(newName)) {
+            doc.setName(connectedElement, GraphDocument.getParseSaveString(newName), dialog.getTransactionID());
+        }
+        connectedElement.refreshText();
     }
 
     /**
