@@ -42,8 +42,9 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     protected final Component connectedElementViewComponent;
 
     /** Das verbundene Element das angezeigt wird (wenn es mind. eins gibt) */
-    private ModelElement connectedElement;
+    protected ModelElement connectedElement;
 
+    /** Cache zur Speicherung, ob der Name des verbundenen Elementes geändert wurde */
     private String oldname = "";
 
     /**
@@ -141,13 +142,14 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     }
 
     @Override
-    public Object getSelection() {
+    public final Object getSelection() {
         return connectedElementsBox != null ? connectedElementsBox.getSelectedItem() : connectedElement;
     }
 
     @Override
     public void commit() {
-        // Ist null, wenn kein verbundenes Element vorhanden ist
+        //der Name kann nicht geändert werden, wenn die ComboBox angezeigt wird (und nicht das EingabeTextfeld)
+        //oder wenn kein verbundenes Element vorhanden ist
         if (connectedElementName == null || connectedElement == null) {
             return;
         }

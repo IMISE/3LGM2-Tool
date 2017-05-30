@@ -4,15 +4,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
@@ -25,6 +24,9 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
     private final ExtendedTextPane descriptionTextPane = new ExtendedTextPane();
 
     private final JLabel descriptionWestLabel = new JLabel(Tool3lgmConstants.getResString("description"));
+
+    /** Cache zur Speicherung, ob die Beschreibung des verbundenen Elementes geändert wurde */
+    private String olddescrip = "";
 
     /**
      * @param dialog
@@ -42,30 +44,41 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      */
     public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
-        descriptionTextPane.setEditable(false);
     }
 
     @Override
     protected final void init() {
         super.init();
         updateDescription();
+        if (descriptionTextPane != null) {
+            descriptionTextPane.setEditable(connectedElement != null);
+        }
     }
 
     private void updateDescription() {
         if (descriptionTextPane != null) {
-            StringBuilder sb = new StringBuilder();
-            List<ElementContainer> connected = getConnectedContainer();
-            if (connected.size() > 0) {
-                ElementContainer kc = connected.get(0);
-                sb.append(kc.getElement().getDescription());
-                for (int i = 1; i < connected.size(); i++) {
-                    ElementContainer lc = connected.get(i);
-                    sb.append("\n\n").append(lc.getElement().getDescription());
-                }
+            if (connectedElement != null) {
+                olddescrip = connectedElement.getDescription();
+                descriptionTextPane.setText(olddescrip);
+            } else {
+                descriptionTextPane.setText("");
             }
-            descriptionTextPane.setText(sb.toString());
             descriptionTextPane.setCaretPosition(0);
         }
+    }
+
+    @Override
+    public void commit() {
+        super.commit();
+        // Ist null, wenn kein verbundenes Element vorhanden ist -> Beschreibung nicht änderbar
+        if (connectedElement == null) {
+            return;
+        }
+        String newDescription = descriptionTextPane.getText();
+        if (newDescription != null && !olddescrip.equals(newDescription)) {
+            doc.setDescription(connectedElement, GraphDocument.getParseSaveString(newDescription), dialog.getTransactionID());
+        }
+        connectedElement.refreshText();
     }
 
     public int addMe(final Container parent, final GridBagConstraints gbc, final int gridy) {
@@ -87,6 +100,8 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     public Component addSelf() {
         GridBagConstraints gbc = new GridBagConstraints();
+        //wenn das Panel als alleine steht, dann soll vor dem Westlabel nur "Bezeichnung" stehen
+        westLabel.setText(Tool3lgmConstants.getResString("bez"));
         setLayout(new GridBagLayout());
         addMe(this, gbc, 0);
         return this;
