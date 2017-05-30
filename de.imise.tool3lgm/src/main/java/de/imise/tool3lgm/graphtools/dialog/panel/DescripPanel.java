@@ -73,23 +73,24 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         init();
     }
 
+    private void updateName() {
+        ModelElement modelElement = getModelElement();
+        String name = modelElement.getName();
+        String nameText = nameTextPane.getText();
+        if (!name.equals(nameText)) {
+            nameTextPane.setText(modelElement.getName());
+        }
+    }
+
     @Override
     protected void init() {
+        nameTextPane.removeDocumentListener(this);
+        updateName();
         ModelElement modelElement = getModelElement();
-        nameTextPane.setText(modelElement.getName());
-        nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhängen, sonst wird gleich commit aufgerufen
         descriptionTextPane.setText(modelElement.getDescription());
         nameTextPane.setCaretPosition(0);
         descriptionTextPane.setCaretPosition(0);
-
-    }
-
-    public void addSingleConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
-        addSingleConnectionInfoPanel(false, edgeClasses);
-    }
-
-    public void addSingleConnectionInfoPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
-        addSubPanel(new SingleConnectionInfoPanel(dialog, labelLastEdgeName, edgeClasses));
+        nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhängen, sonst wird gleich commit aufgerufen
     }
 
     public void addDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
@@ -117,18 +118,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
             westLabel.setBorder(topBorder);
             descriptedPanel.setBorder(topBorder);
-            gbc.fill = GridBagConstraints.NONE;
-            add(this, westLabel, gbc, 0, gridy, 1, 1);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            add(this, descriptedPanel, gbc, 1, gridy++, 1, 1);
-            gbc.fill = GridBagConstraints.NONE;
-            add(this, descriptedPanel.getDescriptionWestLabel(), gbc, 0, gridy, 1, 1);
-            gbc.fill = GridBagConstraints.BOTH;
-            gbc.weighty = 1;
-            gbc.weightx = 1;
-            add(this, new JScrollPane(descriptedPanel.getDescriptionTextPane()), gbc, 1, gridy++, 1, 1);
-            gbc.weightx = 0;
-            gbc.weighty = 0;
+            gridy = descriptedPanel.addMe(this, gbc, gridy);
         } else {
             add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
             add(this, panel, gbc, 1, gridy++, 1, 1);
@@ -145,6 +135,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
 
     @Override
     public void commit() {
+        nameTextPane.removeDocumentListener(this);
         ModelElement me = getModelElement();
         String newName = nameTextPane.getText();
         // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion
@@ -165,10 +156,15 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             doc.setDescription(me, GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
         }
         me.refreshText();
+        for (int m = 0; m < panels.size(); m++) {
+            panels.get(m).commit();
+        }
+        nameTextPane.addDocumentListener(this);
     }
 
     @Override
     public void update() {
+        updateName();
         for (int m = 0; m < panels.size(); m++) {
             panels.get(m).update();
         }
