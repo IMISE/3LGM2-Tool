@@ -45,14 +45,6 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         descriptionTextPane.setEditable(false);
     }
 
-    public ExtendedTextPane getDescriptionTextPane() {
-        return descriptionTextPane;
-    }
-
-    public JLabel getDescriptionWestLabel() {
-        return descriptionWestLabel;
-    }
-
     @Override
     protected final void init() {
         super.init();
@@ -83,11 +75,11 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         add(parent, connectedElementViewComponent, gbc, 1, newGridy++, 1, 1);
         gbc.fill = GridBagConstraints.NONE;
-        add(parent, getDescriptionWestLabel(), gbc, 0, newGridy, 1, 1);
+        add(parent, descriptionWestLabel, gbc, 0, newGridy, 1, 1);
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weighty = 1;
         gbc.weightx = 1;
-        add(parent, new JScrollPane(getDescriptionTextPane()), gbc, 1, newGridy++, 1, 1);
+        add(parent, new JScrollPane(descriptionTextPane), gbc, 1, newGridy++, 1, 1);
         gbc.weightx = 0;
         gbc.weighty = 0;
         return newGridy;
