@@ -81,7 +81,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         gbc.fill = GridBagConstraints.NONE;
         add(parent, westLabel, gbc, 0, newGridy, 1, 1);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(parent, box, gbc, 1, newGridy++, 1, 1);
+        add(parent, connectedElementViewComponent, gbc, 1, newGridy++, 1, 1);
         gbc.fill = GridBagConstraints.NONE;
         add(parent, getDescriptionWestLabel(), gbc, 0, newGridy, 1, 1);
         gbc.fill = GridBagConstraints.BOTH;

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.EventObject;
@@ -32,10 +33,13 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
     /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
-    protected final AlphabeticalComboBox connectedElementsBox;
+    private final AlphabeticalComboBox connectedElementsBox;
 
     /** Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und geändert werden kann. */
-    protected final LimitedSizeScrollTextPane connectedElementName;
+    private final LimitedSizeScrollTextPane connectedElementName;
+
+    /** Je nachdem was von beiden (Box oder Textfeld) initialisert wurde, ist dies diese Komponente */
+    protected final Component connectedElementViewComponent;
 
     /** Das verbundene Element das angezeigt wird (wenn es mind. eins gibt) */
     private ModelElement connectedElement;
@@ -74,15 +78,16 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             connectedElementsBox = null;
             itemListener = null;
             connectedElementName = new LimitedSizeScrollTextPane(4);
+            connectedElementViewComponent = connectedElementName;
 
-            // Action erstellen und Listener an Panel und Box anhängen
+            //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementName);
             add(connectedElementName, BorderLayout.CENTER);
-
         } else {
             connectedElementsBox = new AlphabeticalComboBox();
             itemListener = new LGMItemListener(getItemStateChangedAction(this, searchElementClass));
             connectedElementName = null;
+            connectedElementViewComponent = connectedElementsBox;
 
             connectedElementsBox.addItemListener(itemListener);
             add(connectedElementsBox, BorderLayout.CENTER);
@@ -123,6 +128,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             }
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
+            //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementsBox);
         } else /* if (connectedElementName != null) */ {
             if (connectedElement != null) {
