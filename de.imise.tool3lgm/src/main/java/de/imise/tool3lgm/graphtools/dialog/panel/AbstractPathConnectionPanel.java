@@ -282,16 +282,19 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * @return
      */
     protected boolean isPathCreatable() {
-        for (int i = 0; i < edgeClasses.length; i++) {
+        int pathLength = edgeClasses.length;
+        for (int i = 0; i < pathLength; i++) {
             Class<? extends ModelElement> class2Create = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
             //wenn die anzulegende End-Klasse der aktuellen Kante abstract ist
             if (ModelConstants.isAbstract(class2Create)) {
                 //prüfe, ob die anzulegende StartKlasse der nächsten Kante nicht abstract und somit eindeutig ist
-                if (i + 1 < edgeClasses.length) {
+                if (i + 1 < pathLength) {
                     class2Create = directions[i + 1] == FORWARD ? Kante.getStartClass(edgeClasses[i + 1]) : Kante.getEndClass(edgeClasses[i + 1]);
-                }
-                if (ModelConstants.isAbstract(class2Create)) {
-                    return false;
+                    if (ModelConstants.isAbstract(class2Create)) {
+                        return false;
+                    }
+                } else if (!ModelConstants.isAbstract(searchElementClass)) {
+                    return true;
                 }
             }
         }
@@ -309,6 +312,20 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
         Class<? extends Kante> edgeClass = edgeClasses[lastEdgeIndex];
         int direction = directions[lastEdgeIndex];
         int minCardinality = direction == FORWARD ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
+        return minCardinality > 0;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung
+     * über die letzte Kante des Pfades hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese
+     * Verbindung zu lösen oder nicht.
+     *
+     * @return
+     */
+    protected boolean isLastPathElementNeededForExistence() {
+        Class<? extends Kante> edgeClass = edgeClasses[lastEdgeIndex];
+        int direction = directions[lastEdgeIndex];
+        int minCardinality = direction == BACKWARD ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
         return minCardinality > 0;
     }
 
