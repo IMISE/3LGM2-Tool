@@ -1,8 +1,13 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -69,6 +74,30 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
             descriptionTextPane.setText(sb.toString());
             descriptionTextPane.setCaretPosition(0);
         }
+    }
+
+    public int addMe(final Container parent, final GridBagConstraints gbc, final int gridy) {
+        int newGridy = gridy;
+        gbc.fill = GridBagConstraints.NONE;
+        add(parent, westLabel, gbc, 0, newGridy, 1, 1);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        add(parent, box, gbc, 1, newGridy++, 1, 1);
+        gbc.fill = GridBagConstraints.NONE;
+        add(parent, getDescriptionWestLabel(), gbc, 0, newGridy, 1, 1);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 1;
+        gbc.weightx = 1;
+        add(parent, new JScrollPane(getDescriptionTextPane()), gbc, 1, newGridy++, 1, 1);
+        gbc.weightx = 0;
+        gbc.weighty = 0;
+        return newGridy;
+    }
+
+    public Component addSelf() {
+        GridBagConstraints gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        addMe(this, gbc, 0);
+        return this;
     }
 
 }
