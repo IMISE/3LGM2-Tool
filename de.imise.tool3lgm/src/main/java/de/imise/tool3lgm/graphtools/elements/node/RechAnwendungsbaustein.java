@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.elements.node;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.FreeTextPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
@@ -43,7 +42,7 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
         dialog.addDescripSingleConnectionPanel(RawbAwpVerbindung.class, AwpSwpVerbindung.class);
         dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
         dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
-        dialog.addTab(getResString("Anwendungsprogramm"), new FreeTextPanel(Anwendungsprogramm.class, dialog));
+        dialog.addDescriptedSingleConnectionPanel(RawbAwpVerbindung.class);
         dialog.addTab(getResString("Aufgabe_p"), new AwbAufPanel(dialog));
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
         return dialog;
