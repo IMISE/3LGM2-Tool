@@ -12,6 +12,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -21,6 +22,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
@@ -356,6 +358,15 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     // DescriptionPanel -> add SubPanels //
     ///////////////////////////////////////
 
+    @Override
+    public void addTab(final String title, final Icon icon, final Component component) {
+        if (component instanceof DescriptedSingleConnectionPanel) {
+            DescriptedSingleConnectionPanel panel = (DescriptedSingleConnectionPanel) component;
+            panel.addSelf();
+        }
+        super.addTab(title, icon, component);
+    }
+
     private TabbedPanel lastCreatedTabbedPanel;
 
     public void addTabbedPanel(final String nameResKey) {
@@ -380,20 +391,16 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         descripPanel.addSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
-    public void addDescripSingleConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
-        addDescripSingleConnectionInfoPanel(false, edgeClasses);
-    }
-
-    public void addDescripSingleConnectionInfoPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
-        descripPanel.addSingleConnectionInfoPanel(labelLastEdgeName, edgeClasses);
-    }
-
     public void addDescripDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
         addDescripDescriptedSingleConnectionPanel(false, edgeClasses);
     }
 
     public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, edgeClasses);
+    }
+
+    public void addDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+        addTab(new DescriptedSingleConnectionPanel(this, edgeClasses));
     }
 
     public void addPathConnectionPanel(final Class<? extends Kante>... edgeClasses) {
