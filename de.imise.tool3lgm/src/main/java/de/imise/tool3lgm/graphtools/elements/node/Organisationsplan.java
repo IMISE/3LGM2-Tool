@@ -19,7 +19,7 @@ public final class Organisationsplan extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionInfoPanel(KawbOrgpVerbindung.class);
+        dialog.addDescripSingleConnectionPanel(KawbOrgpVerbindung.class);
         return dialog;
     }
 

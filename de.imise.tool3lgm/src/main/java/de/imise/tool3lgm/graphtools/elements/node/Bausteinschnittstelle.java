@@ -35,7 +35,7 @@ public final class Bausteinschnittstelle extends Schnittstelle {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionInfoPanel(true, AwbKommssVerbindung.class);
+        dialog.addDescripSingleConnectionPanel(true, AwbKommssVerbindung.class);
         dialog.addDescripSingleConnectionPanel(BssKommstVerbindung.class);
         dialog.addTab(getResString("KommBeziehung"), new KomPanel(Bausteinschnittstelle.class, dialog, true));
         dialog.addTab(getResString("etntges") + " + " + getResString("etntempf"), new ETNTPanel(EtntEtdtKombination.class, dialog));
