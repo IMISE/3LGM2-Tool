@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
@@ -42,8 +42,8 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(RawbDbsVerbindung.class);
         dialog.addDescripSingleConnectionPanel(RawbAwpVerbindung.class, AwpSwpVerbindung.class);
-        dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
-        dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
+        dialog.addTab(getResString("Bausteinschnittstelle_p"), new MutipleCompositionPanel(Bausteinschnittstelle.class, dialog));
+        dialog.addTab(getResString("Benutzungsschnittstelle_p"), new MutipleCompositionPanel(Benutzungsschnittstelle.class, dialog));
         dialog.addDescriptedSingleConnectionPanel(RawbAwpVerbindung.class);
         dialog.addPathConnectionInfoPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);

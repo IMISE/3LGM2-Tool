@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel2;
@@ -114,15 +114,15 @@ public class LGMActionLibrary {
                 };
             }
 
-        } else if (edp instanceof BSNPanel) {
+        } else if (edp instanceof MutipleCompositionPanel) {
 
             return new LGMAction(Tool3lgmConstants.getResString("addButtonText")) {
 
                 @Override
                 public void execute(final EventObject eo) {
                     doc.select(modelElement.getContainer(doc.getCollection().getMainGraphDocument()), dialog.getTransactionID());
-                    if (edp instanceof BSNPanel) {
-                        GraphDocument.createAddicted(doc.getCollection().getSelectedDoc(), modelElement, AwbKommssVerbindung.class, ((BSNPanel) edp).getSearchElementClass(), dialog.getTransactionID());
+                    if (edp instanceof MutipleCompositionPanel) {
+                        GraphDocument.createAddicted(doc.getCollection().getSelectedDoc(), modelElement, AwbKommssVerbindung.class, ((MutipleCompositionPanel) edp).getSearchElementClass(), dialog.getTransactionID());
                     }
                     doc.select(modelElement.getContainer(doc.getCollection().getMainGraphDocument()), dialog.getTransactionID());
                 }
@@ -217,7 +217,7 @@ public class LGMActionLibrary {
         final ElementDialogPanel pane = edp;
         final ModelElement modelElement = edp.getModelElement();
 
-        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof ETNTPanel || edp instanceof ETNTPanel2 || edp instanceof BSNPanel || edp instanceof DoubleMeaningEdgePanel || edp instanceof KomPanel) {
+        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof ETNTPanel || edp instanceof ETNTPanel2 || edp instanceof MutipleCompositionPanel || edp instanceof DoubleMeaningEdgePanel || edp instanceof KomPanel) {
 
             LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
@@ -246,7 +246,7 @@ public class LGMActionLibrary {
                     }
                 }
             };
-            if (edp instanceof BSNPanel) {
+            if (edp instanceof MutipleCompositionPanel) {
                 returnAction.putValue("Name", Tool3lgmConstants.getResString("delete"));
                 returnAction.putValue("SmallIcon", null);
             }

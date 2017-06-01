@@ -28,7 +28,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * Das Panel für die Bausteinschnittstellen
  */
-public class BSNPanel extends ElementDialogPanel {
+public class MutipleCompositionPanel extends ElementDialogPanel {
 
     /**
      * COMMENTME
@@ -75,7 +75,7 @@ public class BSNPanel extends ElementDialogPanel {
      * @param searchElementClass
      * @param dl
      */
-    public BSNPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog dl) {
+    public MutipleCompositionPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog dl) {
         super(dl);
 
         this.searchElementClass = searchElementClass;
