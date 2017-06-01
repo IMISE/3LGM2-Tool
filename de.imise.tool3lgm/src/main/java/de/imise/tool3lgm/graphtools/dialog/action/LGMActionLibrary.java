@@ -29,7 +29,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel;
@@ -44,7 +43,6 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -116,30 +114,6 @@ public class LGMActionLibrary {
                 };
             }
 
-            else if (edp instanceof AufOrgPanel) {
-
-                return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-
-                    @Override
-                    public void execute(final EventObject eo) {
-                        TreePath[] selpaths = tree1.getSelectionPaths();
-                        if (selpaths != null && selpaths.length > 0) {
-                            boolean old_mode = gdcoll.isInteractiveMode();
-                            gdcoll.setInteractiveMode(false);
-                            for (int n = 0; n < selpaths.length; n++) {
-                                ModelElement kokMe = doc.createKnotenWithContainer(AufOrgKombination.class, dialog.getTransactionID()).getElement();
-                                LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                                ModelElement nodeMe = ((NodeContainer) node.getUserObject()).getElement();
-                                gdcoll.link(dndPanel.getEdgeType(kokMe, nodeMe), kokMe, nodeMe, dialog.getTransactionID());
-                                gdcoll.link(dndPanel.getEdgeType(kokMe, modelElement), kokMe, modelElement, dialog.getTransactionID());
-                            }
-                            gdcoll.setInteractiveMode(old_mode);
-                        }
-                        return;
-                    }
-
-                };
-            }
         } else if (edp instanceof BSNPanel) {
 
             return new LGMAction(Tool3lgmConstants.getResString("addButtonText")) {
@@ -278,27 +252,7 @@ public class LGMActionLibrary {
             }
 
             return returnAction;
-        }
 
-        else if (edp instanceof AufOrgPanel) {
-
-            return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-
-                @Override
-                public void execute(final EventObject eo) {
-                    TreePath[] selpaths = tree1.getSelectionPaths();
-                    if (selpaths != null) {
-                        for (int n = 0; n < selpaths.length; n++) {
-                            // if(lomodel.getChildCount(loroot)>0) return;
-                            LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                            ElementContainer knot = (ElementContainer) node.getUserObject();
-                            ElementContainer parent = (ElementContainer) node.getUserObject(1);
-                            gdcoll.unlink(parent.getElement(), knot.getElement(), dialog.getTransactionID());
-                        }
-                    }
-                    return;
-                }
-            };
         } else if (edp instanceof ProzessStructurePanel) {
             return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
                 @Override
@@ -675,31 +629,6 @@ public class LGMActionLibrary {
                                 gdcoll.link(dndPanel.getEdgeType(modelElement, k), modelElement, k, dialog.getTransactionID());
                             }
                         }
-                        // doc.finish_transaction(dialog.getTransactionID());
-                        // doc.distributeEvent(GraphDocument.DATA_CHANGED, null,
-                        // null, dialog.getTransactionID());
-                        return;
-                    }
-                };
-            } else if (panel instanceof AufOrgPanel) {
-                return new LGMAction(Tool3lgmConstants.getResString("new")) {
-                    @Override
-                    public void execute(final EventObject eo) {
-                        // doc.start_transaction(dialog.getTransactionID());
-                        boolean old_mode = gdcoll.isInteractiveMode();
-                        gdcoll.setInteractiveMode(true);
-                        NodeContainer newC = doc.createKnotenWithContainer(elementClass, dialog.getTransactionID());
-                        if (newC == null) {
-                            gdcoll.setInteractiveMode(old_mode);
-                            doc.undo(dialog.getTransactionID());
-                            return;
-                        }
-                        gdcoll.setInteractiveMode(false);
-                        doc.createKnotenWithContainer(AufOrgKombination.class, dialog.getTransactionID());
-                        gdcoll.setInteractiveMode(old_mode);
-                        NodeContainer kokC = doc.getLastCreated();
-                        gdcoll.link(dndPanel.getEdgeType(kokC.getElement(), newC.getElement()), kokC.getElement(), newC.getElement(), dialog.getTransactionID());
-                        gdcoll.link(dndPanel.getEdgeType(kokC.getElement(), panel.getModelElement()), kokC.getElement(), panel.getModelElement(), dialog.getTransactionID());
                         // doc.finish_transaction(dialog.getTransactionID());
                         // doc.distributeEvent(GraphDocument.DATA_CHANGED, null,
                         // null, dialog.getTransactionID());
