@@ -1,9 +1,11 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.AwbAufPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.BSNPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbOrgpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
@@ -44,7 +46,7 @@ public final class KonAnwendungsbaustein extends Anwendungsbaustein {
         dialog.addTab(getResString("Bausteinschnittstelle_p"), new BSNPanel(Bausteinschnittstelle.class, dialog));
         dialog.addTab(getResString("Benutzungsschnittstelle_p"), new BSNPanel(Benutzungsschnittstelle.class, dialog));
         dialog.addDescriptedSingleConnectionPanel(KawbOrgpVerbindung.class);
-        dialog.addTab(getResString("Aufgabe_p"), new AwbAufPanel(dialog));
+        dialog.addPathConnectionInfoPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
         return dialog;
     }
