@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
-import java.awt.Component;
 /**
  * @author AXS created on 20.05.2007
  */
@@ -19,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -28,7 +26,6 @@ import com.beust.jcommander.internal.Sets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -57,10 +54,10 @@ import de.imise.util.StringUtils;
  */
 public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
-    private final LGMDragNDropTree ltree;
-    private final LGMDragNDropTree rtree;
+    protected final LGMDragNDropTree ltree;
+    protected final LGMDragNDropTree rtree;
     private final DefaultTreeModel model, abmodel;
-    private final LGMTreeNode root, abroot;
+    protected final LGMTreeNode root, abroot;
     private final JLabel rtreeLabel;
     private final JScrollPane sp2;
     private final JPanel buttonpanel;
@@ -169,8 +166,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
          */
 
         try {
-            addAction = getAddElementAction(rtree, ltree);
-            removeAction = getDisconnectAction(ltree);
+            addAction = getConnectAction();
+            removeAction = getDisconnectAction();
             newElementAction = getNewConnectedElementAction();
         } catch (ActionNotDefinedForClassException e) {
             Log.log(Log.DEBUG, e.getMessage());
@@ -198,7 +195,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         remove(buttonpanel);
         remove(rtreeLabel);
         remove(sp2);
-        buildTree();
+        buildLeftTree();
         revalidate();
         repaint();
     }
@@ -227,6 +224,10 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
 
     private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
 
+    protected boolean isExcludeChildrenFromRightTree() {
+        return isConnectionPointUnique;
+    }
+
     /**
      * Sammelt für die letzte Kante alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
      * sie bereits verknüpft sind und kein weiteres Mal verknüpft werden können.
@@ -237,8 +238,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      */
     private void addChildrenToExcludeFromRtree(final int edgeIndex, final Collection<ElementContainer> potentialExcludeChildren, final boolean clear) {
         //nur bei Panels, bei denen der Pfad eindeutig verknüpfbar ist, kann man Elemente im rechten Baum ausschließen
-        if (isConnectionPointUnique) {
-            //beim ersten Durchlauf sollte die alte Collecion geleert werden
+        if (isExcludeChildrenFromRightTree()) {
+            //beim ersten Durchlauf sollte die alte Collection geleert werden
             if (clear) {
                 childrenToExcludeFromRtree.clear();
             }
@@ -249,12 +250,21 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         }
     }
 
-    private void buildTree() {
+    private void buildLeftTree() {
         ltree.saveExpansion();
         ltree.saveSelection();
         root.removeAllChildren();
         ltree.reset();
+        buildTree();
+        model.reload();
+        ltree.restoreExpansion();
+        ltree.restoreSelection();
+    }
 
+    /**
+     * Baut im linken Baum den gesamten Pfad auf
+     */
+    protected Collection<LGMTreeNode> buildTree() {
         int edgeIndex = 0;
         Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
         ModelElement me = getModelElement();
@@ -268,6 +278,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         if (UserProperties.isSearchParents()) {
             all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc));
         }
+        ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = Lists.newArrayListWithCapacity(all.size());
         for (ElementContainer ec : all) {
             LGMTreeNode node = ltree.addObject(ec, root, null, true, false, false);
@@ -284,6 +295,9 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
+                    if (edgeIndex + 1 == edgeClasses.length) {
+                        leafs.add(newNode);
+                    }
                     newNextStartNodes.add(newNode);
                 }
             }
@@ -293,11 +307,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         for (int i = firstLevelNodes.size() - 1; i >= firstNonSelectableIndex; i--) {
             firstLevelNodes.get(i).setSelectable(false);
         }
-
-        model.reload();
-        ltree.restoreExpansion();
-        ltree.restoreSelection();
-
+        return leafs.build();
     }
 
     /**
@@ -338,45 +348,50 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         };
     }
 
-    public final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree) throws ActionNotDefinedForClassException {
-        final Component panel = this;
+    /**
+     * Liefert den TreePath, der im linken Baum als selektiert gilt und an den der neue Pfad(teil)
+     * angehängt werden soll.
+     *
+     * @return
+     */
+    protected TreePath getConnectActionTargetTreeSelectionPath() {
+        // Anzahl der selektierten Zeilen im linken Ziel-Baum ermitteln
+        int targetTreeSelRowsCount = ltree.getSelectionCount();
+
+        // wenn im linken Ziel-Baum nur eine Zeile enthalten ist und bisher nichts
+        // selektiert ist, selektiere diese eine Zeile (falls die Zeile sich nicht
+        // selektieren lässt, weil sie dialbels ist, wenn si über Teil-Von-Beziehungen
+        // ererbt wurde, dann its danach immer noch nichts selektiert
+        if (targetTreeSelRowsCount == 0 && ltree.getRowCount() == 1) {
+            ltree.setSelectionRow(0);
+        }
+
+        // Anzahl der selektierten Zeilen im linken Ziel-Baum erneut ermitteln
+        targetTreeSelRowsCount = ltree.getSelectionCount();
+
+        //ausgewählter Path im TargetTree -> wenn sich vorher was selktieren ließ, dann das sonst der root
+        TreePath targetTreeSelectionPath = targetTreeSelRowsCount > 0 ? ltree.getSelectionPath() : new TreePath(ltree.getModel().getRoot());
+        return targetTreeSelectionPath;
+    }
+
+    protected LGMAction getConnectAction() throws ActionNotDefinedForClassException {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
             @Override
             public void execute(final EventObject eo) {
-
                 //falls in den TargetTree gedroppt wurde -> selektiere den zur DropPosition nächstegelegenen TreePath
-                LGMActionLibrary.getDragNDropLocateElementAsTargetAction(targetTree).execute(eo);
+                LGMActionLibrary.getDragNDropLocateElementAsTargetAction(ltree).execute(eo);
                 // Anzahl der selektierten Elemente im rechten Baum, die verbunden werden sollen, ermitteln
-                int srcTreeSelRowsCount = srcTree.getSelectionCount();
+                int srcTreeSelRowsCount = rtree.getSelectionCount();
                 if (srcTreeSelRowsCount < 1) {
-                    Static.showMessgae(panel, "selction_in_right_tree");
                     return;
                 }
-
-                // Anzahl der selektierten Zeilen im linken Ziel-Baum ermitteln
-                int targetTreeSelRowsCount = targetTree.getSelectionCount();
-
-                // wenn im linken Ziel-Baum nur eine Zeile enthalten ist und bisher nichts
-                // selektiert ist, selektiere diese eine Zeile (falls die Zeile sich nicht
-                // selektieren lässt, weil sie dialbels ist, wenn si über Teil-Von-Beziehungen
-                // ererbt wurde, dann its danach immer noch nichts selektiert
-                if (targetTreeSelRowsCount == 0 && targetTree.getRowCount() == 1) {
-                    targetTree.setSelectionRow(0);
-                }
-
-                // Anzahl der selektierten Zeilen im linken Ziel-Baum erneut ermitteln
-                targetTreeSelRowsCount = targetTree.getSelectionCount();
-
-                //ausgewählter Path im TargetTree -> wenn sich vorher was selktieren ließ, dann das sonst der root
-                TreePath targetTreeSelectionPath = targetTreeSelRowsCount > 0 ? targetTree.getSelectionPath() : new TreePath(targetTree.getModel().getRoot());
-                TreePath[] sourceTreePaths = srcTree.getSelectionPaths();
-
+                TreePath targetTreeSelectionPath = getConnectActionTargetTreeSelectionPath();
+                TreePath[] sourceTreePaths = rtree.getSelectionPaths();
                 connect(targetTreeSelectionPath, sourceTreePaths);
 
                 //TODO: das hier expandiert das neue überhaupt nicht, sondern nur bis zum vorher schon geöffneten Knoten. Das ist doof!
-                targetTree.expandPath(targetTreeSelectionPath);
-                targetTree.clearSelection();
-
+                ltree.expandPath(targetTreeSelectionPath);
+                ltree.clearSelection();
                 return;
             }
         };
@@ -387,7 +402,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         return getNodeModelElement(node);
     }
 
-    private static ModelElement getNodeModelElement(final LGMTreeNode node) {
+    protected static ModelElement getNodeModelElement(final LGMTreeNode node) {
         ElementContainer ec = (ElementContainer) node.getUserObject();
         ModelElement me = ec.getElement();
         return me;
@@ -401,18 +416,18 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      * @param srcTree linker Baum mit dem verknüpften Pfaden
      * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
      */
-    private final LGMAction getDisconnectAction(final JTree srcTree) {
+    protected LGMAction getDisconnectAction() {
         final PathConnectionPanel panel = this;
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
             @Override
             public void execute(final EventObject eo) {
-                int selrows = srcTree.getSelectionCount();
+                int selrows = ltree.getSelectionCount();
                 if (selrows < 1) {
                     return;
                 }
 
-                TreePath[] path2disconnect = srcTree.getSelectionPaths();
+                TreePath[] path2disconnect = ltree.getSelectionPaths();
                 for (int i = 0; i < path2disconnect.length; i++) {
                     //das ist der Index der Kante im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = path2disconnect[i].getPathCount() - 2;
@@ -422,10 +437,9 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
                 }
             }
         };
-
     }
 
-    private void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
+    protected final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
         int pid = getTransactionID();
@@ -457,7 +471,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      * @param targetTreePath
      * @param sourceTreePaths
      */
-    private void connect(final TreePath targetTreePath, final TreePath... sourceTreePaths) {
+    protected void connect(final TreePath targetTreePath, final TreePath... sourceTreePaths) {
 
         //das ist der Index der Kante im Pfad, ab der hinzugefügt werden soll
         int targetTreePathEdgeIndex = targetTreePath.getPathCount() - 1;

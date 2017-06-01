@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
@@ -409,6 +410,14 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
 
     public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
         addTab(new PathConnectionPanel(this, labelLastEdgeName, true, edgeClasses));
+    }
+
+    public void addPathConnectionLeafPanel(final Class<? extends Kante>... edgeClasses) {
+        addPathConnectionLeafPanel(false, edgeClasses);
+    }
+
+    public void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, true, edgeClasses));
     }
 
     public void addPathConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
