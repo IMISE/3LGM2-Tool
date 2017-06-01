@@ -176,12 +176,15 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      */
     private boolean isSingleConnectionPath() {
         for (int i = 0; i < edgeClasses.length; i++) {
+            Class<? extends Kante> edgeClass = edgeClasses[i];
             if (directions[i] == FORWARD) {
-                if (Kante.getMaxStartToEndCardinality(edgeClasses[searchEdgeIndex]) > 1) {
+                int maxCard = Kante.getMaxStartToEndCardinality(edgeClass);
+                if (maxCard > 1) {
                     return false;
                 }
             } else {
-                if (Kante.getMaxEndToStartCardinality(edgeClasses[searchEdgeIndex]) > 1) {
+                int maxCard = Kante.getMaxEndToStartCardinality(edgeClass);
+                if (maxCard > 1) {
                     return false;
                 }
             }
