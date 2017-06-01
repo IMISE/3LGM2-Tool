@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -15,6 +14,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.EtAufVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.OrgAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
@@ -65,7 +65,7 @@ public final class Aufgabe extends Knoten {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addTab(new DoubleMeaningEdgePanel(AufObjVerbindung.class, dialog));
-        dialog.addTab(getResString("Organisationseinheit"), new AufOrgPanel(Organisationseinheit.class, dialog, true));
+        dialog.addPathConnectionLeafPanel(AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(EtAufVerbindung.class);
         dialog.addPathConnectionPanel(AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
         return dialog;

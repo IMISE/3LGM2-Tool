@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.AufOrgPanel;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.OrgAufOrgVerbindung;
 
 public final class Organisationseinheit extends Knoten {
 
@@ -22,7 +23,7 @@ public final class Organisationseinheit extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Aufgabe_p"), new AufOrgPanel(Aufgabe.class, dialog, true));
+        dialog.addPathConnectionLeafPanel(OrgAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         return dialog;
     }
 
