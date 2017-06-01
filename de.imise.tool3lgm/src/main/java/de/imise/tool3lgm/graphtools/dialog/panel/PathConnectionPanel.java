@@ -318,9 +318,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         abroot.removeAllChildren();
         rtree.reset();
         for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass, true, true)) {
-            if (!childrenToExcludeFromRtree.contains(ec)) {
-                rtree.addObject(ec, abroot, null, false, true);
-            }
+            rtree.addObject(ec, abroot, childrenToExcludeFromRtree, false, true);
         }
         abmodel.reload();
         rtree.restoreExpansion();
