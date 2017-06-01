@@ -43,8 +43,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     }
 
     @Override
-    protected boolean isExcludeChildrenFromRightTree() {
-        //alle Elemente, die bereits verknüpft sind, können nicht noch einmal verknüpft werden
+    protected boolean isConnectionPointUnique() {
+        //es wird immer an root angehängt
         return true;
     }
 

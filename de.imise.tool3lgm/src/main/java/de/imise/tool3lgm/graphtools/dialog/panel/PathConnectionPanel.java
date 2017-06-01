@@ -222,11 +222,10 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         }
     }
 
+    /**
+     * Set aller TreeNodes, die im linken Baum bereits verknüpft sind und im rechten nicht mehr auftauchen sollen
+     */
     private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
-
-    protected boolean isExcludeChildrenFromRightTree() {
-        return isConnectionPointUnique;
-    }
 
     /**
      * Sammelt für die letzte Kante alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
@@ -238,7 +237,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
      */
     private void addChildrenToExcludeFromRtree(final int edgeIndex, final Collection<ElementContainer> potentialExcludeChildren, final boolean clear) {
         //nur bei Panels, bei denen der Pfad eindeutig verknüpfbar ist, kann man Elemente im rechten Baum ausschließen
-        if (isExcludeChildrenFromRightTree()) {
+        if (isConnectionPointUnique) {
             //beim ersten Durchlauf sollte die alte Collection geleert werden
             if (clear) {
                 childrenToExcludeFromRtree.clear();

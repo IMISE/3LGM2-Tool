@@ -336,7 +336,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      *
      * @return
      */
-    private boolean isConnectionPointUnique() {
+    protected boolean isConnectionPointUnique() {
         //für alle Kanten außer der letzten
         for (int i = 0; i < lastEdgeIndex; i++) {
             //hole die maximale Verbindungsanzahl zum nächsten Element
