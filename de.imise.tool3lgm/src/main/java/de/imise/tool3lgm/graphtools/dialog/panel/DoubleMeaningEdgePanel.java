@@ -67,11 +67,14 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
         JLabel oben = new JLabel(getEdgeDisplayName(Doppelkante.BACKWARD));
 
+        //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
+        boolean showRootHandles = ModelConstants.canHaveParts(this.searchElementClass);
+
         oroot = new LGMTreeNode("invisible root", false);
         omodel = new DefaultTreeModel(oroot);
         otree = new LGMDragNDropTree(omodel, mainDoc);
         otree.setRootVisible(false);
-        otree.setShowsRootHandles(true);
+        otree.setShowsRootHandles(showRootHandles);
         otree.setCellRenderer(treeRenderer);
         otree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp1 = new JScrollPane(otree);
@@ -82,7 +85,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         umodel = new DefaultTreeModel(uroot);
         utree = new LGMDragNDropTree(umodel, mainDoc);
         utree.setRootVisible(false);
-        utree.setShowsRootHandles(true);
+        utree.setShowsRootHandles(showRootHandles);
         utree.setCellRenderer(treeRenderer);
         utree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
@@ -108,7 +111,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         romodel = new DefaultTreeModel(roroot);
         rotree = new LGMDragNDropTree(romodel, mainDoc);
         rotree.setRootVisible(false);
-        rotree.setShowsRootHandles(true);
+        rotree.setShowsRootHandles(showRootHandles);
         rotree.setCellRenderer(treeRenderer);
         rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         sp3 = new JScrollPane(rotree);
@@ -119,7 +122,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         rumodel = new DefaultTreeModel(ruroot);
         rutree = new LGMDragNDropTree(rumodel, mainDoc);
         rutree.setRootVisible(false);
-        rutree.setShowsRootHandles(true);
+        rutree.setShowsRootHandles(showRootHandles);
         rutree.setCellRenderer(treeRenderer);
         rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         sp4 = new JScrollPane(rutree);

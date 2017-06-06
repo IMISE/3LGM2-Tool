@@ -2111,14 +2111,14 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return <code>true</code>, wenn die Elementart eine PartOfBeziehung hat
      */
     public final boolean canHaveParts() {
-        return ModelConstants.getHasPartsEdgeClasses(getClass()).length > 0;
+        return ModelConstants.canHaveParts(getClass());
     }
 
     /**
      * @return <code>true</code>, wenn die Elementart eine PartOfBeziehung hat
      */
     public final boolean canHaveParents() {
-        return ModelConstants.getIsPartOfEdgeClasses(getClass()).length > 0;
+        return ModelConstants.canHaveParents(getClass());
     }
 
     /**

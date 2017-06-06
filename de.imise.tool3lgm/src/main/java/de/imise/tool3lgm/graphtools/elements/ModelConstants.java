@@ -1115,6 +1115,14 @@ public final class ModelConstants {
 
     }
 
+    public static final boolean canHaveParts(final Class<? extends ModelElement> elementClass) {
+        return getHasPartsEdgeClasses(elementClass).length > 0;
+    }
+
+    public static final boolean canHaveParents(final Class<? extends ModelElement> elementClass) {
+        return getIsPartOfEdgeClasses(elementClass).length > 0;
+    }
+
     /**
      * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
      * können.
