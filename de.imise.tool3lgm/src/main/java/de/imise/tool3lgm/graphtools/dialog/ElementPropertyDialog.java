@@ -23,12 +23,15 @@ import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
+import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -377,7 +380,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     public void addTabbedPanelPathConnectionPanel(final Class<? extends Kante>... edgeClasses) {
-        lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, edgeClasses));
+        addTabbedPanelPathConnectionPanel(null, edgeClasses);
     }
 
     public void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
@@ -385,10 +388,18 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     public void addDescripSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
-        addDescripSingleConnectionPanel(false, edgeClasses);
+        addDescripSingleConnectionPanel(null, edgeClasses);
+    }
+
+    public void addDescripSingleConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        addDescripSingleConnectionPanel(false, searchElementClass, edgeClasses);
     }
 
     public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+    }
+
+    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
         descripPanel.addSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
@@ -397,6 +408,10 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+        addDescripDescriptedSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+    }
+
+    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
         descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
@@ -408,8 +423,16 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         addPathConnectionPanel(false, edgeClasses);
     }
 
+    public void addPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        addPathConnectionPanel(false, searchElementClass, edgeClasses);
+    }
+
     public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
-        addTab(new PathConnectionPanel(this, labelLastEdgeName, true, edgeClasses));
+        addPathConnectionPanel(labelLastEdgeName, null, edgeClasses);
+    }
+
+    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        addTab(new PathConnectionPanel(this, labelLastEdgeName, true, searchElementClass, edgeClasses));
     }
 
     public void addPathConnectionLeafPanel(final Class<? extends Kante>... edgeClasses) {
@@ -422,6 +445,20 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
 
     public void addPathConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
         addTab(new PathConnectionPanel(this, false, edgeClasses));
+    }
+
+    public void addEdgePanel(final Class<? extends Kante> edgeClass) {
+        addEdgePanel(null, edgeClass);
+    }
+
+    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+        if (ModelConstants.isComposition(edgeClass)) {
+            addTab(new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(Composition.class)));
+        } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+            addTab(new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass));
+        } else {
+            addPathConnectionPanel(searchElementClass, edgeClass);
+        }
     }
 
 }

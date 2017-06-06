@@ -1350,6 +1350,10 @@ public final class ModelConstants {
         }
     }
 
+    public static final boolean isComposition(final Class<? extends Kante> edgeClass) {
+        return Composition.class.isAssignableFrom(edgeClass);
+    }
+
     /**
      * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder
      * übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
@@ -1365,7 +1369,7 @@ public final class ModelConstants {
         Class<? extends Kante>[] elementClassEdges = getEdgeTypes(elementClass);
         ArrayList<Class<? extends Kante>> subEdgeTypes = new ArrayList<Class<? extends Kante>>(elementClassEdges.length);
         for (Class<? extends Kante> edgeClass : elementClassEdges) {
-            if (Composition.class.isAssignableFrom(edgeClass)) {
+            if (isComposition(edgeClass)) {
                 if (isMaster) {
                     if (Kante.isStartClass(edgeClass, elementClass)) {
                         subEdgeTypes.add(edgeClass);
@@ -1451,7 +1455,7 @@ public final class ModelConstants {
      */
     public static boolean isSlaveType(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass)) {
-            if (Composition.class.isAssignableFrom(edgeClass) && Kante.isEndClass(edgeClass, elementClass)) {
+            if (isComposition(edgeClass) && Kante.isEndClass(edgeClass, elementClass)) {
                 return true;
             }
         }

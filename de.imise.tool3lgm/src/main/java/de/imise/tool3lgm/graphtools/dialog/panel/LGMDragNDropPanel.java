@@ -22,7 +22,7 @@ import de.imise.tool3lgm.log.Log;
  *         und Methoden zur Sammlung aller gewünschten DragNDrop-Aktionen bereitgestellt. Achtung!
  *         <code>init()</code> muss von allen erbenden Klassen aufgerufen werden.
  */
-public abstract class LGMDragNDropPanel extends ElementDialogPanel {
+public abstract class LGMDragNDropPanel extends ConnectedElementsPanel {
 
     /**
      * Konstruktor Ruft den Super-Konstruktor auf. Setzt Klassen-Attribute auf default-Werte
@@ -103,9 +103,7 @@ public abstract class LGMDragNDropPanel extends ElementDialogPanel {
      * @param tree
      */
     protected final ModelElement getTopLevelModelElement(final JTree tree) {
-
         ModelElement me = null;
-
         try {
             ElementPropertyDialog d = (ElementPropertyDialog) tree.getTopLevelAncestor();
             me = d.getModelElement();

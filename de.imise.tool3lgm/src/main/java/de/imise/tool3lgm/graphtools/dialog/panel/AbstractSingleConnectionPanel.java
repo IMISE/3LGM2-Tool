@@ -15,6 +15,12 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDr
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 
+/**
+ * Abtsractes Panel für Verbindungen mit einer Maximalen Verbindungsanzahl von 1.
+ *
+ * @author astruebi
+ * @created 05/2017
+ */
 public abstract class AbstractSingleConnectionPanel extends AbstractPathConnectionPanel {
 
     private final MouseListener mouseListener = createMouseListener();

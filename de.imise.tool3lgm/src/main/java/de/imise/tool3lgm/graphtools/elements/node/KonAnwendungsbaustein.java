@@ -1,10 +1,10 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbAwbkVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.KawbOrgpVerbindung;
@@ -43,8 +43,8 @@ public final class KonAnwendungsbaustein extends Anwendungsbaustein {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(KawbDoksVerbindung.class);
-        dialog.addTab(getResString("Bausteinschnittstelle_p"), new MutipleCompositionPanel(Bausteinschnittstelle.class, dialog));
-        dialog.addTab(getResString("Benutzungsschnittstelle_p"), new MutipleCompositionPanel(Benutzungsschnittstelle.class, dialog));
+        dialog.addEdgePanel(Bausteinschnittstelle.class, AwbKommssVerbindung.class);
+        dialog.addEdgePanel(Benutzungsschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addDescriptedSingleConnectionPanel(KawbOrgpVerbindung.class);
         dialog.addPathConnectionInfoPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);

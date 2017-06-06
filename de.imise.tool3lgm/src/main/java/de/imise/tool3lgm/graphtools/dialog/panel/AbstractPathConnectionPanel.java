@@ -35,14 +35,6 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     protected final Class<? extends Kante>[] edgeClasses;
 
     /**
-     * Die Elementklasse die im Panel angezeigt wird. Das muss nicht das Ende des durch die edgeClasses vorgegebenen Pfades
-     * sein, sondern kann auch eine Kante in der Mitte sein.
-     *
-     * @see #searchEdgeIndex
-     */
-    protected final Class<? extends ModelElement> searchElementClass;
-
-    /**
      * Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
      * wird. Der Pfad muss mindestens searchEdgeIndex + 1 Elemente haben, kann aber auch länger sein.
      */
@@ -66,11 +58,22 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
     /**
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
-     * @param edgeClass
      * @param dialog
+     * @param edgeClasses
      */
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
-        this(dialog, false, edgeClasses);
+        this(dialog, null, edgeClasses);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
+     *
+     * @param dialog
+     * @param searchElementClass
+     * @param edgeClasss
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        this(dialog, false, searchElementClass, edgeClasses);
     }
 
     /**
@@ -263,7 +266,7 @@ public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
      * @return
      */
     protected static boolean isCompositionFromMasterToSlave(final Class<? extends Kante> edgeClass, final int direction) {
-        boolean isEdgeComposition = Composition.class.isAssignableFrom(edgeClass);
+        boolean isEdgeComposition = ModelConstants.isComposition(edgeClass);
         isEdgeComposition &= direction == FORWARD;
         return isEdgeComposition;
     }

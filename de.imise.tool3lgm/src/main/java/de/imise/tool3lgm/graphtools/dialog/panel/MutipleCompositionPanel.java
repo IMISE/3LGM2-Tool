@@ -19,23 +19,23 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
+import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
+import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
+import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * Das Panel für die Bausteinschnittstellen
  */
-public class MutipleCompositionPanel extends ElementDialogPanel {
+public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
 
     /**
      * COMMENTME
@@ -45,12 +45,12 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
     /**
      * COMMENTME
      */
-    private final DefaultTreeModel lmodel;
+    private final DefaultTreeModel model;
 
     /**
      * COMMENTME
      */
-    private final LGMTreeNode lroot;
+    private final LGMTreeNode root;
 
     /**
      * COMMENTME
@@ -58,15 +58,6 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
     private JPanel workingpanel;
 
     private final JPanel buttonpanel;
-
-    /**
-     * COMMENTME
-     */
-    private final Class<? extends ModelElement> searchElementClass;
-
-    public Class<? extends ModelElement> getSearchElementClass() {
-        return searchElementClass;
-    }
 
     /**
      * COMMENTME
@@ -79,22 +70,21 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
     private LGMAction removeAction;
 
     /**
+     * @param dialog
      * @param searchElementClass
-     * @param dl
+     * @param edgeClass
      */
-    public MutipleCompositionPanel(final Class<? extends ModelElement> searchElementClass, final ElementPropertyDialog dl) {
-        super(dl);
-
-        this.searchElementClass = searchElementClass;
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Composition> edgeClass) {
+        super(dialog, searchElementClass, edgeClass);
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel label = new JLabel(Tool3lgmConstants.getResString("verb"));
-        lroot = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
-        lmodel = new DefaultTreeModel(lroot);
-        tree = new JTree(lmodel);
+        root = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        model = new DefaultTreeModel(root);
+        tree = new JTree(model);
         tree.setRootVisible(false);
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -114,8 +104,8 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
         JButton removeButton = new JButton();
 
         try {
-            addAction = getAddElementAction(null, null, this, false);
-            removeAction = getDisconnectAction(tree, null, this, false);
+            addAction = getCreateNewElementAction();
+            removeAction = getDisconnectAction();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,19 +142,19 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
     protected void init() {
         super.init();
         // remove(workingpanel);
-        lroot.removeAllChildren();
+        root.removeAllChildren();
         ModelElement modelElement = getModelElement();
         List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
         for (int m = 0; m < all.size(); m++) {
             LGMTreeNode node = new LGMTreeNode(all.get(m), false);
-            lroot.add(node);
+            root.add(node);
         }
         if (UserProperties.isSearchParts()) {
             all = ((Knoten) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new LGMTreeNode(all.get(m), false);
                 node.setSelectable(false);
-                lroot.add(node);
+                root.add(node);
             }
         }
         if (UserProperties.isSearchParents()) {
@@ -172,57 +162,46 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new LGMTreeNode(all.get(m), false);
                 node.setSelectable(false);
-                lroot.add(node);
+                root.add(node);
             }
         }
-        lmodel.reload();
+        model.reload();
         expandTree(tree);
         revalidate();
         repaint();
     }
 
-    @Override
-    protected void showFullDialog() {
-        if (true) {
-            return;
-        }
-        super.showFullDialog();
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 100;
-        constraints.weighty = 100;
-        constraints.anchor = GridBagConstraints.CENTER;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        add(this, workingpanel, constraints, 1, 3, 1, 3);
-
-        revalidate();
-        repaint();
-    }
-
+    //    @Override
+    //    protected void showFullDialog() {
+    //        if (true) {
+    //            return;
+    //        }
+    //        super.showFullDialog();
+    //        GridBagConstraints constraints = new GridBagConstraints();
+    //        constraints.fill = GridBagConstraints.NONE;
+    //        constraints.weightx = 100;
+    //        constraints.weighty = 100;
+    //        constraints.anchor = GridBagConstraints.CENTER;
+    //        constraints.fill = GridBagConstraints.HORIZONTAL;
+    //        add(this, workingpanel, constraints, 1, 3, 1, 3);
+    //
+    //        revalidate();
+    //        repaint();
+    //    }
+    //
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "addButtons" der Panels angefügt werden.
-     *
-     * @param srcTree
-     * @param targetTree
-     * @param edp
-     * @param switchTree
-     * @throws ActionNotDefinedForClassException
      */
-    public static final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree, final ElementDialogPanel edp, final boolean switchTree) throws ActionNotDefinedForClassException {
-        final GraphDocument doc = edp.getGraphDocument();
-        final ElementPropertyDialog dialog = edp.getDialog();
-        final ModelElement modelElement = edp.getModelElement();
-
+    public final LGMAction getCreateNewElementAction() {
         return new LGMAction(Tool3lgmConstants.getResString("addButtonText")) {
             @Override
             public void execute(final EventObject eo) {
-                doc.select(modelElement.getContainer(doc.getCollection().getMainGraphDocument()), dialog.getTransactionID());
-                if (edp instanceof MutipleCompositionPanel) {
-                    GraphDocument.createAddicted(doc.getCollection().getSelectedDoc(), modelElement, AwbKommssVerbindung.class, ((MutipleCompositionPanel) edp).getSearchElementClass(), dialog.getTransactionID());
-                }
-                doc.select(modelElement.getContainer(doc.getCollection().getMainGraphDocument()), dialog.getTransactionID());
+                int pid = getTransactionID();
+                GraphDocument selectedDoc = doc.getCollection().getSelectedDoc();
+                ModelElement me = getModelElement();
+                ElementContainer ec = me.getContainer(mainDoc);
+                doc.select(ec, pid);
+                GraphDocument.createAddicted(selectedDoc, me, edgeClasses[0].asSubclass(Composition.class), searchElementClass, pid);
+                doc.select(ec, pid);
             }
         };
     }
@@ -231,26 +210,12 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
      * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
      * sollte an die "removeButtons" der Panels angefügt werden.
-     *
-     * @param srcTree
-     * @param targetTree
-     * @param edp
-     * @param switchTree
-     * @throws ActionNotDefinedForClassException
      */
-    public static final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final ElementDialogPanel edp, final boolean switchTree) throws ActionNotDefinedForClassException {
-
-        final boolean switchIt = switchTree;
-        final JTree tree1 = srcTree;
-        final JTree tree2 = targetTree;
-        final GDCollection gdcoll = edp.getGraphDocument().getCollection();
-        final ElementPropertyDialog dialog = edp.getDialog();
-
+    public final LGMAction getDisconnectAction() {
         LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-
             @Override
             public void execute(final EventObject e) {
-                TreePath[] selpaths = tree1.getSelectionPaths();
+                TreePath[] selpaths = tree.getSelectionPaths();
                 if (selpaths != null) {
                     for (int n = 0; n < selpaths.length; n++) {
                         // if(lomodel.getChildCount(loroot)>0) return;
@@ -258,17 +223,9 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
                         ElementContainer knot = (ElementContainer) node.getUserObject();
 
                         ModelElement topLevelModelElement;
-                        if (tree2 == null) {
-                            topLevelModelElement = getTopLevelModelElement(tree1);
-                        } else {
-                            topLevelModelElement = getTopLevelModelElement(tree2);
-                        }
-
-                        if (switchIt == true) {
-                            gdcoll.unlink(knot.getElement(), topLevelModelElement, dialog.getTransactionID());
-                        } else {
-                            gdcoll.unlink(topLevelModelElement, knot.getElement(), dialog.getTransactionID());
-                        }
+                        topLevelModelElement = getModelElement();
+                        GDCollection gdcoll = getGraphDocument().getCollection();
+                        gdcoll.unlink(topLevelModelElement, knot.getElement(), getTransactionID());
                     }
                 }
             }
@@ -279,22 +236,14 @@ public class MutipleCompositionPanel extends ElementDialogPanel {
         return returnAction;
     }
 
-    /**
-     * Gibt das <code>ModelElement</code> des <code>ElementPropertyDialog</code> s wieder, in dem
-     * sich der <code>tree</code> befindet.
-     *
-     * @param tree TODO: diese Funktion hat jetzt das {@link LGMDragNDropPanel}, so dass das hier
-     *            irgendwann mal weg kann
-     */
-    private static ModelElement getTopLevelModelElement(final JTree tree) {
-        ModelElement me = null;
-        try {
-            ElementPropertyDialog d = (ElementPropertyDialog) tree.getTopLevelAncestor();
-            me = d.getModelElement();
-        } catch (Exception ex) {
-            Log.log(Log.ERROR, "LGMActionLibary: could'nt find TopLevelAncestor for tree", ex);
-        }
-        return me;
+    @Override
+    protected DragNDropActionChain[] collectDragNDropActionChains() {
+        return new DragNDropActionChain[] {};
+    }
+
+    @Override
+    public LGMDragNDropTree[] getAllDragNDropTrees() {
+        return new LGMDragNDropTree[] {};
     }
 
 }
