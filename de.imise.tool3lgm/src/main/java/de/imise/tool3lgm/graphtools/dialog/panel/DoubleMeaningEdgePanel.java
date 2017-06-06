@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,7 +28,6 @@ import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -40,6 +41,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * <br>
  * an. Hinzufügen von Assoziationen zw. den Elementen und Neuanlegen von Aufgaben bzw. Objekttypen
  * geht auch.
+ * Das hier könnte man auch aus 2 {@link PathConnectionPanel} zusammen bauen
  */
 public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
@@ -227,12 +229,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         childrenToExcludeFromRutree.clear();
 
         ModelElement modelElement = getModelElement();
-        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, AufObjVerbindung.class, Doppelkante.BACKWARD)) {
+        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
             otree.addObject(ec, oroot, null, true, false, false);
             childrenToExcludeFromRotree.add(ec);
         }
         if (UserProperties.isSearchParts()) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, AufObjVerbindung.class, Doppelkante.BACKWARD)) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
                 LGMTreeNode node = otree.addObject(ec, oroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -241,7 +243,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
         if (UserProperties.isSearchParents()) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, AufObjVerbindung.class, Doppelkante.BACKWARD)) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
                 LGMTreeNode node = otree.addObject(ec, oroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -250,12 +252,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
 
-        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, AufObjVerbindung.class, Doppelkante.FORWARD)) {
+        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
             utree.addObject(ec, uroot, null, true, false, false);
             childrenToExcludeFromRutree.add(ec);
         }
         if (UserProperties.isSearchParts()) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, AufObjVerbindung.class, Doppelkante.FORWARD)) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
                 LGMTreeNode node = utree.addObject(ec, uroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -264,7 +266,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
         if (UserProperties.isSearchParents()) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, AufObjVerbindung.class, Doppelkante.FORWARD)) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
                 LGMTreeNode node = utree.addObject(ec, uroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
