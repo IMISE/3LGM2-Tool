@@ -4,14 +4,12 @@
 package de.imise.tool3lgm.graphtools.elements.edge;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.ETNTPanel2;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
 
 /**
  * @author thomas
@@ -52,7 +50,7 @@ public final class KommBeziehung extends Doppelkante {
     //	private static Object[][] etcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-     * 
+     *
      */
     public KommBeziehung() {
         super();
@@ -74,7 +72,7 @@ public final class KommBeziehung extends Doppelkante {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("etntueb"), new ETNTPanel2(EtntEtdtKombination.class, dialog));
+        dialog.addEdgePanel(KommbezEtntVerbindung.class);
         return dialog;
     }
 
