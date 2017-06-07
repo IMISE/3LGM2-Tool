@@ -25,7 +25,6 @@ public class LGMTree extends CorrectSelectionTree {
         super(treeModel);
         this.doc = doc;
         setShowsRootHandles(true);
-        //super(new DefaultTreeModel(new LGMTreeNode(Tool3lgmConstants.getResourceBundle().getString("browser"), false, false)));
     }
 
     public LGMTree(final DefaultTreeModel treeModel) {
