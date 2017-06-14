@@ -94,6 +94,16 @@ public class LGMTree extends CorrectSelectionTree {
     // Model neu laden und Expansion + Selektion wiederherstellen //
     ////////////////////////////////////////////////////////////////
 
+    public final void saveExpansionAndSelection() {
+        saveExpansion();
+        saveSelection();
+    }
+
+    public final void restoreExpansionAndSelection() {
+        restoreExpansion();
+        restoreSelection();
+    }
+
     /**
      * <code>ArrayList</code> mit den <code>String</code>s der expandierten Pfade
      */
@@ -102,7 +112,7 @@ public class LGMTree extends CorrectSelectionTree {
     /**
      * Aktuelle Expansion merken
      */
-    public void saveExpansion() {
+    public final void saveExpansion() {
         //umständlich, aber alles andere zieht viel zu große Änderungen nach sich
         Enumeration<TreePath> e = getExpandedDescendants(new TreePath(treeModel.getRoot()));
         expandedPathStrings.clear();
@@ -117,7 +127,7 @@ public class LGMTree extends CorrectSelectionTree {
      * Expansion wieder herstellen. Da sich wenn man die Selektion wieder herstellen möchte eigentlich
      * immer das <code>TreeModel</code> geändert hat, wird es auch neu geladen.
      */
-    public void restoreExpansion() {
+    public final void restoreExpansion() {
         expandFull();
         if (expandedPathStrings.size() > 0) {
             //von hinten alle Pfade wieder zusammenklappen, die vorher auch nicht expandiert waren
@@ -146,7 +156,7 @@ public class LGMTree extends CorrectSelectionTree {
     /**
      * Expandiert den gesamten Baum
      */
-    public void expandFull() {
+    public final void expandFull() {
         for (int n = 0; n < getRowCount(); n++) {
             expandRow(n);
         }
@@ -160,7 +170,7 @@ public class LGMTree extends CorrectSelectionTree {
     /**
      * Aktuelle Selektion merken
      */
-    public void saveSelection() {
+    public final void saveSelection() {
         selectedPaths = getSelectionPaths();
         if (selectedPaths == null) {
             selectedPaths = new TreePath[0];
@@ -182,7 +192,7 @@ public class LGMTree extends CorrectSelectionTree {
      * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen möchte eigentlich
      * immer das <code>TreeModel</code> geändert hat, wird es auch neu geladen.
      */
-    public void restoreSelection() {
+    public final void restoreSelection() {
         if (selectedPaths.length == 0) {
             return;
         }
@@ -215,7 +225,7 @@ public class LGMTree extends CorrectSelectionTree {
      *
      * @param selectionSource Der Baum dessen Selektion nachgebildet werden soll
      */
-    public void restoreSelection(final LGMTree selectionSource) {
+    public final void restoreSelection(final LGMTree selectionSource) {
         TreePath[] sourceSelectedPaths = selectionSource.selectedPaths;
         for (int i = 0; i < sourceSelectedPaths.length; i++) {
             LGMTreeNode sourceNode = (LGMTreeNode) sourceSelectedPaths[i].getLastPathComponent();
@@ -237,7 +247,7 @@ public class LGMTree extends CorrectSelectionTree {
      *
      * @param selectionSource
      */
-    public void restoreSelectionAndScroll(final LGMTree selectionSource) {
+    public final void restoreSelectionAndScroll(final LGMTree selectionSource) {
         restoreSelection(selectionSource);
         scrollPathToVisible(getLeadSelectionPath());
     }

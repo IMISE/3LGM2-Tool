@@ -27,11 +27,9 @@ import de.imise.tool3lgm.graphtools.analyse.process.ProzessStructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
@@ -84,34 +82,30 @@ public class LGMActionLibrary {
         final ElementPropertyDialog dialog = edp.getDialog();
         final ModelElement modelElement = edp.getModelElement();
 
-        if (edp instanceof LGMDragNDropPanel) {
-
-            final LGMDragNDropPanel dndPanel = (LGMDragNDropPanel) edp;
-
-            if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof DoubleMeaningEdgePanel || edp instanceof KomPanel) {
-                return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-                    @Override
-                    public void execute(final EventObject e) {
-                        TreePath[] selpaths = tree1.getSelectionPaths();
-                        if (selpaths != null) {
-                            for (int n = 0; n < selpaths.length; n++) {
-                                // if(lomodel.getChildCount(loroot)>0) return;
-                                LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                                ModelElement me = ((ElementContainer) node.getUserObject()).getElement();
-                                ModelElement topLevelMe = getTopLevelModelElement(tree2);
-                                if (switchIt) {
-                                    gdcoll.link(dndPanel.getEdgeType(me, topLevelMe), me, topLevelMe, dialog.getTransactionID());
-                                } else {
-                                    gdcoll.link(dndPanel.getEdgeType(me, topLevelMe), topLevelMe, me, dialog.getTransactionID());
-                                }
+        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof DoubleMeaningEdgePanel) {
+            return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+                @Override
+                public void execute(final EventObject e) {
+                    TreePath[] selpaths = tree1.getSelectionPaths();
+                    if (selpaths != null) {
+                        for (int n = 0; n < selpaths.length; n++) {
+                            // if(lomodel.getChildCount(loroot)>0) return;
+                            LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
+                            ModelElement me = ((ElementContainer) node.getUserObject()).getElement();
+                            ModelElement topLevelMe = getTopLevelModelElement(tree2);
+                            if (switchIt) {
+                                gdcoll.link(me, topLevelMe, dialog.getTransactionID());
+                            } else {
+                                gdcoll.link(topLevelMe, me, dialog.getTransactionID());
                             }
                         }
                     }
+                }
 
-                };
-            }
+            };
+        }
 
-        } else if (edp instanceof ProzessStructurePanel) {
+        else if (edp instanceof ProzessStructurePanel) {
 
             return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
 
@@ -174,9 +168,8 @@ public class LGMActionLibrary {
                 }
             };
         } else {
-            throw new ActionNotDefinedForClassException(edp.getClass().getName());
+            return null;
         }
-        return null;
     }
 
     /**
@@ -200,7 +193,7 @@ public class LGMActionLibrary {
         final ElementDialogPanel pane = edp;
         final ModelElement modelElement = edp.getModelElement();
 
-        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof DoubleMeaningEdgePanel || edp instanceof KomPanel) {
+        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof DoubleMeaningEdgePanel) {
 
             LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
 
@@ -307,11 +300,11 @@ public class LGMActionLibrary {
      * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
      *
      * @param tree
-     * @param edp
+     * @param panel
      * @return
      */
-    public static final LGMAction getMouseAction(final JTree tree, final ElementDialogPanel edp) {
-        return getMouseActionInternal(tree, edp);
+    public static final LGMAction getMouseAction(final JTree tree, final ElementDialogPanel panel) {
+        return getMouseActionInternal(tree, panel);
     }
 
     /**
@@ -329,6 +322,8 @@ public class LGMActionLibrary {
                 boolean popup = Tool3lgmConstants.isPopupTrigger(e);
                 boolean doubleClick = !popup && e.getClickCount() > 1;
                 if (popup || doubleClick) {
+
+                    //find selection
                     int xin = e.getX();
                     int yin = e.getY();
                     Object selection = null;
@@ -350,6 +345,8 @@ public class LGMActionLibrary {
                         AbstractSingleConnectionPanel singleSelectionPanel = (AbstractSingleConnectionPanel) panel;
                         selection = singleSelectionPanel.getSelection();
                     }
+
+                    //set selection
                     GraphDocument doc = panel.getGraphDocument();
                     ElementContainer selected = null;
                     if (selection instanceof ElementContainer) {
@@ -379,14 +376,11 @@ public class LGMActionLibrary {
      * Methode liefert eine <code>LGMAction</code> zurück, die auf das Selektieren von Elementen in
      * Trees reagiert.
      *
-     * @param jTree
-     * @param edp
+     * @param tree
+     * @param panel
      * @return
      */
-    public static final LGMAction getTreeSelectionAction(final JTree jTree, final ElementDialogPanel edp) {
-
-        final ElementDialogPanel panel = edp;
-
+    public static final LGMAction getTreeSelectionAction(final JTree tree, final ElementDialogPanel panel) {
         return new LGMAction() {
             @Override
             public void execute(final EventObject e) {
@@ -464,7 +458,7 @@ public class LGMActionLibrary {
              * Attribut speichert den zuletzt angeklickten Tree, um mehrfaches Initialisieren von
              * DragNDrop zu vermeiden.
              */
-            private LGMDragNDropTree lastEnteredTree;
+            private JTree lastEnteredTree;
 
             /**
              * Falls <code>e</code> ein <code>MouseEvent</code> ist, wird in Abhängigkeit davon, ob
@@ -505,17 +499,17 @@ public class LGMActionLibrary {
 
                 blockDragNDropInitializing = true;
 
-                if (!(me.getSource() instanceof LGMDragNDropTree)) {
+                if (!(me.getSource() instanceof JTree)) {
                     return;
                 }
 
-                LGMDragNDropTree focusedTree = (LGMDragNDropTree) me.getSource();
+                JTree focusedTree = (JTree) me.getSource();
 
                 int n = dndActionChains.length;
 
                 if (n > 2) {
                     for (int i = 0; i < n; i++) {
-                        LGMDragNDropTree tree = dndActionChains[i].getSrcTree();
+                        JTree tree = dndActionChains[i].getSrcTree();
                         if (tree != focusedTree) {
                             tree.removeSelectionPaths(tree.getSelectionPaths());
                         }
@@ -534,8 +528,8 @@ public class LGMActionLibrary {
              */
             private void mouseEntered(final MouseEvent me) {
 
-                if (blockDragNDropInitializing == false && me.getSource() instanceof LGMDragNDropTree) {
-                    activateDragNDrop((LGMDragNDropTree) me.getSource());
+                if (blockDragNDropInitializing == false && me.getSource() instanceof JTree) {
+                    activateDragNDrop((JTree) me.getSource());
                 }
             }
 
@@ -545,21 +539,15 @@ public class LGMActionLibrary {
              *
              * @param focusedTree
              */
-            private void activateDragNDrop(final LGMDragNDropTree focusedTree) {
-
+            private void activateDragNDrop(final JTree focusedTree) {
                 if (lastEnteredTree == focusedTree) {
                     return;
                 }
-
                 lastEnteredTree = focusedTree;
-
                 for (int i = 0; i < dndActionChains.length; i++) {
                     DragNDropActionChain dndAC = dndActionChains[i];
-
                     if (dndAC.getSrcTree() == focusedTree) {
-
                         DragNDropInitializer.initDragNDrop(dndAC);
-
                     }
                 }
             }
@@ -841,10 +829,7 @@ public class LGMActionLibrary {
         return new LGMAction() {
             @Override
             public void execute(final EventObject eo) {
-                if (!panel.isAlreadyInitialized()) {
-                    panel.setAlreadyInitialized(true);
-                    panel.update();
-                }
+                panel.update();
             }
         };
     }

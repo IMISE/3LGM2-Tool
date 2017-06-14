@@ -22,17 +22,17 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 public class NConnectionPanel extends LGMDragNDropPanel {
 
-    private final LGMDragNDropTree ltree;
+    private final LGMTree ltree;
 
-    private final LGMDragNDropTree rtree;
+    private final LGMTree rtree;
 
     private final DefaultTreeModel lmodel, rmodel;
     private final LGMTreeNode lroot, rroot;
@@ -82,7 +82,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         lmodel = new DefaultTreeModel(lroot);
 
         // FST: geändert!
-        ltree = new LGMDragNDropTree(lmodel, mainDoc);
+        ltree = new LGMTree(lmodel, mainDoc);
         ltree.setName("ltree");
 
         ltree.setRootVisible(false);
@@ -117,7 +117,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         rmodel = new DefaultTreeModel(rroot);
 
         // FST: geändert!
-        rtree = new LGMDragNDropTree(rmodel, mainDoc);
+        rtree = new LGMTree(rmodel, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
         rtree.setShowsRootHandles(true);
@@ -180,19 +180,18 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         if (mw) {
             buttonpanel.add(newElementButton);
         }
-
-        init();
+        update();
     }
 
     ArrayList<ElementContainer> childrenToExcludeFromRtree = new ArrayList<ElementContainer>(5000);
 
     @Override
-    protected void init() {
-        super.init();
-        remove(buttonpanel);
-        remove(rtreeLabel);
-        remove(rtreeScollPane);
-
+    public void update() {
+        if (!checkShowFullDialog()) {
+            remove(buttonpanel);
+            remove(rtreeLabel);
+            remove(rtreeScollPane);
+        }
         childrenToExcludeFromRtree.clear();
         lroot.removeAllChildren();
         ltree.reset();
@@ -230,12 +229,9 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         repaint();
     }
 
-    @Override
-    protected void showFullDialog() {
-
-        super.showFullDialog();
-
-        if (editable) {
+    private boolean checkShowFullDialog() {
+        boolean showRightSide = editable && isRightSideShouldBeVisible();
+        if (showRightSide && buttonpanel.getParent() == null) {
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.HORIZONTAL;
             constraints.weightx = 1;
@@ -262,6 +258,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         }
         revalidate();
         repaint();
+        return showRightSide;
     }
 
     //
@@ -319,8 +316,8 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     }
 
     @Override
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {
+    public LGMTree[] getAllDragNDropTrees() {
+        return new LGMTree[] {
                 rtree,
                 ltree
         };

@@ -95,11 +95,10 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         }
 
         createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass)) : null;
-        init();
     }
 
     @Override
-    protected void init() {
+    public void update() {
         List<ElementContainer> allConnectedContainers = getConnectedContainer();
         ElementContainer connectedContainer = allConnectedContainers.isEmpty() ? null : allConnectedContainers.get(0);
         connectedElement = connectedContainer == null ? null : connectedContainer.getElement();
@@ -206,7 +205,6 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
                 modelElement.getContainer(mainDoc).refreshText();
                 mainDoc.finish_transaction(dialog.getTransactionID());
                 mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, dialog.getTransactionID());
-                panel.showFullDialog(false);
             }
         };
     }

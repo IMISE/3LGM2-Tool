@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
-public class ConnectedElementsPanel extends ElementDialogPanel {
+public abstract class ConnectedElementsPanel extends ElementDialogPanel {
 
     /**
      * Die Elementklasse die im Panel angezeigt wird. Das muss nicht das Ende des durch die edgeClasses vorgegebenen Pfades

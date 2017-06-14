@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
  * @author AXS
  * @created 24.04.2017
  */
-public abstract class AbstractPathOfOneEdgePanel extends AbstractPathConnectionPanel {
+public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel {
 
     /** Die Kantenklasse zum anderen Element */
     protected final Class<? extends Kante> edgeClass;
@@ -23,10 +23,23 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractPathConnectionP
      * Panel für eine einfache Assoziation
      *
      * @param dialog
+     * @param searchElementClass
      * @param edgeClass
      */
     public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
-        super(dialog, searchElementClass, edgeClass);
+        this(dialog, false, searchElementClass, edgeClass);
+    }
+
+    /**
+     * Panel für eine einfache Assoziation
+     *
+     * @param dialog
+     * @param labelEdgeName
+     * @param searchElementClass
+     * @param edgeClass
+     */
+    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+        super(dialog, labelEdgeName, searchElementClass, edgeClass);
         this.edgeClass = edgeClass;
         edgeIsForward = directions[0] == FORWARD;
     }

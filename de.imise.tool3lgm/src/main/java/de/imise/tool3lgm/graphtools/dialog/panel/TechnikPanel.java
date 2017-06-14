@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -63,19 +65,21 @@ public class TechnikPanel extends ElementDialogPanel {
 
         label = new JLabel(Tool3lgmConstants.getResString("verfuegbarkeit"));
         area.add(label);
-        verfuegbarkeit = new JLabel(Float.toString(((PhysischerDVBaustein) modelElement).getVerfuegbarkeit(getDialog().getGraphDocument().getCollection().getMainGraphDocument())));
+        verfuegbarkeit = new JLabel();
         area.add(verfuegbarkeit);
 
         add(area);
     }
 
     @Override
-    protected void init() {
-        verfuegbarkeit.setText(Float.toString(((PhysischerDVBaustein) getModelElement()).getVerfuegbarkeit(getDialog().getGraphDocument().getCollection().getMainGraphDocument())));
-    }
-
-    @Override
-    protected void showFullDialog() {
+    public void update() {
+        GraphDocument doc = getGraphDocument();
+        GDCollection gdcoll = doc.getCollection();
+        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        PhysischerDVBaustein physischerDVBaustein = (PhysischerDVBaustein) getModelElement();
+        float value = physischerDVBaustein.getVerfuegbarkeit(mainDoc);
+        String text = Float.toString(value);
+        verfuegbarkeit.setText(text);
     }
 
     @Override

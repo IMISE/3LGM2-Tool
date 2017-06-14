@@ -30,19 +30,15 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Pair;
@@ -52,15 +48,17 @@ import de.imise.util.StringUtils;
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
  * angezeigt, hinzugefügt und entfernt werden.
  */
-public class PathConnectionPanel extends AbstractPathConnectionPanel {
+public class PathConnectionPanel extends AbstractExpandablePanel {
 
-    protected final LGMDragNDropTree ltree;
-    protected final LGMDragNDropTree rtree;
-    private final DefaultTreeModel model, abmodel;
-    protected final LGMTreeNode root, abroot;
-    private final JLabel rtreeLabel;
-    private final JScrollPane sp2;
-    private final JPanel buttonpanel;
+    protected final LGMTree ltree;
+    protected LGMTree rtree;
+    private final DefaultTreeModel model;
+    private DefaultTreeModel abmodel;
+    protected LGMTreeNode root;
+    protected LGMTreeNode abroot;
+    private JLabel rtreeLabel;
+    private JScrollPane sp2;
+    private JPanel buttonpanel;
     private final boolean showRightTree;
 
     private LGMAction addAction;
@@ -104,98 +102,86 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         JLabel ltreeLabel = westLabel;
         root = new LGMTreeNode(getModelElement().getContainer(mainDoc), false);
         model = new DefaultTreeModel(root);
-        ltree = new LGMDragNDropTree(model, mainDoc);
+        ltree = new LGMTree(model, mainDoc);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp = new JScrollPane(ltree);
 
-        if (showRightTree) {
-            constraints.anchor = GridBagConstraints.EAST;
-            constraints.ipadx = -30;
-            constraints.ipady = -10;
-            add(this, viewButton, constraints, 0, 5, 1, 1);
-        }
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
         add(this, ltreeLabel, constraints, 0, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 100;
-        constraints.weighty = 100;
+        constraints.weightx = 1d;
+        constraints.weighty = 1d;
         add(this, sp, constraints, 0, 1, 1, 4);
 
-        rtreeLabel = new JLabel(rtreeLabelString);
-        abroot = new LGMTreeNode(rtreeLabelString, false);
-        abmodel = new DefaultTreeModel(abroot);
-        rtree = new LGMDragNDropTree(abmodel, mainDoc);
-        rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        rtree.setRootVisible(false);
-        rtree.setShowsRootHandles(true);
-        rtree.setCellRenderer(treeRenderer);
-        sp2 = new JScrollPane(rtree);
+        if (showRightTree) {
+            constraints.anchor = GridBagConstraints.EAST;
+            constraints.weightx = 0d;
+            constraints.weighty = 0d;
+            constraints.fill = GridBagConstraints.NONE;
+            //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
+            //            constraints.ipadx = -30;
+            //            constraints.ipady = -10;
+            add(this, viewButton, constraints, 0, 5, 1, 1);
+            constraints.weightx = 1d;
+            constraints.weighty = 1d;
+            constraints.fill = GridBagConstraints.BOTH;
+            rtreeLabel = new JLabel(rtreeLabelString);
+            abroot = new LGMTreeNode(rtreeLabelString, false);
+            abmodel = new DefaultTreeModel(abroot);
+            rtree = new LGMTree(abmodel, mainDoc);
+            rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            rtree.setRootVisible(false);
+            rtree.setShowsRootHandles(true);
+            rtree.setCellRenderer(treeRenderer);
+            sp2 = new JScrollPane(rtree);
 
-        /*
-         * Start: MouseListener erstellen und an Trees anhängen ...
-         */
-        LGMAction ltreeMouseAction = LGMActionLibrary.getMouseAction(ltree, this);
-        LGMAction rtreeMouseAction = LGMActionLibrary.getMouseAction(rtree, this);
+            //            initDragAndDropTreeActions(rtree);
+            //            initDragAndDropTreeActions(ltree);
 
-        ltree.addMouseListener(new LGMMouseListener(null, null, null, ltreeMouseAction, null));
-        rtree.addMouseListener(new LGMMouseListener(null, null, null, rtreeMouseAction, null));
-        /*
-         * ... End: MouseListener erstellen und an Trees anhängen
-         */
-
-        /*
-         * Start: TreeSelectionListener erstellen und an Trees anhängen ...
-         */
-        LGMAction ltreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(ltree, this);
-        LGMAction rtreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rtree, this);
-
-        ltree.addTreeSelectionListener(new LGMTreeSelectionListener(ltreeSelectionAction));
-        rtree.addTreeSelectionListener(new LGMTreeSelectionListener(rtreeSelectionAction));
-        /*
-         * ... End: TreeSelectionListener erstellen und an Trees anhängen
-         */
-
-        /*
-         * Start: Buttons & Actions erstellen, Actions setzen ...
-         */
-
-        try {
+            //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
             removeAction = getDisconnectAction();
             newElementAction = getNewConnectedElementAction();
-        } catch (ActionNotDefinedForClassException e) {
-            Log.log(Log.DEBUG, e.getMessage());
+
+            buttonpanel = new JPanel();
+            buttonpanel.setSize(30, 250);
+            buttonpanel.setLayout(new GridLayout(3, 1));
+            buttonpanel.add(new JButton(addAction));
+            buttonpanel.add(new JButton(removeAction));
+            if (newElementAction != null) {
+                buttonpanel.add(new JButton(newElementAction));
+            }
+
         }
 
-        /*
-         * ... end: Buttons & Actions erstellen, Actions setzen
-         */
+        initTreeListenerAndDragNDrop();
 
-        buttonpanel = new JPanel();
-        buttonpanel.setSize(30, 250);
-        buttonpanel.setLayout(new GridLayout(3, 1));
-        buttonpanel.add(new JButton(addAction));
-        buttonpanel.add(new JButton(removeAction));
-        if (newElementAction != null) {
-            buttonpanel.add(new JButton(newElementAction));
-        }
-
-        init();
+        showFullDialog(true);
     }
 
+    //    private void initDragAndDropTreeActions(final JTree tree) {
+    //        //MouseListener erstellen und an Trees anhängen ...
+    //        LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
+    //        LGMMouseListener lgmMouseListener = new LGMMouseListener(null, null, null, treeMouseAction, null);
+    //        tree.addMouseListener(lgmMouseListener);
+    //        //Start: TreeSelectionListener erstellen und an Trees anhängen ...
+    //        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
+    //        LGMTreeSelectionListener lgmTreeSelectionListener = new LGMTreeSelectionListener(treeSelectionAction);
+    //        tree.addTreeSelectionListener(lgmTreeSelectionListener);
+    //    }
+
     @Override
-    public void init() {
-        super.init();
-        remove(buttonpanel);
-        remove(rtreeLabel);
-        remove(sp2);
+    public void update() {
         buildLeftTree();
+        if (showRightTree && isRightSideVisible()) {
+            buildRightTree();
+        }
         revalidate();
         repaint();
     }
@@ -203,7 +189,6 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     @Override
     public void showFullDialog() {
         if (showRightTree) {
-            super.showFullDialog();
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.NONE;
             add(this, buttonpanel, constraints, 1, 3, 1, 2);
@@ -211,14 +196,18 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
             add(this, rtreeLabel, constraints, 2, 0, 1, 1);
             constraints.anchor = GridBagConstraints.WEST;
             constraints.fill = GridBagConstraints.BOTH;
-            constraints.weightx = 100;
-            constraints.weighty = 100;
+            constraints.weightx = 1d;
+            constraints.weighty = 1d;
             add(this, sp2, constraints, 2, 1, 1, 4);
+        }
+    }
 
-            buildRightTree();
-
-            revalidate();
-            repaint();
+    @Override
+    protected void showPartlyDialog() {
+        if (showRightTree) {
+            remove(buttonpanel);
+            remove(rtreeLabel);
+            remove(sp2);
         }
     }
 
@@ -250,14 +239,12 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     private void buildLeftTree() {
-        ltree.saveExpansion();
-        ltree.saveSelection();
+        ltree.saveExpansionAndSelection();
         root.removeAllChildren();
         ltree.reset();
         buildTree();
         model.reload();
-        ltree.restoreExpansion();
-        ltree.restoreSelection();
+        ltree.restoreExpansionAndSelection();
     }
 
     /**
@@ -338,8 +325,8 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     @Override
-    public final LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {
+    public final LGMTree[] getAllDragNDropTrees() {
+        return new LGMTree[] {
                 rtree,
                 ltree
         };
@@ -371,7 +358,7 @@ public class PathConnectionPanel extends AbstractPathConnectionPanel {
         return targetTreeSelectionPath;
     }
 
-    protected LGMAction getConnectAction() throws ActionNotDefinedForClassException {
+    protected LGMAction getConnectAction() {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
             @Override
             public void execute(final EventObject eo) {

@@ -23,8 +23,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -135,12 +133,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
         constraints.weighty = 100;
         add(this, sp, constraints, 0, 1, 3, 1);
 
-        init();
+        update();
     }
 
     @Override
-    protected void init() {
-        super.init();
+    public void update() {
         // remove(workingpanel);
         root.removeAllChildren();
         ModelElement modelElement = getModelElement();
@@ -171,25 +168,8 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
         repaint();
     }
 
-    //    @Override
-    //    protected void showFullDialog() {
-    //        if (true) {
-    //            return;
-    //        }
-    //        super.showFullDialog();
-    //        GridBagConstraints constraints = new GridBagConstraints();
-    //        constraints.fill = GridBagConstraints.NONE;
-    //        constraints.weightx = 100;
-    //        constraints.weighty = 100;
-    //        constraints.anchor = GridBagConstraints.CENTER;
-    //        constraints.fill = GridBagConstraints.HORIZONTAL;
-    //        add(this, workingpanel, constraints, 1, 3, 1, 3);
-    //
-    //        revalidate();
-    //        repaint();
-    //    }
-    //
     /**
+     *
      */
     public final LGMAction getCreateNewElementAction() {
         return new LGMAction(Tool3lgmConstants.getResString("addButtonText")) {
@@ -234,16 +214,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
         returnAction.putValue("SmallIcon", null);
 
         return returnAction;
-    }
-
-    @Override
-    protected DragNDropActionChain[] collectDragNDropActionChains() {
-        return new DragNDropActionChain[] {};
-    }
-
-    @Override
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {};
     }
 
 }

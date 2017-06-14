@@ -11,8 +11,6 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 
 /**
@@ -38,16 +36,6 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
         LGMAction mouseAction = LGMActionLibrary.getMouseAction(this);
         MouseListener mouseListener = new LGMMouseListener(null, null, null, mouseAction, null);
         return mouseListener;
-    }
-
-    @Override
-    protected final DragNDropActionChain[] collectDragNDropActionChains() {
-        return new DragNDropActionChain[] {};
-    }
-
-    @Override
-    public final LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {};
     }
 
     /**

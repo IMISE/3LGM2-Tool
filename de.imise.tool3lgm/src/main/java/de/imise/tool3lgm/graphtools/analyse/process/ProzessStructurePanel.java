@@ -40,7 +40,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -51,6 +50,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
@@ -61,7 +61,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * COMMENTME
      */
-    private final LGMDragNDropTree ltree, rtree;
+    private final LGMTree ltree, rtree;
 
     /**
      * COMMENTME
@@ -180,10 +180,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
         prozess = (Prozess) getModelElement();
 
-        // legt fest, dass im der rechte Baum gleich beim öfnnen zu sehen ist
-        // und nicht erst nach dem aufklappen
-        rightSideVisible = true;
-
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -192,7 +188,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         lroot = new LGMTreeNode(Tool3lgmConstants.getResString("proz_ablauf"), false, false);
         lroot.setSelectable(false);
         lmodel = new DefaultTreeModel(lroot);
-        ltree = new LGMDragNDropTree(lmodel);
+        ltree = new LGMTree(lmodel);
         // ltree.setRootVisible(false); TRUE IST STANDARD UND ES M U S S IN
         // DIESEM DIALOG AUCH TRUE SEIN!!!
         // (bei false fehlen im Baum die Kinder und die ganze Ausrichtung stimmt
@@ -229,7 +225,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
          * JButton clearBut = new JButton(Tool3lgmConstants.getIcon("clear.gif"));
          * clearBut.setActionCommand("clear"); clearBut.addActionListener(this); /
          */JPanel clearBut = new JPanel(); // Platzhalten für den deaktivierten
-                                           // clearBut;
+                                          // clearBut;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
         JPanel upDownControl = new JPanel(new GridLayout(1, 2));
@@ -277,8 +273,9 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0;
         constraints.weighty = 0;
-        constraints.ipadx = -30;
-        constraints.ipady = -10;
+        //Windows-spezifisch
+        //        constraints.ipadx = -30;
+        //        constraints.ipady = -10;
         add(this, clearBut, constraints, 0, 2, 1, 1);
 
         // leeres Panel fuer den Abstand zw. clear-Button und dem upDownControl
@@ -294,7 +291,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0;
         // constraints.weighty = 0;
-        constraints.ipadx = -60;
+        //Windows-spezifisch
+        //        constraints.ipadx = -60;
         // constraints.ipady = - 10;
         add(this, upDownControl, constraints, 2, 2, 1, 1);
 
@@ -310,7 +308,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         // constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0;
         // constraints.weighty = 0;
-        constraints.ipadx = -30;
+        //Windows-spezifisch
+        //        constraints.ipadx = -30;
         // constraints.ipady = - 10;
         add(this, viewButton, constraints, 4, 2, 1, 1);
 
@@ -365,7 +364,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         rroot = new LGMTreeNode(Tool3lgmConstants.getResString("verf_auf"), false);
         rroot.setSelectable(false);
         rmodel = new DefaultTreeModel(rroot);
-        rtree = new LGMDragNDropTree(rmodel);
+        rtree = new LGMTree(rmodel);
         // rtree.setRootVisible(false); TRUE IST STANDARD UND ES M U S S IN
         // DIESEM DIALOG AUCH TRUE SEIN!!!
         // (bei false fehlen im Baum die Kinder und die ganze Ausrichtung stimmt
@@ -426,10 +425,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
          * ... End: TreeSelectionListener erstellen und an Trees anhängen
          */
 
-        // hier wird festgelegt, dass der rechte Baum beim öffnen angezeigt wird
-        rightSideVisible = false;
-
-        if (rightSideVisible) {
+        if (isRightSideShouldBeVisible()) {
             viewButton.setIcon(Tool3lgmConstants.getIcon("auf.gif"));
             viewButton.setActionCommand("zuklappen");
         } else {
@@ -460,25 +456,21 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         constraints.weighty = 1;
         add(this, spRechts, constraints, 6, 1, 1, 1);
 
-        init();
+        update();
 
     }
 
     /**
      * Sorgt dafuer, dass die rechte Seite des Panels angezeigt oder verborgen wird. Es werden KEINE
      * Daten aktualisiert sondern lediglich die Komponenten hinzugefuegt oder entfernt.
-     * 
+     *
      * @param visible boolean
      * @see de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel#setRightSideVisible(boolean)
      */
-    @Override
-    public void setRightSideVisible(final boolean visible) {
-        super.setRightSideVisible(visible);
-
+    public boolean checkRightSideVisible() {
+        boolean visible = isRightSideShouldBeVisible();
         // rechte Seite nur visible setzen, wenn sie es nicht schon ist
         if (visible && !labelRechts.isVisible()) {
-            // this.viewButton.setIcon(Tool3lgmConstants.getIcon("zu.gif"));
-            // this.viewButton.setActionCommand("zuklappen");
             addRemoveControl.setVisible(true);
             labelRechts.setVisible(true);
             spRechts.setVisible(true);
@@ -487,15 +479,14 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             addRemoveControl.setVisible(false);
             labelRechts.setVisible(false);
             spRechts.setVisible(false);
-            // this.viewButton.setIcon(Tool3lgmConstants.getIcon("auf.gif"));
-            // this.viewButton.setActionCommand("aufklappen");
         }
+        return visible;
     }
 
     /**
      * Haengt an den uebergebenen LGMTreeNode neue LGMTreeNodes mit den Objekttypen an, die von der
      * Aufgabe (UserObject des uebergebenen LGMTreeNode) bearbeitet und interpretiert werden.
-     * 
+     *
      * @param aufgabenContainerNode
      */
     private void appendObjectTypes(final LGMTreeNode aufgabenContainerNode) {
@@ -685,34 +676,11 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
     @Override
     public void update() {
-        // System.out.println("update");
-        init();
-    }
-
-    @Override
-    public void init() {
-        super.init();
-
-        if (rightSideVisible) {
-            setRightSideVisible(true);
+        if (checkRightSideVisible()) {
             buildRightTree();
-            showFullDialog();
-        } else {
-            setRightSideVisible(false);
         }
         buildLeftTree();
-
         initDragNDrop();
-
-    }
-
-    @Override
-    protected void showFullDialog() {
-        super.showFullDialog();
-
-        // System.out.println("showFullDialog");
-        setRightSideVisible(true);
-        buildRightTree();
     }
 
     /**
@@ -943,16 +911,16 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
      * return; } /* Das hier würde sich bei drücken auf Abbrechen nicht zurücknehmen lassen, da das
      * UNDO für link nicht gesetzt wurde
      *//*
-        * if (str.equals("clear")){ //diese Funktion geht davon aus, dass der Baum komplett
-        * expandiert ist, was er in dem Fall, //dass alle Kinder von lroot Blätter sind und lroot
-        * selbst nicht angezeigt wird immer automatisch ist. /* for (int i=ltree.getRowCount()-1;
-        * i>=0; i--){ NodeContainer knotCont = (NodeContainer)
-        * ((LGMTreeNode)lroot.getChildAt(i)).getUserObject(); doc.exec("UNLINK " +
-        * prozess.getHashString() + " " + knotCont.getHashString(), dialog.getID());
-        * lroot.remove(i); }
-        *//*
-           * return; } /*
-           */// }
+       * if (str.equals("clear")){ //diese Funktion geht davon aus, dass der Baum komplett
+       * expandiert ist, was er in dem Fall, //dass alle Kinder von lroot Blätter sind und lroot
+       * selbst nicht angezeigt wird immer automatisch ist. /* for (int i=ltree.getRowCount()-1;
+       * i>=0; i--){ NodeContainer knotCont = (NodeContainer)
+       * ((LGMTreeNode)lroot.getChildAt(i)).getUserObject(); doc.exec("UNLINK " +
+       * prozess.getHashString() + " " + knotCont.getHashString(), dialog.getID());
+       * lroot.remove(i); }
+       *//*
+         * return; } /*
+         */// }
 
     @Override
     public void treeWillExpand(final TreeExpansionEvent e) throws ExpandVetoException {
@@ -995,7 +963,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
         // wenn sich links die Selektion geändert hat, die rechte Seite sichtbar
         // ist und verifiziert werden soll
-        if (verificationCheck.isSelected() && rightSideVisible && ((JTree) e.getSource()).getName().equals("lefttree")) {
+        if (verificationCheck.isSelected() && labelRechts.isShowing() && ((JTree) e.getSource()).getName().equals("lefttree")) {
             checkRightPossibleTasks();
         }
 
@@ -1185,7 +1153,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * Selekiert in destinationTree die Zeile row. Wird row=-1 uebergeben, wird eine evtl. Selekion
      * gelöscht.
-     * 
+     *
      * @param destinationTree
      * @param row
      */
@@ -1255,14 +1223,19 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         DragNDropActionChain dndAC1 = DragNDropInitializer.createNewDragNDropActionChain(rtree, ltree, addAction);
         DragNDropActionChain dndAC2 = DragNDropInitializer.createNewDragNDropActionChain(ltree, rtree, removeAction);
 
-        DragNDropActionChain dndAC3 = DragNDropInitializer.createNewDragNDropActionChain(new LGMDragNDropTree[] {
-                ltree, rtree, ltree
+        DragNDropActionChain dndAC3 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
+                ltree,
+                rtree,
+                ltree
         }, new LGMAction[] {
-                removeAction, addAction
+                removeAction,
+                addAction
         });
 
         return new DragNDropActionChain[] {
-                dndAC1, dndAC2, dndAC3
+                dndAC1,
+                dndAC2,
+                dndAC3
         };
 
     }
@@ -1270,19 +1243,20 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * @return
      */
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {
-                rtree, ltree
+    public LGMTree[] getAllDragNDropTrees() {
+        return new LGMTree[] {
+                rtree,
+                ltree
         };
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void initDragNDrop() {
         LGMAction action = LGMActionLibrary.getDragNDropInitAction(collectDragNDropActionChains());
         LGMMouseListener ml = new LGMMouseListener(action, action, action, null, action, action);
-        LGMDragNDropTree[] trees = getAllDragNDropTrees();
+        LGMTree[] trees = getAllDragNDropTrees();
 
         for (int i = 0; i < trees.length; i++) {
             trees[i].addMouseListener(ml);

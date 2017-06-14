@@ -1,0 +1,81 @@
+package de.imise.tool3lgm.graphtools.dialog.panel;
+
+import java.util.EventObject;
+
+import javax.swing.JButton;
+
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
+import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
+
+/**
+ * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts Bäume.
+ *
+ * @author AXS
+ * @created 12.06.2017
+ */
+public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
+
+    /**
+     * Button zu Auf- und Zuklappen der rechten Seite
+     */
+    protected JButton viewButton;
+
+    /**
+     * Action zum Aufklappen der rechten Seite
+     */
+    protected LGMAction showAllAction;
+
+    /**
+     * Action zum Zuklappen der rechten Seite
+     */
+    protected LGMAction showPartlyAction;
+
+    public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+        super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
+    }
+
+    @Override
+    protected final void init() {
+        super.init();
+        // Aktionen für den button setzen
+        showPartlyAction = getShowAction(this, false);
+        viewButton = new JButton();
+        showAllAction = getShowAction(this, true);
+    }
+
+    public final void showFullDialog(final boolean full) {
+        if (full) {
+            showFullDialog();
+        } else {
+            showPartlyDialog();
+        }
+        viewButton.setAction(full ? showPartlyAction : showAllAction);
+        update();
+    }
+
+    protected final boolean isRightSideVisible() {
+        return viewButton.getAction() == showPartlyAction;
+    }
+
+    protected abstract void showFullDialog();
+
+    protected abstract void showPartlyDialog();
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder nur einen Teils des Panels anzeigt.
+     *
+     * @param panel
+     */
+    public static final LGMAction getShowAction(final AbstractExpandablePanel panel, final boolean full) {
+        return new LGMAction("", Tool3lgmConstants.getIcon(full ? "zu.gif" : "auf.gif")) {
+            @Override
+            public void execute(final EventObject e) {
+                panel.showFullDialog(full);
+            }
+        };
+    }
+
+}

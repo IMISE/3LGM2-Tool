@@ -70,7 +70,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  * <code>ArrayList</code> und vergleicht Sie mit den
  * bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando <code>SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert
  * eines Attributes einer Element- bzw. Kanetenklasse geändert.
- * 
+ *
  * @author Thomas Rudert, xhb, AXS
  */
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
@@ -115,7 +115,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
      * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
      * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
      * echten Leerstring "" ersetzt.
-     * 
+     *
      * @param userField
      * @return
      */
@@ -129,7 +129,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
      * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
      * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
      * echten Leerstring "" ersetzt.
-     * 
+     *
      * @param me
      * @param userField
      * @param format
@@ -185,7 +185,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
      * Label, das im Dialog für das UserField angezeigt werden soll und die zweite Komponente ist der
      * zugehörige Editor. Bei Separatoren ist der Editor die Separator-Komponente und bei Formeln ist
      * der Editor deaktiviert.
-     * 
+     *
      * @param field
      * @return
      */
@@ -261,7 +261,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
             // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
             NumberFormat numberFormat = field.getNumberFormat();
-            // Kennzahlwerte in die Felder einfügen. 
+            // Kennzahlwerte in die Felder einfügen.
             NumberTextField numberTextField = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
             if (!UserField.isError(value)) {
                 numberTextField.setValue(value);
@@ -280,7 +280,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
     /**
      * Speichert für jedes UserField alle Editoren als Eingabefelder.
-     * 
+     *
      * @param userField
      * @param editorComponent
      */
@@ -387,7 +387,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     /**
      * Erzeugt einen HTML-String, bei dem der übergebenen <code>fieldName</code> fett in der 1. Zeile und
      * darunter die übergebene <code>fieldDescription</code> steht.
-     * 
+     *
      * @param fieldName
      * @param fieldDescription
      * @return
@@ -395,10 +395,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     private String toHTML(final String fieldName, final String fieldDescription) {
         String htmlString = "<HTML><B>" + fieldName + "</B><BR>" + fieldDescription + "</HTML>";
         return htmlString;
-    }
-
-    @Override
-    protected void showFullDialog() {
     }
 
     @Override
@@ -444,7 +440,6 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
     @Override
     public void update() {
-        super.update();
         updateFormulaValues();
     }
 
@@ -466,7 +461,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     /**
      * Liefert <code>true</code>, wenn der übergebene <code>newValue</code> ein anderer ist, als
      * der beim ModelElement aktuell für das übergebenen UserField gesetzte Wert.
-     * 
+     *
      * @param me
      * @param userField
      * @param newValue
@@ -482,7 +477,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
     /**
      * Liefert in Abhängigkeit vom Style den aktuellen Wert der übergebenen editorComponent.
-     * 
+     *
      * @param style
      * @param editorComponent
      * @return

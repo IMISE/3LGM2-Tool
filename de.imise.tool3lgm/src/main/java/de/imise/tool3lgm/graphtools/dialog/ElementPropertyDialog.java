@@ -10,11 +10,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -35,9 +38,11 @@ import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.component.TabbedPane;
 
 /**
@@ -175,8 +180,21 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     }
 
     private void addPartOfStructurePanel() {
-        if (modelElement.canHaveParts()) {
-            addTab(new StructurePanel(this));
+        Class<? extends ModelElement> elementClass = modelElement.getClass();
+        Class<? extends PartOfBeziehung>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
+        Class<? extends PartOfBeziehung>[] isPartOfEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
+        List<Class<? extends PartOfBeziehung>> realPartOfs = Lists.newArrayList();
+        for (Class<? extends PartOfBeziehung> partOf : isPartOfEdgeClasses) {
+            if (CollectionUtils.arrayContains(hasPartsEdgeClasses, partOf)) {
+                realPartOfs.add(partOf);
+            }
+        }
+        if (realPartOfs.size() == 1) {
+            StructurePanel structurePanel = new StructurePanel(this, realPartOfs.get(0));
+            structurePanel.setName(Tool3lgmConstants.getResString("strukt"));
+            addTab(structurePanel);
+        } else if (realPartOfs.size() > 1) {
+            //TODO: hier könnte müsste man ein ExtraPanel mit dem Namen Struktur mit den Teil-Von-Beziehungen als UnterPanels anlegen, die mit der jeweiligen Kante benamt sind
         }
     }
 

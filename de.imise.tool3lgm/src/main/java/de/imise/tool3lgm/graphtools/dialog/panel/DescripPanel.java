@@ -70,7 +70,6 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
 
-        init();
     }
 
     private void updateName() {
@@ -83,7 +82,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
     }
 
     @Override
-    protected void init() {
+    public void update() {
         nameTextPane.removeDocumentListener(this);
         updateName();
         ModelElement modelElement = getModelElement();
@@ -91,6 +90,9 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         nameTextPane.setCaretPosition(0);
         descriptionTextPane.setCaretPosition(0);
         nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhängen, sonst wird gleich commit aufgerufen
+        for (int m = 0; m < panels.size(); m++) {
+            panels.get(m).update();
+        }
     }
 
     public void addDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
@@ -130,10 +132,6 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
     }
 
     @Override
-    protected void showFullDialog() {
-    }
-
-    @Override
     public void commit() {
         nameTextPane.removeDocumentListener(this);
         ModelElement me = getModelElement();
@@ -160,14 +158,6 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
             panels.get(m).commit();
         }
         nameTextPane.addDocumentListener(this);
-    }
-
-    @Override
-    public void update() {
-        updateName();
-        for (int m = 0; m < panels.size(); m++) {
-            panels.get(m).update();
-        }
     }
 
     @Override

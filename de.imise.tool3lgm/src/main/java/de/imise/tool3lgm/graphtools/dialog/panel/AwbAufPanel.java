@@ -71,26 +71,20 @@ public class AwbAufPanel extends ElementDialogPanel {
         constraints.weighty = 100;
         add(this, sp, constraints, 0, 1, 1, 4);
 
-        init();
+        update();
     }
 
     @Override
-    protected void init() {
-        super.init();
+    public void update() {
         buildTree();
         tree.expandFull();
         revalidate();
         repaint();
     }
 
-    @Override
-    public void showFullDialog() {
-        super.showFullDialog();
-    }
-
     /**
-	 * 
-	 */
+     *
+     */
     private void buildTree() {
         tree.saveExpansion();
         tree.saveSelection();

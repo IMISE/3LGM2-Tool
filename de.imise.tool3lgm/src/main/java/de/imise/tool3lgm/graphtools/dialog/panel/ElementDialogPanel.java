@@ -12,11 +12,9 @@ import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -64,17 +62,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * COMMENTME
      */
-    protected boolean alreadyInitialized = false;
-
-    /**
-     * COMMENTME
-     */
     protected EventObject lastSelEvent = null;
-
-    /**
-     * Legt fest, ob auch die rechte Seite des Panels angezeigt werden soll.
-     */
-    protected boolean rightSideVisible = true;
 
     /**
      * Der Renderer der Bäume
@@ -95,21 +83,6 @@ public abstract class ElementDialogPanel extends JPanel {
      * COMMENTME
      */
     private LGMComponentListener componentListener;
-
-    /**
-     * COMMENTME
-     */
-    protected JButton viewButton;
-
-    /**
-     * COMMENTME
-     */
-    protected LGMAction showAllAction;
-
-    /**
-     * COMMENTME
-     */
-    protected LGMAction showPartlyAction;
 
     /**
      * COMMENTME
@@ -140,16 +113,11 @@ public abstract class ElementDialogPanel extends JPanel {
     public ElementDialogPanel(final ElementPropertyDialog dialog, final String name) {
         super();
         this.dialog = dialog;
-        internalInit(dialog, name);
+        setName(name);
+        init();
     }
 
-    /**
-     * @param dialog
-     * @param name
-     */
-    private void internalInit(final ElementPropertyDialog dialog, final String name) {
-        setName(name);
-
+    protected void init() {
         doc = dialog.getGraphDocument();
         mainDoc = doc.getCollection().getMainGraphDocument();
         treeRenderer = new TreeRenderer(doc);
@@ -164,36 +132,13 @@ public abstract class ElementDialogPanel extends JPanel {
 
         dialog.addWindowListener(windowListener);
         addComponentListener(componentListener);
-
-        // Aktionen für den button setzen
-        showPartlyAction = getShowPartlyAction(this);
-        viewButton = new JButton();
-        showAllAction = getShowAllAction(this);
-        viewButton.setAction(showAllAction);
-    }
-
-    /**
-     * Initialisert das Panel
-     */
-    protected void init() {
-        viewButton.setAction(showAllAction);
-        // System.out.println("Ich bin: " + this.getClass().getName());
-    }
-
-    protected void showFullDialog() {
-        viewButton.setAction(showPartlyAction);
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
-    public void update() {
-        init();
-        if (rightSideVisible) {
-            showFullDialog();
-        }
-    }
+    public abstract void update();
 
     public void commit() {
     }
@@ -315,28 +260,6 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     /**
-     * @return rightSideVisible
-     */
-    public boolean getRightSideVisible() {
-        return rightSideVisible;
-    }
-
-    public void setRightSideVisible(final boolean rightSideVisible) {
-        this.rightSideVisible = rightSideVisible;
-    }
-
-    /**
-     * @return alreadyInitialized
-     */
-    public boolean isAlreadyInitialized() {
-        return alreadyInitialized;
-    }
-
-    public void setAlreadyInitialized(final boolean b) {
-        alreadyInitialized = b;
-    }
-
-    /**
      * @return modelElement
      */
     public ModelElement getModelElement() {
@@ -344,49 +267,5 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     // -------------------------------------------------------------------------------- -/
-    public void showFullDialog(final boolean b) {
-
-        if (b == true) {
-            rightSideVisible = true;
-            showFullDialog();
-        } else {
-            rightSideVisible = false;
-            init();
-        }
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte Panel anzeigen lässt.
-     * Diese <code>LGMAction</code> sollte an den "viewButton" eines Panels angefügt werden, falls
-     * der Inhalt des Panels nur teilweise zu sehen ist.
-     *
-     * @param edp
-     */
-    public static final LGMAction getShowAllAction(final ElementDialogPanel edp) {
-        final ElementDialogPanel panel = edp;
-        return new LGMAction("", Tool3lgmConstants.getIcon("zu.gif")) {
-            @Override
-            public void execute(final EventObject e) {
-                panel.showFullDialog(true);
-            }
-        };
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die nur einen Teil des Panels anzeigen
-     * lässt. Diese <code>LGMAction</code> sollte an den "viewButton" eines Panels angefügt werden,
-     * falls der Inhalt des Panels vollständig zu sehen ist.
-     *
-     * @param edp
-     */
-    public static final LGMAction getShowPartlyAction(final ElementDialogPanel edp) {
-        final ElementDialogPanel panel = edp;
-        return new LGMAction("", Tool3lgmConstants.getIcon("auf.gif")) {
-            @Override
-            public void execute(final EventObject e) {
-                panel.showFullDialog(false);
-            }
-        };
-    }
 
 }

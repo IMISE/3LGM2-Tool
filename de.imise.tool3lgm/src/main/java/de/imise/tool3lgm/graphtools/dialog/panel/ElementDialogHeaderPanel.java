@@ -95,11 +95,11 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             add(submodelLabel, gbc);
         }
         setBorder(BorderFactory.createEmptyBorder(2, 5, 5, 5));
-        init();
+        update();
     }
 
     @Override
-    protected void init() {
+    public void update() {
         ModelElement modelElement = dialog.getModelElement();
         if (ModelConstants.isNodeType(getModelElement().getClass())) {
             typeLabel.setText(ModelConstants.getDisplayableName(modelElement));
@@ -143,11 +143,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             labelLabel.setText("<html>" + modelElement.getClearName() + "</html>");
             idLabel.setText(modelElement.getHashString() + "        " + getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
         }
-    }
-
-    @Override
-    public void update() {
-        init();
     }
 
 }

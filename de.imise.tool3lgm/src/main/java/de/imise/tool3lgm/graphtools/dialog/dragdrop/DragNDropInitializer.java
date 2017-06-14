@@ -9,6 +9,7 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.util.EventObject;
 
 import javax.swing.DropMode;
+import javax.swing.JTree;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreePath;
 
@@ -16,7 +17,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 
 /**
  * @author fstephan Diese Klasse stellt statische Methoden bereit, um in einem
- *         <code>LGMDragNDropTree</code> die DragNDrop-Funktion zu integrieren. Außerdem besteht die
+ *         <code>JTree</code> die DragNDrop-Funktion zu integrieren. Außerdem besteht die
  *         Möglichkeit eine Aktionsfolge für das DragNDrop zwischen Trees zu erstellen, die keinen
  *         gemeinsamen Aktionsbutton besitzen, sondern über weitere Trees und dazugehörige
  *         ActionButtons verbunden sind.
@@ -31,18 +32,24 @@ public class DragNDropInitializer {
      * einer DragNDrop-Aktion vom <code>srcTree</code> zum <code>targetTree</code> wird die in der
      * <code>DragNDropActionChain</code> enthaltenen Folge von <code>LGMAction</code>s nacheinander
      * ausgeführt.
-     * 
+     *
      * @param dndAC
      */
     public static void initDragNDrop(final DragNDropActionChain dndAC) {
+        JTree srcTree = dndAC.getSrcTree();
+        JTree targetTree = dndAC.getTargetTree();
+        if (srcTree == null || targetTree == null) {
+            return;
+        }
+
         // Das(Die) zu droppende(n) Element(e), ist(sind) auch das(die) markierte(n) Element(e)
-        dndAC.getTargetTree().setDropMode(DropMode.USE_SELECTION);
+        targetTree.setDropMode(DropMode.USE_SELECTION);
 
         // Dragging für den srcTree aktivieren
-        dndAC.getSrcTree().setDragEnabled(true);
+        srcTree.setDragEnabled(true);
 
         // Für den srcTree, wird der targetTree als DropTarget gesetzt
-        dndAC.getTargetTree().setDropTarget(getObjectAsDropTarget(dndAC));
+        targetTree.setDropTarget(getObjectAsDropTarget(dndAC));
 
     }
 
@@ -50,12 +57,12 @@ public class DragNDropInitializer {
      * Diese Methode initialisiert die DragNDrop Funktion vom <code>srcTree</code> zum
      * <code>targetTree</code>. Beim Ausführen einer DragNDrop-Aktion vom <code>srcTree</code> zum
      * <code>targetTree</code> wird <code>action</code> ausgeführt.
-     * 
+     *
      * @param srcTree
      * @param targetTree
      * @param action
      */
-    public static void initDragNDrop(final LGMDragNDropTree srcTree, final LGMDragNDropTree targetTree, final LGMAction action) {
+    public static void initDragNDrop(final JTree srcTree, final JTree targetTree, final LGMAction action) {
 
         DragNDropActionChain dndAC = createNewDragNDropActionChain(srcTree, targetTree, action);
 
@@ -64,7 +71,7 @@ public class DragNDropInitializer {
 
     /**
      * Diese Methode liefert den targetTree als DropTarget für den srcTree
-     * 
+     *
      * @param srcTree
      * @param targetTree
      * @param actionButton
@@ -81,7 +88,7 @@ public class DragNDropInitializer {
      * <code>DropTargetAdapter</code>s wird beim Eintreten eines DragNDrop-Ereignisses, die in
      * <code>dragNDropActionChain</code> enthaltene Aktionsfolge ausgeführt. Außerdem werden die
      * verschobenen Elemente im targetTree automatisch wieder selektiert.
-     * 
+     *
      * @param dragNDropActionChain
      */
     private static DropTargetAdapter getNewDropTargetAdapter(final DragNDropActionChain dragNDropActionChain) {
@@ -92,7 +99,7 @@ public class DragNDropInitializer {
 
             /**
              * Methode wird beim Eintreten eines DragNDrop-Ereignisses aufgerufen.
-             * 
+             *
              * @see java.awt.dnd.DropTargetListener#drop(java.awt.dnd.DropTargetDropEvent)
              */
             @Override
@@ -110,8 +117,8 @@ public class DragNDropInitializer {
                         return;
                     }
 
-                    LGMDragNDropTree dndSrcTree = dndA.getSrcTree();
-                    LGMDragNDropTree dndTargetTree = dndA.getTargetTree();
+                    JTree dndSrcTree = dndA.getSrcTree();
+                    JTree dndTargetTree = dndA.getTargetTree();
                     LGMAction action = dndA.getAction();
 
                     // Selektierten Node ermitteln
@@ -142,7 +149,7 @@ public class DragNDropInitializer {
             /**
              * Methode sorgt für das Ausführen von <code>action</code>. Methode gibt wieder, ob die
              * Aktion erfolgreich ausgeführt wurde.
-             * 
+             *
              * @param al
              * @param ae
              */
@@ -164,33 +171,34 @@ public class DragNDropInitializer {
     /**
      * Diese Methode erstellt anhand der übergebenen Parameter eine neue
      * <code>DragNDropActionChain</code> und gibt diese wieder.
-     * 
+     *
      * @see DragNDropActionChain
      * @param trees
      * @param actions
      */
-    public static DragNDropActionChain createNewDragNDropActionChain(final LGMDragNDropTree[] trees, final LGMAction[] actions) {
+    public static DragNDropActionChain createNewDragNDropActionChain(final JTree[] trees, final LGMAction[] actions) {
         return new DragNDropActionChain(trees, actions);
     }
 
     /**
      * Diese Methode erstellt anhand der übergebenen Parameter eine neue
      * <code>DragNDropActionChain</code> und gibt diese wieder.
-     * 
-     * @see #createNewDragNDropActionChain(LGMDragNDropTree[] trees,LGMAction[] actions) mit
+     *
+     * @see #createNewDragNDropActionChain(JTree[] trees,LGMAction[] actions) mit
      *      <code>trees</code> = {<code>srcTree</code>,<code>targetTree</code> und
      *      <code>actions</code> = {<code>action</code> .
      * @param srcTree
      * @param targetTree
      * @param action
      */
-    public static DragNDropActionChain createNewDragNDropActionChain(final LGMDragNDropTree srcTree, final LGMDragNDropTree targetTree, final LGMAction action) {
+    public static DragNDropActionChain createNewDragNDropActionChain(final JTree srcTree, final JTree targetTree, final LGMAction action) {
 
-        LGMDragNDropTree[] trees = new LGMDragNDropTree[] {
-                srcTree, targetTree
+        JTree[] trees = new JTree[] {
+                srcTree,
+                targetTree
         };
         LGMAction[] actions = new LGMAction[] {
-            action
+                action
         };
 
         return createNewDragNDropActionChain(trees, actions);
@@ -208,7 +216,7 @@ public class DragNDropInitializer {
         /**
          * Reihenfolge der zu durchlaufenden Trees
          */
-        private final LGMDragNDropTree[] trees;
+        private final JTree[] trees;
 
         /**
          * auszuführende Aktionsfolge
@@ -227,11 +235,11 @@ public class DragNDropInitializer {
          * targetTree] <code>actions</code> = [action 1, action 2, ..., action n-1] -->
          * <code>trees.length - 1</code> = <code>actions.length</code> Semantik: Bei DragNDrop von
          * srcTree zu targetTree führe zwischen tree i und tree i+1 action i für alle i aus.
-         * 
+         *
          * @param trees
          * @param actions
          */
-        private DragNDropActionChain(final LGMDragNDropTree[] trees, final LGMAction[] actions) {
+        private DragNDropActionChain(final JTree[] trees, final LGMAction[] actions) {
 
             this.trees = trees;
             this.actions = actions;
@@ -268,14 +276,14 @@ public class DragNDropInitializer {
         /**
          * Methode gibt den targetTree der Aktionsfolge wieder
          */
-        public LGMDragNDropTree getTargetTree() {
+        public JTree getTargetTree() {
             return trees[trees.length - 1];
         }
 
         /**
          * Methode gibt den srcTree der Aktionsfolge wieder
          */
-        public LGMDragNDropTree getSrcTree() {
+        public JTree getSrcTree() {
             return trees[0];
         }
 
@@ -292,7 +300,7 @@ public class DragNDropInitializer {
         /**
          * @return <code>trees</code>
          */
-        public LGMDragNDropTree[] getTrees() {
+        public JTree[] getTrees() {
             return trees;
         }
 
@@ -314,12 +322,12 @@ public class DragNDropInitializer {
             /**
              * beinhaltet die zu verschiebenden Elemente
              */
-            private final LGMDragNDropTree srcTree;
+            private final JTree srcTree;
 
             /**
              * stellt die DropLocation dar
              */
-            private final LGMDragNDropTree targetTree;
+            private final JTree targetTree;
 
             /**
              * auszuführende Aktion
@@ -328,12 +336,12 @@ public class DragNDropInitializer {
 
             /**
              * Konstruktor
-             * 
+             *
              * @param srcTree
              * @param targetTree
              * @param action
              */
-            public DragNDropAction(final LGMDragNDropTree srcTree, final LGMDragNDropTree targetTree, final LGMAction action) {
+            public DragNDropAction(final JTree srcTree, final JTree targetTree, final LGMAction action) {
 
                 super();
                 this.srcTree = srcTree;
@@ -343,7 +351,7 @@ public class DragNDropInitializer {
 
             /**
              * Methode überprüft ob diese Instanz eine gültige <code>DragNDropAction</code> ist.
-             * 
+             *
              * @return <code>true</code>, falls gültige Instanz, <code>false</code>, sonst
              */
             public boolean isValid() {
@@ -354,14 +362,14 @@ public class DragNDropInitializer {
             /**
              * @return <code>srcTree</code>
              */
-            public LGMDragNDropTree getSrcTree() {
+            public JTree getSrcTree() {
                 return srcTree;
             }
 
             /**
              * @return <code>targetTree</code>
              */
-            public LGMDragNDropTree getTargetTree() {
+            public JTree getTargetTree() {
                 return targetTree;
             }
 
@@ -374,7 +382,7 @@ public class DragNDropInitializer {
 
             /**
              * Methode führt <code>action</code> aus
-             * 
+             *
              * @see de.imise.tool3lgm.graphtools.dialog.action.LGMAction#execute(java.util.EventObject)
              */
             @Override

@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.KomPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssEtntVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.BssKommstVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
 
 public final class Bausteinschnittstelle extends Schnittstelle {
 
@@ -37,7 +37,7 @@ public final class Bausteinschnittstelle extends Schnittstelle {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(true, AwbKommssVerbindung.class);
         dialog.addDescripSingleConnectionPanel(BssKommstVerbindung.class);
-        dialog.addTab(getResString("KommBeziehung"), new KomPanel(Bausteinschnittstelle.class, dialog, true));
+        dialog.addEdgePanel(KommBeziehung.class);
         dialog.addEdgePanel(BssEtntVerbindung.class);
         return dialog;
     }

@@ -29,7 +29,7 @@ import de.imise.util.Sys;
  * @author AXS
  * @created 25.04.2017
  */
-public abstract class AbstractPathConnectionPanel extends LGMDragNDropPanel {
+public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
 
     /** Die Kantenklasse zum anderen Element */
     protected final Class<? extends Kante>[] edgeClasses;

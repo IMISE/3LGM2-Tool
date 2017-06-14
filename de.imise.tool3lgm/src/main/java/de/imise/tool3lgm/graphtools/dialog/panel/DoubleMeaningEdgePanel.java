@@ -13,22 +13,24 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.google.common.collect.Lists;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
@@ -45,18 +47,18 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  */
 public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
-    private final LGMDragNDropTree otree, utree;
-    private final LGMDragNDropTree rotree, rutree;
-    private final DefaultTreeModel omodel, umodel, romodel, rumodel;
-    private final LGMTreeNode oroot, uroot, roroot, ruroot;
+    private final LGMTree lotree, lutree;
+    private final LGMTree rotree, rutree;
+    private final DefaultTreeModel lomodel, lumodel, romodel, rumodel;
+    private final LGMTreeNode loroot, luroot, roroot, ruroot;
     private final JPanel buttonpanel1, buttonpanel2;
-    private final JLabel oben2, unten2;
+    private final JLabel lolabel, lulabel;
     private final JScrollPane sp3, sp4;
 
-    private LGMAction addUeberAction;
-    private LGMAction removeUeberAction;
-    private LGMAction addUnterAction;
-    private LGMAction removeUnterAction;
+    private LGMAction loaddAction;
+    private LGMAction loremoveAction;
+    private LGMAction luaddAction;
+    private LGMAction luremoveAction;
 
     public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
@@ -70,30 +72,31 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
         boolean showRootHandles = ModelConstants.canHaveParts(this.searchElementClass);
 
-        oroot = new LGMTreeNode("invisible root", false);
-        omodel = new DefaultTreeModel(oroot);
-        otree = new LGMDragNDropTree(omodel, mainDoc);
-        otree.setRootVisible(false);
-        otree.setShowsRootHandles(showRootHandles);
-        otree.setCellRenderer(treeRenderer);
-        otree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        JScrollPane sp1 = new JScrollPane(otree);
+        loroot = new LGMTreeNode("loroot", false);
+        lomodel = new DefaultTreeModel(loroot);
+        lotree = new LGMTree(lomodel, mainDoc);
+        lotree.setRootVisible(false);
+        lotree.setShowsRootHandles(showRootHandles);
+        lotree.setCellRenderer(treeRenderer);
+        lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        JScrollPane sp1 = new JScrollPane(lotree);
 
         JLabel unten = new JLabel(getEdgeDisplayName(Doppelkante.FORWARD));
 
-        uroot = new LGMTreeNode("invisible root", false);
-        umodel = new DefaultTreeModel(uroot);
-        utree = new LGMDragNDropTree(umodel, mainDoc);
-        utree.setRootVisible(false);
-        utree.setShowsRootHandles(showRootHandles);
-        utree.setCellRenderer(treeRenderer);
-        utree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        luroot = new LGMTreeNode("luroot", false);
+        lumodel = new DefaultTreeModel(luroot);
+        lutree = new LGMTree(lumodel, mainDoc);
+        lutree.setRootVisible(false);
+        lutree.setShowsRootHandles(showRootHandles);
+        lutree.setCellRenderer(treeRenderer);
+        lutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-        JScrollPane sp2 = new JScrollPane(utree);
+        JScrollPane sp2 = new JScrollPane(lutree);
 
         constraints.anchor = GridBagConstraints.EAST;
-        constraints.ipadx = -30;
-        constraints.ipady = -10;
+        //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
+        //            constraints.ipadx = -30;
+        //            constraints.ipady = -10;
         add(this, viewButton, constraints, 0, 6, 1, 1);
         constraints.ipadx = 0;
         constraints.ipady = 0;
@@ -107,57 +110,26 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, sp1, constraints, 0, 1, 1, 1);
         add(this, sp2, constraints, 0, 3, 1, 1);
 
-        roroot = new LGMTreeNode(getResString("frei1"), false);
+        roroot = new LGMTreeNode("roroot", false);
         romodel = new DefaultTreeModel(roroot);
-        rotree = new LGMDragNDropTree(romodel, mainDoc);
+        rotree = new LGMTree(romodel, mainDoc);
         rotree.setRootVisible(false);
         rotree.setShowsRootHandles(showRootHandles);
         rotree.setCellRenderer(treeRenderer);
         rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         sp3 = new JScrollPane(rotree);
 
-        oben2 = new JLabel(getResString("frei"));
-        unten2 = new JLabel(getResString("frei"));
-        ruroot = new LGMTreeNode(getResString("frei2"), false);
+        String unconnected = getResString("frei");
+        lolabel = new JLabel(unconnected);
+        lulabel = new JLabel(unconnected);
+        ruroot = new LGMTreeNode("ruroot", false);
         rumodel = new DefaultTreeModel(ruroot);
-        rutree = new LGMDragNDropTree(rumodel, mainDoc);
+        rutree = new LGMTree(rumodel, mainDoc);
         rutree.setRootVisible(false);
         rutree.setShowsRootHandles(showRootHandles);
         rutree.setCellRenderer(treeRenderer);
         rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         sp4 = new JScrollPane(rutree);
-
-        /*
-         * Start: MouseListener erstellen und an Trees anhängen ...
-         */
-        LGMAction otreeMouseAction = LGMActionLibrary.getMouseAction(otree, this);
-        LGMAction utreeMouseAction = LGMActionLibrary.getMouseAction(utree, this);
-        LGMAction rotreeMouseAction = LGMActionLibrary.getMouseAction(rotree, this);
-        LGMAction rutreeMouseAction = LGMActionLibrary.getMouseAction(rutree, this);
-
-        otree.addMouseListener(new LGMMouseListener(null, null, null, otreeMouseAction, null));
-        utree.addMouseListener(new LGMMouseListener(null, null, null, utreeMouseAction, null));
-        rotree.addMouseListener(new LGMMouseListener(null, null, null, rotreeMouseAction, null));
-        rutree.addMouseListener(new LGMMouseListener(null, null, null, rutreeMouseAction, null));
-        /*
-         * ... End: MouseListener erstellen und an Trees anhängen
-         */
-
-        /*
-         * Start: TreeSelectionListener erstellen und an Trees anhängen ...
-         */
-        LGMAction otreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(otree, this);
-        LGMAction utreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(utree, this);
-        LGMAction rotreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rotree, this);
-        LGMAction rutreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rutree, this);
-
-        otree.addTreeSelectionListener(new LGMTreeSelectionListener(otreeSelectionAction));
-        utree.addTreeSelectionListener(new LGMTreeSelectionListener(utreeSelectionAction));
-        rotree.addTreeSelectionListener(new LGMTreeSelectionListener(rotreeSelectionAction));
-        rutree.addTreeSelectionListener(new LGMTreeSelectionListener(rutreeSelectionAction));
-        /*
-         * ... End: TreeSelectionListener erstellen und an Trees anhängen
-         */
 
         /*
          * Start: Buttons & Actions erstellen und registrieren ...
@@ -168,18 +140,19 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         JButton removeUnterButton = new JButton();
 
         try {
-            addUeberAction = LGMActionLibrary.getAddElementAction(rotree, otree, this, true);
-            removeUeberAction = LGMActionLibrary.getDisconnectAction(otree, rotree, this, true);
-            addUnterAction = LGMActionLibrary.getAddElementAction(rutree, utree, this, false);
-            removeUnterAction = LGMActionLibrary.getDisconnectAction(utree, rutree, this, false);
-        } catch (Exception e) {
+            loaddAction = LGMActionLibrary.getAddElementAction(rotree, lotree, this, true);
+            loremoveAction = LGMActionLibrary.getDisconnectAction(lotree, rotree, this, true);
+            luaddAction = LGMActionLibrary.getAddElementAction(rutree, lutree, this, false);
+            luremoveAction = LGMActionLibrary.getDisconnectAction(lutree, rutree, this, false);
+        } catch (ActionNotDefinedForClassException e) {
             e.printStackTrace();
         }
 
-        addUeberButton.setAction(addUeberAction);
-        removeUeberButton.setAction(removeUeberAction);
-        addUnterButton.setAction(addUnterAction);
-        removeUnterButton.setAction(removeUnterAction);
+        addUeberButton.setAction(loaddAction);
+        removeUeberButton.setAction(loremoveAction);
+        addUnterButton.setAction(luaddAction);
+        removeUnterButton.setAction(luremoveAction);
+
         /*
          * ... end: Buttons & Actions erstellen und registrieren
          */
@@ -197,48 +170,41 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         buttonpanel2.add(addUnterButton);
         buttonpanel2.add(removeUnterButton);
 
-        init();
+        initTreeListenerAndDragNDrop();
+
+        showFullDialog(true);
     }
 
     protected String getEdgeDisplayName(final int connectionState) {
         return edgeIsForward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
-    ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<ElementContainer>(500);
-    ArrayList<ElementContainer> childrenToExcludeFromRutree = new ArrayList<ElementContainer>(500);
+    ArrayList<ElementContainer> childrenToExcludeFromRotree = Lists.newArrayList();
+    ArrayList<ElementContainer> childrenToExcludeFromRutree = Lists.newArrayList();
 
     @Override
-    protected void init() {
+    public void update() {
 
-        super.init();
+        lotree.saveExpansion();
+        lotree.saveSelection();
+        lutree.saveExpansion();
+        lutree.saveSelection();
 
-        remove(buttonpanel1);
-        remove(buttonpanel2);
-        remove(oben2);
-        remove(unten2);
-        remove(sp3);
-        remove(sp4);
-
-        otree.saveExpansion();
-        otree.saveSelection();
-        utree.saveExpansion();
-        utree.saveSelection();
-
-        oroot.removeAllChildren();
-        uroot.removeAllChildren();
-        otree.reset();
-        utree.reset();
+        loroot.removeAllChildren();
+        luroot.removeAllChildren();
+        lotree.reset();
+        lutree.reset();
         childrenToExcludeFromRotree.clear();
         childrenToExcludeFromRutree.clear();
 
         ModelElement modelElement = getModelElement();
         for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
-            otree.addObject(ec, oroot, null, true, false, false);
+            lotree.addObject(ec, loroot, null, true, false, false);
             childrenToExcludeFromRotree.add(ec);
         }
         if (UserProperties.isSearchParts()) {
             for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
-                LGMTreeNode node = otree.addObject(ec, oroot, null, true, false, false);
+                LGMTreeNode node = lotree.addObject(ec, loroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
@@ -247,7 +213,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
         if (UserProperties.isSearchParents()) {
             for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
-                LGMTreeNode node = otree.addObject(ec, oroot, null, true, false, false);
+                LGMTreeNode node = lotree.addObject(ec, loroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
@@ -256,12 +222,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
 
         for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
-            utree.addObject(ec, uroot, null, true, false, false);
+            lutree.addObject(ec, luroot, null, true, false, false);
             childrenToExcludeFromRutree.add(ec);
         }
         if (UserProperties.isSearchParts()) {
             for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
-                LGMTreeNode node = utree.addObject(ec, uroot, null, true, false, false);
+                LGMTreeNode node = lutree.addObject(ec, luroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
@@ -270,17 +236,17 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         }
         if (UserProperties.isSearchParents()) {
             for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
-                LGMTreeNode node = utree.addObject(ec, uroot, null, true, false, false);
+                LGMTreeNode node = lutree.addObject(ec, luroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
                 }
                 childrenToExcludeFromRutree.add(ec);
             }
         }
-        omodel.reload();
-        otree.restoreExpansion();
-        umodel.reload();
-        utree.restoreExpansion();
+        lomodel.reload();
+        lotree.restoreExpansion();
+        lumodel.reload();
+        lutree.restoreExpansion();
 
         repaint();
         revalidate();
@@ -289,7 +255,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
     @Override
     protected void showFullDialog() {
-        super.showFullDialog();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.NONE;
         add(this, buttonpanel1, constraints, 1, 1, 1, 2);
@@ -297,8 +262,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, buttonpanel2, constraints, 1, 3, 1, 2);
 
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, oben2, constraints, 2, 0, 1, 1);
-        add(this, unten2, constraints, 2, 2, 1, 1);
+        add(this, lolabel, constraints, 2, 0, 1, 1);
+        add(this, lulabel, constraints, 2, 2, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
@@ -332,11 +297,21 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     }
 
     @Override
+    protected void showPartlyDialog() {
+        remove(buttonpanel1);
+        remove(buttonpanel2);
+        remove(lolabel);
+        remove(lulabel);
+        remove(sp3);
+        remove(sp4);
+    }
+
+    @Override
     protected DragNDropActionChain[] collectDragNDropActionChains() {
-        DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rotree, otree, addUeberAction);
-        DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(otree, rotree, removeUeberAction);
-        DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(rutree, utree, addUnterAction);
-        DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(utree, rutree, removeUnterAction);
+        DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rotree, lotree, loaddAction);
+        DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(lotree, rotree, loremoveAction);
+        DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(rutree, lutree, luaddAction);
+        DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(lutree, rutree, luremoveAction);
 
         return new DragNDropActionChain[] {
                 tac1,
@@ -347,11 +322,11 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     }
 
     @Override
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {
-                otree,
+    public JTree[] getAllDragNDropTrees() {
+        return new JTree[] {
+                lotree,
                 rotree,
-                utree,
+                lutree,
                 rutree
         };
     }

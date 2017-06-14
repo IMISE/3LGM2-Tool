@@ -3,135 +3,116 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EventObject;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.google.common.collect.Sets;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
-import de.imise.tool3lgm.graphtools.dialog.dragdrop.LGMDragNDropTree;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
  * @author fstephan
  */
-public class StructurePanel extends LGMDragNDropPanel {
+public class StructurePanel extends AbstractPathOfOneEdgePanel {
+
+    private LGMTree lotree, lutree;
+    private LGMTree rtree;
+    private DefaultTreeModel lomodel, lumodel, rmodel;
+    private LGMTreeNode loroot, luroot, rroot;
+    private JPanel control1, control2;
+    private JLabel rlabel;
+    private JScrollPane sp2;
 
     /**
-     *
+     * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden sollen, weil sie links schon verknüpft sind
      */
-    private final LGMDragNDropTree lotree, lutree;
+    private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
+
+    private LGMAction loaddAction;
+    private LGMAction loremoveAction;
+    private LGMAction luaddAction;
+    private LGMAction luremoveAction;
 
     /**
-     *
+     * @param dialog
      */
-    private final LGMDragNDropTree rtree;
+    public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends PartOfBeziehung> partOfEdgeClass) {
+        super(dialog, true, dialog.getModelElement().getClass(), partOfEdgeClass);
+        internalInit();
+    }
 
-    /**
-     *
-     */
-    private final DefaultTreeModel lomodel, lumodel, rmodel;
-
-    /**
-     *
-     */
-    private final LGMTreeNode loroot, luroot, rroot;
-
-    /**
-     *
-     */
-    private final JPanel control1, control2;
-
-    /**
-     *
-     */
-    private final JLabel label2;
-
-    /**
-     *
-     */
-    private final JScrollPane sp2;
-
-    /**
-     * COMMENTME
-     */
-    private final ArrayList<ElementContainer> childrenToExcludeFromRtree = new ArrayList<ElementContainer>(100);
-
-    private LGMAction addUeberAction;
-    private LGMAction removeUeberAction;
-    private LGMAction addUnterAction;
-    private LGMAction removeUnterAction;
-
-    /**
-     * @param pd
-     */
-    public StructurePanel(final ElementPropertyDialog pd) {
-        super(pd, getResString("strukt"));
-
+    private void internalInit() {
         // lotree
-        JLabel oben = new JLabel(Tool3lgmConstants.getResString("ueberg"));
-        loroot = new LGMTreeNode(Tool3lgmConstants.getResString("ueberg"), false);
+        JLabel lolabel = new JLabel(Tool3lgmConstants.getResString("ueberg"));
+        loroot = new LGMTreeNode(getModelElement().getName(), false);
         lomodel = new DefaultTreeModel(loroot);
-        lotree = new LGMDragNDropTree(lomodel, mainDoc);
+        lotree = new LGMTree(lomodel, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
         lotree.setShowsRootHandles(true);
         lotree.setCellRenderer(treeRenderer);
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        JScrollPane spueber = new JScrollPane(lotree);
+        JScrollPane lotreeScrollPane = new JScrollPane(lotree);
 
         // lutree
-        JLabel unten = new JLabel(Tool3lgmConstants.getResString("unterg"));
-        luroot = new LGMTreeNode(Tool3lgmConstants.getResString("unterg"), false);
+        JLabel lulabel = new JLabel(Tool3lgmConstants.getResString("unterg"));
+        luroot = new LGMTreeNode(getModelElement().getName(), false);
         lumodel = new DefaultTreeModel(luroot);
-        lutree = new LGMDragNDropTree(lumodel, mainDoc);
+        lutree = new LGMTree(lumodel, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
         lutree.setCellRenderer(treeRenderer);
-        JScrollPane spunter = new JScrollPane(lutree);
+        JScrollPane lutreeScrollPane = new JScrollPane(lutree);
 
         // PanelLayout
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        constraints.ipadx = -30;
-        constraints.ipady = -10;
+        //nur für Windows wichtig
+        //        constraints.ipadx = -30;
+        //        constraints.ipady = -10;
         add(this, viewButton, constraints, 0, 6, 1, 1);
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
+
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, oben, constraints, 0, 0, 1, 1);
-        add(this, unten, constraints, 0, 2, 1, 1);
+        add(this, lolabel, constraints, 0, 0, 1, 1);
+        add(this, lulabel, constraints, 0, 2, 1, 1);
+
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 100;
-        constraints.weighty = 100;
-        add(this, spueber, constraints, 0, 1, 1, 1);
-        add(this, spunter, constraints, 0, 3, 1, 1);
+        constraints.weightx = 1d;
+        constraints.weighty = 1d;
+        add(this, lotreeScrollPane, constraints, 0, 1, 1, 1);
+        add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         // rtree
-        label2 = new JLabel(Tool3lgmConstants.getResString("frei"));
+        rlabel = new JLabel(Tool3lgmConstants.getResString("frei"));
         rroot = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
         rmodel = new DefaultTreeModel(rroot);
-        rtree = new LGMDragNDropTree(rmodel, mainDoc);
+        rtree = new LGMTree(rmodel, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
         rtree.setShowsRootHandles(true);
@@ -140,140 +121,106 @@ public class StructurePanel extends LGMDragNDropPanel {
         sp2 = new JScrollPane(rtree);
 
         /*
-         * Start: MouseListener erstellen und an Trees anhängen ...
-         */
-        LGMAction lotreeMouseAction = LGMActionLibrary.getMouseAction(lotree, this);
-        LGMAction lutreeMouseAction = LGMActionLibrary.getMouseAction(lutree, this);
-        LGMAction rtreeMouseAction = LGMActionLibrary.getMouseAction(rtree, this);
-
-        lotree.addMouseListener(new LGMMouseListener(null, null, null, lotreeMouseAction, null));
-        lutree.addMouseListener(new LGMMouseListener(null, null, null, lutreeMouseAction, null));
-        rtree.addMouseListener(new LGMMouseListener(null, null, null, rtreeMouseAction, null));
-        /*
-         * ... End: MouseListener erstellen und an Trees anhängen
-         */
-
-        /*
-         * Start: TreeSelectionListener erstellen und an Trees anhängen ...
-         */
-        LGMAction lotreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(lotree, this);
-        LGMAction lutreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(lutree, this);
-        LGMAction rtreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rtree, this);
-
-        lotree.addTreeSelectionListener(new LGMTreeSelectionListener(lotreeSelectionAction));
-        lutree.addTreeSelectionListener(new LGMTreeSelectionListener(lutreeSelectionAction));
-        rtree.addTreeSelectionListener(new LGMTreeSelectionListener(rtreeSelectionAction));
-        /*
-         * ... End: TreeSelectionListener erstellen und an Trees anhängen
-         */
-
-        /*
          * Start: Buttons & Actions erstellen und registrieren ...
          */
-        JButton addUeberButton = new JButton();
-        JButton removeUeberButton = new JButton();
-        JButton addUnterButton = new JButton();
-        JButton removeUnterButton = new JButton();
+        JButton loaddButton = new JButton();
+        JButton loremoveButton = new JButton();
+        JButton luaddButton = new JButton();
+        JButton luremoveButton = new JButton();
 
-        try {
-            addUeberAction = LGMActionLibrary.getAddElementAction(rtree, lotree, this, false);
-            removeUeberAction = LGMActionLibrary.getDisconnectAction(lotree, rtree, this, false);
-            addUnterAction = LGMActionLibrary.getAddElementAction(rtree, lutree, this, true);
-            removeUnterAction = LGMActionLibrary.getDisconnectAction(lutree, rtree, this, true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loaddAction = getConnectAction(rtree, lotree, true);
+        loremoveAction = getDisconnectAction(lotree, rtree, true);
+        luaddAction = getConnectAction(rtree, lutree, false);
+        luremoveAction = getDisconnectAction(lutree, rtree, false);
 
-        addUeberButton.setAction(addUeberAction);
-        removeUeberButton.setAction(removeUeberAction);
-        addUnterButton.setAction(addUnterAction);
-        removeUnterButton.setAction(removeUnterAction);
+        loaddButton.setAction(loaddAction);
+        loremoveButton.setAction(loremoveAction);
+        luaddButton.setAction(luaddAction);
+        luremoveButton.setAction(luremoveAction);
         /*
          * ... end: Buttons & Actions erstellen und registrieren
          */
 
         // ButtonPanels erstellen
-        control1 = new JPanel();
-        control2 = new JPanel();
-        control1.setLayout(new GridLayout(2, 1));
-        control2.setLayout(new GridLayout(2, 1));
+        control1 = new JPanel(new GridLayout(2, 1));
+        control2 = new JPanel(new GridLayout(2, 1));
 
         // Buttons dem Panel hinzufügen
-        control1.add(addUeberButton);
-        control1.add(removeUeberButton);
-        control2.add(addUnterButton);
-        control2.add(removeUnterButton);
+        control1.add(loaddButton);
+        control1.add(loremoveButton);
+        control2.add(luaddButton);
+        control2.add(luremoveButton);
 
-        init();
+        initTreeListenerAndDragNDrop();
+
+        showFullDialog(true);
     }
 
     @Override
-    protected void init() {
-
-        super.init();
-
-        remove(control1);
-        remove(control2);
-        remove(label2);
-        remove(sp2);
-
+    public void update() {
         childrenToExcludeFromRtree.clear();
+        ModelElement me = getModelElement();
+        ElementContainer meContainer = me.getContainer(doc);
+        childrenToExcludeFromRtree.add(meContainer);
+        lotree.saveExpansionAndSelection();
         loroot.removeAllChildren();
         lotree.reset();
-        ModelElement modelElement = getModelElement();
-        for (ElementContainer ec : modelElement.getDirectParentContainer(mainDoc)) {
+        for (ElementContainer ec : me.getDirectParentContainer(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
             lotree.addObject(ec, loroot, null, true, false, false);
         }
         lomodel.reload();
-        // expandTree(lotree);
+        lotree.restoreExpansionAndSelection();
 
+        lutree.saveExpansionAndSelection();
         luroot.removeAllChildren();
         lutree.reset();
-        for (ElementContainer ec : modelElement.getDirectPartContainer(mainDoc)) {
+        for (ElementContainer ec : me.getDirectPartContainer(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
             lutree.addObject(ec, luroot, null, true, false, false);
         }
         lumodel.reload();
-        // expandTree(lutree);
+        lutree.restoreExpansionAndSelection();
 
+        if (isRightSideVisible()) {
+            rtree.saveExpansionAndSelection();
+            rroot.removeAllChildren();
+            rtree.reset();
+            ArrayList<ElementContainer> all = mainDoc.getElementContainer(me.getClass());
+            all.remove(meContainer);
+            for (ElementContainer ec : all) {
+                rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, false, true);
+            }
+            rmodel.reload();
+            rtree.restoreExpansionAndSelection();
+        }
         revalidate();
         repaint();
     }
 
     @Override
     protected void showFullDialog() {
-
-        super.showFullDialog();
-
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.CENTER;
-        constraints.weightx = 0;
-        constraints.weighty = 0;
+        constraints.weightx = 0d;
+        constraints.weighty = 0d;
         add(this, control1, constraints, 1, 1, 1, 1);
         add(this, control2, constraints, 1, 3, 1, 1);
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, label2, constraints, 2, 0, 1, 1);
+        add(this, rlabel, constraints, 2, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 100;
-        constraints.weighty = 100;
+        constraints.weightx = 1d;
+        constraints.weighty = 1d;
         add(this, sp2, constraints, 2, 1, 1, 3);
+    }
 
-        rroot.removeAllChildren();
-        rtree.reset();
-        ModelElement modelElement = getModelElement();
-        ArrayList<ElementContainer> all = mainDoc.getElementContainer(modelElement.getClass());
-        all.remove(modelElement.getContainer(doc));
-        for (ElementContainer ec : all) {
-            rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, false, true);
-        }
-        rmodel.reload();
-        // expandTree(rtree);
-
-        revalidate();
-        repaint();
-
+    @Override
+    protected void showPartlyDialog() {
+        remove(control1);
+        remove(control2);
+        remove(rlabel);
+        remove(sp2);
     }
 
     /**
@@ -285,29 +232,29 @@ public class StructurePanel extends LGMDragNDropPanel {
         /*
          * alle Aktionen zwischen rtree <-> lotree und rtree <-> lutree
          */
-        DragNDropInitializer.DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rtree, lotree, addUeberAction);
-        DragNDropInitializer.DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(rtree, lutree, addUnterAction);
-        DragNDropInitializer.DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(lotree, rtree, removeUeberAction);
-        DragNDropInitializer.DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(lutree, rtree, removeUnterAction);
+        DragNDropInitializer.DragNDropActionChain tac1 = DragNDropInitializer.createNewDragNDropActionChain(rtree, lotree, loaddAction);
+        DragNDropInitializer.DragNDropActionChain tac2 = DragNDropInitializer.createNewDragNDropActionChain(rtree, lutree, luaddAction);
+        DragNDropInitializer.DragNDropActionChain tac3 = DragNDropInitializer.createNewDragNDropActionChain(lotree, rtree, loremoveAction);
+        DragNDropInitializer.DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(lutree, rtree, luremoveAction);
 
         /*
          * alle Aktionen zwischen lotree <-> lutree
          */
-        DragNDropInitializer.DragNDropActionChain tac5 = DragNDropInitializer.createNewDragNDropActionChain(new LGMDragNDropTree[] {
+        DragNDropInitializer.DragNDropActionChain tac5 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
                 lotree,
                 rtree,
                 lutree
         }, new LGMAction[] {
-                removeUeberAction,
-                addUnterAction
+                loremoveAction,
+                luaddAction
         });
-        DragNDropInitializer.DragNDropActionChain tac6 = DragNDropInitializer.createNewDragNDropActionChain(new LGMDragNDropTree[] {
+        DragNDropInitializer.DragNDropActionChain tac6 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
                 lutree,
                 rtree,
                 lotree
         }, new LGMAction[] {
-                removeUnterAction,
-                addUeberAction
+                luremoveAction,
+                loaddAction
         });
 
         DragNDropInitializer.DragNDropActionChain[] allDndActionChains = new DragNDropInitializer.DragNDropActionChain[] {
@@ -324,12 +271,82 @@ public class StructurePanel extends LGMDragNDropPanel {
     }
 
     @Override
-    public LGMDragNDropTree[] getAllDragNDropTrees() {
-        return new LGMDragNDropTree[] {
+    public LGMTree[] getAllDragNDropTrees() {
+        return new LGMTree[] {
                 rtree,
                 lotree,
                 lutree
         };
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "addButtons" der Panels angefügt werden.
+     *
+     * @param srcTree
+     * @param targetTree
+     * @param connectForward
+     */
+    private final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final boolean connectForward) {
+        final GraphDocument doc = getGraphDocument();
+        final GDCollection gdcoll = doc.getCollection();
+        final int pid = getTransactionID();
+        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+            @Override
+            public void execute(final EventObject e) {
+                TreePath[] selpaths = srcTree.getSelectionPaths();
+                if (selpaths != null) {
+                    for (int n = 0; n < selpaths.length; n++) {
+                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = (ElementContainer) node.getUserObject();
+                        ModelElement me = ec.getElement();
+                        ModelElement topLevelMe = getTopLevelModelElement(targetTree);
+                        if (connectForward) {
+                            gdcoll.link(edgeClass, topLevelMe, me, pid);
+                        } else {
+                            gdcoll.link(edgeClass, me, topLevelMe, pid);
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "removeButtons" der Panels angefügt werden.
+     *
+     * @param srcTree
+     * @param targetTree
+     * @param disconnectForward
+     */
+    private final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final boolean disconnectForward) {
+        final GraphDocument doc = getGraphDocument();
+        final GDCollection gdcoll = doc.getCollection();
+        final int pid = getTransactionID();
+        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+
+            @Override
+            public void execute(final EventObject e) {
+                TreePath[] selpaths = srcTree.getSelectionPaths();
+                if (selpaths != null) {
+                    for (int n = 0; n < selpaths.length; n++) {
+                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = (ElementContainer) node.getUserObject();
+                        ModelElement me = ec.getElement();
+                        ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
+                        if (disconnectForward) {
+                            gdcoll.unlink(topLevelModelElement, me, edgeClass, pid);
+                        } else {
+                            gdcoll.unlink(me, topLevelModelElement, edgeClass, pid);
+                        }
+                    }
+                }
+            }
+        };
+
     }
 
 }
