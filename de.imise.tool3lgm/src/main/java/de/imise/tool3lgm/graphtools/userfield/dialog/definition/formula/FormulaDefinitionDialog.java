@@ -54,7 +54,7 @@ import de.imise.util.swing.component.text.ExtendedTextArea;
  * damit in die Klammer. Zum Kenntlichmachen, das der nächste Operand/Operator nicht mehr in die Klammer gehört, wurde das Metazeichen " > "eingeührt.
  * In diesem Dialog kann die interne Repräsentation der Formal angezeigt werden. Dazu ist <code>hashAreaVisible</code> auf true zu setzen. Andernfalls
  * auf false.
- * 
+ *
  * @author hboehme
  */
 public class FormulaDefinitionDialog extends JDialog implements ActionListener {
@@ -115,8 +115,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private AlphabeticalJList modelAttributes;
 
     /**
-	 *  
-	 */
+     *
+     */
     private final UserFieldDefinitions definitions;
 
     /**
@@ -241,7 +241,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         formulaArea.setLineWrap(true);
         formulaArea.setWrapStyleWord(true);
         formulaArea.addCaretListener(new CaretListener() {
-            //wenn keine Formel definiert wurde, soll der okButton nicht aktivert sein. 
+            //wenn keine Formel definiert wurde, soll der okButton nicht aktivert sein.
             @Override
             public void caretUpdate(final CaretEvent e) {
                 if (okButton != null) {
@@ -261,7 +261,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         panel2.add(scrollPane, constraints);
 
-        // wird gemacht, damit sämtliche Keyevents irrelevant werden. 
+        // wird gemacht, damit sämtliche Keyevents irrelevant werden.
         formulaArea.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(final KeyEvent e) {
@@ -474,14 +474,14 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         panel.add(buttonminus, bpc);
         bpc.gridx++;
 
+        bpc.gridy++;
+        bpc.gridx = 0;
         panel.add(buttonmult, bpc);
         bpc.gridx++;
 
         panel.add(buttondiv, bpc);
         bpc.gridx++;
 
-        bpc.gridy++;
-        bpc.gridx = 0;
         panel.add(buttonklammerauf, bpc);
         bpc.gridx++;
 
@@ -499,13 +499,16 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             bpc.gridx++;
 
             panel.add(buttonteilwertsumme, bpc);
-            bpc.gridx++;
+
+            bpc.gridy++;
+            bpc.gridx = 0;
             panel.add(buttonmax, bpc);
             bpc.gridx++;
             panel.add(buttonmin, bpc);
             bpc.gridx++;
             panel.add(buttonmittelwert, bpc);
-            bpc.gridx++;
+            bpc.gridy++;
+            bpc.gridx = 0;
             panel.add(buttonindikator, bpc);
             bpc.gridx++;
         } else {
@@ -567,7 +570,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Lädt alle anderen <code>UserField</code>s (userFields, die vom STYLE CLASSIFICATION_NUMBER sind) in die JList.
-     * 
+     *
      * @param elementClass
      */
     private void updateFieldList(final Class<? extends UserFieldTarget> elementClass) {
@@ -580,7 +583,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Zeigt den FormelEditorDialog.
-     * 
+     *
      * @param owner
      * @param def
      * @param field
@@ -652,7 +655,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_SUM, userField);
 
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term, 
+            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
 
             String vfdResult = vfd.showDialog();
@@ -665,7 +668,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MULT, userField);
 
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term, 
+            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
 
             String vfdResult = vfd.showDialog();
@@ -687,7 +690,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MIN, userField);
 
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term, 
+            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
 
             String vfdResult = vfd.showDialog();
@@ -699,7 +702,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MAX, userField);
 
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term, 
+            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
 
             String vfdResult = vfd.showDialog();
@@ -711,7 +714,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_AVG, userField);
 
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term, 
+            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
 
             String vfdResult = vfd.showDialog();
@@ -802,7 +805,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         else if (e.getActionCommand().equals("clearFormula")) {
 
-            // Wenn der Löschenbutton betätigt wurde, werden alle Elemente des Term-stacks entfernt und die textAreas neu gefüllt (in diesem Falls mich nichts).  
+            // Wenn der Löschenbutton betätigt wurde, werden alle Elemente des Term-stacks entfernt und die textAreas neu gefüllt (in diesem Falls mich nichts).
             if (term != null) {
                 term.clear();
             }
@@ -813,7 +816,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
             orgButtons(Calculator.OPERATOR_PLUS);
         }
-        // Als letze Aktion nach jeder Aktion wird geprüft, ob die Formel korrekt ist.   
+        // Als letze Aktion nach jeder Aktion wird geprüft, ob die Formel korrekt ist.
         checkFormulaValidity();
 
     }
@@ -833,7 +836,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Konvertiert den Stack mit seinen Elementen, die in Eingabereihenfolge vorliegen, in einen String der die Formel in der Form enthält, wie sie
      * mathematisch korrekt ist. Zusätzlich wird hier entschieden, an welcher Position der Cursor im Textfeld für die Formel angezeigt wird.
-     * 
+     *
      * @return String Die Formel in menschenlesbarer Form aber in <code>UserField</code>-hashCode-schreibweise.
      */
     private String convertStackFormulaToOrdinaryFormula() {
@@ -841,7 +844,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
          * Schreibt die Elemente aus dem Term-Stack in die <code>ArrayList</code> mit diesem Mechanismus kann evtl. auf den Stack ganz verzichtet
          * werden.
          */
-        //die Liste wird verwendet, um die Formel in die korrekte Form zu ordnen 
+        //die Liste wird verwendet, um die Formel in die korrekte Form zu ordnen
         /**
          * Diese Liste beinhaltet die Formel in der korrekten Leseweise.
          */
@@ -855,11 +858,11 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 if (partTerm.equals("(  )")) {
                     termList.add(insertIndex, Calculator.OPEN_BRACKET);
 
-                    //hier wird mit Absicht nicht insertIndex++ gemacht, 
+                    //hier wird mit Absicht nicht insertIndex++ gemacht,
                     //da somit nochmal an der selben Stelle etwas eingefügt werden kann
                     termList.add(insertIndex + 1, Calculator.CLOSE_BRACKET);
 
-                    //Wenn eine Klammer eingefügt wird, 
+                    //Wenn eine Klammer eingefügt wird,
                     //ist die soll der Cursor in der Mitte des Klammernpaares stehen.
                     caretPosInFormulaArea += 2;
                 } else if (partTerm.equals(USERFIELD_IN_FORMULA_BRACKET_LEAVE)) {
@@ -867,7 +870,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 } else {
                     termList.add(insertIndex, partTerm);
 
-                    // Die Teilformel in einen menschenlesbaren String umwandeln, 
+                    // Die Teilformel in einen menschenlesbaren String umwandeln,
                     // damit seine Länge in die Berechung für die Cusorposition eingehen kann.
                     String humanReadablePartTerm = CostingUtil.getHumanReadableFormulaString(partTerm, definitions);
                     caretPosInFormulaArea += humanReadablePartTerm.length();
@@ -876,7 +879,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             }
         }
 
-        //hier wird die Formel, 
+        //hier wird die Formel,
         //die aus vielen Teilformeln bestehen kann zusammengesetzt
         StringBuilder formulaString = new StringBuilder();
         for (int i = 0; i < termList.size(); i++) {
@@ -889,7 +892,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Fügt dem <code>Stack</code> <code>term</code> ein Element an. Alle eingegebenen Elemente befinden sich in Eingabereihenfolge und nicht in
      * natürlicher Formelartiger Form auf diesem Stack.
-     * 
+     *
      * @param element Der anzufügende String
      */
     private void pushToFormulaStack(final String element) {
@@ -914,7 +917,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Entfernt das letzte Element aus dem <code>term</code> <code>Stack</code> und gibt es zurück.
-     * 
+     *
      * @return das gepoppte Element
      */
     private String popFromStack() {
@@ -932,7 +935,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Setzte den enabled-Status der Buttons auf true oder false. Somit soll Verhindert werden, dass mehrmal Operatoren hintereinanderer angegeben
      * werden können.
-     * 
+     *
      * @param lastCommand das letze Komanndo, welches für den neuen Status der Button bestimmt. Bsp: Nach einem "+" darf nicht nochmal ein "+"
      *            betätigt werden. Übergabeparameter ist in diesem Fall das "+" als String.
      */
@@ -1013,7 +1016,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Setzt den Editierbarkeitesstatus der Buttons für Verrechnungsfunktionen
-     * 
+     *
      * @param state true, wenn die Buttons klickbar sein sollen false, wenn die Buttons nicht klickbar sein sollen
      * @param ignoreTypeElement true, wenn wirklich von allen Buttons die Enabled-einstellung geändert werden soll - unabhänig ob es ein Knoten oder
      *            eine Kante ist.
@@ -1040,7 +1043,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     /**
      * Setzt den Editierbarkeitesstatus der Buttons für die normale Operatoren ( +,-,*,/ )
-     * 
+     *
      * @param state true, wenn die Buttons klickbar sein sollen false, wenn die Buttons nicht klickbar sein sollen
      * @param state
      */
