@@ -75,6 +75,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -533,6 +534,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public boolean openFile(final boolean open, File file) {
         GDCollection gdcoll = new GDCollection();
+        //Standard-Userfield-Definition laden
+        UserfieldResourceHandler.loadDefaultUserfieldDefinition(gdcoll);
         if (open == false && file == null) {
             gdcoll.createSzenario();
         } else if (file != null) {
@@ -589,6 +592,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
             createSzenarioFrame(szen);
         }
+
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
         setSelectedDoc(selectedDoc, true);
@@ -1915,8 +1919,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     public final boolean checkLicenses() {
         try {
             if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de", "medizin.uni-leipzig.de", "AAA2011")) {
-                return true;
-            }
+            return true;
+        }
         } catch (Exception e) {
         }
         FileNameExtensionFilterAndFileFilter licenseFileFilter = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC), false);

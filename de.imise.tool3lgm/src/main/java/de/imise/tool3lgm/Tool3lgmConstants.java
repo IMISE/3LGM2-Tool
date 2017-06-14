@@ -145,11 +145,22 @@ public abstract class Tool3lgmConstants {
      */
     private static final String RESOURCE_ICON_DIR_NAME = "icon/";
 
+    /** Name des Verzeichnisses in dem die lokalisierten Ressourcen ZUR ENTWICKLUNGSZEIT liegen bedinnend mit dem Hauptpackage */
+    public static final String DEV_RESOURCE_DIR_NAME = "/src/main/resources/";
+    /** Name des Verzeichnisses in dem die lokalisierten Ressourcen IN DEM JAR-FILE liegen bedinnend mit dem Hauptpackage */
+    public static final String JAR_RESOURCE_DIR_NAME = "";
+
     /**
      * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
      * sind.
      */
     public static final String RESOUCE_BASE_XSL_SCRIPT_DIR_NAME = "xslt/";
+
+    /**
+     * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
+     * sind.
+     */
+    public static final String RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME = "userfield/";
 
     /** Absoluter Name des Beispielmodells */
     public static final File EXAMPLE_MODEL_FILE = new File(APPLICATION_DIR, "Beispiel.z3lgm");
