@@ -3,6 +3,17 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.CLOSE_BRACKET;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPEN_BRACKET;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_DIV;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_MINUS;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_MULT;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_PLUS;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
+import static java.awt.GridBagConstraints.BOTH;
+import static java.awt.GridBagConstraints.NORTHWEST;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -19,7 +30,6 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -69,6 +79,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      */
     public static final String USERFIELD_IN_FORMULA_BRACKET_LEAVE = "%>%";
 
+    public static final String BRACKETS = OPEN_BRACKET + WHITESPACE + WHITESPACE + CLOSE_BRACKET;
+
     /**
      * String für Dialogrückgabewert
      */
@@ -82,7 +94,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Button zum Bestätigen und schließen
      */
-    private JButton okButton;
+    private final JButton okButton, cancelButton;
 
     /**
      * TextArea zum Anzeigen des FormelStrings in lesebarer Form.
@@ -132,7 +144,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Die Buttons, für +,-,*,/,()
      */
-    private JButton buttonplus, buttonminus, buttonmult, buttondiv, buttonklammerauf;
+    private JButton buttonplus, buttonminus, buttonmult, buttondiv, buttonbrackets;
 
     /**
      * Die Buttons für die Verrechnungsfunktionen Summe, Teilwertsumme, Maximum, Minimum, Indikator und Reference
@@ -174,13 +186,15 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @param oldFormulaString
      */
     private FormulaDefinitionDialog(final JDialog owner, final UserFieldDefinitions def, final UserField field, final String newUserFieldName) {
-        super(owner, Tool3lgmConstants.getResString("formulaEditorDialog"), true);
+        super(owner, getResString("formulaEditorDialog"), true);
         definitions = def;
         userField = field;
         oldFormulaString = userField.getFormula();
-        setTitle(Tool3lgmConstants.getResString("formulaEditorDialog") + "  -  " + userField.getTargetClass().getSimpleName() + "  -  " + newUserFieldName);
+        setTitle(getResString("formulaEditorDialog") + "  -  " + userField.getTargetClass().getSimpleName() + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
         term = new Stack<String>();
+        okButton = getButton("ok");
+        cancelButton = getButton("cancel");
         init();
         pack();
     }
@@ -192,7 +206,6 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         Container pane = getContentPane();
         JLabel label;
         JPanel panel, panel2;
-        AbstractButton button;
         Border border1, border2;
         JScrollPane scrollPane;
         setLocationByPlatform(true);
@@ -203,23 +216,22 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent e) {
-                FormulaDefinitionDialog.this.actionPerformed(new ActionEvent(FormulaDefinitionDialog.this, e.getID(), "cancel"));
+                cancelButton.doClick();
             }
         });
         panel2 = new JPanel(new GridBagLayout());
-        //GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 0, 2, 0), 0, 0);
 
         isOnlyEdge = ModelConstants.isEdgeType(userField.getTargetClass());
 
-        undoButton = new JButton(Tool3lgmConstants.getResString("undo"));
-        leaveBracketButton = new JButton(Tool3lgmConstants.getResString("leaveBracketButton"));
-        clearFormulaButton = new JButton(Tool3lgmConstants.getResString("clearFormula"));
+        undoButton = getButton("undo");
+        leaveBracketButton = getButton("leaveBracketButton");
+        clearFormulaButton = getButton("clearFormula");
         undoButton.setEnabled(false);
         leaveBracketButton.setEnabled(false);
 
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.fill = BOTH;
+        constraints.anchor = NORTHWEST;
         constraints.insets = new Insets(2, 0, 2, 0);
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -227,7 +239,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         constraints.gridwidth = 1;
 
         panel2.setBorder(new EmptyBorder(5, 5, 5, 5));
-        label = new JLabel(Tool3lgmConstants.getResString("formula") + ": ");
+        label = new JLabel(getResString("formula") + ": ");
         panel2.add(label, constraints);
         /* keine leere Eingabe zulassen */
 
@@ -307,7 +319,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         constraints.gridheight = 1;
         constraints.weighty = 0;
         constraints.weightx = 0;
-        panel2.add(new JLabel(Tool3lgmConstants.getResString("attributes")), constraints);
+        panel2.add(new JLabel(getResString("attributes")), constraints);
 
         userFieldList = new AlphabeticalJList();
         userFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -323,7 +335,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                             pushToFormulaStack(tmpUserField.getHashCode());
                             //Wenn ein Attribut ausgewählt wurde, darf nicht sofort ein neues hinzugefügt werden.
                             orgButtons(CLASSIFICATION_NUMBER);
-                            checkFormulaValidity();
+                            setValidityStatusLabelText();
                         }
                     }
                 }
@@ -345,7 +357,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         constraints.gridx = 2;
         constraints.weighty = 0;
         constraints.weightx = 1;
-        panel2.add(new JLabel(Tool3lgmConstants.getResString("model_variable")), constraints);
+        panel2.add(new JLabel(getResString("model_variable")), constraints);
 
         modelAttributes = new AlphabeticalJList();
         for (UserField uf : definitions.getGlobalUserFields()) {
@@ -362,7 +374,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                     if (tmpUserField != null) {
                         pushToFormulaStack(tmpUserField.getHashCode());
                         orgButtons(CLASSIFICATION_NUMBER);
-                        checkFormulaValidity();
+                        setValidityStatusLabelText();
                     }
                 }
             }
@@ -380,18 +392,11 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         JPanel formulaController = new JPanel();
 
-        Border border = BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("formula_control"));
+        Border border = BorderFactory.createTitledBorder(getResString("formula_control"));
 
         formulaController.setBorder(border);
         formulaController.setLayout(new GridBagLayout());
         GridBagConstraints fcc = new GridBagConstraints();
-
-        leaveBracketButton.addActionListener(this);
-        leaveBracketButton.setActionCommand("leaveBracket");
-        undoButton.addActionListener(this);
-        undoButton.setActionCommand("undo");
-        clearFormulaButton.addActionListener(this);
-        clearFormulaButton.setActionCommand("clearFormula");
 
         fcc.insets = new Insets(3, 0, 3, 0);
         fcc.gridx = 1;
@@ -420,46 +425,21 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         panel.setBorder(border2);
         panel2.add(panel, constraints);
 
-        buttonplus = new JButton("+");
-        buttonminus = new JButton("-");
-        buttonmult = new JButton("*");
-        buttondiv = new JButton("/");
-        buttonklammerauf = new JButton("( )");
-        buttonplus.addActionListener(this);
-        buttonminus.addActionListener(this);
-        buttonmult.addActionListener(this);
-        buttondiv.addActionListener(this);
-        buttonklammerauf.addActionListener(this);
-        buttonplus.setActionCommand("+");
-        buttonminus.setActionCommand("-");
-        buttonmult.setActionCommand("*");
-        buttondiv.setActionCommand("/");
-        buttonklammerauf.setActionCommand("(");
-        buttonsum = new JButton(Tool3lgmConstants.getResString("summe"));
-        buttonsum.addActionListener(this);
-        buttonsum.setActionCommand("sum");
-        buttonMult = new JButton(Tool3lgmConstants.getResString("produkt"));
-        buttonMult.addActionListener(this);
-        buttonMult.setActionCommand("mult");
+        buttonplus = getButton(OPERATOR_PLUS);
+        buttonminus = getButton(OPERATOR_MINUS);
+        buttonmult = getButton(OPERATOR_MULT);
+        buttondiv = getButton(OPERATOR_DIV);
+        buttonbrackets = getButton(BRACKETS);
 
-        buttonteilwertsumme = new JButton(Tool3lgmConstants.getResString("teilwertsumme"));
-        buttonteilwertsumme.addActionListener(this);
-        buttonteilwertsumme.setActionCommand("teilwertsumme");
-        buttonmax = new JButton(Tool3lgmConstants.getResString("maximum"));
-        buttonmax.addActionListener(this);
-        buttonmax.setActionCommand("maximum");
-        buttonmin = new JButton(Tool3lgmConstants.getResString("minimum"));
-        buttonmin.addActionListener(this);
-        buttonmin.setActionCommand("minimum");
-        buttonmittelwert = new JButton(Tool3lgmConstants.getResString("mittelwert"));
-        buttonmittelwert.addActionListener(this);
-        buttonmittelwert.setActionCommand("mittelwert");
-        buttonindikator = new JButton(Tool3lgmConstants.getResString("indicator"));
-        buttonindikator.addActionListener(this);
-        buttonindikator.setActionCommand("indikator");
-        buttonReference = new JButton(Tool3lgmConstants.getResString("reference"));
-        buttonReference.addActionListener(this);
-        buttonReference.setActionCommand("reference");
+        buttonsum = getButton("summe");
+        buttonMult = getButton("produkt");
+        buttonteilwertsumme = getButton("teilwertsumme");
+        buttonmax = getButton("maximum");
+        buttonmin = getButton("minimum");
+        buttonmittelwert = getButton("mittelwert");
+        buttonindikator = getButton("indicator");
+        buttonReference = getButton("reference");
+
         bpc.anchor = GridBagConstraints.NORTHWEST;
         bpc.gridx = 0;
         bpc.gridy = 0;
@@ -482,7 +462,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         panel.add(buttondiv, bpc);
         bpc.gridx++;
 
-        panel.add(buttonklammerauf, bpc);
+        panel.add(buttonbrackets, bpc);
         bpc.gridx++;
 
         bpc.gridy++;
@@ -541,31 +521,41 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         panel2C.weightx = 0;
         panel2C.gridx++;
 
-        okButton = new JButton(Tool3lgmConstants.getResString("ok"));
-        okButton.setActionCommand("ok");
         if (formulaArea.getText().trim().length() == 0) {
             okButton.setEnabled(false);
         } else {
             okButton.setEnabled(true);
         }
-        okButton.addActionListener(this);
         panel2.add(okButton, panel2C);
+
         panel2C.gridx++;
-        button = new JButton(Tool3lgmConstants.getResString("cancel"));
-        button.setActionCommand("cancel");
-        button.addActionListener(this);
-        panel2.add(button, panel2C);
+        panel2.add(cancelButton, panel2C);
+
         pane.add(panel2, BorderLayout.SOUTH);
         pack();
         updateFieldList(userField.getTargetClass());
         term = CostingUtil.getStackForInternalFormula(oldFormulaString);
         if (term != null) {
-            formulaArea.setText(CostingUtil.getHumanReadableFormulaString(convertStackFormulaToOrdinaryFormula(), definitions));
-            hashArea.setText(convertStackFormulaToOrdinaryFormula());
+            String ordinaryFormula = convertStackFormulaToOrdinaryFormula();
+            String humanReadableFormula = CostingUtil.getHumanReadableFormulaString(ordinaryFormula, definitions);
+            formulaArea.setText(humanReadableFormula);
+            hashArea.setText(ordinaryFormula);
             orgButtons("withFormula");
         } else {
             orgButtons("initial");
         }
+    }
+
+    private JButton getButton(final String resKey) {
+        String buttonText = resKey;
+        try {
+            buttonText = Tool3lgmConstants.getResString(resKey);
+        } catch (Exception e) {
+        }
+        JButton button = new JButton(buttonText);
+        button.setActionCommand(resKey);
+        button.addActionListener(this);
+        return button;
     }
 
     /**
@@ -603,8 +593,9 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-
-        if (e.getActionCommand().equals("ok")) {
+        String cmd = e.getActionCommand();
+        Object source = e.getSource();
+        if (source == okButton) {
             //retVal = hashArea.getText();
             String newHashFormula = convertStackFormulaToOrdinaryFormula();
             if (formulaArea.getText().equals(CostingUtil.getHumanReadableFormulaString(oldFormulaString, definitions))) {
@@ -612,45 +603,24 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             } else if (newHashFormula.length() > 0) {
                 retVal = newHashFormula;
             }
-
             if (CostingUtil.isFormulaValid(retVal)) {
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("syntax_error_in_formula"));
             }
-        } else if (e.getActionCommand().equals("cancel")) {
+        } else if (source == cancelButton) {
             retVal = oldFormulaString;
             dispose();
-        } else if (e.getActionCommand().equals(Calculator.OPERATOR_PLUS)) {
-
+        } else if (Calculator.OPERATOR_SIGNS.contains(cmd)) {
             formulaArea.requestFocus();
-            pushToFormulaStack(Calculator.OPERATOR_PLUS);
-            orgButtons(Calculator.OPERATOR_PLUS);
-        } else if (e.getActionCommand().equals(Calculator.OPERATOR_MINUS)) {
-
-            pushToFormulaStack(Calculator.OPERATOR_MINUS);
+            pushToFormulaStack(cmd);
+            orgButtons(cmd);
+        } else if (source == buttonbrackets) {
             formulaArea.requestFocus();
-            orgButtons(Calculator.OPERATOR_MINUS);
-        } else if (e.getActionCommand().equals(Calculator.OPERATOR_MULT)) {
-
-            pushToFormulaStack(Calculator.OPERATOR_MULT);
-            formulaArea.requestFocus();
-            orgButtons(Calculator.OPERATOR_MULT);
-        } else if (e.getActionCommand().equals(Calculator.OPERATOR_DIV)) {
-
-            pushToFormulaStack(Calculator.OPERATOR_DIV);
-            formulaArea.requestFocus();
-            orgButtons(Calculator.OPERATOR_DIV);
-        } else if (e.getActionCommand().equals(Calculator.OPEN_BRACKET)) {
-            formulaArea.requestFocus();
-            leaveBracketButton.setEnabled(true);
             leaveableBracketCounter++;
-            pushToFormulaStack(Calculator.OPEN_BRACKET + "  " + Calculator.CLOSE_BRACKET);
-            orgButtons(Calculator.OPEN_BRACKET);
-
-        } else if (e.getActionCommand().equals(Calculator.CLOSE_BRACKET)) {
-            orgButtons(Calculator.CLOSE_BRACKET);
-        } else if (e.getActionCommand().equals("sum")) {
+            pushToFormulaStack(BRACKETS);
+            orgButtons(BRACKETS);
+        } else if (source == buttonsum) {
 
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_SUM, userField);
@@ -663,7 +633,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 pushToFormulaStack(vfdResult);
                 orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
             }
-        } else if (e.getActionCommand().equals("mult")) {
+        } else if (source == buttonMult) {
 
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MULT, userField);
@@ -676,7 +646,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 pushToFormulaStack(vfdResult);
                 orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
             }
-        } else if (e.getActionCommand().equals("teilwertsumme")) {
+        } else if (source == buttonteilwertsumme) {
 
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_TWSUM, userField);
             String vfdResult = vfd.showDialog();
@@ -685,7 +655,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 pushToFormulaStack(vfdResult);
                 orgButtons(UserField.ACCOUNTING_FUNCTION_TWSUM);
             }
-        } else if (e.getActionCommand().equals("minimum")) {
+        } else if (source == buttonmin) {
 
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MIN, userField);
@@ -698,7 +668,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 pushToFormulaStack(vfdResult);
                 orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
             }
-        } else if (e.getActionCommand().equals("maximum")) {
+        } else if (source == buttonmax) {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MAX, userField);
 
@@ -710,7 +680,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 pushToFormulaStack(vfdResult);
                 orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
             }
-        } else if (e.getActionCommand().equals("mittelwert")) {
+        } else if (source == buttonmittelwert) {
             formulaArea.requestFocus();
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_AVG, userField);
 
@@ -725,7 +695,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
         }
 
-        else if (e.getActionCommand().equals("indikator")) {
+        else if (source == buttonindikator) {
             if (formulaArea.getText().equals("") || formulaArea.getText().trim().startsWith(UserField.ACCOUNTING_FUNCTION_INDI)) {
                 IndicatorDialog indiDialog;
                 indiDialog = new IndicatorDialog(this, userField);
@@ -748,7 +718,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("indicator_in_formula"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
             }
 
-        } else if (e.getActionCommand().equals("reference")) {
+        } else if (source == buttonReference) {
             VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_REF, userField);
             String vfdResult = vfd.showDialog();
             formulaArea.requestFocus();
@@ -758,7 +728,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             }
         }
 
-        else if (e.getActionCommand().equals("leaveBracket")) {
+        else if (source == leaveBracketButton) {
             formulaArea.requestFocus();
             pushToFormulaStack(USERFIELD_IN_FORMULA_BRACKET_LEAVE);
 
@@ -769,14 +739,14 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             orgButtons(USERFIELD_IN_FORMULA_BRACKET_LEAVE);
         }
 
-        else if (e.getActionCommand().equals("undo")) {
+        else if (source == undoButton) {
 
             String deletedElement = popFromStack();
             int termSize = term.size();
 
             if (deletedElement.equals(USERFIELD_IN_FORMULA_BRACKET_LEAVE)) {
                 leaveableBracketCounter++;
-            } else if (deletedElement.equals(Calculator.OPEN_BRACKET + "  " + Calculator.CLOSE_BRACKET)) {
+            } else if (deletedElement.equals(BRACKETS)) {
                 leaveableBracketCounter--;
                 orgButtons("");
             } else if (deletedElement.startsWith(UserField.ACCOUNTING_FUNCTION_SUM) || deletedElement.startsWith(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
@@ -785,7 +755,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
             if (Calculator.OPERATOR_SIGNS.contains(deletedElement)) {
                 orgButtons(CLASSIFICATION_NUMBER);
-                checkFormulaValidity();
+                setValidityStatusLabelText();
                 return;
             }
             if (termSize > 0) {
@@ -803,7 +773,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             }
         }
 
-        else if (e.getActionCommand().equals("clearFormula")) {
+        else if (source == clearFormulaButton) {
 
             // Wenn der Löschenbutton betätigt wurde, werden alle Elemente des Term-stacks entfernt und die textAreas neu gefüllt (in diesem Falls mich nichts).
             if (term != null) {
@@ -816,8 +786,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
             orgButtons(Calculator.OPERATOR_PLUS);
         }
-        // Als letze Aktion nach jeder Aktion wird geprüft, ob die Formel korrekt ist.
-        checkFormulaValidity();
+        setValidityStatusLabelText();
 
     }
 
@@ -825,11 +794,11 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * Prüft die Formel auf syntaktische Korrektheit und setzt entsprechend das <code>statusLabel</code>. Über dieses <code>statusLabel</code> wird
      * angezeigt, ob die Formel korrekt ist oder nicht.
      */
-    private void checkFormulaValidity() {
+    private void setValidityStatusLabelText() {
         if (CostingUtil.isFormulaValid(convertStackFormulaToOrdinaryFormula())) {
-            statusLabel.setText(Tool3lgmConstants.getResString("formula_is_valid"));
+            statusLabel.setText(getResString("formula_is_valid"));
         } else {
-            statusLabel.setText(Tool3lgmConstants.getResString("formula_is_not_valid"));
+            statusLabel.setText(getResString("formula_is_not_valid"));
         }
     }
 
@@ -840,14 +809,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @return String Die Formel in menschenlesbarer Form aber in <code>UserField</code>-hashCode-schreibweise.
      */
     private String convertStackFormulaToOrdinaryFormula() {
-        /*
-         * Schreibt die Elemente aus dem Term-Stack in die <code>ArrayList</code> mit diesem Mechanismus kann evtl. auf den Stack ganz verzichtet
-         * werden.
-         */
-        //die Liste wird verwendet, um die Formel in die korrekte Form zu ordnen
-        /**
-         * Diese Liste beinhaltet die Formel in der korrekten Leseweise.
-         */
+        // Schreibt die Elemente aus dem Term-Stack in die <code>ArrayList</code> mit diesem Mechanismus kann evtl. auf den Stack ganz verzichtet
+        // werden.
+        // die Liste wird verwendet, um die Formel in die korrekte Form zu ordnen
+        // Diese Liste beinhaltet die Formel in der korrekten Leseweise.
         ArrayList<String> termList = new ArrayList<String>();
         caretPosInFormulaArea = 0;
         int insertIndex = 0;
@@ -855,7 +820,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         if (term != null) {
             for (int i = 0; i < term.size(); i++) {
                 partTerm = term.get(i).toString();
-                if (partTerm.equals("(  )")) {
+                if (partTerm.equals(BRACKETS)) {
                     termList.add(insertIndex, Calculator.OPEN_BRACKET);
 
                     //hier wird mit Absicht nicht insertIndex++ gemacht,
@@ -901,7 +866,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         }
         term.push(element);
         String hashStringFormula = convertStackFormulaToOrdinaryFormula();
-        hashArea.setText(hashStringFormula);
+        //        hashArea.setText(hashStringFormula);
+        hashArea.setText(term.toString());
         formelString = CostingUtil.getHumanReadableFormulaString(hashStringFormula, definitions);
         formulaArea.setText(formelString);
     }
@@ -941,9 +907,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      */
     private void orgButtons(final String lastCommand) {
 
+        leaveBracketButton.setEnabled(true);
         if (lastCommand.equals("initial")) {
             setEnableStatusOfOrdinaryButtons(false);
-            buttonklammerauf.setEnabled(true);
+            buttonbrackets.setEnabled(true);
             setEnableStatusOfVFButtons(true, false);
             buttonindikator.setEnabled(true);
             userFieldList.setEnabled(true);
@@ -954,38 +921,38 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         } else if (lastCommand.equals("withFormula")) {
             setEnableStatusOfOrdinaryButtons(true);
-            buttonklammerauf.setEnabled(true);
+            buttonbrackets.setEnabled(false);
             setEnableStatusOfVFButtons(false, true);
             buttonindikator.setEnabled(false);
             userFieldList.setEnabled(false);
             modelAttributes.setEnabled(false);
 
-        } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand) || lastCommand.equals(Calculator.OPEN_BRACKET)) {
+        } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand) || lastCommand.equals(BRACKETS)) {
             setEnableStatusOfOrdinaryButtons(false);
-            buttonklammerauf.setEnabled(true);
+            buttonbrackets.setEnabled(true);
             setEnableStatusOfVFButtons(true, false);
             buttonindikator.setEnabled(false);
             userFieldList.setEnabled(true);
             modelAttributes.setEnabled(true);
-            //leaveBracketButton.setEnabled(true);
+            leaveBracketButton.setEnabled(false);
 
-        } else if (lastCommand.equals(Calculator.OPEN_BRACKET) || UserField.ACCOUNTING_FUNCTIONS_SET.contains(lastCommand)) {
+        } else if (UserField.ACCOUNTING_FUNCTIONS_SET.contains(lastCommand)) {
             setEnableStatusOfOrdinaryButtons(true);
-            buttonklammerauf.setEnabled(false);
+            buttonbrackets.setEnabled(false);
             setEnableStatusOfVFButtons(false, false);
             userFieldList.setEnabled(false);
             modelAttributes.setEnabled(false);
 
         } else if (lastCommand.equals(CLASSIFICATION_NUMBER)) {
             setEnableStatusOfOrdinaryButtons(true);
-            buttonklammerauf.setEnabled(false);
+            buttonbrackets.setEnabled(false);
             setEnableStatusOfVFButtons(false, false);
             userFieldList.setEnabled(false);
             modelAttributes.setEnabled(false);
 
         } else if (lastCommand.equals(UserField.ACCOUNTING_FUNCTION_INDI)) {
             setEnableStatusOfOrdinaryButtons(false);
-            buttonklammerauf.setEnabled(false);
+            buttonbrackets.setEnabled(false);
             setEnableStatusOfVFButtons(false, false);
         }
 
@@ -999,9 +966,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             undoButton.setEnabled(true);
         }
 
-        if (leaveableBracketCounter > 0) {
-            leaveBracketButton.setEnabled(true);
-        } else {
+        if (leaveableBracketCounter <= 0) {
             leaveBracketButton.setEnabled(false);
         }
 
@@ -1022,7 +987,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      *            eine Kante ist.
      */
     private void setEnableStatusOfVFButtons(final boolean state, final boolean ignoreTypeElement) {
-        // Für den Fall, dass eine Formel für eine Elementklasse defijniert wird, sind diese Buttons anzuzeigen
+        // Für den Fall, dass eine Formel für eine Elementklasse definiert wird, sind diese Buttons anzuzeigen
         if (isOnlyEdge && ignoreTypeElement || !isOnlyEdge) {
             buttonmax.setEnabled(state);
             buttonmin.setEnabled(state);
@@ -1030,15 +995,9 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             buttonteilwertsumme.setEnabled(state);
             buttonsum.setEnabled(state);
             buttonMult.setEnabled(state);
-
             buttonindikator.setEnabled(state);
         }
-
-        if (isOnlyEdge) {
-            buttonReference.setEnabled(true);
-        } else {
-            buttonReference.setEnabled(false);
-        }
+        buttonReference.setEnabled(isOnlyEdge);
     }
 
     /**
