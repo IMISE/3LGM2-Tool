@@ -3,6 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_TWSUM;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,16 +32,16 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * Panel mit dem für Kennzahlen ausgewählt werden kann, wie sie innerhalb einer Hierarchie - also elementartintern verrechnet werden können. Dieses
  * Panel wird Moment nicht benutzt, da die interne Verrechnung in Hierarchien jetzt (erstmal) durch die Definition der Formeln erledigt wird.
- * 
+ *
  * @author AXS
  */
 public class InternalAccountingPanel extends AbstractInputPanel implements ActionListener {
 
     private final JRadioButton noAccountingBut = new JRadioButton(Tool3lgmConstants.getResString("non_accounting"));
 
-    private final JRadioButton sumAccountingBut = new JRadioButton(Tool3lgmConstants.getResString("summe"));
+    private final JRadioButton sumAccountingBut = new JRadioButton(UserField.getDisplayableFunctionName(ACCOUNTING_FUNCTION_SUM));
 
-    private final JRadioButton twsumAccountingBut = new JRadioButton(Tool3lgmConstants.getResString("teilwertsumme"));
+    private final JRadioButton twsumAccountingBut = new JRadioButton(UserField.getDisplayableFunctionName(ACCOUNTING_FUNCTION_TWSUM));
 
     private final AlphabeticalComboBox dirComboBox = new AlphabeticalComboBox();
 
@@ -164,7 +167,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         //		}else{
         //			noAccountingBut.doClick();
         //		}
-        //		
+        //
         //		//die Richtung des UserFields selektieren
         //		dirComboBox.setSelectedObject(userField.getInternalAccountingDirection());
         //
@@ -176,7 +179,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         //			else
         //				vgComboBox.setSelectedObject(weightHash);
         //		}
-        //		*/ 
+        //		*/
     }
 
     //	/**
@@ -201,7 +204,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     /**
      * Liefert je nach Auswahl in der Richtungs-ComboBox die Strings <code>UserField.DIRECTION_FROM_PART_TO_WHOLE</code>,
      * <code>UserField.DIRECTION_FROM_WHOLE_TO_PART</code> oder <code>null</code>.
-     * 
+     *
      * @return Richtung in der eine verrechnet werden soll
      */
     public final String getSelectedInternalAccountingDirection() {
@@ -214,7 +217,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
 
     /**
      * Liefert den Hash-String des selektierten Verteilungsgwichtes für die interne Verrechnung.
-     * 
+     *
      * @return
      */
     public String getSelectedInternalAccountingWeigthHash() {

@@ -1374,4 +1374,9 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
         return ACCOUNTING_FUNCTIONS_SET.contains(s);
     }
 
+    public static String getDisplayableFunctionName(final String functionName) {
+        //falls mal die Funktionen tatsächlich auf enum umgestellt werden, muss das hier anders laufen
+        return Tool3lgmConstants.getResString(functionName);
+    }
+
 }

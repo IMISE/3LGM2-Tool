@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.Re
 /**
  * Der Dialog lässt die Benutzer eine Verrechnungsfunktion spezifieren. Nachdem er im Formeleditor eine Verrechungsfunktion ausgewählt hat ( durch
  * Buttonklick) muss er hier angeben, welche Parameter in der Verrechungsfunktion einfließen sollen.)
- * 
+ *
  * @author hboehme
  * @created 07.01.2008
  */
@@ -56,7 +56,7 @@ public class VfDialog extends JDialog implements ActionListener {
     /**
      * Instanz des Panels. Beinzhaltet selbst nur den OK.- und Abbrechen button. Kann je nach übergebenem Operatortyp (SUM, TWSUM) den entsprechenden
      * komplettierten Dialog anzeigen.
-     * 
+     *
      * @param owner
      * @param operator Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>
      * @param elementClass
@@ -66,28 +66,16 @@ public class VfDialog extends JDialog implements ActionListener {
         super(owner);
         this.userField = userField;
         vfOperator = operator;
-
-        if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
-            setTitle(Tool3lgmConstants.getResString("calculation") + " - " + Tool3lgmConstants.getResString("summe"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
-            setTitle(Tool3lgmConstants.getResString("calculation") + " - " + Tool3lgmConstants.getResString("teilwertsumme"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
-            setTitle(Tool3lgmConstants.getResString("calculation") + " - " + Tool3lgmConstants.getResString("minimum"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
-            setTitle(Tool3lgmConstants.getResString("calculation") + " - " + Tool3lgmConstants.getResString("maximum"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_AVG)) {
-            setTitle(Tool3lgmConstants.getResString("calculation") + " - " + Tool3lgmConstants.getResString("mittelwert"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
-            setTitle(Tool3lgmConstants.getResString("calculation") + " - " + Tool3lgmConstants.getResString("reference"));
-        }
+        String title = Tool3lgmConstants.getResString("accounting") + ": " + UserField.getDisplayableFunctionName(vfOperator);
+        setTitle(title);
         setModal(true);
         setLocationByPlatform(true);
         init();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void init() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -126,7 +114,7 @@ public class VfDialog extends JDialog implements ActionListener {
 
     /**
      * Zeigt der Dialog an.
-     * 
+     *
      * @return Gibt die Verrechungsfunktion als String-Rückgabewert zurück.
      */
     public String showDialog() {

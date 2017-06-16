@@ -23,7 +23,7 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
  * Dieses Panel stellt die möglichen auswählbaren Attribute für die Verrechnungsfunktionen bereit.
- * 
+ *
  * @author hboehme, AXS
  * @created 02.01.2008
  */
@@ -62,7 +62,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
     /**
      * Das Panel, dass die ComboBoxen darstellt.
-     * 
+     *
      * @param vfOperator Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>
      * @param classElement Elementklasse, die sich über die Verrechnungsfunktion irgendeinen Wert einer verbundenen Klasse holen soll
      * @param userField
@@ -80,32 +80,16 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     private void init() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        JLabel label = null;
-        if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
-            label = new JLabel(Tool3lgmConstants.getResString("accounting") + ": " + Tool3lgmConstants.getResString("summe"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
-            label = new JLabel(Tool3lgmConstants.getResString("accounting") + ": " + Tool3lgmConstants.getResString("produkt"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
-            label = new JLabel(Tool3lgmConstants.getResString("accounting") + ": " + Tool3lgmConstants.getResString("teilwertsumme"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_AVG)) {
-            label = new JLabel(Tool3lgmConstants.getResString("accounting") + ": " + Tool3lgmConstants.getResString("mittelwert"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
-            label = new JLabel(Tool3lgmConstants.getResString("accounting") + ": " + Tool3lgmConstants.getResString("minimum"));
-        } else if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
-            label = new JLabel(Tool3lgmConstants.getResString("accounting") + ": " + Tool3lgmConstants.getResString("maximum"));
-        }
-
-        gbc.insets = new Insets(3, 3, 3, 3);
-        gbc.gridy = 0;
-        add(label, gbc);
+        gbc.insets = new Insets(10, 3, 3, 3);
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
         gbc.weighty = 0;
-        gbc.gridy++;
+        gbc.gridy = 0;
         add(new JLabel(Tool3lgmConstants.getResString("target_of_accounting") + " -> " + Tool3lgmConstants.getResString("source_of_accounting")), gbc);
         associationBox = new AlphabeticalComboBox();
         associationBox.addActionListener(this);
+        gbc.insets.top = 3;
         gbc.gridy++;
         gbc.weightx = 1;
         add(associationBox, gbc);
@@ -146,12 +130,12 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
     /**
      * Aktualisiert die {@link AlphabeticalJList}, die die {@link UserField}s der assoziierten Klasse enthält.
-     * 
+     *
      * @param elementClasses
      */
     private final void updateFieldListAttributesOfAssociatedClass(final Class<? extends ModelElement> elementClass) {
         clearBoxAttributsOfAssociatedClass();
-        //Manchmal hat das userfield nicht die aktuellen Definitions 
+        //Manchmal hat das userfield nicht die aktuellen Definitions
         UserFieldDefinitions definitions = userField.getDefinitions().getCollection().getUserFieldDefinitions();
         //wird true, wenn dieses UserField bereits in den Definitions vorkommt
         // (also nicht grade angelegt wurde)
@@ -218,7 +202,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
     /**
      * Aktualisiert die ComboBox, die die Verteilungsgewichte aktuell ausgewählten Kantenklasse beinhaltet.
-     * 
+     *
      * @param edgeClass die aktuelle Kantenklasse
      */
     private void updateVGComboBoxItems(final Class<? extends ModelElement> edgeClass) {
@@ -284,7 +268,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     /**
      * Gibt aus dem Dialog den String zurück, der die Verrechnungsfunktion beschreibt. Z.B: SUM ( Assoziation | Attribut der verbunden Klasse |
      * Richtung )
-     * 
+     *
      * @return
      */
     public String getRetVal() {

@@ -35,7 +35,7 @@ import de.imise.util.swing.component.text.ExtendedTextField;
  * Der <code>IndicatorDialog</code> stellt eine Oberfläche zur Verfügung, mit der die Verrechnungsfunktion "Indikator" spezifiziert werden kann. Es
  * muss zuerst ein Kennzahl ausgewählt werden, die indiziert werden soll. Danach kann die Anzahl der möglichen Wertebereiche über einen
  * <code>JSpinner</code> festgelegt und die Werte in den TextFields angegeben werden.
- * 
+ *
  * @author hboehme
  * @created 05.11.2007
  */
@@ -87,20 +87,20 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     private final UserField userField;
 
     /**
-	 * 
-	 */
+     *
+     */
     private UserFieldDefinitions definitions;
 
     /**
      * Instanz des Dialoges.
-     * 
+     *
      * @param owner des Dialoges
      * @param classElement : für welches Klassenelement soll ein Indikator angelegt werden.
      * @param userField : wenn eine schon bestehende Indikationsdefinition bearbeitet werden soll, das entsprechende UserField übergeben <br>
      *            ansonsten null übergeben! wenn eine neue Indikatordefinitions angelegt werden soll: null übergeben!
      */
     public IndicatorDialog(final JDialog owner, final UserField userField) {
-        super(owner, Tool3lgmConstants.getResString("indicator"));
+        super(owner, UserField.getDisplayableFunctionName(UserField.ACCOUNTING_FUNCTION_INDI));
         this.userField = userField;
         setModal(true);
         setLocationByPlatform(true);
@@ -131,7 +131,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             definitions = userField.getDefinitions();
         }
 
-        // Hier wird die ComboBox mit den indizierbaren userfields gefüllt. 
+        // Hier wird die ComboBox mit den indizierbaren userfields gefüllt.
         for (UserField uf : definitions.getUserFields(userField.getTargetClass())) {
             //das UserField selbst soll nicht mit eingefügt werden (hier ist die Formual noch null, so dass die untere
             //Anfrage, isIndicatorFormula() noch nicht greift. Daher hier explizit ausschließen)
@@ -224,7 +224,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             }
             //Danach nur noch obere Grenzen anlgen
 
-            //Falls der Spinner nicht mit der Maus geklickt wurde, sonderen eine Zahl im zugelassenenen Intervall eingegeben wurde, 
+            //Falls der Spinner nicht mit der Maus geklickt wurde, sonderen eine Zahl im zugelassenenen Intervall eingegeben wurde,
             //müssen entsprechend viele neue Felder angelegt werden.
             int anzNewFields = newValue - oldValue;
             for (int i = 0; i < anzNewFields; i++) {
@@ -318,7 +318,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
 
     /**
      * zeigt den Dialog an.
-     * 
+     *
      * @return Gibt als String das zu indizierende <code>UserField</code> und die Wertebereiche zurück.
      */
     public String showDialog() {
@@ -355,7 +355,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
      * <li>Prüft die Eingabefelder der Grenzwerte auf gültige Eingabewerte.</li>
      * <li>Prüft die <code>AlpabeticalComboBox</code>, ob ein Element ausgewählt ist</li>
      * </ul>
-     * 
+     *
      * @return True, wenn alle Eingabefelder korrekt belegt sind, sonst false.
      */
     private boolean validateInputs() {
@@ -365,10 +365,10 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             return false;
         }
 
-        //Die eingaben dürfen nicht leer sein  
+        //Die eingaben dürfen nicht leer sein
         for (int i = 0; i < gwList.size(); i++) {
             try {
-                //Die Eingabenb müssen gülte Werte sein, die sich auf BigDecimal parsen lassen müssen.  
+                //Die Eingabenb müssen gülte Werte sein, die sich auf BigDecimal parsen lassen müssen.
                 String tmp_string = gwList.get(i).inputField.getText().trim();
                 tmp_string = tmp_string.replace(",", ".");
                 new BigDecimal(tmp_string);
@@ -385,7 +385,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     /**
      * Ein Object, welches JPanel erweitert und ein <code>JLabel</code> sowie ein <code>JTexftField</code> enthält. Dieses Objekt geht in die Liste
      * der Wertetabelle ein und kann damit dynamisch erweitert oder gekürzt werden.
-     * 
+     *
      * @author hboehme
      * @created 16.11.2007
      */
