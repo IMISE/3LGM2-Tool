@@ -18,6 +18,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,6 +43,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -141,20 +144,17 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      */
     private Stack<String> term;
 
-    /**
-     * Die Buttons, für +,-,*,/,()
-     */
-    private JButton buttonplus, buttonminus, buttonmult, buttondiv, buttonbrackets;
+    private final CalculatorStyledInputPanel operatorAndNumberInputPanel;
 
     /**
      * Die Buttons für die Verrechnungsfunktionen Summe, Teilwertsumme, Maximum, Minimum, Indikator und Reference
      */
-    private JButton buttonsum, buttonMult, buttonteilwertsumme, buttonmax, buttonmin, buttonmittelwert, buttonindikator, buttonReference;
+    private final JButton buttonsum, buttonMult, buttonteilwertsumme, buttonmax, buttonmin, buttonmittelwert, buttonindikator, buttonReference;
 
     /**
      * Die Buttons für die Formelsteuerung. Rückgänig machen, Klammer verlassen, Formel leeren.
      */
-    private JButton undoButton, leaveBracketButton, clearFormulaButton;
+    private final JButton undoButton, leaveBracketButton, clearFormulaButton;
 
     /**
      * Gibt an, wieviele Klammernpaare noch verlassen werden können.
@@ -193,8 +193,24 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         setTitle(getResString("formulaEditorDialog") + "  -  " + userField.getTargetClass().getSimpleName() + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
         term = new Stack<String>();
+
         okButton = getButton("ok");
         cancelButton = getButton("cancel");
+        undoButton = getButton("undo");
+        leaveBracketButton = getButton("leaveBracketButton");
+        clearFormulaButton = getButton("clearFormula");
+
+        buttonsum = getButton("summe");
+        buttonMult = getButton("produkt");
+        buttonteilwertsumme = getButton("teilwertsumme");
+        buttonmax = getButton("maximum");
+        buttonmin = getButton("minimum");
+        buttonmittelwert = getButton("mittelwert");
+        buttonindikator = getButton("indicator");
+        buttonReference = getButton("reference");
+
+        operatorAndNumberInputPanel = new CalculatorStyledInputPanel();
+
         init();
         pack();
     }
@@ -223,9 +239,6 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         isOnlyEdge = ModelConstants.isEdgeType(userField.getTargetClass());
 
-        undoButton = getButton("undo");
-        leaveBracketButton = getButton("leaveBracketButton");
-        clearFormulaButton = getButton("clearFormula");
         undoButton.setEnabled(false);
         leaveBracketButton.setEnabled(false);
 
@@ -257,11 +270,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             @Override
             public void caretUpdate(final CaretEvent e) {
                 if (okButton != null) {
-                    if (formulaArea.getText().trim().length() == 0) {
-                        okButton.setEnabled(false);
-                    } else {
-                        okButton.setEnabled(true);
-                    }
+                    okButton.setEnabled(!formulaArea.getText().trim().isEmpty());
                 }
             }
 
@@ -425,21 +434,6 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         panel.setBorder(border2);
         panel2.add(panel, constraints);
 
-        buttonplus = getButton(OPERATOR_PLUS);
-        buttonminus = getButton(OPERATOR_MINUS);
-        buttonmult = getButton(OPERATOR_MULT);
-        buttondiv = getButton(OPERATOR_DIV);
-        buttonbrackets = getButton(BRACKETS);
-
-        buttonsum = getButton("summe");
-        buttonMult = getButton("produkt");
-        buttonteilwertsumme = getButton("teilwertsumme");
-        buttonmax = getButton("maximum");
-        buttonmin = getButton("minimum");
-        buttonmittelwert = getButton("mittelwert");
-        buttonindikator = getButton("indicator");
-        buttonReference = getButton("reference");
-
         bpc.anchor = GridBagConstraints.NORTHWEST;
         bpc.gridx = 0;
         bpc.gridy = 0;
@@ -448,21 +442,21 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         bpc.fill = GridBagConstraints.HORIZONTAL;
         bpc.insets = new Insets(3, 3, 3, 3);
 
-        panel.add(buttonplus, bpc);
+        panel.add(operatorAndNumberInputPanel.buttonplus, bpc);
         bpc.gridx++;
 
-        panel.add(buttonminus, bpc);
+        panel.add(operatorAndNumberInputPanel.buttonminus, bpc);
         bpc.gridx++;
 
         bpc.gridy++;
         bpc.gridx = 0;
-        panel.add(buttonmult, bpc);
+        panel.add(operatorAndNumberInputPanel.buttonmult, bpc);
         bpc.gridx++;
 
-        panel.add(buttondiv, bpc);
+        panel.add(operatorAndNumberInputPanel.buttondiv, bpc);
         bpc.gridx++;
 
-        panel.add(buttonbrackets, bpc);
+        panel.add(operatorAndNumberInputPanel.buttonbrackets, bpc);
         bpc.gridx++;
 
         bpc.gridy++;
@@ -540,10 +534,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String humanReadableFormula = CostingUtil.getHumanReadableFormulaString(ordinaryFormula, definitions);
             formulaArea.setText(humanReadableFormula);
             hashArea.setText(ordinaryFormula);
-            orgButtons("withFormula");
-        } else {
-            orgButtons("initial");
         }
+        orgButtons("");
     }
 
     private JButton getButton(final String resKey) {
@@ -615,7 +607,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             pushToFormulaStack(cmd);
             orgButtons(cmd);
-        } else if (source == buttonbrackets) {
+        } else if (source == operatorAndNumberInputPanel.buttonbrackets) {
             formulaArea.requestFocus();
             leaveableBracketCounter++;
             pushToFormulaStack(BRACKETS);
@@ -907,110 +899,76 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      */
     private void orgButtons(final String lastCommand) {
 
-        leaveBracketButton.setEnabled(true);
-        if (lastCommand.equals("initial")) {
-            setEnableStatusOfOrdinaryButtons(false);
-            buttonbrackets.setEnabled(true);
-            setEnableStatusOfVFButtons(true, false);
-            buttonindikator.setEnabled(true);
-            userFieldList.setEnabled(true);
-            modelAttributes.setEnabled(true);
-            undoButton.setEnabled(false);
-            leaveBracketButton.setEnabled(false);
-            clearFormulaButton.setEnabled(false);
+        boolean emptyFormula = term == null || term.isEmpty();
+        boolean initWithFormula = Strings.isNullOrEmpty(lastCommand) && !emptyFormula;
 
-        } else if (lastCommand.equals("withFormula")) {
-            setEnableStatusOfOrdinaryButtons(true);
-            buttonbrackets.setEnabled(false);
-            setEnableStatusOfVFButtons(false, true);
-            buttonindikator.setEnabled(false);
-            userFieldList.setEnabled(false);
-            modelAttributes.setEnabled(false);
+        undoButton.setEnabled(!emptyFormula);
+        clearFormulaButton.setEnabled(!emptyFormula);
+        leaveBracketButton.setEnabled(false);
 
-        } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand) || lastCommand.equals(BRACKETS)) {
-            setEnableStatusOfOrdinaryButtons(false);
-            buttonbrackets.setEnabled(true);
-            setEnableStatusOfVFButtons(true, false);
-            buttonindikator.setEnabled(false);
-            userFieldList.setEnabled(true);
-            modelAttributes.setEnabled(true);
-            leaveBracketButton.setEnabled(false);
-
-        } else if (UserField.ACCOUNTING_FUNCTIONS_SET.contains(lastCommand)) {
-            setEnableStatusOfOrdinaryButtons(true);
-            buttonbrackets.setEnabled(false);
-            setEnableStatusOfVFButtons(false, false);
-            userFieldList.setEnabled(false);
-            modelAttributes.setEnabled(false);
-
-        } else if (lastCommand.equals(CLASSIFICATION_NUMBER)) {
-            setEnableStatusOfOrdinaryButtons(true);
-            buttonbrackets.setEnabled(false);
-            setEnableStatusOfVFButtons(false, false);
-            userFieldList.setEnabled(false);
-            modelAttributes.setEnabled(false);
-
-        } else if (lastCommand.equals(UserField.ACCOUNTING_FUNCTION_INDI)) {
-            setEnableStatusOfOrdinaryButtons(false);
-            buttonbrackets.setEnabled(false);
-            setEnableStatusOfVFButtons(false, false);
+        if (emptyFormula || lastCommand.equals(BRACKETS)) {
+            setOperatorAndNumberButtonStates(false, true, true, true);
+        } else if (initWithFormula) {
+            setOperatorAndNumberButtonStates(true, true, false, false);
+        } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand)) {
+            setOperatorAndNumberButtonStates(false, !lastCommand.equals(Calculator.OPERATOR_MINUS), true, true);
+            setFunctionButtonStates(true);
+        } else if (UserField.ACCOUNTING_FUNCTIONS_SET.contains(lastCommand) || lastCommand.equals(CLASSIFICATION_NUMBER)) {
+            setOperatorAndNumberButtonStates(true, true, false, false);
+            leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
         }
 
-        // Wenn der term leer ist, kann nichts mehr rückgängig gemacht werden
-        if (term != null && term.size() == 0 || term == null) {
-            undoButton.setEnabled(false);
-            setEnableStatusOfVFButtons(true, false);
-
-        } else {
-            //Wenn der Stack Elemente beinhaltet, kann der letzte Einfügeschritt widerrufen werden
-            undoButton.setEnabled(true);
-        }
-
-        if (leaveableBracketCounter <= 0) {
-            leaveBracketButton.setEnabled(false);
-        }
-
-        if (isOnlyEdge) {
-            setEnableStatusOfVFButtons(false, true);
-        }
+        //        if (isOnlyEdge) {
+        //            setFunctionButtonStates(false, true);
+        //        }
 
         //Setze den Cursor an die richtige Stelle. Speziell bei Klammerungen wichtig.
         setCaretInFormulaArea();
         formulaArea.requestFocus();
     }
 
-    /**
-     * Setzt den Editierbarkeitesstatus der Buttons für Verrechnungsfunktionen
-     *
-     * @param state true, wenn die Buttons klickbar sein sollen false, wenn die Buttons nicht klickbar sein sollen
-     * @param ignoreTypeElement true, wenn wirklich von allen Buttons die Enabled-einstellung geändert werden soll - unabhänig ob es ein Knoten oder
-     *            eine Kante ist.
-     */
-    private void setEnableStatusOfVFButtons(final boolean state, final boolean ignoreTypeElement) {
-        // Für den Fall, dass eine Formel für eine Elementklasse definiert wird, sind diese Buttons anzuzeigen
-        if (isOnlyEdge && ignoreTypeElement || !isOnlyEdge) {
-            buttonmax.setEnabled(state);
-            buttonmin.setEnabled(state);
-            buttonmittelwert.setEnabled(state);
-            buttonteilwertsumme.setEnabled(state);
-            buttonsum.setEnabled(state);
-            buttonMult.setEnabled(state);
-            buttonindikator.setEnabled(state);
-        }
-        buttonReference.setEnabled(isOnlyEdge);
+    //    /**
+    //     * Setzt den Editierbarkeitesstatus der Buttons für Verrechnungsfunktionen
+    //     *
+    //     * @param enabled true, wenn die Buttons klickbar sein sollen false, wenn die Buttons nicht klickbar sein sollen
+    //     * @param ignoreTypeElement true, wenn wirklich von allen Buttons die Enabled-einstellung geändert werden soll - unabhänig ob es ein Knoten oder
+    //     *            eine Kante ist.
+    //     */
+    //    private void setFunctionButtonStates(final boolean enabled, final boolean ignoreTypeElement) {
+    //        // Für den Fall, dass eine Formel für eine Elementklasse definiert wird, sind diese Buttons anzuzeigen
+    //        if (isOnlyEdge && ignoreTypeElement || !isOnlyEdge) {
+    //            buttonmax.setEnabled(enabled);
+    //            buttonmin.setEnabled(enabled);
+    //            buttonmittelwert.setEnabled(enabled);
+    //            buttonteilwertsumme.setEnabled(enabled);
+    //            buttonsum.setEnabled(enabled);
+    //            buttonMult.setEnabled(enabled);
+    //            buttonindikator.setEnabled(enabled);
+    //        }
+    //        buttonReference.setEnabled(isOnlyEdge);
+    //    }
+
+    private void setFunctionButtonStates(final boolean enabled) {
+        buttonmax.setEnabled(enabled);
+        buttonmin.setEnabled(enabled);
+        buttonmittelwert.setEnabled(enabled);
+        buttonteilwertsumme.setEnabled(enabled);
+        buttonsum.setEnabled(enabled);
+        buttonMult.setEnabled(enabled);
+        buttonindikator.setEnabled(enabled);
+        buttonReference.setEnabled(enabled);
     }
 
-    /**
-     * Setzt den Editierbarkeitesstatus der Buttons für die normale Operatoren ( +,-,*,/ )
-     *
-     * @param state true, wenn die Buttons klickbar sein sollen false, wenn die Buttons nicht klickbar sein sollen
-     * @param state
-     */
-    private void setEnableStatusOfOrdinaryButtons(final boolean state) {
-        buttonplus.setEnabled(state);
-        buttonminus.setEnabled(state);
-        buttonmult.setEnabled(state);
-        buttondiv.setEnabled(state);
+    private void setOperatorAndNumberButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean bracketsEnabled) {
+        operatorAndNumberInputPanel.setButtonStates(operatorsEnabled, minusEnabled, numbersEnabled, bracketsEnabled);
+        setFunctionButtonStates(numbersEnabled);
+        setListStates(numbersEnabled);
+
+    }
+
+    private void setListStates(final boolean enabled) {
+        userFieldList.setEnabled(enabled);
+        modelAttributes.setEnabled(enabled);
     }
 
     /**
@@ -1020,4 +978,50 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private void setCaretInFormulaArea() {
         formulaArea.setCaretPosition(caretPosInFormulaArea);
     }
+
+    private class CalculatorStyledInputPanel extends JPanel {
+
+        private final JButton[] numberButtons = new JButton[10];
+
+        /**
+         * Die Buttons, für +,-,*,/,()
+         */
+        private final JButton buttonplus, buttonminus, buttonmult, buttondiv, buttonbrackets;
+
+        public CalculatorStyledInputPanel() {
+            super(new GridLayout());
+            buttonplus = getButton(OPERATOR_PLUS);
+            buttonminus = getButton(OPERATOR_MINUS);
+            buttonmult = getButton(OPERATOR_MULT);
+            buttondiv = getButton(OPERATOR_DIV);
+            buttonbrackets = getButton(BRACKETS);
+
+            initNumberButtons();
+        }
+
+        private void initNumberButtons() {
+            for (int i = 0; i < numberButtons.length; i++) {
+                numberButtons[i] = getButton(new Integer(i).toString());
+            }
+        }
+
+        /**
+         * @param operatorsEnabled wenn <code>true</code> sind die Operator-Buttons ( +,*,/ ) enabled, sonst nicht
+         * @param minusEnabled wenn <code>true</code> ist der Minus-Button ( - ) enabled, sonst nicht
+         * @param numbersEnabled wenn <code>true</code> sind die Zahlen-Buttons ( 0 -9 ) enabled, sonst nicht
+         * @param bracketsEnabled wenn <code>true</code> ist der Klammer-Button enabled, sonst nicht
+         */
+        public void setButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean bracketsEnabled) {
+            buttonplus.setEnabled(operatorsEnabled);
+            buttonminus.setEnabled(minusEnabled);
+            buttonmult.setEnabled(operatorsEnabled);
+            buttondiv.setEnabled(operatorsEnabled);
+            for (int i = 0; i < numberButtons.length; i++) {
+                numberButtons[i].setEnabled(numbersEnabled);
+            }
+            buttonbrackets.setEnabled(bracketsEnabled);
+        }
+
+    }
+
 }
