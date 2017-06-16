@@ -38,7 +38,7 @@ public class CostingUtil {
     /**
      * Syncronisiert den HashString und den FormelString. Da nur der HashString gespeichert wird, muss aus dem HashString wieder ein FormelString
      * gemacht werden, der in lesbarer Form vorliegt.
-     * 
+     *
      * @param hash_formula FormelString in hash-Form.
      * @param definitions
      * @return Den FormelString in menschenlesbarer Form
@@ -51,7 +51,7 @@ public class CostingUtil {
             UserField tmpField = null;
             while (hashtok.hasMoreTokens()) {
                 s = hashtok.nextToken();
-                if (Calculator.OPERATOR_SIGNS.contains(s) || s.equals(Calculator.OPEN_BRACKET) || s.equals(Calculator.CLOSE_BRACKET) || UserField.ACCOUNTING_FUNCTIONS_SET.contains(s)) {
+                if (Calculator.OPERATOR_SIGNS.contains(s) || s.equals(Calculator.OPEN_BRACKET) || s.equals(Calculator.CLOSE_BRACKET) || UserField.isAccountingFunction(s)) {
                     resultString.append(" " + s);
                 } else {
                     if (s.contains(UserField.USERFIELD_HASH_STRING_PREFIX)) {
@@ -78,7 +78,7 @@ public class CostingUtil {
     /**
      * Prüft die übergebene Formel auf Korrektheit. Kriterien für Korrektheit: Die Anzahl der öffnenden und schließenden Klammern muss übereinstimmen
      * auf eine öffnende Klammer darf keine schließende Folgen
-     * 
+     *
      * @param formula Der zu prüfende Formelstring
      * @return Gibt true zurück, wenn die übergebene Formel korrekt ist, ansonsten false
      */
@@ -119,7 +119,7 @@ public class CostingUtil {
                 second = USERFIELDHASH;
             }
 
-            //Damit wird verhindert, dass zwei Operatoren aufeinander folgen 
+            //Damit wird verhindert, dass zwei Operatoren aufeinander folgen
             if (Calculator.OPERATOR_SIGNS.contains(first) && Calculator.OPERATOR_SIGNS.contains(second)) {
                 return false;
             }
@@ -135,7 +135,7 @@ public class CostingUtil {
             }
 
             // Wenn auf eine schließende Klammer eine Verrechnungsfunktion folgt
-            if (first.equals(Calculator.CLOSE_BRACKET) && UserField.ACCOUNTING_FUNCTIONS_SET.contains(second)) {
+            if (first.equals(Calculator.CLOSE_BRACKET) && UserField.isAccountingFunction(second)) {
                 return false;
             }
 
@@ -161,7 +161,7 @@ public class CostingUtil {
     /**
      * Wenn das übergebene UserField eine einfache Teilwertsummenformel ist, dann kommt hier die Formel ohne
      * alle WhiteSpaces und ohne die evtl. vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
-     * 
+     *
      * @param userField
      * @return
      */
@@ -223,7 +223,7 @@ public class CostingUtil {
     /**
      * Prüft, ob die Formel des übergebenen UserFields eine einfache Teilwertsummenformel ist.
      * Diese Funktion setzt vorraus, dass die Formel valide ist!
-     * 
+     *
      * @param userField
      * @return
      */
@@ -245,7 +245,7 @@ public class CostingUtil {
 
     /**
      * Wenn das übergebene UserField eine einfache Teilwertsumme ist, dann wird hier die Kantenklasse der Formel extrahiert.
-     * 
+     *
      * @param userField
      * @return Kantenklasse der einfachenTeilwertsummenformel oder <code>null</code>
      */
@@ -260,7 +260,7 @@ public class CostingUtil {
 
     /**
      * Gibt zu dem übergebenen {@link Style} den Lokalisierten Anzeigenamen des Styles zurück.
-     * 
+     *
      * @param styleValue
      * @return Lokalisierten Anzeigenamen des Styles oder ""
      */
@@ -272,7 +272,7 @@ public class CostingUtil {
      * Konvertiert einen FormelString in einen Stack. Der String wird dazu mittel StringTokenizers zerlegt. Argumente, die ein userField kennzeichenen
      * oder +,*,-,/ werden auf den Stack draufgelegt. Verrechnungsfunktionen werden als String zusammengefasst und als einzelnes zusammengehörendes
      * Argument auf den Stack gelegt.
-     * 
+     *
      * @param internalFormula Die Formel in interner repräsentation Bsp: UserFieldHash_XXX_X + ( UserFieldHash_XXX_X )
      * @return Stack, der die Formel enthält.
      */
@@ -287,7 +287,7 @@ public class CostingUtil {
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
             //			if (token.equals(UserField.ACCOUNTING_FUNCTION_SUM) || token.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)|| token.equals(UserField.ACCOUNTING_FUNCTION_INDI) || token.equals(UserField.ACCOUNTING_FUNCTION_AVG)|| token.equals(UserField.ACCOUNTING_FUNCTION_MULT)|| token.equals(UserField.ACCOUNTING_FUNCTION_MAX)|| token.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
-            if (UserField.ACCOUNTING_FUNCTIONS_SET.contains(token)) {
+            if (UserField.isAccountingFunction(token)) {
                 sb = new StringBuilder();
                 while (!token.equals(")")) {
                     sb.append(" ");

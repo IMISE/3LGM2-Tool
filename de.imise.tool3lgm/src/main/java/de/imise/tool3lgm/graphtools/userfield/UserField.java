@@ -25,7 +25,7 @@ import de.imise.tool3lgm.xml.XMLCharacterCoder;
  * zusätzliche Eigenschaften für Element- und Kantenklassen deklariert und definiert werden. Es kann somit eine benutzergesteuerte Erweiterung des
  * Metamodells vorgenommen werden. die Klasse <code>UserField</code> hat als Attribute eine Bezeichung, eine Beschreibung, einen <code>hashCode</code>
  * , einen <code>style</code> und einen Identifikator, der kenntlich macht, zu welcher Elementklasse das <code>UserField</code> gehört.
- * 
+ *
  * @author Thomas Rudert
  */
 public final class UserField implements Cloneable, Comparator<ModelElement> {
@@ -141,7 +141,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
          * Bedingungen für die Vergleichbarkeit sind:
          * <li>Die UserFields haben den selben Style
          * <li>Beide UserFields sind für die Klasse des Modelements definiert
-         * 
+         *
          * @param uf1
          * @param uf2
          * @param me
@@ -357,7 +357,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Dieses Set beinhaltet Strings, die interne Verrechnungsfunktionen kennzeichen beinhaltet:
      */
-    public static final Set<String> ACCOUNTING_FUNCTIONS_SET = ImmutableSet.of(ACCOUNTING_FUNCTION_SUM, ACCOUNTING_FUNCTION_TWSUM, ACCOUNTING_FUNCTION_MAX, ACCOUNTING_FUNCTION_MIN, ACCOUNTING_FUNCTION_MULT, ACCOUNTING_FUNCTION_AVG,
+    private static final Set<String> ACCOUNTING_FUNCTIONS_SET = ImmutableSet.of(ACCOUNTING_FUNCTION_SUM, ACCOUNTING_FUNCTION_TWSUM, ACCOUNTING_FUNCTION_MAX, ACCOUNTING_FUNCTION_MIN, ACCOUNTING_FUNCTION_MULT, ACCOUNTING_FUNCTION_AVG,
             ACCOUNTING_FUNCTION_INDI, ACCOUNTING_FUNCTION_REF);
 
     ///////////////////////
@@ -452,7 +452,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Erzeugt ein globales UserField, das keiner realen Elementklasse zugeordnet ist
-     * 
+     *
      * @param style
      * @param definitions
      */
@@ -463,7 +463,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Erzeugt ein {@link UserField} für die übergebene Elementklasse
-     * 
+     *
      * @param targetClass
      * @param style
      * @param definitions
@@ -498,7 +498,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Erzeugt ein globales UserField
-     * 
+     *
      * @param hashCode
      * @param definitions
      */
@@ -566,7 +566,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt den übergeben Wert als Variable
-     * 
+     *
      * @param fieldName Der Name der zu belegenden Variable des userFieldes
      * @param value Der Wert, mit der die Variable belegt werden soll.
      */
@@ -590,7 +590,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
                 style = Style.values()[index];
             }
             //beim Einlesen können Formate im ersten Schritt nur als globale Eigenschaften erkannt werden.
-            //Sie werden erstmal mit der TargetClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS angelegt. 
+            //Sie werden erstmal mit der TargetClass == GLOBAL_USERFIELD_IDENTIFIER_CLASS angelegt.
             //Erst wenn hier der Style "FORMAT" erkannt werden konnte, wird die richtige TargetClass ==
             //GLOBAL_FORMAT_IDENTIFIER_CLASS gesetzt.
             if (style == Style.FORMAT) {
@@ -624,7 +624,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt den aktuellen <code>style</code> des <code>UserField</code> s zurück
-     * 
+     *
      * @return Style des <code>UserField</code> s
      */
     public Style getStyle() {
@@ -642,7 +642,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Liefert <code>true</code>, wemm der Style dieses UserFields <code>CLASSIFICATION_NUMBER</code> oder <code>CLASSIFICATION_NUMBER_FORMULA</code>
      * ist.
-     * 
+     *
      * @return
      */
     public boolean hasClassfificationStyle() {
@@ -651,7 +651,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt den Namen des <code>UserField</code> s zurück.
-     * 
+     *
      * @return Name des <code>UserField</code> s
      */
     public String getName() {
@@ -660,7 +660,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt den Namen des <code>UserField</code> s
-     * 
+     *
      * @param name
      */
     public void setName(final String name) {
@@ -669,7 +669,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt die Beschreibung des <code>UserField</code> s zurück.
-     * 
+     *
      * @return Beschreibung des <code>UserField</code> s
      */
     public String getDescription() {
@@ -692,7 +692,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft, ob das UserField eine Kennzahl, Kennzahlformel oder ein Verteilungsgweicht ist
-     * 
+     *
      * @return
      */
     public static boolean isClassificationStyle(final Style style) {
@@ -701,18 +701,18 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft, ob ein {@link UserField} mit dem übergebenen {@link Style} Listenwert zur Auswahl stellt
-     * 
+     *
      * @return
      */
     public static boolean isListValueStyle(final Style style) {
         //blöder Weise ist das Checkbox_UserField nicht darauf ausgelegt, mehr als eine Checkbox gleichzeitug darzustellen,
         //daher hat es im Moment keinen ListValueStyle
-        return style == Style.RADIO_BUTTON /* || style==Style.CHECK_BOX */|| style == Style.COMBO_BOX;
+        return style == Style.RADIO_BUTTON /* || style==Style.CHECK_BOX */ || style == Style.COMBO_BOX;
     }
 
     /**
      * Prüft, ob dieses {@link UserField} ein Formel-UserFIeld ist, das einen Indikator definiert.
-     * 
+     *
      * @param userField
      * @return
      */
@@ -727,7 +727,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Prüft, ob dieses {@link UserField} ein UserField ist, das einen Wert in sich tragen kann (also kein Format-, kein Separator- und kein
      * Panel-USerfield ist).
-     * 
+     *
      * @param userField
      * @return
      */
@@ -737,7 +737,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft, ob das UserField eine Kennzahl oder Kennzahlformel ist
-     * 
+     *
      * @return
      */
     public boolean isClassificationUserField() {
@@ -746,7 +746,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt die Kennzahlformel.
-     * 
+     *
      * @param formulaString
      * @return boolean true: Wenn es sich bei dem <code>userField</code> um eine sekundäre Kennzahl handelt, d.h. eine Kennzahl, die Kennzahlformeln
      *         repräsentiert - ansonsten false
@@ -762,7 +762,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt den Klassentyp des <code>UserField</code> s zurück.
-     * 
+     *
      * @return Elementklassentyp
      */
     public Class<? extends UserFieldTarget> getTargetClass() {
@@ -771,7 +771,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * gibt den <code>hashCode</code> des <code>UserField</code> s zurück.
-     * 
+     *
      * @return hashCode des <code>UserField</code> s
      */
     public String getHashCode() {
@@ -794,7 +794,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt das Format zurück.
-     * 
+     *
      * @return
      */
     public UserField getFormatUserField() {
@@ -803,7 +803,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt das Format, mit dem Zahlenwerte dieses Userfields formatiert werden können.
-     * 
+     *
      * @return
      */
     public void setFormatUserField(final UserField formatUserField) {
@@ -812,7 +812,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt die Formel zurück, die sich hinter dem <code>UserField</code> verbirgt.
-     * 
+     *
      * @return wenn es sich um ein UserField handelt, dass eine Kennzhalformel repräsentierne soll, wird die Formel in INFIX-Notation zurückgegeben
      *         ansonsten null.
      */
@@ -822,7 +822,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt die Anzahl der definierten Listeneinträge zurück.
-     * 
+     *
      * @return Anzahl der definierten Listeneinträge
      */
     public int getListValuesCount() {
@@ -831,7 +831,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt die definierten Listeneintrag an Position <code>index</code> zurück.
-     * 
+     *
      * @return Listeneintrag an <code>index</code>
      */
     public String getListValueAt(final int index) {
@@ -840,7 +840,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Fügt einen Listeneintrag hinzu
-     * 
+     *
      * @param value
      */
     public void addListValue(final String value) {
@@ -855,7 +855,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft ob der übergebene String in den Listenwerten dieses Userfields steht.
-     * 
+     *
      * @param value
      * @return
      */
@@ -865,7 +865,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Liefert den <code>String</code>, der in Modeldatein oder in der Export von <code>UserField</code>s geschrieben wird.
-     * 
+     *
      * @return
      */
     private String getFormatExportString() {
@@ -885,7 +885,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      * Setzt die Nachkommastellenanzahl und die Einheit des Formates. Es wird ein String der Form "d### uXXX" erwartet, wobei d für den String
      * {@link #FORMAT_DECIMAL_PLACES_PREFIX} und u für {@link #FORMAT_UNIT_PREFIX} steht. "###" steht für eine Zahl und "XXX" für eine beliebige
      * Zeichenkette. Vor dem 'u' können beliebig viele Whitespaces (auch keins) stehen.
-     * 
+     *
      * @param formatStringWithPrefixes
      */
     private void setFormatFractionDigitsCountAndUnit(final String formatStringWithPrefixes) {
@@ -901,7 +901,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      * Liefert das <code>NumberFormat</code> des <code>UserField</code>s. Ist das <code>UserField</code> selbst ein Format, gibt es seine eigenen
      * Nachkommastellen zurück, ist es ein UserField, dem ein Format zugewiesen ist (was für ein Format selbst nie zutreffen kann), dann gibt es die
      * Nachkommstellen des Formates zurück.
-     * 
+     *
      * @param definitions die <code>UserFieldDefinitions</code>, in denen das Format-<code>UserField</code> dieses <code>UserField</code>s defniert
      *            ist oder <code>null</code>, wenn man diese Information direkt für ein Format-<code>UserField</code> abfragen möchte.
      * @return die Anzahl der Nachkommastellen des Formates. Wenn kein Format eingestellt ist, kommt -1 zurück;
@@ -919,7 +919,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Liefert die Anzahl der Nachkommastellen. Ist das UserField selbst ein Format, gibt es seine eigenen Nachkommastellen zurück, ist es ein
      * UserField, dem ein Format zugewiesen ist (was für ein Format selbst nie zutreffen kann), dann gibt es die Nachkommstellen des Formates zurück.
-     * 
+     *
      * @return die Anzahl der Nachkommastellen des Formates. Wenn kein Format eingestellt ist, kommt -1 zurück;
      */
     public int getFormatFractionDigits() {
@@ -932,7 +932,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt bei Format-<code>UserField</code>s die Anzahl der Nachkommastellen.
-     * 
+     *
      * @param fractionDigits
      */
     public void setFormatFractionDigits(final int fractionDigits) {
@@ -948,7 +948,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt die Einheit des <code>UserFields</code>, wenn es den Style <code>FORMAT_STYLE</code>.
-     * 
+     *
      * @param unitString
      */
     public void setFormatUnit(final String unitString) {
@@ -965,7 +965,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Gibt die Einheit des <code>UserField</code>s zurück. Ist das UserField selbst ein Format, gibt es seine eigene Einheit zurück, ist es ein
      * UserField, dem ein Format zugewiesen ist (was für ein Format selbst nie zutreffen kann), dann gibt es die Nachkommstellen des Formates zurück.
-     * 
+     *
      * @return die Einheit des Formates. Wenn kein Format eingestellt ist, kommt <code>null</code> zurück;
      */
     public String getFormatUnit() {
@@ -1038,7 +1038,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt <code>true</code> zurück, falls nur positive Werte erlaubt sind, sonst <code>false</code>
-     * 
+     *
      * @return {@link #positiveOnly}
      */
     public boolean isPositiveOnly() {
@@ -1047,7 +1047,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Setzt das Attribut {@link #positiveOnly} auf <code>b</code>
-     * 
+     *
      * @param b <code>true</code> --> nur noch postive Werte erlaubt <code>false</code> --> positive und negative Werte erlaubt
      */
     public void setPositiveOnly(final boolean b) {
@@ -1067,7 +1067,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Liefert den unformatierten Wert einer Kennzahl.
-     * 
+     *
      * @param target Kennzahlwertträger, für das der Wert zurück gegeben werden soll
      * @return
      */
@@ -1102,7 +1102,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Formatiert einen übergenenen Wert mit der Formatvorlage.
-     * 
+     *
      * @param me Modellelement, für das der formatierte Wert zurück gegeben werden soll
      * @return
      */
@@ -1112,7 +1112,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Formatiert einen übergenenen Wert mit der Formatvorlage.
-     * 
+     *
      * @param me Modellelement, für das der formatierte Wert zurück gegeben werden soll
      * @param appendUnit wenn <code>true</code> wird auch die Einheit an den Rückgabewert angehängt
      * @return
@@ -1124,7 +1124,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Formatiert den über <code>o.toString()</code> erhaltenen String gemäß der Formatvorlage.
-     * 
+     *
      * @see #getFormattedValue(ModelElement, boolean)
      * @param o
      * @param appendUnit
@@ -1175,7 +1175,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
         try {
             //hier prüfen, ob sich der String überhaupt in eine Zahl umwandeln lässt
             BigDecimal numberValue = new BigDecimal(value);
-            //wenn kein Format gesetzt ist 
+            //wenn kein Format gesetzt ist
             if (formatUserField == null) {
                 return value;
             }
@@ -1201,7 +1201,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      * <li>Beide Modelemente sind Instanzen der selben Klasse</li>
      * <li>Das UserField ist für diese Klasse definiert</li> <br>
      * <br>
-     * 
+     *
      * @param o1
      * @param o2
      * @return
@@ -1223,7 +1223,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Führt, wenn das übergebene <code>Object</code> ungleich <code>null</code> ist die <code>toString()</code>-Methode aus und ersetzt in diesem
      * String alle Punkte gegen Kommas, wenn der DecimalSeparator ein Komma ist und umgekehrt.
-     * 
+     *
      * @param string
      */
     public static String replaceWrongDecimalSeparator(final Object objectToString) {
@@ -1234,7 +1234,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * Ersetzt alle in <code>objectToString.toString()</code> enthaltenen Kommas und Punkte durch <code>decimalSeparator</code>. Mit
      * <code>replaceAll = true</code> wird nur das letzte Treenzeichen ersetzt
-     * 
+     *
      * @param objectToString
      * @param decimalSeparator
      * @return
@@ -1280,7 +1280,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     }
 
     ///////////////////////////////////////////////////////
-    // prüfen, ob ein UserField ein anderes referenziert // 
+    // prüfen, ob ein UserField ein anderes referenziert //
     ///////////////////////////////////////////////////////
 
     /**
@@ -1305,7 +1305,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Gibt wieder, ob dieses UserField ein UserField für die spezfizierte Klasse ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -1320,7 +1320,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Liefert eine Liste aller in der Formel vorkommenden Hash-Strings von anderen <code>UserField</code>s.
-     * 
+     *
      * @return
      */
     public Set<String> getHashesInFormula() {
@@ -1341,7 +1341,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft, ob der übergebene Wert ein Wert aus <code>ERROR_SET</code> ist.
-     * 
+     *
      * @param value Der zu prüfende Wert
      * @return <code>true</code>, wenn sich der übergebene Wert in <code>ERROR_SET</code> befindet sonst <code>false</code>
      */
@@ -1351,7 +1351,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft, ob der übergebene Wert ein Wert aus <code>IGNOREABLE_ERROR_SET</code> ist.
-     * 
+     *
      * @param value Der zu prüfende Wert
      * @return <code>true</code>, wenn sich der übergebene Wert in <code>IGNOREABLE_ERROR_SET</code> befindet sonst <code>false</code>
      */
@@ -1361,13 +1361,17 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
 
     /**
      * Prüft, ob der übergebene Wert ein Wert aus <code>ERROR_SET</code> oder <code>IGNOREABLE_ERROR_SET</code> ist.
-     * 
+     *
      * @param value Der zu prüfende Wert
      * @return <code>true</code>, wenn sich der übergebene Wert in <code>ERROR_SET</code> oder <code>IGNOREABLE_ERROR_SET</code> befindet sonst
      *         <code>false</code>
      */
     public static boolean isError(final String value) {
         return IGNOREABLE_ERROR_SET.contains(value) || ERROR_SET.contains(value);
+    }
+
+    public static final boolean isAccountingFunction(final String s) {
+        return ACCOUNTING_FUNCTIONS_SET.contains(s);
     }
 
 }

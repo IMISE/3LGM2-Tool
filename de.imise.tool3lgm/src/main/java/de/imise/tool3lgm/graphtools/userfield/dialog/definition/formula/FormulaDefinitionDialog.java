@@ -913,7 +913,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand)) {
             setOperatorAndNumberButtonStates(false, !lastCommand.equals(Calculator.OPERATOR_MINUS), true, true);
             setFunctionButtonStates(true);
-        } else if (UserField.ACCOUNTING_FUNCTIONS_SET.contains(lastCommand) || lastCommand.equals(CLASSIFICATION_NUMBER)) {
+        } else if (UserField.isAccountingFunction(lastCommand) || lastCommand.equals(CLASSIFICATION_NUMBER)) {
             setOperatorAndNumberButtonStates(true, true, false, false);
             leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
         }
