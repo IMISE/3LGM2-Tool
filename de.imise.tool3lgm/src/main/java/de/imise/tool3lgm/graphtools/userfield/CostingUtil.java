@@ -299,7 +299,7 @@ public class CostingUtil {
             } else if (token.equals("(")) {
                 stack.push("(  )");
             } else if (token.equals(")")) {
-                stack.push(FormulaDefinitionDialog.USERFIELD_IN_FORMULA_BRACKET_LEAVE);
+                stack.push(FormulaDefinitionDialog.LEAVE_BRACKET_ESCAPE_CHARS);
             } else if (token.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
                 stack.push(token);
             } else if (token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")) {

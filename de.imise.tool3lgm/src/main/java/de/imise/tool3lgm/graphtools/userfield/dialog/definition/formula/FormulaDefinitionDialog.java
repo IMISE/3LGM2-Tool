@@ -4,6 +4,14 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_AVG;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_INDI;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MAX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MIN;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_MULT;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_REF;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_SUM;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_TWSUM;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.CLOSE_BRACKET;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPEN_BRACKET;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_DIV;
@@ -13,6 +21,7 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERA
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -48,6 +57,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -80,7 +90,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Kenzeichen dafür, dass eine Klammer in einer Formel nach rechts Verlassen wird.
      */
-    public static final String USERFIELD_IN_FORMULA_BRACKET_LEAVE = "%>%";
+    public static final String LEAVE_BRACKET_ESCAPE_CHARS = "%>%";
 
     public static final String BRACKETS = OPEN_BRACKET + WHITESPACE + WHITESPACE + CLOSE_BRACKET;
 
@@ -190,24 +200,27 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         definitions = def;
         userField = field;
         oldFormulaString = userField.getFormula();
-        setTitle(getResString("formulaEditorDialog") + "  -  " + userField.getTargetClass().getSimpleName() + "  -  " + newUserFieldName);
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        Class<? extends ModelElement> elementClass = ModelElement.class.isAssignableFrom(targetClass) ? targetClass.asSubclass(ModelElement.class) : null;
+        String targetClassDisplayName = elementClass == null ? "" : "  -  " + ModelConstants.getDisplayableName(elementClass);
+        setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
         term = new Stack<String>();
 
         okButton = getButton("ok");
         cancelButton = getButton("cancel");
         undoButton = getButton("undo");
-        leaveBracketButton = getButton("leaveBracketButton");
+        leaveBracketButton = getButton(LEAVE_BRACKET_ESCAPE_CHARS);
         clearFormulaButton = getButton("clearFormula");
 
-        buttonsum = getButton("summe");
-        buttonMult = getButton("produkt");
-        buttonteilwertsumme = getButton("teilwertsumme");
-        buttonmax = getButton("maximum");
-        buttonmin = getButton("minimum");
-        buttonmittelwert = getButton("mittelwert");
-        buttonindikator = getButton("indicator");
-        buttonReference = getButton("reference");
+        buttonsum = getButton(ACCOUNTING_FUNCTION_SUM);
+        buttonMult = getButton(ACCOUNTING_FUNCTION_MULT);
+        buttonteilwertsumme = getButton(UserField.ACCOUNTING_FUNCTION_TWSUM);
+        buttonmax = getButton(ACCOUNTING_FUNCTION_MAX);
+        buttonmin = getButton(ACCOUNTING_FUNCTION_MIN);
+        buttonmittelwert = getButton(ACCOUNTING_FUNCTION_AVG);
+        buttonindikator = getButton(ACCOUNTING_FUNCTION_INDI);
+        buttonReference = getButton(ACCOUNTING_FUNCTION_REF);
 
         operatorAndNumberInputPanel = new CalculatorStyledInputPanel();
 
@@ -607,15 +620,15 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             formulaArea.requestFocus();
             pushToFormulaStack(cmd);
             orgButtons(cmd);
-        } else if (source == operatorAndNumberInputPanel.buttonbrackets) {
+        } else if (cmd.equals(BRACKETS)) {
             formulaArea.requestFocus();
             leaveableBracketCounter++;
-            pushToFormulaStack(BRACKETS);
-            orgButtons(BRACKETS);
+            pushToFormulaStack(cmd);
+            orgButtons(cmd);
         } else if (source == buttonsum) {
 
             formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_SUM, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_SUM, userField);
 
             // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
@@ -623,12 +636,12 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String vfdResult = vfd.showDialog();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
+                orgButtons(ACCOUNTING_FUNCTION_SUM);
             }
         } else if (source == buttonMult) {
 
             formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MULT, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_MULT, userField);
 
             // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
@@ -636,21 +649,21 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String vfdResult = vfd.showDialog();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
+                orgButtons(ACCOUNTING_FUNCTION_SUM);
             }
         } else if (source == buttonteilwertsumme) {
 
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_TWSUM, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_TWSUM, userField);
             String vfdResult = vfd.showDialog();
             formulaArea.requestFocus();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_TWSUM);
+                orgButtons(ACCOUNTING_FUNCTION_TWSUM);
             }
         } else if (source == buttonmin) {
 
             formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MIN, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_MIN, userField);
 
             // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
@@ -658,11 +671,11 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String vfdResult = vfd.showDialog();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
+                orgButtons(ACCOUNTING_FUNCTION_SUM);
             }
         } else if (source == buttonmax) {
             formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_MAX, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_MAX, userField);
 
             // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
@@ -670,11 +683,11 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String vfdResult = vfd.showDialog();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
+                orgButtons(ACCOUNTING_FUNCTION_SUM);
             }
         } else if (source == buttonmittelwert) {
             formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_AVG, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_AVG, userField);
 
             // vfdResult = VerechnugsFunktionsDefinition ist der Term,
             // der nach der angabe der VF zurück kommt.
@@ -682,53 +695,45 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String vfdResult = vfd.showDialog();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_SUM);
+                orgButtons(ACCOUNTING_FUNCTION_SUM);
             }
             formulaArea.requestFocus();
-        }
-
-        else if (source == buttonindikator) {
-            if (formulaArea.getText().equals("") || formulaArea.getText().trim().startsWith(UserField.ACCOUNTING_FUNCTION_INDI)) {
+        } else if (source == buttonindikator) {
+            if (formulaArea.getText().isEmpty() || formulaArea.getText().trim().startsWith(ACCOUNTING_FUNCTION_INDI)) {
                 IndicatorDialog indiDialog;
                 indiDialog = new IndicatorDialog(this, userField);
                 String newIndi = indiDialog.showDialog();
-                if (!newIndi.equals("")) {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(" ");
-                    sb.append(UserField.ACCOUNTING_FUNCTION_INDI);
-                    sb.append(" ( ");
-                    sb.append(newIndi);
-                    sb.append(" ) ");
-                    clearStack();
-                    pushToFormulaStack(sb.toString());
+                newIndi = getIndikatorStackString(newIndi);
+                if (!newIndi.isEmpty()) {
+                    pushToFormulaStack(newIndi);
                     hashArea.setText(convertStackFormulaToOrdinaryFormula());
                     formulaArea.setText(CostingUtil.getHumanReadableFormulaString(convertStackFormulaToOrdinaryFormula(), definitions));
                     formulaArea.requestFocus();
-                    orgButtons(UserField.ACCOUNTING_FUNCTION_INDI);
+                    orgButtons(ACCOUNTING_FUNCTION_INDI);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("indicator_in_formula"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("indicator_in_formula"), Tool3lgmConstants.getResString("fehler"), ERROR_MESSAGE);
             }
 
         } else if (source == buttonReference) {
-            VfDialog vfd = new VfDialog(this, UserField.ACCOUNTING_FUNCTION_REF, userField);
+            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_REF, userField);
             String vfdResult = vfd.showDialog();
             formulaArea.requestFocus();
             if (!vfdResult.equals("")) {
                 pushToFormulaStack(vfdResult);
-                orgButtons(UserField.ACCOUNTING_FUNCTION_REF);
+                orgButtons(ACCOUNTING_FUNCTION_REF);
             }
         }
 
         else if (source == leaveBracketButton) {
             formulaArea.requestFocus();
-            pushToFormulaStack(USERFIELD_IN_FORMULA_BRACKET_LEAVE);
+            pushToFormulaStack(LEAVE_BRACKET_ESCAPE_CHARS);
 
             leaveableBracketCounter--;
             if (leaveableBracketCounter == 0) {
                 leaveBracketButton.setEnabled(false);
             }
-            orgButtons(USERFIELD_IN_FORMULA_BRACKET_LEAVE);
+            orgButtons(LEAVE_BRACKET_ESCAPE_CHARS);
         }
 
         else if (source == undoButton) {
@@ -736,12 +741,12 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             String deletedElement = popFromStack();
             int termSize = term.size();
 
-            if (deletedElement.equals(USERFIELD_IN_FORMULA_BRACKET_LEAVE)) {
+            if (deletedElement.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
                 leaveableBracketCounter++;
             } else if (deletedElement.equals(BRACKETS)) {
                 leaveableBracketCounter--;
                 orgButtons("");
-            } else if (deletedElement.startsWith(UserField.ACCOUNTING_FUNCTION_SUM) || deletedElement.startsWith(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
+            } else if (deletedElement.startsWith(ACCOUNTING_FUNCTION_SUM) || deletedElement.startsWith(ACCOUNTING_FUNCTION_TWSUM)) {
                 orgButtons(Calculator.OPERATOR_PLUS);
             } else
 
@@ -780,6 +785,24 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         }
         setValidityStatusLabelText();
 
+    }
+
+    private String getIndikatorStackString(final String orgIndicatorString) {
+        StringBuilder sb = new StringBuilder();
+        if (!Strings.isNullOrEmpty(orgIndicatorString)) {
+            sb.append(" ");
+            sb.append(UserField.ACCOUNTING_FUNCTION_INDI);
+            sb.append(" ( ");
+            sb.append(orgIndicatorString);
+            sb.append(" ) ");
+            clearStack();
+            pushToFormulaStack(sb.toString());
+            hashArea.setText(convertStackFormulaToOrdinaryFormula());
+            formulaArea.setText(CostingUtil.getHumanReadableFormulaString(convertStackFormulaToOrdinaryFormula(), definitions));
+            formulaArea.requestFocus();
+            orgButtons(UserField.ACCOUNTING_FUNCTION_INDI);
+        }
+        return sb.toString();
     }
 
     /**
@@ -822,7 +845,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                     //Wenn eine Klammer eingefügt wird,
                     //ist die soll der Cursor in der Mitte des Klammernpaares stehen.
                     caretPosInFormulaArea += 2;
-                } else if (partTerm.equals(USERFIELD_IN_FORMULA_BRACKET_LEAVE)) {
+                } else if (partTerm.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
                     caretPosInFormulaArea += 2;
                 } else {
                     termList.add(insertIndex, partTerm);
@@ -880,7 +903,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      */
     private String popFromStack() {
         String deletetElement = "";
-        if (term.size() != 0) {
+        if (!term.isEmpty()) {
             deletetElement = term.get(term.size() - 1).toString();
             term.pop();
         }
@@ -908,7 +931,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         if (emptyFormula || lastCommand.equals(BRACKETS)) {
             setOperatorAndNumberButtonStates(false, true, true, true);
-        } else if (initWithFormula) {
+        } else if (initWithFormula || lastCommand.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
             setOperatorAndNumberButtonStates(true, true, false, false);
         } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand)) {
             setOperatorAndNumberButtonStates(false, !lastCommand.equals(Calculator.OPERATOR_MINUS), true, true);
