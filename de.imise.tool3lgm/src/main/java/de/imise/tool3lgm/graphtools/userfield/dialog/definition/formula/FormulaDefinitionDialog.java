@@ -21,7 +21,6 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERA
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -37,8 +36,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -50,8 +49,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 
 import com.google.common.base.Strings;
 
@@ -112,14 +109,14 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * TextArea zum Anzeigen des FormelStrings in lesebarer Form.
      */
-    private ExtendedTextArea formulaArea;
+    private final ExtendedTextArea formulaArea;
 
     /**
      * <code>ExtendedTextArea</code> zum Anzeigen des FormelStrings in HashCode-Komination. Diese Area ist nicht Teil des Formeleditor. Sie ist nur so
      * lang Bestandteil, wie die Arbeit am Editor dauert. Vor Auslieferung wird sie entfernt. Die Zugriffe darauf können gegen die Abfrage eines
      * Strings ausgetauscht werden.
      */
-    private ExtendedTextArea hashArea;
+    private final ExtendedTextArea hashArea;
 
     private String formelString = "";
 
@@ -152,19 +149,13 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     /**
      * Dieser <code>Stack</code> beinhaltet die Formel in klickreihenfolge. Bsp: Klickreihenfolge: 3 * () 4 + 5 soll darstellen: 3 * ( 4 + 5 )
      */
-    private Stack<String> term;
+    private FormulaDefinitionDialogStack termStack;
 
-    private final CalculatorStyledInputPanel operatorAndNumberInputPanel;
+    private final AccountingFunctionsButtonPanel accountingFunctionsButtonPanel;
 
-    /**
-     * Die Buttons für die Verrechnungsfunktionen Summe, Teilwertsumme, Maximum, Minimum, Indikator und Reference
-     */
-    private final JButton buttonsum, buttonMult, buttonteilwertsumme, buttonmax, buttonmin, buttonmittelwert, buttonindikator, buttonReference;
+    private final CalculatorStyledButtonPanel operatorAndNumberInputPanel;
 
-    /**
-     * Die Buttons für die Formelsteuerung. Rückgänig machen, Klammer verlassen, Formel leeren.
-     */
-    private final JButton undoButton, leaveBracketButton, clearFormulaButton;
+    private final FormulaControlButtonPanel formulaControlPanel;
 
     /**
      * Gibt an, wieviele Klammernpaare noch verlassen werden können.
@@ -184,11 +175,6 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
     private int caretPosInFormulaArea;
 
     /**
-     * Wenn die Elementklasse, für die die Kennzhalformel bearbeitet wird, eine Kante ist, ist <code>isOnlyEdge</code> true;
-     */
-    private boolean isOnlyEdge = false;
-
-    /**
      * @param owner Dialogowner
      * @param def
      * @param field
@@ -196,36 +182,27 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @param oldFormulaString
      */
     private FormulaDefinitionDialog(final JDialog owner, final UserFieldDefinitions def, final UserField field, final String newUserFieldName) {
-        super(owner, getResString("formulaEditorDialog"), true);
+        super(owner, true);
         definitions = def;
         userField = field;
         oldFormulaString = userField.getFormula();
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         Class<? extends ModelElement> elementClass = ModelElement.class.isAssignableFrom(targetClass) ? targetClass.asSubclass(ModelElement.class) : null;
-        String targetClassDisplayName = elementClass == null ? "" : "  -  " + ModelConstants.getDisplayableName(elementClass);
+        ModelConstants.isNodeType(targetClass);
+        String targetClassDisplayName = elementClass == null || ModelConstants.isEdgeType(targetClass) ? "" : "  -  " + ModelConstants.getDisplayableName(elementClass);
         setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
-        term = new Stack<String>();
 
         okButton = getButton("ok");
         cancelButton = getButton("cancel");
-        undoButton = getButton("undo");
-        leaveBracketButton = getButton(LEAVE_BRACKET_ESCAPE_CHARS);
-        clearFormulaButton = getButton("clearFormula");
 
-        buttonsum = getButton(ACCOUNTING_FUNCTION_SUM);
-        buttonMult = getButton(ACCOUNTING_FUNCTION_MULT);
-        buttonteilwertsumme = getButton(UserField.ACCOUNTING_FUNCTION_TWSUM);
-        buttonmax = getButton(ACCOUNTING_FUNCTION_MAX);
-        buttonmin = getButton(ACCOUNTING_FUNCTION_MIN);
-        buttonmittelwert = getButton(ACCOUNTING_FUNCTION_AVG);
-        buttonindikator = getButton(ACCOUNTING_FUNCTION_INDI);
-        buttonReference = getButton(ACCOUNTING_FUNCTION_REF);
-
-        operatorAndNumberInputPanel = new CalculatorStyledInputPanel();
+        accountingFunctionsButtonPanel = new AccountingFunctionsButtonPanel();
+        operatorAndNumberInputPanel = new CalculatorStyledButtonPanel();
+        formulaControlPanel = new FormulaControlButtonPanel();
+        formulaArea = createFormulaTextArea();
+        hashArea = createFormulaTextArea();
 
         init();
-        pack();
     }
 
     /**
@@ -233,10 +210,6 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      */
     private void init() {
         Container pane = getContentPane();
-        JLabel label;
-        JPanel panel, panel2;
-        Border border1, border2;
-        JScrollPane scrollPane;
         setLocationByPlatform(true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         /*
@@ -248,55 +221,126 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 cancelButton.doClick();
             }
         });
-        panel2 = new JPanel(new GridBagLayout());
 
-        isOnlyEdge = ModelConstants.isEdgeType(userField.getTargetClass());
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        undoButton.setEnabled(false);
-        leaveBracketButton.setEnabled(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = BOTH;
+        gbc.anchor = NORTHWEST;
+        gbc.insets = new Insets(2, 0, 2, 0);
+        gbc.gridheight = 1;
+        gbc.gridwidth = 3;
+        panel.add(new JLabel(getResString("formula")), nextLine(gbc));
 
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = BOTH;
-        constraints.anchor = NORTHWEST;
-        constraints.insets = new Insets(2, 0, 2, 0);
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridheight = 1;
-        constraints.gridwidth = 1;
+        gbc.weightx = 1;
+        gbc.weighty = 0.5;
+        gbc.gridheight = 1;
+        JScrollPane formualAreaScrollPane = new JScrollPane(formulaArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        panel.add(formualAreaScrollPane, nextLine(gbc));
 
-        panel2.setBorder(new EmptyBorder(5, 5, 5, 5));
-        label = new JLabel(getResString("formula") + ": ");
-        panel2.add(label, constraints);
-        /* keine leere Eingabe zulassen */
+        //Wenn die hashArea nicht sichtbar sein soll, darf ich nicht die ScrollPane eingefügt werden.
+        if (hashAreaVisible) {
+            gbc.gridheight = 1;
+            gbc.weighty = 0.02;
+            gbc.weightx = 1;
+            panel.add(new JScrollPane(hashArea), nextLine(gbc));
+        }
 
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.weightx = 1;
-        constraints.weighty = 0.5;
-        constraints.gridheight = 1;
-        constraints.gridwidth = 4;
-        formulaArea = new ExtendedTextArea(3, 4);
-        formulaArea.setLineWrap(true);
-        formulaArea.setWrapStyleWord(true);
-        formulaArea.addCaretListener(new CaretListener() {
-            //wenn keine Formel definiert wurde, soll der okButton nicht aktivert sein.
+        gbc.weighty = 1;
+        gbc.weightx = 1;
+        panel.add(getListsPanel(), nextLine(gbc));
+
+        gbc.gridwidth = 1;
+        gbc.weighty = 0;
+        gbc.weightx = 0;
+        panel.add(formulaControlPanel, nextLine(gbc));
+        gbc.weightx = 1;
+        panel.add(accountingFunctionsButtonPanel, nextColumn(gbc));
+        gbc.weightx = 0;
+        panel.add(operatorAndNumberInputPanel, nextColumn(gbc));
+
+        pane.setLayout(new BorderLayout());
+        pane.add(panel, BorderLayout.CENTER);
+        pane.add(getSouthButtonPanel(), BorderLayout.SOUTH);
+
+        pack();
+
+        termStack = new FormulaDefinitionDialogStack(this);
+        termStack.fill(oldFormulaString);
+    }
+
+    private AlphabeticalJList initUserFieldList() {
+        final AlphabeticalJList returnList = new AlphabeticalJList();
+        returnList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        returnList.addMouseListener(new MouseAdapter() {
             @Override
-            public void caretUpdate(final CaretEvent e) {
-                if (okButton != null) {
-                    okButton.setEnabled(!formulaArea.getText().trim().isEmpty());
+            public void mouseClicked(final MouseEvent e) {
+                if (returnList.isEnabled() && e.getClickCount() > 0) {
+                    UserField tmpUserField = (UserField) returnList.getSelectedValue();
+                    if (tmpUserField != null) {
+                        termStack.push(tmpUserField.getHashCode());
+                    }
                 }
             }
-
         });
+        return returnList;
+    }
 
-        //formulaArea.setText(CostingUtil.getHumanReadableFormulaString(oldFormulaString, definitions));
+    private JPanel getListsPanel() {
+        userFieldList = initUserFieldList();
+        modelAttributes = initUserFieldList();
+        updateFieldList(userField.getTargetClass());
+        JPanel listsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.weighty = 0;
+        gbc.weightx = 0.4;
+        listsPanel.add(new JLabel(getResString("attributes")), nextLine(gbc));
+        gbc.weightx = 0.6;
+        listsPanel.add(new JLabel(getResString("model_variable")), nextColumn(gbc));
+        gbc.weighty = 1;
+        gbc.fill = BOTH;
+        gbc.weightx = 0.4;
+        listsPanel.add(new JScrollPane(userFieldList), nextLine(gbc));
+        gbc.weightx = 0.6;
+        listsPanel.add(new JScrollPane(modelAttributes), nextColumn(gbc));
+        return listsPanel;
+    }
 
-        scrollPane = new JScrollPane(formulaArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    private JPanel getSouthButtonPanel() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        statusLabel = new JLabel("");
+        gbc.insets = new Insets(3, 3, 3, 3);
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(statusLabel, nextLine(gbc));
+        gbc.weightx = 0;
+        panel.add(okButton, nextColumn(gbc));
+        panel.add(cancelButton, nextColumn(gbc));
+        return panel;
+    }
 
-        panel2.add(scrollPane, constraints);
+    private JButton getButton(final String resKey) {
+        String buttonText = resKey;
+        try {
+            buttonText = Tool3lgmConstants.getResString(resKey);
+        } catch (Exception e) {
+        }
+        JButton button = new JButton(buttonText);
+        button.setActionCommand(resKey);
+        button.addActionListener(this);
+        return button;
+    }
 
+    private static ExtendedTextArea createFormulaTextArea() {
+        ExtendedTextArea formulaTextArea = new ExtendedTextArea(3, 4);
+        formulaTextArea.setLineWrap(true);
+        formulaTextArea.setWrapStyleWord(true);
         // wird gemacht, damit sämtliche Keyevents irrelevant werden.
-        formulaArea.addKeyListener(new KeyAdapter() {
+        formulaTextArea.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(final KeyEvent e) {
                 e.consume();
@@ -312,255 +356,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 e.consume();
             }
         });
-
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridheight = 1;
-        constraints.weighty = 0.02;
-        constraints.weightx = 1;
-        constraints.gridwidth = 4;
-        hashArea = new ExtendedTextArea(3, 4);
-        hashArea.setEditable(false);
-        //hashArea.setText(oldFormulaString);
-        JScrollPane hashscrollPane = new JScrollPane(hashArea);
-
-        //ElementDialogPanel.
-        //Wenn die hashArea nicht sichtbar sein soll, darf ich nicht die ScrollPane eingefügt werden.
-        if (hashAreaVisible) {
-            panel2.add(hashscrollPane, constraints);
-        }
-        panel = new JPanel(new GridBagLayout());
-
-        //bpc = ButtonPanelConstraints
-        GridBagConstraints bpc = new GridBagConstraints();
-
-        ///////////////UserfieldLabel + List Start
-        constraints.gridwidth = 1;
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.gridheight = 1;
-        constraints.weighty = 0;
-        constraints.weightx = 0;
-        panel2.add(new JLabel(getResString("attributes")), constraints);
-
-        userFieldList = new AlphabeticalJList();
-        userFieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        userFieldList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                if (userFieldList.isEnabled()) {
-                    UserField tmpUserField = null;
-                    if (e.getClickCount() == 1) {
-                        tmpUserField = (UserField) userFieldList.getSelectedValue();
-                        if (tmpUserField != null) {
-                            //pushToStack(USERFIELD_IN_FORMULA_START + tmpUserField.getHashCode() + USERFIELD_IN_FORMULA_END);
-                            pushToFormulaStack(tmpUserField.getHashCode());
-                            //Wenn ein Attribut ausgewählt wurde, darf nicht sofort ein neues hinzugefügt werden.
-                            orgButtons(CLASSIFICATION_NUMBER);
-                            setValidityStatusLabelText();
-                        }
-                    }
-                }
-            }
-        });
-
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.weighty = 0.5;
-        constraints.weightx = 0.5;
-        constraints.gridwidth = 2;
-        panel2.add(new JScrollPane(userFieldList), constraints);
-        ///////////////////UserFieldLabel + List Ende
-
-        /////////////////ModellVaraiblen Start
-
-        constraints.gridwidth = 1;
-        constraints.gridy = 3;
-        constraints.gridx = 2;
-        constraints.weighty = 0;
-        constraints.weightx = 1;
-        panel2.add(new JLabel(getResString("model_variable")), constraints);
-
-        modelAttributes = new AlphabeticalJList();
-        for (UserField uf : definitions.getGlobalUserFields()) {
-            if (!uf.hasStyle(UserField.Style.FORMAT)) {
-                modelAttributes.addItem(uf);
-            }
-        }
-        modelAttributes.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                UserField tmpUserField = null;
-                if (e.getClickCount() == 1) {
-                    tmpUserField = (UserField) modelAttributes.getSelectedValue();
-                    if (tmpUserField != null) {
-                        pushToFormulaStack(tmpUserField.getHashCode());
-                        orgButtons(CLASSIFICATION_NUMBER);
-                        setValidityStatusLabelText();
-                    }
-                }
-            }
-        });
-        constraints.gridx = 2;
-        constraints.gridy = 4;
-        constraints.weighty = 0.5;
-        constraints.weightx = 0.5;
-        constraints.gridwidth = 2;
-        panel2.add(new JScrollPane(modelAttributes), constraints);
-
-        //////////////////ModellVaraibleb End
-
-        ////////////////// Formelsteuerung Start
-
-        JPanel formulaController = new JPanel();
-
-        Border border = BorderFactory.createTitledBorder(getResString("formula_control"));
-
-        formulaController.setBorder(border);
-        formulaController.setLayout(new GridBagLayout());
-        GridBagConstraints fcc = new GridBagConstraints();
-
-        fcc.insets = new Insets(3, 0, 3, 0);
-        fcc.gridx = 1;
-        fcc.fill = GridBagConstraints.HORIZONTAL;
-        formulaController.add(undoButton, fcc);
-        formulaController.add(leaveBracketButton, fcc);
-        formulaController.add(clearFormulaButton, fcc);
-
-        constraints.gridy = 5;
-        constraints.gridx = 0;
-        constraints.weighty = 0;
-        constraints.weightx = 0;
-        constraints.gridwidth = 1;
-        //constraints.fill=GridBagConstraints.NONE;
-        panel2.add(formulaController, constraints);
-
-        ////////////////// Formelsteuerung End
-
-        constraints.gridy = 5;
-        constraints.gridx = 1;
-        constraints.weighty = 0;
-        constraints.weightx = 1;
-        constraints.gridwidth = 3;
-        border1 = BorderFactory.createEtchedBorder();
-        border2 = BorderFactory.createTitledBorder(border1, " " + Tool3lgmConstants.getResString("operator") + " ");
-        panel.setBorder(border2);
-        panel2.add(panel, constraints);
-
-        bpc.anchor = GridBagConstraints.NORTHWEST;
-        bpc.gridx = 0;
-        bpc.gridy = 0;
-        bpc.weightx = 0;
-
-        bpc.fill = GridBagConstraints.HORIZONTAL;
-        bpc.insets = new Insets(3, 3, 3, 3);
-
-        panel.add(operatorAndNumberInputPanel.buttonplus, bpc);
-        bpc.gridx++;
-
-        panel.add(operatorAndNumberInputPanel.buttonminus, bpc);
-        bpc.gridx++;
-
-        bpc.gridy++;
-        bpc.gridx = 0;
-        panel.add(operatorAndNumberInputPanel.buttonmult, bpc);
-        bpc.gridx++;
-
-        panel.add(operatorAndNumberInputPanel.buttondiv, bpc);
-        bpc.gridx++;
-
-        panel.add(operatorAndNumberInputPanel.buttonbrackets, bpc);
-        bpc.gridx++;
-
-        bpc.gridy++;
-        bpc.gridx = 0;
-        bpc.gridwidth = 2;
-        panel.add(new JLabel(Tool3lgmConstants.getResString("accounting") + ": "), bpc);
-        bpc.gridwidth = 1;
-
-        bpc.gridy++;
-        if (!isOnlyEdge) {
-            panel.add(buttonsum, bpc);
-            bpc.gridx++;
-            panel.add(buttonMult, bpc);
-            bpc.gridx++;
-
-            panel.add(buttonteilwertsumme, bpc);
-
-            bpc.gridy++;
-            bpc.gridx = 0;
-            panel.add(buttonmax, bpc);
-            bpc.gridx++;
-            panel.add(buttonmin, bpc);
-            bpc.gridx++;
-            panel.add(buttonmittelwert, bpc);
-            bpc.gridy++;
-            bpc.gridx = 0;
-            panel.add(buttonindikator, bpc);
-            bpc.gridx++;
-        } else {
-            panel.add(buttonReference, bpc);
-        }
-        bpc.gridx++;
-
-        // Ein Leer-JLabel mit weightx=1 eingefügt, damit die Buttons immer
-        // schön an der linken
-        // Seite "kleben" bleiben und nicht zentriert werden. Das Label nimmt
-        // nach dem resizen
-        // immer den ganzen neuen zusätzlichen Platz ein.
-        bpc.gridy++;
-        bpc.gridx = 0;
-        bpc.weightx = 1;
-        bpc.gridwidth = 10;
-        panel.add(new JLabel(""), bpc);
-        pane.setLayout(new BorderLayout());
-        pane.add(panel2, BorderLayout.CENTER);
-        //panel2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel2 = new JPanel(new GridBagLayout());
-        statusLabel = new JLabel("");
-        GridBagConstraints panel2C = new GridBagConstraints();
-        panel2C.insets = new Insets(3, 3, 3, 3);
-        panel2C.gridx = 1;
-        panel2C.gridy = 1;
-        panel2C.weightx = 1;
-        panel2C.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(statusLabel, panel2C);
-        panel2C.weightx = 0;
-        panel2C.gridx++;
-
-        if (formulaArea.getText().trim().length() == 0) {
-            okButton.setEnabled(false);
-        } else {
-            okButton.setEnabled(true);
-        }
-        panel2.add(okButton, panel2C);
-
-        panel2C.gridx++;
-        panel2.add(cancelButton, panel2C);
-
-        pane.add(panel2, BorderLayout.SOUTH);
-        pack();
-        updateFieldList(userField.getTargetClass());
-        term = CostingUtil.getStackForInternalFormula(oldFormulaString);
-        if (term != null) {
-            String ordinaryFormula = convertStackFormulaToOrdinaryFormula();
-            String humanReadableFormula = CostingUtil.getHumanReadableFormulaString(ordinaryFormula, definitions);
-            formulaArea.setText(humanReadableFormula);
-            hashArea.setText(ordinaryFormula);
-        }
-        orgButtons("");
-    }
-
-    private JButton getButton(final String resKey) {
-        String buttonText = resKey;
-        try {
-            buttonText = Tool3lgmConstants.getResString(resKey);
-        } catch (Exception e) {
-        }
-        JButton button = new JButton(buttonText);
-        button.setActionCommand(resKey);
-        button.addActionListener(this);
-        return button;
+        return formulaTextArea;
     }
 
     /**
@@ -572,6 +368,11 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         for (UserField uf : definitions.getUserFields(elementClass)) {
             if (uf != userField && uf.isClassificationUserField()) {
                 userFieldList.addItem(uf);
+            }
+        }
+        for (UserField uf : definitions.getGlobalUserFields()) {
+            if (!uf.hasStyle(UserField.Style.FORMAT)) {
+                modelAttributes.addItem(uf);
             }
         }
     }
@@ -587,7 +388,6 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
      * @return dialog.retval String: Formel in Hash-Ausdrucksform
      */
     public static String showDialog(final JDialog owner, final UserFieldDefinitions def, final UserField field, final String newUserFieldName) {
-
         if (owner == null || field == null) {
             return "-1";
         }
@@ -601,13 +401,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         String cmd = e.getActionCommand();
         Object source = e.getSource();
         if (source == okButton) {
-            //retVal = hashArea.getText();
-            String newHashFormula = convertStackFormulaToOrdinaryFormula();
-            if (formulaArea.getText().equals(CostingUtil.getHumanReadableFormulaString(oldFormulaString, definitions))) {
-                retVal = oldFormulaString;
-            } else if (newHashFormula.length() > 0) {
-                retVal = newHashFormula;
-            }
+            retVal = convertStackFormulaToOrdinaryFormula();
             if (CostingUtil.isFormulaValid(retVal)) {
                 dispose();
             } else {
@@ -617,174 +411,39 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             retVal = oldFormulaString;
             dispose();
         } else if (Calculator.OPERATOR_SIGNS.contains(cmd)) {
-            formulaArea.requestFocus();
-            pushToFormulaStack(cmd);
-            orgButtons(cmd);
+            termStack.push(cmd);
         } else if (cmd.equals(BRACKETS)) {
-            formulaArea.requestFocus();
             leaveableBracketCounter++;
-            pushToFormulaStack(cmd);
-            orgButtons(cmd);
-        } else if (source == buttonsum) {
-
-            formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_SUM, userField);
-
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
-            // der nach der angabe der VF zurück kommt.
-
-            String vfdResult = vfd.showDialog();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_SUM);
-            }
-        } else if (source == buttonMult) {
-
-            formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_MULT, userField);
-
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
-            // der nach der angabe der VF zurück kommt.
-
-            String vfdResult = vfd.showDialog();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_SUM);
-            }
-        } else if (source == buttonteilwertsumme) {
-
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_TWSUM, userField);
-            String vfdResult = vfd.showDialog();
-            formulaArea.requestFocus();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_TWSUM);
-            }
-        } else if (source == buttonmin) {
-
-            formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_MIN, userField);
-
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
-            // der nach der angabe der VF zurück kommt.
-
-            String vfdResult = vfd.showDialog();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_SUM);
-            }
-        } else if (source == buttonmax) {
-            formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_MAX, userField);
-
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
-            // der nach der angabe der VF zurück kommt.
-
-            String vfdResult = vfd.showDialog();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_SUM);
-            }
-        } else if (source == buttonmittelwert) {
-            formulaArea.requestFocus();
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_AVG, userField);
-
-            // vfdResult = VerechnugsFunktionsDefinition ist der Term,
-            // der nach der angabe der VF zurück kommt.
-
-            String vfdResult = vfd.showDialog();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_SUM);
-            }
-            formulaArea.requestFocus();
-        } else if (source == buttonindikator) {
+            termStack.push(cmd);
+        } else if (cmd.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
+            leaveableBracketCounter--;
+            termStack.push(cmd);
+        } else if (source == accountingFunctionsButtonPanel.buttonindikator) {
             if (formulaArea.getText().isEmpty() || formulaArea.getText().trim().startsWith(ACCOUNTING_FUNCTION_INDI)) {
                 IndicatorDialog indiDialog;
                 indiDialog = new IndicatorDialog(this, userField);
                 String newIndi = indiDialog.showDialog();
                 newIndi = getIndikatorStackString(newIndi);
                 if (!newIndi.isEmpty()) {
-                    pushToFormulaStack(newIndi);
-                    hashArea.setText(convertStackFormulaToOrdinaryFormula());
-                    formulaArea.setText(CostingUtil.getHumanReadableFormulaString(convertStackFormulaToOrdinaryFormula(), definitions));
-                    formulaArea.requestFocus();
-                    orgButtons(ACCOUNTING_FUNCTION_INDI);
+                    termStack.push(newIndi);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("indicator_in_formula"), Tool3lgmConstants.getResString("fehler"), ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("indicator_in_formula"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
             }
-
-        } else if (source == buttonReference) {
-            VfDialog vfd = new VfDialog(this, ACCOUNTING_FUNCTION_REF, userField);
+        } else if (UserField.isAccountingFunction(cmd)) {
+            VfDialog vfd = new VfDialog(this, cmd, userField);
             String vfdResult = vfd.showDialog();
-            formulaArea.requestFocus();
-            if (!vfdResult.equals("")) {
-                pushToFormulaStack(vfdResult);
-                orgButtons(ACCOUNTING_FUNCTION_REF);
+            if (!vfdResult.isEmpty()) {
+                termStack.push(vfdResult);
             }
-        }
-
-        else if (source == leaveBracketButton) {
-            formulaArea.requestFocus();
-            pushToFormulaStack(LEAVE_BRACKET_ESCAPE_CHARS);
-
-            leaveableBracketCounter--;
-            if (leaveableBracketCounter == 0) {
-                leaveBracketButton.setEnabled(false);
-            }
-            orgButtons(LEAVE_BRACKET_ESCAPE_CHARS);
-        }
-
-        else if (source == undoButton) {
-
-            String deletedElement = popFromStack();
-            int termSize = term.size();
-
-            if (deletedElement.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
-                leaveableBracketCounter++;
-            } else if (deletedElement.equals(BRACKETS)) {
-                leaveableBracketCounter--;
-                orgButtons("");
-            } else if (deletedElement.startsWith(ACCOUNTING_FUNCTION_SUM) || deletedElement.startsWith(ACCOUNTING_FUNCTION_TWSUM)) {
-                orgButtons(Calculator.OPERATOR_PLUS);
-            } else
-
-            if (Calculator.OPERATOR_SIGNS.contains(deletedElement)) {
-                orgButtons(CLASSIFICATION_NUMBER);
-                setValidityStatusLabelText();
-                return;
-            }
-            if (termSize > 0) {
-                String tmps = term.get(termSize - 1).toString();
-                if (tmps.contains(" ")) {
-                    tmps = tmps.substring(0, tmps.indexOf(" "));
-                    orgButtons(tmps);
-                } else if (tmps.contains(UserField.USERFIELD_HASH_STRING_PREFIX)) {
-                    orgButtons(CLASSIFICATION_NUMBER);
-                } else if (tmps.length() == 1) {
-                    orgButtons(tmps);
-                }
-            } else {
-                orgButtons(Calculator.OPERATOR_PLUS);
-            }
-        }
-
-        else if (source == clearFormulaButton) {
-
+        } else if (source == formulaControlPanel.undoButton) {
+            String lastStackElement = termStack.getLastElement();
+            leaveableBracketCounter += lastStackElement.equals(LEAVE_BRACKET_ESCAPE_CHARS) ? 1 : lastStackElement.equals(BRACKETS) ? -1 : 0;
+            termStack.pop();
+        } else if (source == formulaControlPanel.clearFormulaButton) {
             // Wenn der Löschenbutton betätigt wurde, werden alle Elemente des Term-stacks entfernt und die textAreas neu gefüllt (in diesem Falls mich nichts).
-            if (term != null) {
-                term.clear();
-            }
-
-            String hashStringFormula = convertStackFormulaToOrdinaryFormula();
-            hashArea.setText(hashStringFormula);
-            formulaArea.setText(CostingUtil.getHumanReadableFormulaString(hashStringFormula, definitions));
-
-            orgButtons(Calculator.OPERATOR_PLUS);
+            termStack.clear();
         }
-        setValidityStatusLabelText();
-
     }
 
     private String getIndikatorStackString(final String orgIndicatorString) {
@@ -795,26 +454,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             sb.append(" ( ");
             sb.append(orgIndicatorString);
             sb.append(" ) ");
-            clearStack();
-            pushToFormulaStack(sb.toString());
-            hashArea.setText(convertStackFormulaToOrdinaryFormula());
-            formulaArea.setText(CostingUtil.getHumanReadableFormulaString(convertStackFormulaToOrdinaryFormula(), definitions));
-            formulaArea.requestFocus();
-            orgButtons(UserField.ACCOUNTING_FUNCTION_INDI);
+            termStack.clear();
+            termStack.push(sb.toString());
         }
         return sb.toString();
-    }
-
-    /**
-     * Prüft die Formel auf syntaktische Korrektheit und setzt entsprechend das <code>statusLabel</code>. Über dieses <code>statusLabel</code> wird
-     * angezeigt, ob die Formel korrekt ist oder nicht.
-     */
-    private void setValidityStatusLabelText() {
-        if (CostingUtil.isFormulaValid(convertStackFormulaToOrdinaryFormula())) {
-            statusLabel.setText(getResString("formula_is_valid"));
-        } else {
-            statusLabel.setText(getResString("formula_is_not_valid"));
-        }
     }
 
     /**
@@ -832,31 +475,29 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         caretPosInFormulaArea = 0;
         int insertIndex = 0;
         String partTerm = "";
-        if (term != null) {
-            for (int i = 0; i < term.size(); i++) {
-                partTerm = term.get(i).toString();
-                if (partTerm.equals(BRACKETS)) {
-                    termList.add(insertIndex, Calculator.OPEN_BRACKET);
+        for (int i = 0; i < termStack.size(); i++) {
+            partTerm = termStack.get(i);
+            if (partTerm.equals(BRACKETS)) {
+                termList.add(insertIndex, Calculator.OPEN_BRACKET);
 
-                    //hier wird mit Absicht nicht insertIndex++ gemacht,
-                    //da somit nochmal an der selben Stelle etwas eingefügt werden kann
-                    termList.add(insertIndex + 1, Calculator.CLOSE_BRACKET);
+                //hier wird mit Absicht nicht insertIndex++ gemacht,
+                //da somit nochmal an der selben Stelle etwas eingefügt werden kann
+                termList.add(insertIndex + 1, Calculator.CLOSE_BRACKET);
 
-                    //Wenn eine Klammer eingefügt wird,
-                    //ist die soll der Cursor in der Mitte des Klammernpaares stehen.
-                    caretPosInFormulaArea += 2;
-                } else if (partTerm.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
-                    caretPosInFormulaArea += 2;
-                } else {
-                    termList.add(insertIndex, partTerm);
+                //Wenn eine Klammer eingefügt wird,
+                //ist die soll der Cursor in der Mitte des Klammernpaares stehen.
+                caretPosInFormulaArea += 2;
+            } else if (partTerm.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
+                caretPosInFormulaArea += 2;
+            } else {
+                termList.add(insertIndex, partTerm);
 
-                    // Die Teilformel in einen menschenlesbaren String umwandeln,
-                    // damit seine Länge in die Berechung für die Cusorposition eingehen kann.
-                    String humanReadablePartTerm = CostingUtil.getHumanReadableFormulaString(partTerm, definitions);
-                    caretPosInFormulaArea += humanReadablePartTerm.length();
-                }
-                insertIndex++;
+                // Die Teilformel in einen menschenlesbaren String umwandeln,
+                // damit seine Länge in die Berechung für die Cusorposition eingehen kann.
+                String humanReadablePartTerm = CostingUtil.getHumanReadableFormulaString(partTerm, definitions);
+                caretPosInFormulaArea += humanReadablePartTerm.length();
             }
+            insertIndex++;
         }
 
         //hier wird die Formel,
@@ -869,124 +510,59 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         return formulaString.toString();
     }
 
-    /**
-     * Fügt dem <code>Stack</code> <code>term</code> ein Element an. Alle eingegebenen Elemente befinden sich in Eingabereihenfolge und nicht in
-     * natürlicher Formelartiger Form auf diesem Stack.
-     *
-     * @param element Der anzufügende String
-     */
-    private void pushToFormulaStack(final String element) {
-        if (term == null) {
-            term = new Stack<String>();
-        }
-        term.push(element);
+    void update() {
+        formulaArea.requestFocus();
         String hashStringFormula = convertStackFormulaToOrdinaryFormula();
         //        hashArea.setText(hashStringFormula);
-        hashArea.setText(term.toString());
+        hashArea.setText(termStack.toString());
         formelString = CostingUtil.getHumanReadableFormulaString(hashStringFormula, definitions);
         formulaArea.setText(formelString);
+        //Wenn ein Attribut ausgewählt wurde, darf nicht sofort ein neues hinzugefügt werden.
+        updateButtonStates();
     }
 
-    /**
-     * Entfernt alle Elemente des <code>Stack</code>s
-     */
-    private void clearStack() {
-        if (term != null) {
-            term.clear();
-        }
-    }
-
-    /**
-     * Entfernt das letzte Element aus dem <code>term</code> <code>Stack</code> und gibt es zurück.
-     *
-     * @return das gepoppte Element
-     */
-    private String popFromStack() {
-        String deletetElement = "";
-        if (!term.isEmpty()) {
-            deletetElement = term.get(term.size() - 1).toString();
-            term.pop();
-        }
-        String hashStringFormula = convertStackFormulaToOrdinaryFormula();
-        hashArea.setText(hashStringFormula);
-        formulaArea.setText(CostingUtil.getHumanReadableFormulaString(hashStringFormula, definitions));
-        return deletetElement;
+    public static String extractFunctionName(final String s) {
+        int firstWhitespace = s.indexOf(WHITESPACE);
+        return firstWhitespace > 0 ? s.substring(0, firstWhitespace) : "";
     }
 
     /**
      * Setzte den enabled-Status der Buttons auf true oder false. Somit soll Verhindert werden, dass mehrmal Operatoren hintereinanderer angegeben
      * werden können.
-     *
-     * @param lastCommand das letze Komanndo, welches für den neuen Status der Button bestimmt. Bsp: Nach einem "+" darf nicht nochmal ein "+"
-     *            betätigt werden. Übergabeparameter ist in diesem Fall das "+" als String.
      */
-    private void orgButtons(final String lastCommand) {
-
-        boolean emptyFormula = term == null || term.isEmpty();
-        boolean initWithFormula = Strings.isNullOrEmpty(lastCommand) && !emptyFormula;
-
-        undoButton.setEnabled(!emptyFormula);
-        clearFormulaButton.setEnabled(!emptyFormula);
-        leaveBracketButton.setEnabled(false);
-
-        if (emptyFormula || lastCommand.equals(BRACKETS)) {
+    private void updateButtonStates() {
+        String lastTermElement = termStack.getLastElement();
+        boolean emptyFormula = termStack.isEmpty();
+        formulaControlPanel.undoButton.setEnabled(!emptyFormula);
+        formulaControlPanel.clearFormulaButton.setEnabled(!emptyFormula);
+        formulaControlPanel.leaveBracketButton.setEnabled(false);
+        if (emptyFormula || lastTermElement.equals(BRACKETS)) {
             setOperatorAndNumberButtonStates(false, true, true, true);
-        } else if (initWithFormula || lastCommand.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
+        } else if (lastTermElement.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
             setOperatorAndNumberButtonStates(true, true, false, false);
-        } else if (Calculator.OPERATOR_SIGNS.contains(lastCommand)) {
-            setOperatorAndNumberButtonStates(false, !lastCommand.equals(Calculator.OPERATOR_MINUS), true, true);
-            setFunctionButtonStates(true);
-        } else if (UserField.isAccountingFunction(lastCommand) || lastCommand.equals(CLASSIFICATION_NUMBER)) {
+        } else if (Calculator.OPERATOR_SIGNS.contains(lastTermElement)) {
+            setOperatorAndNumberButtonStates(false, !lastTermElement.equals(Calculator.OPERATOR_MINUS), true, true);
+            setFunctionButtonStates(true); //nur in diesem Fall muss man die Buttons, die in der Funktion oben auf false geetzt wurden, wieder enablen
+        } else if (UserField.isAccountingFunction(extractFunctionName(lastTermElement)) || lastTermElement.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
             setOperatorAndNumberButtonStates(true, true, false, false);
-            leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
+            formulaControlPanel.leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
         }
-
-        //        if (isOnlyEdge) {
-        //            setFunctionButtonStates(false, true);
-        //        }
-
+        String hashFormula = convertStackFormulaToOrdinaryFormula();
+        boolean validFormula = !hashFormula.isEmpty() && CostingUtil.isFormulaValid(hashFormula);
+        okButton.setEnabled(validFormula);
         //Setze den Cursor an die richtige Stelle. Speziell bei Klammerungen wichtig.
         setCaretInFormulaArea();
-        formulaArea.requestFocus();
+        statusLabel.setText(emptyFormula ? "" : getResString(validFormula ? "formula_is_valid" : "formula_is_not_valid"));
     }
 
-    //    /**
-    //     * Setzt den Editierbarkeitesstatus der Buttons für Verrechnungsfunktionen
-    //     *
-    //     * @param enabled true, wenn die Buttons klickbar sein sollen false, wenn die Buttons nicht klickbar sein sollen
-    //     * @param ignoreTypeElement true, wenn wirklich von allen Buttons die Enabled-einstellung geändert werden soll - unabhänig ob es ein Knoten oder
-    //     *            eine Kante ist.
-    //     */
-    //    private void setFunctionButtonStates(final boolean enabled, final boolean ignoreTypeElement) {
-    //        // Für den Fall, dass eine Formel für eine Elementklasse definiert wird, sind diese Buttons anzuzeigen
-    //        if (isOnlyEdge && ignoreTypeElement || !isOnlyEdge) {
-    //            buttonmax.setEnabled(enabled);
-    //            buttonmin.setEnabled(enabled);
-    //            buttonmittelwert.setEnabled(enabled);
-    //            buttonteilwertsumme.setEnabled(enabled);
-    //            buttonsum.setEnabled(enabled);
-    //            buttonMult.setEnabled(enabled);
-    //            buttonindikator.setEnabled(enabled);
-    //        }
-    //        buttonReference.setEnabled(isOnlyEdge);
-    //    }
-
     private void setFunctionButtonStates(final boolean enabled) {
-        buttonmax.setEnabled(enabled);
-        buttonmin.setEnabled(enabled);
-        buttonmittelwert.setEnabled(enabled);
-        buttonteilwertsumme.setEnabled(enabled);
-        buttonsum.setEnabled(enabled);
-        buttonMult.setEnabled(enabled);
-        buttonindikator.setEnabled(enabled);
-        buttonReference.setEnabled(enabled);
+        accountingFunctionsButtonPanel.setButtonStates(enabled);
     }
 
     private void setOperatorAndNumberButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean bracketsEnabled) {
         operatorAndNumberInputPanel.setButtonStates(operatorsEnabled, minusEnabled, numbersEnabled, bracketsEnabled);
         setFunctionButtonStates(numbersEnabled);
         setListStates(numbersEnabled);
-
     }
 
     private void setListStates(final boolean enabled) {
@@ -1002,30 +578,144 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         formulaArea.setCaretPosition(caretPosInFormulaArea);
     }
 
-    private class CalculatorStyledInputPanel extends JPanel {
+    private static final Border getPanelBorder(final String titleResKey) {
+        Border border1 = BorderFactory.createEtchedBorder();
+        Border border2 = BorderFactory.createTitledBorder(border1, " " + Tool3lgmConstants.getResString(titleResKey) + " ");
+        return border2;
+    }
+
+    private GridBagConstraints nextColumn(final GridBagConstraints gbc) {
+        gbc.gridx++;
+        return gbc;
+    }
+
+    private GridBagConstraints nextLine(final GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        return gbc;
+    }
+
+    private class FormulaControlButtonPanel extends JPanel {
+
+        /**
+         * Die Buttons für die Formelsteuerung. Rückgänig machen, Klammer verlassen, Formel leeren.
+         */
+        private final JButton undoButton, leaveBracketButton, clearFormulaButton;
+
+        public FormulaControlButtonPanel() {
+            super(new GridLayout(1, 3));
+            setBorder(getPanelBorder("formula_control"));
+            undoButton = getButton("undo");
+            leaveBracketButton = getButton(LEAVE_BRACKET_ESCAPE_CHARS);
+            clearFormulaButton = getButton("clearFormula");
+            Border border = getPanelBorder("formula_control");
+            setBorder(border);
+            setLayout(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(3, 0, 3, 0);
+            gbc.gridx = 1;
+            gbc.fill = GridBagConstraints.BOTH;
+            add(undoButton, gbc);
+            add(leaveBracketButton, gbc);
+            add(clearFormulaButton, gbc);
+        }
+    }
+
+    private class AccountingFunctionsButtonPanel extends JPanel {
+
+        /**
+         * Die Buttons für die Verrechnungsfunktionen Summe, Teilwertsumme, Maximum, Minimum, Indikator und Reference
+         */
+        private final JButton buttonsum, buttonMult, buttonteilwertsumme, buttonmax, buttonmin, buttonmittelwert, buttonindikator, buttonReference;
+
+        public AccountingFunctionsButtonPanel() {
+            super(new GridLayout(3, 3));
+            setBorder(getPanelBorder("accounting_functions"));
+            buttonsum = getButton(ACCOUNTING_FUNCTION_SUM);
+            buttonMult = getButton(ACCOUNTING_FUNCTION_MULT);
+            buttonteilwertsumme = getButton(ACCOUNTING_FUNCTION_TWSUM);
+            buttonmax = getButton(ACCOUNTING_FUNCTION_MAX);
+            buttonmin = getButton(ACCOUNTING_FUNCTION_MIN);
+            buttonmittelwert = getButton(ACCOUNTING_FUNCTION_AVG);
+            buttonindikator = getButton(ACCOUNTING_FUNCTION_INDI);
+            buttonReference = getButton(ACCOUNTING_FUNCTION_REF);
+            addButtons();
+        }
+
+        private void addButtons() {
+            Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+            boolean targetClassCanHaveEdges = ModelElement.class.isAssignableFrom(targetClass) && ModelConstants.getEdgeTypes(targetClass.asSubclass(ModelElement.class)).length > 0;
+            if (targetClassCanHaveEdges) {
+                add(buttonsum);
+                add(buttonMult);
+                add(buttonteilwertsumme);
+                add(buttonmax);
+                add(buttonmin);
+                add(buttonmittelwert);
+                add(buttonindikator);
+            }
+            if (ModelConstants.isEdgeType(userField.getTargetClass())) {
+                add(buttonReference);
+            }
+        }
+
+        private void setButtonStates(final boolean enabled) {
+            buttonmax.setEnabled(enabled);
+            buttonmin.setEnabled(enabled);
+            buttonmittelwert.setEnabled(enabled);
+            buttonteilwertsumme.setEnabled(enabled);
+            buttonsum.setEnabled(enabled);
+            buttonMult.setEnabled(enabled);
+            buttonindikator.setEnabled(enabled);
+            buttonReference.setEnabled(enabled);
+        }
+    }
+
+    private class CalculatorStyledButtonPanel extends JPanel {
 
         private final JButton[] numberButtons = new JButton[10];
 
         /**
          * Die Buttons, für +,-,*,/,()
          */
-        private final JButton buttonplus, buttonminus, buttonmult, buttondiv, buttonbrackets;
+        private final JButton buttonplus, buttonminus, buttonmult, buttondiv, buttonbrackets, buttoncomma;
 
-        public CalculatorStyledInputPanel() {
-            super(new GridLayout());
+        public CalculatorStyledButtonPanel() {
+            super(new GridBagLayout());
+            setBorder(getPanelBorder("nums_and_operators"));
             buttonplus = getButton(OPERATOR_PLUS);
             buttonminus = getButton(OPERATOR_MINUS);
             buttonmult = getButton(OPERATOR_MULT);
             buttondiv = getButton(OPERATOR_DIV);
             buttonbrackets = getButton(BRACKETS);
-
-            initNumberButtons();
-        }
-
-        private void initNumberButtons() {
+            char decimalSeparator = new DecimalFormat().getDecimalFormatSymbols().getDecimalSeparator();
+            buttoncomma = getButton("" + decimalSeparator);
             for (int i = 0; i < numberButtons.length; i++) {
                 numberButtons[i] = getButton(new Integer(i).toString());
             }
+            addButtons();
+        }
+
+        private void addButtons() {
+            GridBagConstraints gbc = new GridBagConstraints();
+            add(numberButtons[7], nextLine(gbc));
+            add(numberButtons[8], nextColumn(gbc));
+            add(numberButtons[9], nextColumn(gbc));
+            add(buttondiv, nextColumn(gbc));
+
+            add(numberButtons[4], nextLine(gbc));
+            add(numberButtons[5], nextColumn(gbc));
+            add(numberButtons[6], nextColumn(gbc));
+            add(buttonmult, nextColumn(gbc));
+
+            add(numberButtons[1], nextLine(gbc));
+            add(numberButtons[2], nextColumn(gbc));
+            add(numberButtons[3], nextColumn(gbc));
+            add(buttonminus, nextColumn(gbc));
+
+            add(numberButtons[0], nextColumn(nextLine(gbc)));
+            add(buttoncomma, nextColumn(gbc));
+            add(buttonplus, nextColumn(gbc));
         }
 
         /**

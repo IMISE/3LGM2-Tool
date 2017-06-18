@@ -3,7 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.userfield;
 
-import java.util.Stack;
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
@@ -15,7 +14,6 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
-import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.FormulaDefinitionDialog;
 
 /**
  * @author hboehme
@@ -266,47 +264,6 @@ public class CostingUtil {
      */
     public final static String getDisplayableStyleName(final UserField.Style style) {
         return Tool3lgmConstants.getResString(style.toString());
-    }
-
-    /**
-     * Konvertiert einen FormelString in einen Stack. Der String wird dazu mittel StringTokenizers zerlegt. Argumente, die ein userField kennzeichenen
-     * oder +,*,-,/ werden auf den Stack draufgelegt. Verrechnungsfunktionen werden als String zusammengefasst und als einzelnes zusammengehörendes
-     * Argument auf den Stack gelegt.
-     *
-     * @param internalFormula Die Formel in interner repräsentation Bsp: UserFieldHash_XXX_X + ( UserFieldHash_XXX_X )
-     * @return Stack, der die Formel enthält.
-     */
-    public static final Stack<String> getStackForInternalFormula(final String internalFormula) {
-        if (internalFormula == null) {
-            return null;
-        }
-        Stack<String> stack = new Stack<String>();
-
-        StringTokenizer st = new StringTokenizer(internalFormula);
-        StringBuilder sb;
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            //			if (token.equals(UserField.ACCOUNTING_FUNCTION_SUM) || token.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)|| token.equals(UserField.ACCOUNTING_FUNCTION_INDI) || token.equals(UserField.ACCOUNTING_FUNCTION_AVG)|| token.equals(UserField.ACCOUNTING_FUNCTION_MULT)|| token.equals(UserField.ACCOUNTING_FUNCTION_MAX)|| token.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
-            if (UserField.isAccountingFunction(token)) {
-                sb = new StringBuilder();
-                while (!token.equals(")")) {
-                    sb.append(" ");
-                    sb.append(token);
-                    token = st.nextToken();
-                }
-                sb.append(" )");
-                stack.push(sb.toString());
-            } else if (token.equals("(")) {
-                stack.push("(  )");
-            } else if (token.equals(")")) {
-                stack.push(FormulaDefinitionDialog.LEAVE_BRACKET_ESCAPE_CHARS);
-            } else if (token.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
-                stack.push(token);
-            } else if (token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/")) {
-                stack.push(token);
-            }
-        }
-        return stack;
     }
 
 }

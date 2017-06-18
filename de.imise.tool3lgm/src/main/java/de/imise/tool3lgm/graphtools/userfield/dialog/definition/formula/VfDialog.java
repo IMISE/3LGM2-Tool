@@ -66,7 +66,7 @@ public class VfDialog extends JDialog implements ActionListener {
         super(owner);
         this.userField = userField;
         vfOperator = operator;
-        String title = Tool3lgmConstants.getResString("accounting") + ": " + UserField.getDisplayableFunctionName(vfOperator);
+        String title = Tool3lgmConstants.getResString("accounting_function") + ": " + UserField.getDisplayableFunctionName(vfOperator);
         setTitle(title);
         setModal(true);
         setLocationByPlatform(true);
