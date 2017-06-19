@@ -466,8 +466,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, elementValue.toString());
-                    } else if (!element.putXMLFieldString(field, elementValue.toString())) {
-                        throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                    } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(collection, element, field, elementValue.toString())) {
+                        if (!element.putXMLFieldString(field, elementValue.toString())) {
+                            throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                        }
                     }
                 }
                 field = null;
