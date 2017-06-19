@@ -1,10 +1,11 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
+
 import java.util.Stack;
 import java.util.StringTokenizer;
 
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 
 public class FormulaDefinitionDialogStack extends Stack<String> {
 
@@ -19,6 +20,11 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
 
     public String getLastElement() {
         return isEmpty() ? "" : get(size() - 1);
+    }
+
+    public String getPreLastElement() {
+        int size = size();
+        return size < 2 ? "" : get(size - 2);
     }
 
     @Override
@@ -39,6 +45,14 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
     public void clear() {
         super.clear();
         update();
+    }
+
+    public void append(final String item) {
+        update = false;
+        String lastItem = pop();
+        lastItem += item;
+        update = true;
+        push(lastItem);
     }
 
     private void update() {
@@ -77,7 +91,9 @@ public class FormulaDefinitionDialogStack extends Stack<String> {
                     push(FormulaDefinitionDialog.LEAVE_BRACKET_ESCAPE_CHARS);
                 } else if (token.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
                     push(token);
-                } else if (Calculator.OPERATOR_SIGNS.contains(token)) {
+                } else if (isOperator(token)) {
+                    push(token);
+                } else if (FormulaDefinitionDialog.isNumber(token)) {
                     push(token);
                 }
             }

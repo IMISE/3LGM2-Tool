@@ -19,6 +19,7 @@ import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERA
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_MULT;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.OPERATOR_PLUS;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.WHITESPACE;
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.GridBagConstraints.NORTHWEST;
 
@@ -410,7 +411,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         } else if (source == cancelButton) {
             retVal = oldFormulaString;
             dispose();
-        } else if (Calculator.OPERATOR_SIGNS.contains(cmd)) {
+        } else if (isOperator(cmd)) {
             termStack.push(cmd);
         } else if (cmd.equals(BRACKETS)) {
             leaveableBracketCounter++;
@@ -436,6 +437,23 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             if (!vfdResult.isEmpty()) {
                 termStack.push(vfdResult);
             }
+        } else if (isNumber(cmd)) {
+            String lastElement = termStack.getLastElement();
+            if (isNumber(lastElement)) {
+                termStack.append(cmd);
+            } else if (lastElement.equals(OPERATOR_MINUS)) {
+                String preLastElement = termStack.getPreLastElement();
+                if (isOperator(preLastElement)) {
+                    termStack.append(cmd);
+                } else {
+                    termStack.push(cmd);
+                }
+            } else {
+                termStack.push(cmd);
+            }
+            //Komma kann nur aktiv gewesen sein, wenn das lastElement eine Zahl ist, die noch kein Komma enthält
+        } else if (containsComma(cmd)) {
+            termStack.append(cmd);
         } else if (source == formulaControlPanel.undoButton) {
             String lastStackElement = termStack.getLastElement();
             leaveableBracketCounter += lastStackElement.equals(LEAVE_BRACKET_ESCAPE_CHARS) ? 1 : lastStackElement.equals(BRACKETS) ? -1 : 0;
@@ -536,32 +554,63 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         formulaControlPanel.undoButton.setEnabled(!emptyFormula);
         formulaControlPanel.clearFormulaButton.setEnabled(!emptyFormula);
         formulaControlPanel.leaveBracketButton.setEnabled(false);
+
         if (emptyFormula || lastTermElement.equals(BRACKETS)) {
-            setOperatorAndNumberButtonStates(false, true, true, true);
+            setOperatorAndNumberButtonStates(false, true, true, false, true);
+            setFunctionButtonStates(true);
         } else if (lastTermElement.equals(LEAVE_BRACKET_ESCAPE_CHARS)) {
-            setOperatorAndNumberButtonStates(true, true, false, false);
-        } else if (Calculator.OPERATOR_SIGNS.contains(lastTermElement)) {
-            setOperatorAndNumberButtonStates(false, !lastTermElement.equals(Calculator.OPERATOR_MINUS), true, true);
-            setFunctionButtonStates(true); //nur in diesem Fall muss man die Buttons, die in der Funktion oben auf false geetzt wurden, wieder enablen
+            setOperatorAndNumberButtonStates(true, true, false, false, false);
+            setFunctionButtonStates(false);
+        } else if (isOperator(lastTermElement)) {
+            boolean minusBefore = lastTermElement.equals(Calculator.OPERATOR_MINUS);
+            setOperatorAndNumberButtonStates(false, !minusBefore, true, false, true);
+            String preLastElement = termStack.getPreLastElement();
+            boolean negateMinusBefore = minusBefore && (preLastElement.isEmpty() || isOperator(preLastElement));
+            setFunctionButtonStates(!negateMinusBefore);
         } else if (UserField.isAccountingFunction(extractFunctionName(lastTermElement)) || lastTermElement.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
-            setOperatorAndNumberButtonStates(true, true, false, false);
+            setOperatorAndNumberButtonStates(true, true, false, false, false);
+            setFunctionButtonStates(false);
+            formulaControlPanel.leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
+        } else if (isNumber(lastTermElement)) {
+            setOperatorAndNumberButtonStates(true, true, true, !containsComma(lastTermElement), false);
+            setFunctionButtonStates(false);
             formulaControlPanel.leaveBracketButton.setEnabled(leaveableBracketCounter > 0);
         }
+
         String hashFormula = convertStackFormulaToOrdinaryFormula();
         boolean validFormula = !hashFormula.isEmpty() && CostingUtil.isFormulaValid(hashFormula);
         okButton.setEnabled(validFormula);
+
         //Setze den Cursor an die richtige Stelle. Speziell bei Klammerungen wichtig.
         setCaretInFormulaArea();
         statusLabel.setText(emptyFormula ? "" : getResString(validFormula ? "formula_is_valid" : "formula_is_not_valid"));
+    }
+
+    static boolean isNumber(final String s) {
+        String n = s.replace(',', '.');
+        if (n.length() > 1 && n.charAt(n.length() - 1) == '.') {
+            n = n.substring(0, n.length() - 1);
+        }
+        try {
+            Double.parseDouble(n);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean containsComma(final String s) {
+        String n = s.replace(',', '.');
+        int indexOfComma = n.indexOf('.');
+        return indexOfComma >= 0;
     }
 
     private void setFunctionButtonStates(final boolean enabled) {
         accountingFunctionsButtonPanel.setButtonStates(enabled);
     }
 
-    private void setOperatorAndNumberButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean bracketsEnabled) {
-        operatorAndNumberInputPanel.setButtonStates(operatorsEnabled, minusEnabled, numbersEnabled, bracketsEnabled);
-        setFunctionButtonStates(numbersEnabled);
+    private void setOperatorAndNumberButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean commaEnabled, final boolean bracketsEnabled) {
+        operatorAndNumberInputPanel.setButtonStates(operatorsEnabled, minusEnabled, numbersEnabled, commaEnabled, bracketsEnabled);
         setListStates(numbersEnabled);
     }
 
@@ -722,13 +771,15 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
          * @param operatorsEnabled wenn <code>true</code> sind die Operator-Buttons ( +,*,/ ) enabled, sonst nicht
          * @param minusEnabled wenn <code>true</code> ist der Minus-Button ( - ) enabled, sonst nicht
          * @param numbersEnabled wenn <code>true</code> sind die Zahlen-Buttons ( 0 -9 ) enabled, sonst nicht
+         * @param commaEnabled wenn <code>true</code> ist der Komma-Button enabled, sonst nicht
          * @param bracketsEnabled wenn <code>true</code> ist der Klammer-Button enabled, sonst nicht
          */
-        public void setButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean bracketsEnabled) {
+        public void setButtonStates(final boolean operatorsEnabled, final boolean minusEnabled, final boolean numbersEnabled, final boolean commaEnabled, final boolean bracketsEnabled) {
             buttonplus.setEnabled(operatorsEnabled);
             buttonminus.setEnabled(minusEnabled);
             buttonmult.setEnabled(operatorsEnabled);
             buttondiv.setEnabled(operatorsEnabled);
+            buttoncomma.setEnabled(commaEnabled);
             for (int i = 0; i < numberButtons.length; i++) {
                 numberButtons[i].setEnabled(numbersEnabled);
             }

@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield;
 
+import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
+
 import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
@@ -49,7 +51,7 @@ public class CostingUtil {
             UserField tmpField = null;
             while (hashtok.hasMoreTokens()) {
                 s = hashtok.nextToken();
-                if (Calculator.OPERATOR_SIGNS.contains(s) || s.equals(Calculator.OPEN_BRACKET) || s.equals(Calculator.CLOSE_BRACKET) || UserField.isAccountingFunction(s)) {
+                if (isOperator(s) || s.equals(Calculator.OPEN_BRACKET) || s.equals(Calculator.CLOSE_BRACKET) || UserField.isAccountingFunction(s)) {
                     resultString.append(" " + s);
                 } else {
                     if (s.contains(UserField.USERFIELD_HASH_STRING_PREFIX)) {
@@ -92,12 +94,12 @@ public class CostingUtil {
         String lastChar = formula.substring(formula.length() - 2, formula.length() - 1);
         String firstChar = formula.trim().substring(0, 1);
 
-        if (Calculator.OPERATOR_SIGNS.contains(lastChar)) {
+        if (isOperator(lastChar)) {
             return false;
         }
 
         // Wenn aus es der Benutzer irgendwie schafft einen Operator als erstes Zeichen zu setzen.
-        if (Calculator.OPERATOR_SIGNS.contains(firstChar)) {
+        if (isOperator(firstChar)) {
             return false;
         }
 
@@ -118,12 +120,12 @@ public class CostingUtil {
             }
 
             //Damit wird verhindert, dass zwei Operatoren aufeinander folgen
-            if (Calculator.OPERATOR_SIGNS.contains(first) && Calculator.OPERATOR_SIGNS.contains(second)) {
+            if (isOperator(first) && isOperator(second)) {
                 return false;
             }
 
             // Wenn auf ein Operatorzeichen eine schließende Klammer folgt
-            if (Calculator.OPERATOR_SIGNS.contains(first) && second.equals(Calculator.CLOSE_BRACKET)) {
+            if (isOperator(first) && second.equals(Calculator.CLOSE_BRACKET)) {
                 return false;
             }
 
@@ -138,7 +140,7 @@ public class CostingUtil {
             }
 
             // Wenn auf eine öffnende Klammer ein Operatorzeichen folgt.
-            if (first.equals(Calculator.OPEN_BRACKET) && Calculator.OPERATOR_SIGNS.contains(second)) {
+            if (first.equals(Calculator.OPEN_BRACKET) && isOperator(second)) {
                 return false;
             }
 

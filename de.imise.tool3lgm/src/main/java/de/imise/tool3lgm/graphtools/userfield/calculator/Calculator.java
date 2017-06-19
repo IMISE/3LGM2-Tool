@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 
 /**
  * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die Berechnung von Kennzahlen.
- * 
+ *
  * @author hboehme, AXS
  * @created 05.11.2007
  */
@@ -49,7 +49,7 @@ public class Calculator {
 
     public static final String WHITESPACE = " ";
 
-    public static final String OPERATOR_SIGNS = OPERATOR_PLUS + OPERATOR_MINUS + OPERATOR_MULT + OPERATOR_DIV;
+    private static final String OPERATOR_SIGNS = OPERATOR_PLUS + OPERATOR_MINUS + OPERATOR_MULT + OPERATOR_DIV;
 
     public static final String _ADDITIONAL_FUNCTION_SIGNS = OPEN_BRACKET + CLOSE_BRACKET + OPERAND_DELIMITER;
 
@@ -75,12 +75,12 @@ public class Calculator {
     }
 
     /**
-     *  
+     *
      */
     private UserFieldDefinitions definitions;
 
     /**
-     *  
+     *
      */
     public Calculator(final UserFieldDefinitions definitions) {
         super();
@@ -109,7 +109,7 @@ public class Calculator {
      * Rechnen wird ein weiterer Hilfs-Stack initialisiert, der solange Operanden aufnimmt, bis im HauptStack ein Operator gepoppt wird. Dieser
      * Operator wird mit den letzten zwei Operanden des Hilfsstacks verrechnent. Das Ergebnis wird wieder auf den Hautstack gelegt. Das geschieht
      * iterativ so lange, bis der HautptStack keine Operatoren mehr beinhaltet.
-     * 
+     *
      * @param userField : das zu berechnende UserField
      * @param data.me : Das konkrete ModelElement, für das die KF ausgewertet wird.
      * @return Das Ergebnis als String
@@ -126,7 +126,7 @@ public class Calculator {
         ModelElement me = (ModelElement) userFieldTarget;
 
         String formula = userField.getFormula();
-        // Wenn für eine userField, dass eine Kennzahlformel ist, keine Formel definiert ist 
+        // Wenn für eine userField, dass eine Kennzahlformel ist, keine Formel definiert ist
         if (formula == null) {
             return UserField.EMPTY_STRING;
         }
@@ -226,12 +226,12 @@ public class Calculator {
         }
 
         // Hier werden aus den userFieldHash - Angaben konkrete Werte geholt.
-        // Iterativ: Operatoren und userFieldHashes werden vom Stack geholt werden. 
-        // Die Hashes werden in konkrete Werte gewandetlt. Operatoren und operanden werden auf den Hilfsstack gelegt. 
+        // Iterativ: Operatoren und userFieldHashes werden vom Stack geholt werden.
+        // Die Hashes werden in konkrete Werte gewandetlt. Operatoren und operanden werden auf den Hilfsstack gelegt.
         // Der Hilfsstack, der nur noch konkrete Werte und Operatoren enthält ist der neue Hauptstack.
         while (!formelStack.empty()) {
             String formulaSubString = formelStack.pop().toString();
-            if (!OPERATOR_SIGNS.contains(formulaSubString)) {
+            if (!isOperator(formulaSubString)) {
                 if (formulaSubString.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
                     //Das userfield wird gebildet, weil es sein kann, dass der
                     // Wert von einer Modellvariable geholt wird,
@@ -262,6 +262,8 @@ public class Calculator {
                     }
 
                     tmp_stack.push(ufValue);
+                } else if (isConstantValue(formulaSubString)) {
+                    tmp_stack.push(formulaSubString);
                 } else {
                     tmp_stack.push(formulaSubString);
                 }
@@ -272,15 +274,15 @@ public class Calculator {
 
         formelStack = tmp_stack;
 
-        // In einer Schleife: In den operandenStack werden nur die Operanden aus dem FormelStack kopiert, bis der erste Operator kommt. Dann werden die letzten zwei Operanden aus dem operandenStack mit dem nun folgenen Operator aus dem formelStack verrechnet. 
+        // In einer Schleife: In den operandenStack werden nur die Operanden aus dem FormelStack kopiert, bis der erste Operator kommt. Dann werden die letzten zwei Operanden aus dem operandenStack mit dem nun folgenen Operator aus dem formelStack verrechnet.
         // Das Ergebnis kommt wieder auf den formelStack und die Schleife beginnt von vorn.
         Stack<String> operandenStack = new Stack<String>();
-        // Hier erfolgt das Berechnen einer Operation. 
+        // Hier erfolgt das Berechnen einer Operation.
 
         while (!formelStack.empty()) {
             String tmp_str = formelStack.pop().toString();
 
-            if (!OPERATOR_SIGNS.contains(tmp_str)) {
+            if (!isOperator(tmp_str)) {
                 operandenStack.push(tmp_str);
             } else {
                 operator = tmp_str;
@@ -299,9 +301,21 @@ public class Calculator {
         return result;
     }
 
+    private static boolean isConstantValue(final String formulaSubString) {
+        if (!formulaSubString.isEmpty()) {
+            char c = formulaSubString.charAt(0);
+            return '0' <= c && c <= '9' && formulaSubString.indexOf(WHITESPACE) < 0;
+        }
+        return false;
+    }
+
+    public static boolean isOperator(final String s) {
+        return OPERATOR_SIGNS.contains(s);
+    }
+
     /**
      * Ersetzt im übergebenen StringBuilder <code>infix</code> die Formel der Verrechnungsfunktion durch ihren Wert.
-     * 
+     *
      * @param infix Der StringBuilder, dessen Formelwerte ersetzt werden müssen
      * @param userField Das <code>userField</code>, dessen Wert geholt werden soll.
      * @param me Das ModelElement, für das der <code>userField</code>-Wert geholt werden soll.
@@ -361,7 +375,7 @@ public class Calculator {
      * <code>UserField.NO_ELEMENTS_CONNECTED</code>, ES = UserField.EMPTY_STRING, 7 = beliebige Zahl NOC / NOC = return NOC NOC / ES = return NOC NOC
      * / 7 = return NOC ES / NOC = return NOC ES / ES = return ES ES / 7 = return ES 7 / NOC = return NOC 7 / ES = return ES 7 / 7 = rechne einfach
      * damit
-     * 
+     *
      * @param operand1 Der erste Operand der Atom-Formel
      * @param operand2 Der zweite Operand der Atom-Formel
      * @param operator Der Operator der Atom-Formel
@@ -436,7 +450,7 @@ public class Calculator {
 
     /**
      * Gibt den wert des referenzierten <code>UserField</code> zurück. Die funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
-     * 
+     *
      * @param resultUserField das konkrete <code>UserField</code>, auf dessen Wert referenziert wird.
      * @param me Für diese Kante ist die Kennzahlformel definiert. Dieses <code>UserField</code> zeigt auf ein UserField welches an einer
      *            Elementklasse
@@ -498,7 +512,7 @@ public class Calculator {
 
     /**
      * Liefert alle Kanten
-     * 
+     *
      * @param me
      * @param elemClass
      * @param edgeClass
@@ -520,7 +534,7 @@ public class Calculator {
 
     /**
      * Errechnet das Ergebnis der Verrechungsfunktion SUM oder MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
-     * 
+     *
      * @param resultUserField
      * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
      * @param formula Die Formel (in INFIX-Notation)
@@ -578,7 +592,7 @@ public class Calculator {
 
     /**
      * Errechnet das Ergebnis der Verrechungsfunktion SUM. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
-     * 
+     *
      * @param resultUserField
      * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
      * @param formula Die Formel (in INFIX-Notation)
@@ -590,7 +604,7 @@ public class Calculator {
 
     /**
      * Errechnet das Ergebnis der Verrechungsfunktion MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
-     * 
+     *
      * @param resultUserField
      * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
      * @param formula Die Formel (in INFIX-Notation)
@@ -602,7 +616,7 @@ public class Calculator {
 
     /**
      * Sucht den kleinsten Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurück.
-     * 
+     *
      * @param resultUserField
      * @param me
      * @param minFormula
@@ -615,7 +629,7 @@ public class Calculator {
 
     /**
      * Sucht den größen Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurück.
-     * 
+     *
      * @param resultUserField
      * @param me
      * @param maxFormula
@@ -628,7 +642,7 @@ public class Calculator {
 
     /**
      * Errechnet das Ergebnis der Verrechungsfunktion MIN bzw MAX. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
-     * 
+     *
      * @param resultUserField
      * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
      * @param minMaxFormula Die Formel (in INFIX-Notation)
@@ -702,7 +716,7 @@ public class Calculator {
 
     /**
      * Errechnet das Ergebnis der Verrechnungsfunktion Mittelwert.
-     * 
+     *
      * @param resultUserField
      * @param elementClass
      * @param userField
@@ -737,7 +751,7 @@ public class Calculator {
 
     /**
      * Berechnet eine Indikatorfunktion für das übergebene <code>UserFieldTarget</code>
-     * 
+     *
      * @param indicatorFormulaString Formel einer Kennzahl der eine Indikatorfunktion beschreibt
      * @param target
      * @return gibt den Indikatorwert zurück.
@@ -808,7 +822,7 @@ public class Calculator {
 
     /**
      * Gibt den Wert eines Referenzierten Attributes zurück, dass zu dem selben Element gehört.
-     * 
+     *
      * @param userFieldHash
      * @param target
      * @return Der Wert des <code>userField</code>s.
@@ -820,7 +834,7 @@ public class Calculator {
 
     /**
      * Gibt zu einer Formel in INFIX-Notation (die Normale), die als String übergeben wurde, die Postfix-Notation (umgekehrte plonische) zurück.
-     * 
+     *
      * @param infix
      * @return Postfixnotation der Formel
      */
@@ -836,7 +850,7 @@ public class Calculator {
         StringBuilder tmp_string_postfix = new StringBuilder();
         while (!stack.empty()) {
             tmp_str = st.nextToken();
-            if (OPERATOR_SIGNS.contains(tmp_str)) {
+            if (isOperator(tmp_str)) {
                 while (!stack.empty()) {
                     String tmp_op;
                     tmp_op = stack.pop().toString();
