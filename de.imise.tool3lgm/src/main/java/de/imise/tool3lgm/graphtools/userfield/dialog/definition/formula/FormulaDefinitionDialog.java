@@ -297,15 +297,12 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.weighty = 0;
-        gbc.weightx = 0.4;
+        gbc.weightx = 0.5;
         listsPanel.add(new JLabel(getResString("attributes")), nextLine(gbc));
-        gbc.weightx = 0.6;
         listsPanel.add(new JLabel(getResString("model_variable")), nextColumn(gbc));
         gbc.weighty = 1;
         gbc.fill = BOTH;
-        gbc.weightx = 0.4;
         listsPanel.add(new JScrollPane(userFieldList), nextLine(gbc));
-        gbc.weightx = 0.6;
         listsPanel.add(new JScrollPane(modelAttributes), nextColumn(gbc));
         return listsPanel;
     }
