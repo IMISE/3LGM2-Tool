@@ -762,7 +762,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             add(numberButtons[3], nextColumn(gbc));
             add(buttonminus, nextColumn(gbc));
 
-            add(numberButtons[0], nextColumn(nextLine(gbc)));
+            add(buttonbrackets, nextLine(gbc));
+            add(numberButtons[0], nextColumn(gbc));
             add(buttoncomma, nextColumn(gbc));
             add(buttonplus, nextColumn(gbc));
         }
