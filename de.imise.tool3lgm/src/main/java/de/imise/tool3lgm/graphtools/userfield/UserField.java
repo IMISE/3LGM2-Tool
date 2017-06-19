@@ -340,12 +340,13 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     public static final String NUMBER_FORMAT_ERROR = "NUMBER_FORMAT_ERROR";
     public static final String ERROR_DIVIDE_BY_ZERO = "DIVIDE_BY_ZERO";
     public static final String ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION = "CROSS_REFERENCE";
+    public static final String CALCULATION_DISABLED = "CALCULATION_DISABLED";
 
     /**
      * Dieses Set beinhaltet Strings, die Formel-UserFields als Werte annehmen, wenn sie sich nicht berechnen lassen oder irgendwelche anderen
      * Probleme auftreten. <code>NUMBER_FORMAT_ERROR</code> und <code>EMPTY_STRING</code> können auch bei Kennzahl-UserFields auftreten. beinhaltet:
      */
-    private static final Set<String> ERROR_SET = ImmutableSet.of(POSITIVE_VALUES_ONLY, NUMBER_FORMAT_ERROR, ERROR_DIVIDE_BY_ZERO, ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION);
+    private static final Set<String> ERROR_SET = ImmutableSet.of(CALCULATION_DISABLED, POSITIVE_VALUES_ONLY, NUMBER_FORMAT_ERROR, ERROR_DIVIDE_BY_ZERO, ERROR_CROSS_REFERENCE_IN_FORMULA_DEFINITION);
 
     /**
      * Dieses Set enthält alle Strings, die Werte von UserFields sein können, die bei Berechnungen ignoriert werden sollen. D.h. wenn eine
@@ -1094,7 +1095,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
                 return value;
             }
             //wenn nicht berechnet werden sollte -> gib einen leeren String zurück
-            return EMPTY_STRING;
+            return CALCULATION_DISABLED;
         }
         //gib den eingegebenen Wert des UserFields zurück
         return target.getUserFieldInputValue(this);
