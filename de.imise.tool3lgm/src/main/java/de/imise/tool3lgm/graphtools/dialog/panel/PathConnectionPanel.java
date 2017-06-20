@@ -95,8 +95,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         String rtreeLabelString = getResString("frei");
         Pair<String, String> treeLabels = StringUtils.makeSameLength(ltreeLabelString, rtreeLabelString);
-        ltreeLabelString = treeLabels.getFirstItem();
-        rtreeLabelString = treeLabels.getSecondItem();
+        ltreeLabelString = StringUtils.capitalizeFirstChar(treeLabels.getFirstItem());
+        rtreeLabelString = StringUtils.capitalizeFirstChar(treeLabels.getSecondItem());
 
         westLabel.setText(ltreeLabelString);
         JLabel ltreeLabel = westLabel;
