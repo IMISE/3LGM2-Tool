@@ -54,10 +54,6 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
     }
 
     @Override
-    protected void showFullDialog() {
-    }
-
-    @Override
     public void update() {
         for (int i = 0; i < rf.getTabCount(); i++) {
             Component c = rf.getComponentAt(i);
