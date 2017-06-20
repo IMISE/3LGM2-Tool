@@ -6,7 +6,8 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 
 public enum GDCommands {
 
-    CREATE_KNOT, LINK,
+    CREATE_KNOT,
+    LINK,
     //	LINK_REVERSE,
     ADDICT,
     UNLINK,
@@ -116,14 +117,6 @@ public enum GDCommands {
     HIDE_ALL_CONFIGS,
     HIDE_UNASSOCIATED_INTERFACES,
     UNHIDE_ALL_INTERFACES,
-
-    CHANGE_OS_TYPE,
-    CHANGE_SERIAL,
-    CHANGE_INVENTAR,
-    CHANGE_DISKSIZE,
-    CHANGE_RAMSIZE,
-    CHANGE_PROCESSOR,
-    CHANGE_DOWNTIME,
 
     //spezielle Kommandos
     COMMAND_LINE,
