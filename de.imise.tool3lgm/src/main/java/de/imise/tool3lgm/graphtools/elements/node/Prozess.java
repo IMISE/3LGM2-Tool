@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.AwbkAufOrgVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
 
 /**
  * @author AXS Ein Prozess ist ein Knoten der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt
@@ -57,7 +58,7 @@ public final class Prozess extends Knoten {
     }
 
     /**
-     * 
+     *
      */
     public Prozess() {
         super();
@@ -77,7 +78,7 @@ public final class Prozess extends Knoten {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Aufgabe_p"), new ProzessStructurePanel(dialog));
+        dialog.addTab(getResString("Aufgabe_p"), new ProzessStructurePanel(dialog, Aufgabe.class, PrzAufVerbindung.class));
         //		dialog.addTab(getResString("Kommunikationsprozess_p"),new KommProzessPanel(dialog));
         return dialog;
     }

@@ -27,24 +27,30 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.ExpandVetoException;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.GDCommands;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractExpandablePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
+import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
@@ -56,7 +62,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 /**
  * @author AXS
  */
-public class ProzessStructurePanel extends ElementDialogPanel implements TreeWillExpandListener {
+public class ProzessStructurePanel extends AbstractExpandablePanel implements TreeWillExpandListener {
 
     /**
      * COMMENTME
@@ -158,12 +164,12 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * COMMENTME
      */
-    private LGMAction addAction;
+    private final LGMAction addAction;
 
     /**
      * COMMENTME
      */
-    private LGMAction removeAction;
+    private final LGMAction removeAction;
 
     private LGMAction upAction;
 
@@ -175,8 +181,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * @param pd
      */
-    public ProzessStructurePanel(final ElementPropertyDialog pd) {
-        super(pd);
+    public ProzessStructurePanel(final ElementPropertyDialog pd, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> multipleConnectableEgdeClass) {
+        super(pd, false, searchElementClass, multipleConnectableEgdeClass);
 
         prozess = (Prozess) getModelElement();
 
@@ -396,12 +402,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         JButton addButton = new JButton();
         JButton removeButton = new JButton();
 
-        try {
-            addAction = LGMActionLibrary.getAddElementAction(rtree, ltree, this, false);
-            removeAction = LGMActionLibrary.getDisconnectAction(ltree, rtree, this, false);
-        } catch (ActionNotDefinedForClassException e) {
-            e.printStackTrace();
-        }
+        addAction = getAddElementAction(rtree, ltree);
+        removeAction = getDisconnectAction(ltree, rtree);
         addButton.setAction(addAction);
         removeButton.setAction(removeAction);
         /*
@@ -425,17 +427,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
          * ... End: TreeSelectionListener erstellen und an Trees anhängen
          */
 
-        if (isRightSideShouldBeVisible()) {
-            viewButton.setIcon(Tool3lgmConstants.getIcon("auf.gif"));
-            viewButton.setActionCommand("zuklappen");
-        } else {
-            viewButton.setIcon(Tool3lgmConstants.getIcon("zu.gif"));
-            viewButton.setActionCommand("aufklappen");
-            addRemoveControl.setVisible(false);
-            labelRechts.setVisible(false);
-            spRechts.setVisible(false);
-        }
-
         constraints.anchor = GridBagConstraints.CENTER;
         // constraints.fill = GridBagConstraints.NONE;
         constraints.ipadx = -Tool3lgmConstants.getIcon("arrow_left2.gif").getIconWidth() - 10;
@@ -458,29 +449,6 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
         update();
 
-    }
-
-    /**
-     * Sorgt dafuer, dass die rechte Seite des Panels angezeigt oder verborgen wird. Es werden KEINE
-     * Daten aktualisiert sondern lediglich die Komponenten hinzugefuegt oder entfernt.
-     *
-     * @param visible boolean
-     * @see de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel#setRightSideVisible(boolean)
-     */
-    public boolean checkRightSideVisible() {
-        boolean visible = isRightSideShouldBeVisible();
-        // rechte Seite nur visible setzen, wenn sie es nicht schon ist
-        if (visible && !labelRechts.isVisible()) {
-            addRemoveControl.setVisible(true);
-            labelRechts.setVisible(true);
-            spRechts.setVisible(true);
-            // rechte Seite nur invisible setzen, wenn sie es nicht schon ist
-        } else if (!visible && labelRechts.isShowing()) {
-            addRemoveControl.setVisible(false);
-            labelRechts.setVisible(false);
-            spRechts.setVisible(false);
-        }
-        return visible;
     }
 
     /**
@@ -676,11 +644,24 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
     @Override
     public void update() {
-        if (checkRightSideVisible()) {
+        buildLeftTree();
+        if (isRightSideVisible()) {
             buildRightTree();
         }
-        buildLeftTree();
-        initDragNDrop();
+    }
+
+    @Override
+    protected void showFullDialog() {
+        addRemoveControl.setVisible(true);
+        labelRechts.setVisible(true);
+        spRechts.setVisible(true);
+    }
+
+    @Override
+    protected void showPartlyDialog() {
+        addRemoveControl.setVisible(false);
+        labelRechts.setVisible(false);
+        spRechts.setVisible(false);
     }
 
     /**
@@ -1219,6 +1200,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * @return
      */
+    @Override
     protected DragNDropActionChain[] collectDragNDropActionChains() {
         DragNDropActionChain dndAC1 = DragNDropInitializer.createNewDragNDropActionChain(rtree, ltree, addAction);
         DragNDropActionChain dndAC2 = DragNDropInitializer.createNewDragNDropActionChain(ltree, rtree, removeAction);
@@ -1243,26 +1225,12 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     /**
      * @return
      */
+    @Override
     public LGMTree[] getAllDragNDropTrees() {
         return new LGMTree[] {
                 rtree,
                 ltree
         };
-    }
-
-    /**
-     *
-     */
-    private void initDragNDrop() {
-        LGMAction action = LGMActionLibrary.getDragNDropInitAction(collectDragNDropActionChains());
-        LGMMouseListener ml = new LGMMouseListener(action, action, action, null, action, action);
-        LGMTree[] trees = getAllDragNDropTrees();
-
-        for (int i = 0; i < trees.length; i++) {
-            trees[i].addMouseListener(ml);
-            trees[i].addMouseMotionListener(ml);
-        }
-
     }
 
     // --- kleine Hilfsmethoden --- Ende ---
@@ -1316,6 +1284,151 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             };
         }
         throw new ActionNotDefinedForClassException(edp.getClass().getName());
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "addButtons" der Panels angefügt werden.
+     *
+     * @param srcTree
+     * @param targetTree
+     */
+    private final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree) {
+
+        final GraphDocument doc = getGraphDocument();
+        final GDCollection gdcoll = doc.getCollection();
+        final ModelElement modelElement = getModelElement();
+
+        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+
+            @Override
+            public void execute(final EventObject eo) {
+                LGMActionLibrary.getDragNDropLocateElementAsTargetAction(targetTree).execute(eo);
+                TreeModel lmodel = targetTree.getModel();
+                LGMTreeNode lroot = (LGMTreeNode) lmodel.getRoot();
+
+                synchronized (targetTree.getTreeLock()) {
+                    TreePath selPath = srcTree.getSelectionPath();
+                    // wenn rechts etwas selektiert war
+                    if (selPath != null) {
+                        // den selektierten Knoten ermitteln
+                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+                        // wenn es sich bei dem rechts selektierten Knoten
+                        // um eine Aufgabe handelt
+                        if (node.getUserObject() instanceof NodeContainer) {
+                            // seinen Container holen (diese muessen links
+                            // im Baum geaddet werden)
+                            NodeContainer knot = (NodeContainer) node.getUserObject();
+                            if (knot.getElement() instanceof Aufgabe) {
+                                // wenn links was selektiert ist, dann muss
+                                // die naechste Aufgabe ueber bzw. vor der
+                                // selektierten eingefuegt werden
+                                selPath = targetTree.getSelectionPath();
+                                boolean nothingSelected = true;
+                                // wenn links etwas selektiert war
+                                if (selPath != null) {
+                                    nothingSelected = false;
+                                    node = (LGMTreeNode) selPath.getLastPathComponent();
+                                    // prüfen, ob eine Aufgabe selektiert ist
+                                    if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
+                                        int selRow = targetTree.getRowForPath(selPath);
+                                        int index = lmodel.getIndexOfChild(lroot, node);
+                                        gdcoll.link(PrzAufVerbindung.class, modelElement, knot.getElement(), index, GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
+                                        // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
+                                        selRow++;
+                                        while (targetTree.getPathForRow(selRow).getPathCount() != 2) {
+                                            selRow++;
+                                        }
+                                        setSelectionRow(targetTree, selRow);
+
+                                    }
+                                }
+                                // wenn links nichts selektiert war ->
+                                // einfach hinten anhaengen
+                                if (nothingSelected) {
+                                    // es wird eine neue ProzessKante
+                                    // angelegt, aber der rechte Baum
+                                    // braucht nicht aktualisiert werden
+                                    gdcoll.link(PrzAufVerbindung.class, modelElement, knot.getElement(), modelElement.getEdgesCount(), GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
+                                    targetTree.scrollRowToVisible(targetTree.getRowCount() - 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "removeButtons" der Panels angefügt werden.
+     *
+     * @param srcTree
+     * @param targetTree
+     */
+    private final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree) {
+
+        final GDCollection gdcoll = getGraphDocument().getCollection();
+        final ElementPropertyDialog dialog = getDialog();
+        final ModelElement modelElement = getModelElement();
+
+        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+            @Override
+            public void execute(final EventObject e) {
+                LGMActionLibrary.getDragNDropLocateElementAsTargetAction(targetTree).execute(e);
+                TreeModel lmodel = srcTree.getModel();
+                LGMTreeNode lroot = (LGMTreeNode) lmodel.getRoot();
+
+                synchronized (targetTree.getTreeLock()) {
+                    TreePath selPath = srcTree.getSelectionPath();
+                    // wenn links etwas selektiert war
+                    if (selPath != null) {
+                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+                        // prüfen, ob eine Aufgabe selektiert ist
+                        Object knot = node.getUserObject(); // auf keinen
+                        // Fall hier
+                        // gleich auf
+                        // ElementContainer
+                        // casten, weil
+                        // es auch ein
+                        // String sein
+                        // kann !!!
+                        if (!(knot instanceof String)) {
+                            ModelElement otherMe = ((ElementContainer) knot).getElement();
+                            if (otherMe instanceof Aufgabe) {
+                                // es wird eine neue ProzessKante angelegt, aber
+                                // der rechte Baum braucht nicht aktualisiert
+                                // werden
+                                int index = lmodel.getIndexOfChild(lroot, node);
+                                gdcoll.unlink(modelElement, otherMe, PrzAufVerbindung.class, index, dialog.getTransactionID());
+                            }
+                        }
+                        // ####################################################################################################
+                        // Dies hier evtl. weglassen, da es auf nem lahmen
+                        // Rechner und nem großen Modell rel. lange dauern
+                        // kann
+                        // Die der auf der linken Seite entfernten Aufgabe
+                        // auf der rechten Seite entsprechende wird
+                        // selektiert.
+                        // Diese Funktion geht davon aus, dass der rechte
+                        // Baum komplett expandiert ist, was er in dem Fall,
+                        // dass alle Kinder von rroot Blätter sind und rroot
+                        // selbst nicht angezeigt wird immer automatisch
+                        // ist.
+                        for (int i = 0; i < targetTree.getRowCount(); i++) {
+                            if (((LGMTreeNode) targetTree.getPathForRow(i).getLastPathComponent()).getUserObject() == knot) {
+                                setSelectionRow(targetTree, i);
+                                break;
+                            }
+                        }
+                    }
+                    return;
+                }
+            }
+        };
     }
 
 }
