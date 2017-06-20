@@ -34,15 +34,15 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 public final class DynamicTree extends JTree implements UserFieldListener, GraphDocumentOwner {
 
     /**
-     * Knoten für die Fachliche Ebene
+     * Knoten fÃ¼r die Fachliche Ebene
      */
     private final LGMTreeNode fachebene = new LGMTreeNode(Tool3lgmConstants.getResString("domain_layer"), false, true);
     /**
-     * Knoten für die Logische Werkzeugebene
+     * Knoten fÃ¼r die Logische Werkzeugebene
      */
     private final LGMTreeNode logebene = new LGMTreeNode(Tool3lgmConstants.getResString("logical_tool_layer"), false, true);
     /**
-     * Knoten für die physische Werkzeugebene
+     * Knoten fÃ¼r die physische Werkzeugebene
      */
     private final LGMTreeNode phyebene = new LGMTreeNode(Tool3lgmConstants.getResString("physical_tool_layer"), false, true);
     /**
@@ -77,7 +77,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     private final LGMTreeNode[] nodesToClear = new LGMTreeNode[ModelConstants.TREE_DOMAIN_LAYER_NODES.length + ModelConstants.TREE_LOGICAL_LAYER_NODES.length + ModelConstants.TREE_PHYSICAL_LAYER_NODES.length];
 
     /**
-     * Transaktions-ID, mit der der Baum alle seine Änderungen vornimmt.
+     * Transaktions-ID, mit der der Baum alle seine Ã„nderungen vornimmt.
      */
     public static final int PID = TransactionManager.STANDARD_PID;
 
@@ -132,7 +132,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den Baum als {@link GraphDocumentListener} hinzu. Beim vorherigen
+     * Setzt das Ã¼bergebene {@link GraphDocument} fÃ¼r diesen Baum und fÃ¼gt den Baum als {@link GraphDocumentListener} hinzu. Beim vorherigen
      * {@link GraphDocument} des Baumes wird der Baum als Listener entfernt.
      * 
      * @param doc
@@ -295,9 +295,9 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             if (pc instanceof NodeContainer) {
                 ArrayList<ElementContainer> directParentElements = pc.getElement().getDirectParentContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
-                //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
+                //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wÃ¤re,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
-                //nur in diesem seltenen Fals den expansionState von allen Knoten retten würde, die mehr als einen Parent haben.
+                //nur in diesem seltenen Fals den expansionState von allen Knoten retten wÃ¼rde, die mehr als einen Parent haben.
                 if (directParentElements.size() < 2) {
                     NodeContainer nc = (NodeContainer) pc;
                     childNode = nc.getTreeNode();
@@ -555,7 +555,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * Selektiert im Baum alle Elemente, die im dazugehörigen {@link GraphDocument} selektiert sind.
+     * Selektiert im Baum alle Elemente, die im dazugehÃ¶rigen {@link GraphDocument} selektiert sind.
      */
     public void selectObjects() {
         selectionListener.setActive(false);
@@ -610,7 +610,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * Wenn die Layer-Nummer gültig ist, wird der zugehörige Ebenenknoten selektiert und ggf. zu ihm hingescollt.
+     * Wenn die Layer-Nummer gÃ¼ltig ist, wird der zugehÃ¶rige Ebenenknoten selektiert und ggf. zu ihm hingescollt.
      * 
      * @param layer
      */
@@ -633,7 +633,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * Über diese Funktion kann der {@link DynamicTreeSelectionListener} den Layer wechseln, wenn
+     * Ãœber diese Funktion kann der {@link DynamicTreeSelectionListener} den Layer wechseln, wenn
      * ein Layerknoten im Baum selektiert wurde.
      * 
      * @param node

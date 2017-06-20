@@ -40,7 +40,7 @@ public class DataAvailabilityFinder {
     private final GraphDocument doc;
 
     /**
-     * Die Analyseklasse zum Finden der (kürzesten) Kommunikationswege
+     * Die Analyseklasse zum Finden der (kÃ¼rzesten) Kommunikationswege
      */
     private final ShortestCommunicationPathFinder commPathFinder;
 
@@ -79,10 +79,10 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird.
+     * PrÃ¼ft, ob der Ã¼bergebenene Objekttyp irgendwo gespeichert wird.
      *
      * @param objecttype
-     * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo gespeichert wird, sonst
+     * @return <code>true</code>, wenn der Ã¼bergebenene Objekttyp irgendwo gespeichert wird, sonst
      *         <code>false</code>
      */
     public boolean hasStoringSystem(final Objekttyp objecttype) {
@@ -92,10 +92,10 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Prüft, ob der übergebenene Objekttyp einen Master-Speicher besitzt.
+     * PrÃ¼ft, ob der Ã¼bergebenene Objekttyp einen Master-Speicher besitzt.
      *
      * @param objecttype
-     * @return <code>true</code>, wenn der übergebenene Objekttyp einen Master-Speicher besitzt,
+     * @return <code>true</code>, wenn der Ã¼bergebenene Objekttyp einen Master-Speicher besitzt,
      *         sonst <code>false</code>
      */
     public boolean hasMasterSystem(final Objekttyp objecttype) {
@@ -105,11 +105,11 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Prüft, ob der übergebenene Objekttyp irgendwo gespeichert wird und ob er einen
+     * PrÃ¼ft, ob der Ã¼bergebenene Objekttyp irgendwo gespeichert wird und ob er einen
      * Master-Speicher besitzt.
      *
      * @param objecttype
-     * @return <code>true</code>, wenn der übergebenene Objekttyp irgendwo gespeichert wird und er
+     * @return <code>true</code>, wenn der Ã¼bergebenene Objekttyp irgendwo gespeichert wird und er
      *         einen Master-Speicher besitzt, sonst <code>false</code>
      */
     public boolean isStored(final Objekttyp objecttype) {
@@ -118,10 +118,10 @@ public class DataAvailabilityFinder {
 
     /**
      * Liefert eine Liste von <code>SameTypePair</code>s, mit allen Master-Anwendungssystemen des
-     * Objekttyps, zwischen denen untereinander kein gerichteter Kommunikationsweg existiert, über
-     * den der Objekttyp übertragen werden kann. Das erste Objekt jedes <code>SameTypePair</code>
-     * ist Sender und das zweite Empfänger des Objekttyps.<br>
-     * Es kann sein, dass gar keine Kommunikation zwischen 2 Master Anwendungsystemen möglich ist.
+     * Objekttyps, zwischen denen untereinander kein gerichteter Kommunikationsweg existiert, Ã¼ber
+     * den der Objekttyp Ã¼bertragen werden kann. Das erste Objekt jedes <code>SameTypePair</code>
+     * ist Sender und das zweite EmpfÃ¤nger des Objekttyps.<br>
+     * Es kann sein, dass gar keine Kommunikation zwischen 2 Master Anwendungsystemen mÃ¶glich ist.
      * Dann sind 2 <code>SameTypePair</code>s in der Liste, die jeweils die beiden Master als
      * Objekte enthalten, aber beide in jeweils umgekehrter Reihenfolge. Ist nur eine
      * kommunikationsrichtung nicht gegeben, dann ist nur das entsprechend gerichtete
@@ -171,7 +171,7 @@ public class DataAvailabilityFinder {
 
     /**
      * Gibt den minimalen Kommunikationsweg zwischen den Anwendungssystemen der Konfiguration der
-     * Aufgabe und den speichernden Anwendungssystemen des Objekttyps zurück. Wenn die Aufgabe keine
+     * Aufgabe und den speichernden Anwendungssystemen des Objekttyps zurÃ¼ck. Wenn die Aufgabe keine
      * Anwendungssysteme in ihrer Konfiguration
      *
      * @param function
@@ -196,7 +196,7 @@ public class DataAvailabilityFinder {
     }
 
     /**
-     * Gibt alle Anwenungssysteme zurück, die den Objekttyp zwar speichern, zu denen aber keine
+     * Gibt alle Anwenungssysteme zurÃ¼ck, die den Objekttyp zwar speichern, zu denen aber keine
      * Kommunikation vom Master-Anwendungssystem des Objekttyps besteht. Dies kann daran liegen,
      * dass der Objekttyp kein Master-Anwenungssystem besitzt oder keine Kommunikationsverbindung
      * zwischen dem Master- und dem speichernden Anwendungssystem besteht.
@@ -297,13 +297,13 @@ public class DataAvailabilityFinder {
                 auf = (Aufgabe) edge.getEnd();
                 ot = (Objekttyp) edge.getStart();
             }
-            // wenn es keine Interpretiert-Beziehung war -> nächste Kante
+            // wenn es keine Interpretiert-Beziehung war -> nÃ¤chste Kante
             if (auf == null) {
                 continue;
             }
 
             // das hier war nur der Testaufruf des alten funktionierenden Codes, um noochmal zu
-            // prüfen, wie es richtig laufen müsste
+            // prÃ¼fen, wie es richtig laufen mÃ¼sste
             // ShortestCommunicationPathFinderOld scpfo = new
             // ShortestCommunicationPathFinderOld(ot.getPartAndParentElements(),
             // mainDoc.getCollection());
@@ -326,7 +326,7 @@ public class DataAvailabilityFinder {
                     outputDialog.appendln("Konfiguration:");
                     outputDialog.appendln("[]");
                     outputDialog.appendln("Kommunikationsweg:");
-                    outputDialog.appendln("--- Keine Kommunikation möglich! ---");
+                    outputDialog.appendln("--- Keine Kommunikation mÃ¶glich! ---");
                     continue;
                 }
                 for (ModelElement abKonf : abKonfigs) {
@@ -336,7 +336,7 @@ public class DataAvailabilityFinder {
                     outputDialog.appendln(s);
                     outputDialog.appendln("Kommunikationsweg:");
                     ShortestCommunicationPathFinder.MinimalCommunicationPath path = commPathFinder.getShortestPath(mac.getDirectMasterAndStorageApplicationSystems(ot), konfigAWBs, ot);
-                    s = path.getAwbPath() == null ? "--- Keine Kommunikation möglich! ---" : path.getAwbPath().toString().replace('\n', ' ');
+                    s = path.getAwbPath() == null ? "--- Keine Kommunikation mÃ¶glich! ---" : path.getAwbPath().toString().replace('\n', ' ');
                     outputDialog.appendln(s);
                     s = path.getInterfacePath() == null ? "" : path.getInterfacePath().toString().replace('\n', ' ');
                     outputDialog.appendln(s);
@@ -364,7 +364,7 @@ public class DataAvailabilityFinder {
                 auf = (Aufgabe) edge.getEnd();
                 ot = (Objekttyp) edge.getStart();
             }
-            // wenn es keine Bearbeitet-Beziehung war -> nächste Kante
+            // wenn es keine Bearbeitet-Beziehung war -> nÃ¤chste Kante
             if (auf == null) {
                 continue;
             }
@@ -403,7 +403,7 @@ public class DataAvailabilityFinder {
                     s = masterAWBs == null ? "null" : masterAWBs.toString().replace('\n', ' ');
                     outputDialog.appendln(s);
                     outputDialog.appendln("Kommunikationsweg:");
-                    outputDialog.appendln("--- Keine Kommunikation möglich! ---");
+                    outputDialog.appendln("--- Keine Kommunikation mÃ¶glich! ---");
 
                     continue;
                 }
@@ -434,7 +434,7 @@ public class DataAvailabilityFinder {
 
                     outputDialog.appendln("Kommunikationsweg:");
                     Object path = commPathFinder.getShortestPath(konfigAWBs, mac.getDirectMasterAndStorageApplicationSystems(ot), ot).getAwbPath();
-                    s = path == null ? "--- Keine Kommunikation möglich! ---" : path.toString().replace('\n', ' ');
+                    s = path == null ? "--- Keine Kommunikation mÃ¶glich! ---" : path.toString().replace('\n', ' ');
                     outputDialog.appendln(s);
                     outputDialog.appendln();
                 }

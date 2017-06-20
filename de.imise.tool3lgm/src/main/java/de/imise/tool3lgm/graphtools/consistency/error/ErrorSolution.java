@@ -9,12 +9,12 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 public class ErrorSolution {
 
     /**
-     * Elementklasse, zu der dieser Fehler gehört.
+     * Elementklasse, zu der dieser Fehler gehÃ¶rt.
      */
     private final Class<? extends ModelElement> targetClass;
 
     /**
-     * Assoziationsklasse, deren Anzahl für Elemente der <code>targetClass</code> nicht korrekt sein
+     * Assoziationsklasse, deren Anzahl fÃ¼r Elemente der <code>targetClass</code> nicht korrekt sein
      * kann.
      */
     private final Class<? extends Kante> edgeClass;
@@ -22,7 +22,7 @@ public class ErrorSolution {
     /**
      * Pfad ausgehend vom targetElement des Fehlers hin zu den Element(en), in dessen
      * Eigenschaftsdialog man den Fehler anzeigen oder beheben kann. In der Regel wird das nur ein
-     * Element sein, aber theoretisch können es beliebig viele sein. Wenn dieser Pfad
+     * Element sein, aber theoretisch kÃ¶nnen es beliebig viele sein. Wenn dieser Pfad
      * <code>null</code> ist, dann wird davon ausgegangen, dass das angegebene Panel im
      * Eigeschaftsdialog des Elementes mit der <code>targetClass</code> selbst enthalten ist. Diesen
      * speziellen MetaPath braucht man nur zu setzen, wenn der Fehler bei einem Element auftritt,

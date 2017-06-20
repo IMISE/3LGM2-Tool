@@ -132,7 +132,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die alphabetische Liste der Knoten erneut. Das muss man machen, da beim initialen einf¸gen
+     * Sortiert die alphabetische Liste der Knoten erneut. Das muss man machen, da beim initialen einf√ºgen
      * noch nicht die Namen der zusammengesetzten ETNTKombinationen bekannt sind, so dass sie beim laden
      * in der Regel falsch einsortiert wurden.
      */
@@ -383,7 +383,7 @@ public class LayerContainer extends ElementContainer {
                 int maxY = page_height / 2 + 1;
                 int rasterWidth = UserProperties.getRasterWidth();
 
-                //				malt das Raster mit durchgezogenen Linien -> kann man f¸r Kontrollzwecke wieder einblenden
+                //				malt das Raster mit durchgezogenen Linien -> kann man f√ºr Kontrollzwecke wieder einblenden
                 //				g.setColor(Color.lightGray);
                 //				for (int x=0; x<maxX; x+=rasterWidth){
                 //					g.drawLine(x, -maxY, x, maxY);
@@ -394,7 +394,7 @@ public class LayerContainer extends ElementContainer {
                 //					g.drawLine(-maxX, -y, maxX, -y);
                 //				}
 
-                //kann man auch hˆher setzen
+                //kann man auch h√∂her setzen
                 float dashWidth = 1.0f;
                 float dash[] = {
                         dashWidth,
@@ -410,7 +410,7 @@ public class LayerContainer extends ElementContainer {
                     g.drawLine(x, -maxY, x, maxY);
                     g.drawLine(-x, -maxY, -x, maxY);
                 }
-                //	Dies hier w¸rde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
+                //	Dies hier w√ºrde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
                 //
                 //				div = maxX/rasterWidth;
                 //				maxX = div*rasterWidth+diff;
@@ -422,7 +422,7 @@ public class LayerContainer extends ElementContainer {
 
                 gc.setStroke(stk);
             }
-            //			malt ein groﬂes Kreuz in den Mittelpunkt der Zeichenfl‰che
+            //			malt ein gro√ües Kreuz in den Mittelpunkt der Zeichenfl√§che
             //			int kreiz = 100;
             //			g.drawLine(-kreiz, -kreiz, kreiz, kreiz);
             //			g.drawLine(kreiz, -kreiz, -kreiz, kreiz);
@@ -654,7 +654,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die KantenContainer in kanten so um, dass ihre Reihenfolge f¸r alle Knoten(Container)
+     * Sortiert die KantenContainer in kanten so um, dass ihre Reihenfolge f√ºr alle Knoten(Container)
      * in sortKnot der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
      */
     public void sortKanten() {
@@ -814,7 +814,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * (De-)Aktiviert das Anzeigen der Interebenenbeziehungen f¸r den spezifizierten {@link ElementContainer}
+     * (De-)Aktiviert das Anzeigen der Interebenenbeziehungen f√ºr den spezifizierten {@link ElementContainer}
      *
      * @param showInterLayerConnections
      *            aktiviren / deaktivieren

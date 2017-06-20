@@ -21,7 +21,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
     }
 
     /**
-     * Wenn Knoten selektiert wurden, die keine NodeContainer-Knoten sind, wird über diese Variable fetsgelegt,
+     * Wenn Knoten selektiert wurden, die keine NodeContainer-Knoten sind, wird Ã¼ber diese Variable fetsgelegt,
      * dass gerade so ein Knoten aus der Selektion entfernt wurde.
      */
     int correctingSelectionCount = 0;
@@ -32,7 +32,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
             return;
         }
         GraphDocument doc = tree.getGraphDocument();
-        //keine von sich selbst ausgelösten SelectionChangeEvents empfangen -> deaktivieren und zum Schnluss wieder anschalten
+        //keine von sich selbst ausgelÃ¶sten SelectionChangeEvents empfangen -> deaktivieren und zum Schnluss wieder anschalten
         tree.setTransactionListenerActive(false);
         doc.start_transaction(DynamicTree.PID, false);
         doc.deselectAll(true);
@@ -57,7 +57,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
             //vom letzten selektieren Knoten den Layer bestimmen
             selectedLayerNode = getLayerNode(node);
         }
-        //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es komtm true zurück
+        //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es komtm true zurÃ¼ck
         boolean layerChanged = tree.setActiveLayer(selectedLayerNode);
         doc.finish_transaction(DynamicTree.PID, false);
         doc.distributeEvent(GraphDocument.SELECTION_CHANGED);
@@ -68,9 +68,9 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
     }
 
     /**
-     * Wenn der übergebene Knoten selbst ein Layer-Knoten ist, dann kommt dieser Knoten zurück. Wenn nicht,
-     * wird solange in den Parents des Knotens gesucht bis ein Layer-Knoten gefunden wurde (der dann zurück
-     * kommt) oder <code>null</code> zurück gegeben, wenn kein Layer-Knoten gefunden wurde.
+     * Wenn der Ã¼bergebene Knoten selbst ein Layer-Knoten ist, dann kommt dieser Knoten zurÃ¼ck. Wenn nicht,
+     * wird solange in den Parents des Knotens gesucht bis ein Layer-Knoten gefunden wurde (der dann zurÃ¼ck
+     * kommt) oder <code>null</code> zurÃ¼ck gegeben, wenn kein Layer-Knoten gefunden wurde.
      * 
      * @param node
      * @return

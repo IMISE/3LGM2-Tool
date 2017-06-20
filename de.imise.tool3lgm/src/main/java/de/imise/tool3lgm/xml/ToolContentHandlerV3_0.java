@@ -38,10 +38,10 @@ import de.imise.tool3lgm.log.Log;
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen
  * ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf
- * alle nötigen Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder
- * wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
- * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem
- * bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
+ * alle nÃ¶tigen Werte hat. Ich denke, bei kleinen Ã„nderungen (hinzukommen oder
+ * wegfallen einzelnener Felder im Dokument) muÃŸ man keinen ganz neuen
+ * ContentHandler schreiben sondern muÃŸ nur einen abgeleiteten von diesem
+ * bilden. Ich wÃ¼rde aber empfehlen von Zeit zu Zeit einen vÃ¶llig neuen
  * ContentHandler zu schreiben.
  * erkennt Modell mit 3lgm2_v3_0.dtd Version 3.0
  *
@@ -50,18 +50,18 @@ import de.imise.tool3lgm.log.Log;
 public class ToolContentHandlerV3_0 implements ContentHandler {
 
     /**
-     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
+     * gÃ¤nderte Hashcodes (bei copyAndPaste) SchlÃ¼ssel ist alter HashString,
      * Wert ist neuer HashString
      */
     protected HashMap<String, String> hashCodes;
 
     /**
-     * Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei
+     * Kanten deren hashStrings (start, end) aufgelÃ¶st werden mÃ¼ssen (bei
      * copyAndPaste)
      */
     protected ArrayList<ModelElement> kanten;
 
-    /** {@link BendpointContainer}, die den Kanten zugeordnet werden müssen (bei copyAndPaste) */
+    /** {@link BendpointContainer}, die den Kanten zugeordnet werden mÃ¼ssen (bei copyAndPaste) */
     protected ArrayList<BendpointContainer> knickpunke;
 
     /**
@@ -105,7 +105,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /** Farbeangabe zu einem GraphElementLayout */
     protected Color color = null;
 
-    /** definiert die gültigkeit Farbe (fg_color, bg_color, border_color) */
+    /** definiert die gÃ¼ltigkeit Farbe (fg_color, bg_color, border_color) */
     protected String colorString = null;
 
     /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
@@ -117,7 +117,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /**
      * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst
      * zu letzt eingelesen werden, wird den Containern zuerst nur der HashString
-     * des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container
+     * des Icons mitgeteilt. Nach dem einlesen der Icons mÃ¼ssen diese Container
      * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
      * passiert in der Methode setIcon();
      */
@@ -218,7 +218,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 try {
                     elementClass = ModelConstants.getClassForName(atts.getValue("class"));
                 } catch (Exception e) {
-                    throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
+                    throw new SAXException("Klasse fÃ¼r Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }
 
                 if (avoidDuplicates) {
@@ -248,7 +248,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
                 //				if (element == null)
-                //					throw new SAXException("ModelObject für Container nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
+                //					throw new SAXException("ModelObject fÃ¼r Container nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
 
                 if (element != null) {
                     container = element.getContainer(szenario);
@@ -260,7 +260,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
 
                     if (container == null) {
-                        throw new SAXException("Container für ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
+                        throw new SAXException("Container fÃ¼r ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
                     }
                 }
                 element = null;
@@ -445,7 +445,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (element != null) {
                     //Bei Aufgaben gab es die Felder requirement und note. Sollten Modelle
                     //auftauchen, bei denen diese Felder noxh existieren, dann werden die
-                    //Einträge hier einfach an die Beschreibung angehängt. Die Felder
+                    //EintrÃ¤ge hier einfach an die Beschreibung angehÃ¤ngt. Die Felder
                     //description, requirement und note stehen in genau dieser Reihenfolge
                     //in der Datei.
                     if (field.equals("requirement") || field.equals("note")) {
@@ -476,11 +476,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("userField")) {
                 String val = elementValue.toString();
-                //wenn eine Benutzerdefinierte Eigenschaft für ein Element eingelesen werden soll
+                //wenn eine Benutzerdefinierte Eigenschaft fÃ¼r ein Element eingelesen werden soll
                 if (element != null) {
                     element.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
                 }
-                //Benutzerdefinierte Eigenschaft für das Modell (GDCollection)
+                //Benutzerdefinierte Eigenschaft fÃ¼r das Modell (GDCollection)
                 else {
                     collection.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
                 }
@@ -758,8 +758,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-                //die HashStrings für das Start- bzw. End-Objekt einer Kante
-                // auflösen und die wirklichen Knoten setzten
+                //die HashStrings fÃ¼r das Start- bzw. End-Objekt einer Kante
+                // auflÃ¶sen und die wirklichen Knoten setzten
                 if (copyAndPaste > 0) {
                     Knickpunkt knp;
                     for (int i = 0; i < knickpunke.size(); i++) {

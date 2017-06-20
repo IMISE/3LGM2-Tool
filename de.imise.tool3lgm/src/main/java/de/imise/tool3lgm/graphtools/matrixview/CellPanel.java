@@ -14,10 +14,10 @@ public class CellPanel extends JPanel {
     /** Das Model nach dem die Zellen sich aufbauen */
     private final TableModel tableModel;
 
-    /** Panel mit Spaltenüberschriften */
+    /** Panel mit SpaltenÃ¼berschriften */
     private final ColPanel colHeaderPanel;
 
-    /** Panel mit Zeilenüberschriften */
+    /** Panel mit ZeilenÃ¼berschriften */
     private final RowPanel rowHeaderPanel;
 
     /** Parameter gesetzt ? */
@@ -27,8 +27,8 @@ public class CellPanel extends JPanel {
      * Konstruktor
      * 
      * @param tableModel Model nach dem die Zellen sich aufbauen
-     * @param colHeaderPanel Panel mit Spaltenüberschriften
-     * @param rowHeaderPanel Panel mit Zeilenüberschriften
+     * @param colHeaderPanel Panel mit SpaltenÃ¼berschriften
+     * @param rowHeaderPanel Panel mit ZeilenÃ¼berschriften
      */
     public CellPanel(final TableModel tableModel, final ColPanel colHeaderPanel, final RowPanel rowHeaderPanel) {
         super();
@@ -65,7 +65,7 @@ public class CellPanel extends JPanel {
             g.drawLine(0, j * height, i * width, j * height);
         }
 
-        /* linke obere Ecke und Kantenlänge des Würfels zum Markieren der Zellen */
+        /* linke obere Ecke und KantenlÃ¤nge des WÃ¼rfels zum Markieren der Zellen */
         int x, y, a = (width + height) / 4;
 
         int dx = (width - a) / 2;
@@ -86,7 +86,7 @@ public class CellPanel extends JPanel {
     }
 
     /**
-     * bestimmt die benötigten Parameter und legt die Größe der Component fest
+     * bestimmt die benÃ¶tigten Parameter und legt die GrÃ¶ÃŸe der Component fest
      * 
      * @param g Graphics
      */

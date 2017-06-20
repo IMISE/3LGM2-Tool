@@ -90,7 +90,7 @@ public final class ModelBrowserPanel extends JPanel {
     }
 
     /**
-     * Entfernt ein Teil-Modell aus dem dazugehörigen Browser. Wenn das letzte Teilmodell eines Modells entfernt wird, dann wird das ganze Modell
+     * Entfernt ein Teil-Modell aus dem dazugehÃ¶rigen Browser. Wenn das letzte Teilmodell eines Modells entfernt wird, dann wird das ganze Modell
      * entfernt.
      *
      * @param doc
@@ -144,7 +144,7 @@ public final class ModelBrowserPanel extends JPanel {
     }
 
     /**
-     * Aktiviert die Baumansicht für das übergebene <code>GraphDocument</code>
+     * Aktiviert die Baumansicht fÃ¼r das Ã¼bergebene <code>GraphDocument</code>
      */
     public void setSelectedDoc(final GraphDocument doc) {
         ModelBrowser modelBrowser = getModelBrowser(doc.getCollection());
@@ -170,7 +170,7 @@ public final class ModelBrowserPanel extends JPanel {
             return;
         }
         //Zuerst das aktuell selektierte GraphDocument holen. Das muss noch mit dem alten globalen Wert
-        //von showModelsInSeparateBrowser passieren, sonst kommt hier null zurück
+        //von showModelsInSeparateBrowser passieren, sonst kommt hier null zurÃ¼ck
         GraphDocument activeDoc = getSelectedDoc();
 
         //erst jetzt den neuen Wert setzen, weil getSelectedDoc() nur das Richtige tut, wenn

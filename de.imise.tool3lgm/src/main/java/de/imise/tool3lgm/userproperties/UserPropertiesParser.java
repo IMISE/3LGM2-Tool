@@ -23,7 +23,7 @@ import de.imise.tool3lgm.xml.XMLVersionException;
  */
 public class UserPropertiesParser {
 
-    /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
+    /** unterstÃ¼tzte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
     private static String[] supportedXMLVersions = {
             "<?xml version='1.0' encoding='utf-8'?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     };

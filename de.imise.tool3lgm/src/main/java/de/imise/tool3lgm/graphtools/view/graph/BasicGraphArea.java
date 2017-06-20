@@ -32,7 +32,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected GraphDocument doc;
 
     /**
-     * Factor, mit dem die Zeichenfläche ausgehend von ihrer ursprünglichen Größe gestreckt wird
+     * Factor, mit dem die ZeichenflÃ¤che ausgehend von ihrer ursprÃ¼nglichen GrÃ¶ÃŸe gestreckt wird
      */
     protected double zoom = 1.0;
 
@@ -49,14 +49,14 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected double effective_y_shift = 0;
 
     /**
-     * Faktor, um die die Darstellung in Y-Richtung skaliert wird. Dieser Faktor wird für den aktuellen
-     * Winkel jeweils neu berechnet. Je größer der Winkel wird, desto kleiner wird dieser Wert, wodurch
-     * die Ebenen in der Höhe gestaucht werden.
+     * Faktor, um die die Darstellung in Y-Richtung skaliert wird. Dieser Faktor wird fÃ¼r den aktuellen
+     * Winkel jeweils neu berechnet. Je grÃ¶ÃŸer der Winkel wird, desto kleiner wird dieser Wert, wodurch
+     * die Ebenen in der HÃ¶he gestaucht werden.
      */
     protected double y_y_factor;
 
     /**
-     * Faktor, um den sich in der Ebenendarstellung mit größeren Y-Werten die X-Werte vergrößern.
+     * Faktor, um den sich in der Ebenendarstellung mit grÃ¶ÃŸeren Y-Werten die X-Werte vergrÃ¶ÃŸern.
      * Dadurch kann man die Ebene nach (hinten) links (positive Werte) oder nach (hinten) rechts
      * (negative Werte) kippen.
      * Im Moment wird dieser Wert nicht genutzt, da keine Notwendigkeit besteht, die Darstellung zu kippen.
@@ -70,7 +70,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected final double X_X_FACTOR = 1.0;
 
     /**
-     * Faktor, um den sich in der Ebenendarstellung mit größeren X-Werten die Y-Werte vergrößern.
+     * Faktor, um den sich in der Ebenendarstellung mit grÃ¶ÃŸeren X-Werten die Y-Werte vergrÃ¶ÃŸern.
      * Dadurch kann man die Ebene nach unten (positive Werte) oder nach oben (negative Werte) kippen.
      * Im Moment wird dieser Wert nicht genutzt, da keine Notwendigkeit besteht, die Darstellung zu kippen.
      */
@@ -111,7 +111,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /**  */
     protected boolean mouse_selection = false;
 
-    /** Aktuelle Abstände der Ebenendarstellung vom Gesamtrand dieser Komponente */
+    /** Aktuelle AbstÃ¤nde der Ebenendarstellung vom Gesamtrand dieser Komponente */
     private final Insets graphBorder = new Insets(50, 50, 50, 50);
 
     /** Minimaler interner Zoom-Wert */
@@ -119,7 +119,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /** Maximaler interner Zoom-Wert */
     private static final double ZOOM_FACTOR_MAXIMUM = 2d;
 
-    /** Mögliche Statusse für das Zeichnen */
+    /** MÃ¶gliche Statusse fÃ¼r das Zeichnen */
     public enum PaintState {
         /** Alles wird mit gezeichnet */
         REGULAR,
@@ -129,7 +129,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         WEBEXPORT
     }
 
-    /** Status für das Zeichnen */
+    /** Status fÃ¼r das Zeichnen */
     private PaintState paintState = PaintState.REGULAR;
 
     /**
@@ -265,7 +265,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Gibt den aktuellen Zeichenwinkel zurueck. Dabei bedeutet 0 normal, und
-     * 90° ist dann eine flache Scheibe von der Seite.
+     * 90Â° ist dann eine flache Scheibe von der Seite.
      */
     public final int getDegree() {
         return page_degree;
@@ -291,7 +291,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-     * Speichert den aktuellen Darstellungswinkel und die Höhenverschiebung und
+     * Speichert den aktuellen Darstellungswinkel und die HÃ¶henverschiebung und
      * setzt beide Werte auf den Standard (0).
      * 
      * @see #recallSettings()
@@ -304,7 +304,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-     * Stellt die alten Werte des Darstellungswinkels und der Höhenverschiebung wieder her.
+     * Stellt die alten Werte des Darstellungswinkels und der HÃ¶henverschiebung wieder her.
      * 
      * @see #storeSettings()
      */
@@ -354,15 +354,15 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 	 * 
 	 */
     protected final void adjustInterLayerSpace() {
-        //Diese ausführliche Berechnung ist nur notwendig, wenn man auch die im Moment konstanten Faktoren X_X_FACTOR = 1.0
-        //und X_Y_FACTOR = 0.0 berücksichtigen will (siehe Beschreibung der Werte oben)
+        //Diese ausfÃ¼hrliche Berechnung ist nur notwendig, wenn man auch die im Moment konstanten Faktoren X_X_FACTOR = 1.0
+        //und X_Y_FACTOR = 0.0 berÃ¼cksichtigen will (siehe Beschreibung der Werte oben)
         //		effective_x_shift = (-pitch_shift / y_y_factor) * (-y_x_factor) * ((X_X_FACTOR) - (y_x_factor * X_Y_FACTOR));
         //		effective_y_shift = (-pitch_shift / y_y_factor) * (X_X_FACTOR) * ((X_X_FACTOR) - (y_x_factor * X_Y_FACTOR));
         //		Das oben ist das Original und das hier drunter dasselbe nur umgestellt bzw. ein paar Klammern weggelassen
         //		effective_x_shift =  pitch_shift / y_y_factor * y_x_factor * (X_X_FACTOR - y_x_factor * X_Y_FACTOR);
         //		effective_y_shift = -pitch_shift / y_y_factor * X_X_FACTOR * (X_X_FACTOR - y_x_factor * X_Y_FACTOR);
 
-        //Unter der Annahme, dass X_X_FACTOR = 1.0 und X_Y_FACTOR = 0.0 bleibt von der Berechnung das hier unten übrig
+        //Unter der Annahme, dass X_X_FACTOR = 1.0 und X_Y_FACTOR = 0.0 bleibt von der Berechnung das hier unten Ã¼brig
         effective_y_shift = -interLayerSpace / y_y_factor;
         effective_x_shift = -effective_y_shift * y_x_factor;
     }
@@ -371,10 +371,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 	 * 
 	 */
     private final void refreshTransformation() {
-        //Diese ausführliche Berechnung ist nur notwendig, wenn man auch die im Moment konstanten Faktoren X_X_FACTOR = 1.0
-        //und X_Y_FACTOR = 0.0 berücksichtigen will (siehe Beschreibung der Werte oben)
+        //Diese ausfÃ¼hrliche Berechnung ist nur notwendig, wenn man auch die im Moment konstanten Faktoren X_X_FACTOR = 1.0
+        //und X_Y_FACTOR = 0.0 berÃ¼cksichtigen will (siehe Beschreibung der Werte oben)
         //		transformation = new AffineTransform(zoom * X_X_FACTOR, zoom * X_Y_FACTOR, zoom * y_x_factor, zoom * y_y_factor, 0, 0);
-        //Unter der Annahme, dass X_X_FACTOR = 1.0 und X_Y_FACTOR = 0.0 bleibt von der Berechnung das hier unten übrig
+        //Unter der Annahme, dass X_X_FACTOR = 1.0 und X_Y_FACTOR = 0.0 bleibt von der Berechnung das hier unten Ã¼brig
         transformation.setTransform(zoom, 0d, zoom * y_x_factor, zoom * y_y_factor, 0d, 0d);
     }
 

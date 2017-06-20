@@ -67,14 +67,14 @@ public class Objekttyp extends Knoten {
             }
         }
         //Liste in die die Objekttypen kommen, von denen
-        // dieser Objekttyp Repräsentationsformen erbt
+        // dieser Objekttyp ReprÃ¤sentationsformen erbt
         ArrayList<ModelElement> partsAndParents = getParentElements(false);
-        //für jeden OT von dem geerbt wird
+        //fÃ¼r jeden OT von dem geerbt wird
         for (ModelElement me : partsAndParents) {
             //alle storePlaces holen
             ArrayList<ModelElement> stores = ((Objekttyp) me).getStorePlaces(databases, collections);
             //wenn diese bisher noch nicht eingesammelt wurden -> zur
-            // returnList hinzufügen
+            // returnList hinzufÃ¼gen
             for (ModelElement store : stores) {
                 if (!returnList.contains(store)) {
                     returnList.add(store);

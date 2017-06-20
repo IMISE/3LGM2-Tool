@@ -47,7 +47,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     public static final int MAX_Y_SIZE = 2000;
 
-    //dieser Wert steht für alles Mögliche zur Verfügung (daher der unspezifische Name)
+    //dieser Wert steht fÃ¼r alles MÃ¶gliche zur VerfÃ¼gung (daher der unspezifische Name)
     //Momentane Verwenung:
     //	- AufgabenContainer:	Anzahl ihrer redundanten Konfigs
     //	- ObjekttypContainer:	Anzahl der DBS und Dokumentensammlungen, in denen sie redundant gespeichert werden
@@ -344,13 +344,13 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             layout.height = h;
         }
         super.setSize(layout.width, layout.height);
-        //Die Beschriftung muss aktualisiert werden, falls die Elementgröße die Minimalgröße überschreitet ab der die Beschriftung
+        //Die Beschriftung muss aktualisiert werden, falls die ElementgrÃ¶ÃŸe die MinimalgrÃ¶ÃŸe Ã¼berschreitet ab der die Beschriftung
         //dargestellt werden soll bzw. unterschreitet, aber der die Beschriftung nicht mehr dargestellt werden soll
         refreshText();
     }
 
     /**
-     * Setzt die Groesse des Knotens für die Buttons
+     * Setzt die Groesse des Knotens fÃ¼r die Buttons
      *
      * @param w
      * @param h
@@ -422,7 +422,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-     * Verannlasst das Zeichen des Containers über die übergeordnete Implementierung.
+     * Verannlasst das Zeichen des Containers Ã¼ber die Ã¼bergeordnete Implementierung.
      *
      * @param g
      */
@@ -573,7 +573,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return;
         }
         StringBuilder sb = new StringBuilder(string);
-        //alle Zeilenumbrüche auf ein einfaches '\n' setzen, also '\r' einfach löschen
+        //alle ZeilenumbrÃ¼che auf ein einfaches '\n' setzen, also '\r' einfach lÃ¶schen
         for (int i = sb.length(); i > 1;) {
             if (sb.charAt(--i) == '\r') {
                 sb.delete(i, i + 1);

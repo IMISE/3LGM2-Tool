@@ -8,12 +8,12 @@ package de.imise.tool3lgm.graphtools.undoredo;
 public interface TransactionListener {
 
     /**
-     * Ruft der <code>TransactionManager</code> für alle seine Listener auf, wenn er eine Transaktion begonnen hat.
+     * Ruft der <code>TransactionManager</code> fÃ¼r alle seine Listener auf, wenn er eine Transaktion begonnen hat.
      */
     public void transactionStarted();
 
     /**
-     * Ruft der <code>TransactionManager</code> für alle seine Listener auf, wenn er eine Transaktion beendet hat.
+     * Ruft der <code>TransactionManager</code> fÃ¼r alle seine Listener auf, wenn er eine Transaktion beendet hat.
      */
     public void transactionStopped();
 

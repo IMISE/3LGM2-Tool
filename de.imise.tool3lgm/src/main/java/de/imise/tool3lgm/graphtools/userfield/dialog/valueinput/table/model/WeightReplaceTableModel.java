@@ -36,10 +36,10 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         List<ModelElement> allRowElements = doc.getModelItems(elementClass, false, true);
         //Alle KennzahluserFields in den Spalten
         List<UserField> allColumnElements = definitions.getUserFields(edgeClass, UserField.Style.CLASSIFICATION_NUMBER_STYLES);
-        //Platzhalter für die Gleichverteilung
+        //Platzhalter fÃ¼r die Gleichverteilung
         allColumnElements.add(0, null);
 
-        //falls man Filter wollte (z.B. nur Blattelemente oder so etwas, müsste man das hier tun
+        //falls man Filter wollte (z.B. nur Blattelemente oder so etwas, mÃ¼sste man das hier tun
         //Analgo zu den anderen Panels
         List<ModelElement> rowElements = Lists.newArrayList();
         List<UserField> columnElements = Lists.newArrayList();
@@ -62,7 +62,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
 
                 WeightReplacer weightReplacer = definitions.getWeightReplacer();
                 String replaceUserFieldHash;
-                //im Falle des Platzhalters für das nicht wirklich vorhandene UserFieldWeight für die Gleichverteilung 
+                //im Falle des Platzhalters fÃ¼r das nicht wirklich vorhandene UserFieldWeight fÃ¼r die Gleichverteilung 
                 if (ce == null) {
                     replaceUserFieldHash = weightReplacer.getUniformDistributionReplacement(re.getHashString(), edgeClass);
                 } else { //ansonsten einfach den genauen Ersetzungshash suchen
@@ -89,7 +89,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.size());
         for (int j = 0; j < columnElements.size(); j++) {
             UserField userField = columnElements.get(j);
-            //wenn das UserField null ist, dann ist das der Platzhalter für die Gleichverteilung
+            //wenn das UserField null ist, dann ist das der Platzhalter fÃ¼r die Gleichverteilung
             columnIdentifiers.add(getValueContainer(userField));
         }
 
@@ -114,7 +114,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert einen Container, für die Gleichverteilung.
+     * Liefert einen Container, fÃ¼r die Gleichverteilung.
      * 
      * @return
      */
@@ -123,7 +123,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene Container eine Gleichverteilung repräsentiert (also
+     * Liefert <code>true</code>, wenn der Ã¼bergebene Container eine Gleichverteilung reprÃ¤sentiert (also
      * das Object im Container <code>null</code> ist).
      * 
      * @param value
@@ -134,8 +134,8 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert einen Container, bei dem als String der Name des übergebenen UserFields gesetzt ist.
-     * Ist das übergebene UserField <code>null</code>, kommt en Container für die Gleichverteilung zurück.
+     * Liefert einen Container, bei dem als String der Name des Ã¼bergebenen UserFields gesetzt ist.
+     * Ist das Ã¼bergebene UserField <code>null</code>, kommt en Container fÃ¼r die Gleichverteilung zurÃ¼ck.
      * 
      * @param userField
      * @return
@@ -148,7 +148,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     }
 
     /**
-     * Liefert einen Container für das übergebene UserField, dessen String ein Leerzeichen ist.
+     * Liefert einen Container fÃ¼r das Ã¼bergebene UserField, dessen String ein Leerzeichen ist.
      * 
      * @param userField
      * @return

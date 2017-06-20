@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 public class GraphAnalyse {
 
     /**
-     * Prüft, ob ein Element(Container) den angegebenen Kriterien entspricht
+     * PrÃ¼ft, ob ein Element(Container) den angegebenen Kriterien entspricht
      * 
      * @param doc
      * @param ec
@@ -24,7 +24,7 @@ public class GraphAnalyse {
             return true;
         }
         boolean tmpmatch = false;
-        // Ist eine Klasse aus "Verbundene" gewählt? Wenn nein, dann okay!
+        // Ist eine Klasse aus "Verbundene" gewÃ¤hlt? Wenn nein, dann okay!
         ModelElement kn = ec.getElement();
         for (int i = 0; i < connectedNames.size() && !tmpmatch; i++) {
             for (int j = 0; j < kn.getEdgesCount() && !tmpmatch; j++) {
@@ -33,7 +33,7 @@ public class GraphAnalyse {
                 }
             }
         }
-        // Das Ganze am Ende umdrehen, wenn die RadioButtons es wünschen...
+        // Das Ganze am Ende umdrehen, wenn die RadioButtons es wÃ¼nschen...
         if (!verbundenState) {
             tmpmatch = !tmpmatch;
         }
@@ -64,7 +64,7 @@ public class GraphAnalyse {
     }
 
     /**
-     * Sucht nach passenden Elementen. Diesmal müssen sie aber bereits mit im übergebenen Vektor
+     * Sucht nach passenden Elementen. Diesmal mÃ¼ssen sie aber bereits mit im Ã¼bergebenen Vektor
      * "origin" enthaltenen Elementen verbunden sein.
      * 
      * @param doc

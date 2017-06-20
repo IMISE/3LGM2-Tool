@@ -126,12 +126,12 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-     * Instanz des Analyzers für die ganz einfache Redundanzanalyse
+     * Instanz des Analyzers fÃ¼r die ganz einfache Redundanzanalyse
      */
     private SimpleRedundancyAnalysis simpleRedAna = null;
 
     /**
-     * @return Instanz des Analyzers für die ganz einfache Redundanzanalyse
+     * @return Instanz des Analyzers fÃ¼r die ganz einfache Redundanzanalyse
      */
     public SimpleRedundancyAnalysis getSimpleRedundancyAnalysis() {
         if (simpleRedAna == null) {
@@ -259,7 +259,7 @@ public class LGMGraphDocument extends GraphDocument {
     public synchronized final void cutToClipboard() {
         start_transaction(TransactionManager.STANDARD_PID);
         copyToClipboard();
-        //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
+        //man muss die Selektion clonen, da sie sich wÃ¤rend des LÃ¶schens Ã¤ndert
         gdcoll.deleteElements(getSelectedElements(), this, TransactionManager.STANDARD_PID);
         finish_transaction(TransactionManager.STANDARD_PID);
         distributeEvent(DATA_CHANGED);
@@ -418,18 +418,18 @@ public class LGMGraphDocument extends GraphDocument {
 
     //	/**
     //	 *
-    //	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
+    //	 * TODO:Bug beim Ãœbenehmen von Elementen in ein anderes Modell
     //	 *
-    //	 * Kanten werden nicht richtig in das neue Modell übenommen, d.h. der Container wird in diesem
+    //	 * Kanten werden nicht richtig in das neue Modell Ã¼benommen, d.h. der Container wird in diesem
     //	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Kante-Container
     //	 * werden aber richtig in den Elementen eingetragen.
     //	 *
     //	 * Die untere Funktion ist die alte Variante; Die hier auskommentierte sollte die neue werden.
     //	 * Allerdings liegt der Fehler irgendwo anders. Hier sollte unbeding auch beachtet werden, dass
-    //	 * wenn man ein Element in ein anderes Modell übernimmt, dass im Ursprungsmodell Verbindungen
-    //	 * zu anderen Elementen hat, auch Verbindungen zu Elementen übernommen werden, die sowohl im
-    //	 * Urpsungsmodell als auc im Zielmodell vorkommen. (Z.B. übernimmt man erst eine Aufgabe in ein
-    //	 * Modell und danach bei einer 2. Übernahme eine Unteraufgabe dieser Aufgabe in das gleiche Modell,
+    //	 * wenn man ein Element in ein anderes Modell Ã¼bernimmt, dass im Ursprungsmodell Verbindungen
+    //	 * zu anderen Elementen hat, auch Verbindungen zu Elementen Ã¼bernommen werden, die sowohl im
+    //	 * Urpsungsmodell als auc im Zielmodell vorkommen. (Z.B. Ã¼bernimmt man erst eine Aufgabe in ein
+    //	 * Modell und danach bei einer 2. Ãœbernahme eine Unteraufgabe dieser Aufgabe in das gleiche Modell,
     //	 * dann geht die Unterordnungsbeziehung im Zielmodell verloren.)
     //	 *
     //	 * @param dest

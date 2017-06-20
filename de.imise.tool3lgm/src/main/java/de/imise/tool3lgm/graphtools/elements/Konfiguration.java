@@ -50,7 +50,7 @@ public abstract class Konfiguration extends Knoten {
     }
 
     /**
-     * Gibt true zurück, wenn eine Konfiguration im uebergebenen GraphDocument enthalten ist, also dann, wenn mind. ein Client und ein Server in doc existiert. False sonst.
+     * Gibt true zurÃ¼ck, wenn eine Konfiguration im uebergebenen GraphDocument enthalten ist, also dann, wenn mind. ein Client und ein Server in doc existiert. False sonst.
      * 
      * @param GraphDocument
      */

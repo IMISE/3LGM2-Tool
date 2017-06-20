@@ -32,7 +32,7 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 public abstract class ElementDialogPanel extends JPanel {
 
     /**
-     * GraphDocument, für das das Panel geöffnet wurde. Über das Panel neu angelegte Elemente sind
+     * GraphDocument, fÃ¼r das das Panel geÃ¶ffnet wurde. Ãœber das Panel neu angelegte Elemente sind
      * automatisch in diesem GraphDocument enthalten.
      */
     protected GraphDocument doc;
@@ -49,7 +49,7 @@ public abstract class ElementDialogPanel extends JPanel {
     protected final ElementPropertyDialog dialog;
 
     /**
-     * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere Bäume enthalten
+     * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere BÃ¤ume enthalten
      * kann, wird sich in dieser Liste sozusagen die Gesamtselektion gemerkt.
      */
     protected List<ElementContainer> highlight = new ArrayList<ElementContainer>(0);
@@ -65,7 +65,7 @@ public abstract class ElementDialogPanel extends JPanel {
     protected EventObject lastSelEvent = null;
 
     /**
-     * Der Renderer der Bäume
+     * Der Renderer der BÃ¤ume
      */
     protected TreeRenderer treeRenderer;
 
@@ -100,14 +100,14 @@ public abstract class ElementDialogPanel extends JPanel {
      * TODO: die Konstruktoren braucht man sicher nicht mehr, wenn alle Panels mit Kanten oder
      * Pfaden initialisiert werden
      *
-     * @param dialog Dialog, der dieses Panel enthält
+     * @param dialog Dialog, der dieses Panel enthÃ¤lt
      */
     public ElementDialogPanel(final ElementPropertyDialog dialog) {
         this(dialog, (String) null);
     }
 
     /**
-     * @param dialog Dialog, der dieses Panel enthält
+     * @param dialog Dialog, der dieses Panel enthÃ¤lt
      * @param name
      */
     public ElementDialogPanel(final ElementPropertyDialog dialog, final String name) {
@@ -181,7 +181,7 @@ public abstract class ElementDialogPanel extends JPanel {
 
     public void removeSpecialInfos() {
         for (int i = 0; i < specialInfoOwner.size(); i++) {
-            // TODO:AXS: das hier geht für LGMProcessSteps jetzt auf jeden Fall schief, weil sie
+            // TODO:AXS: das hier geht fÃ¼r LGMProcessSteps jetzt auf jeden Fall schief, weil sie
             // keine ElementContainer mehr sind
 
             ElementContainer ec = (ElementContainer) specialInfoOwner.get(i);

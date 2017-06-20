@@ -34,7 +34,7 @@ public class SzenarioTableModel extends AbstractTableModel {
      * erstellt das Tabellemodell
      * 
      * @param collection GDCollection mit den Szenarios
-     * @param selectioColName Titel der Spalte zum Ausw‰hlen der Szenarios
+     * @param selectioColName Titel der Spalte zum Ausw√§hlen der Szenarios
      */
     public SzenarioTableModel(final GDCollection collection, final String selectioColName) {
         super();
@@ -121,7 +121,7 @@ public class SzenarioTableModel extends AbstractTableModel {
     }
 
     /**
-     * gibt die ausgew‰hlten Szenarios zur¸ck
+     * gibt die ausgew√§hlten Szenarios zur√ºck
      * 
      * @return Array mit den selektierten Szenarios
      */

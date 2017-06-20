@@ -14,16 +14,16 @@ import javax.swing.table.TableCellRenderer;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**
- * Repräsentiert genau eine Zelle eines UserFieldTables.<br>
- * Ist die Editor- und die Renderer-Komponente für eine Zelle.
+ * ReprÃ¤sentiert genau eine Zelle eines UserFieldTables.<br>
+ * Ist die Editor- und die Renderer-Komponente fÃ¼r eine Zelle.
  * 
  * @author fstephan
  */
 public interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer {
 
     /**
-     * Zeichen, dass im Editor als Dezimal-Trennzeichnen angezeigt wird. Sorgt dafür, dass <code>Strings</code> korrekt auf <code>Number</code>
-     * geparsed werden können.
+     * Zeichen, dass im Editor als Dezimal-Trennzeichnen angezeigt wird. Sorgt dafÃ¼r, dass <code>Strings</code> korrekt auf <code>Number</code>
+     * geparsed werden kÃ¶nnen.
      */
     char EDITOR_DECIMAL_SEPARATOR = '.';
 
@@ -33,16 +33,16 @@ public interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer 
     /** {@link UserField#EMPTY_STRING} wird im Editor durch <code>""</code> ersetzt */
     String EDITOR_EMPTY_STRING = "";
 
-    /** Renderer stellt Text rechtsbündig dar */
+    /** Renderer stellt Text rechtsbÃ¼ndig dar */
     int HORIZONTAL_ALIGNMENT_RIGHT = SwingConstants.RIGHT;
 
-    /** Editor stellt Text linksbündig dar */
+    /** Editor stellt Text linksbÃ¼ndig dar */
     int HORIZONTAL_ALIGNMENT_LEFT = SwingConstants.LEFT;
 
-    /** Initiale Zellhöhe */
+    /** Initiale ZellhÃ¶he */
     int PREFERRED_CELL_HEIGHT = 20;
 
-    /** Minimale Zellhöhe */
+    /** Minimale ZellhÃ¶he */
     int MIN_CELL_HEIGHT = 15;
 
     /** Initiale Zellbreite */
@@ -54,7 +54,7 @@ public interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer 
     /** Maximale Zellbreite */
     int MAX_CELL_WIDTH = 200;
 
-    /** Initiale Zellgröße */
+    /** Initiale ZellgrÃ¶ÃŸe */
     Dimension PREFERRED_SIZE = new Dimension(PREFERRED_CELL_WIDTH, PREFERRED_CELL_HEIGHT);
 
     /** Hintergrundfarbe nicht selektierter Zellen */
@@ -78,7 +78,7 @@ public interface IUserFieldTableCell extends TableCellEditor, TableCellRenderer 
     /** Gibt die Editor-Komponente dieser Zelle wieder */
     DefaultCellEditor getEditor();
 
-    /** Gibt den angezeigten Wert der Zelle als {@link String} zurück */
+    /** Gibt den angezeigten Wert der Zelle als {@link String} zurÃ¼ck */
     String getCellRendererValue();
 
 }

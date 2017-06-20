@@ -69,7 +69,7 @@ import de.imise.util.swing.dialog.ImageChooser;
 
 public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
 
-    /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
+    /** Zeichen, das in Kommandos zusammengehÃ¶rigen Text umschlieÃŸt, damit er als zusammengehÃ¶rig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
 
     public static final int DATA_CHANGED = 0 << 0;
@@ -161,7 +161,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     private int page_width = INITIAL_PAGE_WIDTH;
 
     /**
-     * Faktor um den das Seitenverhältnis dieses GraphDocumentes von der urspünglichen Größe abweicht
+     * Faktor um den das SeitenverhÃ¤ltnis dieses GraphDocumentes von der urspÃ¼nglichen GrÃ¶ÃŸe abweicht
      */
     private double pageSizeFactor = 1.0;
 
@@ -233,7 +233,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Setzt den pageSizeFactor auf den übergebenen Wert ohne es UndoRedo-mäßig zu loggen.
+     * Setzt den pageSizeFactor auf den Ã¼bergebenen Wert ohne es UndoRedo-mÃ¤ÃŸig zu loggen.
      *
      * @param newPageSizeFactor
      */
@@ -249,7 +249,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public void setPageSizeFactor(final double oldPageSizeFactor, final double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
         page_height = new Double(INITIAL_PAGE_HEIGHT * newPageSizeFactor).intValue();
         page_width = new Double(INITIAL_PAGE_WIDTH * newPageSizeFactor).intValue();
-        //wenn der Wert sich geändert hat, dann die UNDO/REDO-Kommandos hinzufügen
+        //wenn der Wert sich geÃ¤ndert hat, dann die UNDO/REDO-Kommandos hinzufÃ¼gen
         if (logUndoRedo) {
             start_transaction(pid);
             addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_SIZE_FACTOR + " " + hashString, oldPageSizeFactor, pid);
@@ -281,13 +281,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /////////////////////
 
     /**
-     * Zähler für die Transaction-IDs
+     * ZÃ¤hler fÃ¼r die Transaction-IDs
      */
     private static int transactionId = 1000;
 
     /**
      * Liefert eine eindeutige Nummer, die als Transaktionsnummer genutzt werden kann.<br>
-     * Bei jedem Aufruf wird die Nummer einfach um 1 erhöht.
+     * Bei jedem Aufruf wird die Nummer einfach um 1 erhÃ¶ht.
      *
      * @return
      *         eindeutige Nummer
@@ -297,7 +297,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Wiederholt die zuletzt zurückgenommene Transaktion
+     * Wiederholt die zuletzt zurÃ¼ckgenommene Transaktion
      */
     public final void redo() {
         redo(TransactionManager.UNSPECIFIC_PID);
@@ -321,9 +321,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         transStackTable.put(pidInteger, transStackInteger);
 
         //wenn Teilelemente mit verschoben wurden, so wurde dieses Verschieben auch mit geloggt
-        //-> beim Wiederholen der Verschiebungen dürfen die Unterelemente nicht durch das
-        //Setzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur, wenn sie
-        //beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
+        //-> beim Wiederholen der Verschiebungen dÃ¼rfen die Unterelemente nicht durch das
+        //Setzen der GrÃ¶ÃŸe und Position der Oberelemente mit verschoben werden, sondern nur, wenn sie
+        //beim ursprÃ¼nglichen Kommando mitverschoben wurden, was geloogt wurde
         boolean isMoveSubElements = UserProperties.isMoveSubelements();
         UserProperties.setMoveSubelements(false);
         getCollection().getTman().redo(pid);
@@ -339,14 +339,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Macht die letzte Transaktion rückgängig
+     * Macht die letzte Transaktion rÃ¼ckgÃ¤ngig
      */
     public final void undo() {
         undo(TransactionManager.UNSPECIFIC_PID);
     }
 
     /**
-     * Macht die Transaktion mit der angegebenen ID rückgängig
+     * Macht die Transaktion mit der angegebenen ID rÃ¼ckgÃ¤ngig
      *
      * @param pid
      */
@@ -363,9 +363,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         transStackTable.put(pidInteger, transStackInteger);
 
         //wenn Teilelemente mit verschoben wurden, so wurde dieses Verschieben auch mit geloggt
-        //-> beim Rückgängigmachen der Verschiebungen dürfen die Unterelemente nicht durch das
-        //Zürücksetzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur,
-        //wenn sie beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
+        //-> beim RÃ¼ckgÃ¤ngigmachen der Verschiebungen dÃ¼rfen die Unterelemente nicht durch das
+        //ZÃ¼rÃ¼cksetzen der GrÃ¶ÃŸe und Position der Oberelemente mit verschoben werden, sondern nur,
+        //wenn sie beim ursprÃ¼nglichen Kommando mitverschoben wurden, was geloogt wurde
         boolean isMoveSubElements = UserProperties.isMoveSubelements();
         UserProperties.setMoveSubelements(false);
 
@@ -403,7 +403,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Wenn bereits bei der selben Transaktion ein Redo-Kommando gespeichert ist, das den
-     * gleichen Prefix besitzt, dann wird das vorhandene Kommando durch das übergebene ersetzt.
+     * gleichen Prefix besitzt, dann wird das vorhandene Kommando durch das Ã¼bergebene ersetzt.
      *
      * @param commandPrefix
      * @param commandArguments
@@ -416,7 +416,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Das übergebene Undo-Kommanmdo wird nur geloggt, wenn nicht bereits ein Undo-Komamndo
+     * Das Ã¼bergebene Undo-Kommanmdo wird nur geloggt, wenn nicht bereits ein Undo-Komamndo
      * mit dem gleichen Prefix in derselben Tansaktion geloggt wurde. Hiermit kann man das
      * Logging von Zwischenschritten unterbinden (z.B. beim Draggen von Elementen in der Grafik)
      *
@@ -521,7 +521,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
 
-            //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden
+            //	Testausgabe aller Elemente im Modell (kann fÃ¼r PrÃ¼fzwecke wieder aktiviert werden
             //			for (Class<? extends ModelElement> meClass : ModelConstants.ALL_NODES){
             //				GraphDocument doc = gdcoll.getGraphDocument();
             //				ArrayList<ModelElement> al = doc.getModelItems(meClass, false);
@@ -544,7 +544,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Führt das angegebene
+     * FÃ¼hrt das angegebene
      *
      * @param command
      * @param pid
@@ -554,22 +554,22 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Methode zur Steuerung des Löschens von Elementen (nur aus Teilmodell,oder aus allen Modellen).<br>
-     * Gegebenfalls werden Dialoge angezeigt, die den Nutzer beim Löschen unterstützen.
+     * Methode zur Steuerung des LÃ¶schens von Elementen (nur aus Teilmodell,oder aus allen Modellen).<br>
+     * Gegebenfalls werden Dialoge angezeigt, die den Nutzer beim LÃ¶schen unterstÃ¼tzen.
      *
      * @param argv
      * @param pid
      */
     private void remove(final String[] argv, final int pid) {
 
-        // Textfeld und Knickpunkt löschen
+        // Textfeld und Knickpunkt lÃ¶schen
         if (isSelectedOnlySubmodelElements()) {
             dispatch_command(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, argv, pid);
         }
-        // Elemente sind nicht aus einem Teilmodell sondern nur aus dem Gesamtmodell löschbar, wenn
+        // Elemente sind nicht aus einem Teilmodell sondern nur aus dem Gesamtmodell lÃ¶schbar, wenn
         // - aktuelles Modell = Hauptdokument
-        // - alle selektierten Elemente sind unique (= ohne grafische Repräsentation sind sie immer in allen Teilmodellen)
-        // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
+        // - alle selektierten Elemente sind unique (= ohne grafische ReprÃ¤sentation sind sie immer in allen Teilmodellen)
+        // - das Element ist ein untergeordnetes Element, aber sein Ã¼bergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
             if ((Boolean) ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING.getValue(Action.SELECTED_KEY)) {
                 JCheckBox cb = new JCheckBox(Tool3lgmConstants.getResString("dont_ask_again"));
@@ -635,7 +635,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 description = argv[2];
                 hashcode = argv[3];
             } catch (Exception e) {
-                //Die Argumente 1-3 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlägt
+                //Die Argumente 1-3 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlÃ¤gt
             }
             createKnotenWithContainer(ModelConstants.getClassForName(classname), name, description, hashcode, pid);
             break;
@@ -1164,7 +1164,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case CREATE_SZENARIO:
 
-            //				in Teilmodell übernehmen dann rückgangig dann redo -> Fehler
+            //				in Teilmodell Ã¼bernehmen dann rÃ¼ckgangig dann redo -> Fehler
 
             Szenario szen = gdcoll.createSzenario(argv[0], false, getDecodedParseSaveString(argv[1]), argv[2], pid);
             if (szen == null) {
@@ -1172,7 +1172,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 return;
             }
             Static.getTool().createSzenarioFrame(szen);
-            //Selection clonen, weil sie sich während der Ausführung ändert!
+            //Selection clonen, weil sie sich wÃ¤hrend der AusfÃ¼hrung Ã¤ndert!
             addElementsToSzenario(szen.getHashString(), new ArrayList<ElementContainer>(selectedContainer), pid);
             break;
 
@@ -1197,17 +1197,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (argc != 1) {
                 return;
             }
-            //Selection clonen, weil sie sich während der Ausführung ändert!
+            //Selection clonen, weil sie sich wÃ¤hrend der AusfÃ¼hrung Ã¤ndert!
             addElementsToSzenario(argv[0], getSelectionInGraphOrder(), pid);
             break;
 
         case ADD_SELECTED_TO_NEW_SZENARIO:
-            //Selection clonen, weil sie sich während der Ausführung ändert!
+            //Selection clonen, weil sie sich wÃ¤hrend der AusfÃ¼hrung Ã¤ndert!
             addContainerToNewSzenario(getSelectionInGraphOrder(), pid);
             break;
 
         case ADD_SELECTED_TO_ALL_SZENARIOS:
-            //Selection clonen, weil sie sich während der Ausführung ändert!
+            //Selection clonen, weil sie sich wÃ¤hrend der AusfÃ¼hrung Ã¤ndert!
             addContainerToAllSzenarios(getSelectionInGraphOrder(), pid);
             break;
 
@@ -1275,18 +1275,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
     }
 
-    //	/** Puffer für Kommandoargumente. Mehr als 100 Argumente sind absolut unwahrscheinlich * /
+    //	/** Puffer fÃ¼r Kommandoargumente. Mehr als 100 Argumente sind absolut unwahrscheinlich * /
     //	private static final ArrayList<String> commandBuffer = new ArrayList<String>();
     //
     //	/**
     //	 * AXS dachte mal, dass die Lange Zeit beim Undo ganz vieler Aktionen vielleicht mit dem aufwendigen Parsen der
-    //	 * Undo-Kommandos zusammenhängt. Dabei ist diese Funktion entstanden, die dasselbe macht wie die darunter, aber
+    //	 * Undo-Kommandos zusammenhÃ¤ngt. Dabei ist diese Funktion entstanden, die dasselbe macht wie die darunter, aber
     //	 * auf ganz andere Weise.
     //	 *
     //	 * @param line
-    //	 * 		Eine gültiges Kommando in <code>line</code> besteht immer aus einem GDCommand an Position 0 und dann duch Leerzeichen
-    //	 * 		getrennte Argumente. Die Argumente können auch Leerzeichen enthalten. Solche Argumente sollten durch
-    //	 * 		{@link GraphDocument#GDCOMMAND_TEXT_SURROUNDER} umschlossen sein, damit sie als zusammenghörig erkannt werden.
+    //	 * 		Eine gÃ¼ltiges Kommando in <code>line</code> besteht immer aus einem GDCommand an Position 0 und dann duch Leerzeichen
+    //	 * 		getrennte Argumente. Die Argumente kÃ¶nnen auch Leerzeichen enthalten. Solche Argumente sollten durch
+    //	 * 		{@link GraphDocument#GDCOMMAND_TEXT_SURROUNDER} umschlossen sein, damit sie als zusammenghÃ¶rig erkannt werden.
     //	 * @param pid
     //	 * /
     //	private void exec_command(String line, int pid) {
@@ -1301,7 +1301,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //			int l = line.length();
     //			String commandString = null;
     //			int i1 = 0;
-    //			//Alle Leerzeichen am Anfang überspringen
+    //			//Alle Leerzeichen am Anfang Ã¼berspringen
     //			while (i1 < l && line.charAt(i1) <= 32)
     //				i1++;
     //			//es stand nichts in der line -> raus
@@ -1310,7 +1310,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //				return;
     //			}
     //			int i2 = i1 + 1;
-    //			//Bis zum Lineend oder dem nächsten char <= 32 suchen -> zwischen i1 und i2 steht das Kommando
+    //			//Bis zum Lineend oder dem nÃ¤chsten char <= 32 suchen -> zwischen i1 und i2 steht das Kommando
     //			while (i2 < l && line.charAt(i2) > 32)
     //				i2++;
     //			commandString = line.substring(i1, i2);
@@ -1324,7 +1324,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //			i1 = i2;
     //			while(i1 < l) {
     //				char c = ' ';
-    //				//Alle Leerzeichen vor einem Argument überspringen
+    //				//Alle Leerzeichen vor einem Argument Ã¼berspringen
     //				while (i1 < l && (c = line.charAt(i1)) <= 32)
     //					i1++;
     //				//es stand nichts mehr in der line
@@ -1334,18 +1334,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //				if (c == GDCOMMAND_TEXT_SURROUNDER) {
     //					i1++;
     //					i2 = i1;
-    //					//nächstes Hochkomma = Argumentende suchen
+    //					//nÃ¤chstes Hochkomma = Argumentende suchen
     //					while (i2 < l && line.charAt(i2) != GDCOMMAND_TEXT_SURROUNDER)
     //						i2++;
-    //					//kein schließendes Hochkomma gefunden -> Fehler
+    //					//kein schlieÃŸendes Hochkomma gefunden -> Fehler
     //					if (i2 == l) {
     //						System.err.println("GraphDocument.exec_command(String line, int pid): wrong line argument: " + line);
     //						return;
     //					}
-    //				//keine Hochkommata um das Argument -> LineEnd oder nächstes char <= 32 suchen
+    //				//keine Hochkommata um das Argument -> LineEnd oder nÃ¤chstes char <= 32 suchen
     //				} else {
     //					i2 = i1;
-    //					//LineEnd oder nächstes Leerzeichen suchen
+    //					//LineEnd oder nÃ¤chstes Leerzeichen suchen
     //					while (++i2 < l && line.charAt(i2) > 32);
     //				}
     //				commandBuffer.add(line.substring(i1, i2));
@@ -1386,9 +1386,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             }
 
-            //je nach globaler Option können die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
+            //je nach globaler Option kÃ¶nnen die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
             //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
-            //muss man testen, ob sich das Kommando auf int casten lässt.
+            //muss man testen, ob sich das Kommando auf int casten lÃ¤sst.
             GDCommands command = null;
             //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
             if (Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
@@ -1872,7 +1872,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Ändert die Farbe aller selektierten Elemente. Die Farbe wird mit einem
+     * Ã„ndert die Farbe aller selektierten Elemente. Die Farbe wird mit einem
      * JColorChooser erfragt.
      *
      * @param pid
@@ -2298,7 +2298,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Verschiebt alle {@link NodeContainer} und {@link BendpointContainer} in der Selektion. Je nach
-     * gewählter Option {@link UserProperties#isMoveSubelements()} werden untergordnete Elemente, die nicht
+     * gewÃ¤hlter Option {@link UserProperties#isMoveSubelements()} werden untergordnete Elemente, die nicht
      * selektiert sind, ebenfalls verschoben. {@link ModelConstants#NO_LAYER}
      *
      * @param deltax
@@ -2306,8 +2306,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param deltay
      *            Anzahl der Pixel, um die in Y-Richtung verschoben werden soll
      * @param layer
-     *            Layer, dessen Selektierte Elemente übergeben werden sollen<br>
-     *            Mögliche Werte:<br>
+     *            Layer, dessen Selektierte Elemente Ã¼bergeben werden sollen<br>
+     *            MÃ¶gliche Werte:<br>
      *            <ul>
      *            <li>{@link ModelConstants#NO_LAYER}, wenn Elemente aller Layer verschoben werden sollen</li>
      *            <li>{@link ModelConstants#DOMAIN_LAYER}, wenn Elemente der FE verschoben werden sollen</li>
@@ -2365,7 +2365,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Liefert <code>true</code>, wenn selektierte Knoten aneinander ausgerichtet
-     * werden können.
+     * werden kÃ¶nnen.
      *
      * @return
      */
@@ -2438,12 +2438,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * der Selektion waren.
      *
      * @param addAllParts
-     *            Wenn <code>true</code> werden alle über {@link PartOfBeziehung}en verbunden Elemente
+     *            Wenn <code>true</code> werden alle Ã¼ber {@link PartOfBeziehung}en verbunden Elemente
      *            in die Selektion mit aufgenommen.
      * @param addAllSlaves
-     *            Wenn <code>true</code> werden alle über {@link Composition}s verbunden Elemente
+     *            Wenn <code>true</code> werden alle Ã¼ber {@link Composition}s verbunden Elemente
      *            in die Selektion mit aufgenommen.
-     * @return <code>null</code>, wenn keine Erweiterung der bestehenden Selektion nötig war, sonst
+     * @return <code>null</code>, wenn keine Erweiterung der bestehenden Selektion nÃ¶tig war, sonst
      *         die alte Selektion
      */
     private ArrayList<ElementContainer> expandSelection(final boolean addAllParts, final boolean addAllSlaves) {
@@ -2455,7 +2455,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     if (!isSelected(partNc)) {
                         container2Select.add(partNc);
                     }
-                    //Slaves des Parts auch alle zur Selektion hinzufügen
+                    //Slaves des Parts auch alle zur Selektion hinzufÃ¼gen
                     if (addAllSlaves) {
                         for (ElementContainer slaveNc : partNc.getElement().getDirectCompositionSlaveContainer(this)) {
                             if (!isSelected(slaveNc)) {
@@ -2486,9 +2486,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Setzt die übergebene Collection als Selektion. Ist diese Collection eine
+     * Setzt die Ã¼bergebene Collection als Selektion. Ist diese Collection eine
      * Liste, wird das letzte Element in der Liste als lastSelected gesetzt, sonst
-     * ist es zufällig eines der selektierten.
+     * ist es zufÃ¤llig eines der selektierten.
      *
      * @param selection
      */
@@ -2501,7 +2501,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     // --- Methoden auf Knoten --- Ende ---
 
     /**
-     * für vergröbern und verfeinern
+     * fÃ¼r vergrÃ¶bern und verfeinern
      */
     public final void aufklappen(final int pid) {
         start_transaction(pid);
@@ -2513,19 +2513,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Das rekursive Auf- und Zuklappen merkt sich über diese Liste, welche Elemente bereits in einem
+     * Das rekursive Auf- und Zuklappen merkt sich Ã¼ber diese Liste, welche Elemente bereits in einem
      * Durchgang angefasst wurden.
      */
     private static ArrayList<ElementContainer> tmpExpandedElements = new ArrayList<ElementContainer>(20);
 
     /**
-     * Das rekursive Auf- und Zuklappen merkt sich über diesen Wert, wie oft die Rekursion in einem
-     * Durchlauf bereits ausgeführt wurde.
+     * Das rekursive Auf- und Zuklappen merkt sich Ã¼ber diesen Wert, wie oft die Rekursion in einem
+     * Durchlauf bereits ausgefÃ¼hrt wurde.
      */
     private static int tmpExpansionLevel = 0;
 
     /**
-     * für vergröbern und verfeinern
+     * fÃ¼r vergrÃ¶bern und verfeinern
      *
      * @param elementHash
      * @param pid
@@ -2574,7 +2574,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * für vergröbern und verfeinern
+     * fÃ¼r vergrÃ¶bern und verfeinern
      *
      * @param pid
      */
@@ -2588,7 +2588,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * für vergröbern und verfeinern
+     * fÃ¼r vergrÃ¶bern und verfeinern
      *
      * @param gdcoll
      * @param szenHash
@@ -2646,7 +2646,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * für vergröbern und verfeinern
+     * fÃ¼r vergrÃ¶bern und verfeinern
      *
      * @param pid
      */
@@ -2705,7 +2705,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
-     * können, kann man hiermit ein allgemeines Ereignis feuern.
+     * kÃ¶nnen, kann man hiermit ein allgemeines Ereignis feuern.
      *
      * @param bitmask
      */
@@ -2715,7 +2715,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
-     * können, kann man hiermit ein allgemeines Ereignis feuern.
+     * kÃ¶nnen, kann man hiermit ein allgemeines Ereignis feuern.
      *
      * @param bitmask
      * @param pid
@@ -3174,7 +3174,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * @param elementClass
-     *            Typ der Elemente, für das eine nuer Name generiert werden soll. Der neue Namen ist
+     *            Typ der Elemente, fÃ¼r das eine nuer Name generiert werden soll. Der neue Namen ist
      *            in diesem GraphDocument eindeutig und besteht aus dem anzeigbaren Elementnamen, einem Leerzeichen
      *            und einer Zahl. Die Zahl ist die kleinste freie Nummer ab 1.
      */
@@ -3189,8 +3189,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * @param elementClass
-     *            ModelElement-Klasse für das der nächste nummerierte Standardname zurückgegeben werden soll
-     * @return nächste nummerierte Standardname für diese Elementart
+     *            ModelElement-Klasse fÃ¼r das der nÃ¤chste nummerierte Standardname zurÃ¼ckgegeben werden soll
+     * @return nÃ¤chste nummerierte Standardname fÃ¼r diese Elementart
      */
     protected String getNextNewName(final Class<? extends ModelElement> elementClass) {
         return getNextNewName("", elementClass);
@@ -3494,11 +3494,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     ////////////////////////////////////////////
-    // abhängige bzw. untergeordnete Elemente //
+    // abhÃ¤ngige bzw. untergeordnete Elemente //
     ////////////////////////////////////////////
 
     /**
-     * Legt ein untergerodnetes Element an und fügt es in jedes Szenario ein, in dem sein übergeordnetes
+     * Legt ein untergerodnetes Element an und fÃ¼gt es in jedes Szenario ein, in dem sein Ã¼bergeordnetes
      * Element vorkommt.
      *
      * @param doc
@@ -3868,8 +3868,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Tauscht die Kanten des Elementes mit dem übergebenen HashString an den beiden
-     * übergebenen Indizes. Diese Funktion spielt nur bei Elementen eine Rolle, bei
+     * Tauscht die Kanten des Elementes mit dem Ã¼bergebenen HashString an den beiden
+     * Ã¼bergebenen Indizes. Diese Funktion spielt nur bei Elementen eine Rolle, bei
      * denen die Reihenfolge der Kanten eine Bedeutung hat. Z.B. Prozesse in Bezug auf
      * Aufgaben = Reihenfolge, in der die Aufgaben in dem Prozess ablaufen.
      *
@@ -3893,8 +3893,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Tauscht die Kanten des übergebenen Elementes an den beiden
-     * übergebenen Positionen. Diese Funktion spielt nur bei Elementen eine Rolle, bei
+     * Tauscht die Kanten des Ã¼bergebenen Elementes an den beiden
+     * Ã¼bergebenen Positionen. Diese Funktion spielt nur bei Elementen eine Rolle, bei
      * denen die Reihenfolge der Kanten eine Bedeutung hat. Z.B. Prozesse in Bezug auf
      * Aufgaben = Reihenfolge, in der die Aufgaben in dem Prozess ablaufen.
      *
@@ -4239,10 +4239,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid);
-        //falls in derselben Transaction der Name mehrfach geändert wird, soll das nur 1 Mal geloggt werden
+        //falls in derselben Transaction der Name mehrfach geÃ¤ndert wird, soll das nur 1 Mal geloggt werden
         addRedoCommandOrReplace(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(newName), pid);
         addUndoCommandIfNotExist(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(me.getName()), pid);
-        //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
+        //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit BestÃ¤tigungsdialog
         //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
         //		ArrayList<ModelElement> connected = me.getConnectedElements(ModelElement.class);
         //		for (ModelElement connMe : connected) {
@@ -4254,7 +4254,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //		}
 
         me.setName(getDecodedParseSaveString(newName));
-        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selsbt wichtig wäre
+        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selsbt wichtig wÃ¤re
         ElementContainer ec = me.getContainer(this);
         finish_transaction(pid);
         distributeEvent(ELEMENT_NAME_CHANGED, ec, null, pid);
@@ -4296,8 +4296,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Setzt den Wert von <code>uf</code> für <code>me</code> auf <code>newValue</code>.
-     * Fügt UNDO- und REDO-Commands hinzu
+     * Setzt den Wert von <code>uf</code> fÃ¼r <code>me</code> auf <code>newValue</code>.
+     * FÃ¼gt UNDO- und REDO-Commands hinzu
      *
      * @param me
      * @param userField
@@ -4314,20 +4314,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Setzt für ein ModelElement für ein UserFieldReplacmentWeigth
-     * Fügt UNDO- und REDO-Commands hinzu
-     * Fall 1: Ersetzung für Gleichverteilung:
+     * Setzt fÃ¼r ein ModelElement fÃ¼r ein UserFieldReplacmentWeigth
+     * FÃ¼gt UNDO- und REDO-Commands hinzu
+     * Fall 1: Ersetzung fÃ¼r Gleichverteilung:
      * a.) durch ein anderes Kantengewicht ersetzen -> edgeClass, userFieldReplacementHash
-     * b.) löschen -> edgeClass, "" oder emptyArgumentString
-     * Fall 2: Ersetzung für Kantengewicht:
+     * b.) lÃ¶schen -> edgeClass, "" oder emptyArgumentString
+     * Fall 2: Ersetzung fÃ¼r Kantengewicht:
      * a.) durch Gleichverteilung ersetzen -> userFieldHashToReplace, "" oder emptyArgumentString
      * b.) durch ein anderes Kantengewicht ersetzen -> userFieldHashToReplace, userFieldReplacementHash
-     * c.) löschen -> userFieldHashToReplace, userFieldHashToReplace
+     * c.) lÃ¶schen -> userFieldHashToReplace, userFieldHashToReplace
      *
      * @param modelElementHash
      * @param userFieldHashToReplaceOrSimpleEdgeClassName
-     *            Das hier ist entweder der Hash eines UserFields oder der SimpleClassName einer Kantenklasse. Wird ein Klassenname übergeben, dann
-     *            wird beim Replacer der Ersetzungshash für die Gleichverteilung der Kante eingetragen, ansonsten wird der Erstzungshash für das
+     *            Das hier ist entweder der Hash eines UserFields oder der SimpleClassName einer Kantenklasse. Wird ein Klassenname Ã¼bergeben, dann
+     *            wird beim Replacer der Ersetzungshash fÃ¼r die Gleichverteilung der Kante eingetragen, ansonsten wird der Erstzungshash fÃ¼r das
      *            UserField mit dem angegebenen Hash eingetragen.
      * @param userFieldHashReplacement
      * @param pid
@@ -4336,10 +4336,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         String emptyArgument = "null";
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         WeightReplacer replacer = definitions.getWeightReplacer();
-        //wurde eine Kantenklasse übergeben?
+        //wurde eine Kantenklasse Ã¼bergeben?
         Class<? extends ModelElement> edgeElementClass = ModelConstants.getClassForName(userFieldHashToReplaceOrSimpleEdgeClassName);
-        //falls ein null oder Leerwert als Ersetzung übergeben wurde, muss der hier in EMPTY_STRING ersetzt werden, damit die
-        //Kommandos mit der richtigen Parameteranzahl geparst werden könnnen
+        //falls ein null oder Leerwert als Ersetzung Ã¼bergeben wurde, muss der hier in EMPTY_STRING ersetzt werden, damit die
+        //Kommandos mit der richtigen Parameteranzahl geparst werden kÃ¶nnnen
         String hashReplacement = Strings.isNullOrEmpty(userFieldHashReplacement) ? emptyArgument : userFieldHashReplacement;
         String oldUserFieldHashReplacement;
         //je nachdem ob die Kantenklasse gefuden wurde oder nicht, wird aus dem Replacer der alte Erstzungshas geladen
@@ -4624,7 +4624,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * 2 Elemente vereinen,
      *
      * @param hashString1
-     *            das abschliessend zu löschende Element
+     *            das abschliessend zu lÃ¶schende Element
      * @param hashString2
      *            gibt das verbleibende Element an
      * @param pid
@@ -4873,7 +4873,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     gdcoll.link(KommbezEtntVerbindung.class, kc.getElement(), kz, TransactionManager.STANDARD_PID);
                 }
             }
-            //zurück
+            //zurÃ¼ck
             empf = bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.FORWARD);
             for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.BACKWARD)) {
                 if (empf.contains(kc)) {
@@ -4900,8 +4900,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     ////////////////////////////
 
     /**
-     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement zuweisungskompatibel
-     * zur übergebenen Klasse ist.<br>
+     * Gibt alle ElementContainer zurÃ¼ck, deren gekapseltes Modellelement zuweisungskompatibel
+     * zur Ã¼bergebenen Klasse ist.<br>
      *
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
      * @return Liste mit ElementContainer oder <code>null</code>
@@ -4911,12 +4911,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
-     * der übergebenen Klasse ist.<br>
+     * Gibt alle ElementContainer zurÃ¼ck, deren gekapseltes Modellelement von
+     * der Ã¼bergebenen Klasse ist.<br>
      * Unterklassen werden nicht beachtet.
      *
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
-     * @param subClassElements wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+     * @param subClassElements wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurÃ¼ck gegeben
      * @return Liste mit ElementContainer oder <code>null</code>
      */
     public final ArrayList<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean subClassElements) {
@@ -4925,11 +4925,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /**
      * Gibt alle eine nach der <code>toString()</code>-Methode der ElementContainer
-     * sortierte Liste von ElementContainern zurück, deren gekapseltes Modellelement
-     * von der übergebenen Klasse ist.<br>
+     * sortierte Liste von ElementContainern zurÃ¼ck, deren gekapseltes Modellelement
+     * von der Ã¼bergebenen Klasse ist.<br>
      *
      * @param clazz
-     * @param includeSubClasseswenn <code>true</code> wird ist die Rückgabeliste alphabetisch
+     * @param includeSubClasseswenn <code>true</code> wird ist die RÃ¼ckgabeliste alphabetisch
      *            sortiert (das betrifft nur die KnotenContainer, aber nicht die KantenContainer)
      * @param alphabetical
      * @return
@@ -4955,7 +4955,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (int i = i1; i < i2; i++) {
             //Ebene holen
             LayerContainer lc = document.getLayer(i);
-            //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
+            //Liste mit allen Containerlisten der Ebene, die durchsucht werden mÃ¼ssen
             ArrayList<ArrayList<? extends ElementContainer>> layerElements = new ArrayList<ArrayList<? extends ElementContainer>>();
             //Knickpunkte
             if (clazz == Knickpunkt.class) {
@@ -4973,20 +4973,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (!includeSubClasses) {
                     return objects;
                 }
-                //alle Elemente sind Unterklassen von ModelElement -> alle Containerlisten können zur Rückgabeliste hinzugefügt werden
+                //alle Elemente sind Unterklassen von ModelElement -> alle Containerlisten kÃ¶nnen zur RÃ¼ckgabeliste hinzugefÃ¼gt werden
                 objects.addAll(lc.getKnickpunkte());
                 objects.addAll(alphabetical ? lc.getKnotenAlphabetical() : lc.getKnoten());
                 objects.addAll(lc.getKanten());
                 //wenn eine Unterklasse von ModelElement gesucht werden soll
             } else {
-                //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
+                //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefÃ¼gt
                 for (ArrayList<? extends ElementContainer> ecList : layerElements) {
-                    //für jede dieser ElementContainerlisten
+                    //fÃ¼r jede dieser ElementContainerlisten
                     for (ElementContainer ec : ecList) {
                         //wenn das ModelElement des Conatainers der gesuchten Klasse entspricht
                         Class<?> elementClass = ec.getElement().getClass();
                         if (includeSubClasses ? clazz.isAssignableFrom(elementClass) : clazz == elementClass) {
-                            //zur Rückgabeliste hinzufügen
+                            //zur RÃ¼ckgabeliste hinzufÃ¼gen
                             objects.add(ec);
                         }
                     }
@@ -4995,7 +4995,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
-        //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
+        //Knotenliste enthaltenen zur RÃ¼ckgabeliste hinzugefÃ¼gt wurden
         if (alphabetical && (clazz == Knickpunkt.class || !ModelConstants.isNodeType(clazz))) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
@@ -5008,8 +5008,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
-     * Es werden nur Instanzen genau dieser Klasse zurück gegeben.
+     * Gibt alle Modellelemente (Knoten oder Kanten) zurÃ¼ck.<br/>
+     * Es werden nur Instanzen genau dieser Klasse zurÃ¼ck gegeben.
      *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @return ArrayList mit allen gefundenen Elementen
@@ -5019,11 +5019,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Knoten oder Kanten) zurÃ¼ck.<br/>
      *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @param includeSubClasses boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt auch
-     *            RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
+     *            RechAnwendungsbausteine und KonAnwendungsbausteine zurÃ¼ck usw.
      * @return ArrayList mit allen gefundenen Elementen
      */
     public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
@@ -5031,14 +5031,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Knoten oder Kanten) zurÃ¼ck.<br/>
      *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
-     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
+     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurÃ¼ck usw.
      * @param alphabetical
-     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
+     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurÃ¼ckgegeben
      * @return ArrayList mit allen gefundenen Elementen
      */
     public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
@@ -5046,18 +5046,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Knoten oder Kanten) zurÃ¼ck.<br/>
      *
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
-     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
+     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurÃ¼ck usw.
      * @param absolutePartsOnly
-     *            wenn <code>true</code> werden keine Elemente zurückgegeben, denen über eine Part-Of-Beziehung
-     *            Teilelemente zugewiesen sind. Die Teil-Von-Eigenschaft wird nicht für dieses Teilmodell sondern
-     *            für das Gesamtmodell geprüft.
+     *            wenn <code>true</code> werden keine Elemente zurÃ¼ckgegeben, denen Ã¼ber eine Part-Of-Beziehung
+     *            Teilelemente zugewiesen sind. Die Teil-Von-Eigenschaft wird nicht fÃ¼r dieses Teilmodell sondern
+     *            fÃ¼r das Gesamtmodell geprÃ¼ft.
      * @param alphabetical
-     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
+     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurÃ¼ckgegeben
      * @return ArrayList mit allen gefundenen Elementen
      */
     public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
@@ -5066,7 +5066,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return new ArrayList<ModelElement>(0);
         }
 
-        //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
+        //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein kÃ¶nnen -> im doc und im mainDoc suchen
         if (!includeSubClasses || clazz == Knickpunkt.class) {
             ArrayList<Class<? extends ModelElement>> searchClasses = new ArrayList<Class<? extends ModelElement>>();
             searchClasses.add(clazz);
@@ -5110,7 +5110,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert alle Elemente aller übergebenen Klasse, die im übergebenen Graphdocument vorkommen. Diese Funktion sucht immer nur im genau übergebenen
+     * Liefert alle Elemente aller Ã¼bergebenen Klasse, die im Ã¼bergebenen Graphdocument vorkommen. Diese Funktion sucht immer nur im genau Ã¼bergebenen
      * GraphDocument
      *
      * @param doc
@@ -5130,7 +5130,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         boolean searchBendpoints = false;
         boolean searchNodes = false;
         boolean searchEdges = false;
-        //Indizes der Ebenen so anpassen, dass möglichst wenig durchsucht werden muss
+        //Indizes der Ebenen so anpassen, dass mÃ¶glichst wenig durchsucht werden muss
         for (Class<? extends ModelElement> searchClass : searchClasses) {
             if (Knickpunkt.class == searchClass) {
                 searchBendpoints = true;
@@ -5163,7 +5163,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (int i = i1; i < i2; i++) {
             //Ebene holen
             LayerContainer lc = doc.getLayer(i);
-            //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
+            //Liste mit allen Containerlisten der Ebene, die durchsucht werden mÃ¼ssen
             ArrayList<ArrayList<? extends ElementContainer>> layerElements = new ArrayList<ArrayList<? extends ElementContainer>>();
             //Knickpunkte
             if (searchBendpoints) {
@@ -5178,18 +5178,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 layerElements.add(lc.getKanten());
             }
 
-            //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
+            //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefÃ¼gt
             for (ArrayList<? extends ElementContainer> ecList : layerElements) {
-                //für jede dieser ElementContainerlisten
+                //fÃ¼r jede dieser ElementContainerlisten
                 for (ElementContainer ec : ecList) {
                     ModelElement me = ec.getElement();
                     //wenn das ModelElement des Conatainers einer gesuchten Klasse entspricht
                     if (searchClasses.contains(me.getClass())) {
-                        //die Teil-Von-Eigenschaft wird nicht für dieses Teilmodell sondern für das Gesamtmodell geprüft
+                        //die Teil-Von-Eigenschaft wird nicht fÃ¼r dieses Teilmodell sondern fÃ¼r das Gesamtmodell geprÃ¼ft
                         if (absolutePartsOnly && me.hasDirectPartContainer(doc.getCollection().getMainGraphDocument())) {
                             continue;
                         }
-                        //zur Rückgabeliste hinzufügen
+                        //zur RÃ¼ckgabeliste hinzufÃ¼gen
                         objects.add(me);
                     }
                 }
@@ -5197,7 +5197,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
-        //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
+        //Knotenliste enthaltenen zur RÃ¼ckgabeliste hinzugefÃ¼gt wurden
         if (alphabetical && (searchBendpoints || searchEdges)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
@@ -5210,7 +5210,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert den Container in diesem GraphDocument für ein übergebenes ModellElement.
+     * Liefert den Container in diesem GraphDocument fÃ¼r ein Ã¼bergebenes ModellElement.
      *
      * @param modelElement
      * @return
@@ -5223,7 +5223,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert den Container in diesem GraphDocument für einen übergebenen anderen Container
+     * Liefert den Container in diesem GraphDocument fÃ¼r einen Ã¼bergebenen anderen Container
      * aus einem beliebigen GraphDocument.
      *
      * @param modelElement
@@ -5237,7 +5237,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert alle Container in diesem GraphDocument für eine Liste von <code>ModellElement</code>s oder
+     * Liefert alle Container in diesem GraphDocument fÃ¼r eine Liste von <code>ModellElement</code>s oder
      * von anderen Containern aus einem beliebigen GraphDocument.
      *
      * @param modelElementOrContainerList
@@ -5389,7 +5389,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
+     * Liefert den Ã¼bergeben String eingerahmt in einfache AnfÃ¼hrungszeichen ('') sowie
      * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
      * benutzt werden sollte.
      *
@@ -5404,11 +5404,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return sb.toString();
         }
         String ss = trim ? s.trim() : s;
-        return GDCOMMAND_TEXT_SURROUNDER + ss.replace("\r", "").replace('\n', '\u001e').replace(GDCOMMAND_TEXT_SURROUNDER, '´').replaceAll("\\\\", "\\\\\\\\") + GDCOMMAND_TEXT_SURROUNDER;
+        return GDCOMMAND_TEXT_SURROUNDER + ss.replace("\r", "").replace('\n', '\u001e').replace(GDCOMMAND_TEXT_SURROUNDER, 'Â´').replaceAll("\\\\", "\\\\\\\\") + GDCOMMAND_TEXT_SURROUNDER;
     }
 
     /**
-     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
+     * Liefert den Ã¼bergeben String eingerahmt in einfache AnfÃ¼hrungszeichen ('') sowie
      * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
      * benutzt werden sollte.
      *
@@ -5420,8 +5420,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert einen übergebenen String, in dem die Transformationen der Zeilenumbrüche durch die Funktion <code>getParseSaveString(String s)</code>
-     * wieder rückgängig gemacht werden.
+     * Liefert einen Ã¼bergebenen String, in dem die Transformationen der ZeilenumbrÃ¼che durch die Funktion <code>getParseSaveString(String s)</code>
+     * wieder rÃ¼ckgÃ¤ngig gemacht werden.
      *
      * @param s
      * @return

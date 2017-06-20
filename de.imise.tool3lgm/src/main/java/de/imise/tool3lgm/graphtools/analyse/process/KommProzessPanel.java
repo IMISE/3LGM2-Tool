@@ -44,7 +44,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
  * @author AXS Dieses Panel ist das KommunikationsprozessPanel im ElementPropertyDialog eines
- *         (Geschäfts-)Prozesses
+ *         (GeschÃ¤fts-)Prozesses
  */
 public class KommProzessPanel extends ElementDialogPanel {
 
@@ -189,7 +189,7 @@ public class KommProzessPanel extends ElementDialogPanel {
     public void update() {
         // System.out.println("update() mit visible==" + isVisible());
         // der boolean muss immer auf false bleiben, da das Panel sonst nicht
-        // neu aufgebaut wird bei Änderungen
+        // neu aufgebaut wird bei Ã„nderungen
         setAlreadyInitialized(false);
         // das Panel braucht nur geupdatet zu werden, wenn es sichtbar ist
         if (isVisible()) { // componentShown(new ComponentEvent(this, -1));
@@ -230,8 +230,8 @@ public class KommProzessPanel extends ElementDialogPanel {
         // Aufgaben des Prozesses in holen (NICHT alphabetisch sortiert)
         List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, doc, null, Doppelkante.ANY, false);
 
-        // Prozess enthält keine Aufgaben und die Zeilenanzahl könnte sich
-        // geändert haben
+        // Prozess enthÃ¤lt keine Aufgaben und die Zeilenanzahl kÃ¶nnte sich
+        // geÃ¤ndert haben
         if (checkRowCount && aufgabenListe.size() == 0) {
             tmodel.setRowCount(0);
             tmodel.fireTableStructureChanged();
@@ -252,7 +252,7 @@ public class KommProzessPanel extends ElementDialogPanel {
             return;
         }
 
-        // für alle ProzessSchritte die Kommunikationsschritte setzen
+        // fÃ¼r alle ProzessSchritte die Kommunikationsschritte setzen
         if (doc.getCollection().getLastModificationTime() != lastDocModificationTime) {
             commFinder = new LGMKommProzessFinder(doc, allSteps);
         }
@@ -300,8 +300,8 @@ public class KommProzessPanel extends ElementDialogPanel {
 
                 ModelElement me = step.getStartAufgabe();
                 // Startaufgabe existiert
-                if (me != null) { // jetzt nur noch vollständige Schritte
-                    // hinzufügen
+                if (me != null) { // jetzt nur noch vollstÃ¤ndige Schritte
+                    // hinzufÃ¼gen
                     table.setValueAt(me, i, START_AUFGABE); // Startaufgabe
                     // Objekttyp (der kann hier nie null sein, da eine Startaufgabe gefunden wurde)
                     table.setValueAt(step.getObjektTyp(), i, OBJEKTTYP);
@@ -315,7 +315,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     } else {
                         table.setValueAt(null, i, START_BAUSTEINE);
                         table.setValueAt(null, i, START_ORGEINHEIT);
-                        table.setValueAt(null, i, MEDIUM_BREAKS);// Medienbrüche
+                        table.setValueAt(null, i, MEDIUM_BREAKS);// MedienbrÃ¼che
                     }
 
                     me = step.getEndAufgabeKonf(); // Endkonfiguration
@@ -366,8 +366,8 @@ public class KommProzessPanel extends ElementDialogPanel {
                 }
             }
             table.setValueAt(null, i, MEDIUM_BREAKS);// Medienbruchspalte
-            // löschen
-            // es ex. keine Startaufgabe -> Felder löschen, die keine Werte
+            // lÃ¶schen
+            // es ex. keine Startaufgabe -> Felder lÃ¶schen, die keine Werte
             // enthalten sollen (das muss sein, falls noch alte Werte darin
             // stehen)
             if (!step.hasStartAufgabe()) {
@@ -392,12 +392,12 @@ public class KommProzessPanel extends ElementDialogPanel {
             } else if (step.getKommProzessLength() == 0) {
                 table.setValueAt(Tool3lgmConstants.getErrString("konfigs_teilw_gleich"), i, BEMERKUNGEN);
             } else {
-                // Bemerkungsspalte löschen
+                // Bemerkungsspalte lÃ¶schen
                 table.setValueAt(null, i, BEMERKUNGEN);
                 table.setValueAt(new Integer(step.getMediumBreaks()), i, MEDIUM_BREAKS);
             }
 
-            // prüfen ob momentane Spaltenbreite größer ist, als der bisher
+            // prÃ¼fen ob momentane Spaltenbreite grÃ¶ÃŸer ist, als der bisher
             // gemerkte Wert
             if (setColumnWidth) {
                 for (int s = 0; s < table.getColumnCount(); s++) {
@@ -432,8 +432,8 @@ public class KommProzessPanel extends ElementDialogPanel {
      */
     public void valueChanged(final ListSelectionEvent e) {
         // System.out.println("KommProzessPanel valueChanged");
-        // wenn sich die Selektion ändert, einfach erst highlight leer machen
-        // und dann das neu selektierte hinzufügen
+        // wenn sich die Selektion Ã¤ndert, einfach erst highlight leer machen
+        // und dann das neu selektierte hinzufÃ¼gen
 
         // doc.deselectAll();
         if (e == null) {

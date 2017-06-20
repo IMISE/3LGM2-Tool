@@ -27,15 +27,15 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldT
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
 
 /**
- * Klasse repräsentiert ein konkretes Layout für einen <code>UserFieldTable</code>.
+ * Klasse reprÃ¤sentiert ein konkretes Layout fÃ¼r einen <code>UserFieldTable</code>.
  * <p>
- * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in einen geeigneten Container einbetten und für diesen das gewählte Layout
+ * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in einen geeigneten Container einbetten und fÃ¼r diesen das gewÃ¤hlte Layout
  * setzen.
  * <p>
- * Über statische Methoden können vorgefertigte <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels für Kennzahlen, Verteilungsgewicht
+ * Ãœber statische Methoden kÃ¶nnen vorgefertigte <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels fÃ¼r Kennzahlen, Verteilungsgewicht
  * oder Modelvariablen zugeschnitten sind.
  * <p>
- * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der RowHeader und alle Spalten lassen sich in ihrer Größe ändern.
+ * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der RowHeader und alle Spalten lassen sich in ihrer GrÃ¶ÃŸe Ã¤ndern.
  * <p>
  * Werte im Table werden in formatierter Form dargestellt.
  * <p>
@@ -78,7 +78,7 @@ public abstract class AbstractUserFieldTableLayout {
     /* ************************************ Start: Deklaration ************************************ */
 
     /**
-     * Gibt wieder, ob der Table Zeilenköpfe enthält
+     * Gibt wieder, ob der Table ZeilenkÃ¶pfe enthÃ¤lt
      */
     protected boolean hasRowHeader = true;
 
@@ -88,7 +88,7 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Erzeugt ein neues Layout.
-     * Falls <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare Zellen grau gefärbt.
+     * Falls <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare Zellen grau gefÃ¤rbt.
      * 
      * @param changeDeactivatedCellColor
      */
@@ -96,7 +96,7 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Erzeugt einen TableHeader, der ToolTips anzeigt und gibt diesen zurück
+     * Erzeugt einen TableHeader, der ToolTips anzeigt und gibt diesen zurÃ¼ck
      * 
      * @param table
      */
@@ -128,7 +128,7 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Setzt für jede Zelle des Tables ein <code>IUserFieldTableCell</code> als Editor und Renderer und legt die Zeilenhöhe fest.
+     * Setzt fÃ¼r jede Zelle des Tables ein <code>IUserFieldTableCell</code> als Editor und Renderer und legt die ZeilenhÃ¶he fest.
      * 
      * @param table
      */
@@ -138,7 +138,7 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * <code>RowHeaderRenderer</code> wird als Renderer für die Zeilenköpfe gesetzt
+     * <code>RowHeaderRenderer</code> wird als Renderer fÃ¼r die ZeilenkÃ¶pfe gesetzt
      * 
      * @param table
      */
@@ -146,7 +146,7 @@ public abstract class AbstractUserFieldTableLayout {
 
         JList rowHeader = new JList(table.getRowIdentifiers());
 
-        // Minimale und initiale Größe des rowHeaders festlegen
+        // Minimale und initiale GrÃ¶ÃŸe des rowHeaders festlegen
         rowHeader.setFixedCellHeight(table.getRowHeight());
         rowHeader.setFixedCellWidth(calculateRowHeaderWidth(rowHeader));
         Dimension minDim = new Dimension(MIN_ROW_HEADER_WIDTH, IUserFieldTableCell.MIN_CELL_HEIGHT);
@@ -185,7 +185,7 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Aktiviert die Änderbarkeit der RowHeader-Breite
+     * Aktiviert die Ã„nderbarkeit der RowHeader-Breite
      * 
      * @param layoutContainer
      */
@@ -198,7 +198,7 @@ public abstract class AbstractUserFieldTableLayout {
 
         RowHeaderResizeListener rl = new RowHeaderResizeListener(layoutContainer);
 
-        // Listener an das ScrollPane, den Table und den RowHeader anfügen
+        // Listener an das ScrollPane, den Table und den RowHeader anfÃ¼gen
         rowHeader.addMouseListener(rl);
         rowHeader.addMouseMotionListener(rl);
         table.addMouseListener(rl);
@@ -236,7 +236,7 @@ public abstract class AbstractUserFieldTableLayout {
     /**
      * Aktualisiert die Zellen, sowie Row- und ColumnHeader des Tables.
      * <p>
-     * Diese Methode ist bei der Initialisierung des <code>table</code>s und nach jedem Neusetzen des dazugehörigen TableModels auszuführen.
+     * Diese Methode ist bei der Initialisierung des <code>table</code>s und nach jedem Neusetzen des dazugehÃ¶rigen TableModels auszufÃ¼hren.
      * <p>
      * Im Falle, dass der <code>table</code> noch nicht in seinen <code>layoutContainer</code> eingebettet wurde, wird dies hier noch erledigt.
      * <p>
@@ -249,7 +249,7 @@ public abstract class AbstractUserFieldTableLayout {
 
         JScrollPane layoutContainer;
 
-        // Prüfen, ob table schon einen LayoutContainer besitzt
+        // PrÃ¼fen, ob table schon einen LayoutContainer besitzt
         if (table.getLayoutContainer() != null) {// table besitzt einen layoutContainer
             layoutContainer = table.getLayoutContainer();
         } else { // table besitzt keinen layoutContainer
@@ -260,12 +260,12 @@ public abstract class AbstractUserFieldTableLayout {
             embed(table, layoutContainer);
         }
 
-        // Falls das Model keine Daten enthält, werden headers und tableCells nicht gesetzt
+        // Falls das Model keine Daten enthÃ¤lt, werden headers und tableCells nicht gesetzt
         if (!table.hasUserFieldTableModel() || !table.hasData()) {
             return;
         }
 
-        // Setzen der Renderer- und Editorkomponenten für die Zellen des Tables
+        // Setzen der Renderer- und Editorkomponenten fÃ¼r die Zellen des Tables
         setTableCells(table);
 
         // Erzeugen und Setzen des ColumnHeaders
@@ -294,10 +294,10 @@ public abstract class AbstractUserFieldTableLayout {
 
     /**
      * Bettet den <code>table</code> in <code>layoutContainer</code> ein.<br>
-     * Um die grafische Darstellung zu aktualisieren, ist möglicherweise noch ein Aufruf von {@link #update(UserFieldTable)} für den
+     * Um die grafische Darstellung zu aktualisieren, ist mÃ¶glicherweise noch ein Aufruf von {@link #update(UserFieldTable)} fÃ¼r den
      * <code>table</code> notwendig.
      * <p>
-     * Falls das Einbetten gelingt, wird <code>true</code> zurückgegeben, sonst <code>false</code>.
+     * Falls das Einbetten gelingt, wird <code>true</code> zurÃ¼ckgegeben, sonst <code>false</code>.
      * 
      * @param table Table, der in den <code>layoutContainer</code> einzubetten ist
      * @param layoutContainer Scrollpane, in das der <code>table</code> eingebettet werden soll
@@ -316,7 +316,7 @@ public abstract class AbstractUserFieldTableLayout {
      * @param table
      */
     public void updateTableCells(final UserFieldTable table) {
-        // Falls das Model keine Daten enthält, werden headers nicht gesetzt
+        // Falls das Model keine Daten enthÃ¤lt, werden headers nicht gesetzt
         if (!table.hasUserFieldTableModel() || !table.hasData()) {
             return;
         }
@@ -327,7 +327,7 @@ public abstract class AbstractUserFieldTableLayout {
     public abstract IUserFieldTableCell[][] getTableCells(final UserFieldTable table);
 
     /**
-     * Deaktiviert die formatierte Darstellung der Werte, das Resizing des RowHeaders, die Tooltips des RowHeaders und die Farbänderung nicht
+     * Deaktiviert die formatierte Darstellung der Werte, das Resizing des RowHeaders, die Tooltips des RowHeaders und die FarbÃ¤nderung nicht
      * editierbarer Zellen
      * 
      * @param table
@@ -348,7 +348,7 @@ public abstract class AbstractUserFieldTableLayout {
     /* ************************************ Start: Unterklassen ************************************ */
 
     /**
-     * Der Renderer für die JList, die als RowHeader angezeigt wird. Sie wird im Großen und Ganzen so dargestellt, wie der ColumnHeader. Außerdem wird
+     * Der Renderer fÃ¼r die JList, die als RowHeader angezeigt wird. Sie wird im GroÃŸen und Ganzen so dargestellt, wie der ColumnHeader. AuÃŸerdem wird
      * der Titel jeder Zeile als ToolTipText angezeigt.
      * 
      * @author AXS
@@ -356,7 +356,7 @@ public abstract class AbstractUserFieldTableLayout {
     private class RowHeaderRenderer extends JLabel implements ListCellRenderer {
 
         /**
-         * ToolTipText für die Reihenköpfe
+         * ToolTipText fÃ¼r die ReihenkÃ¶pfe
          */
         private final String[] toolTips;
 
@@ -395,7 +395,7 @@ public abstract class AbstractUserFieldTableLayout {
     }
 
     /**
-     * Listener, der das Resizing des rowHeaders ermöglicht und überwacht
+     * Listener, der das Resizing des rowHeaders ermÃ¶glicht und Ã¼berwacht
      * 
      * @author fstephan
      */
@@ -403,22 +403,22 @@ public abstract class AbstractUserFieldTableLayout {
 
         /**
          * MousePointer - Verschiebung <br>
-         * Sorgt dafür, dass beim Eintreten eines Resize-Ereignisses der rowHeader das source-Objekt der MouseEvents ist.
+         * Sorgt dafÃ¼r, dass beim Eintreten eines Resize-Ereignisses der rowHeader das source-Objekt der MouseEvents ist.
          */
         private static final int MOUSE_POINT_X_PITCH = 1;
 
         /** der RowHeader des Tables */
         private final JList header;
 
-        /** das ScrollPane, das den Table und den Header enthält */
+        /** das ScrollPane, das den Table und den Header enthÃ¤lt */
         private final JScrollPane pane;
 
-        /** gibt, wieder ob die Größe des RowHeaders gerade geändert wird */
+        /** gibt, wieder ob die GrÃ¶ÃŸe des RowHeaders gerade geÃ¤ndert wird */
         private boolean isResizing = false;
 
         /**
          * der MouseCursor <br>
-         * ändert sich, wenn er sich auf dem Rand zwischen RowHeader und Table befindet
+         * Ã¤ndert sich, wenn er sich auf dem Rand zwischen RowHeader und Table befindet
          */
         private Cursor cursor;
 
@@ -438,7 +438,7 @@ public abstract class AbstractUserFieldTableLayout {
         }
 
         /**
-         * Verändert den Cursor-Typ in Abhängigkeit seiner Position. Ist er über dem Rand zwischen rowHeader und table, wechselt er in die
+         * VerÃ¤ndert den Cursor-Typ in AbhÃ¤ngigkeit seiner Position. Ist er Ã¼ber dem Rand zwischen rowHeader und table, wechselt er in die
          * resize-Dartsellung, sonst wir der Standard-Cursor angezeigt.
          * 
          * @param e
@@ -454,7 +454,7 @@ public abstract class AbstractUserFieldTableLayout {
             int headerX = header.getX() + header.getWidth();
             Rectangle visibleCells = header.getCellBounds(header.getFirstVisibleIndex(), header.getLastVisibleIndex());
 
-            // Cursor über dem Rand von rowHeader und table
+            // Cursor Ã¼ber dem Rand von rowHeader und table
             if ((mouseX == headerX || mouseX + 1 == headerX) && e.getSource() == header && e.getY() <= visibleCells.y + visibleCells.height) {
 
                 canResize = true;
@@ -470,7 +470,7 @@ public abstract class AbstractUserFieldTableLayout {
         }
 
         /**
-         * Führt den resize aus. Unterbindet das Verkleinern, falls die minimale Breite unterschritten wird. Unterbindet das Vergrößern, falls die
+         * FÃ¼hrt den resize aus. Unterbindet das Verkleinern, falls die minimale Breite unterschritten wird. Unterbindet das VergrÃ¶ÃŸern, falls die
          * Breite des rowHeaders fast die Fensterbreite erreicht.
          * 
          * @param e
@@ -487,7 +487,7 @@ public abstract class AbstractUserFieldTableLayout {
             int mouseX = e.getX() + MOUSE_POINT_X_PITCH;
 
             /*
-             * Verhindert, dass der rowHeader seine minimale Größe unterschreiten bzw. die Fenstergröße überschreiten kann
+             * Verhindert, dass der rowHeader seine minimale GrÃ¶ÃŸe unterschreiten bzw. die FenstergrÃ¶ÃŸe Ã¼berschreiten kann
              */
             JViewport p = pane.getViewport();
             if (mouseX <= header.getMinimumSize().width || mouseX >= p.getWidth() + p.getX() - 10) {

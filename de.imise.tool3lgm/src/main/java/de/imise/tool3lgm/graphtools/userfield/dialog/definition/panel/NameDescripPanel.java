@@ -22,7 +22,7 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 public class NameDescripPanel extends AbstractInputPanel {
 
     /**
-     * Das UserField, dessen Eigenschaften mit diesem Panel geändert werden sollen.
+     * Das UserField, dessen Eigenschaften mit diesem Panel geÃ¤ndert werden sollen.
      */
     private final UserField userField;
 
@@ -48,18 +48,18 @@ public class NameDescripPanel extends AbstractInputPanel {
 
         setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("general")));
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(3, 3, 3, 3), 0, 0);
-        //die beiden Labels untereinander in der ersten Spalte einfügen
+        //die beiden Labels untereinander in der ersten Spalte einfÃ¼gen
         add(new JLabel(Tool3lgmConstants.getResString("bez")), gbc);
         gbc.gridy = 1;
         add(new JLabel(Tool3lgmConstants.getResString("description")), gbc);
 
-        //jetzt das Namentextfeld in der zweiten Spalte und ersten Zeile einfügen
+        //jetzt das Namentextfeld in der zweiten Spalte und ersten Zeile einfÃ¼gen
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         add(nameTextField, gbc);
 
-        //das Beschreibungsfeld unter das Namensfeld einfügen
+        //das Beschreibungsfeld unter das Namensfeld einfÃ¼gen
         gbc.gridy = 1;
         gbc.weighty = 1.0;
         add(new JScrollPane(descripArea), gbc);

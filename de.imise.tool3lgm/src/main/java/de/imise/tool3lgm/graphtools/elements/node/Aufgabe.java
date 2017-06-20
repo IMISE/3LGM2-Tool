@@ -72,7 +72,7 @@ public final class Aufgabe extends Knoten {
 
     /**
      * Gibt eine Liste aller ABKonfigurationConatiner zurueck, die mit dieser Aufgabe, bzw. je nach uebergebener Option mit ihren Parents oder Parts
-     * verknüpft sind.
+     * verknÃ¼pft sind.
      *
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
@@ -97,7 +97,7 @@ public final class Aufgabe extends Knoten {
                 allPartsAndParents.add(parent);
             }
         }
-        //für jeden Container von dem geerbt wird
+        //fÃ¼r jeden Container von dem geerbt wird
         for (ElementContainer ppc : partsAndParents) {
             Aufgabe ppAuf = (Aufgabe) ppc.getElement();
             //alle Konfigurationen holen
@@ -109,7 +109,7 @@ public final class Aufgabe extends Knoten {
 
     /**
      * Gibt eine Liste aller ABKonfigurationConatiner zurueck, die mit dieser Aufgabe, bzw. je nach uebergebener Option mit ihren Parents oder Parts
-     * verknüpft sind. Es sind nur die zuerst gefundenen Konfigurationen enthalten, die sich bezueglich ihrer
+     * verknÃ¼pft sind. Es sind nur die zuerst gefundenen Konfigurationen enthalten, die sich bezueglich ihrer
      * Liste der Anwendungsbausteine unterscheiden.
      *
      * @param doc Graphdocument

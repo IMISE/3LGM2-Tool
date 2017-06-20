@@ -3,10 +3,10 @@ package de.imise.tool3lgm.tools;
 import javax.swing.JToolBar;
 
 /**
- * TODO: prüfen, ob diese Klasse weg kann
+ * TODO: prÃ¼fen, ob diese Klasse weg kann
  * 
  * @author Thomas Rudert
- *         Abstrakte Klasse für alle Werkzeugleisten, die nicht floatable sein sollen.
+ *         Abstrakte Klasse fÃ¼r alle Werkzeugleisten, die nicht floatable sein sollen.
  */
 public abstract class UnfloatableToolBar extends JToolBar {
 

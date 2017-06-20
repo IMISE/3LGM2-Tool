@@ -20,8 +20,8 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.Op
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.ReferencePanel;
 
 /**
- * Der Dialog lässt die Benutzer eine Verrechnungsfunktion spezifieren. Nachdem er im Formeleditor eine Verrechungsfunktion ausgewählt hat ( durch
- * Buttonklick) muss er hier angeben, welche Parameter in der Verrechungsfunktion einfließen sollen.)
+ * Der Dialog lÃ¤sst die Benutzer eine Verrechnungsfunktion spezifieren. Nachdem er im Formeleditor eine Verrechungsfunktion ausgewÃ¤hlt hat ( durch
+ * Buttonklick) muss er hier angeben, welche Parameter in der Verrechungsfunktion einflieÃŸen sollen.)
  *
  * @author hboehme
  * @created 07.01.2008
@@ -29,12 +29,12 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.Re
 public class VfDialog extends JDialog implements ActionListener {
 
     /**
-     * Der Rückgabewert als zusammengefattser String
+     * Der RÃ¼ckgabewert als zusammengefattser String
      */
     private String retVal = "";
 
     /**
-     * das aktuelle <code>userField</code>, für welches die VF definiert wird.
+     * das aktuelle <code>userField</code>, fÃ¼r welches die VF definiert wird.
      */
     private final UserField userField;
 
@@ -54,7 +54,7 @@ public class VfDialog extends JDialog implements ActionListener {
     private final String vfOperator;
 
     /**
-     * Instanz des Panels. Beinzhaltet selbst nur den OK.- und Abbrechen button. Kann je nach übergebenem Operatortyp (SUM, TWSUM) den entsprechenden
+     * Instanz des Panels. Beinzhaltet selbst nur den OK.- und Abbrechen button. Kann je nach Ã¼bergebenem Operatortyp (SUM, TWSUM) den entsprechenden
      * komplettierten Dialog anzeigen.
      *
      * @param owner
@@ -115,7 +115,7 @@ public class VfDialog extends JDialog implements ActionListener {
     /**
      * Zeigt der Dialog an.
      *
-     * @return Gibt die Verrechungsfunktion als String-Rückgabewert zurück.
+     * @return Gibt die Verrechungsfunktion als String-RÃ¼ckgabewert zurÃ¼ck.
      */
     public String showDialog() {
         setVisible(true);

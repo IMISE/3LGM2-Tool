@@ -20,7 +20,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListener {
 
     /**
-     * Combobox, in der das aktuelle Teilmodell ausgewählt werden kann
+     * Combobox, in der das aktuelle Teilmodell ausgewÃ¤hlt werden kann
      */
     private final AlphabeticalComboBox submodelBox;
 
@@ -44,7 +44,7 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
     public void addGraphDocument(final GraphDocument doc) {
         submodelBox.addItem(doc);
         //das erste doc ist immer das Gesamtmodell -> erstes Doc in eigene Liste packen (also einen
-        //Separator nach dem ersten einfügen), damit es immer oben steht (egal wie es heißt) und nur
+        //Separator nach dem ersten einfÃ¼gen), damit es immer oben steht (egal wie es heiÃŸt) und nur
         //die Elemente darunter (alle Szenarios) sortiert werden
         if (submodelBox.getItemCount() == 1) {
             submodelBox.addSeparator(false);

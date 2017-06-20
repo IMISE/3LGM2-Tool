@@ -4,7 +4,7 @@
 package de.imise.tool3lgm.xml;
 
 /**
- * TODO:AXS: prüfen, ob das über vordefinierte CharSets geht
+ * TODO:AXS: prÃ¼fen, ob das Ã¼ber vordefinierte CharSets geht
  * 
  * @author Thomas Rudert
  */

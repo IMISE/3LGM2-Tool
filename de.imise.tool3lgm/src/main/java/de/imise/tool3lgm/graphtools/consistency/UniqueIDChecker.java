@@ -24,7 +24,7 @@ public class UniqueIDChecker {
     }
 
     /**
-     * Liefert eine Liste aller {@link AbstractIDError} in dem übergebenen Modell
+     * Liefert eine Liste aller {@link AbstractIDError} in dem Ã¼bergebenen Modell
      * 
      * @param gdcoll
      * @return
@@ -49,7 +49,7 @@ public class UniqueIDChecker {
                     userFieldTargetClassElements = doc.getModelItems(userFieldTargetClass.asSubclass(ModelElement.class));
                 }
             }
-            //für alle Elemente mit dem UserField
+            //fÃ¼r alle Elemente mit dem UserField
             for (ModelElement me : userFieldTargetClassElements) {
                 String idValue = me.getUserFieldInputValue(idUserField);
                 if (UserField.EMPTY_STRING.equals(idValue)) {
@@ -74,10 +74,10 @@ public class UniqueIDChecker {
     }
 
     /**
-     * Liefert eine Liste aller Elemente derselben Art, wie das übergebene Modelelement, die bei demselben UserField denselben Wert haben.
-     * Das Element selbst ist auch immer in der Liste, also ist die Rückgabeliste immer mind. 1 groß, es sei denn das UserField passt gar
+     * Liefert eine Liste aller Elemente derselben Art, wie das Ã¼bergebene Modelelement, die bei demselben UserField denselben Wert haben.
+     * Das Element selbst ist auch immer in der Liste, also ist die RÃ¼ckgabeliste immer mind. 1 groÃŸ, es sei denn das UserField passt gar
      * nicht zum Element.
-     * ACHTUNG: Das hier geht für beliebige UserFields - nicht nur für ID-USerFields!
+     * ACHTUNG: Das hier geht fÃ¼r beliebige UserFields - nicht nur fÃ¼r ID-USerFields!
      * 
      * @param userField
      * @param me
@@ -86,7 +86,7 @@ public class UniqueIDChecker {
      */
     public static List<ModelElement> getElementsWithSameValue(final ModelElement me, final UserField userField, final String value) {
         Class<? extends ModelElement> meClass = me.getClass();
-        //das UserField ist nicht für das übergebene Element definiert -> leere Liste
+        //das UserField ist nicht fÃ¼r das Ã¼bergebene Element definiert -> leere Liste
         if (!userField.getTargetClass().isAssignableFrom(meClass)) {
             return new ArrayList<ModelElement>();
         }
@@ -108,7 +108,7 @@ public class UniqueIDChecker {
     }
 
     //    /**
-    //     * Fügt der übergebenen Error-Liste alle ID-Errors des übergebenen Elementes hinzu.
+    //     * FÃ¼gt der Ã¼bergebenen Error-Liste alle ID-Errors des Ã¼bergebenen Elementes hinzu.
     //     * 
     //     * @param me
     //     * @param returnList
@@ -119,8 +119,8 @@ public class UniqueIDChecker {
     //    }
     //
     //    /**
-    //     * Prüft für ein ModelElement, ob es ID-UserFields besitzt deren Werte mit dem anderer Elemente
-    //     * übereinstimmen.
+    //     * PrÃ¼ft fÃ¼r ein ModelElement, ob es ID-UserFields besitzt deren Werte mit dem anderer Elemente
+    //     * Ã¼bereinstimmen.
     //     * 
     //     * @param me
     //     * @return
@@ -139,7 +139,7 @@ public class UniqueIDChecker {
     //    }
     //
     //    /**
-    //     * Wenn das übergebene UserField ein ID-UserField ist, das zum übergebenen Element passt
+    //     * Wenn das Ã¼bergebene UserField ein ID-UserField ist, das zum Ã¼bergebenen Element passt
     //     * 
     //     * @param me
     //     * @param idUserField

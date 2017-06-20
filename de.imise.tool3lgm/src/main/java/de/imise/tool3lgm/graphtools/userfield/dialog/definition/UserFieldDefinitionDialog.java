@@ -48,17 +48,17 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     private final ArrayList<AbstractInputPanel> panelList = new ArrayList<AbstractInputPanel>();
 
     /**
-     * Rückgabewert des Dialoges, wenn er über den Abbrechen-Knopf verlassen wurde
+     * RÃ¼ckgabewert des Dialoges, wenn er Ã¼ber den Abbrechen-Knopf verlassen wurde
      */
     public static final int CANCEL = 0;
 
     /**
-     * Rückgabewert des Dialoges, wenn er über den OK-Knopf verlassen wurde
+     * RÃ¼ckgabewert des Dialoges, wenn er Ã¼ber den OK-Knopf verlassen wurde
      */
     public static final int OK = 1;
 
     /**
-     * Rückgabewert des Dialoges. Er nimmt einen der Werte UserFieldDefinitionDialog.OK oder UserFieldDefinitionDialog.CANCEL an
+     * RÃ¼ckgabewert des Dialoges. Er nimmt einen der Werte UserFieldDefinitionDialog.OK oder UserFieldDefinitionDialog.CANCEL an
      */
     private int retVal = -1;
 
@@ -68,7 +68,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     private final UserFieldDefinitions definitions;
 
     /**
-     * Das UserField, dessem Eigenschaften mit diesem Panel geändert werden sollen.
+     * Das UserField, dessem Eigenschaften mit diesem Panel geÃ¤ndert werden sollen.
      */
     private final UserField userField;
 
@@ -95,7 +95,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         /*
-         * schließen des Fensters abfangen (wenn nicht durch Abbrechen-Button veranlasst)
+         * schlieÃŸen des Fensters abfangen (wenn nicht durch Abbrechen-Button veranlasst)
          */
         addWindowListener(new WindowAdapter() {
             @Override
@@ -130,7 +130,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         topLabel.setFont(topLabel.getFont().deriveFont(14f).deriveFont(Font.BOLD));
         pane.add(topLabel, gbc);
 
-        //Panel für das Ändern des Namens und der Beschreibung
+        //Panel fÃ¼r das Ã„ndern des Namens und der Beschreibung
         NameDescripPanel nameDescripPanel = new NameDescripPanel(userField);
         panelList.add(nameDescripPanel);
         gbc.gridy++;
@@ -159,7 +159,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         //Optionen-Panel
         panelList.add(new OptionPanel(userField));
 
-        //Alle Panels hinzufügen
+        //Alle Panels hinzufÃ¼gen
         for (int i = 0; i < panelList.size(); i++) {
             JPanel panel = panelList.get(i);
             if (!(panel instanceof NameDescripPanel)) {
@@ -167,7 +167,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
                 pane.add(panel, gbc);
             }
         }
-        //Ok und Abbrechen-Buttons unten hinzufügen
+        //Ok und Abbrechen-Buttons unten hinzufÃ¼gen
         okButton.addActionListener(this);
         cancelButton.addActionListener(this);
         JPanel buttonPane = new JPanel();
@@ -179,7 +179,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     }
 
     /**
-     * Zeigt den Dialog für die Definition eines <code>UserField</code>.
+     * Zeigt den Dialog fÃ¼r die Definition eines <code>UserField</code>.
      * 
      * @param owner
      * @param userField
@@ -193,7 +193,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     }
 
     /**
-     * Bricht die aktuelle Transaktion ab und macht die Änderung Rückgänig.
+     * Bricht die aktuelle Transaktion ab und macht die Ã„nderung RÃ¼ckgÃ¤nig.
      */
     public void cancel() {
         for (int i = 0; i < panelList.size(); i++) {
@@ -233,7 +233,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         } else if (e.getSource() == cancelButton) {
             //Achtung: Cancel wird auch aufgerufen, wenn auf das Kreuz des
             // Dialoges geklickt wurde,
-            //also alles was rückgängig gemacht werden soll nicht hier hin
+            //also alles was rÃ¼ckgÃ¤ngig gemacht werden soll nicht hier hin
             // sondern in cancel() schreiben
             cancel();
         }

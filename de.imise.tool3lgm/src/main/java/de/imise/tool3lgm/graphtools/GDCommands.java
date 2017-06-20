@@ -20,7 +20,7 @@ public enum GDCommands {
     DELETE,
 
     SET_NAME,
-    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
+    //TODO: Dieses Kommando wird im Moment nicht ausgefÃ¼hrt, also dispatch_command kann mit diesem Kommando nichts anfangen
     CHANGE_FORM,
     CHANGE_COLOR,
     CHANGE_ALPHA,
@@ -29,9 +29,9 @@ public enum GDCommands {
     CHANGE_LAYER_SIZE_FACTOR,
     CHANGE_GLOBAL_NAME,
     CHANGE_GLOBAL_MAPPING,
-    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
+    //TODO: Dieses Kommando wird im Moment nicht ausgefÃ¼hrt, also dispatch_command kann mit diesem Kommando nichts anfangen
     HIDE_ELEM,
-    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
+    //TODO: Dieses Kommando wird im Moment nicht ausgefÃ¼hrt, also dispatch_command kann mit diesem Kommando nichts anfangen
     UNHIDE_ELEM,
     Z_STEP_UP,
     Z_STEP_DOWN,
@@ -123,7 +123,7 @@ public enum GDCommands {
     PRINT_QUEUE,
     CHECK_CONSISTENCY;
 
-    //Ungültige Werte für alle Kommandos
+    //UngÃ¼ltige Werte fÃ¼r alle Kommandos
     public static final int INVALID_POSITION_X = -1;
     public static final int INVALID_POSITION_Y = -1;
     public static final int INVALID_WIDTH = -1;
@@ -142,11 +142,11 @@ public enum GDCommands {
     public String toString() {
         //wenn lesbare Undo-Kommandos ausgegeben werden sollen
         if (Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
-            //den normalen Kommando-String zurück geben
+            //den normalen Kommando-String zurÃ¼ck geben
             return super.toString();
         }
-        //den Index des Komandos als String zurück geben (der auch eindeutig, aber
-        //viel kürzer ist als der Komandoname und somit nicht soviel Speicher verbraucht
+        //den Index des Komandos als String zurÃ¼ck geben (der auch eindeutig, aber
+        //viel kÃ¼rzer ist als der Komandoname und somit nicht soviel Speicher verbraucht
         //beim Loggen der Undo-redo-Kommandos
         return new Integer(ordinal()).toString();
     }

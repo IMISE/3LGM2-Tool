@@ -24,18 +24,18 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 
 /**
  * @author AXS
- *         Dieses Panel stellt in einer Combobox ein einzelne Element zur Verknüpfung mit dem
- *         ModelElement des Dialoges zur Auswahl. Je nachdem ob die Verknüpfung über eine normale
- *         {@link Kante} oder eine {@link Composition} läuft, werden andere im Modell befindliche
- *         Elemente zur Verknüpfung angeboten {@link Kante}) oder nicht ({@link Composition}).
- *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
+ *         Dieses Panel stellt in einer Combobox ein einzelne Element zur VerknÃ¼pfung mit dem
+ *         ModelElement des Dialoges zur Auswahl. Je nachdem ob die VerknÃ¼pfung Ã¼ber eine normale
+ *         {@link Kante} oder eine {@link Composition} lÃ¤uft, werden andere im Modell befindliche
+ *         Elemente zur VerknÃ¼pfung angeboten {@link Kante}) oder nicht ({@link Composition}).
+ *         Die VerknÃ¼pfung kann Ã¼ber einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
  */
 public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
     /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
     private final AlphabeticalComboBox connectedElementsBox;
 
-    /** Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und geändert werden kann. */
+    /** Eingabefeld, in dem der Name des verbundenen Elementes angezeit wird und geÃ¤ndert werden kann. */
     private final LimitedSizeScrollTextPane connectedElementName;
 
     /** Je nachdem was von beiden (Box oder Textfeld) initialisert wurde, ist dies diese Komponente */
@@ -44,7 +44,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     /** Das verbundene Element das angezeigt wird (wenn es mind. eins gibt) */
     protected ModelElement connectedElement;
 
-    /** Cache zur Speicherung, ob der Name des verbundenen Elementes geändert wurde */
+    /** Cache zur Speicherung, ob der Name des verbundenen Elementes geÃ¤ndert wurde */
     private String oldname = "";
 
     /**
@@ -81,7 +81,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             connectedElementName = new LimitedSizeScrollTextPane(4);
             connectedElementViewComponent = connectedElementName;
 
-            //Doppelklick-Action und Kontextmenü anghängen
+            //Doppelklick-Action und KontextmenÃ¼ anghÃ¤ngen
             addMouseActions(connectedElementName);
             add(connectedElementName, BorderLayout.CENTER);
         } else {
@@ -108,11 +108,11 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
             connectedElementsBox.addItem(" ");
-            //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle
+            //bei abhÃ¤ngigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle
             List<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : mainDoc.getElementContainer(searchElementClass);
 
-            //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
-            //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
+            //neues Element anlegen und verknÃ¼pfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
+            //abhÃ¤ngig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
             boolean showNewEntry = createNew != null;
             if (showNewEntry && isLastPathElementDependent && !allConnectedContainers.isEmpty()) {
                 showNewEntry = false;
@@ -128,7 +128,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             }
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
-            //Doppelklick-Action und Kontextmenü anghängen
+            //Doppelklick-Action und KontextmenÃ¼ anghÃ¤ngen
             addMouseActions(connectedElementsBox);
         } else /* if (connectedElementName != null) */ {
             if (connectedElement != null) {
@@ -147,7 +147,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
     @Override
     public void commit() {
-        //der Name kann nicht geändert werden, wenn die ComboBox angezeigt wird (und nicht das EingabeTextfeld)
+        //der Name kann nicht geÃ¤ndert werden, wenn die ComboBox angezeigt wird (und nicht das EingabeTextfeld)
         //oder wenn kein verbundenes Element vorhanden ist
         if (connectedElementName == null || connectedElement == null) {
             return;
@@ -160,7 +160,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     }
 
     /**
-     * Dies ist die Action, wenn sich die Combobox-Auswahl ändert
+     * Dies ist die Action, wenn sich die Combobox-Auswahl Ã¤ndert
      *
      * @param panel
      * @param elementClass
@@ -196,7 +196,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
                 if (selected == panel.createNew) {
                     panel.connectToFirstPath(null);
 
-                } else if (selected instanceof NodeContainer) { //vorhandemes Element verknüpfen
+                } else if (selected instanceof NodeContainer) { //vorhandemes Element verknÃ¼pfen
                     ElementContainer container2Connect = (ElementContainer) selected;
                     ModelElement element2Connect = container2Connect.getElement();
                     panel.connectToFirstPath(element2Connect);

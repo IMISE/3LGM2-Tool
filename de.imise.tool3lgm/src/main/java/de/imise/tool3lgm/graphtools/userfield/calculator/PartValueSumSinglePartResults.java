@@ -10,9 +10,9 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**
- * Hält für alle ModelElemente, denen eine einfache Teilwertsummenformel als UserField zugeordnet ist,
+ * HÃ¤lt fÃ¼r alle ModelElemente, denen eine einfache Teilwertsummenformel als UserField zugeordnet ist,
  * eine Liste mit dem jeweiligen Element und dem Teilwert, den dieses Element zu dem Gesamtergebnis
- * der Teilwertsumme beiträgt.
+ * der Teilwertsumme beitrÃ¤gt.
  * 
  * @author Ich
  * @create 26.10.2015

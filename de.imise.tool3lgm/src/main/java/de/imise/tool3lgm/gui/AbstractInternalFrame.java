@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.UnfloatableToolBar;
 
 /**
- * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)
+ * Abstrakte Klasse fÃ¼r alle internen Fenster zur Darstellung von (Teil-)
  * Modellen
  * 
  * @author Thomas Rudert
@@ -24,7 +24,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
     /** darzustellendes (Teil-)Modell */
     protected LGMGraphDocument doc;
 
-    /** die JScrollFläche für den Inhalt */
+    /** die JScrollFlÃ¤che fÃ¼r den Inhalt */
     protected JScrollPane scrollPane;
 
     /** Werkzeugleiste zu diesem Fenster */
@@ -34,7 +34,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
      * Konstruktor
      * 
      * @param _graphDocument darzustellendes (Teil-)Modell
-     * @param _title Fensterüberschrift
+     * @param _title FensterÃ¼berschrift
      */
     public AbstractInternalFrame(final LGMGraphDocument _graphDocument, final String _title) {
 
@@ -67,7 +67,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
     }
 
     /**
-     * gibt das darzustellende (Teil-)Modell zurück
+     * gibt das darzustellende (Teil-)Modell zurÃ¼ck
      * 
      * @return GraphDocument
      */
@@ -76,7 +76,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
     }
 
     /**
-     * gibt den scrollbaren Bereich zurück
+     * gibt den scrollbaren Bereich zurÃ¼ck
      * 
      * @return JScrollPane
      */
@@ -85,7 +85,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
     }
 
     /**
-     * gibt die Werkzeugleise zu diesem Fenster zurück
+     * gibt die Werkzeugleise zu diesem Fenster zurÃ¼ck
      * 
      * @return Werkzeugleiste des Fensters
      */

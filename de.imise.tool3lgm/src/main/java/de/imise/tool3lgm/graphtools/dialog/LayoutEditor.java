@@ -33,8 +33,8 @@ import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Der LayoutEdior für die Konfiguration von Form, Farbe und Schriftwart der Elemetklassen
- * zuständig.
+ * Der LayoutEdior fÃ¼r die Konfiguration von Form, Farbe und Schriftwart der Elemetklassen
+ * zustÃ¤ndig.
  */
 public class LayoutEditor extends JDialog implements ActionListener {
 
@@ -190,7 +190,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (GraphViewConstants.isUnpaintable(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
                 continue;
             }
-            // nur für Knoten kann man das Layout im Moment festlegen -> Kanten
+            // nur fÃ¼r Knoten kann man das Layout im Moment festlegen -> Kanten
             // auslassen
             if (!Knoten.class.isAssignableFrom(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
                 continue;

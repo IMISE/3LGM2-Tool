@@ -11,15 +11,15 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.UserF
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Klasse repr‰sentiert ein konkretes Layout f¸r einen <code>UserFieldTable</code>.
+ * Klasse repr√§sentiert ein konkretes Layout f√ºr einen <code>UserFieldTable</code>.
  * <p>
- * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in einen geeigneten Container einbetten und f¸r diesen das gew‰hlte Layout
+ * Es werden Methoden bereitgestellt, die einen <code>UserFieldTable</code> in einen geeigneten Container einbetten und f√ºr diesen das gew√§hlte Layout
  * setzen.
  * <p>
- * ‹ber statische Methoden kˆnnen vorgefertigte <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels f¸r Kennzahlen, Verteilungsgewicht
+ * √úber statische Methoden k√∂nnen vorgefertigte <code>UserFieldTableLayout</code>s abgerufen werden, die auf Tabels f√ºr Kennzahlen, Verteilungsgewicht
  * oder Modelvariablen zugeschnitten sind.
  * <p>
- * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der RowHeader und alle Spalten lassen sich in ihrer Grˆﬂe ‰ndern.
+ * Es wird ein RowHeader(optional) und ColumnHeader mit Tooltips gesetzt. Der RowHeader und alle Spalten lassen sich in ihrer Gr√∂√üe √§ndern.
  * <p>
  * Werte im Table werden in formatierter Form dargestellt.
  * <p>
@@ -56,7 +56,7 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
 
     /**
      * Erzeugt ein neues Layout.
-     * Nicht editierbare Zellen werden nicht grau gef‰rbt, d.h. sie bleiben weiﬂ
+     * Nicht editierbare Zellen werden nicht grau gef√§rbt, d.h. sie bleiben wei√ü
      */
     public UserFieldTableLayout() {
         this(false);
@@ -64,7 +64,7 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
 
     /**
      * Erzeugt ein neues Layout.
-     * Falls <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare Zellen grau gef‰rbt.
+     * Falls <code>changeDeactivatedCellColor = true</code>, werden nicht editierbare Zellen grau gef√§rbt.
      * 
      * @param changeDeactivatedCellColor
      */
@@ -80,7 +80,7 @@ public final class UserFieldTableLayout extends AbstractUserFieldTableLayout {
     @Override
     public IUserFieldTableCell[][] getTableCells(final UserFieldTable table) {
         IUserFieldTableCell[][] tableCells = null;
-        // Falls das Model keine Daten enth‰lt, werden headers nicht gesetzt
+        // Falls das Model keine Daten enth√§lt, werden headers nicht gesetzt
         if (table.hasUserFieldTableModel() && table.hasData()) {
             if (table.isFormattingActive() == true) {
                 tableCells = new IUserFieldTableCell[table.getRowCount()][table.getColumnCount()];

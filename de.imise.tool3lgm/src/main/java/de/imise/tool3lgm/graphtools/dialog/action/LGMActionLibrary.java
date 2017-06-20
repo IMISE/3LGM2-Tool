@@ -48,7 +48,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 /**
  * @author fstephan Diese Klasse stellt statische Methoden zur Erzeugung von <code>LGMAction</code>
  *         s bereit. Panels erzeugen und verwenden diese Actions um Funktionen wie etwa das
- *         Verschieben von Elementen zwischen ihren Trees bereitstellen zu können.
+ *         Verschieben von Elementen zwischen ihren Trees bereitstellen zu kÃ¶nnen.
  *         <code>LGMActions</code> bereit.
  */
 public class LGMActionLibrary {
@@ -57,14 +57,14 @@ public class LGMActionLibrary {
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! zu
      * getAddElementAction(...) und getRemoveElementAction(...): Bei Panels mit mehr als zwei Trees,
      * kann es dazu kommen, dass Elemente falsch verschoben werden. Um dieses Problem zu beheben,
-     * sollte einfach der Wert von switchTree geändert werden.
+     * sollte einfach der Wert von switchTree geÃ¤ndert werden.
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "addButtons" der Panels angefügt werden.
+     * sollte an die "addButtons" der Panels angefÃ¼gt werden.
      *
      * @param srcTree
      * @param targetTree
@@ -138,7 +138,7 @@ public class LGMActionLibrary {
                                     if (selPath != null) {
                                         nothingSelected = false;
                                         node = (LGMTreeNode) selPath.getLastPathComponent();
-                                        // prüfen, ob eine Aufgabe selektiert ist
+                                        // prÃ¼fen, ob eine Aufgabe selektiert ist
                                         if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
                                             int selRow = tree2.getRowForPath(selPath);
                                             int index = lmodel.getIndexOfChild(lroot, node);
@@ -173,9 +173,9 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * sollte an die "removeButtons" der Panels angefÃ¼gt werden.
      *
      * @param srcTree
      * @param targetTree
@@ -238,7 +238,7 @@ public class LGMActionLibrary {
                         // wenn links etwas selektiert war
                         if (selPath != null) {
                             LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-                            // prüfen, ob eine Aufgabe selektiert ist
+                            // prÃ¼fen, ob eine Aufgabe selektiert ist
                             Object knot = node.getUserObject(); // auf keinen
                             // Fall hier
                             // gleich auf
@@ -259,14 +259,14 @@ public class LGMActionLibrary {
                             }
                             // ####################################################################################################
                             // Dies hier evtl. weglassen, da es auf nem lahmen
-                            // Rechner und nem großen Modell rel. lange dauern
+                            // Rechner und nem groÃŸen Modell rel. lange dauern
                             // kann
                             // Die der auf der linken Seite entfernten Aufgabe
                             // auf der rechten Seite entsprechende wird
                             // selektiert.
                             // Diese Funktion geht davon aus, dass der rechte
                             // Baum komplett expandiert ist, was er in dem Fall,
-                            // dass alle Kinder von rroot Blätter sind und rroot
+                            // dass alle Kinder von rroot BlÃ¤tter sind und rroot
                             // selbst nicht angezeigt wird immer automatisch
                             // ist.
                             for (int i = 0; i < tree2.getRowCount(); i++) {
@@ -286,7 +286,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in AbstractSingleConnectionPanel reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die auf Mouse-Aktionen in AbstractSingleConnectionPanel reagiert.
      *
      * @param panel
      * @param edp
@@ -297,7 +297,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die auf Mouse-Aktionen in Trees reagiert.
      *
      * @param tree
      * @param panel
@@ -308,7 +308,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die auf Mouse-Aktionen in Trees reagiert.
      *
      * @param component
      * @param panel
@@ -352,7 +352,7 @@ public class LGMActionLibrary {
                     if (selection instanceof ElementContainer) {
                         selected = (ElementContainer) selection;
                     } else if (selection instanceof ModelElement) {
-                        //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
+                        //da die Selektion sowieso in allen Teilmodellen ausgefÃ¼hrt wird, ist es hier ok, das ModelElement durch
                         //den Container aus dem Hauptdokument zu ersetzen
                         ModelElement me = (ModelElement) selection;
                         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
@@ -373,7 +373,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf das Selektieren von Elementen in
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die auf das Selektieren von Elementen in
      * Trees reagiert.
      *
      * @param tree
@@ -427,9 +427,9 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine neue LGMAction zurück. Diese LGMAction verwaltet das Initialisieren von
-     * DragNDrop in einem Panel. Alle Panels, die DragNDrop-Funktionalität bieten wollen, müssen
-     * diese Action über einen MouseListener an ihre Trees anfügen. Dabei sollte diese Action sowohl
+     * Methode liefert eine neue LGMAction zurÃ¼ck. Diese LGMAction verwaltet das Initialisieren von
+     * DragNDrop in einem Panel. Alle Panels, die DragNDrop-FunktionalitÃ¤t bieten wollen, mÃ¼ssen
+     * diese Action Ã¼ber einen MouseListener an ihre Trees anfÃ¼gen. Dabei sollte diese Action sowohl
      * bei mousePressed als auch bei mouseEntered aufgerufen werden.
      *
      * @param dndActionChains
@@ -442,15 +442,15 @@ public class LGMActionLibrary {
 
             /**
              * Sammlung aller <code>DragNDropActionChain</code>s, die bei einem DragNDrop-Ereignis
-             * ausgeführt werden können
+             * ausgefÃ¼hrt werden kÃ¶nnen
              */
             private final DragNDropActionChain[] dndActionChains = chains;
 
             /**
-             * Variable dient der Trennung von DragNDrop-Ausführung und DragNDrop-Initialisierungen.
-             * Es kann entweder eine DragNDrop-Aktion in einem Panel ausgeführt werden, oder eine
-             * DragNDrop-Aktion für ein Panel initialisiert werden. = <code>true</code>, wenn gerade
-             * eine DragNDrop-Aktion ausgeführt wird =<code>false</code>, sonst
+             * Variable dient der Trennung von DragNDrop-AusfÃ¼hrung und DragNDrop-Initialisierungen.
+             * Es kann entweder eine DragNDrop-Aktion in einem Panel ausgefÃ¼hrt werden, oder eine
+             * DragNDrop-Aktion fÃ¼r ein Panel initialisiert werden. = <code>true</code>, wenn gerade
+             * eine DragNDrop-Aktion ausgefÃ¼hrt wird =<code>false</code>, sonst
              */
             private boolean blockDragNDropInitializing;
 
@@ -461,8 +461,8 @@ public class LGMActionLibrary {
             private JTree lastEnteredTree;
 
             /**
-             * Falls <code>e</code> ein <code>MouseEvent</code> ist, wird in Abhängigkeit davon, ob
-             * die Maus über einen Tree bewegt bzw. ein Element des Trees angeklickt wurde, die
+             * Falls <code>e</code> ein <code>MouseEvent</code> ist, wird in AbhÃ¤ngigkeit davon, ob
+             * die Maus Ã¼ber einen Tree bewegt bzw. ein Element des Trees angeklickt wurde, die
              * Methode <code>mouseEntered(MouseEvent me)</code> bzw.
              * <code>mousePressed(MouseEvent me)</code> aufgerufen.
              *
@@ -489,8 +489,8 @@ public class LGMActionLibrary {
             /**
              * Hier wird, je nach dem welcher der Trees angeklickt wurde, die Selektion der Elemente
              * in den anderen Trees entfernt. Dadurch werden Uneindeutigkeiten beim DragNDrop
-             * vermieden. Solang die Mousetaste gedrückt bleibt, ist das Initialisieren einer neuen
-             * DragNDrop-Aktion deaktiviert, um das Auführen der aktuellen DragNDrop-Aktion nicht zu
+             * vermieden. Solang die Mousetaste gedrÃ¼ckt bleibt, ist das Initialisieren einer neuen
+             * DragNDrop-Aktion deaktiviert, um das AufÃ¼hren der aktuellen DragNDrop-Aktion nicht zu
              * behindern.
              *
              * @param me
@@ -522,7 +522,7 @@ public class LGMActionLibrary {
 
             /**
              * Methode ruft <code>activateDragNDrop(LGMDragNDropTree focusedTree)</code> auf, falls
-             * sich die Mouse über einen der Trees des Panels befindet.
+             * sich die Mouse Ã¼ber einen der Trees des Panels befindet.
              *
              * @param me
              */
@@ -555,7 +555,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Erzeugen eines neuen Elements
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Erzeugen eines neuen Elements
      * realisiert.
      *
      * @param panel
@@ -610,7 +610,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben eines Elements in
      * einem Tree realisiert.
      *
      * @param tree
@@ -632,7 +632,7 @@ public class LGMActionLibrary {
                 @Override
                 public void execute(final EventObject eo) {
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
-                    // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
+                    // Aufaben haben PfadlÃ¤nge 2 (das nicht sichtbare root hat
                     // die 1)
                     TreePath selPath = ltree.getSelectionPath();
                     if (selPath != null && selPath.getPathCount() == 2) {
@@ -675,7 +675,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben eines Elements in
      * einem Tree realisiert.
      *
      * @param tree
@@ -697,7 +697,7 @@ public class LGMActionLibrary {
                 @Override
                 public void execute(final EventObject eo) {
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
-                    // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
+                    // Aufaben haben PfadlÃ¤nge 2 (das nicht sichtbare root hat
                     // die 1)
                     TreePath selPath = ltree.getSelectionPath();
                     // wenn links eine Aufgabe selektiert ist
@@ -706,10 +706,10 @@ public class LGMActionLibrary {
                         int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
                         // wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
                         if (pos1 > 0) {
-                            // jetzt die Position der über der selektierten Aufgabe liegenden
+                            // jetzt die Position der Ã¼ber der selektierten Aufgabe liegenden
                             // Aufgabe holen
                             // -> von dieser alle evtl. expandierten Unterknoten merken
-                            // -> sie removen und unter der selektierten wieder einfügen
+                            // -> sie removen und unter der selektierten wieder einfÃ¼gen
                             // -> alles was von ihr expandiert war, wieder expandieren
                             int pos2 = ltree.getRowForPath(selPath) - 1;
                             TreePath path = ltree.getPathForRow(pos2);
@@ -718,21 +718,21 @@ public class LGMActionLibrary {
                                 path = ltree.getPathForRow(pos2);
                             }
 
-                            // wenn die selektierte Aufgabe expandierte Unterknoten hat (können max.
-                            // 2 sein, nämlich
+                            // wenn die selektierte Aufgabe expandierte Unterknoten hat (kÃ¶nnen max.
+                            // 2 sein, nÃ¤mlich
                             // "Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt
                             // in enum
                             Enumeration<TreePath> en = ltree.getExpandedDescendants(path);
 
                             // jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree()
-                            // NICHT VERÄNDERT)
-                            // und weil hier noch die Expasionen anpasst werden (über enum), soll
+                            // NICHT VERÃ„NDERT)
+                            // und weil hier noch die Expasionen anpasst werden (Ã¼ber enum), soll
                             // das auch hier bleiben!
                             LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1); // den
                             // oberen Knoten holen
                             lmodel.removeNodeFromParent(node); // ihn entfernen
                             lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher
-                                                                      // einfügen, wenn die
+                                                                      // einfÃ¼gen, wenn die
                                                                       // selektierte Aufgabe
                                                                       // expandiert war
                             if (en != null) {
@@ -743,7 +743,7 @@ public class LGMActionLibrary {
                                     ltree.expandPath(en.nextElement()); // seine Unterknoten auch
                                                                         // expandieren
                                 }
-                                // das muss immer nch einem Expandieren zurückgesetzt werden (siehe
+                                // das muss immer nch einem Expandieren zurÃ¼ckgesetzt werden (siehe
                                 // treeWillExpand)
                                 panel.willExpand(false);
                                 panel.expandFullPath(false);
@@ -755,7 +755,7 @@ public class LGMActionLibrary {
                             node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
                             node.setText("[" + pos1 + "] " + node.getUserObject());
 
-                            // das switchen in den connections vom Prozess ausführen
+                            // das switchen in den connections vom Prozess ausfÃ¼hren
                             doc.swapEdgePositions(modelElement, pos1, pos1 - 1, dialog.getTransactionID());
                         }
                     }
@@ -768,15 +768,15 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die beim Eintreten eines
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die beim Eintreten eines
      * DragNDrop-Ereignisses, die konkrete Drop-Location im targetTree ermittelt. Dabei wird das
-     * Element, was sich dem Mouse-Zeiger am nächsten befindet, als SelectionPath des targetTrees
-     * gesetzt. Damit ist es möglich Elemente an eine bestimmte Position innerhalb eines Trees zu
+     * Element, was sich dem Mouse-Zeiger am nÃ¤chsten befindet, als SelectionPath des targetTrees
+     * gesetzt. Damit ist es mÃ¶glich Elemente an eine bestimmte Position innerhalb eines Trees zu
      * verschieben. Methode wird hier automatisch in
      * <code>getAddElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
      * und in
      * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
-     * aufgerufen --> Panel muss sich also darum nicht kümmern
+     * aufgerufen --> Panel muss sich also darum nicht kÃ¼mmern
      *
      * @param tree
      */
@@ -796,7 +796,7 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die beim Schließen eines Panels alle
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die beim SchlieÃŸen eines Panels alle
      * WindowListener des Panels entfernt.
      *
      * @param edp

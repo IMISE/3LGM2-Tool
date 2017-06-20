@@ -19,7 +19,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 
 /**
- * Dieser Dialog stellt Optionen zur Auswahl, Modelle hinsichtlich auszuwählender Bereiche
+ * Dieser Dialog stellt Optionen zur Auswahl, Modelle hinsichtlich auszuwÃ¤hlender Bereiche
  * bereinigen zu lassen.
  *
  * @author AXS created on 03.07.2007
@@ -27,30 +27,30 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 public class CleanModelDialog extends JDialog implements WindowListener {
 
     /**
-     * Checkbox für die Option, inkonsistente Anwendungsbaustein-Konfigurationen zu löschen
+     * Checkbox fÃ¼r die Option, inkonsistente Anwendungsbaustein-Konfigurationen zu lÃ¶schen
      */
     private static Checkbox inconsistentAWBConfigsBox = new Checkbox(getString("clean_option_inconsistent_awbconfig"));
     /**
-     * Checkbox für die Option, inkonsistente Aufgabe-Orgnaisationseinheiten-Kombinationen zu
-     * löschen
+     * Checkbox fÃ¼r die Option, inkonsistente Aufgabe-Orgnaisationseinheiten-Kombinationen zu
+     * lÃ¶schen
      */
     private static Checkbox inconsistentAufOrgBox = new Checkbox(getString("clean_option_inconsistent_auforg"));
     /**
-     * Checkbox für die Option, inkonsistente Datenverarbeitungsbaustein-Konfigurationen zu löschen
+     * Checkbox fÃ¼r die Option, inkonsistente Datenverarbeitungsbaustein-Konfigurationen zu lÃ¶schen
      */
     private static Checkbox inconsistentPDVBConfigsBox = new Checkbox(getString("clean_option_inconsistent_pdvbconfig"));
 
     /**
-     * Checkbox für die Option, AWB-Konfigurationen an die Blattaufgaben zu kopieren
+     * Checkbox fÃ¼r die Option, AWB-Konfigurationen an die Blattaufgaben zu kopieren
      */
     private static Checkbox copyAWBConfigToLeafBox = new Checkbox(getString("clean_option_copy_awbconfig_to_leaf"));
     /**
-     * Checkbox für die Option, einen Dialog mit allen Aufgaben zu öffnen, die AWB-Konfigurationen
+     * Checkbox fÃ¼r die Option, einen Dialog mit allen Aufgaben zu Ã¶ffnen, die AWB-Konfigurationen
      * mit mehreren Anwendungsbausteinen besitzen.
      */
     private static Checkbox multipleAWBConfigBox = new Checkbox(getString("clean_option_multiple_awbconfig"));
     /**
-     * Checkbox für die Option, einen Dialog mit allen Aufgaben zu öffnen, die mehrer gleiche
+     * Checkbox fÃ¼r die Option, einen Dialog mit allen Aufgaben zu Ã¶ffnen, die mehrer gleiche
      * AWB-Konfigurationen besitzen.
      */
     private static Checkbox identicalAWBConfigBox = new Checkbox(getString("clean_option_identical_awbconfig"));
@@ -68,8 +68,8 @@ public class CleanModelDialog extends JDialog implements WindowListener {
     };
 
     /**
-     * Speichert einen bereits geöffneten Dialog, damit immer nur ein solcher Dialog geöffnet ist.
-     * Beim Schließen wird diese Variable wieder <code>null</code> gesetzt.
+     * Speichert einen bereits geÃ¶ffneten Dialog, damit immer nur ein solcher Dialog geÃ¶ffnet ist.
+     * Beim SchlieÃŸen wird diese Variable wieder <code>null</code> gesetzt.
      */
     private static CleanModelDialog dialog = null;
 
@@ -80,7 +80,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
         super(owner, getString("clean_model"), true);
 
         // //////////////////////////////////////////////////////
-        // Panel für das Löschen von inkonsistenten Elementen //
+        // Panel fÃ¼r das LÃ¶schen von inkonsistenten Elementen //
         // //////////////////////////////////////////////////////
         JPanel inconsistentElementSectionBoxPanel = new JPanel(new GridLayout(3, 1));
         inconsistentElementSectionBoxPanel.add(inconsistentAWBConfigsBox);
@@ -98,7 +98,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
         inconsistentElementSectionPanel.add(inconsistentElementSectionHelpPanel, BorderLayout.EAST);
 
         // ///////////////////////////////////////////////
-        // Panel für das Auffinden AWB-Konfigurationen //
+        // Panel fÃ¼r das Auffinden AWB-Konfigurationen //
         // ///////////////////////////////////////////////
 
         JPanel awbconfigSectionBoxPanel = new JPanel(new GridLayout(3, 1));
@@ -117,7 +117,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
         awbconfigSectionPanel.add(awbconfigSectionHelpPanel, BorderLayout.EAST);
 
         // /////////////////////////////////////////////
-        // Panel für den OK und Abbrechen Knopf usw. //
+        // Panel fÃ¼r den OK und Abbrechen Knopf usw. //
         // /////////////////////////////////////////////
 
         JPanel okQuitButPanel = new JPanel();
@@ -182,7 +182,7 @@ public class CleanModelDialog extends JDialog implements WindowListener {
     }
 
     /**
-     * Liefert den über den Schlüssel in den Resoucen auffindbaren String.
+     * Liefert den Ã¼ber den SchlÃ¼ssel in den Resoucen auffindbaren String.
      *
      * @param resourceKey
      * @return
@@ -243,23 +243,23 @@ public class CleanModelDialog extends JDialog implements WindowListener {
 
     /**
      * Ein Hilfebutton mit einer bestimmten Darstellung, der bei Aktivierung einen Dialog mit dem
-     * Hilfetext präsentiert.
+     * Hilfetext prÃ¤sentiert.
      *
      * @author AXS created on 03.07.2007
      */
     private class HelpButton extends JButton {
         /**
-         * Resourcenschlüssel für den zu öffnenden Hilfedialog
+         * ResourcenschlÃ¼ssel fÃ¼r den zu Ã¶ffnenden Hilfedialog
          */
         private final String titleKey;
         /**
-         * Resourcenschlüssel für den Hilfetext
+         * ResourcenschlÃ¼ssel fÃ¼r den Hilfetext
          */
         private final String helpKey;
 
         /**
-         * @param dialogTitleKey Resourcenschlüssel für den zu öffnenden Hilfedialog
-         * @param helpKey Resourcenschlüssel für den Hilfetext
+         * @param dialogTitleKey ResourcenschlÃ¼ssel fÃ¼r den zu Ã¶ffnenden Hilfedialog
+         * @param helpKey ResourcenschlÃ¼ssel fÃ¼r den Hilfetext
          */
         public HelpButton(final String dialogTitleKey, final String helpTextKey) {
             super();

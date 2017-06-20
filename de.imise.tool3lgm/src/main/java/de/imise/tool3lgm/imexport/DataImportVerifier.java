@@ -72,8 +72,8 @@ public class DataImportVerifier {
             int row = -1;
             while ((line = reader.readLine()) != null) {
                 row++;
-                //um im Fehlerfall den richtigen Zeilenindex bestimmen zu können
-                //-> für jede Zeile wenigsten einen Platzhalter hinzufügen. Wenn wirklich
+                //um im Fehlerfall den richtigen Zeilenindex bestimmen zu kÃ¶nnen
+                //-> fÃ¼r jede Zeile wenigsten einen Platzhalter hinzufÃ¼gen. Wenn wirklich
                 //ein HashString in der Zeile steht, wird das null unten durch diesen
                 //ersetzt. Dies ist nur bei NodeLine und EdgeLine der Fall
                 importHashConfiguration.addDefaultHash();
@@ -112,7 +112,7 @@ public class DataImportVerifier {
      * Fehler 1: Die Zeile hat keinen Header (also ist die Elementart nicht klar)
      * Fehler 2: Der Name des Knotens ist leer
      * Fehler 3: Hash mehrfach in der Datei vergeben
-     * Fehler 4: Hash wird im Modell bereits für ein Element einer anderen Art verwendet
+     * Fehler 4: Hash wird im Modell bereits fÃ¼r ein Element einer anderen Art verwendet
      * 
      * @param nodeLine
      * @param importHashConfiguration
@@ -133,7 +133,7 @@ public class DataImportVerifier {
     /**
      * Fehler 1: Der Name der Kante ist leer
      * Fehler 2: Hash mehrfach in der Datei vergeben
-     * Fehler 3: Hash wird im Modell bereits für ein Element einer anderen Art verwendet
+     * Fehler 3: Hash wird im Modell bereits fÃ¼r ein Element einer anderen Art verwendet
      * Fehler 4: Das Element, das der Starthash angibt, existiert nicht
      * Fehler 5: Das Element, das der Starthash angibt, passt nicht zur Kante
      * Fehler 6: Das Element, das der Endhash angibt, existiert nicht
@@ -154,8 +154,8 @@ public class DataImportVerifier {
     }
 
     /**
-     * Fehler 1: In der HeaderLine ist eine Elementklasse angegeben, die nicht aufgelöst werden kann.
-     * Fehler 2: Für die aktuelle Elementklasse müssen alle Userfields definiert sein, deren Namen in der übergebenen HeaderLine stehen.
+     * Fehler 1: In der HeaderLine ist eine Elementklasse angegeben, die nicht aufgelÃ¶st werden kann.
+     * Fehler 2: FÃ¼r die aktuelle Elementklasse mÃ¼ssen alle Userfields definiert sein, deren Namen in der Ã¼bergebenen HeaderLine stehen.
      * 
      * @param nodeHeaderLine
      */
@@ -163,7 +163,7 @@ public class DataImportVerifier {
         Class<? extends ModelElement> elementClass = nodeHeaderLine.getElementClass();
         String elementClassName = nodeHeaderLine.getElementType();
 
-        //Header bei dem der Name nicht zu einer gültigen Elementklasse aufgelöst werden konnte
+        //Header bei dem der Name nicht zu einer gÃ¼ltigen Elementklasse aufgelÃ¶st werden konnte
         if (elementClass == null) {
             errors.add(nodeHeaderLine, COLUMN_INDEX_ELEMENT_TYPE, HEADER_UNKNOWN_ELEMENT_TYPE, "\"" + elementClassName + "\"");
         }
@@ -171,7 +171,7 @@ public class DataImportVerifier {
     }
 
     /**
-     * Fehler: Für die aktuelle Elementklasse müssen alle Userfields definiert sein, deren Namen in der übergebenen HeaderLine stehen.
+     * Fehler: FÃ¼r die aktuelle Elementklasse mÃ¼ssen alle Userfields definiert sein, deren Namen in der Ã¼bergebenen HeaderLine stehen.
      * 
      * @param edgeHeaderLine
      */
@@ -180,7 +180,7 @@ public class DataImportVerifier {
     }
 
     /**
-     * Fehler: Für die aktuelle Elementklasse müssen alle Userfields definiert sein, deren Namen in der übergebenen HeaderLine stehen.
+     * Fehler: FÃ¼r die aktuelle Elementklasse mÃ¼ssen alle Userfields definiert sein, deren Namen in der Ã¼bergebenen HeaderLine stehen.
      * 
      * @param line
      * @param userFieldColumnStartIndex
@@ -202,7 +202,7 @@ public class DataImportVerifier {
 
     /**
      * Fehler 1: Hash mehrfach in der Datei vergeben
-     * Fehler 2: Hash wird im Modell bereits für ein Element einer anderen Art verwendet.
+     * Fehler 2: Hash wird im Modell bereits fÃ¼r ein Element einer anderen Art verwendet.
      * 
      * @param line
      * @param importHashConfiguration
@@ -219,7 +219,7 @@ public class DataImportVerifier {
             if (index >= 0) {
                 errors.add(line, COLUMN_INDEX_HASH, HASH_DUPLICATE, hash, "" + index);
             }
-            //prüfen, ob im Modell ein Element einer anderen Art vorkommt, das denselben Hash hat
+            //prÃ¼fen, ob im Modell ein Element einer anderen Art vorkommt, das denselben Hash hat
             ModelElement me = gdcoll.getMainGraphDocument().findElementCoded(hash);
             if (me != null && me.getClass() != elementClass) {
                 String displayableName = ModelConstants.getDisplayableName(me.getClass());

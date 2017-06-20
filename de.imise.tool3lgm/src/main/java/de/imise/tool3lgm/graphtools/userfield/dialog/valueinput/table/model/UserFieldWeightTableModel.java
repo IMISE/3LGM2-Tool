@@ -27,12 +27,12 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     /**
      * @param doc
      * @param edgeClass
-     * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
-     *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     * @param direction Richtung in der die ausgwÃ¤hlte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
+     *            <code>DoubleTrace.FORWARD</code> Ã¼bergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
-     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
+     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element Ã¼bergeben wurde,
      *            dann wird nur die Spalte dieses Elementes angezeigt.
-     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
+     * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element Ã¼bergeben wurde,
      *            dann wird nur die Spalte dieses Elementes angezeigt.
      */
     public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
@@ -45,8 +45,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Sucht die RowElements und ColumnElements für alle Elemente heraus, die durch die übergebene Kantenart in der übergebenen
-     * Richtung verbunden sein können. Dabei sind die RowElements immer die Start-Elemente der Kante in der angegebenen Richtung (!) und die
+     * Sucht die RowElements und ColumnElements fÃ¼r alle Elemente heraus, die durch die Ã¼bergebene Kantenart in der Ã¼bergebenen
+     * Richtung verbunden sein kÃ¶nnen. Dabei sind die RowElements immer die Start-Elemente der Kante in der angegebenen Richtung (!) und die
      * ColumnElements immer die EndElemente in der angegebenen Kantenrichtung
      * 
      * @param edgeClass
@@ -59,7 +59,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
         List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
 
-        //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehängt werden könnte
+        //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehÃ¤ngt werden kÃ¶nnte
         for (int i = allRowElements.size() - 1; i >= 0; i--) {
             ModelElement me = allRowElements.get(i);
             if (me.getEdges(edgeClass).isEmpty()) {
@@ -76,7 +76,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Sucht die RowElements genau für das eine übergebene columnElement heraus.
+     * Sucht die RowElements genau fÃ¼r das eine Ã¼bergebene columnElement heraus.
      * 
      * @param edgeClass
      * @param direction
@@ -108,7 +108,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Wenn das übergebene <code>columnElement</code> null ist, wird {@link #getRowAndColumnElements(Class, int)} aufgetrufen, sonst
+     * Wenn das Ã¼bergebene <code>columnElement</code> null ist, wird {@link #getRowAndColumnElements(Class, int)} aufgetrufen, sonst
      * {@link #getRowAndColumnElements(Class, int, ModelElement)}
      * 
      * @param edgeClass
@@ -130,8 +130,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * Erstellt und setzt Verteilungsgewicht-Modeldaten
      * 
      * @param edgeClass
-     * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
-     *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     * @param direction Richtung in der die ausgwÃ¤hlte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
+     *            <code>DoubleTrace.FORWARD</code> Ã¼bergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
      */
     private void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {

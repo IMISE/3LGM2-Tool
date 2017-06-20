@@ -16,11 +16,11 @@ public abstract class UserFieldDefinitionChangeHandler extends GraphDocumentAdap
 
     /**
      * Wenn diese Variable <code>true</code> ist, wird bei der Abfrage irgendeines Kennzahlformelwertes alles neu berechnet. Sie wird bei allen
-     * Änderungen am Modell <code>true</code>.
+     * Ã„nderungen am Modell <code>true</code>.
      */
     private boolean reset = true;
 
-    /** Das Modell für welches die UserField definiert sind */
+    /** Das Modell fÃ¼r welches die UserField definiert sind */
     protected GDCollection gdcoll = null;
 
     /**
@@ -39,17 +39,17 @@ public abstract class UserFieldDefinitionChangeHandler extends GraphDocumentAdap
     }
 
     /**
-     * Löscht alle Berechneten Werte, d.h. alle berechneten Werte werden inkonsitstent (null) gesetzt.
+     * LÃ¶scht alle Berechneten Werte, d.h. alle berechneten Werte werden inkonsitstent (null) gesetzt.
      */
     protected abstract void clearCalculatedUserFieldValues();
 
     /**
-     * Über diese Funktion kann dem Calculator mitgeteilt werden, dass sich mind. eine Kennzahl geändert hat. Nachdem alle Kennzahlen geändert wurden,
+     * Ãœber diese Funktion kann dem Calculator mitgeteilt werden, dass sich mind. eine Kennzahl geÃ¤ndert hat. Nachdem alle Kennzahlen geÃ¤ndert wurden,
      * kann dann die Funktion reset() aufgerufen werden, in der alle Kennzahlen neu berechnet werden. Der Calculator ist selbst kein
-     * <code>GraphDocumentListener</code>, der auf <code>DATA_CHANGED</code> hört, weil er sonst bei jeder Änderung immer alles neu berechen würde.
+     * <code>GraphDocumentListener</code>, der auf <code>DATA_CHANGED</code> hÃ¶rt, weil er sonst bei jeder Ã„nderung immer alles neu berechen wÃ¼rde.
      * Das <code>GraphDocument</code> setzt den <code>boolen reset</code> auf <code>true</code>, wenn das Kommando <code>SET_USER_FIELD_VALUE</code>
-     * ausgeführt wurde. Ein Aufruf der Funktion <code>reset()</code> nach dem <code>true</code>-setzen, führt dann tatsächlich zu der Neuberechnung.
-     * Das macht aber nicht das <code>GraphDocument</code>, sondern das muss man selber machen, nachdem man alle Kennzahlen geändert hat.
+     * ausgefÃ¼hrt wurde. Ein Aufruf der Funktion <code>reset()</code> nach dem <code>true</code>-setzen, fÃ¼hrt dann tatsÃ¤chlich zu der Neuberechnung.
+     * Das macht aber nicht das <code>GraphDocument</code>, sondern das muss man selber machen, nachdem man alle Kennzahlen geÃ¤ndert hat.
      * 
      * @see PropertyDialogUserFieldPanel#commit()
      */
@@ -58,12 +58,12 @@ public abstract class UserFieldDefinitionChangeHandler extends GraphDocumentAdap
     }
 
     /**
-     * Setzt alle berechneten Werte zurück
+     * Setzt alle berechneten Werte zurÃ¼ck
      */
     public final void reset() {
-        //wenn sich irgendwas geändert hatte, ist reset auf true
+        //wenn sich irgendwas geÃ¤ndert hatte, ist reset auf true
         if (reset) {
-            //alle berechneten Werte auf null zurücksetzen
+            //alle berechneten Werte auf null zurÃ¼cksetzen
             clearCalculatedUserFieldValues();
             reset = false;
         }

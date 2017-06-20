@@ -7,11 +7,11 @@ import java.util.List;
 import de.imise.util.io.FileHandler;
 
 /**
- * Klasse für Zugriffe und Operationen auf den Baukasten-Dateien.
+ * Klasse fÃ¼r Zugriffe und Operationen auf den Baukasten-Dateien.
  * 
  * @author fstephan
  *         AXS:06.08.2012: Diese Klasse wurde nirgend und hoffentlich auch im Reporter nicht benutzt. Daher aheb ich
- *         Sie im neuen Projekt gelöscht und hier als deprecated gelassen
+ *         Sie im neuen Projekt gelÃ¶scht und hier als deprecated gelassen
  */
 @Deprecated
 public class ToolDirectoryUtil {
@@ -38,7 +38,7 @@ public class ToolDirectoryUtil {
      * @param fileExtension
      *            Dateisuffix (z.B. <code>.java</code>)
      * @param allFiles
-     *            zu füllende Liste
+     *            zu fÃ¼llende Liste
      * @see FileHandler#traverse(File, String, List)
      * @return
      */

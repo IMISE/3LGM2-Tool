@@ -69,7 +69,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         super(dl, name);
         this.searchElementClass = searchElementClass;
         this.editable = editable;
-        // bei abstracten Klassen darf grunds‰tzlich kein Neu-Knopf angeboten werden
+        // bei abstracten Klassen darf grunds√§tzlich kein Neu-Knopf angeboten werden
         mw = Modifier.isAbstract(searchElementClass.getModifiers()) ? false : mitnew;
 
         // setPreferredSize(new Dimension(550,350));
@@ -81,7 +81,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         lroot = new LGMTreeNode(getResString("verb"), false);
         lmodel = new DefaultTreeModel(lroot);
 
-        // FST: ge‰ndert!
+        // FST: ge√§ndert!
         ltree = new LGMTree(lmodel, mainDoc);
         ltree.setName("ltree");
 
@@ -101,7 +101,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
             add(this, viewButton, constraints, 0, 2, 1, 1);
         }
 
-        //linker Baum direkt ¸ber dem ViewButton
+        //linker Baum direkt √ºber dem ViewButton
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
@@ -116,7 +116,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         rroot = new LGMTreeNode(getResString("frei"), false);
         rmodel = new DefaultTreeModel(rroot);
 
-        // FST: ge‰ndert!
+        // FST: ge√§ndert!
         rtree = new LGMTree(rmodel, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
@@ -126,7 +126,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         rtreeScollPane = new JScrollPane(rtree);
 
         /*
-         * Start: MouseListener erstellen und an Trees anh‰ngen ...
+         * Start: MouseListener erstellen und an Trees anh√§ngen ...
          */
         LGMAction ltreeMouseAction = LGMActionLibrary.getMouseAction(ltree, this);
         LGMAction rtreeMouseAction = LGMActionLibrary.getMouseAction(rtree, this);
@@ -134,11 +134,11 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         ltree.addMouseListener(new LGMMouseListener(null, null, null, ltreeMouseAction, null));
         rtree.addMouseListener(new LGMMouseListener(null, null, null, rtreeMouseAction, null));
         /*
-         * ... End: MouseListener erstellen und an Trees anh‰ngen
+         * ... End: MouseListener erstellen und an Trees anh√§ngen
          */
 
         /*
-         * Start: TreeSelectionListener erstellen und an Trees anh‰ngen ...
+         * Start: TreeSelectionListener erstellen und an Trees anh√§ngen ...
          */
         LGMAction ltreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(ltree, this);
         LGMAction rtreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rtree, this);
@@ -146,7 +146,7 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         ltree.addTreeSelectionListener(new LGMTreeSelectionListener(ltreeSelectionAction));
         rtree.addTreeSelectionListener(new LGMTreeSelectionListener(rtreeSelectionAction));
         /*
-         * ... End: TreeSelectionListener erstellen und an Trees anh‰ngen
+         * ... End: TreeSelectionListener erstellen und an Trees anh√§ngen
          */
 
         /*

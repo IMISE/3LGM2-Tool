@@ -96,7 +96,7 @@ public class UserFieldTableSumHandler {
     }
 
     /**
-     * Liefert das UserField, das für die gewünschte Zeile oder Spalte das Format vorgibt.
+     * Liefert das UserField, das fÃ¼r die gewÃ¼nschte Zeile oder Spalte das Format vorgibt.
      * 
      * @param tableModel
      * @param rowOrColumnIndex
@@ -145,7 +145,7 @@ public class UserFieldTableSumHandler {
 
     /**
      * Liefert das erste gesetzte UserField in irgendeiner Zelle der Tabellendaten oder <code>null</code>, wenn
-     * kein Feld gesetzt ist oder das erste gefundene Feld kein UserField enthält.
+     * kein Feld gesetzt ist oder das erste gefundene Feld kein UserField enthÃ¤lt.
      * 
      * @param tableModel
      * @return

@@ -26,7 +26,7 @@ import de.imise.util.StringUtils;
 import de.imise.util.Sys;
 
 /**
- * Panel für alle einfachen Verbindungen zwischen 2 Elementen
+ * Panel fÃ¼r alle einfachen Verbindungen zwischen 2 Elementen
  *
  * @author AXS
  * @created 25.04.2017
@@ -46,13 +46,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected final int lastEdgeIndex;
 
     /**
-     * Indikator, ob über den Pfad verbundene Elemente immer eindeutig an einem Punkt angehängt werden können (=<code>true</code>) oder
-     * ob es mehrere Möglichkeiten gibt, weil Zwischenpfade mehrfach existieren können.
+     * Indikator, ob Ã¼ber den Pfad verbundene Elemente immer eindeutig an einem Punkt angehÃ¤ngt werden kÃ¶nnen (=<code>true</code>) oder
+     * ob es mehrere MÃ¶glichkeiten gibt, weil Zwischenpfade mehrfach existieren kÃ¶nnen.
      */
     protected final boolean isConnectionPointUnique;
 
     /**
-     * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
+     * Panel fÃ¼r eine einfache Assoziation. Das Label trÃ¤gt den Anzeigenamen der letzten Elementart.
      *
      * @param dialog
      * @param edgeClasses
@@ -62,7 +62,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
+     * Panel fÃ¼r eine einfache Assoziation. Das Label trÃ¤gt den Anzeigenamen der letzten Elementart.
      *
      * @param dialog
      * @param searchElementClass
@@ -73,10 +73,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Kante oder die letzte Kante selbst.
+     * Panel fÃ¼r eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Kante oder die letzte Kante selbst.
      *
      * @param dialog
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Kante im Pfad verbundenen
+     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der Ã¼ber die letzte Kante im Pfad verbundenen
      *            Elementart der Name der letzten Kante selbst ans Label geschrieben.
      * @param edgeClasses
      */
@@ -85,10 +85,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Kante oder die letzte Kante selbst.
+     * Panel fÃ¼r eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Kante oder die letzte Kante selbst.
      *
      * @param dialog
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Kante im Pfad verbundenen
+     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der Ã¼ber die letzte Kante im Pfad verbundenen
      *            Elementart der Name der letzten Kante selbst ans Label geschrieben.
      * @param searchElementClass
      * @param edgeClasses
@@ -98,7 +98,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Panel für eine einfache Assoziation
+     * Panel fÃ¼r eine einfache Assoziation
      *
      * @param dialog
      * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
@@ -114,7 +114,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Panel für eine einfache Assoziation
+     * Panel fÃ¼r eine einfache Assoziation
      *
      * @param dialog
      * @param labelEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
@@ -122,7 +122,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Kante selbst ans Label geschrieben. Welche Kante im Pfad das ist, wird durch connectionLabelIndex
      *            festgelegt.
-     * @param searchElementClass wird hier <code>null</code> übergeben, wird diese Klasse aus den edgeClasses bestimmt, sond wird die übergebene
+     * @param searchElementClass wird hier <code>null</code> Ã¼bergeben, wird diese Klasse aus den edgeClasses bestimmt, sond wird die Ã¼bergebene
      *            Klasse genommen
      * @param edgeClasses
      */
@@ -134,7 +134,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         lastEdgeIndex = edgeClasses.length - 1;
         isConnectionPointUnique = isConnectionPointUnique();
 
-        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
+        // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefÃ¼gt werden
         westLabel = new JLabel();
         String westLabelText;
         Class<? extends Kante> edgeClass = edgeClasses[labelEdgeIndex];
@@ -144,7 +144,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         } else {
             westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(this.searchElementClass) : ModelConstants.getDisplayablePluralName(this.searchElementClass);
         }
-        westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
+        westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groÃŸ schreiben
         westLabel.setText(westLabelText);
         setName(westLabelText);
     }
@@ -175,7 +175,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * @return <code>true</code>, wenn maximal 1 Element der {@link #searchElementClass} mit dem Ausgangselement über den
+     * @return <code>true</code>, wenn maximal 1 Element der {@link #searchElementClass} mit dem Ausgangselement Ã¼ber den
      *         angegebenen Pfad verbunden sein kann. Wenn irgendeine Kante des Pfades mehrfach verbunden sein kann, dann
      *         ist es kein SingleConnectionPath
      */
@@ -205,10 +205,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
+     * Liefert die mit dem ModelElement des Dialoges Ã¼ber die angegebenen Kanten verbundenen Elemente.
      *
      * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
-     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Kante bestehen ist das das
+     *            Pfad zurÃ¼ck gegeben. Bei Pfaden, die nur aus einer Kante bestehen ist das das
      *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
      * @return
      */
@@ -231,9 +231,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert die Elemente, die auf dem durch die Kanten angegebenen Pfad diejenigen sind, die tatsächlich
-     * mit dem searchElementen verbunden sind. Bei einem Pfad der Länge 1 ist das immer nur das ModelElement
-     * selbst bzw. dessen HauptDokument-Container. Bei einem Pfad der Länge 2 sind es die Elemente in der
+     * Liefert die Elemente, die auf dem durch die Kanten angegebenen Pfad diejenigen sind, die tatsÃ¤chlich
+     * mit dem searchElementen verbunden sind. Bei einem Pfad der LÃ¤nge 1 ist das immer nur das ModelElement
+     * selbst bzw. dessen HauptDokument-Container. Bei einem Pfad der LÃ¤nge 2 sind es die Elemente in der
      * Mitte, also immer die direkt nach dem Ausgangs-ModelElement und vor dem searchElement usw.
      *
      * @return
@@ -260,8 +260,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert true, wenn die übergebene Kantenklasse eine Composition ist und die
-     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     * Liefert true, wenn die Ã¼bergebene Kantenklasse eine Composition ist und die
+     * zugehÃ¶rige Richtung (direction) vom Master auf den Slave zeigt.
      *
      * @param edgeClass
      * @param direction
@@ -274,8 +274,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert true, wenn die Kantenklasse am übergebenen Index eine Composition ist und die
-     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     * Liefert true, wenn die Kantenklasse am Ã¼bergebenen Index eine Composition ist und die
+     * zugehÃ¶rige Richtung (direction) vom Master auf den Slave zeigt.
      *
      * @param index
      * @return
@@ -285,7 +285,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert <code>true</code>, wenn der durch die Kanten angegebene Pfad anlegbar ist (also nicht über abstracte Klassen läuft).
+     * Liefert <code>true</code>, wenn der durch die Kanten angegebene Pfad anlegbar ist (also nicht Ã¼ber abstracte Klassen lÃ¤uft).
      *
      * @return
      */
@@ -316,8 +316,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /**
      * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung
-     * über die letzte Kante des Pfades hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese
-     * Verbindung zu lösen oder nicht.
+     * Ã¼ber die letzte Kante des Pfades hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese
+     * Verbindung zu lÃ¶sen oder nicht.
      *
      * @return
      */
@@ -329,16 +329,16 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert <code>true</code>, wenn der durch die Kanten vorgegebene Pfad eindeitig festlegt, wo zu verbindende Elemente verknüpft werden.
-     * Sobald in einem Pfad der Länge > 1 (also mind. aus 2 Kanten) eines der mittleren Elemente mehrfach mit dem Ausgangselement verbunden
-     * sein kann, ist nicht mehr eindeutig, wo die Endelemente angehängt werden sollen.
+     * Liefert <code>true</code>, wenn der durch die Kanten vorgegebene Pfad eindeitig festlegt, wo zu verbindende Elemente verknÃ¼pft werden.
+     * Sobald in einem Pfad der LÃ¤nge > 1 (also mind. aus 2 Kanten) eines der mittleren Elemente mehrfach mit dem Ausgangselement verbunden
+     * sein kann, ist nicht mehr eindeutig, wo die Endelemente angehÃ¤ngt werden sollen.
      *
      * @return
      */
     protected boolean isConnectionPointUnique() {
-        //für alle Kanten außer der letzten
+        //fÃ¼r alle Kanten auÃŸer der letzten
         for (int i = 0; i < lastEdgeIndex; i++) {
-            //hole die maximale Verbindungsanzahl zum nächsten Element
+            //hole die maximale Verbindungsanzahl zum nÃ¤chsten Element
             int maxCardinality = directions[i] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClasses[i]) : Kante.getMaxEndToStartCardinality(edgeClasses[i]);
             //wenn dieses Zwischenelement mehrfach verbunden sein kann
             if (maxCardinality > 1) {
@@ -350,7 +350,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Legt für das übergebene Startelement den gesamten Teilpfad ab startEdgeIndex bis einschließlich zur letzten Kante an.
+     * Legt fÃ¼r das Ã¼bergebene Startelement den gesamten Teilpfad ab startEdgeIndex bis einschlieÃŸlich zur letzten Kante an.
      *
      * @param startElement Das Element bei dem der Teilpfad losgehen soll.
      * @param startEdgeIndex Index der Kante, bei der der anzulegende Teilpfad losgeht
@@ -360,10 +360,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an und hängt die übergebenen elements2connect an.
+     * Legt fÃ¼r das Ã¼bergebene Startelement den Teilpfad ab startEdgeIndex an und hÃ¤ngt die Ã¼bergebenen elements2connect an.
      *
      * @param startElement Das Element bei dem der Teilpfad losgehen soll.
-     * @param elements2Connect Die Elemente die am Ende angehängt werden sollen
+     * @param elements2Connect Die Elemente die am Ende angehÃ¤ngt werden sollen
      * @param startEdgeIndex Index der Kante, bei der der anzulegende Teilpfad losgeht
      */
     protected void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
@@ -371,18 +371,18 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         GDCollection gdcoll = selDoc.getCollection();
         ModelElement targetElement = startElement;
         int pid = getTransactionID();
-        //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Kante
-        //anlegen, sonst bis einschließlich zur letzten
+        //wenn ein gÃ¼ltiges Element2Connect Ã¼bergeben wurde, dann muss man den Pfad nur bis zur vorletzten Kante
+        //anlegen, sonst bis einschlieÃŸlich zur letzten
         int edgeSearchStopIndex = elements2Connect != null ? edgeClasses.length - 1 : edgeClasses.length;
         for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
             Class<? extends Kante> edgeClass2Create = edgeClasses[i];
             int edgeClass2CreateDirection = directions[i];
             Class<? extends Kante> nextEdgeClass2Create = i + 1 < edgeClasses.length ? edgeClasses[i + 1] : null;
-            //wenn es noch eine nächte Kante gibt, dann gibt es auch noch eine nächste direction. Wenn nicht wird einfach FORWARD übergeben, weil das egal ist
+            //wenn es noch eine nÃ¤chte Kante gibt, dann gibt es auch noch eine nÃ¤chste direction. Wenn nicht wird einfach FORWARD Ã¼bergeben, weil das egal ist
             int nextEdgeClass2CreateDirection = nextEdgeClass2Create != null ? directions[i + 1] : FORWARD;
             targetElement = createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
         }
-        //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
+        //wenn gÃ¼ltige elments2Connect Ã¼bergeben wurde, dann mÃ¼ssen sie an das vorletzte Pfadelement angehÃ¤ngt werden
         if (edgeSearchStopIndex < edgeClasses.length) {
             int direction = directions[edgeSearchStopIndex];
             Class<? extends Kante> edgeClass2Create = edgeClasses[edgeSearchStopIndex];
@@ -393,7 +393,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder rückwärts.
+     * Verbindet die beiden Elemente je nach Ã¼bergebener Richtung vorwÃ¤rts oder rÃ¼ckwÃ¤rts.
      *
      * @param gdcoll
      * @param startElement
@@ -403,7 +403,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param pid
      */
     private static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Kante> edgeClass, final int direction, final int pid) {
-        //das neue Element mit dem startElement verknüpfen
+        //das neue Element mit dem startElement verknÃ¼pfen
         if (direction == FORWARD) {
             gdcoll.link(edgeClass, startElement, endElement, pid);
         } else {
@@ -412,26 +412,26 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen Startelelement. Für das neue Element werden alle anderen
-     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher Kardinalitäten bestehen.
+     * Erzeugt ein neues Element und verknÃ¼pft es mit dem Ã¼bergebenen Startelelement. FÃ¼r das neue Element werden alle anderen
+     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher KardinalitÃ¤ten bestehen.
      *
      * @param doc GraphDocument, in dem die anzulegenden Container landen sollen (wenn sie teilmodellspezifisch sind)
      * @param startElement Element, von dem aus die Kanten angelegt werden sollen. Ist dieses Element null, dann wird nur das neue Element angelegt,
-     *            aber nichts verknüpft.
+     *            aber nichts verknÃ¼pft.
      * @param edgeClassToNewElement Kantenklasse, die zwischen dem startElement und dem anzulegenden Element bestehen soll. Diese Klasse und die
      *            directionToNewElement geben vor, welche Elementart neu angelegt werden soll
      * @param directionToNewElement Richtung der neu anzulegenden Kante ausgehend vom startContainer
-     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die Kardinalität das bedingen würde. Da diese Funktion hier
-     *            für einen anzulegenden Pfad aufgerufen wird, dürfen die Kante, dieses Pfades eben nicht schon hier automatisch angelegt werden.
+     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die KardinalitÃ¤t das bedingen wÃ¼rde. Da diese Funktion hier
+     *            fÃ¼r einen anzulegenden Pfad aufgerufen wird, dÃ¼rfen die Kante, dieses Pfades eben nicht schon hier automatisch angelegt werden.
      * @param pid Process-ID des Dialoges
-     * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
+     * @return den neu angelegtes ModelElement mit allen davon abhÃ¤ngigen Elementen (auÃŸer denen, die evtl. auf dem Pfad liegen, der insgesamt
      *         angelegt werden soll)
      */
     protected ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Kante> edgeClassToNewElement, final int directionToNewElement,
             final Class<? extends Kante> edgeClassFromNewElement, final int directionFromNewElement, final int pid) {
-        //Collection des übergebenen doc holen
+        //Collection des Ã¼bergebenen doc holen
         GDCollection gdcoll = doc.getCollection();
-        //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
+        //den interactiveMode auf false setzen, damit man nicht nach den Namen fÃ¼r die Zwischenelemente gefragt wird,
         //bei denen der Namen normalerweise nicht generiert wird
         boolean isInteractiveMode = gdcoll.isInteractiveMode();
 
@@ -439,7 +439,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
         //bei der letzten Kante sollte man bei neuen Elementen nach dem Namen fragen
         boolean newInteractiveMode = lastEdge;
-        //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        //Ausnahme fÃ¼r Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
         if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
             newInteractiveMode = false;
@@ -448,19 +448,19 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
         //Richtung der Kante FORWARD -> die Endklasse muss angelegt werden, sonst die Startklasse
         Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? Kante.getEndClass(edgeClassToNewElement) : Kante.getStartClass(edgeClassToNewElement);
-        //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncähsten Kante ermittelt werden können.
+        //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncÃ¤hsten Kante ermittelt werden kÃ¶nnen.
         if (ModelConstants.isAbstract(elementClass2Create)) {
-            //Richtung der nächsten Kante FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
+            //Richtung der nÃ¤chsten Kante FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
             elementClass2Create = lastEdge ? searchElementClass : directionFromNewElement == FORWARD ? Kante.getStartClass(edgeClassFromNewElement) : Kante.getEndClass(edgeClassFromNewElement);
         }
-        //abstracte Elemente können nicht angelegt werden!
+        //abstracte Elemente kÃ¶nnen nicht angelegt werden!
         if (ModelConstants.isAbstract(elementClass2Create)) {
             return null;
         }
 
         ModelElement createdDependent;
 
-        //wenn ein gültiges startElement übergeben wurde und die Kantenart eine Composition ist
+        //wenn ein gÃ¼ltiges startElement Ã¼bergeben wurde und die Kantenart eine Composition ist
         if (startElement != null && isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
             //erzeuge ein untergeordnetes Element
             createdDependent = GraphDocument.createAddicted(doc, startElement, edgeClassToNewElement.asSubclass(Composition.class), elementClass2Create, pid);
@@ -473,35 +473,35 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             //das Element des neu angelgten Containers holen
             createdDependent = createdContainer.getElement();
 
-            //das neue Element mit dem startElement verknüpfen. Dast Startelement kann null sein, wenn nur das neue Element angelegt werden soll
+            //das neue Element mit dem startElement verknÃ¼pfen. Dast Startelement kann null sein, wenn nur das neue Element angelegt werden soll
             if (startElement != null) {
                 link(gdcoll, startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
             }
         }
         //alle Kantentpyen der neu angelegten Elementart holen
         Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
-        //für jede dieser Kantenarten
+        //fÃ¼r jede dieser Kantenarten
         boolean interrupted = false;
         for (int i = 0; i < edgeTypes.length && !interrupted; i++) {
             //aktuelle Kantenart holen
             Class<? extends Kante> edgeType = edgeTypes[i];
-            //die Kanten, die über den Pfad als nächstes angelegt werden sollen, dürfen hier nicht angelegt werden
+            //die Kanten, die Ã¼ber den Pfad als nÃ¤chstes angelegt werden sollen, dÃ¼rfen hier nicht angelegt werden
             if (edgeType == edgeClassFromNewElement) {
                 continue;
             }
             //wenn das neu angelegte Element StartElement der Kante ist
             if (Kante.isStartClass(edgeType, elementClass2Create)) {
-                //hole die MinKardnalität zu dem anderen Element der Kante
+                //hole die MinKardnalitÃ¤t zu dem anderen Element der Kante
                 int minCardinalityForwardToOther = Kante.getMinStartToEndCardinality(edgeType);
                 if (minCardinalityForwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     ArrayList<Kante> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
                     //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
                     int edgesForwardToCount = edgesForwardTo.size();
-                    //wenn weitere Kanten angelegt werden müssen
+                    //wenn weitere Kanten angelegt werden mÃ¼ssen
                     while (minCardinalityForwardToOther - edgesForwardToCount > 0) {
-                        //für das neu angelegte Element müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                        //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
+                        //fÃ¼r das neu angelegte Element mÃ¼ssen auch alle abhÃ¤ngigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
+                        //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehÃ¶rige Kante null ist -> einfach FORWARD Ã¼bergeben.
                         ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, FORWARD, pid);
                         if (created == null) {
                             interrupted = true;
@@ -512,17 +512,17 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 }
                 //wenn das neu angelegte Element EndElement der Kante ist
             } else {
-                //hole die MinKardnalität zu dem anderen Element der Kante
+                //hole die MinKardnalitÃ¤t zu dem anderen Element der Kante
                 int minCardinalityBackwardToOther = Kante.getMinEndToStartCardinality(edgeType);
                 if (minCardinalityBackwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     ArrayList<Kante> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);
                     //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
                     int edgesBackwardToCount = edgesBackwardTo.size();
-                    //wenn weitere Kanten angelegt werden müssen
+                    //wenn weitere Kanten angelegt werden mÃ¼ssen
                     while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
-                        //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                        //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Kante null ist -> einfach FORWARD übergeben.
+                        //fÃ¼r das neu angelegte Elemente, mÃ¼ssen auch alle abhÃ¤ngigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
+                        //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehÃ¶rige Kante null ist -> einfach FORWARD Ã¼bergeben.
                         ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, FORWARD, pid);
                         if (created == null) {
                             interrupted = true;
@@ -543,12 +543,12 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
      * angelegt.
      *
-     * @param element2Connect wenn hier ein nicht null-Element übergeben wird, dann wird dieses als letztes verknüpft.
+     * @param element2Connect wenn hier ein nicht null-Element Ã¼bergeben wird, dann wird dieses als letztes verknÃ¼pft.
      *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
      */
     protected void connectToFirstPath(final ModelElement element2Connect) {
         ModelElement me = dialog.getModelElement();
-        //für den gesamten Pfad der angelegt werden muss
+        //fÃ¼r den gesamten Pfad der angelegt werden muss
         for (int i = 0; i < edgeClasses.length; i++) {
             //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
             List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i]);

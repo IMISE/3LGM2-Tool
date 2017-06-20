@@ -27,17 +27,17 @@ public abstract class AbstractInputPanel extends JPanel {
     }
 
     /**
-     * Wird aufgerufen, wenn die Änderungen des Panels rückgängig gemacht werden sollen.
+     * Wird aufgerufen, wenn die Ã„nderungen des Panels rÃ¼ckgÃ¤ngig gemacht werden sollen.
      */
     public abstract void cancel();
 
     /**
-     * Wird aufgerufen, wenn die Änderungen des Panels übernommen werden sollen.
+     * Wird aufgerufen, wenn die Ã„nderungen des Panels Ã¼bernommen werden sollen.
      */
     public abstract void commit();
 
     /**
-     * Wenn alle Eingaben in dem Panel korrekt sind, kommt <code>null</code> zurück. Ansonsten kommt, eine Fehlermeldung zurück, die dem Benutzer
+     * Wenn alle Eingaben in dem Panel korrekt sind, kommt <code>null</code> zurÃ¼ck. Ansonsten kommt, eine Fehlermeldung zurÃ¼ck, die dem Benutzer
      * angezeigt werden kann.
      */
     public String getError() {

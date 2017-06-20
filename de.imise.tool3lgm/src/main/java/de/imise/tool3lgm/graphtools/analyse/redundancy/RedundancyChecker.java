@@ -52,29 +52,29 @@ import de.imise.util.swing.dialog.ProgressDialog;
 public class RedundancyChecker extends WindowAdapter {
 
     /**
-     * Konstante für die Einstellung des Benutzers nur Anwendungssysteme zu analysieren
+     * Konstante fÃ¼r die Einstellung des Benutzers nur Anwendungssysteme zu analysieren
      */
     public static final int APPLICATION_SYSTEM_OPTION = 1;
     /**
-     * Konstante für die Einstellung des Benutzers nur Organisationssysteme zu analysieren
+     * Konstante fÃ¼r die Einstellung des Benutzers nur Organisationssysteme zu analysieren
      */
     public static final int ORGANISATION_SYSTEM_OPTION = 2;
     /**
-     * Konstante für die Einstellung des Benutzers Anwendungssysteme und Organisationssysteme zu
+     * Konstante fÃ¼r die Einstellung des Benutzers Anwendungssysteme und Organisationssysteme zu
      * analysieren
      */
     public static final int APPLICATION_AND_ORGANISATION_SYSTEM_OPTION = 3;
 
     /**
      * Legt die Vorauswahl der selektierten Optionen im Auswahldialog fest. Es sind nur 2 booleans
-     * dort enthalten, einer für Anwendungssysteme und einer für Organisationssysteme.
+     * dort enthalten, einer fÃ¼r Anwendungssysteme und einer fÃ¼r Organisationssysteme.
      */
     private static Object[] selectedOptions = null;
 
     /**
-     * <code>Thread</code> für die eigentliche Berechnung.<br>
+     * <code>Thread</code> fÃ¼r die eigentliche Berechnung.<br>
      * Die Berechnung findet in einem eigenen Thread statt, damit man sie abbrechen kann. Wenn sie
-     * nicht in einem eigenen Thread läuft, werden Benutzereingaben (Abbrechen) vom GUI nicht
+     * nicht in einem eigenen Thread lÃ¤uft, werden Benutzereingaben (Abbrechen) vom GUI nicht
      * weitergeleitet.
      */
     private Thread redundancyThread = null;
@@ -87,7 +87,7 @@ public class RedundancyChecker extends WindowAdapter {
     }
 
     /**
-     * Generiert einen Redundanzbericht für das übergebene Modell.<br>
+     * Generiert einen Redundanzbericht fÃ¼r das Ã¼bergebene Modell.<br>
      *
      * @param gdcoll Modell das analysiert werden soll
      * @return Redundanzreport
@@ -98,14 +98,14 @@ public class RedundancyChecker extends WindowAdapter {
         // besitzt
         RedundancyChecker rc = new RedundancyChecker();
 
-        // Liste in die alle zu füllenden RedundancyAnalysisResult kommen
+        // Liste in die alle zu fÃ¼llenden RedundancyAnalysisResult kommen
         ArrayList<RedundancyAnalysisResult> resultList = new ArrayList<RedundancyAnalysisResult>();
 
         do {
             String message = "";
 
             // wenn die Option
-            // "beim Suchen übergeordnete Elemente berücksichtigen"
+            // "beim Suchen Ã¼bergeordnete Elemente berÃ¼cksichtigen"
             // ausgeschaltet ist
             if (!UserProperties.isSearchParents()) {
                 message += Tool3lgmConstants.getResString("ana_fr_search_parents_option_message1");
@@ -123,7 +123,7 @@ public class RedundancyChecker extends WindowAdapter {
             options[3] = Tool3lgmConstants.getResString("Datenbanksystem_p") + con + Tool3lgmConstants.getResString("Objekttyp_p");
             options[4] = Tool3lgmConstants.getResString("ana_fr_self_defined_analysis");
 
-            // null wenn Abrechen gedrückt wurde, sonst ein gültiges
+            // null wenn Abrechen gedrÃ¼ckt wurde, sonst ein gÃ¼ltiges
             // Boolean-Array
             selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("redundancy_analysis"), message, options, null);
 
@@ -132,18 +132,18 @@ public class RedundancyChecker extends WindowAdapter {
                 return;
             }
 
-            // erstes Result für die Anwendungsbausteine bezüglich Aufgaben
+            // erstes Result fÃ¼r die Anwendungsbausteine bezÃ¼glich Aufgaben
             RedundancyAnalysisResult result = null;
             // alle Metapfade zwischen Aufgabe und AWB holen (momentan ist nur
             // einer definiert; dieser ist der
-            // Pfad Aufgabe wird unterstützt durch AWB und in dem Array an
+            // Pfad Aufgabe wird unterstÃ¼tzt durch AWB und in dem Array an
             // Position 0)
 
             MetaPath metaPath = PathFinder.getMetaPathes(Anwendungsbaustein.class, Aufgabe.class)[0];
 
             // wenn beide Arten von AWB analysiert werden sollen
             if (selectedOptions[0] != null && selectedOptions[1] != null) {
-                // AnalyseoptionenString für das Result zusammenbasteln
+                // AnalyseoptionenString fÃ¼r das Result zusammenbasteln
                 String analyzedSystemTypes = Tool3lgmConstants.getResString("RechAnwendungsbaustein_p");
                 analyzedSystemTypes += " " + Tool3lgmConstants.getResString("und") + " " + Tool3lgmConstants.getResString("KonAnwendungsbaustein_p") + con + Tool3lgmConstants.getResString("Aufgabe_p");
                 result = new RedundancyAnalysisResult(gdcoll, Anwendungsbaustein.class, Aufgabe.class, metaPath, analyzedSystemTypes);
@@ -158,21 +158,21 @@ public class RedundancyChecker extends WindowAdapter {
                 resultList.add(result);
             }
 
-            // Softwareprodukte bezüglich Aufgaben
+            // Softwareprodukte bezÃ¼glich Aufgaben
             if (selectedOptions[2] != null) {
                 // alle Metapfade zwischen Aufgabe und Softwareprodukten holen
                 // (momentan ist nur einer definiert; dieser ist der
-                // Pfad Aufgabe wird unterstützt durch SWP und in dem Array an
+                // Pfad Aufgabe wird unterstÃ¼tzt durch SWP und in dem Array an
                 // Position 0)
                 metaPath = PathFinder.getMetaPathes(Softwareprodukt.class, Aufgabe.class)[0];
                 resultList.add(new RedundancyAnalysisResult(gdcoll, Softwareprodukt.class, Aufgabe.class, metaPath, options[2]));
             }
 
-            // Datenbanksystemen bezüglich Objekttypen
+            // Datenbanksystemen bezÃ¼glich Objekttypen
             if (selectedOptions[3] != null) {
                 // alle Metapfade zwischen Objekttypen und Datenbanksystemen
                 // holen (momentan sind 2 definiert
-                // Pfad Aufgabe wird unterstützt durch SWP und in dem Array an
+                // Pfad Aufgabe wird unterstÃ¼tzt durch SWP und in dem Array an
                 // Position 1)
                 metaPath = PathFinder.getMetaPathes(Datenbanksystem.class, Objekttyp.class)[1];
                 resultList.add(new RedundancyAnalysisResult(gdcoll, Datenbanksystem.class, Objekttyp.class, metaPath, options[3]));
@@ -196,19 +196,19 @@ public class RedundancyChecker extends WindowAdapter {
             // nochmal zeigen
         } while (resultList.size() == 0);
 
-        // Konsistenzvorraussetzungen prüfen, die für ein korrektes Ergebnis notwendig sind
-        // 1.) Alle Inkonsistenzen, die die normale Konsistenzprüfung für Elemente liefert, die die
-        // bezüglich ihrer Redundanz zu untersuchenden
-        // oder auf dem verbindenden Pfad dazwischenliegenden Elemente betrifft, müssen beseitigt
+        // Konsistenzvorraussetzungen prÃ¼fen, die fÃ¼r ein korrektes Ergebnis notwendig sind
+        // 1.) Alle Inkonsistenzen, die die normale KonsistenzprÃ¼fung fÃ¼r Elemente liefert, die die
+        // bezÃ¼glich ihrer Redundanz zu untersuchenden
+        // oder auf dem verbindenden Pfad dazwischenliegenden Elemente betrifft, mÃ¼ssen beseitigt
         // werden.
         // 2.) Jedes der Elemente, die am Ende als redundant ausgegeben werden sollen (in unserem
         // speziellen Fall sind das AWB) darf nur einen
         // einzigen Pfad zu der anderen Elementart haben (in unserem Fall zu Aufgaben).
-        // 3.) Für alle auf dem zu untersuchenden Gesamtpfad liegenden Elemente, die in
-        // Teil-Von-Beziehung stehen können, dürfen nur die
+        // 3.) FÃ¼r alle auf dem zu untersuchenden Gesamtpfad liegenden Elemente, die in
+        // Teil-Von-Beziehung stehen kÃ¶nnen, dÃ¼rfen nur die
         // Blattelemente mit jeweils anderen Elementen auf diesem Pfad verbunden sein.
 
-        // alle allgemeinen Konsistenzfehler suchen, die bei Klassen auftreten, die für die
+        // alle allgemeinen Konsistenzfehler suchen, die bei Klassen auftreten, die fÃ¼r die
         // Redundanzanalyse relevant sind
         ConsistencyDefinition consistencyDefinition = new ConsistencyDefinition(Tool3lgmConstants.getResString("redundancy_analysis"));
         for (RedundancyAnalysisResult result : resultList) {
@@ -225,7 +225,7 @@ public class RedundancyChecker extends WindowAdapter {
                     // Anwendungsbausteinkonfiguration immer nur ein
                     // Anwendungsbaustein zugeordnet sein. Sind es mehr als einer, bedeutet das,
                     // dass die alle in einer
-                    // KonfigurationAWB gleichzeitig gebraucht werden. Die Redundanzanalyse würde
+                    // KonfigurationAWB gleichzeitig gebraucht werden. Die Redundanzanalyse wÃ¼rde
                     // aber davon ausgehen, dass
                     // man jeweils nur einen in einer Konfiguration braucht.
                     if (edgeClass == AwbAwbkVerbindung.class) {
@@ -289,7 +289,7 @@ public class RedundancyChecker extends WindowAdapter {
     /**
      * Gibt das Ergebnis der Redundanzanalyse in einem Ausgabedialog aus.
      *
-     * @param doc Modell für das die XMLAnalyse durchgeführt wurde
+     * @param doc Modell fÃ¼r das die XMLAnalyse durchgefÃ¼hrt wurde
      * @param redundancyAnalysisResults
      */
     private static void showResult(final ArrayList<RedundancyAnalysisResult> redundancyAnalysisResults) {
@@ -314,7 +314,7 @@ public class RedundancyChecker extends WindowAdapter {
         outputDialog.appendln(Tool3lgmConstants.getResString("redundancy_analysis"), true);
         outputDialog.appendln(Tool3lgmConstants.getResString("model") + "\t\t: " + col.getName());
 
-        // Letzte Änderung
+        // Letzte Ã„nderung
         File file = col.getFile();
         Calendar cal = Calendar.getInstance();
         if (file == null || !file.canRead()) {
@@ -346,10 +346,10 @@ public class RedundancyChecker extends WindowAdapter {
                 }
             }
 
-            // Äquivalenzklassen
+            // Ã„quivalenzklassen
             outputDialog.appendln("\n\n");
             // outputDialog.appendln(
-            // "Äquivalente Anwendungssysteme, deren Funktionalität man genau 1 mal braucht:"
+            // "Ã„quivalente Anwendungssysteme, deren FunktionalitÃ¤t man genau 1 mal braucht:"
             // , true);
             outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_equivalence_class_title") + ":", true);
             if (result.equalsSets.size() == 0) {
@@ -366,7 +366,7 @@ public class RedundancyChecker extends WindowAdapter {
                 }
             }
 
-            // Überflüssige
+            // ÃœberflÃ¼ssige
             outputDialog.appendln("\n");
             outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_superfluous") + ":", true);
             al.clear();
@@ -442,7 +442,7 @@ public class RedundancyChecker extends WindowAdapter {
      */
     private static String getElementName(final ModelElement me) {
         String retVal = me.toString().replace("-\n", "").replace('\n', ' ');
-        // Hänge an AWB ihre SWP
+        // HÃ¤nge an AWB ihre SWP
         if (me instanceof RechAnwendungsbaustein) {
             StringBuilder sb = new StringBuilder(retVal);
             sb.append(" (");
@@ -523,7 +523,7 @@ public class RedundancyChecker extends WindowAdapter {
     }
 
     /**
-     * Führt die Redundanzberechnug aus. Man kann diese Abbrechen.
+     * FÃ¼hrt die Redundanzberechnug aus. Man kann diese Abbrechen.
      *
      * @author AXS
      */
@@ -535,12 +535,12 @@ public class RedundancyChecker extends WindowAdapter {
         boolean searchParents;
 
         /**
-         * Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
+         * Liste mit RedundancyAnalysisResult, die gefÃ¼llt werden sollen
          */
         private final ArrayList<RedundancyAnalysisResult> resultList;
 
         /**
-         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
+         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefÃ¼llt werden sollen
          */
         public RedundancyThread(final ArrayList<RedundancyAnalysisResult> resultsToFill) {
             super();
@@ -552,12 +552,12 @@ public class RedundancyChecker extends WindowAdapter {
 
             // Originalwert von searchParents merken
             searchParents = UserProperties.isSearchParents();
-            // übergeordnete Elemente auf jeden Fall mit berücksichtigen
+            // Ã¼bergeordnete Elemente auf jeden Fall mit berÃ¼cksichtigen
             UserProperties.setSearchParents(true);
 
-            // füllt alle results
+            // fÃ¼llt alle results
             for (int i = 0; i < resultList.size(); i++) {
-                // der Konstruktoraufruf füllt die übergebene Liste
+                // der Konstruktoraufruf fÃ¼llt die Ã¼bergebene Liste
                 new DecisionTree(resultList.get(i));
             }
 

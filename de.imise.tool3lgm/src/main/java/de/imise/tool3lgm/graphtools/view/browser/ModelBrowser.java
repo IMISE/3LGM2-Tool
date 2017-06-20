@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.swing.component.TabbedPane;
 
-/** Erzeugt ModelBrowser für 3lgm */
+/** Erzeugt ModelBrowser fÃ¼r 3lgm */
 public final class ModelBrowser extends TabbedPane implements ChangeListener, FocusListener {
 
     /** icon for tap with model of active frame */
@@ -33,7 +33,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     /** Der zuletzt aktive Browser */
     protected static ModelBrowser lastActiveBrowser = null;
 
-    /** Styles, die für die Anzeige der Teilmodelle einer {@link GDCollection} zur Verfügung stehen. */
+    /** Styles, die fÃ¼r die Anzeige der Teilmodelle einer {@link GDCollection} zur VerfÃ¼gung stehen. */
     public enum STYLE {
         tab,
         combobox
@@ -55,7 +55,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     }
 
     /**
-     * Tab für eine {@link GDCollection} wird hinzugefügt
+     * Tab fÃ¼r eine {@link GDCollection} wird hinzugefÃ¼gt
      *
      * @param gdcoll
      * @return
@@ -185,7 +185,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     }
 
     /**
-     * Hebt den aktiven Tab hervor und löscht die Hervorhebung beim letzten aktiven Tab.
+     * Hebt den aktiven Tab hervor und lÃ¶scht die Hervorhebung beim letzten aktiven Tab.
      */
     private void updateActiveBrowserTab() {
         if (UserProperties.isShowModelsInSeparateBrowser() && lastActiveBrowser == this) {

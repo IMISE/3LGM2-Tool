@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
- * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts Bäume.
+ * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts BÃ¤ume.
  *
  * @author AXS
  * @created 12.06.2017
@@ -40,7 +40,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     @Override
     protected final void init() {
         super.init();
-        // Aktionen für den button setzen
+        // Aktionen fÃ¼r den button setzen
         showPartlyAction = getShowAction(this, false);
         viewButton = new JButton();
         showAllAction = getShowAction(this, true);
@@ -65,7 +65,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     protected abstract void showPartlyDialog();
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder nur einen Teils des Panels anzeigt.
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das gesamte oder nur einen Teils des Panels anzeigt.
      *
      * @param panel
      */

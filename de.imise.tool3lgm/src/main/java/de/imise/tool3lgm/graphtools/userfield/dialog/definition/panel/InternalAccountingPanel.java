@@ -30,7 +30,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
- * Panel mit dem für Kennzahlen ausgewählt werden kann, wie sie innerhalb einer Hierarchie - also elementartintern verrechnet werden können. Dieses
+ * Panel mit dem fÃ¼r Kennzahlen ausgewÃ¤hlt werden kann, wie sie innerhalb einer Hierarchie - also elementartintern verrechnet werden kÃ¶nnen. Dieses
  * Panel wird Moment nicht benutzt, da die interne Verrechnung in Hierarchien jetzt (erstmal) durch die Definition der Formeln erledigt wird.
  *
  * @author AXS
@@ -48,7 +48,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     private final AlphabeticalComboBox vgComboBox = new AlphabeticalComboBox();
 
     /**
-     * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
+     * "Gleichverteilt" in der gewÃ¤hlten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung Ã¼ber die Teilwertsumme kein
      * spezielles Verteilungsgewicht genutzt werden soll.
      */
     private static final String UNIFORMLY_DISTRIBUTED = Tool3lgmConstants.getResString("uniformly_distributed");
@@ -118,7 +118,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         add(vgComboBox, constraints);
 
         //falls im UserField bereits eine Verrechnungsfunktion, eine Richtung und ein Verteilungsgewicht
-        //hinterlegt sind, müssen diese in den Komponenten ausgewählt werden
+        //hinterlegt sind, mÃ¼ssen diese in den Komponenten ausgewÃ¤hlt werden
         //als erstes die Funktion setzen
         //		if (userField.getInternalAccountingFunction()==UserField.INTERNAL_ACCOUNTING_FUNCTION_SUM)
         //			sumAccountingBut.setSelected(true);
@@ -171,7 +171,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         //		//die Richtung des UserFields selektieren
         //		dirComboBox.setSelectedObject(userField.getInternalAccountingDirection());
         //
-        //		//das Verteilungsgewicht der internen Verrechnung selektieren (nur bei Teilwertsumme möglich)
+        //		//das Verteilungsgewicht der internen Verrechnung selektieren (nur bei Teilwertsumme mÃ¶glich)
         //		if (twsumAccountingBut.isSelected()) {
         //			String weightHash = userField.getInternalAccountingWeightUserFieldHash();
         //			if (vgComboBox.setSelectedObject(weightHash)<0)
@@ -185,12 +185,12 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     //	/**
     //	 * Liefert einen der folgenden Strings: <br>
     //	 * <ul>
-    //	 * <li><code>UserFiled.INTERNAL_ACCOUNTING_FUNCTION_SUM</code>, wenn über die interne Verrechnung über eine Summe ausgewählt ist</li>
-    //	 * <li><code>UserFiled.INTERNAL_ACCOUNTING_FUNCTION_TWSUM</code>, wenn über die interne Verrechnung über eine Teilwertsumme ausgewählt ist</li>
+    //	 * <li><code>UserFiled.INTERNAL_ACCOUNTING_FUNCTION_SUM</code>, wenn Ã¼ber die interne Verrechnung Ã¼ber eine Summe ausgewÃ¤hlt ist</li>
+    //	 * <li><code>UserFiled.INTERNAL_ACCOUNTING_FUNCTION_TWSUM</code>, wenn Ã¼ber die interne Verrechnung Ã¼ber eine Teilwertsumme ausgewÃ¤hlt ist</li>
     //	 * <li><code>null</code>, wenn nicht verrechnet werden soll</li>
     //	 * </ul>
     //	 * @return
-    //	 * 		String der Funktion über die intern verrechnet werden soll
+    //	 * 		String der Funktion Ã¼ber die intern verrechnet werden soll
     //	 * /
     //	public final String getSelectedInternalFuntionName(){
     //		if (sumAccountingBut.isSelected())
@@ -216,7 +216,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
     }
 
     /**
-     * Liefert den Hash-String des selektierten Verteilungsgwichtes für die interne Verrechnung.
+     * Liefert den Hash-String des selektierten Verteilungsgwichtes fÃ¼r die interne Verrechnung.
      *
      * @return
      */

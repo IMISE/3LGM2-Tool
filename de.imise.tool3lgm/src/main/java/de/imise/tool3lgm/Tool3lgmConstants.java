@@ -35,17 +35,17 @@ import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * @author Thomas Rudert, AXS Klasse, die alle global benötigten Parameter, und deren Zugriffsmethoden, des Programms enthält
+ * @author Thomas Rudert, AXS Klasse, die alle global benÃ¶tigten Parameter, und deren Zugriffsmethoden, des Programms enthÃ¤lt
  */
 public abstract class Tool3lgmConstants {
 
     /**
-     * Mögliche Typen der FileFilter. Die Bezeichnungen der Bildtypen entsprechen exakt denen, die ImageCodec.createImageEncoder() als Typ-String
-     * versteht. Für alle diese Typen gibt es
-     * Ressourcen-Strings, deren Key für die Beschreibung sich über den zusammengebausten String aus
+     * MÃ¶gliche Typen der FileFilter. Die Bezeichnungen der Bildtypen entsprechen exakt denen, die ImageCodec.createImageEncoder() als Typ-String
+     * versteht. FÃ¼r alle diese Typen gibt es
+     * Ressourcen-Strings, deren Key fÃ¼r die Beschreibung sich Ã¼ber den zusammengebausten String aus
      * {@link Tool3lgmConstants#FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()} ergbibt.
-     * Für die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
-     * {@link Tool3lgmConstants#FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
+     * FÃ¼r die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
+     * {@link Tool3lgmConstants#FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehÃ¤ngt.
      */
     public static enum FileFilterType {
         LGM3,
@@ -76,11 +76,11 @@ public abstract class Tool3lgmConstants {
     }
 
     /** String with the version-identifier for Tool3lgm */
-    // TODO _____###### ständig aktualisieren! UND DIE BEIDEN TODOS IN TOOL3LGM BEACHTEN!!!
+    // TODO _____###### stÃ¤ndig aktualisieren! UND DIE BEIDEN TODOS IN TOOL3LGM BEACHTEN!!!
     public static final String TOOL_VERSION = "3.3.9";
 
     /**
-     * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer toString()-Methode den Namen des Kommandos zurück. Wenn <code>false</code>,
+     * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer toString()-Methode den Namen des Kommandos zurÃ¼ck. Wenn <code>false</code>,
      * dann liefert die toString()-Methode die Nummer des
      * Kommandos in der values()-Liste der {@link GDCommands} als String. Man braucht die lesbaren Namen im Grunde nur zum Debuggen. Im Regelbetrieb
      * sollte der Parameter auf <code>false</code> stehen,
@@ -115,7 +115,7 @@ public abstract class Tool3lgmConstants {
     public static final File USER_INFO_FILE = new File(USER_HOME_DIR_NAME, ".tool3lgmUserInfo");
 
     /**
-     * Datei-Endung für große Icons.
+     * Datei-Endung fÃ¼r groÃŸe Icons.
      * <p>
      * Verwendungsweise: <br>
      * <code>Icon largeIcon = getIcon(</code><em>iconNamePrefix</em><code> + LARGE_ICON_SUFFIX)</code> <br>
@@ -126,7 +126,7 @@ public abstract class Tool3lgmConstants {
     public static final String LARGE_ICON_SUFFIX = "_LARGE.gif";
 
     /**
-     * Datei-Endung für kleine Icons.
+     * Datei-Endung fÃ¼r kleine Icons.
      * <p>
      * Verwendungsweise: <br>
      * <code>Icon smallIcon = getIcon(</code><em>iconNamePrefix</em><code> + SMALL_ICON_SUFFIX)</code> Bsp.: <br>
@@ -141,7 +141,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Name des Verzeichnisses in dem alle Icons liegen, die das Tool braucht.<br>
-     * Diese können über die statische Methode <code>getIcon(String name)</code> geladen werden.
+     * Diese kÃ¶nnen Ã¼ber die statische Methode <code>getIcon(String name)</code> geladen werden.
      */
     private static final String RESOURCE_ICON_DIR_NAME = "icon/";
 
@@ -151,13 +151,13 @@ public abstract class Tool3lgmConstants {
     public static final String JAR_RESOURCE_DIR_NAME = "";
 
     /**
-     * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
+     * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem SprachkÃ¼rzel der akuellen <code>Locale</code> zu finden
      * sind.
      */
     public static final String RESOUCE_BASE_XSL_SCRIPT_DIR_NAME = "xslt/";
 
     /**
-     * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem Sprachkürzel der akuellen <code>Locale</code> zu finden
+     * Name des Verzeichnisses, in dem die lokalisierten XSLT-Scripte in den Ordnern mit dem SprachkÃ¼rzel der akuellen <code>Locale</code> zu finden
      * sind.
      */
     public static final String RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME = "userfield/";
@@ -165,27 +165,27 @@ public abstract class Tool3lgmConstants {
     /** Absoluter Name des Beispielmodells */
     public static final File EXAMPLE_MODEL_FILE = new File(APPLICATION_DIR, "Beispiel.z3lgm");
 
-    /** Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen */
+    /** Name des Verzeichnisses in dem die Ressourcen fÃ¼r den Webexport liegen */
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
     // Anfang FileFilter
 
-    /** Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen Benutzer */
+    /** Pfad zur Default-Datei in den Ressourcen mit den Optionen fÃ¼r einen Benutzer */
     public static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
-    /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
+    /** Anzahl der im MenÃ¼ angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;
 
     /**
-     * Anfang des ResourceString, mit dem bei jedem über die Funktion zu ladenden FileFilter der Key-String der Beschreibung und der
+     * Anfang des ResourceString, mit dem bei jedem Ã¼ber die Funktion zu ladenden FileFilter der Key-String der Beschreibung und der
      * Dateierweiterungen beginnen muss.
      */
     public static final String FILE_FILTER_RESOURCE_PREFIX = "FILE_FILTER_";
 
-    /** Ende des Key-Strings für die Dateiertweiterungen eines FileFilters */
+    /** Ende des Key-Strings fÃ¼r die Dateiertweiterungen eines FileFilters */
     public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 
-    /** Mappt von einem {@link FileFilterType} auf den dazugehörigen {@link FileNameExtensionFilter} */
+    /** Mappt von einem {@link FileFilterType} auf den dazugehÃ¶rigen {@link FileNameExtensionFilter} */
     private static final HashMap<FileFilterType, FileNameExtensionFilter> FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER = new HashMap<Tool3lgmConstants.FileFilterType, FileNameExtensionFilter>();
 
     /** Map aller Global einsetzbarer {@link KeyStroke}s */
@@ -198,7 +198,7 @@ public abstract class Tool3lgmConstants {
     // Ende FileFilter
 
     /**
-     * Array aller {@link Action}s, die im gesamten Baukasten durch ihre dazugehörigen {@link KeyStroke}s ausgelöst werden können
+     * Array aller {@link Action}s, die im gesamten Baukasten durch ihre dazugehÃ¶rigen {@link KeyStroke}s ausgelÃ¶st werden kÃ¶nnen
      */
     private static Action[] KEYSTROKE_ACTIONS;
 
@@ -215,7 +215,7 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Name des Verzeichnisses in dem alle lokalisierten Icons liegen, die das Tool braucht.<br>
-     * Diese können über die statische Methode <code>getLocalizedIcon(String name)</code> geladen werden.
+     * Diese kÃ¶nnen Ã¼ber die statische Methode <code>getLocalizedIcon(String name)</code> geladen werden.
      */
     private static final String RESOURCE_LOCALIZED_ICON_PATH = RESOURCE_ICON_DIR_NAME + UserProperties.getLocale().getLanguage() + "/";
     /**
@@ -226,13 +226,13 @@ public abstract class Tool3lgmConstants {
 
     // die beiden ResourceBundles laden
     /**
-     * Haupt-<code>ResoruceBundle</code> mit allen Resourcen außer ein paar speziellen Fehlermeldungen.<br>
+     * Haupt-<code>ResoruceBundle</code> mit allen Resourcen auÃŸer ein paar speziellen Fehlermeldungen.<br>
      * Fehlermeldungen sollten in errorBundle abgelegt werden.
      */
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
-     * ResourceBundle für Fehlermeldungen
+     * ResourceBundle fÃ¼r Fehlermeldungen
      */
     private static ResourceBundle errorBundle = ResourceBundle.getBundle(RESOURCE_ERRORS_BASE_NAME);
 
@@ -256,14 +256,14 @@ public abstract class Tool3lgmConstants {
     private static int debugGraphicsOption = DebugGraphics.NONE_OPTION;
 
     /**
-     * für die Sanduhr...
+     * fÃ¼r die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
 
     /**
-     * Liefert den command-<code>String</code> für das {@link KeyEvent}, das durch die durch <code>key</code> identifizierte {@link StaticAction}
-     * ausgelöst wird.<br>
-     * Im Moment wird hier <code>key</code> selbst zurückgegeben.
+     * Liefert den command-<code>String</code> fÃ¼r das {@link KeyEvent}, das durch die durch <code>key</code> identifizierte {@link StaticAction}
+     * ausgelÃ¶st wird.<br>
+     * Im Moment wird hier <code>key</code> selbst zurÃ¼ckgegeben.
      *
      * @param identifier
      * @return
@@ -273,7 +273,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
+     * Gibt das Oberste Verzeichnis zurÃ¼ck, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
      *
      * @return Pfad zur Anwendung
      */
@@ -288,7 +288,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * gibt String für die Dateiangabe des programminternen Zwischenspeichers zurück
+     * gibt String fÃ¼r die Dateiangabe des programminternen Zwischenspeichers zurÃ¼ck
      *
      * @return String mit Verzeichnis- und Dateiangabe des Zwischenspeichers
      */
@@ -307,7 +307,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert eine kurze Beschreibung für die durch <code>key</code> identifizierte {@link StaticAction}. (Zur Verwendung als Tooltip)
+     * Liefert eine kurze Beschreibung fÃ¼r die durch <code>key</code> identifizierte {@link StaticAction}. (Zur Verwendung als Tooltip)
      *
      * @param identifier
      * @return
@@ -317,8 +317,8 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Gibt fuer eine ArrayList von {@link NodeContainer}n oder {@link ModelElement}s einen String des Inhalts zurück. Ist insertNewLines==false, wird
-     * eine kommaseparierte Liste zurückgegeben.
+     * Gibt fuer eine ArrayList von {@link NodeContainer}n oder {@link ModelElement}s einen String des Inhalts zurÃ¼ck. Ist insertNewLines==false, wird
+     * eine kommaseparierte Liste zurÃ¼ckgegeben.
      *
      * @param ArrayList
      * @param boolean
@@ -330,21 +330,21 @@ public abstract class Tool3lgmConstants {
             return serversBuf.toString();
         }
 
-        // diese Form mag blöd aussehen, aber so müssen nicht in jedem Schleifendurchlauf die Bedingungen neu geprüft werden
+        // diese Form mag blÃ¶d aussehen, aber so mÃ¼ssen nicht in jedem Schleifendurchlauf die Bedingungen neu geprÃ¼ft werden
         if (showSzenarios) {
             if (insertNewLines) {
-                // Namen der Container durch \n getrennt einfügen
+                // Namen der Container durch \n getrennt einfÃ¼gen
                 for (int i = 0; i < list.size(); i++) {
                     serversBuf.append(list.get(i).toString().replace('\n', ' '));
                     serversBuf.append('\n');
                 }
             } else {
-                // Namen der Container durch ein Leerzeichen und Komma getrennt einfügen
+                // Namen der Container durch ein Leerzeichen und Komma getrennt einfÃ¼gen
                 return list.toString().replace('\n', ' ');
             }
         } else {
             String separator = insertNewLines ? "\n" : ", ";
-            // Namen der Elemente durch \n oder ", " getrennt einfügen
+            // Namen der Elemente durch \n oder ", " getrennt einfÃ¼gen
             for (Object o : list) {
                 if (o instanceof ElementContainer) {
                     o = ((ElementContainer) o).getElement();
@@ -353,7 +353,7 @@ public abstract class Tool3lgmConstants {
                 serversBuf.append(separator);
             }
         }
-        // das zuletzt angehängten Zeichen (Komma+Leerzeichen oder Newline) nicht mit zurückgeben
+        // das zuletzt angehÃ¤ngten Zeichen (Komma+Leerzeichen oder Newline) nicht mit zurÃ¼ckgeben
         if (serversBuf.length() > 0) {
             if (insertNewLines) {
                 return serversBuf.deleteCharAt(serversBuf.length() - 1).toString();
@@ -374,7 +374,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene String eine Extension eines {@link FileNameExtensionFilter} in
+     * Liefert <code>true</code>, wenn der Ã¼bergebene String eine Extension eines {@link FileNameExtensionFilter} in
      * FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER ist.
      *
      * @param extension
@@ -392,7 +392,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert für den übergebenen {@link FileFilterType} den {@link FileNameExtensionFilter}
+     * Liefert fÃ¼r den Ã¼bergebenen {@link FileFilterType} den {@link FileNameExtensionFilter}
      *
      * @param filterName
      * @return
@@ -410,7 +410,7 @@ public abstract class Tool3lgmConstants {
      * Liefert eine Liste von {@link FileNameExtensionFilter}.
      *
      * @param fileFilterType
-     *            Array von Objecten, deren jeweilige toString()-Methode den Filternamen angibt, der an dieser Stelle im Rückgabearray stehen soll.
+     *            Array von Objecten, deren jeweilige toString()-Methode den Filternamen angibt, der an dieser Stelle im RÃ¼ckgabearray stehen soll.
      * @return
      * @see #getFileNameExtensionFilter(FileFilterType)
      */
@@ -430,7 +430,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * gibt das spezifiziert ImageIcon aus dem Standard-Iconpfad zurück
+     * gibt das spezifiziert ImageIcon aus dem Standard-Iconpfad zurÃ¼ck
      *
      * @param name
      * @return ImageIcon
@@ -443,7 +443,7 @@ public abstract class Tool3lgmConstants {
      * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu laden und es wiederzugeben
      *
      * @param dir
-     *            Verzeichnis des tatsächlichen Bilds
+     *            Verzeichnis des tatsÃ¤chlichen Bilds
      * @return
      */
     private static ImageIcon getImageIcon(final String dir) {
@@ -459,24 +459,24 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert alle <code>Locale</code>s, für die Resourcen hinterlegt wurden.<br>
+     * Liefert alle <code>Locale</code>s, fÃ¼r die Resourcen hinterlegt wurden.<br>
      * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt. Es wird davon
      * ausgegangen, dass auf jeden Fall englische Ressourcen
      * existieren, die in der Datei "Tool3lgmResources.properties" hinterlegt sind.<br>
      *
-     * @return alle Locales, für die Ressourcen existieren
+     * @return alle Locales, fÃ¼r die Ressourcen existieren
      */
     public static final Locale[] getInstalledLanguages() {
         StringBuilder sb = new StringBuilder(RESOURCE_BASE_NAME);
-        // den Namen vervollständigen; die Zeichen an "XX" werden immer durch einen Ländercode ersetzt
+        // den Namen vervollstÃ¤ndigen; die Zeichen an "XX" werden immer durch einen LÃ¤ndercode ersetzt
         sb.append("_");
         String appendix = "XX";
         sb.append(appendix);
         // Positionen der Xe bestimmen
         int firstXIndex = sb.length() - appendix.length();
-        // alle im System verfügbaren Locale-Sprachcodes holen (die sind immer 2 Zeichen lang)
+        // alle im System verfÃ¼gbaren Locale-Sprachcodes holen (die sind immer 2 Zeichen lang)
         String[] allLocales = Locale.getISOLanguages();
-        // Array für die gefundenen Ergebnislocales
+        // Array fÃ¼r die gefundenen Ergebnislocales
         Locale[] allFoundLocales = new Locale[allLocales.length];
         // Anzahl der gefundenen Ergebnislocales
         int foundLocales = 0;
@@ -495,7 +495,7 @@ public abstract class Tool3lgmConstants {
                 found = true;
             } catch (MissingResourceException e) {
             }
-            // wenn ein ResoruceBundle für die aktuelle Sprache gefunden wurde
+            // wenn ein ResoruceBundle fÃ¼r die aktuelle Sprache gefunden wurde
             if (found) {
                 // Suche die Systemlocale zum gefundenen ResourceBundle
                 for (int j = 0; j < systemLocales.length; j++) {
@@ -511,7 +511,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert den auslösenden {@link KeyStroke} für die durch <code>key</code> identifizierte {@link StaticAction}.
+     * Liefert den auslÃ¶senden {@link KeyStroke} fÃ¼r die durch <code>key</code> identifizierte {@link StaticAction}.
      *
      * @param identifier
      * @return
@@ -521,7 +521,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Gibt ein Array aller {@link Action}s wieder, die im gesamten Baukasten durch ihre dazugehörigen {@link KeyStroke}s ausgelöst werden können.
+     * Gibt ein Array aller {@link Action}s wieder, die im gesamten Baukasten durch ihre dazugehÃ¶rigen {@link KeyStroke}s ausgelÃ¶st werden kÃ¶nnen.
      *
      * @see #KEYSTROKES
      * @return
@@ -549,7 +549,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * gibt das spezifiziert ImageIcon aus dem lokalisierten Iconpfad zurück
+     * gibt das spezifiziert ImageIcon aus dem lokalisierten Iconpfad zurÃ¼ck
      *
      * @param name
      * @return ImageIcon
@@ -558,7 +558,7 @@ public abstract class Tool3lgmConstants {
         ImageIcon retVal;
         try {
             retVal = getImageIcon(RESOURCE_LOCALIZED_ICON_PATH + name);
-            // wenn für die Locale aus der Userproperties-Datei das gesucht lokalisierte Bild nicht vorkommt
+            // wenn fÃ¼r die Locale aus der Userproperties-Datei das gesucht lokalisierte Bild nicht vorkommt
         } catch (Exception e) {
             // Standardressourcen sind englisch
             retVal = getImageIcon(RESOURCE_ICON_DIR_NAME + "/en/");
@@ -590,7 +590,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * für die Sanduhr...
+     * fÃ¼r die Sanduhr...
      *
      * @return Cursor that indicates a running process
      */
@@ -599,7 +599,7 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Wenn nicht die linke Maustaste gedrückt wurde, wird true zurück gegeben.
+     * Wenn nicht die linke Maustaste gedrÃ¼ckt wurde, wird true zurÃ¼ck gegeben.
      *
      * @param e
      * @return
@@ -613,7 +613,7 @@ public abstract class Tool3lgmConstants {
      *
      * @param f
      *            the file to check the permission
-     * @return true, if thread can get exclusive read/write-permission for file TODO:AXS:prüfen was das hier soll
+     * @return true, if thread can get exclusive read/write-permission for file TODO:AXS:prÃ¼fen was das hier soll
      */
     public static boolean lockSupportedByFileSystem(final File f) {
         return false;

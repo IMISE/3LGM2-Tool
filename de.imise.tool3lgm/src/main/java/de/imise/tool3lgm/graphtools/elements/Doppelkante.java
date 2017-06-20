@@ -54,9 +54,9 @@ public abstract class Doppelkante extends Kante {
     }
 
     /**
-     * Teilweise werden Kanten falschherum angelegt, was teilweise auch mal zulässig war. So konnte man "Aufgabe interpretiert Objekttyp" ausdrücken
-     * über eine Kante von der Aufgabe zum Objekttyp mit der Richtung <code>FORWARD</code> oder über eine Kante
-     * vm Objekttyp zur Aufgabe mit der Richtung <code>BACKWARD</code>. Jetzt ist nur noch eine eindeutige Richtung zulässig. Diese ergibt sich aus
+     * Teilweise werden Kanten falschherum angelegt, was teilweise auch mal zulÃ¤ssig war. So konnte man "Aufgabe interpretiert Objekttyp" ausdrÃ¼cken
+     * Ã¼ber eine Kante von der Aufgabe zum Objekttyp mit der Richtung <code>FORWARD</code> oder Ã¼ber eine Kante
+     * vm Objekttyp zur Aufgabe mit der Richtung <code>BACKWARD</code>. Jetzt ist nur noch eine eindeutige Richtung zulÃ¤ssig. Diese ergibt sich aus
      * der Startelementklasse und der Endelementklasse, die in einer konkreten Kantenklasse angegeben sind.
      * 
      * @see de.imise.tool3lgm.graphtools.elements.Kante#checkValidity()
@@ -65,12 +65,12 @@ public abstract class Doppelkante extends Kante {
     public boolean checkValidity() {
         //das Originale Startelement merken
         ModelElement start = k1;
-        //die übergeordnete Validitätsprüfung ausführen -> die Elemente wurden evtl. vertauscht.
+        //die Ã¼bergeordnete ValiditÃ¤tsprÃ¼fung ausfÃ¼hren -> die Elemente wurden evtl. vertauscht.
         if (!super.checkValidity()) {
-            //wenn die übergeordnete Prüfung fehl schlug, ist irgendwas richtig falsch
+            //wenn die Ã¼bergeordnete PrÃ¼fung fehl schlug, ist irgendwas richtig falsch
             return false;
         }
-        //wenn die Elemente vertauscht wurden -> wenn nötig auch die Richtung tauschen
+        //wenn die Elemente vertauscht wurden -> wenn nÃ¶tig auch die Richtung tauschen
         if (k1 != start) {
             if (direction == FORWARD) {
                 direction = BACKWARD;

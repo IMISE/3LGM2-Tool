@@ -16,7 +16,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 public class OptionPanel extends AbstractInputPanel {
 
     /**
-     * Das UserField, dessem Eigenschaften mit diesem Panel ge‰ndert werden sollen.
+     * Das UserField, dessem Eigenschaften mit diesem Panel ge√§ndert werden sollen.
      */
     private final UserField userField;
 
@@ -26,7 +26,7 @@ public class OptionPanel extends AbstractInputPanel {
     private final JCheckBox treeVisCheckBox = new JCheckBox(Tool3lgmConstants.getResString("userFieldEditor_treevis"));
 
     /**
-     * CheckBox zum Unstellen der Option, ob Kennzahlformeln tats‰chlich berechnet werden sollen
+     * CheckBox zum Unstellen der Option, ob Kennzahlformeln tats√§chlich berechnet werden sollen
      */
     private JCheckBox enableClassificationNumberCalculationCheckBox;
 

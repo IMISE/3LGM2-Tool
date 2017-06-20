@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
- * Klasse zum Zeichnen der Zeilenköpfe für die Analysetabelle
+ * Klasse zum Zeichnen der ZeilenkÃ¶pfe fÃ¼r die Analysetabelle
  * 
  * @author Thomas Rudert
  */
@@ -19,10 +19,10 @@ public class RowPanel extends JPanel {
     /** ArrayList mit Strings der Namen der Zeilenelement */
     private ArrayList<? extends ModelElement> rows;
 
-    /** Integer der die Zeilenhöhe definiert */
+    /** Integer der die ZeilenhÃ¶he definiert */
     private int delta = -1;
 
-    /** Integer der die maximal Breite der Zeilenköpfe definiert */
+    /** Integer der die maximal Breite der ZeilenkÃ¶pfe definiert */
     private int max_length = 0;
 
     /** Anzahl der Zeilen */
@@ -36,7 +36,7 @@ public class RowPanel extends JPanel {
     /**
      * Konstruktor
      * 
-     * @param _rows ArrayList mit Strings der Zeilenüberschriften
+     * @param _rows ArrayList mit Strings der ZeilenÃ¼berschriften
      */
     public RowPanel(final ArrayList<ModelElement> _rows) {
         super();
@@ -60,12 +60,12 @@ public class RowPanel extends JPanel {
     }
 
     /**
-     * Bestimmt die benötigten Parameter delta und max_length und legt die Größe der Component fest
+     * Bestimmt die benÃ¶tigten Parameter delta und max_length und legt die GrÃ¶ÃŸe der Component fest
      * 
      * @param g Graphics
      */
     private void setRequiredParam(final Graphics g) {
-        /* Zeilenhöhe */
+        /* ZeilenhÃ¶he */
         delta = g.getFontMetrics().getHeight() + 5;
 
         /* Spaltenbreite */
@@ -76,7 +76,7 @@ public class RowPanel extends JPanel {
         }
         max_length = Math.min(300, max_length);
 
-        /* Component-Größe festlegen */
+        /* Component-GrÃ¶ÃŸe festlegen */
         Dimension dim = new Dimension(max_length + 1, delta * rows.size() + 1);
         this.setSize(dim);
         setPreferredSize(dim);
@@ -87,7 +87,7 @@ public class RowPanel extends JPanel {
     }
 
     /**
-     * Gibt Anzahl der Zeilen zurück
+     * Gibt Anzahl der Zeilen zurÃ¼ck
      * 
      * @return int Anzahl der Zeilen
      */
@@ -96,9 +96,9 @@ public class RowPanel extends JPanel {
     }
 
     /**
-     * Gibt Zeilenhöhe in Pixeln zurück
+     * Gibt ZeilenhÃ¶he in Pixeln zurÃ¼ck
      * 
-     * @return int Zeilenhöhe in Pixeln
+     * @return int ZeilenhÃ¶he in Pixeln
      */
     public int getRowHeight() {
         return delta;

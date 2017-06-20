@@ -17,8 +17,8 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
  * Ein {@link PathConnectionPanel}, das statt im linken bzw. einzigen Baum den ganzen Pfad anzuzeigen immer
- * nur die Bl‰tter unter root anzeigt, wobei diese "Bl‰tter" dann noch ihre Teile (¸ber PartOfBeziehungen)
- * angeh‰ngt bekommen. Es werden also nur die End-Elemente des Pfades angezeigt und keine Zwischenelemente.
+ * nur die Bl√§tter unter root anzeigt, wobei diese "Bl√§tter" dann noch ihre Teile (√ºber PartOfBeziehungen)
+ * angeh√§ngt bekommen. Es werden also nur die End-Elemente des Pfades angezeigt und keine Zwischenelemente.
  *
  * @author astruebi
  * @created 31.05.2017
@@ -44,7 +44,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     @Override
     protected boolean isConnectionPointUnique() {
-        //es wird immer an root angeh‰ngt
+        //es wird immer an root angeh√§ngt
         return true;
     }
 
@@ -54,7 +54,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     @Override
     protected Collection<LGMTreeNode> buildTree() {
         Collection<LGMTreeNode> leafNodes = super.buildTree();
-        //wenn dieses Panel mit einem Pfad der L‰nge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
+        //wenn dieses Panel mit einem Pfad der L√§nge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
         //da es keine Zwischenelemente gibt, die nicht angezeigt werden sollen
         if (edgeClasses.length == 1) {
             return leafNodes;
@@ -65,16 +65,16 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             nodeToUserObjectPath.clear();
         }
         if (!leafNodes.isEmpty()) {
-            //vor dem Umh‰ngen der Bl‰tter an den root f¸r jedes Blatt das echte Vorg‰ngerelement auf dem Pfad merken
+            //vor dem Umh√§ngen der Bl√§tter an den root f√ºr jedes Blatt das echte Vorg√§ngerelement auf dem Pfad merken
             for (LGMTreeNode leaf : leafNodes) {
                 LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
                 ModelElement parentMe = getNodeModelElement(leafParent);
                 nodeToUserObjectPath.put(leaf, parentMe);
                 root.add(leaf);
             }
-            //alle Elemente vom root abh‰ngen
+            //alle Elemente vom root abh√§ngen
             root.removeAllChildren();
-            //alle Bl‰tter direkt an den root h‰ngen
+            //alle Bl√§tter direkt an den root h√§ngen
             for (LGMTreeNode leaf : leafNodes) {
                 root.add(leaf);
             }
@@ -84,7 +84,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     @Override
     protected TreePath getConnectActionTargetTreeSelectionPath() {
-        //ausgew‰hlter Path im TargetTree ist immer root -> immer der gesamte Pfad wird neu angelegt
+        //ausgew√§hlter Path im TargetTree ist immer root -> immer der gesamte Pfad wird neu angelegt
         return new TreePath(ltree.getModel().getRoot());
     }
 

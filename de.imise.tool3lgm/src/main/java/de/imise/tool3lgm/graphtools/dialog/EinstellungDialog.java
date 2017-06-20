@@ -23,7 +23,7 @@ import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.gui.Werkzeugleiste;
 
 /**
- * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche
+ * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und GrÃ¶ÃŸe der ZeichenflÃ¤che
  * 
  * @author N.N.
  */
@@ -70,7 +70,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
      * @param f
      */
     public void showDialog(final ToolInternalFrame f) {
-        // Dialog nur für Teilmodelle anzeigen, da nur Teilmodelle einen Grafischen View besitzen
+        // Dialog nur fÃ¼r Teilmodelle anzeigen, da nur Teilmodelle einen Grafischen View besitzen
         if (!(f.getGraphDocument() instanceof Szenario)) {
             return;
         }

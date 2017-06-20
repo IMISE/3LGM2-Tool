@@ -15,11 +15,11 @@ import de.imise.util.Alphabetical;
 import de.imise.util.collections.AlphabeticalSet;
 
 /**
- * Die Redundanzanalyse wurde ursprünglich für Anwendungsbausteine in Bezug auf Aufgaben
- * geschrieben. D.h. es sollte die Frage geklärt werden, welche Anwendungsbausteine überflüssig
- * sind, da sie keine oder nur Aufgaben unterstützen, die schon von anderen Anwendungsbausteinen
+ * Die Redundanzanalyse wurde ursprÃ¼nglich fÃ¼r Anwendungsbausteine in Bezug auf Aufgaben
+ * geschrieben. D.h. es sollte die Frage geklÃ¤rt werden, welche Anwendungsbausteine Ã¼berflÃ¼ssig
+ * sind, da sie keine oder nur Aufgaben unterstÃ¼tzen, die schon von anderen Anwendungsbausteinen
  * erledigt werden, die man auf jeden Fall braucht. <br>
- * Mittlerweile ist die ganze XMLAnalyse so allgemein, dass man alle Elemente die über einen Pfad
+ * Mittlerweile ist die ganze XMLAnalyse so allgemein, dass man alle Elemente die Ã¼ber einen Pfad
  * verbunden sind, gegenseitig auf Redundanz testen kann. Alle Kommentare und Variablenbenennungen
  * gehen aber vom oben genannten Szenario aus.
  * 
@@ -28,12 +28,12 @@ import de.imise.util.collections.AlphabeticalSet;
 public class DecisionTree {
 
     /**
-     * Der Wurzelknoten des Entscheidungsbaumes. Er repräsentiert den keinen AWB.
+     * Der Wurzelknoten des Entscheidungsbaumes. Er reprÃ¤sentiert den keinen AWB.
      */
     private DecisionTreeNode root = DecisionTreeNode.createDecisionTreeRoot();
 
     /**
-     * Anazahl der AWB, die im Baum betrachtet werden. Dieser Zähler wird auch für die Tiefe des
+     * Anazahl der AWB, die im Baum betrachtet werden. Dieser ZÃ¤hler wird auch fÃ¼r die Tiefe des
      * Kombinationsbaumes angewendet.
      */
     private int awbCount;
@@ -43,33 +43,33 @@ public class DecisionTree {
      */
     private int[][] data;
 
-    /** unterstützende AWB pro Aufgabe */
+    /** unterstÃ¼tzende AWB pro Aufgabe */
     private int[] awbSupport;
-    /** Index des ersten unterstützenden AWB pro Aufgabe (oder -1) */
+    /** Index des ersten unterstÃ¼tzenden AWB pro Aufgabe (oder -1) */
     private int[] firstAwbSupportIndex;
-    /** Index des letzten unterstützenden AWB pro Aufgabe (oder -1) */
+    /** Index des letzten unterstÃ¼tzenden AWB pro Aufgabe (oder -1) */
     private int[] lastAwbSupportIndex;
 
     /**
-     * unterstützte Aufgaben pro AWB. Diese Zahl wird negiert, wenn der AWB mind. eine Aufgabe
-     * exklusiv untertsützt.
+     * unterstÃ¼tzte Aufgaben pro AWB. Diese Zahl wird negiert, wenn der AWB mind. eine Aufgabe
+     * exklusiv untertsÃ¼tzt.
      */
     private int[] supportedAuf;
-    /** Index der ersten unterstützten Aufgabe pro AWB (oder -1) */
+    /** Index der ersten unterstÃ¼tzten Aufgabe pro AWB (oder -1) */
     private int[] firstSupportedAufIndex;
-    /** Index der letzten unterstützten Aufgabe pro AWB (oder -1) */
+    /** Index der letzten unterstÃ¼tzten Aufgabe pro AWB (oder -1) */
     private int[] lastSupportedAufIndex;
 
     /** Geringster bekannter Kostenwert eines Ergebnissets der Baumanalyse */
     int minPathCosts;
 
     /**
-     * Liste der Blätter im Baum.
+     * Liste der BlÃ¤tter im Baum.
      */
     private ArrayList<DecisionTreeNode> leafs = new ArrayList<DecisionTreeNode>();
 
     /**
-     * Wird gebraucht, um bei großen Bäumen den zu Ende gehenden Speicher wieder zu bereinigen
+     * Wird gebraucht, um bei groÃŸen BÃ¤umen den zu Ende gehenden Speicher wieder zu bereinigen
      */
     private static Runtime runtime = Runtime.getRuntime();
 
@@ -84,7 +84,7 @@ public class DecisionTree {
     private RedundancyAnalysisResult result;
 
     /**
-     * Menge aller AWB, die Funktionen unterstützen, die noch nicht durch exklusive AWB erledigt
+     * Menge aller AWB, die Funktionen unterstÃ¼tzen, die noch nicht durch exklusive AWB erledigt
      * werden.
      */
     private ModelElement[] notExclusiveAWB;
@@ -102,23 +102,23 @@ public class DecisionTree {
     private ArrayList<ModelElement> applicationSystems;
 
     /**
-     * Table der für jede Aufgabe das Set aller von ihr unterstützten AWBs enthält.
+     * Table der fÃ¼r jede Aufgabe das Set aller von ihr unterstÃ¼tzten AWBs enthÃ¤lt.
      */
     private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> funcToAWBSets = new Hashtable<ModelElement, AlphabeticalSet<ModelElement>>();
     /**
-     * Table der für jeden AWB das Set aller von ihm unterstützten Aufgaben enthält.
+     * Table der fÃ¼r jeden AWB das Set aller von ihm unterstÃ¼tzten Aufgaben enthÃ¤lt.
      */
     private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> awbToFuncsSets = new Hashtable<ModelElement, AlphabeticalSet<ModelElement>>();
 
     /**
-     * @param resultToFill Analyseergebnis, das gefüllt werden soll
+     * @param resultToFill Analyseergebnis, das gefÃ¼llt werden soll
      */
     public DecisionTree(final RedundancyAnalysisResult resultToFill) {
         super();
         result = resultToFill;
         init();
         // RedundancyChecker.printData(data);
-        // hier kommt false zurück, wenn vom Benutzer abgebrochen wurde (durch Schließen des
+        // hier kommt false zurÃ¼ck, wenn vom Benutzer abgebrochen wurde (durch SchlieÃŸen des
         // ProgressDialogs)
         if (!createTree()) {
             return;
@@ -148,14 +148,14 @@ public class DecisionTree {
         // alle Teil-Anwendungsbausteine des doc in einer alphabetischen Liste holen
         applicationSystems = doc.getModelItems(result.getStartClass(), true, true, true);
 
-        // Set aller Aufgaben, die von mehr als einem AWB unterstützt werden und von keinem AWB, der
-        // mind. eine Aufgabe exklusiv unterstützt
+        // Set aller Aufgaben, die von mehr als einem AWB unterstÃ¼tzt werden und von keinem AWB, der
+        // mind. eine Aufgabe exklusiv unterstÃ¼tzt
         AlphabeticalSet<ModelElement> notExclusiveFuncSet = new AlphabeticalSet<ModelElement>();
-        // Set aller AWB, die mind. eine Aufgabe unterstützen, die auch von anderen AWB unterstützt
+        // Set aller AWB, die mind. eine Aufgabe unterstÃ¼tzen, die auch von anderen AWB unterstÃ¼tzt
         // wird
         AlphabeticalSet<ModelElement> notExclusiveAWBSet = new AlphabeticalSet<ModelElement>();
 
-        // für jeden AWB
+        // fÃ¼r jeden AWB
         for (ModelElement as : applicationSystems) {
             // es werden nur die absoluten Unterbausteine betrachtet (an sie werden die
             // Eigenschaften ihrer
@@ -163,7 +163,7 @@ public class DecisionTree {
             if (as.hasPart()) {
                 continue;
             }
-            // Set aller Aufgaben, die der AWB unterstützt
+            // Set aller Aufgaben, die der AWB unterstÃ¼tzt
             AlphabeticalSet<ModelElement> funcsOfAWB = new AlphabeticalSet<ModelElement>();
             awbToFuncsSets.put(as, funcsOfAWB);
             HashSet<ModelElement> funcsAwb = PathFinder.getConnectedElements(as, result.getEndClass(), result.getMetaPath());
@@ -173,89 +173,89 @@ public class DecisionTree {
             }
             funcsOfAWB.addAll(leafFuncAwb);
             for (ModelElement func : funcsOfAWB) {
-                // Set aller AWB, die die Aufgabe unterstützen holen
+                // Set aller AWB, die die Aufgabe unterstÃ¼tzen holen
                 AlphabeticalSet<ModelElement> AWBsOfFunc = funcToAWBSets.get(func);
-                // wenn es für die aktuelle Aufgabe noch kein solches Set gibt -> eins anlegen
+                // wenn es fÃ¼r die aktuelle Aufgabe noch kein solches Set gibt -> eins anlegen
                 if (AWBsOfFunc == null) {
                     AWBsOfFunc = new AlphabeticalSet<ModelElement>();
                     funcToAWBSets.put(func, AWBsOfFunc);
                 }
-                // unterstützte Aufgabe des AWB merken
+                // unterstÃ¼tzte Aufgabe des AWB merken
                 AWBsOfFunc.add(as);
             }
         }
 
-        // Jetzt sind die 2 Hashtables, die für jeden AWB auf alle von ihm unterstützten
-        // Aufgaben mappen (awbToFuncsSets)und für jede Aufgabe auf die sie unterstützenden
+        // Jetzt sind die 2 Hashtables, die fÃ¼r jeden AWB auf alle von ihm unterstÃ¼tzten
+        // Aufgaben mappen (awbToFuncsSets)und fÃ¼r jede Aufgabe auf die sie unterstÃ¼tzenden
         // AWBs (funcToAWBSets), initialisiert.
-        // Für Aufgaben, die von gar keinem AWB unterstützt werden, gibts es keinen Eintrag
+        // FÃ¼r Aufgaben, die von gar keinem AWB unterstÃ¼tzt werden, gibts es keinen Eintrag
         // in funcToAWBSets, d.h. sie werden ignoriert. Die Gesamtliste aller Aufgaben
-        // (functions), in der diese nicht unterstützten Aufgaben noch stehen, wird ab hier
+        // (functions), in der diese nicht unterstÃ¼tzten Aufgaben noch stehen, wird ab hier
         // nicht mehr verwendet.
 
-        // für jeden AWB
+        // fÃ¼r jeden AWB
         for (int awb = 0; awb < applicationSystems.size(); awb++) {
             // hole den AWB
             ModelElement as = applicationSystems.get(awb);
 
-            // Set aller Aufgaben, die der AWB unterstützt
+            // Set aller Aufgaben, die der AWB unterstÃ¼tzt
             AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
 
-            // wenn der AWB gar keine Aufgaben unterstützt -> als uunnützt merken und nächster AWB
+            // wenn der AWB gar keine Aufgaben unterstÃ¼tzt -> als uunnÃ¼tzt merken und nÃ¤chster AWB
             if (funcsOfAWB.size() == 0) {
                 result.notSupportingAWB.add(as);
                 continue;
             }
-            // wird true, wenn der aktuelle AWB eine Aufgabe als einziger unterstützt
+            // wird true, wenn der aktuelle AWB eine Aufgabe als einziger unterstÃ¼tzt
             boolean exclusive = false;
-            // für alle Aufgaben, die der AWB untertsützt
+            // fÃ¼r alle Aufgaben, die der AWB untertsÃ¼tzt
             for (ModelElement auf : funcsOfAWB) {
-                // hole die AWB, die die Aufgabe unterstützen
+                // hole die AWB, die die Aufgabe unterstÃ¼tzen
                 AlphabeticalSet<ModelElement> AWBsOfFunc = funcToAWBSets.get(auf);
-                // wenn der aktuelle AWB eine Aufgabe exklusiv unterstützt
+                // wenn der aktuelle AWB eine Aufgabe exklusiv unterstÃ¼tzt
                 if (AWBsOfFunc.size() == 1) {
-                    // den AWB als exklusiven Unterstützer merken
+                    // den AWB als exklusiven UnterstÃ¼tzer merken
                     result.exclusiveAWB.add(as);
-                    // alle Aufgaben des AWBs als exklusiv bereits unterstütze merken
+                    // alle Aufgaben des AWBs als exklusiv bereits unterstÃ¼tze merken
                     exclusiveFuncs.addAll(funcsOfAWB);
                     exclusive = true;
                     break;
                 }
             }
-            // wenn der aktuelle AWB keine Aufgabe exklusiv unterstützt
+            // wenn der aktuelle AWB keine Aufgabe exklusiv unterstÃ¼tzt
             if (!exclusive) {
-                // dieser AWB unterstützt nur Aufgaben, die er und noch weitere AWB unterstützen
+                // dieser AWB unterstÃ¼tzt nur Aufgaben, die er und noch weitere AWB unterstÃ¼tzen
                 notExclusiveAWBSet.add(as);
             }
         }
 
-        // für alle AWB, die mind. eine aber keine Aufgabe exklusiv unterstützen prüfe, ob schon
+        // fÃ¼r alle AWB, die mind. eine aber keine Aufgabe exklusiv unterstÃ¼tzen prÃ¼fe, ob schon
         // alle
-        // ihre Aufgaben von exklusiv unterstützenden AWBs unterstützt werden
+        // ihre Aufgaben von exklusiv unterstÃ¼tzenden AWBs unterstÃ¼tzt werden
         AlphabeticalSet<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<ModelElement>();
         for (ModelElement as : notExclusiveAWBSet) {
-            // wird true, wenn der AWB mind. eine Aufgabe unterstützt, die von keinem AWB
-            // unterstützt
-            // wird, die eine Aufgabe als einziger unterstützt
+            // wird true, wenn der AWB mind. eine Aufgabe unterstÃ¼tzt, die von keinem AWB
+            // unterstÃ¼tzt
+            // wird, die eine Aufgabe als einziger unterstÃ¼tzt
             boolean allAlreadySupported = true;
-            // alle vom as unterstützten Aufgaben holen
+            // alle vom as unterstÃ¼tzten Aufgaben holen
             AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
-            // für jede dieser Aufgaben
+            // fÃ¼r jede dieser Aufgaben
             for (ModelElement f : funcsOfAWB) {
-                // wenn sie noch nicht von den exklusiv unterstützenden AWBs erledigt wird
+                // wenn sie noch nicht von den exklusiv unterstÃ¼tzenden AWBs erledigt wird
                 if (!exclusiveFuncs.contains(f)) {
-                    // zum Set aller nicht exklusiv unterstützten Aufgaben hinzufügen
+                    // zum Set aller nicht exklusiv unterstÃ¼tzten Aufgaben hinzufÃ¼gen
                     notExclusiveFuncSet.add(f);
                     // es werden nicht bereits alle Aufgaben des aktuellen AWB durch exklusive
-                    // AWB unterstützt
+                    // AWB unterstÃ¼tzt
                     allAlreadySupported = false;
                 }
             }
-            // der AWB unterstützt mind. eine Aufgabe, die nicht von den exklusiv unterstützenden
-            // unterstützt wird
+            // der AWB unterstÃ¼tzt mind. eine Aufgabe, die nicht von den exklusiv unterstÃ¼tzenden
+            // unterstÃ¼tzt wird
             if (!allAlreadySupported) {
                 reallyNotExclusiveAWB.add(as);
-                // alle Aufgaben des AWB werden bereits unterstützt
+                // alle Aufgaben des AWB werden bereits unterstÃ¼tzt
             } else {
                 // als nutzlosen AWB merken
                 result.uselessAWB.add(as);
@@ -265,7 +265,7 @@ public class DecisionTree {
         // System.err.println("Anzahl AWB ohne eindeutig benoetigte und eindeutig ueberfluessige: "
         // + reallyNotExclusiveAWB.size());
 
-        // Sets mit den Listen der AWB initialisieren, die dieselben Aufgaben unterstützen
+        // Sets mit den Listen der AWB initialisieren, die dieselben Aufgaben unterstÃ¼tzen
         initEqualsSets(reallyNotExclusiveAWB);
 
         // System.err.println("Anzahl der zu untersuchenden Aequivalenzklassen: " +
@@ -292,7 +292,7 @@ public class DecisionTree {
         int[][] matrix = new int[notExclusiveAWB.length][notExclusiveFunc.length];
 
         for (int awb = 0; awb < notExclusiveAWB.length; awb++) {
-            // alle vom as unterstützten Aufgaben holen
+            // alle vom as unterstÃ¼tzten Aufgaben holen
             AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(notExclusiveAWB[awb]);
 
             for (int auf = 0; auf < notExclusiveFunc.length; auf++) {
@@ -310,66 +310,66 @@ public class DecisionTree {
             return;
         }
 
-        // unterstützende AWB pro Aufgabe
+        // unterstÃ¼tzende AWB pro Aufgabe
         awbSupport = new int[aufCount];
-        // Index des ersten unterstützenden AWB pro Aufgabe (oder -1)
+        // Index des ersten unterstÃ¼tzenden AWB pro Aufgabe (oder -1)
         firstAwbSupportIndex = new int[aufCount];
-        // Index des letzten unterstützenden AWB pro Aufgabe (oder -1)
+        // Index des letzten unterstÃ¼tzenden AWB pro Aufgabe (oder -1)
         lastAwbSupportIndex = new int[aufCount];
 
-        // unterstützte Aufgaben pro AWB
+        // unterstÃ¼tzte Aufgaben pro AWB
         supportedAuf = new int[awbCount];
-        // Index der ersten unterstützten Aufgabe pro AWB (oder -1)
+        // Index der ersten unterstÃ¼tzten Aufgabe pro AWB (oder -1)
         firstSupportedAufIndex = new int[awbCount];
-        // Index der letzten unterstützten Aufgabe pro AWB (oder -1)
+        // Index der letzten unterstÃ¼tzten Aufgabe pro AWB (oder -1)
         lastSupportedAufIndex = new int[awbCount];
 
-        // für jede Aufgabe die Indizes des ersten und letzten unterstützenden AWB mit -1
+        // fÃ¼r jede Aufgabe die Indizes des ersten und letzten unterstÃ¼tzenden AWB mit -1
         // initialisieren
         for (int auf = 0; auf < aufCount; auf++) {
             firstAwbSupportIndex[auf] = -1;
             lastAwbSupportIndex[auf] = -1;
         }
-        // für jeden AWB die Indizes der ersten und letzten unterstützten Aufgabe mit -1
+        // fÃ¼r jeden AWB die Indizes der ersten und letzten unterstÃ¼tzten Aufgabe mit -1
         // initialisieren
         for (int awb = 0; awb < awbCount; awb++) {
             firstSupportedAufIndex[awb] = -1;
             lastSupportedAufIndex[awb] = -1;
         }
 
-        // bester nächster AWB-Index für den Greedy-Algorithmus
+        // bester nÃ¤chster AWB-Index fÃ¼r den Greedy-Algorithmus
         int maxIndex = 0;
 
         // die ganze Matrix einmal durchlaufen
         for (int awb = 0; awb < awbCount; awb++) {
             for (int auf = 0; auf < aufCount; auf++) {
-                // wenn der aktuelle AWB die aktuelle Aufgabe unterstützt
+                // wenn der aktuelle AWB die aktuelle Aufgabe unterstÃ¼tzt
                 if (data[awb][auf] > 0) {
 
-                    // Anzahl der unterstützten AWB der Aufgabe erhöhen
+                    // Anzahl der unterstÃ¼tzten AWB der Aufgabe erhÃ¶hen
                     awbSupport[auf]++;
-                    // wenn für die aktuelle Aufgabe noch kein AWB-Index als erster Unterstützer
+                    // wenn fÃ¼r die aktuelle Aufgabe noch kein AWB-Index als erster UnterstÃ¼tzer
                     // vermerkt ist
                     if (firstAwbSupportIndex[auf] == -1) {
-                        // speichere den aktuellen AWB-Index als ersten Unterstützer
+                        // speichere den aktuellen AWB-Index als ersten UnterstÃ¼tzer
                         firstAwbSupportIndex[auf] = awb;
                     }
-                    // speichere immer jeden AWB-Index als letzten Unterstützer
+                    // speichere immer jeden AWB-Index als letzten UnterstÃ¼tzer
                     lastAwbSupportIndex[auf] = awb;
 
-                    // Anzahl der unterstützten Aufgaben des AWB erhöhen
+                    // Anzahl der unterstÃ¼tzten Aufgaben des AWB erhÃ¶hen
                     supportedAuf[awb]++;
-                    // wenn für den aktuellen AWB noch kein Aufgaben-Index als erste Unterstütze
+                    // wenn fÃ¼r den aktuellen AWB noch kein Aufgaben-Index als erste UnterstÃ¼tze
                     // vermerkt ist
                     if (firstSupportedAufIndex[awb] == -1) {
-                        // speichere den aktuellen Aufgaben-Index als erste Unterstütze
+                        // speichere den aktuellen Aufgaben-Index als erste UnterstÃ¼tze
                         firstSupportedAufIndex[awb] = auf;
                     }
-                    // speichere immer jeden Aufgaben-Index als letzte Unterstütze
+                    // speichere immer jeden Aufgaben-Index als letzte UnterstÃ¼tze
                     lastSupportedAufIndex[awb] = auf;
                 }
             }
-            // wenn der aktuelle AWB mehr Aufgaben untertsützt als der bisher bekannte AWB mit den
+            // wenn der aktuelle AWB mehr Aufgaben untertsÃ¼tzt als der bisher bekannte AWB mit den
             // meisten Aufgaben
             if (supportedAuf[awb] > supportedAuf[maxIndex]) {
                 // merke seinen Index als den besten
@@ -379,41 +379,41 @@ public class DecisionTree {
         }
 
         // ////////////////////////////////////////////////////////////////////
-        // Jetzt mit einem Greedy-Algortithmus eine beste Lösung bestimmen. //
+        // Jetzt mit einem Greedy-Algortithmus eine beste LÃ¶sung bestimmen. //
         // ////////////////////////////////////////////////////////////////////
 
-        // jede Aufgabe, die durch das bisher gefundene Set von AWB unterstützt wird, ist hier 1
+        // jede Aufgabe, die durch das bisher gefundene Set von AWB unterstÃ¼tzt wird, ist hier 1
         // gesetzt, sonst 0
         int[] bestSetSupportedFunctions = new int[notExclusiveFunc.length];
 
         // bei den AWB, die im Ergebnisset sind steht hier dann eine 1 sonst 0;
         int[] bestAWBIndex = new int[notExclusiveAWB.length];
 
-        // Anzahl neuer Aufgaben, die ein AWB hinzufügen könnte. Am Anfang sind das jeweils alle
+        // Anzahl neuer Aufgaben, die ein AWB hinzufÃ¼gen kÃ¶nnte. Am Anfang sind das jeweils alle
         // Aufgaben eines AWB
         int[] newFunctionsCountForAWB = new int[supportedAuf.length];
         System.arraycopy(supportedAuf, 0, newFunctionsCountForAWB, 0, supportedAuf.length);
 
-        // Zähler für die vom Ergebnisset unterstützten Aufgaben
+        // ZÃ¤hler fÃ¼r die vom Ergebnisset unterstÃ¼tzten Aufgaben
         int supportedFuncs = 0;
 
         do {
             bestAWBIndex[maxIndex] = 1;
             minPathCosts++;
             supportedFuncs += newFunctionsCountForAWB[maxIndex];
-            // wenn alle Aufgaben unterstützt werden, ist man fertig
+            // wenn alle Aufgaben unterstÃ¼tzt werden, ist man fertig
             if (supportedFuncs == aufCount) {
                 break;
             }
 
-            // für alle Aufgaben, die der beste AWB unterstützt auch mit 1 markieren
+            // fÃ¼r alle Aufgaben, die der beste AWB unterstÃ¼tzt auch mit 1 markieren
             for (int auf = firstSupportedAufIndex[maxIndex]; auf <= lastSupportedAufIndex[maxIndex]; auf++) {
                 if (data[maxIndex][auf] > 0) {
                     bestSetSupportedFunctions[auf] = 1;
                 }
             }
             // den Vektor mit den neuen Aufgaben pro AWB erneuern
-            // für alle Aufgaben
+            // fÃ¼r alle Aufgaben
             for (int awb = 0; awb < awbCount; awb++) {
                 newFunctionsCountForAWB[awb] = 0;
                 // wenn die Aufgabe schon im Ergebnisset vorkommt
@@ -421,15 +421,15 @@ public class DecisionTree {
                     // sie kann keine neuen Funktionen mit einbringen
                     continue;
                 }
-                // für alle Aufgaben, die der aktuelle AWB unterstützt
+                // fÃ¼r alle Aufgaben, die der aktuelle AWB unterstÃ¼tzt
                 for (int auf = firstSupportedAufIndex[awb]; auf <= lastSupportedAufIndex[awb]; auf++) {
-                    // wenn die aktuelle Aufgabe bereits von den AWB in der Lösung unterstützt
+                    // wenn die aktuelle Aufgabe bereits von den AWB in der LÃ¶sung unterstÃ¼tzt
                     // werden
                     if (bestSetSupportedFunctions[auf] == 1) {
-                        // nächste Aufgabe
+                        // nÃ¤chste Aufgabe
                         continue;
                     }
-                    // wenn er sie unterstützt
+                    // wenn er sie unterstÃ¼tzt
                     if (data[awb][auf] > 0) {
                         newFunctionsCountForAWB[awb]++;
                     }
@@ -457,22 +457,22 @@ public class DecisionTree {
         // Kostenwert des aktuell betrachteten Astes
         int pathCosts = 0;
 
-        // der aktuell betrachtete Knoten im Baum. Er repräsentiert einen AWB
+        // der aktuell betrachtete Knoten im Baum. Er reprÃ¤sentiert einen AWB
         DecisionTreeNode actNode = root;
 
         // RedundancyChecker.printData(data);
 
         // awbCount lokal kopieren, da er gleich um 1 erniedrigt wird, um die Schleife effizienter
-        // auszuführen. Der globale Wert sollte nicht geändert werden, da es sein kann, dass doch
+        // auszufÃ¼hren. Der globale Wert sollte nicht geÃ¤ndert werden, da es sein kann, dass doch
         // einmal innerhalb der Schleife eine andere Funktion aufgerufen wird, die den Originalwert
-        // benötigt
+        // benÃ¶tigt
         int awbCount = this.awbCount;
-        // dieser Wert wird um 1 erniedrigt, weil man für den letzten Wert ständig Abfragen machen
+        // dieser Wert wird um 1 erniedrigt, weil man fÃ¼r den letzten Wert stÃ¤ndig Abfragen machen
         // muss und
         // man sich so das abziehen bei jeder Abfrage sparen kann
         awbCount--;
 
-        // für jeden AWB
+        // fÃ¼r jeden AWB
         for (int awb = 0; awb <= awbCount; awb++) {
 
             // wenn abgebrochen werden soll -> raus
@@ -480,31 +480,31 @@ public class DecisionTree {
                 return false;
             }
 
-            // der aktuelle AWB unterstützt mind. eine Aufgabe, die auch ein anderer AWB
-            // unterstützt. Es können
-            // jetzt noch 2 Fälle auftreten. Entweder alle Aufgaben des aktuellen AWB werden bereits
+            // der aktuelle AWB unterstÃ¼tzt mind. eine Aufgabe, die auch ein anderer AWB
+            // unterstÃ¼tzt. Es kÃ¶nnen
+            // jetzt noch 2 FÃ¤lle auftreten. Entweder alle Aufgaben des aktuellen AWB werden bereits
             // duch AWB im
-            // Baum bzw. andere Aufgaben exklusiv unterstützende AWB erledigt ODER es gibt mind.
+            // Baum bzw. andere Aufgaben exklusiv unterstÃ¼tzende AWB erledigt ODER es gibt mind.
             // eine nicht von
-            // den Vorgänger-AWBs unterstützte Aufgabe. Diese kann dann nur noch von AWBs nach dem
+            // den VorgÃ¤nger-AWBs unterstÃ¼tzte Aufgabe. Diese kann dann nur noch von AWBs nach dem
             // aktuellen
-            // unterstützt werden, was im Baum das Hinzufügen eines Plus- und eines Minus-Knotens
+            // unterstÃ¼tzt werden, was im Baum das HinzufÃ¼gen eines Plus- und eines Minus-Knotens
             // nach sich zieht.
-            // prüfen, ob jede Aufgabe, die der aktuelle AWB unterstützt bereits durch
-            // die AWB in der Ergebnismenge unterstützt werden -> wenn ja -> dieser AWB bekommt
+            // prÃ¼fen, ob jede Aufgabe, die der aktuelle AWB unterstÃ¼tzt bereits durch
+            // die AWB in der Ergebnismenge unterstÃ¼tzt werden -> wenn ja -> dieser AWB bekommt
             // nur einen Knoten mit minus
 
-            // Anzahl der Aufgaben, die der aktuelle AWB untertstützt, die auch von den AWBs in
-            // der Ergebnismenge unterstützt werden
+            // Anzahl der Aufgaben, die der aktuelle AWB untertstÃ¼tzt, die auch von den AWBs in
+            // der Ergebnismenge unterstÃ¼tzt werden
             int alreadySupported = 0;
-            // wird true, wenn der aktuelle AWB mind eine Aufgabe als letzter möglicher AWB
-            // unterstützen kann.
-            // (da immer zuerst die Minus-Knoten eines Aplit-Knotens hinzugefügt werden, muss eine
+            // wird true, wenn der aktuelle AWB mind eine Aufgabe als letzter mÃ¶glicher AWB
+            // unterstÃ¼tzen kann.
+            // (da immer zuerst die Minus-Knoten eines Aplit-Knotens hinzugefÃ¼gt werden, muss eine
             // Aufgabe aber
-            // wenigstens von dem letzten möglichen AWB dann unterstützt werden)
+            // wenigstens von dem letzten mÃ¶glichen AWB dann unterstÃ¼tzt werden)
             boolean lastSupporter = false;
 
-            // solange bis alle Aufgaben, die der aktuelle AWB unterstützt, überprüft wurden
+            // solange bis alle Aufgaben, die der aktuelle AWB unterstÃ¼tzt, Ã¼berprÃ¼ft wurden
             for (int auf = firstSupportedAufIndex[awb]; auf <= lastSupportedAufIndex[awb]; auf++) {
 
                 // wenn abgebrochen werden soll -> raus
@@ -512,34 +512,34 @@ public class DecisionTree {
                     return false;
                 }
 
-                // wenn der aktuelle AWB die aktuelle Aufgabe nicht untertsützt -> nächste Aufgabe
+                // wenn der aktuelle AWB die aktuelle Aufgabe nicht untertsÃ¼tzt -> nÃ¤chste Aufgabe
                 if (data[awb][auf] == 0) {
                     continue;
                 }
                 // wird true, wenn ein anderer AWB, der in dem aktuellen Ast des Baumes als needed
                 // markiert ist,
-                // die aktuelle Aufgabe bereits unterstützt
+                // die aktuelle Aufgabe bereits unterstÃ¼tzt
                 boolean already = false;
 
                 lastSupporter = false;
 
-                // Jetzt für alle AWB-Knoten die breits im Baum sind, prüfen, ob sie die aktuelle
-                // Aufgabe auch unterstützen. Man kann sich im Baum das zurückgehen sparen, wenn
+                // Jetzt fÃ¼r alle AWB-Knoten die breits im Baum sind, prÃ¼fen, ob sie die aktuelle
+                // Aufgabe auch unterstÃ¼tzen. Man kann sich im Baum das zurÃ¼ckgehen sparen, wenn
                 // die Aufgabe gar nicht von einem AWB mit einem kleineren Index als dem aktuellen
-                // unterstützt wird (firstSupportIndex[auf]>=awb) und braucht nur soviele Schritte
-                // zurückgehen, bis man den AWB an firstSupportIndex[auf] überprüft hat.
+                // unterstÃ¼tzt wird (firstSupportIndex[auf]>=awb) und braucht nur soviele Schritte
+                // zurÃ¼ckgehen, bis man den AWB an firstSupportIndex[auf] Ã¼berprÃ¼ft hat.
 
                 if (firstAwbSupportIndex[auf] < awb) {
-                    // der actNode ist der parent des Knotens für den momentan überprüften AWB
+                    // der actNode ist der parent des Knotens fÃ¼r den momentan Ã¼berprÃ¼ften AWB
                     DecisionTreeNode parent = actNode;
                     // Index des AWB vor dem aktuellen merken (= Index des Parent in der Matrix)
                     int a = awb - 1;
                     do {
                         // wenn ein Knoten 'gebraucht' wird (= Knoten mit einem Plus) und der von
                         // dem Knoten
-                        // repräsentierte AWB die aktulelle Aufgabe auch unterstützt
+                        // reprÃ¤sentierte AWB die aktulelle Aufgabe auch unterstÃ¼tzt
                         if (parent.isNeeded() && data[a][auf] != 0) {
-                            // merke, dass die Aufgabe bereits durch AWBs im Baum untertsützt wird
+                            // merke, dass die Aufgabe bereits durch AWBs im Baum untertsÃ¼tzt wird
                             already = true;
                             // brich die Suche ab
                             break;
@@ -565,20 +565,20 @@ public class DecisionTree {
                 return false;
             }
 
-            // wenn die Zahl der vom aktuellen AWB unterstützten Aufgaben kleiner ist als die Zahl
-            // der bereits duch die Vorgänger-AWBs unterstützten Aufgaben, dann unterstützt außer
+            // wenn die Zahl der vom aktuellen AWB unterstÃ¼tzten Aufgaben kleiner ist als die Zahl
+            // der bereits duch die VorgÃ¤nger-AWBs unterstÃ¼tzten Aufgaben, dann unterstÃ¼tzt auÃŸer
             // dem
-            // aktuellen AWB mind. ein AWB danach auch die Aufgabe -> füge einen Plus und einen
+            // aktuellen AWB mind. ein AWB danach auch die Aufgabe -> fÃ¼ge einen Plus und einen
             // Minus-
             // Knoten ein
             if (alreadySupported < supportedAuf[awb]) {
                 pathCosts++;
-                // im Pfad werden noch nicht alle Aufgaben unterstützt und ein weiterer AWB erhöht
+                // im Pfad werden noch nicht alle Aufgaben unterstÃ¼tzt und ein weiterer AWB erhÃ¶ht
                 // die Kosten
-                // noch nicht über das Minimum; Sollten die minimalen Pfadkosten hier überschritten
+                // noch nicht Ã¼ber das Minimum; Sollten die minimalen Pfadkosten hier Ã¼berschritten
                 // werden, wird
-                // kein neuer Knoten angehängt, sondern es wurden nur die Kosten des aktuellen
-                // Pfades erhöht.
+                // kein neuer Knoten angehÃ¤ngt, sondern es wurden nur die Kosten des aktuellen
+                // Pfades erhÃ¶ht.
                 if (pathCosts <= minPathCosts) {
                     if (awb == awbCount) {
                         actNode = actNode.addLeaf(true, pathCosts);
@@ -590,8 +590,8 @@ public class DecisionTree {
                         actNode = actNode.getFirstNode();
                     }
                 }
-                // Alle Aufgaben des aktuellen AWB werden bereits von anderen AWBs unterstützt ->
-                // füge nur
+                // Alle Aufgaben des aktuellen AWB werden bereits von anderen AWBs unterstÃ¼tzt ->
+                // fÃ¼ge nur
                 // einen Minusknoten ein
             } else {
                 if (awb == awbCount) {
@@ -604,7 +604,7 @@ public class DecisionTree {
             // Wenn nur noch 200000Bytes Speicher frei sind
             if (runtime.maxMemory() - runtime.totalMemory() == 0 && runtime.freeMemory() < 100000) {
                 System.err.println("Speicher voll -> bereinige");
-                // bereinige den Baum um die Äste, die Definitiv nicht mehr gebraucht werden
+                // bereinige den Baum um die Ã„ste, die Definitiv nicht mehr gebraucht werden
                 clearMemory();
             }
 
@@ -629,7 +629,7 @@ public class DecisionTree {
                     if (actNode != secondChild) {
                         // wenn es aber einen 2. Knoten gibt
                         if (secondChild != null) {
-                            // lösche den aktuellen und mache den ehemals 2. zum aktuellen
+                            // lÃ¶sche den aktuellen und mache den ehemals 2. zum aktuellen
                             parent.removeChild(actNode);
                             // einer der beiden Geschwisterknoten ist immer needed und der andere
                             // nicht -> wenn
@@ -643,7 +643,7 @@ public class DecisionTree {
                             actNode = secondChild;
                             break;
                         }
-                        // es gibt keinen 2. Kindknoten unter dem parent von actNode -> lösche
+                        // es gibt keinen 2. Kindknoten unter dem parent von actNode -> lÃ¶sche
                         // actNode und mache den parent zu actNode
                         if (actNode.isNeeded()) {
                             pathCosts--;
@@ -653,23 +653,23 @@ public class DecisionTree {
                         awb--;
                         // der aktuelle Knoten ist das 2. Kind -> das erste muss erhalten bleiben
                     } else {
-                        // lösche actNode und mache den parent zu actNode
+                        // lÃ¶sche actNode und mache den parent zu actNode
                         if (actNode.isNeeded()) {
                             pathCosts--;
                         }
                         parent.removeChild(actNode);
                         actNode = parent;
                         awb--;
-                        // gehe im Baum zurück
+                        // gehe im Baum zurÃ¼ck
                         goBack = true;
                         break;
                     }
                 }
             } else if (actNode.isLeaf()) {
-                // das Blatt zur Liste aller Blätter hinzufügen
+                // das Blatt zur Liste aller BlÃ¤tter hinzufÃ¼gen
                 leafs.add(actNode);
                 minPathCosts = pathCosts;
-                // gleich eine Ebene zurückgehen (ein Blatt kann keinen Geschwisterknoten besitzen)
+                // gleich eine Ebene zurÃ¼ckgehen (ein Blatt kann keinen Geschwisterknoten besitzen)
                 if (actNode.isNeeded()) {
                     pathCosts--;
                 }
@@ -705,7 +705,7 @@ public class DecisionTree {
 
                     // wenn der 2. Knoten leer ist oder der aktuelle schon der 2. Knoten ist
                     if (secondChild == null || secondChild == actNode) {
-                        // wenn man hier bis zur Wurzel zurückgekommen ist, ist man fertig
+                        // wenn man hier bis zur Wurzel zurÃ¼ckgekommen ist, ist man fertig
                         if (parent == root) {
                             return true;
                         }
@@ -726,12 +726,12 @@ public class DecisionTree {
                         } else {
                             pathCosts++;
                         }
-                        // wenn vorher ein Plus-Knoten als 2. Knoten eingefügt wurde, der jetzt aber
+                        // wenn vorher ein Plus-Knoten als 2. Knoten eingefÃ¼gt wurde, der jetzt aber
                         // das bekannte
-                        // Minimum überschreitet -> lösche diesen Knoten, gehe auf den parent und
-                        // dann weiter zurück
+                        // Minimum Ã¼berschreitet -> lÃ¶sche diesen Knoten, gehe auf den parent und
+                        // dann weiter zurÃ¼ck
                         if (pathCosts > minPathCosts) {
-                            // wenn man hier bis zur Wurzel zurückgekommen ist, ist man fertig
+                            // wenn man hier bis zur Wurzel zurÃ¼ckgekommen ist, ist man fertig
                             if (parent == root) {
                                 return true;
                             }
@@ -758,21 +758,21 @@ public class DecisionTree {
     /**
      * Ordnet aus dem Entscheidungsbaum die AWBs den Mengen moreUselessAWB und moreNeededAWB zu.
      * Alle Listen in <code>equalSets</code> haben danach mind. 2 Elemente und von denen von der
-     * Funktionalität immer nur ein AWB gebraucht wird.
+     * FunktionalitÃ¤t immer nur ein AWB gebraucht wird.
      */
     private void extractTree() {
-        // Set das alle Elemente in minimalen Ästen genau einmal enthält
+        // Set das alle Elemente in minimalen Ã„sten genau einmal enthÃ¤lt
         AlphabeticalSet<ModelElement> minimalUnionSet = new AlphabeticalSet<ModelElement>();
 
-        // für alle Blätter
+        // fÃ¼r alle BlÃ¤tter
         for (int i = 0; i < leafs.size(); i++) {
             DecisionTreeNode actNode = leafs.get(i);
-            // wenn das Blatt kein Minimalblatt ist -> nächstes
+            // wenn das Blatt kein Minimalblatt ist -> nÃ¤chstes
             if (actNode.getValue() > minPathCosts) {
                 continue;
             }
             int index = awbCount;
-            // jetzt für alle minimalen Äste die darin enthaltenen AWBs in einem Set zusammmen
+            // jetzt fÃ¼r alle minimalen Ã„ste die darin enthaltenen AWBs in einem Set zusammmen
             // sammeln
             while (actNode != root) {
                 if (actNode == null) {
@@ -793,7 +793,7 @@ public class DecisionTree {
         root = null;
 
         // jetzt alle AWB, die nicht im minimalUnionSet vorkommen und keine Aufgabe
-        // exklusiv unterstützen -> in moreUselessAWB kopieren
+        // exklusiv unterstÃ¼tzen -> in moreUselessAWB kopieren
         for (int i = 0; i < notExclusiveAWB.length; i++) {
             if (!minimalUnionSet.contains(notExclusiveAWB[i])) {
                 result.moreUselessAWB.add(notExclusiveAWB[i]);
@@ -805,16 +805,16 @@ public class DecisionTree {
                         result.moreUselessAWB.addAll(as);
                         // dieses equalsSet entfernen
                         result.equalsSets.remove(j--);
-                        // es kann nur 1 solches Set geben -> alle weiteren überspringen
+                        // es kann nur 1 solches Set geben -> alle weiteren Ã¼berspringen
                         break;
                     }
                 }
-                // der Stellvertreter des Äquivalenzsets kommt in der minimalen Schnittmenge vor
+                // der Stellvertreter des Ã„quivalenzsets kommt in der minimalen Schnittmenge vor
             } else {
-                // wenn zugehörige Äquivalenzsets nur den Stellvertreter als einziges Element
-                // enthält
+                // wenn zugehÃ¶rige Ã„quivalenzsets nur den Stellvertreter als einziges Element
+                // enthÃ¤lt
                 for (int j = 0; j < result.equalsSets.size(); j++) {
-                    // den Stellvertreter in die moreNeededAWB kopieren und das Äquivalenzset aus
+                    // den Stellvertreter in die moreNeededAWB kopieren und das Ã„quivalenzset aus
                     // der Liste der Sets entfernen
                     AlphabeticalSet<ModelElement> as = result.equalsSets.get(j);
                     if (as.size() == 1) {
@@ -835,8 +835,8 @@ public class DecisionTree {
     }
 
     /**
-     * Füllt im <code>RedundancyAnalysisResult</code> für alle überflüssigen Elemente die Liste der
-     * Elemente, die das Element überflüssig machen
+     * FÃ¼llt im <code>RedundancyAnalysisResult</code> fÃ¼r alle Ã¼berflÃ¼ssigen Elemente die Liste der
+     * Elemente, die das Element Ã¼berflÃ¼ssig machen
      */
     private void findSameSupporter() {
         ArrayList<AlphabeticalSet<ModelElement>> uselessLists = new ArrayList<AlphabeticalSet<ModelElement>>(2);
@@ -850,9 +850,9 @@ public class DecisionTree {
     }
 
     /**
-     * Wenn die Redundanz von Anwendungsbausteinen bezüglich Aufgaben berechnet wird, dann liefert
-     * die Funktion für einen Anwendungsbaustein alle anderen Anwendungsbauteine, die dieselben
-     * Aufgaben unterstützen.
+     * Wenn die Redundanz von Anwendungsbausteinen bezÃ¼glich Aufgaben berechnet wird, dann liefert
+     * die Funktion fÃ¼r einen Anwendungsbaustein alle anderen Anwendungsbauteine, die dieselben
+     * Aufgaben unterstÃ¼tzen.
      * 
      * @param me
      * @return
@@ -873,21 +873,21 @@ public class DecisionTree {
 
     /**
      * Findet alle Mengen von AWBs aus den kombinierbaren AWBs, die man gegeneinander austauschen
-     * kann, da sie dieselben Aufgaben unterstützen.
+     * kann, da sie dieselben Aufgaben unterstÃ¼tzen.
      * 
-     * @param Set aller bisher als nicht exklusiv und nicht überflüssig erkannten AWB
+     * @param Set aller bisher als nicht exklusiv und nicht Ã¼berflÃ¼ssig erkannten AWB
      */
     private final void initEqualsSets(final AlphabeticalSet<ModelElement> notExclusiveAWBSet) {
-        // Liste für alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
+        // Liste fÃ¼r alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
         ArrayList<ModelElement> maybeNotrequiredAWB = new ArrayList<ModelElement>();
 
         // Liste in die alle Alphabetical-Sets mit den jeweils gleichen Aufgaben kommen
         result.equalsSets = new ArrayList<AlphabeticalSet<ModelElement>>();
 
-        // für alle AWB, auf die nur mit den exklusiven nicht verzichtet werden kann
+        // fÃ¼r alle AWB, auf die nur mit den exklusiven nicht verzichtet werden kann
         for (ModelElement notExclusiveAWB : notExclusiveAWBSet) {
             Alphabetical.insert(maybeNotrequiredAWB, notExclusiveAWB);
-            // aus dem Set der vom AWB unterstützten Aufgaben all die entfernen, die schon
+            // aus dem Set der vom AWB unterstÃ¼tzten Aufgaben all die entfernen, die schon
             // von den exklusiven AWBs erledigt werden (die braucht man nicht beachten)
             AlphabeticalSet<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWB);
             funcOfAWB.removeAll(exclusiveFuncs);
@@ -911,15 +911,15 @@ public class DecisionTree {
     }
 
     /**
-     * Löscht im Baum alle Äste, die nicht zu bereits bekannten minimalen Lösungen führen.
+     * LÃ¶scht im Baum alle Ã„ste, die nicht zu bereits bekannten minimalen LÃ¶sungen fÃ¼hren.
      */
     private void clearMemory() {
         ArrayList<DecisionTreeNode> leafsNew = new ArrayList<DecisionTreeNode>();
         for (DecisionTreeNode node : leafs) {
-            // wenn bei einem Blatt die Kosten die aktuellen Minimalkosten überschreiten
+            // wenn bei einem Blatt die Kosten die aktuellen Minimalkosten Ã¼berschreiten
             if (node.getValue() > minPathCosts) {
-                // lösche solange ausgehend vom Baltt einen Ast hin zur Wurzel, wie der
-                // Parent nur das zu löschende Kind und kein weiteres Kind besitzt
+                // lÃ¶sche solange ausgehend vom Baltt einen Ast hin zur Wurzel, wie der
+                // Parent nur das zu lÃ¶schende Kind und kein weiteres Kind besitzt
                 while (true) {
                     if (node == root) {
                         break;

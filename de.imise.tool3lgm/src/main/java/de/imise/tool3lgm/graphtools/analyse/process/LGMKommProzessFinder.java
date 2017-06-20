@@ -30,22 +30,22 @@ public class LGMKommProzessFinder {
     }
 
     /**
-     * Setzt in den übergebenen LGMProzessSteps, den kürzesten Kommunikationspfad, wenn es einen
+     * Setzt in den Ã¼bergebenen LGMProzessSteps, den kÃ¼rzesten Kommunikationspfad, wenn es einen
      * gibt. (Unendliche Pfade sind an Ende null)
      * 
      * @param steps
      */
     private static final boolean getKommProzessForSteps(final GraphDocument doc, final List<LGMProzessStep> steps) {
 
-        // wenn steps keine Schritte enthält ->return leere Liste
+        // wenn steps keine Schritte enthÃ¤lt ->return leere Liste
         if (steps.size() == 0) {
             return false;
         }
 
-        // ArrayList aller verschiedenen Objekttypen aus den übergebenen steps anlegen
+        // ArrayList aller verschiedenen Objekttypen aus den Ã¼bergebenen steps anlegen
         List<ModelElement> initialObjekttypes = new ArrayList<ModelElement>();
         for (LGMProzessStep step : steps) {
-            // nur vollständige, korrekte Schritte müssen überhaupt betrachtet werden
+            // nur vollstÃ¤ndige, korrekte Schritte mÃ¼ssen Ã¼berhaupt betrachtet werden
             if (!step.isCorrect()) {
                 continue;
             }
@@ -57,17 +57,17 @@ public class LGMKommProzessFinder {
 
         ShortestCommunicationPathFinder sPathFinder = new ShortestCommunicationPathFinder(doc.getCollection());
 
-        // für jeden Schritt
+        // fÃ¼r jeden Schritt
         // 1.) Hole alle Anwendungsbausteine seiner Start- und Endkonfiguration
         // 2.) Hole alle Bausteinschnittstellen der Anwendungsbausteine seiner Start- und
         // Endkonfiguration
-        // 3.) Suche den kürzesten Weg von einer der Startschnittstellen zu einer der
+        // 3.) Suche den kÃ¼rzesten Weg von einer der Startschnittstellen zu einer der
         // Endschnittstellen
         // 4.) Setze diesen Pfad im Schritt
 
-        // für jeden Schritt
+        // fÃ¼r jeden Schritt
         for (LGMProzessStep step : steps) {
-            // nur vollständige, korrekte Schritte können einen Pfad haben alle anderen erhalten
+            // nur vollstÃ¤ndige, korrekte Schritte kÃ¶nnen einen Pfad haben alle anderen erhalten
             // null
             // System.out.println(stepCount+".]\t"+step.getGraphDocument());
 
@@ -85,7 +85,7 @@ public class LGMKommProzessFinder {
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Die KantenListe des Schrittes setzen (=Liste der Kanten, die in diesem Schritt
             // durchlaufen werden) und
-            // Medienbrüche mitzählen
+            // MedienbrÃ¼che mitzÃ¤hlen
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             List<Kante> kantenList = new ArrayList<Kante>();
             List<ModelElement> kommProzessSchnittstellen = step.getKommProzessSchnittstellen();
@@ -93,22 +93,22 @@ public class LGMKommProzessFinder {
 
             // diese Medeinbruchberechnung ist nicht mehr aktuell
             // ->Medienwechsel liegt vor:
-            // - bei Wechsel von einer Kante, die einen NT übterträgt auf eine Kante, die einen DT
-            // überträgt und umgekehrt
-            // - immer bei einer Kante die sowohl NT als auch DT überträgt
-            // - immer nach einer Kante, die sowohl einen NT als auch einen DT überträgt
+            // - bei Wechsel von einer Kante, die einen NT Ã¼btertrÃ¤gt auf eine Kante, die einen DT
+            // Ã¼bertrÃ¤gt und umgekehrt
+            // - immer bei einer Kante die sowohl NT als auch DT Ã¼bertrÃ¤gt
+            // - immer nach einer Kante, die sowohl einen NT als auch einen DT Ã¼bertrÃ¤gt
 
-            // speichern, ob die zuletzt übertragene ETNT-Kombination einen Nachrichtentyp und/oder
+            // speichern, ob die zuletzt Ã¼bertragene ETNT-Kombination einen Nachrichtentyp und/oder
             // einen Dokumententyp transprotierte
-            // ->mögliche Werte für lastConnectdType:
+            // ->mÃ¶gliche Werte fÃ¼r lastConnectdType:
             // - 0 = initial
-            // - ModelConstants.NACHRICHTENTYP = wenn als letztes ein Nachrichtentyp übertrage wurde
-            // - ModelConstants.DOKUMENTENTYP = wenn als letztes ein Dokumententyp übertrage wurde
+            // - ModelConstants.NACHRICHTENTYP = wenn als letztes ein Nachrichtentyp Ã¼bertrage wurde
+            // - ModelConstants.DOKUMENTENTYP = wenn als letztes ein Dokumententyp Ã¼bertrage wurde
             // - ModelConstants.NACHRICHTENTYP+ModelConstants.DOKUMENTENTYP = wenn als letztes ein
-            // Nachrichtentyp und ein Dokumententyp übertragen wurden
+            // Nachrichtentyp und ein Dokumententyp Ã¼bertragen wurden
             // int lastConnectedType=0;
 
-            // für jede Schnittstelle, die in diesem step durchlaufen wird
+            // fÃ¼r jede Schnittstelle, die in diesem step durchlaufen wird
             for (int i = 0; i < count; i++) {
                 // hole die Schnittstelle
                 ModelElement me1 = kommProzessSchnittstellen.get(i);
@@ -127,11 +127,11 @@ public class LGMKommProzessFinder {
                 }
 
                 // zw. 2 Schnittstellen kann es max. eine BSS_BSS_VERBINDUNG geben
-                // Kante zur Liste der im Prozessschritt durchlaufenen Kanten hinzufügen
+                // Kante zur Liste der im Prozessschritt durchlaufenen Kanten hinzufÃ¼gen
                 kantenList.add(ol.get(0));
 
-                // neue Berechnung der Medienbrüche (AXS: 20.10.05)
-                // über ModelConstants.ANWENDUNGSBAUSTEIN bekommt man alle Arten von AWBs
+                // neue Berechnung der MedienbrÃ¼che (AXS: 20.10.05)
+                // Ã¼ber ModelConstants.ANWENDUNGSBAUSTEIN bekommt man alle Arten von AWBs
                 List<ModelElement> bausteinList = me1.getConnectedElements(Anwendungsbaustein.class);
                 // hier einfach die 0 nehmen, weil mind. ein Baustein mit der SS verbunden sein muss
                 // und weil es nicht das Problem dieses Algorithmus sein kann, wenn eine SS mit mehr
@@ -139,7 +139,7 @@ public class LGMKommProzessFinder {
                 me1 = bausteinList.get(0);
                 bausteinList = me2.getConnectedElements(Anwendungsbaustein.class);
                 me2 = bausteinList.get(0);
-                // bei gemischten AWBs soll das untere Hochzählen der Medienbrüche des Schrittes
+                // bei gemischten AWBs soll das untere HochzÃ¤hlen der MedienbrÃ¼che des Schrittes
                 // nicht passieren
                 if (me1.getClass() == Anwendungsbaustein.class || me2.getClass() == Anwendungsbaustein.class) {
                     me2 = me1;
@@ -151,7 +151,7 @@ public class LGMKommProzessFinder {
 
             step.setKommProzessKanten(kantenList);
 
-            // wenn Kommunikation möglich ist, müssen die tatsächlichen Start- und Endbausteine der
+            // wenn Kommunikation mÃ¶glich ist, mÃ¼ssen die tatsÃ¤chlichen Start- und Endbausteine der
             // Kommunikation gesetzt werden
             if (count >= 0) {
                 // StartKonfiguration durchgehen

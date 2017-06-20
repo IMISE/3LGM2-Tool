@@ -8,13 +8,13 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Model für alle Tables des Attributeditors
+ * Model fÃ¼r alle Tables des Attributeditors
  * <p>
- * Über die statischen Methoden können vorgefertigte <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels für Kennzahlen,
+ * Ãœber die statischen Methoden kÃ¶nnen vorgefertigte <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels fÃ¼r Kennzahlen,
  * Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * !!! Die Änderung der Daten erfolgt nicht mehr über javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
- * sondern über setDataVector(java.lang.Object[][], java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann dann dazu führen,
+ * !!! Die Ã„nderung der Daten erfolgt nicht mehr Ã¼ber javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
+ * sondern Ã¼ber setDataVector(java.lang.Object[][], java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann dann dazu fÃ¼hren,
  * dass die im Table dargstellten Daten nicht mehr den Modeldaten entsprechen !!!
  * 
  * @author fstephan

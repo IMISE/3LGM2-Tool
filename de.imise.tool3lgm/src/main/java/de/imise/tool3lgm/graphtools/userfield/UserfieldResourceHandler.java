@@ -19,13 +19,13 @@ public class UserfieldResourceHandler extends ResourceHandler {
 
         for (String ufdFileName : defaultUserpropertiesFileNames) {
             try {
-                //man muss über den ClassLoader gehen, um die vollständige URI zu erhalten
+                //man muss Ã¼ber den ClassLoader gehen, um die vollstÃ¤ndige URI zu erhalten
                 File ufdFile = new File(ClassLoader.getSystemClassLoader().getResource(ufdFileName).toURI());
                 UserFieldXMLParser parser = new UserFieldXMLParser(ufdFile, definitions);
                 parser.parseDocument();
             } catch (Exception e) {
-                // kann man ruhig ausgeben, denn wenn hier was schief geht, hat jemand Mist in die Resourcen eingefügt
-                // und solte das sofort ändern
+                // kann man ruhig ausgeben, denn wenn hier was schief geht, hat jemand Mist in die Resourcen eingefÃ¼gt
+                // und solte das sofort Ã¤ndern
                 e.printStackTrace();
             }
         }

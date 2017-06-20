@@ -29,7 +29,7 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.clipboard.ContentExchangeListener;
 
 /**
- * Abstrake Oberklasse für alle Panels zur Massendateneingabe von Kennzahlen und Verteilungsgewichten, d.h. für:
+ * Abstrake Oberklasse fÃ¼r alle Panels zur Massendateneingabe von Kennzahlen und Verteilungsgewichten, d.h. fÃ¼r:
  * <p>
  * tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel <br>
  * tool3lgm.graphtools.userfield.dialog.valueinput.DistributionWeigthEditorPanel <br>
@@ -55,12 +55,12 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     private String[] elementsAtMousePointer;
 
     /**
-     * Gibt wieder, ob sich Daten im {@link #table} geändert haben.
+     * Gibt wieder, ob sich Daten im {@link #table} geÃ¤ndert haben.
      */
     private boolean dataChanged;
 
     /**
-     * Listener zur Überwachung von Änderungen in Modeldaten des {@link #table}s
+     * Listener zur Ãœberwachung von Ã„nderungen in Modeldaten des {@link #table}s
      */
     private TableModelListener dataChangeListener;
 
@@ -78,7 +78,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Initialisiert den <code>table</code> und fügt ihn an dieses Panel an.
+     * Initialisiert den <code>table</code> und fÃ¼gt ihn an dieses Panel an.
      */
     private void init() {
         table = initTable();
@@ -86,8 +86,8 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
         initElementsAtMousePointerListener();
 
         /*
-         * Listener, der Änderungen im Model des Tables erkennt. Der UserFieldEditorDialog, der dieses Panel beinhaltet, nutzt diese Informationen um
-         * das richtige Verhalten bei Ok, Übernehmen und Abbrechen zu bestimmen.
+         * Listener, der Ã„nderungen im Model des Tables erkennt. Der UserFieldEditorDialog, der dieses Panel beinhaltet, nutzt diese Informationen um
+         * das richtige Verhalten bei Ok, Ãœbernehmen und Abbrechen zu bestimmen.
          */
         dataChangeListener = new TableModelListener() {
             @Override
@@ -100,7 +100,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Erstellt und fügt einen Listener an den Table an, der das Reihen- und Spaltenelement an der Mausposition erkennt und an Dialog übergibt.
+     * Erstellt und fÃ¼gt einen Listener an den Table an, der das Reihen- und Spaltenelement an der Mausposition erkennt und an Dialog Ã¼bergibt.
      */
     private void initElementsAtMousePointerListener() {
         ListSelectionListener l = new ListSelectionListener() {
@@ -110,7 +110,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
                 int row = table.getSelectedRow();
                 int col = table.getSelectedColumn();
                 String[] oldValue = elementsAtMousePointer;
-                //wenn nicht selektiert ist -> löschen
+                //wenn nicht selektiert ist -> lÃ¶schen
                 if (row == -1 || col == -1) {
                     elementsAtMousePointer = new String[] {
                             "", "", "", "", "", "", "", ""
@@ -143,7 +143,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
                 elementsAtMousePointer = new String[] {
                         rowIdentifierName, columnHeaderName, rowSum, colSum, rowIndex, columnIndex, rowCount, columnCount
                 };
-                // Änderung dem Dialog mitteilen
+                // Ã„nderung dem Dialog mitteilen
                 firePropertyChange(UserFieldEditorDialog.PROPERTY_TABLE_SELECTION_CHANGED, oldValue, elementsAtMousePointer);
             }
 
@@ -153,14 +153,14 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Sichert die spezielle Darstellung von <code>UserFieldTable</code>s. Es wird nicht der <code>UserFieldTable</code> selbst, sondern dass ihn
-     * beinhaltende <code>JScrollPane</code> angefügt.
+     * beinhaltende <code>JScrollPane</code> angefÃ¼gt.
      * 
      * @see java.awt.Container#add(java.awt.Component, java.lang.Object)
      */
     @Override
     public void add(final Component comp, final Object constraints) {
 
-        /* Darstellung der Komponente, die den Table und das passende Layout enthält */
+        /* Darstellung der Komponente, die den Table und das passende Layout enthÃ¤lt */
         if (comp instanceof UserFieldTable) {
             this.add(((UserFieldTable) comp).getLayoutContainer(), constraints);
         } else {
@@ -184,7 +184,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Methode verändert das Attribut <code>table</code> und löst ein Update aus. Das Model bzw. die EditCondition des <code>table</code>s wird auf
+     * Methode verÃ¤ndert das Attribut <code>table</code> und lÃ¶st ein Update aus. Das Model bzw. die EditCondition des <code>table</code>s wird auf
      * <code>newModel</code> bzw. <code>newController</code> gesetzt.
      * 
      * @param newModel
@@ -203,7 +203,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Gibt den Dialog wieder, der dieses Panel enthält
+     * Gibt den Dialog wieder, der dieses Panel enthÃ¤lt
      * 
      * @return dialog
      */
@@ -217,17 +217,17 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     public abstract boolean hasValues();
 
     /**
-     * so zu überschreiben, dass Werte aus <code>table</code> im Model übernommen werden
+     * so zu Ã¼berschreiben, dass Werte aus <code>table</code> im Model Ã¼bernommen werden
      */
     public abstract void takeOver();
 
     /**
-     * so zu überschreiben, dass <code>table</code> entsprechend des Anwendungsbereiches korrekt erzeugt wird
+     * so zu Ã¼berschreiben, dass <code>table</code> entsprechend des Anwendungsbereiches korrekt erzeugt wird
      */
     protected abstract UserFieldTable initTable();
 
     /**
-     * so zu überschreiben, dass die Constraints für den <code>table</code> zurückgegeben werden
+     * so zu Ã¼berschreiben, dass die Constraints fÃ¼r den <code>table</code> zurÃ¼ckgegeben werden
      */
     protected abstract Object constraintsForTable();
 
@@ -237,12 +237,12 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     protected abstract void initSelectFirstItem();
 
     /**
-     * so zu überschreiben, dass <code>table</code> korrekt dargestellt wird
+     * so zu Ã¼berschreiben, dass <code>table</code> korrekt dargestellt wird
      */
     protected abstract void drawTable();
 
     /**
-     * Führt im GraphDocument eine Selection_Changed Aktion aus
+     * FÃ¼hrt im GraphDocument eine Selection_Changed Aktion aus
      * 
      * @param panel
      */
@@ -251,15 +251,15 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Beendet das Editieren der aktuelle ausgewählten Zelle im Table. Methode muss vor dem Schließen des <code>UserFieldEditorDialog</code>s
-     * aufgerufen werden, damit auch der aktuelle Wert der gerade editierten Zelle übernommen wird.
+     * Beendet das Editieren der aktuelle ausgewÃ¤hlten Zelle im Table. Methode muss vor dem SchlieÃŸen des <code>UserFieldEditorDialog</code>s
+     * aufgerufen werden, damit auch der aktuelle Wert der gerade editierten Zelle Ã¼bernommen wird.
      */
     public void stopEditing() {
         table.stopEditing();
     }
 
     /**
-     * Gibt wieder, ob sich Daten im {@link #table} geändert haben.
+     * Gibt wieder, ob sich Daten im {@link #table} geÃ¤ndert haben.
      * 
      * @return
      */
@@ -268,7 +268,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Setzt das Attribut {@link #dataChanged} und bestimmt damit, ob dem {@link #dialog} angezeigt werden soll, dass Änderungen gemacht wurden, oder
+     * Setzt das Attribut {@link #dataChanged} und bestimmt damit, ob dem {@link #dialog} angezeigt werden soll, dass Ã„nderungen gemacht wurden, oder
      * nicht.
      * 
      * @param b

@@ -47,7 +47,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     private static final String DEVELOPMENT_DURATION = "2003 - " + Math.max(2013, Calendar.getInstance().get(Calendar.YEAR));
 
     /**
-     * Überwacht die übergebene Componente auf Mausbewegungen
+     * Ãœberwacht die Ã¼bergebene Componente auf Mausbewegungen
      *
      * @param c
      */
@@ -73,7 +73,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
 
     /**
      * Schreibt den Link an in das Infofenster.<br>
-     * Wird normal false übergeben, wird der Link schwarz geschrieben, sonst blau.
+     * Wird normal false Ã¼bergeben, wird der Link schwarz geschrieben, sonst blau.
      *
      * @param g
      * @param normal
@@ -92,7 +92,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     }
 
     /**
-     * Fügt in das übergebene Graphics-Object den Infotext ein.
+     * FÃ¼gt in das Ã¼bergebene Graphics-Object den Infotext ein.
      *
      * @param g
      */
@@ -117,7 +117,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     }
 
     /**
-     * Liefert das Panel für den
+     * Liefert das Panel fÃ¼r den
      *
      * @return
      */

@@ -131,10 +131,10 @@ public class SzenarioDialog extends JDialog {
     }
 
     /**
-     * zeigt einen Dialog zum auswählen der Szenarios, die exportiert werden sollen und zur Auswahl
-     * der Zieldatei, und exportiert die Szenarios anschließend in die Zieldatei
+     * zeigt einen Dialog zum auswÃ¤hlen der Szenarios, die exportiert werden sollen und zur Auswahl
+     * der Zieldatei, und exportiert die Szenarios anschlieÃŸend in die Zieldatei
      *
-     * @param owner das übergeordnete JFrame
+     * @param owner das Ã¼bergeordnete JFrame
      * @param collection die GDCollection aus der die Szenarios exportiert werden sollen
      */
     public static void showExportDialog(final JFrame owner, final GDCollection collection) {
@@ -143,9 +143,9 @@ public class SzenarioDialog extends JDialog {
     }
 
     /**
-     * zeigt einen Dialog zum auswählen der Szenarios, die importiert werden sollen
+     * zeigt einen Dialog zum auswÃ¤hlen der Szenarios, die importiert werden sollen
      *
-     * @param owner das übergeordnete JFrame
+     * @param owner das Ã¼bergeordnete JFrame
      * @param collection die GDCollection aus der die Szenarios importiert werden sollen
      * @return Array mit den Szenarios die importiert werden sollen
      */

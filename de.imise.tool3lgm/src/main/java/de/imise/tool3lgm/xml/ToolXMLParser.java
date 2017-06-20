@@ -29,11 +29,11 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 public class ToolXMLParser {
 
     //	/**
-    //	 * Set der Hashes aller Elemente, die nicht länger unterstützt werden. Beispielsweise werden
-    //	 * keine gemischten Anwendungsbausteine mehr unterstützt. Die zugehörige Klasse "Anwendungsbaustein"
-    //	 * ist jetzt abstract. Da diese nicht mehr unterstützten Elemente aber Assoziationen zu anderen
-    //	 * Elementen aber auch untergeordnete Elemente haben können, müssen diese auch entfernt werden. Um diese
-    //	 * Assoziationen und Elemente zu finden, muss man sich alle Hashes der nicht mehr unterstützten Elemente
+    //	 * Set der Hashes aller Elemente, die nicht lÃ¤nger unterstÃ¼tzt werden. Beispielsweise werden
+    //	 * keine gemischten Anwendungsbausteine mehr unterstÃ¼tzt. Die zugehÃ¶rige Klasse "Anwendungsbaustein"
+    //	 * ist jetzt abstract. Da diese nicht mehr unterstÃ¼tzten Elemente aber Assoziationen zu anderen
+    //	 * Elementen aber auch untergeordnete Elemente haben kÃ¶nnen, mÃ¼ssen diese auch entfernt werden. Um diese
+    //	 * Assoziationen und Elemente zu finden, muss man sich alle Hashes der nicht mehr unterstÃ¼tzten Elemente
     //	 * merken.
     //	 *
     //	 * TODO:implementieren
@@ -45,7 +45,7 @@ public class ToolXMLParser {
      */
     private final GDCollection gdcoll;
 
-    /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
+    /** unterstÃ¼tzte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
     private static String[] supportedXMLVersions = {
             "<?xml version='1.0' encoding='utf-8'?>",
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -89,7 +89,7 @@ public class ToolXMLParser {
 
         /* XML Version */
         if (version[0] < 0) {
-            throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
+            throw new SAXException("angegebenes Dateiformat wird nicht unterstÃ¼tzt");
         }
 
         /* Tool3lgm2-Datei-Version */
@@ -128,12 +128,12 @@ public class ToolXMLParser {
 
         case 8:
         case 9: //3.4 und 3.5 haben denselben Parser, aber die 8 kann die 9 nicht lesen, weil Elementklassen
-                    //umbeannt wurden, was aber den Parser nicht kümmert)
+                    //umbeannt wurden, was aber den Parser nicht kÃ¼mmert)
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_4(collection, paste));
             break;
 
         default:
-            throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
+            throw new SAXException("angegebenes Dateiformat wird nicht unterstÃ¼tzt");
 
             //			if (version[1]<8)
             //TODO:+++				//drehe alle KommBezETNTVBerbindungen! ACHTUNG: beim Modellieren muss das auch gedreht werden
@@ -149,69 +149,69 @@ public class ToolXMLParser {
         XMLReader reader = parser.getXMLReader();
         reader.parse(new InputSource(parseStream));
 
-        //alle Assoziationen und untergeordneten Elemente von nicht mehr unterstützten
+        //alle Assoziationen und untergeordneten Elemente von nicht mehr unterstÃ¼tzten
         //Elementen entfernen
         // 		GraphDocument mainDoc = gdcoll.getGraphDocument();
 
-        ////TODO:AXS: sauberes Entfernen nicht mehr unterstützter Elemente beenden
+        ////TODO:AXS: sauberes Entfernen nicht mehr unterstÃ¼tzter Elemente beenden
         ///*
-        // 		//HashSet, in das die HashStrings aller Elemente kommen, die gelöscht werden müssen,
-        // 		//weil sie von einem anderen Element abhängig sind (untergeordnete Elemente),
+        // 		//HashSet, in das die HashStrings aller Elemente kommen, die gelÃ¶scht werden mÃ¼ssen,
+        // 		//weil sie von einem anderen Element abhÃ¤ngig sind (untergeordnete Elemente),
         //
         // 		HashSet alreadyRemovedHashes = new HashSet();
         // 		System.err.println(deprecatedElementHashes);
         //
-        // 		//für alle HashWerte von ModellElementen, die nicht mehr unterstützt werden
+        // 		//fÃ¼r alle HashWerte von ModellElementen, die nicht mehr unterstÃ¼tzt werden
         // 		for (Iterator it=deprecatedElementHashes.iterator(); it.hasNext();){
         // 			String deprecatedElementHash = it.next().toString();
-        // 			//wenn er schon aufgrund eines anderen nicht mehr unterstützten Elementes gelöscht
-        // 			//wurde -> nimm den nächsten Hash
+        // 			//wenn er schon aufgrund eines anderen nicht mehr unterstÃ¼tzten Elementes gelÃ¶scht
+        // 			//wurde -> nimm den nÃ¤chsten Hash
         // 			if (alreadyRemovedHashes.contains(deprecatedElementHash))
         // 				continue;
-        // 			//für alle Kantenarten
+        // 			//fÃ¼r alle Kantenarten
         // 			for (int i=0; i<ModelConstants.ALL_TRACES.length; i++){
         // 	 			//hole alle Kanten der i-ten Art
         // 				ArrayList connections = mainDoc.getAllModelElements(ModelConstants.ALL_TRACES[i]);
-        // 	 			//für jede dieser Kanten
+        // 	 			//fÃ¼r jede dieser Kanten
         // 				for (Iterator tracesIt=connections.iterator(); tracesIt.hasNext();){
         // 	 				Kante trace = (Kante)tracesIt.next();
         // 	 				String elemToDeleteHash = null;
         // 					Object[][] typesAndCardinality = null;
         // 					ModelElement me = null;
-        // 	 				//wenn der Hashstring des nicht mehr unterstützten Elementes dem StartHash
+        // 	 				//wenn der Hashstring des nicht mehr unterstÃ¼tzten Elementes dem StartHash
         // 					//der Kante entspricht
         // 					if (trace.getStartHash().equals(deprecatedElementHash)){
-        // 	 					//hole das Endelement der Kante und die Kardinalitäten
+        // 	 					//hole das Endelement der Kante und die KardinalitÃ¤ten
         // 						me = mainDoc.findElementCoded(trace.getEndHash());
         // 	 					typesAndCardinality = trace.getStartTypesAndCardinality();
-        // 	 	 				//wenn der Hashstring des nicht mehr unterstützten Elementes dem EndHash
+        // 	 	 				//wenn der Hashstring des nicht mehr unterstÃ¼tzten Elementes dem EndHash
         // 	 					//der Kante entspricht
         // 	 				}else if (trace.getEndHash().equals(deprecatedElementHash)){
-        // 	 					//hole das Startelement der Kante und die Kardinalitäten
+        // 	 					//hole das Startelement der Kante und die KardinalitÃ¤ten
         // 	 					me = mainDoc.findElementCoded(trace.getStartHash());
         // 	 					typesAndCardinality = trace.getEndTypesAndCardinality();
         // 	 				}
         // 	 				//entferne die Kante
         // 					mainDoc.removeTrace(trace, TransactionManager.STANDARD_PID);
-        // 					//wenn das andere Element der Kante auch nicht richtig instanziiert war -> nächste Kante
+        // 					//wenn das andere Element der Kante auch nicht richtig instanziiert war -> nÃ¤chste Kante
         // 					if (me==null)
         // 						continue;
-        // 					//wenn beim anderen Element der Kante die minimale Kardinalität größer 0 ist (wenn
-        // 					//es also dem nicht mehr unterstützten Element untergeordnet ist (z.B. Datenbanken
+        // 					//wenn beim anderen Element der Kante die minimale KardinalitÃ¤t grÃ¶ÃŸer 0 ist (wenn
+        // 					//es also dem nicht mehr unterstÃ¼tzten Element untergeordnet ist (z.B. Datenbanken
         // 					//waren gemischten Anwendungsbausteinen untergeordnet -> gemischte Anwendungsbausteine
-        // 					//gibt es nicht mehr -> Datenbanken von solchen nicht mehr untertsützten gemischten
-        // 					//Anwendungsbausteinen müssen auch gelöscht werden))
+        // 					//gibt es nicht mehr -> Datenbanken von solchen nicht mehr untertsÃ¼tzten gemischten
+        // 					//Anwendungsbausteinen mÃ¼ssen auch gelÃ¶scht werden))
         // 					Class elementClass = me.getClass();
         // 					for (int o=0; o<typesAndCardinality.length; o++){
         //	 	 				if (((Class)typesAndCardinality[o][0]).isAssignableFrom(elementClass))
         // 	 	 					if (((Integer)typesAndCardinality[o][1]).intValue()>0)
         // 	 	 	 	 				elemToDeleteHash = trace.getEndHash();
         // 	 				}
-        // 	 				//das andere Element der Kante muss auch gelöscht werden
+        // 	 				//das andere Element der Kante muss auch gelÃ¶scht werden
         // 					if (elemToDeleteHash!=null){
         // 	 					mainDoc.remove(elemToDeleteHash, TransactionManager.STANDARD_PID);
-        // 	 					//merke es als bereits gelöscht, falls es selbst auch ein nicht mehr
-        // 	 					//unterstütztes Element ist
+        // 	 					//merke es als bereits gelÃ¶scht, falls es selbst auch ein nicht mehr
+        // 	 					//unterstÃ¼tztes Element ist
         // 	 					alreadyRemovedHashes.add(elemToDeleteHash);
         // 	 				}
         // 	 			}
@@ -222,8 +222,8 @@ public class ToolXMLParser {
         // 		deprecatedElementHashes = null;
         //*/
         // 		//Bis zur version[1] == 7 (= FileVersion V3_4)haben die x- und Y-Koordinaten der Elemente den Mittelpunkt
-        // 		//beschrieben, danach den oberen linken Eckpunkt. Das hier war nur nötig, weil die alte version auch Modelle
-        // 		//aus dem 3LGM²-Reporter einlesen können sollte, die mit der neuen Version gechrieben worden waren
+        // 		//beschrieben, danach den oberen linken Eckpunkt. Das hier war nur nÃ¶tig, weil die alte version auch Modelle
+        // 		//aus dem 3LGMÂ²-Reporter einlesen kÃ¶nnen sollte, die mit der neuen Version gechrieben worden waren
         //// 		System.err.println(version[1]);
         ///* 		if (version[1] >= 9) {
         // 			for (Szenario szen : gdcoll.getSzenarios()) {
@@ -346,7 +346,7 @@ public class ToolXMLParser {
     }
 
     //	/**
-    //	 * Fügt zu den Hashes der Elemente, die nicht mehr unterstützt werden den übergebenen hinzu.
+    //	 * FÃ¼gt zu den Hashes der Elemente, die nicht mehr unterstÃ¼tzt werden den Ã¼bergebenen hinzu.
     //	 *
     //	 * @param hash
     //	 */

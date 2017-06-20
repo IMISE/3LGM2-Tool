@@ -24,7 +24,7 @@ import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.util.swing.dialog.ProgressDialog;
 
 /**
- * Klasse, die häufig gebrauchte statische Informationen und Zugriffsfunktionen des Tools liefert.
+ * Klasse, die hÃ¤ufig gebrauchte statische Informationen und Zugriffsfunktionen des Tools liefert.
  *
  * @author AXS
  */
@@ -65,7 +65,7 @@ public class Static {
         return tool.getPreSelectedGDCollection();
     }
 
-    /** Gibt das momentan ausgewählte {@link GraphDocument} zurück */
+    /** Gibt das momentan ausgewÃ¤hlte {@link GraphDocument} zurÃ¼ck */
     public static LGMGraphDocument getSelectedDoc() {
         if (tool == null) {
             return null;
@@ -73,7 +73,7 @@ public class Static {
         return tool.getSelectedDoc();
     }
 
-    /** Setzt das ausgewählte Modell und holt bei Bedarf den dazugehörigen Frame nach vorne */
+    /** Setzt das ausgewÃ¤hlte Modell und holt bei Bedarf den dazugehÃ¶rigen Frame nach vorne */
     public static void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
         if (tool == null) {
             return;
@@ -82,7 +82,7 @@ public class Static {
     }
 
     /**
-     * Liefert die geöffneten Modelle
+     * Liefert die geÃ¶ffneten Modelle
      *
      * @return
      */
@@ -130,7 +130,7 @@ public class Static {
         return tool.getAllFrames();
     }
 
-    /** Gibt das gerade aktivierte Frame zurück */
+    /** Gibt das gerade aktivierte Frame zurÃ¼ck */
     public static AbstractInternalFrame getActiveFrame() {
         if (tool == null) {
             return null;
@@ -138,18 +138,18 @@ public class Static {
         return tool.getActiveFrame();
     }
 
-    /** Gibt zurück, ob interne Frames existieren */
+    /** Gibt zurÃ¼ck, ob interne Frames existieren */
     public static boolean isFramesExists() {
         return tool.getAllFrames().length > 0;
     }
 
-    /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */
+    /** Gibt zurÃ¼ck, ob ein aktiver, sichtbarer Grafik-Frame existiert */
     public static boolean isActiveFrameGraphFrame() {
         AbstractInternalFrame f = getActiveFrame();
         return f != null && f instanceof ToolInternalFrame && f.getGraphDocument() instanceof Szenario && f.isVisible();
     }
 
-    /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */
+    /** Gibt zurÃ¼ck, ob ein aktiver, sichtbarer Matrix-Frame existiert */
     public static boolean isActiveFrameMatrixFrame() {
         AbstractInternalFrame f = getActiveFrame();
         return f != null && f instanceof TableInternalFrame && f.isVisible();
@@ -166,9 +166,9 @@ public class Static {
         if (simple) {
             return;
         }
-        //Das neu Zeichnen braucht nicht angestoßen werden, wenn auf die
+        //Das neu Zeichnen braucht nicht angestoÃŸen werden, wenn auf die
         //Simple Grafik umgeschaltet wurde, denn dann bleibt, solange sich
-        //nichts ändert immer noch die volle Grafik in der Anzeige erhalten
+        //nichts Ã¤ndert immer noch die volle Grafik in der Anzeige erhalten
         GraphDocument doc = getSelectedDoc();
         if (doc != null) {
             doc.distributeEvent(GraphDocument.LAYOUT_CHANGED);
@@ -188,28 +188,28 @@ public class Static {
      * erstellt einen neuen ProgressDialog mit dem Hauotfenster als owner
      */
     public static void showProgressDialog(final boolean showStatusLabel) {
-        //ist null, wenn der Baukasten extern z.B. über den Reporter geladen wird
+        //ist null, wenn der Baukasten extern z.B. Ã¼ber den Reporter geladen wird
         if (tool != null) {
             showProgressDialog(tool, showStatusLabel);
         }
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Fenster als owner
+     * erstellt einen neuen ProgressDialog mit dem Ã¼bergebenen Fenster als owner
      */
     public static void showProgressDialog(final JFrame owner) {
         showProgressDialog(owner, true);
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Dialog als owner
+     * erstellt einen neuen ProgressDialog mit dem Ã¼bergebenen Dialog als owner
      */
     public static void showProgressDialog(final JDialog owner) {
         showProgressDialog(owner, true);
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Fenster als owner
+     * erstellt einen neuen ProgressDialog mit dem Ã¼bergebenen Fenster als owner
      */
     public static void showProgressDialog(final JFrame owner, final boolean showStatusLabel) {
         closeProgressDialog();
@@ -217,7 +217,7 @@ public class Static {
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Dialog als owner
+     * erstellt einen neuen ProgressDialog mit dem Ã¼bergebenen Dialog als owner
      */
     public static void showProgressDialog(final JDialog owner, final boolean showStatusLabel) {
         closeProgressDialog();
@@ -225,7 +225,7 @@ public class Static {
     }
 
     /**
-     * schließt den ProgressDialog, sofern dieser überhaupt existiert; ansonsten passiert nichts
+     * schlieÃŸt den ProgressDialog, sofern dieser Ã¼berhaupt existiert; ansonsten passiert nichts
      */
     public static void closeProgressDialog() {
         if (progressDialog == null) {
@@ -236,7 +236,7 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt existiert; ansonsten
+     * Setzt einen neuen Titel des ProgressDialog, sofern dieser Ã¼berhaupt existiert; ansonsten
      * passiert nichts.
      *
      * @param text
@@ -250,8 +250,8 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
-     * ansonsten passiert nichts. Wenn der übergebene String in den Resourcen gefunden wird,
+     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser Ã¼berhaupt existiert;
+     * ansonsten passiert nichts. Wenn der Ã¼bergebene String in den Resourcen gefunden wird,
      * dann wird er durch den Resourcen-String eretzt, ansonsten wird er direkt angezeigt.
      *
      * @param text String mit neuen Statustext
@@ -261,7 +261,7 @@ public class Static {
     }
 
     /**
-     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
+     * Setzt einen neuen Stautstext des ProgressDialog, sofern dieser Ã¼berhaupt existiert;
      * ansonsten passiert nichts.
      *
      * @param resourceKey
@@ -282,14 +282,14 @@ public class Static {
                 //tue nichts
             }
         }
-        //wenn ein nicht leerer zusätzlicher Text angegeben wurde
+        //wenn ein nicht leerer zusÃ¤tzlicher Text angegeben wurde
         if (!Strings.isNullOrEmpty(text)) {
             //wenn oben irgendein nicht leerer String als Label zusammen gebaut wurde
             if (!label.isEmpty()) {
-                //hänge den zusätzlichen Text mit Leerzeichen an
+                //hÃ¤nge den zusÃ¤tzlichen Text mit Leerzeichen an
                 label += " " + text;
             } else {
-                //das label war bis hierher leer -> setze nur den zusätzlichen Text als Label
+                //das label war bis hierher leer -> setze nur den zusÃ¤tzlichen Text als Label
                 label = text;
             }
         }
@@ -299,7 +299,7 @@ public class Static {
     // Selektionen //
 
     /**
-     * Gibt zurück, ob wenigstens ein richtiger Knoten selektiert ist
+     * Gibt zurÃ¼ck, ob wenigstens ein richtiger Knoten selektiert ist
      *
      * @see GraphDocument#isSelectedAtLeastOneRealNode()
      */

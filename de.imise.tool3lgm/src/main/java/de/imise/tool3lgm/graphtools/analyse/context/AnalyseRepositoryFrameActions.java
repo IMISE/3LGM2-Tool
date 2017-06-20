@@ -24,11 +24,11 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public class AnalyseRepositoryFrameActions {
 
     // ////////////////////////////////////
-    // Actions für Buttons und das Menü //
+    // Actions fÃ¼r Buttons und das MenÃ¼ //
     // ////////////////////////////////////
 
     /**
-     * Aktion für das Schließen des Dialoges
+     * Aktion fÃ¼r das SchlieÃŸen des Dialoges
      */
     static final Action ACTION_CLOSE_DIALOG = new AbstractAction(Tool3lgmConstants.getResString("close")) {
         @Override
@@ -49,8 +49,8 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Aktion für den Import von Analysen.<br>
-     * Fügt zur Liste der Analysen dieses Dialogs alle Analysen einer vom Benutzer ausgewählten
+     * Aktion fÃ¼r den Import von Analysen.<br>
+     * FÃ¼gt zur Liste der Analysen dieses Dialogs alle Analysen einer vom Benutzer ausgewÃ¤hlten
      * Datei hinzu.
      */
     static final Action ACTION_IMPORT_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_import")) {
@@ -78,7 +78,7 @@ public class AnalyseRepositoryFrameActions {
                 for (XMLAnalyse xMLAnalyse : analysenToAdd) {
                     AnalyseRepositoryFrame.addAnalyse(xMLAnalyse, true);
                 }
-                // wenn mind. eine neue XMLAnalyse eingefügt wurde -> analysisChanged == true setzen
+                // wenn mind. eine neue XMLAnalyse eingefÃ¼gt wurde -> analysisChanged == true setzen
                 AnalyseRepositoryFrame.analysisChanged = size < AnalyseRepositoryFrame.analysen.size();
                 AnalyseRepositoryFrame.table.update();
                 AnalyseRepositoryFrame.refreshActionStates();
@@ -87,12 +87,12 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Aktion für das Exportieren von Analysen
+     * Aktion fÃ¼r das Exportieren von Analysen
      */
     static final Action ACTION_EXPORT_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_export")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            // Speichert die aktuellen Analysen in einer vom Benutzer ausgewählten Datei
+            // Speichert die aktuellen Analysen in einer vom Benutzer ausgewÃ¤hlten Datei
             File lastUsedAnalyseFile = AnalyseRepositoryFrame.analyseFile;
             if (lastUsedAnalyseFile == null) {
                 lastUsedAnalyseFile = AnalyseRepository.getRepositoryFile();
@@ -133,7 +133,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Aktion für das Zurücksetzen des Repositories auf das Standardrepository
+     * Aktion fÃ¼r das ZurÃ¼cksetzen des Repositories auf das Standardrepository
      */
     static final Action ACTION_LOAD_STANDARD_REPOSITORY = new AbstractAction(Tool3lgmConstants.getResString("ana_load_standard_repository")) {
 
@@ -158,7 +158,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Action für das Speichern des Repositories
+     * Action fÃ¼r das Speichern des Repositories
      */
     static final Action ACTION_SAVE_REPOSITORY = new AbstractAction(Tool3lgmConstants.getResString("ana_save_repository")) {
 
@@ -179,7 +179,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Action für das Zurücksetzen des Analyseergebnisses in der Grafik
+     * Action fÃ¼r das ZurÃ¼cksetzen des Analyseergebnisses in der Grafik
      */
     static final Action ACTION_RESET_ANALYSIS_RESULT = new AbstractAction(Tool3lgmConstants.getResString("reset_result")) {
         @Override
@@ -194,7 +194,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Action für das starten der ausgewählten Analysen
+     * Action fÃ¼r das starten der ausgewÃ¤hlten Analysen
      */
     static final Action ACTION_START_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_start")) {
 
@@ -223,7 +223,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Action für das starten der ausgewählten Analysen
+     * Action fÃ¼r das starten der ausgewÃ¤hlten Analysen
      */
     static final Action ACTION_NEW_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_new")) {
         @Override
@@ -240,7 +240,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Action für das starten der ausgewählten Analysen
+     * Action fÃ¼r das starten der ausgewÃ¤hlten Analysen
      */
     static final Action ACTION_DELETE_ANALYSIS = new AbstractAction(Tool3lgmConstants.getResString("ana_delete")) {
         @Override
@@ -264,7 +264,7 @@ public class AnalyseRepositoryFrameActions {
     };
 
     /**
-     * Action für das Starten des AnalyseEditors
+     * Action fÃ¼r das Starten des AnalyseEditors
      */
     static final Action ACTION_ANALYSIS_EDITOR = new AbstractAction(Tool3lgmConstants.getResString("analysis_editor")) {
         @Override

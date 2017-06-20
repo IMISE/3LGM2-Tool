@@ -9,17 +9,17 @@ import de.imise.tool3lgm.graphtools.GDCommands;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 
 /**
- * Von {@link AbstractLGMAction} abgeleitete Klasse zu Ausführung von {@link GDCommands} im aktiven
+ * Von {@link AbstractLGMAction} abgeleitete Klasse zu AusfÃ¼hrung von {@link GDCommands} im aktiven
  * {@link GraphDocument}.
  * 
  * @author fstephan
  */
 class CommandAction extends AbstractLGMAction {
 
-    /** Das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte Kommando */
+    /** Das beim AuslÃ¶sen dieser {@link Action} im {@link GraphDocument} ausgefÃ¼hrte Kommando */
     private final GDCommands command;
 
-    /** Argument für das auszuführende Kommando */
+    /** Argument fÃ¼r das auszufÃ¼hrende Kommando */
     protected String arguments;
 
     /**

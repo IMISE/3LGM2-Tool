@@ -24,9 +24,9 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * @author hboehme RMI-fehlerPanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
+ * @author hboehme RMI-fehlerPanel fÃ¼r die RMI-Konfiguration. Das Panel beinhaltet zwei
  *         <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code> Wenn
- *         die <code>JCheckBox</code> aktiviert wird, wird versucht für den RMI-Service der nächste
+ *         die <code>JCheckBox</code> aktiviert wird, wird versucht fÃ¼r den RMI-Service der nÃ¤chste
  *         freie Port zu finden, sonst nicht. In das <code>JTextField</code> wird vom User der Port
  *         eingetragen, auf dem der RMI-Server lauschen soll. Sollte das auch wieder fhelschlagen,
  *         wird der Dialog erneut angeuzeigt.
@@ -45,7 +45,7 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
     /**
      * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein
      * <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert wird, wird versucht ein
-     * neue freier Port für den RMI-Service zu finden, sonst nicht. In das <code>JTextField</code>
+     * neue freier Port fÃ¼r den RMI-Service zu finden, sonst nicht. In das <code>JTextField</code>
      * wird vom User der Port eingetragen, auf dem der RMI-Server lauschen soll.
      */
     public RMIErrorPanel() {
@@ -82,7 +82,7 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
 
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
-        // / Bunutzereingabe für den Port
+        // / Bunutzereingabe fÃ¼r den Port
 
         JPanel panel2 = new JPanel(new BorderLayout(3, 3));
 
@@ -99,7 +99,7 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
         add(panel2, gbc);
-        // Wenn der Button betätig wird, wird in das TextField der Standardport eingetragen, der für
+        // Wenn der Button betÃ¤tig wird, wird in das TextField der Standardport eingetragen, der fÃ¼r
         // RMI vorgesehen ist. Derzeit 1099.
         rmiStdRegistryButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("standardPort")) {
             @Override

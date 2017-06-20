@@ -12,8 +12,8 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle
- * nötigen Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
- * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
+ * nÃ¶tigen Werte hat. Ich denke, bei kleinen Ã„nderungen (hinzukommen oder wegfallen einzelnener Felder im Dokument) muÃŸ man keinen ganz neuen
+ * ContentHandler schreiben sondern muÃŸ nur einen abgeleiteten von diesem bilden. Ich wÃ¼rde aber empfehlen von Zeit zu Zeit einen vÃ¶llig neuen
  * ContentHandler zu schreiben.
  * 
  * @author Thomas Rudert

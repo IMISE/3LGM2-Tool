@@ -19,11 +19,11 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 
 /**
- * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
+ * Erzeugt InternalFrame fÃ¼r 3lgm mit bestimmter GrÃ¶ÃŸe und und Lage. Es werden freie Stellen gesucht und eingfÃ¼gt.
  */
 public class ToolInternalFrame extends AbstractInternalFrame implements ActionListener {
 
-    /** Anzahl der jemals geöffneten Teilmodelle */
+    /** Anzahl der jemals geÃ¶ffneten Teilmodelle */
     static int docCount = 0;
 
     /**
@@ -81,7 +81,7 @@ public class ToolInternalFrame extends AbstractInternalFrame implements ActionLi
     }
 
     /**
-     * implementiert ActionListener zum selbständigen zentrieren der Frames
+     * implementiert ActionListener zum selbstÃ¤ndigen zentrieren der Frames
      * 
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */

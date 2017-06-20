@@ -64,7 +64,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     /** Tabelle zur Auswahl der Teilmodelle */
     private JTable szenarioTable;
 
-    /** die GDCollection, auf der die Exporte ausgeführt werden */
+    /** die GDCollection, auf der die Exporte ausgefÃ¼hrt werden */
     private GDCollection collection;
 
     private final XSLTResourceHandler xsltResourceHandler;
@@ -76,14 +76,14 @@ public class XMLExportDialog extends JDialog implements ActionListener {
      *
      * @see java.awt.Window#Window(Frame)
      * @param owner, besitzendes Fenster des Dialogs
-     * @param collection, die GDCollection, auf der die Exporte ausgeführt werden
+     * @param collection, die GDCollection, auf der die Exporte ausgefÃ¼hrt werden
      */
     public XMLExportDialog(final Frame owner, final GDCollection collection) {
         /* Besitzer, Titel, modal anzeigen */
         super(owner, Tool3lgmConstants.getResString("trans_title"), false);
         xsltResourceHandler = new XSLTResourceHandler();
 
-        //da evtl. viele Verzeichnisse nach Scripten durchsucht werden müssen, einen Fortschrittsdialog zeigen
+        //da evtl. viele Verzeichnisse nach Scripten durchsucht werden mÃ¼ssen, einen Fortschrittsdialog zeigen
         ProgressDialog progressDialog = new ProgressDialog(owner);
         progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("trans_load_scripts"));
 
@@ -322,7 +322,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     /* --- tabelle anfang --- */
 
     /**
-     * aktualisiert die Tabellen Einträge
+     * aktualisiert die Tabellen EintrÃ¤ge
      */
     protected void updateTable() {
         tableModel.clear();

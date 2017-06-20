@@ -19,25 +19,25 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.util.swing.event.ExtendedAction;
 
 /**
- * Oberklasse aller Actions in diesem Package. Ist die einzige nach außen hin sichtbare Klasse.
+ * Oberklasse aller Actions in diesem Package. Ist die einzige nach auÃŸen hin sichtbare Klasse.
  *
  * @author fstephan
  */
 public abstract class AbstractLGMAction extends ExtendedAction {
 
-    /** Schlüssel für das Attribut <em>Prüfen ob ein {@link GraphDocument} ausgewählt ist</em> */
+    /** SchlÃ¼ssel fÃ¼r das Attribut <em>PrÃ¼fen ob ein {@link GraphDocument} ausgewÃ¤hlt ist</em> */
     public static final String ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY = "DocNotNullKey";
 
-    /** Schlüssel für den {@link ActionIdentifier} dieser Action */
+    /** SchlÃ¼ssel fÃ¼r den {@link ActionIdentifier} dieser Action */
     public static final String IDENTIFIER_KEY = "IdentifierKey";
 
-    /** Key, für das auszuführende Kommando */
+    /** Key, fÃ¼r das auszufÃ¼hrende Kommando */
     public static final String COMMAND_KEY = "CommandKey";
 
-    /** Key, für das Argument des auszuführenden Kommandos */
+    /** Key, fÃ¼r das Argument des auszufÃ¼hrenden Kommandos */
     public static final String ARGUMENT_KEY = "ArgumentKey";
 
-    /** Key für die {@link ModelElement}-Klasse die, durch diese Action erzeugt wird */
+    /** Key fÃ¼r die {@link ModelElement}-Klasse die, durch diese Action erzeugt wird */
     public static final String ELEMENT_CLASS_KEY = "ElementClassKey";
 
     /** Liste aller {@link Action}s, die einen {@link KeyStroke} besitzen */
@@ -60,25 +60,25 @@ public abstract class AbstractLGMAction extends ExtendedAction {
         super(text, smallIcon, largeIcon, keyStroke, shortDescription, longDescription, actionCommand, initialSelectionState);
     }
 
-    // TODO:+++ prüfen, ob das mit selectedDoc hier wirlich ok ist oder ob das richtige doc
-    // übergeben werden muss
+    // TODO:+++ prÃ¼fen, ob das mit selectedDoc hier wirlich ok ist oder ob das richtige doc
+    // Ã¼bergeben werden muss
 
     /** Erzeugt ein Element der spezifizierten Klasse */
     void createNode(final Class<? extends ModelElement> elementClass) {
         getSelectedDoc().createKnotenWithContainer(elementClass, TransactionManager.STANDARD_PID);
     }
 
-    /** Benachrichtigt das Tool über eine Ändeung der Daten */
+    /** Benachrichtigt das Tool Ã¼ber eine Ã„ndeung der Daten */
     void distributeDataChanged() {
         distributeOptionChange(GraphDocument.DATA_CHANGED);
     }
 
-    /** Benachrichtigt das Tool über eine Ändeung der grafischen Darstellung der Elemente */
+    /** Benachrichtigt das Tool Ã¼ber eine Ã„ndeung der grafischen Darstellung der Elemente */
     void distributeElementGraphicsChanged() {
         distributeOptionChange(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
     }
 
-    /** Benachrichtigt das Tool über das Eintreten des spezifizierten Ereignisses */
+    /** Benachrichtigt das Tool Ã¼ber das Eintreten des spezifizierten Ereignisses */
     private void distributeOptionChange(final int eventCode) {
         getTool().distributeOptionChange(eventCode);
     }
@@ -88,13 +88,13 @@ public abstract class AbstractLGMAction extends ExtendedAction {
         getTool().activeLayerChanged(getSelectedDoc());
     }
 
-    /** Führt das spezifizierte Kommando im momentan selektierten {@link GraphDocument} aus */
+    /** FÃ¼hrt das spezifizierte Kommando im momentan selektierten {@link GraphDocument} aus */
     void exec(final GDCommands command) {
         exec(command.name());
     }
 
     /**
-     * Führt das spezifizierte Kommando mit dem spezifizierten Argument im momentan selektierten
+     * FÃ¼hrt das spezifizierte Kommando mit dem spezifizierten Argument im momentan selektierten
      * {@link GraphDocument} aus
      */
     void exec(final GDCommands command, final Object argument) {
@@ -102,24 +102,24 @@ public abstract class AbstractLGMAction extends ExtendedAction {
     }
 
     /**
-     * Führt den spezifizierten Kommando-<code>String</code> im momentan selektierten
+     * FÃ¼hrt den spezifizierten Kommando-<code>String</code> im momentan selektierten
      * {@link GraphDocument} aus
      */
     private void exec(final String commandString) {
         getSelectedDoc().exec(commandString, TransactionManager.STANDARD_PID);
     }
 
-    /** Gibt das gerade aktivierte Frame zurück */
+    /** Gibt das gerade aktivierte Frame zurÃ¼ck */
     AbstractInternalFrame getActiveFrame() {
         return Static.getActiveFrame();
     }
 
-    /** Gibt die momentan ausgewählte {@link GDCollection} zurück */
+    /** Gibt die momentan ausgewÃ¤hlte {@link GDCollection} zurÃ¼ck */
     GDCollection getSelectedCollection() {
         return Static.getSelectedGDCollection();
     }
 
-    /** Gibt das momentan ausgewählte {@link GraphDocument} zurück */
+    /** Gibt das momentan ausgewÃ¤hlte {@link GraphDocument} zurÃ¼ck */
     LGMGraphDocument getSelectedDoc() {
         return Static.getSelectedDoc();
     }
@@ -129,18 +129,18 @@ public abstract class AbstractLGMAction extends ExtendedAction {
         return Static.getTool();
     }
 
-    /** Gibt zurück, ob ein gültiges aktives Frame existiert */
+    /** Gibt zurÃ¼ck, ob ein gÃ¼ltiges aktives Frame existiert */
     boolean hasActiveFrame() {
         AbstractInternalFrame f = getTool().getActiveFrame();
         return f != null && !(f instanceof TableInternalFrame);
     }
 
-    /** Gibt zurück, ob interne Frames existieren */
+    /** Gibt zurÃ¼ck, ob interne Frames existieren */
     boolean hasInternalFrames() {
         return getTool().getAllFrames().length > 0;
     }
 
-    /** Löst ein Neuzeichnen des Tools aus */
+    /** LÃ¶st ein Neuzeichnen des Tools aus */
     void repaintTool() {
         getTool().repaint();
     }

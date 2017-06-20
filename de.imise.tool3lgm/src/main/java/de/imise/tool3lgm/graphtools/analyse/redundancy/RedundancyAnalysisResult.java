@@ -12,30 +12,30 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.util.collections.AlphabeticalSet;
 
 /**
- * Repräsentiert das Ergebnis einer Redundanzanalyse.<br>
- * Es enhält folgende Mengen:
+ * ReprÃ¤sentiert das Ergebnis einer Redundanzanalyse.<br>
+ * Es enhÃ¤lt folgende Mengen:
  * <ol>
- * <li>auf jeden Fall benötigte Elemente</li>
- * <li>auf jeden Fall nicht benötigte Elemente</li>
- * <li>äquivalente Elemente, von denen man eigentlich nur 1 braucht</li>
+ * <li>auf jeden Fall benÃ¶tigte Elemente</li>
+ * <li>auf jeden Fall nicht benÃ¶tigte Elemente</li>
+ * <li>Ã¤quivalente Elemente, von denen man eigentlich nur 1 braucht</li>
  * <li>Elemente, die man in jedem minmalen Set vorkommen</li>
  * <li>Elemente, die man in keinem minmalen Set vorkommen</li>
  * </ol>
  * Ein solches 'Ergebnis' wird mit den zu analysierenden Klassen und dem MetaPfad initialisiert und
- * dann in den Redundanzalgorithmus geschickt, der das Ergebnis füllt.
+ * dann in den Redundanzalgorithmus geschickt, der das Ergebnis fÃ¼llt.
  * 
  * @author AXS
  */
 public class RedundancyAnalysisResult {
 
     /**
-     * Menge aller AWB, die man in jeder minimalen Menge braucht. Sie unterstützen mind. eine
+     * Menge aller AWB, die man in jeder minimalen Menge braucht. Sie unterstÃ¼tzen mind. eine
      * Funktion als einziger Baustein.
      */
     AlphabeticalSet<ModelElement> exclusiveAWB = new AlphabeticalSet<ModelElement>();
 
     /**
-     * Menge aller AWB, die überhaupt keine Aufgabe unterstützen
+     * Menge aller AWB, die Ã¼berhaupt keine Aufgabe unterstÃ¼tzen
      */
     AlphabeticalSet<ModelElement> notSupportingAWB = new AlphabeticalSet<ModelElement>();
 
@@ -51,23 +51,23 @@ public class RedundancyAnalysisResult {
 
     /**
      * Liste aller AWB, auf die man auch braucht, da sie in jedem Minimalset vorkommen, die aber nur
-     * eine einelementige Äquivalenzklasse bilden.
+     * eine einelementige Ã„quivalenzklasse bilden.
      */
     AlphabeticalSet<ModelElement> moreNeededAWB = new AlphabeticalSet<ModelElement>();
 
     /**
      * Liste von <code>AlphabeticalSet</code>s mit AWB, die jeweils alle dieselben Aufgaben
-     * unterstützen.<br>
-     * Die betrachteten Aufgaben sind bereits eingeschränkt um alle Aufgaben, die bereits von den
-     * exklusiven AWB unterstützt werden.
+     * unterstÃ¼tzen.<br>
+     * Die betrachteten Aufgaben sind bereits eingeschrÃ¤nkt um alle Aufgaben, die bereits von den
+     * exklusiven AWB unterstÃ¼tzt werden.
      */
     ArrayList<AlphabeticalSet<ModelElement>> equalsSets;
 
     /**
-     * Mappt von einem überflüssigen AWB auf alle AWB, die nicht verzichtbar sind und die diesen AWB
-     * überflüssig machen. Das heißt in der Liste sind alle AWB, die in <code>exclusiveAWB</code>
-     * oder <code>moreNeededAWB</code> vorkommen und mind. eine Aufgabe des überflüssigen AWB
-     * unterstützen.
+     * Mappt von einem Ã¼berflÃ¼ssigen AWB auf alle AWB, die nicht verzichtbar sind und die diesen AWB
+     * Ã¼berflÃ¼ssig machen. Das heiÃŸt in der Liste sind alle AWB, die in <code>exclusiveAWB</code>
+     * oder <code>moreNeededAWB</code> vorkommen und mind. eine Aufgabe des Ã¼berflÃ¼ssigen AWB
+     * unterstÃ¼tzen.
      */
     HashMap<ModelElement, AlphabeticalSet<ModelElement>> uselessToNeeded = new HashMap<ModelElement, AlphabeticalSet<ModelElement>>();
 
@@ -77,17 +77,17 @@ public class RedundancyAnalysisResult {
     private final GDCollection gdcoll;
 
     /**
-     * Klasse für deren Elemente Redundanz aufgedeckt werden soll.
+     * Klasse fÃ¼r deren Elemente Redundanz aufgedeckt werden soll.
      */
     private final Class<? extends ModelElement> startClass;
 
     /**
-     * Klasse bezüglich der Elemente der <code>startClass</code> redundant sein können.
+     * Klasse bezÃ¼glich der Elemente der <code>startClass</code> redundant sein kÃ¶nnen.
      */
     private final Class<? extends ModelElement> endClass;
 
     /**
-     * MetaPfad über den Elemente der Art <code>startClass</code> und <code>endClass</code>
+     * MetaPfad Ã¼ber den Elemente der Art <code>startClass</code> und <code>endClass</code>
      * analysiert werden sollen.
      */
     private final MetaPath metaPath;
@@ -99,9 +99,9 @@ public class RedundancyAnalysisResult {
 
     /**
      * @param gdcoll Modell, das analysiert werden soll
-     * @param startClass Klasse für deren Elemente Redundanz aufgedeckt werden soll
-     * @param endClass Klasse bezüglich der Elemente der <code>endClass</code> redundant sein können
-     * @param metaPath MetaPfad über den Elemente der Art <code>startClass</code> und
+     * @param startClass Klasse fÃ¼r deren Elemente Redundanz aufgedeckt werden soll
+     * @param endClass Klasse bezÃ¼glich der Elemente der <code>endClass</code> redundant sein kÃ¶nnen
+     * @param metaPath MetaPfad Ã¼ber den Elemente der Art <code>startClass</code> und
      *            <code>endClass</code> analysiert werden sollen.
      * @param analyseOptionString String der bei der Ausgabe des Ergebnisses als Analyseoption
      *            angezeigt werden soll

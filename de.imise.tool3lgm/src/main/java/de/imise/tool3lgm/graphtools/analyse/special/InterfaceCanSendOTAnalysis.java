@@ -74,7 +74,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
         for (Object o : objectTypeList.getSelectedValues()) {
             objectTypes.add((ModelElement) o);
         }
-        // nichts ausgewählt
+        // nichts ausgewÃ¤hlt
         if (objectTypes.size() == 0) {
             return null;
         }
@@ -89,9 +89,9 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
             }
             testedBS.add(bs);
             for (ModelElement commLink : getSendingCommunicationLinks(bs, connectedObjectTypes)) {
-                // die Ausgangsschnittstelle nur zum Result hinzufügen, wenn sie wenigestens eine
+                // die Ausgangsschnittstelle nur zum Result hinzufÃ¼gen, wenn sie wenigestens eine
                 // SendeBezihung zu einer
-                // Empfangsschnittstelle hat (dass sie in jedem Durchlauf hier nochmal hinzugefügt
+                // Empfangsschnittstelle hat (dass sie in jedem Durchlauf hier nochmal hinzugefÃ¼gt
                 // wird ist nicht schlimm,
                 // da result ein Set ist und sie somit nur einmal darin vorkommt
                 result.add(bs);
@@ -104,12 +104,12 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
                 result.add(otherBS);
                 // AWB der Empfangsschnittstelle holen
                 ArrayList<ModelElement> allAwbOfBs = otherBS.getConnectedElements(Anwendungsbaustein.class, AwbKommssVerbindung.class);
-                // Liste um alle AWB erweitern, die zum selben Baustein gehören (alle Parts, Parents
+                // Liste um alle AWB erweitern, die zum selben Baustein gehÃ¶ren (alle Parts, Parents
                 // und Geschwister des AWB)
                 for (int j = allAwbOfBs.size() - 1; j >= 0; j--) {
                     allAwbOfBs.addAll(allAwbOfBs.get(j).getPartAndParentElements());
                 }
-                // alle Schnittstellen des Gesamt-AWB zu den ursprünglich selektierten hinzufügen
+                // alle Schnittstellen des Gesamt-AWB zu den ursprÃ¼nglich selektierten hinzufÃ¼gen
                 for (ModelElement awb : allAwbOfBs) {
                     CollectionUtils.addNonMultiples(selectedInterfaces, awb.getConnectedElements(Schnittstelle.class, AwbKommssVerbindung.class));
                 }
@@ -126,8 +126,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     }
 
     /**
-     * Liefert alle Objekttypen, die über Kommunikationsbeziehungen, die von der übergebenen
-     * Schnittstelle ausgehen, versendet werden können.
+     * Liefert alle Objekttypen, die Ã¼ber Kommunikationsbeziehungen, die von der Ã¼bergebenen
+     * Schnittstelle ausgehen, versendet werden kÃ¶nnen.
      *
      * @param bs
      * @return
@@ -142,8 +142,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     }
 
     /**
-     * Liefert für die übergebene Kommunikationsbeziehung alle Objekttypen, die die übergebene
-     * Schnittstelle über sie versendet.
+     * Liefert fÃ¼r die Ã¼bergebene Kommunikationsbeziehung alle Objekttypen, die die Ã¼bergebene
+     * Schnittstelle Ã¼ber sie versendet.
      *
      * @param bs
      * @param communicationLink
@@ -161,8 +161,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     }
 
     /**
-     * Liefert für eine übergebene Schnittstelle alle Kommunikatinsbezeihungen, die die übergebenen
-     * Objekttypen versenden können.
+     * Liefert fÃ¼r eine Ã¼bergebene Schnittstelle alle Kommunikatinsbezeihungen, die die Ã¼bergebenen
+     * Objekttypen versenden kÃ¶nnen.
      *
      * @param bs
      * @param objectTypes

@@ -47,7 +47,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     private JScrollPane sp2;
 
     /**
-     * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden sollen, weil sie links schon verknüpft sind
+     * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden sollen, weil sie links schon verknÃ¼pft sind
      */
     private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
 
@@ -92,7 +92,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        //nur für Windows wichtig
+        //nur fÃ¼r Windows wichtig
         //        constraints.ipadx = -30;
         //        constraints.ipady = -10;
         add(this, viewButton, constraints, 0, 6, 1, 1);
@@ -145,7 +145,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         control1 = new JPanel(new GridLayout(2, 1));
         control2 = new JPanel(new GridLayout(2, 1));
 
-        // Buttons dem Panel hinzufügen
+        // Buttons dem Panel hinzufÃ¼gen
         control1.add(loaddButton);
         control1.add(loremoveButton);
         control2.add(luaddButton);
@@ -224,7 +224,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     /**
-     * Hier werden alle möglichen DragNDrop-Aktionen zwischen den Trees des Panels zumsammengefasst
+     * Hier werden alle mÃ¶glichen DragNDrop-Aktionen zwischen den Trees des Panels zumsammengefasst
      * und als Attribut in der Oberklasse abgespeichert.
      */
     @Override
@@ -280,9 +280,9 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "addButtons" der Panels angefügt werden.
+     * sollte an die "addButtons" der Panels angefÃ¼gt werden.
      *
      * @param srcTree
      * @param targetTree
@@ -314,9 +314,9 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * sollte an die "removeButtons" der Panels angefÃ¼gt werden.
      *
      * @param srcTree
      * @param targetTree

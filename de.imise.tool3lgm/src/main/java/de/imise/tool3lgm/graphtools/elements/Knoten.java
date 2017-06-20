@@ -67,7 +67,7 @@ public abstract class Knoten extends ModelElement {
     }
 
     /**
-     * Gibt eine Liste der Container zurueck, die für diesen Knoten redundant sein koennen. (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
+     * Gibt eine Liste der Container zurueck, die fÃ¼r diesen Knoten redundant sein koennen. (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
      * 
      * @param doc
      * @return
@@ -77,7 +77,7 @@ public abstract class Knoten extends ModelElement {
     }
 
     /**
-     * Diese Funktion ist bis jetzt nur in Aufgabe überschrieben und sollte den String zurückliefern, der ueber dem Layer angezeigt wird, wenn die Redundanzinformationen gewünscht werden.
+     * Diese Funktion ist bis jetzt nur in Aufgabe Ã¼berschrieben und sollte den String zurÃ¼ckliefern, der ueber dem Layer angezeigt wird, wenn die Redundanzinformationen gewÃ¼nscht werden.
      * 
      * @param redundance
      * @param saturation

@@ -8,17 +8,17 @@ import de.imise.tool3lgm.graphtools.GDCommands;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 
 /**
- * Von {@link StaticAction} abgeleitet Klasse zur Änderung von Layer- und Element-Layout.
+ * Von {@link StaticAction} abgeleitet Klasse zur Ã„nderung von Layer- und Element-Layout.
  * <p>
- * Das im Konstruktor spezifizierte Kommando wird inklusive eventueller Argumente beim Auslösen dieser {@link Action} im aktuellen
- * {@link GraphDocument} ausgeführt.
+ * Das im Konstruktor spezifizierte Kommando wird inklusive eventueller Argumente beim AuslÃ¶sen dieser {@link Action} im aktuellen
+ * {@link GraphDocument} ausgefÃ¼hrt.
  * 
  * @author fstephan
  */
 class LayoutAction extends StaticAction {
 
     /**
-     * Von {@link LayoutAction} abgeleitet Klasse speziell für das Ändern der Element-Ausrichtung
+     * Von {@link LayoutAction} abgeleitet Klasse speziell fÃ¼r das Ã„ndern der Element-Ausrichtung
      * 
      * @author fstephan
      */
@@ -36,7 +36,7 @@ class LayoutAction extends StaticAction {
     }
 
     /**
-     * Von {@link LayoutAction} abgeleitet Klasse speziell für das Ändern des Element-Layouts
+     * Von {@link LayoutAction} abgeleitet Klasse speziell fÃ¼r das Ã„ndern des Element-Layouts
      * 
      * @author fstephan
      */
@@ -66,7 +66,7 @@ class LayoutAction extends StaticAction {
     }
 
     /**
-     * Von {@link LayoutAction} abgeleitet Klasse speziell für das Ändern des Ebenen-Layouts
+     * Von {@link LayoutAction} abgeleitet Klasse speziell fÃ¼r das Ã„ndern des Ebenen-Layouts
      * 
      * @author fstephan
      */
@@ -94,17 +94,17 @@ class LayoutAction extends StaticAction {
         }
     }
 
-    /** Das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte Kommando */
+    /** Das beim AuslÃ¶sen dieser {@link Action} im {@link GraphDocument} ausgefÃ¼hrte Kommando */
     private final GDCommands command;
 
-    /** Argument für das auszuführende Kommando */
+    /** Argument fÃ¼r das auszufÃ¼hrende Kommando */
     private final Integer argument;
 
     /**
      * Konstruktor
      * 
-     * @param identifier eindeutiger {@link ActionIdentifier} für diese Action
-     * @param command das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte
+     * @param identifier eindeutiger {@link ActionIdentifier} fÃ¼r diese Action
+     * @param command das beim AuslÃ¶sen dieser {@link Action} im {@link GraphDocument} ausgefÃ¼hrte
      *            Kommando
      */
     private LayoutAction(final ActionIdentifier identifier, final GDCommands command) {
@@ -125,10 +125,10 @@ class LayoutAction extends StaticAction {
     /**
      * Konstruktor
      * 
-     * @param identifier eindeutiger {@link ActionIdentifier} für diese Action
-     * @param command das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte
+     * @param identifier eindeutiger {@link ActionIdentifier} fÃ¼r diese Action
+     * @param command das beim AuslÃ¶sen dieser {@link Action} im {@link GraphDocument} ausgefÃ¼hrte
      *            Kommando
-     * @param argument Argument für das auszuführende Kommando
+     * @param argument Argument fÃ¼r das auszufÃ¼hrende Kommando
      */
     private LayoutAction(final ActionIdentifier identifier, final GDCommands command, final Integer argument) {
         this(identifier, "", command, argument);
@@ -137,11 +137,11 @@ class LayoutAction extends StaticAction {
     /**
      * Konstruktor
      * 
-     * @param identifier eindeutiger {@link ActionIdentifier} für diese Action
-     * @param command das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte
+     * @param identifier eindeutiger {@link ActionIdentifier} fÃ¼r diese Action
+     * @param command das beim AuslÃ¶sen dieser {@link Action} im {@link GraphDocument} ausgefÃ¼hrte
      *            Kommando
-     * @param argument Argument für das auszuführende Kommando
-     * @param textSuffix Suffix für den Text der Action (z.B. "...")
+     * @param argument Argument fÃ¼r das auszufÃ¼hrende Kommando
+     * @param textSuffix Suffix fÃ¼r den Text der Action (z.B. "...")
      */
     private LayoutAction(final ActionIdentifier identifier, final String textSuffix, final GDCommands command, final Integer argument) {
         super(identifier, textSuffix);

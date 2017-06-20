@@ -81,7 +81,7 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  */
 public final class GDCollection extends UserFieldTarget {
 
-    /** Information für Dateiversion (wird bei jedem Aufruf von getFileVersion() um eins erhoeht) */
+    /** Information fÃ¼r Dateiversion (wird bei jedem Aufruf von getFileVersion() um eins erhoeht) */
     private int fileVersion = 0;
 
     /** Undo- und Redomanager */
@@ -89,9 +89,9 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Table, der von der ID einer Transaktion auf die Anzahl der gestarteten Untertransaktionen mit derselben ID mappt.
-     * Eine Aktion wie "Lösche Aufgabe X aus Gesamtmodell" hat zur Folge, dass in jedem Teilmodell eine Transaktion
-     * "Lösche Aufgabe X aus Teilmodell" gestartet wird. Über diese Map kann man für das Löschen aus dem Teilmodell
-     * festestellen, dass es als Unteraktion einer anderen Transaktion gestartet wurde und nicht selbst die äußerste
+     * Eine Aktion wie "LÃ¶sche Aufgabe X aus Gesamtmodell" hat zur Folge, dass in jedem Teilmodell eine Transaktion
+     * "LÃ¶sche Aufgabe X aus Teilmodell" gestartet wird. Ãœber diese Map kann man fÃ¼r das LÃ¶schen aus dem Teilmodell
+     * festestellen, dass es als Unteraktion einer anderen Transaktion gestartet wurde und nicht selbst die Ã¤uÃŸerste
      * Transaktion war.
      */
     private final Hashtable<Integer, Integer> transStackTable = new Hashtable<Integer, Integer>();
@@ -130,7 +130,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
      * das davor selektierte direkt davor und so weiter. Jedes <code>GraphDocument</code> der Collection - also
-     * auch das Hauptdokument - kommt genau einmal in der Liste vor. Wird ein Teilmodell gelöscht, wird das davor
+     * auch das Hauptdokument - kommt genau einmal in der Liste vor. Wird ein Teilmodell gelÃ¶scht, wird das davor
      * selektierte aktiviert, im <code>ModelBrowser</code> selektiert und sein Grafikfenster in den Vordergrund
      * geholt.
      */
@@ -145,7 +145,7 @@ public final class GDCollection extends UserFieldTarget {
     private boolean changed;
 
     /**
-     * Zeitpunkt der letzen Änderung
+     * Zeitpunkt der letzen Ã„nderung
      */
     private long lastModificationTime = System.currentTimeMillis();
 
@@ -309,8 +309,8 @@ public final class GDCollection extends UserFieldTarget {
 
         doc.start_transaction(pid);
 
-        //bei allen Elementen, die mit dem zu löschenden Teilmodell verknüpft sind
-        //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
+        //bei allen Elementen, die mit dem zu lÃ¶schenden Teilmodell verknÃ¼pft sind
+        //den Verweis auf dieses Teilmodell lÃ¶schen (das passiert im Hauptmodell)
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer layer = doc.getLayer(ModelConstants.LAYERS[i]);
             for (int j = 0; j < layer.getKnotenCount(); j++) {
@@ -321,7 +321,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         }
-        //alle Elemente des Szenarios löschen -> das kann man dann auch wieder zurück nehmen
+        //alle Elemente des Szenarios lÃ¶schen -> das kann man dann auch wieder zurÃ¼ck nehmen
         ArrayList<ElementContainer> elementsToDelete = new ArrayList<ElementContainer>(100);
 
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
@@ -344,7 +344,7 @@ public final class GDCollection extends UserFieldTarget {
         doc.addUndoCommand(GDCommands.CREATE_SZENARIO + " " + GraphDocument.getParseSaveString(szenario.getTitle()) + " " + GraphDocument.getParseSaveString(szenario.getDescription()) + " " + szenario.hashString, pid);
         doc.addRedoCommand(GDCommands.REMOVE_SZENARIO + " " + szenario.hashString, pid);
 
-        //wenn das Beschreibungsfenster offen ist -> den Tab des zu löschenden Teimodells löschen
+        //wenn das Beschreibungsfenster offen ist -> den Tab des zu lÃ¶schenden Teimodells lÃ¶schen
         if (descriptionFrame != null) {
             descriptionFrame.update();
             //			descriptionFrame.removeTab(szenario);
@@ -377,7 +377,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Setzt das übergebene <code>GraphDocument</code> als das aktuell selektierte.
+     * Setzt das Ã¼bergebene <code>GraphDocument</code> als das aktuell selektierte.
      *
      * @param doc
      */
@@ -387,7 +387,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Gibt das aktuell selektierte <code>GraphDocument</code> zurück.
+     * Gibt das aktuell selektierte <code>GraphDocument</code> zurÃ¼ck.
      */
     public LGMGraphDocument getSelectedDoc() {
         if (activeGraphDocumentsList.size() < 1) {
@@ -461,7 +461,7 @@ public final class GDCollection extends UserFieldTarget {
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Fügt unter der angegebenen PID die UndoKommandos ein, um das Layout des übergebenen Containers
+     * FÃ¼gt unter der angegebenen PID die UndoKommandos ein, um das Layout des Ã¼bergebenen Containers
      * wieder herzustellen.
      *
      * @param ec
@@ -516,10 +516,10 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Entfernt die übergebenen Container aus ihrem GraphDocument. Es werden nur {@link NodeContainer} entfernt sowie
-     * deren {@link EdgeContainer} und alle von den übergebenen Elementen abhängigen Elemente. Abhängige Elemente
-     * selbst oder Kanten in der übergebenen Liste werden übergangen und nicht gelöscht, wenn das Element
-     * von dem sie abhängen nicht gelöscht wird.
+     * Entfernt die Ã¼bergebenen Container aus ihrem GraphDocument. Es werden nur {@link NodeContainer} entfernt sowie
+     * deren {@link EdgeContainer} und alle von den Ã¼bergebenen Elementen abhÃ¤ngigen Elemente. AbhÃ¤ngige Elemente
+     * selbst oder Kanten in der Ã¼bergebenen Liste werden Ã¼bergangen und nicht gelÃ¶scht, wenn das Element
+     * von dem sie abhÃ¤ngen nicht gelÃ¶scht wird.
      *
      * @param elementsToRemove
      * @param pid
@@ -531,7 +531,7 @@ public final class GDCollection extends UserFieldTarget {
         for (ElementContainer ec : elementsToRemove) {
             GraphDocument ecDoc = ec.getGraphDocument();
             //man kann hier nur Elemente aus demselben Szenario (also nicht aus dem Hauptmodell und alle aus dem
-            //gleichen Teilmodell löschen)
+            //gleichen Teilmodell lÃ¶schen)
             if (ecDoc == doc || szen != null && szen != ecDoc) {
                 continue;
             }
@@ -545,12 +545,12 @@ public final class GDCollection extends UserFieldTarget {
                 removeBendpoint(((BendpointContainer) ec).getKnickpunktKnoten(), pid);
                 continue;
             }
-            //keine Kanten löschen
+            //keine Kanten lÃ¶schen
             if (ec instanceof EdgeContainer) {
                 continue;
             }
             ModelElement me = ec.getElement();
-            //keine untergerodneten Elemente einfach so aus der Grafik löschen
+            //keine untergerodneten Elemente einfach so aus der Grafik lÃ¶schen
             if (ModelConstants.isSlaveType(me.getClass())) {
                 continue;
             }
@@ -559,15 +559,15 @@ public final class GDCollection extends UserFieldTarget {
                 szen.start_transaction(pid);
                 transctionStarted = true;
             }
-            //dieser Container kann wirklich gelöscht werden -> merken
+            //dieser Container kann wirklich gelÃ¶scht werden -> merken
             reallyContainerToRemove.add(ec);
             for (Kante edge : me.getEdges()) {
 
-                //den Container der Kante mit allen Knickpunkten im aktuellen Teilmodell löschen
+                //den Container der Kante mit allen Knickpunkten im aktuellen Teilmodell lÃ¶schen
                 if (!simpleRemoveEdgeContainer((EdgeContainer) edge.getContainer(szen), pid)) {
                     continue;
                 }
-                //alle untergeordneten ElementContainer ebenfalls löschen
+                //alle untergeordneten ElementContainer ebenfalls lÃ¶schen
                 if (!(edge instanceof Composition)) {
                     continue;
                 }
@@ -582,7 +582,7 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
 
-        //wenn es nichts zu löschen gab -> raus
+        //wenn es nichts zu lÃ¶schen gab -> raus
         if (!transctionStarted) {
             return;
         }
@@ -603,25 +603,25 @@ public final class GDCollection extends UserFieldTarget {
         if (edgeContainer == null) {
             return false;
         }
-        //erstmal alle Knickpunkte löschen
+        //erstmal alle Knickpunkte lÃ¶schen
         ArrayList<BendpointContainer> bendPointContainerList = edgeContainer.getBendpointContainerList();
-        //die bendPointContainerList wird beim removeBendpoint-Aufruf selbst geändert -> daher einfach von hinten die
-        //Knickpunkte löschen.
+        //die bendPointContainerList wird beim removeBendpoint-Aufruf selbst geÃ¤ndert -> daher einfach von hinten die
+        //Knickpunkte lÃ¶schen.
         for (int k = bendPointContainerList.size() - 1; k >= 0; k--) {
             removeBendpoint(bendPointContainerList.get(k).getKnickpunktKnoten(), pid);
         }
 
         Kante edge = edgeContainer.getEdge();
         GraphDocument doc = edgeContainer.getGraphDocument();
-        //jetzt den KantenContainer einfach löschen
+        //jetzt den KantenContainer einfach lÃ¶schen
         edge.removeContainer(doc);
         doc.layer[ModelConstants.layerFor(edge.getClass())].remove(edgeContainer);
         return true;
     }
 
     /**
-     * Entfernt die übergebenen ElementContainer aus dem Szenario des ersten Containers in der Liste ohne dabei
-     * irgendwelche Konsistenzprüfungen vorzunehmen.
+     * Entfernt die Ã¼bergebenen ElementContainer aus dem Szenario des ersten Containers in der Liste ohne dabei
+     * irgendwelche KonsistenzprÃ¼fungen vorzunehmen.
      *
      * @param containerToRemove
      * @param pid
@@ -641,8 +641,8 @@ public final class GDCollection extends UserFieldTarget {
             me.removeContainer(ecDoc);
             ecDoc.layer[ModelConstants.layerFor(me.getClass())].remove(ec);
         }
-        //das Undo das die Container wieder einfügt muss als letztes kommen, weil es als erstes beim
-        //Rückgängig machen wieder ausgeführt wird
+        //das Undo das die Container wieder einfÃ¼gt muss als letztes kommen, weil es als erstes beim
+        //RÃ¼ckgÃ¤ngig machen wieder ausgefÃ¼hrt wird
         for (ElementContainer ec : containerToRemove) {
             ModelElement me = ec.getElement();
             if (logSubElements || !ModelConstants.isSlaveType(me.getClass())) {
@@ -676,8 +676,8 @@ public final class GDCollection extends UserFieldTarget {
      * @param me
      * @param doc
      *            GraphDocument, das die Transaktion starten und beenden soll, also dessen Selektion im Falle
-     *            eines Undo wieder hergestellt wird. Das Element selbst wird natürlich aus allen Teilmodellen
-     *            und dem Hauptmodell gelöscht.
+     *            eines Undo wieder hergestellt wird. Das Element selbst wird natÃ¼rlich aus allen Teilmodellen
+     *            und dem Hauptmodell gelÃ¶scht.
      * @param pid
      */
     public final void deleteElement(final ModelElement me, final GraphDocument gdoc, final int pid) {
@@ -698,8 +698,8 @@ public final class GDCollection extends UserFieldTarget {
      * @param elementHashesToDelete
      * @param doc
      *            GraphDocument, das die Transaktion starten und beenden soll, also dessen Selektion im Falle
-     *            eines Undo wieder hergestellt wird. Das Element selbst wird natürlich aus allen Teilmodellen
-     *            und dem Hauptmodell gelöscht.
+     *            eines Undo wieder hergestellt wird. Das Element selbst wird natÃ¼rlich aus allen Teilmodellen
+     *            und dem Hauptmodell gelÃ¶scht.
      * @param pid
      */
     public final void deleteElements(final String[] elementHashesToDelete, final GraphDocument gdoc, final int pid) {
@@ -723,19 +723,19 @@ public final class GDCollection extends UserFieldTarget {
      * @param elementsToDelete
      * @param doc
      *            GraphDocument, das die Transaktion starten und beenden soll, also dessen Selektion im Falle
-     *            eines Undo wieder hergestellt wird. Das Element selbst wird natürlich aus allen Teilmodellen
-     *            und dem Hauptmodell gelöscht.
+     *            eines Undo wieder hergestellt wird. Das Element selbst wird natÃ¼rlich aus allen Teilmodellen
+     *            und dem Hauptmodell gelÃ¶scht.
      * @param pid
      */
     public final void deleteElements(final ArrayList<? extends ModelElement> elementsToDelete, final GraphDocument gdoc, final int pid) {
-        //das wird die Liste mit allen zu löschenden Elementen. Das sind alle Elemente aus <code>elementsToDelete</code>,
-        //alle Kanten dieser Elemente und rekursiv alle von den zu löschenden Elementen abhängigen Elemente (min. Karfinalität=1)
+        //das wird die Liste mit allen zu lÃ¶schenden Elementen. Das sind alle Elemente aus <code>elementsToDelete</code>,
+        //alle Kanten dieser Elemente und rekursiv alle von den zu lÃ¶schenden Elementen abhÃ¤ngigen Elemente (min. KarfinalitÃ¤t=1)
         //sowie deren Kanten
         ArrayList<ModelElement> allElementsToDelete = new ArrayList<ModelElement>(elementsToDelete);
-        //In dieses Set kommen alle Elemente, deren Löschen man nicht in den RedoKommandos loggen muss, weil beim Löschen eines
-        //anderen Elementes eine minimale Kardinalität unterschritten ist, so dass sie automatisch mitgelöscht werden
+        //In dieses Set kommen alle Elemente, deren LÃ¶schen man nicht in den RedoKommandos loggen muss, weil beim LÃ¶schen eines
+        //anderen Elementes eine minimale KardinalitÃ¤t unterschritten ist, so dass sie automatisch mitgelÃ¶scht werden
         HashSet<ModelElement> dependentDeletedElements = new HashSet<ModelElement>();
-        //das wird die Liste aller zu löschenden Verbindungen
+        //das wird die Liste aller zu lÃ¶schenden Verbindungen
         ArrayList<Kante> edgesToDelete = new ArrayList<Kante>();
 
         gdoc.start_transaction(pid);
@@ -748,13 +748,13 @@ public final class GDCollection extends UserFieldTarget {
                 continue;
             }
 
-            //den evtl. geöffneten Dialog des Elementes scließen
+            //den evtl. geÃ¶ffneten Dialog des Elementes sclieÃŸen
             ElementPropertyDialog dialog = ModelConstants.hasObjektDialog(me);
             if (dialog != null) {
                 dialog.performOK();
             }
 
-            //Knickpunkte kann man gleich löschen
+            //Knickpunkte kann man gleich lÃ¶schen
             if (me instanceof Knickpunkt) {
                 ElementContainer kpc = me.getContainer(gdoc);
                 if (kpc == null) {
@@ -766,16 +766,16 @@ public final class GDCollection extends UserFieldTarget {
             } else if (me instanceof Kante) {
                 Kante edge = (Kante) me;
                 edgesToDelete.add(edge);
-                //wenn durch das Löschen der Kante auch die Kardinalität für eins oder beide der durch die Kante verbundenen
-                //Elemente unterschritten wurde -> die Elemente auch löschen
+                //wenn durch das LÃ¶schen der Kante auch die KardinalitÃ¤t fÃ¼r eins oder beide der durch die Kante verbundenen
+                //Elemente unterschritten wurde -> die Elemente auch lÃ¶schen
                 ModelElement[] startEnd = {
                         edge.getStart(),
                         edge.getEnd()
                 };
                 for (ModelElement elem : startEnd) {
-                    //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
-                    //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
-                    //auf Gleichheit muss getestet werden, weil die Kante ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
+                    //wenn die Anzahl der bestehenden Kanten der zu lÃ¶schenden Art fÃ¼r das verbundene Element gleich
+                    //der minimalen KardinalitÃ¤t fÃ¼r diese Kantenart ist, dann muss das verbundene Element auch gelÃ¶scht werden
+                    //auf Gleichheit muss getestet werden, weil die Kante ja noch nicht wirklich gelÃ¶scht ist und somit mitgezÃ¤hlt wird
                     if (elem != null && elem.countConnections(edge.getClass()) <= Kante.getMinCardinality(elem.getClass(), edge.getClass())) {
                         if (!allElementsToDelete.contains(elem)) {
                             allElementsToDelete.add(elem);
@@ -786,7 +786,7 @@ public final class GDCollection extends UserFieldTarget {
             }
 
             for (Kante edge : me.getEdges()) {
-                //auch Kanten können Kanten haben usw., daher müssen sie diese Schleife auch durchlaufen
+                //auch Kanten kÃ¶nnen Kanten haben usw., daher mÃ¼ssen sie diese Schleife auch durchlaufen
                 if (!allElementsToDelete.contains(edge)) {
                     allElementsToDelete.add(edge);
                 }
@@ -799,7 +799,7 @@ public final class GDCollection extends UserFieldTarget {
             return;
         }
 
-        //alle Elemente einfach aus den Szenarien löschen
+        //alle Elemente einfach aus den Szenarien lÃ¶schen
         for (Szenario szen : szenarios) {
             HashSet<ElementContainer> elementContainer = new HashSet<ElementContainer>();
             for (ModelElement me : allElementsToDelete) {
@@ -815,7 +815,7 @@ public final class GDCollection extends UserFieldTarget {
         while (edgesToDelete.size() > 0) {
             for (int i = 0; i < edgesToDelete.size(); i++) {
                 Kante edge = edgesToDelete.get(i);
-                //immer erst nur Kanten ohne Kanten löschen
+                //immer erst nur Kanten ohne Kanten lÃ¶schen
                 if (edge.hasEdges()) {
                     continue;
                 }
@@ -823,7 +823,7 @@ public final class GDCollection extends UserFieldTarget {
                 ModelElement ke = edge.getEnd();
                 //bei inkonsistenten Kanten nicht loggen
                 if (ks != null && ke != null) {
-                    //alle Kanten sind Doppelkanten, deswegen hier keine Prüfung
+                    //alle Kanten sind Doppelkanten, deswegen hier keine PrÃ¼fung
                     switch (((Doppelkante) edge).getDirection()) {
                     case Doppelkante.FORWARD:
                         doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdgeIndex(edge) + " " + ke.getEdgeIndex(edge), pid);
@@ -848,13 +848,13 @@ public final class GDCollection extends UserFieldTarget {
                 //				this.doc.layer[layer].remove(edgeCont);
                 //				System.err.println("GDCollection.deleteElements() line 848");
                 doc.layer[ModelConstants.layerFor(edge.getClass())].remove(edge.getContainer(doc));
-                //jetzt den Container selbst löschen (kann man sich sparen, weil die Kante seobst nicht mehr gepsüeichert wird)
+                //jetzt den Container selbst lÃ¶schen (kann man sich sparen, weil die Kante seobst nicht mehr gepsÃ¼eichert wird)
                 edge.removeContainer(doc);
                 edgesToDelete.remove(i--);
             }
         }
 
-        //jetzt alle Knoten im Hauptmodell löschen
+        //jetzt alle Knoten im Hauptmodell lÃ¶schen
         for (ModelElement me : allElementsToDelete) {
             if (me instanceof Kante || me instanceof Knickpunkt) {
                 continue;
@@ -863,10 +863,10 @@ public final class GDCollection extends UserFieldTarget {
             if (!dependentDeletedElements.contains(me)) {
                 doc.addRedoCommand(GDCommands.DELETE + " " + me.getHashString(), pid);
             }
-            //den Container des zu löschenden Elementes im Hauptmodell holen
+            //den Container des zu lÃ¶schenden Elementes im Hauptmodell holen
             doc.layer[ModelConstants.layerFor(me.getClass())].remove(me.getContainer(doc));
             //und danach erst im Table des Elements
-            //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nicrgends mehr gespecihert werden sollte
+            //das LÃ¶schen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nicrgends mehr gespecihert werden sollte
             //me.removeContainer(this.doc);
         }
         gdoc.finish_transaction(pid);
@@ -876,7 +876,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Entfernt den übergebenen {@link Knickpunkt} aus dem Haupt-{@link GraphDocument} und
+     * Entfernt den Ã¼bergebenen {@link Knickpunkt} aus dem Haupt-{@link GraphDocument} und
      * dem Szenario, in dem er dargestellt wird (das ist immer nur 1). Es werden die Undo-Redo-Kommandos geloggt.
      *
      * @param kpk
@@ -887,7 +887,7 @@ public final class GDCollection extends UserFieldTarget {
         if (kc == null) {
             return;
         }
-        //das GraphDocument holen, aus dem der übergebene Container stammt
+        //das GraphDocument holen, aus dem der Ã¼bergebene Container stammt
         GraphDocument kcDoc = kc.getGraphDocument();
         kcDoc.start_transaction(pid);
         Knickpunkt kp = kc.getKnickpunktKnoten();
@@ -902,9 +902,9 @@ public final class GDCollection extends UserFieldTarget {
         edgeC.removeKnickpunkt(kp);
         edgeC.computeBorderPoints();
         int layerIndex = edgeC.layerFor();
-        //den Knickpunkt im Teilmodell löschen
+        //den Knickpunkt im Teilmodell lÃ¶schen
         szenario.getLayer(layerIndex).remove(kc);
-        //den Knickpunkt im Hauptmodell löschen
+        //den Knickpunkt im Hauptmodell lÃ¶schen
         doc.getLayer(layerIndex).remove(kp.getContainer(doc));
         kcDoc.addRedoCommand(GDCommands.DELETE + " " + kp.getHashString(), pid);
         kcDoc.addUndoCommand(GDCommands.INSERT_BENDING_POINT + " " + szenario.getHashString() + " " + edgeC.getHashString() + " " + kc.getHashString() + " " + kc.getX() + " " + kc.getY() + " " + oldIndex, pid);
@@ -970,7 +970,7 @@ public final class GDCollection extends UserFieldTarget {
         szen.addRedoCommand(GDCommands.INSERT_BENDING_POINT + " " + szenHashString + " " + kc.getHashString() + " " + kp.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
         szen.addUndoCommand(GDCommands.DELETE + " " + kp.getHashString(), pid);
 
-        // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Kante)
+        // den Layer bestimmen auf dem der Knickpunkt eingefÃ¼gt werden soll (= der Layer der Kante)
         int layerNumber = kc.getElement().layerFor();
         if (szen.getLayer(layerNumber).add(kpc) == null) {
             szen.undo(pid);
@@ -1000,7 +1000,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public NodeContainer createKnotenWithContainer(final Class<? extends Knoten> elementClass, final String name, final String description, final String hashString, final int pid) {
 
-        //Knickpunkte kann man über diese Funktion nicht anlegen
+        //Knickpunkte kann man Ã¼ber diese Funktion nicht anlegen
         if (Knickpunkt.class.isAssignableFrom(elementClass)) {
             return null;
         }
@@ -1041,7 +1041,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         doc.addUndoCommand(GDCommands.DELETE + " " + me.getHashString(), pid);
 
-        // den Layer bestimmen auf dem das Element eingefügt werden soll
+        // den Layer bestimmen auf dem das Element eingefÃ¼gt werden soll
         int layerNumber = me.layerFor();
         LayerContainer lc = doc.getLayer(layerNumber);
         if (lc.add(nc) == null) {
@@ -1053,7 +1053,7 @@ public final class GDCollection extends UserFieldTarget {
         setInteractiveMode(false);
         createInitialSubtypes(me, pid);
 
-        // Sichtbarkeit der Interebenenbeziehungen prüfen
+        // Sichtbarkeit der Interebenenbeziehungen prÃ¼fen
         if (nc instanceof KonfigurationContainer) {
             checkInterLayerConnectionVisibility((KonfigurationContainer) nc);
         }
@@ -1065,7 +1065,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Legt für das übergebene Element alle initialen Unterelemente an, wenn diese noch nicht vorhanden sind.
+     * Legt fÃ¼r das Ã¼bergebene Element alle initialen Unterelemente an, wenn diese noch nicht vorhanden sind.
      *
      * @param me
      * @param pid
@@ -1074,14 +1074,14 @@ public final class GDCollection extends UserFieldTarget {
         Class<? extends ModelElement> elementClass = me.getClass();
         for (Class<? extends Kante> subTypeEdgeClass : ModelConstants.getInitialSubtypes(elementClass)) {
             Class<? extends ModelElement> subType = Kante.isStartClass(subTypeEdgeClass, elementClass) ? Kante.getEndClass(subTypeEdgeClass) : Kante.getStartClass(subTypeEdgeClass);
-            //minimale kardinalität für die Unterelemente
+            //minimale kardinalitÃ¤t fÃ¼r die Unterelemente
             int minCardForSubType = Kante.getMinCardinality(me.getClass(), subTypeEdgeClass);
             //bisher verbundene Anzahl von Unterelementen
             ArrayList<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
             //soviele Unterelemente wie fehlen neu anlegen
             for (int i = connectedSubTypes.size(); i < minCardForSubType; i++) {
                 String name;
-                //wenn mehrere Unterelemene existieren können, dann durchnummerieren
+                //wenn mehrere Unterelemene existieren kÃ¶nnen, dann durchnummerieren
                 if (minCardForSubType > 1) {
                     name = CollectionUtils.getNextIndicatedName(ModelConstants.getDisplayableName(subType) + " ", " " + Tool3lgmConstants.getResString("fuer") + " " + me.getName(), connectedSubTypes);
                 } else {
@@ -1095,7 +1095,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Überprüft, in welchen {@link Szenario}s, Interebenenbeziehung angezeigt werden sollen und aktiviert
+     * ÃœberprÃ¼ft, in welchen {@link Szenario}s, Interebenenbeziehung angezeigt werden sollen und aktiviert
      * gegeben Falls das Anzeigen der neu anglegten Instanz.
      *
      * @param interLayerEndClass
@@ -1239,28 +1239,28 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert. Die Verbindung
-     * entsteht immer in Vorwärtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
+     * entsteht immer in VorwÃ¤rtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
      *
      * @param edgeClassName
      *            Klassenname der kante, die angelegt werden soll. Ist nur relevant, wenn es mehrere Kantenarten zwischen den Elementen geben kann.
      * @param edgeHash
-     *            Wird ein Wert ungleich <code>null</code> übergeben, wird dieser als HasWert der neuen Kante gesetzt
+     *            Wird ein Wert ungleich <code>null</code> Ã¼bergeben, wird dieser als HasWert der neuen Kante gesetzt
      * @param startElement
      *            Startknoten der Kante
      * @param endElement
      *            Endknoten der Kante
      * @param edgeIndex
      * @param startElementEdgeIndex
-     *            Position, an der die Kante beim Startelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
-     *            übergeben werden.
+     *            Position, an der die Kante beim Startelement in die Kantenliste eingefÃ¼gt werden soll. Bei ungeordneten Listen sollte hier -1
+     *            Ã¼bergeben werden.
      * @param endElementEdgeIndex
-     *            Position, an der die Kante beim Endelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
-     *            übergeben werden.
+     *            Position, an der die Kante beim Endelement in die Kantenliste eingefÃ¼gt werden soll. Bei ungeordneten Listen sollte hier -1
+     *            Ã¼bergeben werden.
      * @param ensureConsistency
-     *            wenn <code>true</code> wird für die verbundenen Elemente geprüft, ob die Kardinalität mit der neuen Kante
-     *            überschritten wird. Wenn ja, werden überzählige Verbindungen gelöscht
+     *            wenn <code>true</code> wird fÃ¼r die verbundenen Elemente geprÃ¼ft, ob die KardinalitÃ¤t mit der neuen Kante
+     *            Ã¼berschritten wird. Wenn ja, werden Ã¼berzÃ¤hlige Verbindungen gelÃ¶scht
      * @param pid
-     *            Transaktions-ID mit der die Änderungen am Model durchgeführt werden
+     *            Transaktions-ID mit der die Ã„nderungen am Model durchgefÃ¼hrt werden
      * @return
      *         die neu angelegte Kante zwischen den beiden Elementen oder die Kante, die bereits existierte
      */
@@ -1363,7 +1363,7 @@ public final class GDCollection extends UserFieldTarget {
                         ModelElement dummy = startElement;
                         startElement = endElement;
                         endElement = dummy;
-                        //nur die Rückwärtsrichtung setzen, wenn es keine Kante ist, die immer vorwärts dargestellt werden soll
+                        //nur die RÃ¼ckwÃ¤rtsrichtung setzen, wenn es keine Kante ist, die immer vorwÃ¤rts dargestellt werden soll
                         if (!ModelConstants.isForwardConnectedEdge(edgeClass)) {
                             dir = Doppelkante.BACKWARD;
                         }
@@ -1390,9 +1390,9 @@ public final class GDCollection extends UserFieldTarget {
                 doc.addRedoCommand(GDCommands.LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startElement.getHashString() + " " + endElement.getHashString() + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
                 doc.addUndoCommand(GDCommands.UNLINK + " " + startElement.getHashString() + " " + endElement.getHashString() + " " + startElementEdgeIndex, pid);
 
-                //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
-                //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
-                //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
+                //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die KardinalitÃ¤ten
+                //verletzt wÃ¤ren -> lÃ¶sche solange bestehende Beziehungen, bis die KardinaltitÃ¤ten eingehalten werden
+                //Dies muss nach dem HinzufÃ¼gen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
                     int maxElemCardinality = edge.isStartClass(startElement.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
                     ArrayList<Kante> edgeList = startElement.getEdgesWith(edge.isStartClass(startElement.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
@@ -1506,9 +1506,9 @@ public final class GDCollection extends UserFieldTarget {
     //				doc.addRedoCommand(GDCommands.LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + me1.getHashString() + " " + me2.getHashString() + " " + edgeIndex, pid);
     //				doc.addUndoCommand(GDCommands.UNLINK + " " + me1.getHashString() + " " + me2.getHashString() + " " + edgeIndex, pid);
     //
-    //				//Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
-    //				//verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
-    //				//Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolegn, sonst stimmt die Reihenfolge der Kommando nicht.
+    //				//Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die KardinalitÃ¤ten
+    //				//verletzt wÃ¤ren -> lÃ¶sche solange bestehende Beziehungen, bis die KardinaltitÃ¤ten eingehalten werden
+    //				//Dies muss nach dem HinzufÃ¼gen der anderen Undo-Komamndos erfolegn, sonst stimmt die Reihenfolge der Kommando nicht.
     //				int maxElemCardinality = edge.isStartClass(me1.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
     //				ArrayList<Kante> edgeList = me1.getEdgesWith(edge.isStartClass(me1.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
     //				edgeList.remove(edge);
@@ -1635,7 +1635,7 @@ public final class GDCollection extends UserFieldTarget {
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
 
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
-        //ist die Richtung egal und das Unlinken ist das Löschen der Kante
+        //ist die Richtung egal und das Unlinken ist das LÃ¶schen der Kante
         if (ModelConstants.isDoubleMeaningEdge(ka.getClass())) {
             Doppelkante dlk = (Doppelkante) ka;
             if (dlk.getDirection() == Doppelkante.DOUBLE) {
@@ -1675,7 +1675,7 @@ public final class GDCollection extends UserFieldTarget {
             return false;
         }
 
-        //prüfen, ob es sich um Knoten gleichen Typs handelt (nur diese können vereint werden)
+        //prÃ¼fen, ob es sich um Knoten gleichen Typs handelt (nur diese kÃ¶nnen vereint werden)
         if (!(modelElement1 instanceof Knoten && modelElement2 instanceof Knoten)) {
             JOptionPane.showMessageDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("nur_knoten_sel"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
             return false;
@@ -1687,14 +1687,14 @@ public final class GDCollection extends UserFieldTarget {
             return false;
         }
 
-        //Beginne umhängen der Kanten
+        //Beginne umhÃ¤ngen der Kanten
         doc.start_transaction(pid);
         for (Szenario s : szenarios) {
             s.start_transaction(pid, false);
         }
 
-        //Namen und Beschreibung des zu löschenden Knoten an den verbleibenden anhängen
-        //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
+        //Namen und Beschreibung des zu lÃ¶schenden Knoten an den verbleibenden anhÃ¤ngen
+        //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenfÃ¼hren
         knoten2.join(knoten1, false);
         //knoten2.createNameWithSzens(doc);
 
@@ -1708,18 +1708,18 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
 
-        //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Kante selbst irgenwie darum kümmern!
-        List<Kante> kantenVector1 = (List<Kante>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        //Das hier ist Hardcore, weil hier das IterableObject zurÃ¼ck auf List gecastet wird-> eigentlich mÃ¼sste sich Kante selbst irgenwie darum kÃ¼mmern!
+        List<Kante> kantenVector1 = (List<Kante>) knoten1.getEdges();//ArrayList der Kanten des zu lÃ¶schendn Knotens
         List<Kante> kantenVector2 = (List<Kante>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
 
-        //für jede Kante vom zu löschenden Knoten
+        //fÃ¼r jede Kante vom zu lÃ¶schenden Knoten
         while (kantenVector1.size() > 0) {
             Kante kante = kantenVector1.get(0);
-            startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Kante merken
+            startKnoten = kante.getStart(); //Startknoten der zu Ã¼bernehmenden Kante merken
             endKnoten = kante.getEnd(); //Endknoten -"-
 
-            //zu löschenden Knoten durch den verbleibenden ersetzen
+            //zu lÃ¶schenden Knoten durch den verbleibenden ersetzen
             if (startKnoten == knoten1) {
                 startKnoten = knoten2;
                 endKnoten = kante.getEnd();
@@ -1741,9 +1741,9 @@ public final class GDCollection extends UserFieldTarget {
                     continue;
                 }
                 testKante.setKnots(startKnoten, endKnoten, false);
-                //TODO:AXS: ich glaube hier fliegen Kanten raus, die in unterschiedliche Richtungen zeigen, weil isEqualTo nur die Elemente und die Kanteklasse prüft
+                //TODO:AXS: ich glaube hier fliegen Kanten raus, die in unterschiedliche Richtungen zeigen, weil isEqualTo nur die Elemente und die Kanteklasse prÃ¼ft
                 for (int i = 0; i < kantenVector2.size(); i++) {
-                    //für jede Kante des verbleibenden Elementes prüfen, ob umzuhängende Kante und eine Kante in
+                    //fÃ¼r jede Kante des verbleibenden Elementes prÃ¼fen, ob umzuhÃ¤ngende Kante und eine Kante in
                     // kantenVector2 dieselben Elemente verbindet
                     if (kantenVector2.get(i).isEqualTo(testKante)) {
                         deleteKante = true;
@@ -1752,13 +1752,13 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
 
-            if (deleteKante) { //wenn die Kante doppelt vorkommen würde
+            if (deleteKante) { //wenn die Kante doppelt vorkommen wÃ¼rde
 
                 deleteElement(kante, doc, pid);
                 //				doc.removeEdge(kante, pid);//Kante einfach
-                // komplett löschen
-            } else { //Kante muss umgehängt werden
-                knoten1.removeEdge(kante); //im zu löschenden Knoten die
+                // komplett lÃ¶schen
+            } else { //Kante muss umgehÃ¤ngt werden
+                knoten1.removeEdge(kante); //im zu lÃ¶schenden Knoten die
                                            // Kante entfernen
                 kante.setKnots(startKnoten, endKnoten);//die Kante wirklich an
                                                        // knoten2 binden
@@ -1769,7 +1769,7 @@ public final class GDCollection extends UserFieldTarget {
             NodeContainer kc1 = (NodeContainer) knoten1.getContainer(szen);
             NodeContainer kc2 = (NodeContainer) knoten2.getContainer(szen);
 
-            // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
+            // jetzt umhÃ¤ngen aller Container von knoten1 auf knoten2 in allen Teilmodellen
             if (kc2 == null && kc1 != null) {
                 //				szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
                 removeContainerFromSubmodel(knoten1.getContainer(szen), pid);
@@ -1785,7 +1785,7 @@ public final class GDCollection extends UserFieldTarget {
             if (nc != null) {
                 szen.createEdgeContainer(nc, szen, false, pid);
                 nc.refreshText();
-                // alle abhängigen Knoten vor den zusammengeführten stellen
+                // alle abhÃ¤ngigen Knoten vor den zusammengefÃ¼hrten stellen
                 szen.start_transaction(TransactionManager.STANDARD_PID, false);
                 szen.moveDependentKnotsUp(nc, TransactionManager.STANDARD_PID, false);
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
@@ -1793,13 +1793,13 @@ public final class GDCollection extends UserFieldTarget {
         }
 
         deleteElement(knoten1, doc, pid);
-        //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Knoten komplett löschen
+        //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehÃ¤ngt -> wegfallenden Knoten komplett lÃ¶schen
 
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
         }
 
-        //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig
+        //Der TransaktionQueue wird einfach gelÃ¶scht. Das muss unbedingt mal geÃ¤ndert werden -> also alles richtig UNDO-/REDO-mÃ¤ssig
         tman.clearTransactionQueue();
 
         doc.finish_transaction(pid);
@@ -1876,8 +1876,8 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * show wird in LGMGraphDocument ausgewertet und legt fest, ob ein Text bezüglich der
-     * allgemeinen Redundanz über dem Layer angezeigt werden soll (momentan nur bei Aufgabe)
+     * show wird in LGMGraphDocument ausgewertet und legt fest, ob ein Text bezÃ¼glich der
+     * allgemeinen Redundanz Ã¼ber dem Layer angezeigt werden soll (momentan nur bei Aufgabe)
      *
      * @param elementClass
      * @param show
@@ -1893,7 +1893,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * Wenn die anderen Parameter aus der Methode <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code> nicht angegeben
-     * werden können, kann man hiermit ein allgemeines Ereignis feuern.
+     * werden kÃ¶nnen, kann man hiermit ein allgemeines Ereignis feuern.
      *
      * @param bitmask
      */
@@ -2058,7 +2058,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Öffnet oder schliesst den Frame mit den Modellbeschreibungen
+     * Ã–ffnet oder schliesst den Frame mit den Modellbeschreibungen
      */
     public void showDescriptionFrame(final boolean b) {
         if (b) {
@@ -2267,10 +2267,10 @@ public final class GDCollection extends UserFieldTarget {
             size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
         }
 
-        /* ModellElemente, die kopiert werden müssen */
+        /* ModellElemente, die kopiert werden mÃ¼ssen */
         ArrayList<ModelElement> elements = new ArrayList<ModelElement>(size);
 
-        /* HashStrings aller Icons, die kopiert werden müssen */
+        /* HashStrings aller Icons, die kopiert werden mÃ¼ssen */
         Set<String> bitmaps = new HashSet<String>();
 
         bitmaps = new HashSet<String>(collection.getIconTable().size());
@@ -2354,7 +2354,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * exportiert die übergebenen Szenarios in eine neue Datei
+     * exportiert die Ã¼bergebenen Szenarios in eine neue Datei
      *
      * @param export Array mit den zu exportierenden Szenarios
      * @param file Datei in die exportiert werden soll
@@ -2369,13 +2369,13 @@ public final class GDCollection extends UserFieldTarget {
             size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
         }
 
-        /* hastStrings aller ModellElemente, die kopiert werden müssen */
+        /* hastStrings aller ModellElemente, die kopiert werden mÃ¼ssen */
         ArrayList<ModelElement> elements = new ArrayList<ModelElement>(size);
 
-        /* HashStrings aller Icons, die kopiert werden müssen */
+        /* HashStrings aller Icons, die kopiert werden mÃ¼ssen */
         HashSet<String> bitmaps = new HashSet<String>(iconTable.size());
 
-        /* HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen */
+        /* HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden mÃ¼ssen */
         HashSet<UserField> userFields = new HashSet<UserField>();
 
         resolveCopyDependencies(export, elements, bitmaps, userFields);
@@ -2420,7 +2420,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Sucht alle Element und Icons, die kopiert werden müssen
+     * Sucht alle Element und Icons, die kopiert werden mÃ¼ssen
      *
      * @param export
      *            Array von Szenarios, die zu kopieren sind
@@ -2432,7 +2432,7 @@ public final class GDCollection extends UserFieldTarget {
      *            Set, in welches die zu kopierenden benutzdefinierten Eigenschaftsfelder geschrieben werden
      */
     private void resolveCopyDependencies(final GraphDocument[] export, final ArrayList<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
-        /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
+        /* alle Ã¼bergebenen Szenarios durchgehen und copyDependcies auflÃ¶sen */
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = doc.getLayer(ModelConstants.LAYERS[i]);
             for (int knotenIndex = 0; knotenIndex < lc.getKnotenCount(); knotenIndex++) {
@@ -2503,9 +2503,9 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * sucht alle Element, die beim kopieren eines Knotens ebenfalls kopiert werden sollen (rekursiv, auch für die gefundenen Element)
+     * sucht alle Element, die beim kopieren eines Knotens ebenfalls kopiert werden sollen (rekursiv, auch fÃ¼r die gefundenen Element)
      *
-     * @param knoten der dessen abhängige Element gefunden werden sollen
+     * @param knoten der dessen abhÃ¤ngige Element gefunden werden sollen
      * @return HashSet mit den HashStrings der gefundenen Elementen
      */
     private void resolveCopyDependencies(final ModelElement me, final ArrayList<ModelElement> elements, final Set<UserField> userFields) {
@@ -2556,7 +2556,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         }
-        //elements wird in der Schleife vergrößert -> nicht über den Iterator gehen
+        //elements wird in der Schleife vergrÃ¶ÃŸert -> nicht Ã¼ber den Iterator gehen
         for (int i = 0; i < elements.size(); i++) {
             ModelElement m = elements.get(i);
             for (Kante ka : me.getEdgesWith(m)) {
@@ -2586,11 +2586,11 @@ public final class GDCollection extends UserFieldTarget {
     //
     //
     //
-    //Beim Kopieren muss man immer eine Liste aller bereits neu angelegten Elemente mitführen und damit evtl. Kreise prüfen
+    //Beim Kopieren muss man immer eine Liste aller bereits neu angelegten Elemente mitfÃ¼hren und damit evtl. Kreise prÃ¼fen
     //
     //lege neues Element an
-    //für alle Verbindungen des alten Elementes
-    //	prüfe ob eine weitere Verbindung dieser Art die Card überschreitet
+    //fÃ¼r alle Verbindungen des alten Elementes
+    //	prÃ¼fe ob eine weitere Verbindung dieser Art die Card Ã¼berschreitet
     //	wenn nein
     //		lege neue Verbindung zum gleichen Element an
     //	wenn ja
@@ -2599,7 +2599,7 @@ public final class GDCollection extends UserFieldTarget {
     //*/
 
     /**
-     * gibt String mit Versionsdaten der Datei zurück<br>
+     * gibt String mit Versionsdaten der Datei zurÃ¼ck<br>
      * setzt sich zusammen aus fileVersion_Benutzername_currentTimeMillis()
      *
      * @return String mit Versionsdaten der Datei
@@ -3201,18 +3201,18 @@ public final class GDCollection extends UserFieldTarget {
         if (newDef != null && newDef != userFieldDefinitions) {
             userFieldDefinitions = newDef;
             //TODO:AXS:USERFIELD
-            //hier müssen bei allen USerfieldTargets alle Userfields ausgetauscht werden, die sie über ihre UserField2Value-Maps referenzieren
+            //hier mÃ¼ssen bei allen USerfieldTargets alle Userfields ausgetauscht werden, die sie Ã¼ber ihre UserField2Value-Maps referenzieren
         }
 
         setChanged(true);
     }
 
     /**
-     * Löscht aus allen <code>UserFieldTarget</code> s der Collection die
-     * Eingabewerte der übergebenen <code>UserField</code>s.
+     * LÃ¶scht aus allen <code>UserFieldTarget</code> s der Collection die
+     * Eingabewerte der Ã¼bergebenen <code>UserField</code>s.
      *
      * @param userFieldsToRemove
-     *            <code>UserField</code> s deren Eingabewerte gelöscht werden
+     *            <code>UserField</code> s deren Eingabewerte gelÃ¶scht werden
      *            sollen
      */
     public void removeUserFieldValues(final ArrayList<UserField> userFieldsToRemove) {

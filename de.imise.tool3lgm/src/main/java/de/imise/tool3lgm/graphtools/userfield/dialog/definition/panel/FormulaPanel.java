@@ -25,19 +25,19 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 public class FormulaPanel extends AbstractInputPanel {
 
     /**
-     * Das UserField, dessem Formel mit diesem Panel ge‰ndert werden sollen.
+     * Das UserField, dessem Formel mit diesem Panel ge√§ndert werden sollen.
      */
     private final UserField userField;
 
     /**
-     * <code>String</code>, in dem die interne Repr‰sentation der neuen Formel gespeichert wird. Beim ‹bernehmen der Eigenschaften in das
+     * <code>String</code>, in dem die interne Repr√§sentation der neuen Formel gespeichert wird. Beim √úbernehmen der Eigenschaften in das
      * <code>UserField</code> wird dieser <code>String</code> dann als Formel im <code>UserField</code> gesetzt.
      */
     private String newFormulaInternalStyle;
 
     /**
-     * @param userField Feld, dessen Eigenschaften ge‰ndert werden sollen
-     * @param owner Owner f¸r weitere Unterdialoge
+     * @param userField Feld, dessen Eigenschaften ge√§ndert werden sollen
+     * @param owner Owner f√ºr weitere Unterdialoge
      * @param userFieldNameSource Textkomponente, die einen evtl. vom aktuell gesetzten Namen des Userfields abweichenden Namen vorgibt
      */
     public FormulaPanel(final JDialog owner, final UserField userField, final UserFieldDefinitions definitions, final JTextComponent userFieldNameSource) {

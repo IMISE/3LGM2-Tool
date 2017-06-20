@@ -47,39 +47,39 @@ public class LGMProzessStep {
     private ABKonfiguration endAufgabeKonf;
 
     /**
-     * Sequenz der Schnittstellen, über die dieser Prozess kommuniziert werden kann
+     * Sequenz der Schnittstellen, Ã¼ber die dieser Prozess kommuniziert werden kann
      */
     private List<ModelElement> kommProzessSchnittstellen;
 
     /**
-     * Sequenz der Kanten, über die dieser Prozess kommuniziert werden kann
+     * Sequenz der Kanten, Ã¼ber die dieser Prozess kommuniziert werden kann
      */
     private List<Kante> kommProzessKanten;
 
     /**
-     * KonfigurationContainer, an denen die mögliche Kommunikation wirklich startet
+     * KonfigurationContainer, an denen die mÃ¶gliche Kommunikation wirklich startet
      */
     private List<ModelElement> realCommunicationStartKonfConts;
 
     /**
-     * KonfigurationContainer, an dem die mögliche Kommunikation wirklich endet
+     * KonfigurationContainer, an dem die mÃ¶gliche Kommunikation wirklich endet
      */
     private List<ModelElement> realCommunicationEndKonfConts;
 
     /**
      * die Positionen geben an, wo die startAufgabe und die endAufgabe im Prozess stehen (die selben
-     * Aufgaben können mehrfach im Prozess vorkommen)
+     * Aufgaben kÃ¶nnen mehrfach im Prozess vorkommen)
      */
     private int startPosition = -1, endPosition = -1;
 
     /**
      * Gibt die Anzahl der Schnitstellen wieder (ist zur Unterscheidung, ob es gar keinen Weg gibt
-     * (-1) oder der Weg die Länge 0 hat (beide Konfigurationen überschneiden sich)
+     * (-1) oder der Weg die LÃ¤nge 0 hat (beide Konfigurationen Ã¼berschneiden sich)
      */
     private int kommProzessLength = -1;
 
     /**
-     * Anzahl der Medienbrüche bei der Kommunikation
+     * Anzahl der MedienbrÃ¼che bei der Kommunikation
      */
     private int mediumBreaks = 0;
 
@@ -118,7 +118,7 @@ public class LGMProzessStep {
     public LGMProzessStep clone(final Object o) {
         LGMProzessStep s = (LGMProzessStep) o;
         LGMProzessStep returnStep = new LGMProzessStep(s.getParentProzess(), s.startAufgabe, s.endAufgabe, s.objektTyp, s.startAufgabeKonf, s.endAufgabeKonf, s.startPosition, s.endPosition);
-        // TODO:AXS:prüfen, warum bei diesen komischen clones die Konfigs doppelt gesetzt werden und
+        // TODO:AXS:prÃ¼fen, warum bei diesen komischen clones die Konfigs doppelt gesetzt werden und
         // warum nicht gleich im Konstruktor
         returnStep.setStartAufgabeKonf(s.getStartAufgabeKonf());
         returnStep.setEndAufgabeKonf(s.getEndAufgabeKonf());
@@ -138,7 +138,7 @@ public class LGMProzessStep {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * @return <code>true</code>, wenn dieser Step eine gültige Start-Konfiguration mit einem
+     * @return <code>true</code>, wenn dieser Step eine gÃ¼ltige Start-Konfiguration mit einem
      *         Anwendungssystem besitzt
      */
     public boolean hasStartKonfiguration() {
@@ -146,7 +146,7 @@ public class LGMProzessStep {
     }
 
     /**
-     * @return <code>true</code>, wenn dieser Step eine gültige End-Konfiguration mit einem
+     * @return <code>true</code>, wenn dieser Step eine gÃ¼ltige End-Konfiguration mit einem
      *         Anwendungssystem besitzt
      */
     public boolean hasEndKonfiguration() {
@@ -158,9 +158,9 @@ public class LGMProzessStep {
     // d.h. es ex. eine Startaufgabe gdw. ein Objekttyp ex.
 
     /**
-     * Prüft, ob für den Step eine gültige Start-Aufgabe besitzt
+     * PrÃ¼ft, ob fÃ¼r den Step eine gÃ¼ltige Start-Aufgabe besitzt
      * 
-     * @return <code>true</code>, wenn der Step eine gültige Start-Aufgabe besitzt sonst
+     * @return <code>true</code>, wenn der Step eine gÃ¼ltige Start-Aufgabe besitzt sonst
      *         <code>false</code>
      */
     public boolean hasStartAufgabe() {
@@ -168,9 +168,9 @@ public class LGMProzessStep {
     }
 
     /**
-     * Prüft, ob für den Step eine gültige End-Aufgabe besitzt
+     * PrÃ¼ft, ob fÃ¼r den Step eine gÃ¼ltige End-Aufgabe besitzt
      * 
-     * @return <code>true</code>, wenn der Step eine gültige End-Aufgabe besitzt sonst
+     * @return <code>true</code>, wenn der Step eine gÃ¼ltige End-Aufgabe besitzt sonst
      *         <code>false</code>
      */
     public boolean hasObjekttyp() {
@@ -178,7 +178,7 @@ public class LGMProzessStep {
     }
 
     /**
-     * Prüft, ob alle Variablen mit gültigen Werten belegt sind, also nicht <code>null</code> sind.
+     * PrÃ¼ft, ob alle Variablen mit gÃ¼ltigen Werten belegt sind, also nicht <code>null</code> sind.
      * 
      * @return <code>true</code>, wenn alle Variablen nicht <code>null</code> sind.
      */

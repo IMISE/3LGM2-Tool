@@ -46,7 +46,7 @@ import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.component.TabbedPane;
 
 /**
- * Eigenschaftsdialog für Modellelemnte, also Knoten und Kanten.<br>
+ * Eigenschaftsdialog fÃ¼r Modellelemnte, also Knoten und Kanten.<br>
  *
  * @author N.N., AXS
  */
@@ -75,7 +75,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
 
     /**
-     * Wird <code>true</code>, wenn der Ok oder der Cancel Button gedrückt wurde
+     * Wird <code>true</code>, wenn der Ok oder der Cancel Button gedrÃ¼ckt wurde
      */
     boolean closing = false;
 
@@ -106,7 +106,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         descripPanel = new DescripPanel(this);
         tab.addTab(Tool3lgmConstants.getResString("general"), descripPanel);
 
-        // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
+        // wenn es mind ein Userfield fÃ¼r diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
             tab.addTab(Tool3lgmConstants.getResString("userfields"), new PropertyDialogUserFieldPanel(this));
         }
@@ -194,7 +194,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
             structurePanel.setName(Tool3lgmConstants.getResString("strukt"));
             addTab(structurePanel);
         } else if (realPartOfs.size() > 1) {
-            //TODO: hier könnte müsste man ein ExtraPanel mit dem Namen Struktur mit den Teil-Von-Beziehungen als UnterPanels anlegen, die mit der jeweiligen Kante benamt sind
+            //TODO: hier kÃ¶nnte mÃ¼sste man ein ExtraPanel mit dem Namen Struktur mit den Teil-Von-Beziehungen als UnterPanels anlegen, die mit der jeweiligen Kante benamt sind
         }
     }
 

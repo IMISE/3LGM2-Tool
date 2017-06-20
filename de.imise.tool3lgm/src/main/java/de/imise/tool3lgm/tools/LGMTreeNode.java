@@ -22,7 +22,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     private boolean actionByDoubleClick = false;
     private Color foregroundColor = Color.black;
 
-    // iconState = SHOW_NORMAL_ICON setzt in TreeRenderer das für den Knoten
+    // iconState = SHOW_NORMAL_ICON setzt in TreeRenderer das fÃ¼r den Knoten
     // spezifische Icon,
     // sonst wird ein Error- oder Warning-Icon gesetzt
     public static final int SHOW_NORMAL_ICON = 0;
@@ -111,7 +111,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     }
 
     /**
-     * Gibt zurück, ob der Knoten selektierbar ist
+     * Gibt zurÃ¼ck, ob der Knoten selektierbar ist
      * 
      * @return
      */
@@ -134,7 +134,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     }
 
     /**
-     * Leert die arrayList <code>userObjects</code> und fügt das übergebene
+     * Leert die arrayList <code>userObjects</code> und fÃ¼gt das Ã¼bergebene
      * Object ein.
      * 
      * @see javax.swing.tree.DefaultMutableTreeNode#setUserObject(java.lang.Object)
@@ -161,7 +161,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     }
 
     /*
-     * gibt das erste Element aus der ArrayList <code>userObjects</code> zurück.
+     * gibt das erste Element aus der ArrayList <code>userObjects</code> zurÃ¼ck.
      * @see javax.swing.tree.DefaultMutableTreeNode#getUserObject()
      */
     @Override
@@ -171,7 +171,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
 
     /**
      * Gibt das <code>userObject</code> an der Stelle <code>index</code> aus der
-     * ArrayList <code>userObjects</code> zurück.
+     * ArrayList <code>userObjects</code> zurÃ¼ck.
      * 
      * @param index
      * @return

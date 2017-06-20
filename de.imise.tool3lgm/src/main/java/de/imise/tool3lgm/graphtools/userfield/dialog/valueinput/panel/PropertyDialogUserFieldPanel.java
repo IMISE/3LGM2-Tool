@@ -61,15 +61,15 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.component.text.NumberTextField;
 
 /**
- * Panel für den Eigenschaftendialog von Elementen, in dem alle definierten UserField des Elementes angezeigt werden. In ein <code>JScrollPane</code>
- * wird ein <code>JPanel</code> eingefügt. In dem <code>JPanel</code> werden die Eingabemöglichkeiten für die UserField dargestellt. Die grafischen
- * Elemente werden durch <code>JComponent </code>, egal ob <code>JLabel</code>, <code>JTextfield</code> oder <code>JComboBox</code> repräsentiert. Es
- * wird eine <code>ArrayList</code> angelegt, die Objekte vom Typ <code>UserFieldEditorComponent</code> enthält. Eine
- * <code>UserFieldEditorComponent</code> enthält als Objektattribute ein Attribut einer Element- bzw. Kantenklasse und die zugehörige GUI-Komponente.
- * Für die Datenübernahme ist die Methode <code>commit()</code> zuständig. Sie prüft iterativ die Eingaben in GUI-komponenten in der
+ * Panel fÃ¼r den Eigenschaftendialog von Elementen, in dem alle definierten UserField des Elementes angezeigt werden. In ein <code>JScrollPane</code>
+ * wird ein <code>JPanel</code> eingefÃ¼gt. In dem <code>JPanel</code> werden die EingabemÃ¶glichkeiten fÃ¼r die UserField dargestellt. Die grafischen
+ * Elemente werden durch <code>JComponent </code>, egal ob <code>JLabel</code>, <code>JTextfield</code> oder <code>JComboBox</code> reprÃ¤sentiert. Es
+ * wird eine <code>ArrayList</code> angelegt, die Objekte vom Typ <code>UserFieldEditorComponent</code> enthÃ¤lt. Eine
+ * <code>UserFieldEditorComponent</code> enthÃ¤lt als Objektattribute ein Attribut einer Element- bzw. Kantenklasse und die zugehÃ¶rige GUI-Komponente.
+ * FÃ¼r die DatenÃ¼bernahme ist die Methode <code>commit()</code> zustÃ¤ndig. Sie prÃ¼ft iterativ die Eingaben in GUI-komponenten in der
  * <code>ArrayList</code> und vergleicht Sie mit den
  * bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando <code>SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert
- * eines Attributes einer Element- bzw. Kanetenklasse geändert.
+ * eines Attributes einer Element- bzw. Kanetenklasse geÃ¤ndert.
  *
  * @author Thomas Rudert, xhb, AXS
  */
@@ -112,8 +112,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
-     * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
+     * Liefert den Wert des UserFields fÃ¼r das ModelElement des Dialogs dieses Panels.
+     * Bei allen UserFields auÃŸer Kennzahl-UserFields werden EMPTY_STRINGS durch den
      * echten Leerstring "" ersetzt.
      *
      * @param userField
@@ -126,8 +126,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Liefert den Wert des UserFields für das ModelElement des Dialogs dieses Panels.
-     * Bei allen UserFields außer Kennzahl-UserFields werden EMPTY_STRINGS durch den
+     * Liefert den Wert des UserFields fÃ¼r das ModelElement des Dialogs dieses Panels.
+     * Bei allen UserFields auÃŸer Kennzahl-UserFields werden EMPTY_STRINGS durch den
      * echten Leerstring "" ersetzt.
      *
      * @param me
@@ -181,9 +181,9 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Für das übergebene Userfield wird eine 2 elementige Liste erzeugt. Die erste Komponente ist das
-     * Label, das im Dialog für das UserField angezeigt werden soll und die zweite Komponente ist der
-     * zugehörige Editor. Bei Separatoren ist der Editor die Separator-Komponente und bei Formeln ist
+     * FÃ¼r das Ã¼bergebene Userfield wird eine 2 elementige Liste erzeugt. Die erste Komponente ist das
+     * Label, das im Dialog fÃ¼r das UserField angezeigt werden soll und die zweite Komponente ist der
+     * zugehÃ¶rige Editor. Bei Separatoren ist der Editor die Separator-Komponente und bei Formeln ist
      * der Editor deaktiviert.
      *
      * @param field
@@ -231,7 +231,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         } else if (style == RADIO_BUTTON) {
             JPanel flowLayoutPanel = new JPanel();
             flowLayoutPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), ""));
-            //den aktuellen Wert in die List-Values hinzufügen, falls er da aus irgendwelchen Gründen nicht drinsteht.
+            //den aktuellen Wert in die List-Values hinzufÃ¼gen, falls er da aus irgendwelchen GrÃ¼nden nicht drinsteht.
             if (!field.containsListValue(value)) {
                 field.addListValue(value);
             }
@@ -258,10 +258,10 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             editorComponent = hyperlinkPanel;
             //Kennzahlen:
         } else if (style == CLASSIFICATION_NUMBER) {
-            // Wenn für die Kennzazhl ein gültiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
-            // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefügt werden, das keine Wertformatierung vornimmt.
+            // Wenn fÃ¼r die Kennzazhl ein gÃ¼ltiger Wert eingegeben ist, dann kann hier ein NumberTextField initialisiert werden.
+            // Sollte das Fehlschlagen, muss ein normales JTextField hinzugefÃ¼gt werden, das keine Wertformatierung vornimmt.
             NumberFormat numberFormat = field.getNumberFormat();
-            // Kennzahlwerte in die Felder einfügen.
+            // Kennzahlwerte in die Felder einfÃ¼gen.
             NumberTextField numberTextField = NumberTextField.getNumberTextField(numberFormat, field.isPositiveOnly());
             if (!UserField.isError(value)) {
                 numberTextField.setValue(value);
@@ -279,7 +279,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Speichert für jedes UserField alle Editoren als Eingabefelder.
+     * Speichert fÃ¼r jedes UserField alle Editoren als Eingabefelder.
      *
      * @param userField
      * @param editorComponent
@@ -287,14 +287,14 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     private void addEditorComponentsToList(final UserField userField, final JComponent editorComponent) {
         if (editorComponent != null) {
             JComponent realEditor = editorComponent;
-            //die übergebene Komponente ist ein Scrollpane -> das ist nur bei Multiline-Textfeldern
+            //die Ã¼bergebene Komponente ist ein Scrollpane -> das ist nur bei Multiline-Textfeldern
             if (editorComponent instanceof JScrollPane) {
                 //hole das Multiline-TextFeld und speichere dieses als echten Editor
                 JViewport viewport = ((JScrollPane) editorComponent).getViewport();
                 realEditor = (JComponent) viewport.getView();
                 fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
                 registerChangeListener(realEditor, userField);
-                //die übergebene Komponente ist ein Panel (bei RadioButtons und bei Hyperlinks)
+                //die Ã¼bergebene Komponente ist ein Panel (bei RadioButtons und bei Hyperlinks)
             } else if (editorComponent instanceof JPanel) {
                 //alle Komponenten des Panels durchgehen
                 for (int i = 0; i < editorComponent.getComponentCount(); i++) {
@@ -307,7 +307,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                     }
                 }
             } else {
-                //die übergebene Kompoente muss selbst der Editor sein
+                //die Ã¼bergebene Kompoente muss selbst der Editor sein
                 fieldComponents.add(new UserFieldEditorComponent(userField, realEditor));
                 registerChangeListener(realEditor, userField);
             }
@@ -333,8 +333,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     private JButton getHyperlinkButton(final JTextComponent hyperlinkText) {
-        // Der Button, der für einen Hyperlink das öffnen eines Browsers
-        // ermöglicht.
+        // Der Button, der fÃ¼r einen Hyperlink das Ã¶ffnen eines Browsers
+        // ermÃ¶glicht.
         final JButton button = new JButton(new AbstractAction(">>") {
 
             @Override
@@ -345,7 +345,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
                 }
             }
         });
-        //auch bei Doppelklick oder Klick mit STRG den Link öffnen
+        //auch bei Doppelklick oder Klick mit STRG den Link Ã¶ffnen
         hyperlinkText.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -385,8 +385,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Erzeugt einen HTML-String, bei dem der übergebenen <code>fieldName</code> fett in der 1. Zeile und
-     * darunter die übergebene <code>fieldDescription</code> steht.
+     * Erzeugt einen HTML-String, bei dem der Ã¼bergebenen <code>fieldName</code> fett in der 1. Zeile und
+     * darunter die Ã¼bergebene <code>fieldDescription</code> steht.
      *
      * @param fieldName
      * @param fieldDescription
@@ -404,13 +404,13 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             UserFieldEditorComponent userFieldEditorComponent = fieldComponents.get(i);
             UserField userField = userFieldEditorComponent.userField;
             JComponent editorComponent = userFieldEditorComponent.editorComponent;
-            //Der Wert sollte sich nur geändert haben können, wenn diese Komponente auch den Focus hat.
+            //Der Wert sollte sich nur geÃ¤ndert haben kÃ¶nnen, wenn diese Komponente auch den Focus hat.
             //Das ist besonders bei Kennzahlen wichtig, da diese, wenn sie nicht den Focus haben, immer
             //den formatierten Wert (also evtl. mit Einheit und im Gegensatz zum eigentlichen Eingabewert
-            //mit einer anderen Anzahl von Nachkommastellen) anzeigen. Das würde hier als Änderung erkannt
+            //mit einer anderen Anzahl von Nachkommastellen) anzeigen. Das wÃ¼rde hier als Ã„nderung erkannt
             //werden und somit der formatierte Wert als Eingabewert gesetzt werden (was ei Einheiten zu
-            //NUMBER_FORMAT_ERROR führt und ansonsten die Anzahl der angeblich eingegebenen Nachkommastellen
-            //ändern kann.
+            //NUMBER_FORMAT_ERROR fÃ¼hrt und ansonsten die Anzahl der angeblich eingegebenen Nachkommastellen
+            //Ã¤ndern kann.
             if (!editorComponent.hasFocus()) {
                 continue;
             }
@@ -419,17 +419,17 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             String newValue = getNewValue(style, editorComponent);
             ModelElement me = getModelElement();
             //wenn bei RadioButtons noch gar nichts gesetzt war, kann newValue null sein
-            //bei UserFields die Formeln sind, kommt auch null zurück -> dann nichts setzen
+            //bei UserFields die Formeln sind, kommt auch null zurÃ¼ck -> dann nichts setzen
             if (newValue != null) {
-                if (isNewValue(me, userField, newValue)) { //wenn sich wirklich was geändert hat
+                if (isNewValue(me, userField, newValue)) { //wenn sich wirklich was geÃ¤ndert hat
                     doc.setUserFieldValue(me, userField, newValue, dialog.getTransactionID());
                     changed = true;
                 }
             }
         }
-        //wenn sich irgendwas geändert hat
+        //wenn sich irgendwas geÃ¤ndert hat
         if (changed) {
-            // wenn eine Kennzahl geändert wurde, wurde bei doc.exec() die Variable
+            // wenn eine Kennzahl geÃ¤ndert wurde, wurde bei doc.exec() die Variable
             // reset aus dem Calculator auf true gesetzt.
             // Jetzt kann man einfach dem Calculator sagen, er soll alle
             // Kennzahlformeln neu berechnen, wenn
@@ -459,8 +459,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene <code>newValue</code> ein anderer ist, als
-     * der beim ModelElement aktuell für das übergebenen UserField gesetzte Wert.
+     * Liefert <code>true</code>, wenn der Ã¼bergebene <code>newValue</code> ein anderer ist, als
+     * der beim ModelElement aktuell fÃ¼r das Ã¼bergebenen UserField gesetzte Wert.
      *
      * @param me
      * @param userField
@@ -476,7 +476,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Liefert in Abhängigkeit vom Style den aktuellen Wert der übergebenen editorComponent.
+     * Liefert in AbhÃ¤ngigkeit vom Style den aktuellen Wert der Ã¼bergebenen editorComponent.
      *
      * @param style
      * @param editorComponent
@@ -501,7 +501,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
         } else if (style == RADIO_BUTTON) {
             JRadioButton radioButton = (JRadioButton) editorComponent;
-            //wenn nichts selektiert ist -> null zurück geben -> der Wert des UserFields wird nicht geändert
+            //wenn nichts selektiert ist -> null zurÃ¼ck geben -> der Wert des UserFields wird nicht geÃ¤ndert
             newValue = radioButton.isSelected() ? radioButton.getText() : null;
 
         } else if (style == HYPERLINK) {
@@ -521,7 +521,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     }
 
     /**
-     * Für jedes UserField eine <code>Component</code>, die es anzeigt.
+     * FÃ¼r jedes UserField eine <code>Component</code>, die es anzeigt.
      */
     private class UserFieldEditorComponent {
 

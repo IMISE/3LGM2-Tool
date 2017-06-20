@@ -23,15 +23,15 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu entscheiden, ob er sich
+ * Die Klasse zeichnet grafische Elemente Funktionen bereit, um fÃ¼r Punkte zu entscheiden, ob er sich
  * am Rand eines grafischen Elementes befindet und wenn ja, an welcher Position.<br>
  */
 public final class KnotenRenderer {
 
     /**
      * Breite der Boxen, die auf die Ecken und die Mitte der Seitenlinien von selektierten
-     * Elementen gezeichnet werden, über die man die Größe des Elementes per Draggen auf dieser
-     * Box verändern kann. Diese Zahl sollte immer ungrade sein!
+     * Elementen gezeichnet werden, Ã¼ber die man die GrÃ¶ÃŸe des Elementes per Draggen auf dieser
+     * Box verÃ¤ndern kann. Diese Zahl sollte immer ungrade sein!
      * Die anderen Variablen darunter ergeben sich aus dieser Breite und bestimmen, wo sich der
      * Pfeil in der Box befindet und wie dick er dargestellt wird.
      */
@@ -254,14 +254,14 @@ public final class KnotenRenderer {
             g.translate(-xm, -ym);
         }
 
-        // Symbol für Verlinkung mit Teilmodell
+        // Symbol fÃ¼r Verlinkung mit Teilmodell
         if (UserProperties.isShowLinks() && kc.getKnoten().getAssociatedDoc() != null) {
             g.drawImage(linkIcon, xm + 2, yp - 13, kc);
         }
 
         gc.setStroke(str);
 
-        //wenn das Element selektiert ist -> schwarzen Rand drumrum und die 8 Anfasser zum ändern der Größe zeichnen
+        //wenn das Element selektiert ist -> schwarzen Rand drumrum und die 8 Anfasser zum Ã¤ndern der GrÃ¶ÃŸe zeichnen
         if (kc.isSelected() && paintState != PaintState.WEBEXPORT) {
 
             //scharzes Rechteck um das Element zeichnen
@@ -369,10 +369,10 @@ public final class KnotenRenderer {
     }
 
     /**
-     * Gibt <code>true</code> zurück, wenn die übergebenen Koordinaten innerhalb
-     * des Darstellungsbereiches des übergebenen Containers liegen, sonst <code>false</code>.
+     * Gibt <code>true</code> zurÃ¼ck, wenn die Ã¼bergebenen Koordinaten innerhalb
+     * des Darstellungsbereiches des Ã¼bergebenen Containers liegen, sonst <code>false</code>.
      * 
-     * @param ec <code>ElementContainer</code>, für den geprüft wird, ob die Koordinaten in ihm liegen
+     * @param ec <code>ElementContainer</code>, fÃ¼r den geprÃ¼ft wird, ob die Koordinaten in ihm liegen
      * @param xi X-Koordinate
      * @param yi Y-Koordinate
      * @return
@@ -454,7 +454,7 @@ public final class KnotenRenderer {
     }
 
     /**
-     * Letzte ausgewählte ResizeBox. Hier werden die Int-Werte der korrespondierenden Cursor benutzt.
+     * Letzte ausgewÃ¤hlte ResizeBox. Hier werden die Int-Werte der korrespondierenden Cursor benutzt.
      */
     private static int lastResizeCursor = Cursor.DEFAULT_CURSOR;
 
@@ -466,10 +466,10 @@ public final class KnotenRenderer {
     }
 
     /**
-     * Liefert den <code>int</code>-Code für Position, welche sich auf dem Container
-     * an den übergebenen Koordinaten befindet.<br>
+     * Liefert den <code>int</code>-Code fÃ¼r Position, welche sich auf dem Container
+     * an den Ã¼bergebenen Koordinaten befindet.<br>
      * <p>
-     * Rückgabewerte:
+     * RÃ¼ckgabewerte:
      * <ul>
      * <li><code>Cursor.DEFAULT_CURSOR</code>: Koordinaten sind ausserhalb eines der anderen speziellen Grenzbereiche</li>
      * <li><code>Cursor.N_RESIZE_CURSOR</code>: Koordinaten sind im oberen Grenzbereich</li>
@@ -483,7 +483,7 @@ public final class KnotenRenderer {
      * </ul>
      * </p>
      * 
-     * @param container Container, für den Grenzbereich ermittelt werden soll
+     * @param container Container, fÃ¼r den Grenzbereich ermittelt werden soll
      * @param xi X-Koordinate
      * @param yi Y-Koordinate
      * @return <code>int</code>-Code des Grenzbereiches

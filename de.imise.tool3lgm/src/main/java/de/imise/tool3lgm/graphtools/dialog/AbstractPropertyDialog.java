@@ -27,7 +27,7 @@ import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 /**
  * Allgemeiner Eigenschaftendialog.<br>
- * In dieser Form kann er als Eigenschaftendialog für ein Modell genutzt werden. Der
+ * In dieser Form kann er als Eigenschaftendialog fÃ¼r ein Modell genutzt werden. Der
  * Eigenschaftendialog von Modellelementen ist eine spezielle Unterklasse dieser Dialogklasse.
  *
  * @author AXS
@@ -39,22 +39,22 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     protected TabbedPane tab;
 
     /**
-     * Ok-Knopf für die Dialoge
+     * Ok-Knopf fÃ¼r die Dialoge
      */
     protected JButton okButton;
 
     /**
-     * Abbrechen-Knopf für die Dialoge
+     * Abbrechen-Knopf fÃ¼r die Dialoge
      */
     protected JButton cancelButton;
 
     /**
-     * Übernehmen-Knopf für die Dialoge
+     * Ãœbernehmen-Knopf fÃ¼r die Dialoge
      */
     protected JButton applyButton;
 
     /**
-     * Hilfe-Knopf für die Dialoge
+     * Hilfe-Knopf fÃ¼r die Dialoge
      */
     protected JButton helpButton;
 
@@ -64,7 +64,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     /** Hauptmodell der GDCollection */
     protected LGMGraphDocument doc;
 
-    /** ID des Dialoges mit der alle Transaktionen durchgeführt werden */
+    /** ID des Dialoges mit der alle Transaktionen durchgefÃ¼hrt werden */
     protected int transactionID;
 
     /**
@@ -148,8 +148,8 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     }
 
     /**
-     * Fügt dem Dialog einen neuen Tab mit der übergebenen Componente hinzu. Der Titel des Tabs ist der
-     * wird über die getName()-Funktion der Componente ermittelt.
+     * FÃ¼gt dem Dialog einen neuen Tab mit der Ã¼bergebenen Componente hinzu. Der Titel des Tabs ist der
+     * wird Ã¼ber die getName()-Funktion der Componente ermittelt.
      *
      * @param component
      */
@@ -158,7 +158,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     }
 
     /**
-     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel und der Komponente hinzu.
+     * FÃ¼gt dem Dialog einen neuen Tab mit dem Ã¼bergebenen Titel und der Komponente hinzu.
      *
      * @param title
      * @param component
@@ -168,7 +168,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     }
 
     /**
-     * Fügt dem Dialog einen neuen Tab mit dem übergebenen Titel, Icon und der Komponente hinzu.
+     * FÃ¼gt dem Dialog einen neuen Tab mit dem Ã¼bergebenen Titel, Icon und der Komponente hinzu.
      *
      * @param title
      * @param icon
@@ -179,12 +179,12 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     }
 
     /**
-     * Bringt den Tab mit dem angegebenen Titel in den Vordergrund, wenn zusätzlich noch die
-     * übergebene Klasse mit der Klasse der Componente in dem Tab zuweisungskompatibel ist. Die
+     * Bringt den Tab mit dem angegebenen Titel in den Vordergrund, wenn zusÃ¤tzlich noch die
+     * Ã¼bergebene Klasse mit der Klasse der Componente in dem Tab zuweisungskompatibel ist. Die
      * Klasse der im Tabpanel enthaltenen Componente muss die gleiche oder eine Unterklasse der
-     * übergebenen Klasse sein.
+     * Ã¼bergebenen Klasse sein.
      *
-     * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> übergeben, wird der
+     * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> Ã¼bergeben, wird der
      *            erstbeste passende Tab herausgesucht
      * @param tabComponentClass Oberklasse der Komponente in dem zu selektierenden Tab
      * @return <code>true</code>, wenn ein Tab der angegebenen Art gefunden und in den Vordergund

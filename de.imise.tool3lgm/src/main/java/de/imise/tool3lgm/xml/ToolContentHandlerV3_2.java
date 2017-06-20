@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * für Dateiversion mit Knickpunkten
+ * fÃ¼r Dateiversion mit Knickpunkten
  *
  * @author Thomas Wendt
  */

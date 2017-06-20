@@ -28,7 +28,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * Mit diesem Panel zeigen Anwendungsbausteinkonfigurationen ihre Aufgaben an.
  */
-// TODO: FST: Funktionsf‰higkeit testen
+// TODO: FST: Funktionsf√§higkeit testen
 public class AwbAufPanel extends ElementDialogPanel {
     private final LGMTree tree;
     private final DefaultTreeModel model;
@@ -51,11 +51,11 @@ public class AwbAufPanel extends ElementDialogPanel {
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
-        // MouseListener erstellen und an tree anh‰ngen
+        // MouseListener erstellen und an tree anh√§ngen
         LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
         tree.addMouseListener(new LGMMouseListener(null, null, null, treeMouseAction, null));
 
-        // TreeSelectionListener erstellen und an tree anh‰ngen
+        // TreeSelectionListener erstellen und an tree anh√§ngen
         LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
         tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
 
@@ -92,7 +92,7 @@ public class AwbAufPanel extends ElementDialogPanel {
         tree.reset();
         ModelElement modelElement = getModelElement();
         List<ElementContainer> all = modelElement.getConnectedContainer(ABKonfiguration.class, mainDoc);
-        // nur Knoten f¸r Elemente in der all-Liste bis zur Grˆﬂe der direkt vrbundenen d¸rfen am
+        // nur Knoten f√ºr Elemente in der all-Liste bis zur Gr√∂√üe der direkt vrbundenen d√ºrfen am
         // Ende
         // selektierbar sein
         int firstNonSelectableIndex = all.size();

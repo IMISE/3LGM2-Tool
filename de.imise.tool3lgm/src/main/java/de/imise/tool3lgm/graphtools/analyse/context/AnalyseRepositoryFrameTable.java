@@ -39,7 +39,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
     private class AnalyseTableModel extends AbstractTableModel {
 
         /**
-         * Irgendeine Komponente, die als Parent für einen Fehlerdialog dienen kann.
+         * Irgendeine Komponente, die als Parent fÃ¼r einen Fehlerdialog dienen kann.
          */
         private final Component parent;
 
@@ -54,7 +54,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
          * Legt ein neues Model an. Die Parentkomponente wird gebraucht, wenn bei einem Fehler ein
          * Infodialog ausgegeben werden muss.
          * 
-         * @param parent Komponente, die als Parent für einen Fehlerdialog dienen kann.
+         * @param parent Komponente, die als Parent fÃ¼r einen Fehlerdialog dienen kann.
          */
         private AnalyseTableModel(final Component parent) {
             super();
@@ -248,7 +248,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
     }
 
     // ////////////////////////////////////////////////////////////////////
-    // CellEditor für das Ändern von Analysetextes (Button in Spalte 3) //
+    // CellEditor fÃ¼r das Ã„ndern von Analysetextes (Button in Spalte 3) //
     // ////////////////////////////////////////////////////////////////////
 
     /**
@@ -259,7 +259,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
     }
 
     // ///////////////////////////////////////
-    // Renderer für die Buttons in Spalte 3//
+    // Renderer fÃ¼r die Buttons in Spalte 3//
     // ///////////////////////////////////////
 
     @Override

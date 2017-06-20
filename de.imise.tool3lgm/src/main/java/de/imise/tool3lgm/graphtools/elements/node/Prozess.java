@@ -62,7 +62,7 @@ public final class Prozess extends Knoten {
     public Prozess() {
         super();
         // das hier ist insofern problematisch, als dass beim Erstellen (nicht aus Datei) eines Prozeses immer der Konstruktor
-        // 2x ausgeführt wird. Das erste mal beim öffnen des NamenDialog und das 2. mal beim Klick auf OK. Bei Abbrechen ists nur
+        // 2x ausgefÃ¼hrt wird. Das erste mal beim Ã¶ffnen des NamenDialog und das 2. mal beim Klick auf OK. Bei Abbrechen ists nur
         // 1x. Daher ist die Farbe momentan absolut nicht verhersagbar (nicht weiter schlimm, aber auch nicht wirklich gut!)
 
         color = colorCounter;
@@ -91,13 +91,13 @@ public final class Prozess extends Knoten {
 
     //----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
+     * Gibt eine Liste mit Prozessschritten fÃ¼r eine einzelne Aufgabe zurÃ¼ck. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
      * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der Aufgabe an Position pos aus
      * der Liste der Prozessaufgaben. Es ist also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im
      * gegebenen GraphDocument bearbeiteten Objekttypen, die von der Aufgabe an pos gleichzeitig interpretiert
      * werden. Ex. kein Objekttyp den die Aufgabe an pos interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben,
      * in dem nur die endAufgabe der Aufgabe an pos entspricht und der Rest null ist. Wird testOnly=true
-     * uebergeben, dann werden nicht alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner
+     * uebergeben, dann werden nicht alle Schritte gesucht sondern nur der erste vollstaendige zurÃ¼ckgegeben oder eine leere Liste, wenn keiner
      * existiert. Pos wird wie immer ab 0 gezaehlt.
      *
      * @param ModelElement
@@ -111,13 +111,13 @@ public final class Prozess extends Knoten {
 
     //----------------------------------------------------------------------------------------------------------------------------------
     /**
-     * Gibt eine Liste mit Prozessschritten für eine einzelne Aufgabe zurück. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
+     * Gibt eine Liste mit Prozessschritten fÃ¼r eine einzelne Aufgabe zurÃ¼ck. In den einzelnen LGMProzessStep dieser Liste sind nur die startAufgabe,
      * endAufgabe und der Objekttyp gesetzt. endAufgabe ist immer identisch mit der uebergebenen Aufgabe. Es ist
      * also eine Liste aller Aufgaben die im Prozess vor aufgabenPos stehen inkl. der von diesen Aufgaben im gegebenen GraphDocument bearbeiteten
-     * Objekttypen, die von der übergebenen Aufgabe gleichzeitig interpretiert werden. Ex. kein Objekttyp den die
+     * Objekttypen, die von der Ã¼bergebenen Aufgabe gleichzeitig interpretiert werden. Ex. kein Objekttyp den die
      * uebergebene Aufgabe interpretiert und eine Vorgaengeraufgabe bearbeitet, wird ein LGMProzessStep zurueckgegeben, in dem nur die endAufgabe der
      * uebergebenen Aufgabe entspricht und der Rest null ist. Wird testOnly=true uebergeben, dann werden nicht
-     * alle Schritte gesucht sondern nur der erste vollstaendige zurückgegeben oder eine leere Liste, wenn keiner existiert. Pos wird wie immer ab 0
+     * alle Schritte gesucht sondern nur der erste vollstaendige zurÃ¼ckgegeben oder eine leere Liste, wenn keiner existiert. Pos wird wie immer ab 0
      * gezaehlt.
      *
      * @param ArrayList Liste mit Elementen der Klasse <code>Aufgabe</code>.
@@ -147,12 +147,12 @@ public final class Prozess extends Knoten {
 
         //Alle von der Aufgabe interpretierten OT in ein Set legen
         Set<ModelElement> setOfInterpretedObjectTypes = new HashSet<ModelElement>();
-        //Alle von den Parts und Parents der Aufgabe interpretierten OT diesem Set hinzufügen
+        //Alle von den Parts und Parents der Aufgabe interpretierten OT diesem Set hinzufÃ¼gen
         for (ModelElement auf : aufgabe.getPartAndParentElements()) {
             setOfInterpretedObjectTypes.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, Doppelkante.BACKWARD));
         }
 
-        //für alle Aufgaben in der ProzessListe vor der übergebenen Position
+        //fÃ¼r alle Aufgaben in der ProzessListe vor der Ã¼bergebenen Position
         for (int i = 0; i < pos; i++) {
             ModelElement startAufgabe = aufgaben.get(i);
             //hole die bearbeiteten Objekttypen der i-ten Aufgabe in der Aufgabenliste des Prozesses
@@ -160,20 +160,20 @@ public final class Prozess extends Knoten {
             for (ModelElement auf : startAufgabe.getPartAndParentElements()) {
                 usedObjekttypenOfAufgabe.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, Doppelkante.FORWARD));
             }
-            //für jeden dieser Objekttypen
+            //fÃ¼r jeden dieser Objekttypen
             for (ModelElement usedObjekttyp : usedObjekttypenOfAufgabe) {
-                //prüfe, ob übergebene Aufgabe diesen auch interpretiert; inkl. Teil-Objekttypen
+                //prÃ¼fe, ob Ã¼bergebene Aufgabe diesen auch interpretiert; inkl. Teil-Objekttypen
                 if (setOfInterpretedObjectTypes.contains(usedObjekttyp)) {
                     //wenn ja -> ProzessStep anlegen
                     returnList.add(new LGMProzessStep(this, startAufgabe, aufgabe, usedObjekttyp, i, pos));
-                    //wenn nur getestet werden soll, ob es überhaupt einen gibt -> dann (beim ersten) raus hier
+                    //wenn nur getestet werden soll, ob es Ã¼berhaupt einen gibt -> dann (beim ersten) raus hier
                     if (testOnly) {
                         return returnList;
                     }
                 }
             }
         }
-        //testOnly==false -> es soll nicht nur irgendein vollständiger Prozessschritt gesucht werden und
+        //testOnly==false -> es soll nicht nur irgendein vollstÃ¤ndiger Prozessschritt gesucht werden und
         //returnList.size()==0 -> es wurde keiner gefunden
         //=> einen LGMProzessStep anlegen, der nur die uebergebene Aufgabe ale endAufgabe enthaelt
         //		if (!testOnly && returnList.size()==0)
@@ -190,7 +190,7 @@ public final class Prozess extends Knoten {
     /**
      * Liefert eine Liste aller Prozesschritte und all ihrer Kombinationen, die sich aus unterschiedlichen Konfigurationen der Aufgaben ergeben. Die
      * aufgaben muss eine Liste der ElementContainer von Aufgaben aus dem selben GraphDocument sein. Es wird null
-     * zurückgegeben, wenn die ArrayList aufgaben weniger als 2 Elemente hat. Folgende Arten von Schritten koennen in der Rueckgabeliste stehen: 1.)
+     * zurÃ¼ckgegeben, wenn die ArrayList aufgaben weniger als 2 Elemente hat. Folgende Arten von Schritten koennen in der Rueckgabeliste stehen: 1.)
      * vollstaendige Schritte, also Schritte fuer die nach einem Kommunikationsprozess gesucht werden kann (alle
      * ElementContainer des LGMProzessStep (Startaufgabe, Endaufgabe, Objekttyp, Startkonfiguration, Endkonfiguration) sind nicht null) 2.)
      * LGMProzessStep, in dem nur die endAufgabe gesetzt ist ( = endAufgabe hat keinen Objekttyp interpretiert, den eine
@@ -236,14 +236,14 @@ public final class Prozess extends Knoten {
         for (int i = 1; i < aufgaben.size(); i++) {
             returnList.addAll(getProcessStepsForAufgabe(aufgaben, i, false));
         }
-        //		System.out.println(returnList.size() + " Geschäftsprozessschritte sind identifiziert worden");
-        //jetzt geht es darum, für jeden BuisnessProcessSteps dieser Liste alle seine Varianten unterschiedlicher Konfigurationen zu erzeugen
+        //		System.out.println(returnList.size() + " GeschÃ¤ftsprozessschritte sind identifiziert worden");
+        //jetzt geht es darum, fÃ¼r jeden BuisnessProcessSteps dieser Liste alle seine Varianten unterschiedlicher Konfigurationen zu erzeugen
         ArrayList<LGMProzessStep> varianten = new ArrayList<LGMProzessStep>(100);
-        //für jeden Geschäftsprzessschritt in returnList
+        //fÃ¼r jeden GeschÃ¤ftsprzessschritt in returnList
         for (int i = 0; i < returnList.size(); i++) {
             //hole den Schritt
             LGMProzessStep step = returnList.get(i);
-            //startAufgabe ist nur ungleich null, wenn ein korrekter Geschäftsprozessschritt vorliegt und nur für solche kann es Varianten geben
+            //startAufgabe ist nur ungleich null, wenn ein korrekter GeschÃ¤ftsprozessschritt vorliegt und nur fÃ¼r solche kann es Varianten geben
             if (step.getStartAufgabe() == null) {
                 continue;
             }
@@ -255,7 +255,7 @@ public final class Prozess extends Knoten {
             int indexOfEndAufgabe = step.getEndPosition();
 
             //System.out.println (i + " " + konfigs[indexOfStartAufgabe].size() + " " + konfigs[indexOfEndAufgabe].size());
-            //alle vollständigen Konfigurationsvarianten hinzufügen (Schritte der Art 1.)
+            //alle vollstÃ¤ndigen Konfigurationsvarianten hinzufÃ¼gen (Schritte der Art 1.)
             for (int m = 0; m < konfigs[indexOfEndAufgabe].size(); m++) {
                 for (int n = 0; n < konfigs[indexOfStartAufgabe].size(); n++) {
                     varianten.add(LGMProzessStep.cloneAndSetKonfigs(step, konfigs[indexOfStartAufgabe].get(n), konfigs[indexOfEndAufgabe].get(m)));
@@ -318,14 +318,14 @@ public final class Prozess extends Knoten {
     //		ArrayList returnList = new ArrayList(100);
     //		for (int i=1; i<aufgaben.size(); i++)
     //			returnList.addAll(getProcessStepsForAufgabe(doc, aufgaben, i, false));
-    ////		System.out.println(returnList.size() + " Geschäftsprozessschritte sind identifiziert worden");
-    //		//jetzt geht es darum, für jeden BuisnessProcessSteps dieser Liste alle seine Varianten unterschiedlicher Konfigurationen zu erzeugen
+    ////		System.out.println(returnList.size() + " GeschÃ¤ftsprozessschritte sind identifiziert worden");
+    //		//jetzt geht es darum, fÃ¼r jeden BuisnessProcessSteps dieser Liste alle seine Varianten unterschiedlicher Konfigurationen zu erzeugen
     //		ArrayList varianten = new ArrayList(100);
-    //		//für jeden Geschäftsprzessschritt in returnList
+    //		//fÃ¼r jeden GeschÃ¤ftsprzessschritt in returnList
     //		for (int i=0; i<returnList.size(); i++){
     //			//hole den Schritt
     //			LGMProzessStep step = (LGMProzessStep)returnList.get(i);
-    //			//startAufgabe ist nur ungleich null, wenn ein korrekter Geschäftsprozessschritt vorliegt und nur für solche kann es Varianten geben
+    //			//startAufgabe ist nur ungleich null, wenn ein korrekter GeschÃ¤ftsprozessschritt vorliegt und nur fÃ¼r solche kann es Varianten geben
     //			if (step.getStartAufgabe()==null){
     //				continue;
     //			}
@@ -337,7 +337,7 @@ public final class Prozess extends Knoten {
     //			int indexOfEndAufgabe = step.getEndPosition();
     //
     //			//System.out.println (i + " " + konfigs[indexOfStartAufgabe].size() + " " + konfigs[indexOfEndAufgabe].size());
-    //			//alle vollständigen Konfigurationsvarianten hinzufügen (Schritte der Art 1.)
+    //			//alle vollstÃ¤ndigen Konfigurationsvarianten hinzufÃ¼gen (Schritte der Art 1.)
     //			for (int m=0; m<konfigs[indexOfEndAufgabe].size(); m++){
     //				for (int n=0; n<konfigs[indexOfStartAufgabe].size(); n++){
     //					varianten.add(LGMProzessStep.cloneAndSetKonfigs(step, konfigs[indexOfStartAufgabe].get(n), konfigs[indexOfEndAufgabe].get(m)));

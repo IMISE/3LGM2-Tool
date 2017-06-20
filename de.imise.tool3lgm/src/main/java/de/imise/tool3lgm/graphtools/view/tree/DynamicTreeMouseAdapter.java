@@ -49,7 +49,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
      */
     private Object tmpUserObject = null;
 
-    // für die Kommunikation zwischen mousePressed und mouseClicked
+    // fÃ¼r die Kommunikation zwischen mousePressed und mouseClicked
 
     @Override
     public void mouseClicked(final MouseEvent e) {
@@ -62,7 +62,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             left_button = true;
         }
         GraphDocument doc = tree.getGraphDocument();
-        // Hyprlink öffnen
+        // Hyprlink Ã¶ffnen
         if ((e.getModifiers() & InputEvent.ALT_MASK) != 0) {
             //Component source, int id, long when, int modifiers,
             //int keyCode, char keyChar, int keyLocation
@@ -110,13 +110,13 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
         final JTree sourceTree = (JTree) e.getComponent();
         TreePath path = sourceTree.getPathForLocation(xin, yin);
 
-        //Wenn die rechte Maustaste gedrückt wurde, wird <code>right_button</code> true;
+        //Wenn die rechte Maustaste gedrÃ¼ckt wurde, wird <code>right_button</code> true;
         if (Tool3lgmConstants.isPopupTrigger(e)) {
             right_button = true;
 
             if (path != null) {
                 LGMTreeNode lastNode = (LGMTreeNode) path.getLastPathComponent();
-                // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen,
+                // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes KontextmenÃ¼ geladen,
                 // so dass hier keine weiter Selektion erstellt werden muss.
                 if (!(lastNode.getUserObject() instanceof ElementContainer)) {
                     tree.getSelectionModel().setSelectionPath(tree.getPathForLocation(xin, yin));
@@ -152,7 +152,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 return;
             }
 
-            // TODO:FST: Actions für Item aus GlobalActionLibrary holen und setzen
+            // TODO:FST: Actions fÃ¼r Item aus GlobalActionLibrary holen und setzen
             TreePath parent = path.getParentPath();
             if (parent != null) {
                 if (tree.isLayerNode(parent.getLastPathComponent()) || tree.isAbstractElementNode(parent.getLastPathComponent())) {
@@ -189,7 +189,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 if (right_button) {
                     ElementContainer elem = (ElementContainer) knot;
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
-                    //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
+                    //und ist somit das Element, bezÃ¼glich dessen fÃ¼r andere selektierte Elemente das KontextmenÃ¼ angeboten wird
                     elem.getGraphDocument().addToSelection(elem, DynamicTree.PID);
                     JPopupMenu pm = Tool3lgm.getContextGenerator().getKnotContextMenu(tree);
                     if (pm != null) {

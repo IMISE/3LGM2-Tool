@@ -25,22 +25,22 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 public final class TableInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
 
     /**
-     * Panel für die Zeilenbeschriftungen (Elementnamen)
+     * Panel fÃ¼r die Zeilenbeschriftungen (Elementnamen)
      */
     private final RowPanel rowHeaderPanel;
 
     /**
-     * Panel für die Spaltenbeschriftungen (Elementnamen)
+     * Panel fÃ¼r die Spaltenbeschriftungen (Elementnamen)
      */
     private final ColPanel colHeaderPanel;
 
     /**
-     * Panel für die Darstellung der Verbindungen
+     * Panel fÃ¼r die Darstellung der Verbindungen
      */
     private final CellPanel cellPanel;
 
     /**
-     * Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt ist.
+     * Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewÃ¤hlt ist.
      */
     private final JPanel msgPanel;
 
@@ -70,13 +70,13 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
     }
 
     /**
-     * Füllt das TableModel
+     * FÃ¼llt das TableModel
      * 
      * @param rowClass Zeilenelementklasse
      * @param colClass Spaltenelementklasse
-     * @param metaPath Metapfad über den Elemente der Zeilen und Splaten miteinander verbunden sein können
-     * @param showPartsOnly legt fest, ob nur absolute Teilelemente angezeigt werden sollen (absolut heiß, dass sie im Gesamtmodell keine Teile haben
-     *            dürfen)
+     * @param metaPath Metapfad Ã¼ber den Elemente der Zeilen und Splaten miteinander verbunden sein kÃ¶nnen
+     * @param showPartsOnly legt fest, ob nur absolute Teilelemente angezeigt werden sollen (absolut heiÃŸ, dass sie im Gesamtmodell keine Teile haben
+     *            dÃ¼rfen)
      */
     public void update(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean showPartsOnly) {
         tableModel.fillTableModel(rowClass, colClass, metaPath, showPartsOnly);

@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 public class CostingUtil {
 
     /**
-     * Eine Stringkonstante, die Kennzeichent, dass es sich um einen UserFieldHash handelt. Sämtliche UserFieldHashes werden während der Prüfung auf
+     * Eine Stringkonstante, die Kennzeichent, dass es sich um einen UserFieldHash handelt. SÃ¤mtliche UserFieldHashes werden wÃ¤hrend der PrÃ¼fung auf
      * sytaktische Korrekthet einer Formel gegen diese Konstante ersetzt.
      */
     private static final String USERFIELDHASH = "ufh";
@@ -76,11 +76,11 @@ public class CostingUtil {
     }
 
     /**
-     * Prüft die übergebene Formel auf Korrektheit. Kriterien für Korrektheit: Die Anzahl der öffnenden und schließenden Klammern muss übereinstimmen
-     * auf eine öffnende Klammer darf keine schließende Folgen
+     * PrÃ¼ft die Ã¼bergebene Formel auf Korrektheit. Kriterien fÃ¼r Korrektheit: Die Anzahl der Ã¶ffnenden und schlieÃŸenden Klammern muss Ã¼bereinstimmen
+     * auf eine Ã¶ffnende Klammer darf keine schlieÃŸende Folgen
      *
-     * @param formula Der zu prüfende Formelstring
-     * @return Gibt true zurück, wenn die übergebene Formel korrekt ist, ansonsten false
+     * @param formula Der zu prÃ¼fende Formelstring
+     * @return Gibt true zurÃ¼ck, wenn die Ã¼bergebene Formel korrekt ist, ansonsten false
      */
     public static final boolean isFormulaValid(final String formula) {
         if (formula == null) {
@@ -124,27 +124,27 @@ public class CostingUtil {
                 return false;
             }
 
-            // Wenn auf ein Operatorzeichen eine schließende Klammer folgt
+            // Wenn auf ein Operatorzeichen eine schlieÃŸende Klammer folgt
             if (isOperator(first) && second.equals(Calculator.CLOSE_BRACKET)) {
                 return false;
             }
 
-            // Wenn auf eine schließende Klammer ein Operatorzeichen folgt
+            // Wenn auf eine schlieÃŸende Klammer ein Operatorzeichen folgt
             if (first.equals(Calculator.CLOSE_BRACKET) && second.equals(USERFIELDHASH)) {
                 return false;
             }
 
-            // Wenn auf eine schließende Klammer eine Verrechnungsfunktion folgt
+            // Wenn auf eine schlieÃŸende Klammer eine Verrechnungsfunktion folgt
             if (first.equals(Calculator.CLOSE_BRACKET) && UserField.isAccountingFunction(second)) {
                 return false;
             }
 
-            // Wenn auf eine öffnende Klammer ein Operatorzeichen folgt.
+            // Wenn auf eine Ã¶ffnende Klammer ein Operatorzeichen folgt.
             if (first.equals(Calculator.OPEN_BRACKET) && isOperator(second)) {
                 return false;
             }
 
-            // Auf eine öffnende Klammer darf keine schließende Folgen
+            // Auf eine Ã¶ffnende Klammer darf keine schlieÃŸende Folgen
             if (first.equals(Calculator.OPEN_BRACKET) && second.equals(Calculator.CLOSE_BRACKET)) {
                 return false;
             }
@@ -159,8 +159,8 @@ public class CostingUtil {
     }
 
     /**
-     * Wenn das übergebene UserField eine einfache Teilwertsummenformel ist, dann kommt hier die Formel ohne
-     * alle WhiteSpaces und ohne die evtl. vorhandenen und überflüssigen Klammern am Anfang und Endezurück.
+     * Wenn das Ã¼bergebene UserField eine einfache Teilwertsummenformel ist, dann kommt hier die Formel ohne
+     * alle WhiteSpaces und ohne die evtl. vorhandenen und Ã¼berflÃ¼ssigen Klammern am Anfang und EndezurÃ¼ck.
      *
      * @param userField
      * @return
@@ -171,10 +171,10 @@ public class CostingUtil {
             return null;
         }
 
-        //alle whitespaces in der Formel löschen
+        //alle whitespaces in der Formel lÃ¶schen
         formula = formula.replaceAll("\\s", "");
 
-        //evtl. vorhandene äußere Klammern beachten und entfernen
+        //evtl. vorhandene Ã¤uÃŸere Klammern beachten und entfernen
         // ((( TWSUM (UF1, UF2, VG1) ))) wird zu TWSUM (UF1, UF2, VG1)
         int initialBrackets = 0;
         int formulaLenght = formula.length();
@@ -199,11 +199,11 @@ public class CostingUtil {
             endBrackets++;
         }
 
-        //am Ende muss eine Klammer mehr stehen, weil die eigenliche Funktion auch eine schließende Klammer hat
+        //am Ende muss eine Klammer mehr stehen, weil die eigenliche Funktion auch eine schlieÃŸende Klammer hat
         if (initialBrackets != endBrackets - 1) {
             return null;
         }
-        //äußere Klammern entfernen
+        //Ã¤uÃŸere Klammern entfernen
         if (initialBrackets > 0) {
             formula = formula.substring(initialBrackets, formulaLenght - 2 * initialBrackets);
         }
@@ -212,7 +212,7 @@ public class CostingUtil {
         if (!formula.startsWith(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
             return null;
         }
-        //die nächste gefundene schließende Klammer muss ganz am Ende stehen
+        //die nÃ¤chste gefundene schlieÃŸende Klammer muss ganz am Ende stehen
         int closeBracketIndex = formula.indexOf(Calculator.CLOSE_BRACKET, UserField.ACCOUNTING_FUNCTION_TWSUM.length());
         if (closeBracketIndex != formula.length() - 1) {
             return null;
@@ -221,7 +221,7 @@ public class CostingUtil {
     }
 
     /**
-     * Prüft, ob die Formel des übergebenen UserFields eine einfache Teilwertsummenformel ist.
+     * PrÃ¼ft, ob die Formel des Ã¼bergebenen UserFields eine einfache Teilwertsummenformel ist.
      * Diese Funktion setzt vorraus, dass die Formel valide ist!
      *
      * @param userField
@@ -244,7 +244,7 @@ public class CostingUtil {
     }
 
     /**
-     * Wenn das übergebene UserField eine einfache Teilwertsumme ist, dann wird hier die Kantenklasse der Formel extrahiert.
+     * Wenn das Ã¼bergebene UserField eine einfache Teilwertsumme ist, dann wird hier die Kantenklasse der Formel extrahiert.
      *
      * @param userField
      * @return Kantenklasse der einfachenTeilwertsummenformel oder <code>null</code>
@@ -259,7 +259,7 @@ public class CostingUtil {
     }
 
     /**
-     * Gibt zu dem übergebenen {@link Style} den Lokalisierten Anzeigenamen des Styles zurück.
+     * Gibt zu dem Ã¼bergebenen {@link Style} den Lokalisierten Anzeigenamen des Styles zurÃ¼ck.
      *
      * @param styleValue
      * @return Lokalisierten Anzeigenamen des Styles oder ""

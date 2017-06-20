@@ -141,8 +141,8 @@ public class MetaModelExporter {
     }
 
     /**
-     * Liefert true, wenn die Start- oder Endklasse der übergebenen Kantenklasse genau die übergebene Elementklasse ist. Anders als bei
-     * den statischen Funktionen aus Kante für die Start- und Endklasse werden hier keine Ober- oder Unerklassen der übergebenen Elementklasse
+     * Liefert true, wenn die Start- oder Endklasse der Ã¼bergebenen Kantenklasse genau die Ã¼bergebene Elementklasse ist. Anders als bei
+     * den statischen Funktionen aus Kante fÃ¼r die Start- und Endklasse werden hier keine Ober- oder Unerklassen der Ã¼bergebenen Elementklasse
      * zugelassen.
      *
      * @param elementClass

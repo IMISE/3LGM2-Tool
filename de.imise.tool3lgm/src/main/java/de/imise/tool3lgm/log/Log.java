@@ -39,7 +39,7 @@ public class Log {
 
 
 	/**
-	 * Gibt den Logger zurück. Initialisiert den Logger, falls dieser noch nicht initialisiert ist.
+	 * Gibt den Logger zurÃ¼ck. Initialisiert den Logger, falls dieser noch nicht initialisiert ist.
 	 * @return	der Logger den diese Klasse verwendet.
 	 */
 	public static Logger getLogger() {
@@ -57,7 +57,7 @@ public class Log {
 		return logger;
 	}
 	/**
-	 * Gibt den Logger zurück mit Klassennahmen. Initialisiert den Logger, falls dieser noch nicht initialisiert ist.
+	 * Gibt den Logger zurÃ¼ck mit Klassennahmen. Initialisiert den Logger, falls dieser noch nicht initialisiert ist.
 	 * @return	der Logger den diese Klasse verwendet.
 	 */
     public static Logger getLogger(String classname) {
@@ -93,7 +93,7 @@ public class Log {
 	}
 	
 	/**
-	 * Logt eine Meldung und die zugehörige Throwable in die Log-Datei.
+	 * Logt eine Meldung und die zugehÃ¶rige Throwable in die Log-Datei.
 	 * @param level		Level der Fehlermeldung (siehe Fehlerlevel)
 	 * @param meldung	die Meldung, welche geloggt werden soll
 	 * @param t			die Throwable, welche geloggt werden soll
@@ -118,7 +118,7 @@ public class Log {
 	}
 	
 	/**
-	 * Logt eine Meldung und zeigt diese in einer JOptionPane an. Zusätzlich zur Meldung
+	 * Logt eine Meldung und zeigt diese in einer JOptionPane an. ZusÃ¤tzlich zur Meldung
 	 * wird die Throwable in die Log-Datei geschrieben.
 	 * @param Level 	der Fehlermeldung (siehe Fehlerlevel)
 	 * @param meldung	die Meldung, welche geloggt und angezeigt werden soll
@@ -151,16 +151,16 @@ public class Log {
 	/**
 	 * Setzt die Component, welche beim anzeigen von Fehlermeldungen durch
 	 * JOptionPane als Parent verwendet werden soll.
-	 * @param c	eine Component als Parent für JOptionPane
+	 * @param c	eine Component als Parent fÃ¼r JOptionPane
 	 */
 	public static void setParentComponent(Component c) {
 		parentComponent = c;
 	}
 	
 	/**
-	 * Gibt die Component zurück, welche bei der Anzeige von Fehlermeldungen als
+	 * Gibt die Component zurÃ¼ck, welche bei der Anzeige von Fehlermeldungen als
 	 * Parent verwendet werden soll.
-	 * @return	Parent Component für die Anzeige von Fehlermeldungen
+	 * @return	Parent Component fÃ¼r die Anzeige von Fehlermeldungen
 	 */
 	public static Component getParentComponent() {
 		return parentComponent;

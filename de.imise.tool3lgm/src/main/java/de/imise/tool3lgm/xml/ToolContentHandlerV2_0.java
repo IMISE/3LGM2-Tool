@@ -31,21 +31,21 @@ import de.imise.tool3lgm.log.Log;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler
- * von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nötigen
- * Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener
- * Felder im Dokument) muß man keinen ganz neuen ContentHandler schreiben sondern muß
- * nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit
- * einen völlig neuen ContentHandler zu schreiben.
+ * von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nÃ¶tigen
+ * Werte hat. Ich denke, bei kleinen Ã„nderungen (hinzukommen oder wegfallen einzelnener
+ * Felder im Dokument) muÃŸ man keinen ganz neuen ContentHandler schreiben sondern muÃŸ
+ * nur einen abgeleiteten von diesem bilden. Ich wÃ¼rde aber empfehlen von Zeit zu Zeit
+ * einen vÃ¶llig neuen ContentHandler zu schreiben.
  * erkennt Modell mit 3lgm2_v2_0.dtd Version 2.0
  *
  * @author Thomas Rudert
  */
 public class ToolContentHandlerV2_0 implements ContentHandler {
 
-    /** gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString, Wert ist neuer HashString */
+    /** gÃ¤nderte Hashcodes (bei copyAndPaste) SchlÃ¼ssel ist alter HashString, Wert ist neuer HashString */
     protected HashMap<String, String> hashCodes;
 
-    /** Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei copyAndPaste) */
+    /** Kanten deren hashStrings (start, end) aufgelÃ¶st werden mÃ¼ssen (bei copyAndPaste) */
     protected ArrayList<Kante> kanten;
 
     /** KantenContainer deren computeBorderPoints()-Methode aufgerufen werden muss */
@@ -81,7 +81,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     /** Farbeangabe zu einem GraphElementLayout */
     protected Color color = null;
 
-    /** definiert die gültigkeit Farbe (fg_color, bg_color, border_color) */
+    /** definiert die gÃ¼ltigkeit Farbe (fg_color, bg_color, border_color) */
     protected String colorString = null;
 
     /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
@@ -92,7 +92,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
     /**
      * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst zu letzt eingelesen werden, wird den Containern zuerst nur der
-     * HashString des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
+     * HashString des Icons mitgeteilt. Nach dem einlesen der Icons mÃ¼ssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
      * laden. Das passiert in der Methode setIcon();
      */
     protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<NodeContainer>();
@@ -177,7 +177,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
             } else if (qName.equals("element")) {
                 Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(atts.getValue("class"));
                 if (elementClass == null) {
-                    //				throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
+                    //				throw new SAXException("Klasse fÃ¼r Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                     return;
                 }
                 if (avoidDuplicates) {
@@ -209,13 +209,13 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
 
                 //			if (element == null)
-                //				throw new SAXException("ModelObject für Container nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
+                //				throw new SAXException("ModelObject fÃ¼r Container nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
 
                 if (element != null) {
                     container = element.createContainer(szenario);
 
                     if (container == null) {
-                        throw new SAXException("Container für ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
+                        throw new SAXException("Container fÃ¼r ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
                     }
 
                     if (copyAndPaste > 0 && container instanceof EdgeContainer) {
@@ -580,7 +580,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-                /* die HashStrings für das Start- bzw. End-Objekt einer Kante auflösen und die wirklichen Knoten setzten */
+                /* die HashStrings fÃ¼r das Start- bzw. End-Objekt einer Kante auflÃ¶sen und die wirklichen Knoten setzten */
                 if (copyAndPaste > 0) {
                     Kante kante;
                     for (int i = 0; i < kanten.size(); i++) {

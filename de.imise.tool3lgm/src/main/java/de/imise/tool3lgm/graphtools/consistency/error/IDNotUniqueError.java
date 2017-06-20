@@ -7,7 +7,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**
- * ACHTUNG: Wenn der Name der Klasse refactored werden sollte, müssen die ErrorResourcen angepasst werden!
+ * ACHTUNG: Wenn der Name der Klasse refactored werden sollte, mÃ¼ssen die ErrorResourcen angepasst werden!
  * 
  * @author Ich
  * @create 17.08.2015

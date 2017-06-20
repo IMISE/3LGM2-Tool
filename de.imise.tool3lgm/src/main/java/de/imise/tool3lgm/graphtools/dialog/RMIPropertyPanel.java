@@ -20,9 +20,9 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * @author hboehme Eigenschaftenpanel f¸r die RMI-Konfiguration. Das Panel beinhaltet zwei
+ * @author hboehme Eigenschaftenpanel f√ºr die RMI-Konfiguration. Das Panel beinhaltet zwei
  *         <code>JLabel</code>s, eine <code>JCheckBox</code> und ein <code>JTextField</code> Wenn
- *         die <code>JCheckBox</code> aktiviert wird, wird bem n‰chsten Systemstart die RMI-Funktion
+ *         die <code>JCheckBox</code> aktiviert wird, wird bem n√§chsten Systemstart die RMI-Funktion
  *         geladen, sonst nicht. In das <code>JTextField</code> wird der Port eingetragen, auf dem
  *         der RMI-Server lauschen soll.
  */
@@ -33,7 +33,7 @@ public class RMIPropertyPanel extends JPanel {
 
     /**
      * Das Panel beinhaltet zwei <code>JLabel</code>s, eine <code>JCheckBox</code> und ein
-     * <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert wird, wird bem n‰chsten
+     * <code>JTextField</code> Wenn die <code>JCheckBox</code> aktiviert wird, wird bem n√§chsten
      * Systemstart die RMI-Funktion geladen, sonst nicht. In das <code>JTextField</code> wird der
      * Port eingetragen, auf dem der RMI-Server lauschen soll.
      */
@@ -62,7 +62,7 @@ public class RMIPropertyPanel extends JPanel {
 
         JButton stdRegistryButton = new JButton();
         add(stdRegistryButton, gbc);
-        // Wenn der Button bet‰tig wird, wird in das TextField der standardport eingetragen, der f¸r
+        // Wenn der Button bet√§tig wird, wird in das TextField der standardport eingetragen, der f√ºr
         // RMI vorgesehen ist. Derzeit 1099.
         stdRegistryButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("standardPort")) {
             @Override

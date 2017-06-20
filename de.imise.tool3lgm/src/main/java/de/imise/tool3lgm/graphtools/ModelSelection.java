@@ -20,7 +20,7 @@ import de.imise.util.collections.CollectionUtils;
 
 /**
  * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen (selektierte Knoten, Kanten und Knickpunkte).
- * Zusätzlich dazu wird sich das zuletzt zur Selektion hinzugefügte Element gemerkt.
+ * ZusÃ¤tzlich dazu wird sich das zuletzt zur Selektion hinzugefÃ¼gte Element gemerkt.
  * 
  * @author AXS
  *         created on 11.12.2006
@@ -33,15 +33,15 @@ public class ModelSelection implements Set<ElementContainer> {
     private static final Class<?> COMMON_REAL_ELEMENTS_SUPER_CLASS = ReflectionUtils.getCommonSuperClass(ModelConstants.ALL_NODES);
 
     /**
-     * Liste, die die selektierten {@link NodeContainer} enthält.
+     * Liste, die die selektierten {@link NodeContainer} enthÃ¤lt.
      */
     private final HashSet<NodeContainer> selectedRealNodeContainer;
     /**
-     * Liste, die die selektierten {@link BendpointContainer} enthält.
+     * Liste, die die selektierten {@link BendpointContainer} enthÃ¤lt.
      */
     private final HashSet<BendpointContainer> selectedBendpointContainer;
     /**
-     * Liste, die die selektierten {@link EdgeContainer} enthält.
+     * Liste, die die selektierten {@link EdgeContainer} enthÃ¤lt.
      */
     private final HashSet<EdgeContainer> selectedEdgeContainer;
 
@@ -51,14 +51,14 @@ public class ModelSelection implements Set<ElementContainer> {
     private ElementContainer lastSelected = null;
 
     /**
-     * Enthält die speziellste gemeinsame Unterklasse von {@link ModelElement} aus allen Elementen
+     * EnthÃ¤lt die speziellste gemeinsame Unterklasse von {@link ModelElement} aus allen Elementen
      * der selektierten {@link NodeContainer} aus <code>selectedRealNodeContainer</code>.<br>
      * Wenn nichts selektiert ist, ist dieser Wert <code>null</code>.
      */
     private Class<? extends ModelElement> mostSpecialRealElementClass = null;
 
     /**
-     * Wenn viele Elemente hinzugefügt oder entfernt werden sollen, muss nicht bei jedem hinzufügen
+     * Wenn viele Elemente hinzugefÃ¼gt oder entfernt werden sollen, muss nicht bei jedem hinzufÃ¼gen
      * einzeln
      */
     private boolean preventUpdate = false;
@@ -81,7 +81,7 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Erzeugt eine neue Selektion mit den übergebenen Objeckten als Selektionsmenge.
+     * Erzeugt eine neue Selektion mit den Ã¼bergebenen Objeckten als Selektionsmenge.
      */
     public ModelSelection(final Collection<? extends ElementContainer> selection) {
         this(selection.size());
@@ -99,7 +99,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Einheitliche Schnittstelle zum internen setzen von {@link #lastSelected}.
-     * Dient nur der Möglichkeit hier mal auszugeben, welches Element das ist.
+     * Dient nur der MÃ¶glichkeit hier mal auszugeben, welches Element das ist.
      * 
      * @param lastSelected
      */
@@ -161,8 +161,8 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Setzt die Selektion auf die übergebenen Objekte.<br>
-     * Jedes Objekt wird maximal einmal hinzugefügt.
+     * Setzt die Selektion auf die Ã¼bergebenen Objekte.<br>
+     * Jedes Objekt wird maximal einmal hinzugefÃ¼gt.
      * 
      * @param selectedObjects
      */
@@ -194,21 +194,21 @@ public class ModelSelection implements Set<ElementContainer> {
             return false;
         }
         setLastSelected(ec);
-        //Knickpunkt hinzugefügt
+        //Knickpunkt hinzugefÃ¼gt
         if (ec instanceof BendpointContainer) {
             return selectedBendpointContainer.add((BendpointContainer) ec);
         }
-        //Kante hinzugefügt
+        //Kante hinzugefÃ¼gt
         if (ec instanceof EdgeContainer) {
             return selectedEdgeContainer.add((EdgeContainer) ec);
         }
 
-        //Knoten (der kein Knickpunkt ist) hinzugefügt
+        //Knoten (der kein Knickpunkt ist) hinzugefÃ¼gt
         if (!selectedRealNodeContainer.add((NodeContainer) ec)) {
             return false;
         }
 
-        //braucht nur ausgeführt werden, wenn ein richtiger Knoten hinzugekommen ist
+        //braucht nur ausgefÃ¼hrt werden, wenn ein richtiger Knoten hinzugekommen ist
         updateSelectionState();
         return true;
     }
@@ -288,8 +288,8 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert eine neu erzeugte Liste aller selektierten Container. Die Reihenfolge der
-     * Elemente ist zufällig, aber das zueltzt selektierte Element ist immer ganz hinten
-     * in der Liste. Diese Rückgabeliste kann genutzt werden, um über die Funktion {@link #set(Collection)} eine alte Selektion wiederherzustellen.
+     * Elemente ist zufÃ¤llig, aber das zueltzt selektierte Element ist immer ganz hinten
+     * in der Liste. Diese RÃ¼ckgabeliste kann genutzt werden, um Ã¼ber die Funktion {@link #set(Collection)} eine alte Selektion wiederherzustellen.
      * 
      * @return
      */
@@ -458,9 +458,9 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Gibt die erste gemeinsame Klasse aller selektierten Elemente zurück.<br>
+     * Gibt die erste gemeinsame Klasse aller selektierten Elemente zurÃ¼ck.<br>
      * In der Selektion sind zwar {@link ElementContainer}, aber hier kommt die Oberklasse
-     * der in den Containern befindlichen Unterklassen von {@link ModelElement} zurück.
+     * der in den Containern befindlichen Unterklassen von {@link ModelElement} zurÃ¼ck.
      * Wenn nichts selektiert ist, ist dieser Wert <code>null</code>.
      * 
      * @return
@@ -489,8 +489,8 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind (= ohne grafische
-     * Repräsentation immer in allen Teilmodellen vorkommen).
+     * Gibt wieder, ob alle ausgewÃ¤hlten Elemente <em>unique</em> sind (= ohne grafische
+     * ReprÃ¤sentation immer in allen Teilmodellen vorkommen).
      * 
      * @return
      */
@@ -501,8 +501,8 @@ public class ModelSelection implements Set<ElementContainer> {
             }
         }
 
-        //  Falls nur Kanten ausgewählt sind, ist selectedRealNodeContainer leer.
-        //  Damit wird korrekterweise true zurückgegeben , da alle Kanten unique sind.
+        //  Falls nur Kanten ausgewÃ¤hlt sind, ist selectedRealNodeContainer leer.
+        //  Damit wird korrekterweise true zurÃ¼ckgegeben , da alle Kanten unique sind.
         //  D.h., dass ein Durchlaufen der selektierten Kanten entfallen kann.
 
         return true;
@@ -523,7 +523,7 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Gibt wieder, ob ausschließlich {@link ElementContainer} von {@link Textfeld} und {@link Knickpunkt} selektiert sind.
+     * Gibt wieder, ob ausschlieÃŸlich {@link ElementContainer} von {@link Textfeld} und {@link Knickpunkt} selektiert sind.
      * 
      * @return
      */
@@ -533,7 +533,7 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Liefert die Anzahl an selektierten Modellelementen (also alles außer Knickpunkte und Kanten).
+     * Liefert die Anzahl an selektierten Modellelementen (also alles auÃŸer Knickpunkte und Kanten).
      * 
      * @return
      */

@@ -20,8 +20,8 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
- * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein Benutzter einen speziellen Metapfad auswählen kann.<br>
- * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere Klasse und, falls es zw. diesen Klassen mehrere MetaPfade gibt, kann man aus einer Liste einen auswählen.<br>
+ * Diese Klasse stellt 3 zusammengehÃ¶rige Komponenten bereit, mit denen ein Benutzter einen speziellen Metapfad auswÃ¤hlen kann.<br>
+ * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere Klasse und, falls es zw. diesen Klassen mehrere MetaPfade gibt, kann man aus einer Liste einen auswÃ¤hlen.<br>
  * Dieser Mechanismus wird in der Matrix-Sicht verwendet.
  * 
  * @author AXS
@@ -29,17 +29,17 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 public class MetaPathSelector implements ActionListener {
 
     /**
-     * ComboBox für die erste Klasse
+     * ComboBox fÃ¼r die erste Klasse
      */
     private final AlphabeticalComboBox class1ComboBox;
 
     /**
-     * ComboBox für die zweite Klasse
+     * ComboBox fÃ¼r die zweite Klasse
      */
     private final AlphabeticalComboBox class2ComboBox;
 
     /**
-     * Listenkomponente zur Auswahl des Metapfades zwischen den in den ComboBoxen ausgewählten Klassen.
+     * Listenkomponente zur Auswahl des Metapfades zwischen den in den ComboBoxen ausgewÃ¤hlten Klassen.
      */
     private final AlphabeticalJList metaPathJList;
 
@@ -84,7 +84,7 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Gibt einen neuen <code>MetaPathSelector</code>, für den alle Komponenten initialisiert sind, zurück.
+     * Gibt einen neuen <code>MetaPathSelector</code>, fÃ¼r den alle Komponenten initialisiert sind, zurÃ¼ck.
      * 
      * @return einen neuen <code>MetaPathSelector</code>
      */
@@ -130,9 +130,9 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen kann.
+     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswÃ¤hlen kann.
      * 
-     * @return einen <code>MetaPathSelector</code> der durch die Einträge aus einem angezeigten Dialog gefüllt wurde
+     * @return einen <code>MetaPathSelector</code> der durch die EintrÃ¤ge aus einem angezeigten Dialog gefÃ¼llt wurde
      */
     public static final MetaPathSelector showDialog() {
         String class1Name = Tool3lgmConstants.getResString("class1");
@@ -142,12 +142,12 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen kann.
+     * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswÃ¤hlen kann.
      * 
-     * @param class1Label Label, das für die erste auszuwählende Klasse angezeigt werden soll
-     * @param class2Label Label, das für die zweite auszuwählende Klasse angezeigt werden soll
-     * @param metaPathListLabel Label, das über der MetaPathList angezeigt werden soll
-     * @return einen <code>MetaPathSelector</code> der durch die Einträge aus einem angezeigten Dialog gefüllt wurde
+     * @param class1Label Label, das fÃ¼r die erste auszuwÃ¤hlende Klasse angezeigt werden soll
+     * @param class2Label Label, das fÃ¼r die zweite auszuwÃ¤hlende Klasse angezeigt werden soll
+     * @param metaPathListLabel Label, das Ã¼ber der MetaPathList angezeigt werden soll
+     * @return einen <code>MetaPathSelector</code> der durch die EintrÃ¤ge aus einem angezeigten Dialog gefÃ¼llt wurde
      */
     public static final MetaPathSelector showDialog(final String class1Label, final String class2Label, final String metaPathListLabel) {
         if (dialogMetaPathSelecor == null) {
@@ -228,9 +228,9 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
+     * Liefert <code>true</code>, wenn gÃ¼ltige Elementklassen und ein gÃ¼ltiger MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
      * 
-     * @return <code>true</code>, wenn gültige Klassen und ein gültiger Metapfad ausgewählt wurde, sonst <code>false</code>
+     * @return <code>true</code>, wenn gÃ¼ltige Klassen und ein gÃ¼ltiger Metapfad ausgewÃ¤hlt wurde, sonst <code>false</code>
      */
     public boolean isValid() {
         if (getSelectedClass1() == null || getSelectedClass2() == null || getSelectedMetaPath() == null) {

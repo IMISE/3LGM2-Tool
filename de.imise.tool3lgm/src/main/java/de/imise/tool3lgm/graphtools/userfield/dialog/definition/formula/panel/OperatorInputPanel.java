@@ -22,7 +22,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
- * Dieses Panel stellt die möglichen auswählbaren Attribute für die Verrechnungsfunktionen bereit.
+ * Dieses Panel stellt die mÃ¶glichen auswÃ¤hlbaren Attribute fÃ¼r die Verrechnungsfunktionen bereit.
  *
  * @author hboehme, AXS
  * @created 02.01.2008
@@ -30,7 +30,7 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 public class OperatorInputPanel extends JPanel implements ActionListener {
 
     /**
-     * Das UserField, für welches die verrechnungsfunktion Summe definiert wird.
+     * Das UserField, fÃ¼r welches die verrechnungsfunktion Summe definiert wird.
      */
     private final UserField userField;
 
@@ -45,12 +45,12 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     private AlphabeticalComboBox connectedAttributesBox;
 
     /**
-     * die Box, die die Verteilungsgewichte enthält. <code>vgBox</code>
+     * die Box, die die Verteilungsgewichte enthÃ¤lt. <code>vgBox</code>
      */
     private AlphabeticalComboBox vgBox;
 
     /**
-     * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
+     * "Gleichverteilt" in der gewÃ¤hlten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung Ã¼ber die Teilwertsumme kein
      * spezielles Verteilungsgewicht genutzt werden soll.
      */
     private static final String UNIFORMLY_DISTRIBUTED = Tool3lgmConstants.getResString("uniformly_distributed");
@@ -64,7 +64,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
      * Das Panel, dass die ComboBoxen darstellt.
      *
      * @param vfOperator Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>
-     * @param classElement Elementklasse, die sich über die Verrechnungsfunktion irgendeinen Wert einer verbundenen Klasse holen soll
+     * @param classElement Elementklasse, die sich Ã¼ber die Verrechnungsfunktion irgendeinen Wert einer verbundenen Klasse holen soll
      * @param userField
      */
     public OperatorInputPanel(final String vfOperator, final UserField userField) {
@@ -122,14 +122,14 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Leert die <code>ComboBox</code>, die die UserFields der Endklasse enthält.
+     * Leert die <code>ComboBox</code>, die die UserFields der Endklasse enthÃ¤lt.
      */
     private void clearBoxAttributsOfAssociatedClass() {
         connectedAttributesBox.removeAllItems();
     }
 
     /**
-     * Aktualisiert die {@link AlphabeticalJList}, die die {@link UserField}s der assoziierten Klasse enthält.
+     * Aktualisiert die {@link AlphabeticalJList}, die die {@link UserField}s der assoziierten Klasse enthÃ¤lt.
      *
      * @param elementClasses
      */
@@ -140,8 +140,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         //wird true, wenn dieses UserField bereits in den Definitions vorkommt
         // (also nicht grade angelegt wurde)
         boolean found = false;
-        //wird true, wenn die Elementklasse, für die das aktuelle UserField definiert wird, zuweisungskompatibel
-        //zu einer der Zielklassen der ausgewählten Kante ist -> das aktuelle Userfield muss sebst in der Auswahlliste
+        //wird true, wenn die Elementklasse, fÃ¼r die das aktuelle UserField definiert wird, zuweisungskompatibel
+        //zu einer der Zielklassen der ausgewÃ¤hlten Kante ist -> das aktuelle Userfield muss sebst in der Auswahlliste
         //erscheinen
         boolean assignableClass = false;
         if (elementClass.isAssignableFrom(userField.getTargetClass())) {
@@ -201,7 +201,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Aktualisiert die ComboBox, die die Verteilungsgewichte aktuell ausgewählten Kantenklasse beinhaltet.
+     * Aktualisiert die ComboBox, die die Verteilungsgewichte aktuell ausgewÃ¤hlten Kantenklasse beinhaltet.
      *
      * @param edgeClass die aktuelle Kantenklasse
      */
@@ -219,14 +219,14 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         vgBox.setSelectedObject(UNIFORMLY_DISTRIBUTED);
     }
 
-    //TODO: man sollte das Öffnen des Dialoges verhindern, wenn keine verrechenbaren Kennzehlen in verbundenen Klassen existieren
+    //TODO: man sollte das Ã–ffnen des Dialoges verhindern, wenn keine verrechenbaren Kennzehlen in verbundenen Klassen existieren
 
     /**
      * Aktualisiert die Box der Assoziationen der Startklasse.
      */
     private final void updateFieldListAssoziation() {
         associationBox.removeAllItems();
-        //Die Assoziationen zur Box hinzufügenen, bei denen die Startklasse
+        //Die Assoziationen zur Box hinzufÃ¼genen, bei denen die Startklasse
         // gleich der Element-Klasse ist
         Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
 
@@ -235,11 +235,11 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             Class<? extends ModelElement> startClass = Kante.getStartClass(tmpEdgeClass);
             Class<? extends ModelElement> endClass = Kante.getEndClass(tmpEdgeClass);
 
-            //prüfen, ob die Start- und Endklassen gleich ist ->
-            //wenn ja, darf diese Kante nur für Verrechnungen genutzt werden, wenn sie
-            //in Vorwärts- und Rückwartsrichtung unterschiedliche Bedeutungen (also eine
+            //prÃ¼fen, ob die Start- und Endklassen gleich ist ->
+            //wenn ja, darf diese Kante nur fÃ¼r Verrechnungen genutzt werden, wenn sie
+            //in VorwÃ¤rts- und RÃ¼ckwartsrichtung unterschiedliche Bedeutungen (also eine
             //unterscheidliche Bezeichnung) hat. Bei PartOfBeziehungen sind die Start und
-            //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
+            //Zielklassen-Arrays gleich, aber die Namen in VorwÃ¤rts- und RÃ¼ckwÃ¤rtsrichtung
             //sind unterscheidlich. Bei der Beziehung "Phys.-DV-Baustein ist verbunden mit
             //Phys.-DV-Baustein" kann man keine eindeutige Richtung zuordnen.
             String forwardName = ModelConstants.getFullForwardMetaAssociationName(tmpEdgeClass);
@@ -266,7 +266,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Gibt aus dem Dialog den String zurück, der die Verrechnungsfunktion beschreibt. Z.B: SUM ( Assoziation | Attribut der verbunden Klasse |
+     * Gibt aus dem Dialog den String zurÃ¼ck, der die Verrechnungsfunktion beschreibt. Z.B: SUM ( Assoziation | Attribut der verbunden Klasse |
      * Richtung )
      *
      * @return
@@ -301,7 +301,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             }
         }
 
-        //wenn eine Part-Of-beziehung ausgewählt wurde, dann die Richtung
+        //wenn eine Part-Of-beziehung ausgewÃ¤hlt wurde, dann die Richtung
         // merken
         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
             sb.append(" | ");

@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 
 /**
- * Abtsractes Panel für Verbindungen mit einer Maximalen Verbindungsanzahl von 1.
+ * Abtsractes Panel fÃ¼r Verbindungen mit einer Maximalen Verbindungsanzahl von 1.
  *
  * @author astruebi
  * @created 05/2017
@@ -39,8 +39,8 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
     }
 
     /**
-     * Fügt der übergebenen Komponente die Doppelklick-Öffne-Eigenschaftsdialog-des-selektierten-Elementes-Action
-     * hinzu und die Rechte-Maustastae-Öffnet-KontextMenü-Action.
+     * FÃ¼gt der Ã¼bergebenen Komponente die Doppelklick-Ã–ffne-Eigenschaftsdialog-des-selektierten-Elementes-Action
+     * hinzu und die Rechte-Maustastae-Ã–ffnet-KontextMenÃ¼-Action.
      *
      * @param component
      */
@@ -62,8 +62,8 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
     }
 
     /**
-     * Liefert das selektiert Object. Wenn hier ein ModelElement oder ein ElementContainer zurück
-     * kommt, dann wird damit die mouseAction ausgeführt.
+     * Liefert das selektiert Object. Wenn hier ein ModelElement oder ein ElementContainer zurÃ¼ck
+     * kommt, dann wird damit die mouseAction ausgefÃ¼hrt.
      *
      * @return
      */

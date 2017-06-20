@@ -113,7 +113,7 @@ public class LGMTree extends CorrectSelectionTree {
      * Aktuelle Expansion merken
      */
     public final void saveExpansion() {
-        //umst‰ndlich, aber alles andere zieht viel zu groﬂe ƒnderungen nach sich
+        //umst√§ndlich, aber alles andere zieht viel zu gro√üe √Ñnderungen nach sich
         Enumeration<TreePath> e = getExpandedDescendants(new TreePath(treeModel.getRoot()));
         expandedPathStrings.clear();
         if (e != null) {
@@ -124,8 +124,8 @@ public class LGMTree extends CorrectSelectionTree {
     }
 
     /**
-     * Expansion wieder herstellen. Da sich wenn man die Selektion wieder herstellen mˆchte eigentlich
-     * immer das <code>TreeModel</code> ge‰ndert hat, wird es auch neu geladen.
+     * Expansion wieder herstellen. Da sich wenn man die Selektion wieder herstellen m√∂chte eigentlich
+     * immer das <code>TreeModel</code> ge√§ndert hat, wird es auch neu geladen.
      */
     public final void restoreExpansion() {
         expandFull();
@@ -176,7 +176,7 @@ public class LGMTree extends CorrectSelectionTree {
             selectedPaths = new TreePath[0];
         }
 
-        //		//umst‰ndlich, aber alles andere zieht viel zu groﬂe ƒnderungen nach sich
+        //		//umst√§ndlich, aber alles andere zieht viel zu gro√üe √Ñnderungen nach sich
         //		TreePath[] selectedPathes = getSelectionPaths();
         //		if (selectedPathes==null || selectedPathes.length==0) {
         //			selectedPathStrings = new String[0];
@@ -189,8 +189,8 @@ public class LGMTree extends CorrectSelectionTree {
     }
 
     /**
-     * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen mˆchte eigentlich
-     * immer das <code>TreeModel</code> ge‰ndert hat, wird es auch neu geladen.
+     * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen m√∂chte eigentlich
+     * immer das <code>TreeModel</code> ge√§ndert hat, wird es auch neu geladen.
      */
     public final void restoreSelection() {
         if (selectedPaths.length == 0) {
@@ -218,10 +218,10 @@ public class LGMTree extends CorrectSelectionTree {
 
     /**
      * In diesem Baum werden alle Elemente selektiert, die sichtbar sind und deren letztes Pfadelement
-     * denen des ¸bergebenen Baumes entspricht.
-     * Diese Funktion ist hilfreich, falls in Dialogen "von einem Baum in einen anderen" etwas ¸bernommen
-     * wurde. Im Quellbaum ist das Element dann h‰ufig nicht mehr selektierbar, im Zielbaum erkennt man
-     * nicht, dass es selektiert sein soll, auﬂer man sicht nach den Knoten mit dem gleichen UserObject.
+     * denen des √ºbergebenen Baumes entspricht.
+     * Diese Funktion ist hilfreich, falls in Dialogen "von einem Baum in einen anderen" etwas √ºbernommen
+     * wurde. Im Quellbaum ist das Element dann h√§ufig nicht mehr selektierbar, im Zielbaum erkennt man
+     * nicht, dass es selektiert sein soll, au√üer man sicht nach den Knoten mit dem gleichen UserObject.
      *
      * @param selectionSource Der Baum dessen Selektion nachgebildet werden soll
      */

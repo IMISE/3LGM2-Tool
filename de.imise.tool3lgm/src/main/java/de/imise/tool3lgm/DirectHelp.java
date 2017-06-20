@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 
-// TODO:prüfen wo das hier gebraucht wird (anscheinend gar nicht)
+// TODO:prÃ¼fen wo das hier gebraucht wird (anscheinend gar nicht)
 public class DirectHelp extends JWindow {
     //   static private boolean open;
 

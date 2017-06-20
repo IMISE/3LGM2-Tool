@@ -75,7 +75,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * gibt an, ob dieses Element durch das Aufklappen seines (ggf. existierenden)
-     * übergeordneten Elements sichtbar gemacht wurde
+     * Ã¼bergeordneten Elements sichtbar gemacht wurde
      */
     protected boolean expanded = true;
 
@@ -108,7 +108,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * Wenn dieser Container an andere in der Grafik zusätzliche Infos schreiben möchte, dann muss er dieses Generator instanziieren.
+     * Wenn dieser Container an andere in der Grafik zusÃ¤tzliche Infos schreiben mÃ¶chte, dann muss er dieses Generator instanziieren.
      */
     protected AdditionalLabelTextGenerator additionalLabelTextGenerator = null;
 
@@ -290,7 +290,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * legt fest, ob dieses Element durch das Aufklappen seines (ggf. existierenden)
-     * übergeordneten Elements sichtbar gemacht wurde
+     * Ã¼bergeordneten Elements sichtbar gemacht wurde
      */
     public void setExpanded(final boolean exp) {
         if (exp == expanded) {
@@ -363,7 +363,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * Erzeugt die angezeigte Bezeichnung. Für Knoten werden in eckigen Klammern durch Kommas getrennt
+     * Erzeugt die angezeigte Bezeichnung. FÃ¼r Knoten werden in eckigen Klammern durch Kommas getrennt
      * alle Szenarien aufgelistet, in denen sie ausser im momentan angezeigten noch vorkommen.
      *
      * @see java.awt.Component#toString()
@@ -646,7 +646,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * Für das GraphElementLayout bei expanded = true
+     * FÃ¼r das GraphElementLayout bei expanded = true
      *
      * @param preString
      * @param forCopy
@@ -658,7 +658,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * für das GraphElementLayout bei expanded = false
+     * fÃ¼r das GraphElementLayout bei expanded = false
      *
      * @param preString
      * @param forCopy
@@ -870,7 +870,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     //	##########################################################################################################
-    //	 BEGINN Funktionen für Container als SpecialInfoTargets /////////////////////////////////////////////////////
+    //	 BEGINN Funktionen fÃ¼r Container als SpecialInfoTargets /////////////////////////////////////////////////////
     /**
      * @param ElementContainer infoOwner
      * @param info String
@@ -1036,7 +1036,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         return westLabel;
     }
 
-    //	 ENDE Funktionen für Container als SpecialInfoTargets ///////////////////////////////////////////////////////
+    //	 ENDE Funktionen fÃ¼r Container als SpecialInfoTargets ///////////////////////////////////////////////////////
     //	##########################################################################################################
 
     /**

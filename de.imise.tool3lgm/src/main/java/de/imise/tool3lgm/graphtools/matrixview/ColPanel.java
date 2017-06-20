@@ -23,16 +23,16 @@ public class ColPanel extends JPanel {
     /** Integer, der die Spaltenbreite definiert */
     private double deltaY = Double.NaN;
 
-    /** Integer, der die horizontale Verschiebung zwischen zwei Einträgen definiert */
+    /** Integer, der die horizontale Verschiebung zwischen zwei EintrÃ¤gen definiert */
     private double deltaX = 0;
 
-    /** Integer der die maximal Länge der Strings in Pixeln */
+    /** Integer der die maximal LÃ¤nge der Strings in Pixeln */
     private int maxLength = 0;
 
-    /** Winkel, um welchen die Schrift gekippt werden soll (Standard: 45° gegen Uhrzeigersinn) */
+    /** Winkel, um welchen die Schrift gekippt werden soll (Standard: 45Â° gegen Uhrzeigersinn) */
     private final double theta = Math.PI / 4.;
 
-    /** affine Transformation zum kippen der Spaltenüberschrift */
+    /** affine Transformation zum kippen der SpaltenÃ¼berschrift */
     private AffineTransform transform = new AffineTransform();
     private static AffineTransform nullTransform = new AffineTransform();
 
@@ -47,7 +47,7 @@ public class ColPanel extends JPanel {
     /**
      * Konstruktor
      * 
-     * @param _cols ArrayList mit Strings der Spaltenüberschriften
+     * @param _cols ArrayList mit Strings der SpaltenÃ¼berschriften
      */
     public ColPanel(final ArrayList<ModelElement> _cols) {
         super();
@@ -70,7 +70,7 @@ public class ColPanel extends JPanel {
 
         g2.drawLine(1, getHeight() - 1, getNumberOfCols() * getColWidth(), getHeight() - 1);
 
-        /* Koordinatentransformation zum Kippen der Spaltenüberschriften */
+        /* Koordinatentransformation zum Kippen der SpaltenÃ¼berschriften */
         g2.transform(transform);
 
         Iterator<ModelElement> i = cols.iterator();
@@ -90,18 +90,18 @@ public class ColPanel extends JPanel {
     }
 
     /**
-     * bestimmt die benötigten Parameter delta und max_height und legt die Größe der Component fest
+     * bestimmt die benÃ¶tigten Parameter delta und max_height und legt die GrÃ¶ÃŸe der Component fest
      * 
      * @param g Graphics
      */
     private void setRequiredParam(final Graphics g) {
-        /* Höhe der Komponente */
+        /* HÃ¶he der Komponente */
         double height = 0;
 
         /* Spaltenbreite */
         deltaY = g.getFontMetrics().getHeight() + 4;
 
-        /* Zeilenlänge ermitteln */
+        /* ZeilenlÃ¤nge ermitteln */
         Iterator<ModelElement> i = cols.iterator();
         String temp_string;
         while (i.hasNext()) {
@@ -121,7 +121,7 @@ public class ColPanel extends JPanel {
         deltaY = colWidth * Math.sin(theta);
         deltaX = colWidth * Math.cos(theta);
 
-        /* Component-Größe festlegen */
+        /* Component-GrÃ¶ÃŸe festlegen */
         Dimension dim = new Dimension((int) (getColWidth() * numberOfCols + ml * Math.cos(theta)), (int) height);
 
         setSize(dim);
@@ -135,7 +135,7 @@ public class ColPanel extends JPanel {
     }
 
     /**
-     * gibt Spaltenbreite in Pixel zurück
+     * gibt Spaltenbreite in Pixel zurÃ¼ck
      * 
      * @return int Spaltenbreite in Pixeln
      */
@@ -144,7 +144,7 @@ public class ColPanel extends JPanel {
     }
 
     /**
-     * gibt Anzahl der Spalten zurück
+     * gibt Anzahl der Spalten zurÃ¼ck
      * 
      * @return int Anzahl der Spalten
      */

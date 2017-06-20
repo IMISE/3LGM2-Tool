@@ -228,8 +228,8 @@ public class EdgeContainer extends ElementContainer {
 
         // TODO:Aus irgend einem Grund sind beim Import von Teilmodellen hier
         // null-Elemente in der Liste knickpunkte
-        // daher hat AXS hier mal das Löschen eingefügt. Eigentlich sollte das
-        // aber nicht nötig sein, weil das nur sie Symptome abstellt
+        // daher hat AXS hier mal das LÃ¶schen eingefÃ¼gt. Eigentlich sollte das
+        // aber nicht nÃ¶tig sein, weil das nur sie Symptome abstellt
         for (int i = knickpunkte.size() - 1; i >= 0; i--) {
             if (knickpunkte.get(i) == null) {
                 knickpunkte.remove(i);
@@ -403,8 +403,8 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Toleranz in Pixeln, mit der man neben die Kante klicken darf, wenn man sie per Mausklick auswählen will oder mit der entschieden wird, an
-     * welcher Stelle ein neuer Knickpunkt hinzugefügt werden
+     * Toleranz in Pixeln, mit der man neben die Kante klicken darf, wenn man sie per Mausklick auswÃ¤hlen will oder mit der entschieden wird, an
+     * welcher Stelle ein neuer Knickpunkt hinzugefÃ¼gt werden
      * muss.
      */
     public static final int TOLERANCE = 4;
@@ -422,7 +422,7 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefügt werden würde, wenn der die übergebenen
+     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefÃ¼gt werden wÃ¼rde, wenn der die Ã¼bergebenen
      * Koordinaten besitzt.
      * 
      * @param x
@@ -434,7 +434,7 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefügt werden würde, wenn der die übergebenen
+     * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefÃ¼gt werden wÃ¼rde, wenn der die Ã¼bergebenen
      * Koordinaten besitzt.
      * 
      * @param x
@@ -467,7 +467,7 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Setzt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
+     * Setzt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 Ã¼bergeben, dann wird der Index anhand der
      * Koordinaten berechnet.
      * 
      * @param kp
@@ -486,7 +486,7 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Fügt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
+     * FÃ¼gt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 Ã¼bergeben, dann wird der Index anhand der
      * Koordinaten berechnet.
      * 
      * @param kp
@@ -682,7 +682,7 @@ public class EdgeContainer extends ElementContainer {
                 g.translate(-dx, -dy);
             }
 
-            // Die 2 hier sind nicht getestet und sehr wahrscheinlich völlig Quatsch (die Koordinaten) if (eastLabel != null) { int dx = startx; g.translate(dx, ym); eastLabel.paint(g);
+            // Die 2 hier sind nicht getestet und sehr wahrscheinlich vÃ¶llig Quatsch (die Koordinaten) if (eastLabel != null) { int dx = startx; g.translate(dx, ym); eastLabel.paint(g);
             // g.translate(-dx, -ym); } if (westLabel != null) { int dx = xm - westLabel.getPreferredSize().width - 1; g.translate(dx, ym); westLabel.paint(g); g.translate(-dx, -ym); }
 
             startx = endx;

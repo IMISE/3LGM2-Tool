@@ -14,14 +14,14 @@ import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 
 /**
- * Interface für alle {@link Component}, die im {@link ModelBrowser} Teilmodelle anzeigen.
+ * Interface fÃ¼r alle {@link Component}, die im {@link ModelBrowser} Teilmodelle anzeigen.
  * 
  * @author AXS
  */
 public abstract class SubModelsBrowser extends JPanel implements MouseListener, FocusListener {
 
     /**
-     * Das Modell das über dieses Tab-Pane dargestellt wird
+     * Das Modell das Ã¼ber dieses Tab-Pane dargestellt wird
      */
     protected GDCollection gdcoll;
 
@@ -51,7 +51,7 @@ public abstract class SubModelsBrowser extends JPanel implements MouseListener, 
     public abstract void addGraphDocument(GraphDocument doc);
 
     /**
-     * Aktualisiert den Titel des Tabs des übergebenen {@link GraphDocument}
+     * Aktualisiert den Titel des Tabs des Ã¼bergebenen {@link GraphDocument}
      * 
      * @param doc
      */

@@ -10,9 +10,9 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
 /**
- * @author fstephan Abstrakte Klasse, deren abgeleitete Instanzen ausführbare Aktionen
- *         repräsentieren. Diese Aktionen können mittels <code>actionPerformed(ActionEvent e)</code>
- *         oder <code>execute(EventObject eo)</code> ausgeführt werden.
+ * @author fstephan Abstrakte Klasse, deren abgeleitete Instanzen ausfÃ¼hrbare Aktionen
+ *         reprÃ¤sentieren. Diese Aktionen kÃ¶nnen mittels <code>actionPerformed(ActionEvent e)</code>
+ *         oder <code>execute(EventObject eo)</code> ausgefÃ¼hrt werden.
  */
 public abstract class LGMAction extends AbstractAction {
 
@@ -45,8 +45,8 @@ public abstract class LGMAction extends AbstractAction {
     }
 
     /**
-     * Methode soll so überschrieben werden, dass sie die auszuführenden Aktionen dieser
-     * <code>LGMAction</code> beinhaltet und auslöst.
+     * Methode soll so Ã¼berschrieben werden, dass sie die auszufÃ¼hrenden Aktionen dieser
+     * <code>LGMAction</code> beinhaltet und auslÃ¶st.
      * 
      * @param eo
      */

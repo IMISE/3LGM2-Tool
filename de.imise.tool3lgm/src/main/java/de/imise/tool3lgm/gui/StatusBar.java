@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 /**
  * Die Statusbar der Anwendung.
- * Hier können nach Belieben bei Ereignissen Informationen ausgegeben werden.
+ * Hier kÃ¶nnen nach Belieben bei Ereignissen Informationen ausgegeben werden.
  * 
  * @author AXS
  */
@@ -47,7 +47,7 @@ public class StatusBar extends JPanel {
         Runtime runtime = Runtime.getRuntime();
 
         /**
-         * Die Speicherwerte des Systems kommen in Bytes zurück. Bei Teilung durch
+         * Die Speicherwerte des Systems kommen in Bytes zurÃ¼ck. Bei Teilung durch
          * diesem Faktor werden daraus Kilobytes.
          */
         long factor = 1024l;
@@ -89,7 +89,7 @@ public class StatusBar extends JPanel {
         private class LabelUpdater extends Thread {
 
             /**
-             * Erzeugt eine neuen Update-Thread mit der niedrigsten Priorität.
+             * Erzeugt eine neuen Update-Thread mit der niedrigsten PrioritÃ¤t.
              */
             public LabelUpdater() {
                 super();

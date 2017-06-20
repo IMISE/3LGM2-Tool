@@ -41,7 +41,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * Panel zur Darstellung und Eingabe von UserFields
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von Knotenelementen separat - die Auswahl der Klasse erfolgt in der enthaltenen
+ * Die Dateneingabe erfolgt fÃ¼r jede Klasse von Knotenelementen separat - die Auswahl der Klasse erfolgt in der enthaltenen
  * <code>elementTypeBox</code>.
  * <p>
  * Wenn es sich um eine Elementklasse mit Tiel-Von-Beziehungen handelt, kann mittels der enthaltenen Auswahlbuttons eine Auswahl der anzuzeigenden
@@ -55,11 +55,11 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  */
 public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUserFieldEditorPanel {
 
-    /** Auswahlbox für den Elementtyp */
+    /** Auswahlbox fÃ¼r den Elementtyp */
     protected AlphabeticalComboBox elementTypeBox;
 
     /**
-     * Rückgabewerte für die Funktion, die prüft, ob eine Elementklasse
+     * RÃ¼ckgabewerte fÃ¼r die Funktion, die prÃ¼ft, ob eine Elementklasse
      * 
      * @author Ich
      * @create 10.11.2015
@@ -84,7 +84,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /**
      * Konstruktor
      * 
-     * @param dialog Dialog, der dieses Panel enthält
+     * @param dialog Dialog, der dieses Panel enthÃ¤lt
      * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
      * @param visibleUserField Style der UserFields, die angezeigt werden sollen
      * @param name Name des Panels
@@ -96,7 +96,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /**
      * Konstruktor
      * 
-     * @param dialog Dialog, der dieses Panel enthält
+     * @param dialog Dialog, der dieses Panel enthÃ¤lt
      * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
      * @param visibleUserFields Styles der UserFields, die angezeigt werden sollen
      * @param name Name des Panels
@@ -145,7 +145,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur die Klassen von Knotenelementen aufgelistet, für die mindestens ein
+     * Methode setzt den Inhalt der <code>elementTypeBox</code> Es werden nur die Klassen von Knotenelementen aufgelistet, fÃ¼r die mindestens ein
      * Kennzahl
      * vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code> definiert ist.
      */
@@ -166,13 +166,13 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 continue;
             }
 
-            // füge elementClass in die elementTypeBox ein
+            // fÃ¼ge elementClass in die elementTypeBox ein
             InsertType insertType = getInsertType(elementClass, definitions);
             if (insertType == NO) {
                 continue;
             }
 
-            // Falls kein Element der Klasse elementClass exisitiert, füge elementClass NICHT ein
+            // Falls kein Element der Klasse elementClass exisitiert, fÃ¼ge elementClass NICHT ein
             if (doc.getModelItems(elementClass).isEmpty()) {
                 continue;
             }
@@ -191,7 +191,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
         }
 
-        // Falls kein Item enthalten ist, wird ein null-Item hinzugefügt, weil es sonst
+        // Falls kein Item enthalten ist, wird ein null-Item hinzugefÃ¼gt, weil es sonst
         // zu inkorrekter Darstellung der elementTypeBox kommt
 
         if (elementTypeBox.getItemCount() == 1) {
@@ -201,10 +201,10 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Prüft, ob mindestens ein <code>UserField</code> der übergebenen <code>elementClass</code> vom Typ Kennzahl ist. Dann wird true zurückggegeben
+     * PrÃ¼ft, ob mindestens ein <code>UserField</code> der Ã¼bergebenen <code>elementClass</code> vom Typ Kennzahl ist. Dann wird true zurÃ¼ckggegeben
      * ansonsten false.
      * 
-     * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprüft werden sollen.
+     * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprÃ¼ft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true; ansonsten
      *         false
@@ -222,8 +222,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>elementTypeBox</code>. Bei Änderung der Auswahl wird das
-     * Neuzeichnen des <code>table</code>s ausgelöst.
+     * Methode setzt die auszufÃ¼hrende Action, bei Ã„nderung der Auswahl in der <code>elementTypeBox</code>. Bei Ã„nderung der Auswahl wird das
+     * Neuzeichnen des <code>table</code>s ausgelÃ¶st.
      */
     protected void setActionsForElementTypeBox() {
         final AbstractUserFieldEditorPanel pane = this;
@@ -276,7 +276,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     @Override
     protected void initSelectFirstItem() {
         //das hier darf man nicht durch hasSelectedItem() ersetzen, weil das in den Unterklassen
-        //überschrieben sein kann
+        //Ã¼berschrieben sein kann
         if (!(elementTypeBox.getSelectedObject() instanceof Class)) {
             //das erste Item ist entweder das Dummy-LeerItem oder eine Elemnent-Klasse
             elementTypeBox.setSelectedIndex(1);
@@ -298,7 +298,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
         AbstractUserFieldTableModel uftm = getTableModel();
 
-        //falls SubClasses andere Controller brauchen, müssen sie die getTableController überschreiben
+        //falls SubClasses andere Controller brauchen, mÃ¼ssen sie die getTableController Ã¼berschreiben
         UserFieldTableController uftc = getTableController(uftm);
 
         super.modifyTable(uftm, uftc);
@@ -333,7 +333,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             }
         }
         uftm.dataChanged(false);
-        //Das reset durchführen kann auch ganz auf das Ende verlegt werden
+        //Das reset durchfÃ¼hren kann auch ganz auf das Ende verlegt werden
         definitions.initReset();
     }
 
@@ -342,7 +342,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /* ************************* Beginn: get/set - Methoden *********************************** */
 
     /**
-     * Gibt die <code>elementTypeBox</code> zurück
+     * Gibt die <code>elementTypeBox</code> zurÃ¼ck
      * 
      * @return <code>elementTypeBox</code>
      */
@@ -355,11 +355,11 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /* ************************* Beginn: Unterklassen *********************************** */
 
     /**
-     * Panel zur Auswahl der anzuzeigenden Element-Typen: <li>Top-Level <li>Innere <li>Blätter
+     * Panel zur Auswahl der anzuzeigenden Element-Typen: <li>Top-Level <li>Innere <li>BlÃ¤tter
      */
     protected class ElementTypePane extends JPanel {
 
-        // CheckBoxes für die Auswahl der anzuzeigenden Elemente
+        // CheckBoxes fÃ¼r die Auswahl der anzuzeigenden Elemente
         private final JCheckBox topLevel;
         private final JCheckBox inner;
         private final JCheckBox leafs;
@@ -377,8 +377,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         }
 
         /**
-         * Gibt die auzuführenden Aktionen für die CheckBoxes wieder. Bei Änderung der Selektion werden Änderungen temporär übernommen und das
-         * Neuzeichnen des Tables ausgelöst.
+         * Gibt die auzufÃ¼hrenden Aktionen fÃ¼r die CheckBoxes wieder. Bei Ã„nderung der Selektion werden Ã„nderungen temporÃ¤r Ã¼bernommen und das
+         * Neuzeichnen des Tables ausgelÃ¶st.
          * 
          * @param panel
          * @param buttonLabel
@@ -392,9 +392,9 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                     if (box.getSelectedObject() == null || !(box.getSelectedObject() instanceof Class)) {
                         return;
                     }
-                    // Beenden des editierens, damit auch aktueller Wert übernommen wird
+                    // Beenden des editierens, damit auch aktueller Wert Ã¼bernommen wird
                     stopEditing();
-                    // Änderungen werden übernommen
+                    // Ã„nderungen werden Ã¼bernommen
                     takeOver();
                     // Aktualisieren des Tables
                     drawTable();
@@ -403,17 +403,17 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             };
         }
 
-        /** Gibt zurück, ob {@link #topLevel} selektiert ist */
+        /** Gibt zurÃ¼ck, ob {@link #topLevel} selektiert ist */
         public boolean showTopLevel() {
             return topLevel.isSelected();
         }
 
-        /** Gibt zurück, ob {@link #leafs} selektiert ist */
+        /** Gibt zurÃ¼ck, ob {@link #leafs} selektiert ist */
         public boolean showLeafs() {
             return leafs.isSelected();
         }
 
-        /** Gibt zurück, ob {@link #inner} selektiert ist */
+        /** Gibt zurÃ¼ck, ob {@link #inner} selektiert ist */
         public boolean showInner() {
             return inner.isSelected();
         }

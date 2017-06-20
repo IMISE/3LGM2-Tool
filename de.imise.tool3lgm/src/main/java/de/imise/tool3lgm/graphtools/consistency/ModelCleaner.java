@@ -65,7 +65,7 @@ public class ModelCleaner {
     }
 
     /**
-     * Führt allgemeine Konsitenz-Bereinigungen auf der gesetzten Collection aus
+     * FÃ¼hrt allgemeine Konsitenz-Bereinigungen auf der gesetzten Collection aus
      */
     public void cleanModel() {
         if (gdcoll == null) {
@@ -82,7 +82,7 @@ public class ModelCleaner {
 
         // Bei allen Elementen den ContainerTable mit den LayerContainern synchronisieren
         // Es kann vorkommen, dass einige Kanten einen Container auf den Layern im Hauptmodell und
-        // einem Teilmodell haben, aber in ihrem ContainerTable nur ein Container für das Hauptmodell
+        // einem Teilmodell haben, aber in ihrem ContainerTable nur ein Container fÃ¼r das Hauptmodell
         // eingetragen ist, der aber eigentlich der Container aus dem Teilmodell ist. Das ist absoluter
         // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
@@ -90,10 +90,10 @@ public class ModelCleaner {
                 ArrayList<ElementContainer> allEc = new ArrayList<ElementContainer>(lc.getKnoten());
                 allEc.addAll(lc.getKanten());
                 allEc.addAll(lc.getKnickpunkte());
-                // für alle Container des aktuellen GraphDocuments
+                // fÃ¼r alle Container des aktuellen GraphDocuments
                 for (ElementContainer layerElemCont : allEc) {
                     ModelElement layerElemMe = layerElemCont.getElement();
-                    // wenn der Container aus dem ContainerTable des Modellelements für das doc ein
+                    // wenn der Container aus dem ContainerTable des Modellelements fÃ¼r das doc ein
                     // anderer ist als der auf dem Layer des docs
                     if (layerElemMe.getContainer(doc) != layerElemCont) {
                         if (PRINT_ERRORS) {
@@ -112,8 +112,8 @@ public class ModelCleaner {
                             }
                             layerElemCont.clone(false, mainDoc);
                         }
-                        // falls das Element unique ist, aber aus irgendwelchen Gründen auch in
-                        // einem Teilmodell einen Container hat -> im Teilmodell löschen
+                        // falls das Element unique ist, aber aus irgendwelchen GrÃ¼nden auch in
+                        // einem Teilmodell einen Container hat -> im Teilmodell lÃ¶schen
                         // (dieser Fehler sollte eigentlich unkritisch sein und trat im
                         // UKL-KIS-Modell bei PdvbPdvbkVerbindung, OrgAufOrgVerbindung,
                         // PdvbStoVerbindung, PdvbBtypVerbindung und DbsDatVerbindung auf)
@@ -131,16 +131,16 @@ public class ModelCleaner {
 
         // Jetzt ist sicher gestellt, dass alle Container, die bei den Layern eingetragen sind auch
         // bei allen Elementen eingetragen sind.
-        // Nun für alle Modellelemente alle ihre Container überprüfen, ob es diese überhaupt geben
+        // Nun fÃ¼r alle Modellelemente alle ihre Container Ã¼berprÃ¼fen, ob es diese Ã¼berhaupt geben
         // darf und wenn ja, ob sie auch korrekt auf den Layern eingetragen sind.
         // Dieser Fehler trat bisher noch nicht auf, aber es ist besser, das noch einmal explizit
         // sicher zu stellen!
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
             for (GraphDocument doc : me.getContainerTable().keySet()) {
-                // Unique Elemente dürfen keinen Container außerhalb des Hauptmodells haben
+                // Unique Elemente dÃ¼rfen keinen Container auÃŸerhalb des Hauptmodells haben
                 if (me.isUnique() && doc instanceof Szenario) {
                     me.removeContainer(doc);
-                    // prüfen, ob alle Container im ContainerTable des Elements auch auf dem Layer liegen
+                    // prÃ¼fen, ob alle Container im ContainerTable des Elements auch auf dem Layer liegen
                 } else {
                     ElementContainer ec = me.getContainer(doc);
                     LayerContainer lc = doc.getLayer(me.layerFor());
@@ -170,12 +170,12 @@ public class ModelCleaner {
             }
         }
 
-        // Alle ABKonfigurationen löschen, die keiner AufOrgKombination zugeordnet sind. Davon gibt
+        // Alle ABKonfigurationen lÃ¶schen, die keiner AufOrgKombination zugeordnet sind. Davon gibt
         // es in alten Modellen aus irgend einem Grund sehr viele removeInconsistentElements(gdcoll,
         // ABKonfiguration.class, AufOrgKombination.class, null);
 
         int pid = TransactionManager.STANDARD_PID;
-        // Alle Knickpunkte löschen, die keiner Kante zugeordnet sind. So etwas trat in alten Modellen
+        // Alle Knickpunkte lÃ¶schen, die keiner Kante zugeordnet sind. So etwas trat in alten Modellen
         // auf und sollte gleich am Anfang ausgeschlossen werden
         ArrayList<ElementContainer> al = new ArrayList<ElementContainer>();
         for (Szenario szen : gdcoll.getSzenarios()) {
@@ -184,7 +184,7 @@ public class ModelCleaner {
                 Knickpunkt kp = bpc.getKnickpunktKnoten();
                 EdgeContainer ec = kp.getOwner();
                 // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
-                // KnickpunktContainerListe seines Owners steht -> löschen
+                // KnickpunktContainerListe seines Owners steht -> lÃ¶schen
                 if (ec == null) {
                     // System.err.println("nullllll");
                     // System.err.println(gdcoll.getSzenario(i));
@@ -199,9 +199,9 @@ public class ModelCleaner {
         }
 
         for (ElementContainer kpc2delete : al) {
-            //da die hier zu löschenden Knickpunkte keinen Owner haben, muss man sie einfach aus
-            //all ihren GraphDocuments löschen. Da nicht sicher ist, ob layerFor() des Bendpoints
-            //den richtigen Layer zurück liefert -> einfach auf allen Layern löschen (wo sie nicht
+            //da die hier zu lÃ¶schenden Knickpunkte keinen Owner haben, muss man sie einfach aus
+            //all ihren GraphDocuments lÃ¶schen. Da nicht sicher ist, ob layerFor() des Bendpoints
+            //den richtigen Layer zurÃ¼ck liefert -> einfach auf allen Layern lÃ¶schen (wo sie nicht
             //enthalten sind, passiert einfach nichts)
             ModelElement bendpoint = kpc2delete.getElement();
             for (GraphDocument doc : bendpoint.getMySzenarios()) {
@@ -211,33 +211,33 @@ public class ModelCleaner {
             }
         }
 
-        // Alle inkonsistenten Kanten löschen = alle Kanten, denen Start- oder Endelement fehlen
+        // Alle inkonsistenten Kanten lÃ¶schen = alle Kanten, denen Start- oder Endelement fehlen
         // oder die dieselben Elemente mehrfach verbinden, obwohl sie nur 1 mal verbunden sein sollten
         ArrayList<ModelElement> edges = mainDoc.getModelItems(Kante.class, true);
         for (int i = 0; i < edges.size(); i++) {
             Kante edge = (Kante) edges.get(i);
-            // Kanten mit fehlendem Start- und Endelement löschen
+            // Kanten mit fehlendem Start- und Endelement lÃ¶schen
             if (edge.getStart() == null || edge.getEnd() == null) {
                 gdcoll.deleteElement(edge, mainDoc, pid);
                 continue;
             }
-            // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
-            // (alle bis auf eine löschen)
+            // Kanten lÃ¶schen, die nicht mehrfach vorkommen dÃ¼rfen, aber mehrfach vorkommen
+            // (alle bis auf eine lÃ¶schen)
             if (ModelConstants.isMultipleEdgeClass(edge.getClass())) {
                 continue;
             }
             for (Kante edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {
                 if (edge != edge2) {
                     gdcoll.deleteElement(edge2, mainDoc, pid);
-                    // edge2 befindet sich auf jeden Fall hinter edge in der Liste edges, sonst wäre
-                    // vorher edge2 schon mal edge gewesen und edge wäre dann edge2 gewesen. ALso kann
+                    // edge2 befindet sich auf jeden Fall hinter edge in der Liste edges, sonst wÃ¤re
+                    // vorher edge2 schon mal edge gewesen und edge wÃ¤re dann edge2 gewesen. ALso kann
                     // man edge2 einfach hinten aus der Liste entfernen.
                     edges.remove(edge2);
                 }
             }
         }
 
-        // Alle Knoten- und KantenContainer löschen, bei denen das zugehörige ModelElement null ist
+        // Alle Knoten- und KantenContainer lÃ¶schen, bei denen das zugehÃ¶rige ModelElement null ist
         for (Szenario szen : gdcoll.getSzenarios()) {
             for (int i = 0; i < Integer.MAX_VALUE; i++) {
                 LayerContainer lc = szen.getLayer(i);
@@ -261,10 +261,10 @@ public class ModelCleaner {
             }
         }
 
-        // die ganzen irgendwann beim Zusammenführen mal sinnlos reingekommenen LeerZeichen und
-        // Leeerzeilen sowie das "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" löschen
+        // die ganzen irgendwann beim ZusammenfÃ¼hren mal sinnlos reingekommenen LeerZeichen und
+        // Leeerzeilen sowie das "-ZUSAMMENGEFÃœHRT-" oder "-JOINED-" lÃ¶schen
         final String[] superflousStrings = {
-                "-ZUSAMMENGEFÜHRT-",
+                "-ZUSAMMENGEFÃœHRT-",
                 "-JOINED-"
         };
         for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(ModelElement.class, true)) {
@@ -272,8 +272,8 @@ public class ModelCleaner {
             me.setName(getCleanString(me.getName(), Tool3lgmConstants.getResString("joined"), superflousStrings));
             me.setDescription(getCleanString(me.getDescription(), Tool3lgmConstants.getResString("joined"), superflousStrings));
 
-            // alle Radiobuttons, Comboboxes und Kennzahlen, die beim Zusammenführen irgendwelche
-            // komischen Werte zusammengeführt bekommen haben, wieder berichtigen
+            // alle Radiobuttons, Comboboxes und Kennzahlen, die beim ZusammenfÃ¼hren irgendwelche
+            // komischen Werte zusammengefÃ¼hrt bekommen haben, wieder berichtigen
             for (UserField uf : new ArrayList<UserField>(me.getUserFieldInputValueKeys())) {
                 if (uf == null) {
                     continue;
@@ -292,7 +292,7 @@ public class ModelCleaner {
             UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
             for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
                 for (UserField uf : definitions.getUserFields(elementClass)) {
-                    // eigentlich haben Checkboxen keine Listenwerte, da sie nur true oder false für
+                    // eigentlich haben Checkboxen keine Listenwerte, da sie nur true oder false fÃ¼r
                     // eine einzelne Box darsellen, aber falls aus der einzelnen Checkbox mal eine
                     // ButtonGroup mit mehreren Checkboxes gemacht wird, haut das hier gleich hin.
                     if (uf.getStyle() != Style.RADIO_BUTTON && uf.getStyle() != Style.COMBO_BOX || uf.getStyle() == Style.CHECK_BOX) {
@@ -351,73 +351,73 @@ public class ModelCleaner {
     }
 
     /**
-     * Entfernt in dem übergebenen String alle überflüssigen Leerzeichen am Anfang und Ende und
-     * löscht entfernt alle "-ZUSAMMENGEFÜHRT-" Eintragungen, die im Grunde dieselben String
-     * trennen. Wenn dieselben Informationen mehrfach durch "-ZUSAMMENGEFÜHRT-" getrennt im
-     * übergebenen String stehen, dann kommt die Information nur noch einmal zurück. Wenn
-     * verschiedene String durch "-ZUSAMMENGEFÜHRT-" getrennt im Ausgangstring stehen, dann kommt
-     * der Ausgangstring zurück. (also das "-ZUSAMMENGEFÜHRT-" bleibt erhalten) @ param sourceString
+     * Entfernt in dem Ã¼bergebenen String alle Ã¼berflÃ¼ssigen Leerzeichen am Anfang und Ende und
+     * lÃ¶scht entfernt alle "-ZUSAMMENGEFÃœHRT-" Eintragungen, die im Grunde dieselben String
+     * trennen. Wenn dieselben Informationen mehrfach durch "-ZUSAMMENGEFÃœHRT-" getrennt im
+     * Ã¼bergebenen String stehen, dann kommt die Information nur noch einmal zurÃ¼ck. Wenn
+     * verschiedene String durch "-ZUSAMMENGEFÃœHRT-" getrennt im Ausgangstring stehen, dann kommt
+     * der Ausgangstring zurÃ¼ck. (also das "-ZUSAMMENGEFÃœHRT-" bleibt erhalten) @ param sourceString
      * String der bereinigt werden soll
      *
-     * @param newDelimiter Yeichenkette, die als neuer Trenner im Rückgabestring eingebaut werden
+     * @param newDelimiter Yeichenkette, die als neuer Trenner im RÃ¼ckgabestring eingebaut werden
      *            soll, wenn 2 verschiedene Zeichenketten duruch einen der 'alten' Delimiter aus
      *            delimiter getrennt waren
      * @param delimiter Strings, die eventuell identische Tokens untereinander Aufteilen. Beim
-     *            Zusammenführen von Elementen besteht der Name evtl 2 Mal aus derselben
-     *            Zeichenkette, die durch "-ZUSAMMENGEFÜHRT-" voneinander getrennt sind.
+     *            ZusammenfÃ¼hren von Elementen besteht der Name evtl 2 Mal aus derselben
+     *            Zeichenkette, die durch "-ZUSAMMENGEFÃœHRT-" voneinander getrennt sind.
      * @return
      */
     public static final String getCleanString(String sourceString, final String newDelimiter, final String... delimiter) {
-        // alle Leerzeichen und Zeilenumbrüche am Anfang und Ende entfernen
+        // alle Leerzeichen und ZeilenumbrÃ¼che am Anfang und Ende entfernen
         sourceString = sourceString.trim();
-        // Liste mit allen Tokens des Ausgangsstring, die durch "-ZUSAMMENGEFÜHRT-" voneinander
+        // Liste mit allen Tokens des Ausgangsstring, die durch "-ZUSAMMENGEFÃœHRT-" voneinander
         // getrennt im Ausgangsstring stehen
         ArrayList<String> subStringList = new ArrayList<String>();
         // ArrayList<String> subStringDelimiterStringList = new ArrayList<String>();
 
-        // Index, ab dem nach dem nächsten Auftreten von "-ZUSAMMENGEFÜHRT-" gesucht wird
+        // Index, ab dem nach dem nÃ¤chsten Auftreten von "-ZUSAMMENGEFÃœHRT-" gesucht wird
         int startIndex = 0;
-        // Gesamtlänge des Ausgangsstrings
+        // GesamtlÃ¤nge des Ausgangsstrings
         int length = sourceString.length();
-        // man muss immer nach dem deutschen "-ZUSAMMENGEFÜHRT-" und dem englischen "-JOINED-"
+        // man muss immer nach dem deutschen "-ZUSAMMENGEFÃœHRT-" und dem englischen "-JOINED-"
         // suchen
         loop: for (int superflousStringIndex = 0; superflousStringIndex < delimiter.length; superflousStringIndex++) {
-            // Index an dem "-ZUSAMMENGEFÜHRT-" ab dem Startindex im Ausgangsstring auftaucht
+            // Index an dem "-ZUSAMMENGEFÃœHRT-" ab dem Startindex im Ausgangsstring auftaucht
             int endIndex = sourceString.indexOf(delimiter[superflousStringIndex], startIndex);
-            // wenn "-ZUSAMMENGEFÜHRT-" im String stand
+            // wenn "-ZUSAMMENGEFÃœHRT-" im String stand
             if (endIndex != -1) {
                 // wenn davor wenigstens ein Inhaltszeichen stand
                 if (startIndex < endIndex) {
                     // merke den aktuellen TeilString zwischen startIndex und dem Beginn von
-                    // "-ZUSAMMENGEFÜHRT-" in der Tokenliste
+                    // "-ZUSAMMENGEFÃœHRT-" in der Tokenliste
                     subStringList.add(sourceString.substring(startIndex, endIndex).trim());
                     // subStringDelimiterStringList.add(superflousStrings[superflousStringIndex]);
                 }
-                // Startindex auf den Index nach dem aktuellen "-ZUSAMMENGEFÜHRT-" erhöhen
+                // Startindex auf den Index nach dem aktuellen "-ZUSAMMENGEFÃœHRT-" erhÃ¶hen
                 startIndex = endIndex + delimiter[superflousStringIndex].length();
-                // ab da wieder nach dem Auftreten von "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" suchen
-                // (solange ein "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" gefunden wurde, wiederholt er
+                // ab da wieder nach dem Auftreten von "-ZUSAMMENGEFÃœHRT-" oder "-JOINED-" suchen
+                // (solange ein "-ZUSAMMENGEFÃœHRT-" oder "-JOINED-" gefunden wurde, wiederholt er
                 // diese for -Schleife immer mit aktuellen Zeichenindex im Ausgangsstring)
                 superflousStringIndex = -1;
                 continue loop;
             }
         }
-        // Wenn kein "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" (mehr) gefunden wurde
+        // Wenn kein "-ZUSAMMENGEFÃœHRT-" oder "-JOINED-" (mehr) gefunden wurde
         if (startIndex < length) {
             // speichere den letzten (und evtl. einzigen) Token in der Tokenliste und trimme ihn
             subStringList.add(sourceString.substring(startIndex).trim());
         }
 
-        // Wenn der String nur aus Zeichen bestanden hat, die beim trim() gelöscht werden oder
-        // nur aus "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" und ansonsten wegtrimbaren Zeichen, dann
-        // ist die Tokenliste leer -> Leeren String zurückgeben
+        // Wenn der String nur aus Zeichen bestanden hat, die beim trim() gelÃ¶scht werden oder
+        // nur aus "-ZUSAMMENGEFÃœHRT-" oder "-JOINED-" und ansonsten wegtrimbaren Zeichen, dann
+        // ist die Tokenliste leer -> Leeren String zurÃ¼ckgeben
         if (subStringList.size() == 0) {
             return "";
         }
-        // Der Ausgangsstring hatte gar kein "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" in sich oder diese
+        // Der Ausgangsstring hatte gar kein "-ZUSAMMENGEFÃœHRT-" oder "-JOINED-" in sich oder diese
         // Zeichenketten standen ganz am Anfang oder ganz hinten
         if (subStringList.size() == 1) {
-            // gib den einzigen vorhandenen Token zurück
+            // gib den einzigen vorhandenen Token zurÃ¼ck
             return subStringList.get(0);
         }
 
@@ -429,21 +429,21 @@ public class ModelCleaner {
             String firstToken = subStringList.get(i);
             for (int j = i + 1; j < subStringList.size(); j++) {
                 String nextToken = subStringList.get(j);
-                // wenn der aktuelle Token einen darausfolgenden Token enthält
+                // wenn der aktuelle Token einen darausfolgenden Token enthÃ¤lt
                 if (firstToken.indexOf(nextToken) != -1) {
-                    // lösche den darauffolgenden Token aus der Liste und weiter
+                    // lÃ¶sche den darauffolgenden Token aus der Liste und weiter
                     subStringList.remove(j--);
                     continue;
                 }
                 // wenn ein Folgetoken den aktuellen Token en
                 if (nextToken.indexOf(firstToken) != -1) {
-                    // lösche den aktuellen Token aus der Liste und weiter
+                    // lÃ¶sche den aktuellen Token aus der Liste und weiter
                     subStringList.remove(i--);
                     continue loop;
                 }
             }
-            // der aktuelle Token muss dem RückgabeString angefügt werden, wenn davor schon was
-            // steht, dann wieder das "-ZUSAMMENGEFÜHRT-" dazwischen schreiben
+            // der aktuelle Token muss dem RÃ¼ckgabeString angefÃ¼gt werden, wenn davor schon was
+            // steht, dann wieder das "-ZUSAMMENGEFÃœHRT-" dazwischen schreiben
             if (sb.length() > 0) {
                 sb.append("\n\n-");
                 sb.append(newDelimiter);
@@ -461,7 +461,7 @@ public class ModelCleaner {
     // TODO:AXS:showResultDialog wird in den folgenden Funktionen gar nicht beachtet
 
     /**
-     * Löscht alle inkonsitenten Anwendungsbaustein-Konfigurationen aus dem Gesamtmodell.<br>
+     * LÃ¶scht alle inkonsitenten Anwendungsbaustein-Konfigurationen aus dem Gesamtmodell.<br>
      * Inkonsitente Anwendungsbaustein-Konfigurationen sind mit keinem Anwendungsbaustein verbunden.
      *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
@@ -478,7 +478,7 @@ public class ModelCleaner {
     }
 
     /**
-     * Löscht alle <code>AufOrgKombination</code>en, die mit keiner <code>Aufgabe</code> oder keiner <code>Organisationseinheit</code> verbunden sind.
+     * LÃ¶scht alle <code>AufOrgKombination</code>en, die mit keiner <code>Aufgabe</code> oder keiner <code>Organisationseinheit</code> verbunden sind.
      *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
      */
@@ -487,7 +487,7 @@ public class ModelCleaner {
     }
 
     /**
-     * Löscht alle inkonsitenten Physischen Datenverarbeitungsbaustein-Konfigurationen aus dem
+     * LÃ¶scht alle inkonsitenten Physischen Datenverarbeitungsbaustein-Konfigurationen aus dem
      * Gesamtmodell.<br>
      * Inkonsitente Physischen Datenverarbeitungsbaustein-Konfigurationen sind mit keinem physischen
      * Datenverarbeitungsbaustein verbunden.
@@ -499,11 +499,11 @@ public class ModelCleaner {
     }
 
     // //////////////////////////////////////////////////////////////////////////////////////////////
-    // Konfigurationen von Aufgaben umhängen (hat eigentlich nichts mit dem Model cleanen zu tun) //
+    // Konfigurationen von Aufgaben umhÃ¤ngen (hat eigentlich nichts mit dem Model cleanen zu tun) //
     // //////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen <code>ABKonfiguration</code>en und AWB. Die
+     * HÃ¤ngt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen <code>ABKonfiguration</code>en und AWB. Die
      * <code>AufOrgKombination</code> und die <code>ABKonfiguration</code>en werden neu angelegt mit allen Assoziationen, die sie zu
      * anderen Elementen haben.
      *
@@ -514,7 +514,7 @@ public class ModelCleaner {
     private static final void cloneConfig(final GDCollection gdcoll, final Aufgabe auf, final AufOrgKombination aufOrg, final int transactionID) {
         // eine neue AufOrgKombi anlegen, diese mit der Aufgabe verbinden und Name und Beschreibung
         // der alten AufOrgKombi
-        // für die neue übernehmen
+        // fÃ¼r die neue Ã¼bernehmen
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
 
         mainDoc.createKnotenWithContainer(AufOrgKombination.class, aufOrg.getName(), aufOrg.getDescription(), transactionID);
@@ -522,7 +522,7 @@ public class ModelCleaner {
         gdcoll.link(AufAufOrgVerbindung.class, auf, newAufOrg, transactionID);
         newAufOrg.setDescription(aufOrg.getDescription());
 
-        // für alle Kanten der aktuellen AufOrgKombination
+        // fÃ¼r alle Kanten der aktuellen AufOrgKombination
         for (Kante kante : aufOrg.getEdges()) {
             // bestimme das Element, mit dem die aktuelle AufOrgKombination verbunden ist
             ModelElement elemToConnect;
@@ -531,14 +531,14 @@ public class ModelCleaner {
             } else {
                 elemToConnect = kante.getStart();
             }
-            // wenn das verbundene Element eine AWB-Konfiguration ist, muss diese auch für
+            // wenn das verbundene Element eine AWB-Konfiguration ist, muss diese auch fÃ¼r
             // jeden AWB neu angelegt werden
             if (elemToConnect instanceof ABKonfiguration) {
                 mainDoc.createKnotenWithContainer(ABKonfiguration.class, elemToConnect.getName(), elemToConnect.getDescription(), transactionID);
                 ModelElement newKonfig = mainDoc.getLastCreated().getElement();
                 gdcoll.link(AwbkAufOrgVerbindung.class, newAufOrg, newKonfig, transactionID);
                 newKonfig.setDescription(elemToConnect.getDescription());
-                // Alle Verbindungen der Konfiguration auch klonen (außer die zur Originalen
+                // Alle Verbindungen der Konfiguration auch klonen (auÃŸer die zur Originalen
                 // AufOrgKombination)
                 for (Kante edge : elemToConnect.getEdges()) {
                     if (!(edge instanceof AwbkAufOrgVerbindung)) {
@@ -561,7 +561,7 @@ public class ModelCleaner {
     }
 
     // /**
-    // * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen
+    // * HÃ¤ngt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen
     // <code>ABKonfiguration</code>en
     // * und AWB. Die <code>AufOrgKombination</code> und die <code>ABKonfiguration</code>en werden
     // neu
@@ -574,13 +574,13 @@ public class ModelCleaner {
     // aufOrg, int transactionID) {
     // //eine neue AufOrgKombi anlegen, diese mit der Aufgabe verbinden und Name und Beschreibung
     // der alten AufOrgKombi
-    // //für die neue übernehmen
+    // //fÃ¼r die neue Ã¼bernehmen
     // ModelElement newAufOrg = gdcoll.createKnotenWithContainer(AufOrgKombination.class,
     // aufOrg.getName(), transactionID).getElement();
     // gdcoll.link(AufAufOrgVerbindung.class, auf, newAufOrg, transactionID);
     // newAufOrg.setDescription(aufOrg.getDescription());
     //
-    // //für alle Kanten der aktuellen AufOrgKombination
+    // //fÃ¼r alle Kanten der aktuellen AufOrgKombination
     // for (Kante kante : aufOrg.getEdges()) {
     // //bestimme das Element, mit dem die aktuelle AufOrgKombination verbunden ist
     // ModelElement elemToConnect;
@@ -588,14 +588,14 @@ public class ModelCleaner {
     // elemToConnect = kante.getEnd();
     // else
     // elemToConnect = kante.getStart();
-    // //wenn das verbundene Element eine AWB-Konfiguration ist, muss diese auch für
+    // //wenn das verbundene Element eine AWB-Konfiguration ist, muss diese auch fÃ¼r
     // //jeden AWB neu angelegt werden
     // if (elemToConnect instanceof ABKonfiguration) {
     // ModelElement newKonfig = gdcoll.createKnotenWithContainer(ABKonfiguration.class,
     // elemToConnect.getName(), transactionID).getElement();
     // gdcoll.link(AwbkAufOrgVerbindung.class, newAufOrg, newKonfig, transactionID);
     // newKonfig.setDescription(elemToConnect.getDescription());
-    // //Alle Verbindungen der Konfiguration auch klonen (außer die zur Originalen
+    // //Alle Verbindungen der Konfiguration auch klonen (auÃŸer die zur Originalen
     // AufOrgKombination)
     // for (Kante edge : elemToConnect.getEdges()) {
     // if (!(edge instanceof AwbkAufOrgVerbindung)) {
@@ -617,7 +617,7 @@ public class ModelCleaner {
     // }
 
     /**
-     * Prüft, ob die übergebene <code>Aufgabe</code> Konfigurationen besitzt, die sie an vorhandene
+     * PrÃ¼ft, ob die Ã¼bergebene <code>Aufgabe</code> Konfigurationen besitzt, die sie an vorhandene
      * Teilaufgaben weitergeben kann.
      *
      * @param auf
@@ -626,12 +626,12 @@ public class ModelCleaner {
     public boolean hasCloneableConfigs(final Aufgabe auf) {
         // hole alle AufOrgKombinationen der Aufgabe
         ArrayList<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
-        // wenn die Aufgabe nichts zu vererben hat -> nächste Aufgabe
+        // wenn die Aufgabe nichts zu vererben hat -> nÃ¤chste Aufgabe
         if (aufOrgs.size() == 0) {
             return false;
         }
         // hole alle Blattaufgaben, die der aktuellen Aufgabe untergeordnet sind
-        // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nächste Aufgabe
+        // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nÃ¤chste Aufgabe
         ArrayList<ElementContainer> absParts = auf.getAbsolutePartContainer(gdcoll.getMainGraphDocument());
         if (absParts.size() == 0) {
             return false;
@@ -653,8 +653,8 @@ public class ModelCleaner {
     }
 
     /**
-     * Gibt alle Konfigurationen der übergebenen Aufgabe an ihre Teilaufgaben weiter.<br>
-     * Im Einzelnen werden für jede Teilaufgabe alle Konfigurationen mit allen
+     * Gibt alle Konfigurationen der Ã¼bergebenen Aufgabe an ihre Teilaufgaben weiter.<br>
+     * Im Einzelnen werden fÃ¼r jede Teilaufgabe alle Konfigurationen mit allen
      *
      * @param auf
      * @param transactionId
@@ -662,7 +662,7 @@ public class ModelCleaner {
     private boolean cloneConfigsToParts(final Aufgabe auf, final int transactionId) {
         // hole alle AufOrgKombinationen der Aufgabe
         ArrayList<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
-        // wenn die Aufgabe nichts zu vererben hat -> nächste Aufgabe
+        // wenn die Aufgabe nichts zu vererben hat -> nÃ¤chste Aufgabe
         if (aufOrgs.size() == 0) {
             return false;
         }
@@ -670,22 +670,22 @@ public class ModelCleaner {
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
 
         // hole alle Blattaufgaben, die der aktuellen Aufgabe untergeordnet sind
-        // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nächste Aufgabe
+        // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nÃ¤chste Aufgabe
         ArrayList<ElementContainer> absParts = auf.getAbsolutePartContainer(mainDoc);
         if (absParts.size() == 0) {
             return false;
         }
-        // für alle absoluten Teilaufgaben
+        // fÃ¼r alle absoluten Teilaufgaben
         for (Iterator<ElementContainer> absPartsIt = absParts.iterator(); absPartsIt.hasNext();) {
             Aufgabe aufPart = (Aufgabe) absPartsIt.next().getElement();
-            // für alle AufOrgKombinationen, die für jede Teilaufgabe neu angelegt werden muss
+            // fÃ¼r alle AufOrgKombinationen, die fÃ¼r jede Teilaufgabe neu angelegt werden muss
             for (Iterator<ModelElement> aufOrgsIt = aufOrgs.iterator(); aufOrgsIt.hasNext();) {
                 AufOrgKombination aufOrg = (AufOrgKombination) aufOrgsIt.next();
                 // alle AufOrgKombinationen und ihre Konfigurationen klonen
                 cloneConfig(gdcoll, aufPart, aufOrg, transactionId);
             }
         }
-        // jetzt die originale AufOrgKombination und alle ihre Konfigurationen löschen
+        // jetzt die originale AufOrgKombination und alle ihre Konfigurationen lÃ¶schen
         for (Iterator<ModelElement> aufOrgsIt = aufOrgs.iterator(); aufOrgsIt.hasNext();) {
             AufOrgKombination aufOrg = (AufOrgKombination) aufOrgsIt.next();
             ArrayList<ModelElement> abKonfigs = aufOrg.getConnectedElements(ABKonfiguration.class);
@@ -702,7 +702,7 @@ public class ModelCleaner {
     }
 
     /**
-     * Klont von Aufgaben sämtliche AufOrgKombinationen mit sämtlichen AWB-Konfigurationen an die
+     * Klont von Aufgaben sÃ¤mtliche AufOrgKombinationen mit sÃ¤mtlichen AWB-Konfigurationen an die
      * Teilaufgaben und entfernt die Originale von der Oberaufgabe.
      *
      * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
@@ -717,7 +717,7 @@ public class ModelCleaner {
 
         // alle Aufgaben holen
         ArrayList<ModelElement> aufgaben = mainDoc.getModelItems(Aufgabe.class);
-        // für jede Aufgabe
+        // fÃ¼r jede Aufgabe
         for (Iterator<ModelElement> aufIt = aufgaben.iterator(); aufIt.hasNext();) {
             Aufgabe auf = (Aufgabe) aufIt.next();
             if (hasCloneableConfigs(auf)) {
@@ -730,7 +730,7 @@ public class ModelCleaner {
         mainDoc.finish_transaction(transactionId, false);
         mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, transactionId);
         if (showResultDialog) {
-            String resultString = "Es wurde von " + aufCount + " Aufgaben Konfigurationen an Teilaufgaben übertragen.";
+            String resultString = "Es wurde von " + aufCount + " Aufgaben Konfigurationen an Teilaufgaben Ã¼bertragen.";
             JOptionPane.showMessageDialog(Static.getMainFrame(), resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -757,12 +757,12 @@ public class ModelCleaner {
     }
 
     /**
-     * Löscht alle Elemente der Art <code>searchType</code> aus dem Modell <code>doc</code>, das
+     * LÃ¶scht alle Elemente der Art <code>searchType</code> aus dem Modell <code>doc</code>, das
      * keine Verbindung zu einem der in <code>connectedTypes</code> angegebenen Elementarten
      * besitzt.<br>
      * Das Ergebnis wird ausgegeben, wenn ein nicht leerer <code>resultStringKey</code> angegeben
-     * wird, der aus den Resourcen einen String lädt, wlcher beschreibt, was gelöscht wurde. Die
-     * Anzahl der gelöschten Elemente wird diesem String in der Ausgabe vorangestellt.
+     * wird, der aus den Resourcen einen String lÃ¤dt, wlcher beschreibt, was gelÃ¶scht wurde. Die
+     * Anzahl der gelÃ¶schten Elemente wird diesem String in der Ausgabe vorangestellt.
      *
      * @param doc
      * @param searchElementClass
@@ -793,13 +793,13 @@ public class ModelCleaner {
      * @param doc Modell in dem gesucht wird
      * @param searchElementClass Art der Elemente, die gesucht werden sollen
      * @param connectedTypes Arten der Elemente, mit denen die gesuchten Elemente nicht verbunden
-     *            sein dürfen
+     *            sein dÃ¼rfen
      * @return Liste aller gefundenen Elemente
      */
     private static HashSet<ModelElement> getNotConnected(final GraphDocument doc, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement>[] connectedElementClasses) {
         ArrayList<ModelElement> searchElems = doc.getModelItems(searchElementClass, true);
         HashSet<ModelElement> returnList = new HashSet<ModelElement>();
-        // zählt die Anzahl der zu zu löschenden Konfigurationen
+        // zÃ¤hlt die Anzahl der zu zu lÃ¶schenden Konfigurationen
         for (ModelElement elem : searchElems) {
             ArrayList<ModelElement> connectedElems = elem.getConnectedElements(connectedElementClasses[0]);
             for (int i = 1; i < connectedElementClasses.length && connectedElems.size() == 0; i++) {

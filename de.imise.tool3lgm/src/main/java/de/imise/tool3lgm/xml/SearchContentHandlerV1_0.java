@@ -17,7 +17,7 @@ import de.imise.tool3lgm.log.Log;
 
 /**
  * @author Thomas Wendt
- *         für Dateiversion mit Knickpunkten
+ *         fÃ¼r Dateiversion mit Knickpunkten
  */
 public class SearchContentHandlerV1_0 {
 

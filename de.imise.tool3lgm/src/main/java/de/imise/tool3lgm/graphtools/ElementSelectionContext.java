@@ -62,7 +62,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Löscht die aktuelle Selektion.
+     * LÃ¶scht die aktuelle Selektion.
      * 
      * @return
      */
@@ -110,7 +110,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Fügt den angegebenen {@link ElementContainer} als letztes Element zur Selektion hinzu.
+     * FÃ¼gt den angegebenen {@link ElementContainer} als letztes Element zur Selektion hinzu.
      * Falls es schon in der Selektion vorhanden war, wird das alte Vorkommen entfernt.
      * Diese Aktion wird weder Undo-/Redo-technisch geloggt noch wird ein Event gefeuert.
      * 
@@ -206,7 +206,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Gibt zurück, ob mehr als ein {@link ElementContainer} selektiert ist.
+     * Gibt zurÃ¼ck, ob mehr als ein {@link ElementContainer} selektiert ist.
      * 
      * @return
      */
@@ -215,7 +215,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Gibt zurück, ob mehr als ein {@link NodeContainer} oder {@link BendpointContainer} selektiert ist.
+     * Gibt zurÃ¼ck, ob mehr als ein {@link NodeContainer} oder {@link BendpointContainer} selektiert ist.
      * 
      * @return
      */
@@ -224,7 +224,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Gibt zurück, ob mehr als ein {@link NodeContainer} selektiert ist.
+     * Gibt zurÃ¼ck, ob mehr als ein {@link NodeContainer} selektiert ist.
      * 
      * @return
      */
@@ -234,7 +234,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer} selektiert ist. {@link BendpointContainer} als Unterklasse von
-     * {@link NodeContainer} zählen auch.
+     * {@link NodeContainer} zÃ¤hlen auch.
      * 
      * @return
      */
@@ -306,8 +306,8 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind, also in allen Teilmodellen
-     * vorkommen und keine grafische Repräsentation besitzen.
+     * Gibt wieder, ob alle ausgewÃ¤hlten Elemente <em>unique</em> sind, also in allen Teilmodellen
+     * vorkommen und keine grafische ReprÃ¤sentation besitzen.
      * 
      * @return
      */
@@ -316,7 +316,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Gibt wieder, ob die selektierten Elemente ausschließlich im Teilmodell existieren
+     * Gibt wieder, ob die selektierten Elemente ausschlieÃŸlich im Teilmodell existieren
      * 
      * @return
      */
@@ -334,7 +334,7 @@ public class ElementSelectionContext {
     }
 
     /**
-     * Giebt einen Ausgabestring der Selektion zurück.
+     * Giebt einen Ausgabestring der Selektion zurÃ¼ck.
      * 
      * @return
      */

@@ -73,7 +73,7 @@ public class WebExportDialog extends JDialog {
     public WebExportDialog(final JFrame owner, final GDCollection collection) throws HeadlessException {
         super(owner, Tool3lgmConstants.getResString("webExport"), true);
 
-        // da evtl. viele Verzeichnisse nach Scripten durchsucht werden müssen, einen Fortschrittsdialog zeigen
+        // da evtl. viele Verzeichnisse nach Scripten durchsucht werden mÃ¼ssen, einen Fortschrittsdialog zeigen
         ProgressDialog progressDialog = new ProgressDialog(owner);
         progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("trans_load_scripts"));
 
@@ -526,7 +526,7 @@ public class WebExportDialog extends JDialog {
         //		}
 
         /**
-         * gibt die ausgewählten Seznarios zurück
+         * gibt die ausgewÃ¤hlten Seznarios zurÃ¼ck
          *
          * @return Array mit den selektierten Szenarios
          */

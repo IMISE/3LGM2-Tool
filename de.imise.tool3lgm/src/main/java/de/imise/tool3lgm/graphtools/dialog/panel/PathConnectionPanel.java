@@ -45,8 +45,8 @@ import de.imise.util.Pair;
 import de.imise.util.StringUtils;
 
 /**
- * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
- * angezeigt, hinzugefügt und entfernt werden.
+ * Mit diesem Panel kÃ¶nnen fÃ¼r ein Element Ã¼ber einen Pfad von mehr als einer Kante verbundene Elemente
+ * angezeigt, hinzugefÃ¼gt und entfernt werden.
  */
 public class PathConnectionPanel extends AbstractExpandablePanel {
 
@@ -85,11 +85,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        //wenn der Pfad aus mehr als einer Kante besteht, dann soll über dem linken Baum einfach "verbunden" stehen
+        //wenn der Pfad aus mehr als einer Kante besteht, dann soll Ã¼ber dem linken Baum einfach "verbunden" stehen
         String ltreeLabelString = lastEdgeIndex > 0 ? getResString("verb") : null;
         //wenn der Pfad aus nur einer Kante besteht
         if (ltreeLabelString == null) {
-            //schreibe den Namen der Kante in der richtigen Richtung über den linken Baum
+            //schreibe den Namen der Kante in der richtigen Richtung Ã¼ber den linken Baum
             Class<? extends Kante> lastEdge = edgeClasses[lastEdgeIndex];
             ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
         }
@@ -166,11 +166,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     //    private void initDragAndDropTreeActions(final JTree tree) {
-    //        //MouseListener erstellen und an Trees anhängen ...
+    //        //MouseListener erstellen und an Trees anhÃ¤ngen ...
     //        LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
     //        LGMMouseListener lgmMouseListener = new LGMMouseListener(null, null, null, treeMouseAction, null);
     //        tree.addMouseListener(lgmMouseListener);
-    //        //Start: TreeSelectionListener erstellen und an Trees anhängen ...
+    //        //Start: TreeSelectionListener erstellen und an Trees anhÃ¤ngen ...
     //        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
     //        LGMTreeSelectionListener lgmTreeSelectionListener = new LGMTreeSelectionListener(treeSelectionAction);
     //        tree.addTreeSelectionListener(lgmTreeSelectionListener);
@@ -212,26 +212,26 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Set aller TreeNodes, die im linken Baum bereits verknüpft sind und im rechten nicht mehr auftauchen sollen
+     * Set aller TreeNodes, die im linken Baum bereits verknÃ¼pft sind und im rechten nicht mehr auftauchen sollen
      */
     private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
 
     /**
-     * Sammelt für die letzte Kante alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
-     * sie bereits verknüpft sind und kein weiteres Mal verknüpft werden können.
+     * Sammelt fÃ¼r die letzte Kante alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
+     * sie bereits verknÃ¼pft sind und kein weiteres Mal verknÃ¼pft werden kÃ¶nnen.
      *
      * @param edgeIndex
      * @param potentialExcludeChildren
      * @param clear
      */
     private void addChildrenToExcludeFromRtree(final int edgeIndex, final Collection<ElementContainer> potentialExcludeChildren, final boolean clear) {
-        //nur bei Panels, bei denen der Pfad eindeutig verknüpfbar ist, kann man Elemente im rechten Baum ausschließen
+        //nur bei Panels, bei denen der Pfad eindeutig verknÃ¼pfbar ist, kann man Elemente im rechten Baum ausschlieÃŸen
         if (isConnectionPointUnique) {
             //beim ersten Durchlauf sollte die alte Collection geleert werden
             if (clear) {
                 childrenToExcludeFromRtree.clear();
             }
-            //wenn es der Index der letzten Kante ist -> zu den Ausschlusselementen hinzufügen
+            //wenn es der Index der letzten Kante ist -> zu den Ausschlusselementen hinzufÃ¼gen
             if (edgeIndex == lastEdgeIndex) {
                 childrenToExcludeFromRtree.addAll(potentialExcludeChildren);
             }
@@ -256,7 +256,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ModelElement me = getModelElement();
         List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
-        // nur Knoten für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
+        // nur Knoten fÃ¼r Elemente in der all-Liste bis zur GrÃ¶ÃŸe der direkt verbundenen dÃ¼rfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.isSearchParts()) {
             all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc));
@@ -334,7 +334,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**
      * Liefert den TreePath, der im linken Baum als selektiert gilt und an den der neue Pfad(teil)
-     * angehängt werden soll.
+     * angehÃ¤ngt werden soll.
      *
      * @return
      */
@@ -344,7 +344,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         // wenn im linken Ziel-Baum nur eine Zeile enthalten ist und bisher nichts
         // selektiert ist, selektiere diese eine Zeile (falls die Zeile sich nicht
-        // selektieren lässt, weil sie dialbels ist, wenn si über Teil-Von-Beziehungen
+        // selektieren lÃ¤sst, weil sie dialbels ist, wenn si Ã¼ber Teil-Von-Beziehungen
         // ererbt wurde, dann its danach immer noch nichts selektiert
         if (targetTreeSelRowsCount == 0 && ltree.getRowCount() == 1) {
             ltree.setSelectionRow(0);
@@ -353,7 +353,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         // Anzahl der selektierten Zeilen im linken Ziel-Baum erneut ermitteln
         targetTreeSelRowsCount = ltree.getSelectionCount();
 
-        //ausgewählter Path im TargetTree -> wenn sich vorher was selktieren ließ, dann das sonst der root
+        //ausgewÃ¤hlter Path im TargetTree -> wenn sich vorher was selktieren lieÃŸ, dann das sonst der root
         TreePath targetTreeSelectionPath = targetTreeSelRowsCount > 0 ? ltree.getSelectionPath() : new TreePath(ltree.getModel().getRoot());
         return targetTreeSelectionPath;
     }
@@ -362,7 +362,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
             @Override
             public void execute(final EventObject eo) {
-                //falls in den TargetTree gedroppt wurde -> selektiere den zur DropPosition nächstegelegenen TreePath
+                //falls in den TargetTree gedroppt wurde -> selektiere den zur DropPosition nÃ¤chstegelegenen TreePath
                 LGMActionLibrary.getDragNDropLocateElementAsTargetAction(ltree).execute(eo);
                 // Anzahl der selektierten Elemente im rechten Baum, die verbunden werden sollen, ermitteln
                 int srcTreeSelRowsCount = rtree.getSelectionCount();
@@ -373,7 +373,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 TreePath[] sourceTreePaths = rtree.getSelectionPaths();
                 connect(targetTreeSelectionPath, sourceTreePaths);
 
-                //TODO: das hier expandiert das neue überhaupt nicht, sondern nur bis zum vorher schon geöffneten Knoten. Das ist doof!
+                //TODO: das hier expandiert das neue Ã¼berhaupt nicht, sondern nur bis zum vorher schon geÃ¶ffneten Knoten. Das ist doof!
                 ltree.expandPath(targetTreeSelectionPath);
                 ltree.clearSelection();
                 return;
@@ -393,12 +393,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * sollte an die "removeButtons" der Panels angefÃ¼gt werden.
      *
-     * @param srcTree linker Baum mit dem verknüpften Pfaden
-     * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
+     * @param srcTree linker Baum mit dem verknÃ¼pften Pfaden
+     * @param targetTree rechter Baum mit den Elementen, die ausgewÃ¤hlt werden kÃ¶nnen
      */
     protected LGMAction getDisconnectAction() {
         final PathConnectionPanel panel = this;
@@ -447,29 +447,29 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     /**
-     * Hängt an den targetTreePath die lastPathComponent der sourceTreePaths an. Wenn als targetTreePath ein vollständiger Pfad
-     * übergeben wird, dann werden die sourceTReePath-Elemente an den Parent der LastPathComponent gehängt. Wenn der Pfad gleich
-     * nur bis zum Parent geht, dann werden sie da angehängt. Ist der Pfad kürzer, dann wird er bis zum Parent erzeugt und dann
-     * die übergebenen sourceTreePath-Elemente angehängt.
+     * HÃ¤ngt an den targetTreePath die lastPathComponent der sourceTreePaths an. Wenn als targetTreePath ein vollstÃ¤ndiger Pfad
+     * Ã¼bergeben wird, dann werden die sourceTReePath-Elemente an den Parent der LastPathComponent gehÃ¤ngt. Wenn der Pfad gleich
+     * nur bis zum Parent geht, dann werden sie da angehÃ¤ngt. Ist der Pfad kÃ¼rzer, dann wird er bis zum Parent erzeugt und dann
+     * die Ã¼bergebenen sourceTreePath-Elemente angehÃ¤ngt.
      *
      * @param targetTreePath
      * @param sourceTreePaths
      */
     protected void connect(final TreePath targetTreePath, final TreePath... sourceTreePaths) {
 
-        //das ist der Index der Kante im Pfad, ab der hinzugefügt werden soll
+        //das ist der Index der Kante im Pfad, ab der hinzugefÃ¼gt werden soll
         int targetTreePathEdgeIndex = targetTreePath.getPathCount() - 1;
 
         TreePath realTargetTreePath = targetTreePath;
-        //falls der TargetPath bis zum letzten Element angegeben wurde, dann soll eigenlich an den Parent angehängt werden, weil
-        //die letzte Elemente im Pfad immer die anzuhängenden selbst sind, die auch auf der rechten Seite ausgewählt werden können
+        //falls der TargetPath bis zum letzten Element angegeben wurde, dann soll eigenlich an den Parent angehÃ¤ngt werden, weil
+        //die letzte Elemente im Pfad immer die anzuhÃ¤ngenden selbst sind, die auch auf der rechten Seite ausgewÃ¤hlt werden kÃ¶nnen
         if (targetTreePathEdgeIndex == edgeClasses.length) {
-            //nimm vom aktuell auf der linken Seite ausgewählten Pfad das vorletzte Pfadelement
+            //nimm vom aktuell auf der linken Seite ausgewÃ¤hlten Pfad das vorletzte Pfadelement
             realTargetTreePath = realTargetTreePath.getParentPath();
             targetTreePathEdgeIndex--;
         }
 
-        //Element holen, an das der Pfad angehängt werden soll
+        //Element holen, an das der Pfad angehÃ¤ngt werden soll
         ModelElement targetElement = getPathModelElement(realTargetTreePath);
 
         ImmutableList.Builder<ModelElement> elements2Connect = ImmutableList.builder();
@@ -490,11 +490,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         return new LGMAction(Tool3lgmConstants.getResString("new")) {
             @Override
             public void execute(final EventObject eo) {
-                //wenn eindutig fest steht, an welchen Knoten ein neues Element gehängt werden sollte, dann wird
-                //es auch gleich angehängt
+                //wenn eindutig fest steht, an welchen Knoten ein neues Element gehÃ¤ngt werden sollte, dann wird
+                //es auch gleich angehÃ¤ngt
                 if (isConnectionPointUnique) {
                     connectToFirstPath(null);
-                } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
+                } else { //es ist nicht klar, wohin ein neues Element gehÃ¤ngt werden sollte -> nur neu erzeugen und nicht verknÃ¼pfen
                     createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[lastEdgeIndex], directions[lastEdgeIndex], null, FORWARD, getTransactionID());
                 }
             }

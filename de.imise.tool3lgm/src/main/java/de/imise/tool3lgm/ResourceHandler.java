@@ -21,7 +21,7 @@ public class ResourceHandler {
     }
 
     /**
-     * Liefert eine Liste der relativen Pfade aller Dateien mit der übergebenen Endung im Resourcenverzeichnis der aktuellen Locale. Werden für die
+     * Liefert eine Liste der relativen Pfade aller Dateien mit der Ã¼bergebenen Endung im Resourcenverzeichnis der aktuellen Locale. Werden fÃ¼r die
      * aktuelle Locale keine
      * Dateien gefunden, werden die Pfade zu den englischen Dateien geladen.
      *
@@ -37,7 +37,7 @@ public class ResourceHandler {
             String path = devTimeResourceBaseDirName + language;
             File dir = new File(path);
             File[] files = dir.listFiles();
-            // wenn für die Locale keine Scripte gefunden wurde -> lade die Englischen
+            // wenn fÃ¼r die Locale keine Scripte gefunden wurde -> lade die Englischen
             if (files.length == 0) {
                 path = devTimeResourceBaseDirName + "en";
                 dir = new File(path);
@@ -80,7 +80,7 @@ public class ResourceHandler {
                     jarEntries.add(jarEntry);
                 }
             }
-            // wenn für die aktuelle Locale-Sprache keine Dateien gefunden wurden -> lade die Englischen
+            // wenn fÃ¼r die aktuelle Locale-Sprache keine Dateien gefunden wurden -> lade die Englischen
             if (jarEntries.size() == 0) {
                 packagePattern = jarResourceBaseDirName + "en/[^/]+\\." + fileExtension;
                 while (entries.hasMoreElements()) {

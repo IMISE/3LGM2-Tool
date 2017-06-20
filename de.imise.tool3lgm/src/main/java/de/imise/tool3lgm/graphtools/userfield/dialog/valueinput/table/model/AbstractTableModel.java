@@ -12,13 +12,13 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Model für alle Tables des Attributeditors
+ * Model fÃ¼r alle Tables des Attributeditors
  * <p>
- * Über die statischen Methoden können vorgefertigte <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels für Kennzahlen,
+ * Ãœber die statischen Methoden kÃ¶nnen vorgefertigte <code>AbstractUserFieldTableModel</code>s abgerufen werden, die auf Tabels fÃ¼r Kennzahlen,
  * Verteilungsgewicht oder Modelvariablen zugeschnitten sind.
  * <p>
- * !!! Die Änderung der Daten erfolgt nicht mehr über javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
- * sondern über setDataVector(java.lang.Object[][], java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann dann dazu führen,
+ * !!! Die Ã„nderung der Daten erfolgt nicht mehr Ã¼ber javax.swing.table.DefaultTableModel.setDataVector(java.lang.Object[][], java.lang.Object[])
+ * sondern Ã¼ber setDataVector(java.lang.Object[][], java.lang.Object[],java.lang.Object[]). Die Anwendung der alten Methode kann dann dazu fÃ¼hren,
  * dass die im Table dargstellten Daten nicht mehr den Modeldaten entsprechen !!!
  * 
  * @author fstephan
@@ -28,27 +28,27 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /* ************************ Start: Konstanten ************************************* */
 
     ///////////////////////////////////////////////
-    /// Konstanten für die Auswahl              ///
+    /// Konstanten fÃ¼r die Auswahl              ///
     /// der im ClassificationNumberPanel        ///
     /// anzuzeigenden Elemente.                 ///
     /// Ist in createClassificationNumberModel( ///
     /// Class elementClass, GraphDocument doc,  ///
-    /// int elementTypesToShow) für             /// 
+    /// int elementTypesToShow) fÃ¼r             /// 
     /// "elementTypesToShow" anzuwenden         ///
     ///////////////////////////////////////////////
 
     /**
-     * Löst das Anzeigen aller ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
+     * LÃ¶st das Anzeigen aller ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
      */
     public static final int SHOW_ALL_ELEMENTS = 1;
 
     /**
-     * Löst das Anzeigen der Blatt-ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
+     * LÃ¶st das Anzeigen der Blatt-ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
      */
     public static final int SHOW_LEAVES_ONLY = 2;
 
     /**
-     * Löst das Anzeigen der Toplevel-ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
+     * LÃ¶st das Anzeigen der Toplevel-ModelElemente im Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s aus
      */
     public static final int SHOW_TOPLEVEL_ELEMENTS_ONLY = 3;
 
@@ -62,17 +62,17 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     protected GraphDocument doc;
 
     /**
-     * Beinhaltet alle UserFields in einer HashMap, die für Knoten, Kanten und das Modell deklariert und definiert wurden.
+     * Beinhaltet alle UserFields in einer HashMap, die fÃ¼r Knoten, Kanten und das Modell deklariert und definiert wurden.
      */
     protected final UserFieldDefinitions definitions;
 
     /**
-     * Daten für die Zeilenköpfe des Tables
+     * Daten fÃ¼r die ZeilenkÃ¶pfe des Tables
      */
     private Vector<NamedObjectContainer<?>> rowIdentifiers;
 
     /**
-     * Gibt zurück, ob sich Daten geändert haben
+     * Gibt zurÃ¼ck, ob sich Daten geÃ¤ndert haben
      */
     protected boolean dataChanged;
 
@@ -96,7 +96,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /* *********************** Start: get/set-Methoden ************************************* */
 
     /**
-     * Liefert den ToolTipText für den Kopf der Spalte <code>columnIndex</code>.
+     * Liefert den ToolTipText fÃ¼r den Kopf der Spalte <code>columnIndex</code>.
      * 
      * @param columnIndex
      * @return
@@ -106,7 +106,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Liefert den ToolTipText für den Kopf der Zeile <code>rowIndex</code>.
+     * Liefert den ToolTipText fÃ¼r den Kopf der Zeile <code>rowIndex</code>.
      * 
      * @param rowIndex
      * @return
@@ -116,7 +116,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Überschreibt die Methode der Superklasse, sodass in Abhängigkeit der Daten über die Editierbarkeit der Zelle an der Stelle (<code>row</code>,
+     * Ãœberschreibt die Methode der Superklasse, sodass in AbhÃ¤ngigkeit der Daten Ã¼ber die Editierbarkeit der Zelle an der Stelle (<code>row</code>,
      * <code>column</code>) entschieden wird.
      * 
      * @return <code>true</code>, falls ein Wert an der Stelle (<code>row</code>,<code>column</code>) exisitiert, sonst <code>false</code>
@@ -129,7 +129,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Gibt die Spaltenköpfe wieder
+     * Gibt die SpaltenkÃ¶pfe wieder
      * 
      * @return <code>columnIdentifiers</code>
      */
@@ -152,7 +152,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Gibt eine Kopie des gesamten Datenfeldes zurück
+     * Gibt eine Kopie des gesamten Datenfeldes zurÃ¼ck
      * 
      * @return
      */
@@ -163,10 +163,10 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     /**
      * Gibt alle Werte aus dem angegebenen Bereich in einem <code>Object[][]</code> wieder.
      * 
-     * @param firstRow erste Zeile, aber der die Werte zurückgegeben werden sollen
-     * @param lastRow letzte Zeile, bis zu der die Werte zurückgegeben werden sollen
-     * @param firstColumn erste Spalte, aber der die Werte zurückgegeben werden sollen
-     * @param lastColumn letzte Spalte, bis zu der die Werte zurückgegeben werden sollen
+     * @param firstRow erste Zeile, aber der die Werte zurÃ¼ckgegeben werden sollen
+     * @param lastRow letzte Zeile, bis zu der die Werte zurÃ¼ckgegeben werden sollen
+     * @param firstColumn erste Spalte, aber der die Werte zurÃ¼ckgegeben werden sollen
+     * @param lastColumn letzte Spalte, bis zu der die Werte zurÃ¼ckgegeben werden sollen
      * @return
      */
     private NamedObjectContainer<?>[][] getValues(final int firstRow, final int lastRow, final int firstColumn, final int lastColumn) {
@@ -184,8 +184,8 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Liefert einen {@link NamedObjectContainer} für der an die Zelle mit den gegebenen Indizes gesetzt wird. Unterklassen
-     * müssen diese Container geeignet initialisieren.
+     * Liefert einen {@link NamedObjectContainer} fÃ¼r der an die Zelle mit den gegebenen Indizes gesetzt wird. Unterklassen
+     * mÃ¼ssen diese Container geeignet initialisieren.
      * 
      * @param newValue
      *            Dar neue Value, der in einen {@link NamedObjectContainer} gepackt werden muss
@@ -195,7 +195,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     public abstract NamedObjectContainer<?> getContainerForNewValue(final Object newValue, final int row, final int col);
 
     /**
-     * Löscht den Wert an der angegebenen Stelle bzw. setzt einen als leer interpretierten Wert.
+     * LÃ¶scht den Wert an der angegebenen Stelle bzw. setzt einen als leer interpretierten Wert.
      * 
      * @param row
      * @param col
@@ -203,7 +203,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     public abstract void clearValueAt(int row, int col);
 
     /**
-     * Übernimmt einen im Table eingegebenen Wert in dieses Model. Dabei wird ein neuer <code>NamedObjectContainer</code> aus <code>value</code> und
+     * Ãœbernimmt einen im Table eingegebenen Wert in dieses Model. Dabei wird ein neuer <code>NamedObjectContainer</code> aus <code>value</code> und
      * dem bereits in {@link #dataField} enthaltenen <code>UserField</code> erstellt und als neuer Wert in {@link DefaultTableModel#dataVector}
      * gesetzt.
      * 
@@ -216,14 +216,14 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     public final void setValueAt(final Object value, final int row, final int column) {
         NamedObjectContainer<?> oldValueContainer = (NamedObjectContainer<?>) getValueAt(row, column);
         //oldValueContainer == null tritt nur in Tables auf, in denen
-        //Leezellen sind (z.B. für Verteilungsgewichte, an denen keine Kante vorkommt = graue Zellen)
-        //da kann man nichts setzen (egal, was z.B. bei Paste eingefügt werden soll)
+        //Leezellen sind (z.B. fÃ¼r Verteilungsgewichte, an denen keine Kante vorkommt = graue Zellen)
+        //da kann man nichts setzen (egal, was z.B. bei Paste eingefÃ¼gt werden soll)
         if (oldValueContainer == null) {
             return;
         }
         if (oldValueContainer != null) {
             Object oldValue = oldValueContainer.toString();
-            //nur was machen, wenn sich wirklich etwas geändert hat
+            //nur was machen, wenn sich wirklich etwas geÃ¤ndert hat
             if (oldValue.equals(value)) {
                 return;
             }
@@ -236,12 +236,12 @@ public abstract class AbstractTableModel extends DefaultTableModel {
 
     /**
      * Setzt die Modeldaten beginnend bei (<code>firstRow</code>,<code>firstColumn</code>) auf die Werte in <code>values</code>.<br>
-     * Wird dabei die Größe des Models überschritten, gibt diese Methode <code>false</code> zurück.<br>
-     * War das Übernehmen der Werte erfolgreich, wird <code>true</code> zurückgegeben.
+     * Wird dabei die GrÃ¶ÃŸe des Models Ã¼berschritten, gibt diese Methode <code>false</code> zurÃ¼ck.<br>
+     * War das Ãœbernehmen der Werte erfolgreich, wird <code>true</code> zurÃ¼ckgegeben.
      * 
      * @param values neue Werte
-     * @param firstRow Zeilenindex, ab dem die Werte eingefügt werden sollen
-     * @param firstColumn Spaltenindex, ab dem die Werte eingefügt werden sollen
+     * @param firstRow Zeilenindex, ab dem die Werte eingefÃ¼gt werden sollen
+     * @param firstColumn Spaltenindex, ab dem die Werte eingefÃ¼gt werden sollen
      * @return
      */
     public boolean setValuesAt(final Object[][] values, final int firstRow, final int firstColumn) {
@@ -277,7 +277,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Gibt die Zeilenköpfe wieder
+     * Gibt die ZeilenkÃ¶pfe wieder
      * 
      * @return rowIdentifiers
      */
@@ -311,15 +311,15 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     }
 
     /**
-     * Gibt zurück, ob sich Daten geändert haben
+     * Gibt zurÃ¼ck, ob sich Daten geÃ¤ndert haben
      */
     public boolean dataChanged() {
         return dataChanged;
     }
 
     /**
-     * Methode setzt das Attribut {@link #dataChanged} und bestimmt damit, ob sich Daten geändert haben oder nicht. <br>
-     * Löst {@link #fireTableDataChanged()} aus, falls <code>b</code> den Wert <code>true</code> hat.
+     * Methode setzt das Attribut {@link #dataChanged} und bestimmt damit, ob sich Daten geÃ¤ndert haben oder nicht. <br>
+     * LÃ¶st {@link #fireTableDataChanged()} aus, falls <code>b</code> den Wert <code>true</code> hat.
      * 
      * @param b
      */

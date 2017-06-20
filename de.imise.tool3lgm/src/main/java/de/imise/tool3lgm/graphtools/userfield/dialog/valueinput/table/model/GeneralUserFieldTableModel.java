@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
 
 /**
- * Erzeugt ein neues Model für den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
+ * Erzeugt ein neues Model fÃ¼r den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
  * 
  * @author Ich
  * @create 19.08.2015
@@ -21,7 +21,7 @@ import de.imise.util.NamedObjectContainer;
 public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
-     * Erzeugt ein neues Model für den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
+     * Erzeugt ein neues Model fÃ¼r den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
      * 
      * @param doc
      */
@@ -31,7 +31,7 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * @param doc
-     * @param elementClass in der <code>elementTypeBox</code> des <code>AbstractElementTypeUserFieldEditorPanel</code>s ausgewählte Klasse
+     * @param elementClass in der <code>elementTypeBox</code> des <code>AbstractElementTypeUserFieldEditorPanel</code>s ausgewÃ¤hlte Klasse
      * @param elementClass
      * @param showTopLevel
      * @param showInner
@@ -44,7 +44,7 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * @param doc
-     * @param elementClass in der <code>elementTypeBox</code> des <code>AbstractElementTypeUserFieldEditorPanel</code>s ausgewählte Klasse
+     * @param elementClass in der <code>elementTypeBox</code> des <code>AbstractElementTypeUserFieldEditorPanel</code>s ausgewÃ¤hlte Klasse
      * @param elementClass
      * @param showTopLevel
      * @param showInner
@@ -72,16 +72,16 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
         //Ermitteln der ModelElemente zu elementClass
         ArrayList<ModelElement> allModelElements = doc.getModelItems(elementClass, true, true);
         ArrayList<ModelElement> modelElements = new ArrayList<ModelElement>(allModelElements.size());
-        //TODO:FST,XHB. Wenn die Kante PDVBKAWBVerb übergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt. 
-        // Dann sollte aber auch keine Exception mehr fliegen. prüf mal bitte, warum das so ist?!
+        //TODO:FST,XHB. Wenn die Kante PDVBKAWBVerb Ã¼bergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt. 
+        // Dann sollte aber auch keine Exception mehr fliegen. prÃ¼f mal bitte, warum das so ist?!
 
         for (int i = 0; i < allModelElements.size(); i++) {
             ModelElement me = allModelElements.get(i);
-            if (showTopLevel && !me.hasDirectParentContainer(doc)) { // Top-Level-E. anfügen
+            if (showTopLevel && !me.hasDirectParentContainer(doc)) { // Top-Level-E. anfÃ¼gen
                 modelElements.add(me);
-            } else if (showInner && me.hasDirectParentContainer(doc) && me.hasDirectPartContainer(doc)) { // Innere E. anfügen
+            } else if (showInner && me.hasDirectParentContainer(doc) && me.hasDirectPartContainer(doc)) { // Innere E. anfÃ¼gen
                 modelElements.add(me);
-            } else if (showLeafs && !me.hasDirectPartContainer(doc)) { // Blatt-E. anfügen
+            } else if (showLeafs && !me.hasDirectPartContainer(doc)) { // Blatt-E. anfÃ¼gen
                 modelElements.add(me);
             }
         }

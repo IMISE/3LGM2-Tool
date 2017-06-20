@@ -7,7 +7,7 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
- * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der Kantenpfad ist genau eine Kante lang.
+ * Panel fÃ¼r alle einfachen Verbindungen zwischen 2 Elementen, also der Kantenpfad ist genau eine Kante lang.
  *
  * @author AXS
  * @created 24.04.2017
@@ -20,7 +20,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
     protected final boolean edgeIsForward;
 
     /**
-     * Panel für eine einfache Assoziation
+     * Panel fÃ¼r eine einfache Assoziation
      *
      * @param dialog
      * @param searchElementClass
@@ -31,7 +31,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
     }
 
     /**
-     * Panel für eine einfache Assoziation
+     * Panel fÃ¼r eine einfache Assoziation
      *
      * @param dialog
      * @param labelEdgeName

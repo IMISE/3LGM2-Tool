@@ -100,7 +100,7 @@ import de.imise.util.swing.dialog.ProgressDialog;
 /** Hauptklasse der Anwendung 3lgm */
 public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener, TransactionListener {
 
-    //Als allerstes muss aus der Main-Funktion ausßerhalb dieser Klasse diese init()-Funktion
+    //Als allerstes muss aus der Main-Funktion ausÃŸerhalb dieser Klasse diese init()-Funktion
     //aufgerufen werden, damit alle statischen Elemente einmal initialisert werden. Diese Funktion
     //muss unbedingt ganz oben stehen!
     public static final void init() {
@@ -136,7 +136,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** panel to hold one or more modelBrowsers */
     private final ModelBrowserPanel modelBrowserPanel;
 
-    /** Menü-Leiste des Tools */
+    /** MenÃ¼-Leiste des Tools */
     private static MenuBar menuBar;
 
     /** ToolBar with general tools */
@@ -196,7 +196,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private final Properties licenseItems = new Properties();
 
     /**
-     * Wenn der Baukasten mit RMI gestartet werden soll, wird <code>activateRMI</code> ausgeführt.
+     * Wenn der Baukasten mit RMI gestartet werden soll, wird <code>activateRMI</code> ausgefÃ¼hrt.
      *
      * @param args
      * @return true, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind, false.
@@ -212,7 +212,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             // hole den vom User eingestellen RegistryPort
             String regValue = UserProperties.getRMIRegistryPort().trim();
 
-            // hier wird geprüft, ob der Wert ungleich "" ist und mittels regulären Ausdruck, ob nur Ziffern enthalten sind.
+            // hier wird geprÃ¼ft, ob der Wert ungleich "" ist und mittels regulÃ¤ren Ausdruck, ob nur Ziffern enthalten sind.
             if (!regValue.equals("") && regValue.matches("\\d*")) {
                 regPort = Integer.parseInt(regValue);
             }
@@ -225,7 +225,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
             Remote remote = null;
 
-            // Im Fehlerfall soll der Dialog angezeigt werden, den den user entscheiden lässt, wie das weitere Vorgehen sein soll.
+            // Im Fehlerfall soll der Dialog angezeigt werden, den den user entscheiden lÃ¤sst, wie das weitere Vorgehen sein soll.
             boolean showErrorDialog = true;
 
             // Es wird solange versucht den RMI-Service zu starten, bis ein freier Port gefunden wurde oder der User einen freien eingegeben hat.
@@ -248,10 +248,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
                 } catch (Exception innerEx) {
                 }
-                // Wenn der RMI-Service noch nicht läuft, wird hier weiter gemacht.
+                // Wenn der RMI-Service noch nicht lÃ¤uft, wird hier weiter gemacht.
                 if (remote == null || !(remote instanceof Tool3lgmServer)) {
 
-                    // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
+                    // Wenn der Baukasten schon lÃ¤uft, wird kein neuer instanziiert, sonst schon.
                     if (Static.tool == null) {
                         Static.tool = new Tool3lgm();
                         menuBar = new MenuBar();
@@ -261,7 +261,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         Static.tool.setVisible(visible);
                     }
 
-                    // Hier ist die kritische Stelle. Das Rebind schlägt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.
+                    // Hier ist die kritische Stelle. Das Rebind schlÃ¤gt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.
                     try {
                         // System.err.println("try port: "+regPort);
                         Naming.rebind("//127.0.0.1:" + regPort + "/Tool3lgmServer", new Tool3lgmServerImpl(Static.tool));
@@ -270,7 +270,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         // Wenn nicht, ist eine Exception geflogen und ist in die catch () gesprungen. bound wurde nicht true.
                         bound = true;
 
-                        // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
+                        // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nÃ¤chsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
                             UserProperties.setRMIRegistryPort("" + regPort);
                             JOptionPane.showMessageDialog(Static.tool, Tool3lgmConstants.getResString("rmiNewRegPortIs") + " " + regPort);
@@ -278,7 +278,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
                     } catch (RemoteException e) {
                         // e.printStackTrace();
-                        // Sollte der RMI-Server nicht auf dem aktuellen eingestellten regPort lauschen können:
+                        // Sollte der RMI-Server nicht auf dem aktuellen eingestellten regPort lauschen kÃ¶nnen:
                         // Wenn ein Fehler aufgetreten ist und nicht schon nach einem neuen Port gesucht wird, wird der RMI-FehlerDialog angezeigt.
                         RMIErrorPanel rmip = new RMIErrorPanel();
 
@@ -315,7 +315,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     // e.printStackTrace();
 
                 } else {
-                    // Wenn schon eine Instanz des Tools läuft, wird hier hergesprungen.
+                    // Wenn schon eine Instanz des Tools lÃ¤uft, wird hier hergesprungen.
                     // <code>bound</code> muss auf true gesetzt werden, dmit die Schleife beendet werden kann.
                     bound = true;
                 }
@@ -328,7 +328,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 return false;
             }
             // Wenn der RMI-Service erfolgreich auf dem regPort lauscht, wird hier weiter gemacht.
-            // Der RMI-Server steht für RMI-Aufrufe bereit.
+            // Der RMI-Server steht fÃ¼r RMI-Aufrufe bereit.
 
             Tool3lgmServer tool3lgmServer = (Tool3lgmServer) remote;
             if (args.length != 0) {
@@ -406,15 +406,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         date = new Date();
 
-        //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
+        //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen kÃ¶nnen
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
-        // TODO:____###### Größenänderung des Tools
+        // TODO:____###### GrÃ¶ÃŸenÃ¤nderung des Tools
         //        screenSize.height -= 400;
         //        screenSize.width -= 50;
         setSize(screenSize);
 
-        //Arbeitsfläche mit SplitPane (rechts JDesktopPane für InternalFrame,
+        //ArbeitsflÃ¤che mit SplitPane (rechts JDesktopPane fÃ¼r InternalFrame,
         // links ModelBrowser)
         desktop = new JDesktopPane();
         getContentPane().setLayout(new BorderLayout());
@@ -441,13 +441,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         // Direkthilfe einschalten
         Help.getHelp().enableHelpKey(rootPane, "willkommen");
-        // Direkthilfe für die einzelnen Baukastenteile
+        // Direkthilfe fÃ¼r die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
 
     }
 
     /**
-     * Ermöglicht das Auslösen der {@link AbstractLGMAction#getKeyStrokeActions()} durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
+     * ErmÃ¶glicht das AuslÃ¶sen der {@link AbstractLGMAction#getKeyStrokeActions()} durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
      */
     private static final void registerPublicKeyStrokes() {
         InputMap im = new InputMap();
@@ -514,23 +514,23 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * lädt ein 3LGM²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das Fenster Menu und ModelBrowser)
+     * lÃ¤dt ein 3LGMÂ²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das Fenster Menu und ModelBrowser)
      */
     public boolean openFile(final boolean open) {
         return openFile(open, null);
     }
 
     /**
-     * Legt ein neues Modell an oder lädt ein bestehendes aus einer Datei.
+     * Legt ein neues Modell an oder lÃ¤dt ein bestehendes aus einer Datei.
      *
      * @param open
-     *            wenn <code>true</code>, wird ein FileChooser geöffnet, über
-     *            den der Benutzer zu ladende Modelldatei auswählen kann. Diese
+     *            wenn <code>true</code>, wird ein FileChooser geÃ¶ffnet, Ã¼ber
+     *            den der Benutzer zu ladende Modelldatei auswÃ¤hlen kann. Diese
      *            Option ist aber nue relevant, wenn <code>file</code> <code>null</code> ist.
      * @param file
-     *            zu ladende Datei. Wenn <code>null</code> übergeben wird,
+     *            zu ladende Datei. Wenn <code>null</code> Ã¼bergeben wird,
      *            wird eine neue Datei angelegt
-     * @return die geöffnete Datei
+     * @return die geÃ¶ffnete Datei
      */
     public boolean openFile(final boolean open, File file) {
         GDCollection gdcoll = new GDCollection();
@@ -593,7 +593,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             createSzenarioFrame(szen);
         }
 
-        //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
+        //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler lÃ¶schen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
         setSelectedDoc(selectedDoc, true);
         gdcoll.setChanged(false);
@@ -633,9 +633,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             Hashtable<Class<? extends ModelElement>, Integer> class2ElementCount = new Hashtable<Class<? extends ModelElement>, Integer>();
             Hashtable<Class<? extends ModelElement>, Integer> class2ContainerCountFromGraphDocuments = new Hashtable<Class<? extends ModelElement>, Integer>();
             Hashtable<Class<? extends ModelElement>, Integer> class2ContainerCountFromModelElements = new Hashtable<Class<? extends ModelElement>, Integer>();
-            //für alle ElementContainer im MainDoc = alle, die es gibt!
+            //fÃ¼r alle ElementContainer im MainDoc = alle, die es gibt!
             for (Object ecOrMe : useElements ? allElements : allContainer) {
-                //Anzahl der Modellelemente im Gesamtmodell hochzählen
+                //Anzahl der Modellelemente im Gesamtmodell hochzÃ¤hlen
                 ModelElement me = useElements ? (ModelElement) ecOrMe : ((ElementContainer) ecOrMe).getElement();
                 Class<? extends ModelElement> meClass = me.getClass();
 
@@ -649,7 +649,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 }
                 docs.add(mainDoc);
 
-                //Anzahl der ElementContainer der Modellelemente im Gesamtmodell hochzählen
+                //Anzahl der ElementContainer der Modellelemente im Gesamtmodell hochzÃ¤hlen
                 for (GraphDocument doc : docs) {
                     for (LayerContainer lcc : doc.getLayers()) {
                         for (ElementContainer layerEc : lcc.getKnickpunkte()) {
@@ -688,7 +688,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             System.err.println("-------------------------------------");
             ArrayList<Class<? extends ModelElement>> classList = new ArrayList<Class<? extends ModelElement>>(class2ElementCount.keySet());
             Alphabetical.sort(classList);
-            //für jede Elementklasse
+            //fÃ¼r jede Elementklasse
             for (Class<? extends ModelElement> elementClass : classList) {
                 //				Integer integer = class2ElementCount.get(elementClass);
                 //				int count = integer == null ? 0 : integer.intValue();
@@ -903,27 +903,27 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
-     * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
+     * um beim Aktivieren eines Matix-Fensters zwar den dazugehÃ¶rigen ModelBrowser in den
      * Vordergrund zu bringen (wenn er noch nicht im Vordergrund ist), aber nicht den Grafischen
      * View des Teilmodells, weil ja dann das Matrix-Fenster sofort nicht mehr im Vordergrund
-     * wäre.
+     * wÃ¤re.
      */
     private static boolean activateGraphView = true;
 
     /**
-     * Über diese Variable wird beim Schließen eines Modells die Selektion
+     * Ãœber diese Variable wird beim SchlieÃŸen eines Modells die Selektion
      * der einzelnen Teilmodelle verhindert.
      */
     private boolean ignoreDocSelection = false;
 
     /**
-     * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
+     * Wechselt den Kontext auf das Ã¼bergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
      *
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
      * @param activateGraphView
-     *            Wenn <code>true</code> ist, wird auch das dazugehörige
+     *            Wenn <code>true</code> ist, wird auch das dazugehÃ¶rige
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
@@ -932,7 +932,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         }
 
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
-        //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
+        //geladenen Teilmodellen gefÃ¼llt wird. Im ModelBrowserPanel wird bei jedem HinzufÃ¼gen eines
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         if (doc == null) {
             setCheckConsistencyState(UserProperties.isCheckConsistency());
@@ -945,14 +945,14 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //Die folgenden beiden Zeilen nicht aktivieren. Sie sind auskommentiert
         //stehen geblieben, damit nicht irgendwann mal einer auf die Idee  kommt,
-        //über diesen Weg optimieren zu wollen
+        //Ã¼ber diesen Weg optimieren zu wollen
         //if (doc == oldDoc)
         //return;
 
         //das zu aktivierende Graphdocument und dessen Collection an die
         // richtige Position bringen
         GDCollection gdcoll = doc.getCollection();
-        //die Collection des übergebenne doc als letzte in die Collection-Liste
+        //die Collection des Ã¼bergebenne doc als letzte in die Collection-Liste
         // bringen
         collections.remove(gdcoll);
         collections.add(gdcoll);
@@ -961,7 +961,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //wenn der interne Frame mit dem grafischen View in den Vordergrund geholt werden soll,
         if (activateGraphView) {
-            //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die statische
+            //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wÃ¤re die statische
             //Variable==false)
             if (Tool3lgm.activateGraphView) {
                 //den richtigen Frame nach vorne holen
@@ -987,8 +987,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     }
                 }
 
-                //wenn vorher ein Matrix-View diese Funktion ausgelöst hat, dann nur merken, dass beim
-                //nächsten Kontextwechsel wieder auch der grafische View gewechselt werden soll
+                //wenn vorher ein Matrix-View diese Funktion ausgelÃ¶st hat, dann nur merken, dass beim
+                //nÃ¤chsten Kontextwechsel wieder auch der grafische View gewechselt werden soll
             } else {
                 Tool3lgm.activateGraphView = true;
             }
@@ -999,15 +999,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             Tool3lgm.activateGraphView = false;
         }
 
-        //wenn sich das im ModelBrowser ausgewählte Teimodell geändert hat
+        //wenn sich das im ModelBrowser ausgewÃ¤hlte Teimodell geÃ¤ndert hat
         if (doc != ModelBrowserPanel.getSelectedDoc()) {
             //aktiviere es. Dabei wird diese Funktion auch noch einmal aufgerufen und je nachdem
             //wie die Tool3lgm.activateGraphView gerade steht, wird der GraphView nach vorne geholt
             //oder eben nicht
             modelBrowserPanel.setSelectedDoc(doc);
-            //wenn sich das Teilmodell nicht geändert hat
+            //wenn sich das Teilmodell nicht geÃ¤ndert hat
         } else {
-            //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
+            //beim nÃ¤chsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
             Tool3lgm.activateGraphView = true;
         }
 
@@ -1026,11 +1026,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * Je nach Paramter wir die Konsitenzprüfung bei <code>true</code> ein und bei <code>false</code> ausgeschaltet. Das beinhaltet auch das Anzeigen
+     * Je nach Paramter wir die KonsitenzprÃ¼fung bei <code>true</code> ein und bei <code>false</code> ausgeschaltet. Das beinhaltet auch das Anzeigen
      * der Fehlertabelle.
      *
      * @param state
-     *            wenn <code>true</code> wird die Konsistenzprüfung eingeschaltet, sonst wird sie abgeschaltet
+     *            wenn <code>true</code> wird die KonsistenzprÃ¼fung eingeschaltet, sonst wird sie abgeschaltet
      */
     public void setCheckConsistencyState(boolean state) {
         //als erstes diese Option setzen, da sie in den folgenden Funktionen abgefragt wird
@@ -1048,14 +1048,14 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
             workarea.add(verticalSplitPane, BorderLayout.CENTER);
             horizontalSplitPane = null;
-            // falls vorher schonmal die Konsistenzprüfung eingeschaltet war -> Listener zur
+            // falls vorher schonmal die KonsistenzprÃ¼fung eingeschaltet war -> Listener zur
             // Tabellenaktualisierung wieder entfernen
             if (consistencyChecker != null) {
                 consistencyChecker.changeContext(null);
             }
         } else {
             if (horizontalSplitPane == null) {
-                //wenn der consistencyChecker noch nicht initialisiert war, wird er es hier (man könnte die Zuweisung auch weg lassen)
+                //wenn der consistencyChecker noch nicht initialisiert war, wird er es hier (man kÃ¶nnte die Zuweisung auch weg lassen)
                 consistencyChecker = getConsistencyChecker();
                 horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, verticalSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
                 horizontalSplitPane.setOneTouchExpandable(true);
@@ -1069,7 +1069,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         repaint();
     }
 
-    /** ordnet alle InternalFrames neu an (überlappt) */
+    /** ordnet alle InternalFrames neu an (Ã¼berlappt) */
     public void fensterUeberlappen() {
         JInternalFrame[] frames = desktop.getAllFrames();
         Rectangle rect = desktop.getVisibleRect();
@@ -1153,10 +1153,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 frame.dispose();
             } else {
                 //erst das dispose und erst dann als Tab removen, sonst haut
-                // das Einfügen-Menü nicht mehr hin, weil
+                // das EinfÃ¼gen-MenÃ¼ nicht mehr hin, weil
                 //die Ereignisse internalFrameDeactivated(),
                 // internalFrameClosed() und internalFrameActivated()
-                //sonst in einer ungünstigen Reihenfolge kommen.
+                //sonst in einer ungÃ¼nstigen Reihenfolge kommen.
                 frame.dispose();
                 modelBrowserPanel.removeGraphDocument(frame.getGraphDocument());
             }
@@ -1173,7 +1173,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * Fragt den Benutzer, ob ein geändertes Modell gepsiechert werden soll.
+     * Fragt den Benutzer, ob ein geÃ¤ndertes Modell gepsiechert werden soll.
      *
      * @param gdcoll
      * @return
@@ -1226,11 +1226,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         ArrayList<ElementPropertyDialog> dialogs = ModelConstants.getDialogs();
         for (int n = 0; n < dialogs.size(); n++) {
             ElementPropertyDialog pd = dialogs.get(n);
-            // wenn der Dialog zum zu schließenden Modell gehört
+            // wenn der Dialog zum zu schlieÃŸenden Modell gehÃ¶rt
             if (selDoc.isMyElement(pd.getModelElement())) {
-                // alle Änderungen der geöffneten Dialoge zurück rollen
+                // alle Ã„nderungen der geÃ¶ffneten Dialoge zurÃ¼ck rollen
                 pd.cancel();
-                // in pd.cancel() wird die dialogs.size() um -1 geändert
+                // in pd.cancel() wird die dialogs.size() um -1 geÃ¤ndert
                 n--;
             }
         }
@@ -1297,7 +1297,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return false;
         }
 
-        /* GDCollection zum ausgewähtlen Frame */
+        /* GDCollection zum ausgewÃ¤htlen Frame */
         GraphDocument doc = getSelectedDoc();
         if (doc == null) {
             return false;
@@ -1468,7 +1468,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void windowClosing(final WindowEvent e) {
-        //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
+        //man muss die Liste Clonen, da sie sich durch setSelectedDoc() Ã¤ndert
         ArrayList<GDCollection> collections = new ArrayList<GDCollection>(this.collections);
         //die letzte ist immer die aktive
         for (int i = collections.size() - 1; i >= 0; i--) {
@@ -1479,7 +1479,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
         }
 
-        //Liste der zuletzt geöffneten Dateien merken
+        //Liste der zuletzt geÃ¶ffneten Dateien merken
         for (int i = collections.size() - 1; i >= 0; i--) {
             UserProperties.addUsedFile(collections.get(i).getFile());
         }
@@ -1672,7 +1672,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Fenster als owner
+     * erstellt einen neuen ProgressDialog mit dem Ã¼bergebenen Fenster als owner
      */
     public void showProgressDialog(final JFrame owner) {
         closeProgressDialog();
@@ -1680,7 +1680,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Dialog als owner
+     * erstellt einen neuen ProgressDialog mit dem Ã¼bergebenen Dialog als owner
      */
     public void showProgressDialog(final JDialog owner) {
         closeProgressDialog();
@@ -1688,7 +1688,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt existiert;
+     * setzt einen neuen Titel des ProgressDialog, sofern dieser Ã¼berhaupt existiert;
      * ansonsten passiert nichts
      *
      * @param xmlText String mit dem neuen Titel
@@ -1701,7 +1701,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * schließt den ProgressDialog, sofern dieser überhaupt existiert;
+     * schlieÃŸt den ProgressDialog, sofern dieser Ã¼berhaupt existiert;
      * ansonsten passiert nichts
      */
     public void closeProgressDialog() {
@@ -1713,7 +1713,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
+     * setzt einen neuen Stautstext des ProgressDialog, sofern dieser Ã¼berhaupt existiert;
      * ansonsten passiert nichts
      *
      * @param xmlText String mit neuen Statustext
@@ -1838,7 +1838,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * Überprüft, ob die übergeben Datei eine gültige Lizenzdatei ist.
+     * ÃœberprÃ¼ft, ob die Ã¼bergeben Datei eine gÃ¼ltige Lizenzdatei ist.
      *
      * @param licenseFile
      * @return
@@ -1875,7 +1875,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * Importiert eine Lizenzdatei in das Anwendungsverzeichnis
      */
     public void importLicenseFile() {
-        // FileChooser, mit FileFilter für Lizenzdateien (Endung "lic")
+        // FileChooser, mit FileFilter fÃ¼r Lizenzdateien (Endung "lic")
         ExtendedFileChooser fileChooser = new ExtendedFileChooser(null);
         FileNameExtensionFilter licenseFileFilter = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC);
         fileChooser.setFileSelectionMode(ExtendedFileChooser.FILES_ONLY);
@@ -1883,7 +1883,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         if (fileChooser.showOpenDialog(this, false, licenseFileFilter) == ExtendedFileChooser.APPROVE_OPTION) {
             File licenseFile = fileChooser.getSelectedFile();
-            // in diese Datei wird die ausgwählte Datei kopiert
+            // in diese Datei wird die ausgwÃ¤hlte Datei kopiert
             File importedLicenseFile = new File(Tool3lgmConstants.APPLICATION_DIR, licenseFile.getName());
             try {
                 String licenseError = getLicenseError(licenseFile);
@@ -1970,7 +1970,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 return;
             }
 
-            // Leerzeichen, die in einer Dateiangabe vorkommen dürfen nicht als
+            // Leerzeichen, die in einer Dateiangabe vorkommen dÃ¼rfen nicht als
             // Trennzeichen interpretiert werden
             StringBuilder path = new StringBuilder();
             outerLoop: for (int i = 0; i < params.length; i++) {

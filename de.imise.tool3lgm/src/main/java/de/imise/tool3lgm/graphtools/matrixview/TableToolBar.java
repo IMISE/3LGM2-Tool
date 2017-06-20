@@ -26,34 +26,34 @@ import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.tools.UnfloatableToolBar;
 
 /**
- * Klasse für die Werkzeugleiste eines InternalFrame mit Matrixdarstellung
+ * Klasse fÃ¼r die Werkzeugleiste eines InternalFrame mit Matrixdarstellung
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
 public class TableToolBar extends UnfloatableToolBar implements ChangeListener, ActionListener {
 
     /**
-     * Label für die ComboBox zur Klassenauswahl der Matrixzeilen
+     * Label fÃ¼r die ComboBox zur Klassenauswahl der Matrixzeilen
      */
     private final JLabel rowLabel;
 
     /**
-     * Label für die ComboBox zur Klassenauswahl der Matrixspalten
+     * Label fÃ¼r die ComboBox zur Klassenauswahl der Matrixspalten
      */
     private final JLabel colLabel;
 
     /**
-     * Label, das das Zeilenelement anzeigt, über dem sich die Maus in der Matrix befindet
+     * Label, das das Zeilenelement anzeigt, Ã¼ber dem sich die Maus in der Matrix befindet
      */
     private final JLabel rowElementLabel;
 
     /**
-     * Label, das das Spaltenelement anzeigt, über dem sich die Maus in der Matrix befindet
+     * Label, das das Spaltenelement anzeigt, Ã¼ber dem sich die Maus in der Matrix befindet
      */
     private final JLabel colElementLabel;
 
     /**
-     * Panel für die Legende (gewählter Pfad und Bedeutung der Markierungen in der Matrix)
+     * Panel fÃ¼r die Legende (gewÃ¤hlter Pfad und Bedeutung der Markierungen in der Matrix)
      */
     private final JPanel legendPanel;
 
@@ -63,14 +63,14 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     private final MetaPathSelector metaPathSelector;
 
     /**
-     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne eigene Teilelemente) angezeigt werden soll. Diese
+     * Chekcbox Ã¼ber die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne eigene Teilelemente) angezeigt werden soll. Diese
      * Box ist disabled, wenn weder in den Zeilen noch in den Spalten Elemente angezeigt werden, die in
-     * Teil-Von-Beziehung stehen können.
+     * Teil-Von-Beziehung stehen kÃ¶nnen.
      */
     private final JCheckBox showPartsOnlyCheckBox;
 
     /**
-     * Über diesen <code>boolean</code> wird sich die zuletzt gewählte Option aller geöffneten <code>showPartsOnlyCheckBox</code>es gemerkt, so dass
+     * Ãœber diesen <code>boolean</code> wird sich die zuletzt gewÃ¤hlte Option aller geÃ¶ffneten <code>showPartsOnlyCheckBox</code>es gemerkt, so dass
      * eine neue Checkbox gleich mit diesem Wert initialisiert werden kann.
      */
     private static boolean lastShowPartsOnlyChoice = false;
@@ -136,7 +136,7 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     }
 
     /**
-     * erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der
+     * erstellt fÃ¼gt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der
      * linken oberen Ecke angefangen und dann zeilenweise angeordnet
      *
      * @param owner Componente, die die child-Componenten besitzen soll
@@ -157,7 +157,7 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
         for (int i = 0; i < childs.length; i++) {
 
             /*
-             * erste Spalte immer so klein wie möglich aller anderen können gestreckt werden
+             * erste Spalte immer so klein wie mÃ¶glich aller anderen kÃ¶nnen gestreckt werden
              */
             if (i % columns == 0) {
                 constraints.weightx = 0;
@@ -175,14 +175,14 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     }
 
     /**
-     * Aktualisiert die Matrix und die Einträge in der Legende (gewählter Pfad und Bedeutung der Markierungen in der Matrix)
+     * Aktualisiert die Matrix und die EintrÃ¤ge in der Legende (gewÃ¤hlter Pfad und Bedeutung der Markierungen in der Matrix)
      */
     private void update() {
         //Tabelle updaten
         Class<? extends ModelElement> c1 = metaPathSelector.getSelectedClass1();
         Class<? extends ModelElement> c2 = metaPathSelector.getSelectedClass2();
         MetaPath mp = metaPathSelector.getSelectedMetaPath();
-        //den Frame und somit die Tabelle mit den gewählten Klassen und dem MetaPfad neu aufbauen
+        //den Frame und somit die Tabelle mit den gewÃ¤hlten Klassen und dem MetaPfad neu aufbauen
         controlledFrame.update(c1, c2, mp, lastShowPartsOnlyChoice);
 
         //Legende updaten
@@ -199,7 +199,7 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
 
     /**
      * Aktualisiert die Positionslabels, die die Elemente der Zeile und Spalte darstellen. (Wird aufgerufen, wenn sich die Mausposition in der Matrix
-     * ändert)
+     * Ã¤ndert)
      *
      * @param col {@link ModelElement}, das in der Spalte dargestellt werden soll
      * @param row {@link ModelElement}, das in der Zeile dargestellt werden soll
@@ -219,7 +219,7 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     @Override
     public void stateChanged(final ChangeEvent e) {
         if (e.getSource() == metaPathSelector.getClass2ComboBox()) {
-            //Dialog anzeigen, in dem man einen Pfad auswählen kann
+            //Dialog anzeigen, in dem man einen Pfad auswÃ¤hlen kann
             if (metaPathSelector.getSelectableMetaPathes() != null && metaPathSelector.getSelectableMetaPathes().length > 1) {
                 Object[] msg = {
                         Tool3lgmConstants.getResString("text_path"),

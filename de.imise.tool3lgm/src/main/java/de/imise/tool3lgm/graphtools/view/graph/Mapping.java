@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
 public class Mapping {
 
     /**
-     * Mappt von der Elementklasse auf das zugehörige Standard-<code>GraphElementLayout</code>
+     * Mappt von der Elementklasse auf das zugehÃ¶rige Standard-<code>GraphElementLayout</code>
      */
     private HashMap<Class<? extends ModelElement>, GraphElementLayout> elementClassToStandardLayoutMap = new HashMap<Class<? extends ModelElement>, GraphElementLayout>();
 
@@ -44,7 +44,7 @@ public class Mapping {
     }
 
     /**
-     * Setzt für diese Map alle Werte der übergebenen. Alle <code>GraphElementLayout</code>s der übergebenen
+     * Setzt fÃ¼r diese Map alle Werte der Ã¼bergebenen. Alle <code>GraphElementLayout</code>s der Ã¼bergebenen
      * Map werden geclont.
      * 
      * @param map
@@ -59,7 +59,7 @@ public class Mapping {
     }
 
     /**
-     * Gibt das allgemeine Standardlayout für alle Elementklassen zurück, die kein eigenes Layout besitzen.
+     * Gibt das allgemeine Standardlayout fÃ¼r alle Elementklassen zurÃ¼ck, die kein eigenes Layout besitzen.
      * 
      * @return Returns the standardElementLayout.
      */
@@ -68,23 +68,23 @@ public class Mapping {
     }
 
     /**
-     * Gibt das Standardlayout für ModellElemente der übergebenen Art zurcük.<br>
-     * Existiert in der HashMap mit den Layouts für alle Elemente kein eigener
-     * Eintrag für diese Elementart, wird das StandardLayout zurück gegeben.<br>
-     * Will man das Layout für eine spezielle Elementart setzen, muss man das
-     * Layout übder die Funktion <code>getElementClassSpecificLayout(Class)</code> holen.
+     * Gibt das Standardlayout fÃ¼r ModellElemente der Ã¼bergebenen Art zurcÃ¼k.<br>
+     * Existiert in der HashMap mit den Layouts fÃ¼r alle Elemente kein eigener
+     * Eintrag fÃ¼r diese Elementart, wird das StandardLayout zurÃ¼ck gegeben.<br>
+     * Will man das Layout fÃ¼r eine spezielle Elementart setzen, muss man das
+     * Layout Ã¼bder die Funktion <code>getElementClassSpecificLayout(Class)</code> holen.
      * 
-     * @param me Element, für das das StandardLayout ermitelt werden soll
+     * @param me Element, fÃ¼r das das StandardLayout ermitelt werden soll
      * @see #getElementClassSpecificLayout(Class)
-     * @return StandardLayout für Elemente der übergebenen Art
+     * @return StandardLayout fÃ¼r Elemente der Ã¼bergebenen Art
      */
     private GraphElementLayout getStandardElementLayout(final ModelElement me) {
         return getStandardElementLayout(me.getClass());
     }
 
     /**
-     * @param elementClass Elementklasse, für das das StandardLayout ermitelt werden soll
-     * @return StandardLayout für Elemente der übergebenen Art
+     * @param elementClass Elementklasse, fÃ¼r das das StandardLayout ermitelt werden soll
+     * @return StandardLayout fÃ¼r Elemente der Ã¼bergebenen Art
      */
     public GraphElementLayout getStandardElementLayout(final Class<? extends ModelElement> elementClass) {
         GraphElementLayout layout = elementClassToStandardLayoutMap.get(elementClass);
@@ -95,11 +95,11 @@ public class Mapping {
     }
 
     /**
-     * Gibt für die übergebene Elementklasse das eigene Standardlayout zurück. Sollte in der HashMap mit allen
-     * Layouts bisher kein eigenes für diese Elementart vorhanden sein, wird das Standardlayout geclont, in die
-     * HashMap eingetragen und zurückgegeben.<br>
-     * Über diese Funktion sollte das Layout einer Elementart immer ermittelt werden, wenn man einen Wert setzen
-     * möchte. Bei reinen Abfragen kann man das immer über <code>getStandardGraphElementLayout(Class)</code> tun.
+     * Gibt fÃ¼r die Ã¼bergebene Elementklasse das eigene Standardlayout zurÃ¼ck. Sollte in der HashMap mit allen
+     * Layouts bisher kein eigenes fÃ¼r diese Elementart vorhanden sein, wird das Standardlayout geclont, in die
+     * HashMap eingetragen und zurÃ¼ckgegeben.<br>
+     * Ãœber diese Funktion sollte das Layout einer Elementart immer ermittelt werden, wenn man einen Wert setzen
+     * mÃ¶chte. Bei reinen Abfragen kann man das immer Ã¼ber <code>getStandardGraphElementLayout(Class)</code> tun.
      * 
      * @param elementClass
      * @see #getStandardGraphElementLayout(Class)
@@ -217,7 +217,7 @@ public class Mapping {
         getElementClassSpecificLayout(elementClass).setFont(font);
     }
 
-    //TODO: die Defaults müssten der Klasse irgendwie von außen übergeben werden
+    //TODO: die Defaults mÃ¼ssten der Klasse irgendwie von auÃŸen Ã¼bergeben werden
 
     public void loadDefaults() {
         elementClassToStandardLayoutMap.clear();
@@ -272,7 +272,7 @@ public class Mapping {
 
         setStandardSize(Knickpunkt.class, 10, 10);
 
-        //		Alte Darstellung (entfernen, wenn das oben läuft)
+        //		Alte Darstellung (entfernen, wenn das oben lÃ¤uft)
         //		for (int c=0;c<ModelConstants.HIGHEST_CLASS_TYPE;c++) {
         //			layout_new[c].reset();
         //			layout_new[c].font = STANDARD_FONT;

@@ -16,7 +16,7 @@ import de.imise.util.io.FileNameExtensionFilterAndFileFilter;
 public class XSLTFileHandler {
 
     /**
-     * {@link javax.swing.filechooser.FileFilter} für XSL-Dateien
+     * {@link javax.swing.filechooser.FileFilter} fÃ¼r XSL-Dateien
      */
     public static final FileNameExtensionFilterAndFileFilter XSLT_FILE_FILTER = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getResString("FILE_FILTER_XSL"), StringUtils.tokenize(Tool3lgmConstants.getResString("FILE_FILTER_XSL_EXT"), " ",
             false));
@@ -87,7 +87,7 @@ public class XSLTFileHandler {
             String line;
             int endIndex;
 
-            // Leerzeilen überspringen
+            // Leerzeilen Ã¼berspringen
             while ((line = file.readLine()).equals("")) {
                 continue;
             }
@@ -96,7 +96,7 @@ public class XSLTFileHandler {
                 return null;
             }
 
-            // Leerzeilen überspringen
+            // Leerzeilen Ã¼berspringen
             while ((line = file.readLine()).equals("")) {
                 continue;
             }
@@ -109,7 +109,7 @@ public class XSLTFileHandler {
             }
             attr[1] = line.substring(10, endIndex);
 
-            // Leerzeilen überspringen
+            // Leerzeilen Ã¼berspringen
             while ((line = file.readLine()).equals("")) {
                 continue;
             }
@@ -122,7 +122,7 @@ public class XSLTFileHandler {
             }
             attr[2] = line.substring(10, endIndex);
 
-            // Leerzeilen überspringen
+            // Leerzeilen Ã¼berspringen
             while ((line = file.readLine()).equals("")) {
                 continue;
             }
@@ -135,7 +135,7 @@ public class XSLTFileHandler {
             }
             attr[3] = line.substring(17, endIndex);
 
-            // Leerzeilen überspringen
+            // Leerzeilen Ã¼berspringen
             while ((line = file.readLine()).equals("")) {
                 continue;
             }

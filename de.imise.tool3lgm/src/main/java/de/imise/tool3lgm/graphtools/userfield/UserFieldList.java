@@ -50,8 +50,8 @@ public class UserFieldList implements Cloneable, Iterable<UserField> {
         if (!userFields.contains(userField)) {
             userFields.add(userField);
         } else {
-            // Das hier ermöglich das Importieren von userFields. 
-            // Es werden somit schon bestehende userField und deren Eiegenschaften überschrieben
+            // Das hier ermÃ¶glich das Importieren von userFields. 
+            // Es werden somit schon bestehende userField und deren Eiegenschaften Ã¼berschrieben
             userFields.remove(userField);
             userFields.add(userField);
         }

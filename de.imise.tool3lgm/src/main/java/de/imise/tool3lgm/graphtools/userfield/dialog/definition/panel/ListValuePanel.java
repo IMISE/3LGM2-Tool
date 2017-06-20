@@ -18,12 +18,12 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 public class ListValuePanel extends AbstractInputPanel {
 
     /**
-     * Das <code>UserField</code>, dessen Listeneintr‰ge ge‰ndert werden sollen.
+     * Das <code>UserField</code>, dessen Listeneintr√§ge ge√§ndert werden sollen.
      */
     private final UserField userField;
 
     /**
-     * Eingabefeld f¸r die Listenwerte
+     * Eingabefeld f√ºr die Listenwerte
      */
     private final ExtendedTextField valueListTextField = new ExtendedTextField();
 

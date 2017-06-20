@@ -31,8 +31,8 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /**
  * Exportiert eine Tabelle mit den Spalten
- * "Aufgabe_ID", "Aufgabe", "Teilaufgabe_ID", "Teilaufgabe", "Beschreibung", "Ort der Durchführung", "Verantwortliche Rolle", "Anwendungssystem",
- * "Physischer DV-Baustein", "Benötiger Speicherplatz"
+ * "Aufgabe_ID", "Aufgabe", "Teilaufgabe_ID", "Teilaufgabe", "Beschreibung", "Ort der DurchfÃ¼hrung", "Verantwortliche Rolle", "Anwendungssystem",
+ * "Physischer DV-Baustein", "BenÃ¶tiger Speicherplatz"
  *
  * @author AXS
  * @create 02.07.2012
@@ -79,7 +79,7 @@ public class B1ExportPlugin implements Plugin {
 
                 StringBuilder fullTextBuilder = new StringBuilder();
                 fullTextBuilder.append(getTableHead(maxHierarchyDepth));
-                //für alle Blätter im Aufgabenbaum
+                //fÃ¼r alle BlÃ¤tter im Aufgabenbaum
                 for (ElementContainer leafFuncEc : absolutePartContainer) {
                     fullTextBuilder.append(getLine(leafFuncEc, maxHierarchyDepth));
                 }
@@ -101,14 +101,14 @@ public class B1ExportPlugin implements Plugin {
     }
 
     /**
-     * Schreibt die Zeile für die übergebene Aufgabe, die eine Blattaufgabe im Hierarchiebaum sein sollte
+     * Schreibt die Zeile fÃ¼r die Ã¼bergebene Aufgabe, die eine Blattaufgabe im Hierarchiebaum sein sollte
      *
      * @param functionLeafEc
      */
     private static final String getLine(final ElementContainer leafFuncEc, final int maxHierarchyDepth) {
         ModelElement func = leafFuncEc.getElement();
         GraphDocument doc = leafFuncEc.getGraphDocument();
-        //Liste von Listen mit den Parents der übergebenen Funktion. In der ersten Liste steht die übergebenen
+        //Liste von Listen mit den Parents der Ã¼bergebenen Funktion. In der ersten Liste steht die Ã¼bergebenen
         //Funktion, in der zweiten ihre direkten Parents, in der dritten deren Parents usw.
         ArrayList<ArrayList<ElementContainer>> parentLists = new ArrayList<ArrayList<ElementContainer>>();
         ArrayList<ElementContainer> parents = new ArrayList<ElementContainer>();
@@ -124,7 +124,7 @@ public class B1ExportPlugin implements Plugin {
             parents = newParents;
         }
 
-        //einrücken
+        //einrÃ¼cken
         StringBuilder linePartBuilder = new StringBuilder();
         appendEmptyColumns(linePartBuilder, (maxHierarchyDepth - parentLists.size()) * 2, false);
 
@@ -138,44 +138,44 @@ public class B1ExportPlugin implements Plugin {
             linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(parents), true));
             linePartBuilder.append("\t");
         }
-        //Beschreibung der übergebenen Funktion anhängen
+        //Beschreibung der Ã¼bergebenen Funktion anhÃ¤ngen
         linePartBuilder.append(GraphDocument.getParseSaveString(func.getDescription(), true));
         linePartBuilder.append("\t");
 
-        //Ort der Durchführung des Prozesses ist ein UserField namens 'Räume'
+        //Ort der DurchfÃ¼hrung des Prozesses ist ein UserField namens 'RÃ¤ume'
         for (UserField uf : func.getUserFieldInputValueKeys()) {
             if (uf.getName().equals("Raum")) {
                 linePartBuilder.append(GraphDocument.getParseSaveString(func.getUserFieldInputValue(uf), true));
                 break;
             }
         }
-        //wenn kein solches Userfield gefunden wurde, steht immer noch der TAB aus der letzten Spalte vorne -> ein Leerzeichen anhängen
+        //wenn kein solches Userfield gefunden wurde, steht immer noch der TAB aus der letzten Spalte vorne -> ein Leerzeichen anhÃ¤ngen
         if (linePartBuilder.charAt(linePartBuilder.length() - 1) == '\t') {
             linePartBuilder.append(GraphDocument.getParseSaveString(""));
         }
         linePartBuilder.append("\t");
 
-        //für jede AufOrgKombination bzw. damit verknüpfe OEs muss eine eigene Zeile generiert werden
+        //fÃ¼r jede AufOrgKombination bzw. damit verknÃ¼pfe OEs muss eine eigene Zeile generiert werden
         ArrayList<ElementContainer> aufOrgCombis = func.getConnectedContainer(AufOrgKombination.class, doc);
-        //wenn gar keine OEs verknüpft sind -> einfach nur die Aufgabenhierarchie zurück geben.
+        //wenn gar keine OEs verknÃ¼pft sind -> einfach nur die Aufgabenhierarchie zurÃ¼ck geben.
         if (aufOrgCombis.size() == 0) {
             appendNoOeConnected(linePartBuilder);
             return linePartBuilder.toString();
         }
 
-        //das ist der Anfang jeder Zeile (also alle Aufgaben bis hin zur Blattaufgabe mit deren Beschreibung und dem Ort der Prozessdurchführung)
+        //das ist der Anfang jeder Zeile (also alle Aufgaben bis hin zur Blattaufgabe mit deren Beschreibung und dem Ort der ProzessdurchfÃ¼hrung)
         String lineStart = linePartBuilder.toString();
 
-        //falls mehrere OEs mit mehreren AWBs für die Ausgangsaufgabe verknüpft sind, müssen mehrere Zeilen erzeugt werden,
+        //falls mehrere OEs mit mehreren AWBs fÃ¼r die Ausgangsaufgabe verknÃ¼pft sind, mÃ¼ssen mehrere Zeilen erzeugt werden,
         //die alle mit dem lineStart beginnen. Am Ende stehen diese gleich beginnenden Zeilen in fullLineBuilder
         StringBuilder fullLinesBuilder = new StringBuilder();
 
         for (ElementContainer aufOrgComb : aufOrgCombis) {
             ArrayList<ElementContainer> oes = aufOrgComb.getElement().getConnectedContainer(Organisationseinheit.class, doc);
-            //an der AufOrgKombi hängen keine OEs -> Zeile ist zu Ende
+            //an der AufOrgKombi hÃ¤ngen keine OEs -> Zeile ist zu Ende
             if (oes.size() == 0) {
                 fullLinesBuilder.append(lineStart);
-                //aktuelle Zeile mit Leerspalten auffüllen und abschließen
+                //aktuelle Zeile mit Leerspalten auffÃ¼llen und abschlieÃŸen
                 appendNoOeConnected(fullLinesBuilder);
                 continue;
             }
@@ -188,18 +188,18 @@ public class B1ExportPlugin implements Plugin {
             linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(oes), true));
             linePartBuilder.append("\t");
 
-            //ACHTUNG: es werden einfach alle Konfigurationen ausgeblendet, also einfach nur alle verknüpften AWBs eingesammelt,
-            //egal ob sie in einer oder mehreren Konfigurationen stecken. Sonst müsste man für jede Konfig eine weitere Zeile anlegen
+            //ACHTUNG: es werden einfach alle Konfigurationen ausgeblendet, also einfach nur alle verknÃ¼pften AWBs eingesammelt,
+            //egal ob sie in einer oder mehreren Konfigurationen stecken. Sonst mÃ¼sste man fÃ¼r jede Konfig eine weitere Zeile anlegen
             ArrayList<ElementContainer> awbs = new ArrayList<ElementContainer>();
             for (ElementContainer awbKonf : aufOrgComb.getElement().getConnectedContainer(ABKonfiguration.class, doc)) {
                 awbs.addAll(awbKonf.getElement().getConnectedContainer(Anwendungsbaustein.class, doc));
             }
 
-            //Kein AWB vorhanden -> aktuelle Zeile für diese OEs abschließen
+            //Kein AWB vorhanden -> aktuelle Zeile fÃ¼r diese OEs abschlieÃŸen
             if (awbs.size() == 0) {
-                linePartBuilder.append(GraphDocument.getParseSaveString("Kein Anwendungssystem verknüpft"));
+                linePartBuilder.append(GraphDocument.getParseSaveString("Kein Anwendungssystem verknÃ¼pft"));
                 linePartBuilder.append("\t");
-                //aktuelle Zeile mit Leerspalten auffüllen und abschließen
+                //aktuelle Zeile mit Leerspalten auffÃ¼llen und abschlieÃŸen
                 appendEmptyColumns(linePartBuilder, 2, true);
                 fullLinesBuilder.append(linePartBuilder);
                 continue;
@@ -222,9 +222,9 @@ public class B1ExportPlugin implements Plugin {
             }
 
             if (pdvbs.size() == 0) {
-                linePartBuilder.append(GraphDocument.getParseSaveString("Keine Physischen DV-Bausteine verknüpft"));
+                linePartBuilder.append(GraphDocument.getParseSaveString("Keine Physischen DV-Bausteine verknÃ¼pft"));
                 linePartBuilder.append("\t");
-                //aktuelle Zeile mit Leerspalten auffüllen und abschließen
+                //aktuelle Zeile mit Leerspalten auffÃ¼llen und abschlieÃŸen
                 appendEmptyColumns(linePartBuilder, 1, true);
                 fullLinesBuilder.append(linePartBuilder);
                 continue;
@@ -234,7 +234,7 @@ public class B1ExportPlugin implements Plugin {
             linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(pdvbs)));
             linePartBuilder.append("\t");
 
-            //Speicherplatz ist noch nicht gekärt -> einfach Leer setzen
+            //Speicherplatz ist noch nicht gekÃ¤rt -> einfach Leer setzen
             appendEmptyColumns(linePartBuilder, 1, true);
             fullLinesBuilder.append(linePartBuilder);
 
@@ -258,14 +258,14 @@ public class B1ExportPlugin implements Plugin {
     }
 
     /**
-     * Fügt dem übergebenen {@link StringBuilder} die Info an, dass keine Organisationseinheit
-     * mit der Aufgabe aus dieser Zeile verknüpft ist und füllt die hinteren Spalten mit Leerspalten
-     * und schließt die Gesamtzeile mit einem Zeilenumbruch ab.
+     * FÃ¼gt dem Ã¼bergebenen {@link StringBuilder} die Info an, dass keine Organisationseinheit
+     * mit der Aufgabe aus dieser Zeile verknÃ¼pft ist und fÃ¼llt die hinteren Spalten mit Leerspalten
+     * und schlieÃŸt die Gesamtzeile mit einem Zeilenumbruch ab.
      *
      * @param sb
      */
     private static final void appendNoOeConnected(final StringBuilder sb) {
-        sb.append(GraphDocument.getParseSaveString("Keine Organisationseinheit verknüpft"));
+        sb.append(GraphDocument.getParseSaveString("Keine Organisationseinheit verknÃ¼pft"));
         sb.append("\t");
         appendEmptyColumns(sb, 3, true);
     }
@@ -301,7 +301,7 @@ public class B1ExportPlugin implements Plugin {
             }
             sb.append(", ");
         }
-        //letztes Komma löschen
+        //letztes Komma lÃ¶schen
         if (sb.length() > 0) {
             sb.setLength(sb.length() - 2);
         }
@@ -334,18 +334,18 @@ public class B1ExportPlugin implements Plugin {
         sb.append("Teilaufgabe_ID\t");
         sb.append("Teilaufgabe\t");
         sb.append("Beschreibung\t");
-        sb.append("Ort der Durchführung\t");
+        sb.append("Ort der DurchfÃ¼hrung\t");
         sb.append("Verantwortliche Rolle\t");
         sb.append("Anwendungssystem\t");
         sb.append("Physischer DV-Baustein\t");
-        sb.append("Benötiger Speicherplatz\t");
+        sb.append("BenÃ¶tiger Speicherplatz\t");
         appendNewLine(sb);
         return sb.toString();
     }
 
     /**
-     * Liefert die Anzahl an mit Teil-Von-Beziehungen übergeordneten Elementen im selben {@link GraphDocument} des
-     * übergebenen Containers.
+     * Liefert die Anzahl an mit Teil-Von-Beziehungen Ã¼bergeordneten Elementen im selben {@link GraphDocument} des
+     * Ã¼bergebenen Containers.
      *
      * @param ec
      * @return

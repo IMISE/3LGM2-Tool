@@ -169,7 +169,7 @@ public class MetaPath {
 
     /**
      * Es wird sicher gestellt, dass die Assoziationen einen Pfad von der Start- zur Zielklasse des Pfades beschreiben. Im Moment wird noch nicht die
-     * Konsistenz geprüft, sondern nur, ob die erste Assoziation zur Startklasse und die letzte Assoziation zur
+     * Konsistenz geprÃ¼ft, sondern nur, ob die erste Assoziation zur Startklasse und die letzte Assoziation zur
      * Endklasse passen.
      */
     private final void ensureAssociationOrder() {
@@ -223,29 +223,29 @@ public class MetaPath {
     }
 
     /**
-     * Gibt die Länge des Metapfades an Position <code>pathIndex</code> zurück.
+     * Gibt die LÃ¤nge des Metapfades an Position <code>pathIndex</code> zurÃ¼ck.
      *
-     * @param Index des Metapfades, dessen Länge zurück gegeben werden soll
-     * @return Länge des Metapfades an Position <code>pathIndex</code>
+     * @param Index des Metapfades, dessen LÃ¤nge zurÃ¼ck gegeben werden soll
+     * @return LÃ¤nge des Metapfades an Position <code>pathIndex</code>
      */
     public final int getLength(final int pathIndex) {
         return associations[pathIndex].length;
     }
 
     /**
-     * Gibt die Länge des ersten Metapfades zurück.
+     * Gibt die LÃ¤nge des ersten Metapfades zurÃ¼ck.
      *
-     * @return Länge des Metapfades an Position 0
+     * @return LÃ¤nge des Metapfades an Position 0
      */
     public final int getLength() {
         return associations[0].length;
     }
 
     /**
-     * Liefert <code>true</code>, wenn der Pfad an Position <code>pathIndex</code> die Länge 1 besitzt.
+     * Liefert <code>true</code>, wenn der Pfad an Position <code>pathIndex</code> die LÃ¤nge 1 besitzt.
      *
      * @param pathIndex
-     * @return <code>true</code>, wenn der Metapfad an Position <code>pathIndex</code> die Länge 1 besitzt.
+     * @return <code>true</code>, wenn der Metapfad an Position <code>pathIndex</code> die LÃ¤nge 1 besitzt.
      */
     public final boolean isImmediate(final int pathIndex) {
         return getLength(pathIndex) == 1;
@@ -398,7 +398,7 @@ public class MetaPath {
             return false;
         }
         MetaPath mp = (MetaPath) obj;
-        //Start- und Endklasse müssen gleich sein
+        //Start- und Endklasse mÃ¼ssen gleich sein
         if (mp.startClass != startClass || mp.endClass != endClass) {
             return false;
         }

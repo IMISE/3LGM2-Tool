@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
 /**
- * Von {@link NodeContainer} abgeleitete Klasse, die den Container für {@link Aufgabe}n
+ * Von {@link NodeContainer} abgeleitete Klasse, die den Container fÃ¼r {@link Aufgabe}n
  * und {@link Anwendungsbaustein}e darstellt.
  * <p>
  * Im Unterschied zur Oberklasse kann hier das Anzeigen der Interebenenbeziehungen gesteurt werden.
@@ -46,7 +46,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
     /**
      * Konstruktor
      * <p>
-     * Benötigt für cloning in {@link ElementContainer#clone(boolean, GraphDocument)}
+     * BenÃ¶tigt fÃ¼r cloning in {@link ElementContainer#clone(boolean, GraphDocument)}
      */
     public InterLayerConnectedNodeContainer() {
         super();
@@ -64,8 +64,8 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
     }
 
     /**
-     * Überprüft initial ob Interebenenbeziehungen angezeigt werden sollen. <br>
-     * Dafür wird überprüft, ob auf der jeweiligen Ebene das Anzeigen aller Interebenenbeziehungen
+     * ÃœberprÃ¼ft initial ob Interebenenbeziehungen angezeigt werden sollen. <br>
+     * DafÃ¼r wird Ã¼berprÃ¼ft, ob auf der jeweiligen Ebene das Anzeigen aller Interebenenbeziehungen
      * aktiviert ist oder nicht.
      * 
      * @param doc

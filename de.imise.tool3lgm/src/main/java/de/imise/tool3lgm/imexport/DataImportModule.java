@@ -238,7 +238,7 @@ public class DataImportModule {
     //
     //        try {
     //
-    //            //das hier war ohne das try-catch das Original. Rückgängig: einfach alle xmlOutStream.writeBytes
+    //            //das hier war ohne das try-catch das Original. RÃ¼ckgÃ¤ngig: einfach alle xmlOutStream.writeBytes
     //            //durch xmlBuilder.append ersetzen
     //            //		StringBuilder xmlBuilder = new StringBuilder(100000);
     //
@@ -323,8 +323,8 @@ public class DataImportModule {
     //                    String hash = realIndex < userFieldHashStrings.size() ? userFieldHashStrings.get(realIndex) : "" + realIndex;
     //                    String value = tokens.get(j);
     //                    int index = value.indexOf("_rangedef_");
-    //                    //AXS: die RangeDefs sind komplett rausgeflogen. Da ich die Konsequenzen von Änderungen an dieser Stelle nicht kenne, lasse
-    //                    //ich den Code hier stehen. nur unten das anhängen der Range-De-Information an den XML-String habe ich rausgenommen.
+    //                    //AXS: die RangeDefs sind komplett rausgeflogen. Da ich die Konsequenzen von Ã„nderungen an dieser Stelle nicht kenne, lasse
+    //                    //ich den Code hier stehen. nur unten das anhÃ¤ngen der Range-De-Information an den XML-String habe ich rausgenommen.
     //                    @SuppressWarnings("unused")
     //                    String rangeDef = "";
     //                    if (index > -1) {

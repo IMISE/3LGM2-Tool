@@ -41,9 +41,9 @@ import de.imise.util.StringUtils;
  * <li>Objekttypen ihre Aufgaben</li>
  * </ul>
  * <br>
- * an. Hinzufügen von Assoziationen zw. den Elementen und Neuanlegen von Aufgaben bzw. Objekttypen
+ * an. HinzufÃ¼gen von Assoziationen zw. den Elementen und Neuanlegen von Aufgaben bzw. Objekttypen
  * geht auch.
- * Das hier könnte man auch aus 2 {@link PathConnectionPanel} zusammen bauen
+ * Das hier kÃ¶nnte man auch aus 2 {@link PathConnectionPanel} zusammen bauen
  */
 public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
@@ -70,7 +70,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(BACKWARD));
         JLabel lolabel = new JLabel(lolabeltext);
 
-        //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
+        //hier niemals das this lÃ¶schen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
         boolean showRootHandles = ModelConstants.canHaveParts(this.searchElementClass);
 
         loroot = new LGMTreeNode("loroot", false);

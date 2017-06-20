@@ -24,7 +24,7 @@ public class Tool3lgmMain {
      */
     public static void main(final String args[]) {
 
-        //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
+        //als allererstes mÃ¼ssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
         //die Ressourcen gefunden werden
         Tool3lgm.init();
 

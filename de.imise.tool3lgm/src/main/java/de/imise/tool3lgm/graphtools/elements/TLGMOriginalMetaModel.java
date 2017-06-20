@@ -159,7 +159,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             //auch die Assoziationsklasse hier eintagen
             KommBeziehung.class,
 
-            //abstracte Knoten müssen hier auch eingetragen werden
+            //abstracte Knoten mÃ¼ssen hier auch eingetragen werden
             Anwendungsbaustein.class,
             EtntEtdtKombination.class,
             Schnittstelle.class,
@@ -410,7 +410,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             Dokumententyp.class, EreignisDokumentenTyp.class, EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class,
             Softwareprodukt.class, Standort.class, Subnetz.class);
 
-    /** Alle Klassen, die man über den Datenimport einlesen kann */
+    /** Alle Klassen, die man Ã¼ber den Datenimport einlesen kann */
     @Override
     public final Class[] getImportableNodes() {
         return IMPORTABLE_NODES;
@@ -427,7 +427,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     ///////////////////////////////////
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse fÃ¼r Elemente der Elementklasse eine
      * Bedeutung haben.
      */
     @Override
@@ -438,7 +438,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     /**
-     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
+     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach Ã¼ber dieselbe Kantenart miteinander verbunden sein kÃ¶nnen.
      */
     @Override
     public final Set<Class<? extends Kante>> getMultipleEdgeClasses() {
@@ -446,7 +446,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
+     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein mÃ¼ssten, aber aus Unwissenheit beim Entwurf des
      * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
      * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
@@ -456,25 +456,25 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     public final Set<Class<? extends Kante>> getDoubleMeaningEdgeClasses() {
         return ImmutableSet.<Class<? extends Kante>> of(
-                //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
-                //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
+                //vorwÃ¤rts1: bearbeitet; rÃ¼ckwÃ¤rts1: wird bearbeitet von
+                //vorwÃ¤rts2: interpretiert; rÃ¼ckwÃ¤rts2: wird interpretiert von
                 AufObjVerbindung.class,
-                //vorwärts1: kann senden; rückwärts1: kann gesendet werden von
-                //vorwärts2: kann empfangen; rückwärts2: kann empfangen werden von
+                //vorwÃ¤rts1: kann senden; rÃ¼ckwÃ¤rts1: kann gesendet werden von
+                //vorwÃ¤rts2: kann empfangen; rÃ¼ckwÃ¤rts2: kann empfangen werden von
                 BssEtntVerbindung.class,
-                //vorwärts1: sendet über; rückwärts1: wird gesendet über
-                //vorwärts2: empfängt über; rückwärts2: wird empfangen über
+                //vorwÃ¤rts1: sendet Ã¼ber; rÃ¼ckwÃ¤rts1: wird gesendet Ã¼ber
+                //vorwÃ¤rts2: empfÃ¤ngt Ã¼ber; rÃ¼ckwÃ¤rts2: wird empfangen Ã¼ber
                 KommbezEtntVerbindung.class,
-                //vorwärts1: sendet an; rückwärts1: empfängt von
-                //vorwärts2: sendet an; rückwärts2: empfängt von
+                //vorwÃ¤rts1: sendet an; rÃ¼ckwÃ¤rts1: empfÃ¤ngt von
+                //vorwÃ¤rts2: sendet an; rÃ¼ckwÃ¤rts2: empfÃ¤ngt von
                 //ACHTUNG: Dies ist auch eine Kante mit doppelter Bedeutung, weil sie das gerichtete
-                //Senden und Empfangen zw. Schnittstellen ausdrückt. Da aber beide Endklassen gleich sind
+                //Senden und Empfangen zw. Schnittstellen ausdrÃ¼ckt. Da aber beide Endklassen gleich sind
                 //haben sie auch in beiden Richtungen immer dieselb Bedeutung.
                 KommBeziehung.class);
     }
 
     /**
-     * Menge aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
+     * Menge aller Kantenklassen, die nur in VorwÃ¤rtsrichtung verbunden werden und somit immer nur in dieser Richtung in
      * der Grafik dargestelt werden.
      */
     @Override
@@ -490,8 +490,8 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     public MetaPath[] getInterLayerConnectedElementPathes() {
-        //die MetaPfade müssen hier über diesen umständlichen Weg initialisiert werden, da wenn man sie
-        //außerhalb dieser Funktion gleich der Variable zuweist, die gesamt Initialisierung fehl schlägt
+        //die MetaPfade mÃ¼ssen hier Ã¼ber diesen umstÃ¤ndlichen Weg initialisiert werden, da wenn man sie
+        //auÃŸerhalb dieser Funktion gleich der Variable zuweist, die gesamt Initialisierung fehl schlÃ¤gt
         if (INTER_LAYER_CONNECTED_ELEMENT_PATHES == null) {
             INTER_LAYER_CONNECTED_ELEMENT_PATHES = new MetaPath[] {
                     new MetaPath(Aufgabe.class, ABKonfiguration.class, new Class[][] {

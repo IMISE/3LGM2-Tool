@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
- * Das <code>ReferncePanel</code> wird genutzt um für Kennzahlformeln an Kanten die Verrechunugsfunktion Reference zu definieren.
+ * Das <code>ReferncePanel</code> wird genutzt um fÃ¼r Kennzahlformeln an Kanten die Verrechunugsfunktion Reference zu definieren.
  * 
  * @author hboehme
  */
@@ -48,7 +48,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
     private final UserField userField;
 
     /**
-     * Das Array, dass alle Elementklassen entählt. Von diesen Elementklassen können <code>UserField></code>s ausgewählt werden.
+     * Das Array, dass alle Elementklassen entÃ¤hlt. Von diesen Elementklassen kÃ¶nnen <code>UserField></code>s ausgewÃ¤hlt werden.
      */
     private Class<? extends ModelElement>[] classes;
 
@@ -68,12 +68,12 @@ public class ReferencePanel extends JPanel implements ActionListener {
     private JRadioButton vgzmRB;
 
     /**
-     * Diese <code>AlphabeticalJList</code> hält die userFields der Start bzw. Endklassen
+     * Diese <code>AlphabeticalJList</code> hÃ¤lt die userFields der Start bzw. Endklassen
      */
     private AlphabeticalJList userFieldList;
 
     /**
-     * Die <code>startClassesList</code> hält die möglichen Klassen der Startklassen
+     * Die <code>startClassesList</code> hÃ¤lt die mÃ¶glichen Klassen der Startklassen
      */
     private AlphabeticalJList classesList;
 
@@ -180,7 +180,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Prüft, ob an allen nötigen Stellen Selektionen vorgenommen wurden.
+     * PrÃ¼ft, ob an allen nÃ¶tigen Stellen Selektionen vorgenommen wurden.
      */
     private boolean verify() {
         if (classesList.getSelectedIndex() == -1) {

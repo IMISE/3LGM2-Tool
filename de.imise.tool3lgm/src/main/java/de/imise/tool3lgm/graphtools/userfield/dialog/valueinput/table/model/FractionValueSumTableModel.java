@@ -22,7 +22,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
     }
 
     /**
-     * Entfernt je nach Werten der übergebenen boolean-Varibalen alle Elemente, die nicht dazu passen aus der übergebenen Liste
+     * Entfernt je nach Werten der Ã¼bergebenen boolean-Varibalen alle Elemente, die nicht dazu passen aus der Ã¼bergebenen Liste
      * 
      * @param elements
      */
@@ -32,11 +32,11 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
             for (int i = elementsSize; i <= 0; i--) {
                 ModelElement other = elements.get(i);
                 boolean stay = false;
-                if (showTopLevel && !other.hasDirectParentContainer(doc)) { // Top-Level-E. anfügen
+                if (showTopLevel && !other.hasDirectParentContainer(doc)) { // Top-Level-E. anfÃ¼gen
                     stay = true;
-                } else if (showInner && other.hasDirectParentContainer(doc) && other.hasDirectPartContainer(doc)) { // Innere E. anfügen
+                } else if (showInner && other.hasDirectParentContainer(doc) && other.hasDirectPartContainer(doc)) { // Innere E. anfÃ¼gen
                     stay = true;
-                } else if (showLeafs && !other.hasDirectPartContainer(doc)) { // Blatt-E. anfügen
+                } else if (showLeafs && !other.hasDirectPartContainer(doc)) { // Blatt-E. anfÃ¼gen
                     stay = true;
                 }
                 if (!stay) {
@@ -58,7 +58,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
         Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
 
         int direction = edgeForwardDirection ? Doppelkante.FORWARD : Doppelkante.BACKWARD;
-        //alle mit dem Element über die Kante verbundenen Elemente holen
+        //alle mit dem Element Ã¼ber die Kante verbundenen Elemente holen
         List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction, true);
 
         removeNotVisibleHierarchyElements(modelElements, showTopLevel, showInner, showLeafs);
@@ -80,8 +80,8 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
         for (UserField userField : fractionValueSumUserFields) {
             NamedObjectContainer<UserField> columnUserFieldContainer = new NamedObjectContainer<UserField>(userField, userField.getName());
             columnIdentifiers.add(columnUserFieldContainer);
-            //der folgende Aufruf stellt sicher, dass immer die aktuellen Werte für die Teilwerte berechnte werden. Beim Abfragen des Wertes des UserFields
-            //wird die Map mit den Teilwerten gefüllt, die unten beim Aufbau des Datenvektors abfragt wird.
+            //der folgende Aufruf stellt sicher, dass immer die aktuellen Werte fÃ¼r die Teilwerte berechnte werden. Beim Abfragen des Wertes des UserFields
+            //wird die Map mit den Teilwerten gefÃ¼llt, die unten beim Aufbau des Datenvektors abfragt wird.
             userField.getValue(me);
         }
 

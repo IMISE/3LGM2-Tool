@@ -23,15 +23,15 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
 /**
- * Repräsentiert genau eine Zelle eines UserFieldTables. Ist Editor- und die Renderer-Komponente für eine Zelle. Sorgt dafür, dass der
- * anzuzeigende Wert der Zelle formatiert dargestellt wird. Bei Selektion mehrerer Zellen werden Wertänderungen in allen diesen Zellen übernommen.
- * Dieses Verhalten wird durch die entsprechend überschriebene Methode
+ * ReprÃ¤sentiert genau eine Zelle eines UserFieldTables. Ist Editor- und die Renderer-Komponente fÃ¼r eine Zelle. Sorgt dafÃ¼r, dass der
+ * anzuzeigende Wert der Zelle formatiert dargestellt wird. Bei Selektion mehrerer Zellen werden WertÃ¤nderungen in allen diesen Zellen Ã¼bernommen.
+ * Dieses Verhalten wird durch die entsprechend Ã¼berschriebene Methode
  * {@link #getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)} erzielt. Zur Abfrage der Editor- bzw. Rendererkomponente
  * dienen die Methoden {@link #getTableCellEditorComponent(JTable, Object, boolean, int, int)} bzw.
- * {@link #getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)}. Die zurückgegebenen Komponenten sollten vom Table als
- * Editor- bzw. Rendererkomponente benutzt werden, um eine formatierte Darstellung der Werte zu erreichen. Außerdem wird dem
+ * {@link #getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)}. Die zurÃ¼ckgegebenen Komponenten sollten vom Table als
+ * Editor- bzw. Rendererkomponente benutzt werden, um eine formatierte Darstellung der Werte zu erreichen. AuÃŸerdem wird dem
  * <code>AbstractUserFieldTableModel</code> des <code>UserFielTable</code>s, der diese Zelle beinhaltet, mitgeteilt, ob sich der Wert der Zelle
- * möglicherweiße geändert hat. Diese Änderungsbenachrichtigung erfolgt beim Beginn des Editierens dieser Zelle, d.h., nach dem Aufruf der Methode
+ * mÃ¶glicherweiÃŸe geÃ¤ndert hat. Diese Ã„nderungsbenachrichtigung erfolgt beim Beginn des Editierens dieser Zelle, d.h., nach dem Aufruf der Methode
  * {@link #shouldSelectCell(EventObject)} bzw. {@link #getTableCellEditorComponent(JTable, Object, boolean, int, int)}.
  * 
  * @author fstephan
@@ -39,12 +39,12 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 public class UserFieldActivatedTableCell implements IUserFieldTableCell {
 
     /**
-     * <code>UserField</code>, dass das Format für die Wertdarstellung enthält
+     * <code>UserField</code>, dass das Format fÃ¼r die Wertdarstellung enthÃ¤lt
      */
     protected final UserField userField;
 
     /**
-     * Tatsächlicher Wert der Zelle
+     * TatsÃ¤chlicher Wert der Zelle
      */
     protected NamedObjectContainer<UserField> value;
 
@@ -71,8 +71,8 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     /**
      * Konstruktor
      * 
-     * @param noc <code>NamedObjectContainer</code>, der das zur Zelle gehörige {@link UserField} und den Wert der Zelle enthält.
-     * @param table <code>UserFieldTable</code>, der diese Zelle enthält
+     * @param noc <code>NamedObjectContainer</code>, der das zur Zelle gehÃ¶rige {@link UserField} und den Wert der Zelle enthÃ¤lt.
+     * @param table <code>UserFieldTable</code>, der diese Zelle enthÃ¤lt
      * @param column Spalte der Cell
      */
     public UserFieldActivatedTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final int column) {
@@ -87,8 +87,8 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     /**
      * Konstruktor, wenn der Spaltenindex egal ist
      * 
-     * @param noc <code>NamedObjectContainer</code>, der das zur Zelle gehörige {@link UserField} und den Wert der Zelle enthält.
-     * @param table <code>UserFieldTable</code>, der diese Zelle enthält
+     * @param noc <code>NamedObjectContainer</code>, der das zur Zelle gehÃ¶rige {@link UserField} und den Wert der Zelle enthÃ¤lt.
+     * @param table <code>UserFieldTable</code>, der diese Zelle enthÃ¤lt
      */
     public UserFieldActivatedTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table) {
         this(noc, table, -1);
@@ -129,7 +129,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     /**
      * Erzeugt eine formatierte Darstellung des aktuell in {@link #value} enthalten Wertes und setzt {@link #xmlText} auf diesen String. <br>
      * Falls {@link #value} {@link UserField#EMPTY_STRING} entspricht, wird {@link #xmlText} auf {@link #RENDERER_EMPTY_STRING}, und {@link #value}
-     * auf einen neuen {@link NamedObjectContainer} mit {@link #userField} und {@link EDITOR_EMPTY_STRING} gesetzt. Das heißt, dass
+     * auf einen neuen {@link NamedObjectContainer} mit {@link #userField} und {@link EDITOR_EMPTY_STRING} gesetzt. Das heiÃŸt, dass
      * der Renderer und der Editor ein leeres Feld anzeigen. <br>
      * Die Formatierung erfolgt dabei durch die Methoden von {@link #userField}.
      */
@@ -144,7 +144,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
 
     /**
      * Wird beim Beginn des Editierens der Zelle durch die Tastatur aufgerufen. Der gesamte Text der Zelle wird markiert. Beim Aufruf dieser
-     * Methode wird dem <code>AbstractUserFieldTableModel</code> mittegeteilt, dass sich Daten geändert haben.
+     * Methode wird dem <code>AbstractUserFieldTableModel</code> mittegeteilt, dass sich Daten geÃ¤ndert haben.
      * 
      * @see TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
      */
@@ -162,11 +162,11 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     }
 
     /**
-     * Gibt den tatsächlichen Wert dieser Zelle wieder und speicher ihn unter {@link #value} ab. <br>
+     * Gibt den tatsÃ¤chlichen Wert dieser Zelle wieder und speicher ihn unter {@link #value} ab. <br>
      * Falls der Wert im Editor <code>""</code> entspricht, wird ein neuer {@link NamedObjectContainer} mit {@link #userField} und
-     * <code>"EMPTY_STRING"</code> zurückgegeben. Falls sich der Wert im Editor nicht auf BigDecimal parsen lässt, wird ein neuer
-     * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurückgegeben. Sonst wird ein neuer
-     * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurückgegeben.
+     * <code>"EMPTY_STRING"</code> zurÃ¼ckgegeben. Falls sich der Wert im Editor nicht auf BigDecimal parsen lÃ¤sst, wird ein neuer
+     * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurÃ¼ckgegeben. Sonst wird ein neuer
+     * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurÃ¼ckgegeben.
      * 
      * @see javax.swing.CellEditor#getCellEditorValue()
      */
@@ -195,7 +195,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
 
     /**
      * Wird beim Beginn des Editierens der Zelle durch die Maus aufgerufen. Der gesamte Text der Zelle wird markiert. Beim Aufruf dieser Methode
-     * wird dem <code>AbstractUserFieldTableModel</code> mittegeteilt, dass sich Daten geändert haben.
+     * wird dem <code>AbstractUserFieldTableModel</code> mittegeteilt, dass sich Daten geÃ¤ndert haben.
      * 
      * @see DefaultCellEditor#shouldSelectCell(java.util.EventObject)
      */
@@ -228,7 +228,7 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
     }
 
     /**
-     * Entfernt den Listener nach Beendigung des Editierens und löst das Aktualisieren von {@link #value} und {@link #xmlText} anhand der
+     * Entfernt den Listener nach Beendigung des Editierens und lÃ¶st das Aktualisieren von {@link #value} und {@link #xmlText} anhand der
      * eingegebenen Werte aus.
      * 
      * @see javax.swing.CellEditor#removeCellEditorListener(javax.swing.event.CellEditorListener)
@@ -241,8 +241,8 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
 
     /**
      * Gibt die Rendererkomponente dieser Zelle wieder. <br>
-     * Hat eine Zelle keinen Focus, besteht trotzdem die Möglichkeit, dass sich durch Mehrfachauswahl ihr Wert geändert haben könnte. In diesem
-     * Falle holt sich die Zelle aktuelle Werte aus dem zum {@link #table} gehörigen {@link TableModel} und setzt {@link #value} und {@link #xmlText}
+     * Hat eine Zelle keinen Focus, besteht trotzdem die MÃ¶glichkeit, dass sich durch Mehrfachauswahl ihr Wert geÃ¤ndert haben kÃ¶nnte. In diesem
+     * Falle holt sich die Zelle aktuelle Werte aus dem zum {@link #table} gehÃ¶rigen {@link TableModel} und setzt {@link #value} und {@link #xmlText}
      * entsprechend neu.
      * 
      * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
@@ -265,14 +265,14 @@ public class UserFieldActivatedTableCell implements IUserFieldTableCell {
      * @param c die anzupassende Komponente
      */
     private void setTableCellRendererComponentStyle(final DefaultTableCellRenderer c, final boolean isSelected, final boolean isAnchor) {
-        // Farbe der Selektierten Zellen ändern
+        // Farbe der Selektierten Zellen Ã¤ndern
         if (isSelected) {
             c.setBackground(SELECTION_BACKROUND_COLOR);
         } else {
             c.setBackground(DEFAULT_BACKROUND_COLOR);
         }
 
-        // Umrandung für Anchor-Zelle setzen
+        // Umrandung fÃ¼r Anchor-Zelle setzen
         if (isAnchor) {
             c.setBorder(ANCHOR_BORDER);
         }

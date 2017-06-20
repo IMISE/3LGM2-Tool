@@ -94,7 +94,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     private final UserFieldDefinitions definitions;
 
     /**
-     * Clone der Definitionen vor allen Änderungen. Wird beim Abbrechen auf diese Defnition zurück gesetzt.
+     * Clone der Definitionen vor allen Ã„nderungen. Wird beim Abbrechen auf diese Defnition zurÃ¼ck gesetzt.
      */
     private final UserFieldDefinitions oldUserFieldDefionitions;
 
@@ -111,13 +111,13 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     private int returnValue = 0;
 
     /**
-     * Liste mit allen UserFields, die gelöscht wurden. Wird der Dialog mit OK verlassen, werden bei allen <code>UserFieldTarget</code>s die Werte
-     * dieser UserFields *unwiederbringlich* gelöscht.
+     * Liste mit allen UserFields, die gelÃ¶scht wurden. Wird der Dialog mit OK verlassen, werden bei allen <code>UserFieldTarget</code>s die Werte
+     * dieser UserFields *unwiederbringlich* gelÃ¶scht.
      */
     private final ArrayList<UserField> removedUserFields = new ArrayList<UserField>();
 
     /**
-     * ist true, wenn eine Warnung angezeigt werden soll, dass die Werte einer Kennzahl gelöscht werden - sonst false.
+     * ist true, wenn eine Warnung angezeigt werden soll, dass die Werte einer Kennzahl gelÃ¶scht werden - sonst false.
      */
     private static boolean showWarningForDeletingUserFields = true;
 
@@ -147,7 +147,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Initialiert die <code>ComboBox</code> mit den Klasseneinträgen, für die <code>UserField</code> s definiert werden können.
+     * Initialiert die <code>ComboBox</code> mit den KlasseneintrÃ¤gen, fÃ¼r die <code>UserField</code> s definiert werden kÃ¶nnen.
      */
     private void createClassComboBox() {
         classComboBox = new AlphabeticalComboBox();
@@ -157,7 +157,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         classComboBox.addItem(UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS, UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
         classComboBox.addSeparator(true);
 
-        //alle nicht abstracten Knotenklassen hinzufügen
+        //alle nicht abstracten Knotenklassen hinzufÃ¼gen
         for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
             if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {
                 continue;
@@ -166,7 +166,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         }
         classComboBox.addSeparator(true);
 
-        //alle Kantenklassen jeweils mit hin und Rückrichtung
+        //alle Kantenklassen jeweils mit hin und RÃ¼ckrichtung
         for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
             classComboBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
             classComboBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
@@ -191,7 +191,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent e) {
-                //Schließen üer das Kreuz = Cancel
+                //SchlieÃŸen Ã¼er das Kreuz = Cancel
                 UserFieldDeclarationDialog.this.actionPerformed(new ActionEvent(UserFieldDeclarationDialog.this, e.getID(), "cancel"));
             }
         });
@@ -225,7 +225,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         addButton.addActionListener(this);
         addButton.setEnabled(false);
         constraints.gridwidth = 1;
-        //Anstelle des Buttons die ComboBox einfügen
+        //Anstelle des Buttons die ComboBox einfÃ¼gen
 
         userFieldTypeComboBox = new AlphabeticalComboBox();
         userFieldTypeComboBox.setEnabled(false);
@@ -309,10 +309,10 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Setzt in Abhängigkeit von der ausgewählten Klasse der <code>classComboBox</code> nur die Arten von neu anlgebaren benutzerdefinierten
-     * Eigenschaftenfeldern, die man für die jeweilige Klasse anlegen kann.<br>
-     * Für Kantenklassen kann man als einziges Verteilungsgewichte anlegen. Für Kanten sind aber keine Kennzahlen oder Kennzahlformeln vorgesehen. Im
-     * Moment auch nicht für Assoziationsklassen (z. B. <code>KommBeziehung</code>), da man das dür das Umsetzen von Ansgars Kostenmodell nicht
+     * Setzt in AbhÃ¤ngigkeit von der ausgewÃ¤hlten Klasse der <code>classComboBox</code> nur die Arten von neu anlgebaren benutzerdefinierten
+     * Eigenschaftenfeldern, die man fÃ¼r die jeweilige Klasse anlegen kann.<br>
+     * FÃ¼r Kantenklassen kann man als einziges Verteilungsgewichte anlegen. FÃ¼r Kanten sind aber keine Kennzahlen oder Kennzahlformeln vorgesehen. Im
+     * Moment auch nicht fÃ¼r Assoziationsklassen (z. B. <code>KommBeziehung</code>), da man das dÃ¼r das Umsetzen von Ansgars Kostenmodell nicht
      * braucht.
      */
     private void updateUserFieldTypeComboBox() {
@@ -343,10 +343,10 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Gibt in Anghänigkeit des übergebenen userfields den style dessen als String zurück.
+     * Gibt in AnghÃ¤nigkeit des Ã¼bergebenen userfields den style dessen als String zurÃ¼ck.
      * 
      * @param u
-     * @return String, der den ausgeschirebenen Style enthält.
+     * @return String, der den ausgeschirebenen Style enthÃ¤lt.
      */
     private static final String getUserFieldStyle(final UserField u) {
         String userFieldStyle = "";
@@ -357,10 +357,10 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Aktualisiert die Liste der {@link UserField}s für die selektierte Klasse
+     * Aktualisiert die Liste der {@link UserField}s fÃ¼r die selektierte Klasse
      */
     private void updateFieldList() {
-        //die Angabe für Start und Endklasse sind nur Testweise
+        //die Angabe fÃ¼r Start und Endklasse sind nur Testweise
         clearFieldList();
         Class<?> selClass = (Class<?>) classComboBox.getSelectedObject();
         if (selClass == null || !UserFieldTarget.class.isAssignableFrom(selClass)) {
@@ -391,7 +391,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
+     * FÃ¼gt zur Liste der <code>UserField</code>s das Ã¼bergebene <code>UserField</code> hinzu.
      * 
      * @param userField
      */
@@ -400,7 +400,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
+     * FÃ¼gt zur Liste der <code>UserField</code>s das Ã¼bergebene <code>UserField</code> hinzu.
      * 
      * @param userField
      * @param index
@@ -498,13 +498,13 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             //Typ der seleketierten Klasse holen
             Class<?> selectedClass = (Class<?>) classComboBox.getSelectedObject();
 
-            //wenn keine Klasse, für die man Kennzahlen und Formeln definieren kann, selektiert ist
+            //wenn keine Klasse, fÃ¼r die man Kennzahlen und Formeln definieren kann, selektiert ist
             if (!UserFieldTarget.class.isAssignableFrom(selectedClass)) {
                 return;
             }
             Class<? extends UserFieldTarget> selClass = selectedClass.asSubclass(UserFieldTarget.class);
 
-            //Definitionseditor für das neue userField anzeigen
+            //Definitionseditor fÃ¼r das neue userField anzeigen
             UserField.Style style = (UserField.Style) userFieldTypeComboBox.getSelectedObject();
             if (style == null) {
                 JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("choose_type_first"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
@@ -512,10 +512,10 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             }
 
             //jetzt kann nur noch ein Knoten- oder Kantentyp selektiert sein
-            //-> neues userField für die selektierte Klassenart anlegen
+            //-> neues userField fÃ¼r die selektierte Klassenart anlegen
             UserField userField = new UserField(selClass, style, definitions);
 
-            //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
+            //das neu erzeugte UserField sofort zur ausgewÃ¤hlten Klasse hinzufÃ¼gne
             definitions.add(userField);
 
             //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
@@ -524,12 +524,12 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 userDefinitionDialogReturnValue = UserFieldDefinitionDialog.showDialog(this, userField, gdcol);
             } while (userDefinitionDialogReturnValue == UserFieldDefinitionDialog.OK && definitions.hasCrossReferences());
 
-            //wenn der Dialog über OK verlassen wurde
+            //wenn der Dialog Ã¼ber OK verlassen wurde
             if (userDefinitionDialogReturnValue == UserFieldDefinitionDialog.OK) {
                 //das neue UserField anzeigen
                 addFieldListEntry(userField);
                 returnValue = 1;
-                //den Definitions sagen, dass sich was geändert hat
+                //den Definitions sagen, dass sich was geÃ¤ndert hat
                 definitions.getCollection().getUserFieldDefinitions().initReset();
                 //wenn die Defnition der neuen Kennzahl oder Formel abgebrochen wurde
             } else {
@@ -552,20 +552,20 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
             do {
                 gdcol.getUserFieldDefinitions().setConsistencyUnknown();
-                //Definitionseditor für das zu bearbeitende userField anzeigen
+                //Definitionseditor fÃ¼r das zu bearbeitende userField anzeigen
                 if (UserFieldDefinitionDialog.showDialog(this, userField, gdcol) == UserFieldDefinitionDialog.OK) {
-                    //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrektr aktualisert wird
+                    //aus der Liste entfernen und wieder hinzufÃ¼gen, damit der Anzeigename korrektr aktualisert wird
                     int selectedIndex = fieldList.getSelectedIndex();
 
-                    //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen, 
-                    //damit der evtl. geänderte korrekt Name angezeigt wird
+                    //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufÃ¼gen, 
+                    //damit der evtl. geÃ¤nderte korrekt Name angezeigt wird
                     fieldListModel.remove(selectedIndex);
                     addFieldListEntry(userField, selectedIndex);
                     fieldList.setSelectedIndex(selectedIndex);
 
                     returnValue = 1;
                 } else {
-                    // Wenn der Definitionsdialog für Kennzahlformeln abgebrochen wurde, wird die alte Formel zurückgesetzt.
+                    // Wenn der Definitionsdialog fÃ¼r Kennzahlformeln abgebrochen wurde, wird die alte Formel zurÃ¼ckgesetzt.
                     userField.setFormula(oldFormula);
                     break;
                 }
@@ -576,8 +576,8 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
             UserField userField = noc.getObject();
 
-            //Bevor ein userField gelöscht wird, wird nochmal eine Sicherheitsabfrage gestellt.
-            //Wenn die Siocherheitsabfrage nicht bestätigt wird, wird cancel true. D.h. das Löschen wird abgebrochen.
+            //Bevor ein userField gelÃ¶scht wird, wird nochmal eine Sicherheitsabfrage gestellt.
+            //Wenn die Siocherheitsabfrage nicht bestÃ¤tigt wird, wird cancel true. D.h. das LÃ¶schen wird abgebrochen.
             boolean cancel = false;
 
             if (showWarningForDeletingUserFields) {
@@ -593,7 +593,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 }
             }
 
-            //Alle gelöschten UserFields merken
+            //Alle gelÃ¶schten UserFields merken
             if (cancel == false) {
                 removedUserFields.addAll(definitions.remove(userField));
                 updateFieldList();

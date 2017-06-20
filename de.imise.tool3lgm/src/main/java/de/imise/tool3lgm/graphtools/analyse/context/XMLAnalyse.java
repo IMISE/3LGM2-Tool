@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Diese Klasse repräsentiert eine einzelne XMLAnalyse.
+ * Diese Klasse reprÃ¤sentiert eine einzelne XMLAnalyse.
  *
  * @author Sebastian Weber
  */
@@ -35,11 +35,11 @@ public class XMLAnalyse extends AbstractAnalyse {
     protected String xmlText;
 
     /**
-     * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
+     * Erzeugt eine neue XMLAnalyse mit den Ã¼bergebenen Parametern.
      *
      * @param analyseText die XMLAnalyse als XML-Text.
      * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
-     *         den übergebenen Parametern zurück gegeben.
+     *         den Ã¼bergebenen Parametern zurÃ¼ck gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
     public static XMLAnalyse createAnalyse(final String analyseText) throws SAXException {
@@ -49,12 +49,12 @@ public class XMLAnalyse extends AbstractAnalyse {
     }
 
     /**
-     * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
+     * Erzeugt eine neue XMLAnalyse mit den Ã¼bergebenen Parametern.
      *
      * @param name Name der XMLAnalyse.
      * @param analyseText die XMLAnalyse als XML-Text.
      * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
-     *         den übergebenen Parametern zurück gegeben.
+     *         den Ã¼bergebenen Parametern zurÃ¼ck gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
     public static XMLAnalyse createAnalyse(final String name, final String analyseText) throws SAXException {
@@ -65,7 +65,7 @@ public class XMLAnalyse extends AbstractAnalyse {
     }
 
     /**
-     * Gibt den Analysetext zurück.
+     * Gibt den Analysetext zurÃ¼ck.
      *
      * @return der Text der die XMLAnalyse beschreibt.
      */
@@ -74,7 +74,7 @@ public class XMLAnalyse extends AbstractAnalyse {
     }
 
     /**
-     * Setzt eine neue Beschreibung für diese XMLAnalyse.
+     * Setzt eine neue Beschreibung fÃ¼r diese XMLAnalyse.
      *
      * @param xmlText der Text der die XMLAnalyse beschreibt.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
@@ -99,7 +99,7 @@ public class XMLAnalyse extends AbstractAnalyse {
     }
 
     /**
-     * Fügt einen neuen Startknoten hinzu.
+     * FÃ¼gt einen neuen Startknoten hinzu.
      *
      * @param startknoten der neue Name des Startknotens.
      */
@@ -111,7 +111,7 @@ public class XMLAnalyse extends AbstractAnalyse {
     }
 
     /**
-     * Löscht die Liste der Startknoten.
+     * LÃ¶scht die Liste der Startknoten.
      */
     protected void deleteStartknoten() {
         if (startknoten != null) {
@@ -120,7 +120,7 @@ public class XMLAnalyse extends AbstractAnalyse {
     }
 
     /**
-     * DocumentHandler für den XML-Analysetext.
+     * DocumentHandler fÃ¼r den XML-Analysetext.
      *
      * @author Sebastian Weber
      */
@@ -171,7 +171,7 @@ public class XMLAnalyse extends AbstractAnalyse {
     @Override
     public String toString() {
         // wird gebraucht, um die Analysen in der Tabelle des AnalyseRepositoryDialoges richtig
-        // zu sortieren (das ganze is ne echte Krücke!)
+        // zu sortieren (das ganze is ne echte KrÃ¼cke!)
         return getStartknotenString();
         // return startknoten.toString();
     }

@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 
 /**
- * Die Klasse <code>Calculator</code> beinhaltet alle Methoden für die Berechnung von Kennzahlen.
+ * Die Klasse <code>Calculator</code> beinhaltet alle Methoden fÃ¼r die Berechnung von Kennzahlen.
  *
  * @author hboehme, AXS
  * @created 05.11.2007
@@ -63,7 +63,7 @@ public class Calculator {
     /**
      * Gibt an, auf wieviele Nachkommastellen die BigDecimals-Ergebnisse abgeschnitten werden sollen.
      * Das beseitigt offensichtliche Rundungsfehler, bei der Berechnung mit 30 Nachkmmastellen
-     * Rundungsfehler ungefähr bis zur 20 Stelle durchschlagen. Also wird der Rest abgeschnitten.
+     * Rundungsfehler ungefÃ¤hr bis zur 20 Stelle durchschlagen. Also wird der Rest abgeschnitten.
      */
     private static final int RESULT_DECIMAL_PLACES_COUNT = 20;
 
@@ -102,16 +102,16 @@ public class Calculator {
     }
 
     /**
-     * Errechnet zu einer übergebenen Formel in Infix-Notation das Ergebnis. TODO:Dazu wird die Formel jedes Mal erst in Postfix-Notation umgewandelt,
-     * was noch erhebliches Optimierungspotenzial in sich birgt ;) dazu wird der übergebene String zuerst in mittels Stringtokenizers zerlegt und in
+     * Errechnet zu einer Ã¼bergebenen Formel in Infix-Notation das Ergebnis. TODO:Dazu wird die Formel jedes Mal erst in Postfix-Notation umgewandelt,
+     * was noch erhebliches Optimierungspotenzial in sich birgt ;) dazu wird der Ã¼bergebene String zuerst in mittels Stringtokenizers zerlegt und in
      * einen Stack kopiert. Es wird eine spiegelverkerhrte Kopie des Stacks angelegt, die nicht mehr die Referenzen auf die Werte in Form von
-     * <code>UserField</code> s enthält sonderen die konkreten Werte! Der Stack ist spiegelverkerhrt damit auch korrekt gerechnet werden kann. Zum
+     * <code>UserField</code> s enthÃ¤lt sonderen die konkreten Werte! Der Stack ist spiegelverkerhrt damit auch korrekt gerechnet werden kann. Zum
      * Rechnen wird ein weiterer Hilfs-Stack initialisiert, der solange Operanden aufnimmt, bis im HauptStack ein Operator gepoppt wird. Dieser
      * Operator wird mit den letzten zwei Operanden des Hilfsstacks verrechnent. Das Ergebnis wird wieder auf den Hautstack gelegt. Das geschieht
      * iterativ so lange, bis der HautptStack keine Operatoren mehr beinhaltet.
      *
      * @param userField : das zu berechnende UserField
-     * @param data.me : Das konkrete ModelElement, für das die KF ausgewertet wird.
+     * @param data.me : Das konkrete ModelElement, fÃ¼r das die KF ausgewertet wird.
      * @return Das Ergebnis als String
      */
 
@@ -126,14 +126,14 @@ public class Calculator {
         ModelElement me = (ModelElement) userFieldTarget;
 
         String formula = userField.getFormula();
-        // Wenn für eine userField, dass eine Kennzahlformel ist, keine Formel definiert ist
+        // Wenn fÃ¼r eine userField, dass eine Kennzahlformel ist, keine Formel definiert ist
         if (formula == null) {
             return UserField.EMPTY_STRING;
         }
 
-        //Prüfen, ob die zu berechnende Formel korrekt ist.
+        //PrÃ¼fen, ob die zu berechnende Formel korrekt ist.
         if (!CostingUtil.isFormulaValid(formula)) {
-            // Hier müsste man noch eine Message bringen und dem User erklären, dass ein Fehler in einer Formel ist.
+            // Hier mÃ¼sste man noch eine Message bringen und dem User erklÃ¤ren, dass ein Fehler in einer Formel ist.
             //JOptionPane.showMessageDialog(Tool3lgm.tool, Tool3lgmConstants.getErrString("syntax_error_in_formula"));
             return UserField.EMPTY_STRING;
         }
@@ -146,7 +146,7 @@ public class Calculator {
             return getIndi(me, infix.toString());
         }
 
-        //      Alle Teilwertsummen auflösen (das muss vor den Summen apssieren, da
+        //      Alle Teilwertsummen auflÃ¶sen (das muss vor den Summen apssieren, da
         //      in TWSUM auch SUM steckt)
         String erg = replaceInfixString(infix, userField, me, UserField.ACCOUNTING_FUNCTION_TWSUM);
         if (UserField.isCriticalError(erg)) {
@@ -219,7 +219,7 @@ public class Calculator {
         // Der FormelStack beinhaltet alle Operanden und Operatoren.
         Stack<String> formelStack = new Stack<String>();
         Stack<String> tmp_stack = new Stack<String>();
-        // hier wird aus dem StringTokenizer ein Stack gemacht, um auf die Elemente besser zugreifen zu können.
+        // hier wird aus dem StringTokenizer ein Stack gemacht, um auf die Elemente besser zugreifen zu kÃ¶nnen.
 
         while (st.hasMoreTokens()) {
             formelStack.push(st.nextToken());
@@ -228,7 +228,7 @@ public class Calculator {
         // Hier werden aus den userFieldHash - Angaben konkrete Werte geholt.
         // Iterativ: Operatoren und userFieldHashes werden vom Stack geholt werden.
         // Die Hashes werden in konkrete Werte gewandetlt. Operatoren und operanden werden auf den Hilfsstack gelegt.
-        // Der Hilfsstack, der nur noch konkrete Werte und Operatoren enthält ist der neue Hauptstack.
+        // Der Hilfsstack, der nur noch konkrete Werte und Operatoren enthÃ¤lt ist der neue Hauptstack.
         while (!formelStack.empty()) {
             String formulaSubString = formelStack.pop().toString();
             if (!isOperator(formulaSubString)) {
@@ -237,7 +237,7 @@ public class Calculator {
                     // Wert von einer Modellvariable geholt wird,
                     // der sich nicht mit
                     // "definitions.getUserField(tmp_str).getValue(me)" holen
-                    // lässt.
+                    // lÃ¤sst.
 
                     UserField tmp_userField = definitions.getUserField(formulaSubString);
 
@@ -314,13 +314,13 @@ public class Calculator {
     }
 
     /**
-     * Ersetzt im übergebenen StringBuilder <code>infix</code> die Formel der Verrechnungsfunktion durch ihren Wert.
+     * Ersetzt im Ã¼bergebenen StringBuilder <code>infix</code> die Formel der Verrechnungsfunktion durch ihren Wert.
      *
-     * @param infix Der StringBuilder, dessen Formelwerte ersetzt werden müssen
+     * @param infix Der StringBuilder, dessen Formelwerte ersetzt werden mÃ¼ssen
      * @param userField Das <code>userField</code>, dessen Wert geholt werden soll.
-     * @param me Das ModelElement, für das der <code>userField</code>-Wert geholt werden soll.
-     * @param accountingFunction Der String der Verrechnungsfunktion, für die die Formeln durch ihre Werte ersetzt werden sollen.
-     * @return Gibt bei erfolgreichem Ersetzen nichts zurück. im FehlerFall wird der entsprechende Errorstring zurückgegeben.
+     * @param me Das ModelElement, fÃ¼r das der <code>userField</code>-Wert geholt werden soll.
+     * @param accountingFunction Der String der Verrechnungsfunktion, fÃ¼r die die Formeln durch ihre Werte ersetzt werden sollen.
+     * @return Gibt bei erfolgreichem Ersetzen nichts zurÃ¼ck. im FehlerFall wird der entsprechende Errorstring zurÃ¼ckgegeben.
      */
     private String replaceInfixString(final StringBuilder infix, final UserField userField, final ModelElement me, final String accountingFunction) {
 
@@ -333,25 +333,25 @@ public class Calculator {
             String value = "";
 
             if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
-                //jetzt berechnen der TeilwertSumme anstoßen
+                //jetzt berechnen der TeilwertSumme anstoÃŸen
                 value = PartValueSumFunction.getTWSUM(definitions, userField, me, arguments);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_SUM)) {
-                //jetzt berechnen der Summe anstoßen
+                //jetzt berechnen der Summe anstoÃŸen
                 value = getSUM(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_SUM);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MULT)) {
-                //jetzt berechnen des Produktes anstoßen
+                //jetzt berechnen des Produktes anstoÃŸen
                 value = getMULT(userField, me, arguments, UserField.ACCOUNTING_FUNCTION_MULT);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MIN)) {
-                //jetzt Suches des Minimums anstoßen
+                //jetzt Suches des Minimums anstoÃŸen
                 value = getMIN(userField, me, arguments);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_MAX)) {
-                //jetzt Suchen des Maximums anstoßen
+                //jetzt Suchen des Maximums anstoÃŸen
                 value = getMAX(userField, me, arguments);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_REF)) {
-                //jetzt das Heraussuchen dees Referenzierten wertes anstoßen.
+                //jetzt das Heraussuchen dees Referenzierten wertes anstoÃŸen.
                 value = getREF(userField, me, arguments);
             } else if (accountingFunction.equals(UserField.ACCOUNTING_FUNCTION_AVG)) {
-                //jetzt berechnen des Durchschnittes anstoßen
+                //jetzt berechnen des Durchschnittes anstoÃŸen
                 value = getAvg(userField, me, arguments);
             }
             if (UserField.isCriticalError(value)) {
@@ -359,19 +359,19 @@ public class Calculator {
             }
             //die Funktion im Formel-StringBuilder durch den Wert ersetzen
             infix.replace(startIndexOfFunction, secondBracketIndex + 1, value);
-            //ab dem eingefügten Wert nach der nächsten Funktion suchen
+            //ab dem eingefÃ¼gten Wert nach der nÃ¤chsten Funktion suchen
             startIndexOfFunction = infix.indexOf(accountingFunction, startIndexOfFunction);
         }
         return "";
     }
 
     /**
-     * Berechnet das Ergebnis einer Atomformel, wenn das geht. Ansonsten wird ein Fehler zurück gegeben. <br>
-     * Ist irgendeiner der beiden Operanden ein Fehler-String, wird dieser Fehler-String als Ergebnis zurück gegeben. Ausnahmen: Bei Additionen bei
-     * denen ein Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird nur der jeweils andere Operand zurückgegeben. Bei Subtraktionen, bei
-     * denen der zweite Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird der erste Operand zurück gegeben. Ist bei Subtraktionen der
-     * erste Operand <code>UserField.NO_ELEMENTS_CONNECTED</code>, dann wird der zweite Operand mal -1 zurück gegeben. Wenn in einer Atom-Formel kein
-     * Fehler enthalten ist, wird die Berechnung durchgeführt und das Ergebnis zurückgeliefert. Spezielle Rechenregeln bei der Division. NOC =
+     * Berechnet das Ergebnis einer Atomformel, wenn das geht. Ansonsten wird ein Fehler zurÃ¼ck gegeben. <br>
+     * Ist irgendeiner der beiden Operanden ein Fehler-String, wird dieser Fehler-String als Ergebnis zurÃ¼ck gegeben. Ausnahmen: Bei Additionen bei
+     * denen ein Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird nur der jeweils andere Operand zurÃ¼ckgegeben. Bei Subtraktionen, bei
+     * denen der zweite Operand <code>UserField.NO_ELEMENTS_CONNECTED</code> ist, wird der erste Operand zurÃ¼ck gegeben. Ist bei Subtraktionen der
+     * erste Operand <code>UserField.NO_ELEMENTS_CONNECTED</code>, dann wird der zweite Operand mal -1 zurÃ¼ck gegeben. Wenn in einer Atom-Formel kein
+     * Fehler enthalten ist, wird die Berechnung durchgefÃ¼hrt und das Ergebnis zurÃ¼ckgeliefert. Spezielle Rechenregeln bei der Division. NOC =
      * <code>UserField.NO_ELEMENTS_CONNECTED</code>, ES = UserField.EMPTY_STRING, 7 = beliebige Zahl NOC / NOC = return NOC NOC / ES = return NOC NOC
      * / 7 = return NOC ES / NOC = return NOC ES / ES = return ES ES / 7 = return ES 7 / NOC = return NOC 7 / ES = return ES 7 / 7 = rechne einfach
      * damit
@@ -379,7 +379,7 @@ public class Calculator {
      * @param operand1 Der erste Operand der Atom-Formel
      * @param operand2 Der zweite Operand der Atom-Formel
      * @param operator Der Operator der Atom-Formel
-     * @return Wenn in einer Atom-Formel kein Fehler enthalten ist, wird die Berechnung durchgeführt und das Ergebnis zurückgeliefert.
+     * @return Wenn in einer Atom-Formel kein Fehler enthalten ist, wird die Berechnung durchgefÃ¼hrt und das Ergebnis zurÃ¼ckgeliefert.
      */
     private static final String getResult(String operand1, String operand2, final String operator) {
 
@@ -393,7 +393,7 @@ public class Calculator {
         if (UserField.NO_ELEMENTS_CONNECTED.equals(operand1) && UserField.NO_ELEMENTS_CONNECTED.equals(operand2)) {
             return UserField.NO_ELEMENTS_CONNECTED;
         }
-        //die Reihenfolge in der die Prüfunge hier stehen ist wichtig!
+        //die Reihenfolge in der die PrÃ¼funge hier stehen ist wichtig!
         if (UserField.NO_ELEMENTS_CONNECTED.equals(operand1)) {
             if (OPERATOR_MULT.equals(operator) || OPERATOR_DIV.equals(operator)) {
                 return UserField.NO_ELEMENTS_CONNECTED;
@@ -449,23 +449,23 @@ public class Calculator {
     }
 
     /**
-     * Gibt den wert des referenzierten <code>UserField</code> zurück. Die funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Gibt den wert des referenzierten <code>UserField</code> zurÃ¼ck. Die funktion geht davon aus, dass alle Ã¼bergebenen Parameter korrekt sind.
      *
      * @param resultUserField das konkrete <code>UserField</code>, auf dessen Wert referenziert wird.
-     * @param me Für diese Kante ist die Kennzahlformel definiert. Dieses <code>UserField</code> zeigt auf ein UserField welches an einer
+     * @param me FÃ¼r diese Kante ist die Kennzahlformel definiert. Dieses <code>UserField</code> zeigt auf ein UserField welches an einer
      *            Elementklasse
      * @param refFormula
      * @return
      */
     private String getREF(final UserField resultUserField, final ModelElement me, final String refFormula) {
-        //TODO:AXS:prüfen, ob hier Klassenvergleiche auf Zuwesiungskompatibilität oder auf Identität zielen sollten
+        //TODO:AXS:prÃ¼fen, ob hier Klassenvergleiche auf ZuwesiungskompatibilitÃ¤t oder auf IdentitÃ¤t zielen sollten
         StringTokenizer st = new StringTokenizer(refFormula, " (|)");
 
-        //nächster Token ist der Name der Elementclass, deren
+        //nÃ¤chster Token ist der Name der Elementclass, deren
         // <code>UserField<code>swert geholt wird
         Class<?> elementClass = ModelConstants.getClassForName(st.nextToken());
 
-        //Der nächste String ist der Hashcode des <code>UserFields</code>,
+        //Der nÃ¤chste String ist der Hashcode des <code>UserFields</code>,
         // dessen Wert geholt werden soll
         UserField userField = definitions.getUserField(st.nextToken());
 
@@ -493,11 +493,11 @@ public class Calculator {
         }
         if (elementWithUserField != null && elementWithUserField.getClass() == elementClass) {
             String value = userField.getValue(elementWithUserField);
-            //wenn der referenzierte Wert bereits ein Fehler ist, dann wird dieser Fehler zurück gegeben
+            //wenn der referenzierte Wert bereits ein Fehler ist, dann wird dieser Fehler zurÃ¼ck gegeben
             if (UserField.isError(value)) {
                 return value;
             }
-            //zur Sicherheit alle BigDecimal-Umwandlungen mit einem try-catch ausführen - egal, ob vorher angeblich
+            //zur Sicherheit alle BigDecimal-Umwandlungen mit einem try-catch ausfÃ¼hren - egal, ob vorher angeblich
             //schon alle Fehler ausgeschlossen wurden. Denn wenn hier an irgend einer Stelle der Berechnung eine
             //exception fliegt, sind einige Werte neu und andere veraltet.
             try {
@@ -533,10 +533,10 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion SUM oder MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion SUM oder MULT. Die Funktion geht davon aus, dass alle Ã¼bergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, fÃ¼r das die Verrechnungsfunktion aufgelÃ¶st werden soll.
      * @param formula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion SUM
      */
@@ -544,12 +544,12 @@ public class Calculator {
         //      ArrayList elements = gd.getAllModelElements(me.getClass(), true);
         StringTokenizer st = new StringTokenizer(formula, " (|)");
 
-        //nächster Token ist der Name der Kante über die UserFields der
+        //nÃ¤chster Token ist der Name der Kante Ã¼ber die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
         Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
 
-        //nächster Token ist der HashString des UserFields das aufsummiert
-        // werden soll -> hole dafür das UserField aus den Definitions
+        //nÃ¤chster Token ist der HashString des UserFields das aufsummiert
+        // werden soll -> hole dafÃ¼r das UserField aus den Definitions
         UserField userField = definitions.getUserField(st.nextToken());
 
         String direction = null;
@@ -570,7 +570,7 @@ public class Calculator {
             result = ONE;
         }
 
-        //für jede dieser Kanten
+        //fÃ¼r jede dieser Kanten
         for (int j = 0; j < kanten.size(); j++) {
             Kante k = kanten.get(j);
             //das verbundene Element holen
@@ -591,10 +591,10 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion SUM. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion SUM. Die Funktion geht davon aus, dass alle Ã¼bergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, fÃ¼r das die Verrechnungsfunktion aufgelÃ¶st werden soll.
      * @param formula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion SUM
      */
@@ -603,10 +603,10 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion MULT. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion MULT. Die Funktion geht davon aus, dass alle Ã¼bergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, fÃ¼r das die Verrechnungsfunktion aufgelÃ¶st werden soll.
      * @param formula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion MULT
      */
@@ -615,7 +615,7 @@ public class Calculator {
     }
 
     /**
-     * Sucht den kleinsten Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurück.
+     * Sucht den kleinsten Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurÃ¼ck.
      *
      * @param resultUserField
      * @param me
@@ -628,12 +628,12 @@ public class Calculator {
     }
 
     /**
-     * Sucht den größen Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurück.
+     * Sucht den grÃ¶ÃŸen Wert des <code>UserField</code>s aller verbunden Elemente und gibt ihn zurÃ¼ck.
      *
      * @param resultUserField
      * @param me
      * @param maxFormula
-     * @return Den größten Wert.
+     * @return Den grÃ¶ÃŸten Wert.
      */
     private String getMAX(final UserField resultUserField, final ModelElement me, final String maxFormula) {
         return getMINMAX(resultUserField, me, maxFormula, UserField.ACCOUNTING_FUNCTION_MAX);
@@ -641,10 +641,10 @@ public class Calculator {
     }
 
     /**
-     * Errechnet das Ergebnis der Verrechungsfunktion MIN bzw MAX. Die Funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
+     * Errechnet das Ergebnis der Verrechungsfunktion MIN bzw MAX. Die Funktion geht davon aus, dass alle Ã¼bergebenen Parameter korrekt sind.
      *
      * @param resultUserField
-     * @param me das konkrete <code>ModelElement</code>, für das die Verrechnungsfunktion aufgelöst werden soll.
+     * @param me das konkrete <code>ModelElement</code>, fÃ¼r das die Verrechnungsfunktion aufgelÃ¶st werden soll.
      * @param minMaxFormula Die Formel (in INFIX-Notation)
      * @return Ergebnis der Verrechungsfunktion MIN bzw MAX
      */
@@ -652,12 +652,12 @@ public class Calculator {
         //  ArrayList elements = gd.getAllModelElements(me.getClass(), true);
         StringTokenizer st = new StringTokenizer(minMaxFormula, " (|)");
 
-        //nächster Token ist der Name der Kante über die UserFields der
+        //nÃ¤chster Token ist der Name der Kante Ã¼ber die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
         Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
 
-        //nächster Token ist der HashString des UserFields das aufsummiert
-        // werden soll -> hole dafür das UserField aus den Definitions
+        //nÃ¤chster Token ist der HashString des UserFields das aufsummiert
+        // werden soll -> hole dafÃ¼r das UserField aus den Definitions
         UserField userField = definitions.getUserField(st.nextToken());
 
         String direction = null;
@@ -676,7 +676,7 @@ public class Calculator {
         }
 
         String result = ZERO;
-        //für jede dieser Kanten
+        //fÃ¼r jede dieser Kanten
         for (int j = 0; j < kanten.size(); j++) {
             Kante k = kanten.get(j);
             //das verbundene Element holen
@@ -720,7 +720,7 @@ public class Calculator {
      * @param resultUserField
      * @param elementClass
      * @param userField
-     * @return gibt das Ergebnis der Berechnung zurück.
+     * @return gibt das Ergebnis der Berechnung zurÃ¼ck.
      */
     private String getAvg(final UserField resultUserField, final ModelElement me, final String avgFormula) {
         String sum = getSUM(resultUserField, me, avgFormula, UserField.ACCOUNTING_FUNCTION_SUM);
@@ -731,7 +731,7 @@ public class Calculator {
 
         StringTokenizer st = new StringTokenizer(avgFormula, " (|)");
 
-        //nächster Token ist der Name der Kante über die UserFields der
+        //nÃ¤chster Token ist der Name der Kante Ã¼ber die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
         Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
 
@@ -750,20 +750,20 @@ public class Calculator {
     }
 
     /**
-     * Berechnet eine Indikatorfunktion für das übergebene <code>UserFieldTarget</code>
+     * Berechnet eine Indikatorfunktion fÃ¼r das Ã¼bergebene <code>UserFieldTarget</code>
      *
      * @param indicatorFormulaString Formel einer Kennzahl der eine Indikatorfunktion beschreibt
      * @param target
-     * @return gibt den Indikatorwert zurück.
+     * @return gibt den Indikatorwert zurÃ¼ck.
      */
     private String getIndi(final UserFieldTarget target, final String indicatorFormula) {
         StringTokenizer st = new StringTokenizer(indicatorFormula, "| ()");
         Stack<String> stack = new Stack<String>();
         int stacksize = 0;
         while (st.hasMoreElements()) {
-            //Falls der Wert ein Komma enthält, muss es durch einen . ersetzt
+            //Falls der Wert ein Komma enthÃ¤lt, muss es durch einen . ersetzt
             // werden,
-            //da die Konvertierung zu BigDecimal sonst fehlschlägt.
+            //da die Konvertierung zu BigDecimal sonst fehlschlÃ¤gt.
             String tmp_String = st.nextElement().toString();
             if (tmp_String.contains(",")) {
                 tmp_String = tmp_String.replace(",", ".");
@@ -772,7 +772,7 @@ public class Calculator {
             stack.push(tmp_String);
             stacksize++;
         }
-        //erstes und zweites Element wegschmeißen
+        //erstes und zweites Element wegschmeiÃŸen
         Stack<String> tmp_stack = new Stack<String>();
         while (!stack.empty()) {
             tmp_stack.push(stack.pop());
@@ -791,7 +791,7 @@ public class Calculator {
             return tmp_value;
         }
 
-        //alle new BigDecimal()-Aufrufe müssen mit try-catch unmantelt werden
+        //alle new BigDecimal()-Aufrufe mÃ¼ssen mit try-catch unmantelt werden
         try {
             BigDecimal value = new BigDecimal(tmp_value);
             int anzWerte = stacksize;
@@ -807,7 +807,7 @@ public class Calculator {
                     valueOne = valueTwo;
                 }
                 if (i == anzWerte - 1 && indicator == 0) {
-                    //Dieser Fall tritt ein, wenn der Wert größer ist als die größte untere Grenze.
+                    //Dieser Fall tritt ein, wenn der Wert grÃ¶ÃŸer ist als die grÃ¶ÃŸte untere Grenze.
                     indicator = i;
                 }
             }
@@ -821,7 +821,7 @@ public class Calculator {
     }
 
     /**
-     * Gibt den Wert eines Referenzierten Attributes zurück, dass zu dem selben Element gehört.
+     * Gibt den Wert eines Referenzierten Attributes zurÃ¼ck, dass zu dem selben Element gehÃ¶rt.
      *
      * @param userFieldHash
      * @param target
@@ -833,7 +833,7 @@ public class Calculator {
     }
 
     /**
-     * Gibt zu einer Formel in INFIX-Notation (die Normale), die als String übergeben wurde, die Postfix-Notation (umgekehrte plonische) zurück.
+     * Gibt zu einer Formel in INFIX-Notation (die Normale), die als String Ã¼bergeben wurde, die Postfix-Notation (umgekehrte plonische) zurÃ¼ck.
      *
      * @param infix
      * @return Postfixnotation der Formel

@@ -82,7 +82,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 public class ActionLibrary {
 
     /**
-     * Actions für Analysen
+     * Actions fÃ¼r Analysen
      *
      * @author fstephan
      */
@@ -97,7 +97,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet den XMLAnalyse-Editor */
+        /** Ã–ffnet den XMLAnalyse-Editor */
         public static final Action OPEN_EDITOR = new StaticAction(ActionIdentifier.analysis_editor, PPP) {
 
             @Override
@@ -106,7 +106,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Setzt alle XMLAnalyse-Ergebnisse zurück */
+        /** Setzt alle XMLAnalyse-Ergebnisse zurÃ¼ck */
         public static final Action RESET_RESULT = new StaticAction(ActionIdentifier.reset_result, true) {
 
             @Override
@@ -143,7 +143,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Aktiviert die Konsistenz-Prüfung */
+        /** Aktiviert die Konsistenz-PrÃ¼fung */
         public static final Action ACTIVATE_CONSISTENCY_CHECK = new StaticAction(ActionIdentifier.consistency_check, false, UserProperties.isCheckConsistency()) {
 
             @Override
@@ -187,8 +187,8 @@ public class ActionLibrary {
          * CommandAction(ActionIdentifier.create_textfield,GDCommands.LINK);
          */
         /**
-         * Action, die das Anzeigen von Interebenenbeziehungen für die ausgewählten Elemente/ die
-         * ausgewählte Ebene (de-)aktiviert.
+         * Action, die das Anzeigen von Interebenenbeziehungen fÃ¼r die ausgewÃ¤hlten Elemente/ die
+         * ausgewÃ¤hlte Ebene (de-)aktiviert.
          */
         public static final Action CONFIGURATIONS_VISIBILITY = new CommandAction(GDCommands.SHOW_ALL_CONFIGS) {
 
@@ -246,9 +246,9 @@ public class ActionLibrary {
     }
 
     /**
-     * Sammlung von Methoden, die häufig verwendete {@link Action}s generieren. <br>
-     * Das Generieren ist notwendig, weil sich diese Actions wärend der Programmausführung ändern
-     * können und damit nicht statisch definierbar sind.
+     * Sammlung von Methoden, die hÃ¤ufig verwendete {@link Action}s generieren. <br>
+     * Das Generieren ist notwendig, weil sich diese Actions wÃ¤rend der ProgrammausfÃ¼hrung Ã¤ndern
+     * kÃ¶nnen und damit nicht statisch definierbar sind.
      *
      * @author fstephan
      */
@@ -427,7 +427,7 @@ public class ActionLibrary {
         }
 
         /**
-         * Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der zuletzt verwendeten Dateien
+         * Gibt ein Array zurÃ¼ck, dessen Elemente Actions zum Ã–ffnen der zuletzt verwendeten Dateien
          * sind
          */
         public static final Action[] getLastUsedFilesOpenActions() {
@@ -454,7 +454,7 @@ public class ActionLibrary {
             return getConnectionActions(GDCommands.LINK, Tool3lgmConstants.getIcon("verbindung_anlegen.gif"));
         }
 
-        /** Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der Teilmodell-Frames sind */
+        /** Gibt ein Array zurÃ¼ck, dessen Elemente Actions zum Ã–ffnen der Teilmodell-Frames sind */
         public static final Action[] getSelectInternalFrameActions() {
 
             AbstractInternalFrame[] internalFrames = Static.getAllFrames();
@@ -494,13 +494,13 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions, wie z.B. UNDO, REDO, Löschen, ...
+     * Actions, wie z.B. UNDO, REDO, LÃ¶schen, ...
      *
      * @author fstephan
      */
     public static class EditActions {
 
-        /** Macht letzte Änderung rückgängig */
+        /** Macht letzte Ã„nderung rÃ¼ckgÃ¤ngig */
         public static final Action UNDO = new StaticAction(ActionIdentifier.undo, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -516,7 +516,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Macht letztes UNDO rückgängig */
+        /** Macht letztes UNDO rÃ¼ckgÃ¤ngig */
         public static final Action REDO = new StaticAction(ActionIdentifier.redo, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -534,7 +534,7 @@ public class ActionLibrary {
 
         // public static int COUNT = 0;
 
-        /** Öffnet ein Suche-Fenster */
+        /** Ã–ffnet ein Suche-Fenster */
         public static final Action SEARCH = new StaticAction(ActionIdentifier.search, PPP, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -583,7 +583,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Fügt den Inhalt der Zwischenablage ein */
+        /** FÃ¼gt den Inhalt der Zwischenablage ein */
         public static final StaticAction PASTE = new StaticAction(ActionIdentifier.paste, true) {
 
             @Override
@@ -618,7 +618,7 @@ public class ActionLibrary {
         };
 
         /**
-         * Löscht die Kindelemente der aktuell selektierten Elemente und hängt alle Eigenschaften
+         * LÃ¶scht die Kindelemente der aktuell selektierten Elemente und hÃ¤ngt alle Eigenschaften
          * der Kinder an das Oberelement
          */
         public static final Action MODEL_ACTION_REMOVE_CHILDS = new StaticAction(ActionIdentifier.MODEL_ACTION_REMOVE_CHILDS, true) {
@@ -645,19 +645,19 @@ public class ActionLibrary {
             }
 
             /**
-             * Gibt eine Liste aller Elemente zurück, die dupliziert werden müssten, um die
+             * Gibt eine Liste aller Elemente zurÃ¼ck, die dupliziert werden mÃ¼ssten, um die
              * Konsistenz zu erhalten, wenn ein anderes Element die gleichen Verbindungen bekommen
-             * sollte wie das übergebene.
+             * sollte wie das Ã¼bergebene.
              *
              * @param elementsList Liste aller Elemente, die dupliziert werden sollen
-             * @param sourceIndex Index des Elementes, dessen Verbindungen darauf geprüft werden
-             *            sollen, ob die verbundenen Elemente dupliziert werden müssten, wenn es
-             *            selbst dupliziert werden würde / private void
+             * @param sourceIndex Index des Elementes, dessen Verbindungen darauf geprÃ¼ft werden
+             *            sollen, ob die verbundenen Elemente dupliziert werden mÃ¼ssten, wenn es
+             *            selbst dupliziert werden wÃ¼rde / private void
              *            fillElements2Duplicate(ArrayList<ModelElement> elementsList, int
              *            sourceIndex) { ModelElement me = elementsList.get(sourceIndex); for (Kante
              *            edge : me.getEdges()) { boolean meIsEdgeStart = edge.isStart(me);
              *            ModelElement connected = meIsEdgeStart ? edge.getEnd() : edge.getStart();
-             *            //Mit wievielen Elementen von der Art des parts darf das umzuhängende
+             *            //Mit wievielen Elementen von der Art des parts darf das umzuhÃ¤ngende
              *            Element maximal verbunden sein? int maxConnectedToOtherCardinality =
              *            meIsEdgeStart ? edge.getMaxEndToStartCardinality() :
              *            edge.getMaxStartToEndCardinality(); int actualConnectedToOtherCardinality
@@ -665,8 +665,8 @@ public class ActionLibrary {
              *            connected.countConnectionsFromThis(edge.getClass()); //das verbundene
              *            Element darf nicht mit einem weiteren Element verbunden if
              *            (actualConnectedToOtherCardinality >= actualConnectedToOtherCardinality) {
-             *            } } } /** Dupliziert das übergebene Element und alle seine Verbindungen
-             *            außer die übergebene Kante. Wenn verbundene Elemente bereits mit der
+             *            } } } /** Dupliziert das Ã¼bergebene Element und alle seine Verbindungen
+             *            auÃŸer die Ã¼bergebene Kante. Wenn verbundene Elemente bereits mit der
              *            maximalen Anzahl der
              * @param me
              * @param exceptionalEdge
@@ -690,25 +690,25 @@ public class ActionLibrary {
              * (parts.size() > 0) { ModelElement part = parts.get(0); ArrayList<ModelElement>
              * partsParents = part.getDirectParentElements(); for (int i = 0; i <
              * partsParents.size(); i++) { //in partsParents nur die Parents lassen, an die alle
-             * Verbindungen //des Parts umgehängt oder dupliziert werden muss (allen die auch
+             * Verbindungen //des Parts umgehÃ¤ngt oder dupliziert werden muss (allen die auch
              * //gleichzeitig Part von me sind braucht man die Informationen //ihrer Kinder nicht
-             * unterzuhängen, da sie ja auch weggelassen werden) if
+             * unterzuhÃ¤ngen, da sie ja auch weggelassen werden) if
              * (parts.contains(partsParents.get(i))) partsParents.remove(i--); } //sicher ist sicher
              * -> Kopie anlegen, falls durch irgendwelche Seiteneffekte sich die Kantenliste nochmal
-             * ändert ArrayList<Kante> partEdges = new ArrayList<Kante>(part.getEdges()); for (int i
+             * Ã¤ndert ArrayList<Kante> partEdges = new ArrayList<Kante>(part.getEdges()); for (int i
              * = 0; i < partEdges.size(); i++) { Doppelkante edge = (Doppelkante)partEdges.get(i);
-             * //Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
-             * Eigenschaften des Teilelementes //Bekommen soll, werden nicht umgehängt (eigentlich
-             * kann das nur die Teil-Von-Kante selbst sein, aber in //neuen Metamodellen wäre auch
+             * //Alle Kanten zwischen dem zu lÃ¶schenden Teil und dem Oberelement, das die
+             * Eigenschaften des Teilelementes //Bekommen soll, werden nicht umgehÃ¤ngt (eigentlich
+             * kann das nur die Teil-Von-Kante selbst sein, aber in //neuen Metamodellen wÃ¤re auch
              * etwas anderes denkbar) if (edge instanceof PartOfBeziehung) continue; //Mit wievielen
-             * Elementen von der Art des parts darf das umzuhängende Element maximal verbunden sein?
+             * Elementen von der Art des parts darf das umzuhÃ¤ngende Element maximal verbunden sein?
              * int maxConnectedToPartCardinality = edge.isStartClass(part.getClass()) ?
              * edge.getMaxEndToStartCardinality() : edge.getMaxStartToEndCardinality(); for (int j =
              * partsParents.size() - 1; j > 0; j--) { ModelElement parent = partsParents.get(j);
-             * //falls mehr Parents vorhanden sind, als mit dem umzuhängenden Element selbst
-             * verbunden //sein dürfen, muss das umzuhängende Element dupliziert werden if
+             * //falls mehr Parents vorhanden sind, als mit dem umzuhÃ¤ngenden Element selbst
+             * verbunden //sein dÃ¼rfen, muss das umzuhÃ¤ngende Element dupliziert werden if
              * (maxConnectedToPartCardinality >= j) { ArrayList<ModelElement> elements2Duplicate =
-             * new ArrayList<ModelElement>(); //einfach umhängen } else { } } for (ModelElement
+             * new ArrayList<ModelElement>(); //einfach umhÃ¤ngen } else { } } for (ModelElement
              * parent : partsParents) { ModelElement start = edge.getStart() == part ? parent :
              * edge.getStart(); ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
              * int minElemCardinality = edge.isStartClass(start.getClass()) ?
@@ -730,13 +730,13 @@ public class ActionLibrary {
                     ModelElement part = parts.get(0);
                     removeChilds(part, doc);
                     // sicher ist sicher -> Kopie anlegen, falls durch irgendwelche Seiteneffekte
-                    // sich die Kantenliste nochmal ändert
+                    // sich die Kantenliste nochmal Ã¤ndert
                     for (Kante edge : part.getEdges()) {
-                        // Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
+                        // Alle Kanten zwischen dem zu lÃ¶schenden Teil und dem Oberelement, das die
                         // Eigenschaften des Teilelementes
-                        // Bekommen soll, werden nicht umgehängt (eigentlich kann das nur die
+                        // Bekommen soll, werden nicht umgehÃ¤ngt (eigentlich kann das nur die
                         // Teil-Von-Kante selbst sein, aber in
-                        // neuen Metamodellen wäre auch etwas anderes denkbar)
+                        // neuen Metamodellen wÃ¤re auch etwas anderes denkbar)
                         if (edge instanceof PartOfBeziehung) {
                             continue;
                         }
@@ -774,7 +774,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
+        /** LÃ¶scht das aktuell ausgewÃ¤hlte Element aus dem Teilmodell */
         public static final Action REMOVE_FROM_SUBMODEL = new StaticAction(ActionIdentifier.remove_from_submodel, true) {
 
             @Override
@@ -792,7 +792,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Löscht das aktuell ausgewählte Element aus dem Gesamtmodell */
+        /** LÃ¶scht das aktuell ausgewÃ¤hlte Element aus dem Gesamtmodell */
         public static final Action REMOVE_FROM_MODEL = new StaticAction(ActionIdentifier.remove_from_model, true) {
 
             @Override
@@ -809,7 +809,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet ein Options-Fenster zum Löschen des aktuell ausgewählten Elements */
+        /** Ã–ffnet ein Options-Fenster zum LÃ¶schen des aktuell ausgewÃ¤hlten Elements */
         public static final Action REMOVE = new StaticAction(ActionIdentifier.remove, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -825,7 +825,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Wählt alle Elemente im Teilmodell aus */
+        /** WÃ¤hlt alle Elemente im Teilmodell aus */
         public static final Action SELECT_ALL = new StaticAction(ActionIdentifier.select_all, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -847,7 +847,7 @@ public class ActionLibrary {
      */
     public static class ExtrasActions {
 
-        /** Öffnet einen Dialog zum Anlegen benutzerdefinierter Eigenschaftsfelder */
+        /** Ã–ffnet einen Dialog zum Anlegen benutzerdefinierter Eigenschaftsfelder */
         public static final Action USERFIELD_DEFINITION_DIALOG = new StaticAction(ActionIdentifier.userfields, PPP, true) {
 
             @Override
@@ -865,7 +865,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet einen Editor zur Eingabe von Kennzahlen */
+        /** Ã–ffnet einen Editor zur Eingabe von Kennzahlen */
         public static final Action ATTRIBUTE_EDITOR = new StaticAction(ActionIdentifier.attribute_editor, PPP, true) {
 
             @Override
@@ -901,20 +901,20 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für das Erstellen, Laden, Speichern, ... von Dateien.
+     * Actions fÃ¼r das Erstellen, Laden, Speichern, ... von Dateien.
      *
      * @author fstephan
      */
     public static class FileActions {
 
         /**
-         * Actions für den Daten-Export
+         * Actions fÃ¼r den Daten-Export
          *
          * @author fstephan
          */
         public static class ExportActions {
 
-            /** Öffnet einen Dialog zum Export des Models als Grafik-Datei */
+            /** Ã–ffnet einen Dialog zum Export des Models als Grafik-Datei */
             public static final Action EXPORT_GRAPHIC = new StaticAction(ActionIdentifier.export_graphic, PPP, true) {
 
                 @Override
@@ -937,7 +937,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
+            /** Ã–ffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
             public static final Action EXPORT_XSLT = new StaticAction(ActionIdentifier.export_xslt, PPP, true) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -949,7 +949,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Export eines Teilmodells */
+            /** Ã–ffnet einen Dialog zum Export eines Teilmodells */
             public static final Action EXPORT_SUBMODEL = new StaticAction(ActionIdentifier.export_submodel, PPP, true) {
 
                 @Override
@@ -961,7 +961,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Export des gesamten Models als HTML-Site */
+            /** Ã–ffnet einen Dialog zum Export des gesamten Models als HTML-Site */
             public static final Action EXPORT_WEB = new StaticAction(ActionIdentifier.export_web, PPP, true) {
 
                 @Override
@@ -973,7 +973,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
+            /** Ã–ffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
             public static final Action EXPORT_DATA = new StaticAction(ActionIdentifier.export_data, PPP, true) {
 
                 @Override
@@ -987,13 +987,13 @@ public class ActionLibrary {
         }
 
         /**
-         * Actions für den Daten-Import
+         * Actions fÃ¼r den Daten-Import
          *
          * @author fstephan
          */
         public static class ImportActions {
 
-            /** Öffnet einen Dialog zum Import von Teilmodellen */
+            /** Ã–ffnet einen Dialog zum Import von Teilmodellen */
             public static final Action IMPORT_SUBMODEL = new StaticAction(ActionIdentifier.import_submodel, PPP, true) {
 
                 @Override
@@ -1010,7 +1010,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Import von Modellen */
+            /** Ã–ffnet einen Dialog zum Import von Modellen */
             public static final Action IMPORT_MODEL = new StaticAction(ActionIdentifier.import_model, PPP, true) {
 
                 @Override
@@ -1027,7 +1027,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
+            /** Ã–ffnet einen Dialog zum Import von Daten im tab-separierten Format */
             public static final Action IMPORT_DATA = new StaticAction(ActionIdentifier.import_data, PPP, true) {
 
                 @Override
@@ -1040,7 +1040,7 @@ public class ActionLibrary {
             };
         }
 
-        /** Öffnen eines neuen Models */
+        /** Ã–ffnen eines neuen Models */
         public static final Action ACTION_NEW_MODEL = new StaticAction(ActionIdentifier.ACTION_NEW_MODEL) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -1048,7 +1048,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnen eines bestehenden Models */
+        /** Ã–ffnen eines bestehenden Models */
         public static final Action OPEN = new StaticAction(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -1084,7 +1084,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Schließen des Models */
+        /** SchlieÃŸen des Models */
         public static final Action CLOSE = new StaticAction(ActionIdentifier.ACTION_CLOSE_MODEL, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -1107,7 +1107,7 @@ public class ActionLibrary {
         };
 
         /*
-         * Die Actions zum Öffnen der zuletzt verwendeten Dateien befinden sich in der Klasse {@link
+         * Die Actions zum Ã–ffnen der zuletzt verwendeten Dateien befinden sich in der Klasse {@link
          * DynamicActions}
          */
 
@@ -1115,7 +1115,7 @@ public class ActionLibrary {
         public static final Action PRINT = new StaticAction(ActionIdentifier.print) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                throw new UnsupportedOperationException("Drucken wird nicht unterstützt");
+                throw new UnsupportedOperationException("Drucken wird nicht unterstÃ¼tzt");
             }
         };
 
@@ -1130,7 +1130,7 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für die Benutzer-Hilfe
+     * Actions fÃ¼r die Benutzer-Hilfe
      *
      * @author fstephan
      */
@@ -1143,7 +1143,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                throw new UnsupportedOperationException("Hilfe wird nicht unterstützt");
+                throw new UnsupportedOperationException("Hilfe wird nicht unterstÃ¼tzt");
             }
         };
 
@@ -1152,7 +1152,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                throw new UnsupportedOperationException("Direkthilfe wird nicht unterstützt");
+                throw new UnsupportedOperationException("Direkthilfe wird nicht unterstÃ¼tzt");
             }
         };
 
@@ -1165,7 +1165,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet die Online-Hilfe-Seite */
+        /** Ã–ffnet die Online-Hilfe-Seite */
         public static final Action ONLINE_HELP = new StaticAction(ActionIdentifier.online_help) {
 
             @Override
@@ -1174,7 +1174,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet die 3lgm-Homepage */
+        /** Ã–ffnet die 3lgm-Homepage */
         public static final Action LGM_ONLINE = new StaticAction(ActionIdentifier.lgm_online) {
 
             @Override
@@ -1183,7 +1183,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet das Beispielmodell */
+        /** Ã–ffnet das Beispielmodell */
         public static final Action EXAMPLE = new StaticAction(ActionIdentifier.example) {
 
             @Override
@@ -1210,7 +1210,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet ein Fenster zum Import von Lizenzdateien */
+        /** Ã–ffnet ein Fenster zum Import von Lizenzdateien */
         public static final Action IMPORT_LICENSE = new StaticAction(ActionIdentifier.import_license) {
 
             @Override
@@ -1221,37 +1221,37 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für das Einfügen von Elementen in die 3 Ebenen.
+     * Actions fÃ¼r das EinfÃ¼gen von Elementen in die 3 Ebenen.
      *
      * @author fstephan
      */
     public static class InsertActions {
 
-        /** Array aller Insert-Actions für die Fachliche Ebene */
+        /** Array aller Insert-Actions fÃ¼r die Fachliche Ebene */
         public static final Action[] DOMAIN_LAYER_ACTIONS = InsertAction.getDomainLayerActions();
 
-        /** Array aller Insert-Actions für die Logische Werkzeugebene */
+        /** Array aller Insert-Actions fÃ¼r die Logische Werkzeugebene */
         public static final Action[] LOGICAL_TOOLLAYER_ACTIONS = InsertAction.getLogicalToolLayerActions();
 
-        /** Array aller Insert-Actions für die Physische Werkzeugebene */
+        /** Array aller Insert-Actions fÃ¼r die Physische Werkzeugebene */
         public static final Action[] PHYSICAL_TOOLLAYER_ACTIONS = InsertAction.getPhysicalToolLayerActions();
 
-        /** Gibt wieder, ob der aktuelle Kontext ein Einfügen von Elementen erlaubt, oder nicht */
+        /** Gibt wieder, ob der aktuelle Kontext ein EinfÃ¼gen von Elementen erlaubt, oder nicht */
         public static boolean isInsertAvailable() {
             return InsertAction.isInsertAvailable();
         }
     }
 
     /**
-     * Actions für die grafische Darstellung von Ebenen und Elementen
+     * Actions fÃ¼r die grafische Darstellung von Ebenen und Elementen
      *
      * @author fstephan
      */
     public static class LayoutActions {
 
         /**
-         * Actions für die relative Ausrichtung der Elemente zueinander<br>
-         * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend
+         * Actions fÃ¼r die relative Ausrichtung der Elemente zueinander<br>
+         * Dabei werden alle markierten Elemente am zuletzt ausgewÃ¤hlten Element entsprechend
          * ausgerichtet.
          *
          * @author fstephan
@@ -1265,31 +1265,31 @@ public class ActionLibrary {
              */
             public static class Horizontal {
 
-                /** Linksbündige Ausrichtung am zuletzt ausgewählten Element */
+                /** LinksbÃ¼ndige Ausrichtung am zuletzt ausgewÃ¤hlten Element */
                 public static final StaticAction LEFT = new ElementAlignmentAction(ActionIdentifier.element_left, GDCommands.HALIGN_LEFT);
 
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (horizontal) */
+                /** Ausrichtung in der Mitte des zuletzt ausgewÃ¤hlten Elements (horizontal) */
                 public static final StaticAction CENTER = new ElementAlignmentAction(ActionIdentifier.element_center_horizontal, GDCommands.HALIGN_CENTER);
 
-                /** Rechtsbündige Ausrichtung am zuletzt ausgewählten Element */
+                /** RechtsbÃ¼ndige Ausrichtung am zuletzt ausgewÃ¤hlten Element */
                 public static final StaticAction RIGHT = new ElementAlignmentAction(ActionIdentifier.element_right, GDCommands.HALIGN_RIGHT);
             }
 
             /**
-             * Größenanpassung
+             * GrÃ¶ÃŸenanpassung
              *
              * @author astruebi
              * @create 13.02.2013
              */
             public static class Size {
 
-                /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
+                /** Ausrichtung am oberen Rand des zuletzt ausgewÃ¤hlten Elements */
                 public static final StaticAction WIDTH = new ElementAlignmentAction(ActionIdentifier.element_width, GDCommands.ALIGN_WIDTH);
 
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
+                /** Ausrichtung in der Mitte des zuletzt ausgewÃ¤hlten Elements (vertikal) */
                 public static final StaticAction HEIGTH = new ElementAlignmentAction(ActionIdentifier.element_height, GDCommands.ALIGN_HEIGHT);
 
-                /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
+                /** Ausrichtung am unteren Rand des zuletzt ausgewÃ¤hlten Elements */
                 public static final StaticAction WIDTH_AND_HEIGTH = new ElementAlignmentAction(ActionIdentifier.element_width_and_height, GDCommands.ALIGN_WIDTH_AND_HEIGTH);
 
             }
@@ -1301,24 +1301,24 @@ public class ActionLibrary {
              */
             public static class Vertical {
 
-                /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
+                /** Ausrichtung am oberen Rand des zuletzt ausgewÃ¤hlten Elements */
                 public static final StaticAction TOP = new ElementAlignmentAction(ActionIdentifier.element_top, GDCommands.VALIGN_TOP);
 
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
+                /** Ausrichtung in der Mitte des zuletzt ausgewÃ¤hlten Elements (vertikal) */
                 public static final StaticAction CENTER = new ElementAlignmentAction(ActionIdentifier.element_center_vertical, GDCommands.VALIGN_CENTER);
 
-                /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
+                /** Ausrichtung am unteren Rand des zuletzt ausgewÃ¤hlten Elements */
                 public static final StaticAction BOTTOM = new ElementAlignmentAction(ActionIdentifier.element_bottom, GDCommands.VALIGN_BOTTOM);
             }
 
         }
 
         /**
-         * Actions für die grafische Darstellung von Elementen. <br>
-         * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewählte(n) Element(e). Im
-         * Folgenden werden unter "Elemente" nur {@link NodeContainer} verstanden, die keine {@link BendpointContainer} sind. Das schließt demnach
+         * Actions fÃ¼r die grafische Darstellung von Elementen. <br>
+         * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewÃ¤hlte(n) Element(e). Im
+         * Folgenden werden unter "Elemente" nur {@link NodeContainer} verstanden, die keine {@link BendpointContainer} sind. Das schlieÃŸt demnach
          * auch {@link EdgeContainer} aus. <br>
-         * Im Falle des Einführens eines Kanten-Layouts sollte hier paralle zu dieser Klasse eine
+         * Im Falle des EinfÃ¼hrens eines Kanten-Layouts sollte hier paralle zu dieser Klasse eine
          * separate Klasse mit den jeweiligen Actions erstellt werden
          *
          * @author fstephan
@@ -1327,13 +1327,13 @@ public class ActionLibrary {
 
             /*
              * Im Folgenden werden unter "Elemente" nur {@link NodeContainer} verstanden, die keine
-             * {@link BendpointContainer} sind. Das schließt demnach auch {@link EdgeContainer} aus.
-             * <br> Im Falle des Einführens eines Kanten-Layouts sollte hier parallel zu dieser
-             * Klasse eine separate Klasse mit den Actions für die Kanten erstellt werden.
+             * {@link BendpointContainer} sind. Das schlieÃŸt demnach auch {@link EdgeContainer} aus.
+             * <br> Im Falle des EinfÃ¼hrens eines Kanten-Layouts sollte hier parallel zu dieser
+             * Klasse eine separate Klasse mit den Actions fÃ¼r die Kanten erstellt werden.
              */
 
             /**
-             * Actions für die Auswahl von Icons für Elemente
+             * Actions fÃ¼r die Auswahl von Icons fÃ¼r Elemente
              *
              * @author fstephan
              */
@@ -1342,12 +1342,12 @@ public class ActionLibrary {
                 /** Entfernt das Icon des Elements */
                 public static final Action NO_ICON = new ElementLayoutAction(ActionIdentifier.no_icon, GDCommands.UNSET_ICON);
 
-                /** Öffnet ein Fenster zur Auswahl eines Icons */
+                /** Ã–ffnet ein Fenster zur Auswahl eines Icons */
                 public static final Action CHOOSE_ICON = new ElementLayoutAction(ActionIdentifier.choose_icon, PPP, GDCommands.CHOOSE_ICON);
             }
 
             /**
-             * Actions für die Auswahl der Ausrichtung der Elementbeschriftungen
+             * Actions fÃ¼r die Auswahl der Ausrichtung der Elementbeschriftungen
              *
              * @author fstephan
              */
@@ -1360,13 +1360,13 @@ public class ActionLibrary {
                  */
                 public static class Horizontal {
 
-                    /** Richtet die Beschrfitung linksbündig aus */
+                    /** Richtet die Beschrfitung linksbÃ¼ndig aus */
                     public static final Action LEFT = new ElementLayoutAction(ActionIdentifier.text_left, GDCommands.LABEL_HALIGN_LEFT);
 
                     /** Richtet die Beschrfitung horizontal mittig aus */
                     public static final Action CENTER = new ElementLayoutAction(ActionIdentifier.text_center_horizontal, GDCommands.LABEL_HALIGN_CENTER);
 
-                    /** Richtet die Beschrfitung rechtsbündig aus */
+                    /** Richtet die Beschrfitung rechtsbÃ¼ndig aus */
                     public static final Action RIGHT = new ElementLayoutAction(ActionIdentifier.text_right, GDCommands.LABEL_HALIGN_RIGHT);
                 }
 
@@ -1389,81 +1389,81 @@ public class ActionLibrary {
             }
 
             /**
-             * Actions für die Transparenz der Elemente
+             * Actions fÃ¼r die Transparenz der Elemente
              *
              * @author fstephan
              */
             public static class Transparency {
 
-                /** Macht das ausgewählte Element nicht-transparent */
+                /** Macht das ausgewÃ¤hlte Element nicht-transparent */
                 public static final Action NO = new ElementLayoutAction(ActionIdentifier.element_no_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.NICHT_TRANSPARENT);
 
-                /** Macht das ausgewählte Element halb-transparent */
+                /** Macht das ausgewÃ¤hlte Element halb-transparent */
                 public static final Action SEMI = new ElementLayoutAction(ActionIdentifier.element_semi_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.HALB_TRANSPARENT);
 
-                /** Macht das ausgewählte Element voll-transparent */
+                /** Macht das ausgewÃ¤hlte Element voll-transparent */
                 public static final Action FULL = new ElementLayoutAction(ActionIdentifier.element_full_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.VOLL_TRANSPARENT);
             }
 
-            /** Öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
+            /** Ã–ffnet ein Fenster zur Ã„nderung der Schriftart des ausgewÃ¤hlten Elements */
             public static final Action CHOOSE_FONT = new ElementLayoutAction(ActionIdentifier.font, PPP, GDCommands.CHANGE_FONT);
 
-            /** Öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
+            /** Ã–ffnet ein Fenster zur Ã„nderung der Farbe des ausgewÃ¤hlten Elements */
             public static final Action CHANGE_COLOR = new ElementLayoutAction(ActionIdentifier.element_change_color, PPP, GDCommands.CHANGE_COLOR);
 
-            /** Setzt die Farbe des Elements zurück */
+            /** Setzt die Farbe des Elements zurÃ¼ck */
             public static final Action RESET_COLOR = new ElementLayoutAction(ActionIdentifier.element_reset_color, GDCommands.NORMALIZE_COLOR);
 
-            /** Setzt die Farbe des Elements zurück */
+            /** Setzt die Farbe des Elements zurÃ¼ck */
             public static final Action RESET_TRANSPARENCY = new ElementLayoutAction(ActionIdentifier.element_reset_transparency, GDCommands.NORMALIZE_TRANSPARENCY);
 
-            /** Setzt die Schriftart des Elements zurück */
+            /** Setzt die Schriftart des Elements zurÃ¼ck */
             public static final Action RESET_FONT = new ElementLayoutAction(ActionIdentifier.reset_font, GDCommands.NORMALIZE_FONT);
 
-            /** Setzt alle Layout-Eigenschaften des Elements zurück */
+            /** Setzt alle Layout-Eigenschaften des Elements zurÃ¼ck */
             public static final Action RESET_ALL = new ElementLayoutAction(ActionIdentifier.reset_all, GDCommands.NORMALIZE);
         }
 
         /**
-         * Actions für die grafische Darstellung der Ebenen
+         * Actions fÃ¼r die grafische Darstellung der Ebenen
          *
          * @author fstephan
          */
         public static class LayerLayout {
 
             /**
-             * Actions für die Transparenz der Ebenen
+             * Actions fÃ¼r die Transparenz der Ebenen
              *
              * @author fstephan
              */
             public static class Transparency {
 
-                /** Macht die momentan ausgewählte Ebene nicht-transparent */
+                /** Macht die momentan ausgewÃ¤hlte Ebene nicht-transparent */
                 public static final Action NO = new LayerLayoutAction(ActionIdentifier.layer_no_transparency, GDCommands.CHANGE_LAYER_ALPHA, GraphElementLayout.NICHT_TRANSPARENT);
 
-                /** Macht die momentan ausgewählte Ebene halb-transparent */
+                /** Macht die momentan ausgewÃ¤hlte Ebene halb-transparent */
                 public static final Action SEMI = new LayerLayoutAction(ActionIdentifier.layer_semi_transparency, GDCommands.CHANGE_LAYER_ALPHA, GraphElementLayout.HALB_TRANSPARENT);
 
-                /** Macht die momentan ausgewählte Ebene voll-transparent */
+                /** Macht die momentan ausgewÃ¤hlte Ebene voll-transparent */
                 public static final Action FULL = new LayerLayoutAction(ActionIdentifier.layer_full_transparency, GDCommands.CHANGE_LAYER_ALPHA, GraphElementLayout.VOLL_TRANSPARENT);
             }
 
-            /** Setzt Farbe und Transparenz der ausgewählten Ebene zurück */
+            /** Setzt Farbe und Transparenz der ausgewÃ¤hlten Ebene zurÃ¼ck */
             public static final Action RESET = new LayerLayoutAction(ActionIdentifier.layer_reset_color, GDCommands.NORMALIZE_LAYER);
 
-            /** Öffnet ein Fenster zur Auswahl der Ebenen-Farbe */
+            /** Ã–ffnet ein Fenster zur Auswahl der Ebenen-Farbe */
             public static final Action CHANGE_COLOR = new LayerLayoutAction(ActionIdentifier.layer_change_color, PPP, GDCommands.CHANGE_LAYER_COLOR);
         }
 
         /**
-         * Actions für die "Höhe" von Elementen innerhalb einer Ebene <br>
-         * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewählte(n) Element(e).
+         * Actions fÃ¼r die "HÃ¶he" von Elementen innerhalb einer Ebene <br>
+         * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewÃ¤hlte(n) Element(e).
          *
          * @author fstephan
          */
         public static class Level {
 
-            /** Element steht über allen anderen */
+            /** Element steht Ã¼ber allen anderen */
             public static final StaticAction HIGHEST = new ElementLayoutAction(ActionIdentifier.highest, GDCommands.Z_MOVE_UP);
 
             /** Element wird um eine (interne) Ebene nach oben bewegt */
@@ -1503,7 +1503,7 @@ public class ActionLibrary {
          */
         public static class Analysis {
 
-            /** (De-)Aktiviert das Erzeugen eines Teilmodells für die XMLAnalyse */
+            /** (De-)Aktiviert das Erzeugen eines Teilmodells fÃ¼r die XMLAnalyse */
             public static final Action NEW_SUBMODEL = new StaticAction(ActionIdentifier.create_submodel, (Boolean) UserProperties.isNewSubmodelForAnalysis()) {
 
                 @Override
@@ -1513,7 +1513,7 @@ public class ActionLibrary {
             };
 
             /**
-             * (De-)Aktiviert das Anzeigen von Konfigurations-Redundanz für {@link Aufgabe}n. TODO:
+             * (De-)Aktiviert das Anzeigen von Konfigurations-Redundanz fÃ¼r {@link Aufgabe}n. TODO:
              * AXS,FTS: Wirft Exception seit ToolMenu
              */
             public static final Action CONFIGURATIONAL_REDUNDANCY = new StaticAction(ActionIdentifier.configurational_redundancy, (Boolean) UserProperties.isShowABKonfigRedundance()) {
@@ -1535,7 +1535,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** (De-)Aktiviert das Anzeigen von Daten-Redundanz für {@link Objekttyp}en */
+            /** (De-)Aktiviert das Anzeigen von Daten-Redundanz fÃ¼r {@link Objekttyp}en */
             public static final Action DATA_REDUNDANCY = new StaticAction(ActionIdentifier.data_redundancy, (Boolean) UserProperties.isShowDataRedundance()) {
 
                 @Override
@@ -1573,7 +1573,7 @@ public class ActionLibrary {
          */
         public static class Gerneral {
 
-            /** (De-)Aktiviert das Anzeigen einer Warnung vor dem Löschen eines Elements */
+            /** (De-)Aktiviert das Anzeigen einer Warnung vor dem LÃ¶schen eines Elements */
             public static final Action SHOW_REMOVE_WARNING = new StaticAction(ActionIdentifier.removeWarning, (Boolean) UserProperties.isShowRemoveWarning()) {
 
                 @Override
@@ -1591,7 +1591,7 @@ public class ActionLibrary {
          */
         public static class Graphics {
 
-            /** (De-)Aktiviert das Zeichnen von Kanten nur für selektierte Elemente */
+            /** (De-)Aktiviert das Zeichnen von Kanten nur fÃ¼r selektierte Elemente */
             public static final Action PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS = new StaticAction(ActionIdentifier.paintEdgesOnlyForSelectedElements, (Boolean) UserProperties.isPaintEdgesOnlyForSelectedElements()) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -1601,7 +1601,7 @@ public class ActionLibrary {
             };
 
             /**
-             * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
+             * Zeigt einen ColorChooser zum auswÃ¤hlen der Farbe, mit der Analyseergnisse in der
              * Grafik hervorgehovben werden
              */
             public static final Action ANALYSIS_COLOR = new StaticAction(ActionIdentifier.analysis_color, PPP) {
@@ -1611,7 +1611,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** Öffnet ein Fenster für allgemeine Grafik-Einstellungen */
+            /** Ã–ffnet ein Fenster fÃ¼r allgemeine Grafik-Einstellungen */
             public static final Action RENDERING_OPTIONS = new StaticAction(ActionIdentifier.rendering_options, PPP) {
 
                 @Override
@@ -1641,7 +1641,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** (De-)Aktiviert das Kennzeichnen von Modelelementen mit verknüpften Teilmodellen */
+            /** (De-)Aktiviert das Kennzeichnen von Modelelementen mit verknÃ¼pften Teilmodellen */
             public static final Action SIGNIFY_LINKED_ELEMENTS = new StaticAction(ActionIdentifier.signify_linked_elements, (Boolean) UserProperties.isShowLinks()) {
 
                 @Override
@@ -1695,7 +1695,7 @@ public class ActionLibrary {
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    throw new UnsupportedOperationException("Tooltips werden nicht unterstützt");
+                    throw new UnsupportedOperationException("Tooltips werden nicht unterstÃ¼tzt");
                 }
             };
         }
@@ -1707,7 +1707,7 @@ public class ActionLibrary {
          */
         public static class Locale {
 
-            /** Array aller Actions, die das Umschalten auf eine andere Sprache ermöglichen */
+            /** Array aller Actions, die das Umschalten auf eine andere Sprache ermÃ¶glichen */
             public static final Action[] CHANGE_LOCALE_ACTIONS = ChangeLocaleAction.getAllActions();
         }
 
@@ -1756,7 +1756,7 @@ public class ActionLibrary {
          */
         public static class PartOf {
 
-            /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Suche */
+            /** (De-)Aktiviert das BerÃ¼cksichtigen Ã¼bergeordneter Elemente bei der Suche */
             public static final Action CONSIDER_PARENTS = new StaticAction(ActionIdentifier.consider_parents, (Boolean) UserProperties.isSearchParents()) {
 
                 @Override
@@ -1776,7 +1776,7 @@ public class ActionLibrary {
                 }
             };
 
-            /** (De-)Aktiviert das Anzeigen der Vergröberung */
+            /** (De-)Aktiviert das Anzeigen der VergrÃ¶berung */
             public static final Action SIGNIFY_COARSEMENT = new StaticAction(ActionIdentifier.signify_coarsement, (Boolean) UserProperties.isShowExpansionSign()) {
 
                 @Override
@@ -1797,13 +1797,13 @@ public class ActionLibrary {
             };
         }
 
-        /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
+        /** Ã–ffnet ein Fenster zum AuswÃ¤hlen des RMI-Ports */
         public static final Action OPEN_RMI_SETTINGS = new StaticAction(ActionIdentifier.rmi_settings, PPP) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                // Für die Konfiguration des RMI, wir das RMIPropertyPanel einem
-                // JOptionPane übergeben.
+                // FÃ¼r die Konfiguration des RMI, wir das RMIPropertyPanel einem
+                // JOptionPane Ã¼bergeben.
                 // Nach dem OK, werden die Values des Panels abgefragt.
                 RMIPropertyPanel rmip = new RMIPropertyPanel();
 
@@ -1819,7 +1819,7 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für das Erstellen, Löschen, ... von Teilmodellen
+     * Actions fÃ¼r das Erstellen, LÃ¶schen, ... von Teilmodellen
      *
      * @author fstephan
      */
@@ -1840,7 +1840,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Entfernt das aktuell ausgewählte Teilmodell */
+        /** Entfernt das aktuell ausgewÃ¤hlte Teilmodell */
         public static final Action REMOVE = new StaticAction(ActionIdentifier.remove_submodel, true) {
 
             @Override
@@ -1860,7 +1860,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet ein Fenster zum Umbenennen des aktuell ausgewählten Teilmodells */
+        /** Ã–ffnet ein Fenster zum Umbenennen des aktuell ausgewÃ¤hlten Teilmodells */
         public static final Action RENAME = new StaticAction(ActionIdentifier.rename_submodel, true) {
 
             @Override
@@ -1876,14 +1876,14 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für das Wechseln der Ebenen-Ansicht, Anzeigen der Toolbars, etc.
+     * Actions fÃ¼r das Wechseln der Ebenen-Ansicht, Anzeigen der Toolbars, etc.
      *
      * @author fstephan
      */
     public static class ViewActions {
 
         /**
-         * Actions für das (De-)aktivieren der Zeichnen- und Standard-Toolbar
+         * Actions fÃ¼r das (De-)aktivieren der Zeichnen- und Standard-Toolbar
          *
          * @author fstephan
          */
@@ -2050,7 +2050,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet einen Dialog für die Einstellung von Größe, Abstand, etc. der Ebenen */
+        /** Ã–ffnet einen Dialog fÃ¼r die Einstellung von GrÃ¶ÃŸe, Abstand, etc. der Ebenen */
         public static final Action OPEN_LAYER_SETTINGS = new StaticAction(ActionIdentifier.settings, PPP, true) {
 
             @Override
@@ -2069,7 +2069,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet die Matrix-Ansicht */
+        /** Ã–ffnet die Matrix-Ansicht */
         public static final Action OPEN_MATRIX = new StaticAction(ActionIdentifier.matrix, true) {
 
             @Override
@@ -2084,7 +2084,7 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für Fenster-Einstellungen
+     * Actions fÃ¼r Fenster-Einstellungen
      *
      * @author fstephan
      */
@@ -2104,7 +2104,7 @@ public class ActionLibrary {
             }
         };
 
-        /** Aktiviert das überlappende Darstellen der (Teil-)Modelle */
+        /** Aktiviert das Ã¼berlappende Darstellen der (Teil-)Modelle */
         public static final Action MODELS_OVERLAPPING_ARRANGEMENT = new StaticAction(ActionIdentifier.overlapping_arrangement) {
 
             @Override

@@ -15,23 +15,23 @@ import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Beschreibt und verwaltet die Daten einer Matrixsicht über eine (Teil-) Modell
+ * Beschreibt und verwaltet die Daten einer Matrixsicht Ã¼ber eine (Teil-) Modell
  * 
  * @author Thomas Rudert, AXS (23.10.07)
  */
 public class TableModel implements Iterable<TableCell> {
 
     /**
-     * ArrayList mit den ModelElementen für die Spalten. <br>
+     * ArrayList mit den ModelElementen fÃ¼r die Spalten. <br>
      */
     private ArrayList<ModelElement> colHeader;
 
-    /** ArrayList mit den ModelElementen für die Zeilen */
+    /** ArrayList mit den ModelElementen fÃ¼r die Zeilen */
     private ArrayList<ModelElement> rowHeader;
 
     private Set<TableCell> cellsSet = null;
 
-    /** das zugehörige (Teil-)Modell */
+    /** das zugehÃ¶rige (Teil-)Modell */
     private final GraphDocument graphDocument;
 
     /** Zeilenklasse */
@@ -40,7 +40,7 @@ public class TableModel implements Iterable<TableCell> {
     /** Spaltenklasse */
     private Class<? extends ModelElement> colClass;
 
-    /** MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen */
+    /** MetaPfad Ã¼ber den Zeilen- und Spaltenklasse verbunden sein sollen */
     private MetaPath metaPath;
 
     /**
@@ -49,7 +49,7 @@ public class TableModel implements Iterable<TableCell> {
     private boolean absolutePartsOnly = false;
 
     /**
-     * Legt ein neues <code>TableModel</code> an, das erstmal gar nichts darstellt, sondern nur das <code>GraphDocument</code> kennt, aus dem nach dem setzen von gültigen Zeilen und Spaltenklassen die Elementverknüpfungen anzeigen soll. Konstruktor
+     * Legt ein neues <code>TableModel</code> an, das erstmal gar nichts darstellt, sondern nur das <code>GraphDocument</code> kennt, aus dem nach dem setzen von gÃ¼ltigen Zeilen und Spaltenklassen die ElementverknÃ¼pfungen anzeigen soll. Konstruktor
      * 
      * @param graphDocument das (Teil-)Modell
      */
@@ -59,12 +59,12 @@ public class TableModel implements Iterable<TableCell> {
 
     /**
      * Legt ein neues <code>TableModel</code> an, das in den Zeilen alle Elemente der Klasse <code>rowElementClass</code> und in den Spalten alle Elemente der Klasse <code>colElementClass</code> sowie alle ihre Verbindungen darstellt, wenn die beiden
-     * Klassen gültige Elementklassen sind. Sind sie ungültig, wird nichts dargestellt.
+     * Klassen gÃ¼ltige Elementklassen sind. Sind sie ungÃ¼ltig, wird nichts dargestellt.
      * 
      * @param graphDocument das (Teil-)Modell
      * @param rowClass Zeilenklasse
      * @param colClass Spaltenklasse
-     * @param metaPath MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen
+     * @param metaPath MetaPfad Ã¼ber den Zeilen- und Spaltenklasse verbunden sein sollen
      * @param absolutePartsOnly legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im Gesamtmodell keine Teilelemente besitzen
      */
     public TableModel(final GraphDocument graphDocument, final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean absolutePartsOnly) {
@@ -75,7 +75,7 @@ public class TableModel implements Iterable<TableCell> {
     /**
      * @param rowClass Zeilenklasse
      * @param colClass Spaltenklasse
-     * @param metaPath MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen
+     * @param metaPath MetaPfad Ã¼ber den Zeilen- und Spaltenklasse verbunden sein sollen
      * @param absolutePartsOnly legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im Gesamtmodell keine Teilelemente besitzen
      */
     public void fillTableModel(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean absolutePartsOnly) {
@@ -87,32 +87,32 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * gibt ArrayListe mit den String für die Zeilenüberschriften zurück
+     * gibt ArrayListe mit den String fÃ¼r die ZeilenÃ¼berschriften zurÃ¼ck
      * 
-     * @return ArrayList mit Strings der Zeilenüberschriften
+     * @return ArrayList mit Strings der ZeilenÃ¼berschriften
      */
     public ArrayList<ModelElement> getRowHeaders() {
         return rowHeader;
     }
 
     /**
-     * gibt ArrayListe mit den Strings für die Spaltenüberschriften zurück
+     * gibt ArrayListe mit den Strings fÃ¼r die SpaltenÃ¼berschriften zurÃ¼ck
      * 
-     * @return ArrayList mit STrings der Spaltenüberschriften
+     * @return ArrayList mit STrings der SpaltenÃ¼berschriften
      */
     public ArrayList<ModelElement> getColHeaders() {
         return colHeader;
     }
 
     /**
-     * @return {@link Knoten} für Zeilenelement
+     * @return {@link Knoten} fÃ¼r Zeilenelement
      */
     public Knoten getRowKnot(final int rowIndex) {
         return rowIndex < rowHeader.size() ? (Knoten) rowHeader.get(rowIndex) : null;
     }
 
     /**
-     * @return {@link Knoten} für Spaltenelement
+     * @return {@link Knoten} fÃ¼r Spaltenelement
      */
     public Knoten getColKnot(final int colIndex) {
         return colIndex < colHeader.size() ? (Knoten) colHeader.get(colIndex) : null;
@@ -151,9 +151,9 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
+     * Liefert <code>true</code>, wenn gÃ¼ltige Elementklassen und ein gÃ¼ltiger MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
      * 
-     * @return <code>true</code>, wenn gültige Klassen ein gültiger Metapfad gesetzt sind, sonst <code>false</code>
+     * @return <code>true</code>, wenn gÃ¼ltige Klassen ein gÃ¼ltiger Metapfad gesetzt sind, sonst <code>false</code>
      */
     public boolean isValid() {
         if (rowClass == null || colClass == null || metaPath == null) {
@@ -163,7 +163,7 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * löscht alle Zelleneinträge aus dem Tabellenmodell und setzt diese mit den aktuelle Überschriften neu
+     * lÃ¶scht alle ZelleneintrÃ¤ge aus dem Tabellenmodell und setzt diese mit den aktuelle Ãœberschriften neu
      */
     private void updateAllCellEntries() {
 

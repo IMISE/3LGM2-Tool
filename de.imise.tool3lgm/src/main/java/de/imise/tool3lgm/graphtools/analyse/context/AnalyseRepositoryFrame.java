@@ -38,17 +38,17 @@ public class AnalyseRepositoryFrame extends JFrame {
     };
 
     /**
-     * Lokale Kopie der Analysen aus dem Repository. Die Liste wird für die Tabelle, die die selbe
+     * Lokale Kopie der Analysen aus dem Repository. Die Liste wird fÃ¼r die Tabelle, die die selbe
      * Liste nutzt, alphabetisch sortiert.
      */
     static List<XMLAnalyse> analysen;
 
     /**
      * Speichert die Analysendatei auf der der Benutzer grade arbeitet, wenn er eine Analysedatei
-     * nicht über das Repository geöffnet oder gespeichert hat. Solange man sich nur vom Repository
-     * die Analysen geben lässt, bleibt diese Variable null.<br>
-     * Diese Variable wird nur gebraucht, um immer in das zuletzt vom Benutzer ausgewählte
-     * Verzeichnis wechseln zu können, damit er es nicht immer wieder neu asuwählen muss.
+     * nicht Ã¼ber das Repository geÃ¶ffnet oder gespeichert hat. Solange man sich nur vom Repository
+     * die Analysen geben lÃ¤sst, bleibt diese Variable null.<br>
+     * Diese Variable wird nur gebraucht, um immer in das zuletzt vom Benutzer ausgewÃ¤hlte
+     * Verzeichnis wechseln zu kÃ¶nnen, damit er es nicht immer wieder neu asuwÃ¤hlen muss.
      */
     static File analyseFile = null;
 
@@ -56,17 +56,17 @@ public class AnalyseRepositoryFrame extends JFrame {
     static AnalyseRepositoryFrame dialog = new AnalyseRepositoryFrame();
 
     /**
-     * Wenn sich die Analysen geändert haben, muss beim Schließen des Frames gefragt werden, ob sie
+     * Wenn sich die Analysen geÃ¤ndert haben, muss beim SchlieÃŸen des Frames gefragt werden, ob sie
      * als Repository gespeichert werden sollen.
      */
     static boolean analysisChanged = false;
 
     /**
-     * Fügt die übergebene XMLAnalyse in die Liste der Analysen ein, wenn sie nicht <code>null</code> ist und noch nicht in der Liste vorkommt.
+     * FÃ¼gt die Ã¼bergebene XMLAnalyse in die Liste der Analysen ein, wenn sie nicht <code>null</code> ist und noch nicht in der Liste vorkommt.
      *
      * @param toadd
      * @param ignoreDuplicates wenn <code>true</code> werden identische Analysen auch mehrfach
-     *            eingefügt, sonst nicht
+     *            eingefÃ¼gt, sonst nicht
      * @return
      */
     static boolean addAnalyse(final XMLAnalyse toadd, final boolean ignoreDuplicates) {
@@ -78,13 +78,13 @@ public class AnalyseRepositoryFrame extends JFrame {
     }
 
     /**
-     * Prüft den enabled-Status aller Buttons
+     * PrÃ¼ft den enabled-Status aller Buttons
      */
     public static final void refreshActionStates() {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setEnabled(buttons[i].getAction().isEnabled());
         }
-        // Das hier funktioniert nur solange richtig, wie es in Menüs keine Untermenüs mit zu
+        // Das hier funktioniert nur solange richtig, wie es in MenÃ¼s keine UntermenÃ¼s mit zu
         // aktualisierenden
         // Aktionen gibt
         JMenuBar menuBar = AnalyseRepositoryFrame.dialog.getJMenuBar();
@@ -107,7 +107,7 @@ public class AnalyseRepositoryFrame extends JFrame {
     }
 
     /**
-     * Setzt die übergeben ArrayList als die Analysenliste dieses Dialoges und sortiert sie für die
+     * Setzt die Ã¼bergeben ArrayList als die Analysenliste dieses Dialoges und sortiert sie fÃ¼r die
      * Tabelle.
      */
     static void setAnalysen(final List<XMLAnalyse> analysen) {
@@ -132,7 +132,7 @@ public class AnalyseRepositoryFrame extends JFrame {
     }
 
     /**
-     * Konstruktor. Zugriff auf diese Klasse ist über die Methode showDialog möglich.
+     * Konstruktor. Zugriff auf diese Klasse ist Ã¼ber die Methode showDialog mÃ¶glich.
      *
      * @param t die Tool3lgm Klasse, in der dieser Dialog angezeigt wird.
      */
@@ -169,7 +169,7 @@ public class AnalyseRepositoryFrame extends JFrame {
             buttonPanel.add(buttons[i]);
         }
 
-        // Tabelle und Buttonpanel ins ContentPane einfügen
+        // Tabelle und Buttonpanel ins ContentPane einfÃ¼gen
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
         mainPanel.add(tableScrollPane, BorderLayout.CENTER);
@@ -181,7 +181,7 @@ public class AnalyseRepositoryFrame extends JFrame {
     @Override
     public void dispose() {
         super.dispose();
-        // beim Schließen immer die Analysen wieder auf die des Repositories setzen
+        // beim SchlieÃŸen immer die Analysen wieder auf die des Repositories setzen
         setAnalysen(AnalyseRepository.getXMLAnalysen());
         analysisChanged = false;
     }

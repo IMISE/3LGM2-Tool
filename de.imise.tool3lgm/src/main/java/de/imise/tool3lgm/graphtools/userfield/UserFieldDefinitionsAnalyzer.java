@@ -28,8 +28,8 @@ public class UserFieldDefinitionsAnalyzer {
 
     /**
      * @param style
-     * @return <code>true</code>, wenn für irgendeine Knotenklasse (= Unterklasse von {@link UserFieldTarget}) mind. ein UserField mit dem übergebenen
-     *         Style definiert ist, sonst <code>false</code>. Für Kantenklasse wird hier nicht geguckt.
+     * @return <code>true</code>, wenn fÃ¼r irgendeine Knotenklasse (= Unterklasse von {@link UserFieldTarget}) mind. ein UserField mit dem Ã¼bergebenen
+     *         Style definiert ist, sonst <code>false</code>. FÃ¼r Kantenklasse wird hier nicht geguckt.
      */
     public boolean hasStyle(final UserField.Style style) {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
@@ -47,9 +47,9 @@ public class UserFieldDefinitionsAnalyzer {
     }
 
     /**
-     * Prüft, ob
+     * PrÃ¼ft, ob
      * 
-     * @return <code>true</code>, wenn für wenigstens eine Kantenklasse ein UserField definiert ist, das eine Kennzahl oder Kennzahlformel ist, sonst
+     * @return <code>true</code>, wenn fÃ¼r wenigstens eine Kantenklasse ein UserField definiert ist, das eine Kennzahl oder Kennzahlformel ist, sonst
      *         <code>false</code>
      */
     public boolean hasDistributionWeights() {
@@ -68,7 +68,7 @@ public class UserFieldDefinitionsAnalyzer {
     }
 
     /**
-     * @return <code>true</code>, wenn für irgendeine {@link UserFieldTarget}-Klasse ein {@link UserField} definiert ist, das eine einfache
+     * @return <code>true</code>, wenn fÃ¼r irgendeine {@link UserFieldTarget}-Klasse ein {@link UserField} definiert ist, das eine einfache
      *         Teilwertsumme ist, sonst <code>false</code>
      */
     public boolean hasSimpleFractionValueSums() {

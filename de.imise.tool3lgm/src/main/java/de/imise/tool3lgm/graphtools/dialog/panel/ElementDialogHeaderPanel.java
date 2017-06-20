@@ -132,7 +132,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             }
 
             String startElementName = edge.getStart().getClearName();
-            // nur die tats‰chliche Richtung hinschreiben
+            // nur die tats√§chliche Richtung hinschreiben
             boolean connectingSameElementClasses = startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
             if (!connectingSameElementClasses) {
                 forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, edge.getDirection()) + "</i>&nbsp;&nbsp;";

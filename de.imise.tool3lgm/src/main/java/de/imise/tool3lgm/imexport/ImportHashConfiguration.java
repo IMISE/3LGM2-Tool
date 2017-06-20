@@ -7,7 +7,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
- * Speichert die Hashes aller Elemente während des Imports. Damit können Widersprüche bei der Verwendung der Hashes erkannt werden.
+ * Speichert die Hashes aller Elemente wÃ¤hrend des Imports. Damit kÃ¶nnen WidersprÃ¼che bei der Verwendung der Hashes erkannt werden.
  * 
  * @author AXS
  * @create 06.10.2014
@@ -22,7 +22,7 @@ public class ImportHashConfiguration {
     private final HashMap<String, Class<? extends ModelElement>> hashToElementClass = new HashMap<String, Class<? extends ModelElement>>();
 
     /**
-     * Liste aller bisher verwendeten Element-Hashes. Beim Import wird für jede Zeile erst einmal ein Default-Hash eingetragen und
+     * Liste aller bisher verwendeten Element-Hashes. Beim Import wird fÃ¼r jede Zeile erst einmal ein Default-Hash eingetragen und
      * dann durch einen eventuell gefundenen Hash ersetzt.
      */
     private final List<String> hashes = new ArrayList<String>();
@@ -41,14 +41,14 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Fügt den DEFAULT_HASH in die Liste aller Hashes ein
+     * FÃ¼gt den DEFAULT_HASH in die Liste aller Hashes ein
      */
     public void addDefaultHash() {
         hashes.add(DEFAULT_HASH);
     }
 
     /**
-     * Ersetzt den letzten Hash durch den übergebenen
+     * Ersetzt den letzten Hash durch den Ã¼bergebenen
      * 
      * @param hash
      */
@@ -57,7 +57,7 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Speichert für einen Hash die zugehöroge Elementklasse
+     * Speichert fÃ¼r einen Hash die zugehÃ¶roge Elementklasse
      * 
      * @param hash
      * @param elementClass
@@ -67,7 +67,7 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Liefert für einen Hash die zugehörige Elementklasse
+     * Liefert fÃ¼r einen Hash die zugehÃ¶rige Elementklasse
      * 
      * @param hash
      * @return
@@ -77,7 +77,7 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Gibt den Index zurück, an dem sich ein Hash in der Liste aller Hashes befindet.
+     * Gibt den Index zurÃ¼ck, an dem sich ein Hash in der Liste aller Hashes befindet.
      * 
      * @param hash
      * @return
@@ -87,7 +87,7 @@ public class ImportHashConfiguration {
     }
 
     /**
-     * Speichert für einen gegebenen Kantenhash den Hash des Startelementes und des Endelmentes
+     * Speichert fÃ¼r einen gegebenen Kantenhash den Hash des Startelementes und des Endelmentes
      * 
      * @param edgeHash
      * @param startElementHash

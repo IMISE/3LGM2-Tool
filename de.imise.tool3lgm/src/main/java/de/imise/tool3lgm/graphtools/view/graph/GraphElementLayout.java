@@ -7,15 +7,15 @@ import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 
-// TODO: Konzept der Klasse GraphElementLayout überarbeiten und toXMLString-Methode verändern und nur GraphElementLayout-Informationen speichern die
+// TODO: Konzept der Klasse GraphElementLayout Ã¼berarbeiten und toXMLString-Methode verÃ¤ndern und nur GraphElementLayout-Informationen speichern die
 // nicht Standard aus Mapping entsprechen
 
 public class GraphElementLayout implements SwingConstants {
 
     /**
-     * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch in den
-     * Ressourcen. Die Position des Enum-Eintrages wird in der XML-Repräsentation
-     * des Modells gepsiechert. D.h. wer hier die Reihenfolge ändert, ändert das
+     * Alle Standardformen. Die String-ReprÃ¤sentation steht als SchlÃ¼ssel auch in den
+     * Ressourcen. Die Position des Enum-Eintrages wird in der XML-ReprÃ¤sentation
+     * des Modells gepsiechert. D.h. wer hier die Reihenfolge Ã¤ndert, Ã¤ndert das
      * Layout der Elemente in Modellen, die vorher erstellt wurden.
      */
     public static enum SHAPE {
@@ -95,7 +95,7 @@ public class GraphElementLayout implements SwingConstants {
     public static final Font STANDARD_FONT = new Font(STANDARD_FONT_NAME, STANDARD_FONT_STYLE, STANDARD_FONT_SIZE);
 
     /**
-     * Standardlayout für alle Knoten und Kanten, die kein spezielles eigenes Layout haben
+     * Standardlayout fÃ¼r alle Knoten und Kanten, die kein spezielles eigenes Layout haben
      */
     public static final GraphElementLayout STANDARD_ELEMENT_LAYOUT = new GraphElementLayout();
     static {
@@ -155,10 +155,10 @@ public class GraphElementLayout implements SwingConstants {
     /** Breite */
     public int width;
 
-    /** Höhe */
+    /** HÃ¶he */
     public int height;
 
-    //TODO:prüfen ob das der Gesamte Pfad zum Icon ist und ob das überhaupt gebraucht wird. EIgentlich müsste hier das Icon rein und nicht ein String
+    //TODO:prÃ¼fen ob das der Gesamte Pfad zum Icon ist und ob das Ã¼berhaupt gebraucht wird. EIgentlich mÃ¼sste hier das Icon rein und nicht ein String
     /** Name des Icons */
     public String icon;
 
@@ -273,7 +273,7 @@ public class GraphElementLayout implements SwingConstants {
      */
     public String toXMLString(final Class<?> elementClass, final boolean expanded) {
         StringBuilder xmlString = new StringBuilder("<" + (expanded ? "" : "ne") + "layout");
-        //ElementClass ist nur für Layer null
+        //ElementClass ist nur fÃ¼r Layer null
         if (elementClass != null) {
             xmlString.append(" class=\"" + elementClass.getSimpleName() + "\"");
         }

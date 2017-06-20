@@ -90,7 +90,7 @@ public class SubModelsTabbedPane extends SubModelsBrowser implements GDCollectio
     }
 
     /**
-     * Liefert den Indes des Tab, an dem sich das übergebene {@link GraphDocument} befindet oder -1;
+     * Liefert den Indes des Tab, an dem sich das Ã¼bergebene {@link GraphDocument} befindet oder -1;
      *
      * @param doc
      * @return

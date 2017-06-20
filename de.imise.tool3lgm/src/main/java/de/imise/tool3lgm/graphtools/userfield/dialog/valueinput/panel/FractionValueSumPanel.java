@@ -29,7 +29,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
 
     /**
-     * Auswahlbox für ein konkretes Element, für das die Teilwertsummen angezigt werden sollen
+     * Auswahlbox fÃ¼r ein konkretes Element, fÃ¼r das die Teilwertsummen angezigt werden sollen
      */
     private final AlphabeticalComboBox elementBox = new AlphabeticalComboBox();
 
@@ -39,10 +39,10 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Im Gegensatz zur Oberklasse wird hier nur true zürück gegeben, wenn die übergebene Elementklasse Formel-UserFields hat,
+     * Im Gegensatz zur Oberklasse wird hier nur true zÃ¼rÃ¼ck gegeben, wenn die Ã¼bergebene Elementklasse Formel-UserFields hat,
      * die eine einfache Teilwertsumme sind.
      * 
-     * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprüft werden sollen.
+     * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprÃ¼ft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_FORMULA</code>) ist
      *         und die Formel selbst eine einfache Teilwertsumme ist
@@ -53,16 +53,16 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         InsertType insertType = NO;
         if (Kante.class.isAssignableFrom(elementClass)) {
             Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
-            //vorwärts
+            //vorwÃ¤rts
             Class<? extends ModelElement> startElementClass = Kante.getStartClass(edgeClass);
-            //alle einfachen Teilwertsummen-UserFields holen, die für die startElementClass über die edgeClass definiert sind
+            //alle einfachen Teilwertsummen-UserFields holen, die fÃ¼r die startElementClass Ã¼ber die edgeClass definiert sind
             List<UserField> fractionValueSumUserFields = definitions.getFractionValueSumUserFields(startElementClass, edgeClass);
             if (!fractionValueSumUserFields.isEmpty()) {
                 insertType = AS_EDGE_FORWARD;
             }
-            //rückwärts
+            //rÃ¼ckwÃ¤rts
             Class<? extends ModelElement> endElementClass = Kante.getEndClass(edgeClass);
-            //alle einfachen Teilwertsummen-UserFields holen, die für die endElementClass über die edgeClass definiert sind
+            //alle einfachen Teilwertsummen-UserFields holen, die fÃ¼r die endElementClass Ã¼ber die edgeClass definiert sind
             fractionValueSumUserFields = definitions.getFractionValueSumUserFields(endElementClass, edgeClass);
             if (!fractionValueSumUserFields.isEmpty()) {
                 insertType = insertType == AS_EDGE_FORWARD ? AS_EDGE_FORWARD_AND_BACKWARD : AS_EDGE_BACKWARD;
@@ -111,7 +111,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>elementTypeBox</code>.
+     * Methode setzt die auszufÃ¼hrende Action, bei Ã„nderung der Auswahl in der <code>elementTypeBox</code>.
      */
     @Override
     protected void setActionsForElementTypeBox() {
@@ -119,12 +119,12 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         final FractionValueSumPanel finalPanel = this;
 
         /*
-         * Bei Änderung der Auswahl in elementTypeBox, werden in der elementBox die verfügbaren Elemente angezeigt
+         * Bei Ã„nderung der Auswahl in elementTypeBox, werden in der elementBox die verfÃ¼gbaren Elemente angezeigt
          */
         AbstractAction action = new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                //sobald sich in dieser Box die Selektion ändert, dann gleich in der anderen Box das erste Item auswählen
+                //sobald sich in dieser Box die Selektion Ã¤ndert, dann gleich in der anderen Box das erste Item auswÃ¤hlen
                 finalPanel.setElementBoxContent();
                 finalPanel.initSelectFirstItem();
                 finalPanel.drawTable();
@@ -144,7 +144,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * @return <code>true</code>, wenn die selektierte Kantenklasse in Vorwärtsrichtung geselen wird, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die selektierte Kantenklasse in VorwÃ¤rtsrichtung geselen wird, sonst <code>false</code>.
      */
     private boolean isSelectedEdgeDirectionForward() {
         Class<? extends Kante> selectedEdgeClass = getSelectedEdgeClass();
@@ -155,9 +155,9 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Setzt den Inhalt der <code>weigthBox</code>. Die für den in der <code>edgeTypeBox</code> gewählten Kantentyp definierten Verteilungsgewichte
+     * Setzt den Inhalt der <code>weigthBox</code>. Die fÃ¼r den in der <code>edgeTypeBox</code> gewÃ¤hlten Kantentyp definierten Verteilungsgewichte
      * werden
-     * der <code>weigthBox</code> hinzugefügt.
+     * der <code>weigthBox</code> hinzugefÃ¼gt.
      */
     private void setElementBoxContent() {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
@@ -177,8 +177,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     }
 
     /**
-     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in <code>weightBox</code>. Werte im Table werden temporär übernommen und die
-     * zum gewählten Verteilungsgewicht gehörigen Daten in einem neuen Table dargestellt.
+     * Methode setzt die auszufÃ¼hrende Aktion, bei Ã„nderung der Auswahl in <code>weightBox</code>. Werte im Table werden temporÃ¤r Ã¼bernommen und die
+     * zum gewÃ¤hlten Verteilungsgewicht gehÃ¶rigen Daten in einem neuen Table dargestellt.
      */
     private void setActionsForElementBox() {
         final FractionValueSumPanel finalPanel = this;

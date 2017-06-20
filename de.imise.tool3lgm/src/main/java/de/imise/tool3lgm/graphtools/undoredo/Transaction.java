@@ -67,7 +67,7 @@ public class Transaction {
     }
 
     /**
-     * Liefert <code>true</code>, wenn das ausführen des Undo- oder Redokommandos nichts sinnvolles bewirkt.
+     * Liefert <code>true</code>, wenn das ausfÃ¼hren des Undo- oder Redokommandos nichts sinnvolles bewirkt.
      * 
      * @return
      */
@@ -126,10 +126,10 @@ public class Transaction {
     }
 
     /**
-     * Löscht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt, wenn es ein solches gibt und fügt ein neues Kommando mit dem
+     * LÃ¶scht das letzte Redo-Kommando, das mit dem <code>commadPrefix</code> beginnt, wenn es ein solches gibt und fÃ¼gt ein neues Kommando mit dem
      * <code>commadPrefix</code> und den <code>commandArguments</code> am Ende an. <br />
-     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
-     * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
+     * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. FÃ¼r das Redo benÃ¶tigt man immer nur
+     * die letzte Verschiebeoperation, da sie den endgÃ¼ltigen Ort und GrÃ¶ÃŸe eines Elementes eindeutig bestimmt.
      * 
      * @param commandPrefix
      * @param commandArguments
@@ -149,8 +149,8 @@ public class Transaction {
 
     /**
      * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese
-     * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
-     * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
+     * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. FÃ¼r das
+     * Undo benÃ¶tigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -GrÃ¶ÃŸe eines Elementes eindeutig bestimmt.
      * 
      * @param commandPrefix
      * @param commandArguments

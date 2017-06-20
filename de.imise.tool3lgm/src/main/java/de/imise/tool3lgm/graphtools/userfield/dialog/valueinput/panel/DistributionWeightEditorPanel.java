@@ -32,9 +32,9 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
- * Panel zur Darstellung und Eingabe von Verteilungsgewichten für Kanten.
+ * Panel zur Darstellung und Eingabe von Verteilungsgewichten fÃ¼r Kanten.
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von Kantenelementen und jedes für sie definierte Verteilungsgewicht separat - die Auswahl der Klasse
+ * Die Dateneingabe erfolgt fÃ¼r jede Klasse von Kantenelementen und jedes fÃ¼r sie definierte Verteilungsgewicht separat - die Auswahl der Klasse
  * erfolgt in der enthaltenen <code>edgeBox</code>, die Auswahl des Verteilungsgewichtes in der <code>weightBox</code>.
  * 
  * @author fstephan
@@ -42,49 +42,49 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldEditorPanel {
 
     /**
-     * Auswahlbox für die Verteilungsgewichte des in <code>edgeBox</code> ausgewählten Kantentyps
+     * Auswahlbox fÃ¼r die Verteilungsgewichte des in <code>edgeBox</code> ausgewÃ¤hlten Kantentyps
      */
     private final AlphabeticalComboBox weightBox = new AlphabeticalComboBox();
 
     /**
-     * Auswahlbox über die man die Tabelle auf genau ein Spaltenelement einschränken kann
+     * Auswahlbox Ã¼ber die man die Tabelle auf genau ein Spaltenelement einschrÃ¤nken kann
      */
     private final AlphabeticalComboBox columnFilterBox = new AlphabeticalComboBox();
 
     /**
-     * Richtung der Kante, die in der <code>edgeBox</code> ausgewählt ist.
+     * Richtung der Kante, die in der <code>edgeBox</code> ausgewÃ¤hlt ist.
      */
     private int choosedEdgeDirection;
 
     //////////////////////////////////////////////////
     /// elementTypeBoxSelection und weightBoxSelection   ///
-    ///	sind notwendig, damit beim temporären      ///
-    /// takeover(), d.h., beim Ändern der Auswahl  ///
+    ///	sind notwendig, damit beim temporÃ¤ren      ///
+    /// takeover(), d.h., beim Ã„ndern der Auswahl  ///
     /// in einer der beiden ComboBoxes die Werte   ///
-    /// unter dem vorher ausgewählten Verteilungs- ///
+    /// unter dem vorher ausgewÃ¤hlten Verteilungs- ///
     /// gewicht abgespeichert werden und nicht     ///
-    /// unter dem neu ausgewählten				   ///
+    /// unter dem neu ausgewÃ¤hlten				   ///
     //////////////////////////////////////////////////
 
     /**
-     * Zuletzt ausgewähltes Element in der {@link #edgeBox}
+     * Zuletzt ausgewÃ¤hltes Element in der {@link #edgeBox}
      */
     private Class<? extends Kante> elementTypeBoxSelection;
 
     /**
-     * Zuletzt ausgewähltes Element in der {@link #weightBox}
+     * Zuletzt ausgewÃ¤hltes Element in der {@link #weightBox}
      */
     private UserField weightBoxSelection;
 
     /**
-     * Zuletzt ausgewähltes Element in der {@link #columnFilterBox}
+     * Zuletzt ausgewÃ¤hltes Element in der {@link #columnFilterBox}
      */
     private ModelElement columnFilterBoxSelection;
 
     /**
      * Konstruktor
      * 
-     * @param dialog Dialog, der dieses Panel enthält
+     * @param dialog Dialog, der dieses Panel enthÃ¤lt
      * @param name
      */
     public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog, final String name) {
@@ -94,8 +94,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
-     * zur gewählten Kantenart gehörigen Verteilungsgewichte in die <code>weightBox</code> eingefügt.
+     * Methode setzt die auszufÃ¼hrende Action, bei Ã„nderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporÃ¤r Ã¼bernommen und die
+     * zur gewÃ¤hlten Kantenart gehÃ¶rigen Verteilungsgewichte in die <code>weightBox</code> eingefÃ¼gt.
      */
     @Override
     protected void setActionsForElementTypeBox() {
@@ -103,7 +103,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         final DistributionWeightEditorPanel finalPanel = this;
 
         /*
-         * Bei Änderung der Auswahl in edgeBox, werden in der weightBox die verfügbaren Verteilungsgewichte angezeigt
+         * Bei Ã„nderung der Auswahl in edgeBox, werden in der weightBox die verfÃ¼gbaren Verteilungsgewichte angezeigt
          */
         AbstractAction action = new AbstractAction() {
             @Override
@@ -114,9 +114,9 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                 }
                 stopEditing();
                 takeOver();
-                // Selektion für nächstes takeOver
+                // Selektion fÃ¼r nÃ¤chstes takeOver
                 finalPanel.elementTypeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
-                //sobald sich in dieser Box die Selektion ändert, dann gleich in der anderen Box das erste Item auswählen
+                //sobald sich in dieser Box die Selektion Ã¤ndert, dann gleich in der anderen Box das erste Item auswÃ¤hlen
                 finalPanel.setWeightBoxContent();
                 finalPanel.initSelectFirstItem();
                 finalPanel.columnFilterBoxSelection = null;
@@ -137,13 +137,13 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     }
 
     /**
-     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in <code>weightBox</code>. Werte im Table werden temporär übernommen und die
-     * zum gewählten Verteilungsgewicht gehörigen Daten in einem neuen Table dargestellt.
+     * Methode setzt die auszufÃ¼hrende Aktion, bei Ã„nderung der Auswahl in <code>weightBox</code>. Werte im Table werden temporÃ¤r Ã¼bernommen und die
+     * zum gewÃ¤hlten Verteilungsgewicht gehÃ¶rigen Daten in einem neuen Table dargestellt.
      */
     private void setActionsForWeightBox() {
         final DistributionWeightEditorPanel finalPanel = this;
-        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
-        // Kantentyp gehörige Table im Panel dargestellt.
+        // Bei Ã„nderung in der weightBox, wird der zum gewÃ¤hlten Verteilungsgewicht und 
+        // Kantentyp gehÃ¶rige Table im Panel dargestellt.
         ItemListener il = new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -158,7 +158,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                 stopEditing();
                 takeOver();
 
-                // Selektion für nächstes takeOver
+                // Selektion fÃ¼r nÃ¤chstes takeOver
                 finalPanel.weightBoxSelection = (UserField) o;
                 finalPanel.columnFilterBoxSelection = null;
                 finalPanel.drawTable();
@@ -171,8 +171,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     }
 
     /**
-     * Setzt den Inhalt der <code>weigthBox</code>. Die für den in der <code>edgeBox</code> gewählten Kantentyp definierten Verteilungsgewichte werden
-     * der <code>weigthBox</code> hinzugefügt.
+     * Setzt den Inhalt der <code>weigthBox</code>. Die fÃ¼r den in der <code>edgeBox</code> gewÃ¤hlten Kantentyp definierten Verteilungsgewichte werden
+     * der <code>weigthBox</code> hinzugefÃ¼gt.
      */
     private void setWeightBoxContent() {
 
@@ -199,8 +199,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
 
     private void setActionsForColumnFilterBox() {
         final DistributionWeightEditorPanel finalPanel = this;
-        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
-        // Kantentyp gehörige Table im Panel dargestellt.
+        // Bei Ã„nderung in der weightBox, wird der zum gewÃ¤hlten Verteilungsgewicht und 
+        // Kantentyp gehÃ¶rige Table im Panel dargestellt.
         ItemListener il = new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -211,7 +211,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                 stopEditing();
                 takeOver();
 
-                // Selektion für nächstes takeOver
+                // Selektion fÃ¼r nÃ¤chstes takeOver
                 finalPanel.columnFilterBoxSelection = (ModelElement) o;
                 finalPanel.drawTable();
                 finalPanel.distributeSelectionChangedEvent();
@@ -278,7 +278,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                         doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
                     } else {
                         try {
-                            //Warum soll man hier keine falschen Werte setzen dürfen, die dann bei Berechnungen zu NUMBER_FORMAT_ERRORS werden
+                            //Warum soll man hier keine falschen Werte setzen dÃ¼rfen, die dann bei Berechnungen zu NUMBER_FORMAT_ERRORS werden
                             new BigDecimal(newValue);
                             // Neuen Wert setzen
                             doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
@@ -292,7 +292,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
 
         tableModel.dataChanged(false);
 
-        //Das reset durchführen kann auch ganz auf das Ende verlegt werden
+        //Das reset durchfÃ¼hren kann auch ganz auf das Ende verlegt werden
         doc.getUserFieldDefinitions().initReset();
     }
 
@@ -350,7 +350,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     protected void initSelectFirstItem() {
         super.initSelectFirstItem();
         //das hier darf man nicht durch hasSelectedItem() ersetzen, falls eine Unterklasse diese
-        //Funktion überschreibt
+        //Funktion Ã¼berschreibt
         if (weightBox.getSelectedObject() == null) {
             //auch in der WeightBox steh an Index 0 immer ein Separator
             if (weightBox.getItemCount() > 1) {

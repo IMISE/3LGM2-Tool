@@ -34,7 +34,7 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
         WeightReplacer replacer = extractReplacer(columnIdentifiers);
 
         //true im Konstuktor bedeutet, dass man einen Leerwert zur Auswahl hat. Der Leerwert
-        //steht für "keine Ersetzung"
+        //steht fÃ¼r "keine Ersetzung"
         AlphabeticalComboBox component = new AlphabeticalComboBox(false);
         for (NamedObjectContainer<UserField> container : columnIdentifiers) {
             UserField colUserField = container.getObject();
@@ -84,18 +84,18 @@ public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
     }
 
     /**
-     * Gibt den tatsächlichen Wert dieser Zelle wieder und speicher ihn unter {@link #value} ab. <br>
+     * Gibt den tatsÃ¤chlichen Wert dieser Zelle wieder und speicher ihn unter {@link #value} ab. <br>
      * Falls der Wert im Editor <code>""</code> entspricht, wird ein neuer {@link NamedObjectContainer} mit {@link #userField} und
-     * <code>"EMPTY_STRING"</code> zurückgegeben. Falls sich der Wert im Editor nicht auf BigDecimal parsen lässt, wird ein neuer
-     * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurückgegeben. Sonst wird ein neuer
-     * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurückgegeben.
+     * <code>"EMPTY_STRING"</code> zurÃ¼ckgegeben. Falls sich der Wert im Editor nicht auf BigDecimal parsen lÃ¤sst, wird ein neuer
+     * {@link NamedObjectContainer} mit {@link #userField} und <code>"NUMBER_FORMAT_ERROR"</code> zurÃ¼ckgegeben. Sonst wird ein neuer
+     * {@link NamedObjectContainer} mit {@link #userField} und dem String im Editor zurÃ¼ckgegeben.
      * 
      * @see javax.swing.CellEditor#getCellEditorValue()
      */
     @Override
     public Object getCellEditorValue() {
         //hier muss wieder das Standardverhalten hergestellt werden, das die Oberklasse UserFieldActivatedTableCell
-        //überschrieben hatte
+        //Ã¼berschrieben hatte
         Object newValue = editor.getCellEditorValue();
         return newValue;
     }

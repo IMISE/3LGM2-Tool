@@ -7,15 +7,15 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 public abstract class AbstractError extends Error {
 
     /**
-     * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
+     * Suffix, der an den SimpleClassName gehÃ¤ngt wird, um die genaue BEschreibung des Fehlers
      * aus den Error-Resourcen zu laden.
      */
     protected static final String ERROR_DESCRIPTION_SUFFIX = "_descrip";
 
     /**
      * Dieser Placeholder kann zum Beispiel in der Beschreibung in den Resourcen verwendet werden,
-     * um die Stelle zu markieren, an der ein Wert eingefügt werden soll. Das kann beliebig oft
-     * sein, Hauptsache man hält sich bei den übergebenen Werten an die an die Reihenfolge.
+     * um die Stelle zu markieren, an der ein Wert eingefÃ¼gt werden soll. Das kann beliebig oft
+     * sein, Hauptsache man hÃ¤lt sich bei den Ã¼bergebenen Werten an die an die Reihenfolge.
      */
     protected static final String ERROR_PLACEHOLDER = "$value";
 
@@ -25,7 +25,7 @@ public abstract class AbstractError extends Error {
     protected ModelElement me;
 
     /**
-     * Klasse der Verbindungen, deren Instanzanzahl für das Modellelement zu hoch oder zu niedrig
+     * Klasse der Verbindungen, deren Instanzanzahl fÃ¼r das Modellelement zu hoch oder zu niedrig
      * ist.
      */
     protected Object errorField;
@@ -60,7 +60,7 @@ public abstract class AbstractError extends Error {
     }
 
     /**
-     * Liefert alle Replacements für die Message (muss in ggf. Unterklassen überschrieben werden)
+     * Liefert alle Replacements fÃ¼r die Message (muss in ggf. Unterklassen Ã¼berschrieben werden)
      * 
      * @return
      */
@@ -110,8 +110,8 @@ public abstract class AbstractError extends Error {
     }
 
     /**
-     * Liefert einen String, der für jede Art von Fehler eindeutig sein sollte (z.B. "MIN", "MAX" oder "ID").
-     * Wird in den Resourcen nichts gefunden, wird "ERROR" zurück gegeben.
+     * Liefert einen String, der fÃ¼r jede Art von Fehler eindeutig sein sollte (z.B. "MIN", "MAX" oder "ID").
+     * Wird in den Resourcen nichts gefunden, wird "ERROR" zurÃ¼ck gegeben.
      * 
      * @return
      */

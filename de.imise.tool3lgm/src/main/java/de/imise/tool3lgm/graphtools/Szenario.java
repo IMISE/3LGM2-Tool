@@ -36,7 +36,7 @@ public class Szenario extends LGMGraphDocument {
         super(_gdcoll);
         setTitle(title == null ? "" : title);
         setDescription(description);
-        //wenn der HashString gültig und noch nicht vergeben ist -> setze ihn
+        //wenn der HashString gÃ¼ltig und noch nicht vergeben ist -> setze ihn
         if (hashString != null && !hashString.trim().equals("") && !hashString.trim().equals("null") && gdcoll.getGraphDocumentCoded(hashString) == null) {
             this.hashString = hashString;
         } else {
@@ -45,7 +45,7 @@ public class Szenario extends LGMGraphDocument {
     }
 
     /**
-     * Fügt eine Kopie des übergebene ElementContainers in dieses Szenario ein.
+     * FÃ¼gt eine Kopie des Ã¼bergebene ElementContainers in dieses Szenario ein.
      * 
      * @param ec
      * @return
@@ -87,7 +87,7 @@ public class Szenario extends LGMGraphDocument {
     }
 
     /**
-     * Holt das Slave-Element der übergegebenen <code>Composition</code> in dieses Szenario
+     * Holt das Slave-Element der Ã¼bergegebenen <code>Composition</code> in dieses Szenario
      * 
      * @param k
      * @param sourceDoc
@@ -111,7 +111,7 @@ public class Szenario extends LGMGraphDocument {
                     return;
                 }
                 addElementToSzenario(getHashString(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
-                //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
+                //wenn der Container aus dem Hauptdokument Ã¼bernommen wurde -> initiale Grafik setzen
                 if (sourceDoc == getCollection().getMainGraphDocument()) {
                     addict(hashString, com.getClass().getName(), com.getHashString(), master, slave, GDCommands.INVALID_EDGE_INDEX, TransactionManager.STANDARD_PID);
                 }
@@ -120,24 +120,24 @@ public class Szenario extends LGMGraphDocument {
     }
 
     //	/**
-    //	 * Erzeugt alle Kanten für den übergebenen ElementContainer.
+    //	 * Erzeugt alle Kanten fÃ¼r den Ã¼bergebenen ElementContainer.
     //	 * 
     //	 * @param egdeStartOrEndContainer
     //	 * @param sourceDoc
-    //	 * 			Haupt- oder Teilmodell, aus dem das Element und die Kanten übernommen werden sollen
+    //	 * 			Haupt- oder Teilmodell, aus dem das Element und die Kanten Ã¼bernommen werden sollen
     //	 * @param select
-    //	 * 			wenn <code>true</code> sind alle neuen Kanten- und Element-Container nach dieser Aktion selektiert (zusätzlich
-    //	 * 			zur ursprünglichen Selektion)
+    //	 * 			wenn <code>true</code> sind alle neuen Kanten- und Element-Container nach dieser Aktion selektiert (zusÃ¤tzlich
+    //	 * 			zur ursprÃ¼nglichen Selektion)
     //	 * @param pid
     //	 */
     //	public void createEdgeContainer(ElementContainer egdeStartOrEndContainer, GraphDocument sourceDoc, boolean select, int pid) {
     //		
-    //		Diese Version der Funktion funktioniert nicht richtig -> es werdfen keine Kanten auf dem Layer hinzugefügt -> die alte Version wieder eingebaut
+    //		Diese Version der Funktion funktioniert nicht richtig -> es werdfen keine Kanten auf dem Layer hinzugefÃ¼gt -> die alte Version wieder eingebaut
     //		
     //		start_transaction(pid, false);
-    //		//wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
+    //		//wenn das Element, dessen Kanten hinzugefÃ¼gt werden sollen, nicht leer und nicht einmalig ist
     //		if ((egdeStartOrEndContainer != null) && (!egdeStartOrEndContainer.getElement().isUnique())) {
-    //			//für alle Kanten des Elements
+    //			//fÃ¼r alle Kanten des Elements
     //			for (Kante ka : egdeStartOrEndContainer.getElement().getEdges()) {
     //				ElementContainer edgeCont = ka.getContainer(this);
     //				
@@ -153,7 +153,7 @@ public class Szenario extends LGMGraphDocument {
     //						//wenn es keinen gibt, hole den Container aus dem Hauptmodell
     //						if (oldKC == null)
     //							oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
-    //						//füge eine Kopie des Kante-Containers in dieses Szenario ein
+    //						//fÃ¼ge eine Kopie des Kante-Containers in dieses Szenario ein
     //						edgeCont = (EdgeContainer)addContainerCopy(oldKC);
     //						if (edgeCont == null)
     //							continue;
@@ -169,22 +169,22 @@ public class Szenario extends LGMGraphDocument {
     //	}
 
     /**
-     * Erzeugt alle Kanten für den übergebenen ElementContainer.
+     * Erzeugt alle Kanten fÃ¼r den Ã¼bergebenen ElementContainer.
      * 
      * @param egdeStartOrEndContainer
      * @param sourceDoc
-     *            Haupt- oder Teilmodell, aus dem das Element und die Kanten übernommen werden sollen
+     *            Haupt- oder Teilmodell, aus dem das Element und die Kanten Ã¼bernommen werden sollen
      * @param select
-     *            wenn <code>true</code> sind alle neuen Kanten- und Element-Container nach dieser Aktion selektiert (zusätzlich
-     *            zur ursprünglichen Selektion)
+     *            wenn <code>true</code> sind alle neuen Kanten- und Element-Container nach dieser Aktion selektiert (zusÃ¤tzlich
+     *            zur ursprÃ¼nglichen Selektion)
      * @param pid
      */
     public void createEdgeContainer(final ElementContainer egdeStartOrEndContainer, final GraphDocument sourceDoc, final boolean select, final int pid) {
 
         start_transaction(pid, false);
-        //wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
+        //wenn das Element, dessen Kanten hinzugefÃ¼gt werden sollen, nicht leer und nicht einmalig ist
         if (egdeStartOrEndContainer != null && !egdeStartOrEndContainer.getElement().isUnique()) {
-            //für alle Kanten des Elements
+            //fÃ¼r alle Kanten des Elements
             for (Kante ka : egdeStartOrEndContainer.getElement().getEdges()) {
                 //wenn die Kante nicht bereits in diesem Szenario vorkommt
                 boolean b = !isMyElement(ka);
@@ -203,7 +203,7 @@ public class Szenario extends LGMGraphDocument {
                         if (oldKC == null) {
                             oldKC = (EdgeContainer) ka.getContainer(sourceDoc.getCollection().getMainGraphDocument());
                         }
-                        //füge eine Kopie des Kante-Containers in dieses Szenario ein
+                        //fÃ¼ge eine Kopie des Kante-Containers in dieses Szenario ein
                         EdgeContainer kc = (EdgeContainer) addContainerCopy(oldKC);
                         if (kc == null) {
                             continue;
@@ -215,23 +215,23 @@ public class Szenario extends LGMGraphDocument {
                     }
                 }
             }
-            //wenn das Element, dessen Kanten hinzugefügt werden sollen, leer oder einmalig ist
+            //wenn das Element, dessen Kanten hinzugefÃ¼gt werden sollen, leer oder einmalig ist
         }
         //AXS 05.09.2008: else-Fall mal heraus genommen, weil der nur irgendwelche Symptome bei Inkonsistenzen mit dem
-        //  Holzhammer behebt. wenn alles richtig läuft, darf das hier meiner meinung gar nicht auftreten
+        //  Holzhammer behebt. wenn alles richtig lÃ¤uft, darf das hier meiner meinung gar nicht auftreten
         // 
         //		
         //		else {
-        //			//für jede Ebene dieses Szenarios
+        //			//fÃ¼r jede Ebene dieses Szenarios
         //			for (LayerContainer lc : layer) {
-        //				//für alle Knoten der Ebene (das können im Schleifendurchlauf mehr werden -> nicht über den Iterator gehen)
+        //				//fÃ¼r alle Knoten der Ebene (das kÃ¶nnen im Schleifendurchlauf mehr werden -> nicht Ã¼ber den Iterator gehen)
         //				for (int j = 0; j < lc.getKnotenCount(); j++) {
         //					egdeStartOrEndContainer = lc.getNodeContainer(j);
         //					ModelElement el = egdeStartOrEndContainer.getElement();
-        //					//einmalige Elemente überspringen
+        //					//einmalige Elemente Ã¼berspringen
         //					if (el.isUnique())
         //						continue;
-        //					//für alle Kanten des Elementes
+        //					//fÃ¼r alle Kanten des Elementes
         //					for (Kante ka : el.getEdges()) {
         //						//wenn die aktuelle Kante noch nicht in diesem Szenario ist
         //						if (!isMyElement(ka)) {
@@ -249,7 +249,7 @@ public class Szenario extends LGMGraphDocument {
         //									//Hauptdokument dieses Szenarios sein
         //									oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
         //								}
-        //								//füge eine Kopie des Kante-Containers in dieses Szenario ein
+        //								//fÃ¼ge eine Kopie des Kante-Containers in dieses Szenario ein
         //								EdgeContainer kc = (EdgeContainer)addContainerCopy(oldKC);
         //								if (kc == null)
         //									continue;
@@ -260,7 +260,7 @@ public class Szenario extends LGMGraphDocument {
         //						}
         //					}
         //				}
-        //				//für alle Kanten des aktuellen Layers
+        //				//fÃ¼r alle Kanten des aktuellen Layers
         //				for (int j = 0; j < lc.getKantenCount(); j++) {
         //					//
         //					egdeStartOrEndContainer = lc.getEdgeContainer(j);
@@ -318,7 +318,7 @@ public class Szenario extends LGMGraphDocument {
         StringBuilder xmlString = new StringBuilder("<szenario hash=\"" + hashString + "\" titel=\"" + XMLCharacterCoder.encodeString(getTitle()) + "\">");
         xmlString.append("<description>" + XMLCharacterCoder.encodeString(description) + "</description>");
 
-        /* Informationen über Ansicht speichern */
+        /* Informationen Ã¼ber Ansicht speichern */
         if (getFrame() != null) {
             try {
                 xmlString.append("<view><selected>" + getFrame().isSelected() + "</selected><x>" + getFrame().getScrollPane().getViewport().getViewPosition().x + "</x><y>" + getFrame().getScrollPane().getViewport().getViewPosition().y + "</y><zoom>"

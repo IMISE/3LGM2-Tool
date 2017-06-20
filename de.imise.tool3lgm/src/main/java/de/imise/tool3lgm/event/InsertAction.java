@@ -7,11 +7,11 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
- * Von {@link AbstractLGMAction} abgeleitete Klasse zum Einfügen von {@link ModelElement}en in die 3
+ * Von {@link AbstractLGMAction} abgeleitete Klasse zum EinfÃ¼gen von {@link ModelElement}en in die 3
  * Ebenen.
  * <p>
  * Das Erzeugen von Instanzen dieser Klasse erfolgt durch die Spezifizierung der zu generierenden {@link ModelElement}-Klasse. Intern wird dann dazu
- * über {@link ModelConstants} der passende Name für diese Action gesucht.
+ * Ã¼ber {@link ModelConstants} der passende Name fÃ¼r diese Action gesucht.
  *
  * @author fstephan
  */
@@ -44,7 +44,7 @@ class InsertAction extends AbstractLGMAction {
         return getActions(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES);
     }
 
-    /** Gibt wieder, ob der aktuelle Kontext ein Einfügen von Elementen erlaubt, oder nicht */
+    /** Gibt wieder, ob der aktuelle Kontext ein EinfÃ¼gen von Elementen erlaubt, oder nicht */
     public static boolean isInsertAvailable() {
         return Static.getSelectedDoc() != null;
     }

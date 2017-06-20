@@ -24,25 +24,25 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
- * Eigenschaftendialog für ein Modell
+ * Eigenschaftendialog fÃ¼r ein Modell
  * 
  * @author AXS
  */
 public final class ModelPropertyDialog extends AbstractPropertyDialog {
 
     /**
-     * Textpane in dem die Beschreibungen angezeigt werden und editiert werden können.
+     * Textpane in dem die Beschreibungen angezeigt werden und editiert werden kÃ¶nnen.
      */
     private ExtendedTextPane textPane;
 
     /**
-     * Das {@link GraphDocument}, das vor einer Änderung des aktiven {@link GraphDocument} aktiv
+     * Das {@link GraphDocument}, das vor einer Ã„nderung des aktiven {@link GraphDocument} aktiv
      * war.
      */
     private GraphDocument lastActiveDoc = null;
 
     /**
-     * Auswahlbox für das aktive (Teil-)Modell
+     * Auswahlbox fÃ¼r das aktive (Teil-)Modell
      */
     private final AlphabeticalComboBox docBox = new AlphabeticalComboBox();
 
@@ -95,7 +95,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
      * Aktualisiert die Anzeige.
      */
     public void update() {
-        // prüfen, ob alle Teilmodelle in der Auswahlbox vorhanden sind
+        // prÃ¼fen, ob alle Teilmodelle in der Auswahlbox vorhanden sind
         for (Szenario szen : gdcoll.getSzenarios()) {
             boolean found = false;
             for (int j = 0; j < docBox.getItemCount(); j++) {
@@ -112,7 +112,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
                 docBox.addItem(szen);
             }
         }
-        // prüfen, ob alle auswählbaren Teilmodelle noch vorhanden sind
+        // prÃ¼fen, ob alle auswÃ¤hlbaren Teilmodelle noch vorhanden sind
         for (int j = 0; j < docBox.getItemCount(); j++) {
             Object item = docBox.getItemAt(j);
             if (!(item instanceof Szenario)) {
@@ -161,8 +161,8 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
     }
 
     /**
-     * Wird ausgeführt, wenn sich das {@link GraphDocument} ändert, dessen BEschreibung angezeigt
-     * werden soll. Erst wird für das zuletzt aktive {@link GraphDocument} die eingegebene
+     * Wird ausgefÃ¼hrt, wenn sich das {@link GraphDocument} Ã¤ndert, dessen BEschreibung angezeigt
+     * werden soll. Erst wird fÃ¼r das zuletzt aktive {@link GraphDocument} die eingegebene
      * Beschreibung gesetzt, dann wird die Beschreibung des aktivierten {@link GraphDocument}s
      * angezeigt.
      */

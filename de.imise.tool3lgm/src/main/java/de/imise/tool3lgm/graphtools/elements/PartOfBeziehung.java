@@ -22,7 +22,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Gibt das Element zurück, welches durch diese Kante Teil des anderen Elementes ist.
+     * Gibt das Element zurÃ¼ck, welches durch diese Kante Teil des anderen Elementes ist.
      * 
      * @return Partelement der Kante
      */
@@ -31,7 +31,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Gibt das Element zurück, welches durch diese Kante das Oberelement des anderen Elementes ist.
+     * Gibt das Element zurÃ¼ck, welches durch diese Kante das Oberelement des anderen Elementes ist.
      * 
      * @return Parentelement der Kante
      */
@@ -40,7 +40,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Gibt die Teilelementklasse der Teil-Von-Beziehung zurück
+     * Gibt die Teilelementklasse der Teil-Von-Beziehung zurÃ¼ck
      * 
      * @param poClass
      * @return
@@ -50,7 +50,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Gibt die Elementklasse der Teil-Von-Beziehung zurück, die nicht die Teilelementklasse ist
+     * Gibt die Elementklasse der Teil-Von-Beziehung zurÃ¼ck, die nicht die Teilelementklasse ist
      * 
      * @param poClass
      * @return
@@ -60,7 +60,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Teilelementklasse der übergebenen Kante zuweisungskompatibel ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Elementklasse mit der Teilelementklasse der Ã¼bergebenen Kante zuweisungskompatibel ist.
      * 
      * @param poClass
      * @param meClass
@@ -71,7 +71,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Kante zuweisungskompatibel ist, ide nicht
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Elementklasse mit der Elementklasse der Ã¼bergebenen Kante zuweisungskompatibel ist, ide nicht
      * die Teilelementklasse ist.
      * 
      * @param poClass

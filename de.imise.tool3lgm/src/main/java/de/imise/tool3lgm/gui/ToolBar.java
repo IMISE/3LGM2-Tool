@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.UnfloatableToolBar;
 
-// TODO: alles auf die Actions umstellen, die auch das Menü benutzt. Die Actions sollten aber auch gleich mit den Icons klarkommen
+// TODO: alles auf die Actions umstellen, die auch das MenÃ¼ benutzt. Die Actions sollten aber auch gleich mit den Icons klarkommen
 public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener {
     //	private AbstractInternalFrame frame = null;
     public JButton multi, redo, undo, print, backward, forward;

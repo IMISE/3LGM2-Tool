@@ -31,7 +31,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * Panel zur Darstellung und Eingabe der Ersetzung von Kantengweichten durch andere Kantengewichte.
  * <p>
- * Die Dateneingabe erfolgt für jede Klasse von ModelElementen und jede für sie definierte Kantenklasse separat - die Auswahl der ElementKlasse
+ * Die Dateneingabe erfolgt fÃ¼r jede Klasse von ModelElementen und jede fÃ¼r sie definierte Kantenklasse separat - die Auswahl der ElementKlasse
  * erfolgt in der enthaltenen <code>elementClassBox</code>, die Auswahl der Kantenklasse in der <code>EdgeClassBox</code>.
  * 
  * @author AXS
@@ -40,39 +40,39 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel {
 
     /**
-     * Auswahlbox für den Elementtyp
+     * Auswahlbox fÃ¼r den Elementtyp
      */
     private final AlphabeticalComboBox elementClassBox = new AlphabeticalComboBox();
 
     /**
-     * Auswahlbox für die Kantenklasse
+     * Auswahlbox fÃ¼r die Kantenklasse
      */
     private final AlphabeticalComboBox edgeClassBox = new AlphabeticalComboBox();
 
     ////////////////////////////////////////////////////////////
     /// elementClassBoxSelection und egdeClassBoxSelection   ///
-    ///	sind notwendig, damit beim temporären                ///
-    /// takeover(), d.h., beim Ändern der Auswahl            ///
+    ///	sind notwendig, damit beim temporÃ¤ren                ///
+    /// takeover(), d.h., beim Ã„ndern der Auswahl            ///
     /// in einer der beiden ComboBoxes die Werte             ///
-    /// unter dem vorher ausgewählten Verteilungs-           ///
+    /// unter dem vorher ausgewÃ¤hlten Verteilungs-           ///
     /// gewicht abgespeichert werden und nicht               ///
-    /// unter dem neu ausgewählten				             ///
+    /// unter dem neu ausgewÃ¤hlten				             ///
     ////////////////////////////////////////////////////////////
 
     /**
-     * Zuletzt ausgewähltes Element in der {@link #elementClassBox}
+     * Zuletzt ausgewÃ¤hltes Element in der {@link #elementClassBox}
      */
     private Object elementClassBoxSelection;
 
     /**
-     * Zuletzt ausgewähltes Element in der {@link #egdeClassBox}
+     * Zuletzt ausgewÃ¤hltes Element in der {@link #egdeClassBox}
      */
     private Object edgeClassBoxSelection;
 
     /**
      * Konstruktor
      * 
-     * @param dialog Dialog, der dieses Panel enthält
+     * @param dialog Dialog, der dieses Panel enthÃ¤lt
      * @param name
      */
     public DistributionWeightReplacePanel(final UserFieldEditorDialog dialog, final String name) {
@@ -101,7 +101,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Methode setzt den Inhalt der <code>elementClassBox</code> Es werden nur Elementklassen hinzugefügt, die Kanten mit mind.
+     * Methode setzt den Inhalt der <code>elementClassBox</code> Es werden nur Elementklassen hinzugefÃ¼gt, die Kanten mit mind.
      * einem definierten Verteilungsgewicht besitzen.
      */
     private void setElementClassBoxContent() {
@@ -121,14 +121,14 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Methode setzt die auszuführende Action, bei Änderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporär übernommen und die
-     * zur gewählten Kantenart gehörigen Verteilungsgewichte in die <code>weightBox</code> eingefügt.
+     * Methode setzt die auszufÃ¼hrende Action, bei Ã„nderung der Auswahl in der <code>edgeBox</code>. Werte im Table werden temporÃ¤r Ã¼bernommen und die
+     * zur gewÃ¤hlten Kantenart gehÃ¶rigen Verteilungsgewichte in die <code>weightBox</code> eingefÃ¼gt.
      */
     private void setActionsForElementClassBox() {
 
         final DistributionWeightReplacePanel finalPanel = this;
 
-        //Bei Änderung der Auswahl in elementClassBox, werden in der edgeClassBox die verfügbaren 
+        //Bei Ã„nderung der Auswahl in elementClassBox, werden in der edgeClassBox die verfÃ¼gbaren 
         //Verteilungsgewichte angezeigt
         AbstractAction action = new AbstractAction() {
             @Override
@@ -139,7 +139,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                 }
                 stopEditing();
                 takeOver();
-                // Selektion für nächstes takeOver
+                // Selektion fÃ¼r nÃ¤chstes takeOver
                 finalPanel.elementClassBoxSelection = o;
                 finalPanel.setEdgeClassBoxContent();
                 finalPanel.initSelectFirstItem();
@@ -167,14 +167,14 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Methode setzt die auszuführende Aktion, bei Änderung der Auswahl in <code>edgeClassBox</code>.
-     * Werte im Table werden temporär übernommen und die zur gewählten Kante gehörigen
+     * Methode setzt die auszufÃ¼hrende Aktion, bei Ã„nderung der Auswahl in <code>edgeClassBox</code>.
+     * Werte im Table werden temporÃ¤r Ã¼bernommen und die zur gewÃ¤hlten Kante gehÃ¶rigen
      * Verteilungsgweichte mit den neuen Dten in einem neuen Table dargestellt.
      */
     private void setActionsForEdgeClassBox() {
         final DistributionWeightReplacePanel finalPanel = this;
-        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
-        // Kantentyp gehörige Table im Panel dargestellt.
+        // Bei Ã„nderung in der weightBox, wird der zum gewÃ¤hlten Verteilungsgewicht und 
+        // Kantentyp gehÃ¶rige Table im Panel dargestellt.
         ItemListener il = new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent e) {
@@ -189,7 +189,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
                 stopEditing();
                 takeOver();
 
-                // Selektion für nächstes takeOver
+                // Selektion fÃ¼r nÃ¤chstes takeOver
                 finalPanel.edgeClassBoxSelection = o;
 
                 finalPanel.drawTable();
@@ -202,9 +202,9 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     }
 
     /**
-     * Setzt den Inhalt der <code>edgeClassBox</code>. Die für den in der <code>edgeBox</code> gewählten Kantentyp definierten Verteilungsgewichte
+     * Setzt den Inhalt der <code>edgeClassBox</code>. Die fÃ¼r den in der <code>edgeBox</code> gewÃ¤hlten Kantentyp definierten Verteilungsgewichte
      * werden
-     * der <code>weigthBox</code> hinzugefügt.
+     * der <code>weigthBox</code> hinzugefÃ¼gt.
      */
     private void setEdgeClassBoxContent() {
         @SuppressWarnings("unchecked")
@@ -254,12 +254,12 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
         tableModel.dataChanged(false);
 
-        //Das reset durchführen kann auch ganz auf das Ende verlegt werden
+        //Das reset durchfÃ¼hren kann auch ganz auf das Ende verlegt werden
         doc.getUserFieldDefinitions().initReset();
     }
 
     /**
-     * Setzt über das GraphDocument im Replacer ein neues Replacement
+     * Setzt Ã¼ber das GraphDocument im Replacer ein neues Replacement
      * 
      * @param doc
      * @param rowElementHash
@@ -274,16 +274,16 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             String columnUserFieldHash = columnUserField.getHashCode();
             if (replaceUserField == null) { // es soll durch die Gleichverteilung ersetzt werden
                 doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, null, pid);
-            } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden 
+            } else { //es soll durch ein anderes UserField ersetzt bzw. gelÃ¶scht werden 
                 String userFieldHashReplacement = replaceUserField.getHashCode();
                 String oldReplacement = replacer.getReplacement(rowElementHash, columnUserFieldHash);
-                //wenn tatsächlich einer Wert übergeben wurde
+                //wenn tatsÃ¤chlich einer Wert Ã¼bergeben wurde
                 //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden
                 boolean setOldValue1 = oldReplacement == null && columnUserFieldHash.equals(userFieldHashReplacement);
                 //Fall 2: es ist ein alter Wert gesetzt und es soll derselbe Wert nochmal gesetzt werden
                 boolean setOldvalue2 = oldReplacement != null && oldReplacement.equals(userFieldHashReplacement);
                 if (!setOldValue1 && !setOldvalue2) {
-                    //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelöscht
+                    //wenn columnUserFieldHash == userFieldHashReplacement sein sollte, dann wird die Ersetzung gelÃ¶scht
                     //wenn die ungleich sind, wird die Ersetzung gesetzt
                     doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, userFieldHashReplacement, pid);
                 }
@@ -293,13 +293,13 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             String selectedEdgeClassName = selectedEdgeClass.getSimpleName();
             String replaceUserFieldHash = replaceUserField == null ? null : replaceUserField.getHashCode();
             String oldReplacement = replacer.getUniformDistributionReplacement(rowElementHash, selectedEdgeClass);
-            //wenn tatsächlich einer Wert übergeben wurde
+            //wenn tatsÃ¤chlich einer Wert Ã¼bergeben wurde
             //FAll 1: Es ist kein alter Wert gesetzt und es soll wieder der Leerwert gesetzt werden (beide null)
             boolean setOldValue1 = oldReplacement == replaceUserFieldHash;
             //Fall 2: es ist ein alter Wert gesetzt und es soll derselbe Wert nochmal gesetzt werden
             boolean setOldValue2 = oldReplacement != null && oldReplacement.equals(replaceUserFieldHash);
             if (!setOldValue1 && !setOldValue2) {
-                //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelöscht
+                //wenn replaceUserFieldHash == null sein sollte wird eine vorhandene Ersetzung gelÃ¶scht
                 //wenn es nicht null ist, dann wird der neue Ersetzungshash gesetzt
                 doc.setUserFieldWeightReplacement(rowElementHash, selectedEdgeClassName, replaceUserFieldHash, pid);
             }
@@ -348,7 +348,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
     @Override
     protected void drawTable() {
         table.removeFromLayoutContainer();
-        //keine Kantenklase ausgewählt -> nichts zu ersetzen
+        //keine Kantenklase ausgewÃ¤hlt -> nichts zu ersetzen
         if (!hasSelectedItem()) {
             return;
         }

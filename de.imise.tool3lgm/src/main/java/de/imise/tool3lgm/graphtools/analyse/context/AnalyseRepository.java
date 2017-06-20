@@ -22,7 +22,7 @@ import de.imise.tool3lgm.log.Log;
 /**
  * Diese Klasse stellt Methoden zum speichern und laden der Analysen bereit. Hier werden alle
  * Analysen die im 3LGM-Baukasten verwendet werden, verwaltet. Achtung: Es existiert noch kein
- * Listener-Mechanismus, der Klassen, welche das AnalyseRepository verwenden, über Änderungen im
+ * Listener-Mechanismus, der Klassen, welche das AnalyseRepository verwenden, Ã¼ber Ã„nderungen im
  * Repository informiert.
  *
  * @author Thomas Wendt, Sebastian Weber, AXS
@@ -32,16 +32,16 @@ public class AnalyseRepository {
     /** Datei, aus der zuletzt Analysen geladen oder in die zuletzt Analysen gespeichert wurden */
     private static File file;
 
-    /** Enthält alle Analysen, die im Modell audf Elemente angewendet werden können. */
+    /** EnthÃ¤lt alle Analysen, die im Modell audf Elemente angewendet werden kÃ¶nnen. */
     private static List<XMLAnalyse> xmlAnalysen;
 
     private static List<AbstractAnalyse> specialAnalysis;
 
     /**
-     * Fügt eine neue XMLAnalyse ins Repository ein, wenn sie noch nicht enthalten ist.
+     * FÃ¼gt eine neue XMLAnalyse ins Repository ein, wenn sie noch nicht enthalten ist.
      *
-     * @param xmlAnalysen Liste zu der die übergebene XMLAnalyse hinzugefügt werden soll
-     * @param toadd die XMLAnalyse, die hinzugefügt werden soll
+     * @param xmlAnalysen Liste zu der die Ã¼bergebene XMLAnalyse hinzugefÃ¼gt werden soll
+     * @param toadd die XMLAnalyse, die hinzugefÃ¼gt werden soll
      */
     public static boolean addAnalyse(final XMLAnalyse toadd) {
         if (toadd == null) {
@@ -61,14 +61,14 @@ public class AnalyseRepository {
     }
 
     /**
-     * Prüft, ob der übergebene <code>name</code> bei irgend einer anderen als der einzeln
-     * übergebenen XMLAnalyse vorkommt.
+     * PrÃ¼ft, ob der Ã¼bergebene <code>name</code> bei irgend einer anderen als der einzeln
+     * Ã¼bergebenen XMLAnalyse vorkommt.
      *
      * @param xmlAnalysen eine ArrayList der Analysen.
      * @param xMLAnalyse die XMLAnalyse, der ein neuer Name gegeben werden soll.
-     * @param name der Name für die übergebene XMLAnalyse.
+     * @param name der Name fÃ¼r die Ã¼bergebene XMLAnalyse.
      * @return false, wenn der Name in der Liste der Analysen gar nicht enthalten ist oder nur die
-     *         einzeln übergebnen XMLAnalyse diesen Namen besitzt.
+     *         einzeln Ã¼bergebnen XMLAnalyse diesen Namen besitzt.
      */
     public static boolean containsName(final List<XMLAnalyse> analysen, final XMLAnalyse xMLAnalyse, final String name) {
         if (analysen == null) {
@@ -86,7 +86,7 @@ public class AnalyseRepository {
     }
 
     /**
-     * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Knoten entspricht.
+     * Gibt alle Analysen zurÃ¼ck, deren Startknoten dem Ã¼bergebenen Knoten entspricht.
      *
      * @param elementClassName
      * @return ArrayList, in der jeder Eintrag eine XMLAnalyse ist.
@@ -108,26 +108,26 @@ public class AnalyseRepository {
     }
 
     /**
-     * Liefert eine Analysedatei für den Benutzer. <br>
-     * Ist bereits eine Datei geladen oder gespeichert worden, kommt diese zurück. Sonst wird der
-     * Reihe nach folgendes geprüft:<br>
+     * Liefert eine Analysedatei fÃ¼r den Benutzer. <br>
+     * Ist bereits eine Datei geladen oder gespeichert worden, kommt diese zurÃ¼ck. Sonst wird der
+     * Reihe nach folgendes geprÃ¼ft:<br>
      * Hat der Benutzer in seinem Anwendungsdatenverzeichnis eine Analysedatei mit dem Namen
-     * "Tool3lgm_Analys.res3" wird diese zurückgegeben. Sie sollte immer beschreibbar sein.<br>
+     * "Tool3lgm_Analys.res3" wird diese zurÃ¼ckgegeben. Sie sollte immer beschreibbar sein.<br>
      * Ex. diese Datei nicht, dann wird im Installationsverzeichnis des Bauskastens nach einer Datei
      * mit dem Namen "Tool3lgm.analysis" gesucht. Wenn diese beschreibbar ist, wird sie
-     * zurückgeliefert. Wenn sie nicht beschreibbar ist, dann wird diese Datei ins
+     * zurÃ¼ckgeliefert. Wenn sie nicht beschreibbar ist, dann wird diese Datei ins
      * Anwendungsdatenverzeichnis des Benutzers mit den Namen "Tool3lgm_Analys.res3" kopiert und
-     * zurückgegeben.<br>
+     * zurÃ¼ckgegeben.<br>
      * Wenn auch im Installationsverzeichnis keine Analysendatei gefunden wurde, wird aus den
      * Resourcen die Standarddatei geladen. Zuerst wird versucht, sie unter dem Namen
      * "Tool3lgm.analysis" ins Installationsverzeichnis des Baukastens zu kopieren. Geht das gut,
-     * wird sie zurückgegeben. Geht das nicht gut, wird die Standarddatei ins Benutzerverzeichnis
-     * mit dem Namen "Tool3lgm_LOCALECODE.analysis" kopiert und diese neue Datei zurückgegeben.<br>
-     * Geht das auch nicht gut, wird die Original Resourcendatei zurückgegeben. Da sie in einem
-     * jar-Paket liegt, ist sie dann sicher nicht beschreibbar. Der ganze Aufwand hängt damit
-     * zusammen, dass der Benutzer immer auf einer Datei arbeitet, die er auch möglichst beschreiben
+     * wird sie zurÃ¼ckgegeben. Geht das nicht gut, wird die Standarddatei ins Benutzerverzeichnis
+     * mit dem Namen "Tool3lgm_LOCALECODE.analysis" kopiert und diese neue Datei zurÃ¼ckgegeben.<br>
+     * Geht das auch nicht gut, wird die Original Resourcendatei zurÃ¼ckgegeben. Da sie in einem
+     * jar-Paket liegt, ist sie dann sicher nicht beschreibbar. Der ganze Aufwand hÃ¤ngt damit
+     * zusammen, dass der Benutzer immer auf einer Datei arbeitet, die er auch mÃ¶glichst beschreiben
      * kann. Das Speichern der Analysendatei im Installationsverzeichnis hat den Vorteil, dass die
-     * Analysen allen Benutzern dieser Installation zu Verfügung stehen.
+     * Analysen allen Benutzern dieser Installation zu VerfÃ¼gung stehen.
      *
      * @return
      */
@@ -144,8 +144,8 @@ public class AnalyseRepository {
         if (file.exists()) {
             // die Datei aus dem Installationsverzeichnis ins Benutzerverzeichnis kopieren (lesen
             // sollte
-            // man file können, sonst könnte man den Baukasten im gleichen Verzeichnis auch nicht
-            // ausführen)
+            // man file kÃ¶nnen, sonst kÃ¶nnte man den Baukasten im gleichen Verzeichnis auch nicht
+            // ausfÃ¼hren)
             if (!file.canWrite()) {
                 File userHomeFile = new File(Tool3lgmConstants.USER_HOME_DIR_NAME, Tool3lgmConstants.ANALYSEN_FILE_NAME);
                 saveAnalyseFile(userHomeFile, loadAnalyseFile(file));
@@ -185,7 +185,7 @@ public class AnalyseRepository {
     }
 
     /**
-     * Gibt alle Abfragen zurück, die sich im Analyserepository befinden.
+     * Gibt alle Abfragen zurÃ¼ck, die sich im Analyserepository befinden.
      *
      * @return eine ArrayList der Abfragen. Jeder Eintrag des ArrayList ist eine XMLAnalyse.
      */
@@ -204,7 +204,7 @@ public class AnalyseRepository {
     // ////////////////////////////////////////////////////
 
     /**
-     * Gibt eine Liste aller Analysen zurück, die sich in dem übergebenen File befinden.
+     * Gibt eine Liste aller Analysen zurÃ¼ck, die sich in dem Ã¼bergebenen File befinden.
      *
      * @param file
      * @return
@@ -219,7 +219,7 @@ public class AnalyseRepository {
     }
 
     /**
-     * Gibt eine Liste aller Analysen zurück, die sich in der Datei mit der übergebenen URL
+     * Gibt eine Liste aller Analysen zurÃ¼ck, die sich in der Datei mit der Ã¼bergebenen URL
      * befinden.
      *
      * @param f
@@ -270,7 +270,7 @@ public class AnalyseRepository {
     }
 
     /**
-     * Speichert die Analysen in die übergebene Analysedatei. Die übergebene Datei muss nicht
+     * Speichert die Analysen in die Ã¼bergebene Analysedatei. Die Ã¼bergebene Datei muss nicht
      * existieren, aber erzeugbar und beschreibbar sein.
      *
      * @param f die Datei, in die die Analysen gespeichert werden sollen.
@@ -316,8 +316,8 @@ public class AnalyseRepository {
     }
 
     /**
-     * Übernimmt die übergebenen Abfragen in das Repository. Der aktuelle Inhalt des Repository wird
-     * dadurch überschrieben.
+     * Ãœbernimmt die Ã¼bergebenen Abfragen in das Repository. Der aktuelle Inhalt des Repository wird
+     * dadurch Ã¼berschrieben.
      *
      * @param newAbfragen eine ArrayList der neuen Abfragen. Jeder Eintrag des ArrayList ist eine
      *            XMLAnalyse.

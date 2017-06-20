@@ -12,7 +12,7 @@ public class ActionNotDefinedForClassException extends Exception {
 	 * 
 	 */
     public ActionNotDefinedForClassException(final String panelClassName) {
-        super("Die Aktion ist für " + panelClassName + " nicht definiert!");
+        super("Die Aktion ist fÃ¼r " + panelClassName + " nicht definiert!");
     }
 
 }

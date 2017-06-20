@@ -25,7 +25,7 @@ import de.imise.util.swing.menu.MenuCreator;
 import de.imise.util.swing.menu.MenuScroller;
 
 /**
- * Sammlung aller Menus für die {@link MenuBar}
+ * Sammlung aller Menus fÃ¼r die {@link MenuBar}
  * 
  * @author fstephan
  */
@@ -43,7 +43,7 @@ public class MenuCollection {
     /** Das Ansicht-Menu */
     public static final JMenu VIEW_MENU = new ViewMenu();
 
-    /** Das Einfügen-Menu */
+    /** Das EinfÃ¼gen-Menu */
     public static final JMenu INSERT_MENU = new InsertMenu();
 
     /** Das Format-Menu */
@@ -80,12 +80,12 @@ public class MenuCollection {
     /** Das Hilfe-Menu */
     public static final JMenu HELP_MENU = new HelpMenu();
 
-    /** Erzeugt {@link JMenu} mit spezifizierten Titel und Einträgen */
+    /** Erzeugt {@link JMenu} mit spezifizierten Titel und EintrÃ¤gen */
     private static JMenu createMenu(final String title, final Object... entries) {
         return MenuCreator.createMenu(title, entries, true);
     }
 
-    /** Erzeugt ein {@link JCheckBoxMenuItem} mit der übergebenen {@link Action} */
+    /** Erzeugt ein {@link JCheckBoxMenuItem} mit der Ã¼bergebenen {@link Action} */
     private static JCheckBoxMenuItem createCheckBoxItem(final Action a) {
         return MenuCreator.createCheckBoxMenuItem(a);
     }
@@ -168,7 +168,7 @@ public class MenuCollection {
     /** Sammlung der Unter-Menus des Optionen-Menus */
     static class OptionsSubMenus {
 
-        /** Menu für allgemeine Optionen */
+        /** Menu fÃ¼r allgemeine Optionen */
         public static final JMenu GENERAL_OPTIONS_MENU = createMenu(Tool3lgmConstants.getResString("general"), createCheckBoxItem(ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING),
                 createCheckBoxItem(ActionLibrary.OptionsActions.PartOf.CONSIDER_PARENTS), createCheckBoxItem(ActionLibrary.OptionsActions.PartOf.HIERARCHICAL));
 
@@ -236,7 +236,7 @@ public class MenuCollection {
             super(title);
             MenuCreator.addAll(this, MenuCreator.createMenuEntries(true, ActionLibrary.FileActions.ACTION_NEW_MODEL, ActionLibrary.FileActions.OPEN, ActionLibrary.FileActions.SAVE, ActionLibrary.FileActions.SAVEAS, ActionLibrary.FileActions.CLOSE,
                     new JSeparator(), ActionLibrary.FileActions.DESCRIPTION, new JSeparator(), FileSubMenus.IMPORT_MENU, FileSubMenus.EXPORT_MENU, new JSeparator(),
-                    //hier werden später die zuletzt geladenen Modelle angezeigt 
+                    //hier werden spÃ¤ter die zuletzt geladenen Modelle angezeigt 
                     new JSeparator(), ActionLibrary.FileActions.EXIT));
         }
 
@@ -262,10 +262,10 @@ public class MenuCollection {
         /** Name dieses Menus */
         public static final String title = Tool3lgmConstants.getResString("viewMenu");
 
-        /** Item für das Aktivieren der Ein-Ebenen-Ansicht */
+        /** Item fÃ¼r das Aktivieren der Ein-Ebenen-Ansicht */
         private static final Component oneLayerPerspective = MenuCreator.createMenuEntry(ActionLibrary.ViewActions.ONE_LAYER_PERSPECTIVE);
 
-        /** Item für das Aktivieren der Drei-Ebenen-Ansicht */
+        /** Item fÃ¼r das Aktivieren der Drei-Ebenen-Ansicht */
         private static final Component threeLayerPerspective = MenuCreator.createMenuEntry(ActionLibrary.ViewActions.THREE_LAYER_PERSPECTIVE);
 
         /** Index der beiden Items im Menu */
@@ -290,19 +290,19 @@ public class MenuCollection {
         }
     }
 
-    /** Das Einfügen-Menu */
+    /** Das EinfÃ¼gen-Menu */
     public static class InsertMenu extends DynamicMenu {
 
         /** Name dieses Menus */
         public static final String title = Tool3lgmConstants.getResString("insert");
 
-        /** Einträge der fachlichen Ebene */
+        /** EintrÃ¤ge der fachlichen Ebene */
         public static final Component[] MENU_ENTRIES_DOMAIN = MenuCreator.createMenuEntries(ActionLibrary.InsertActions.DOMAIN_LAYER_ACTIONS, true);
 
-        /** Einträge der logischen Ebene */
+        /** EintrÃ¤ge der logischen Ebene */
         public static final Component[] MENU_ENTRIES_LOGICAL = MenuCreator.createMenuEntries(ActionLibrary.InsertActions.LOGICAL_TOOLLAYER_ACTIONS, true);
 
-        /** Einträge der physichen bene */
+        /** EintrÃ¤ge der physichen bene */
         public static final Component[] MENU_ENTRIES_PHYSICAL = MenuCreator.createMenuEntries(ActionLibrary.InsertActions.PHYSICAL_TOOLLAYER_ACTIONS, true);
 
         public InsertMenu() {
@@ -338,13 +338,13 @@ public class MenuCollection {
         /** Name dieses Menus */
         public static final String title = Tool3lgmConstants.getResString("layoutMenu");
 
-        /** Item für das Teilmodell-Layout */
+        /** Item fÃ¼r das Teilmodell-Layout */
         private final JMenuItem globalLayout = new JMenuItem(ActionLibrary.LayoutActions.GLOBAL_LAYOUT);
 
-        /** Menu für das Ebenen Layout */
+        /** Menu fÃ¼r das Ebenen Layout */
         private final JMenu layerLayoutMenu = LayoutSubMenus.LAYER_LAYOUT_MENU;
 
-        /** Menu für das Element Layout */
+        /** Menu fÃ¼r das Element Layout */
         private final JMenu elementLayoutMenu = LayoutSubMenus.ELEMENT_LAYOUT_MENU;
 
         /** Das Level-Menu */

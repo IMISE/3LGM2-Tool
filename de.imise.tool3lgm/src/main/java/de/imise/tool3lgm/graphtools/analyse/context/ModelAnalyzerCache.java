@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.Repraesentationsform;
 
 /**
- * Stellt Funktionen bereit, um 'teure' Anfragen an ein Model effizient wiederholen zu können.
+ * Stellt Funktionen bereit, um 'teure' Anfragen an ein Model effizient wiederholen zu kÃ¶nnen.
  * 
  * @author AXS Created on 15.07.2008
  */
@@ -34,22 +34,22 @@ public class ModelAnalyzerCache {
     /**
      * Mapppt von einem Anwendungsbausteins auf eine Set aller seiner eigenen Schnittstellen und die
      * seiner Parts und Parents. Wir sehen die Teil-Von-Beziehung zwischen Anwendungsbausteinen als
-     * bidirektionale Kommunikationsbeziehung, über die jeder Objekttyp ausgetauscht werden kann.
+     * bidirektionale Kommunikationsbeziehung, Ã¼ber die jeder Objekttyp ausgetauscht werden kann.
      * Das bedeutet, dass die Eigenschaften einer Schnittstelle, die ein AWB besitzt, an alle
-     * anderen AWBs übergehen, die mit dem AWB über einen beliebigen Pfad aus Teil-Von-Beziehungen
+     * anderen AWBs Ã¼bergehen, die mit dem AWB Ã¼ber einen beliebigen Pfad aus Teil-Von-Beziehungen
      * verbunden sind.
      */
     private final HashMap<ModelElement, Set<ModelElement>> appSysToInterfaceSet = new HashMap<ModelElement, Set<ModelElement>>();
 
     /**
-     * Mappt für jeden <code>Anwendungsbaustein</code> auf die Liste aller seiner Eltern, Kinder und
+     * Mappt fÃ¼r jeden <code>Anwendungsbaustein</code> auf die Liste aller seiner Eltern, Kinder und
      * Geschwister - also aller Anwendungsbausteine, mit denen er eine Einheit bildet.
      */
     private final HashMap<ModelElement, Collection<ModelElement>> appSysToSameAppSysCollection = new HashMap<ModelElement, Collection<ModelElement>>();
 
     /**
      * Mappt von einem Objekttyp auf eine <code>Collection</code>, die ihn selbst und alle seine
-     * übergeordneten Objekttypen enthält.
+     * Ã¼bergeordneten Objekttypen enthÃ¤lt.
      */
     private final HashMap<ModelElement, Collection<ModelElement>> objectTypeToObjectTypeAndParentsCollection = new HashMap<ModelElement, Collection<ModelElement>>();
 
@@ -73,7 +73,7 @@ public class ModelAnalyzerCache {
 
     /**
      * Mappt von einem Objekttyp auf ein Set alle Anwendungsbausteine die den Objekttyp oder einen
-     * seiner Parent-Objekttypen als Master speichern. Dies darf aus Konsistenzgründen eigentlich
+     * seiner Parent-Objekttypen als Master speichern. Dies darf aus KonsistenzgrÃ¼nden eigentlich
      * immer nur einer sein.
      */
     private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectMasterAppSysSet = new HashMap<ModelElement, Set<ModelElement>>();
@@ -85,7 +85,7 @@ public class ModelAnalyzerCache {
     private final HashMap<ModelElement, Set<ModelElement>> objectTypeToMasterDBSSet = new HashMap<ModelElement, Set<ModelElement>>();
 
     /**
-     * @param gdcoll Modell, für das ein Analyzer angelegt werden soll
+     * @param gdcoll Modell, fÃ¼r das ein Analyzer angelegt werden soll
      */
     public ModelAnalyzerCache(final GDCollection gdcoll) {
         super();
@@ -110,7 +110,7 @@ public class ModelAnalyzerCache {
     }
 
     /**
-     * Liefert alle Anwendungssysteme, die den Objekttyp speichern. Die Master-Eigenschaft zählt
+     * Liefert alle Anwendungssysteme, die den Objekttyp speichern. Die Master-Eigenschaft zÃ¤hlt
      * dabei nicht. Es sind alle Teile und alle Oberbausteine der Baustein enthalten, die den
      * Objekttyp eigentlich speichern.
      * 
@@ -142,8 +142,8 @@ public class ModelAnalyzerCache {
     }
 
     /**
-     * Liefert ein Set von Elementen, in dem alle übergebenen Elemente und alle mit den übergebenen
-     * durch Teil-Von-Beziehungen irgendwie, also auch über mehrere andere Anwendungssysteme,
+     * Liefert ein Set von Elementen, in dem alle Ã¼bergebenen Elemente und alle mit den Ã¼bergebenen
+     * durch Teil-Von-Beziehungen irgendwie, also auch Ã¼ber mehrere andere Anwendungssysteme,
      * verbundenen Elemente enthalten sind.
      */
     public Set<ModelElement> expandPartOfElementSet(final Collection<ModelElement> modelElements) {
@@ -201,8 +201,8 @@ public class ModelAnalyzerCache {
 
     /**
      * Liefert alle Anwendungssysteme, die den Objekttyp direkt speichern. Die Master-Eigenschaft
-     * zählt dabei nicht. Direktes Speichern bedeutet dabei, dass der Objekttyp selbst oder einer
-     * seiner übergeordneten Objekttypen gespeichert wird.
+     * zÃ¤hlt dabei nicht. Direktes Speichern bedeutet dabei, dass der Objekttyp selbst oder einer
+     * seiner Ã¼bergeordneten Objekttypen gespeichert wird.
      * 
      * @param objectType
      * @return
@@ -227,12 +227,12 @@ public class ModelAnalyzerCache {
         }
         Collection<ModelElement> sameAWBCol = getSameApplicationSystems(applicationSystem);
 
-        // neue Schnittstellenliste, die für jeden Einzel-AWB eines Gesamt-AWB identisch sein wird
+        // neue Schnittstellenliste, die fÃ¼r jeden Einzel-AWB eines Gesamt-AWB identisch sein wird
         Set<ModelElement> sameInterfaceSet = new HashSet<ModelElement>();
         for (ModelElement sameAWB : sameAWBCol) {
-            // hole alle seine Schnittstellen und füge sie zur Gesamtliste hinzu
+            // hole alle seine Schnittstellen und fÃ¼ge sie zur Gesamtliste hinzu
             sameInterfaceSet.addAll(sameAWB.getConnectedElementsByEdge(AwbKommssVerbindung.class));
-            // lege die Gesamtliste für den Einzel-AWB in die globale HashMap
+            // lege die Gesamtliste fÃ¼r den Einzel-AWB in die globale HashMap
             appSysToInterfaceSet.put(sameAWB, sameInterfaceSet);
         }
         return sameInterfaceSet;

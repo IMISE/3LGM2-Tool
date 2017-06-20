@@ -17,27 +17,27 @@ import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
  *         created on 16.08.2007
  */
 public class UserProperties {
-    //TODO:AXS: die UserProperties sollten in zukunft über Properties.class gemanaged werden.
+    //TODO:AXS: die UserProperties sollten in zukunft Ã¼ber Properties.class gemanaged werden.
 
-    //ACHTUNG: alles was hier auskommentiert ist, war nur mal zum Test, wie es über Properties laufen könnte
+    //ACHTUNG: alles was hier auskommentiert ist, war nur mal zum Test, wie es Ã¼ber Properties laufen kÃ¶nnte
 
     //	static Properties properties = new Properties();
 
     //	static final File USER_PROPERTIES_FILE = new File(System.getProperty("user.home") + "/" + ".too3lgmUserInfo.xml");
 
     //	/**
-    //	 * Stellt Property-Change-Funktionalität zur Verfügung. <br>
+    //	 * Stellt Property-Change-FunktionalitÃ¤t zur VerfÃ¼gung. <br>
     //	 * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-    //	 * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
+    //	 * hinzugefÃ¼gt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
     //	 * /
     //	private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
     //
     //	///////////////////////////////////////////////////
-    //	// Listener hinzufügen/entfernen/benachrichtigen //
+    //	// Listener hinzufÃ¼gen/entfernen/benachrichtigen //
     //	///////////////////////////////////////////////////
     //
     //	/**
-    //	 * Fügt einen <code>PropertyChangeListener</code> hinzu
+    //	 * FÃ¼gt einen <code>PropertyChangeListener</code> hinzu
     //	 * @param listener
     //	 * /
     //	public static final void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -87,11 +87,11 @@ public class UserProperties {
     // Locale //
     ////////////
 
-    /** Locale, die der Benutzer gewählt hat */
+    /** Locale, die der Benutzer gewÃ¤hlt hat */
     private static Locale locale = setLocale(Locale.getDefault());
 
     /**
-     * Liefert die eingestellte Locale. Hat der Benutzer sie nicht geändert, entspricht sie der des Systems.
+     * Liefert die eingestellte Locale. Hat der Benutzer sie nicht geÃ¤ndert, entspricht sie der des Systems.
      */
     public static final Locale getLocale() {
         return locale;
@@ -99,11 +99,11 @@ public class UserProperties {
 
     /**
      * Setzt die Locale, mit der alle Ressourcen geladen werden.<br>
-     * Existieren für die Sprache dieser Locale keine Ressourcen, werden die englischen
+     * Existieren fÃ¼r die Sprache dieser Locale keine Ressourcen, werden die englischen
      * Standardressorucen geladen.<br>
      * Das Umstellen der Locale hat nur Auswirkungen auf das sortieren der Elemente (siehe <code>Alphabetical.class</code>) und bei der Anzeige von
      * Dialogen aus dem util-Package.
-     * Da das <code>ResourceBundle</code> für die vorher selektierte Sprache nicht neu geladen wird
+     * Da das <code>ResourceBundle</code> fÃ¼r die vorher selektierte Sprache nicht neu geladen wird
      * und das Hauptfenster nicht zur Laufzeit neu initialisiert werden kann, wird das Umstellen der
      * locale dort erst nach einem Neustart sichtbar.
      *
@@ -198,7 +198,7 @@ public class UserProperties {
     // searchParts //
     /////////////////
 
-    /** Beim Suchen untergeordnete Elemente berücksichtigen */
+    /** Beim Suchen untergeordnete Elemente berÃ¼cksichtigen */
     private static boolean searchParts;
 
     /** @return searchParts */
@@ -215,7 +215,7 @@ public class UserProperties {
     // searchParents //
     ///////////////////
 
-    /** Beim Suchen übergeordnete Elemente berücksichtigen */
+    /** Beim Suchen Ã¼bergeordnete Elemente berÃ¼cksichtigen */
     private static boolean searchParents;
 
     /** @return searchParts */
@@ -249,7 +249,7 @@ public class UserProperties {
     // enableSubmodelBrowser //
     ///////////////////////////
 
-    /** Modellbrowser für Teilmodelle zeigen nur Elemente des Teilmodells an. (bei <code>false</code> werden alle angezeigt) */
+    /** Modellbrowser fÃ¼r Teilmodelle zeigen nur Elemente des Teilmodells an. (bei <code>false</code> werden alle angezeigt) */
     private static boolean enableSubmodelBrowser;
 
     /** @return enableSubmodelBrowser */
@@ -357,7 +357,7 @@ public class UserProperties {
     // paintEdgesOnlyForSelectedElements //
     ///////////////////////////////////////
 
-    /** Kanten werden nur für selektierte Elemente gespeichert */
+    /** Kanten werden nur fÃ¼r selektierte Elemente gespeichert */
     private static boolean paintEdgesOnlyForSelectedElements = false;
 
     /** @return paintEdgesOnlyForSelectedElements */
@@ -376,9 +376,9 @@ public class UserProperties {
 
     /**
      * AXS: Das hier hat irgendwas mit der Farbe von benutzerdef. Eigenschaften im Baum zu tun.
-     * Wenn die im Baum angezeigt werden, dann soll wohl ihre Farbe auf das dazugehörige ModelElement
-     * im Baum übertragen werden. Wer auch immer das implementiert hat, hat es nicht zuende programmiert.
-     * Mir ist nicht klar, wozu das gut sein könnte, da man für benutzerdef. Eigenschaften gar keine
+     * Wenn die im Baum angezeigt werden, dann soll wohl ihre Farbe auf das dazugehÃ¶rige ModelElement
+     * im Baum Ã¼bertragen werden. Wer auch immer das implementiert hat, hat es nicht zuende programmiert.
+     * Mir ist nicht klar, wozu das gut sein kÃ¶nnte, da man fÃ¼r benutzerdef. Eigenschaften gar keine
      * Farbe setzen kann.
      */
     private static boolean usePropertyColors;
@@ -397,7 +397,7 @@ public class UserProperties {
     // useRaster //
     ///////////////
 
-    /** Wenn <code>true</code> werden alle Verschiebungen in der Grafik auf einem Raster ausgeführt. */
+    /** Wenn <code>true</code> werden alle Verschiebungen in der Grafik auf einem Raster ausgefÃ¼hrt. */
     private static boolean useRaster;
 
     /** @return useRaster */
@@ -474,7 +474,7 @@ public class UserProperties {
     // newSubmodelForAnalysis //
     ////////////////////////////
 
-    /** Ergebniselemente einer XMLAnalyse werden in ein neues Teilmodell übernommen */
+    /** Ergebniselemente einer XMLAnalyse werden in ein neues Teilmodell Ã¼bernommen */
     private static boolean newSubmodelForAnalysis;
 
     /** @return newSubmodelForAnalysis */
@@ -515,7 +515,7 @@ public class UserProperties {
     /**
      * Anwendungbaustein-Konfigurationsredundanz anzeigen.<br>
      * Diese Option wird nicht gespeichert, weil es vertretbar ist, dass der Benutzer die Option wieder
-     * einschaltet, wenn ihn der Wert interessiert. Außerdem ist diese Option eher modellspezifisch
+     * einschaltet, wenn ihn der Wert interessiert. AuÃŸerdem ist diese Option eher modellspezifisch
      * als eine globale Benutzeroption.
      */
     private static transient boolean showABKonfigRedundance;
@@ -537,7 +537,7 @@ public class UserProperties {
     /**
      * Datenredundanz anzeigen.<br>
      * Diese Option wird nicht gespeichert, weil es vertretbar ist, dass der Benutzer die Option wieder
-     * einschaltet, wenn ihn der Wert interessiert. Außerdem ist diese Option eher modellspezifisch
+     * einschaltet, wenn ihn der Wert interessiert. AuÃŸerdem ist diese Option eher modellspezifisch
      * als eine globale Benutzeroption.
      */
     private static boolean showDataRedundance;
@@ -557,9 +557,9 @@ public class UserProperties {
     //////////////////////
 
     /**
-     * Medienbrüche anzeigen.<br>
+     * MedienbrÃ¼che anzeigen.<br>
      * Diese Option wird nicht gespeichert, weil es vertretbar ist, dass der Benutzer die Option wieder
-     * einschaltet, wenn ihn der Wert interessiert. Außerdem ist diese Option eher modellspezifisch
+     * einschaltet, wenn ihn der Wert interessiert. AuÃŸerdem ist diese Option eher modellspezifisch
      * als eine globale Benutzeroption.
      */
     private static boolean showMediumBreaks;
@@ -595,7 +595,7 @@ public class UserProperties {
     };
 
     /**
-     * gibt die zuletzt benutzen Datei zurück
+     * gibt die zuletzt benutzen Datei zurÃ¼ck
      *
      * @return ArrayList mit File-Objekten
      */
@@ -604,7 +604,7 @@ public class UserProperties {
     }
 
     /**
-     * fügt eine Datei zu der List mit den zuletzt geöffenten Datei hinzu
+     * fÃ¼gt eine Datei zu der List mit den zuletzt geÃ¶ffenten Datei hinzu
      *
      * @param file Datei, die benutzt wurde
      */
@@ -700,7 +700,7 @@ public class UserProperties {
     // enableClassificationNumberCalculation //
     ///////////////////////////////////////////
 
-    /** Wenn <code>true</code>, werden die Werte von Kennzahlformeln neu berechnet, wenn Änderungen am Modell vorgenommen wurden. */
+    /** Wenn <code>true</code>, werden die Werte von Kennzahlformeln neu berechnet, wenn Ã„nderungen am Modell vorgenommen wurden. */
     private static boolean enableClassificationNumberCalculation;
 
     /** @return enableClassificationNumberCalculation */
@@ -730,10 +730,10 @@ public class UserProperties {
     }
 
     //////////////////////////////////////////////
-    // Consistenzprüfung ein oder ausgeschaltet //
+    // ConsistenzprÃ¼fung ein oder ausgeschaltet //
     //////////////////////////////////////////////
 
-    /** Wenn <code>true</code>, wird die Konsitenz des aktuellen Modells überprüft. */
+    /** Wenn <code>true</code>, wird die Konsitenz des aktuellen Modells Ã¼berprÃ¼ft. */
     private static boolean checkConsistency;
 
     /** @return checkConsistency */
@@ -747,7 +747,7 @@ public class UserProperties {
     }
 
     /**
-     * Wenn <code>true</code>, wird vor dem Löschen von Elementen aus dem Hauptmodell
+     * Wenn <code>true</code>, wird vor dem LÃ¶schen von Elementen aus dem Hauptmodell
      * und allen Teilmodellen, eine Warnung angezeigt.
      */
     private static boolean showRemoveWarning = true;

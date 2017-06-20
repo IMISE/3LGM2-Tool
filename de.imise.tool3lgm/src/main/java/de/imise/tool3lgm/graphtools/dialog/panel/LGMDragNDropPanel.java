@@ -19,10 +19,10 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * @author fstephan Diese Klasse ist eine abstrakte Oberklasse, für alle
- *         <code>ElementDialogPanel</code>s, die DragNDrop-Funktionalität bereitstellen wollen. Es
- *         werden Methoden zur Behandlung aller für DragNDrop relevanten <code>MouseEvent</code>s
- *         und Methoden zur Sammlung aller gewünschten DragNDrop-Aktionen bereitgestellt. Achtung!
+ * @author fstephan Diese Klasse ist eine abstrakte Oberklasse, fÃ¼r alle
+ *         <code>ElementDialogPanel</code>s, die DragNDrop-FunktionalitÃ¤t bereitstellen wollen. Es
+ *         werden Methoden zur Behandlung aller fÃ¼r DragNDrop relevanten <code>MouseEvent</code>s
+ *         und Methoden zur Sammlung aller gewÃ¼nschten DragNDrop-Aktionen bereitgestellt. Achtung!
  *         <code>init()</code> muss von allen erbenden Klassen aufgerufen werden.
  */
 public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
@@ -37,8 +37,8 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Methode erstellt anhand der übergeben <code>LGMAction</code> einen MouseListener, der an alle
-     * Trees, die durch <code>getAllDragNDropTrees()</code> zurückgegeben werden, angeheftet wird.
+     * Methode erstellt anhand der Ã¼bergeben <code>LGMAction</code> einen MouseListener, der an alle
+     * Trees, die durch <code>getAllDragNDropTrees()</code> zurÃ¼ckgegeben werden, angeheftet wird.
      * Damit werden nun alle Trees kontrolliert und DragNDrop kann stattfinden.
      *
      * @param action
@@ -48,7 +48,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
         LGMMouseListener ml = new LGMMouseListener(action, action, action, action, action);
         JTree[] trees = getAllDragNDropTrees();
         for (int i = 0; i < trees.length; i++) {
-            //die Bäume können null sein, da sie nur bei Bedarf initialisiert werden (insbesondere der rechte Baum im PathConnectionPanel)
+            //die BÃ¤ume kÃ¶nnen null sein, da sie nur bei Bedarf initialisiert werden (insbesondere der rechte Baum im PathConnectionPanel)
             if (trees[i] != null) {
                 trees[i].addMouseListener(ml);
                 addMouseListener(trees[i]);
@@ -58,20 +58,20 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Diese Methode soll so überschrieben werden, dass alle möglichen DragNDrop-Aktionen die im
-     * jeweils abgeleiteten Panel zur Verfügung stehen sollen, als <code>DragNDropActionChain</code>
+     * Diese Methode soll so Ã¼berschrieben werden, dass alle mÃ¶glichen DragNDrop-Aktionen die im
+     * jeweils abgeleiteten Panel zur VerfÃ¼gung stehen sollen, als <code>DragNDropActionChain</code>
      * s in einem Array zusammengefasst und returniert werden.
      */
     protected abstract DragNDropActionChain[] collectDragNDropActionChains();
 
     /**
-     * Methode soll so überschrieben werden, dass alle Trees, die an DragNDrop-Aktionen beteiligt
+     * Methode soll so Ã¼berschrieben werden, dass alle Trees, die an DragNDrop-Aktionen beteiligt
      * sind, in einem Array zusammengefasst und returniert werden.
      */
     public abstract JTree[] getAllDragNDropTrees();
 
     /**
-     * Gibt die Kante zurück, die man zwischen Elementen der übergebenen Art in diesem Panel neu
+     * Gibt die Kante zurÃ¼ck, die man zwischen Elementen der Ã¼bergebenen Art in diesem Panel neu
      * erzeugen kann.
      *
      * @param me1

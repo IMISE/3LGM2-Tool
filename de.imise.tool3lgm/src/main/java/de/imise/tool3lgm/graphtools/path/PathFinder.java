@@ -78,7 +78,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Subnetz;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Stellt Funktionen bereit, mit denen konkrete Pfade zu definierten Metapfaden ermittelt werden können.
+ * Stellt Funktionen bereit, mit denen konkrete Pfade zu definierten Metapfaden ermittelt werden kÃ¶nnen.
  * 
  * @author Thomas Rudert
  * @author AXS (5.10.2007)
@@ -91,7 +91,7 @@ public final class PathFinder {
     private static HashMap<String, MetaPath[]> metaPathes = new HashMap<String, MetaPath[]>(100);
 
     /**
-     * Liste der Elementtypen, für die ein Pfad in init() definiert wurde (wird z.B. für die Comboboxen in der Matrixsicht gebraucht)
+     * Liste der Elementtypen, fÃ¼r die ein Pfad in init() definiert wurde (wird z.B. fÃ¼r die Comboboxen in der Matrixsicht gebraucht)
      */
     private static HashSet<Class<? extends ModelElement>> elementClassesInPathes = new HashSet<Class<? extends ModelElement>>();
 
@@ -115,15 +115,15 @@ public final class PathFinder {
     }
 
     //	/**
-    //	 * Wenn die übergebene <code>startClass</code> die Start- oder Endklasse der ersten Assoziation dieses 
-    //	 * Pfades ist und die übergebene <code>endClass</code> in der letzten Assoziation des Pfades vorkommt, 
-    //	 * dann kommt der übergebene Pfad zurück.<br />
+    //	 * Wenn die Ã¼bergebene <code>startClass</code> die Start- oder Endklasse der ersten Assoziation dieses 
+    //	 * Pfades ist und die Ã¼bergebene <code>endClass</code> in der letzten Assoziation des Pfades vorkommt, 
+    //	 * dann kommt der Ã¼bergebene Pfad zurÃ¼ck.<br />
     //	 * 
-    //	 * Wenn die übergebene <code>startClass</code> eine Endklasse des übergebenen Metapfades ist und die übergebene
-    //	 * <code>endClass</code> eine Startklasse des übergebenen Metapfades, dann kommt ein Metapfad zurück, in dem 
-    //	 * die Assoziationen genau anders herum sind als im übergebenen MetaPfad.<br />
+    //	 * Wenn die Ã¼bergebene <code>startClass</code> eine Endklasse des Ã¼bergebenen Metapfades ist und die Ã¼bergebene
+    //	 * <code>endClass</code> eine Startklasse des Ã¼bergebenen Metapfades, dann kommt ein Metapfad zurÃ¼ck, in dem 
+    //	 * die Assoziationen genau anders herum sind als im Ã¼bergebenen MetaPfad.<br />
     //	 * 
-    //	 * Wenn Start- und Endklassen in keiner der Richtungen übereinstimmen, kommt <code>null</code> zurück.
+    //	 * Wenn Start- und Endklassen in keiner der Richtungen Ã¼bereinstimmen, kommt <code>null</code> zurÃ¼ck.
     //	 * 
     //	 * @param startClass
     //	 * @param endClass
@@ -141,7 +141,7 @@ public final class PathFinder {
     //				switchAssociations = true;
     //		}
     //		//wenn switchAssociations immer noch false ist und er bis hier gekommen ist, dann passt der MetaPath gar
-    //		//nicht zu den Start und Zielklassen -> es kommt null zurück
+    //		//nicht zu den Start und Zielklassen -> es kommt null zurÃ¼ck
     //		if (!switchAssociations)
     //			return null;
     //		
@@ -293,7 +293,7 @@ public final class PathFinder {
     }
 
     //	/**
-    //	 * Liefert alle Elemente, die im angegebenen Modell mit dem übergebenen Element über den angegebenen Pfad verbunden sind.
+    //	 * Liefert alle Elemente, die im angegebenen Modell mit dem Ã¼bergebenen Element Ã¼ber den angegebenen Pfad verbunden sind.
     //	 * 
     //	 * @param me
     //	 * @param metaPath
@@ -316,7 +316,7 @@ public final class PathFinder {
     //	}
 
     /**
-     * Liefert alle Elemente, die im angegebenen Modell mit dem übergebenen Element über den angegebenen Pfad verbunden sind.
+     * Liefert alle Elemente, die im angegebenen Modell mit dem Ã¼bergebenen Element Ã¼ber den angegebenen Pfad verbunden sind.
      * 
      * @param me
      * @param metaPath
@@ -341,13 +341,13 @@ public final class PathFinder {
     }
 
     //	/**
-    //	 * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den
-    //	 * angegebenen Pfad verbunden Elemente zurück.  
+    //	 * Liefert alle Elemente die mit dem Ã¼bergebeben Element oder seinen Elternelementen Ã¼ber den
+    //	 * angegebenen Pfad verbunden Elemente zurÃ¼ck.  
     //	 * 
     //	 * @param me
     //	 * @param targetElementClass
     //	 * 		Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des 
-    //	 * 		Metapfades übereinstimmen, sondern kann eine spezielle Unterklasse sein.
+    //	 * 		Metapfades Ã¼bereinstimmen, sondern kann eine spezielle Unterklasse sein.
     //	 * @param metaPath
     //	 * @param gdcoll
     //	 * @return
@@ -376,11 +376,11 @@ public final class PathFinder {
     //	}
 
     /**
-     * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den angegebenen Pfad verbunden Elemente zurück.
+     * Liefert alle Elemente die mit dem Ã¼bergebeben Element oder seinen Elternelementen Ã¼ber den angegebenen Pfad verbunden Elemente zurÃ¼ck.
      * 
      * @param me
      * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
-     *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
+     *            Ã¼bereinstimmen, sondern kann eine spezielle Unterklasse sein.
      * @param metaPath
      * @return
      */
@@ -388,17 +388,17 @@ public final class PathFinder {
         HashSet<ModelElement> startElements = me.getParentElements();
         startElements.add(me);
         HashSet<ModelElement> endElements = null;
-        //das übergebene Element ist Startklasse des Pfades?
+        //das Ã¼bergebene Element ist Startklasse des Pfades?
         boolean pathStartClass = Kante.isStartOrEndClass(metaPath.getEdgeClasses(0)[0], me.getClass());
-        //für alle Assoziationen jedes inneren MetaPfades des übergebenen Gesamtmetapfades
+        //fÃ¼r alle Assoziationen jedes inneren MetaPfades des Ã¼bergebenen Gesamtmetapfades
         for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++) {
-            //für jeden inneren MetaPfad
+            //fÃ¼r jeden inneren MetaPfad
             for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
                 endElements = new HashSet<ModelElement>();
-                //wenn das übergebene Element von der Startklasse des Pfades ist, laufe die einzelnen
+                //wenn das Ã¼bergebene Element von der Startklasse des Pfades ist, laufe die einzelnen
                 //Assoziationen des Metapfades von vorne durch, sonst von hinten
                 int index = pathStartClass ? assoIndex : metaPath.getLength() - 1 - assoIndex;
-                //zu allen Endelementen alle über die aktuelle Assoziation verbunenen Elemente hinzufügen
+                //zu allen Endelementen alle Ã¼ber die aktuelle Assoziation verbunenen Elemente hinzufÃ¼gen
                 for (ModelElement startElem : startElements) {
                     endElements.addAll(startElem.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[index]));
                 }
@@ -421,7 +421,7 @@ public final class PathFinder {
     }
 
     /**
-     * Berechnet einen eindeutigen Schlüssel für 2 übergebene Klassen.
+     * Berechnet einen eindeutigen SchlÃ¼ssel fÃ¼r 2 Ã¼bergebene Klassen.
      * 
      * @param elementClass1
      * @param elementClass2
@@ -442,7 +442,7 @@ public final class PathFinder {
     }
 
     /**
-     * Setzt den übergenen Metapfad in die HashMap aller Metapfade
+     * Setzt den Ã¼bergenen Metapfad in die HashMap aller Metapfade
      * 
      * @param metaPath
      */
@@ -989,7 +989,7 @@ public final class PathFinder {
     }
 
     /**
-     * Bildet das Set aller Klassen, für die Pfade definiert wurden.
+     * Bildet das Set aller Klassen, fÃ¼r die Pfade definiert wurden.
      */
     private static void initElementTypesInPathes() {
         for (MetaPath[] mps : metaPathes.values()) {

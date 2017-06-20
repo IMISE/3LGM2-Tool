@@ -16,8 +16,8 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
  * @author AXS
- *         Dieses Panel ist ein {@link SingleConnectionPanel}, das zusätzlich dazu noch ein Beschreibungfeld
- *         für das searchElement zur Verfügung stellt.
+ *         Dieses Panel ist ein {@link SingleConnectionPanel}, das zusÃ¤tzlich dazu noch ein Beschreibungfeld
+ *         fÃ¼r das searchElement zur VerfÃ¼gung stellt.
  */
 public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
@@ -25,7 +25,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     private final JLabel descriptionWestLabel = new JLabel(Tool3lgmConstants.getResString("description"));
 
-    /** Cache zur Speicherung, ob die Beschreibung des verbundenen Elementes geändert wurde */
+    /** Cache zur Speicherung, ob die Beschreibung des verbundenen Elementes geÃ¤ndert wurde */
     private String olddescrip = "";
 
     /**
@@ -70,7 +70,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
     @Override
     public void commit() {
         super.commit();
-        // Ist null, wenn kein verbundenes Element vorhanden ist -> Beschreibung nicht änderbar
+        // Ist null, wenn kein verbundenes Element vorhanden ist -> Beschreibung nicht Ã¤nderbar
         if (connectedElement == null) {
             return;
         }

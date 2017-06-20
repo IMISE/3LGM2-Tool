@@ -33,11 +33,11 @@ public class DataExportModule {
 
     //@SuppressWarnings("unchecked")
     public static final MetaPath[] metaPaths2Export = {
-            //Über diese Angaben kann man abweichend vom Standardexport verbundene Elemente ebenfalls exportieren.
-            //Das macht aber Probleme in dem Fall, dass man denselben Datensatz wieder importieren möchte, da man nun anhand des Namens
-            //eines über einen Pfad verbundenen Elementes auch noch die Zwischenelemente rekonrtuieren müsste. Daher einfach alle
-            //Elemente ohne diesen Schnickschnack exportieren, dann kann man das über einen sehr simplen Import auch wieder rein bekommen.
-            //Diese Art des Exports und dazugehörigen Imports beachtet keinerlei Kanten! D.h. im Export stecken überhaupt keine Verbindungsinformationen!
+            //Ãœber diese Angaben kann man abweichend vom Standardexport verbundene Elemente ebenfalls exportieren.
+            //Das macht aber Probleme in dem Fall, dass man denselben Datensatz wieder importieren mÃ¶chte, da man nun anhand des Namens
+            //eines Ã¼ber einen Pfad verbundenen Elementes auch noch die Zwischenelemente rekonrtuieren mÃ¼sste. Daher einfach alle
+            //Elemente ohne diesen Schnickschnack exportieren, dann kann man das Ã¼ber einen sehr simplen Import auch wieder rein bekommen.
+            //Diese Art des Exports und dazugehÃ¶rigen Imports beachtet keinerlei Kanten! D.h. im Export stecken Ã¼berhaupt keine Verbindungsinformationen!
 
             //        new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class)
 
@@ -87,7 +87,7 @@ public class DataExportModule {
             //alle diese Elementklassen durchlaufen und die jeweilgen Elemente dieser Klasse exportieren
             for (Class<? extends ModelElement> elementClass : elementClasses) {
                 for (ModelElement me : elements) {
-                    //aktuelles Element ist nicht von der aktuellen Klasse -> nächstes Element
+                    //aktuelles Element ist nicht von der aktuellen Klasse -> nÃ¤chstes Element
                     if (me.getClass() != elementClass) {
                         continue;
                     }

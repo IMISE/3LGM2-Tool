@@ -12,9 +12,9 @@ import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.util.Pair;
 
 /**
- * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden können, was bei der
- * Konsistenzprüfung als Inkonsistenz angesehen werden soll. Hierrüber kann man die im Metamodell
- * vorgegebenen Kardinalitäten für den Konsistenzcheck ändern bzw. filtern.
+ * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden kÃ¶nnen, was bei der
+ * KonsistenzprÃ¼fung als Inkonsistenz angesehen werden soll. HierrÃ¼ber kann man die im Metamodell
+ * vorgegebenen KardinalitÃ¤ten fÃ¼r den Konsistenzcheck Ã¤ndern bzw. filtern.
  * 
  * @author AXS
  * @create 17.02.2011
@@ -28,7 +28,7 @@ public class ConsistencyDefinition {
     private String description = "";
 
     /**
-     * Mappt von einer Kantenklasse auf ihre Kardinalitäten.
+     * Mappt von einer Kantenklasse auf ihre KardinalitÃ¤ten.
      */
     private final HashMap<Class<? extends Kante>, Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> edgeClassToCardinalities = new HashMap<Class<? extends Kante>, Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>>();
 
@@ -40,8 +40,8 @@ public class ConsistencyDefinition {
 
     /**
      * Mappt von einer Elemnentklasse auf alle Kanten, die bei Elementen dieser Klasse nur an
-     * solchen Elementen ohne Kindelemente vorkommen dürfen. Also alle Elemente der Keyklasse dürfen
-     * keine Kante der in der Liste befindlichen Art haben, wenn ihnen über eine Teil-Von-Beziehung
+     * solchen Elementen ohne Kindelemente vorkommen dÃ¼rfen. Also alle Elemente der Keyklasse dÃ¼rfen
+     * keine Kante der in der Liste befindlichen Art haben, wenn ihnen Ã¼ber eine Teil-Von-Beziehung
      * ein anderes Element untergeordnet ist.
      */
     private final HashMap<Class<? extends ModelElement>, Collection<Class<? extends Kante>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<Class<? extends ModelElement>, Collection<Class<? extends Kante>>>();
@@ -93,12 +93,12 @@ public class ConsistencyDefinition {
         }
         edgeClassToCardinalities.put(edgeClass, new Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>(new Pair<Integer, Integer>(minStartToEndCardinality, maxStartToEndCardinality), new Pair<Integer, Integer>(minEndToStartCardinality,
                 maxEndToStartCardinality)));
-        // die Variable keySet wieder null setzen, um sie als geändert zu markieren
+        // die Variable keySet wieder null setzen, um sie als geÃ¤ndert zu markieren
         edgeClassCardinalitiesKeySet = null;
     }
 
     /**
-     * Fügt die übergebene Kantenklase mit den ursprünglichen Kardinalitäten der Kante in die Liste
+     * FÃ¼gt die Ã¼bergebene Kantenklase mit den ursprÃ¼nglichen KardinalitÃ¤ten der Kante in die Liste
      * ein
      * 
      * @param edgeClass
@@ -112,11 +112,11 @@ public class ConsistencyDefinition {
      * @param edgeClass
      */
     public void addOnlyLeafAllowedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        // Teil-Von-Beziehungen dürfen hier nicht enthalten sein, da das ein Widerspruch wäre
+        // Teil-Von-Beziehungen dÃ¼rfen hier nicht enthalten sein, da das ein Widerspruch wÃ¤re
         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
             return;
         }
-        // nur bei Elementen, die auch Teil-Von-Beziehungen haben können, ist es sinnvoll, sie sich
+        // nur bei Elementen, die auch Teil-Von-Beziehungen haben kÃ¶nnen, ist es sinnvoll, sie sich
         // zu merken
         Class<? extends PartOfBeziehung>[] edges2parts = ModelConstants.getHasPartsEdgeClasses(elementClass);
         if (edges2parts.length == 0) {
@@ -131,8 +131,8 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Setzt für diese Elementart, dass alle Kanten nur an Blättern im Teil-Von-Baum dieser Elemente
-     * hängen dürfen.
+     * Setzt fÃ¼r diese Elementart, dass alle Kanten nur an BlÃ¤ttern im Teil-Von-Baum dieser Elemente
+     * hÃ¤ngen dÃ¼rfen.
      * 
      * @param elementClass
      */
@@ -143,7 +143,7 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Liefert die minimale Kardinalität in Vorwärtsrichtung.
+     * Liefert die minimale KardinalitÃ¤t in VorwÃ¤rtsrichtung.
      * 
      * @param edgeClass
      * @return
@@ -160,7 +160,7 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Liefert die maximale Kardinalität in Vorwärtsrichtung.
+     * Liefert die maximale KardinalitÃ¤t in VorwÃ¤rtsrichtung.
      * 
      * @param edgeClass
      * @return
@@ -177,7 +177,7 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Liefert die minimale Kardinalität in Rückwärtsrichtung.
+     * Liefert die minimale KardinalitÃ¤t in RÃ¼ckwÃ¤rtsrichtung.
      * 
      * @param edgeClass
      * @return
@@ -194,7 +194,7 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Liefert die maximale Kardinalität in Rückwärtsrichtung.
+     * Liefert die maximale KardinalitÃ¤t in RÃ¼ckwÃ¤rtsrichtung.
      * 
      * @param edgeClass
      * @return
@@ -211,7 +211,7 @@ public class ConsistencyDefinition {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die Kanteklasse im Key-Set der Map auf die Kardinalitäten
+     * Liefert <code>true</code>, wenn die Kanteklasse im Key-Set der Map auf die KardinalitÃ¤ten
      * enthalten ist oder wenn diese Map leer ist (uns somit alle Kanten als enthalten gelten).
      * 
      * @param egdeClass

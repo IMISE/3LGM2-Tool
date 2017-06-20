@@ -109,8 +109,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     private final Prozess prozess;
 
     /**
-     * werden gebraucht, um die Bäume zu aktualisieren, wenn sich die Anzahl der Aufgaben,
-     * Objekttypen oder die Kanten zwischen diesen beiden ändert während dieses Panel offen ist, NUR
+     * werden gebraucht, um die BÃ¤ume zu aktualisieren, wenn sich die Anzahl der Aufgaben,
+     * Objekttypen oder die Kanten zwischen diesen beiden Ã¤ndert wÃ¤hrend dieses Panel offen ist, NUR
      * DANN muss aktualisiert werden, sonst nicht
      */
     private int oldObjectCounter = -1, objectCounter = 0;
@@ -202,8 +202,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         ltree.addTreeWillExpandListener(this);
         ltree.setBorder(BorderFactory.createEmptyBorder(-ltree.getRowHeight(), 0, 3, 0));
         JScrollPane spLinks = new JScrollPane(ltree);
-        // dieses preferredSize setzen muss sein, weil sonst aus unklärbaren
-        // Gründen beim resizen oder repainten Mist passieren kann
+        // dieses preferredSize setzen muss sein, weil sonst aus unklÃ¤rbaren
+        // GrÃ¼nden beim resizen oder repainten Mist passieren kann
         spLinks.setPreferredSize(new Dimension(1, 1));
 
         // Das Label (oben) links hinzufuegen
@@ -219,15 +219,15 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         constraints.weighty = 1;
         add(this, spLinks, constraints, 0, 1, 5, 1);
 
-        // den Löschen-Button anlegen
+        // den LÃ¶schen-Button anlegen
         /*
-         * / erstmal wieder raugenommen, weil sich das beim Abbrechen nicht zurücknehmen lässt
+         * / erstmal wieder raugenommen, weil sich das beim Abbrechen nicht zurÃ¼cknehmen lÃ¤sst
          * JButton clearBut = new JButton(Tool3lgmConstants.getIcon("clear.gif"));
          * clearBut.setActionCommand("clear"); clearBut.addActionListener(this); /
-         */JPanel clearBut = new JPanel(); // Platzhalten für den deaktivierten
+         */JPanel clearBut = new JPanel(); // Platzhalten fÃ¼r den deaktivierten
                                           // clearBut;
 
-        // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
+        // Panel fÃ¼r die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
         JPanel upDownControl = new JPanel(new GridLayout(1, 2));
 
         /*
@@ -268,7 +268,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             }
         };
 
-        // den cler-Button hinzufügen
+        // den cler-Button hinzufÃ¼gen
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0;
@@ -285,8 +285,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         // constraints.weighty = 0;
         add(this, tmpPanel, constraints, 1, 2, 1, 1);
 
-        // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge
-        // hinzufügen
+        // Panel fÃ¼r die Buttons zur Aenderung der Aufgabenreihenfolge
+        // hinzufÃ¼gen
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0;
@@ -303,7 +303,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         // constraints.weighty = 0;
         add(this, tmpPanel, constraints, 3, 2, 1, 1);
 
-        // den auf- und zuklapp-Button hinzufügen
+        // den auf- und zuklapp-Button hinzufÃ¼gen
         constraints.anchor = GridBagConstraints.EAST;
         // constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0;
@@ -314,7 +314,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         add(this, viewButton, constraints, 4, 2, 1, 1);
 
         /*
-         * Start: Aktionen für Verifikation und für FehlerButton setzen ...
+         * Start: Aktionen fÃ¼r Verifikation und fÃ¼r FehlerButton setzen ...
          */
         try {
             verificationCheck = new JCheckBox();
@@ -332,7 +332,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             andfce.printStackTrace();
         }
         /*
-         * End: Aktionen für Verifikation und für FehlerButton setzen
+         * End: Aktionen fÃ¼r Verifikation und fÃ¼r FehlerButton setzen
          */
 
         constraints.anchor = GridBagConstraints.WEST;
@@ -414,7 +414,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         addRemoveControl.add(removeButton);
 
         /*
-         * Start: TreeSelectionListener erstellen und an Trees anhängen ...
+         * Start: TreeSelectionListener erstellen und an Trees anhÃ¤ngen ...
          */
         LGMAction ltreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(ltree, this);
         LGMAction rtreeSelectionAction = LGMActionLibrary.getTreeSelectionAction(rtree, this);
@@ -422,7 +422,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         ltree.addTreeSelectionListener(new LGMTreeSelectionListener(ltreeSelectionAction));
         rtree.addTreeSelectionListener(new LGMTreeSelectionListener(rtreeSelectionAction));
         /*
-         * ... End: TreeSelectionListener erstellen und an Trees anhängen
+         * ... End: TreeSelectionListener erstellen und an Trees anhÃ¤ngen
          */
 
         if (isRightSideShouldBeVisible()) {
@@ -527,15 +527,15 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         List<ElementContainer> aufgabenConts = doc.getElementContainer(Aufgabe.class);
 
         // wenn sich die Anzahl der Aufgaben, Objekttypen oder die der
-        // Verbindungen zw. Auf und OTs geändert hat
+        // Verbindungen zw. Auf und OTs geÃ¤ndert hat
         // muss aktualisiert werden (und nur dann)
         objectCounter = doc.getLayer(4).countType(Aufgabe.class);
         objectCounter += doc.getLayer(4).countType(Objekttyp.class);
         objectCounter += doc.getLayer(4).countType(AufObjVerbindung.class);
 
-        // wenn auf der FE eine Kante (Prozesskanten zählen nicht mit)
+        // wenn auf der FE eine Kante (Prozesskanten zÃ¤hlen nicht mit)
         // hinzugekommen ist oder
-        // ein Objekttyp gelöscht wurde oder eine Aufgabe hinzugekommen ist ->
+        // ein Objekttyp gelÃ¶scht wurde oder eine Aufgabe hinzugekommen ist ->
         // Baum einfach komplett neu aufbauen
         rtree.getComponent(0).setSize(rtree.getComponent(0).getWidth(), rtree.getComponent(0).getHeight() * 2);
         if (objectCounter != oldObjectCounter || rroot.getChildCount() < aufgabenConts.size()) {
@@ -549,8 +549,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             rmodel.reload();
             return;
         }
-        // es wurde mind. eine Aufgabe auf der FE gelöscht
-        // -> diese Aufgaben im Baum löschen (Expandierungen bleiben erhalten,
+        // es wurde mind. eine Aufgabe auf der FE gelÃ¶scht
+        // -> diese Aufgaben im Baum lÃ¶schen (Expandierungen bleiben erhalten,
         // da nicht das ganze TreeModel reloadet wird)
         else if (rroot.getChildCount() > aufgabenConts.size()) {
             int diff = rroot.getChildCount() - aufgabenConts.size();
@@ -571,7 +571,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
                 }
             }
         }
-        // stellt sicher, dass Namensänderungen von Aufgaben und Objekttypen
+        // stellt sicher, dass NamensÃ¤nderungen von Aufgaben und Objekttypen
         // angezeigt werden
         rtree.repaint();
     }
@@ -585,7 +585,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         aufgabenContainer = prozess.getConnectedContainer(Aufgabe.class, doc, null, Doppelkante.ANY, false);
         // System.out.println(aufgabenContainer);
         // wenn sich die Anzahl der Aufgaben, Objekttypen oder die der
-        // Verbindungen zw. Auf und OTs geändert hat
+        // Verbindungen zw. Auf und OTs geÃ¤ndert hat
         // muss aktualisiert werden (und nur dann). Wenn der rechte Baum
         // angezeigt wird, dann wurde objectCounter
         // dort schon aktualisiert
@@ -594,8 +594,8 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             objectCounter += doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(Objekttyp.class);
             objectCounter += doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(AufObjVerbindung.class);
         }
-        // wenn auf der FE eine Kante (Prozesskanten zählen nicht mit)
-        // hinzugekommen ist oder ein Objekttyp gelöscht
+        // wenn auf der FE eine Kante (Prozesskanten zÃ¤hlen nicht mit)
+        // hinzugekommen ist oder ein Objekttyp gelÃ¶scht
         // wurde oder der Baum noch leer ist -> Baum einfach komplett neu
         // aufbauen
         if (objectCounter != oldObjectCounter || lroot.getChildCount() == 0) {
@@ -615,15 +615,15 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             }
             return;
         }
-        // wenn dem Prozess eine neue Aufgabe hinzugefügt wurde muss der neue
-        // Knoten eingefügt werden
+        // wenn dem Prozess eine neue Aufgabe hinzugefÃ¼gt wurde muss der neue
+        // Knoten eingefÃ¼gt werden
         // (dies hat im Gegensatz zum kompletten Neuaufbau den Vorteil, dass
         // expandierte Knoten expandiert bleiben und
         // nur deswegen hier der ganze Aufwand)
         else if (lroot.getChildCount() < aufgabenContainer.size()) {
-            // nach dem Knoten, welcher neu eingefügt wird, muss die
+            // nach dem Knoten, welcher neu eingefÃ¼gt wird, muss die
             // Nummerierung aller folgenden Knoten
-            // um 1 erhöht werden. Das passiert erst ab da, wenn
+            // um 1 erhÃ¶ht werden. Das passiert erst ab da, wenn
             // actualizeNodes==true ist.
             boolean actualizeNodes = false;
             for (int m = 0; m < aufgabenContainer.size(); m++) {
@@ -637,30 +637,30 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
                 }
             }
         }
-        // es wurde mind. eine Aufgabe auf der FE gelöscht, die auch im Prozess
+        // es wurde mind. eine Aufgabe auf der FE gelÃ¶scht, die auch im Prozess
         // vorkam
         else if (lroot.getChildCount() > aufgabenContainer.size()) {
             boolean actualizeNodes = false;
-            // für alle Aufgaben des Prozesses in sub
+            // fÃ¼r alle Aufgaben des Prozesses in sub
             for (int m = 0; m < aufgabenContainer.size(); m++) {
                 // wenn im Baum eine andere Aufgabe steht als an der selben
                 // Position in sub
                 if (((LGMTreeNode) lroot.getChildAt(m)).getUserObject() != aufgabenContainer.get(m)) {
-                    // lösche diesen Knoten im Baum
+                    // lÃ¶sche diesen Knoten im Baum
                     lmodel.removeNodeFromParent((LGMTreeNode) lroot.getChildAt(m));
                     // dieselbe Position muss nochmal getestet werden
                     m--;
-                    // ab jetzt muss für alle folgenden Knoten, die nicht auch
-                    // gelöscht werden, die Nummerierung angepasst werden
+                    // ab jetzt muss fÃ¼r alle folgenden Knoten, die nicht auch
+                    // gelÃ¶scht werden, die Nummerierung angepasst werden
                     actualizeNodes = true;
                     // wenn die Aufgabe erhalten bleibt und hinter einer Aufgabe
-                    // stand, die gelöscht wurde
+                    // stand, die gelÃ¶scht wurde
                 } else if (actualizeNodes) {
                     // schreibe die Nummerierung neu
                     ((LGMTreeNode) lroot.getChildAt(m)).setText("[" + (m + 1) + "] " + aufgabenContainer.get(m));
                 }
             }
-            // am Ende alle Knoten löschen, die mehr im Baum sind, als in der
+            // am Ende alle Knoten lÃ¶schen, die mehr im Baum sind, als in der
             // Aufgabenliste sub
             while (lroot.getChildCount() > aufgabenContainer.size()) {
                 lmodel.removeNodeFromParent((LGMTreeNode) lroot.getChildAt(lroot.getChildCount() - 1));
@@ -669,7 +669,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         if (verify) {
             check3LGMBuisnessProcess();
         }
-        // stellt sicher, dass Namensänderungen von Aufgaben und Objekttypen
+        // stellt sicher, dass NamensÃ¤nderungen von Aufgaben und Objekttypen
         // angezeigt werden
         ltree.repaint();
     }
@@ -685,7 +685,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
     /**
      * Prueft, wenn 3LGM-Geschaeftsprozesse angelegt werden sollen, welche Aufgaben im rechten Baum
-     * selektierbar sein dürfen. setSelectable(false) hat lediglich Auswirkungen auf die
+     * selektierbar sein dÃ¼rfen. setSelectable(false) hat lediglich Auswirkungen auf die
      * Darstellung.
      */
     public void checkRightPossibleTasks() {
@@ -693,11 +693,11 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         if (!spRechts.isVisible()) {
             return;
         }
-        // wenn links gar keine Aufgabe steht, dann müssen rechts alle Aufgaben
+        // wenn links gar keine Aufgabe steht, dann mÃ¼ssen rechts alle Aufgaben
         // setSelectable(true) gesetzt werden
         int lrootChildCount = lroot.getChildCount();
         TreePath selPath = ltree.getSelectionPath();
-        // rechts alle Aufgaben verfügbar anzeigen, wenn links keine Aufgabe
+        // rechts alle Aufgaben verfÃ¼gbar anzeigen, wenn links keine Aufgabe
         // steht, nicht verifiziert werden soll oder die erste Aufgabe
         // selektiert ist
         if (lrootChildCount == 0 || !verificationCheck.isSelected() || selPath != null && ltree.getSelectionRows() != null && ltree.getSelectionRows()[0] == 1) {
@@ -730,7 +730,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             } else {
                 // hole die Aufgaben des Prozesses
                 List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
-                // für alle Zeilen des rechten Baumes
+                // fÃ¼r alle Zeilen des rechten Baumes
                 for (int i = 1; i < rtree.getRowCount(); i++) {
                     selPath = rtree.getPathForRow(i);
                     // wenn der momentane Pfad eine Aufgabe ist
@@ -751,7 +751,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     }
 
     /**
-     * Prüft den Prozess, ob er ein 3LGM-Geschäftsprozess ist. Der erste spezifische Fehler, der
+     * PrÃ¼ft den Prozess, ob er ein 3LGM-GeschÃ¤ftsprozess ist. Der erste spezifische Fehler, der
      * Auftritt wird sich in errorMessage gemerkt. Alle fehlerhaften Positionen werden im linken
      * Baum mit einem Error-Icon markiert.
      */
@@ -762,7 +762,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         errorMessage = "";
         // Das deaktivieren von Aufgabe auf der rechten Seite ist rausgenommen,
         // da beim Drag und Drop nicht von vornerein fest steht,
-        // an welcher Position die Aufgabe links hinzugefügt werden soll
+        // an welcher Position die Aufgabe links hinzugefÃ¼gt werden soll
         // checkRightPossibleTasks();
 
         // aufgabenContainer wird in buildLeftTree() aktualisiert
@@ -789,7 +789,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
             // hole die Aufgaben des Prozesses
             List<ModelElement> aufgaben = prozess.getConnectedElements(Aufgabe.class);
             // die Icons auf fehlerhaft setzen, deren Aufgabe kein
-            // Geschäftsprozessschritt von einer der vorherigen Aufgaben ist
+            // GeschÃ¤ftsprozessschritt von einer der vorherigen Aufgaben ist
             for (int i = 1; i < size; i++) {
                 if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
                     if (errorBuffer.length() == 0) {
@@ -832,7 +832,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
      * naechste Aufgabe ueber bzw. vor der selektierten eingefuegt werden selPath =
      * ltree.getSelectionPath(); boolean nothingSelected = true; //wenn links etwas selektiert war
      * if (selPath != null){ nothingSelected=false; node =
-     * (LGMTreeNode)selPath.getLastPathComponent(); //prüfen, ob eine Aufgabe selektiert ist if
+     * (LGMTreeNode)selPath.getLastPathComponent(); //prÃ¼fen, ob eine Aufgabe selektiert ist if
      * ((node.getUserObject() instanceof NodeContainer) &&
      * (((NodeContainer)node.getUserObject()).getElement() instanceof Aufgabe)){ int selRow =
      * ltree.getRowForPath(selPath); int index = lmodel.getIndexOfChild(lroot, node);
@@ -848,7 +848,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
      * ltree.scrollRowToVisible(ltree.getRowCount()-1); } } } } } return; } if
      * (str.equals("removeueber")) { synchronized (rtree.getTreeLock()){ TreePath selPath =
      * ltree.getSelectionPath(); //wenn links etwas selektiert war if (selPath != null){ LGMTreeNode
-     * node = (LGMTreeNode)selPath.getLastPathComponent(); //prüfen, ob eine Aufgabe selektiert ist
+     * node = (LGMTreeNode)selPath.getLastPathComponent(); //prÃ¼fen, ob eine Aufgabe selektiert ist
      * Object knot = node.getUserObject(); //auf keinen Fall hier gleich auf ElementContainer
      * casten, weil es auch ein String sein kann !!! if (!(knot instanceof String) &&
      * (((ElementContainer)knot).getElement() instanceof Aufgabe)){ //es wird eine neue ProzessKante
@@ -857,42 +857,42 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
      * + ((ElementContainer)knot).getHashString() + " " + index, dialog.getTransactionID()); }
      * //####
      * ########################################################################################
-     * ######## //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem großen Modell rel.
+     * ######## //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem groÃŸen Modell rel.
      * lange dauern kann //Die der auf der linken Seite entfernten Aufgabe auf der rechten Seite
      * entsprechende wird selektiert. //Diese Funktion geht davon aus, dass der rechte Baum komplett
-     * expandiert ist, was er in dem Fall, //dass alle Kinder von rroot Blätter sind und rroot
+     * expandiert ist, was er in dem Fall, //dass alle Kinder von rroot BlÃ¤tter sind und rroot
      * selbst nicht angezeigt wird immer automatisch ist. for (int i=0; i<rtree.getRowCount(); i++){
      * if (((LGMTreeNode)rtree.getPathForRow(i).getLastPathComponent()).getUserObject()==knot){
      * setSelectionRow(rtree, i); break; } } } return; } } if (str.equals("moveup")){ //Aufaben
-     * haben Pfadlänge 2 (das nicht sichtbare root hat die 1) TreePath selPath =
+     * haben PfadlÃ¤nge 2 (das nicht sichtbare root hat die 1) TreePath selPath =
      * ltree.getSelectionPath(); //wenn links eine Aufgabe selektiert ist if (selPath != null &&
      * selPath.getPathCount()==2){ //Position der selektierten Aufgabe im Baum bzw. Prozess holen
      * int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent()); //wenn nicht die
-     * erste sondern eine Aufgabe dahinter selektiert ist if (pos1>0){ //jetzt die Position der über
+     * erste sondern eine Aufgabe dahinter selektiert ist if (pos1>0){ //jetzt die Position der Ã¼ber
      * der selektierten Aufgabe liegenden Aufgabe holen //-> von dieser alle evtl. expandierten
-     * Unterknoten merken //-> sie removen und unter der selektierten wieder einfügen //-> alles was
+     * Unterknoten merken //-> sie removen und unter der selektierten wieder einfÃ¼gen //-> alles was
      * von ihr expandiert war, wieder expandieren int pos2 = ltree.getRowForPath(selPath)-1;
      * TreePath path = ltree.getPathForRow(pos2); while(path.getPathCount()>2){ pos2--; path =
      * ltree.getPathForRow(pos2); } //wenn die selektierte Aufgabe expandierte Unterknoten hat
-     * (können max. 2 sein, nämlich //"Interpretiert" und "Bearbeitet"), dann sind diese TreePathes
+     * (kÃ¶nnen max. 2 sein, nÃ¤mlich //"Interpretiert" und "Bearbeitet"), dann sind diese TreePathes
      * jetzt in enum Enumeration en = ltree.getExpandedDescendants(path); //jetzt den Baum anpassen
-     * (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT) //und weil hier noch die
-     * Expasionen anpasst werden (über enum), soll das auch hier bleiben! LGMTreeNode node =
+     * (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÃ„NDERT) //und weil hier noch die
+     * Expasionen anpasst werden (Ã¼ber enum), soll das auch hier bleiben! LGMTreeNode node =
      * (LGMTreeNode)lroot.getChildAt(pos1-1); //den oberen Knoten holen
      * lmodel.removeNodeFromParent(node); //ihn entfernen lmodel.insertNodeInto(node, lroot, pos1);
-     * //ihn einen tiefer als vorher einfügen //wenn die selektierte Aufgabe expandiert war if
+     * //ihn einen tiefer als vorher einfÃ¼gen //wenn die selektierte Aufgabe expandiert war if
      * (en!=null){ expandFullPath = true; //muss sein wegen treeWillExpand, damits auch wirklich
      * expandiert wird ltree.expandRow(pos1+1); //den Knoten wieder expandieren
      * while(en.hasMoreElements()){ ltree.expandPath((TreePath)en.nextElement()); //seine
-     * Unterknoten auch expandieren } //das muss immer nch einem Expandieren zurückgesetzt werden
+     * Unterknoten auch expandieren } //das muss immer nch einem Expandieren zurÃ¼ckgesetzt werden
      * (siehe treeWillExpand) willExpand = false; expandFullPath = false; }
      * ltree.scrollPathToVisible(selPath); //jetzt erst die Nummerierungen anpassen (auf keinen Fall
      * vor dem Expandieren, weil sonst die Pfade nicht mehr stimmen) node.setText("["+(pos1+1)+"] "+
      * node.getUserObject()); node = (LGMTreeNode)lroot.getChildAt(pos1-1);
      * node.setText("["+(pos1)+"] "+ node.getUserObject()); //das switchen in den connections vom
-     * Prozess ausführen doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1
+     * Prozess ausfÃ¼hren doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1
      * + " " + (pos1-1), dialog.getTransactionID()); } } ltree.repaint(); return; } if
-     * (str.equals("movedown")){ //Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
+     * (str.equals("movedown")){ //Aufaben haben PfadlÃ¤nge 2 (das nicht sichtbare root hat die 1)
      * TreePath selPath = ltree.getSelectionPath(); if (selPath != null &&
      * selPath.getPathCount()==2){ int pos1 = lmodel.getIndexOfChild(lroot,
      * selPath.getLastPathComponent()); if (pos1<lroot.getChildCount()-1){ int pos2 =
@@ -908,11 +908,11 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
      * doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1 + " " + (pos1+1),
      * dialog.getTransactionID()); } } ltree.repaint(); return; } if (str.equals("fehler")){
      * JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
-     * return; } /* Das hier würde sich bei drücken auf Abbrechen nicht zurücknehmen lassen, da das
-     * UNDO für link nicht gesetzt wurde
+     * return; } /* Das hier wÃ¼rde sich bei drÃ¼cken auf Abbrechen nicht zurÃ¼cknehmen lassen, da das
+     * UNDO fÃ¼r link nicht gesetzt wurde
      *//*
        * if (str.equals("clear")){ //diese Funktion geht davon aus, dass der Baum komplett
-       * expandiert ist, was er in dem Fall, //dass alle Kinder von lroot Blätter sind und lroot
+       * expandiert ist, was er in dem Fall, //dass alle Kinder von lroot BlÃ¤tter sind und lroot
        * selbst nicht angezeigt wird immer automatisch ist. /* for (int i=ltree.getRowCount()-1;
        * i>=0; i--){ NodeContainer knotCont = (NodeContainer)
        * ((LGMTreeNode)lroot.getChildAt(i)).getUserObject(); doc.exec("UNLINK " +
@@ -961,22 +961,22 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         }
         lastSelEvent = e;
 
-        // wenn sich links die Selektion geändert hat, die rechte Seite sichtbar
+        // wenn sich links die Selektion geÃ¤ndert hat, die rechte Seite sichtbar
         // ist und verifiziert werden soll
         if (verificationCheck.isSelected() && labelRechts.isShowing() && ((JTree) e.getSource()).getName().equals("lefttree")) {
             checkRightPossibleTasks();
         }
 
         // man kann immer nur einen einzelnen TreeNode selektieren->
-        // wenn sich die Selektion ändert, einfach erst highlight leer machen
-        // und dann das neu selektierte hinzufügen (wenn der TreeNode ein
+        // wenn sich die Selektion Ã¤ndert, einfach erst highlight leer machen
+        // und dann das neu selektierte hinzufÃ¼gen (wenn der TreeNode ein
         // ModelElement
-        // und nicht nur einen String repräsentiert)
+        // und nicht nur einen String reprÃ¤sentiert)
         removeHighLights();
         LGMTreeNode node = null;
         if (e.getNewLeadSelectionPath() != null) {
             node = (LGMTreeNode) e.getNewLeadSelectionPath().getLastPathComponent();
-            // root ist zwar in beiden Bäumen durch Verschieben des
+            // root ist zwar in beiden BÃ¤umen durch Verschieben des
             // Darstellungsoffsets nicht sichtbar, kann
             // aber per Tastaur erreicht werden ->wenn root selektiert wird,
             // einfach die erste Aufgabe selektieren
@@ -1021,7 +1021,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         // nichts selektiert
         if (selRow == -1) {
             // es ist nichts selektiert und es wurde mit rechts neben die
-            // Einträge geklickt -> return
+            // EintrÃ¤ge geklickt -> return
             if (clickedRow == -1) {
                 return;
             }
@@ -1037,7 +1037,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         }
         // es ist etwas selektiert
         else {
-            // wenn mit rechts auf einen Eintrag und nicht neben die Einträge
+            // wenn mit rechts auf einen Eintrag und nicht neben die EintrÃ¤ge
             // geklickt wurde
             if (clickedRow != -1) {
                 // wenn keine Aufgabe oder ein Objekttyp angeklickt wurde ->
@@ -1048,7 +1048,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
                     setSelectionRow(tree, clickedRow);
                 }
             }
-            // das PopupMenü für den jetzt selektierten Eintrag anzeigen
+            // das PopupMenÃ¼ fÃ¼r den jetzt selektierten Eintrag anzeigen
             Object o = ((LGMTreeNode) tree.getPathForRow(clickedRow).getLastPathComponent()).getUserObject();
             Tool3lgm.getContextGenerator().getTreeKnotContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
         }
@@ -1063,19 +1063,19 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
         if (Tool3lgmConstants.isPopupTrigger(e)) {
             return;
         }
-        // wenn in einem der Bäume 1x geklickt wurde oder durch Doppelklicken
-        // auf einen Knoten mit Pfadlänge>2 (also
+        // wenn in einem der BÃ¤ume 1x geklickt wurde oder durch Doppelklicken
+        // auf einen Knoten mit PfadlÃ¤nge>2 (also
         // alles ausser der Wurzel und den Aufgaben)
         // (pathToExpandOrCollapse ist nur != null, wenn vorher treeWillExpand
-        // oder treeWillCollapse ausgelöst wurde)
+        // oder treeWillCollapse ausgelÃ¶st wurde)
         JTree tree = (JTree) e.getSource();
         if (e.getClickCount() == 1 || pathToExpandOrCollapse != null && pathToExpandOrCollapse.getPathCount() > 2) {
-            // wenn vorher treeWillExpand ausgelöst wurde (dort wurde das erste
+            // wenn vorher treeWillExpand ausgelÃ¶st wurde (dort wurde das erste
             // eigentliche Expandieren verhindert, da
             // Aufgaben beim Doppelklicken in den jeweils anderen Baum
             // verschoben werden sollen)
             if (willExpand) {
-                // expandFullPath = true bewirkt, dass jetzt beim Auslösen von
+                // expandFullPath = true bewirkt, dass jetzt beim AuslÃ¶sen von
                 // treeWillExpand die Expansion auch wirklich
                 // passiert
                 expandFullPath = true;
@@ -1083,21 +1083,21 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
                 // Expandieren des obersten Knoten des zu expandierenden Knotens
                 tree.expandRow(row);
                 for (int n = row + 1; n < tree.getRowCount(); n++) {
-                    // alle Knoten mit Pfadlänge größer 2 unter diesem Knoten
+                    // alle Knoten mit PfadlÃ¤nge grÃ¶ÃŸer 2 unter diesem Knoten
                     // expandieren (das >2 bewirkt, dass nur bis
-                    // zur nächsten Aufgabe expandiert wird)
+                    // zur nÃ¤chsten Aufgabe expandiert wird)
                     if (tree.getPathForRow(n).getPathCount() > 2) {
                         tree.expandRow(n);
                     } else {
                         break;
                     }
                 }
-                // willExpand und expandFullPath zurücksetzen
+                // willExpand und expandFullPath zurÃ¼cksetzen
                 willExpand = false;
                 expandFullPath = false;
                 pathToExpandOrCollapse = null;
             }
-            // wenn vorher treeWillCollapse ausgelöst wurde (dort wurde das
+            // wenn vorher treeWillCollapse ausgelÃ¶st wurde (dort wurde das
             // eigentliche Collapsen verhindert, da Aufgaben
             // beim Doppelklicken in den jeweils anderen Baum verschoben werden
             // sollen)
@@ -1106,10 +1106,10 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
                 pathToExpandOrCollapse = null;
             }
             // das hier tritt ein, wenn man 1x irgendwo hingeklickt hat und kein
-            // Expandieren oder Collapsen ausgelöst wurde
+            // Expandieren oder Collapsen ausgelÃ¶st wurde
             // -> eine evtl. vorhandene Selektion wird aufgehoben (wichtig, weil
             // man im linken Baum Aufgaben nur hinten
-            // anhängen kann, wenn nichts selektiert ist)
+            // anhÃ¤ngen kann, wenn nichts selektiert ist)
             else {
                 int selRow = tree.getLeadSelectionRow();
                 if (selRow != -1) {
@@ -1122,7 +1122,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
                 }
             }
             // wenn mind. 2x geklickt wurde und kein Expandieren oder Collapsen
-            // ausgelöst wurde, dann wurden auf jeden
+            // ausgelÃ¶st wurde, dann wurden auf jeden
             // Fall Aufgaben doppelt angeklickt, welche entweder von links nach
             // rechts oder umgekehrt verschoben werden
         } else {
@@ -1142,7 +1142,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
     protected void expandTree(final JTree tree) {
         expandFullPath = true;
         for (int n = 0; n < tree.getRowCount(); n++) {
-            // hier wird immer treeWillExpand ausgelöst und damit er wirklich
+            // hier wird immer treeWillExpand ausgelÃ¶st und damit er wirklich
             // expandiert muss die ganze Zeit expandFullPath = true sein
             tree.expandRow(n);
         }
@@ -1152,7 +1152,7 @@ public class ProzessStructurePanel extends ElementDialogPanel implements TreeWil
 
     /**
      * Selekiert in destinationTree die Zeile row. Wird row=-1 uebergeben, wird eine evtl. Selekion
-     * gelöscht.
+     * gelÃ¶scht.
      *
      * @param destinationTree
      * @param row

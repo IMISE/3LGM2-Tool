@@ -6,9 +6,9 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
  * beiden Kindknoten (wenn vorhanden). Hat ein Knoten nur einen Kindknoten, so ist dieser immer der
  * erste Kindknoten (<code>firstNode</code>). Entfernt man von einem Knoten mit 2 Kindknoten den
  * ersten Knoten, so wird der vormals zweite Kindknoten dann der erste.<br>
- * Es können maximal 2 Kindknoten hinzugefügt werden.<br>
+ * Es kÃ¶nnen maximal 2 Kindknoten hinzugefÃ¼gt werden.<br>
  * Jeder Knoten hat einen <code>boolean</code>-Status. Im Kontext eines Entscheidungsbaumes gibt der
- * Status an, ob ein Element, das der Knoten repräsentiert, dazugehört oder nicht.
+ * Status an, ob ein Element, das der Knoten reprÃ¤sentiert, dazugehÃ¶rt oder nicht.
  * 
  * @author AXS
  */
@@ -89,9 +89,9 @@ public class DecisionTreeNode {
     boolean deleted = false;
 
     /**
-     * Entfernt den übergebenen Knoten von diesem Knoten, wenn er der Vater davon ist. Falls der zu
-     * löschende Knoten der erste Kindknoten ist und es noch einen zweiten Knidknoten gibt, ist der
-     * ehemals zweite nach dem Löschen der erste.
+     * Entfernt den Ã¼bergebenen Knoten von diesem Knoten, wenn er der Vater davon ist. Falls der zu
+     * lÃ¶schende Knoten der erste Kindknoten ist und es noch einen zweiten Knidknoten gibt, ist der
+     * ehemals zweite nach dem LÃ¶schen der erste.
      * 
      * @param node
      */
@@ -189,8 +189,8 @@ public class DecisionTreeNode {
     }
 
     /**
-     * Klasse für die Blätter des Baumes. Sie merken sich zusätzlich noch den Gesamtwert der
-     * Unterstützung
+     * Klasse fÃ¼r die BlÃ¤tter des Baumes. Sie merken sich zusÃ¤tzlich noch den Gesamtwert der
+     * UnterstÃ¼tzung
      * 
      * @author AXS
      */

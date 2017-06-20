@@ -30,27 +30,27 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
- * fehlerhafte Elemente zurück gegeben.
+ * Die Klasse prÃ¼ft die Konsistenz eines Modells. Es werden alle KardinalitÃ¤ten Ã¼berprÃ¼ft und
+ * fehlerhafte Elemente zurÃ¼ck gegeben.
  *
  * @author AXS created on 06.08.2008
  */
 public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
-     * Modell, das überprüft wird.
+     * Modell, das Ã¼berprÃ¼ft wird.
      */
     private GDCollection gdcoll;
 
     /**
-     * Katalog der Lösungen zu den Fehlern
+     * Katalog der LÃ¶sungen zu den Fehlern
      */
     private final ErrorSolutionLibraryVersion solutionsLibrary;
 
     /**
-     * Die Kardinalitäts und Fehlerdefinitionen für die bei der Prüfung relevanten Kanten. Wenn
-     * diese Variable <code>null</code> ist, werden alle Kanten mit ihren Originalen Kardinalitäten
-     * geprüft.
+     * Die KardinalitÃ¤ts und Fehlerdefinitionen fÃ¼r die bei der PrÃ¼fung relevanten Kanten. Wenn
+     * diese Variable <code>null</code> ist, werden alle Kanten mit ihren Originalen KardinalitÃ¤ten
+     * geprÃ¼ft.
      */
     private ConsistencyDefinition consistencyDefinition = null;
 
@@ -67,7 +67,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
     /**
      * Legt einen neuen Consistency-Checker an, der sich als Listener beim HauptModell der
-     * übergebenen Collection registeriert.
+     * Ã¼bergebenen Collection registeriert.
      *
      * @param gdcoll
      */
@@ -77,7 +77,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
-     * Setzt die übergebene Collection als aktuelle Collection
+     * Setzt die Ã¼bergebene Collection als aktuelle Collection
      *
      * @param gscoll
      */
@@ -102,24 +102,24 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
-     * Löscht alle Elemente komplett, die fehlerhaft sind, deren Fehler man aber nicht behandeln
-     * kann. Darunter fallen alle Fehler, für die eine Error-Solution mit einem gültigen <code>MetaPath</code> zu einem verbundenen Element hinterlegt
+     * LÃ¶scht alle Elemente komplett, die fehlerhaft sind, deren Fehler man aber nicht behandeln
+     * kann. Darunter fallen alle Fehler, fÃ¼r die eine Error-Solution mit einem gÃ¼ltigen <code>MetaPath</code> zu einem verbundenen Element hinterlegt
      * ist hinterlegt ist, das aber
      * nicht erreichtbar ist, weil auch die Verbindung zu diesem Element fehlt. Somit kann der
-     * Fehler nirgends behoben werden und man kann das Element löschen. In Metamodell 2.7 heißt das:
-     * Anwendungsbaustein-Konfigurationen ohne einen Anwendungsbautein könnte man im Dialog der
+     * Fehler nirgends behoben werden und man kann das Element lÃ¶schen. In Metamodell 2.7 heiÃŸt das:
+     * Anwendungsbaustein-Konfigurationen ohne einen Anwendungsbautein kÃ¶nnte man im Dialog der
      * Aufgaben an der mit der Anwendungsbaustein-Konfigurationen verbundenen AufOrgKombination
      * beheben. Wenn aber sowohl die Verbindung zur AufOrgKombination oder deren Verbindung zu einer
-     * Aufgabe fehlt, dann wird diese Konfiguration einfach gelöscht, da man den Fehler nicht mehr
-     * sinnvoll beheben kann. Das gleiche gilt für physische DV-Baustein-Konfigurationen ohne
+     * Aufgabe fehlt, dann wird diese Konfiguration einfach gelÃ¶scht, da man den Fehler nicht mehr
+     * sinnvoll beheben kann. Das gleiche gilt fÃ¼r physische DV-Baustein-Konfigurationen ohne
      * Datenverarbeitungsbausteine. Dies kann man im Dialog der Anwendungsbausteine der
      * Konfiguration beheben. Fehlt aber auch diese Verbindung, dann kann man die Konfiguration
-     * löschen.
+     * lÃ¶schen.
      */
     public static void clearUnfixableErrors(final GDCollection gdcoll) {
         ConsistencyChecker checker = new ConsistencyChecker();
         checker.gdcoll = gdcoll;
-        // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
+        // dieses LÃ¶schen muss man nicht rÃ¼ckgÃ¤ngig machen kÃ¶nnen -> BulkMode einschalten
         boolean oldBulkMode = checker.gdcoll.isBulkMode();
         checker.gdcoll.setBulkMode(true);
         for (AbstractError err : checker.getAllInconsistencies()) {
@@ -128,7 +128,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
             }
         }
-        // für alle explizit angegebenen nicht lösbaren Fehler -> lösche die betreffenden Elemente
+        // fÃ¼r alle explizit angegebenen nicht lÃ¶sbaren Fehler -> lÃ¶sche die betreffenden Elemente
         // for (Pair<Class<? extends ModelElement>, Class<? extends Kante>> pair :
         // checker.solutionsLibrary.getMinCardinalityNoSolutuinErrors()){
         // ArrayList<ModelElement> elements =
@@ -147,9 +147,9 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
-     * Liefert das Modell, das dieser Checker überprüft.
+     * Liefert das Modell, das dieser Checker Ã¼berprÃ¼ft.
      *
-     * @return überprüftes Modell
+     * @return Ã¼berprÃ¼ftes Modell
      */
     GDCollection getGDCollection() {
         return gdcoll;
@@ -206,7 +206,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         dataChanged(source);
     }
 
-    /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
+    /** Gibt wieder, ob KardinalitÃ¤ts-Inkonsistenzen im Modell bestehen */
     public boolean hasCardinalityInconsistencies() {
         return getInconsistencies(AbstractCardinalityError.class).size() > 0;
     }
@@ -248,7 +248,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
-     * Fügt der übergebenen Error-Liste alle Kardinalitätsfehler des übergebenen Elementes hinzu.
+     * FÃ¼gt der Ã¼bergebenen Error-Liste alle KardinalitÃ¤tsfehler des Ã¼bergebenen Elementes hinzu.
      *
      * @param me
      * @param returnList
@@ -256,13 +256,13 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     private void addCardinalityErrors(final ModelElement me, final ArrayList<AbstractError> returnList) {
         Class<? extends ModelElement> meClass = me.getClass();
         Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
-        // nur Elementarten beachten, die wenigstens eine Kante besitzen können
+        // nur Elementarten beachten, die wenigstens eine Kante besitzen kÃ¶nnen
         if (edgeTypes != null) {
             for (Class<? extends Kante> edgeClass : edgeTypes) {
                 if (consistencyDefinition != null && !consistencyDefinition.contains(edgeClass)) {
                     continue;
                 }
-                // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
+                // entweder fÃ¼r die aktuelle Kantenklasse die neu gesetzten KardinalitÃ¤ten holen
                 // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
                 int minStartCard = consistencyDefinition == null ? Kante.getMinStartToEndCardinality(edgeClass) : consistencyDefinition.getMinStartToEndCardinality(edgeClass);
                 int maxStartCard = consistencyDefinition == null ? Kante.getMaxStartToEndCardinality(edgeClass) : consistencyDefinition.getMaxStartToEndCardinality(edgeClass);
@@ -283,7 +283,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 }
 
                 // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass
-                // sowohl Start- als auch Endklasse sein können
+                // sowohl Start- als auch Endklasse sein kÃ¶nnen
                 if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
                     if (meHasStartClass && meIsStartConnections.size() < minStartCard) {
                         returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minEndCard));
@@ -321,26 +321,26 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                         returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, maxEndCard));
                     }
                 } else {
-                    System.err.println("Die Kante darf gar nicht für dieses Element existieren!");
+                    System.err.println("Die Kante darf gar nicht fÃ¼r dieses Element existieren!");
                 }
             }
         }
     }
 
     /**
-     * Diese Funktion hat folgende Rückgabewerte:<br />
+     * Diese Funktion hat folgende RÃ¼ckgabewerte:<br />
      * <ol>
-     * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, die einen gültigen <code>MetaPath</code> beschreibt, über den ausgehend
-     * vom Element des übergebenen Fehlers verbundene Elemente gefunden werden, dann kommen genau diese verbundenen Elemente zurück.</li>
+     * <li>Wenn fÃ¼r den Fehler eine <code>ErrorSolution</code> gefunden wird, die einen gÃ¼ltigen <code>MetaPath</code> beschreibt, Ã¼ber den ausgehend
+     * vom Element des Ã¼bergebenen Fehlers verbundene Elemente gefunden werden, dann kommen genau diese verbundenen Elemente zurÃ¼ck.</li>
      * <li>Wenn die gleichen Vorbedingungen gelten, wie eben, aber keine verbundenen Elemente gefunden werden, dann kommt <code>null</code>
-     * zurück.</li>
-     * <li>Wenn für den Fehler eine <code>ErrorSolution</code> gefunden wird, diese aber keinen <code>MetaPath</code> enthält, so kommt eine Liste mit
-     * dem ModelElement des Fehlers als einzigem Element zurück</li>
-     * <li>Wenn für den Fehler keine <code>ErrorSolution</code> gefunden wurde, kommt eine leere Liste zurück</li>
+     * zurÃ¼ck.</li>
+     * <li>Wenn fÃ¼r den Fehler eine <code>ErrorSolution</code> gefunden wird, diese aber keinen <code>MetaPath</code> enthÃ¤lt, so kommt eine Liste mit
+     * dem ModelElement des Fehlers als einzigem Element zurÃ¼ck</li>
+     * <li>Wenn fÃ¼r den Fehler keine <code>ErrorSolution</code> gefunden wurde, kommt eine leere Liste zurÃ¼ck</li>
      * </ol>
-     * Zusäztlich dazu wird auch <code>null</code> zurück gegeben, wenn der übergebene Fehler selbst <code>null</code> ist. Das kann man aber vorher
-     * ausschließen, so dass die eindeutige
-     * Unterscheidung der einzelnen Fehlerarten möglich ist.
+     * ZusÃ¤ztlich dazu wird auch <code>null</code> zurÃ¼ck gegeben, wenn der Ã¼bergebene Fehler selbst <code>null</code> ist. Das kann man aber vorher
+     * ausschlieÃŸen, so dass die eindeutige
+     * Unterscheidung der einzelnen Fehlerarten mÃ¶glich ist.
      *
      * @param error
      * @return
@@ -370,7 +370,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn es für diesen Fehler eine ausführbare Lösung gibt, sonst <code>false</code>.
+     * Liefert <code>true</code>, wenn es fÃ¼r diesen Fehler eine ausfÃ¼hrbare LÃ¶sung gibt, sonst <code>false</code>.
      *
      * @param error
      * @return
@@ -384,8 +384,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @return
      */
     public void execSolution(final AbstractError error) {
-        // 'es' ist null, wenn für den Fehler keine Solution hinterlegt wurde. Das gilt nur
-        // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzliches
+        // 'es' ist null, wenn fÃ¼r den Fehler keine Solution hinterlegt wurde. Das gilt nur
+        // fÃ¼r Fehler, fÃ¼r die im Eigenschaftsdialog des Elementes dann ein zusÃ¤tzliches
         // OneToNUndirectedConnectionPanel angezeigt werden soll, in dem man den Fehler beheben kann
         if (error instanceof AbstractCardinalityError) {
             ErrorSolution es = solutionsLibrary.getSolution(error);

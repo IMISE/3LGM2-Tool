@@ -53,19 +53,19 @@ public class ErrorSolutionLibraryVersion {
     };
 
     /**
-     * Falls man mal verschiedene Metamodelle gleichzeitug nutzen will, muss man für jede
-     * Metamodellversion eine eigene Klasse mit Lösungen anlegen. Daher kann man die Lösungen nicht
+     * Falls man mal verschiedene Metamodelle gleichzeitug nutzen will, muss man fÃ¼r jede
+     * Metamodellversion eine eigene Klasse mit LÃ¶sungen anlegen. Daher kann man die LÃ¶sungen nicht
      * einfach statisch abfragen.
      */
     public ErrorSolutionLibraryVersion() {
         super();
     }
 
-    // wenn man keine Error-Solution für einen Min oder Max-Fehler findet, wird ein neues
-    // OneToNUndirectedConnectionPanel angefügt, das den Fehler anzeigt
-    // wenn die minimale Kardinalität eines initalSubTypes unterschritten ist, dann einfach einen
+    // wenn man keine Error-Solution fÃ¼r einen Min oder Max-Fehler findet, wird ein neues
+    // OneToNUndirectedConnectionPanel angefÃ¼gt, das den Fehler anzeigt
+    // wenn die minimale KardinalitÃ¤t eines initalSubTypes unterschritten ist, dann einfach einen
     // neuen anlegen (Anwendungsparogramm bei AWB, Orgplan bei KAWB)
-    // Kanten ohne start und end einfach löschen
+    // Kanten ohne start und end einfach lÃ¶schen
 
     @SuppressWarnings("unchecked")
     private final ErrorSolution[] CARDINALITY_ERROR_SOLUTIONS = {
@@ -85,8 +85,8 @@ public class ErrorSolutionLibraryVersion {
     };
 
     /**
-     * Liste aller Elementarten, die bei Unterschreitung der Anzahl der zugehörigen Kantenart sofort
-     * gelöscht werden.
+     * Liste aller Elementarten, die bei Unterschreitung der Anzahl der zugehÃ¶rigen Kantenart sofort
+     * gelÃ¶scht werden.
      *
      * @return / private final Pair[] MINCARDINALITY_NO_SOLUTION_ERRORS = { new Pair<Class<? extends
      *         ModelElement>, Class<? extends Kante>>(DBKonfiguration.class,

@@ -30,14 +30,14 @@ public final class ModelConstants {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als SchlÃ¼ssel den alten Namen und
      * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * eingelesen werden kÃ¶nnen.
      */
     private static Map<String, String> OLD_TO_NEW_CLASS_NAME = metaModel.getOldToNewClassName();
 
     /**
-     * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
+     * Leeres Array als StandardrÃ¼ckgabetyp fÃ¼r zu Ã¼berschreibende Funktionen.
      */
     @SuppressWarnings("unchecked")
     public static final Class<? extends ModelElement>[] EMPTY_ELEMENT_CLASS_ARRAY = new Class[0];
@@ -66,11 +66,11 @@ public final class ModelConstants {
         return layerIndex % 2 == 1;
     }
 
-    /** Short-Name für den beginn des HashStrings bei allen Kanten */
+    /** Short-Name fÃ¼r den beginn des HashStrings bei allen Kanten */
     public static final String EDGE_SHORT_NAME = "DLK";
 
     /**
-     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Knoten noch Kantenklasse
+     * Short-Name der zurÃ¼ckgegeben wird, wenn die an <code>getShortName(Class)</code> Ã¼bergebene Klasse weder eine gÃ¼ltige Knoten noch Kantenklasse
      * ist.
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
@@ -78,14 +78,14 @@ public final class ModelConstants {
     private static final String PLURAL_NAME_RES_KEY_SUFFIX = "_p";
 
     /**
-     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
-     * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
+     * Mappt von den Knotenklassen auf den zugehÃ¶rigen Short-Name fÃ¼r die HashString der Elemente. Diese 3-Buchstabigen KlassenkÃ¼rzel sind nicht
+     * zwangslÃ¤ufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
      * Vorangestellt werden.
      */
     private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
 
     /**
-     * Liste aller geöffneten Dialoge
+     * Liste aller geÃ¶ffneten Dialoge
      */
     public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<ElementPropertyDialog>();
 
@@ -105,7 +105,7 @@ public final class ModelConstants {
     public static final Integer ONE = new Integer(1);
 
     /**
-     * Standardrückgabewert bei Fehlern = -1 ;
+     * StandardrÃ¼ckgabewert bei Fehlern = -1 ;
      */
     public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
 
@@ -275,7 +275,7 @@ public final class ModelConstants {
     // spezielle Knoteneigenschaften //
     ///////////////////////////////////
 
-    /** Alle Klassen, die man über den Datenimport einlesen kann */
+    /** Alle Klassen, die man Ã¼ber den Datenimport einlesen kann */
     @SuppressWarnings({
             "rawtypes"
     })
@@ -289,15 +289,15 @@ public final class ModelConstants {
     ///////////////////////////////////
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse fÃ¼r Elemente der Elementklasse eine
      * Bedeutung haben.
      */
     private static final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = metaModel.getElementClassToOrderedEdges();
 
     /**
-     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
-     * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
-     * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
+     * Liefert ein Set aller Kantenklassen, die fÃ¼r die Ã¼bergebene Elementklasse "geordnet sind", d. h. dass fÃ¼r Elemente der Ã¼bergebenen Klasse die
+     * Reihenfolge der Instanzen der zurÃ¼ck gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
+     * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind fÃ¼r den Prozess geordnet).
      *
      * @param elementClass
      */
@@ -306,10 +306,10 @@ public final class ModelConstants {
     }
 
     /**
-     * Prüft, ob für die übergebene Elementklasse Reihenfolge der Kanten der übergebenen Kantenklasse relevant ist.
+     * PrÃ¼ft, ob fÃ¼r die Ã¼bergebene Elementklasse Reihenfolge der Kanten der Ã¼bergebenen Kantenklasse relevant ist.
      *
-     * @param elementClass Elementklasse, für die Kanten der edgeClass in einer bestimmten Reihenfolge sein müssen
-     * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
+     * @param elementClass Elementklasse, fÃ¼r die Kanten der edgeClass in einer bestimmten Reihenfolge sein mÃ¼ssen
+     * @param edgeClass Kantenklasse, die fÃ¼r Elemente der elementClass in der richtigen Reihenfolge sein mÃ¼ssen
      * @return
      */
     public static final boolean isOrderedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
@@ -317,12 +317,12 @@ public final class ModelConstants {
     }
 
     /**
-     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
+     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach Ã¼ber dieselbe Kantenart miteinander verbunden sein kÃ¶nnen.
      */
     private static final Set<Class<? extends Kante>> MULTIPLE_EDGE_CLASSES = metaModel.getMultipleEdgeClasses();
 
     /**
-     * Liefert <code>true</code>, wenn über Kanten der übergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein können.
+     * Liefert <code>true</code>, wenn Ã¼ber Kanten der Ã¼bergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein kÃ¶nnen.
      *
      * @param edgeClass
      * @return
@@ -332,7 +332,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
+     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein mÃ¼ssten, aber aus Unwissenheit beim Entwurf des
      * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
      * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
@@ -342,7 +342,7 @@ public final class ModelConstants {
     private static final Set<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = metaModel.getDoubleMeaningEdgeClasses();
 
     /**
-     * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante die Bedeutung angibt.
+     * PrÃ¼ft, ob die Ã¼bergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante die Bedeutung angibt.
      *
      * @see #DOUBLE_MEANING_EDGE_CLASSES
      * @param edgeClass
@@ -353,13 +353,13 @@ public final class ModelConstants {
     }
 
     /**
-     * Liste aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
+     * Liste aller Kantenklassen, die nur in VorwÃ¤rtsrichtung verbunden werden und somit immer nur in dieser Richtung in
      * der Grafik dargestelt werden.
      */
     private static final Set<Class<? extends Kante>> FORWARD_CONNECTED_EDGE_CLASSES = ImmutableSet.of();
 
     /**
-     * Prüft, ob die übergebene Klasse eine Kantenklasse ist, die immer nur in Vorwärtsrichtung verbunden werden kann
+     * PrÃ¼ft, ob die Ã¼bergebene Klasse eine Kantenklasse ist, die immer nur in VorwÃ¤rtsrichtung verbunden werden kann
      * und somit auch in der Grafik nur in dieser Richtung dargestellt wird.
      *
      * @see #FORWARD_CONNECTED_EDGE_CLASSES
@@ -380,8 +380,8 @@ public final class ModelConstants {
     public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]>();
 
     /**
-     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
-     * Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     * Liefert alle nichtabstrakten, zur Ã¼bergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die Ã¼bergebene Klasse selbst ist in den
+     * RÃ¼ckgabewerten enthalten, wenn sie nichtabstract ist.
      *
      * @param elementClass
      * @return
@@ -419,7 +419,7 @@ public final class ModelConstants {
     private static final HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
 
     /**
-     * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
+     * Liefert fÃ¼r eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
      *
      * @param elementClass
      * @return
@@ -449,7 +449,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Elementklasse die Ã¼bergebene Kantenart hat.
      *
      * @param elementClass
      * @param edgeClass
@@ -460,17 +460,17 @@ public final class ModelConstants {
     }
 
     /**
-     * Mappt für eine Elementklasse auf eine weitere Map, die von einer Elementklasse auf ein Array von Kantenklassen mappt. Das Array der
-     * Kantenklassen enthält alle Kanten, die zwischen den beiden Schlüsselelementklassen vorhanden sein können.<br />
-     * In der äußeren und allen inneren HashMaps sind immer dieselben Schlüsselelemente enthalten. Für ein Paar von Schlüsselelementklassen ist immer
-     * dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als Schlüssel
+     * Mappt fÃ¼r eine Elementklasse auf eine weitere Map, die von einer Elementklasse auf ein Array von Kantenklassen mappt. Das Array der
+     * Kantenklassen enthÃ¤lt alle Kanten, die zwischen den beiden SchlÃ¼sselelementklassen vorhanden sein kÃ¶nnen.<br />
+     * In der Ã¤uÃŸeren und allen inneren HashMaps sind immer dieselben SchlÃ¼sselelemente enthalten. FÃ¼r ein Paar von SchlÃ¼sselelementklassen ist immer
+     * dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als SchlÃ¼ssel
      * einsetzt.
      */
     private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>>();
 
     /**
-     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
-     * zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
+     * Liefert ein Array aller Kantenklassen, die zwischen den beiden Ã¼bergebenen Elementklassen existieren kÃ¶nnen. Gibt es keine Kantenklasse
+     * zwischen den Elementen so kommt ein leeres Array (length==0) zurÃ¼ck.
      *
      * @param elementClass1
      * @param elementClass2
@@ -502,7 +502,7 @@ public final class ModelConstants {
             returnClasses = new Class[resultEdgeClasses.size()];
             System.arraycopy(resultEdgeClasses.toArray(), 0, returnClasses, 0, size);
         }
-        //jetzt das gefundenen Kantenklassen-Array für beide Elementklassenkombinationen in den inneren HashMaps ablegen
+        //jetzt das gefundenen Kantenklassen-Array fÃ¼r beide Elementklassenkombinationen in den inneren HashMaps ablegen
         elementClassToEdgeClass.put(elementClass2, returnClasses);
         elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass2);
         if (elementClassToEdgeClass == null) {
@@ -538,7 +538,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell
+     * Liefert <code>true</code>, wenn die Ã¼bergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell
      * einen eigenen Container besitzt.
      */
     public static final boolean isUnique(final Class<?> elementClass) {
@@ -546,7 +546,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Prüft, ob die übergebene Klasse <code>abstract</code> ist.
+     * PrÃ¼ft, ob die Ã¼bergebene Klasse <code>abstract</code> ist.
      *
      * @param elementClass
      * @return
@@ -556,47 +556,47 @@ public final class ModelConstants {
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
+     * GeprÃ¼ft wird, ob sich die Ã¼bergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die Ã¼bergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
     public static final boolean isNodeType(final Class<?> elementClass) {
         return Knoten.class.isAssignableFrom(elementClass) || NodeContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
+     * GeprÃ¼ft wird, ob sich die Ã¼bergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die Ã¼bergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
     public static final boolean isBendpointType(final Class<?> elementClass) {
         return Knickpunkt.class.isAssignableFrom(elementClass) || BendpointContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} ist.
+     * GeprÃ¼ft wird, ob sich die Ã¼bergebene Klasse eine Unterklasse von {@link Knoten} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die Ã¼bergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
     public static final boolean isRealNodeType(final Class<?> elementClass) {
         return isNodeType(elementClass) && !isBendpointType(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Kante} ist.
+     * GeprÃ¼ft wird, ob sich die Ã¼bergebene Klasse eine Unterklasse von {@link Kante} ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation ist, sonst <code>false</code>.
+     * @return <code>true</code>, wenn die Ã¼bergebene Klasse eine Assoziation ist, sonst <code>false</code>.
      */
     public static final boolean isEdgeType(final Class<?> elementClass) {
         return Kante.class.isAssignableFrom(elementClass) || EdgeContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Kantenklasse selbst Assoziationen zu anderen Elementen haben kann - also eine Assoziationsklasse
      * ist.
      *
      * @param elementClass
@@ -617,7 +617,7 @@ public final class ModelConstants {
     public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = metaModel.getInterLayerConnectedElementPathes();
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Klasse Startklasse eines Interebenenmetapfades ist.
      *
      * @param elementClass
      * @return
@@ -632,7 +632,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Gibt alle Startklassen zurück, die über eine Interebenenbeziehung der spezifizierten Endklasse verfügen.
+     * Gibt alle Startklassen zurÃ¼ck, die Ã¼ber eine Interebenenbeziehung der spezifizierten Endklasse verfÃ¼gen.
      *
      * @param endClass Endklasse der Interebenenbeziehung
      * @return
@@ -660,11 +660,11 @@ public final class ModelConstants {
 
     /**
      * Erzeugt eine neue Instanz eines Modellelementes.<br>
-     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> Ã¼bergeben wurde.
      *
      * @param elementClass Unterklasse von <code>ModelElement</code>
      * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
-     * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
+     * @return neues ModelElement der Ã¼bergebenen Klasse oder <code>null</code>
      */
     public static final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
         try {
@@ -678,9 +678,9 @@ public final class ModelConstants {
     }
 
     /**
-     * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
+     * Erzeugt eine neues ModelElement der gleichen Art wie das Ã¼bergebene
      *
-     * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
+     * @return neues ModelElement der Ã¼bergebenen Art oder im Fehlerfall <code>null</code>
      * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
      * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
      * @return neues ModelElement oder <code>null</code>
@@ -690,8 +690,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
-     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
+     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen fÃ¼r den Ã¼bergebenen alten Klassennamen. <br>
+     * Ist in <code>oldToNewName</code> kein Eintrag fÃ¼r den Ã¼bergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
      * aktuelle ist.
      *
      * @param oldName
@@ -699,14 +699,14 @@ public final class ModelConstants {
      */
     private static final String getActualClassName(String oldName) {
         String newName = OLD_TO_NEW_CLASS_NAME.get(oldName);
-        //wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
+        //wenn kein Eintrag fÃ¼r den alten Namen gefunden wurde, ist der alte
         // Namen der aktuelle
         if (newName == null) {
             return oldName;
         }
         //solange immer nach neuen Ersetzungen suchen, bis es keine mehr gibt
         // -> den letzten
-        //gefundenen Namen zurückgeben
+        //gefundenen Namen zurÃ¼ckgeben
         while (true) {
             oldName = newName;
             newName = OLD_TO_NEW_CLASS_NAME.get(oldName);
@@ -716,14 +716,14 @@ public final class ModelConstants {
         }
     }
 
-    /** Mappt vom Klassennamen auf die Klasse. Ist der Cache für die Funktion {@link #getClassForName(String)} */
+    /** Mappt vom Klassennamen auf die Klasse. Ist der Cache fÃ¼r die Funktion {@link #getClassForName(String)} */
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
 
     /** Alle Modellelementklassen, die instaziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class.getSimpleName(), TextfeldFach.class.getSimpleName(), TextfeldLog.class.getSimpleName(), TextfeldPhy.class.getSimpleName());
 
     /**
-     * Prüft, ob in dem übergebenen className mindestens 2 Punkte stehen.
+     * PrÃ¼ft, ob in dem Ã¼bergebenen className mindestens 2 Punkte stehen.
      *
      * @param className
      * @return
@@ -742,7 +742,7 @@ public final class ModelConstants {
     public static final String EDGE_PACKAGE_NAME = ALL_EDGES.length > 0 ? ALL_EDGES[0].getPackage().getName() + "." : "";
 
     /**
-     * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
+     * Gibt die Klasse zu einem Klassennamen zurÃ¼ck. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
      *
      * @param classname String mit der Klassenbezeichnung
      * @return Class
@@ -759,10 +759,10 @@ public final class ModelConstants {
 
         String fullClassName = null;
         if (!isFullQualifiedClassName(classname)) {
-            //die allgemeinen (nicht metamodellabhängigen)Klassen liegen in einem anderen
+            //die allgemeinen (nicht metamodellabhÃ¤ngigen)Klassen liegen in einem anderen
             //package als alle Metamodellklassen. Das hier sollte eigentlich nicht die
             //ModelConstants wissen, sondern das sind Tool3lgmConstants, da die Klassen
-            //nicht modellabhängig sind
+            //nicht modellabhÃ¤ngig sind
             if (META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES.contains(classname)) {
                 fullClassName = Tool3lgmConstants.ELEMENTS_PACKAGE_NAME + classname;
             } else {
@@ -805,11 +805,11 @@ public final class ModelConstants {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurÃ¼ck.<br>
+     * Wird <code>null</code> Ã¼bergeben, wird der Name fÃ¼r ein Modell (im Deutschen also "Modell" zurÃ¼ck gegeben.)
      *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
-     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param clazz Klasse fÃ¼r die der anzeigbare Name geliefert werden soll
+     * @param plural wenn true, wird der Pluralname zurÃ¼ck gegeben, sonst der Singular
      * @return String aus dem geladenen ResourcenBundle
      */
     private static final String getDisplayableName(Class<? extends ModelElement> clazz, final boolean plural) {
@@ -831,10 +831,10 @@ public final class ModelConstants {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurÃ¼ck.<br>
+     * Wird <code>null</code> Ã¼bergeben, wird der Name fÃ¼r ein Modell (im Deutschen also "Modell" zurÃ¼ck gegeben.)
      *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @param clazz Klasse fÃ¼r die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public static final String getDisplayablePluralName(final Class<? extends ModelElement> clazz) {
@@ -842,10 +842,10 @@ public final class ModelConstants {
     }
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurÃ¼ck.<br>
+     * Wird <code>null</code> Ã¼bergeben, wird der Name fÃ¼r ein Modell (im Deutschen also "Modell" zurÃ¼ck gegeben.)
      *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @param clazz Klasse fÃ¼r die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public static final String getDisplayableName(final Class<? extends ModelElement> clazz) {
@@ -853,7 +853,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert den Standardanzeigenamen für ein Modelelement der übergebenen Art
+     * Liefert den Standardanzeigenamen fÃ¼r ein Modelelement der Ã¼bergebenen Art
      *
      * @param me
      * @return
@@ -875,7 +875,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Kante verbindet.
+     * Liefert den Meta-Namen der Kanteklasse fÃ¼r die VorwÃ¤rtsrichtung ohne die Elementartnamen, die die Kante verbindet.
      *
      * @param edgeClass
      * @return
@@ -918,7 +918,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Kante verbindet.
+     * Liefert den Meta-Namen der Kanteklasse fÃ¼r die RÃ¼ckwÃ¤rtsrichtung mit den Elementartnamen, die die Kante verbindet.
      *
      * @param edgeClass
      * @return
@@ -963,30 +963,30 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
+     * Liefert in AbhÃ¤ngigkeit von der Richtung den Meta-Namen der Kanteklasse
      *
      * @param edgeClass
      * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
-     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
+     *            zur Startklasse (<code>true</code>) zurÃ¼ck gegeben werden soll. Mit Start- und Endklasse sind hier die
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
      * @param connectionState Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur
      *            eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
-     *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
+     *            die Richtung angegeben werden fÃ¼r die die bedeutung zurÃ¼ck gegeben werden soll.<br>
      *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
-     *            Assoziationen sind, aber aus allerlei Gründen in eine gepackt wurden.<br>
+     *            Assoziationen sind, aber aus allerlei GrÃ¼nden in eine gepackt wurden.<br>
      *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
      *            <ul>
      *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heiÃŸt
      *            "Aufgabe bearbeitet Objekttyp"</li>
      *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heiÃŸt
      *            "Aufgabe interpretiert Objekttyp"</li>
      *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
+     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heiÃŸt
      *            "Objekttyp wird interpretiert von Aufgabe "</li>
      *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
+     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heiÃŸt
      *            "Objekttyp wird bearbeitet von Aufgabe"</li>
      *            </ul>
      * @return
@@ -1052,16 +1052,16 @@ public final class ModelConstants {
     }
 
     /**
-     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart Teilemente untergeordnet werden kann.
+     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, Ã¼ber die der Elementart Teilemente untergeordnet werden kann.
      */
     private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
     /**
-     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart als Teilement untergeordnet werden kann.
+     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, Ã¼ber die die Elementart als Teilement untergeordnet werden kann.
      */
     private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
-    //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
+    //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht Ã¼ber die
     //gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
-    //kann man die Warnungen nur für die ganze Datei unterdrücken
+    //kann man die Warnungen nur fÃ¼r die ganze Datei unterdrÃ¼cken
     static {
         fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES();
     }
@@ -1124,8 +1124,8 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
-     * können.
+     * Liefert die Klassen von <code>PartOfBeziehung</code>, Ã¼ber die der Ã¼bergebenen Elementart andere Elemente als Teile untergeordnet werden
+     * kÃ¶nnen.
      *
      * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
@@ -1136,7 +1136,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
+     * Liefert die Klassen von <code>PartOfBeziehung</code>, Ã¼ber die die Ã¼bergebenen Elementart anderen Elementen als Teilelement untergeordnet
      * werden kann.
      *
      * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
@@ -1150,11 +1150,11 @@ public final class ModelConstants {
     /*******************/
 
     /**
-     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
+     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese NamenskÃ¼rzel garantieren nicht, dass man von ihnen auf die Klasse zurÃ¼ckschlieÃŸen kann.
      * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
      * lesbarer zu gestalten.
      *
-     * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
+     * @param elementClass Elementklasse fÃ¼r die das KÃ¼rzel zurÃ¼ck gegeben werden soll.
      * @return String mit Namenskuerzel
      */
     public static final String getShortName(final Class<? extends ModelElement> elementClass) {
@@ -1162,7 +1162,7 @@ public final class ModelConstants {
         //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
         if (elementClassToHashShortName == null) {
             elementClassToHashShortName = new HashMap<Class<? extends ModelElement>, String>();
-            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
+            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prÃ¼fen, ob ein shortName bereits existiert
             HashSet<String> allShortNames = new HashSet<String>();
             loop1: for (int i = 0; i < ALL_NODES.length; i++) {
                 String s = ALL_NODES[i].getSimpleName();
@@ -1174,11 +1174,11 @@ public final class ModelConstants {
                 //mehr als 3 Zeichen
                 StringBuilder shortName = new StringBuilder(3);
                 for (int j = 0; j < s.length(); j++) {
-                    //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
+                    //suche GroÃŸbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
                     String character = s.substring(j, j + 1);
                     if (character.toUpperCase().equals(character)) {
                         shortName.append(character);
-                        //wenn 3 Großbuchstaben gefunden wurden
+                        //wenn 3 GroÃŸbuchstaben gefunden wurden
                         if (shortName.length() == 3) {
                             String sn = shortName.toString();
                             //wenn es den ShortName noch nicht gibt
@@ -1187,15 +1187,15 @@ public final class ModelConstants {
                                 elementClassToHashShortName.put(ALL_NODES[i], sn);
                                 continue loop1;
                             }
-                            //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
+                            //es gibt den ShortName bereits -> letztes Zeichen lÃ¶schen und weiter nach GroÃŸbuchstanben suchen
                             shortName.deleteCharAt(2);
                         }
                     }
                 }
-                //hier kommt er nur hin, wenn keine 3 Großbuchstaben gefunden wurden
+                //hier kommt er nur hin, wenn keine 3 GroÃŸbuchstaben gefunden wurden
                 //short name hat 0 bis 2 Zeichen
 
-                //wenn genau 2 Großbuchstaben gefunden wurden
+                //wenn genau 2 GroÃŸbuchstaben gefunden wurden
                 if (shortName.length() == 2) {
                     int lastUpperCharInClassName = 0;
                     for (int j = 0; j < shortName.length(); j++) {
@@ -1206,9 +1206,9 @@ public final class ModelConstants {
                             }
                         }
                     }
-                    //lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
+                    //lastUpperCharInClassName hat jetzt den Index des letzten GroÃŸbuchstaben in shortName
 
-                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen,
+                    //solange hinter dem letzten GroÃŸbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhÃ¤ngen,
                     //bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
                     while (++lastUpperCharInClassName < s.length()) {
                         shortName.append(s.charAt(lastUpperCharInClassName));
@@ -1219,12 +1219,12 @@ public final class ModelConstants {
                             elementClassToHashShortName.put(ALL_NODES[i], sn);
                             continue loop1;
                         }
-                        //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
+                        //es gibt den ShortName bereits -> letztes Zeichen lÃ¶schen und weiter suchen
                         shortName.deleteCharAt(2);
                     }
                 }
 
-                //es wurden keine 3 eindutigen Buchstaben nach Großbuchstaben gefunden -> Nimm einfach die ersten beiden
+                //es wurden keine 3 eindutigen Buchstaben nach GroÃŸbuchstaben gefunden -> Nimm einfach die ersten beiden
                 //Buchstaben und suche einen Folgebuchstaben bis 3 eindeutige Zeichen gefunden werden (das geht immer gut,
                 //wenn die Klassennamen eindeutig sind (was immer der Fall ist, wenn sie im selben package liegen) und hier
                 ///unten fest steht, dass der Name mind. 4 Zeichen lang ist)
@@ -1240,13 +1240,13 @@ public final class ModelConstants {
                         elementClassToHashShortName.put(ALL_NODES[i], sn);
                         continue loop1;
                     }
-                    //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
+                    //es gibt den ShortName bereits -> letztes Zeichen lÃ¶schen und weiter suchen
                     shortName.deleteCharAt(2);
                 }
 
-                //wenn auch das nicht gekalppt hat (der Fall dürfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
+                //wenn auch das nicht gekalppt hat (der Fall dÃ¼rfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
                 //da sie dann alle etwas eindeutiges bei s = class.getShortName() geliefert haben)
-                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
+                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prÃ¼fen;
                 String sn = s.substring(0, 3).toUpperCase();
                 allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
                 elementClassToHashShortName.put(ALL_NODES[i], sn);
@@ -1322,7 +1322,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
+     * Ãœberprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurÃ¼ck
      *
      * @param obj Dialog zu diesem Objekt
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
@@ -1363,14 +1363,14 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder
-     * übergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
+     * Liefert ein Array aller Kantenklassen, durch die die Ã¼bergebene Elementart einer anderen untergeordnet (<code>isMaster==false</code>) oder
+     * Ã¼bergeordnet (<code>isMaster==true</code>) wird. Dies sind alle Kantenklasse, die Kompositionen sind und bei
      * denen mindestens eine Endklasse (bei <code>isMaster==false</code>) oder eine Startklasse (bei <code>isMaster==true</code>) zuweisungskompatibel
-     * zur übergebenen Elementklasse ist.
+     * zur Ã¼bergebenen Elementklasse ist.
      *
      * @param elementClass
-     * @param isMaster wenn <code>true</code> soll die übergebene Elementart die übergeordnete sein, sonst die untergeordnete
-     * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
+     * @param isMaster wenn <code>true</code> soll die Ã¼bergebene Elementart die Ã¼bergeordnete sein, sonst die untergeordnete
+     * @return Array von Kantenklassen, die die Ã¼bergebene Elementart unterordnen
      */
     @SuppressWarnings("unchecked")
     private static Class<? extends Composition>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
@@ -1405,34 +1405,34 @@ public final class ModelConstants {
     //    }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen übergeordnet wird. Dies sind alle Kantenklasse, die
-     * Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur übergebenen
+     * Liefert ein Array aller Kantenklassen, durch die die Ã¼bergebene Elementart einer anderen Ã¼bergeordnet wird. Dies sind alle Kantenklasse, die
+     * Kompositionen sind und bei denen mindestens eine Startklasse zuweisungskompatibel zur Ã¼bergebenen
      * Elementklasse ist.
      *
      * @param elementClass
-     * @return Array von Kantenklassen, die die übergebene Elementart überordnen
+     * @return Array von Kantenklassen, die die Ã¼bergebene Elementart Ã¼berordnen
      */
     public static Class<? extends Composition>[] getCompositionEdgeTypesForMaster(final Class<? extends ModelElement> elementClass) {
         return getCompositionEdgeTypes(elementClass, true);
     }
 
     /**
-     * Liefert ein Array aller Kantenklassen, durch die die übergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die
-     * Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur übergebenen
+     * Liefert ein Array aller Kantenklassen, durch die die Ã¼bergebene Elementart einer anderen untergeordnet wird. Dies sind alle Kantenklasse, die
+     * Kompositionen sind und bei denen mindestens eine Endklasse zuweisungskompatibel zur Ã¼bergebenen
      * Elementklasse ist.
      *
      * @param elementClass
-     * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
+     * @return Array von Kantenklassen, die die Ã¼bergebene Elementart unterordnen
      */
     public static Class<? extends Composition>[] getCompositionEdgeTypesForSlave(final Class<? extends ModelElement> elementClass) {
         return getCompositionEdgeTypes(elementClass, false);
     }
 
     /**
-     * Liefert alle Elementarten, die der übergebenen Elementart über eine Komposition untergeordnet sind.
+     * Liefert alle Elementarten, die der Ã¼bergebenen Elementart Ã¼ber eine Komposition untergeordnet sind.
      *
-     * @param masterElementClass Elementart, für die alle anderen Elementarten ermittelt werden sollen, die mit ihr über eine Komposition verbunden
-     *            sein können.
+     * @param masterElementClass Elementart, fÃ¼r die alle anderen Elementarten ermittelt werden sollen, die mit ihr Ã¼ber eine Komposition verbunden
+     *            sein kÃ¶nnen.
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -1455,11 +1455,11 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die
-     * übergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Elementklasse mindestens einer anderen Klasse untergeordnet ist. Das erkennt man daran, dass die
+     * Ã¼bergebene Klasse zuweisungskompatibel zu einer Endklasse einer Kantenklasse ist.
      *
      * @param elementClass
-     * @return <code>true</code>, wenn das übergebene ein untergeordnetes Element ist
+     * @return <code>true</code>, wenn das Ã¼bergebene ein untergeordnetes Element ist
      */
     public static boolean isSlaveType(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass)) {
@@ -1471,10 +1471,10 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert für die übergebene Elementklasse alle Elementtypen, die ihr untergeordnet sind und die nicht unendlich oft
-     * an ihr hängen dürfen. Diese müssen beim Join ebenfalls zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein
+     * Liefert fÃ¼r die Ã¼bergebene Elementklasse alle Elementtypen, die ihr untergeordnet sind und die nicht unendlich oft
+     * an ihr hÃ¤ngen dÃ¼rfen. Diese mÃ¼ssen beim Join ebenfalls zusammengefÃ¼hrt werden. Z.B. darf ein Rechanwendungsbaustein
      * laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei Rechanwendungsbausteine mit jeweils einem Datenbanksystem
-     * gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
+     * gejoined, dann mÃ¼ssen auch die Datenbanksysteme gejoined werden.
      *
      * @param elementClass
      * @return
@@ -1494,12 +1494,12 @@ public final class ModelConstants {
         return subordinatedJoinbleTypes.build();
     }
 
-    /** Cache für die Funktion {@link #getInitialSubtypes(Class)} */
+    /** Cache fÃ¼r die Funktion {@link #getInitialSubtypes(Class)} */
     private static Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> INITIAL_SUBTYPES = Maps.newHashMap();
 
     /**
-     * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also über eine Komposition mit
-     * ihr verbunden sind, bei der sie der Master ist) und die minimale Kardinlität der Unterklassen > 0 ist.
+     * Liefert fÃ¼r eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also Ã¼ber eine Komposition mit
+     * ihr verbunden sind, bei der sie der Master ist) und die minimale KardinlitÃ¤t der Unterklassen > 0 ist.
      *
      * @param elementClass
      */

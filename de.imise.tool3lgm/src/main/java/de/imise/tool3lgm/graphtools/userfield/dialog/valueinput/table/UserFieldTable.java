@@ -49,16 +49,16 @@ import de.imise.util.clipboard.IllegalContentException;
 import de.imise.util.clipboard.SimpleContentParser;
 
 /**
- * Klasse repräsentiert einen speziellen <code>JTable</code>, der zur Eingabe und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen
+ * Klasse reprÃ¤sentiert einen speziellen <code>JTable</code>, der zur Eingabe und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen
  * verwendet werden kann.
  * <p>
- * Es besteht die Möglichkeit, diese Tabelle in eine Komponente mit speziellem Layout einzubetten(im Allgem. ein <code>JScrollPane</code>). Die
- * grafische Darstellung des Tables ist dann über <code>getLayoutContainer()</code> zu erreichen.
+ * Es besteht die MÃ¶glichkeit, diese Tabelle in eine Komponente mit speziellem Layout einzubetten(im Allgem. ein <code>JScrollPane</code>). Die
+ * grafische Darstellung des Tables ist dann Ã¼ber <code>getLayoutContainer()</code> zu erreichen.
  * <p>
- * Über eine <code>TableEditCondition</code> kann die Editierbarkeit einer jeden Zelle speziell festgelegt werden. Über die Konstanten können
+ * Ãœber eine <code>TableEditCondition</code> kann die Editierbarkeit einer jeden Zelle speziell festgelegt werden. Ãœber die Konstanten kÃ¶nnen
  * spezielle AutoResizeModes aktiviert werden.
  * <p>
- * Code für die Verwendung des <code>container</code>s
+ * Code fÃ¼r die Verwendung des <code>container</code>s
  * 
  * <pre>
  * 	JPanel panel = new JPanel() {
@@ -83,15 +83,15 @@ import de.imise.util.clipboard.SimpleContentParser;
  * </pre>
  * <p>
  * Spezielle Selektierungseigenschaften: <br>
- * Es ist möglich mittels Gedrückthalten der "Shift" oder "Strg" - Taste, mehrere Zellen auszuwählen und ebenso auch die Selektierung wieder
- * aufzuheben. Änderungen durch Werteeingabe werden auf alle ausgewählten Zellen übertragen.
+ * Es ist mÃ¶glich mittels GedrÃ¼ckthalten der "Shift" oder "Strg" - Taste, mehrere Zellen auszuwÃ¤hlen und ebenso auch die Selektierung wieder
+ * aufzuheben. Ã„nderungen durch Werteeingabe werden auf alle ausgewÃ¤hlten Zellen Ã¼bertragen.
  * <p>
  * Undo/Redo: <br>
- * Mit den Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> ist und Undo bzw. Redo möglich.
+ * Mit den Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> ist und Undo bzw. Redo mÃ¶glich.
  * <p>
  * Cut/Copy/Paste: <br>
  * Mit den Tastenkombinationen <b>Ctrl+X</b>, <b>Ctrl+C</b>, <b>Ctrl+V</b> ist das Ausschneiden und das Kopieren von Werten aus dem Table in die
- * Systemzwischenablage möglich, sowie das Einfügen von Werten aus der Zwischenablage in den Table.
+ * Systemzwischenablage mÃ¶glich, sowie das EinfÃ¼gen von Werten aus der Zwischenablage in den Table.
  * 
  * @author fstephan
  */
@@ -103,17 +103,17 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     private UserFieldTableController tableController;
 
     /**
-     * Komponente, die diesen Table und das dazugehörige Layout enthält
+     * Komponente, die diesen Table und das dazugehÃ¶rige Layout enthÃ¤lt
      */
     private final JScrollPane layoutContainer;
 
     /**
-     * Spezielles Layout für Cellrendering/-editing und RowHeaders
+     * Spezielles Layout fÃ¼r Cellrendering/-editing und RowHeaders
      */
     private AbstractUserFieldTableLayout tableLayout;
 
     /**
-     * Drückt aus, ob Standard-AutoResizeModes von <code>JTable</code> verwendet werden sollen, oder nicht.
+     * DrÃ¼ckt aus, ob Standard-AutoResizeModes von <code>JTable</code> verwendet werden sollen, oder nicht.
      * 
      * @value = true, falls <code>JTable</code> AutoResizeModes verwendet werden soll
      * @value = false, falls eigene AutoResizeModes verwendet werden sollen
@@ -121,18 +121,18 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     private boolean superResize = false;
 
     /**
-     * Bestimmt das Resize-Verhalten des Tables bei großem Fenster(Table kann vollständig in seiner<code>preferredSize</code> dargestellt werden).
+     * Bestimmt das Resize-Verhalten des Tables bei groÃŸem Fenster(Table kann vollstÃ¤ndig in seiner<code>preferredSize</code> dargestellt werden).
      */
     private int autoResizeModeLarge;
 
     /**
-     * Bestimmt das Resize-Verhalten des Tables bei kleinem Fenster (Table kann nicht vollständig in seiner<code>preferredSize</code> dargestellt
+     * Bestimmt das Resize-Verhalten des Tables bei kleinem Fenster (Table kann nicht vollstÃ¤ndig in seiner<code>preferredSize</code> dargestellt
      * werden).
      */
     private int autoResizeModeSmall;
 
     /**
-     * Spezielle Renderer- und Editorkomponenten für die Zellen des Tables. Werden zur formatierten Darstellung der Werte der Zellen verwendet.
+     * Spezielle Renderer- und Editorkomponenten fÃ¼r die Zellen des Tables. Werden zur formatierten Darstellung der Werte der Zellen verwendet.
      */
     private IUserFieldTableCell[][] tableCells;
 
@@ -141,10 +141,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      */
     private boolean doFormatting;
 
-    /** Speichert alle gemachten Wertänderung */
+    /** Speichert alle gemachten WertÃ¤nderung */
     private ArrayList<NamedObjectContainer<?>[][]> undoStack;
 
-    /** Speichert alle rückgängig gemachten Änderunge */
+    /** Speichert alle rÃ¼ckgÃ¤ngig gemachten Ã„nderunge */
     private ArrayList<NamedObjectContainer<?>[][]> redoStack;
 
     private static final int MAX_UNDO_REDO_STACK_SIZE = 10;
@@ -179,24 +179,24 @@ public class UserFieldTable extends JTable implements ContentExchanger {
 
     /**
      * Initialisiert diesen Table. <br>
-     * Es wird das AutoResize-Verhalten und das Focus-Verhalten festgelegt, ein {@link ContentExchangeListener} hinzugefügt sowie Undo bzw. Redo für
+     * Es wird das AutoResize-Verhalten und das Focus-Verhalten festgelegt, ein {@link ContentExchangeListener} hinzugefÃ¼gt sowie Undo bzw. Redo fÃ¼r
      * die Tastenkombinationen <b>Ctrl+Z</b> bzw. <b>Ctrl+Y</b> gesetzt.
      */
     private void init() {
         setRowSelectionAllowed(false);
 
-        // Überwachung des resize-Modes
+        // Ãœberwachung des resize-Modes
         getViewport().addComponentListener(new ComponentAdapter() {
 
             @Override
             public void componentResized(final ComponentEvent e) {
-                // small- u. largeMode-Resize-Verhalten gewählt
+                // small- u. largeMode-Resize-Verhalten gewÃ¤hlt
                 if (!superResize) {
                     if (getViewport().getWidth() < getPreferredSize().width) {
                         // Table kann nicht in der preferredSize dargestellt werden -> aktiviere autoResizeModeSmall
                         UserFieldTable.super.setAutoResizeMode(autoResizeModeSmall);
                     } else {
-                        // / Table kann vollständig in der preferredSize dargestellt werden -> aktiviere autoResizeModeLarge
+                        // / Table kann vollstÃ¤ndig in der preferredSize dargestellt werden -> aktiviere autoResizeModeLarge
                         UserFieldTable.super.setAutoResizeMode(autoResizeModeLarge);
                     }
                 }
@@ -226,7 +226,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
             }
         });
 
-        // Selektion löschen, wenn Table den Focus verliert
+        // Selektion lÃ¶schen, wenn Table den Focus verliert
 
         addFocusListener(new FocusListener() {
 
@@ -280,7 +280,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löst das Neuzeichnen der Zelle an der Position (<code>row</code>,<code>column</code>) aus.
+     * LÃ¶st das Neuzeichnen der Zelle an der Position (<code>row</code>,<code>column</code>) aus.
      * 
      * @param row Zeilennummer der Zelle
      * @param column Spaltennummer der Zelle
@@ -291,7 +291,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * So überschrieben, dass Änderungen in der Selektion jetzt auch während gedrückter Shift-Taste an das {@link #selectionModel} übergeben werden.
+     * So Ã¼berschrieben, dass Ã„nderungen in der Selektion jetzt auch wÃ¤hrend gedrÃ¼ckter Shift-Taste an das {@link #selectionModel} Ã¼bergeben werden.
      * 
      * @see javax.swing.JTable#changeSelection(int, int, boolean, boolean)
      * @param rowIndex
@@ -310,7 +310,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Beendet das Editieren der aktuell ausgewählten Zelle im Table.
+     * Beendet das Editieren der aktuell ausgewÃ¤hlten Zelle im Table.
      */
     public void stopEditing() {
         int row = getEditingRow();
@@ -324,7 +324,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Benachrichtigt das {@link #dataModel}, dass sich Daten geändert haben.
+     * Benachrichtigt das {@link #dataModel}, dass sich Daten geÃ¤ndert haben.
      */
     public void fireTableDataChanged() {
         if (hasUserFieldTableModel()) {
@@ -333,7 +333,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Aktualisiert die gesamte grafische Darstellung des Tables und des umschließenden ScrollPanes.
+     * Aktualisiert die gesamte grafische Darstellung des Tables und des umschlieÃŸenden ScrollPanes.
      */
     public void updateLayout() {
         tableLayout.update(this);
@@ -414,7 +414,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
 
         saveValues();
         if (((AbstractTableModel) dataModel).setValuesAt(internalContent, leadingPoint.x, leadingPoint.y) == false) {
-            // Einfügen nicht erfolgreich
+            // EinfÃ¼gen nicht erfolgreich
             showWarningMessage("userFieldTable_paste_warning");
             undo();
         }
@@ -440,7 +440,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Macht die letzte Eingabe rückgängig
+     * Macht die letzte Eingabe rÃ¼ckgÃ¤ngig
      */
     public void undo() {
 
@@ -461,7 +461,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Macht das letzte Undo rückgängig
+     * Macht das letzte Undo rÃ¼ckgÃ¤ngig
      */
     public void redo() {
         int n = redoStack.size();
@@ -481,7 +481,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Speichert die letzten Werte im {@link #undoStack} und löscht den {@link #redoStack}.
+     * Speichert die letzten Werte im {@link #undoStack} und lÃ¶scht den {@link #redoStack}.
      */
     private boolean saveValues() {
         Object[][] data = ((AbstractTableModel) dataModel).getValues();
@@ -552,12 +552,12 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Bestimmt jeweils das Resize-Verhalten für kleines und großes Fenster.
+     * Bestimmt jeweils das Resize-Verhalten fÃ¼r kleines und groÃŸes Fenster.
      * 
      * @see UserFieldTable#autoResizeModeSmall
      * @see UserFieldTable#autoResizeModeLarge
      * @param smallMode AutoResizeMode bei kleinem Fenster
-     * @param largeMode AutoResizeMode bei großem Fenster
+     * @param largeMode AutoResizeMode bei groÃŸem Fenster
      */
     public void setAutoResizeMode(final int smallMode, final int largeMode) {
 
@@ -572,7 +572,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Übernimmt <code>value</code> für alle ausgewählten Zellen
+     * Ãœbernimmt <code>value</code> fÃ¼r alle ausgewÃ¤hlten Zellen
      * 
      * @see JTable#setValueAt(java.lang.Object, int, int)
      */
@@ -598,7 +598,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löscht den Wert aller selektierten Zellen.
+     * LÃ¶scht den Wert aller selektierten Zellen.
      * 
      * @see AbstractUserFieldTableModel#clearValueAt(int, int)
      * @param row
@@ -643,18 +643,18 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Setzt die bevorzugte Größe für diesen Table.
+     * Setzt die bevorzugte GrÃ¶ÃŸe fÃ¼r diesen Table.
      * 
      * @see JTable#setPreferredSize(Dimension)
      * @param width bevorzugte Breite des Tables
-     * @param height bevorzugte Höhe des Tables
+     * @param height bevorzugte HÃ¶he des Tables
      */
     public void setPreferredSize(final int width, final int height) {
         super.setPreferredSize(new Dimension(width, height));
     }
 
     /**
-     * Gibt den LayoutContainer dieses Tables zurück. Alle Klassen, die den Table darstellen wollen, sollten stattdessen das hier zurückgegebene
+     * Gibt den LayoutContainer dieses Tables zurÃ¼ck. Alle Klassen, die den Table darstellen wollen, sollten stattdessen das hier zurÃ¼ckgegebene
      * ScrollPane darstellen. Die Modifizierungen des RowHeaders sind sonst nicht sichtbar.
      * 
      * @return container
@@ -664,7 +664,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den Renderer für die Zelle an Position (<code>row</code>,<code>column</code>) wieder. Der zurückgegebene Renderer sorgt für die
+     * Gibt den Renderer fÃ¼r die Zelle an Position (<code>row</code>,<code>column</code>) wieder. Der zurÃ¼ckgegebene Renderer sorgt fÃ¼r die
      * formatierte Darstellung der Werte in dieser Zelle.
      * 
      * @param row
@@ -685,7 +685,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den Editor für die Zelle an Position (<code>row</code>,<code>column</code>) wieder. Der zurückgegebene Editor stellt den tatsächlichen
+     * Gibt den Editor fÃ¼r die Zelle an Position (<code>row</code>,<code>column</code>) wieder. Der zurÃ¼ckgegebene Editor stellt den tatsÃ¤chlichen
      * unformatierten Wert dar.
      * 
      * @param row
@@ -708,10 +708,10 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /**
      * Gibt alle Werte aus dem angegebenen Bereich in einem <code>Object[][]</code> wieder.
      * 
-     * @param firstRow erste Zeile, aber der die Werte zurückgegeben werden sollen
-     * @param lastRow letzte Zeile, bis zu der die Werte zurückgegeben werden sollen
-     * @param firstColumn erste Spalte, aber der die Werte zurückgegeben werden sollen
-     * @param lastColumn letzte Spalte, bis zu der die Werte zurückgegeben werden sollen
+     * @param firstRow erste Zeile, aber der die Werte zurÃ¼ckgegeben werden sollen
+     * @param lastRow letzte Zeile, bis zu der die Werte zurÃ¼ckgegeben werden sollen
+     * @param firstColumn erste Spalte, aber der die Werte zurÃ¼ckgegeben werden sollen
+     * @param lastColumn letzte Spalte, bis zu der die Werte zurÃ¼ckgegeben werden sollen
      * @param replaceIgnorableErrors gibt an, ob Werte aus {@link UserField#IGNOREABLE_ERROR_SET} durch <code>""</code> ersetzt werden soll
      * @param replaceErrors gibt an, ob Werte aus {@link UserField#ERROR_SET} durch <code>""</code> ersetzt werden soll
      * @return
@@ -742,7 +742,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt die Zeilenköpfe zurück.
+     * Gibt die ZeilenkÃ¶pfe zurÃ¼ck.
      * 
      * @see AbstractTableModel#getRowIdentifiers()
      * @return
@@ -752,7 +752,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt die Spaltenköpfe zurück.
+     * Gibt die SpaltenkÃ¶pfe zurÃ¼ck.
      * 
      * @see AbstractTableModel#getColumnIdentifiers()
      * @return
@@ -762,7 +762,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt den <code>Viewport</code> des {@link #layoutContainer}s wieder, das heißt den Bereich des {@link #layoutContainer}s, der die Zellen des
+     * Gibt den <code>Viewport</code> des {@link #layoutContainer}s wieder, das heiÃŸt den Bereich des {@link #layoutContainer}s, der die Zellen des
      * Tables darstellt.
      * 
      * @see JScrollPane#getViewport()
@@ -782,7 +782,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Reguliert die Editierbarkeit von Zellen in Abhängigkeit von dem <code>tableController</code>.
+     * Reguliert die Editierbarkeit von Zellen in AbhÃ¤ngigkeit von dem <code>tableController</code>.
      */
     @Override
     public boolean isCellEditable(final int row, final int col) {
@@ -793,8 +793,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Überschreibt die Methode von {@link JTable}, sodass der Wert von {@link UserFieldTableController#isCellSelected(int, int)} an der Stelle (
-     * <code>row</code>,<code>column</code>) zurückgegeben wird.
+     * Ãœberschreibt die Methode von {@link JTable}, sodass der Wert von {@link UserFieldTableController#isCellSelected(int, int)} an der Stelle (
+     * <code>row</code>,<code>column</code>) zurÃ¼ckgegeben wird.
      */
     @Override
     public boolean isCellSelected(final int row, final int column) {
@@ -840,7 +840,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Gibt zurück, ob das {@link #dataModel} eine Instanz der Klasse {@link AbstractTableModel} ist.
+     * Gibt zurÃ¼ck, ob das {@link #dataModel} eine Instanz der Klasse {@link AbstractTableModel} ist.
      * 
      * @return
      */
@@ -865,19 +865,19 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /* ************************ Start: add/remove Methoden ************************************** */
 
     /**
-     * Fügt den <code>ListSelectionListener l</code> an alle Spalten an.
+     * FÃ¼gt den <code>ListSelectionListener l</code> an alle Spalten an.
      * 
      * @param l
      */
     public void addSelectionListener(final ListSelectionListener l) {
-        // Horizontale Veränderungen
+        // Horizontale VerÃ¤nderungen
         getSelectionModel().addListSelectionListener(l);
-        // Vertikale Veränderungen
+        // Vertikale VerÃ¤nderungen
         getColumnModel().getSelectionModel().addListSelectionListener(l);
     }
 
     /**
-     * Fügt den {@link TableModelListener} <code>l</code> an {@link #dataModel} an.
+     * FÃ¼gt den {@link TableModelListener} <code>l</code> an {@link #dataModel} an.
      * 
      * @see TableModel#addTableModelListener(TableModelListener)
      * @param l
@@ -887,7 +887,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löscht den <code>ListSelectionListener l</code>
+     * LÃ¶scht den <code>ListSelectionListener l</code>
      * 
      * @param l
      */
@@ -897,7 +897,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löscht den {@link TableModelListener} <code>l</code>
+     * LÃ¶scht den {@link TableModelListener} <code>l</code>
      * 
      * @see TableModel#removeTableModelListener(TableModelListener)
      * @param l
@@ -918,7 +918,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     }
 
     /**
-     * Löscht den gesamten Table inklusive Row- und ColumnHeader aus dem {@link #layoutContainer}
+     * LÃ¶scht den gesamten Table inklusive Row- und ColumnHeader aus dem {@link #layoutContainer}
      */
     public void removeFromLayoutContainer() {
         clearSelection();
@@ -932,7 +932,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /* ************************ Start: Kontroll-Methoden *************************************** */
 
     /**
-     * Typen von internen Werten. Dazu gehören: <li>Editor-Werte <li>Renderer-Werte <li>Selektionszustand
+     * Typen von internen Werten. Dazu gehÃ¶ren: <li>Editor-Werte <li>Renderer-Werte <li>Selektionszustand
      * 
      * @see UserFieldTable#showInternalValueTable(UserFieldTable, Frame, INTERNAL_VALUE_TYPE)
      */
@@ -973,7 +973,7 @@ public class UserFieldTable extends JTable implements ContentExchanger {
     /**
      * Zeigt einen Table mit dem Selektionszustand der Zellen von <code>originalTable</code> an.
      * 
-     * @param originTable Table, dessen Selektionszustand für die Zellen angezeigt werden sollen
+     * @param originTable Table, dessen Selektionszustand fÃ¼r die Zellen angezeigt werden sollen
      * @param owner Frame, in dem der Table angezeigt werden soll
      */
     public static void showSelectionStateTable(final UserFieldTable originTable, final Frame owner) {

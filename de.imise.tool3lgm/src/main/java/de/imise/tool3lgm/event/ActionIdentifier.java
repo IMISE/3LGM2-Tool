@@ -10,9 +10,9 @@ import javax.swing.KeyStroke;
 import de.imise.tool3lgm.Tool3lgmConstants;
 
 /**
- * Identifiers für {@link StaticAction}s
+ * Identifiers fÃ¼r {@link StaticAction}s
  * <p>
- * Über diese Identifier, können {@link StaticAction}s ihre Attribute bekommen.
+ * Ãœber diese Identifier, kÃ¶nnen {@link StaticAction}s ihre Attribute bekommen.
  */
 public enum ActionIdentifier {
 
@@ -274,9 +274,9 @@ public enum ActionIdentifier {
     private static final String WEB = "web";
 
     /**
-     * Liefert den zur {@link Locale} <code>l</code> gehörigen Identifier.
+     * Liefert den zur {@link Locale} <code>l</code> gehÃ¶rigen Identifier.
      * <p>
-     * Per Konvention wird hier der Identifier zurückgegeben, der dem Namen von <code>l</code> im Englischen in Kleinbuchstaben entspricht. Bsp.:
+     * Per Konvention wird hier der Identifier zurÃ¼ckgegeben, der dem Namen von <code>l</code> im Englischen in Kleinbuchstaben entspricht. Bsp.:
      * {@link Locale#GERMAN} --> {@link #german}
      * 
      * @param l
@@ -287,7 +287,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen der
+     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim AuslÃ¶sen der
      * durch <code>identifier</code> identifizierten {@link StaticAction} entsteht.
      * 
      * @param actionCommand
@@ -298,7 +298,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt den {@link KeyStroke} zurück, der die durch diesen Identifier identifizierte {@link StaticAction} auslöst.
+     * Gibt den {@link KeyStroke} zurÃ¼ck, der die durch diesen Identifier identifizierte {@link StaticAction} auslÃ¶st.
      * 
      * @return
      */
@@ -307,7 +307,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt das große Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
+     * Gibt das groÃŸe Icon fÃ¼r die durch diesen Identifier identifizierte {@link StaticAction} wieder
      * 
      * @return
      */
@@ -317,7 +317,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt ausführliche Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung bei Hilfe)
+     * Gibt ausfÃ¼hrliche Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurÃ¼ck. (Zur Verwendung bei Hilfe)
      * 
      * @param description
      */
@@ -329,7 +329,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt kurze Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung als Tooltip)
+     * Gibt kurze Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurÃ¼ck. (Zur Verwendung als Tooltip)
      * 
      * @param description
      */
@@ -340,7 +340,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt das kleine Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
+     * Gibt das kleine Icon fÃ¼r die durch diesen Identifier identifizierte {@link StaticAction} wieder
      * 
      * @return
      */
@@ -350,7 +350,7 @@ public enum ActionIdentifier {
     }
 
     /**
-     * Gibt den anzuzeigenden Text für die durch diesen Identifier identifizierte {@link StaticAction} wieder.
+     * Gibt den anzuzeigenden Text fÃ¼r die durch diesen Identifier identifizierte {@link StaticAction} wieder.
      * 
      * @param
      */

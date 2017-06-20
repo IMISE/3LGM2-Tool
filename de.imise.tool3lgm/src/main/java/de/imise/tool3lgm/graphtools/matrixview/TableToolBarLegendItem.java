@@ -6,20 +6,20 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 /**
- * Repräsentiert einen Legendeneintrag in der <code>TableToolBar</code>.<br>
- * Diese Einträge werden angezeigt, wenn in der ToolBar eine gültige Auswahl von 2 Klassen vorgenommen wurde, für die die Verbindungsmatrix angezeigt werden soll.
+ * ReprÃ¤sentiert einen Legendeneintrag in der <code>TableToolBar</code>.<br>
+ * Diese EintrÃ¤ge werden angezeigt, wenn in der ToolBar eine gÃ¼ltige Auswahl von 2 Klassen vorgenommen wurde, fÃ¼r die die Verbindungsmatrix angezeigt werden soll.
  * 
  * @author Thomas Rudert
  */
 public class TableToolBarLegendItem extends JPanel {
 
     /**
-     * Farbe der Felder, die dieses Legenden-Item erklärt
+     * Farbe der Felder, die dieses Legenden-Item erklÃ¤rt
      */
     private final Color color;
 
     /**
-     * Beschreibung der Felder, die dieses Legenden-Item erklärt
+     * Beschreibung der Felder, die dieses Legenden-Item erklÃ¤rt
      */
     private final String description;
 

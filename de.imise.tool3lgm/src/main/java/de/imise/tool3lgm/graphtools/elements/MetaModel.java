@@ -15,9 +15,9 @@ public abstract class MetaModel {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als SchlÃ¼ssel den alten Namen und
      * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
+     * eingelesen werden kÃ¶nnen.
      */
     protected abstract Map<String, String> getOldToNewClassName();
 
@@ -77,7 +77,7 @@ public abstract class MetaModel {
     // spezielle Knoteneigenschaften //
     ///////////////////////////////////
 
-    /** Alle Klassen, die man über den Datenimport einlesen kann */
+    /** Alle Klassen, die man Ã¼ber den Datenimport einlesen kann */
     public abstract Class[] getImportableNodes();
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
@@ -88,18 +88,18 @@ public abstract class MetaModel {
     ///////////////////////////////////
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse fÃ¼r Elemente der Elementklasse eine
      * Bedeutung haben.
      */
     public abstract Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges();
 
     /**
-     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
+     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach Ã¼ber dieselbe Kantenart miteinander verbunden sein kÃ¶nnen.
      */
     public abstract Set<Class<? extends Kante>> getMultipleEdgeClasses();
 
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
+     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein mÃ¼ssten, aber aus Unwissenheit beim Entwurf des
      * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
      * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
@@ -109,7 +109,7 @@ public abstract class MetaModel {
     public abstract Set<Class<? extends Kante>> getDoubleMeaningEdgeClasses();
 
     /**
-     * Menge aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
+     * Menge aller Kantenklassen, die nur in VorwÃ¤rtsrichtung verbunden werden und somit immer nur in dieser Richtung in
      * der Grafik dargestelt werden.
      */
     public abstract Set<Class<? extends Kante>> getForwardConnectedEdgeClasses();
@@ -123,8 +123,8 @@ public abstract class MetaModel {
 
     //    /**
     //     * Um Festzustellen, ob ein gegebener Klassenname bereits voll qulaifiziert ist, wird geschaut, ob der Klassenname mit
-    //     * diesem Prefix beginnt. Ein Metamodell dessen Element-Klassen außerhalb von "de.imise.tool3lgm." liegen, müsste über
-    //     * diese Funktion den tatsächlichen Prefix ausgeben. Da das aber in absehbarer Zeit nicht passieren wird, ist diese
+    //     * diesem Prefix beginnt. Ein Metamodell dessen Element-Klassen auÃŸerhalb von "de.imise.tool3lgm." liegen, mÃ¼sste Ã¼ber
+    //     * diese Funktion den tatsÃ¤chlichen Prefix ausgeben. Da das aber in absehbarer Zeit nicht passieren wird, ist diese
     //     * Funktion hier ertsmal final.
     //     *
     //     * @return

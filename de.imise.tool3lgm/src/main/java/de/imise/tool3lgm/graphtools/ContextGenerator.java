@@ -168,7 +168,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     /**
      * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
-     * GrapDocument sind erstmal egal, da sie beim ersten aktivieren über
+     * GrapDocument sind erstmal egal, da sie beim ersten aktivieren Ã¼ber
      * changeContext(GraphDocument) eines InternalFrames auf korrekte Werte
      * gesetzt werden.
      */
@@ -192,7 +192,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Setzt das GraphDocument auf das übergebene und tauscht bei allen
+     * Setzt das GraphDocument auf das Ã¼bergebene und tauscht bei allen
      * MenuItems den ContextListener aus
      *
      * @param GraphDocument
@@ -242,7 +242,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         unlinkToSzenario = getItem("unlinkToSzenario", GDCommands.LINK_SELECTED_TO_SZENARIO, GraphDocument.GDCOMMAND_TEXT_SURROUNDER + "null" + GraphDocument.GDCOMMAND_TEXT_SURROUNDER);
         selectLinkedSzenario = getItem("selectLinkedSzenario", GDCommands.SELECT_LINKED_SZENARIO);
         delete_selected = getItem("remove_from_model", GDCommands.DELETE);
-        // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
+        // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehÃ¤ngt wird, hinter das dann die Hashes der zulÃ¶schenden Elemnte kommen
         delete_selected_from_szenario = getItem("remove_from_submodel", GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, "");
 
         join_selected = getItem("elemente_vereinigen", GDCommands.JOIN_SELECTED);
@@ -387,7 +387,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Liefert das Menü für die untergeordneten Elemente.
+     * Liefert das MenÃ¼ fÃ¼r die untergeordneten Elemente.
      *
      * @return
      */
@@ -422,8 +422,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Liefert das Menü, mit dem selektierte Elemente in andere Teilmodelle
-     * übernommen werden können.
+     * Liefert das MenÃ¼, mit dem selektierte Elemente in andere Teilmodelle
+     * Ã¼bernommen werden kÃ¶nnen.
      *
      * @return
      */
@@ -461,7 +461,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Menü für das verknüpfen mit einem Teilmodell
+     * MenÃ¼ fÃ¼r das verknÃ¼pfen mit einem Teilmodell
      *
      * @return
      */
@@ -475,7 +475,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
 
-            /* ist Knoten schon mit diesem Szenario verknüpft */
+            /* ist Knoten schon mit diesem Szenario verknÃ¼pft */
             if (mc != null && mc.getElement() instanceof Knoten && szen.getHashString().equals(((Knoten) mc.getElement()).getAssociatedDoc())) {
                 item.setEnabled(false);
             }
@@ -488,7 +488,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Kontextmenü eines Einzelknotens
+     * KontextmenÃ¼ eines Einzelknotens
      *
      * @param contextSource
      * @param ec
@@ -563,7 +563,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             menu.addSeparator();
 
-            // Analysemenü anfügen
+            // AnalysemenÃ¼ anfÃ¼gen
             menu.add(getAnalyseMenu());
 
             JMenuItem joinMenu = getJoinMenu();
@@ -579,7 +579,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             menu.add(ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS);
         }
 
-        //bewirkt, dass "Aus Teilmodell löschen" nur angezeigt wird,
+        //bewirkt, dass "Aus Teilmodell lÃ¶schen" nur angezeigt wird,
         //wenn das selektierte Element in mehr als einem Teilmodell vorkommt
         //und nicht der <Alle-Elemte>-Browser aktiviert ist.
         if (!ec.getElement().isUnique() && !ec.getElement().isSlave()) {
@@ -864,7 +864,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Kontextmenü im Searchdialog
+     * KontextmenÃ¼ im Searchdialog
      */
     public JPopupMenu getSearchDialogContextMenu() {
         JPopupMenu menu = new JPopupMenu();
@@ -1289,10 +1289,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         }
 
         if (elementGetroffen) {
-            //wenn man auf einer selektierten Kante das Kontexmenü auf einem Knickpunkt öffnet,
-            //dann soll das Kontextmenü aufgehen, als wäre die Kante angeklickt worden und nicht
-            //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
-            //anzeigen würde
+            //wenn man auf einer selektierten Kante das KontexmenÃ¼ auf einem Knickpunkt Ã¶ffnet,
+            //dann soll das KontextmenÃ¼ aufgehen, als wÃ¤re die Kante angeklickt worden und nicht
+            //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses KontextmenÃ¼
+            //anzeigen wÃ¼rde
             if (mc instanceof BendpointContainer) {
                 EdgeContainer kc = ((Knickpunkt) mc.getElement()).getOwner();
                 if (doc.isSelected(kc)) {
@@ -1672,8 +1672,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private void right_knot_multi(final Component gdl, final int xin, final int yin) {
         doc.addToSelection(mc, 0);
-        //Wenn mind. 2 Knoten selektiert sind und das Kontextmenü auf einem Knoten aufgerufen wurde,
-        //kann man auch das Knotenkontextmenü anbieten
+        //Wenn mind. 2 Knoten selektiert sind und das KontextmenÃ¼ auf einem Knoten aufgerufen wurde,
+        //kann man auch das KnotenkontextmenÃ¼ anbieten
         //		menu = getMultiContextMenu();
         menu = getMultiKnotContextMenu(gdl);
         menu.show(gdl, xin, yin);
@@ -1941,7 +1941,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.add(delete_selected);
         delete_selected.setEnabled(true);
 
-        //		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgeführt");
+        //		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgefÃ¼hrt");
         menu.addPopupMenuListener(this);
         return menu;
     }
@@ -1959,21 +1959,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * Gibt ein Menü zurück, welches die Analysen für das aktuell ausgewählten
-     * Element enthält.
+     * Gibt ein MenÃ¼ zurÃ¼ck, welches die Analysen fÃ¼r das aktuell ausgewÃ¤hlten
+     * Element enthÃ¤lt.
      *
-     * @return Analysemenü
+     * @return AnalysemenÃ¼
      */
     private static JMenu getAnalyseMenu() {
         JMenu menu = new JMenu(Tool3lgmConstants.getResString("analysis"));
         ElementContainer ec = doc.getLastSelected();
         if (ec != null && ec.getElement() instanceof Knoten) {
-            // Alle Analysen für die ausgewählte Klasse holen
+            // Alle Analysen fÃ¼r die ausgewÃ¤hlte Klasse holen
             String klasse = ec.getElement().getClass().getName();
             klasse = klasse.substring(klasse.lastIndexOf('.') + 1);
             List<AbstractAnalyse> analysen = AnalyseRepository.getAnalysenFuerKnoten(klasse);
 
-            // Analysen ins Menü eintragen
+            // Analysen ins MenÃ¼ eintragen
             if (analysen != null && analysen.size() > 0) {
                 for (final AbstractAnalyse ana : analysen) {
                     JMenuItem item = new JMenuItem(ana.getName());
@@ -2007,7 +2007,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     @Override
     public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
-        // das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulöschenden Elemnte kommen
+        // das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulÃ¶schenden Elemnte kommen
         delete_selected_from_szenario.setActionCommand(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO + " ");
         delete_selected.setActionCommand(GDCommands.DELETE + " ");
         ((JPopupMenu) e.getSource()).removePopupMenuListener(this);

@@ -12,12 +12,12 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 
 /**
- * Von {@link AbstractAction} abgeleitete Klasse für das Umschalten der Sprache im Programm.
+ * Von {@link AbstractAction} abgeleitete Klasse fÃ¼r das Umschalten der Sprache im Programm.
  * <p>
- * Diese Klasse generiert automatisch über {@link #getAllActions()} die durch die Anzahl installierter Sprachen beschränkte Liste der möglichen
- * Instanzen dieser Klasse. Jede dieser Instanzen sorgt für das Umschalten auf die jeweils zugeordnete Sprache.<br>
- * Durch das Überschreiben von {@link #setSelected(boolean)} wird garantiert, dass nur genau eine Sprache aktiviert ist. Diese Sprache ist dann unter
- * {@link #selectedAction} abgespeichert und besitzt als einziges den Wert <code>true</code> für die {@link #SELECTED_KEY}-Property.
+ * Diese Klasse generiert automatisch Ã¼ber {@link #getAllActions()} die durch die Anzahl installierter Sprachen beschrÃ¤nkte Liste der mÃ¶glichen
+ * Instanzen dieser Klasse. Jede dieser Instanzen sorgt fÃ¼r das Umschalten auf die jeweils zugeordnete Sprache.<br>
+ * Durch das Ãœberschreiben von {@link #setSelected(boolean)} wird garantiert, dass nur genau eine Sprache aktiviert ist. Diese Sprache ist dann unter
+ * {@link #selectedAction} abgespeichert und besitzt als einziges den Wert <code>true</code> fÃ¼r die {@link #SELECTED_KEY}-Property.
  * <p>
  * Das Umschalten erfolgt beim Aufruf von {@link #actionPerformed(ActionEvent)}.
  * 
@@ -27,10 +27,10 @@ import de.imise.util.Alphabetical;
  */
 class ChangeLocaleAction extends StaticAction {
 
-    /** Schlüssel für die {@link Locale}, die durch diese Action aktiviert wird */
+    /** SchlÃ¼ssel fÃ¼r die {@link Locale}, die durch diese Action aktiviert wird */
     public static final String LOCALE_KEY = "LocaleKey";
 
-    /** Aktuell ausgewählte Action */
+    /** Aktuell ausgewÃ¤hlte Action */
     private static ChangeLocaleAction selectedAction;
 
     /** Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten Sprache wieder */
@@ -38,7 +38,7 @@ class ChangeLocaleAction extends StaticAction {
         Locale[] locales = Tool3lgmConstants.getInstalledLanguages();
         Alphabetical.sort(locales);
         ChangeLocaleAction[] allActions = new ChangeLocaleAction[locales.length];
-        for (int i = 0; i < locales.length; i++) { // Wähle die Standard-Sprache aus den
+        for (int i = 0; i < locales.length; i++) { // WÃ¤hle die Standard-Sprache aus den
             // UserProperties
             allActions[i] = new ChangeLocaleAction(locales[i]);
             if (locales[i].getLanguage().equals(UserProperties.getLocale().getLanguage())) {
@@ -49,7 +49,7 @@ class ChangeLocaleAction extends StaticAction {
         return allActions;
     }
 
-    /** Locale, die bei Ausführen dieser Aktion in den UserProperties eingestellt wird. */
+    /** Locale, die bei AusfÃ¼hren dieser Aktion in den UserProperties eingestellt wird. */
     private final Locale locale;
 
     /**
@@ -71,8 +71,8 @@ class ChangeLocaleAction extends StaticAction {
             return;
         }
 
-        // wenn die Locale wieder zurückgestellt wurde auf die Locale mit der der Baukasten
-        // grade läuft)
+        // wenn die Locale wieder zurÃ¼ckgestellt wurde auf die Locale mit der der Baukasten
+        // grade lÃ¤uft)
         if (locale.getLanguage().equals(Tool3lgmConstants.START_LOCALE.getLanguage())) {
             UserProperties.setLocale(locale);
             setSelected(true);

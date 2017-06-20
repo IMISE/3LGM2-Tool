@@ -24,11 +24,11 @@ import de.imise.util.io.FileHandler;
 /**
  * @author Thomas Rudert, AXS
  *         Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler
- *         von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nötigen
- *         Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener
- *         Felder im Dokument) muß man keinen ganz neuen ContentHandler schreiben sondern muß
- *         nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit
- *         einen völlig neuen ContentHandler zu schreiben.
+ *         von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nÃ¶tigen
+ *         Werte hat. Ich denke, bei kleinen Ã„nderungen (hinzukommen oder wegfallen einzelnener
+ *         Felder im Dokument) muÃŸ man keinen ganz neuen ContentHandler schreiben sondern muÃŸ
+ *         nur einen abgeleiteten von diesem bilden. Ich wÃ¼rde aber empfehlen von Zeit zu Zeit
+ *         einen vÃ¶llig neuen ContentHandler zu schreiben.
  *         erkennt Modell mit 3lgm2.dtd Version 1.0
  */
 public class UserPropertiesContentHandler implements ContentHandler {
@@ -171,7 +171,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
     }
 
     /**
-     * Vergleicht die 2 Strings auf Gleichheit ohne Beachtung der Groß- und Kleinschreibung.
+     * Vergleicht die 2 Strings auf Gleichheit ohne Beachtung der GroÃŸ- und Kleinschreibung.
      * 
      * @param s1
      * @param s2
@@ -202,7 +202,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
     // Einlesen und Herausschreiben der UserProperties //
     /////////////////////////////////////////////////////
     /**
-     * Ließt die benutzerspezifischen Informationen aus dem Benutzer-Home-Verzeichnis
+     * LieÃŸt die benutzerspezifischen Informationen aus dem Benutzer-Home-Verzeichnis
      * oder die Defaultdatei aus den Ressourcen.
      */
     protected static void readUserInfo() {
@@ -225,7 +225,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
         } catch (Exception exp) {
             //wenn die Datei nicht gelesen werden konnte und es sich nicht um die Standardeinstellungsdatei
             //handelt (dann hat irgendwer was in die Porperties-Datei des Benutzers geschrieben, was da nicht
-            //reingehört -> Standarddatei laden)
+            //reingehÃ¶rt -> Standarddatei laden)
             if (!isDefault) {
                 userInfoFile.delete();
                 readUserInfo();

@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 public abstract class AbstractCardinalityError extends AbstractError {
 
     /**
-     * Wert der Kardinalität, die über oder unterschritten wurde
+     * Wert der KardinalitÃ¤t, die Ã¼ber oder unterschritten wurde
      */
     protected int cardValue;
 

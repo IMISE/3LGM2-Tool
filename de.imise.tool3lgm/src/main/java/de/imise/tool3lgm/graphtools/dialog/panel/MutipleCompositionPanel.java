@@ -31,7 +31,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Das Panel für die Bausteinschnittstellen
+ * Das Panel fÃ¼r die Bausteinschnittstellen
  */
 public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
 
@@ -87,11 +87,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        // MouseListener erstellen und an tree anhängen
+        // MouseListener erstellen und an tree anhÃ¤ngen
         LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
         tree.addMouseListener(new LGMMouseListener(null, null, null, treeMouseAction, null));
 
-        // TreeSelectionListener erstellen und an tree anhängen
+        // TreeSelectionListener erstellen und an tree anhÃ¤ngen
         LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
         tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
 
@@ -187,9 +187,9 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * Methode liefert eine <code>LGMAction</code> zurÃ¼ck, die das Verschieben von Elementen aus dem
      * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * sollte an die "removeButtons" der Panels angefÃ¼gt werden.
      */
     public final LGMAction getDisconnectAction() {
         LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {

@@ -7,7 +7,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * Abstracte Implementeirung von <code>GraphDocumentListener</code>. In keiner
- * der Methoden wird etwas ausgeführt.
+ * der Methoden wird etwas ausgefÃ¼hrt.
  * 
  * @author AXS
  */

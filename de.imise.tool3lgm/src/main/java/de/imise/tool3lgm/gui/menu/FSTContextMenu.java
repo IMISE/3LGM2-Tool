@@ -20,9 +20,9 @@ import de.imise.util.swing.menu.MenuCreator;
  * AXS:04.02.2013: Diese Klasse wurde mal von Frank Stepahn angefangen, konnte aber nicht beendet werden.
  * Sie sollte den ContextGenerator ersetzen.
  * Dynamisches Kontextmenu.<br>
- * Noch nicht voll funktionsfähig
+ * Noch nicht voll funktionsfÃ¤hig
  * <p>
- * Beinhaltet alle Einträge bzw. Untermenüs, die das Kontextmenu überhaupt anzeigen kann. Der Kontext wird aus {@link ElementSelectionContext}
+ * Beinhaltet alle EintrÃ¤ge bzw. UntermenÃ¼s, die das Kontextmenu Ã¼berhaupt anzeigen kann. Der Kontext wird aus {@link ElementSelectionContext}
  * ermittelt und das Menu entsprechend gebaut.
  * 
  * @author fstephan
@@ -43,8 +43,8 @@ public class FSTContextMenu extends JPopupMenu {
     // Ebenenmenu muss in dieser Klasse bleiben, weil es einmal normales menu
     // und einmal
     // popmenu ist
-    /** Einträge für das Layermenu */
-    private static Component[] LAYER_MENU_ENTRIES = MenuCreator.createMenuEntries(false, new MenuCollection.InsertMenu(), //man muss hier das InsertMenu neu insatziieren, da es sonst aus dem Menü oben verschwindet!
+    /** EintrÃ¤ge fÃ¼r das Layermenu */
+    private static Component[] LAYER_MENU_ENTRIES = MenuCreator.createMenuEntries(false, new MenuCollection.InsertMenu(), //man muss hier das InsertMenu neu insatziieren, da es sonst aus dem MenÃ¼ oben verschwindet!
             // ActionLibrary.ContextActions.CREATE_TEXTFIELD,
             new JSeparator(),
             // ActionLibrary.ContextActions.CONFIGURATIONS_VISIBILITY,
@@ -54,10 +54,10 @@ public class FSTContextMenu extends JPopupMenu {
                                                                                                                                                           * INTERNAL_MENU
                                                                                                                                                           */);
 
-    /** Das Kontextmenu für Elemente */
+    /** Das Kontextmenu fÃ¼r Elemente */
     private static JPopupMenu elementMenu = new ElementMenu();
 
-    /** Das Kontextmenu für Ebenen */
+    /** Das Kontextmenu fÃ¼r Ebenen */
     private static JPopupMenu layerMenu = MenuCreator.createPopupMenu(Tool3lgmConstants.getResString("localeOptionsMenu"), LAYER_MENU_ENTRIES, false);
 
     //	/*
@@ -92,7 +92,7 @@ public class FSTContextMenu extends JPopupMenu {
         return MenuCreator.createMenuEntry(entry);
     }
 
-    /** Das Kontextmenu für Elemente */
+    /** Das Kontextmenu fÃ¼r Elemente */
     private static class ElementMenu extends DynamicPopupMenu {
         //		/*
         //		 * private Component properties =
@@ -136,12 +136,12 @@ public class FSTContextMenu extends JPopupMenu {
         protected void updateItems() {
             removeAll();
 
-            // Verbinden- und Trennen-Items hinzufügen
+            // Verbinden- und Trennen-Items hinzufÃ¼gen
             Object[] itemSources;
             boolean hasConnectionItems = false;
             Action[] actions = ActionLibrary.DynamicActions.getLinkActions();
             int n = actions.length;
-            if (n > 0) { // Verbinden-Items dem Menu hinzufügen
+            if (n > 0) { // Verbinden-Items dem Menu hinzufÃ¼gen
                 itemSources = new Object[n + 1];
                 System.arraycopy(actions, 0, itemSources, 1, n);
                 itemSources[0] = Tool3lgmConstants.getResString("verbinden");
@@ -150,7 +150,7 @@ public class FSTContextMenu extends JPopupMenu {
             }
             actions = ActionLibrary.DynamicActions.getUnlinkActions();
             n = actions.length;
-            if (n > 0) { // Trennen-Items dem Menu hinzufügen
+            if (n > 0) { // Trennen-Items dem Menu hinzufÃ¼gen
                 itemSources = new Object[n + 1];
                 System.arraycopy(actions, 0, itemSources, 1, n);
                 itemSources[0] = Tool3lgmConstants.getResString("trennen");
@@ -166,7 +166,7 @@ public class FSTContextMenu extends JPopupMenu {
 
         }
 
-        /** Das "Untergeordnete Elemente"- Menü */
+        /** Das "Untergeordnete Elemente"- MenÃ¼ */
         private static class SubordinatedElementsMenu extends DynamicMenu {
 
             public static final String title = Tool3lgmConstants.getResString("windowMenu");
@@ -182,7 +182,7 @@ public class FSTContextMenu extends JPopupMenu {
             }
         }
 
-        /** Das "Übernehmen in Teilmodell"- Menü */
+        /** Das "Ãœbernehmen in Teilmodell"- MenÃ¼ */
         private static class TakeOverInSubmodelMenu extends DynamicMenu {
 
             public static final String title = Tool3lgmConstants.getResString("windowMenu");
@@ -199,7 +199,7 @@ public class FSTContextMenu extends JPopupMenu {
             }
         }
 
-        /** Das "Verknüpfen mit Teilmodell"- Menü */
+        /** Das "VerknÃ¼pfen mit Teilmodell"- MenÃ¼ */
         private static class ConnectToSubmodelMenu extends DynamicMenu {
 
             public static final String title = Tool3lgmConstants.getResString("windowMenu");
@@ -216,7 +216,7 @@ public class FSTContextMenu extends JPopupMenu {
             }
         }
 
-        /** Das "XMLAnalyse"- Menü */
+        /** Das "XMLAnalyse"- MenÃ¼ */
         private static class AnalyseMenu extends DynamicMenu {
 
             public static final String title = Tool3lgmConstants.getResString("windowMenu");

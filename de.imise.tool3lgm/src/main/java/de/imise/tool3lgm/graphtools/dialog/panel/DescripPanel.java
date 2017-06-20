@@ -89,7 +89,7 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         descriptionTextPane.setText(modelElement.getDescription());
         nameTextPane.setCaretPosition(0);
         descriptionTextPane.setCaretPosition(0);
-        nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhängen, sonst wird gleich commit aufgerufen
+        nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhÃ¤ngen, sonst wird gleich commit aufgerufen
         for (int m = 0; m < panels.size(); m++) {
             panels.get(m).update();
         }
@@ -136,16 +136,16 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         nameTextPane.removeDocumentListener(this);
         ModelElement me = getModelElement();
         String newName = nameTextPane.getText();
-        // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion
-        // ändern
+        // nur wenn der Name explizit geÃ¤ndert wurde, dann auch den Namen in einer Transaktion
+        // Ã¤ndern
         String name = me.getName();
         if (newName != null && !newName.equals(name)) {
             doc.setName(me, newName, dialog.getTransactionID());
         } else {
             // wenn der Name gleich geblieben ist, kann aber trotzdem der HTML-Name in der Grafik
-            // sich geändert haben, wenn in dem Dialog ein Element verknüpft wurde, das auch im
+            // sich geÃ¤ndert haben, wenn in dem Dialog ein Element verknÃ¼pft wurde, das auch im
             // Namen in der Grafik angezeigt wird -> einfach ohne Transaktion in jedem Fall mal
-            // setName() mit dem alten Namen für das Element aufrufen
+            // setName() mit dem alten Namen fÃ¼r das Element aufrufen
             me.setName(name);
         }
         String newDescrip = descriptionTextPane.getText();

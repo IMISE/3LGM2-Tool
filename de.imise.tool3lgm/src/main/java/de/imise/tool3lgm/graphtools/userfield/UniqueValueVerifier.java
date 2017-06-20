@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
  * Wird zur Zeit nicht genutzt. Wenn dann bei der Eingabe von IDs als benutzerdefinierte Eigenschaften.
- * Die Klasse ist nur rudiment‰r implementiert.
+ * Die Klasse ist nur rudiment√§r implementiert.
  * 
  * @author Ich
  * @create 19.08.2015

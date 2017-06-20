@@ -31,7 +31,7 @@ import de.imise.util.swing.component.DirectoryTreePane;
 
 /**
  * @author Thomas Rudert TODO:AXS: Verallgemeinern und ab ins utils-package (also von allen
- *         tool3lgm-Zeug auﬂerhalb des util-Packages befreien) To change the template for this
+ *         tool3lgm-Zeug au√üerhalb des util-Packages befreien) To change the template for this
  *         generated type comment go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
  *         Comments
  */

@@ -4,16 +4,16 @@
 package de.imise.tool3lgm.graphtools.elements;
 
 /**
- * Eine Komposition im Sinne der Objektortientierung. Das 2. Element bzw. Endelement gilt immer als Untergeordnetes Element (Slave) des 1. bzw. Startelementes (Master). Diese Tatsache kann aber weitestgehend unberücksichtigt bleiben, wenn man die
- * speziellen Eigenschaften der Komposition ausschließlich über die Klasse <code>Composition.class</code> und nicht über die Klasse <code>Kante.class</code> abfragt (also wer Master und wer Slave sein kann und wieviele Elemente miteinander verbunden sein
- * können.)
+ * Eine Komposition im Sinne der Objektortientierung. Das 2. Element bzw. Endelement gilt immer als Untergeordnetes Element (Slave) des 1. bzw. Startelementes (Master). Diese Tatsache kann aber weitestgehend unberÃ¼cksichtigt bleiben, wenn man die
+ * speziellen Eigenschaften der Komposition ausschlieÃŸlich Ã¼ber die Klasse <code>Composition.class</code> und nicht Ã¼ber die Klasse <code>Kante.class</code> abfragt (also wer Master und wer Slave sein kann und wieviele Elemente miteinander verbunden sein
+ * kÃ¶nnen.)
  * 
  * @author AXS
  */
 public abstract class Composition extends Doppelkante {
 
     /**
-     * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
+     * Die Slave-KardinalitÃ¤t zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
      */
     public static final int[] scard = {
             ModelConstants.ONE, ModelConstants.ONE
@@ -43,7 +43,7 @@ public abstract class Composition extends Doppelkante {
     }
 
     /**
-     * Liefert das ModelElement, von dem das andere abhängt.
+     * Liefert das ModelElement, von dem das andere abhÃ¤ngt.
      * 
      * @return Masterelement der Komposition
      */
@@ -52,7 +52,7 @@ public abstract class Composition extends Doppelkante {
     }
 
     /**
-     * Liefert das ModelElement, das von dem anderen abhängt.
+     * Liefert das ModelElement, das von dem anderen abhÃ¤ngt.
      * 
      * @return Slaveelement der Komposition
      */
@@ -61,7 +61,7 @@ public abstract class Composition extends Doppelkante {
     }
 
     /**
-     * Liefert alle Elementklassen, die Masterklasse der übergebenen Komposition sein können.
+     * Liefert alle Elementklassen, die Masterklasse der Ã¼bergebenen Komposition sein kÃ¶nnen.
      * 
      * @param compositionClass
      * @return
@@ -71,7 +71,7 @@ public abstract class Composition extends Doppelkante {
     }
 
     /**
-     * Liefert alle Elementklassen, die Slaveklasse der übergebenen Komposition sein können.
+     * Liefert alle Elementklassen, die Slaveklasse der Ã¼bergebenen Komposition sein kÃ¶nnen.
      * 
      * @param compositionClass
      * @return
@@ -81,7 +81,7 @@ public abstract class Composition extends Doppelkante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Elementklasse eine Slave-Klasse der Ã¼bergebenen Kompositionsklasse ist.
      * 
      * @param compositionClass
      * @param elementClass
@@ -92,7 +92,7 @@ public abstract class Composition extends Doppelkante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Elementklasse eine Master-Klasse der Ã¼bergebenen Kompositionsklasse ist.
      * 
      * @param compositionClass
      * @param elementClass

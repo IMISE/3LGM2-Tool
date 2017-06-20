@@ -16,8 +16,8 @@ public class PartValueSumFunction {
 
     /**
      * Errechnet das Ergebnis der Verrechnungsfunktion TEILWERTSUMME. Die Funktion hat 2, 3 oder 4 Argumente. Das erste Argument ist in jedem Fall der
-     * Name der Assoziation über den verrechnet wird, das 2. ist immer das <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
-     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Kante über die verrechent wird eine
+     * Name der Assoziation Ã¼ber den verrechnet wird, das 2. ist immer das <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
+     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Kante Ã¼ber die verrechent wird eine
      * <code>PartOfBeziehung</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
      * immer die Richtung.
      * 
@@ -39,13 +39,13 @@ public class PartValueSumFunction {
             return UserField.NO_ELEMENTS_CONNECTED;
         }
 
-        //ist eine Richtung gesetzt, muss diese jetzt umgedreht werden, da von allen vorwärts verbundenen Elementen
-        //jetzt alle rückwärts verbundenen Elemente gesucht werden müssen
+        //ist eine Richtung gesetzt, muss diese jetzt umgedreht werden, da von allen vorwÃ¤rts verbundenen Elementen
+        //jetzt alle rÃ¼ckwÃ¤rts verbundenen Elemente gesucht werden mÃ¼ssen
         String backDirection = getOtherDirection(args.direction);
 
         //dies wird die Summe aller Anteilswerte
         BigDecimal erg = BigDecimal.ZERO;
-        //dieser String bleibt in der folgenden Schleife solange null, bis irgendein Fehlerwert einer Einzelrechnung zurück kommt
+        //dieser String bleibt in der folgenden Schleife solange null, bis irgendein Fehlerwert einer Einzelrechnung zurÃ¼ck kommt
         String fullErgString = null;
 
         PartValueSumSinglePartResults partResults = definitions.getPartValueSumSinglePartResults();
@@ -62,7 +62,7 @@ public class PartValueSumFunction {
                 if (UserField.isError(ergString)) {
                     fullErgString = ergString;
                 } else {
-                    //wenn noch kein Zwischenergebnis einen Fehler zurück gegeben hat
+                    //wenn noch kein Zwischenergebnis einen Fehler zurÃ¼ck gegeben hat
                     if (fullErgString == null) {
                         //das muss auf jeden Fall als BigDecimal umwandelbar sein
                         erg = erg.add(new BigDecimal(ergString));
@@ -92,7 +92,7 @@ public class PartValueSumFunction {
                 return UserField.EMPTY_STRING;
             }
 
-            //wenn sich der Verteilungsgewichtwert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+            //wenn sich der Verteilungsgewichtwert nicht als Zahl parsen lÃ¤sst, ist das Ergebnis NUMBER_FORMAT_ERROR
             try {
                 normalizedVG = new BigDecimal(vgValueString);
             } catch (Exception e) {
@@ -112,13 +112,13 @@ public class PartValueSumFunction {
         // Elemente haben
         if (UserField.NO_ELEMENTS_CONNECTED.equals(userFieldValueToSplit)) {
             return UserField.NO_ELEMENTS_CONNECTED;
-            //irgend ein anderer Fehler-Wert -> den Fehler selbst zurück geben
+            //irgend ein anderer Fehler-Wert -> den Fehler selbst zurÃ¼ck geben
         } else if (UserField.isError(userFieldValueToSplit)) {
             return userFieldValueToSplit;
         }
 
         BigDecimal valueToSplit = null;
-        //wenn sich der aufzuteilende Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+        //wenn sich der aufzuteilende Wert nicht als Zahl parsen lÃ¤sst, ist das Ergebnis NUMBER_FORMAT_ERROR
         try {
             valueToSplit = new BigDecimal(userFieldValueToSplit);
         } catch (Exception e) {
@@ -131,10 +131,10 @@ public class PartValueSumFunction {
         ArrayList<Kante> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
 
         //wenn mit einer Gleichverteilung gerechnet werden soll, dann
-        // braucht man die Kanten nur zu zählen
+        // braucht man die Kanten nur zu zÃ¤hlen
         if (vgUserField == null) {
             normalizedVG = Calculator.divide(normalizedVG, new BigDecimal(connectionsFrom.size()));
-            //die eingegebenen Verteilungsgweichte müssen normiert werden
+            //die eingegebenen Verteilungsgweichte mÃ¼ssen normiert werden
         } else {
             //das Verteilungsgewicht, das an der Kante steht (erstmal
             // gleichverteilung (also alles 1 annhmen)
@@ -145,13 +145,13 @@ public class PartValueSumFunction {
                 Kante connectionFrom = connectionsFrom.get(j);
                 //den Wert des VG der aktuellen Kante holen
                 String vgValueString = vgUserField.getValue(connectionFrom);
-                //wenn für eine Kante kein Verteilungsgewicht eingegeben
+                //wenn fÃ¼r eine Kante kein Verteilungsgewicht eingegeben
                 // wurde, wird es als 0 angenommen
                 if (vgValueString.equals(UserField.EMPTY_STRING)) {
                     continue;
                 }
                 //den gefundenen Wert ausummieren
-                //wenn sich der gefundenen Wert nicht als Zahl parsen lässt, ist das Ergebnis NUMBER_FORMAT_ERROR
+                //wenn sich der gefundenen Wert nicht als Zahl parsen lÃ¤sst, ist das Ergebnis NUMBER_FORMAT_ERROR
                 try {
                     BigDecimal vgValue = new BigDecimal(vgValueString.toString());
                     vgSum = vgSum.add(vgValue);
@@ -187,7 +187,7 @@ public class PartValueSumFunction {
     }
 
     /**
-     * Gibt die Gegenrichtung zurück, wenn eine gültige Richtung als String übergeben wurde.
+     * Gibt die Gegenrichtung zurÃ¼ck, wenn eine gÃ¼ltige Richtung als String Ã¼bergeben wurde.
      * 
      * @param direction
      * @return
@@ -267,7 +267,7 @@ public class PartValueSumFunction {
             //wenn es mind. 3 Argumente gibt
             if (st.hasMoreTokens()) {
                 String nextToken = st.nextToken();
-                //wenn der nächste Token das Verteilungsgewicht angibt
+                //wenn der nÃ¤chste Token das Verteilungsgewicht angibt
                 if (nextToken.startsWith(UserField.USERFIELD_HASH_STRING_PREFIX)) {
                     vgUserField = definitions.getUserField(nextToken);
                     //wenn es nicht das VG ist, kann es nur noch die Richtung sein

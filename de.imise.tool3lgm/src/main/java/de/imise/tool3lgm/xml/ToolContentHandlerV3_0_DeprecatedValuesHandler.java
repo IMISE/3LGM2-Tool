@@ -6,8 +6,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 
 /**
- * Spezieller Hander für Ausnahmen. In alten Modellen können für PDVB technische Merkmale angegeben sein, die
- * ab jetzt nicht mehr als eigene spezielle Eigenschaften existieren, sondern über UserFields abgebildet werden.
+ * Spezieller Hander fÃ¼r Ausnahmen. In alten Modellen kÃ¶nnen fÃ¼r PDVB technische Merkmale angegeben sein, die
+ * ab jetzt nicht mehr als eigene spezielle Eigenschaften existieren, sondern Ã¼ber UserFields abgebildet werden.
  * Um die alten Werte korrket in die neuen UserFields einzutragen wird hier das Mapping vorgenommen. Die Hash-Werte
  * der UserFields kommen aus der DefaultUserField-Definition im Resourcenverzeichnis.
  *
@@ -51,7 +51,7 @@ public class ToolContentHandlerV3_0_DeprecatedValuesHandler {
 
     /**
      * Extrahiert aus einem String den ersten Teilstring, der als Zahl (mit beliebig vielen Kommas oder Punkten darin) erkannt wird
-     * und löscht alle Punkte oder Kommas außer das letzte.
+     * und lÃ¶scht alle Punkte oder Kommas auÃŸer das letzte.
      *
      * @param s
      * @return
@@ -84,7 +84,7 @@ public class ToolContentHandlerV3_0_DeprecatedValuesHandler {
     }
 
     /**
-     * Entfernt alle Punkte aus dem String außer den letzten.
+     * Entfernt alle Punkte aus dem String auÃŸer den letzten.
      *
      * @param s
      * @return

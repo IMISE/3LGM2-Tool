@@ -22,12 +22,12 @@ public class AdditionalLabelTextGenerator {
 
     /**
      * Liste der {@link ElementContainer}, an die dieses Objekt etwas ranschreibt / protected HashSet<ElementContainer> specialInfoTargets = null; /**
-     * Layout mit dessen Farbe und Schrift die zusätzlichen Infos an Elemente geschrieben werden
+     * Layout mit dessen Farbe und Schrift die zusÃ¤tzlichen Infos an Elemente geschrieben werden
      */
     protected GraphElementLayout layout;
 
     /**
-     * Gibt an wo, die SpecialInfos hinzugefügt werden
+     * Gibt an wo, die SpecialInfos hinzugefÃ¼gt werden
      */
     protected int specialInfoPosition = SwingConstants.NORTH;
 
@@ -73,7 +73,7 @@ public class AdditionalLabelTextGenerator {
     }
 
     //	/**
-    //	 * Diese Funktion muesste für alle Knoten speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
+    //	 * Diese Funktion muesste fÃ¼r alle Knoten speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
     //	 * in einem eigenen Container ueberschrieben werden.
     //	 */ 
     //	public boolean addSpecialInfoToMyTargets(boolean remove) {
@@ -83,7 +83,7 @@ public class AdditionalLabelTextGenerator {
     //	}
 
     //	/**
-    //	 * Diese Funktion muesste für alle Knoten speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
+    //	 * Diese Funktion muesste fÃ¼r alle Knoten speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
     //	 * in einem eigenen Container ueberschrieben werden.
     //	 */
     //	public boolean addSpecialInfoToMyTargets(boolean remove) {

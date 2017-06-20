@@ -15,39 +15,39 @@ import de.imise.tool3lgm.log.Log;
 public abstract class Kante extends ModelElement {
 
     /**
-     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Über diesen
+     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Ãœber diesen
      * Namen werden die Startklassen per Reflection ermittelt.
      */
     public static final String START_CLASS_FIELD_NAME = "stcl";
 
     /**
-     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Endklassen beschreibt. Über diesen
+     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Endklassen beschreibt. Ãœber diesen
      * Namen werden die Endklassen per Reflection ermittelt.
      */
     public static final String END_CLASS_FIELD_NAME = "etcl";
 
     /**
-     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse für Elemente
-     * der Endklasse vorhanden sein müssen.<br />
-     * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
+     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die KardinalitÃ¤ten beschreibt, mit denen Elemente der Startklasse fÃ¼r Elemente
+     * der Endklasse vorhanden sein mÃ¼ssen.<br />
+     * Ãœber diesen Namen werden die KardinalitÃ¤ten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte fÃ¼r Minimum und Maximum enthalten.
      */
     public static final String START_CARDINALITY_FIELD_NAME = "scard";
 
     /**
-     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für Elemente der
-     * Startklasse vorhanden sein müssen.<br />
-     * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
+     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die KardinalitÃ¤ten beschreibt, mit denen Elemente der Endklasse fÃ¼r Elemente der
+     * Startklasse vorhanden sein mÃ¼ssen.<br />
+     * Ãœber diesen Namen werden die KardinalitÃ¤ten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte fÃ¼r Minimum und Maximum enthalten.
      */
     public static final String END_CARDINALITY_FIELD_NAME = "ecard";
 
     /**
-     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
+     * Auch fÃ¼r Kanten muss angegeben, welche Elementarten sie verbinden kÃ¶nnen, damit die Vererbung bei der Definition der MetaPfade funktioniert,
      * die getStartElementClass() und getEndElementClass() aufruft.
      */
     public static final Class<? extends ModelElement> stcl = ModelElement.class;
 
     /**
-     * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
+     * Auch fÃ¼r Kanten muss angegeben, welche Elementarten sie verbinden kÃ¶nnen, damit die Vererbung bei der Definition der MetaPfade funktioniert,
      * die getStartElementClass() und getEndElementClass() aufruft.
      */
     public static final Class<? extends ModelElement> etcl = ModelElement.class;
@@ -141,7 +141,7 @@ public abstract class Kante extends ModelElement {
                 _k2.addEdge(this);
             }
         }
-        //Validität der Kante prüfen und dabei wenn nötig umdrehen (bis Version 3.2
+        //ValiditÃ¤t der Kante prÃ¼fen und dabei wenn nÃ¶tig umdrehen (bis Version 3.2
         //ist teilweise die Reihenfolge der Start- und Endelemente von Kanten andersherum gewesen,
         //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
         checkValidity();
@@ -152,7 +152,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Setzt fuer die Kante die Knoten Anfang=_k1 und Ende=_k2 und fügt die Kante bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
+     * Setzt fuer die Kante die Knoten Anfang=_k1 und Ende=_k2 und fÃ¼gt die Kante bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
      * ein.
      *
      * @param _k1 Knoten
@@ -161,11 +161,11 @@ public abstract class Kante extends ModelElement {
      */
     /**
      * @param _k1 Startelement der Kante
-     * @param _k1EdgePos Postion der Kante in der Kantenliste von _k1. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
-     *            Kante hinten angefügt.
+     * @param _k1EdgePos Postion der Kante in der Kantenliste von _k1. Wenn der Wert grÃ¶ÃŸer oder kleiner als die aktuelle Liste ist, dann wird die
+     *            Kante hinten angefÃ¼gt.
      * @param _k2 Endelement der Kante
-     * @param _k2EdgePos Postion der Kante in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
-     *            Kante hinten angefügt.
+     * @param _k2EdgePos Postion der Kante in der Kantenliste von _k2. Wenn der Wert grÃ¶ÃŸer oder kleiner als die aktuelle Liste ist, dann wird die
+     *            Kante hinten angefÃ¼gt.
      */
     public void setKnotsAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
         k1 = _k1;
@@ -231,7 +231,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Wenn das übergebene Element durch diese Kante mit einem anderen Element verbunden ist, kommt das andere Element der Kante zurück, sons
+     * Wenn das Ã¼bergebene Element durch diese Kante mit einem anderen Element verbunden ist, kommt das andere Element der Kante zurÃ¼ck, sons
      * <code>null</code>.
      *
      * @param me
@@ -248,12 +248,12 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Wenn die übergebene Elementklasse durch eine Kante der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
-     * dieser anderen Elemente zurück gegeben. Passen Kante und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
+     * Wenn die Ã¼bergebene Elementklasse durch eine Kante der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
+     * dieser anderen Elemente zurÃ¼ck gegeben. Passen Kante und Elementklasse nicht zusammen, kommt <code>null</code> zurÃ¼ck.
      *
-     * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
-     * @param meClass Elementklasse der Kante, deren Gegenelementklasse zurück gegeben werden soll
-     * @return die andere Elementklasse der Kante, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
+     * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurÃ¼ck gegeben werden soll
+     * @param meClass Elementklasse der Kante, deren Gegenelementklasse zurÃ¼ck gegeben werden soll
+     * @return die andere Elementklasse der Kante, als die Ã¼bergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
      */
     public static Class<? extends ModelElement> getOther(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> meClass) {
         if (isStartClass(edgeClass, meClass)) {
@@ -359,16 +359,16 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
+     * PrÃ¼ft die ValiditÃ¤t der Kanten und stellt sie wenn mÃ¶glich her. Die PrÃ¼fung betrifft die Art der Kantenelemente
      *
-     * @return <code>true</code>, wenn die Kante vollständig richtig ist
+     * @return <code>true</code>, wenn die Kante vollstÃ¤ndig richtig ist
      */
     public boolean checkValidity() {
         boolean startClassOk = false, endClassOk = false;
         boolean switchStart = false, switchEnd = false;
         if (k1 != null && k2 != null) {
             Class<? extends ModelElement> clazz = k1.getClass();
-            //prüfen, ob das StartElement von einer der Startklassen ist
+            //prÃ¼fen, ob das StartElement von einer der Startklassen ist
             if (!isStartClass(clazz)) {
                 //wenn nicht
                 switchStart = isEndClass(clazz);
@@ -376,7 +376,7 @@ public abstract class Kante extends ModelElement {
                 startClassOk = true;
             }
             clazz = k2.getClass();
-            //prüfen, ob das EndElement von einer der Endklassen ist
+            //prÃ¼fen, ob das EndElement von einer der Endklassen ist
             if (!isEndClass(clazz)) {
                 //wenn nicht
                 switchEnd = isStartClass(clazz);
@@ -385,7 +385,7 @@ public abstract class Kante extends ModelElement {
             }
         }
         boolean switchClasses = false;
-        //wenn sich die Konsitenz herstellen lässt indem man beide Elemente vertaucht -> vertauschen
+        //wenn sich die Konsitenz herstellen lÃ¤sst indem man beide Elemente vertaucht -> vertauschen
         if (switchStart && switchEnd) {
             switchClasses = true;
         } else if (switchStart) {
@@ -405,8 +405,8 @@ public abstract class Kante extends ModelElement {
             k2 = dummy;
             return true;
         }
-        //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
-        //der Start- und Endelemente mit den Metaklassen üerbeinstimmen.
+        //Es musste nichts vertauscht werden -> hier kommt nur true zurÃ¼ck, wenn die Klassen
+        //der Start- und Endelemente mit den Metaklassen Ã¼erbeinstimmen.
         return startClassOk && endClassOk;
     }
 
@@ -490,7 +490,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
@@ -502,7 +502,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
      *
      * @param elementClass
      * @return
@@ -512,7 +512,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
@@ -524,7 +524,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
      *
      * @param elementClass
      * @return
@@ -534,7 +534,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Klasse die Start- oder Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
@@ -545,7 +545,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
      *
      * @param edgeClass
      * @param elementClass1
@@ -557,7 +557,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Kantenklasse Elemente der angegebenen Arten in VorwÃ¤rtsrichtung miteinander verbindet. Also
      * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und <code>endElementClass</code> die Endklasse
      * der Kantenklasse oder eine Unterklasse davon ist.
      *
@@ -571,7 +571,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben muss.
+     * Liefert die minimale Anzahl von Kanten der Ã¼bergebenen Art, die ein Element der Ã¼bergebenen Art zu anderen Elementen haben muss.
      *
      * @param edgeClass
      * @param elementClass
@@ -588,7 +588,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert die maximale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben kann.
+     * Liefert die maximale Anzahl von Kanten der Ã¼bergebenen Art, die ein Element der Ã¼bergebenen Art zu anderen Elementen haben kann.
      *
      * @param edgeClass
      * @param elementClass

@@ -63,7 +63,7 @@ public class XSLTScript {
         this.url = url;
         //Aus irgendeinem Grund kommt die URL mit "%5c" und "/" als Dateitrenner gemischt rein
         //und das obwohl File.separator einen Backslash ("\") liefert. Deswegen wird hier einfach
-        //jede Möglichkeit getestet, um an den letzten Namen innerhalb des Dateipfades zu kommen
+        //jede MÃ¶glichkeit getestet, um an den letzten Namen innerhalb des Dateipfades zu kommen
         int index = url.toString().lastIndexOf("%5c");
         int offset = 0;
         if (index < 0) {

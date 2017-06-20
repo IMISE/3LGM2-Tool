@@ -23,12 +23,12 @@ class ConsistencyErrorTableGenerator {
     private final UneditableJTable table;
 
     /**
-     * Der Konsistenzprüfer, der alle Fehler liefert
+     * Der KonsistenzprÃ¼fer, der alle Fehler liefert
      */
     private final ConsistencyChecker checker;
 
     /**
-     * @param checker Konsistenzprüfer, der alle Fehler liefert
+     * @param checker KonsistenzprÃ¼fer, der alle Fehler liefert
      */
     ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
         super();

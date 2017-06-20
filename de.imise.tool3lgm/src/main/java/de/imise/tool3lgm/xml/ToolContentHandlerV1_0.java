@@ -32,11 +32,11 @@ import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 /**
  * @author Thomas Rudert
  *         Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler
- *         von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nötigen
- *         Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener
- *         Felder im Dokument) muß man keinen ganz neuen ContentHandler schreiben sondern muß
- *         nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit
- *         einen völlig neuen ContentHandler zu schreiben.
+ *         von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle nÃ¶tigen
+ *         Werte hat. Ich denke, bei kleinen Ã„nderungen (hinzukommen oder wegfallen einzelnener
+ *         Felder im Dokument) muÃŸ man keinen ganz neuen ContentHandler schreiben sondern muÃŸ
+ *         nur einen abgeleiteten von diesem bilden. Ich wÃ¼rde aber empfehlen von Zeit zu Zeit
+ *         einen vÃ¶llig neuen ContentHandler zu schreiben.
  *         erkennt Modell mit 3lgm2.dtd Version 1.0
  */
 public class ToolContentHandlerV1_0 implements ContentHandler {
@@ -71,7 +71,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     /** Farbeangabe zu einem GraphElementLayout */
     protected Color color = null;
 
-    /** definiert die gültigkeit Farbe (fg_color, bg_color, border_color) */
+    /** definiert die gÃ¼ltigkeit Farbe (fg_color, bg_color, border_color) */
     protected String colorString = null;
 
     /** String der in der characters Methode ausgelesen wird (Werte eines Tags) */
@@ -82,7 +82,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
     /**
      * ArrayList mit allen Containern die ein Icon besitzen; da die Icons erst zu letzt eingelesen werden, wird den Containern zuerst nur der
-     * HashString des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
+     * HashString des Icons mitgeteilt. Nach dem einlesen der Icons mÃ¼ssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
      * laden. Das passiert in der Methode setIcon();
      */
     protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<NodeContainer>();
@@ -153,7 +153,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("element")) {
             Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(atts.getValue("class"));
             if (elementClass == null || Modifier.isAbstract(elementClass.getModifiers())) {
-                throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
+                throw new SAXException("Klasse fÃ¼r Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
             }
             element = ModelConstants.createElement(elementClass, false);
             if (element != null) {
@@ -166,12 +166,12 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("container")) {
             element = doc.findElementCoded(atts.getValue("hash"));
             if (element == null) {
-                throw new SAXException("ModelObject für Container nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
+                throw new SAXException("ModelObject fÃ¼r Container nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
             }
 
             container = element.createContainer(szenario);
             if (container == null) {
-                throw new SAXException("Container für ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
+                throw new SAXException("Container fÃ¼r ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
             }
 
             element = null;
@@ -448,7 +448,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
             Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-            /* die HashStrings für das Start- bzw. End-Objekt einer Kante auflösen und die wirklichen Knoten setzten */
+            /* die HashStrings fÃ¼r das Start- bzw. End-Objekt einer Kante auflÃ¶sen und die wirklichen Knoten setzten */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getKanten()) {
                     kc.getEdge().decodeHashStrings(doc);
