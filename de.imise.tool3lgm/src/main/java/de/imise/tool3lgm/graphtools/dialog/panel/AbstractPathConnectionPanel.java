@@ -140,11 +140,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         Class<? extends Kante> edgeClass = edgeClasses[labelEdgeIndex];
 
         if (labelEdgeName) {
-            if (directions[labelEdgeIndex] == FORWARD) {
-                westLabelText = ModelConstants.getForwardMetaAssociationName(edgeClass);
-            } else {
-                westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClass);
-            }
+            westLabelText = directions[labelEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
         } else {
             westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(this.searchElementClass) : ModelConstants.getDisplayablePluralName(this.searchElementClass);
         }
@@ -295,19 +291,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     protected boolean isPathCreatable() {
         int pathLength = edgeClasses.length;
-        for (int i = 0; i < pathLength; i++) {
-            Class<? extends ModelElement> class2Create = directions[i] == FORWARD ? Kante.getEndClass(edgeClasses[i]) : Kante.getStartClass(edgeClasses[i]);
-            //wenn die anzulegende End-Klasse der aktuellen Kante abstract ist
+        for (int edgeIndex = 0; edgeIndex < pathLength; edgeIndex++) {
+            Class<? extends ModelElement> class2Create = getPathStepEndElementClass(edgeIndex);
             if (ModelConstants.isAbstract(class2Create)) {
-                //prüfe, ob die anzulegende StartKlasse der nächsten Kante nicht abstract und somit eindeutig ist
-                if (i + 1 < pathLength) {
-                    class2Create = directions[i + 1] == FORWARD ? Kante.getStartClass(edgeClasses[i + 1]) : Kante.getEndClass(edgeClasses[i + 1]);
-                    if (ModelConstants.isAbstract(class2Create)) {
-                        return false;
-                    }
-                } else {
-                    return !ModelConstants.isAbstract(searchElementClass);
-                }
+                return false;
             }
         }
         return true;
