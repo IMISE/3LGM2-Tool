@@ -21,7 +21,7 @@ public class ScreenRobot {
 	private static int standardDelay = 30;
 	
 	/**
-	 * Eine <code>Robot</code>-Instanz f¸r alle.
+	 * Eine <code>Robot</code>-Instanz f√ºr alle.
 	 */
 	public static Robot robot;
 	static{
@@ -60,10 +60,10 @@ public class ScreenRobot {
 	
 	
 	/**
-	 * Setzt die Maus mit einer zuf‰lligen Abweichung im Bereich <code>tolerance</code> an die 
+	 * Setzt die Maus mit einer zuf√§lligen Abweichung im Bereich <code>tolerance</code> an die 
 	 * angegebene Position.<br>
 	 * Die <code>tolerance</code> gibt die Anzahl der Pixel an, um die der Punkt, an den die Maus
-	 * dann tats‰chlich bewegt wird, in positiver sowie negativer X- und Y-Richtung abweichen kann.
+	 * dann tats√§chlich bewegt wird, in positiver sowie negativer X- und Y-Richtung abweichen kann.
 	 * 
 	 * @param p
 	 * @param tolerance
@@ -77,7 +77,7 @@ public class ScreenRobot {
 	}
 
 	/**
-	 * Rechteck, Maﬂe des gesamten Bildschirms
+	 * Rechteck, Ma√üe des gesamten Bildschirms
 	 */
 	private static Rectangle fullScreenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 	/**
@@ -98,7 +98,7 @@ public class ScreenRobot {
 
 	/**
 	 * Liefert einen Screenshot eines Ausschnittes des gesamten Bildschirms, der
-	 * druch das ¸bergebene <code>Rectangle</code> festgelegt ist.
+	 * druch das √ºbergebene <code>Rectangle</code> festgelegt ist.
 	 * @return
 	 */
 	public static final BufferedImage getScreenShot(Rectangle r){
@@ -106,7 +106,7 @@ public class ScreenRobot {
 	}
 	
 	/**
-	 * Liefert einen Screenshot der ¸bergebenen Ausmaﬂe.
+	 * Liefert einen Screenshot der √ºbergebenen Ausma√üe.
 	 * @param x
 	 * @param y
 	 * @param w

@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * Ein Panel mit einem {@link BorderLayout}, welches ein Label vor, über, nach oder unter die Center-Componente setzt.
+ * Ein Panel mit einem {@link BorderLayout}, welches ein Label vor, Ã¼ber, nach oder unter die Center-Componente setzt.
  * 
  * @author AFranz
  * @create 01.07.2010

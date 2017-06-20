@@ -3,54 +3,54 @@ package de.imise.util.transaction;
 import java.beans.PropertyChangeListener;
 
 /**
- * Interface für die Basisfunktionalität aller TransactionManager.
+ * Interface fÃ¼r die BasisfunktionalitÃ¤t aller TransactionManager.
  * 
  * @author fstephan
  */
 public interface TransactionManager {
 	
 	/**
-	 * Macht die letzte Transaktion rückgängig.
+	 * Macht die letzte Transaktion rÃ¼ckgÃ¤ngig.
 	 * 
-	 * @return 	<li><code>true</code>, wenn das UNDO erfolgreich ausgeführt wurde
+	 * @return 	<li><code>true</code>, wenn das UNDO erfolgreich ausgefÃ¼hrt wurde
 	 * 			<li><code>false</code>, sonst
 	 * 		
 	 * @throws TransactionManagerException
 	 * 			Wird geworfen, wenn die aktuelle Transaktion noch nicht
-	 * 			durchgeführt wurde.
+	 * 			durchgefÃ¼hrt wurde.
 	 */
 	boolean undo() throws TransactionManagerException;
 	
 
 	/**
-	 * Macht das letzte UNDO rückgängig.
+	 * Macht das letzte UNDO rÃ¼ckgÃ¤ngig.
 	 * 
-	 * @return 	<li><code>true</code>, wenn das REDO erfolgreich ausgeführt wurde
+	 * @return 	<li><code>true</code>, wenn das REDO erfolgreich ausgefÃ¼hrt wurde
 	 * 			<li><code>false</code>, sonst
 	 * 		
 	 * @throws TransactionManagerException
 	 * 			Wird geworfen, wenn die aktuelle Transaktion noch nicht
-	 * 			durchgeführt wurde.
+	 * 			durchgefÃ¼hrt wurde.
 	 */
 	boolean redo() throws TransactionManagerException;
 	
 	/**
-	 * Gibt wieder, ob UNDO verfügbar ist.
+	 * Gibt wieder, ob UNDO verfÃ¼gbar ist.
 	 */
 	boolean isUndoAvailable();
 	
 	/**
-	 * Gibt wieder, ob REDO verfügbar ist.
+	 * Gibt wieder, ob REDO verfÃ¼gbar ist.
 	 */
 	boolean isRedoAvailable();
 	
 	/**
-	 * Fügt einen {@link PropertyChangeListener} an, welcher benachrichtigt wird,
-	 * sobald UNDO bzw. REDO verfügbar sind. <br>
-	 * Die PropertyNames hierfür sind <tt>"undoAvailable"</tt> bzw. <tt>"redoAvailable"</tt>.
+	 * FÃ¼gt einen {@link PropertyChangeListener} an, welcher benachrichtigt wird,
+	 * sobald UNDO bzw. REDO verfÃ¼gbar sind. <br>
+	 * Die PropertyNames hierfÃ¼r sind <tt>"undoAvailable"</tt> bzw. <tt>"redoAvailable"</tt>.
 	 * 
 	 * @param l
-	 * 		Der anzufügende Listener
+	 * 		Der anzufÃ¼gende Listener
 	 */
 	void addPropertyChangeListener(PropertyChangeListener l);
 	
@@ -63,12 +63,12 @@ public interface TransactionManager {
 	void removePropertyChangeListener(PropertyChangeListener l);
 	
 	/**
-	 * Fügt einen {@link ExtendedTransactionListener} an, welcher benachrichtigt wird, sobald
-	 * ein UNDO bzw. REDO ausgeführt wird, eine Transaktion geöffnet bzw. beendet wurde oder 
+	 * FÃ¼gt einen {@link ExtendedTransactionListener} an, welcher benachrichtigt wird, sobald
+	 * ein UNDO bzw. REDO ausgefÃ¼hrt wird, eine Transaktion geÃ¶ffnet bzw. beendet wurde oder 
 	 * die aktuelle Transaktion abgebrochen wurde.
 	 * 
 	 * @param l
-	 * 		Der anzufügende Listener
+	 * 		Der anzufÃ¼gende Listener
 	 */
 	void addTransactionListener(ExtendedTransactionListener l);
 	

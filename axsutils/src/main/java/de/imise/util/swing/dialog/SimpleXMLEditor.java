@@ -23,7 +23,7 @@ import de.imise.util.swing.component.SimpleXMLTextPane;
  * XMLEditorPane und dieses Panel hat dann 2 statische Funktionen String showDialog(...) und String showFrame(...)
  * 
  * @author Sebastian Weber
- * Stellt einen einfachen Editor für XML-Skripte zur Verfügung.
+ * Stellt einen einfachen Editor fÃ¼r XML-Skripte zur VerfÃ¼gung.
  */
 public class SimpleXMLEditor extends JDialog implements ActionListener {
 	/** eine TextPane zur anzeige des xml Textes mit Syntaxhervorhebung. */
@@ -32,19 +32,19 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 	JButton okButton;
 	/** Knopf zum Abbrechen des Dialoges. Die Variable Auswahl wird auf ABBRECHEN gesetzt. */
 	JButton cancelButton;
-	/** Nach dem Schließen des Dialoges sieht man hier mit welcher Option (OK oder ABBRECHEN) der Dialog geschlossen wurde. */
+	/** Nach dem SchlieÃŸen des Dialoges sieht man hier mit welcher Option (OK oder ABBRECHEN) der Dialog geschlossen wurde. */
 	int auswahl = 0;
-	/** Konstante zur Angabe, daß der Dialog mit OK geschlossen wurde. */
+	/** Konstante zur Angabe, daÃŸ der Dialog mit OK geschlossen wurde. */
 	public final static int OK = 1;
-	/** Konstante zur Angabe, daß der Dialog mit Abbrechen geschlossen wurde. */
+	/** Konstante zur Angabe, daÃŸ der Dialog mit Abbrechen geschlossen wurde. */
 	public final static int ABBRECHEN = 0;
 	
 	/**
 	 * Der Konstruktor.
-	 * @param owner		Besitzerframe für diesen Dialog.
-	 * @param modal 	auf true setzen, wenn der Dialog die Ausführung des Besitzerframes blockieren soll.
-	 * @param title		Titel für diesen Dialog.
-	 * @param xmlText	Ein xmlText, der nach dem Öffnen angezeigt werden soll.
+	 * @param owner		Besitzerframe fÃ¼r diesen Dialog.
+	 * @param modal 	auf true setzen, wenn der Dialog die AusfÃ¼hrung des Besitzerframes blockieren soll.
+	 * @param title		Titel fÃ¼r diesen Dialog.
+	 * @param xmlText	Ein xmlText, der nach dem Ã–ffnen angezeigt werden soll.
 	 */
 	public SimpleXMLEditor(Frame owner, boolean modal, String title, String xmlText) {
 		super(owner, title, modal);
@@ -53,10 +53,10 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 
 	/**
 	 * Der Konstruktor.
-	 * @param owner		Besitzerdialog für diesen Dialog.
-	 * @param modal 	auf true setzen, wenn der Dialog die Ausführung des Besitzerdialoges blockieren soll.
-	 * @param title		Titel für diesen Dialog.
-	 * @param xmlText	Ein xmlText, der nach dem Öffnen angezeigt werden soll.
+	 * @param owner		Besitzerdialog fÃ¼r diesen Dialog.
+	 * @param modal 	auf true setzen, wenn der Dialog die AusfÃ¼hrung des Besitzerdialoges blockieren soll.
+	 * @param title		Titel fÃ¼r diesen Dialog.
+	 * @param xmlText	Ein xmlText, der nach dem Ã–ffnen angezeigt werden soll.
 	 */
 	public SimpleXMLEditor(Dialog owner, boolean modal, String title, String xmlText) {
 		super(owner, title, modal);
@@ -89,7 +89,7 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 	}
 	
 	/**
-	 * Wird intern aufgerufen, wenn einer der Knöpfe gedrückt wurde.
+	 * Wird intern aufgerufen, wenn einer der KnÃ¶pfe gedrÃ¼ckt wurde.
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
@@ -100,7 +100,7 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 	}
 	
 	/**
-	 * Zweigt den Dialog an und gibt die Option zurück, mit der er geschlossen wurde.
+	 * Zweigt den Dialog an und gibt die Option zurÃ¼ck, mit der er geschlossen wurde.
 	 * @return	die Option mit der der Dialog geschlossen wurde (OK oder ABBRECHEN).
 	 */
 	public int showDialog() {
@@ -109,7 +109,7 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 	}
 	
 	/**
-	 * Gibt den xml-Text der in diesem Dialog angezeigt wird, zurück. 
+	 * Gibt den xml-Text der in diesem Dialog angezeigt wird, zurÃ¼ck. 
 	 * @return	der angezeigte xml-Text.
 	 */
 	public String getText() {

@@ -3,9 +3,9 @@ package de.imise.util;
 import java.awt.Color;
 
 /**
- * AXS: Das Zeug hier kommt ursprünglich aus Tool3lgmConstants.
+ * AXS: Das Zeug hier kommt ursprÃ¼nglich aus Tool3lgmConstants.
  * 
- * TODO:AXS: das sollte sich wohl über das UTF-8-<code>CharSet</code> lösen lassen und dann raus hiermit. 
+ * TODO:AXS: das sollte sich wohl Ã¼ber das UTF-8-<code>CharSet</code> lÃ¶sen lassen und dann raus hiermit. 
  * 
  * @author N.N., AXS
  * created on 16.08.2007
@@ -19,7 +19,7 @@ public class HTMLConverter {
 	}
 
 	/**
-	 * Wandelt Sonderzeichen im übergebenen String HTML-konform um und gibt den String zurück.
+	 * Wandelt Sonderzeichen im Ã¼bergebenen String HTML-konform um und gibt den String zurÃ¼ck.
 	 * @param instr
 	 * @return
 	 */
@@ -50,187 +50,187 @@ public class HTMLConverter {
 				case '\\' :
 					buf.append("\\");
 					continue;
-				case 'Ä' :
+				case 'Ã„' :
 					buf.append("&#196;");
 					continue;
-				case 'Ö' :
+				case 'Ã–' :
 					buf.append("&#214;");
 					continue;
-				case 'Ü' :
+				case 'Ãœ' :
 					buf.append("&#220;");
 					continue;
-				case 'ß' :
+				case 'ÃŸ' :
 					buf.append("&#223;");
 					continue;
-				case 'ä' :
+				case 'Ã¤' :
 					buf.append("&#228;");
 					continue;
-				case 'ö' :
+				case 'Ã¶' :
 					buf.append("&#246;");
 					continue;
-				case 'ü' :
+				case 'Ã¼' :
 					buf.append("&#252;");
 					continue;
-				case 'À' :
+				case 'Ã€' :
 					buf.append("&#192;");
 					continue;
-				case 'Á' :
+				case 'Ã' :
 					buf.append("&#193;");
 					continue;
-				case 'Â' :
+				case 'Ã‚' :
 					buf.append("&#194;");
 					continue;
-				case 'Ã' :
+				case 'Ãƒ' :
 					buf.append("&#195;");
 					continue;
-				case 'Å' :
+				case 'Ã…' :
 					buf.append("&#197;");
 					continue;
-				case 'Æ' :
+				case 'Ã†' :
 					buf.append("&#198;");
 					continue;
-				case 'Ç' :
+				case 'Ã‡' :
 					buf.append("&#199;");
 					continue;
-				case 'È' :
+				case 'Ãˆ' :
 					buf.append("&#200;");
 					continue;
-				case 'É' :
+				case 'Ã‰' :
 					buf.append("&#201;");
 					continue;
-				case 'Ê' :
+				case 'ÃŠ' :
 					buf.append("&#202;");
 					continue;
-				case 'Ë' :
+				case 'Ã‹' :
 					buf.append("&#203;");
 					continue;
-				case 'Ì' :
+				case 'ÃŒ' :
 					buf.append("&#204;");
 					continue;
-				case 'Í' :
+				case 'Ã' :
 					buf.append("&#205;");
 					continue;
-				case 'Î' :
+				case 'Ã' :
 					buf.append("&#206;");
 					continue;
-				case 'Ï' :
+				case 'Ã' :
 					buf.append("&#207;");
 					continue;
-				case 'Ñ' :
+				case 'Ã‘' :
 					buf.append("&#209;");
 					continue;
-				case 'Ò' :
+				case 'Ã’' :
 					buf.append("&#210;");
 					continue;
-				case 'Ó' :
+				case 'Ã“' :
 					buf.append("&#211;");
 					continue;
-				case 'Ô' :
+				case 'Ã”' :
 					buf.append("&#212;");
 					continue;
-				case 'Õ' :
+				case 'Ã•' :
 					buf.append("&#213;");
 					continue;
-				case 'Ø' :
+				case 'Ã˜' :
 					buf.append("&#216;");
 					continue;
-				case 'Ù' :
+				case 'Ã™' :
 					buf.append("&#217;");
 					continue;
-				case 'Ú' :
+				case 'Ãš' :
 					buf.append("&#218;");
 					continue;
-				case 'Û' :
+				case 'Ã›' :
 					buf.append("&#219;");
 					continue;
-				case 'İ' :
+				case 'Ã' :
 					buf.append("&#221;");
 					continue;
-				case 'à' :
+				case 'Ã ' :
 					buf.append("&#224;");
 					continue;
-				case 'á' :
+				case 'Ã¡' :
 					buf.append("&#225;");
 					continue;
-				case 'â' :
+				case 'Ã¢' :
 					buf.append("&#226;");
 					continue;
-				case 'ã' :
+				case 'Ã£' :
 					buf.append("&#227;");
 					continue;
-				case 'å' :
+				case 'Ã¥' :
 					buf.append("&#229;");
 					continue;
-				case 'æ' :
+				case 'Ã¦' :
 					buf.append("&#230;");
 					continue;
-				case 'ç' :
+				case 'Ã§' :
 					buf.append("&#231;");
 					continue;
-				case 'è' :
+				case 'Ã¨' :
 					buf.append("&#232;");
 					continue;
-				case 'é' :
+				case 'Ã©' :
 					buf.append("&#233;");
 					continue;
-				case 'ê' :
+				case 'Ãª' :
 					buf.append("&#234;");
 					continue;
-				case 'ë' :
+				case 'Ã«' :
 					buf.append("&#235;");
 					continue;
-				case 'ì' :
+				case 'Ã¬' :
 					buf.append("&#236;");
 					continue;
-				case 'í' :
+				case 'Ã­' :
 					buf.append("&#237;");
 					continue;
-				case 'î' :
+				case 'Ã®' :
 					buf.append("&#238;");
 					continue;
-				case 'ï' :
+				case 'Ã¯' :
 					buf.append("&#239;");
 					continue;
-				case 'ñ' :
+				case 'Ã±' :
 					buf.append("&#241;");
 					continue;
-				case 'ò' :
+				case 'Ã²' :
 					buf.append("&#242;");
 					continue;
-				case 'ó' :
+				case 'Ã³' :
 					buf.append("&#243;");
 					continue;
-				case 'ô' :
+				case 'Ã´' :
 					buf.append("&#244;");
 					continue;
-				case 'õ' :
+				case 'Ãµ' :
 					buf.append("&#245;");
 					continue;
-				case 'ø' :
+				case 'Ã¸' :
 					buf.append("&#248;");
 					continue;
-				case 'ù' :
+				case 'Ã¹' :
 					buf.append("&#249;");
 					continue;
-				case 'ú' :
+				case 'Ãº' :
 					buf.append("&#250;");
 					continue;
-				case 'û' :
+				case 'Ã»' :
 					buf.append("&#251;");
 					continue;
-				case 'ı' :
+				case 'Ã½' :
 					buf.append("&#253;");
 					continue;
-				case 'ÿ' :
+				case 'Ã¿' :
 					buf.append("&#255;");
 					continue;
-				case 'µ' :
+				case 'Âµ' :
 					buf.append("&#181;");
 					continue;
-				case '²' :
+				case 'Â²' :
 					buf.append("&#178;");
 					continue;
-				case '³' :
+				case 'Â³' :
 					buf.append("&#179;");
 					continue;
 				case '!' :
@@ -308,106 +308,106 @@ public class HTMLConverter {
 				case '~' :
 					buf.append("&#126;");
 					continue;
-				case '¡' :
+				case 'Â¡' :
 					buf.append("&#161;");
 					continue;
-				case '¢' :
+				case 'Â¢' :
 					buf.append("&#162;");
 					continue;
-				case '£' :
+				case 'Â£' :
 					buf.append("&#163;");
 					continue;
-				case '€' :
+				case 'Â€' :
 					buf.append("&#8364;");
 					continue; //EURO
-				case '¤' :
+				case 'Â¤' :
 					buf.append("&#164;");
 					continue;
-				case '¥' :
+				case 'Â¥' :
 					buf.append("&#165;");
 					continue;
-				case '¦' :
+				case 'Â¦' :
 					buf.append("&#166;");
 					continue;
-				case '§' :
+				case 'Â§' :
 					buf.append("&#167;");
 					continue;
-				case '¨' :
+				case 'Â¨' :
 					buf.append("&#168;");
 					continue;
-				case '©' :
+				case 'Â©' :
 					buf.append("&#169;");
 					continue;
-				case 'ª' :
+				case 'Âª' :
 					buf.append("&#170;");
 					continue;
-				case '«' :
+				case 'Â«' :
 					buf.append("&#171;");
 					continue;
-				case '¬' :
+				case 'Â¬' :
 					buf.append("&#172;");
 					continue;
-				case '­' :
+				case 'Â­' :
 					buf.append("&#173;");
 					continue;
-				case '®' :
+				case 'Â®' :
 					buf.append("&#174;");
 					continue;
-				case '¯' :
+				case 'Â¯' :
 					buf.append("&#175;");
 					continue;
-				case '°' :
+				case 'Â°' :
 					buf.append("&#176;");
 					continue;
-				case '±' :
+				case 'Â±' :
 					buf.append("&#177;");
 					continue;
-				case '´' :
+				case 'Â´' :
 					buf.append("&#180;");
 					continue;
-				case '¶' :
+				case 'Â¶' :
 					buf.append("&#182;");
 					continue;
-				case '·' :
+				case 'Â·' :
 					buf.append("&#183;");
 					continue;
-				case '¸' :
+				case 'Â¸' :
 					buf.append("&#184;");
 					continue;
-				case '¹' :
+				case 'Â¹' :
 					buf.append("&#185;");
 					continue;
-				case 'º' :
+				case 'Âº' :
 					buf.append("&#186;");
 					continue;
-				case '»' :
+				case 'Â»' :
 					buf.append("&#187;");
 					continue;
-				case '¼' :
+				case 'Â¼' :
 					buf.append("&#188;");
 					continue;
-				case '½' :
+				case 'Â½' :
 					buf.append("&#189;");
 					continue;
-				case '¾' :
+				case 'Â¾' :
 					buf.append("&#190;");
 					continue;
-				case '¿' :
+				case 'Â¿' :
 					buf.append("&#191;");
 					continue;
-				case 'Ğ' :
+				case 'Ã' :
 					buf.append("&#208;");
 					continue;
-				case '×' :
+				case 'Ã—' :
 					buf.append("&#215;");
 					continue;
-				case 'Ş' :
+				case 'Ã' :
 					buf.append("&#222;");
 					continue;
-				case '÷' :
+				case 'Ã·' :
 					buf.append("&#247;");
 					continue;
-				case 'ş' :
+				case 'Ã¾' :
 					buf.append("&#254;");
 					continue;
 				case '\n' :

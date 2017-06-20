@@ -16,20 +16,20 @@ import de.imise.util.Pair;
 /**
  * Erweiterungsklasse zu {@link AbstractAction}
  * <p>
- * Ermöglich den Zugriff auf bzw. das Setzen der durch {@link Action} gegebenen Properties über get- bzw. set-Methoden. <br>
+ * ErmÃ¶glich den Zugriff auf bzw. das Setzen der durch {@link Action} gegebenen Properties Ã¼ber get- bzw. set-Methoden. <br>
  * 
  * @author fstephan, AXS
  */
 public abstract class ExtendedAction extends AbstractAction {
 
-    /** Source für das Ausführen der Aktion über ein neu generiertes {@link ActionEvent} */
+    /** Source fÃ¼r das AusfÃ¼hren der Aktion Ã¼ber ein neu generiertes {@link ActionEvent} */
     private static JButton button = new JButton();
 
     /**
      * Konstruktor
      * <p>
      * Erzeugt eine Instanz dieser Klasse mit den spezifizierten Property-Werten ({@link Action}). <br>
-     * Die Mnemonic-Property wird hier ausgeschlossen, da sie üblicherweise innerhalb von {@link AbstractButton}-Gruppen gemeinsam gesetzt wird und
+     * Die Mnemonic-Property wird hier ausgeschlossen, da sie Ã¼blicherweise innerhalb von {@link AbstractButton}-Gruppen gemeinsam gesetzt wird und
      * beim Erzeugen der Action noch nicht bekannt ist.
      * </p>
      * 
@@ -41,7 +41,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param longDescription
      * @param actionCommand
      * @param initialSelectionState
-     *            Initialer Selektionszustand für die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s
+     *            Initialer Selektionszustand fÃ¼r die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s
      */
     public ExtendedAction(final String text, final Icon smallIcon, final Icon largeIcon, final KeyStroke keyStroke, final String shortDescription, final String longDescription, final String actionCommand, final Boolean initialSelectionState) {
         this(text, smallIcon);
@@ -108,7 +108,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt das große Icon
+     * Setzt das groÃŸe Icon
      * 
      * @param largeIcon
      */
@@ -119,7 +119,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt den {@link KeyStroke}, der diese Action auslöst
+     * Setzt den {@link KeyStroke}, der diese Action auslÃ¶st
      * 
      * @param keyStroke
      */
@@ -151,7 +151,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt ausführliche Beschreibung der Action. (Zur Verwendung bei Hilfe)
+     * Setzt ausfÃ¼hrliche Beschreibung der Action. (Zur Verwendung bei Hilfe)
      * 
      * @param description
      */
@@ -162,7 +162,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Setzt den command-<code>String</code> für das {@link ActionEvent}, das beim Auslösen dieser Action entsteht.
+     * Setzt den command-<code>String</code> fÃ¼r das {@link ActionEvent}, das beim AuslÃ¶sen dieser Action entsteht.
      * 
      * @param actionCommand
      */
@@ -199,21 +199,21 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Liefert für den key {@link Action#SELECTED_KEY} den Wert von {@link ExtendedAction#isSelected()} zurück, verhält
+     * Liefert fÃ¼r den key {@link Action#SELECTED_KEY} den Wert von {@link ExtendedAction#isSelected()} zurÃ¼ck, verhÃ¤lt
      * sich sonst aber wie {@link AbstractAction#getValue(String)}. <br>
-     * Durch Überschreiben von {@link ExtendedAction#isSelected()} kann der Selektionzustand dynamisch festgelegt
-     * werden, sodass ein manuelles Setzen mittels {@link ExtendedAction#putValue(String, Object)} entfällt.
+     * Durch Ãœberschreiben von {@link ExtendedAction#isSelected()} kann der Selektionzustand dynamisch festgelegt
+     * werden, sodass ein manuelles Setzen mittels {@link ExtendedAction#putValue(String, Object)} entfÃ¤llt.
      * 
      * @see javax.swing.AbstractAction#getValue(java.lang.String)
      */
     @Override
     public Object getValue(final String key) {
-        // Ermöglicht das Überschreiben von isSelected() sodass beim Überprüfen
+        // ErmÃ¶glicht das Ãœberschreiben von isSelected() sodass beim ÃœberprÃ¼fen
         // des Selektionszustandes dieser Action durch eine Component,
         // der Wert der isSelected()-Methode genommen wird, statt
         // dem Wert im ArrayTable.
-        // Wird isSelected() nicht überschrieben, bleibt das Standardverhalten erhalten,
-        // d.h. es wird der Wert aus dem ArrayTable zurückgegeben.
+        // Wird isSelected() nicht Ã¼berschrieben, bleibt das Standardverhalten erhalten,
+        // d.h. es wird der Wert aus dem ArrayTable zurÃ¼ckgegeben.
         if (key == SELECTED_KEY) {
             return isSelected();
         }
@@ -239,7 +239,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt das große Icon wieder
+     * Gibt das groÃŸe Icon wieder
      * 
      * @return
      */
@@ -248,7 +248,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt den {@link KeyStroke} zurück, der diese Action auslöst
+     * Gibt den {@link KeyStroke} zurÃ¼ck, der diese Action auslÃ¶st
      * 
      * @return
      */
@@ -257,7 +257,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt den Index des Mnemonics im Text wieder, falls er gesetz wurde. Sonst wird <code>-1</code> zurückgegeben.
+     * Gibt den Index des Mnemonics im Text wieder, falls er gesetz wurde. Sonst wird <code>-1</code> zurÃ¼ckgegeben.
      * 
      * @see #getText()
      * @return
@@ -268,7 +268,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt kurze Beschreibung der Action zurück. (Zur Verwendung als Tooltip)
+     * Gibt kurze Beschreibung der Action zurÃ¼ck. (Zur Verwendung als Tooltip)
      * 
      * @param description
      */
@@ -277,7 +277,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt ausführliche Beschreibung der Action zurück. (Zur Verwendung bei Hilfe)
+     * Gibt ausfÃ¼hrliche Beschreibung der Action zurÃ¼ck. (Zur Verwendung bei Hilfe)
      * 
      * @param description
      */
@@ -286,7 +286,7 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen dieser Action entsteht.
+     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim AuslÃ¶sen dieser Action entsteht.
      * 
      * @param actionCommand
      */
@@ -296,10 +296,10 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt den Selektionszustand dieser Action wieder. (Zur Verwendung bei {@link JRadioButtonMenuItem} und {@link JCheckBoxMenuItem}) <br>
-     * Falls kein Selektionszustand gesetzt wurde, wird <code>false</code> zurückgegeben.
+     * Falls kein Selektionszustand gesetzt wurde, wird <code>false</code> zurÃ¼ckgegeben.
      * <p>
-     * Durch Überschreiben dieser Methode kann der Selektionszustand dynamisch festgelegt werden. Allerdings ist dann eine Beeinflussung durch
-     * {@link #putValue(String, Object)} nicht mehr möglich.
+     * Durch Ãœberschreiben dieser Methode kann der Selektionszustand dynamisch festgelegt werden. Allerdings ist dann eine Beeinflussung durch
+     * {@link #putValue(String, Object)} nicht mehr mÃ¶glich.
      * 
      * @param b
      */
@@ -360,7 +360,7 @@ public abstract class ExtendedAction extends AbstractAction {
         }
     }
 
-    /** Führt die Aktion aus */
+    /** FÃ¼hrt die Aktion aus */
     public final void perform() {
         actionPerformed(new ActionEvent(button, ActionEvent.ACTION_PERFORMED, getText()));
     }

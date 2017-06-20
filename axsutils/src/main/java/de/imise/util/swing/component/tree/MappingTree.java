@@ -6,11 +6,11 @@ import java.util.HashMap;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- * Ein Baum, der sich in einer extra Map merkt, für welches UserObject welcher Knoten angelegt wurde. Um den Knoten
- * für ein UserObject heruas zu bekommen, muss also nicht der ganze baum durchsucht werden. Das bringt vor allem
- * in sehr großen Bäumen Performancevorteile.
+ * Ein Baum, der sich in einer extra Map merkt, fÃ¼r welches UserObject welcher Knoten angelegt wurde. Um den Knoten
+ * fÃ¼r ein UserObject heruas zu bekommen, muss also nicht der ganze baum durchsucht werden. Das bringt vor allem
+ * in sehr groÃŸen BÃ¤umen Performancevorteile.
  * 
- * Falls ein UserObject mehr als einen Knoten hat, müsste man die Klasse dahingehend ändern, dass die Map auf ein Array
+ * Falls ein UserObject mehr als einen Knoten hat, mÃ¼sste man die Klasse dahingehend Ã¤ndern, dass die Map auf ein Array
  * von Knoten mappt.
  * 
  * @author AXS
@@ -18,7 +18,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class MappingTree extends BasicTree {
 	
 	/**
-	 * <code>HashMap</code>, die vom <code>userObject</code> des Knotens auf den dazugehörigen Knoten mappt
+	 * <code>HashMap</code>, die vom <code>userObject</code> des Knotens auf den dazugehÃ¶rigen Knoten mappt
 	 */
 	private HashMap <Object, DefaultMutableTreeNode>userObjects2TreeNodes = new HashMap<Object, DefaultMutableTreeNode>();
 	
@@ -30,8 +30,8 @@ public class MappingTree extends BasicTree {
 	}
 
 	/**
-	 * Erzeugt einen neuen Knoten mit dem übergebenene UserObject, der auch zu den MappedNodes 
-	 * hinzugefügt wird.
+	 * Erzeugt einen neuen Knoten mit dem Ã¼bergebenene UserObject, der auch zu den MappedNodes 
+	 * hinzugefÃ¼gt wird.
 	 * @param userObject
 	 * @return
 	 */
@@ -42,7 +42,7 @@ public class MappingTree extends BasicTree {
 	}
 
 	/**
-	 * Fügt den übergebenen Knoten mit seinem userObject zu den MappedNodes hinzu
+	 * FÃ¼gt den Ã¼bergebenen Knoten mit seinem userObject zu den MappedNodes hinzu
 	 * @param node
 	 */
 	public void mapNode(DefaultMutableTreeNode node){
@@ -50,20 +50,20 @@ public class MappingTree extends BasicTree {
 	}
 	
 	/**
-	 * Entfernt den Knoten mit dem übergebenen UserObject aus dem Baum. Dieser Knoten muss 
+	 * Entfernt den Knoten mit dem Ã¼bergebenen UserObject aus dem Baum. Dieser Knoten muss 
 	 * zwingend in den MappedNodes vorkommen, aus denen er und auch alle seine gemappten 
 	 * Kindknoten entfernt werden.
 	 * @param userObject
 	 */
 	protected final void removeNodeAndRefreshTree(Object userObject){
-		//den Knoten und alle seine Kinder aus dem Baum und den MappedNodes löschen
+		//den Knoten und alle seine Kinder aus dem Baum und den MappedNodes lÃ¶schen
 		DefaultMutableTreeNode node2Remove = userObjects2TreeNodes.remove(userObject);
 		removeNodeAndAllChildsFromMap(node2Remove);
 		super.removeNodeAndRefreshTree(node2Remove);
 	}
 	
 	/**
-	 * Löscht aus den MappedNodes alle Kindknoten des übergebenen Knotens und den übergebenen Knoten selbst
+	 * LÃ¶scht aus den MappedNodes alle Kindknoten des Ã¼bergebenen Knotens und den Ã¼bergebenen Knoten selbst
 	 * @param node
 	 */
 	protected void removeNodeAndAllChildsFromMap(DefaultMutableTreeNode node){
@@ -73,7 +73,7 @@ public class MappingTree extends BasicTree {
 	}
 
 	/**
-	 * Liefert einen Knoten zum übergebnen <code>userObject</code> oder <code>null</code>
+	 * Liefert einen Knoten zum Ã¼bergebnen <code>userObject</code> oder <code>null</code>
 	 * 
 	 * @param userObject
 	 * @return

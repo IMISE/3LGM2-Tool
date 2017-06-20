@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * Diese Klasse stellt allgemeine Funktionen für den Umgang mit Dateien zur Verfügung.
+ * Diese Klasse stellt allgemeine Funktionen fÃ¼r den Umgang mit Dateien zur VerfÃ¼gung.
  * 
  * @author AXS
  * @created 17.04.06
@@ -25,7 +25,7 @@ import java.util.List;
 public class FileHandler {
 
     /**
-     * Liefert <code>true</code> zurück, wenn das übergebene {@link File} beschreibbar ist.
+     * Liefert <code>true</code> zurÃ¼ck, wenn das Ã¼bergebene {@link File} beschreibbar ist.
      * Sollte die Datei noch nicht existieren und <code>testonly</code> ist <code>false</code>,
      * dann wird die Datei angelegt.
      * Achtung: Es werden immer Dateien und keine Verzeichnisse angelegt.
@@ -35,7 +35,7 @@ public class FileHandler {
      * @param testonly
      *            wenn <code>false</code> wird die Datei angelegt, wenn sie noch nicht existiert
      * @return
-     *         <code>true</code> wenn das übergebene {@link File} geschrieben werden kann
+     *         <code>true</code> wenn das Ã¼bergebene {@link File} geschrieben werden kann
      */
     public static boolean guaranteeWriteableFile(final File file, final boolean testonly) {
         if (file == null) {
@@ -51,7 +51,7 @@ public class FileHandler {
         //file existiert nicht
         File dir = new File(file.getParent());
         try {
-            //wenn das Verzeichnis noch nicht vorhanden ist und sich nicht anlegen lässt
+            //wenn das Verzeichnis noch nicht vorhanden ist und sich nicht anlegen lÃ¤sst
             if (!dir.exists() && !dir.mkdirs()) {
                 return false;
             }
@@ -66,7 +66,7 @@ public class FileHandler {
     }
 
     /**
-     * Liefert <code>true</code> zurück, wenn das übergebene {@link File} beschreibbar ist.
+     * Liefert <code>true</code> zurÃ¼ck, wenn das Ã¼bergebene {@link File} beschreibbar ist.
      * Sollte die Datei noch nicht existieren, wird sie angelegt. <br>
      * Achtung: Es werden immer Dateien und keine Verzeichnisse angelegt.
      * 
@@ -112,7 +112,7 @@ public class FileHandler {
 
     /**
      * Kopiert eine Datei in eine andere.
-     * Existiert die Zieldatei, wird sie überschrieben.
+     * Existiert die Zieldatei, wird sie Ã¼berschrieben.
      * 
      * @param source - die Quelldatei-URL
      * @param dest - die Zieldatei
@@ -131,7 +131,7 @@ public class FileHandler {
 
     /**
      * Kopiert eine Datei in eine andere.
-     * Existiert die Zieldatei, wird sie überschrieben.
+     * Existiert die Zieldatei, wird sie Ã¼berschrieben.
      * 
      * @param source - die Quelldatei-URL
      * @param dest - die Zieldatei
@@ -149,7 +149,7 @@ public class FileHandler {
 
     /**
      * Kopiert eine Datei in eine andere.
-     * Existiert die Zieldatei, wird sie überschrieben.
+     * Existiert die Zieldatei, wird sie Ã¼berschrieben.
      * 
      * @param source - die Quelldatei
      * @param dest - die Zieldatei
@@ -245,10 +245,10 @@ public class FileHandler {
     /**
      * Noch nicht korrekt implementiert!
      * <p>
-     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code> besteht, falls die zulässige Zeichenanzahl nicht überschritten wird. <br>
+     * Gibt einfach ein Array wieder, das ausschlieÃŸlich aus <code>file</code> besteht, falls die zulÃ¤ssige Zeichenanzahl nicht Ã¼berschritten wird. <br>
      * Sonst wird eine Exception geworfen.
      * <p>
-     * Ziel: Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl ihrer Zeichen kleiner als {@link Integer#MAX_VALUE} ist. Damit können
+     * Ziel: Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl ihrer Zeichen kleiner als {@link Integer#MAX_VALUE} ist. Damit kÃ¶nnen
      * dann alle Zeichen der einzelnen Dateien in jeweils einem <code>charArray</code> erfasst werden.
      * 
      * @param file
@@ -262,11 +262,11 @@ public class FileHandler {
                 file
             };
         }
-        throw new IllegalArgumentException("Die Datei: " + file.getName() + " überschreitet die zulässige Größe");
+        throw new IllegalArgumentException("Die Datei: " + file.getName() + " Ã¼berschreitet die zulÃ¤ssige GrÃ¶ÃŸe");
     }
 
     /**
-     * Erzeugt eine tmporäre Datei
+     * Erzeugt eine tmporÃ¤re Datei
      * 
      * @param prefix
      *            Dateiname
@@ -291,16 +291,16 @@ public class FileHandler {
     /**
      * Traversiert das gesamte Verzeichnis <code>parent</code> und gibt eine Liste aller
      * enthaltenen Dateien wieder.<br>
-     * Es werden dabei nur Dateien mit dem spezifizierten Suffix in die Liste übernommen.<br>
-     * Diese Dateien werden an die übergebene Liste angefügt, welche am Ende der Traversierung
-     * zurückgegeben wird.
+     * Es werden dabei nur Dateien mit dem spezifizierten Suffix in die Liste Ã¼bernommen.<br>
+     * Diese Dateien werden an die Ã¼bergebene Liste angefÃ¼gt, welche am Ende der Traversierung
+     * zurÃ¼ckgegeben wird.
      * 
      * @param parent
      *            zu durchsuchendes Verzeichnis
      * @param fileExtension
      *            Dateisuffix (z.B. <code>.java</code>)
      * @param allFiles
-     *            zu füllende Liste
+     *            zu fÃ¼llende Liste
      * @return
      */
     public static List<File> traverse(final File parent, final String fileExtension, final List<File> allFiles) {
@@ -324,7 +324,7 @@ public class FileHandler {
     private static int nextNotExistingFileCounter = 1;
 
     /**
-     * Liefert die nächste Datei im angegebenen Pfad, die noch nicht existiert.
+     * Liefert die nÃ¤chste Datei im angegebenen Pfad, die noch nicht existiert.
      * Wird der Counter nicht restartet, dann wird vom letzten Index der beim
      * Aufruf dieser Funktion ermittelt wurde weitergesucht.
      * 

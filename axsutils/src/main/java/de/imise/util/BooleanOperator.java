@@ -52,7 +52,7 @@ public enum BooleanOperator {
 	NOT {
     	
     	/**
-    	 * Berechnet das Komplement der Menge <i>s1</i> bezüglich des Universums <i>s2</i>
+    	 * Berechnet das Komplement der Menge <i>s1</i> bezÃ¼glich des Universums <i>s2</i>
     	 * @see BooleanOperator#calculate(Set, Set, Set)
     	 */
 	    @Override
@@ -63,10 +63,10 @@ public enum BooleanOperator {
     };
 	
     /**
-     * Führt die jeweilige boolsche Operation auf den Elementen in <i>s1</i> und <i>s2</i> aus und
+     * FÃ¼hrt die jeweilige boolsche Operation auf den Elementen in <i>s1</i> und <i>s2</i> aus und
      * speichert das Resultat. 
      * <p>
-     * Die {@link Set}s <i>s1</i> und <i>s2</i> werden dabei nicht verändert.
+     * Die {@link Set}s <i>s1</i> und <i>s2</i> werden dabei nicht verÃ¤ndert.
      * 
      * @param s1
      * 			Menge 1.
@@ -78,7 +78,7 @@ public enum BooleanOperator {
 	public abstract <E, T extends Set<E>> void calculate(T s1, T s2, T target);
 	
 	/*
-	 * Leert target und fügt alle Elemente aus s an. 
+	 * Leert target und fÃ¼gt alle Elemente aus s an. 
 	 */
 	private static <E, T extends Set<E>> void prepareTarget(T s, T target) {
 		target.clear();

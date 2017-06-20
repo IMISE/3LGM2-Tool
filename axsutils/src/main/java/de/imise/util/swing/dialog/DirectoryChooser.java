@@ -31,9 +31,9 @@ import de.imise.util.swing.component.text.ExtendedTextField;
 /**
  * @author Thomas Rudert
  * 
- * Dialog zum auswählen eines Verzeichnisses.<br>
+ * Dialog zum auswÃ¤hlen eines Verzeichnisses.<br>
  * 
- * Die Datei besteht aus den mehreren Klassen, die alle für den  <code>DirectoryChooser</code>
+ * Die Datei besteht aus den mehreren Klassen, die alle fÃ¼r den  <code>DirectoryChooser</code>
  * gebraucht werden. 
  */
 public class DirectoryChooser extends JDialog {

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Stellt Funktionen für Objektsammlungen bereit, die <code>Arrays</code> und <code>Collections</code> nicht bieten.
+ * Stellt Funktionen fÃ¼r Objektsammlungen bereit, die <code>Arrays</code> und <code>Collections</code> nicht bieten.
  * 
  * @author AXS
  * @version 0.0.7
@@ -13,8 +13,8 @@ import java.util.Iterator;
 public abstract class CollectionUtils {
 
     /**
-     * Liefert einen Namen zurück, der aus dem Prefix und einem mit Leerzeichen abgetrennten
-     * Index ab 1 besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt, wird zurückgegeben.
+     * Liefert einen Namen zurÃ¼ck, der aus dem Prefix und einem mit Leerzeichen abgetrennten
+     * Index ab 1 besteht. Der erste Name dieser Form, der nicht in der Ã¼bergebene <code>Collection</code> vorkommt, wird zurÃ¼ckgegeben.
      * 
      * @param prefix
      * @param alreadyExistingNames
@@ -25,9 +25,9 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und dem übergebenen Postfix
-     * besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt,
-     * wird zurückgegeben.
+     * Liefert einen Namen zurÃ¼ck, der aus dem Prefix und einem Index ab 1 und dem Ã¼bergebenen Postfix
+     * besteht. Der erste Name dieser Form, der nicht in der Ã¼bergebene <code>Collection</code> vorkommt,
+     * wird zurÃ¼ckgegeben.
      * 
      * @param prefix
      * @param postfix
@@ -71,8 +71,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt zwei Arrays zu einem zusammen. Zuerst kommen die Elemente
-     * des zuerst übergebenen Arrays, dann die des zweiten.
+     * FÃ¼gt zwei Arrays zu einem zusammen. Zuerst kommen die Elemente
+     * des zuerst Ã¼bergebenen Arrays, dann die des zweiten.
      * 
      * @param array1
      *            erstes Array
@@ -89,8 +89,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt zwei Class-Arrays zu einem zusammen. Zuerst kommen die Elemente
-     * des zuerst übergebenen Arrays, dann die des zweiten.
+     * FÃ¼gt zwei Class-Arrays zu einem zusammen. Zuerst kommen die Elemente
+     * des zuerst Ã¼bergebenen Arrays, dann die des zweiten.
      * 
      * @param array1
      *            erstes Array
@@ -122,7 +122,7 @@ public abstract class CollectionUtils {
 
     /**
      * Liefert eine <code>Collection</code> aller Elemente deren Klassenname <b>genau</b> dem
-     * übergebenen entspricht.
+     * Ã¼bergebenen entspricht.
      * 
      * @param source
      * @param clazz
@@ -135,7 +135,7 @@ public abstract class CollectionUtils {
 
     /**
      * Liefert eine <code>Collection</code> aller Elemente die Insatnz einer Klasse des
-     * übergebenen Namens sind.
+     * Ã¼bergebenen Namens sind.
      * 
      * @param source
      * @param clazz
@@ -147,7 +147,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die spezifizierte Collection Instanzen der spezifizierten Klasse enthält.
+     * Gibt wieder, ob die spezifizierte Collection Instanzen der spezifizierten Klasse enthÃ¤lt.
      * 
      * @param source
      *            zu durchsuchende Collection
@@ -173,7 +173,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der spezifizierten Klasse enthält.
+     * Gibt wieder, ob die spezifizierte Collection ausschlieÃŸlich Instanzen der spezifizierten Klasse enthÃ¤lt.
      * 
      * @param source
      *            zu durchsuchende Collection
@@ -199,7 +199,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der spezifizierten Klassen enthält.
+     * Gibt wieder, ob die spezifizierte Collection ausschlieÃŸlich Instanzen der spezifizierten Klassen enthÃ¤lt.
      * 
      * @param source
      *            zu durchsuchende Collection
@@ -269,8 +269,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt eine neue <code>ArrayList</code> zurück, die jedes Element aus der übergebenen Liste
-     * genau einmal enthält.
+     * Gibt eine neue <code>ArrayList</code> zurÃ¼ck, die jedes Element aus der Ã¼bergebenen Liste
+     * genau einmal enthÃ¤lt.
      * 
      * @param list
      */
@@ -286,7 +286,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Löscht aus der übergebenen Liste jedes mehrfache Vorkommen des selben Elementes.
+     * LÃ¶scht aus der Ã¼bergebenen Liste jedes mehrfache Vorkommen des selben Elementes.
      * 
      * @param list
      */
@@ -302,7 +302,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Fügt der Sammlung <code>col1</code> alle Elemente aus <code>col2</code> einmal hinzu, die
+     * FÃ¼gt der Sammlung <code>col1</code> alle Elemente aus <code>col2</code> einmal hinzu, die
      * bisher nicht in <code>col1</code> vorkamen.
      * 
      * @param col1
@@ -321,15 +321,15 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Wandelt <code>rows</code> in ein <code>Object[][]</code> um, falls es sich um eine gültige <code>Collection</code> handelt.<br>
-     * Sonst wird <code>null</code> zurückgegeben.
+     * Wandelt <code>rows</code> in ein <code>Object[][]</code> um, falls es sich um eine gÃ¼ltige <code>Collection</code> handelt.<br>
+     * Sonst wird <code>null</code> zurÃ¼ckgegeben.
      * <p>
-     * <code>rows</code> ist eine gültige <code>Collection</code>, falls ihre Elemente selbst wieder vom Typ {@link Collection} sind und alle die
+     * <code>rows</code> ist eine gÃ¼ltige <code>Collection</code>, falls ihre Elemente selbst wieder vom Typ {@link Collection} sind und alle die
      * gleiche Elementanzahl besitzen.<br>
-     * Das heißt, dass <code>rows</code> eine <code>Collection</code> aller Zeilen sein muss. Außerdem darf <code>rows</code> nicht <code>null</code>
+     * Das heiÃŸt, dass <code>rows</code> eine <code>Collection</code> aller Zeilen sein muss. AuÃŸerdem darf <code>rows</code> nicht <code>null</code>
      * sein.
      * <p>
-     * Diese Methode bildet dabei die Zeilen und Spalten von <code>rows</code> identisch auf die Zeilen und Spalten des zurückgegebenen Arrays ab.
+     * Diese Methode bildet dabei die Zeilen und Spalten von <code>rows</code> identisch auf die Zeilen und Spalten des zurÃ¼ckgegebenen Arrays ab.
      * 
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
@@ -345,7 +345,7 @@ public abstract class CollectionUtils {
 
         T[][] array = null;
 
-        // Zeilen-/Spaltenzähler
+        // Zeilen-/SpaltenzÃ¤hler
         int i = 0, j = 0;
 
         for (Object nextRow : rows) {
@@ -387,7 +387,7 @@ public abstract class CollectionUtils {
         int n = row.size();
         T[] array = (T[]) new Object[n];
 
-        // Zeilen-/Spaltenzähler
+        // Zeilen-/SpaltenzÃ¤hler
         int i = 0;
         for (T value : row) {
             array[i] = value;
@@ -401,7 +401,7 @@ public abstract class CollectionUtils {
      * Dabei wird auf jedes {@link Object} aus <code>objectArray</code> {@link Object#toString()} angewendet und das Resultat an die entsprechende
      * Stelle im <code>String[][]</code> geschrieben.
      * <p>
-     * Ist <code>objectArray=null</code> wird <code>null</code> zurückgegeben.
+     * Ist <code>objectArray=null</code> wird <code>null</code> zurÃ¼ckgegeben.
      * 
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
@@ -411,7 +411,7 @@ public abstract class CollectionUtils {
     public static String[][] toStringArray(final Object[][] objectArray) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
 
         if (objectArray == null) {
-            throw new IllegalArgumentException("Das übergebene Array ist null");
+            throw new IllegalArgumentException("Das Ã¼bergebene Array ist null");
         }
 
         String[][] stringArray = new String[objectArray.length][objectArray[0].length];
@@ -429,7 +429,7 @@ public abstract class CollectionUtils {
      * Dabei wird auf jedes {@link Object} aus <code>objectArray</code> {@link Object#toString()} angewendet und das Resultat an die entsprechende
      * Stelle im <code>String[]</code> geschrieben.
      * <p>
-     * Ist <code>objectArray=null</code> wird <code>null</code> zurückgegeben.
+     * Ist <code>objectArray=null</code> wird <code>null</code> zurÃ¼ckgegeben.
      * 
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
@@ -439,7 +439,7 @@ public abstract class CollectionUtils {
     public static String[] toStringArray(final Object[] objectArray) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
 
         if (objectArray == null) {
-            throw new IllegalArgumentException("Das übergebene Array ist null");
+            throw new IllegalArgumentException("Das Ã¼bergebene Array ist null");
         }
 
         String[] stringArray = new String[objectArray.length];
@@ -497,7 +497,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert eine von eckicken Klammern eingerahmte und durch Kommas separierte Listendarstellung des übergebenen Arrays.
+     * Liefert eine von eckicken Klammern eingerahmte und durch Kommas separierte Listendarstellung des Ã¼bergebenen Arrays.
      * 
      * @param array
      * @return
@@ -507,7 +507,7 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Liefert einen String in dem einfach die Rückgabewerte der toString()-Methode aller übergebenen Objects aneinadergehängt wird.
+     * Liefert einen String in dem einfach die RÃ¼ckgabewerte der toString()-Methode aller Ã¼bergebenen Objects aneinadergehÃ¤ngt wird.
      * 
      * @param array
      * @return
@@ -522,9 +522,9 @@ public abstract class CollectionUtils {
      * @param array
      *            Das aufzulistende Array
      * @param suffix
-     *            Anfang des Rückgabestrings
+     *            Anfang des RÃ¼ckgabestrings
      * @param postfix
-     *            Ende des Rückgabestrings
+     *            Ende des RÃ¼ckgabestrings
      * @param delimiter
      *            Trenner zwischen den einzelnen Listenwerten
      * @return
@@ -552,8 +552,8 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Berechnet das Maximum der Größen der {@link Collection}s.<br>
-     * Falls keine Collections enthalten sind, wird <code>-1</code> zurückgegeben.
+     * Berechnet das Maximum der GrÃ¶ÃŸen der {@link Collection}s.<br>
+     * Falls keine Collections enthalten sind, wird <code>-1</code> zurÃ¼ckgegeben.
      * 
      * @param allCollections
      * @return

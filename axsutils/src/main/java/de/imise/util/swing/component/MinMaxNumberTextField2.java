@@ -11,8 +11,8 @@ import javax.swing.text.NumberFormatter;
 
 /**
  * Ein JTetxField, das nur Zahlenwerte in einem bestimmten Bereich mit einer vorher festgeleten Genauigkeit als Eingabe akzeptiert.
- * Im Unterschied zu dem eigentlichen Verhalten eines {@link JFormattedTextField} wird hier schon die Eingabe ungültiger Werte
- * verhindert und nicht erst beim Beenden des Editierens (= Enter gedrückt oder Focus verloren).
+ * Im Unterschied zu dem eigentlichen Verhalten eines {@link JFormattedTextField} wird hier schon die Eingabe ungÃ¼ltiger Werte
+ * verhindert und nicht erst beim Beenden des Editierens (= Enter gedrÃ¼ckt oder Focus verloren).
  * 
  * @author AXS
  */
@@ -24,7 +24,7 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
 	/** Dezimaltrennzeichen der aktuellen Locale dieses Textfeldes */
 	private char decimalSeparator;
 	
-	/** Anzahl der zulässigen Nachkommastellen bei der Eingabe */
+	/** Anzahl der zulÃ¤ssigen Nachkommastellen bei der Eingabe */
 	private int decimalPlaces;
 	
 	/**
@@ -67,7 +67,7 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
     		//Unterschreiten des Minimums und Unterschreiten des Maximums bei der Eingabe verhindern
     		if (formatter.getMinimum().compareTo(value) > 0 || formatter.getMaximum().compareTo(value) < 0)
     			throw new Exception();
-    		//Genauigkeit wurde überschritten
+    		//Genauigkeit wurde Ã¼berschritten
     		int decimalSepIndex = parseableText.indexOf('.');
     		if (decimalSepIndex >= 0 && parseableText.length() - decimalSepIndex - 1 > decimalPlaces)
     			throw new Exception();
@@ -77,8 +77,8 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
     		}
         } catch (Exception ex) {
         	//caretUpdate wird immer 2x gefeuert, aber beim ersten Mal wird bei 
-    		//setText() eine Exception ausgelöst und erst beim 2ten Mal kann der
-    		//Text tatsächlich wieder zurück gesetzt werden
+    		//setText() eine Exception ausgelÃ¶st und erst beim 2ten Mal kann der
+    		//Text tatsÃ¤chlich wieder zurÃ¼ck gesetzt werden
         	try {
         		setText(oldText);
         	} catch (Exception ex2) {}

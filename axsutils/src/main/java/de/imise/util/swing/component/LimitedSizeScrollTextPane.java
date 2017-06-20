@@ -22,14 +22,14 @@ import com.google.common.collect.Sets;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
- * Wird maxLines >0 angegeben, dann wird das TextPane nie größer als diese Zeilenanzahl
- * sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1 vergrößert sich das Pane
+ * Wird maxLines >0 angegeben, dann wird das TextPane nie grÃ¶ÃŸer als diese Zeilenanzahl
+ * sondern es erscheint ein ScrollPane. Bei maxLines kleiner 1 vergrÃ¶ÃŸert sich das Pane
  * beliebig, ohne dass ein ScrollPane erscheint.
  */
 public class LimitedSizeScrollTextPane extends JScrollPane {
 
     /**
-     * Maximale Zeilenanzahl, auf die sich die Komponente vergrößert, bevor das ScrollPane angezeigt wird.
+     * Maximale Zeilenanzahl, auf die sich die Komponente vergrÃ¶ÃŸert, bevor das ScrollPane angezeigt wird.
      */
     private final int maxLines;
 
@@ -155,7 +155,7 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
 
     @Override
     public synchronized void addKeyListener(final KeyListener listener) {
-        //jeden Listener nur 1 x hinzufügen
+        //jeden Listener nur 1 x hinzufÃ¼gen
         if (keyListeners.contains(listener)) {
             return;
         }
@@ -172,7 +172,7 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
     private final Set<DocumentListener> documentListeners = Sets.newHashSet();
 
     public void addDocumentListener(final DocumentListener listener) {
-        //jeden Listener nur 1 x hinzufügen
+        //jeden Listener nur 1 x hinzufÃ¼gen
         if (documentListeners.contains(listener)) {
             return;
         }

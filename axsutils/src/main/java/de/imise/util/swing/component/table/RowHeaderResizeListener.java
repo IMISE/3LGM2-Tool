@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 /**
- * Listener, der das Resizing des rowHeaders ermöglicht und überwacht
+ * Listener, der das Resizing des rowHeaders ermÃ¶glicht und Ã¼berwacht
  * 
  * @author fstephan
  */
@@ -20,7 +20,7 @@ public class RowHeaderResizeListener extends MouseAdapter {
 	/** 
 	 * MousePointer - Verschiebung
 	 * <br>
-	 * Sorgt dafür, dass beim Eintreten eines Resize-Ereignisses der rowHeader 
+	 * Sorgt dafÃ¼r, dass beim Eintreten eines Resize-Ereignisses der rowHeader 
 	 * das source-Objekt der MouseEvents ist.
 	 */
 	private static final int MOUSE_POINT_X_PITCH = 1;
@@ -28,15 +28,15 @@ public class RowHeaderResizeListener extends MouseAdapter {
 	/** der RowHeader des Tables */
 	private JList header;
 	
-	/** das ScrollPane, das den Table und den Header enthält */
+	/** das ScrollPane, das den Table und den Header enthÃ¤lt */
 	private JScrollPane pane;
 	
-	/** gibt, wieder ob die Größe des RowHeaders gerade geändert wird */ 
+	/** gibt, wieder ob die GrÃ¶ÃŸe des RowHeaders gerade geÃ¤ndert wird */ 
 	private boolean isResizing = false;
 	
 	/** 
 	 * der MouseCursor 
-	 * <br> ändert sich, wenn er sich auf dem Rand zwischen RowHeader und Table befindet 
+	 * <br> Ã¤ndert sich, wenn er sich auf dem Rand zwischen RowHeader und Table befindet 
 	 */
 	private Cursor cursor;
 	
@@ -58,8 +58,8 @@ public class RowHeaderResizeListener extends MouseAdapter {
 	}
 	
 	/**
-	 * Verändert den Cursor-Typ in Abhängigkeit seiner Position.
-	 * Ist er über dem Rand zwischen rowHeader und table, 
+	 * VerÃ¤ndert den Cursor-Typ in AbhÃ¤ngigkeit seiner Position.
+	 * Ist er Ã¼ber dem Rand zwischen rowHeader und table, 
 	 * wechselt er in die resize-Dartsellung, sonst wir der Standard-Cursor angezeigt.
 	 * @param e
 	 * @see java.awt.event.MouseAdapter#mouseMoved(java.awt.event.MouseEvent)
@@ -74,7 +74,7 @@ public class RowHeaderResizeListener extends MouseAdapter {
 		int headerX = header.getX() + header.getWidth();
 		Rectangle visibleCells = header.getCellBounds(header.getFirstVisibleIndex(), header.getLastVisibleIndex());
 		
-		// Cursor über dem Rand von rowHeader und table
+		// Cursor Ã¼ber dem Rand von rowHeader und table
 		if((mouseX == headerX || mouseX+1 == headerX) && 
 				e.getSource() == header && 
 				e.getY() <= (visibleCells.y + visibleCells.height)) {
@@ -92,9 +92,9 @@ public class RowHeaderResizeListener extends MouseAdapter {
 	}
 	
 	/**
-	 * Führt den resize aus.
+	 * FÃ¼hrt den resize aus.
 	 * Unterbindet das Verkleinern, falls die minimale Breite unterschritten wird.
-	 * Unterbindet das Vergrößern, falls die Breite des rowHeaders fast die Fensterbreite
+	 * Unterbindet das VergrÃ¶ÃŸern, falls die Breite des rowHeaders fast die Fensterbreite
 	 * erreicht.
 	 * 
 	 * @param e
@@ -111,8 +111,8 @@ public class RowHeaderResizeListener extends MouseAdapter {
 		int mouseX = e.getX() + MOUSE_POINT_X_PITCH;
 		
 		/*
-		 * Verhindert, dass der rowHeader seine minimale Größe unterschreiten
-		 * bzw. die Fenstergröße überschreiten kann
+		 * Verhindert, dass der rowHeader seine minimale GrÃ¶ÃŸe unterschreiten
+		 * bzw. die FenstergrÃ¶ÃŸe Ã¼berschreiten kann
 		 */
 		JViewport p = pane.getViewport();
 		if (mouseX <= header.getMinimumSize().width || mouseX >= p.getWidth() + p.getX() -10)

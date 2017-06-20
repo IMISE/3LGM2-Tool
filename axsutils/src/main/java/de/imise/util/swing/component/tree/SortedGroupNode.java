@@ -14,8 +14,8 @@ public class SortedGroupNode extends DefaultMutableTreeNode{
 	/**
 	 * Die Gruppe, in der ein Knoten unter seinem Parent eingeordnet wird. Einem Paren werden
 	 * zuerst alle Knoten der Gruppe 0 untergehangen, dann 1 usw. Die Knoten innerhalb einer
-	 * Gruppe können selbst auch sortiert sein. Wird kein Gruppenwert für einen solchen Knoten
-	 * gesetzt, so gehört er zur Gruppe 0.
+	 * Gruppe kÃ¶nnen selbst auch sortiert sein. Wird kein Gruppenwert fÃ¼r einen solchen Knoten
+	 * gesetzt, so gehÃ¶rt er zur Gruppe 0.
 	 */
 	private int nodeGroup = 0;
 	
@@ -81,7 +81,7 @@ public class SortedGroupNode extends DefaultMutableTreeNode{
 	//Hilfsklassen
 	
 	/**
-	 * Wenn ein Comparator übegeben wird, so gibt dieser nur die Ordnung für die Kindknoten
+	 * Wenn ein Comparator Ã¼begeben wird, so gibt dieser nur die Ordnung fÃ¼r die Kindknoten
 	 * in einer Gruppe (also mit dem selben <code>nodeGroup</code>-Wert) vor. Dieser
 	 * Comparator muss dahingehend erweitert werden, dass erst nach den Gruppen und dann
 	 * in den Gruppen sortiert wird. 
@@ -91,7 +91,7 @@ public class SortedGroupNode extends DefaultMutableTreeNode{
 	private static class NodeComparator implements Comparator {
 
 		/**
-		 * Der String-Comparator der  für den Vergleich innerhalb einer Gruppe benutzt wird.
+		 * Der String-Comparator der  fÃ¼r den Vergleich innerhalb einer Gruppe benutzt wird.
 		 */
 		private Comparator <Object> comparator = null;
 		

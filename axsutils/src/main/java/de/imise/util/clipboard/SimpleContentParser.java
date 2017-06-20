@@ -12,7 +12,7 @@ import de.imise.util.io.FileHandler;
  * Klasse zur Verarbeitung von Inhalten der System-Zwischenablage.
  * <p>
  * Bekannte Fehler:
- * 	<li>leere Zellen am rechten und unteren Rand einer Selektion in einer Excel-Tabelle werden nicht übernommen
+ * 	<li>leere Zellen am rechten und unteren Rand einer Selektion in einer Excel-Tabelle werden nicht Ã¼bernommen
  * 
  * @see
  * @author Frank
@@ -33,11 +33,11 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 	/* *************************** Beginn: Parsing extern->intern ************************* */
 
 	/**
-	 * Wandelt, wenn möglich, <code>externalContent</code> in ein ObjectArray um.<br>
-	 * Falls eine Umwandlung nicht möglich ist, wird eine {@link IllegalContentException} geworfen.
+	 * Wandelt, wenn mÃ¶glich, <code>externalContent</code> in ein ObjectArray um.<br>
+	 * Falls eine Umwandlung nicht mÃ¶glich ist, wird eine {@link IllegalContentException} geworfen.
 	 * <p>
 	 * 
-	 * Gültige Formate für <code>externalContent</code> sind:
+	 * GÃ¼ltige Formate fÃ¼r <code>externalContent</code> sind:
 	 * 	<li> Tabulator/Zeilenumbruch-separierte {@link String}s
 	 * 	<li> {@link File}s, die solche {@link String}s enthalten
 	 * 
@@ -61,8 +61,8 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 
 		
 	/**
-	 * Wandelt, wenn möglich, <code>externalContent</code> in ein ObjectArray um.<br>
-	 * Falls eine Umwandlung nicht möglich ist, wird <code>null</code> zurückgegeben.
+	 * Wandelt, wenn mÃ¶glich, <code>externalContent</code> in ein ObjectArray um.<br>
+	 * Falls eine Umwandlung nicht mÃ¶glich ist, wird <code>null</code> zurÃ¼ckgegeben.
 	 * 
 	 * @see SimpleContentParser#toInternalContent(Object)
 	 * @param externalContent
@@ -70,7 +70,7 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 	 */
 	private static final String[][] _toInternalContent(Object externalContent) {
 		
-//		Fehler nach paste bei öffnen der Zelle
+//		Fehler nach paste bei Ã¶ffnen der Zelle
 		
 		if(externalContent == null)
 			return null;
@@ -108,15 +108,15 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 		for (int i=0; i<rowCount; i++) {
 			String row = rows[i];
 			for (int j=0; j<row.length(); j++) {
-				if (row.charAt(j) == ROW_TAG) // gehe in nächste Reihe
+				if (row.charAt(j) == ROW_TAG) // gehe in nÃ¤chste Reihe
 					break;
-				if(row.charAt(j) == COLUMN_TAG) { // gehe in nächste Spalte
+				if(row.charAt(j) == COLUMN_TAG) { // gehe in nÃ¤chste Spalte
 					internalContent[i][y] = sb.toString();
 					y++;
 					sb = new StringBuffer();
 					continue;
 				}
-				sb.append(row.charAt(j)); // füge Inhalt hinzu
+				sb.append(row.charAt(j)); // fÃ¼ge Inhalt hinzu
 			}
 			internalContent[i][y] = sb.toString();
 			y=0;
@@ -170,14 +170,14 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 	/* *************************** Beginn: Parsing intern->extern ************************* */
 
 	/**
-	 * Wandelt, wenn möglich, <code>internalContent</code> in einen <code>String</code> um.<br>
-	 * Falls eine Umwandlung nicht möglich ist, wird eine {@link IllegalContentException} geworfen.
+	 * Wandelt, wenn mÃ¶glich, <code>internalContent</code> in einen <code>String</code> um.<br>
+	 * Falls eine Umwandlung nicht mÃ¶glich ist, wird eine {@link IllegalContentException} geworfen.
 	 * <p>
 	 * 
-	 * Gültige Formate für <code>internalContent</code> sind:
+	 * GÃ¼ltige Formate fÃ¼r <code>internalContent</code> sind:
 	 * 	<li> <code>Object[][]</code>
 	 * 	<li> <code>String[][]</code>
-	 * 	<li> gültige <code>Collection</code>s (<b>siehe auch:</b> {@link CollectionUtils#toArray(Collection)})
+	 * 	<li> gÃ¼ltige <code>Collection</code>s (<b>siehe auch:</b> {@link CollectionUtils#toArray(Collection)})
 	 * 
 	 * @throws IllegalContentException
 	 * @see ContentParser#toExternalContent(Object)
@@ -197,8 +197,8 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 	}
 	
 	/**
-	 * Wandelt, wenn möglich, <code>internalContent</code> in einen <code>String</code> um.<br>
-	 * Falls eine Umwandlung nicht möglich ist, wird <code>null</code> zurückgegeben.
+	 * Wandelt, wenn mÃ¶glich, <code>internalContent</code> in einen <code>String</code> um.<br>
+	 * Falls eine Umwandlung nicht mÃ¶glich ist, wird <code>null</code> zurÃ¼ckgegeben.
 	 * 
 	 * @throws ArrayIndexOutOfBoundsException
 	 * @see SimpleContentParser#toExternalContent(Object)
@@ -221,7 +221,7 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 		if(internalContentArray == null)
 			return null;
 		
-		// externalContent füllen
+		// externalContent fÃ¼llen
 		String s;
 		int m = internalContentArray.length;
 		int n = internalContentArray[0].length;
@@ -241,9 +241,9 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 	
 
 	/**
-	 * Wandelt <code>rows</code> in ein <code>String[][]</code> um, falls es sich um eine gültige
+	 * Wandelt <code>rows</code> in ein <code>String[][]</code> um, falls es sich um eine gÃ¼ltige
 	 * <code>Collection</code> handelt.<br>
-	 * Sonst wird <code>null</code> zurückgegeben.
+	 * Sonst wird <code>null</code> zurÃ¼ckgegeben.
 	 * 
 	 * @see CollectionUtils#toArray(Collection)
 	 * @param rows
@@ -264,7 +264,7 @@ public class SimpleContentParser implements ClipboardConstants,ContentParser {
 	/* *************************** Beginn: statische Methoden ************************* */
 
 	/**
-	 * Gibt den Standard-Parser für diese Plattform wieder.
+	 * Gibt den Standard-Parser fÃ¼r diese Plattform wieder.
 	 * @return
 	 */
 	public static SimpleContentParser getDefaultParser() {

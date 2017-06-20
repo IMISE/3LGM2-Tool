@@ -6,7 +6,7 @@ import java.io.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Ein {@link FileFilter}, der sich genauso verhält wie ein {@link FileNameExtensionFilter}, bei dem man aber
+ * Ein {@link FileFilter}, der sich genauso verhÃ¤lt wie ein {@link FileNameExtensionFilter}, bei dem man aber
  * optional das Akzeptieren von Verzeichnissen abschalten kann, die der {@link FileNameExtensionFilter} in jedem
  * Fall akzeptiert.
  * Da {@link FileNameExtensionFilter} leider final ist, kann man ihn nicht direkt als Oberklasse nehmen.
@@ -19,7 +19,7 @@ public class FileNameExtensionFilterAndFileFilter implements FileFilter {
     /** Der eigentliche FileNameExtensionFilter */
     private FileNameExtensionFilter fileNameExtensionFilter;
 
-    /** Wenn <code>true</code> werden auch Verzeichnisse zurück gegeben, sonst nur Dateien */
+    /** Wenn <code>true</code> werden auch Verzeichnisse zurÃ¼ck gegeben, sonst nur Dateien */
     private final boolean acceptDirectories;
 
     /**

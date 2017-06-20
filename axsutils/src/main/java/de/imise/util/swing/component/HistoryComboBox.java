@@ -17,13 +17,13 @@ import de.imise.util.swing.component.text.TextComponentStandardPopup;
  */
 public class HistoryComboBox extends JComboBox implements KeyListener/*, DocumentListener*/{
 
-	/** Konstante für die Maximalzahl der Historyeinträge */
+	/** Konstante fÃ¼r die Maximalzahl der HistoryeintrÃ¤ge */
 	private static final int MAX_HISTORY_ENTRIES = Integer.MAX_VALUE;
 	
-	/*** Maximale Anzahl von Einträgen in der Histotry-Liste */
+	/*** Maximale Anzahl von EintrÃ¤gen in der Histotry-Liste */
 	private int historyLength = MAX_HISTORY_ENTRIES;
 
-	/** Die Aktion, die beim Drücken von Enrter ausgeführt werden soll */
+	/** Die Aktion, die beim DrÃ¼cken von Enrter ausgefÃ¼hrt werden soll */
 	private Action enterAction = null;
 
 	private ActionEvent enterActionEvent;
@@ -45,7 +45,7 @@ public class HistoryComboBox extends JComboBox implements KeyListener/*, Documen
 
 	/**
 	 * @param historyLength
-	 * 		Maximale Anzahl der Einträge in der History-Liste
+	 * 		Maximale Anzahl der EintrÃ¤ge in der History-Liste
 	 * @param initialListValues
 	 * 		Am Anfang vorhandene Listenwerte
 	 */
@@ -70,18 +70,18 @@ public class HistoryComboBox extends JComboBox implements KeyListener/*, Documen
 
 	/**
 	 * @param historyLength
-	 * 		Maximale Anzahl der Einträge in der History-Liste
+	 * 		Maximale Anzahl der EintrÃ¤ge in der History-Liste
 	 */
 	public HistoryComboBox(int historyLength) {
 		this(historyLength, (String[])null);
 	}
 
 	/**
-	 * Hinzufügen des selektierten Eintrages zur History
+	 * HinzufÃ¼gen des selektierten Eintrages zur History
 	 * @param jbc
 	 */
 	public static void addToHistory(HistoryComboBox jbc) {
-		// Bei Suchen über Enter ist das selektierte Objekt noch nicht als selectedObject verfügbar, dann muss über getEditor gegangen werden
+		// Bei Suchen Ã¼ber Enter ist das selektierte Objekt noch nicht als selectedObject verfÃ¼gbar, dann muss Ã¼ber getEditor gegangen werden
 		jbc.setSelectedItem(((JTextComponent) jbc.getEditor().getEditorComponent()).getText());
 		if (jbc.getItemCount() > 0 || jbc.getSelectedObjects().length > 0) {
 			boolean found = false;
@@ -91,7 +91,7 @@ public class HistoryComboBox extends JComboBox implements KeyListener/*, Documen
 				}
 			}
 			if (!found) {
-				//wenn historylänge überschritten, letztes löschen
+				//wenn historylÃ¤nge Ã¼berschritten, letztes lÃ¶schen
 				if (jbc.historyLength < jbc.getItemCount() + 1)
 					jbc.removeItemAt(jbc.historyLength - 1);
 				jbc.insertItemAt(jbc.getSelectedItem(), 0);
@@ -100,7 +100,7 @@ public class HistoryComboBox extends JComboBox implements KeyListener/*, Documen
 	}
 	
 	/**
-	 * Lösung funktionierte nicht
+	 * LÃ¶sung funktionierte nicht
 	 */
 	/*
 	@Deprecated
@@ -152,8 +152,8 @@ public class HistoryComboBox extends JComboBox implements KeyListener/*, Documen
 	public void keyReleased(KeyEvent e) {
 	}
 /*	
-	muss erstmal raus, lagt sonst in großen Modellen	
-	TODO: später debuggen -> Lösung?
+	muss erstmal raus, lagt sonst in groÃŸen Modellen	
+	TODO: spÃ¤ter debuggen -> LÃ¶sung?
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		fireActionEvent();

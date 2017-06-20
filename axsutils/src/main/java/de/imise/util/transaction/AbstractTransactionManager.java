@@ -7,9 +7,9 @@ import javax.swing.event.EventListenerList;
 
 /**
  * Abstrakter Transaction-Manager, welcher die grundlegende 
- * Listener-Funktionalität bereitstellt. 
+ * Listener-FunktionalitÃ¤t bereitstellt. 
  * <p>
- * <u>Unterstützte Properties:</u> <ul>
+ * <u>UnterstÃ¼tzte Properties:</u> <ul>
  * 	<li> "isUndoAvailable" </li>
  * 	<li> "isRedoAvailable" </li>
  * </ul>
@@ -18,7 +18,7 @@ import javax.swing.event.EventListenerList;
  */
 public abstract class AbstractTransactionManager implements TransactionManager {
 	
-	/** Die Liste aller Listener für die TransactionManager */
+	/** Die Liste aller Listener fÃ¼r die TransactionManager */
 	protected EventListenerList listenerList = new EventListenerList();
 	
 	/*
@@ -58,7 +58,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 
 	/**
-	 * Benachrichtigt alle {@link ExtendedTransactionListener}s, dass eine neue Transaktion geöffnet wurde.
+	 * Benachrichtigt alle {@link ExtendedTransactionListener}s, dass eine neue Transaktion geÃ¶ffnet wurde.
 	 */
 	protected void fireTransactionOpened() {
 		ExtendedTransactionListener[] ls = listenerList.getListeners(ExtendedTransactionListener.class);
@@ -86,7 +86,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	
 	/**
-	 * Benachrichtig alle {@link PropertyChangeListener}, dass jetzt das UNDO verfügbar ist.
+	 * Benachrichtig alle {@link PropertyChangeListener}, dass jetzt das UNDO verfÃ¼gbar ist.
 	 * @param oldValue
 	 * 			alter Wert, der "undoAvailable"-Property
 	 * @param newValue
@@ -97,7 +97,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	
 	/**
-	 * Benachrichtig alle {@link PropertyChangeListener}, dass jetzt das REDO verfügbar ist.
+	 * Benachrichtig alle {@link PropertyChangeListener}, dass jetzt das REDO verfÃ¼gbar ist.
 	 * @param oldValue
 	 * 			alter Wert, der "redoAvailable"-Property
 	 * @param newValue
@@ -108,7 +108,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	
 	/**
-	 * Benachrichtigt alle {@link ExtendedTransactionListener}s, dass ein UNDO durchgeführt wurde.
+	 * Benachrichtigt alle {@link ExtendedTransactionListener}s, dass ein UNDO durchgefÃ¼hrt wurde.
 	 */
 	protected void fireUndoPerformed() {
 		ExtendedTransactionListener[] ls = listenerList.getListeners(ExtendedTransactionListener.class);
@@ -117,7 +117,7 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	
 	/**
-	 * Benachrichtigt alle {@link ExtendedTransactionListener}s, dass ein REDO durchgeführt wurde.
+	 * Benachrichtigt alle {@link ExtendedTransactionListener}s, dass ein REDO durchgefÃ¼hrt wurde.
 	 */
 	protected void fireRedoPerformed() {
 		ExtendedTransactionListener[] ls = listenerList.getListeners(ExtendedTransactionListener.class);
@@ -126,10 +126,10 @@ public abstract class AbstractTransactionManager implements TransactionManager {
 	}
 	
 	/**
-	 * Benachrichtig alle {@link PropertyChangeListener}, dass sich die spezifizierte Property geändert hat.
+	 * Benachrichtig alle {@link PropertyChangeListener}, dass sich die spezifizierte Property geÃ¤ndert hat.
 	 * 
 	 * @param propertyName
-	 * 			Name der veränderten Property
+	 * 			Name der verÃ¤nderten Property
 	 * @param oldValue
 	 * 			alter Wert
 	 * @param newValue

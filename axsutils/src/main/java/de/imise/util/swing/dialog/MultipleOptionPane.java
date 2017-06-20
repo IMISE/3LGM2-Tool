@@ -12,15 +12,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- * Stellt einen Dialog bereit, der untereinander CheckBoxen für übergebene Optionen darstellt,
- * die alle einzeln selektiert werden können. Der Dialog gibt die Selektion der Optionen in
- * einem <code>boolean</code>-Array zurück, in der die Reihenfolge der einzelnen boolean-Werte
- * der Reihenfolge der übergebenen Optionen entspricht. Ein <code>true</code> an Stelle 0
- * im Rückgabe-Array bedeutet, dass die erste Option selektiert wurde.<br>
+ * Stellt einen Dialog bereit, der untereinander CheckBoxen fÃ¼r Ã¼bergebene Optionen darstellt,
+ * die alle einzeln selektiert werden kÃ¶nnen. Der Dialog gibt die Selektion der Optionen in
+ * einem <code>boolean</code>-Array zurÃ¼ck, in der die Reihenfolge der einzelnen boolean-Werte
+ * der Reihenfolge der Ã¼bergebenen Optionen entspricht. Ein <code>true</code> an Stelle 0
+ * im RÃ¼ckgabe-Array bedeutet, dass die erste Option selektiert wurde.<br>
  * 
- * Der Dialog kann in seiner Anzeigebreite beschränkt werden, wenn man eine direkte Instanz von
- * dieser Klasse bildet und dann nicht über die statischen Funktionen von <code>JOptionPane</code>
- * sondern über die Instanzmethoden dieser Klasse Dialoge anzeigt.
+ * Der Dialog kann in seiner Anzeigebreite beschrÃ¤nkt werden, wenn man eine direkte Instanz von
+ * dieser Klasse bildet und dann nicht Ã¼ber die statischen Funktionen von <code>JOptionPane</code>
+ * sondern Ã¼ber die Instanzmethoden dieser Klasse Dialoge anzeigt.
  * 
  * @author AXS
  *
@@ -34,7 +34,7 @@ public class MultipleOptionPane extends JOptionPane{
 	
 
 	/**
-	 * Ertsellt ein neues Pane, dessen Dialoge auf 90 Zeichen Breite beschränkt sind.
+	 * Ertsellt ein neues Pane, dessen Dialoge auf 90 Zeichen Breite beschrÃ¤nkt sind.
 	 */
 	public MultipleOptionPane() {
 		super();
@@ -49,7 +49,7 @@ public class MultipleOptionPane extends JOptionPane{
 	}
 	
 	/**
-	 * Zeigt einen Dialog an, der oben eine Message und darunter die übergebene Komponente anzeigt.
+	 * Zeigt einen Dialog an, der oben eine Message und darunter die Ã¼bergebene Komponente anzeigt.
 	 * 
 	 * @param parentComponent
 	 * 			Besitzerkomponente des Dialoges
@@ -60,8 +60,8 @@ public class MultipleOptionPane extends JOptionPane{
 	 * @param component
 	 * 			Anzuzeigende Komponente
 	 * @return
-	 * 			{@link JOptionPane#OK_OPTION} wenn OK gedrückt wurde. {@link JOptionPane#CANCEL_OPTION}, wenn etwas anderes (Schließen-Kreuz
-	 * 			oder Abbrechen) gedrückt wurde.
+	 * 			{@link JOptionPane#OK_OPTION} wenn OK gedrÃ¼ckt wurde. {@link JOptionPane#CANCEL_OPTION}, wenn etwas anderes (SchlieÃŸen-Kreuz
+	 * 			oder Abbrechen) gedrÃ¼ckt wurde.
 	 */
 	public final int showComponentDialog(Component parentComponent, String title, String message, Component component) {
 		Object msg[] = { message, component };
@@ -70,16 +70,16 @@ public class MultipleOptionPane extends JOptionPane{
 		setOptionType(JOptionPane.OK_CANCEL_OPTION);
 		JDialog dialog = createDialog(parentComponent, title);
 		dialog.setVisible(true);
-		// Schließen übers Kreuz oder irgendwas unvorhergesehenes
+		// SchlieÃŸen Ã¼bers Kreuz oder irgendwas unvorhergesehenes
 		if (value == null || !(value instanceof Integer))
 			return CANCEL_OPTION;
 		return OK_OPTION;
 	}
 
 	/**
-	 * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
-	 * Über das Array <code>selected</code> können bereits selektierte Checkboxen festgelegt werden.
-	 * Dieses Array muss die gleiche Länge wie <code>options</code> haben oder kann <code>null</code>
+	 * Zeigt einen Optionen-Dialog an, der fÃ¼r jede Ã¼bergebene Option eine Checkbox darstellt.<br>
+	 * Ãœber das Array <code>selected</code> kÃ¶nnen bereits selektierte Checkboxen festgelegt werden.
+	 * Dieses Array muss die gleiche LÃ¤nge wie <code>options</code> haben oder kann <code>null</code>
 	 * sein. Wenn es <code>null</code> ist, sind alle Checkboxen nicht selektiert. 
 	 * 
 	 * 
@@ -90,11 +90,11 @@ public class MultipleOptionPane extends JOptionPane{
 	 * @param message 
 	 * 			Nachricht des Dialoges
 	 * @param options 
-	 * 			Optionen, die über Checkboxen zur Auswahl gestellt werden. Diese Optionen werden über
+	 * 			Optionen, die Ã¼ber Checkboxen zur Auswahl gestellt werden. Diese Optionen werden Ã¼ber
 	 * 			ihre toString()-Methode im Dialog angezeigt.
 	 * @param selected
-	 * 			legt fest, ob Checkboxen der Optionen bereits angewählt sind oder nicht
-	 * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
+	 * 			legt fest, ob Checkboxen der Optionen bereits angewÃ¤hlt sind oder nicht
+	 * @return Array der Ã¼bergebenen Options. War die Option ausgewÃ¤hlt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
 	 */
 	public static final Object[] showCheckBoxOptionDialog(Component parentComponent, String title, String message, Object[] options, boolean[] selected){
 		JOptionPane optionPane = new MultipleOptionPane();
@@ -116,25 +116,25 @@ public class MultipleOptionPane extends JOptionPane{
 		JDialog dialog = optionPane.createDialog(parentComponent, title);
 		dialog.setVisible(true);
 		Object value = optionPane.getValue();
-		// Schließen übers Kreuz oder irgendwas unvorhergesehenes
+		// SchlieÃŸen Ã¼bers Kreuz oder irgendwas unvorhergesehenes
 		if (value == null || !(value instanceof Integer) || options.length == 0)
 			return null;
-		// Schließen über einen der Knöpfe
+		// SchlieÃŸen Ã¼ber einen der KnÃ¶pfe
 		// Knopf ermitteln
 		int i = ((Integer) value).intValue();
-		// Schließen oder OK
+		// SchlieÃŸen oder OK
 		if (i == JOptionPane.CLOSED_OPTION || i == JOptionPane.OK_OPTION) {
 			Object[] returnValue = new Object[options.length];
 			for (int j = 0; j < options.length; j++)
 				returnValue[j] = boxes[j].isSelected() ? options[j] : null;
 			return returnValue;
-			// Abbrechen gedrückt
+			// Abbrechen gedrÃ¼ckt
 		}
 		return null;
 	}
 
 	/**
-	 * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
+	 * Zeigt einen Optionen-Dialog an, der fÃ¼r jede Ã¼bergebene Option eine Checkbox darstellt.<br>
 	 * Alle Checkboxen sind nicht selektiert. 
 	 * 
 	 * @param parentComponent 
@@ -144,9 +144,9 @@ public class MultipleOptionPane extends JOptionPane{
 	 * @param message 
 	 * 			Nachricht des Dialoges
 	 * @param options 
-	 * 			Optionen, die über Checkboxen zur Auswahl gestellt werden sollen. Diese Optionen werden über
+	 * 			Optionen, die Ã¼ber Checkboxen zur Auswahl gestellt werden sollen. Diese Optionen werden Ã¼ber
 	 * 			ihre toString()-Methode im Dialog angezeigt.
-	 * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
+	 * @return Array der Ã¼bergebenen Options. War die Option ausgewÃ¤hlt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
 	 */
 	public static final Object[] showCheckBoxOptionDialog(Component parentComponent, String title, String message, Object[] options){
 		return showCheckBoxOptionDialog(parentComponent, title, message, options, null);
@@ -186,10 +186,10 @@ public class MultipleOptionPane extends JOptionPane{
 		JDialog dialog = optionPane.createDialog(parentComponent, title);
 		dialog.setVisible(true);
 		Object value = optionPane.getValue();
-		//Schließen übers Kreuz oder irgendwas unvorhergesehenes
+		//SchlieÃŸen Ã¼bers Kreuz oder irgendwas unvorhergesehenes
 		if (value == null || !(value instanceof Integer))
 			return CANCEL_OPTION;
-		//Schließen über einen der Knöpfe
+		//SchlieÃŸen Ã¼ber einen der KnÃ¶pfe
 		return ((Integer)value).intValue();
 	}
 	

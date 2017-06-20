@@ -3,19 +3,19 @@ package de.imise.util;
 import java.util.ResourceBundle;
 
 /**
- * Erzeugt einen neuen Handler, der die Resourcen für eine übergebene Klasse zurückgeben kann.
+ * Erzeugt einen neuen Handler, der die Resourcen fÃ¼r eine Ã¼bergebene Klasse zurÃ¼ckgeben kann.
  * 
  * @author AXS created on 21.08.2007
  */
 public class SimpleResourceHandler {
 
 	/**
-	 * ResourceBundles mit den speziellen Ressourcen für eine bestimmte Klasse
+	 * ResourceBundles mit den speziellen Ressourcen fÃ¼r eine bestimmte Klasse
 	 */
 	protected ResourceBundle resourceBundle;
 
 	/**
-	 * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+	 * Erzeugt einen neuen Handler, der die Resourcen fÃ¼r die Ã¼bergebene Klasse zurÃ¼ckgeben kann.
 	 * 
 	 * @param ressourceNameClassSource
 	 * 		Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt.
@@ -29,7 +29,7 @@ public class SimpleResourceHandler {
 	}
 
 	/**
-	 * Liefert den Resourcen-String zum übergebenen Schlüssel
+	 * Liefert den Resourcen-String zum Ã¼bergebenen SchlÃ¼ssel
 	 * 
 	 * @param key
 	 * @return

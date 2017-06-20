@@ -15,11 +15,11 @@ import de.imise.util.Alphabetical;
 /**
  * Set dessen Elemente immer alphabetisch sortiert sind.<br>
  * Kein Element kommt doppelt vor und <code>null</code> ist als Element erlaubt.
- * Zugriffszeit ist immer log(n). Vorteil gegenüber <code>HashSet</code> ist, dass die Reihenfolge der Elemente immer gleich ist, was das debuggen
+ * Zugriffszeit ist immer log(n). Vorteil gegenÃ¼ber <code>HashSet</code> ist, dass die Reihenfolge der Elemente immer gleich ist, was das debuggen
  * erleichtert.
  * Wahrscheinlich gibt es mittlerweile in irgendeinem Collection-Framework (guava oder apache-commons) eine Klasse mit
- * derselben Funktionalität. Im Unterscheid zu TreeSet oder TreeBag wird hier der Alphabetical-Comparator nur fürs Ordering
- * genutzt und nicht um festzustellen, ob Elemente bereits vorhanden sidn oder nicht! Das wird hier über die equals-Methode
+ * derselben FunktionalitÃ¤t. Im Unterscheid zu TreeSet oder TreeBag wird hier der Alphabetical-Comparator nur fÃ¼rs Ordering
+ * genutzt und nicht um festzustellen, ob Elemente bereits vorhanden sidn oder nicht! Das wird hier Ã¼ber die equals-Methode
  * der enthaltenen Elemente entschieden.
  * 
  * @author AXS
@@ -60,7 +60,7 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
      * @return
      */
     private int getInsertPosition(final Object arg0) {
-        //hole die Position an der das Element eingefügt werden müsste
+        //hole die Position an der das Element eingefÃ¼gt werden mÃ¼sste
         int pos = Alphabetical.binarySearch(elements, arg0);
         //es kommt bisher kein Element mit demselben Namen in der Liste vor
         if (pos < 0) {
@@ -69,7 +69,7 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
 
         //es kommt schon mind. ein Element mit derselben toString() vor
 
-        //wenn das Object mit dem gleichen Namen das übergebene ist
+        //wenn das Object mit dem gleichen Namen das Ã¼bergebene ist
         if (elements.get(pos) == arg0) {
             return pos;
         }
@@ -77,10 +77,10 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
         String name = arg0.toString();
         int p = pos;
 
-        //solange nach vorne alle gleichbenannten Elemente durchsuchen, ob das übergebene schon dabei ist
+        //solange nach vorne alle gleichbenannten Elemente durchsuchen, ob das Ã¼bergebene schon dabei ist
         while (--p > 0) {
             Object element = elements.get(p);
-            //wenn das Element vor dem gleichbenannten nicht mehr genauso heißt -> Suche nach vorne abbrechen
+            //wenn das Element vor dem gleichbenannten nicht mehr genauso heiÃŸt -> Suche nach vorne abbrechen
             if (!element.toString().equals(name)) {
                 break;
             }
@@ -89,12 +89,12 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
                 return p;
             }
         }
-        //solange nach hinten alle gleichbenannten Elemente durchsuchen, ob das übergebene schon dabei ist
+        //solange nach hinten alle gleichbenannten Elemente durchsuchen, ob das Ã¼bergebene schon dabei ist
         p = pos;
         int elementsSize = elements.size();
         while (++p < elementsSize) {
             Object element = elements.get(p);
-            //wenn das Element vor dem gleichbenannten nicht mehr genauso heißt -> Suche nch hinten abbrechen
+            //wenn das Element vor dem gleichbenannten nicht mehr genauso heiÃŸt -> Suche nch hinten abbrechen
             if (!element.toString().equals(name)) {
                 break;
             }
@@ -103,7 +103,7 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
                 return p;
             }
         }
-        //das Element ist noch nicht enthalten -> Rückgabe wie bei Collections.binarySearch()
+        //das Element ist noch nicht enthalten -> RÃ¼ckgabe wie bei Collections.binarySearch()
         return -p - 1;
     }
 
@@ -151,12 +151,12 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
 
     @Override
     public boolean add(final E arg0) {
-        //hole die Position an der das Element eingefügt werden müsste
+        //hole die Position an der das Element eingefÃ¼gt werden mÃ¼sste
         int pos = getInsertPosition(arg0);
 
         //es kommt bisher kein Element mit demselben Namen in der Liste vor
         if (pos < 0) {
-            //die Position auf den richtigen Wert zurückrechnen (siehe Collections.binarySearch())
+            //die Position auf den richtigen Wert zurÃ¼ckrechnen (siehe Collections.binarySearch())
             elements.add(-pos - 1, arg0);
             return true;
         }

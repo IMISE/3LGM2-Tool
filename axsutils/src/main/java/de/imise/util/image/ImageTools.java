@@ -23,7 +23,7 @@ public class ImageTools {
 	/**
 	 * @param bi1
 	 * @param bi2
-	 * @return true, wenn die übergebenen Bilder in allen Pixeln dieselben RGB-Farbwerte besitzen
+	 * @return true, wenn die Ã¼bergebenen Bilder in allen Pixeln dieselben RGB-Farbwerte besitzen
 	 */
 	public static final boolean equals(BufferedImage bi1, BufferedImage bi2){
 		int w1 = bi1.getWidth();
@@ -44,12 +44,12 @@ public class ImageTools {
 	}
 	
 	/**
-	 * Liefert ein Bild zurück, dass an allen Stellen, an denen mindestens eins der übergebenen
-	 * Bilder die übergebenen Farbe hat, ebenfalls diese Farbe gesetzt ist, sowie auch an allen
-	 * Stellen, an denen sich die übergebenen Bilder unterscheiden.<br> 
+	 * Liefert ein Bild zurÃ¼ck, dass an allen Stellen, an denen mindestens eins der Ã¼bergebenen
+	 * Bilder die Ã¼bergebenen Farbe hat, ebenfalls diese Farbe gesetzt ist, sowie auch an allen
+	 * Stellen, an denen sich die Ã¼bergebenen Bilder unterscheiden.<br> 
 	 * Alle anderen Stellen - also die, an denen alle Bilder die gleiche Farbe haben, die aber nicht
-	 * mit der übergebenen Farbe identisch ist, behalten diese in allen Bildern gleiche Farbe.<br>
-	 * Alle Bilder müssen gleich groß sein!
+	 * mit der Ã¼bergebenen Farbe identisch ist, behalten diese in allen Bildern gleiche Farbe.<br>
+	 * Alle Bilder mÃ¼ssen gleich groÃŸ sein!
 	 * @param images
 	 * @param color
 	 * @return
@@ -83,9 +83,9 @@ public class ImageTools {
 	}
 	
 	/**
-	 * Gibt ein Bild zurück, in dem an allen Stellen, an denen sich die übergebenen Bilder unterscheiden, die
-	 * übergebene Farbe gesetzt ist und an allen anderen Stellen die Farbe, die dort in den Bildern vorkommt.<br>
-	 * Alle Bilder in der übergebenen Liste müssen gleich groß sein.
+	 * Gibt ein Bild zurÃ¼ck, in dem an allen Stellen, an denen sich die Ã¼bergebenen Bilder unterscheiden, die
+	 * Ã¼bergebene Farbe gesetzt ist und an allen anderen Stellen die Farbe, die dort in den Bildern vorkommt.<br>
+	 * Alle Bilder in der Ã¼bergebenen Liste mÃ¼ssen gleich groÃŸ sein.
 	 * @param images
 	 * @param differenceColor
 	 * @return
@@ -118,7 +118,7 @@ public class ImageTools {
 	
 	
 	/**
-	 * Übersetzt das übergebene Bild in Pixel. Alle Pixel, die im Bild nicht die übergebene Farbe
+	 * Ãœbersetzt das Ã¼bergebene Bild in Pixel. Alle Pixel, die im Bild nicht die Ã¼bergebene Farbe
 	 * haben, sind invers. Alle, die diese Farbe haben, sind nicht invers.
 	 * @param image
 	 * @param color
@@ -141,8 +141,8 @@ public class ImageTools {
 	}
 	
 	/**
-	 * Liefert ein <code>Image</code> zurück, bei dem alle Punkte, die im übergebenen Bild die
-	 * übergebene Farbe <code>fgColor</code> besitzen, auch im Ergebnisbild diese Farbe haben
+	 * Liefert ein <code>Image</code> zurÃ¼ck, bei dem alle Punkte, die im Ã¼bergebenen Bild die
+	 * Ã¼bergebene Farbe <code>fgColor</code> besitzen, auch im Ergebnisbild diese Farbe haben
 	 * und alle anderen die Farbe <code>bgColor</code>.
 	 * 
 	 * @param source
@@ -170,11 +170,11 @@ public class ImageTools {
 	
 	
 	/**
-	 * Liefert aus dem Bild an Index <code>targetImageIndex</code> in der übergebnenen Bilderliste
-	 * einen Bildpunkt, der in keinem der anderen übergebenen Bilder bei diesen Koordinaten denselben
+	 * Liefert aus dem Bild an Index <code>targetImageIndex</code> in der Ã¼bergebnenen Bilderliste
+	 * einen Bildpunkt, der in keinem der anderen Ã¼bergebenen Bilder bei diesen Koordinaten denselben
 	 * Farbwert besitzt.<br>
-	 * Wird kein eindeutiger Punkt gefunden, kommt <code>null</code> zurück.<br>
-	 * Alle Bilder müssen gleich groß sein!<br>
+	 * Wird kein eindeutiger Punkt gefunden, kommt <code>null</code> zurÃ¼ck.<br>
+	 * Alle Bilder mÃ¼ssen gleich groÃŸ sein!<br>
 	 * @param images
 	 * @param targetImageIndex
 	 * @return
@@ -211,8 +211,8 @@ public class ImageTools {
 	
 	/**
 	 * Liefert ein Bild, in dem alle Pixel, die nur in dem Bild an der Stelle <code>targteImageIndex</code>
-	 * in der übergebenen Bildliste einen für diese Pixelposition in allen anderen Bildern der Liste eindeutigen
-	 * Farbwert besitzen weiß sind und alle nicht einmaligen Pxel schwarz.
+	 * in der Ã¼bergebenen Bildliste einen fÃ¼r diese Pixelposition in allen anderen Bildern der Liste eindeutigen
+	 * Farbwert besitzen weiÃŸ sind und alle nicht einmaligen Pxel schwarz.
 	 * @param images
 	 * @param targetImageIndex
 	 * @return
@@ -291,7 +291,7 @@ public class ImageTools {
 	
 	/**
 	 * Liefert alle Bilddateien, deren Pfadname und Dateiname mit <code>fullPathPrefix</code> beginnt,
-	 * gefolgt von einem Index und der übergebenen Datei-Extension. Der Index im Namen der Bilder muss
+	 * gefolgt von einem Index und der Ã¼bergebenen Datei-Extension. Der Index im Namen der Bilder muss
 	 * eine Zahl von <code>startIndex</code> bi <code>stopIndex</code>-1 sein.
 	 * Es werden alle Bilder geladen, die existieren.
 	 * 
@@ -327,7 +327,7 @@ public class ImageTools {
 	
 
 	/**
-	 * Liefert einen Screenshot der übergebenen Ausmaße und speichert diesen, wenn gewünscht, im 
+	 * Liefert einen Screenshot der Ã¼bergebenen AusmaÃŸe und speichert diesen, wenn gewÃ¼nscht, im 
 	 * Standardbildpfad.
 	 * @param r
 	 * @return
@@ -345,8 +345,8 @@ public class ImageTools {
 	}
 	
 	/**
-	 * Liefert den im übergebenen <code>Rectangle</code> befindlichen Bildausschnitt des Screenshots
-	 * mit dem übergebenen Index und speichert diesen Bildausschnitt in eine Datei, wenn ein nicht-leerer
+	 * Liefert den im Ã¼bergebenen <code>Rectangle</code> befindlichen Bildausschnitt des Screenshots
+	 * mit dem Ã¼bergebenen Index und speichert diesen Bildausschnitt in eine Datei, wenn ein nicht-leerer
 	 * Dateinamensprefix <code>partImageFileName</code> angegeben wurde.
 	 * @param sourceFileName
 	 * @param targetFileName
@@ -366,7 +366,7 @@ public class ImageTools {
 	
 	/**
 	 * Liefert die Position des <code>partImage</code> in dem Bild <code>fullImage</code>.<br>
-	 * Es kommt <code>null</code> zurück, wenn das Teilbild nicht gefunden wurde.
+	 * Es kommt <code>null</code> zurÃ¼ck, wenn das Teilbild nicht gefunden wurde.
 	 * @param fullImage
 	 * @param partImage
 	 * @return
@@ -397,7 +397,7 @@ public class ImageTools {
 
 	/**
 	 * Liefert die Position des <code>rgbArray</code>s in dem Bild <code>fullImage</code>.<br>
-	 * Es kommt <code>null</code> zurück, wenn das <code>rgbArray</code> nicht gefunden wurde.
+	 * Es kommt <code>null</code> zurÃ¼ck, wenn das <code>rgbArray</code> nicht gefunden wurde.
 	 * @param fullImage
 	 * @param rgbArray
 	 * @return
@@ -429,10 +429,10 @@ public class ImageTools {
 
 	/**
 	 * Sucht die Position eines monochromen <tt>Pixel</tt>-Arrays in dem ubergebenen Bild.<br>
-	 * Die Koordinaten der <tt>Pixel</tt> werden durch die Ausmaße des Arrays bestimmt, welches
-	 * auch die <tt>invers</tt>-Eigenschaft des jeweiligen <tt>Pixel</tt>s fest. Die übergebene
+	 * Die Koordinaten der <tt>Pixel</tt> werden durch die AusmaÃŸe des Arrays bestimmt, welches
+	 * auch die <tt>invers</tt>-Eigenschaft des jeweiligen <tt>Pixel</tt>s fest. Die Ã¼bergebene
 	 * Farbe ist die Farbe, die die <tt>Pixel</tt> haben sollen bzw. nicht haben sollen.<br> 
-	 * Es kommt <code>null</code> zurück, wenn die <tt>Pixel</tt> nicht gefunden wurden.
+	 * Es kommt <code>null</code> zurÃ¼ck, wenn die <tt>Pixel</tt> nicht gefunden wurden.
 	 * @param fullImage
 	 * @param rgbArray
 	 * @return
@@ -480,7 +480,7 @@ public class ImageTools {
 	}
 
 	/**
-	 * Liefert vom übergebenen Bild den am weitesten links oben stehenden Bildpunkt mit dem angegebenen 
+	 * Liefert vom Ã¼bergebenen Bild den am weitesten links oben stehenden Bildpunkt mit dem angegebenen 
 	 * RGB-Wert oder <code>null</code>, wenn kein solcher Bildpunkt existiert.
 	 * @param image
 	 * @param rgb
@@ -509,7 +509,7 @@ public class ImageTools {
 	}
 
 	/**
-	 * Liefert vom üvbergebenen Bild den am weitesten rechts unten stehenden Bildpunkt mit dem angegebenen
+	 * Liefert vom Ã¼vbergebenen Bild den am weitesten rechts unten stehenden Bildpunkt mit dem angegebenen
 	 * RGB-Wert oder <code>null</code>, wenn kein solcher Bildpunkt existiert.
 	 * @param image
 	 * @param rgb
@@ -530,7 +530,7 @@ public class ImageTools {
 	
 	
 	/**
-	 * Gibt das übergebene Pixel-Array als Java-Code aus.
+	 * Gibt das Ã¼bergebene Pixel-Array als Java-Code aus.
 	 * @param pixels
 	 * @param fieldname
 	 * @return

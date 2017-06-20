@@ -19,9 +19,9 @@ import javax.swing.plaf.basic.BasicSpinnerUI;
 import de.imise.util.robot.ScreenRobot;
 
 /**
- * Ein {@link JSpinner} für Double-Werte, der beim Drücken der Pfeil-Knöpfe mit der Maus über längere Zeit oder bei langem
- * Drücken der Pfeiltasten auf der Tastatur nicht jeden Wert einzeln hoch oder runter zählt, sondern die Schrittweite
- * der Änderung nach einigen Durchläufen automatisch erhöht. 
+ * Ein {@link JSpinner} fÃ¼r Double-Werte, der beim DrÃ¼cken der Pfeil-KnÃ¶pfe mit der Maus Ã¼ber lÃ¤ngere Zeit oder bei langem
+ * DrÃ¼cken der Pfeiltasten auf der Tastatur nicht jeden Wert einzeln hoch oder runter zÃ¤hlt, sondern die Schrittweite
+ * der Ã„nderung nach einigen DurchlÃ¤ufen automatisch erhÃ¶ht. 
  * 
  * @author AFranz
  * @create 30.06.2010
@@ -33,34 +33,34 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
 	
 	/**
 	 * Die Ausgangsschrittweite, mit der der Spinner initialisiert wurde.
-	 * Für diesen Wert könnte man bei Bedarf auch noch eine Set-Funktion bereitstellen.
+	 * FÃ¼r diesen Wert kÃ¶nnte man bei Bedarf auch noch eine Set-Funktion bereitstellen.
 	 */
 	private double initialStepSize;
 	
-	/** Zeit in Millisekunden in der 2 aufeinanderfolgende Änderungen als ein Änderungszyklus angesehen werden */
+	/** Zeit in Millisekunden in der 2 aufeinanderfolgende Ã„nderungen als ein Ã„nderungszyklus angesehen werden */
 	private static final long SAME_CHANGE_LOOP_MAX_MILLIS = 300;
 	
-	/** Zeit der letzten erfolgreichen Änderung des Eingabewertes */
+	/** Zeit der letzten erfolgreichen Ã„nderung des Eingabewertes */
 	private long lastChangeTime = System.currentTimeMillis();
 	
-	/** Anzahl der Änderungen, die jeweils nie mehr als {@value #SAME_CHANGE_LOOP_MAX_MILLIS} Millisekunden auseinander liegen */
+	/** Anzahl der Ã„nderungen, die jeweils nie mehr als {@value #SAME_CHANGE_LOOP_MAX_MILLIS} Millisekunden auseinander liegen */
 	private int counter = 0;
 	
 	/** 
-	 * Anzahl der Änderungen, die jeweils nie mehr als {@value #SAME_CHANGE_LOOP_MAX_MILLIS} Millisekunden auseinander liegen,
-	 * nach denen die Änderungsschrittweite um den Faktor {@link #nextLevelStepFactor} erhöht wird.
-	 * Diesen Wert könnte man bei Bedarf auch noch im Konstruktor übergeben oder eine Set-Funktion bereitstellen.
+	 * Anzahl der Ã„nderungen, die jeweils nie mehr als {@value #SAME_CHANGE_LOOP_MAX_MILLIS} Millisekunden auseinander liegen,
+	 * nach denen die Ã„nderungsschrittweite um den Faktor {@link #nextLevelStepFactor} erhÃ¶ht wird.
+	 * Diesen Wert kÃ¶nnte man bei Bedarf auch noch im Konstruktor Ã¼bergeben oder eine Set-Funktion bereitstellen.
 	 */
 	private int nextLevelStepCount = 50;
 	
 	/** 
-	 * Faktor, um den die Schrittweite nach {@link #nextLevelStepCount} Änderungsschritten	, die jeweils nie mehr als
-	 * {@value #SAME_CHANGE_LOOP_MAX_MILLIS} Millisekunden auseinander liegen, erhöht wird.
-	 * Diesen Wert könnte man bei Bedarf auch noch im Konstruktor übergeben oder eine Set-Funktion bereitstellen.
+	 * Faktor, um den die Schrittweite nach {@link #nextLevelStepCount} Ã„nderungsschritten	, die jeweils nie mehr als
+	 * {@value #SAME_CHANGE_LOOP_MAX_MILLIS} Millisekunden auseinander liegen, erhÃ¶ht wird.
+	 * Diesen Wert kÃ¶nnte man bei Bedarf auch noch im Konstruktor Ã¼bergeben oder eine Set-Funktion bereitstellen.
 	 */
 	private double nextLevelStepFactor = 10;
 	
-	/** Letzter gültiger Eingabewert */
+	/** Letzter gÃ¼ltiger Eingabewert */
 	private double lastValue; 
 
 	/**
@@ -93,8 +93,8 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
 				sb.append("0");
 		}
 		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(this, sb.toString());
-		//dem Editortextfield diese Komponente als KeyListener hinzufügen, damit beim Loslassen von Tasten
-		//die Schrittweite der Änderungen wieder aus den Ausgangswert gesetzt werden kann
+		//dem Editortextfield diese Komponente als KeyListener hinzufÃ¼gen, damit beim Loslassen von Tasten
+		//die Schrittweite der Ã„nderungen wieder aus den Ausgangswert gesetzt werden kann
 		editor.getTextField().addKeyListener(this);
 		editor.getTextField().addFocusListener(this);
 		setEditor(editor);
@@ -127,10 +127,10 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
 	    double value = model.getNumber().doubleValue();
 	    double min = ((Double)model.getMinimum()).doubleValue();
 	    double max = ((Double)model.getMaximum()).doubleValue();
-	    //wenn die die StepSize größer als der Restwert bis zum Minimum ist, dann muss man den Wert explizit auf min setzen
+	    //wenn die die StepSize grÃ¶ÃŸer als der Restwert bis zum Minimum ist, dann muss man den Wert explizit auf min setzen
 	    if (lastValue > value && model.getStepSize().doubleValue() > value - min) {
 	    	model.setValue(min);
-	    //wenn die die StepSize größer als der Restwert bis zum Maximum ist, dann muss man den Wert explizit auf max setzen
+	    //wenn die die StepSize grÃ¶ÃŸer als der Restwert bis zum Maximum ist, dann muss man den Wert explizit auf max setzen
 	    } else if (lastValue < value && model.getStepSize().doubleValue() > max - value) {
 	    	model.setValue(max);
 	    }
@@ -174,7 +174,7 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-    	//Die beiden Hoch- und Runter-Buttons des UI können nur über die Maus bedient werden
+    	//Die beiden Hoch- und Runter-Buttons des UI kÃ¶nnen nur Ã¼ber die Maus bedient werden
     	//und wenn die Maus losgelassen wird, wird die StepSize wieder auf den Anfangswert gestellt.
     	counter = 0;
     	model.setStepSize(initialStepSize);
@@ -211,8 +211,8 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		//Wenn der Benutzer die Werte im Editor über die Pfeil-hoch und -Runter Tasten ändert, muss nach dem 
-		//Loslassen der Tasten die Schrittweite der Änderung wieder auf den Anfangswert gestellt werden.
+		//Wenn der Benutzer die Werte im Editor Ã¼ber die Pfeil-hoch und -Runter Tasten Ã¤ndert, muss nach dem 
+		//Loslassen der Tasten die Schrittweite der Ã„nderung wieder auf den Anfangswert gestellt werden.
     	counter = 0;
     	model.setStepSize(initialStepSize);
 	}
@@ -229,7 +229,7 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
     
     /**
      * {@link BasicSpinnerUI}, bei dem an die Hoch- und Runter-Buttons ein MouseListener
-     * gehängt wird.
+     * gehÃ¤ngt wird.
      * 
      * @author AFranz
      * @create 30.06.2010
@@ -237,7 +237,7 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
     private class MySpinnerUI extends BasicSpinnerUI {
 
     	/**
-    	 * Der MouseListener der an die beiden Buttons gehängt wird
+    	 * Der MouseListener der an die beiden Buttons gehÃ¤ngt wird
     	 */
     	private MouseListener mouseListener;
     	
@@ -260,8 +260,8 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
 		@Override
 		protected Component createNextButton() {
 			Component nextButton = super.createNextButton();
-			//den Spinner als MouseListener zu dem Runter-Knopf hinzufügen, damit beim Loslassen des Knopfes
-			//mit der Maus die Schrittweite der Änderungen wieder auf den Anfangswert gestellt wird
+			//den Spinner als MouseListener zu dem Runter-Knopf hinzufÃ¼gen, damit beim Loslassen des Knopfes
+			//mit der Maus die Schrittweite der Ã„nderungen wieder auf den Anfangswert gestellt wird
 			if (nextButton instanceof JButton)
 				((JButton)nextButton).addMouseListener(mouseListener);
 			this.nextButton = nextButton;
@@ -274,8 +274,8 @@ public class RaiseStepSpinner extends JSpinner implements ChangeListener, MouseL
 		@Override
 		protected Component createPreviousButton() {
 			Component previousButton = super.createPreviousButton();
-			//den Spinner als MouseListener zu dem Hoch-Knopf hinzufügen, damit beim Loslassen des Knopfes
-			//mit der Maus die Schrittweite der Änderungen wieder auf den Anfangswert gestellt wird
+			//den Spinner als MouseListener zu dem Hoch-Knopf hinzufÃ¼gen, damit beim Loslassen des Knopfes
+			//mit der Maus die Schrittweite der Ã„nderungen wieder auf den Anfangswert gestellt wird
 			if (previousButton instanceof JButton)
 				((JButton)previousButton).addMouseListener(mouseListener);
 			this.previousButton = previousButton;

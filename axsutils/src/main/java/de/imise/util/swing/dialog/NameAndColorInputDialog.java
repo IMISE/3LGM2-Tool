@@ -103,7 +103,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
         inputArea.addKeyListener(new java.awt.event.KeyListener() {
             @Override
             public void keyPressed(final KeyEvent e) {
-                if (e.getKeyCode() == 10) {//ENTER wurde gedrückt
+                if (e.getKeyCode() == 10) {//ENTER wurde gedrÃ¼ckt
                     if (e.isControlDown() || e.isAltDown() || e.isShiftDown() || e.isMetaDown() || e.isAltGraphDown()) {
                         ok_button.doClick();
                     }
@@ -138,7 +138,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurÃ¼ck.
      *
      * @param title
      * @param defaultString
@@ -182,7 +182,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurÃ¼ck.
      *
      * @param title
      * @param defaultString
@@ -195,7 +195,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurÃ¼ck.
      *
      * @param title
      * @param defaultString
@@ -206,7 +206,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurÃ¼ck.
      *
      * @param title
      * @param defaultString
@@ -218,7 +218,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurÃ¼ck.
      *
      * @param title
      * @param defaultString
@@ -228,7 +228,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Liefert den eingegebene String (wurde Abbrechen gedrückt, ist dieser <code>null</code>)
+     * Liefert den eingegebene String (wurde Abbrechen gedrÃ¼ckt, ist dieser <code>null</code>)
      *
      * @return
      */
@@ -237,7 +237,7 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * Liefert die ausgewählte Farbe (oder <code>null</code>, wenn keine ausgewählt wurde)
+     * Liefert die ausgewÃ¤hlte Farbe (oder <code>null</code>, wenn keine ausgewÃ¤hlt wurde)
      *
      * @return
      */

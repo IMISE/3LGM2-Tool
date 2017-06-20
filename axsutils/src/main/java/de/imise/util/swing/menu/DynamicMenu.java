@@ -8,8 +8,8 @@ import javax.swing.JMenuItem;
 /**
  * Erweiterungsklasse zu {@link JMenu}
  * <p>
- * Besonders ist hier, dass bei jedem Öffnen die Einträge aktualisiert werden können.
- * Außerdem werden dabei immer <code>isSelected</code> und <code>isEnabled</code> auf die
+ * Besonders ist hier, dass bei jedem Ã–ffnen die EintrÃ¤ge aktualisiert werden kÃ¶nnen.
+ * AuÃŸerdem werden dabei immer <code>isSelected</code> und <code>isEnabled</code> auf die
  * entsprechenden Werte der {@link Action} dieser Items gesetzt.
  * 
  * @author fstephan
@@ -27,8 +27,8 @@ public abstract class DynamicMenu extends JMenu {
 	}
 	
 	/**
-	 * Wird ausgelöst, wenn das Menu geöffnet wird.<br>
-	 * Löst das Aktualisieren der Items und das Setzen von <code>isSelected</code> und 
+	 * Wird ausgelÃ¶st, wenn das Menu geÃ¶ffnet wird.<br>
+	 * LÃ¶st das Aktualisieren der Items und das Setzen von <code>isSelected</code> und 
 	 * <code>isEnabled</code> aus.
 	 * {@inheritDoc}
 	 */
@@ -41,12 +41,12 @@ public abstract class DynamicMenu extends JMenu {
 	}
 
 	/** 
-	 * Aktualisiert die Menu Einträge
+	 * Aktualisiert die Menu EintrÃ¤ge
 	 * <p>
-	 * Diese Methode wird automatisch bei jedem Öffnen des Menus aufgerufen und sollte so benutzt
-	 * werden, dass die Einträge neu gesetz bzw. reduziert oder erweitert werden. <br>
+	 * Diese Methode wird automatisch bei jedem Ã–ffnen des Menus aufgerufen und sollte so benutzt
+	 * werden, dass die EintrÃ¤ge neu gesetz bzw. reduziert oder erweitert werden. <br>
 	 * Das Setzen der Attribute <code>isSelected</code> und <code>isEnabled</code> muss hier nicht
-	 * implementiert werden, da dies bereits über {@link #fireMenuSelected()} erfolgt.
+	 * implementiert werden, da dies bereits Ã¼ber {@link #fireMenuSelected()} erfolgt.
 	 */
 	protected abstract void updateItems();
 
@@ -57,7 +57,7 @@ public abstract class DynamicMenu extends JMenu {
 		}
 	}
 
-	/** Fügt die spezifiezierten Items an der spezifizierten Position ein */
+	/** FÃ¼gt die spezifiezierten Items an der spezifizierten Position ein */
 	public void insertItems(JMenuItem[] items, int pos) {
 		for(JMenuItem item : items)
 			insert(item,pos++);

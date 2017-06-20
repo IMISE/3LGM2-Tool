@@ -16,7 +16,7 @@ public class Console {
 	/**
 	 * Loggt die aufrufende Klasse und Methode im Stderr
 	 * @param message
-	 * 		Nachricht, die zus‰tzlich angeh‰ngt wird
+	 * 		Nachricht, die zus√§tzlich angeh√§ngt wird
 	 */
 	public static final void syserr(String message) {
 		syserr(message, false);
@@ -25,7 +25,7 @@ public class Console {
 	/**
 	 * Loggt die aufrufende Klasse und Methode im Stderr
 	 * @param message
-	 * 		Nachricht, die zus‰tzlich angeh‰ngt wird
+	 * 		Nachricht, die zus√§tzlich angeh√§ngt wird
 	 * @param fullClassName
 	 * 		wenn <code>true</code> wird der volle Klassenname ausgegeben, sonst der einfache.
 	 */

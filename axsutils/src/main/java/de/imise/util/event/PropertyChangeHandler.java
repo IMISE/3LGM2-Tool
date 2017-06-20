@@ -6,9 +6,9 @@ import java.beans.PropertyChangeSupport;
 public abstract class PropertyChangeHandler {
 
 	/** 
-	 * Stellt Property-Change-Funktionalität zur Verfügung. <br>
+	 * Stellt Property-Change-FunktionalitÃ¤t zur VerfÃ¼gung. <br>
 	 * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-	 * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt. 
+	 * hinzugefÃ¼gt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt. 
 	 */
 	protected PropertyChangeSupport changeSupport = null;
 
@@ -21,10 +21,10 @@ public abstract class PropertyChangeHandler {
 		changeSupport = new PropertyChangeSupport(sourceBean);
 	}
 
-	//Listener hinzufügen/entfernen/benachrichtigen
+	//Listener hinzufÃ¼gen/entfernen/benachrichtigen
 	
 	/**
-	 * Fügt einen <code>PropertyChangeListener</code> hinzu
+	 * FÃ¼gt einen <code>PropertyChangeListener</code> hinzu
 	 * @param listener
 	 */
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -56,7 +56,7 @@ public abstract class PropertyChangeHandler {
 			changeSupport.firePropertyChange(propertyName, oldValue, newValue);
 	}
 
-	//Ende Listener hinzufügen/entfernen/benachrichtugen
+	//Ende Listener hinzufÃ¼gen/entfernen/benachrichtugen
 
 
 }

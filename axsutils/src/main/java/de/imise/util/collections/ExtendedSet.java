@@ -12,10 +12,10 @@ import java.util.HashSet;
 public class ExtendedSet<E> extends HashSet<E> {
 	
 	/**
-	 * Erzeugt eine neue Instanz dieser Klasse und fügt alle spezifizierten Elemente
+	 * Erzeugt eine neue Instanz dieser Klasse und fÃ¼gt alle spezifizierten Elemente
 	 * hinzu.
 	 * @param es
-	 * 			Initial hinzuzufügende Elemente
+	 * 			Initial hinzuzufÃ¼gende Elemente
 	 */
 	public ExtendedSet(E... es) {
 		super();
@@ -24,10 +24,10 @@ public class ExtendedSet<E> extends HashSet<E> {
 	}
 	
 	/**
-	 * Erzeugt eine neue Instanz dieser Klasse und fügt alle spezifizierten Elemente
+	 * Erzeugt eine neue Instanz dieser Klasse und fÃ¼gt alle spezifizierten Elemente
 	 * hinzu.
 	 * @param es
-	 * 			Initial hinzuzufügende Elemente
+	 * 			Initial hinzuzufÃ¼gende Elemente
 	 */
 	public ExtendedSet(Collection<E> elements) {
 		super(elements);

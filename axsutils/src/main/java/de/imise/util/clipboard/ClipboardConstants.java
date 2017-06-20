@@ -1,14 +1,14 @@
 package de.imise.util.clipboard;
 
 /**
- * Interface, mit allen notwenigen Konstanten für die Klassen dieses Packages.
+ * Interface, mit allen notwenigen Konstanten fÃ¼r die Klassen dieses Packages.
  * @author fstephan
  */
 interface ClipboardConstants {
 
 	/**
 	 * Postion des <code>Strings</code> in den <code>String</code> - Inhalten der 
-	 * Zwischenablage, der dem {@link XMLContentParser} übergeben wird.
+	 * Zwischenablage, der dem {@link XMLContentParser} Ã¼bergeben wird.
 	 */
 	int CONTENT_STRING_POSITION = 1;
 	

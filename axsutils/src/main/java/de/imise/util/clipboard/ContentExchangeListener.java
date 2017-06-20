@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * {@link KeyListener}, der cut, copy und paste für einen {@link ContentExchanger} steuert.
+ * {@link KeyListener}, der cut, copy und paste fÃ¼r einen {@link ContentExchanger} steuert.
  * @author fstephan
  */
 public class ContentExchangeListener extends KeyAdapter {
@@ -25,7 +25,7 @@ public class ContentExchangeListener extends KeyAdapter {
 	}
 	
 	/**
-	 * Löst cut, copy oder paste in {@link #contentExchanger} aus.
+	 * LÃ¶st cut, copy oder paste in {@link #contentExchanger} aus.
 	 * @see java.awt.event.KeyAdapter#keyPressed(java.awt.event.KeyEvent)
 	 */
 	@Override
@@ -35,7 +35,7 @@ public class ContentExchangeListener extends KeyAdapter {
 			switch(keyCode) {
 			case KeyEvent.VK_C: contentExchanger.copy();break; // kopieren
 			case KeyEvent.VK_X: contentExchanger.cut();break; // ausschneiden
-			case KeyEvent.VK_V: contentExchanger.paste();break; // einfügen
+			case KeyEvent.VK_V: contentExchanger.paste();break; // einfÃ¼gen
 			}
 			
 			

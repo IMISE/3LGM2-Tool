@@ -4,7 +4,7 @@ import javax.swing.SizeSequence;
 
 
 /**
- * Dient dem definieren von Zellhöhen für eine {@link ExtendedJList}.
+ * Dient dem definieren von ZellhÃ¶hen fÃ¼r eine {@link ExtendedJList}.
  * 
  * @see SizeSequence
  * 
@@ -13,7 +13,7 @@ import javax.swing.SizeSequence;
 public interface CellHeightModel {
 
 	/**
-	 * Gibt die Höhe der Zelle am Index wieder
+	 * Gibt die HÃ¶he der Zelle am Index wieder
 	 * 
 	 * @param index
 	 * 			Index der Zelle innerhalb der Liste, der dieses {@link CellHeightModel}<br>
@@ -24,8 +24,8 @@ public interface CellHeightModel {
 	int getHeight(int index) throws ArrayIndexOutOfBoundsException;
 	
 	/**
-	 * Gibt die Anzahl der Einträge in diesem {@link CellHeightModel} wieder,
-	 * welche äquivalent zur Anzahl der Zellen in der dazugehörigen List sein sollte.
+	 * Gibt die Anzahl der EintrÃ¤ge in diesem {@link CellHeightModel} wieder,
+	 * welche Ã¤quivalent zur Anzahl der Zellen in der dazugehÃ¶rigen List sein sollte.
 	 * @return
 	 */
 	int getSize();

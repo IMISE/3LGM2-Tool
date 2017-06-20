@@ -2,8 +2,8 @@ package de.imise.util;
 
 /**
  * Hilfsklasse, um Objekte zu kapseln, deren <code>toString()</code>-Methode nicht
- * das zurückliefert, was angezeigt werden soll. Dieses Objekt speichert das
- * Originalobjekt und zusätzlich einen String, der über <code>toString()</code> zurückgeliefert wird.
+ * das zurÃ¼ckliefert, was angezeigt werden soll. Dieses Objekt speichert das
+ * Originalobjekt und zusÃ¤tzlich einen String, der Ã¼ber <code>toString()</code> zurÃ¼ckgeliefert wird.
  * 
  * @author AXS
  * @created 17.10.2007
@@ -12,18 +12,18 @@ public final class NamedObjectContainer<E> {
 
     /**
      * <code>String</code> der in der Liste angezeigt wird. <br>
-     * Dies ist also der String, der über <code>toString()</code> zurück
+     * Dies ist also der String, der Ã¼ber <code>toString()</code> zurÃ¼ck
      * gegeben wird.
      */
-    protected final String toString; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
+    protected final String toString; //ACHTUNG: niemals unfinalizen und set() hierfÃ¼r schreiben!
 
     /**
      * Das Objekt das durch den angezeigten String dargestellt wird
      */
-    protected final E object; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
+    protected final E object; //ACHTUNG: niemals unfinalizen und set() hierfÃ¼r schreiben!
 
     /**
-     * Legt ein Obekt an, das über die <code>toString()</code> -Methode den <code>toString</code> zurück liefert und zusätzlich das Objekt
+     * Legt ein Obekt an, das Ã¼ber die <code>toString()</code> -Methode den <code>toString</code> zurÃ¼ck liefert und zusÃ¤tzlich das Objekt
      * <code>modelElement</code> speichert.
      * 
      * @param modelElement

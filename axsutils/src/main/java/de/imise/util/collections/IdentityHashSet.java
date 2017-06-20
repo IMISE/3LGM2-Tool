@@ -7,7 +7,7 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 
 /**
- * Set-Implementierung, welche beim Vergleich der Objekte nicht Gleichheit, sondern Identit‰t
+ * Set-Implementierung, welche beim Vergleich der Objekte nicht Gleichheit, sondern Identit√§t
  * fordert. <br>
  * In {@link #contains(Object)} wird also nicht "<code>equals</code>", sondern "<code>==</code>" verwendet.
  * 

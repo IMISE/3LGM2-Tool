@@ -10,13 +10,13 @@ package de.imise.util.transaction;
 public interface TransactionListener {
 
 	/**
-	 * Ruft der <code>TransactionManager</code> für alle seine Listener auf, wenn er eine
+	 * Ruft der <code>TransactionManager</code> fÃ¼r alle seine Listener auf, wenn er eine
 	 * Transaktion begonnen hat.
 	 */
 	public void transactionStarted();
 
 	/**
-	 * Ruft der <code>TransactionManager</code> für alle seine Listener auf, wenn er eine
+	 * Ruft der <code>TransactionManager</code> fÃ¼r alle seine Listener auf, wenn er eine
 	 * Transaktion beendet hat.
 	 */
 	public void transactionStopped();

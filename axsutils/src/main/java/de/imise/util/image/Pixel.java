@@ -28,12 +28,12 @@ public class Pixel extends Point {
 	protected int maxR;
 	
 	/**
-	 * Minimaler Grünwert, der noch als gleich zu der korrekten Farbe dieses Pixels anerkannt werden soll
+	 * Minimaler GrÃ¼nwert, der noch als gleich zu der korrekten Farbe dieses Pixels anerkannt werden soll
 	 */
 	protected int minG;
 
 	/**
-	 * Maximaler Grünwert, der noch als gleich zu der korrekten Farbe dieses Pixels anerkannt werden soll
+	 * Maximaler GrÃ¼nwert, der noch als gleich zu der korrekten Farbe dieses Pixels anerkannt werden soll
 	 */
 	protected int maxG;
 	/**
@@ -102,7 +102,7 @@ public class Pixel extends Point {
 
 	/**
 	 * Definiert einen Pixel, dessen Farbe, ob er invers ist und wie stark ein
-	 * Vergleichspixel in den Farbwerten rot, grün und blau abweichen darf.<br>
+	 * Vergleichspixel in den Farbwerten rot, grÃ¼n und blau abweichen darf.<br>
 	 * @param x
 	 * @param y
 	 * @param rgb
@@ -115,7 +115,7 @@ public class Pixel extends Point {
 	
 	/**
 	 * Definiert einen Pixel, dessen Farbe und wie stark ein
-	 * Vergleichspixel in den Farbwerten rot, grün und blau abweichen darf.<br>
+	 * Vergleichspixel in den Farbwerten rot, grÃ¼n und blau abweichen darf.<br>
 	 * @param x
 	 * @param y
 	 * @param color
@@ -127,7 +127,7 @@ public class Pixel extends Point {
 
 	/**
 	 * Definiert einen Pixel, dessen Farbe, ob er invers ist und wie stark ein
-	 * Vergleichspixel in den Farbwerten rot, grün und blau abweichen darf.<br>
+	 * Vergleichspixel in den Farbwerten rot, grÃ¼n und blau abweichen darf.<br>
 	 * @param x
 	 * @param y
 	 * @param color
@@ -181,8 +181,8 @@ public class Pixel extends Point {
 	}
 
 	/**
-	 * Liefert <code>true</code>, wenn dieser Pixel in den Toleranzen mit dem übergebenen Punkt
-	 * im übergebenen Bild übereinstimmt.
+	 * Liefert <code>true</code>, wenn dieser Pixel in den Toleranzen mit dem Ã¼bergebenen Punkt
+	 * im Ã¼bergebenen Bild Ã¼bereinstimmt.
 	 * @param image
 	 * @return
 	 */
@@ -191,8 +191,8 @@ public class Pixel extends Point {
 	}
 
 	/**
-	 * Liefert <code>true</code>, wenn die Farbe des Pixels in den Toleranzen mit der übergebenen
-	 * Farbe übereinstimmt.
+	 * Liefert <code>true</code>, wenn die Farbe des Pixels in den Toleranzen mit der Ã¼bergebenen
+	 * Farbe Ã¼bereinstimmt.
 	 * @param color
 	 * @return
 	 */

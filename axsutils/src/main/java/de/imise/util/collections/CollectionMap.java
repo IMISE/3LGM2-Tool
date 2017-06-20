@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Basisklasse für das Mapping auf {@link Collection}s.
+ * Basisklasse fÃ¼r das Mapping auf {@link Collection}s.
  * <p>
- * Es besteht hier die Möglichkeit, den Typ der Collection vorher festzulegen. <br>
- * Darüber hinaus, wird das Erzeugen der Collections automatisch vorgenommen,
+ * Es besteht hier die MÃ¶glichkeit, den Typ der Collection vorher festzulegen. <br>
+ * DarÃ¼ber hinaus, wird das Erzeugen der Collections automatisch vorgenommen,
  * falls dies erforderlich ist.
  * 
  * @param <K>
@@ -39,7 +39,7 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	public CollectionMap(Class<? extends C> collectionType) {
 	    super();
 	    if (!hasDefaultConstructor(collectionType))
-	    	throw new IllegalArgumentException("Collection-Klasse benötigt einen Default-Constructor");
+	    	throw new IllegalArgumentException("Collection-Klasse benÃ¶tigt einen Default-Constructor");
 	    this.collectionType = collectionType;
 	    
     }
@@ -58,7 +58,7 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	public CollectionMap(int initialCapacity, float loadFactor, Class<? extends C> collectionType) {
 	    super(initialCapacity, loadFactor);
 	    if (!hasDefaultConstructor(collectionType))
-	    	throw new IllegalArgumentException("Collection-Klasse benötigt einen Default-Constructor");
+	    	throw new IllegalArgumentException("Collection-Klasse benÃ¶tigt einen Default-Constructor");
 	    this.collectionType = collectionType;
     }
 
@@ -75,7 +75,7 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	public CollectionMap(int initialCapacity, Class<? extends C> collectionType) {
 	    super(initialCapacity);
 	    if (!hasDefaultConstructor(collectionType))
-	    	throw new IllegalArgumentException("Collection-Klasse benötigt einen Default-Constructor");
+	    	throw new IllegalArgumentException("Collection-Klasse benÃ¶tigt einen Default-Constructor");
 	    this.collectionType = collectionType;
     }
 
@@ -92,7 +92,7 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	public CollectionMap(Map<? extends K, ? extends C> m, Class<? extends C> collectionType) {
 	    super(m);
 	    if (!hasDefaultConstructor(collectionType))
-	    	throw new IllegalArgumentException("Collection-Klasse benötigt einen Default-Constructor");
+	    	throw new IllegalArgumentException("Collection-Klasse benÃ¶tigt einen Default-Constructor");
 	    this.collectionType = collectionType;
     }
 	
@@ -163,18 +163,18 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
     }
 
 	/**
-	 * Falls bereits eine Collection für den <code>key</code> existiert, wird
-	 * der <code>entry</code> zu ihr hinzugefügt. Andernfalls wird zunächst eine
+	 * Falls bereits eine Collection fÃ¼r den <code>key</code> existiert, wird
+	 * der <code>entry</code> zu ihr hinzugefÃ¼gt. Andernfalls wird zunÃ¤chst eine
 	 * neue Collection entsprechend dem {@link #collectionType} angelegt, welche
-	 * dann als <code>value</code> für den <code>key</code> gesetzt wird. Der
-	 * <code>entry</code> wird dann ebenfalls der Collection angefügt.
+	 * dann als <code>value</code> fÃ¼r den <code>key</code> gesetzt wird. Der
+	 * <code>entry</code> wird dann ebenfalls der Collection angefÃ¼gt.
 	 * 
 	 * @param key
-	 * 		Der  Schlüssel für den Wert (die Collection) in dieser Map
+	 * 		Der  SchlÃ¼ssel fÃ¼r den Wert (die Collection) in dieser Map
 	 * @param entry
-	 * 		Der Eintrag der dieser Collection hinzugefügt werden soll
+	 * 		Der Eintrag der dieser Collection hinzugefÃ¼gt werden soll
 	 * @return
-	 * 		Die Collection, in der der <code>entry</code> eingefügt wurde.
+	 * 		Die Collection, in der der <code>entry</code> eingefÃ¼gt wurde.
 	 */
 	public Collection<E> putCollectionEntry(K key, E entry) {
     	C value = get(key);
@@ -187,16 +187,16 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
     }
 	
 	/**
-	 * Entfernt den <code>entry</code> aus der für den <code>key</code>
+	 * Entfernt den <code>entry</code> aus der fÃ¼r den <code>key</code>
 	 * registrierten Collection, falls vorhanden.
 	 * 
 	 * @param key
-	 * 		Der Schlüssel für die Collection (<code>value</code>)
+	 * 		Der SchlÃ¼ssel fÃ¼r die Collection (<code>value</code>)
 	 * @param entry
-	 * 		Der Eintrag der aus dieser Collection gelöscht werden soll
+	 * 		Der Eintrag der aus dieser Collection gelÃ¶scht werden soll
 	 * 
-	 * @return 	<code>true</code>, wenn für den <code>key</code> eine Collection
-	 * 			registriert ist, die den spezifizierten <code>entry</code> enthält;
+	 * @return 	<code>true</code>, wenn fÃ¼r den <code>key</code> eine Collection
+	 * 			registriert ist, die den spezifizierten <code>entry</code> enthÃ¤lt;
 	 * 			<code>false</code>, sonst
 	 * 
 	 * @see Collection#remove(Object)
@@ -210,16 +210,16 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	
 	/**
 	 * Falls bereits eine Collection zu dem <code>key</code> in dieser Map existiert,
-	 * werden alle Einträge aus <code>entries</code> dieser Collection hinzugefügt.<br>
-	 * Andernfalls, wird zunächst eine neue Collection erstellt. 
+	 * werden alle EintrÃ¤ge aus <code>entries</code> dieser Collection hinzugefÃ¼gt.<br>
+	 * Andernfalls, wird zunÃ¤chst eine neue Collection erstellt. 
 	 * 
 	 * @param key
-	 * 		Der Schlüssel für die Einträge
+	 * 		Der SchlÃ¼ssel fÃ¼r die EintrÃ¤ge
 	 * @param entries
-	 * 		Die Einträge, die für den <code>key</code> registriert werden soll.
+	 * 		Die EintrÃ¤ge, die fÃ¼r den <code>key</code> registriert werden soll.
 	 * 
 	 * @return
-	 * 		Der <code>value</code> (die Collection) für den <code>key</code>
+	 * 		Der <code>value</code> (die Collection) fÃ¼r den <code>key</code>
 	 */
 	public C putCollectionEntries(K key, Collection<E> entries) {
     	C value = get(key);
@@ -232,16 +232,16 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
     }
 	
 	/**
-	 * Entfernt alle <code>entries</code> aus der für den <code>key</code>
+	 * Entfernt alle <code>entries</code> aus der fÃ¼r den <code>key</code>
 	 * registrierten Collection, falls vorhanden.
 	 * 
 	 * @param key
-	 * 		Der Schlüssel für die Collection (<code>value</code>)
+	 * 		Der SchlÃ¼ssel fÃ¼r die Collection (<code>value</code>)
 	 * @param entries
-	 * 		Der Eintrag der aus dieser Collection gelöscht werden soll
+	 * 		Der Eintrag der aus dieser Collection gelÃ¶scht werden soll
 	 * 
-	 * @return 	<code>true</code>, wenn für den <code>key</code> eine Collection
-	 * 			registriert ist, die die spezifizierten <code>entries</code> enthält;
+	 * @return 	<code>true</code>, wenn fÃ¼r den <code>key</code> eine Collection
+	 * 			registriert ist, die die spezifizierten <code>entries</code> enthÃ¤lt;
 	 * 			<code>false</code>, sonst
 	 * 
 	 * @see Collection#removeAll(Collection)
@@ -254,10 +254,10 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	}
 	
 	/**
-	 * Registriert alle Einträge über {@link #putCollectionEntries(Object, Collection)}. <br>
-	 * Alle bestehenden Collections, werden durch die übergebenen erweitert.
-	 * Bei unbekanntem Schlüssel, wird eine neue Collection erzeugt und dann die
-	 * Einträge aus der übergebenen Collection angefügt.
+	 * Registriert alle EintrÃ¤ge Ã¼ber {@link #putCollectionEntries(Object, Collection)}. <br>
+	 * Alle bestehenden Collections, werden durch die Ã¼bergebenen erweitert.
+	 * Bei unbekanntem SchlÃ¼ssel, wird eine neue Collection erzeugt und dann die
+	 * EintrÃ¤ge aus der Ã¼bergebenen Collection angefÃ¼gt.
 	 * 
 	 * @param m
 	 * 		Ein beliebige Map, welche auf Collections als <code>value</code>
@@ -270,15 +270,15 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
 	}
 	
 	/**
-	 * Entfernt alle <code>entries</code> aus den für die <code>keys</code>
+	 * Entfernt alle <code>entries</code> aus den fÃ¼r die <code>keys</code>
 	 * registrierten Collections, falls vorhanden.
 	 * 
 	 * @param m
 	 * 		Ein beliebige Map, welche auf Collections als <code>value</code>
 	 * 		abbildet.
 	 * 
-	 * @return 	<code>true</code>, wenn für alle <code>keys</code> eine Collection
-	 * 			registriert ist, die die spezifizierten <code>entries</code> enthält;
+	 * @return 	<code>true</code>, wenn fÃ¼r alle <code>keys</code> eine Collection
+	 * 			registriert ist, die die spezifizierten <code>entries</code> enthÃ¤lt;
 	 * 			<code>false</code>, sonst
 	 * 
 	 * @see Collection#removeAll(Collection)
@@ -356,14 +356,14 @@ public class CollectionMap<K , E, C extends Collection<E>> extends HashMap<K, C>
     }
     
     private static void throwCNSException() throws CloneNotSupportedException {
-    	throw new CloneNotSupportedException("Die Collections können nicht geclont werden!");
+    	throw new CloneNotSupportedException("Die Collections kÃ¶nnen nicht geclont werden!");
     }
 
 	/**
-	 * Prüft, ob die übergebene Collection-Klasse einen parameterlosen Konstruktor besitzt, sonst <code>false</code>.
+	 * PrÃ¼ft, ob die Ã¼bergebene Collection-Klasse einen parameterlosen Konstruktor besitzt, sonst <code>false</code>.
 	 * 
 	 * @param collectionType
-	 * @return Liefert <code>true</code>, wenn die übergebene Collection-Klasse einen parameterlosen Konstruktor
+	 * @return Liefert <code>true</code>, wenn die Ã¼bergebene Collection-Klasse einen parameterlosen Konstruktor
 	 * besitzt, sonst <code>false</code>.
 	 */
 	private static boolean hasDefaultConstructor(Class<? extends Collection<?>> collectionType) {

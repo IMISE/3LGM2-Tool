@@ -12,10 +12,10 @@ import javax.swing.ImageIcon;
 /**
  * @author fstephan
  * 
- * Abstrakte Klasse, deren abgeleitete Instanzen ausführbare Aktionen repräsentieren.
+ * Abstrakte Klasse, deren abgeleitete Instanzen ausfÃ¼hrbare Aktionen reprÃ¤sentieren.
  * 
- * Diese Aktionen können mittels <code>actionPerformed(ActionEvent e)</code> oder
- * <code>execute(EventObject eo)</code> ausgeführt werden.
+ * Diese Aktionen kÃ¶nnen mittels <code>actionPerformed(ActionEvent e)</code> oder
+ * <code>execute(EventObject eo)</code> ausgefÃ¼hrt werden.
  */
 public abstract class FlexibleEventAction extends ExtendedAction{
 	
@@ -48,8 +48,8 @@ public abstract class FlexibleEventAction extends ExtendedAction{
 	}
 	
 	/**
-	 * Methode soll so überschrieben werden, dass sie die auszuführenden Aktionen
-	 * dieser <code>LGMAction</code> beinhaltet und auslöst.
+	 * Methode soll so Ã¼berschrieben werden, dass sie die auszufÃ¼hrenden Aktionen
+	 * dieser <code>LGMAction</code> beinhaltet und auslÃ¶st.
 	 * 
 	 * @param eo
 	 */

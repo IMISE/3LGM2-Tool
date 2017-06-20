@@ -23,33 +23,33 @@ import de.imise.util.StringUtils;
 /**
  * @author Thomas Rudert
  *
- * Dialog zum Auswählen/Öffnen eines Bitmaps mit Bildvorschau
+ * Dialog zum AuswÃ¤hlen/Ã–ffnen eines Bitmaps mit Bildvorschau
  */
 public class ImageChooser extends ExtendedFileChooser {
 
 	/**
-	 * Mögliche Typen der FileFilter, die dieser Dialog anzeigen kann. Für alle diese Typen gibt es 
-	 * Ressourcen-Strings, deren Key für die Beschreibung sich über den zusammengebausten String aus
+	 * MÃ¶gliche Typen der FileFilter, die dieser Dialog anzeigen kann. FÃ¼r alle diese Typen gibt es 
+	 * Ressourcen-Strings, deren Key fÃ¼r die Beschreibung sich Ã¼ber den zusammengebausten String aus
 	 * {@link FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()} ergbibt.
-	 * Für die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
-	 * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
+	 * FÃ¼r die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
+	 * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehÃ¤ngt.
 	 */
 	public static enum FileFilterType {IMAGE, JPEG, GIF, PNG}
 	
 	/** 
-	 * Anfang des ResourceString, mit dem bei jedem über die Funktion zu ladenden FileFilter
+	 * Anfang des ResourceString, mit dem bei jedem Ã¼ber die Funktion zu ladenden FileFilter
 	 * der Key-String der Beschreibung und der Dateierweiterungen beginnen muss.
 	 */
 	public static final String FILE_FILTER_RESOURCE_PREFIX = "FILE_FILTER_";
 	
-	/** Ende des Key-Strings für die Dateiertweiterungen eines FileFilters */
+	/** Ende des Key-Strings fÃ¼r die Dateiertweiterungen eines FileFilters */
 	public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 	
 	/** Ressourcenhandler */
 	private DialogResourceHandler drh = new DialogResourceHandler(ImageChooser.class);
 	
 	/**
-	 * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
+	 * Liefert fÃ¼r die Ã¼bergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
 	 * der Erweiterungen den Konventionen entsprechend in den Resoourcendateien abgelegt sind.
 	 * 
 	 * @param filterNames
@@ -63,13 +63,13 @@ public class ImageChooser extends ExtendedFileChooser {
 	}
 
 	/**
-	 * Ein Label auf dem ein skaliertes Vorschaubild eines aktuell über diesen 
-	 * Dialog ausgewählten Bildes angezeigt werden kann.
+	 * Ein Label auf dem ein skaliertes Vorschaubild eines aktuell Ã¼ber diesen 
+	 * Dialog ausgewÃ¤hlten Bildes angezeigt werden kann.
 	 */
 	private ImagePreviewer previewer = new ImagePreviewer();
 	
 	/**
-	 * Panel, das den {@link ImagePreviewer} enthält
+	 * Panel, das den {@link ImagePreviewer} enthÃ¤lt
 	 */
 	private PreviewPanel previewPanel = new PreviewPanel();	
 	
@@ -119,7 +119,7 @@ public class ImageChooser extends ExtendedFileChooser {
 		 */
 		public void configure(File f) {
 					
-			// neues Bild in voller Größe
+			// neues Bild in voller GrÃ¶ÃŸe
 			try {
 				orginal = f == null  ||  ! f.isFile() ? null : new ImageIcon(f.getPath());
 				resize();

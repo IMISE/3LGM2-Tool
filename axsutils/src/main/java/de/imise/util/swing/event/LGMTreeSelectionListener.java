@@ -11,21 +11,21 @@ import javax.swing.event.TreeSelectionListener;
 
 /**
  * Ein {@link TreeSelectionListener}, der beim eintreffen eines
- * {@link TreeSelectionEvent} eine übergebare {@link Action} ausführt. 
+ * {@link TreeSelectionEvent} eine Ã¼bergebare {@link Action} ausfÃ¼hrt. 
  * 
  * @author fstephan
  */
 public class LGMTreeSelectionListener implements TreeSelectionListener {
 
 	/**
-	 * Aktion, die ausgeführt wird, wenn diesen Listener ein {@link TreeSelectionEvent}
+	 * Aktion, die ausgefÃ¼hrt wird, wenn diesen Listener ein {@link TreeSelectionEvent}
 	 * erreicht.
 	 */
 	private FlexibleEventAction action;
 
 	/**
 	 * Legt einen {@link TreeSelectionListener} an, der beim eintreffen eines
-	 * {@link TreeSelectionEvent} die übergebene {@link Action} ausführt. 
+	 * {@link TreeSelectionEvent} die Ã¼bergebene {@link Action} ausfÃ¼hrt. 
 	 * 
 	 * @param action
 	 */

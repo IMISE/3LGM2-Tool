@@ -10,20 +10,20 @@ import java.awt.event.WindowStateListener;
 
 /**
  * Ein {@link WindowStateListener}, der beim Eintreffen eines {@link WindowEvent}
- * eine festgelegte Aktion ausführt.
+ * eine festgelegte Aktion ausfÃ¼hrt.
  * 
  * @author fstephan
  */
 public class LGMWindowStateListener implements WindowStateListener {
 
 	/**
-	 * Aktion, die beim Eintreffen eines {@link WindowEvent} ausgeführt wird.
+	 * Aktion, die beim Eintreffen eines {@link WindowEvent} ausgefÃ¼hrt wird.
 	 */
 	private FlexibleEventAction windowStateChangedAction;
 
 	/**
 	 * Ein {@link WindowStateListener}, der beim Eintreffen eines {@link WindowEvent}
-	 * die übergebene Aktion ausführt.
+	 * die Ã¼bergebene Aktion ausfÃ¼hrt.
 	 * 
 	 * @param windowStateChangedAction
 	 */

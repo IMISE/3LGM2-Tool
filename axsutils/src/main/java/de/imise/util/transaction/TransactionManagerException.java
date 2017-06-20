@@ -16,7 +16,7 @@ public class TransactionManagerException extends RuntimeException {
     }
 
 	public static final TransactionManagerException noOpenTransaction() {
-		return new TransactionManagerException("Es wurde noch keine Transaktion geöffnet");
+		return new TransactionManagerException("Es wurde noch keine Transaktion geÃ¶ffnet");
 	}
 	
 	public static final TransactionManagerException alreadyOpenTransaction() {
@@ -24,15 +24,15 @@ public class TransactionManagerException extends RuntimeException {
 	}
 	
 	public static final TransactionManagerException transactionNotProcessable(Throwable cause) {
-		return new TransactionManagerException("Die Transaktion konnte nicht ausgeführt werden", cause);
+		return new TransactionManagerException("Die Transaktion konnte nicht ausgefÃ¼hrt werden", cause);
 	}
 	
 	public static final TransactionManagerException transactionAlreadyExecuted() {
-		return new TransactionManagerException("Die Transaktion wurde bereits ausgeführt");
+		return new TransactionManagerException("Die Transaktion wurde bereits ausgefÃ¼hrt");
 	}
 	
 	public static final TransactionManagerException undoAlreadyPerformed() {
-		return new TransactionManagerException("Die Transaktion wurde bereits rückgängig gemacht");
+		return new TransactionManagerException("Die Transaktion wurde bereits rÃ¼ckgÃ¤ngig gemacht");
 	}
 	
 	public static final TransactionManagerException redoAlreadyPerformed() {
@@ -40,7 +40,7 @@ public class TransactionManagerException extends RuntimeException {
 	}
 	
 	public static final TransactionManagerException currentTransactionNotExecuted() {
-		return new TransactionManagerException("Aktuelle Transaktion wurde noch nicht ausgeführt");
+		return new TransactionManagerException("Aktuelle Transaktion wurde noch nicht ausgefÃ¼hrt");
 	}
 	
 	

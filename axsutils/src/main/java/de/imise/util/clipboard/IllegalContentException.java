@@ -15,7 +15,7 @@ public class IllegalContentException extends Exception {
 	 * 			Inhalt, der nicht umgewandelt werden kann
 	 */
 	public IllegalContentException(Object content) {
-		super(content + " besitzt kein gültiges Format");
+		super(content + " besitzt kein gÃ¼ltiges Format");
 	}
 	
 	/**
@@ -24,10 +24,10 @@ public class IllegalContentException extends Exception {
 	 * @param content
 	 * 			Inhalt, der nicht umgewandelt werden kann
 	 * @param t
-	 * 			Auslösende Exception
+	 * 			AuslÃ¶sende Exception
 	 */
 	public IllegalContentException(Object content, Throwable t) {
-		super(content + " besitzt kein gültiges Format\n" + t.getMessage());
+		super(content + " besitzt kein gÃ¼ltiges Format\n" + t.getMessage());
 		
 	}
 

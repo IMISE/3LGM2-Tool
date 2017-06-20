@@ -42,11 +42,11 @@ public class UniquePixelExtractor {
 	 * @return
 	 */
 	public static final ArrayList<Pixel> getUniquePixelSet(BufferedImage targetImage, ArrayList<BufferedImage> images, Color pixelColor, Color ignoreColor){
-		//Rückgabeliste anlegen
+		//RÃ¼ckgabeliste anlegen
 		ArrayList<Pixel> uniquePixels = new ArrayList<Pixel>(images.size());
 		
-		//für das Bild an Position targetImageIndex in der Liste images ein Feld mit Differentpixeln anlegen, die
-		//entweder genau die übergebene Pixelfarbe haben, sie nicht haben oder, wenn der Pixel im aktuellen Bild
+		//fÃ¼r das Bild an Position targetImageIndex in der Liste images ein Feld mit Differentpixeln anlegen, die
+		//entweder genau die Ã¼bergebene Pixelfarbe haben, sie nicht haben oder, wenn der Pixel im aktuellen Bild
 		//die Farbe ignoreColor besitzt, null ist
 		DifferencePixel[][] d = DifferencePixel.getDifferencePixels(targetImage, images, pixelColor, ignoreColor);
 		int w = d.length;
@@ -60,13 +60,13 @@ public class UniquePixelExtractor {
 		ArrayList <BufferedImage> bestPixelNewImages = null;
 		//Liste aller Bilder, von denen sich die gesamte bisher gefundene Pixelmenge unterscheidet
 		ArrayList<BufferedImage> allDifferentImages = new ArrayList<BufferedImage>(images.size());
-		//boolean, der sich merkt, ob schon ein nicht-inverser Pixel im Rückgabeset steckt (das muss sein)
+		//boolean, der sich merkt, ob schon ein nicht-inverser Pixel im RÃ¼ckgabeset steckt (das muss sein)
 		boolean onlyInversPixelInSet = true;
-		//solange nicht alle Pixel zur Gesamtmenge der gefundenen Pixel hinzugefügt wurden
+		//solange nicht alle Pixel zur Gesamtmenge der gefundenen Pixel hinzugefÃ¼gt wurden
 		while(uniquePixels.size()<images.size()-1){
 			//setze den "besten" neuen Pixel null
 			bestPixel = null;
-			//für jede Koordinate des Bildes 
+			//fÃ¼r jede Koordinate des Bildes 
 			for (int x=0; x<w; x++){
 				for (int y=0; y<h; y++){
 					//wenn der entsprechende Differenzpixel schon in der Gesamtliste ist -> weiter
@@ -74,11 +74,11 @@ public class UniquePixelExtractor {
 						continue;
 					//
 					ArrayList <BufferedImage> newDifferentImages = d[x][y].getNewDifferenceImages(allDifferentImages);
-					//wenn die Lösung grade gefunden wurde
+					//wenn die LÃ¶sung grade gefunden wurde
 					if (allDifferentImages.size()+newDifferentImages.size()+1==images.size()){
 						uniquePixels.add(d[x][y]);
-						//wenn bisher kein nichtinverser Pixel mit der pixelColor im Rückgabeset ist, dann
-						//wird der erstbeste hinzugefügt
+						//wenn bisher kein nichtinverser Pixel mit der pixelColor im RÃ¼ckgabeset ist, dann
+						//wird der erstbeste hinzugefÃ¼gt
 						if (d[x][y].isInvers() && onlyInversPixelInSet){
 							Point p = ImageTools.getMostLeftUpPixelPosition(targetImage, pixelColor.getRGB());
 							uniquePixels.add(new Pixel(p, pixelColor));
@@ -96,7 +96,7 @@ public class UniquePixelExtractor {
 					}
 				}
 			}
-			//keine eindeutige Lösung 
+			//keine eindeutige LÃ¶sung 
 			if (bestPixel==null || bestPixelNewImages.size()==0)
 				return null;
 			uniquePixels.add(bestPixel);
@@ -104,8 +104,8 @@ public class UniquePixelExtractor {
 				onlyInversPixelInSet=false;
 			allDifferentImages.addAll(bestPixelNewImages);
 		}
-		//wenn bisher kein nichtinverser Pixel mit der pixelColor im Rückgabeset ist, dann
-		//wird der erstbeste hinzugefügt
+		//wenn bisher kein nichtinverser Pixel mit der pixelColor im RÃ¼ckgabeset ist, dann
+		//wird der erstbeste hinzugefÃ¼gt
 		if (onlyInversPixelInSet){
 			Point p = ImageTools.getMostLeftUpPixelPosition(targetImage, pixelColor.getRGB());
 			uniquePixels.add(new Pixel(p, pixelColor));
@@ -144,25 +144,25 @@ public class UniquePixelExtractor {
 */	
 	
 	/**
-	 * Pixel, der für übergebene Bilder entscheiden kann, ob dieses Bild den Pixel enthält.<br>
+	 * Pixel, der fÃ¼r Ã¼bergebene Bilder entscheiden kann, ob dieses Bild den Pixel enthÃ¤lt.<br>
 	 * Ein Pixel besteht aus einem Punkt und einer Farbe.<br>
-	 * Ist <code>invers</code> nicht <code>true</code>, dann wird ein übergebenes Bild bei
-	 * <code>add(BufferedImage)</code> zur Liste der Differenzbilder hinzugefügt, wenn es an diesem
-	 * Punkt den Pixel nicht enthält.
+	 * Ist <code>invers</code> nicht <code>true</code>, dann wird ein Ã¼bergebenes Bild bei
+	 * <code>add(BufferedImage)</code> zur Liste der Differenzbilder hinzugefÃ¼gt, wenn es an diesem
+	 * Punkt den Pixel nicht enthÃ¤lt.
 	 */
 	private static class DifferencePixel extends Pixel{
 
 		/**
-		 * Liste, in die alle Bilder eingefügt werden, deren Farbwert in dem Bildpunkt, den dieser Pixel 
-		 * beschreibt bei <code>invers==true</code> nicht mit dem Farbwert dieses Pixel übereinstimmt
-		 * oder bei <code>invers==false</code> mit dem Farbwert dieses Pixel übereinstimmt.
+		 * Liste, in die alle Bilder eingefÃ¼gt werden, deren Farbwert in dem Bildpunkt, den dieser Pixel 
+		 * beschreibt bei <code>invers==true</code> nicht mit dem Farbwert dieses Pixel Ã¼bereinstimmt
+		 * oder bei <code>invers==false</code> mit dem Farbwert dieses Pixel Ã¼bereinstimmt.
 		 */
 		private ArrayList <BufferedImage> differenceImages;
 		
 		/**
-		 * Liste, in die alle Bilder eingefügt werden, deren Farbwert in dem Bildpunkt, den dieser Pixel 
-		 * beschreibt bei <code>invers==true</code> mit dem Farbwert dieses Pixel übereinstimmt
-		 * oder bei <code>invers==false</code> nicht mit dem Farbwert dieses Pixel übereinstimmt.
+		 * Liste, in die alle Bilder eingefÃ¼gt werden, deren Farbwert in dem Bildpunkt, den dieser Pixel 
+		 * beschreibt bei <code>invers==true</code> mit dem Farbwert dieses Pixel Ã¼bereinstimmt
+		 * oder bei <code>invers==false</code> nicht mit dem Farbwert dieses Pixel Ã¼bereinstimmt.
 		 */
 		private ArrayList <BufferedImage> equalsImages;
 		
@@ -227,7 +227,7 @@ public class UniquePixelExtractor {
 		
 
 		/**
-		 * Liefer ein DifferencePixel-Array für das Zielbild.<br>
+		 * Liefer ein DifferencePixel-Array fÃ¼r das Zielbild.<br>
 		 * Alle Pixel im Zielbild mit der ignoreColor sind im Array <code>null</code>. Alle anderen sind normale
 		 * Differenzpixel.
 		 * @param targetImage

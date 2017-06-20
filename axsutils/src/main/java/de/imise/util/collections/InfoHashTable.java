@@ -5,8 +5,8 @@ import java.util.Map;
 
 /**
  *
- * Dient nur zur Überwachung des Inhaltes eines HashTables, falls man mit debuggen nicht mehr weiter
- * kommt. Bei jeder Änderung des Inhaltes wird der Table ausgegeben.
+ * Dient nur zur Ãœberwachung des Inhaltes eines HashTables, falls man mit debuggen nicht mehr weiter
+ * kommt. Bei jeder Ã„nderung des Inhaltes wird der Table ausgegeben.
  *  
  * @author AXS
  * Created on 18.04.2008

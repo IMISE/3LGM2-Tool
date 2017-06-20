@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Klasse zum Austausch von Daten zwischen dieser Software und anderen Desktop-Anwendungen über
+ * Klasse zum Austausch von Daten zwischen dieser Software und anderen Desktop-Anwendungen Ã¼ber
  * die System-Zwischenablage.
  * 
  * @author Frank
@@ -80,9 +80,9 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager{
 	}
 
 	/**
-	 * Gibt den String zurück der sich an der Position {@link ClipboardConstants#CONTENT_STRING_POSITION}
+	 * Gibt den String zurÃ¼ck der sich an der Position {@link ClipboardConstants#CONTENT_STRING_POSITION}
 	 * der <code>String</code> - Inhalte der System-Zwischenablage befindet.<br>
-	 * Falls keine <code>String</code> - Inhalte existieren, wird <code>null</code> zurückgegeben.
+	 * Falls keine <code>String</code> - Inhalte existieren, wird <code>null</code> zurÃ¼ckgegeben.
 	 * @return
 	 * @see de.imise.util.clipboard.ContentManager#getClipboardContent()
 	 */
@@ -108,10 +108,10 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager{
 
 		/*
 		wenn Table auf seine in die Zwischenablage geschobenen Inhalte
-		zurückgreift, kommt es zu einem Fehler. Das könnte daran liegen,
+		zurÃ¼ckgreift, kommt es zu einem Fehler. Das kÃ¶nnte daran liegen,
 		dass sich an der Position 1 der Zwischenablage nichts mehr befindet.
 		--> Eventuell ein Transferable aus zwei StringSelections erstellen
-			und als content übergeben.
+			und als content Ã¼bergeben.
 		 */
 
 	}
@@ -125,7 +125,7 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager{
 	}
 
 	/**
-	 * Gibt den aktuellen {@link ContentManagerImpl} zurück.
+	 * Gibt den aktuellen {@link ContentManagerImpl} zurÃ¼ck.
 	 * @return {@link currentManager}
 	 */
 	public static ContentManagerImpl getCurrentManager() {
@@ -138,9 +138,9 @@ public class ContentManagerImpl implements ClipboardConstants, ContentManager{
 	}
 
 	/** 
-	 * Repräsentation des im Konstruktor übergebenen <code>data</code> als {@link Transferable}.<br>
+	 * ReprÃ¤sentation des im Konstruktor Ã¼bergebenen <code>data</code> als {@link Transferable}.<br>
 	 * Dabei wird immer <code>data.toString()</code> durch {@link #getTransferData(DataFlavor)}
-	 * zurückgegeben.
+	 * zurÃ¼ckgegeben.
 	 * 
 	 * @author fstephan
 	 *

@@ -17,7 +17,7 @@ import javax.swing.event.ChangeListener;
 public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 
 	/**
-	 * Spinner für die Einstellung des Minimum und Maximumwertes
+	 * Spinner fÃ¼r die Einstellung des Minimum und Maximumwertes
 	 */
 	private RaiseStepSpinner minSpinner, maxSpinner;
 	
@@ -32,7 +32,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	private JLabel varLabel;
 	
 	/**
-	 * Liefert ein {@link MinMaxSpinnerPanel} für Integer-Werte, bei dem der Minimumspinner mit dem
+	 * Liefert ein {@link MinMaxSpinnerPanel} fÃ¼r Integer-Werte, bei dem der Minimumspinner mit dem
 	 * Minimalwert und der Maximumspinner mit dem Maximalwert initialisiert wird.
 	 * 
 	 * @param varName
@@ -44,8 +44,8 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	}
 
 	/**
-	 * Liefert ein {@link MinMaxSpinnerPanel} für Integer-Werte, bei dem der Minimumspinner mit dem
-	 * übergebenen Minimalwert und der Maximumspinner mit dem übergebenen Maximalwert initialisiert wird.
+	 * Liefert ein {@link MinMaxSpinnerPanel} fÃ¼r Integer-Werte, bei dem der Minimumspinner mit dem
+	 * Ã¼bergebenen Minimalwert und der Maximumspinner mit dem Ã¼bergebenen Maximalwert initialisiert wird.
 	 * 
 	 * @param varName
 	 * @param min
@@ -58,7 +58,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	}
 
 	/**
-	 * Liefert ein {@link MinMaxSpinnerPanel} für Double-Werte, bei dem der Minimumspinner mit dem
+	 * Liefert ein {@link MinMaxSpinnerPanel} fÃ¼r Double-Werte, bei dem der Minimumspinner mit dem
 	 * Minimalwert und der Maximumspinner mit dem Maximalwert initialisiert wird.
 	 * 
 	 * @param varName
@@ -71,8 +71,8 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	}
 	
 	/**
-	 * Liefert ein {@link MinMaxSpinnerPanel} für Double oder Integer-Werte, bei dem der Minimumspinner mit dem
-	 * übergebenen Minimalwert und der Maximumspinner mit dem übergebenen Maximalwert initialisiert wird.
+	 * Liefert ein {@link MinMaxSpinnerPanel} fÃ¼r Double oder Integer-Werte, bei dem der Minimumspinner mit dem
+	 * Ã¼bergebenen Minimalwert und der Maximumspinner mit dem Ã¼bergebenen Maximalwert initialisiert wird.
 	 * 
 	 * @param varName
 	 * @param min
@@ -129,7 +129,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	}
 
 	/**
-	 * Liefert den Spinner für den Minimalwert.
+	 * Liefert den Spinner fÃ¼r den Minimalwert.
 	 * 
 	 * @return
 	 */
@@ -138,7 +138,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	}
 	
 	/**
-	 * Liefert den Spinner für den Maximalwert.
+	 * Liefert den Spinner fÃ¼r den Maximalwert.
 	 * 
 	 * @return
 	 */
@@ -151,7 +151,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
      */
     @Override
     public void stateChanged(ChangeEvent e) {
-    	//verhindert, dass das Minimum das Maximum überschreitet und umgekehrt
+    	//verhindert, dass das Minimum das Maximum Ã¼berschreitet und umgekehrt
     	SpinnerNumberModel minSpinnerModel = (SpinnerNumberModel)minSpinner.getModel();
     	SpinnerNumberModel maxSpinnerModel = (SpinnerNumberModel)maxSpinner.getModel();
 	    if (e.getSource() == minSpinner && minSpinnerModel.getNumber().doubleValue() > maxSpinnerModel.getNumber().doubleValue())
@@ -194,7 +194,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 
 	
 	/**
-	 * Hängt an beide Spinner den übergebenen ChangeListener
+	 * HÃ¤ngt an beide Spinner den Ã¼bergebenen ChangeListener
 	 * 
 	 * @param listener
 	 */
@@ -204,7 +204,7 @@ public class MinMaxSpinnerPanel extends JPanel implements ChangeListener{
 	}
 
 	/**
-	 * Entfernt von beiden Spinnern den übergebenen ChangeListener
+	 * Entfernt von beiden Spinnern den Ã¼bergebenen ChangeListener
 	 * 
 	 * @param listener
 	 */

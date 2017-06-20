@@ -1,36 +1,36 @@
 package de.imise.util.transaction;
 
 /**
- * Interface für Klassen, welche Transaktionen unterstützen.
+ * Interface fÃ¼r Klassen, welche Transaktionen unterstÃ¼tzen.
  * 
  * @author fstephan
  */
 public interface TransactionSupport {
 	
 	/**
-	 * Rückgängigmachen der letzten Änderung
+	 * RÃ¼ckgÃ¤ngigmachen der letzten Ã„nderung
 	 * @return <ul>
-	 * 			<li><code>true</code>: UNDO wurde erfolgreich ausgeführt </li>
-	 * 			<li><code>false</code>: UNDO konnte nicht ausgeführt werden </li>
+	 * 			<li><code>true</code>: UNDO wurde erfolgreich ausgefÃ¼hrt </li>
+	 * 			<li><code>false</code>: UNDO konnte nicht ausgefÃ¼hrt werden </li>
 	 */
 	boolean undo();
 	
 	/**
-	 * Wiederholen der letzten Änderung
+	 * Wiederholen der letzten Ã„nderung
 	 * @return <ul>
-	 * 			<li><code>true</code>: REDO wurde erfolgreich ausgeführt </li>
-	 * 			<li><code>false</code>: REDO konnte nicht ausgeführt werden </li>
+	 * 			<li><code>true</code>: REDO wurde erfolgreich ausgefÃ¼hrt </li>
+	 * 			<li><code>false</code>: REDO konnte nicht ausgefÃ¼hrt werden </li>
 	 */
 	boolean redo();
 	
 	/**
-	 * Gibt wieder, ob UNDO verfügbar ist.
+	 * Gibt wieder, ob UNDO verfÃ¼gbar ist.
 	 * @return
 	 */
 	boolean isUndoAvailable();
 	
 	/**
-	 * Gibt wieder, ob REDO verfügbar ist.
+	 * Gibt wieder, ob REDO verfÃ¼gbar ist.
 	 * @return
 	 */
 	boolean isRedoAvailable();
@@ -38,8 +38,8 @@ public interface TransactionSupport {
 	/**
 	 * Gibt den TransactionManager der implementierenden Klasse wieder.
 	 * <p>
-	 * Grundsätzlich ist diese Methode optional und darf auch
-	 * <code>null</code> zurückgeben.
+	 * GrundsÃ¤tzlich ist diese Methode optional und darf auch
+	 * <code>null</code> zurÃ¼ckgeben.
 	 * 
 	 * @return
 	 */

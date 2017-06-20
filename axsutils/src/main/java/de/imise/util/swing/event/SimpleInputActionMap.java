@@ -13,8 +13,8 @@ import javax.swing.KeyStroke;
 
 /**
  * Erzeugt eine {@link InputMap} und eine {@link ActionMap}, die beide
- * durch diese Klasse einfach gehandhabt werden können.<br>
- * Insbesondere entfällt hier das Erzeugen eines Identifiers zur Verbindung 
+ * durch diese Klasse einfach gehandhabt werden kÃ¶nnen.<br>
+ * Insbesondere entfÃ¤llt hier das Erzeugen eines Identifiers zur Verbindung 
  * beider Maps.
  * 
  * @author fstephan
@@ -28,8 +28,8 @@ public class SimpleInputActionMap {
 	/**
 	 * 
 	 * @param component
-	 * 			Wird nur benötigt, wenn die {@link InputMap} mit der Condition {@link JComponent#WHEN_IN_FOCUSED_WINDOW}
-	 * 			für die Komponente gesetzt wird
+	 * 			Wird nur benÃ¶tigt, wenn die {@link InputMap} mit der Condition {@link JComponent#WHEN_IN_FOCUSED_WINDOW}
+	 * 			fÃ¼r die Komponente gesetzt wird
 	 */
 	public SimpleInputActionMap(JComponent component) {
 		if (component == null)
@@ -48,9 +48,9 @@ public class SimpleInputActionMap {
 	 * @see ActionMap#put(Object, Action)
 	 * 
 	 * @param k
-	 * 		KeyStroke für den die Action in der ActionMap registriert werden soll
+	 * 		KeyStroke fÃ¼r den die Action in der ActionMap registriert werden soll
 	 * @param a
-	 * 		Action, die beim Auslösen des KeyStrokes gefeuert werden soll
+	 * 		Action, die beim AuslÃ¶sen des KeyStrokes gefeuert werden soll
 	 */
 	public void put(KeyStroke k, Action a) {
 		Integer id = newID();
@@ -64,10 +64,10 @@ public class SimpleInputActionMap {
 	 * @see ActionMap#put(Object, Action)
 	 * 
 	 * @param k
-	 * 		KeyStroke für den die Action in der ActionMap registriert werden soll
+	 * 		KeyStroke fÃ¼r den die Action in der ActionMap registriert werden soll
 	 * @param a
 	 * 		ActionListener, dessen {@link ActionListener#actionPerformed(ActionEvent)} 
-	 * 		beim Auslösen KeyStrokes aufgerufen werden soll
+	 * 		beim AuslÃ¶sen KeyStrokes aufgerufen werden soll
 	 */
 	public void put(KeyStroke k, final ActionListener a) {
 		Integer id = newID();
@@ -85,9 +85,9 @@ public class SimpleInputActionMap {
 	 * Nimmt den in der Action spezifizierten KeyStroke in {@link #put(KeyStroke, Action)}
 	 * 
 	 * @param k
-	 * 		KeyStroke für den die Action in der ActionMap registriert werden soll
+	 * 		KeyStroke fÃ¼r den die Action in der ActionMap registriert werden soll
 	 * @param a
-	 * 		Action, die beim Auslösen des KeyStrokes gefeuert werden soll
+	 * 		Action, die beim AuslÃ¶sen des KeyStrokes gefeuert werden soll
 	 */
 	public void put(Action a) {
 		Integer id = newID();
@@ -100,7 +100,7 @@ public class SimpleInputActionMap {
 	 * @see ActionMap#remove(Object)
 	 *
 	 * @param k
-	 * 		Entfernt den KeyStroke und die für ihn registierte Action
+	 * 		Entfernt den KeyStroke und die fÃ¼r ihn registierte Action
 	 */
 	public void remove(KeyStroke k) {
 		actionMap.remove(inputMap.get(k));

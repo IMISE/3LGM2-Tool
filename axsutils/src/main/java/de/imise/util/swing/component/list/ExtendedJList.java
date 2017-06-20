@@ -20,7 +20,7 @@ import javax.swing.event.ListDataListener;
  * {@link JList} Implementation mit zwei neuen Funktionen:
  * 
  * <li> Editierbarkeit der Zellen
- * <li> Höhe für jede einzelne Zelle einstellbar
+ * <li> HÃ¶he fÃ¼r jede einzelne Zelle einstellbar
  * 
  * @author fstephan
  *
@@ -34,14 +34,14 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	private static final String uiClassID = "ExtendedJListUI";
 
 	/*
-	 * zugehörige UI Klasse festlegen
+	 * zugehÃ¶rige UI Klasse festlegen
 	 */
 	static {
 		UIManager.put(uiClassID, ExtendedJListUI.class.getName());
 	}
 
 	/**
-	 * Beinhaltet die Höhe der Zellen
+	 * Beinhaltet die HÃ¶he der Zellen
 	 * @see SizeSequence
 	 */
 	private CellHeightModel cellHeightModel;
@@ -57,9 +57,9 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 
 	/**
 	 * @param model
-	 * 			Modell der Werte für die Liste
+	 * 			Modell der Werte fÃ¼r die Liste
 	 * @param editor
-	 * 			Editor für das Ändern der Werte
+	 * 			Editor fÃ¼r das Ã„ndern der Werte
 	 */
 	public ExtendedJList(EditableListModel model, ListCellEditor editor) {
 		super(model);
@@ -78,7 +78,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Setzt die Höhe der Zellen entsprechend der Werte von {@link CellHeightModel#getHeight(int)}
+	 * Setzt die HÃ¶he der Zellen entsprechend der Werte von {@link CellHeightModel#getHeight(int)}
 	 * @param cellHeightModel
 	 */
 	public void setCellHeightModel(CellHeightModel cellHeightModel) {
@@ -123,7 +123,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 
 			if (r != null) {
 				for (int row = 0; row < getModel().getSize(); row++) {
-					// Berücksichtigt die unterschiedlichen Zellhöhen
+					// BerÃ¼cksichtigt die unterschiedlichen ZellhÃ¶hen
 					height += getCellHeight(row, true);
 				}
 			} else {
@@ -138,7 +138,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Gibt die Höhe der Zelle am spezifizierten Index wieder
+	 * Gibt die HÃ¶he der Zelle am spezifizierten Index wieder
 	 * @param index
 	 * @return
 	 */
@@ -185,7 +185,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 
 		/*
 		 * Erneutes Senden des MouseEvents an die Editorkomponente, da diese beim ersten
-		 * Eingang des Events zunächst erst initialisiert wird
+		 * Eingang des Events zunÃ¤chst erst initialisiert wird
 		 */
 		if (editorComponent != null) {
 			editorComponent.requestFocus();
@@ -222,7 +222,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Gibt den Index der Zelle zurück, die im Moment editiert wird.
+	 * Gibt den Index der Zelle zurÃ¼ck, die im Moment editiert wird.
 	 * @return <code>-1</code>, wenn keine Zelle editiert wird
 	 */
 	public int getEditingIndex() {
@@ -230,7 +230,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Löst das Entfernen des Editors von der Zelle aus.
+	 * LÃ¶st das Entfernen des Editors von der Zelle aus.
 	 * @see javax.swing.event.CellEditorListener#editingCanceled(javax.swing.event.ChangeEvent)
 	 */
 	@Override
@@ -239,7 +239,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Die {@link ExtendedJList} ist nur für die {@link JList#VERTICAL} Layout Orienation definiert.
+	 * Die {@link ExtendedJList} ist nur fÃ¼r die {@link JList#VERTICAL} Layout Orienation definiert.
 	 */
 	@Override
 	@Deprecated
@@ -248,7 +248,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Löst das Editieren der Zelle am spezifizierten Index aus.
+	 * LÃ¶st das Editieren der Zelle am spezifizierten Index aus.
 	 * @param index
 	 * @return
 	 */
@@ -271,9 +271,9 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Löst das Beenden des Editors aus. 
+	 * LÃ¶st das Beenden des Editors aus. 
 	 * <p>
-	 * Der neue Wert wird ins Modell übernommen und der Editor von der Zelle gelöst.
+	 * Der neue Wert wird ins Modell Ã¼bernommen und der Editor von der Zelle gelÃ¶st.
 	 */
 	@Override
 	public void editingStopped(ChangeEvent e) {
@@ -313,8 +313,8 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 
 	/**
-	 * Veranlasst den Editor die grafische Komponente für die Zelle am spezifizierten Index zu erzeugen.<br>
-	 * Die Funktion kann zum Beispiel verwendet werden, um bereits vor dem Editieren Informationen über die
+	 * Veranlasst den Editor die grafische Komponente fÃ¼r die Zelle am spezifizierten Index zu erzeugen.<br>
+	 * Die Funktion kann zum Beispiel verwendet werden, um bereits vor dem Editieren Informationen Ã¼ber die
 	 * darszustellende Komponente zu erhalten (Layout, etc.).
 	 * 
 	 * @param editor
@@ -358,7 +358,7 @@ public class ExtendedJList extends JList implements CellEditorListener, ListData
 	}
 	
 	/**
-	 * Wandelt die y-Koordinate in den dazugehörigen Zellindex um. 
+	 * Wandelt die y-Koordinate in den dazugehÃ¶rigen Zellindex um. 
 	 * @param y0
 	 * @return -1, wenn y0 ausserhalb der Koordinaten dieser {@link ExtendedJList} liegt.
 	 */

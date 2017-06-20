@@ -10,19 +10,19 @@ import java.util.Vector;
  * Die Transaction-Manager ist eine Implementierung des {@link AbstractTransactionManager} auf der Basis
  * umkehrbarer Funtionen - den {@link InvertibleFunction}s.
  * <p>
- * Das Prinzip hierbei ist, dass Änderungen des Systemzustandes nicht über das Speichern der jeweils 
- * veränderten Werte erfolgt, sondern durch das Festhalten der Aktionen, die eben diese Änderungen
- * ausgelöst haben. <br>
+ * Das Prinzip hierbei ist, dass Ã„nderungen des Systemzustandes nicht Ã¼ber das Speichern der jeweils 
+ * verÃ¤nderten Werte erfolgt, sondern durch das Festhalten der Aktionen, die eben diese Ã„nderungen
+ * ausgelÃ¶st haben. <br>
  * Der entscheidende Vorteil bei dieser Herangehensweise ist, dass sich der Transaction-Manager nicht
  * mit Typen, Formaten, etc. der betreffenden Werte auseinandersetzen muss. Klassen, die diesen
- * Transaction-Manager verwenden, können selbst entscheiden, wie Werte verändert werden und was beim
- * Durchführen von UNDO und REDO auf der Ebene der {@link InvertibleFunction}s geschehen soll. <br>
- * Darüberhinaus ist es möglich, {@link FunctionalTransactionManager} geschachtelt zu verwenden, indem
+ * Transaction-Manager verwenden, kÃ¶nnen selbst entscheiden, wie Werte verÃ¤ndert werden und was beim
+ * DurchfÃ¼hren von UNDO und REDO auf der Ebene der {@link InvertibleFunction}s geschehen soll. <br>
+ * DarÃ¼berhinaus ist es mÃ¶glich, {@link FunctionalTransactionManager} geschachtelt zu verwenden, indem
  * untergeordnete Instanzen, selbst wieder in {@link InvertibleFunction}s eingebunden werden. Etwa bei
- * hierarchisch aufgebauten {@link Component}s ist es möglich, den einzelnen Komponenten eigene auf sie
+ * hierarchisch aufgebauten {@link Component}s ist es mÃ¶glich, den einzelnen Komponenten eigene auf sie
  * zugeschnittene Transaction-Manager zuzuweisen, auf welche dann der Transaction-Manager der 
- * übergeordeten Komponente zugreifen kann.<br>
- * Welche Funktionen des {@link FunctionalTransactionManager} dabei zugänglich gemacht werden, kann
+ * Ã¼bergeordeten Komponente zugreifen kann.<br>
+ * Welche Funktionen des {@link FunctionalTransactionManager} dabei zugÃ¤nglich gemacht werden, kann
  * individuell entschieden werden. Hierzu wurden alle kritischen Methoden auf <code>protected</code>
  * gesetzt. 
  * <p>
@@ -31,7 +31,7 @@ import java.util.Vector;
  * Zugriffsrechte steuern kann.
  * <p>
  * Sind alle {@link InvertibleFunction}s korrekt definiert, garantiert der {@link FunctionalTransactionManager}
- * die Atomarität und Konsistenzerhaltung für die jeweiligen Transaktionen. <br>
+ * die AtomaritÃ¤t und Konsistenzerhaltung fÃ¼r die jeweiligen Transaktionen. <br>
  * <i>Achtung</i>: Dieser Transaction-Manager ist nicht thread-sicher.
  * <p>
  * <b>Code-Beispiel:</b>
@@ -49,14 +49,14 @@ import java.util.Vector;
                 }
 			};
 		
-		// Öffnet die Transaktion
+		// Ã–ffnet die Transaktion
 		transactionManager.openTransaction();
 		
-		// Setzt die Aktionen für die Transaktion
+		// Setzt die Aktionen fÃ¼r die Transaktion
 		transactionManager.fillTransaction(f);
 		
-		// Führt durch und beendet die Transaktion
-		// Danach ist erst UNDO und REDO möglich
+		// FÃ¼hrt durch und beendet die Transaktion
+		// Danach ist erst UNDO und REDO mÃ¶glich
 		transactionManager.doTransaction();
  * 
  * </pre>
@@ -73,8 +73,8 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	/** 
 	 * Der UNDO Stack. 
 	 * <p>
-	 * Beinhaltet alle bisher durchgeführten Transaktionen.<br>
-	 * Beim Ausführen von {@link #undo()} wird die letzte Transaktion
+	 * Beinhaltet alle bisher durchgefÃ¼hrten Transaktionen.<br>
+	 * Beim AusfÃ¼hren von {@link #undo()} wird die letzte Transaktion
 	 * in den {@link #redoStack} verschoben. 
 	 */
 	protected Stack<Transaction> undoStack = new Stack<Transaction>();
@@ -82,8 +82,8 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	/** 
 	 * Der REDO Stack. 
 	 * <p>
-	 * Beinhaltet alle rückgängig gemachten Transaktionen.<br>
-	 * Beim Ausführen von {@link #redo()} wird die letzte Transaktion
+	 * Beinhaltet alle rÃ¼ckgÃ¤ngig gemachten Transaktionen.<br>
+	 * Beim AusfÃ¼hren von {@link #redo()} wird die letzte Transaktion
 	 * wieder in den {@link #undoStack} verschoben. 
 	 */
 	protected Stack<Transaction> redoStack = new Stack<Transaction>();
@@ -91,13 +91,13 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	// Dient der Speicherung des letzten REDO-Stacks, beim Abbrechen einer Transaktion
 	private transient Stack<Transaction> redoStack_old = new Stack<Transaction>();
 	
-	/** Die momentan geöffnete Transaktion */
+	/** Die momentan geÃ¶ffnete Transaktion */
 	protected Transaction currentTransaction = null;
 	
-	/** Gibt wieder, ob UNDO verfügbar ist */
+	/** Gibt wieder, ob UNDO verfÃ¼gbar ist */
 	protected boolean isUndoAvailable = false;
 	
-	/** Gibt wieder, ob REDO verfügbar ist */
+	/** Gibt wieder, ob REDO verfÃ¼gbar ist */
 	protected boolean isRedoAvailable = false;
 	
 	
@@ -119,7 +119,7 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
         	throw new InternalError();
         } catch (NoSuchMethodException e) {
         	// Passiert immer dann, wenn eine erbende Klasse die 
-        	// createUndoStack-Methode nicht überschreibt
+        	// createUndoStack-Methode nicht Ã¼berschreibt
         	undoStack = createUndoStack(undoStackSize);
         } catch (IllegalArgumentException e) {
         	// Wird niemals passieren
@@ -140,7 +140,7 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
         	throw new InternalError();
         } catch (NoSuchMethodException e) {
         	// Passiert immer dann, wenn eine erbende Klasse die 
-        	// createRedoStack-Methode nicht überschreibt
+        	// createRedoStack-Methode nicht Ã¼berschreibt
         	redoStack = createRedoStack(redoStackSize);
         } catch (IllegalArgumentException e) {
         	// Wird niemals passieren
@@ -174,12 +174,12 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	
 	/**
 	 * Erzeugt den UNDO-Stack.<p>
-	 * Erbende Klassen können diese Methode "überschreiben" um einen individuellen
+	 * Erbende Klassen kÃ¶nnen diese Methode "Ã¼berschreiben" um einen individuellen
 	 * Stack zu erzeugen.
 	 * 
 	 * @param maxSize
-	 * 		Maximale Größe des UNDO-Stack
-	 * @return Begrenzter Stack für <code>maxSize > 0</code>; unbegrenzter Stack für <code>maxSize == -1</code>
+	 * 		Maximale GrÃ¶ÃŸe des UNDO-Stack
+	 * @return Begrenzter Stack fÃ¼r <code>maxSize > 0</code>; unbegrenzter Stack fÃ¼r <code>maxSize == -1</code>
 	 */
 	protected static Stack<Transaction> createUndoStack(int maxSize) {
 		return createStack(maxSize);
@@ -187,12 +187,12 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	
 	/**
 	 * Erzeugt den REDO-Stack.<p>
-	 * Erbende Klassen können diese Methode "überschreiben" um einen individuellen
+	 * Erbende Klassen kÃ¶nnen diese Methode "Ã¼berschreiben" um einen individuellen
 	 * Stack zu erzeugen.
 	 * 
 	 * @param maxSize
-	 * 		Maximale Größe des REDO-Stack
-	 * @return Begrenzter Stack für <code>maxSize > 0</code>; unbegrenzter Stack für <code>maxSize == -1</code>
+	 * 		Maximale GrÃ¶ÃŸe des REDO-Stack
+	 * @return Begrenzter Stack fÃ¼r <code>maxSize > 0</code>; unbegrenzter Stack fÃ¼r <code>maxSize == -1</code>
 	 */
 	protected static Stack<Transaction> createRedoStack(int maxSize) {
 		return createStack(maxSize);
@@ -221,7 +221,7 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	}
 	
 	/**
-	 * Öffnet eine neue Transaktion
+	 * Ã–ffnet eine neue Transaktion
 	 */
 	public void openTransaction() throws TransactionManagerException {
 		if (hasOpenTransaction())
@@ -233,17 +233,17 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	}
 	
 	/**
-	 * Gibt wieder, ob im Moment eine Transaktion geöffnet ist
+	 * Gibt wieder, ob im Moment eine Transaktion geÃ¶ffnet ist
 	 */
 	public boolean hasOpenTransaction() {
 		return currentTransaction != null;
 	}
 	
 	/**
-	 * Ausführen einer Transaktion, die nur aus einer {@link InvertibleFunction}
+	 * AusfÃ¼hren einer Transaktion, die nur aus einer {@link InvertibleFunction}
 	 * besteht.<br>
-	 * Hierzu wird eine neue Transaktion geöffnet, die Function angefügt und
-	 * danach die Transaktion ausgeführt.
+	 * Hierzu wird eine neue Transaktion geÃ¶ffnet, die Function angefÃ¼gt und
+	 * danach die Transaktion ausgefÃ¼hrt.
 	 */
 	public void fastTransaction(InvertibleFunction action)  throws TransactionManagerException {
 		openTransaction();
@@ -252,7 +252,7 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	}
 	
 	/**
-	 * Bricht die aktuelle geöffnet Transaktion ab.
+	 * Bricht die aktuelle geÃ¶ffnet Transaktion ab.
 	 */
 	public void abortTransaction() throws TransactionManagerException {
 		if (!hasOpenTransaction())
@@ -264,7 +264,7 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	}
 	
 	/**
-	 * Fügt die übergebene Funktion an die aktuell offene Transaktion an.<br>
+	 * FÃ¼gt die Ã¼bergebene Funktion an die aktuell offene Transaktion an.<br>
 	 * <i>Hinweis:</i> Das Aufrufen der Methoden {@link InvertibleFunction#execute()} oder
      * {@link InvertibleFunction#invert()} erfolgt intern im {@link FunctionalTransactionManager}
      * und darf nicht manuell erfolgen.
@@ -278,11 +278,11 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	}
 	
 	/**
-	 * Löst das Ausführen der aktuellen Transaktion aus.<br>
-	 * Dabei werden alle vorher über {@link #fillTransaction(InvertibleFunction)} angefügten
-	 * {@link InvertibleFunction}s der Reihe nach ausgeführt.<br>
-	 * Das Aufrufen dieser Methode schließt die aktuelle Transaktion, sodass nun über
-	 * {@link #openTransaction()} wieder neue geöffnet werden können.
+	 * LÃ¶st das AusfÃ¼hren der aktuellen Transaktion aus.<br>
+	 * Dabei werden alle vorher Ã¼ber {@link #fillTransaction(InvertibleFunction)} angefÃ¼gten
+	 * {@link InvertibleFunction}s der Reihe nach ausgefÃ¼hrt.<br>
+	 * Das Aufrufen dieser Methode schlieÃŸt die aktuelle Transaktion, sodass nun Ã¼ber
+	 * {@link #openTransaction()} wieder neue geÃ¶ffnet werden kÃ¶nnen.
 	 */
 	public void doTransaction () throws TransactionManagerException {
 		if (!hasOpenTransaction())
@@ -374,10 +374,10 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 	
 	/**
 	 * Eine {@link Transaction} ist eine Folge von {@link InvertibleFunction}s, deren
-	 * sukzessive Ausführung die durch diese Transaktion beschriebene Änderung des 
+	 * sukzessive AusfÃ¼hrung die durch diese Transaktion beschriebene Ã„nderung des 
 	 * Systemzustandes bewirkt. <br>
-	 * Diese Änderungen sind ausschließlich in den {@link InvertibleFunction}s selbst
-	 * definiert. Die Transaktion sorgt dann für deren geordnetes Ausführen und kontrolliert
+	 * Diese Ã„nderungen sind ausschlieÃŸlich in den {@link InvertibleFunction}s selbst
+	 * definiert. Die Transaktion sorgt dann fÃ¼r deren geordnetes AusfÃ¼hren und kontrolliert
 	 * UNDO und REDO.
 	 * 
 	 * @see InvertibleFunction
@@ -387,19 +387,19 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 		private boolean isExecutable = true;
 		
 		/**
-		 * Führt alle enthaltenen {@link InvertibleFunction}s der Reihe nach aus.
+		 * FÃ¼hrt alle enthaltenen {@link InvertibleFunction}s der Reihe nach aus.
 		 * <p>
 		 * Tritt dabei ein Fehler auf, so wird diese Transaktion versuchen, die bereits
-		 * gemachten Änderungen rückgängig zu machen, sodass der ursprüngliche Systemzustand 
+		 * gemachten Ã„nderungen rÃ¼ckgÃ¤ngig zu machen, sodass der ursprÃ¼ngliche Systemzustand 
 		 * wieder erreicht wird. Dazu wird jeweils die {@link InvertibleFunction#invert()}-
 		 * Methode benutzt. Kommt es dabei erneut zu einem Fehler, befindet sich das System
-		 * möglicherweise in einem ungültigen Zustand und muss beendet werden.
+		 * mÃ¶glicherweise in einem ungÃ¼ltigen Zustand und muss beendet werden.
 		 * <p>
-		 * @return 	<code>true</code>, wenn Ausführung erfolgreich; 
+		 * @return 	<code>true</code>, wenn AusfÃ¼hrung erfolgreich; 
 		 * 			<code>false</code>, sonst
 		 * @throws TransactionManagerException
-		 * 			Wird geworfen, wenn das Durchführen der Transaktion nicht möglich war,
-		 * 			das System aber wieder im gültigen Ausgangszustand ist.
+		 * 			Wird geworfen, wenn das DurchfÃ¼hren der Transaktion nicht mÃ¶glich war,
+		 * 			das System aber wieder im gÃ¼ltigen Ausgangszustand ist.
 		 */
 		public boolean execute() throws TransactionManagerException {
 			if (!isExecutable)
@@ -407,17 +407,17 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 			for (int i=0; i<size(); i++) {
 				try {
 					get(i).execute();
-					// Wenn beim Ausführen der Transaktionen Fehler auftreteten,
-					// wird versucht diese rückgängig zu machen
+					// Wenn beim AusfÃ¼hren der Transaktionen Fehler auftreteten,
+					// wird versucht diese rÃ¼ckgÃ¤ngig zu machen
 				} catch (RuntimeException e1) {
 					for (; i>=0; i--) {
 						try {
 							get(i).invert();
-							// Kann die fehlerhafte Transaktion nicht rückgängig gemacht werden
-							// befindet sich das System jetzt in einem ungültigen Zustand
+							// Kann die fehlerhafte Transaktion nicht rÃ¼ckgÃ¤ngig gemacht werden
+							// befindet sich das System jetzt in einem ungÃ¼ltigen Zustand
                         } catch (RuntimeException e2) {
-	                        throw new Error("Fehlerhafte Transaktion konnte nicht rückgängig gemacht werden.\n" +
-	                        		"Das Sytsem befindet sich eventuell in einem ungültigen Zustand", e2);
+	                        throw new Error("Fehlerhafte Transaktion konnte nicht rÃ¼ckgÃ¤ngig gemacht werden.\n" +
+	                        		"Das Sytsem befindet sich eventuell in einem ungÃ¼ltigen Zustand", e2);
                         } /*finally {
                         	throw TransactionManagerException.transactionNotProcessable(e1);
                         }*/
@@ -430,24 +430,24 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 		}
 		
 		/**
-		 * Macht die durch diese Transaktion ausgelösten Änderungen rückgängig.
+		 * Macht die durch diese Transaktion ausgelÃ¶sten Ã„nderungen rÃ¼ckgÃ¤ngig.
 		 * <p>
 		 * Dazu wird die {@link InvertibleFunction#invert()}-Methode verwendet. Kommt es 
-		 * dabei zu Fehlern, wird versucht die bereits rückgängig gemachten Änderungen
-		 * wiederherzustellen. Dies erfolgt dann wieder über die 
+		 * dabei zu Fehlern, wird versucht die bereits rÃ¼ckgÃ¤ngig gemachten Ã„nderungen
+		 * wiederherzustellen. Dies erfolgt dann wieder Ã¼ber die 
 		 * {@link InvertibleFunction#execute()}- Methode. Treten dabei erneut Fehler auf,
-		 * befindet sich das System möglicherweise in einem ungültigen Zustand und muss 
+		 * befindet sich das System mÃ¶glicherweise in einem ungÃ¼ltigen Zustand und muss 
 		 * beendet werden.
 		 * <p>
 		 * Anmerkung:<br>
-		 * Der Aufruf dieser Methode kann nur nach dem Ausführen von {@link #execute()}
+		 * Der Aufruf dieser Methode kann nur nach dem AusfÃ¼hren von {@link #execute()}
 		 * erfolgen.
 		 * 
-		 * @return 	<code>true</code>, wenn Rückgängigmachen erfolgreich; 
+		 * @return 	<code>true</code>, wenn RÃ¼ckgÃ¤ngigmachen erfolgreich; 
 		 * 			<code>false</code>, sonst
 		 * @throws TransactionManagerException
-		 * 			Wird geworfen, wenn das Rückgängigmachen der Transaktion nicht möglich war,
-		 * 			das System aber wieder im gültigen Zustand - wie es nach dem Durchführen von 
+		 * 			Wird geworfen, wenn das RÃ¼ckgÃ¤ngigmachen der Transaktion nicht mÃ¶glich war,
+		 * 			das System aber wieder im gÃ¼ltigen Zustand - wie es nach dem DurchfÃ¼hren von 
 		 * 			{@link #execute()} war - ist.
 		 */
 		public boolean revert() throws TransactionManagerException {
@@ -456,18 +456,18 @@ public class FunctionalTransactionManager extends AbstractTransactionManager {
 			
 			for (int i=size()-1; i>=0; i--) {
 				try {
-					// Wenn beim Rückgängigmachen der Transaktionen Fehler auftreteten,
-					// wird versucht die gemachten Änderungen wiederherzustellen
+					// Wenn beim RÃ¼ckgÃ¤ngigmachen der Transaktionen Fehler auftreteten,
+					// wird versucht die gemachten Ã„nderungen wiederherzustellen
 				get(i).invert();
 				} catch (RuntimeException e1) {
 					for (; i<size(); i++) {
 						try {
 							get(i).execute();
-							// Können die die gemachten Änderungen nicht wiederhergestellt werden
-							// befindet sich das System jetzt in einem ungültigen Zustand
+							// KÃ¶nnen die die gemachten Ã„nderungen nicht wiederhergestellt werden
+							// befindet sich das System jetzt in einem ungÃ¼ltigen Zustand
                         } catch (RuntimeException e2) {
-	                        throw new Error("Die Transaktion konnte nicht rückgängig gemacht werden.\n" +
-	                        		"Das Sytsem befindet sich eventuell in einem ungültigen Zustand", e2);
+	                        throw new Error("Die Transaktion konnte nicht rÃ¼ckgÃ¤ngig gemacht werden.\n" +
+	                        		"Das Sytsem befindet sich eventuell in einem ungÃ¼ltigen Zustand", e2);
                         }/* finally {
                         	throw TransactionManagerException.transactionNotProcessable(e1);
                         }*/

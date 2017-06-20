@@ -6,11 +6,11 @@ package de.imise.util.swing.event;
 import java.awt.event.ActionEvent;
 
 /**
- * Eine Aktion, die mehrere andere Aktionen in sich aufnehmen kann. Dabei hat diese Aktion nach außen
- * immer genau die Eigenschaften der ersten Aktion in der übergebenen Aktionenliste, deren enabled()-Funktion
+ * Eine Aktion, die mehrere andere Aktionen in sich aufnehmen kann. Dabei hat diese Aktion nach auÃŸen
+ * immer genau die Eigenschaften der ersten Aktion in der Ã¼bergebenen Aktionenliste, deren enabled()-Funktion
  * <code>true</code> liefert.<br>
- * Sinnvoller Weise kann man diese Aktion mit 2 anderen Aktionen initialisieren, die beide komplematäre Zustände
- * bei isEnabled() haben, so dass die Aktion zwischen 2 Zuständen hin und her schalten kann. 
+ * Sinnvoller Weise kann man diese Aktion mit 2 anderen Aktionen initialisieren, die beide komplematÃ¤re ZustÃ¤nde
+ * bei isEnabled() haben, so dass die Aktion zwischen 2 ZustÃ¤nden hin und her schalten kann. 
  * 
  * 
  * @author AXS
@@ -19,13 +19,13 @@ import java.awt.event.ActionEvent;
 public class ToggleAction extends ExtendedAction {
 
 	/**
-	 * Liste der Aktionen, von denen die erste, die bei isEnabed() true liefert, die Eigenschaften an diese Aktion übergibt
+	 * Liste der Aktionen, von denen die erste, die bei isEnabed() true liefert, die Eigenschaften an diese Aktion Ã¼bergibt
 	 */
 	protected ExtendedAction[] actions;
 	
 	/**
 	 * @param actions
-	 * 				Liste der Aktionen, von denen die erste, die bei isEnabed() true liefert, die Eigenschaften an diese Aktion übergibt
+	 * 				Liste der Aktionen, von denen die erste, die bei isEnabed() true liefert, die Eigenschaften an diese Aktion Ã¼bergibt
 	 */
 	public ToggleAction(ExtendedAction... actions) {
 		//erst einmal alle Werte auf die erste Aktion setzen

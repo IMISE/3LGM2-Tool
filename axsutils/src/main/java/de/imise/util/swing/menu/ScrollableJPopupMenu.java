@@ -87,9 +87,9 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
 	private JMenuItem nextItem = null;
 	
 	/**
-	 * Liefert den Pixel-Wert, um den das Popupmenü verschoben werden müsste, damit man den nicht sichtbaren Eintrag
-	 * dirkt über oder unter dem selektierten Eintrag sehen kann. Wenn beide angrenzenden Menüitems vollständig sichtbar
-	 * sind, kommt 0 zurück.
+	 * Liefert den Pixel-Wert, um den das PopupmenÃ¼ verschoben werden mÃ¼sste, damit man den nicht sichtbaren Eintrag
+	 * dirkt Ã¼ber oder unter dem selektierten Eintrag sehen kann. Wenn beide angrenzenden MenÃ¼items vollstÃ¤ndig sichtbar
+	 * sind, kommt 0 zurÃ¼ck.
 	 * 
 	 * @return
 	 */
@@ -100,14 +100,14 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
 
 		nextItem = null;
 		if (i > 0) {
-			// prüfen, ob das aktuell selektierte Item ganz oben das letzte sichtbare Item ist und darüber noch mind ein
-			// weiteres kommt, das in den schtbaren Bereich gescrollt werden müsste
+			// prÃ¼fen, ob das aktuell selektierte Item ganz oben das letzte sichtbare Item ist und darÃ¼ber noch mind ein
+			// weiteres kommt, das in den schtbaren Bereich gescrollt werden mÃ¼sste
 			for (int j = i - 1; j >= 0; j--) {
-				// Separatoren übergehen
+				// Separatoren Ã¼bergehen
 				if (!(getComponent(j) instanceof JMenuItem))
 					continue;
 				nextItem = (JMenuItem) getComponent(j);
-				// wenn das vorherige Item nicht vollständig sichtbar ist
+				// wenn das vorherige Item nicht vollstÃ¤ndig sichtbar ist
 				int pos = nextItem.getY() + getBounds().y;
 				if (pos < 0) 
 					return selectedItem.getY() - nextItem.getY();
@@ -115,14 +115,14 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
 			}
 		}
 		if (i < getComponentCount()) {
-			// prüfen, ob das aktuell selektierte Item ganz unten das letzte sichtbare Item ist und danach noch mind ein
+			// prÃ¼fen, ob das aktuell selektierte Item ganz unten das letzte sichtbare Item ist und danach noch mind ein
 			// weiteres kommt
 			for (int j = i + 1; j < getComponentCount(); j++) {
-				// Separatoren übergehen
+				// Separatoren Ã¼bergehen
 				if (!(getComponent(j) instanceof JMenuItem))
 					continue;
 				nextItem = (JMenuItem) getComponent(j);
-				// wenn das nächste Item nicht vollständig sichtbar ist
+				// wenn das nÃ¤chste Item nicht vollstÃ¤ndig sichtbar ist
 				int pos = nextItem.getY() + getBounds().y + nextItem.getHeight();
 				if (pos > Toolkit.getDefaultToolkit().getScreenSize().height)
 					return Toolkit.getDefaultToolkit().getScreenSize().height - pos;
@@ -135,7 +135,7 @@ public class ScrollableJPopupMenu extends JPopupMenu implements ChangeListener, 
 	
 
 	/**
-	 * Scrollt ein Menü solange nach oben oder unten bis er angehalten wird oder es nichts mehr zu scrollen gibt.
+	 * Scrollt ein MenÃ¼ solange nach oben oder unten bis er angehalten wird oder es nichts mehr zu scrollen gibt.
 	 * 
 	 */
 	private class ScrollThread extends Thread {

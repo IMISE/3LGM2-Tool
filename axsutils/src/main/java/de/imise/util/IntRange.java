@@ -4,7 +4,7 @@
 package de.imise.util;
 
 /**
- * Ein Range Objekt besitzt eine Position und eine Länge
+ * Ein Range Objekt besitzt eine Position und eine LÃ¤nge
  * 
  * @author AXS
  */
@@ -16,7 +16,7 @@ public class IntRange {
 	private int offset = 0;
 	
 	/**
-	 * Länge des Ranges
+	 * LÃ¤nge des Ranges
 	 */
 	private int length = 0;
 	

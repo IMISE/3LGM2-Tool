@@ -23,11 +23,11 @@ public class NumberTextField extends ExtendedJFormattedTextField {
     private boolean positiveOnly = false;
 
     /**
-     * Diese AbstractFormatterFactory wird nur belegt, wenn ein String übergeben
-     * wurde, der sich nicht nach Double parsen lässet. Diese Factory wird mit
+     * Diese AbstractFormatterFactory wird nur belegt, wenn ein String Ã¼bergeben
+     * wurde, der sich nicht nach Double parsen lÃ¤sset. Diese Factory wird mit
      * der NumberFormatFactory belegt, die das <code>NumberTextField</code> eigentlich besitzt Wenn dann in dem ElementPropertyDialog ein korrekter
      * Wert eingegeben wurde, wird genau diese zwishcengespeicherte Factory
-     * zurückgespielt, damit nur noch gültige Wert möglich sind.
+     * zurÃ¼ckgespielt, damit nur noch gÃ¼ltige Wert mÃ¶glich sind.
      */
     private AbstractFormatterFactory tmpNumberFormaterFactory;
 
@@ -114,7 +114,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
             char minusSign = new java.text.DecimalFormatSymbols().getMinusSign();
             // wenn mind. ein Minuszeichenin der Eingabe vorkommt
             if (getText().indexOf(minusSign) >= 0) {
-                // einfach die Eingabe ungültig machen
+                // einfach die Eingabe ungÃ¼ltig machen
                 setText("x");
             }
         }
@@ -144,8 +144,8 @@ public class NumberTextField extends ExtendedJFormattedTextField {
                 setText(s);
             }
         } else
-        // Beim Verlassen des Textfields muss geprüft werden, ob das Feld
-        // geleert wurde. In diesem Fall soll nicht der alte value zurückgesetzt
+        // Beim Verlassen des Textfields muss geprÃ¼ft werden, ob das Feld
+        // geleert wurde. In diesem Fall soll nicht der alte value zurÃ¼ckgesetzt
         // werden sondern
         if (e.getID() == FocusEvent.FOCUS_LOST) {
 
@@ -157,9 +157,9 @@ public class NumberTextField extends ExtendedJFormattedTextField {
             }
             // Es wird veruscht den eingegeben String in einen Double-Wert zu
             // parsen. Wenn das funktioniert,
-            // wird die ursprünglich übergebene NumberFormatFactory, die in der
-            // überschriebenen Methode setValue() extrahiert wurde,
-            // dem NumberTextField übergeben.
+            // wird die ursprÃ¼nglich Ã¼bergebene NumberFormatFactory, die in der
+            // Ã¼berschriebenen Methode setValue() extrahiert wurde,
+            // dem NumberTextField Ã¼bergeben.
             // Danach wird der Wert als Double korrekt formatiert und
             // dargestellt.
             try {
@@ -183,7 +183,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
     }
 
     /**
-     * Führt, wenn das übergebene <code>Object</code> ungleich <code>null</code> ist die <code>toString()</code>-Methode aus und ersetzt in diesem
+     * FÃ¼hrt, wenn das Ã¼bergebene <code>Object</code> ungleich <code>null</code> ist die <code>toString()</code>-Methode aus und ersetzt in diesem
      * String
      * alle Punkte gegen Kommas, wenn der DecimalSeparator ein Komma ist und
      * umgekehrt.
@@ -205,7 +205,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
         // das letzte Vorkommen einfach schon mal auf den Anzeigeseparator
         // setzen
         sb.setCharAt(lastIndexOfSeparator, decimalSeparator);
-        // alle Punkte vor diesem letzten Separator löschen
+        // alle Punkte vor diesem letzten Separator lÃ¶schen
         int index = 0;
         while (true) {
             index = sb.indexOf(".", index);
@@ -216,7 +216,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
                 break;
             }
         }
-        // alle Kommas vor diesem letzten Separator löschen
+        // alle Kommas vor diesem letzten Separator lÃ¶schen
         index = 0;
         while (true) {
             index = sb.indexOf(",", index);
@@ -237,16 +237,16 @@ public class NumberTextField extends ExtendedJFormattedTextField {
     @Override
     public void setValue(final Object value) {
 
-        // Es wird versucht den übergebenen Wert dem NumberTextField zu
-        // übergeben.
+        // Es wird versucht den Ã¼bergebenen Wert dem NumberTextField zu
+        // Ã¼bergeben.
         try {
             tmpNumberFormaterFactory = getFormatterFactory();
             super.setValue(value);
         } catch (Exception ex) {
-            // Wenn ein ungültiger String übergeben wurde, wird von dem
+            // Wenn ein ungÃ¼ltiger String Ã¼bergeben wurde, wird von dem
             // NumberTextField die FormatterFactory geholt und gemerkt.
             // Ersatzweise wird dem numbertextfield nun eine
-            // DefaultFormatterFactory übergeben, damit sich belibige Strings
+            // DefaultFormatterFactory Ã¼bergeben, damit sich belibige Strings
             // darstellen lassen.
             // Dann klappt auch das setValue() mit jedem String.
             tmpNumberFormaterFactory = getFormatterFactory();

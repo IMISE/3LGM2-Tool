@@ -59,7 +59,7 @@ public class AlphabeticalJList extends JList {
 	}
 
 	/**
-	 * Fügt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code>
+	 * FÃ¼gt zur Liste ein <code>NamedObjectContainer</code> hinzu mit <code>anObject</code>
 	 * als Objekt und dem Anzeige-String <code>displayName</code>.
 	 * 
 	 * @param anObject
@@ -72,8 +72,8 @@ public class AlphabeticalJList extends JList {
 	/**
 	 * Liefert das selektierte <code>Object</code>.<br>
 	 * Wenn ein <code>NamedObjectContainer</code> selektiert ist, wird von diesem die Methode
-	 * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
-	 * das <code>Object</code> am selektierten Index zurückgegeben.
+	 * <code>getObject()<code> aufgerufen und das Ergebnis zurÃ¼ck gegeben, sonst wird einfach
+	 * das <code>Object</code> am selektierten Index zurÃ¼ckgegeben.
 	 * 
 	 * @return selektierte Objekt
 	 */
@@ -87,8 +87,8 @@ public class AlphabeticalJList extends JList {
 	/**
 	 * Liefert die selektierten <code>Object</code>s.<br>
 	 * Wenn <code>NamedObjectContainer</code> selektiert sind, wird von diesem die Methode
-	 * <code>getObject()<code> aufgerufen und das Ergebnis zurück gegeben, sonst wird einfach
-	 * das <code>Object</code> am selektierten Index zurückgegeben.
+	 * <code>getObject()<code> aufgerufen und das Ergebnis zurÃ¼ck gegeben, sonst wird einfach
+	 * das <code>Object</code> am selektierten Index zurÃ¼ckgegeben.
 	 * 
 	 * @return selektierte Objekt
 	 */
@@ -110,8 +110,8 @@ public class AlphabeticalJList extends JList {
 	}
 
 	/**
-	 * Listmodel, das alle Einträge immer alphabetisch einsortiert. Wird beim Hinzufügen ein Index
-	 * mit angegeben, an dem das neue Element eingefügt werden soll, wird dieser ignoriert.
+	 * Listmodel, das alle EintrÃ¤ge immer alphabetisch einsortiert. Wird beim HinzufÃ¼gen ein Index
+	 * mit angegeben, an dem das neue Element eingefÃ¼gt werden soll, wird dieser ignoriert.
 	 * 
 	 * @author AXS
 	 */

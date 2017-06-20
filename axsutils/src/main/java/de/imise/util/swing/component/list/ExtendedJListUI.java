@@ -18,7 +18,7 @@ import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicListUI;
 
 /**
- * UI Klasse für die {@link ExtendedJList}.
+ * UI Klasse fÃ¼r die {@link ExtendedJList}.
  * 
  * @author fstephan
  */
@@ -83,8 +83,8 @@ public class ExtendedJListUI extends BasicListUI {
 	 * Zeichnet die Liste.
 	 * <p>
 	 * Funktioniert analog der Methode {@link BasicListUI#paintImpl(Graphics, JComponent)}
-	 * und wurde hier neu eingeführt, da die Methode der Superklasse <code>private</code> ist.<br>
-	 * {@link #paint(Graphics, JComponent)} wurde so überschrieben, dass nur diese Methode aufgerufen wird.
+	 * und wurde hier neu eingefÃ¼hrt, da die Methode der Superklasse <code>private</code> ist.<br>
+	 * {@link #paint(Graphics, JComponent)} wurde so Ã¼berschrieben, dass nur diese Methode aufgerufen wird.
 	 * 
 	 * @param g
 	 * @param c

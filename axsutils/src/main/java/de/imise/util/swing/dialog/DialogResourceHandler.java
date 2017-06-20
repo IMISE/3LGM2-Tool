@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import de.imise.util.SimpleResourceHandler;
 
 /**
- * Stellt für Dilaoge die Resourcen nach folgende Regeln bereit:
+ * Stellt fÃ¼r Dilaoge die Resourcen nach folgende Regeln bereit:
  * 
  * Zuererst wird nach einer Resourcendatei gesucht, die dem Klassennamen entspricht,
  * dann nach der allgemeinen Ressourcendatei mit dem <code>baseName</code>
@@ -19,19 +19,19 @@ import de.imise.util.SimpleResourceHandler;
 public class DialogResourceHandler extends SimpleResourceHandler {
 
 	/**
-	 * BaseName des ResourceBundles mit den für alle Dialoge gleichen Ressourcen
+	 * BaseName des ResourceBundles mit den fÃ¼r alle Dialoge gleichen Ressourcen
 	 */	
 	private static final String BASE_NAME = DialogResourceHandler.class.getPackage().getName()
 											.replace('.', '/')
 											+"/"
 											+"CommonDialogResources";
 	/**
-	 * ResourceBundles mit den für alle Dialoge gleichen Ressourcen
+	 * ResourceBundles mit den fÃ¼r alle Dialoge gleichen Ressourcen
 	 */
 	private static final ResourceBundle COMMON_RESOURCE_BUNDLE = ResourceBundle.getBundle(BASE_NAME, Locale.ENGLISH);
 	
 	/**
-	 * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+	 * Erzeugt einen neuen Handler, der die Resourcen fÃ¼r die Ã¼bergebene Klasse zurÃ¼ckgeben kann.
 	 * 
 	 * @param ressourceNameClassSource
 	 * 		Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt.
@@ -41,7 +41,7 @@ public class DialogResourceHandler extends SimpleResourceHandler {
 	}
 	
 	/**
-	 * Liefert den Resourcen-String zum übergebenen Schlüssel. Zuerst wird im speziellen RessoruceBundle mit dem
+	 * Liefert den Resourcen-String zum Ã¼bergebenen SchlÃ¼ssel. Zuerst wird im speziellen RessoruceBundle mit dem
 	 * Klassennamen gesucht und dann in den allgemeinen Ressourcen.
 	 * 
 	 * @param key
@@ -57,7 +57,7 @@ public class DialogResourceHandler extends SimpleResourceHandler {
 	}
 
 	/**
-	 * Liefert den Resourcen-String zum übergebenen Schlüssel aus dem gemeinsamen ResourceBundle zurück
+	 * Liefert den Resourcen-String zum Ã¼bergebenen SchlÃ¼ssel aus dem gemeinsamen ResourceBundle zurÃ¼ck
 	 * @param key
 	 * @return
 	 */

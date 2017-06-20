@@ -4,8 +4,8 @@ package de.imise.util.transaction;
  * Implementierung des Konzeptes einer invertierbaren Funktion zur Verwendung
  * bei Transaktionen. 
  * <p>
- * Die Funktion wird über {@link #execute()} ausgeführt und kann durch {@link #invert()}
- * rückgängig gemacht werden.
+ * Die Funktion wird Ã¼ber {@link #execute()} ausgefÃ¼hrt und kann durch {@link #invert()}
+ * rÃ¼ckgÃ¤ngig gemacht werden.
  * 
  * @see FunctionalTransactionManager
  * 
@@ -14,17 +14,17 @@ package de.imise.util.transaction;
 public interface InvertibleFunction {
 	
 	/**
-	 * Führt diese Funktion aus. 
+	 * FÃ¼hrt diese Funktion aus. 
 	 * <p>
-	 * Im Falle eines Fehlers muss es über {@link #invert()} möglich sein, die bis zum 
-	 * Auftreten des Fehlers durchgeführten Änderungen rückgängig zu machen.
+	 * Im Falle eines Fehlers muss es Ã¼ber {@link #invert()} mÃ¶glich sein, die bis zum 
+	 * Auftreten des Fehlers durchgefÃ¼hrten Ã„nderungen rÃ¼ckgÃ¤ngig zu machen.
 	 * 
 	 * @throws RuntimeException
 	 */
 	void execute() throws RuntimeException;
 	
 	/**
-	 * Diese Methode macht die durch {@link #execute()} durchgeführten Änderungen rückgängig.
+	 * Diese Methode macht die durch {@link #execute()} durchgefÃ¼hrten Ã„nderungen rÃ¼ckgÃ¤ngig.
 	 * 
 	 * @throws RuntimeException
 	 */

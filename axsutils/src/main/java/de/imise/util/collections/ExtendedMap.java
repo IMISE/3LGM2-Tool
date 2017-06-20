@@ -36,7 +36,7 @@ public class ExtendedMap<K, V> extends HashMap<K, V> {
     }
 
     /**
-     * Gibt ein Array aller Schlüssel-Wert-Paare zurück.
+     * Gibt ein Array aller SchlÃ¼ssel-Wert-Paare zurÃ¼ck.
      * 
      * @return
      */

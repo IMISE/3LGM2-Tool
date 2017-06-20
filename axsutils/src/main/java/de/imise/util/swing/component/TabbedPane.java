@@ -11,8 +11,8 @@ import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
 
 /**
- * Ein TabPane, bei dem man die Tabs per Maus-Drag in ihrer Reihenfolge ändern kann.
- * Außerdem hat es eine Funktion, über die man einfach per boolean umstellen kann, ob die
+ * Ein TabPane, bei dem man die Tabs per Maus-Drag in ihrer Reihenfolge Ã¤ndern kann.
+ * AuÃŸerdem hat es eine Funktion, Ã¼ber die man einfach per boolean umstellen kann, ob die
  * Tabs in einer Zeile dargestellt werden sollen oder gewrapped werden, wenn die Zeile
  * nicht mehr ausreicht.
  * http://forum.java.sun.com/thread.jsp?thread=263180&forum=57&message=2281801<br>

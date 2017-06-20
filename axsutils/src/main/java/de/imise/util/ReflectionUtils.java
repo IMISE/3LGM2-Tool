@@ -12,9 +12,9 @@ public class ReflectionUtils {
 
     /**
      * Liefert die gemeinsame Oberklasse beider Objekte. Wenn die Objekte selbst Klassen sind,
-     * dann werden ihre Oberklassen gesucht. Der Rückgabewert ist wenigstens {@link Object}, wenn beide
-     * übergebenen Objekte keine speziellere gemeinsame Oberklasse besitzen.
-     * <code>null</code> kommt nur zurück, wenn beide übergebenen Objekte <code>null</code> waren.
+     * dann werden ihre Oberklassen gesucht. Der RÃ¼ckgabewert ist wenigstens {@link Object}, wenn beide
+     * Ã¼bergebenen Objekte keine speziellere gemeinsame Oberklasse besitzen.
+     * <code>null</code> kommt nur zurÃ¼ck, wenn beide Ã¼bergebenen Objekte <code>null</code> waren.
      * 
      * @param o1
      * @param o2
@@ -55,12 +55,12 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für die übergebene <code>ArrayList</code> die speziellste gemeinsame Klasse aller
-     * enthaltenen Elemente ab einschließlich dem Index startIndex bis einschließlich zum Index endIndex.<br>
-     * Handelt es sich bei einem übergebenen Object selbst um eine Klasse, so wird von ihr und allen
+     * Liefert fÃ¼r die Ã¼bergebene <code>ArrayList</code> die speziellste gemeinsame Klasse aller
+     * enthaltenen Elemente ab einschlieÃŸlich dem Index startIndex bis einschlieÃŸlich zum Index endIndex.<br>
+     * Handelt es sich bei einem Ã¼bergebenen Object selbst um eine Klasse, so wird von ihr und allen
      * anderen Elementen die speziellste gemeinsame Klasse gesucht.<br>
-     * Ist die Liste <code>null</code> oder leer oder die Indices ungültig, kommt hier <code>null</code> zurück.
-     * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
+     * Ist die Liste <code>null</code> oder leer oder die Indices ungÃ¼ltig, kommt hier <code>null</code> zurÃ¼ck.
+     * Ansonsten wird mindestens <code>Object.class</code> zurÃ¼ckgeliefert.
      * 
      * @param objectList
      * @param startIndex
@@ -78,11 +78,11 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für die übergebenen Objekte die speziellste gemeinsame Klasse.<br>
-     * Handelt es sich bei einem übergebenen Object in der Collection selbst um eine Klasse, so wird von ihr und allen
+     * Liefert fÃ¼r die Ã¼bergebenen Objekte die speziellste gemeinsame Klasse.<br>
+     * Handelt es sich bei einem Ã¼bergebenen Object in der Collection selbst um eine Klasse, so wird von ihr und allen
      * anderen Elementen die speziellste gemeinsame Klasse gesucht.<br>
-     * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code> zurück.
-     * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
+     * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code> zurÃ¼ck.
+     * Ansonsten wird mindestens <code>Object.class</code> zurÃ¼ckgeliefert.
      * 
      * @param objectList
      * @param startIndex
@@ -108,10 +108,10 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert für das übergebene <code>Object</code>-Array die speziellste gemeinsame Klasse aller
+     * Liefert fÃ¼r das Ã¼bergebene <code>Object</code>-Array die speziellste gemeinsame Klasse aller
      * enthaltenen Elemente.<br>
-     * Ist die Liste <code>null</code> oder leer, kommt hier <code>null</code> zurück. Ansonsten
-     * wird mindestens <code>Object.class</code> zurückgeliefert.
+     * Ist die Liste <code>null</code> oder leer, kommt hier <code>null</code> zurÃ¼ck. Ansonsten
+     * wird mindestens <code>Object.class</code> zurÃ¼ckgeliefert.
      * 
      * @param objectArray
      * @return
@@ -132,8 +132,8 @@ public class ReflectionUtils {
 
     /**
      * Liefert die speziellere Klasse der beiden Objekte, wenn das eine Objekt eine Unterklasse des anderen ist. Wenn sie vererbungstechnisch
-     * nicht zusammen hängen, dann kommt <code>null</code> zurück. Werden als Objekte Klasse übergeben, dann wird für diese Klassen dieser
-     * Zusammenhang gerpüft.
+     * nicht zusammen hÃ¤ngen, dann kommt <code>null</code> zurÃ¼ck. Werden als Objekte Klasse Ã¼bergeben, dann wird fÃ¼r diese Klassen dieser
+     * Zusammenhang gerpÃ¼ft.
      * 
      * @param o1
      * @param o2
@@ -152,7 +152,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Entfernt alle Klassen aus der übergebenen Klassenliste,
+     * Entfernt alle Klassen aus der Ã¼bergebenen Klassenliste,
      * von denen eine Oberklasse in der Liste vorkommt.
      * 
      * @param classList
@@ -174,7 +174,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Entfernt alle Klassen aus der übergebenen Klassenliste,
+     * Entfernt alle Klassen aus der Ã¼bergebenen Klassenliste,
      * von denen eine Unterklasse in der Liste vorkommt.
      * 
      * @param classList
@@ -196,7 +196,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Gibt <code>true</code> zurück, wenn mind. ein Element in der übergebenen Liste enthalten ist
+     * Gibt <code>true</code> zurÃ¼ck, wenn mind. ein Element in der Ã¼bergebenen Liste enthalten ist
      * und alle Elemente in der Liste dieselbe Klasse besitzen, sonst false.
      * 
      * @param objectList
@@ -217,8 +217,8 @@ public class ReflectionUtils {
     }
 
     /**
-     * Gibt den ersten Index des Objektes zurück, das mit der übergebenen Klasse zuweisungskompatibel ist. Ist ein
-     * enthaltenes Objekt selbst eine Klasse, dass wird deren Zuweisungskompatibilität überprüft.
+     * Gibt den ersten Index des Objektes zurÃ¼ck, das mit der Ã¼bergebenen Klasse zuweisungskompatibel ist. Ist ein
+     * enthaltenes Objekt selbst eine Klasse, dass wird deren ZuweisungskompatibilitÃ¤t Ã¼berprÃ¼ft.
      * 
      * @param objectList
      * @param clazz
@@ -240,9 +240,9 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Objektliste wenigstens ein zu der übergebenen Klasse
-     * zuweisungskompatibles Objekt enthält. Sind Elemente in der Objektliste selbst Klassen, so wird deren
-     * Zuweisungskompatibilität geprüft.
+     * Liefert <code>true</code>, wenn die Ã¼bergebene Objektliste wenigstens ein zu der Ã¼bergebenen Klasse
+     * zuweisungskompatibles Objekt enthÃ¤lt. Sind Elemente in der Objektliste selbst Klassen, so wird deren
+     * ZuweisungskompatibilitÃ¤t geprÃ¼ft.
      * 
      * @param objectList
      * @param clazz
@@ -254,7 +254,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Gibt wieder, ob die übergebene Klasse <code>abstract</code> ist.
+     * Gibt wieder, ob die Ã¼bergebene Klasse <code>abstract</code> ist.
      * 
      * @param clazz
      * @return
@@ -264,19 +264,19 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert den absoluten Pfad zum Verzeichnis, in dem sich die übergebene Klasse im
+     * Liefert den absoluten Pfad zum Verzeichnis, in dem sich die Ã¼bergebene Klasse im
      * Dateisystem befindet.
      * 
      * @return
      */
     public static final String getAbsoluteDirectory(final Class<?> clazz) {
         String absoluteDirectory = getClassFile(clazz).getParentFile().getParentFile().getPath() + File.separator;
-        // die "%20" der URL müssen wieder raus, damit die Dateien gefunden werden
+        // die "%20" der URL mÃ¼ssen wieder raus, damit die Dateien gefunden werden
         return absoluteDirectory.replace("%20", " ");
     }
 
     /**
-     * Liefert die Datei der übergebenen Klasse.
+     * Liefert die Datei der Ã¼bergebenen Klasse.
      * 
      * @param clazz
      * @return

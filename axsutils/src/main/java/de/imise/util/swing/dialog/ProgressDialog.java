@@ -70,13 +70,13 @@ public class ProgressDialog extends JDialog {
 
 	/**
 	 * Thread dessen Progress der Dialog anzeigt.<br>
-	 * Wenn der <code>null</code> bleibt, bezieht er sich auf den Haupt-Thread. Sonst schlieﬂt sich
-	 * der ProgressDialog, wenn der <code>observedThread</code> nicht mehr l‰uft.
+	 * Wenn der <code>null</code> bleibt, bezieht er sich auf den Haupt-Thread. Sonst schlie√üt sich
+	 * der ProgressDialog, wenn der <code>observedThread</code> nicht mehr l√§uft.
 	 */
 	private Thread observedThread = null;
 
 	////////////////////////////////////////
-	// Konstruktoren f¸r Frames als Owner //
+	// Konstruktoren f√ºr Frames als Owner //
 	////////////////////////////////////////
 
 	/**
@@ -157,7 +157,7 @@ public class ProgressDialog extends JDialog {
 	}
 
 	/////////////////////////////////////////
-	// Konstruktoren f¸r Dialoge als Owner //
+	// Konstruktoren f√ºr Dialoge als Owner //
 	/////////////////////////////////////////
 
 	/**

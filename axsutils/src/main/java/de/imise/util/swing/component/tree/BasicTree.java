@@ -79,7 +79,7 @@ public class BasicTree extends JTree{
 	public void insertNodeAndRefreshTree(DefaultMutableTreeNode parent, DefaultMutableTreeNode node2add, int index){
 		//Expansion merken
 		saveExpansionState();
-		//füge den Kindknoten an Position index hinzu
+		//fÃ¼ge den Kindknoten an Position index hinzu
 		parent.insert(node2add, index);
 		//Baum neu aufbauen
 		treeModel.reload();
@@ -88,7 +88,7 @@ public class BasicTree extends JTree{
 	}
 
 	/**
-	 * Fügt den übergebenen <code>node2Insert</code> dem <code>parent</code>-Knoten unter, nach den
+	 * FÃ¼gt den Ã¼bergebenen <code>node2Insert</code> dem <code>parent</code>-Knoten unter, nach den
 	 * Regeln, die der Comparator vorgibt.<br>
 	 * Vorrausetzung ist, dass alle Kindknoten unter dem Parent schon alphabetisch sortiert sind.
 	 * Ist der Knoten bereits unter diesem Parent vorhanden wird er neu einsortiert.
@@ -101,7 +101,7 @@ public class BasicTree extends JTree{
 
 
 	/**
-	 * Fügt den übergebenen <code>node2Insert</code> dem <code>parent</code>-Knoten unter, nach den
+	 * FÃ¼gt den Ã¼bergebenen <code>node2Insert</code> dem <code>parent</code>-Knoten unter, nach den
 	 * Regeln, die der Comparator vorgibt.
 	 * Der <code>startIndex</code> gibt an, beim wievielten Knoten mit dem einsortieren erst begonnen
 	 * werden soll.<br>
@@ -138,7 +138,7 @@ public class BasicTree extends JTree{
 				break;
 			}
 		}
-		//füge den Knoten an der neuen Position hinzu
+		//fÃ¼ge den Knoten an der neuen Position hinzu
 		parent.insert(node2Insert, l);
 		
 		//Baum neu aufbauen
@@ -149,7 +149,7 @@ public class BasicTree extends JTree{
 
 
 	/**
-	 * Entfernt den übergebenen Knoten aus dem Baum, baut den Baum neu auf und stellt von den
+	 * Entfernt den Ã¼bergebenen Knoten aus dem Baum, baut den Baum neu auf und stellt von den
 	 * verbliebenen Knoten die Expansion wieder her.
 	 * @param node2Remove
 	 */
@@ -167,7 +167,7 @@ public class BasicTree extends JTree{
 	}
 
 	/**
-	 * Entfernt alle übergebenen Knoten aus dem Baum, baut den Baum neu auf und stellt von den
+	 * Entfernt alle Ã¼bergebenen Knoten aus dem Baum, baut den Baum neu auf und stellt von den
 	 * verbliebenen Knoten die Expansion wieder her.
 	 * 
 	 * @param nodes2RemoveList
@@ -175,7 +175,7 @@ public class BasicTree extends JTree{
 	public void removeNodesAndRefreshTree(ArrayList<MutableTreeNode> nodes2RemoveList){
 		//Expansion merken
 		saveExpansionState();
-		//für alle zu entfernenden Knoten
+		//fÃ¼r alle zu entfernenden Knoten
 		for (MutableTreeNode node2Remove : nodes2RemoveList)
 			//Knoten  vom Parent-Knoten des zu entfernenden Knoten entfernen
 			((MutableTreeNode) node2Remove.getParent()).remove(node2Remove);
@@ -187,7 +187,7 @@ public class BasicTree extends JTree{
 
 
 	/**
-	 * Selektiert den übergebenen Knoten, wenn er im Baum vorkommt
+	 * Selektiert den Ã¼bergebenen Knoten, wenn er im Baum vorkommt
 	 * @param node
 	 */
 	protected void selectNode(TreeNode node){
@@ -200,7 +200,7 @@ public class BasicTree extends JTree{
 	}
 
 	/**
-	 * Setzt den übergebenen Knoten in den Editier-Modus, wenn der <code>TreeCellEditor</code> des 
+	 * Setzt den Ã¼bergebenen Knoten in den Editier-Modus, wenn der <code>TreeCellEditor</code> des 
 	 * Baumes nicht <code>null</code> ist.
 	 * 
 	 * @param node
@@ -231,8 +231,8 @@ public class BasicTree extends JTree{
 		expansionEnum = getExpandedDescendants(new TreePath(treeModel.getRoot()));
 	}
 	/**
-	 * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen möchte eigentlich
-	 * immer das <code>TreeModel</code> geändert hat, wird es auch neu geladen. 
+	 * Selektion wieder herstellen. Da sich wenn man die Selektion wieder herstellen mÃ¶chte eigentlich
+	 * immer das <code>TreeModel</code> geÃ¤ndert hat, wird es auch neu geladen. 
 	 */
 	protected void restoreExpansionState() {
 		treeModel.reload();

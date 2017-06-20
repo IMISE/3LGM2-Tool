@@ -5,7 +5,7 @@ import java.text.Format;
 import javax.swing.JFormattedTextField;
 
 /**
- * Erweitert {@link JFormattedTextField} um ein Kontextmenü mit Cut, Copy, Paste, Select All und Delete All.
+ * Erweitert {@link JFormattedTextField} um ein KontextmenÃ¼ mit Cut, Copy, Paste, Select All und Delete All.
  * 
  * @author AXS
  * @create 21.08.2015

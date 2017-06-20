@@ -17,8 +17,8 @@ import de.imise.util.io.FileHandler;
  * Probleme:<br>
  * Der in der Zwischenablage befindliche, durch Programme wie etwa Excel erzeugte html-String
  * ist nicht xml-konform. Damit ist das Erstellen eines {@link Document}s mittels des 
- * {@link SAXBuilder}s nicht möglich. Demnach gibt es auch keine Möglichkeit eine xsl-
- * Transformation auf diesem html-Inhalt durchzuführen. <br>
+ * {@link SAXBuilder}s nicht mÃ¶glich. Demnach gibt es auch keine MÃ¶glichkeit eine xsl-
+ * Transformation auf diesem html-Inhalt durchzufÃ¼hren. <br>
  * Programme wie "HTMLCleaner" oder "CyberNeko" schaffen es auch nicht, die Inhalte
  * xml-konform zu machen.
  * <p>
@@ -26,7 +26,7 @@ import de.imise.util.io.FileHandler;
  * Inhalten der System-Zwischenablage verwendet werden.
  * 
  * <p>
- * Lösungsvorschläge:
+ * LÃ¶sungsvorschlÃ¤ge:
  *   <li>eventuell {@link CleanerProperties} besser konfigurieren
  *   <li>das {@link Document} manuell erstellen
  *   <li>einen eigenen Wandler von html in xml schreiben
@@ -38,8 +38,8 @@ class XMLContentParser {
 	
 	/** 
 	 * Datei, die die Bezeichnung der Programme(z.b. excel, word, 3lgm.uerfieldtable, ...), und die 
-	 * Pfade der XSL-Dateien enthält, die für die Transformation der durch die Programme 
-	 * erzeugten Inhalte in der System-Zwischenablage zuständig sind.
+	 * Pfade der XSL-Dateien enthÃ¤lt, die fÃ¼r die Transformation der durch die Programme 
+	 * erzeugten Inhalte in der System-Zwischenablage zustÃ¤ndig sind.
 	 */ 
 //	private static final File PARSER_MAP = new File("src/clipboard/XSL/ParserMap.txt");
 	@SuppressWarnings("unused")
@@ -49,22 +49,22 @@ class XMLContentParser {
 	private static final String TEMP_FILE_SUFFIX_CSV = "csv";
 	private static final String TEMP_FILE_SUFFIX_CCS = "ccs";
 	
-	/** Der Standard-Parser für diese Plattform */
+	/** Der Standard-Parser fÃ¼r diese Plattform */
 	private static XMLContentParser defaultParser;
 	
 	/**
-	 * Temporäre Datei, die das Ergebnis der Umwandlung von
+	 * TemporÃ¤re Datei, die das Ergebnis der Umwandlung von
 	 * <code>String</code> - Inhalten der Zwischenablage in CSV<code>String</code>s
-	 * enthält. Es wird nur diese Datei für CSV-Inhalte verwendet um den 
-	 * Speicherplatzbedarf, der bei permanentem Erzeugen neuer temporärer Dateien entsteht,
+	 * enthÃ¤lt. Es wird nur diese Datei fÃ¼r CSV-Inhalte verwendet um den 
+	 * Speicherplatzbedarf, der bei permanentem Erzeugen neuer temporÃ¤rer Dateien entsteht,
 	 * zu vermeiden.
 	 */
 	private File csvTempFile = FileHandler.createTempFile(TEMP_FILE_PREFIX,TEMP_FILE_SUFFIX_CSV);
 
 	/**
-	 * Temporäre Datei, in der die <code>String</code>-Inhalte der Zwischenablage
-	 * gespeichert werden. Es wird nur diese Datei für die Speicherung verwendet, um den 
-	 * Speicherplatzbedarf, der bei permanentem Erzeugen neuer temporärer Dateien entsteht,
+	 * TemporÃ¤re Datei, in der die <code>String</code>-Inhalte der Zwischenablage
+	 * gespeichert werden. Es wird nur diese Datei fÃ¼r die Speicherung verwendet, um den 
+	 * Speicherplatzbedarf, der bei permanentem Erzeugen neuer temporÃ¤rer Dateien entsteht,
 	 * zu vermeiden.
 	 */
 	private File ccsTempFile = FileHandler.createTempFile(TEMP_FILE_PREFIX,TEMP_FILE_SUFFIX_CCS);
@@ -205,14 +205,14 @@ class XMLContentParser {
 	/**
 	 * Noch nicht korrekt implementiert!
 	 * <p>
-	 * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code> besteht,
-	 * falls die zulässige Zeichenanzahl nicht überschritten wird.
+	 * Gibt einfach ein Array wieder, das ausschlieÃŸlich aus <code>file</code> besteht,
+	 * falls die zulÃ¤ssige Zeichenanzahl nicht Ã¼berschritten wird.
 	 * <br>
 	 * Sonst wird eine Exception geworfen.
 	 * <p>
 	 * Ziel:
 	 * Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl ihrer Zeichen kleiner
-	 * als {@link Integer#MAX_VALUE} ist. Damit können dann alle Zeichen der einzelnen Dateien
+	 * als {@link Integer#MAX_VALUE} ist. Damit kÃ¶nnen dann alle Zeichen der einzelnen Dateien
 	 * in jeweils einem <code>charArray</code> erfasst werden.
 	 * @param file
 	 * @return
@@ -221,11 +221,11 @@ class XMLContentParser {
 		// kein splitten notwendig
 		if(file.length() <= Integer.MAX_VALUE) 
 			return new File[] {file};
-		throw new IllegalArgumentException("Die Datei: " + file.getName() + " überschreitet die zulässige Größe");
+		throw new IllegalArgumentException("Die Datei: " + file.getName() + " Ã¼berschreitet die zulÃ¤ssige GrÃ¶ÃŸe");
 	}
 	
 	/**
-	 * Setzt fehlende Anführungszeichen in den contentString und gibt das Ergebnis wieder.
+	 * Setzt fehlende AnfÃ¼hrungszeichen in den contentString und gibt das Ergebnis wieder.
 	 * @param contentString
 	 * @return
 	 */
@@ -245,7 +245,7 @@ class XMLContentParser {
 				break;
 			}
 			
-			// Anfügen inkl. '='
+			// AnfÃ¼gen inkl. '='
 			pos1++;
 			sb.append(contentString.substring(lastPos, pos1));
 			
@@ -257,7 +257,7 @@ class XMLContentParser {
 				if (contentString.indexOf('\n',pos1)<pos2)
 					pos2 = (contentString.indexOf('\n',pos1));
 				
-				// Anfügen ohne ' '
+				// AnfÃ¼gen ohne ' '
 				sb.append(contentString.substring(pos1, pos2));
 				sb.append('"');
 			}
@@ -275,7 +275,7 @@ class XMLContentParser {
 	}
 	
 	/**
-	 * Erzeugt den Standard-Parser für diese Plattform 
+	 * Erzeugt den Standard-Parser fÃ¼r diese Plattform 
 	 * @return
 	 */
 	public static XMLContentParser getDefaultParser() {

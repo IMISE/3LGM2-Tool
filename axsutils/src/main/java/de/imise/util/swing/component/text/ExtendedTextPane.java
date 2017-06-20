@@ -5,7 +5,7 @@ import javax.swing.text.StyledDocument;
 
 
 /**
- * Erweitert {@link JTextPane} um ein Kontextmenü mit Cut, Copy, Paste, Select All und Delete All.
+ * Erweitert {@link JTextPane} um ein KontextmenÃ¼ mit Cut, Copy, Paste, Select All und Delete All.
  * 
  * @author AXS
  * @create 20.07.2012

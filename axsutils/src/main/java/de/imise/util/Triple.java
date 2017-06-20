@@ -1,7 +1,7 @@
 package de.imise.util;
 
 /**
- * Repräsentation eines geordneten Triples.
+ * ReprÃ¤sentation eines geordneten Triples.
  * 
  * @author fstephan
  * @param <S>

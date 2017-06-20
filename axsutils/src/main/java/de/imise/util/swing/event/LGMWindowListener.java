@@ -10,7 +10,7 @@ import java.awt.event.WindowListener;
 
 /**
  * Ein {@link WindowListener}, der beim Eintreffen von {@link WindowEvent} die jeweils
- * festgelegte Aktion ausführt.
+ * festgelegte Aktion ausfÃ¼hrt.
  * 
  * @author fstephan
  * 
@@ -18,43 +18,43 @@ import java.awt.event.WindowListener;
 public class LGMWindowListener implements WindowListener {
 
 	/**
-	 * Aktion, die ausgeführt wird, wenn ein Fenster aktiviert wird.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn ein Fenster aktiviert wird.
 	 */
 	private FlexibleEventAction windowActivatedAction;
 	
 	/**
-	 * Aktion, die ausgeführt wird, wenn ein Fenster geschlossen wurde.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn ein Fenster geschlossen wurde.
 	 */
 	private FlexibleEventAction windowClosedAction;
 	
 	/**
-	 * Aktion, die ausgeführt wird, wenn ein Fenster geschlossen wird.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn ein Fenster geschlossen wird.
 	 */
 	private FlexibleEventAction windowClosingAction;
 	
 	/**
-	 * Aktion, die ausgeführt wird, wenn ein Fenster deaktiviert wird.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn ein Fenster deaktiviert wird.
 	 */
 	private FlexibleEventAction windowDeactivatedAction;
 	
 	/**
-	 * Aktion, die ausgeführt wird, wenn von einem Fenster das Icon entfernt wurde.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn von einem Fenster das Icon entfernt wurde.
 	 */
 	private FlexibleEventAction windowDeiconifiedAction;
 	
 	/**
-	 * Aktion, die ausgeführt wird, wenn bei einem Fenster ein Icon hinzugefügt wurde.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn bei einem Fenster ein Icon hinzugefÃ¼gt wurde.
 	 */
 	private FlexibleEventAction windowIconifiedAction;
 	
 	/**
-	 * Aktion, die ausgeführt wird, wenn ein Fenster geöffnet wurde.
+	 * Aktion, die ausgefÃ¼hrt wird, wenn ein Fenster geÃ¶ffnet wurde.
 	 */
 	private FlexibleEventAction windowOpenedAction;
 
 	/**
 	 * Ein {@link WindowListener}, der beim Eintreffen von {@link WindowEvent} die jeweilige
-	 * übergebene Aktion ausführt, wenn diese nicht null ist
+	 * Ã¼bergebene Aktion ausfÃ¼hrt, wenn diese nicht null ist
 	 * 
 	 * Konstruktor
 	 * 

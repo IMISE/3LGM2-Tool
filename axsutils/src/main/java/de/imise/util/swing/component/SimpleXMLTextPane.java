@@ -29,7 +29,7 @@ public class SimpleXMLTextPane extends ExtendedTextPane {
 	Matcher partMatcher, nameMatcher, attributeMatcher;
 	
 	/**
-	 * Initialisiert die TextPane mit dem übergebenen Text.
+	 * Initialisiert die TextPane mit dem Ã¼bergebenen Text.
 	 * @param xmlText	Text der angezeigt werden soll.
 	 */
 	public SimpleXMLTextPane(String xmlText) {
@@ -65,7 +65,7 @@ public class SimpleXMLTextPane extends ExtendedTextPane {
 	}
 	
 	/**
-	 * Initialisiert AttributeSets für die unterschiedlichen
+	 * Initialisiert AttributeSets fÃ¼r die unterschiedlichen
 	 * syntaktischen Bestandteile der XML-Datei.
 	 */
 	private void initAttributeSets() {
@@ -95,7 +95,7 @@ public class SimpleXMLTextPane extends ExtendedTextPane {
 		// this copyright and citation notice remains intact and that modifications
 		// or additions are clearly identified.
 		
-		// Angepaßt an java.util.regex.
+		// AngepaÃŸt an java.util.regex.
 		
 		String TextSE = "[^<]+";
 		String UntilHyphen = "[^-]*-";
@@ -133,8 +133,8 @@ public class SimpleXMLTextPane extends ExtendedTextPane {
 	}
 	
 	/**
-	 * Führt die Formatierung des gesamten Textes durch.
-	 * Dies kann bei längeren Texten lange dauern.
+	 * FÃ¼hrt die Formatierung des gesamten Textes durch.
+	 * Dies kann bei lÃ¤ngeren Texten lange dauern.
 	 */
 	public void format() {
 		String text = getText();
@@ -199,7 +199,7 @@ public class SimpleXMLTextPane extends ExtendedTextPane {
 	}
 
 	/** 
-	 Formatiert den Text der aktuellen Group (abzüglich bestimmter Ränder links und rechts)
+	 Formatiert den Text der aktuellen Group (abzÃ¼glich bestimmter RÃ¤nder links und rechts)
 	 des Matchers mit dem AttributeSet.
 	 */
 	private void applyAttributeSet(Matcher m, AttributeSet attributeSet, int additionalOffset, int lengthReduction) {

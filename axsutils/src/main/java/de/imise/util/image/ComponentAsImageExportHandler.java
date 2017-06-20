@@ -41,21 +41,21 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 public class ComponentAsImageExportHandler {
 
 	/**
-	 * Mögliche Typen der FileFilter, die dieser Dialog anzeigen kann. Für alle diese Typen gibt es 
-	 * Ressourcen-Strings, deren Key für die Beschreibung sich über den zusammengebausten String aus
+	 * MÃ¶gliche Typen der FileFilter, die dieser Dialog anzeigen kann. FÃ¼r alle diese Typen gibt es 
+	 * Ressourcen-Strings, deren Key fÃ¼r die Beschreibung sich Ã¼ber den zusammengebausten String aus
 	 * {@link FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()} ergbibt.
-	 * Für die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
-	 * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
+	 * FÃ¼r die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
+	 * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehÃ¤ngt.
 	 */
 	public static enum FileFilterType {JPEG, TIFF, BMP, PNG}
 	
 	/** 
-	 * Anfang des ResourceString, mit dem bei jedem über die Funktion zu ladenden FileFilter
+	 * Anfang des ResourceString, mit dem bei jedem Ã¼ber die Funktion zu ladenden FileFilter
 	 * der Key-String der Beschreibung und der Dateierweiterungen beginnen muss.
 	 */
 	public static final String FILE_FILTER_RESOURCE_PREFIX = "FILE_FILTER_";
 	
-	/** Ende des Key-Strings für die Dateiertweiterungen eines FileFilters */
+	/** Ende des Key-Strings fÃ¼r die Dateiertweiterungen eines FileFilters */
 	public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 	
 	/** Ressourcenhandler */
@@ -69,7 +69,7 @@ public class ComponentAsImageExportHandler {
 	}
 	
 	/**
-	 * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
+	 * Liefert fÃ¼r die Ã¼bergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
 	 * der Erweiterungen den Konventionen entsprechend in den Resoourcendateien abgelegt sind.
 	 * 
 	 * @param filterNames
@@ -120,11 +120,11 @@ public class ComponentAsImageExportHandler {
 	private final void createFileInternal(JComponent comp, FileFilterType fileFormat, String filename, boolean maximizeSize) {
 		if (fileFormat == null)
 			return;
-		//wenn das Bild mit maximaler Größe gespeichert werden soll und das Bild auch maximierbar ist
+		//wenn das Bild mit maximaler GrÃ¶ÃŸe gespeichert werden soll und das Bild auch maximierbar ist
 		maximizeSize = comp instanceof ZoomableComponent && maximizeSize;
 		double zoom = 0d;
 		Dimension size = null;
-		//maximale Bildgröße speichern?
+		//maximale BildgrÃ¶ÃŸe speichern?
 		if (maximizeSize) {
 			//vollen Zoom setzen und alten zoom merken
 			zoom = ((ZoomableComponent)comp).setZoomToMaximum();
@@ -141,7 +141,7 @@ public class ComponentAsImageExportHandler {
 		og.setColor(new Color(255, 255, 255, 255));
 		og.fillRect(0, 0, w, h);
 		comp.printAll(og);
-		//ggf. Zoom auf alten Wert zurück setzen
+		//ggf. Zoom auf alten Wert zurÃ¼ck setzen
 		if (maximizeSize) {
 			((ZoomableComponent)comp).setZoom(zoom);
 			comp.setSize(size);
@@ -242,7 +242,7 @@ public class ComponentAsImageExportHandler {
 	}
 
 	/**
-	 * Liefert den Dialog oder das Fenster, der die übergebene Komponente enthält
+	 * Liefert den Dialog oder das Fenster, der die Ã¼bergebene Komponente enthÃ¤lt
 	 * @param comp
 	 * @return
 	 */
@@ -257,7 +257,7 @@ public class ComponentAsImageExportHandler {
 	}
 	
 	/**
-	 * Bei Unterklassen dieser Klasse kann beim Export ausgewählt werden,
+	 * Bei Unterklassen dieser Klasse kann beim Export ausgewÃ¤hlt werden,
 	 * ob die Componente mit maximalem Zoom exportiert werden soll.
 	 * 
 	 * @author astruebi
@@ -266,13 +266,13 @@ public class ComponentAsImageExportHandler {
 	public static interface ZoomableComponent {
 		
 		/**
-		 * Setzt den Maximalen Zoom und gibt den alten Zoom-Wert zurück
+		 * Setzt den Maximalen Zoom und gibt den alten Zoom-Wert zurÃ¼ck
 		 * @return
 		 */
 		public abstract double setZoomToMaximum();
 		
 		/**
-		 * Setzt den Zoom entsprechend dem übergebenen Wert
+		 * Setzt den Zoom entsprechend dem Ã¼bergebenen Wert
 		 * @param zoom
 		 * @return
 		 */

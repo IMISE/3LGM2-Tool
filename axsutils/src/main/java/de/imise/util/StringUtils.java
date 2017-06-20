@@ -10,7 +10,7 @@ import com.google.common.base.Strings;
 public class StringUtils {
 
     /**
-     * Gibt ein Array zurück, dass durch Aufteilen des übergebenen Strings entsteht.
+     * Gibt ein Array zurÃ¼ck, dass durch Aufteilen des Ã¼bergebenen Strings entsteht.
      *
      * @see StringTokenizer
      * @param str
@@ -18,7 +18,7 @@ public class StringUtils {
      * @param delim
      *            Zeichenkette, an der gesplittet wird
      * @param returnDelims
-     *            delim wird zurückgegeben oder nicht
+     *            delim wird zurÃ¼ckgegeben oder nicht
      */
     public static String[] tokenize(final String str, final String delim, final boolean returnDelims) {
         StringTokenizer st = new StringTokenizer(str, delim, returnDelims);
@@ -31,7 +31,7 @@ public class StringUtils {
     }
 
     /**
-     * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurück;
+     * FÃ¼hrt {@link String#trim()} fÃ¼r jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurÃ¼ck;
      *
      * @param source
      *            Quell-<code>Array</code>
@@ -47,7 +47,7 @@ public class StringUtils {
     }
 
     /**
-     * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurück;
+     * FÃ¼hrt {@link String#trim()} fÃ¼r jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurÃ¼ck;
      *
      * @param source
      *            Quell-<code>Array</code>
@@ -84,7 +84,7 @@ public class StringUtils {
     }
 
     /**
-     * Liefert einen Bereich, an dem sich in dem übergebenen Text <code>text</code> der zu suchende String <code>searchString</code> befindet.
+     * Liefert einen Bereich, an dem sich in dem Ã¼bergebenen Text <code>text</code> der zu suchende String <code>searchString</code> befindet.
      *
      * @param text
      *            Zu durchsuchender Text
@@ -93,63 +93,63 @@ public class StringUtils {
      * @param fromIndex
      *            Startindex in <code>text</code>, ab dem gesucht wird
      * @param ignoreCase
-     *            Wenn <code>true</code> wird die Groß- und Kleinschreibung ignoriert.
+     *            Wenn <code>true</code> wird die GroÃŸ- und Kleinschreibung ignoriert.
      * @param searchForward
-     *            Wenn <code>true</code> wird ab dem Startindex in Vorwärtsrichtung gesucht, wenn <code>false</code> rückwärts.
+     *            Wenn <code>true</code> wird ab dem Startindex in VorwÃ¤rtsrichtung gesucht, wenn <code>false</code> rÃ¼ckwÃ¤rts.
      * @param text2FindAsRegExp
-     *            Wenn <code>true</code> wird der <code>text2Find</code> als regulärer Ausdruck interpretiert, bei <code>false</code> wird er immer im
+     *            Wenn <code>true</code> wird der <code>text2Find</code> als regulÃ¤rer Ausdruck interpretiert, bei <code>false</code> wird er immer im
      *            Original gesucht.
      * @param wholeWord
      *            Wenn <code>true</code> muss der zu suchende String als ganzes Wort gefunden werden. Das ist der Fall wenn der gefundene Textteil von
-     *            Whitespaces, Zeilenumbrüchen oder dem
+     *            Whitespaces, ZeilenumbrÃ¼chen oder dem
      *            Stringanfang oder - ende eingerahmt ist.
      * @param wrapSearch
      *            Wenn <code>false</code> endet die Suche (je nach Suchrichtung) am Anfang oder Ende des zu durchsuchenden Strings. Bei
      *            <code>true</code> wird die Suche (je nach Suchrichtung) dann
      *            wieder am Ende bzw. Anfang forgesetzt.
-     * @return Position und Länge des gefundenen Suchstrings im zu duerchsuchenden Text oder <code>null</code>, wenn der Suchstring nicht gefunden
-     *         wurde. Die zurück gegebene Länge kann sich von der
-     *         Länge des <code>text2Find</code> unterscheiden, wenn mit regulären Ausdrücken gesucht wird.
+     * @return Position und LÃ¤nge des gefundenen Suchstrings im zu duerchsuchenden Text oder <code>null</code>, wenn der Suchstring nicht gefunden
+     *         wurde. Die zurÃ¼ck gegebene LÃ¤nge kann sich von der
+     *         LÃ¤nge des <code>text2Find</code> unterscheiden, wenn mit regulÃ¤ren AusdrÃ¼cken gesucht wird.
      */
     public static final IntRange find(String text, String text2Find, final int fromIndex, final boolean ignoreCase, final boolean searchForward, final boolean text2FindAsRegExp, final boolean wholeWord, final boolean wrapSearch) {
-        // eingeführt, um wholeWord Suche mit zu integrieren;
+        // eingefÃ¼hrt, um wholeWord Suche mit zu integrieren;
         boolean foundNoWholeWord = false;
-        // eingeführt, um bei regulären Ausdrücken auch wrappen zu können
+        // eingefÃ¼hrt, um bei regulÃ¤ren AusdrÃ¼cken auch wrappen zu kÃ¶nnen
         boolean wrappedInMode_regExpr = false;
-        // Groß- und Kleinschreibung ignorieren? -> Wenn ja, alles in Bleinbuchstaben umwandeln
+        // GroÃŸ- und Kleinschreibung ignorieren? -> Wenn ja, alles in Bleinbuchstaben umwandeln
         if (ignoreCase) {
             text = text.toLowerCase();
             text2Find = text2Find.toLowerCase();
         }
 
-        // falls text2Find tatsächlich ein regulärer Ausdruck ist und auch über reguläre Ausdrücke gesucht wird, ist das hier das kompilierte Pattern aus text2Find
+        // falls text2Find tatsÃ¤chlich ein regulÃ¤rer Ausdruck ist und auch Ã¼ber regulÃ¤re AusdrÃ¼cke gesucht wird, ist das hier das kompilierte Pattern aus text2Find
         Pattern regExpPattern = null;
         // Suche nach RegExp -> Pattern compilieren
         if (text2FindAsRegExp) {
             regExpPattern = Pattern.compile(text2Find);
         }
 
-        // Rückgabewert, wenn der Suchtext gefunden wurde
+        // RÃ¼ckgabewert, wenn der Suchtext gefunden wurde
         IntRange range = null;
         int startIndex = -2;
         int endIndex = -1;
-        // 2 Durchläufe: je nach Richtung in einem Druchlauf den Teil vom Index 0 bis Index fromindex
+        // 2 DurchlÃ¤ufe: je nach Richtung in einem Druchlauf den Teil vom Index 0 bis Index fromindex
         // und im zweiten Durchlauf immer den ganzen String durchsuchen durchsuchen
         outerloop: for (int i = 0;; i++) {
             // im 1. Durchlauf
             if (i == 0) {
-                // Vorwärtsuche
+                // VorwÃ¤rtsuche
                 if (searchForward) {
                     // von fromIndex bis zum Ende
                     startIndex = fromIndex;
                     endIndex = text.length();
-                    // Rückwärtssuche
+                    // RÃ¼ckwÃ¤rtssuche
                 } else {
                     // vom Anfang bis fromIndex
                     startIndex = 0;
-                    // Mehrmaliges Rückwärtssuchen
-                    // anpassung - 1 , weil man sonst bei lastIndexOf hängen bleibt bei mehrmaligen rückwärts suchen
-                    // text.lenght -1 bei 0, sonst kann man anfang nicht rückwärts suchen
+                    // Mehrmaliges RÃ¼ckwÃ¤rtssuchen
+                    // anpassung - 1 , weil man sonst bei lastIndexOf hÃ¤ngen bleibt bei mehrmaligen rÃ¼ckwÃ¤rts suchen
+                    // text.lenght -1 bei 0, sonst kann man anfang nicht rÃ¼ckwÃ¤rts suchen
                     endIndex = fromIndex > 0 ? fromIndex - 1 : text.length() - 1;
                 }
                 // im 2. Durchlauf;
@@ -161,7 +161,7 @@ public class StringUtils {
                 // obere Zeile erweitert, weil sonst hier immer immer bei !wrapSearch rausgesprungen wird...+ bei umgekehrter suche, wird endindex deckrementiert
                 if (!wrapSearch && !wholeWord || searchForward && fromIndex == 0 || !searchForward && fromIndex == text.length() && !foundNoWholeWord) {
                     break;
-                    // außerdem rausspringen, wenn endIndex<=startIndex (entsteht bei wholeWord)
+                    // auÃŸerdem rausspringen, wenn endIndex<=startIndex (entsteht bei wholeWord)
                 }
 
                 if (endIndex <= startIndex) {
@@ -170,17 +170,17 @@ public class StringUtils {
                         startIndex = 0;
                         endIndex = text.length();
                     } else {
-                        // bei raussprung letztes range ungültig
+                        // bei raussprung letztes range ungÃ¼ltig
                         range = null;
                         break;
                     }
                 }
                 // wenn die Suche wieder von vorne bzw. hinten beginnen soll
                 // immer vom Anfang bis zum Ende suchen!!! Damit der Suchstring in jedem Fall gefunden wird
-                // nur im 2. Durchlauf wirklich den ganzen String durchsuchen. Alle Durchlaüfe danach kommen nur noch zu Stande,
-                // wenn man nach wholeWord sucht. Dann dürfen die Indizes nicht angepasst werden.
+                // nur im 2. Durchlauf wirklich den ganzen String durchsuchen. Alle DurchlaÃ¼fe danach kommen nur noch zu Stande,
+                // wenn man nach wholeWord sucht. Dann dÃ¼rfen die Indizes nicht angepasst werden.
 
-                // wenn im Durchlauf kein wholeWord (false positive im Modus whole word) gefunden wurde, darf man hier nicht zurücksetzen (sonst endlosschleife)
+                // wenn im Durchlauf kein wholeWord (false positive im Modus whole word) gefunden wurde, darf man hier nicht zurÃ¼cksetzen (sonst endlosschleife)
                 if (i == 1 && !foundNoWholeWord) {
                     startIndex = 0;
                     endIndex = text.length();
@@ -194,22 +194,22 @@ public class StringUtils {
                 int foundIndex = searchForward ? text.indexOf(text2Find, startIndex) : text.lastIndexOf(text2Find, endIndex);
                 if (foundIndex >= 0) {
                     range = new IntRange(foundIndex, text2Find.length());
-                    // suche nach regulärem Ausdruck
+                    // suche nach regulÃ¤rem Ausdruck
                 }
             } else {
-                // reguläre Ausdrücke kann man nur vorwärts durchsuchen
+                // regulÃ¤re AusdrÃ¼cke kann man nur vorwÃ¤rts durchsuchen
                 // zu durchsuchenden Substring holen
                 // String textPart = startIndex > 0 || endIndex < text.length() ? text.substring(startIndex, endIndex) : text;
                 String textPart = endIndex < text.length() ? text.substring(startIndex, endIndex) : text;
                 Matcher m = regExpPattern.matcher(textPart);
-                // wenn vorwärts gesucht werden soll, dann fängt er bei Index 0 an und sucht nur 1 mal. Rückwärt fängt er am Ende an
+                // wenn vorwÃ¤rts gesucht werden soll, dann fÃ¤ngt er bei Index 0 an und sucht nur 1 mal. RÃ¼ckwÃ¤rt fÃ¤ngt er am Ende an
                 // und sucht nach vorne durch
                 for (int start = searchForward ? startIndex : textPart.length() - 1; start >= 0; start--) {
 
                     if (!m.find(start)) {
-                        // bleibt sonst hängen am letzten Wort bei Wrap
+                        // bleibt sonst hÃ¤ngen am letzten Wort bei Wrap
                         // ->
-                        // - bei Vorwärtssuche wenn nichts gefunden wird im ersten Lauf, muss startIndex auf 0 gesetzt werden.
+                        // - bei VorwÃ¤rtssuche wenn nichts gefunden wird im ersten Lauf, muss startIndex auf 0 gesetzt werden.
                         // - gleichzeitig wird sich gemerkt, dass gewrapped wurde mittels wrappedInMode_regExpr, damit nicht unendlich wieder auf 0 gesetzt wird...
                         if (searchForward && wrapSearch && !wrappedInMode_regExpr) {
                             startIndex = 0;
@@ -229,7 +229,7 @@ public class StringUtils {
                 // wenn nichts gefunden in 1ter Schleife, weiter machen
                 if (i == 0 && wrapSearch) {
                     continue;
-                    // wenn nichts gefunden nach 1ter Schleife, aufhören
+                    // wenn nichts gefunden nach 1ter Schleife, aufhÃ¶ren
                 } else {
                     break;
                 }
@@ -240,16 +240,16 @@ public class StringUtils {
             // Hinweise zu wholeword:
             // ->
             // - wenn der Kandidat korrekt ist, soll der Block durchlaufen und unten break bei (range != null)
-            // - wenn es ein false positive ist, muss der Bereich eingeschräankt werden (abhäangig von vorwärts rüuckwärts) und es muss wieder hochgesprungen werden
+            // - wenn es ein false positive ist, muss der Bereich eingeschrÃ¤ankt werden (abhÃ¤angig von vorwÃ¤rts rÃ¼uckwÃ¤rts) und es muss wieder hochgesprungen werden
             // - dann darf oben nicht mehr der Bereich auf 0 zurckgesetzt werden Z164
             // - um sich das zu merken => foundNoWholeWord => es wurde kein ganzes wort gefunden (aber false positive)
 
             // String gefunden, aber suche eigentlich nach ganzem Wort?
             if (wholeWord) {
-                // Wenn ganzes Wort gefunden -> soll hier übersprungen werden
-                // Wenn ganzes Wort dann muss angepasst und zurückgesprungen werden
+                // Wenn ganzes Wort gefunden -> soll hier Ã¼bersprungen werden
+                // Wenn ganzes Wort dann muss angepasst und zurÃ¼ckgesprungen werden
 
-                // man beachte die 2 Sonderfälle, ganz am Anfang, ganz am Ende
+                // man beachte die 2 SonderfÃ¤lle, ganz am Anfang, ganz am Ende
                 // Pos vor dem Wort; 0 beim Anfang
                 int beforePos = Math.max(0, range.getOffset() - 1);
                 // Pos nach dem Wort; len bei Ende
@@ -261,10 +261,10 @@ public class StringUtils {
 
                 // Wenn nicht von Leerzeichen umgeben -> wieder hochspringen
                 if (!(charBefore < 33 && charAfter < 33)) {
-                    // Wenn kein ganzes Wort -> erhöhe startZeiger bei Vorwärtssuche
+                    // Wenn kein ganzes Wort -> erhÃ¶he startZeiger bei VorwÃ¤rtssuche
                     if (searchForward) {
                         startIndex++;
-                        // Wenn kein ganzes Wort -> verringere endZeiger bei Rückwärtssuche
+                        // Wenn kein ganzes Wort -> verringere endZeiger bei RÃ¼ckwÃ¤rtssuche
                     } else {
                         endIndex--;
                     }

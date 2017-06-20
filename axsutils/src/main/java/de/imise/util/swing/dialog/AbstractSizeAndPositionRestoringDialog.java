@@ -14,7 +14,7 @@ import java.util.HashMap;
 import javax.swing.JDialog;
 
 /**
- * Dialog, der seine Größe immer werder herstellen kann, wenn er neu geöffnet wird.
+ * Dialog, der seine GrÃ¶ÃŸe immer werder herstellen kann, wenn er neu geÃ¶ffnet wird.
  * 
  * @author Ich
  * @create 12.09.2015
@@ -133,7 +133,7 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
     }
 
     /**
-     * Liefert die Default-Größe des Dialogs
+     * Liefert die Default-GrÃ¶ÃŸe des Dialogs
      * 
      * @return
      */

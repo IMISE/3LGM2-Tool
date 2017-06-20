@@ -10,7 +10,7 @@ public class PixelImage {
 	private Pixel[][] data;
 	
 	/**
-	 * Variablen für die Höhe und Breite des Bildes
+	 * Variablen fÃ¼r die HÃ¶he und Breite des Bildes
 	 */
 	private int w, h;
 	
@@ -30,7 +30,7 @@ public class PixelImage {
 	}
 	
 	/**
-	 * Liefert die Höhe des Bildes
+	 * Liefert die HÃ¶he des Bildes
 	 * @return
 	 */
 	public int getHeight() {
@@ -46,8 +46,8 @@ public class PixelImage {
 	}
 
 	/**
-	 * Liefert <code>true</code>, wenn die Bilder gleich groß sind und kein Pixel um mehr als 
-	 * die angegebene tolerance von denen des übergebenen Bildes abweicht.
+	 * Liefert <code>true</code>, wenn die Bilder gleich groÃŸ sind und kein Pixel um mehr als 
+	 * die angegebene tolerance von denen des Ã¼bergebenen Bildes abweicht.
 	 * @param image
 	 * @return
 	 * @see Pixel#isPixelInImage(BufferedImage)

@@ -26,7 +26,7 @@ public class EventMulticaster extends AWTEventMulticaster implements MouseInputL
 	 * <i>Hinweis:</i> Events werden immer zuerst an l1 und danach an l2 weitergeleitet
 	 * 
 	 * @param <T>
-	 * 		Typ der Listener; Entspricht gleichzeitig dem Typ des Rückgabewertes; 
+	 * 		Typ der Listener; Entspricht gleichzeitig dem Typ des RÃ¼ckgabewertes; 
 	 * 		Muss eine Ableitung {@link EventListener} sein.
 	 * @param l1
 	 * 		Erster Listener
@@ -34,7 +34,7 @@ public class EventMulticaster extends AWTEventMulticaster implements MouseInputL
 	 * 		Zweiter Listener
 	 * @param flag
 	 * 		Hat keinen Einfluss auf diese Methode; Wird hier nur verwendet, um die Abgrenzung zu den
-	 * 		add()-Methoden des {@link AWTEventMulticaster} zu gewährleisten.
+	 * 		add()-Methoden des {@link AWTEventMulticaster} zu gewÃ¤hrleisten.
 	 * 
 	 * @return {@link AWTEventMulticaster} aus l1 und l2
 	 */
@@ -46,7 +46,7 @@ public class EventMulticaster extends AWTEventMulticaster implements MouseInputL
 	 * Entfernt oldl von l.
 	 * 
 	 * @param <T>
-	 * 		Typ der Listener; Entspricht gleichzeitig dem Typ des Rückgabewertes; 
+	 * 		Typ der Listener; Entspricht gleichzeitig dem Typ des RÃ¼ckgabewertes; 
 	 * 		Muss eine Ableitung {@link EventListener} sein.
 	 * @param l
 	 * 		{@link AWTEventMulticaster} von dem oldl entfernt werden soll
@@ -54,7 +54,7 @@ public class EventMulticaster extends AWTEventMulticaster implements MouseInputL
 	 * 		Listener der von l entfernt werden soll
 	 * @param flag
 	 * 		Hat keinen Einfluss auf diese Methode; Wird hier nur verwendet, um die Abgrenzung zu den
-	 * 		remove()-Methoden des {@link AWTEventMulticaster} zu gewährleisten.
+	 * 		remove()-Methoden des {@link AWTEventMulticaster} zu gewÃ¤hrleisten.
 	 * 
 	 * @return den nach dem Entfernen resultierenden {@link AWTEventMulticaster}
 	 */

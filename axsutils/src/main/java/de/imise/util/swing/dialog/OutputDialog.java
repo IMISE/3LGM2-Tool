@@ -25,7 +25,7 @@ public class OutputDialog extends JDialog {
 	private ExtendedTextArea outputTextField = new ExtendedTextArea();
 
 	/**
-	 * Das Scrollpane für das Ausgabetextfeld
+	 * Das Scrollpane fÃ¼r das Ausgabetextfeld
 	 */
 	private JScrollPane outputScrollPane = new JScrollPane(outputTextField);
 

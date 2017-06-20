@@ -56,20 +56,20 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	private HistoryComboBox elementReplace = new HistoryComboBox();
 
 	/**
-	 * Komponente, für das das Menü angezeigt werden soll
+	 * Komponente, fÃ¼r das das MenÃ¼ angezeigt werden soll
 	 */
 	private JTextComponent myTargetComponent = null;
 
 	final static SimpleResourceHandler resHandler = new SimpleResourceHandler(FindReplacePanel.class);
 
 	/**
-	 * Groß/Kleinschreibung
+	 * GroÃŸ/Kleinschreibung
 	 */
 	private static boolean ignoreCase = true;
 	private JCheckBox ignoreCase_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_IC"), ignoreCase);
 
 	/**
-	 * Reguläre Ausdrücke
+	 * RegulÃ¤re AusdrÃ¼cke
 	 */
 	private static boolean allowREs = false;
 	private JCheckBox allowREs_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_RE"), allowREs);
@@ -86,7 +86,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	private JCheckBox wrapAround_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_WA"), onlyWholeWord);
 
 	/**
-	 * normal_direction: true vorwärts, false rückwärts;
+	 * normal_direction: true vorwÃ¤rts, false rÃ¼ckwÃ¤rts;
 	 */
 	private static boolean normal_direction = true;
 	private JRadioButton normal_direction_rb = new JRadioButton(resHandler.getString("TOOLS_FINDREPLACEPANEL_RB_F"), normal_direction);
@@ -108,7 +108,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Liefert den Dialog oder das Fenster, der die übergebene Komponente enthält
+	 * Liefert den Dialog oder das Fenster, der die Ã¼bergebene Komponente enthÃ¤lt
 	 * @param comp
 	 * @return
 	 */
@@ -195,7 +195,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 		this.add(new JLabel(resHandler.getString("TOOLS_FINDREPLACEPANEL_R")), constraints);
 		constraints.gridy++;
 
-		// nächste Spalte
+		// nÃ¤chste Spalte
 		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		constraints.gridx++;
 		constraints.gridy = 0;
@@ -204,7 +204,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 		constraints.gridy++;
 		this.add(elementReplace, constraints);
 
-		// nächste Zeile: Optionen
+		// nÃ¤chste Zeile: Optionen
 		ButtonGroup bgDir = new ButtonGroup();
 		bgDir.add(back_direction_rb);
 		bgDir.add(normal_direction_rb);
@@ -239,8 +239,8 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 
 		this.add(optPanel, constraints);
 
-		// wenn irgendwas an den Optionen oder der Suchtext geändert wird,
-		// muss der enabled-Status der Knöpfe aktualsiert werden
+		// wenn irgendwas an den Optionen oder der Suchtext geÃ¤ndert wird,
+		// muss der enabled-Status der KnÃ¶pfe aktualsiert werden
 		elementFind.addActionListener(this);
 		elementReplace.addActionListener(this);
 		ignoreCase_cb.addActionListener(this);
@@ -283,7 +283,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 		SwingUtilities.replaceUIActionMap(jbSearch, actionMap);
 		SwingUtilities.replaceUIInputMap(jbSearch, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
 
-		// Aktion in den beiden Comboboxen setzen, die ausgeführt werden soll, wenn Enter gedrückt wird
+		// Aktion in den beiden Comboboxen setzen, die ausgefÃ¼hrt werden soll, wenn Enter gedrÃ¼ckt wird
 		elementFind.setEnterAction(jbSearch.getAction());
 		elementReplace.setEnterAction(jbSearch.getAction());
 
@@ -291,7 +291,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Liefert die Aktion, die die Suche ausführt
+	 * Liefert die Aktion, die die Suche ausfÃ¼hrt
 	 * 
 	 * @param elemFindEditor
 	 * @return
@@ -315,7 +315,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Liefert die Action, über die man einen vorher über die Suche gefundenen String ersetzen kann.
+	 * Liefert die Action, Ã¼ber die man einen vorher Ã¼ber die Suche gefundenen String ersetzen kann.
 	 * 
 	 * @param elemFindEditor
 	 * @param targetComponent
@@ -335,7 +335,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 					int pos = targetComponent.getSelectionStart();
 					
 					//baue den Ersetzungstext zusammen, dieser besteht aus dem originalTargetText, 
-					//der an der Stelle pos mit der Länge len ersetzt wird durch den Text searchReplacement
+					//der an der Stelle pos mit der LÃ¤nge len ersetzt wird durch den Text searchReplacement
 					//ersetze den Text von myTargetComponent, durch den Ersetzungstext
 					if (len > 0)
  {
@@ -345,7 +345,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 						StringBuilder newTargetTextBuilder = new StringBuilder(originalTargetText.subSequence(0, pos));
 						// Ersetzungstext
 						newTargetTextBuilder.append(searchReplacement);
-						// Rest der noch übrig bleibt kommt hinten dran
+						// Rest der noch Ã¼brig bleibt kommt hinten dran
 						newTargetTextBuilder.append(originalTargetText.subSequence(pos + len, originalTargetText.length()));
 						myTargetComponent.setText(newTargetTextBuilder.toString());
 						// nach ersetzung steht Curser auf Ende der Ersetzung
@@ -356,7 +356,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 							myTargetComponent.setSelectionStart(pos + len);
 							myTargetComponent.setSelectionEnd(pos + len + searchReplacement.length());
 							
-							// caret darf nicht größer sein als gesamtlänge 
+							// caret darf nicht grÃ¶ÃŸer sein als gesamtlÃ¤nge 
 							if (pos + len + searchReplacement.length() < newTargetTextBuilder.toString().length())
 								myTargetComponent.setCaretPosition(pos + len + searchReplacement.length());
 						} else {
@@ -398,7 +398,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Liefert die Action, über die alle Vorkommen des Suchtextes in der targetComponent ersetzt werden.
+	 * Liefert die Action, Ã¼ber die alle Vorkommen des Suchtextes in der targetComponent ersetzt werden.
 	 * 
 	 * @param elemFindEditor
 	 * @param targetComponent
@@ -413,7 +413,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 				String originalTargetText = myTargetComponent.getText();
 				String searchReplacement = (String) elementReplace.getSelectedItem() == null ? "" : (String) elementReplace.getSelectedItem();
 				String searchString = elementFind.getSelectedItem().toString() == null ? "" : elementFind.getSelectedItem().toString();
-				//Ausführung
+				//AusfÃ¼hrung
 				myTargetComponent.setText(originalTargetText.replaceAll(searchString, searchReplacement));
 			}
 
@@ -425,7 +425,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Sucht das nächste Vorkommen im Zielfeld ab der aktuellen Cursorposition in die eingestellte Richtung
+	 * Sucht das nÃ¤chste Vorkommen im Zielfeld ab der aktuellen Cursorposition in die eingestellte Richtung
 	 */
 	/**
 	 * @return <code>true</code> wenn etwas gefunden wurde
@@ -433,10 +433,10 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 	 */
 	private boolean search() throws Exception {
 		IntRange range;
-		//Rückwärtselektion geht nicht, deswegen bei Rückwärtssuche mit vorhandener Selektion ab dem Startpuunkt der Selektion suchen
+		//RÃ¼ckwÃ¤rtselektion geht nicht, deswegen bei RÃ¼ckwÃ¤rtssuche mit vorhandener Selektion ab dem Startpuunkt der Selektion suchen
 		if (back_direction_rb.isSelected() && myTargetComponent.getSelectedText() != null)
 			range = StringUtils.find(myTargetComponent.getText(), elementFind.getSelectedItem().toString(), myTargetComponent.getSelectionStart(), ignoreCase_cb.isSelected(), normal_direction_rb.isSelected(), allowREs_cb.isSelected(), onlyWholeWord_cb.isSelected(), wrapAround_cb.isSelected());
-		//Vorwärtssuche mit oder ohne Selektion oder Rückwärtssuche ohne Selektion immer ab CaretPostion suchen
+		//VorwÃ¤rtssuche mit oder ohne Selektion oder RÃ¼ckwÃ¤rtssuche ohne Selektion immer ab CaretPostion suchen
 		else
 			range = StringUtils.find(myTargetComponent.getText(), elementFind.getSelectedItem().toString(), myTargetComponent.getCaretPosition(), ignoreCase_cb.isSelected(), normal_direction_rb.isSelected(), allowREs_cb.isSelected(), onlyWholeWord_cb.isSelected(), wrapAround_cb.isSelected());
 
@@ -444,7 +444,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 			myTargetComponent.setSelectionStart(range.getOffset());
 			myTargetComponent.setSelectionEnd(range.getOffset() + range.getLength());
 		}
-		// all Knöpfe aktualisieren
+		// all KnÃ¶pfe aktualisieren
 		updateEnabledStates();
 		return range != null;
 	}

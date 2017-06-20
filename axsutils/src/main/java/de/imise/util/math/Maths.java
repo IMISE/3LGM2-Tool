@@ -4,7 +4,7 @@ package de.imise.util.math;
 public class Maths {
 	
 	/**
-	 * Errechnet das Maximum der übergegebenen Werte.
+	 * Errechnet das Maximum der Ã¼bergegebenen Werte.
 	 * @param values
 	 * @return
 	 */
@@ -16,7 +16,7 @@ public class Maths {
 	}
 	
 	/**
-	 * Errechnet das Minimum der übergegebenen Werte.
+	 * Errechnet das Minimum der Ã¼bergegebenen Werte.
 	 * @param values
 	 * @return
 	 */

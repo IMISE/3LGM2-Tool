@@ -26,12 +26,12 @@ import de.imise.util.SimpleResourceHandler;
 public class TextComponentStandardPopup extends JPopupMenu implements MouseListener {
 
 	/**
-	 * Komponente, für das das Menü angezeigt werden soll
+	 * Komponente, fÃ¼r das das MenÃ¼ angezeigt werden soll
 	 */
 	private JTextComponent myTargetComponent = null;
 
 	/**
-	 * Wird <code>true</code>, wenn das Menü initilisiert wurde (Einmalig vor dem ersten anzeigen)
+	 * Wird <code>true</code>, wenn das MenÃ¼ initilisiert wurde (Einmalig vor dem ersten anzeigen)
 	 */
 	private boolean initialized = false;
 
@@ -64,7 +64,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 	}
 
 	/**
-	 * Initialisiert das Menü
+	 * Initialisiert das MenÃ¼
 	 * 
 	 * @param textComponent
 	 */
@@ -188,7 +188,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 			add(findIt);
 		}
 
-		// dafür sorgen, dass bei jedem Anzeigen der enabled-Status aktualisiert wird
+		// dafÃ¼r sorgen, dass bei jedem Anzeigen der enabled-Status aktualisiert wird
 		addPopupMenuListener(new PopupMenuListener() {
 
 			@Override
@@ -204,7 +204,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 				if (isExtensionFindReplace()) {
 					selectAllIt.setEnabled(findIt.getAction().isEnabled());
 
-				// Workaround für Exception in thread "AWT-EventQueue-0" java.awt.IllegalComponentStateException: 
+				// Workaround fÃ¼r Exception in thread "AWT-EventQueue-0" java.awt.IllegalComponentStateException: 
 				// component must be showing on the screen to determine its location
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -228,40 +228,40 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 	}
 
 	/**
-	 * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll. Wenn die Textkomponente nicht editable oder nicht enabled ist, wird nur SelectAll und Copy angeboten.
+	 * KontextmenÃ¼ fÃ¼r Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll. Wenn die Textkomponente nicht editable oder nicht enabled ist, wird nur SelectAll und Copy angeboten.
 	 * 
 	 * @param textComponent
 	 * @return
 	 */
 	@SuppressWarnings("unused")
 	public static boolean addPopupMenuTo(final JTextComponent textComponent) {
-		// nur 1 x hinzufügen
+		// nur 1 x hinzufÃ¼gen
 		for (MouseListener ml : textComponent.getMouseListeners()) {
 			if (ml instanceof TextComponentStandardPopup)
 				return false;
 		}
-		//mit diesem Aufruf wird der textComponent das Popuzp angehängt
+		//mit diesem Aufruf wird der textComponent das Popuzp angehÃ¤ngt
 		new TextComponentStandardPopup(textComponent);
 		return true;
 	}
 
 	/**
-	 * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll, Find and Replace optional Wenn die Textkomponente nicht editable oder nicht enabled ist, wird nur SelectAll und Copy
+	 * KontextmenÃ¼ fÃ¼r Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll, Find and Replace optional Wenn die Textkomponente nicht editable oder nicht enabled ist, wird nur SelectAll und Copy
 	 * angeboten.
 	 * 
 	 * @param textComponent
 	 * @param extensionFindReplace
-	 *            Find/Replace eingefügen
+	 *            Find/Replace eingefÃ¼gen
 	 * @return
 	 */
 	@SuppressWarnings("unused")
 	public static boolean addPopupMenuTo(final JTextComponent textComponent, boolean extensionFindReplace) {
-		// nur 1 x hinzufügen
+		// nur 1 x hinzufÃ¼gen
 		for (MouseListener ml : textComponent.getMouseListeners()) {
 			if (ml instanceof TextComponentStandardPopup)
 				return false;
 		}
-		//mit diesem Aufruf wird der textComponent das Popuzp angehängt
+		//mit diesem Aufruf wird der textComponent das Popuzp angehÃ¤ngt
 		new TextComponentStandardPopup(textComponent, extensionFindReplace);
 		return true;
 	}
@@ -269,7 +269,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 	/**
 	 * Liefert den aktuellen Inhalt des System-Clipboards als String.
 	 * 
-	 * @return String-Repräsentation des Inhalts oder <code>null</code>, wenn nichts enthalten ist.
+	 * @return String-ReprÃ¤sentation des Inhalts oder <code>null</code>, wenn nichts enthalten ist.
 	 */
 	private static final String getFromClipboard() {
 		try {
@@ -292,14 +292,14 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 	}
 
 	/**
-	 * Zeigt das Popupmenu für die SourceKomponente des übergebenen Ereignisses an, wenn es eine {@link JTextComponent} ist.
+	 * Zeigt das Popupmenu fÃ¼r die SourceKomponente des Ã¼bergebenen Ereignisses an, wenn es eine {@link JTextComponent} ist.
 	 * 
 	 * @param e
 	 */
 	private void doPop(MouseEvent e) {
 		if (e.getSource() instanceof JTextComponent) {
 			JTextComponent source = (JTextComponent) e.getSource();
-			// wenn die Komponente nicht enabled ist, kann man gar nichts machen, also braucht das Menü auch nicht gezeigt zu werden
+			// wenn die Komponente nicht enabled ist, kann man gar nichts machen, also braucht das MenÃ¼ auch nicht gezeigt zu werden
 			if (!source.isEnabled())
 				return;
 			source.requestFocus();

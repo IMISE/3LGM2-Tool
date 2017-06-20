@@ -6,11 +6,11 @@ import java.awt.datatransfer.Transferable;
 
 /**
  * Interface zum Austausch von Daten zwischen dieser Software und anderen Desktop-Anwendungen 
- * über die System-Zwischenablage.
+ * Ã¼ber die System-Zwischenablage.
  * <p>
- * Klassen, die dieses Interface implementieren, bieten die Möglichkeit, auf die 
+ * Klassen, die dieses Interface implementieren, bieten die MÃ¶glichkeit, auf die 
  * System-Zwischenablage sowie auf ihre Inhalte zu zugreifen.<br>
- * Außerdem ist es möglich, den Inhalt der System-Zwischenablage zu setzen.
+ * AuÃŸerdem ist es mÃ¶glich, den Inhalt der System-Zwischenablage zu setzen.
  * 
  * @see ClipboardOwner
  * @author fstephan
@@ -29,8 +29,8 @@ public interface ContentManager extends ClipboardOwner {
 	Transferable getClipboardContents();
 	
 	/** 
-	 * Gibt einen ausgewählten Teil der Inhalte der System-Zwischenablage wieder.<br>
-	 * Das zurückgegebene Objekt ist zur Weiterverarbeitung durch einen {@link ContentParser}
+	 * Gibt einen ausgewÃ¤hlten Teil der Inhalte der System-Zwischenablage wieder.<br>
+	 * Das zurÃ¼ckgegebene Objekt ist zur Weiterverarbeitung durch einen {@link ContentParser}
 	 * geeignet.
 	 */
 	Object getClipboardContent();

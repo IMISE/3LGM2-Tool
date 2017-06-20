@@ -11,17 +11,17 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 /**
- * Klasse für das Debuggen von {@link JTable}s.
+ * Klasse fÃ¼r das Debuggen von {@link JTable}s.
  * <p>
- * <b>Hinweis:</b> An einen Table werden hier üblicherweise Listener angehängt, welche
- * anschließend nicht entfernt werden. Daher sollte diese Klasse auch nur zum
- * Debuggen verwendet werden, nicht aber beim "tatsächlichen Bertieb".
+ * <b>Hinweis:</b> An einen Table werden hier Ã¼blicherweise Listener angehÃ¤ngt, welche
+ * anschlieÃŸend nicht entfernt werden. Daher sollte diese Klasse auch nur zum
+ * Debuggen verwendet werden, nicht aber beim "tatsÃ¤chlichen Bertieb".
  * 
  * @author fstephan
  */
 public class TableDebugger {
 	
-	/** TableModel für das überprüfen der Selektion in einem JTable */
+	/** TableModel fÃ¼r das Ã¼berprÃ¼fen der Selektion in einem JTable */
 	protected static class SelectionCheckModel extends AbstractTableModel {
 
 		protected JTable source;
@@ -67,10 +67,10 @@ public class TableDebugger {
 	 * @param source
 	 * 			Die Ausgangstabelle
 	 * @param show <ul>
-	 * 				<li><code>true</code>:  Es wird ein Dialog geöffnet, der die Debugging-Tabelle anzeigt</li>
-	 * 				<li><code>false</code>: Die Tabelle wird nur erzeugt und zurückgegeben </li></ul>
+	 * 				<li><code>true</code>:  Es wird ein Dialog geÃ¶ffnet, der die Debugging-Tabelle anzeigt</li>
+	 * 				<li><code>false</code>: Die Tabelle wird nur erzeugt und zurÃ¼ckgegeben </li></ul>
 	 * @param owner
-	 * 			Der WindowOwner für den Dialog. (optional)
+	 * 			Der WindowOwner fÃ¼r den Dialog. (optional)
 	 * 
 	 * @return Tabelle der Selektionswerte
 	 */
@@ -79,15 +79,15 @@ public class TableDebugger {
 	}
 	
 	/**
-	 * Erzeugt eine Tabelle zum Debuggen auf Basis des übergebenen TableModel.
+	 * Erzeugt eine Tabelle zum Debuggen auf Basis des Ã¼bergebenen TableModel.
 	 * 
 	 * @param debuggingModel
-	 * 			Das Modell, welches als Basis für die hier erzeugte Tabelle dient.
+	 * 			Das Modell, welches als Basis fÃ¼r die hier erzeugte Tabelle dient.
 	 * @param show <ul>
-	 * 				<li><code>true</code>:  Es wird ein Dialog geöffnet, der die Debugging-Tabelle anzeigt</li>
-	 * 				<li><code>false</code>: Die Tabelle wird nur erzeugt und zurückgegeben </li></ul>
+	 * 				<li><code>true</code>:  Es wird ein Dialog geÃ¶ffnet, der die Debugging-Tabelle anzeigt</li>
+	 * 				<li><code>false</code>: Die Tabelle wird nur erzeugt und zurÃ¼ckgegeben </li></ul>
 	 * @param owner
-	 * 			Der WindowOwner für den Dialog. (optional)
+	 * 			Der WindowOwner fÃ¼r den Dialog. (optional)
 	 * 
 	 * @return Tabelle der Selektionswerte
 	 */

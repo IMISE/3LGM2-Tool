@@ -6,7 +6,7 @@ import javax.swing.CellEditor;
 import javax.swing.JList;
 
 /**
- * Interface für den Editor einer {@link JList}.
+ * Interface fÃ¼r den Editor einer {@link JList}.
  * 
  * @author fstephan
  *
@@ -14,10 +14,10 @@ import javax.swing.JList;
 public interface ListCellEditor extends CellEditor {
 
 	/**
-	 * Gibt die Editorkomponente für Zellen einer {@link JList} wieder.
+	 * Gibt die Editorkomponente fÃ¼r Zellen einer {@link JList} wieder.
 	 * 
 	 * @param list
-	 * 			Liste, die die zu editierende Zelle enthält
+	 * 			Liste, die die zu editierende Zelle enthÃ¤lt
 	 * @param value
 	 * 			Initaler Wert des Editors
 	 * @param isSelected
