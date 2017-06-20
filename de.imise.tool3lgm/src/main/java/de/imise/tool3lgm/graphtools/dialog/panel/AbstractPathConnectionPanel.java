@@ -21,6 +21,8 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.ReflectionUtils;
+import de.imise.util.StringUtils;
 import de.imise.util.Sys;
 
 /**
@@ -33,12 +35,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /** Die Kantenklasse zum anderen Element */
     protected final Class<? extends Kante>[] edgeClasses;
-
-    /**
-     * Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     * wird. Der Pfad muss mindestens searchEdgeIndex + 1 Elemente haben, kann aber auch länger sein.
-     */
-    protected final int searchEdgeIndex;
 
     //die sind entweder Dopplekante.FORWARD oder Doppelkante.BACKWARD
     protected final int[] directions;
@@ -121,8 +117,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Panel für eine einfache Assoziation
      *
      * @param dialog
-     * @param searchEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiliegn Index ans Label geschrieben.
+     * @param labelEdgeIndex Index der Kante, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
+     *            wird. Es wird immer die Endklasse des Pfades bis zur Kante mit dem jeweiligen Index ans Label geschrieben.
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Kante selbst ans Label geschrieben. Welche Kante im Pfad das ist, wird durch connectionLabelIndex
      *            festgelegt.
@@ -130,22 +126,21 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            Klasse genommen
      * @param edgeClasses
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
         super(dialog);
-        this.searchEdgeIndex = searchEdgeIndex;
         this.edgeClasses = edgeClasses;
         directions = getEdgeDirections();
-        this.searchElementClass = searchElementClass != null ? searchElementClass : getPathStepEndElementClass(searchEdgeIndex);
+        this.searchElementClass = searchElementClass != null ? searchElementClass : getPathStepEndClass(edgeClasses.length - 1);
         lastEdgeIndex = edgeClasses.length - 1;
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         String westLabelText;
-        Class<? extends Kante> edgeClass = edgeClasses[searchEdgeIndex];
+        Class<? extends Kante> edgeClass = edgeClasses[labelEdgeIndex];
 
         if (labelEdgeName) {
-            if (directions[searchEdgeIndex] == FORWARD) {
+            if (directions[labelEdgeIndex] == FORWARD) {
                 westLabelText = ModelConstants.getForwardMetaAssociationName(edgeClass);
             } else {
                 westLabelText = ModelConstants.getBackwardMetaAssociationName(edgeClass);
@@ -153,7 +148,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         } else {
             westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(this.searchElementClass) : ModelConstants.getDisplayablePluralName(this.searchElementClass);
         }
-        westLabelText = westLabelText.substring(0, 1).toUpperCase() + westLabelText.substring(1); // Den ersten Buchstaben des Labels immer groß schreiben
+        westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
         setName(westLabelText);
     }
@@ -168,8 +163,19 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         return returnValue;
     }
 
-    protected Class<? extends ModelElement> getPathStepEndElementClass(final int edgeIndex) {
+    private Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex) {
+        return directions[edgeIndex] == FORWARD ? Kante.getStartClass(edgeClasses[edgeIndex]) : Kante.getEndClass(edgeClasses[edgeIndex]);
+    }
+
+    private Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex) {
         return directions[edgeIndex] == FORWARD ? Kante.getEndClass(edgeClasses[edgeIndex]) : Kante.getStartClass(edgeClasses[edgeIndex]);
+    }
+
+    protected Class<? extends ModelElement> getPathStepEndElementClass(final int edgeIndex) {
+        Class<? extends ModelElement> pathStepEndElementClass = getPathStepEndClass(edgeIndex);
+        Class<? extends ModelElement> nextPathStepStartElementClass = edgeIndex + 1 < edgeClasses.length ? getPathStepStartClass(edgeIndex + 1) : searchElementClass;
+        pathStepEndElementClass = ReflectionUtils.getMostSpecialElementClass(pathStepEndElementClass, nextPathStepStartElementClass).asSubclass(ModelElement.class);
+        return pathStepEndElementClass;
     }
 
     /**
@@ -299,8 +305,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                     if (ModelConstants.isAbstract(class2Create)) {
                         return false;
                     }
-                } else if (!ModelConstants.isAbstract(searchElementClass)) {
-                    return true;
+                } else {
+                    return !ModelConstants.isAbstract(searchElementClass);
                 }
             }
         }
@@ -434,7 +440,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
      *         angelegt werden soll)
      */
-    protected static ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Kante> edgeClassToNewElement, final int directionToNewElement,
+    protected ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Kante> edgeClassToNewElement, final int directionToNewElement,
             final Class<? extends Kante> edgeClassFromNewElement, final int directionFromNewElement, final int pid) {
         //Collection des übergebenen doc holen
         GDCollection gdcoll = doc.getCollection();
@@ -442,8 +448,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //bei denen der Namen normalerweise nicht generiert wird
         boolean isInteractiveMode = gdcoll.isInteractiveMode();
 
+        boolean lastEdge = edgeClassFromNewElement == null;
+
         //bei der letzten Kante sollte man bei neuen Elementen nach dem Namen fragen
-        boolean newInteractiveMode = edgeClassFromNewElement == null;
+        boolean newInteractiveMode = lastEdge;
         //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
         if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
@@ -456,7 +464,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncähsten Kante ermittelt werden können.
         if (ModelConstants.isAbstract(elementClass2Create)) {
             //Richtung der nächsten Kante FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
-            elementClass2Create = directionFromNewElement == FORWARD ? Kante.getStartClass(edgeClassFromNewElement) : Kante.getEndClass(edgeClassFromNewElement);
+            elementClass2Create = lastEdge ? searchElementClass : directionFromNewElement == FORWARD ? Kante.getStartClass(edgeClassFromNewElement) : Kante.getEndClass(edgeClassFromNewElement);
         }
         //abstracte Elemente können nicht angelegt werden!
         if (ModelConstants.isAbstract(elementClass2Create)) {
