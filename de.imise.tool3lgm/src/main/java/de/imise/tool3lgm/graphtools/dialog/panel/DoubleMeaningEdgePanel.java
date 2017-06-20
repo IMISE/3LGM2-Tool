@@ -20,9 +20,7 @@ import javax.swing.tree.TreeSelectionModel;
 import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -55,10 +53,10 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private final JLabel rolabel, rulabel;
     private final JScrollPane sp3, sp4;
 
-    private LGMAction loaddAction;
-    private LGMAction loremoveAction;
-    private LGMAction luaddAction;
-    private LGMAction luremoveAction;
+    private final LGMAction loaddAction;
+    private final LGMAction loremoveAction;
+    private final LGMAction luaddAction;
+    private final LGMAction luremoveAction;
 
     public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
@@ -141,14 +139,10 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         JButton addUnterButton = new JButton();
         JButton removeUnterButton = new JButton();
 
-        try {
-            loaddAction = LGMActionLibrary.getAddElementAction(rotree, lotree, this, true);
-            loremoveAction = LGMActionLibrary.getDisconnectAction(lotree, rotree, this, true);
-            luaddAction = LGMActionLibrary.getAddElementAction(rutree, lutree, this, false);
-            luremoveAction = LGMActionLibrary.getDisconnectAction(lutree, rutree, this, false);
-        } catch (ActionNotDefinedForClassException e) {
-            e.printStackTrace();
-        }
+        loaddAction = getConnectAction(rotree, lotree, false);
+        loremoveAction = getDisconnectAction(lotree, rotree, false);
+        luaddAction = getConnectAction(rutree, lutree, true);
+        luremoveAction = getDisconnectAction(lutree, rutree, true);
 
         addUeberButton.setAction(loaddAction);
         removeUeberButton.setAction(loremoveAction);

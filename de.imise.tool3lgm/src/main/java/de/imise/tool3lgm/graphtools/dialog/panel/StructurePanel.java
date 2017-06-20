@@ -8,22 +8,17 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EventObject;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.google.common.collect.Sets;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -277,76 +272,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
                 lotree,
                 lutree
         };
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "addButtons" der Panels angefügt werden.
-     *
-     * @param srcTree
-     * @param targetTree
-     * @param connectForward
-     */
-    private final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final boolean connectForward) {
-        final GraphDocument doc = getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
-        final int pid = getTransactionID();
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-            @Override
-            public void execute(final EventObject e) {
-                TreePath[] selpaths = srcTree.getSelectionPaths();
-                if (selpaths != null) {
-                    for (int n = 0; n < selpaths.length; n++) {
-                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer ec = (ElementContainer) node.getUserObject();
-                        ModelElement me = ec.getElement();
-                        ModelElement topLevelMe = getTopLevelModelElement(targetTree);
-                        if (connectForward) {
-                            gdcoll.link(edgeClass, topLevelMe, me, pid);
-                        } else {
-                            gdcoll.link(edgeClass, me, topLevelMe, pid);
-                        }
-                    }
-                }
-            }
-        };
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
-     *
-     * @param srcTree
-     * @param targetTree
-     * @param disconnectForward
-     */
-    private final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final boolean disconnectForward) {
-        final GraphDocument doc = getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
-        final int pid = getTransactionID();
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-
-            @Override
-            public void execute(final EventObject e) {
-                TreePath[] selpaths = srcTree.getSelectionPaths();
-                if (selpaths != null) {
-                    for (int n = 0; n < selpaths.length; n++) {
-                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer ec = (ElementContainer) node.getUserObject();
-                        ModelElement me = ec.getElement();
-                        ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
-                        if (disconnectForward) {
-                            gdcoll.unlink(topLevelModelElement, me, edgeClass, pid);
-                        } else {
-                            gdcoll.unlink(me, topLevelModelElement, edgeClass, pid);
-                        }
-                    }
-                }
-            }
-        };
-
     }
 
 }
