@@ -317,7 +317,7 @@ public class HTMLConverter {
 				case '£' :
 					buf.append("&#163;");
 					continue;
-				case '' :
+				case '€' :
 					buf.append("&#8364;");
 					continue; //EURO
 				case '¤' :
