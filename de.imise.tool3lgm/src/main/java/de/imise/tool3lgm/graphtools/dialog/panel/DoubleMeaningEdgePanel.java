@@ -25,7 +25,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -33,6 +32,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.StringUtils;
 
 /**
  * Mit diesem Panel zeigen
@@ -52,7 +52,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private final DefaultTreeModel lomodel, lumodel, romodel, rumodel;
     private final LGMTreeNode loroot, luroot, roroot, ruroot;
     private final JPanel buttonpanel1, buttonpanel2;
-    private final JLabel lolabel, lulabel;
+    private final JLabel rolabel, rulabel;
     private final JScrollPane sp3, sp4;
 
     private LGMAction loaddAction;
@@ -67,7 +67,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel oben = new JLabel(getEdgeDisplayName(Doppelkante.BACKWARD));
+        String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(BACKWARD));
+        JLabel lolabel = new JLabel(lolabeltext);
 
         //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
         boolean showRootHandles = ModelConstants.canHaveParts(this.searchElementClass);
@@ -81,7 +82,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp1 = new JScrollPane(lotree);
 
-        JLabel unten = new JLabel(getEdgeDisplayName(Doppelkante.FORWARD));
+        String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(FORWARD));
+        JLabel lulabel = new JLabel(lulabeltext);
 
         luroot = new LGMTreeNode("luroot", false);
         lumodel = new DefaultTreeModel(luroot);
@@ -101,8 +103,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, oben, constraints, 0, 0, 1, 1);
-        add(this, unten, constraints, 0, 2, 1, 1);
+        add(this, lolabel, constraints, 0, 0, 1, 1);
+        add(this, lulabel, constraints, 0, 2, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
@@ -120,8 +122,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         sp3 = new JScrollPane(rotree);
 
         String unconnected = getResString("frei");
-        lolabel = new JLabel(unconnected);
-        lulabel = new JLabel(unconnected);
+        rolabel = new JLabel(unconnected);
+        rulabel = new JLabel(unconnected);
         ruroot = new LGMTreeNode("ruroot", false);
         rumodel = new DefaultTreeModel(ruroot);
         rutree = new LGMTree(rumodel, mainDoc);
@@ -262,8 +264,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, buttonpanel2, constraints, 1, 3, 1, 2);
 
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, lolabel, constraints, 2, 0, 1, 1);
-        add(this, lulabel, constraints, 2, 2, 1, 1);
+        add(this, rolabel, constraints, 2, 0, 1, 1);
+        add(this, rulabel, constraints, 2, 2, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
@@ -300,8 +302,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     protected void showPartlyDialog() {
         remove(buttonpanel1);
         remove(buttonpanel2);
-        remove(lolabel);
-        remove(lulabel);
+        remove(rolabel);
+        remove(rulabel);
         remove(sp3);
         remove(sp4);
     }
