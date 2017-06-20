@@ -6,10 +6,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 public abstract class ConnectedElementsPanel extends ElementDialogPanel {
 
     /**
-     * Die Elementklasse die im Panel angezeigt wird. Das muss nicht das Ende des durch die edgeClasses vorgegebenen Pfades
-     * sein, sondern kann auch eine Kante in der Mitte sein.
-     *
-     * @see #searchEdgeIndex
+     * Die Elementklasse die im Panel angezeigt wird.
      */
     protected Class<? extends ModelElement> searchElementClass;
 
