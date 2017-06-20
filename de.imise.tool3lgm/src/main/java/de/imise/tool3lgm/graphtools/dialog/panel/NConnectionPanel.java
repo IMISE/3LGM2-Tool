@@ -7,14 +7,20 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.EventObject;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
@@ -22,13 +28,18 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
+import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
+import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
+import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
-public class NConnectionPanel extends LGMDragNDropPanel {
+public class NConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMTree ltree;
 
@@ -41,8 +52,6 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     private final JScrollPane rtreeScollPane;
     private final JPanel buttonpanel;
     private final Class<? extends ModelElement> searchElementClass;
-
-    private boolean editable = true;
 
     private LGMAction addAction;
     private LGMAction removeAction;
@@ -66,9 +75,8 @@ public class NConnectionPanel extends LGMDragNDropPanel {
      * @param editable
      */
     public NConnectionPanel(final Class<? extends ModelElement> searchElementClass, final String name, final ElementPropertyDialog dl, final boolean mitnew, final boolean editable) {
-        super(dl, name);
+        super(dl, false, searchElementClass, ModelConstants.getEdgeTypes(dl.getModelElement().getClass(), searchElementClass)[0]);
         this.searchElementClass = searchElementClass;
-        this.editable = editable;
         // bei abstracten Klassen darf grundsätzlich kein Neu-Knopf angeboten werden
         mw = Modifier.isAbstract(searchElementClass.getModifiers()) ? false : mitnew;
 
@@ -157,9 +165,9 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         JButton newElementButton = new JButton();
 
         try {
-            addAction = LGMActionLibrary.getAddElementAction(rtree, ltree, this, false);
-            removeAction = LGMActionLibrary.getDisconnectAction(ltree, rtree, this, false);
-            newElementAction = LGMActionLibrary.getNewElementAction(this, searchElementClass);
+            addAction = getConnectAction(rtree, ltree);
+            removeAction = getDisconnectAction(ltree, rtree);
+            newElementAction = getNewElementAction();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -187,11 +195,6 @@ public class NConnectionPanel extends LGMDragNDropPanel {
 
     @Override
     public void update() {
-        if (!checkShowFullDialog()) {
-            remove(buttonpanel);
-            remove(rtreeLabel);
-            remove(rtreeScollPane);
-        }
         childrenToExcludeFromRtree.clear();
         lroot.removeAllChildren();
         ltree.reset();
@@ -225,40 +228,11 @@ public class NConnectionPanel extends LGMDragNDropPanel {
         lmodel.reload();
         // expandTree(ltree);
 
-        revalidate();
-        repaint();
-    }
-
-    private boolean checkShowFullDialog() {
-        boolean showRightSide = editable && isRightSideShouldBeVisible();
-        if (showRightSide && buttonpanel.getParent() == null) {
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            constraints.weightx = 1;
-            add(this, buttonpanel, constraints, 1, 1, 1, 1);
-            constraints.anchor = GridBagConstraints.WEST;
-            add(this, rtreeLabel, constraints, 2, 0, 1, 1);
-            constraints.anchor = GridBagConstraints.CENTER;
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.weightx = 100;
-            add(this, rtreeScollPane, constraints, 2, 1, 1, 1);
-
-            rroot.removeAllChildren();
-            rtree.reset();
-
-            ArrayList<ElementContainer> all = mainDoc.getElementContainer(searchElementClass);
-            for (ElementContainer ec : all) {
-                // if (((Knoten) modelElement).isConnectedWith(ec.getKnoten())) {
-                // childrenToExcludeFromRtree.add(ec);
-                // }
-                rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, true);
-            }
-            rmodel.reload();
-            // expandTree(rtree);
+        if (isRightSideVisible()) {
+            buildRightTree();
         }
         revalidate();
         repaint();
-        return showRightSide;
     }
 
     //
@@ -329,4 +303,139 @@ public class NConnectionPanel extends LGMDragNDropPanel {
     public Class<? extends ModelElement> getElementClass() {
         return searchElementClass;
     }
+
+    private void buildRightTree() {
+        rroot.removeAllChildren();
+        rtree.reset();
+
+        ArrayList<ElementContainer> all = mainDoc.getElementContainer(searchElementClass);
+        for (ElementContainer ec : all) {
+            // if (((Knoten) modelElement).isConnectedWith(ec.getKnoten())) {
+            // childrenToExcludeFromRtree.add(ec);
+            // }
+            rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, true);
+        }
+        rmodel.reload();
+    }
+
+    @Override
+    protected void showFullDialog() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1;
+        add(this, buttonpanel, constraints, 1, 1, 1, 1);
+        constraints.anchor = GridBagConstraints.WEST;
+        add(this, rtreeLabel, constraints, 2, 0, 1, 1);
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 100;
+        add(this, rtreeScollPane, constraints, 2, 1, 1, 1);
+    }
+
+    @Override
+    protected void showPartlyDialog() {
+        remove(buttonpanel);
+        remove(rtreeLabel);
+        remove(rtreeScollPane);
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "addButtons" der Panels angefügt werden.
+     *
+     * @param srcTree
+     * @param targetTree
+     */
+    protected final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree) {
+        final GraphDocument doc = getGraphDocument();
+        final GDCollection gdcoll = doc.getCollection();
+        final int pid = getTransactionID();
+        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+            @Override
+            public void execute(final EventObject e) {
+                TreePath[] selpaths = srcTree.getSelectionPaths();
+                if (selpaths != null) {
+                    for (int n = 0; n < selpaths.length; n++) {
+                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = (ElementContainer) node.getUserObject();
+                        ModelElement me = ec.getElement();
+                        ModelElement topLevelMe = getTopLevelModelElement(targetTree);
+                        gdcoll.link(topLevelMe, me, pid);
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "removeButtons" der Panels angefügt werden.
+     *
+     * @param srcTree
+     * @param targetTree
+     */
+    protected final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree) {
+        final GraphDocument doc = getGraphDocument();
+        final GDCollection gdcoll = doc.getCollection();
+        final int pid = getTransactionID();
+        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+            @Override
+            public void execute(final EventObject e) {
+                TreePath[] selpaths = srcTree.getSelectionPaths();
+                if (selpaths != null) {
+                    for (int n = 0; n < selpaths.length; n++) {
+                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = (ElementContainer) node.getUserObject();
+                        ModelElement me = ec.getElement();
+                        ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
+                        gdcoll.unlink(topLevelModelElement, me, pid);
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Erzeugen eines neuen Elements
+     * realisiert.
+     */
+    public final LGMAction getNewElementAction() {
+
+        final GraphDocument doc = getGraphDocument();
+        final GDCollection gdcoll = doc.getCollection();
+        final int pid = getTransactionID();
+        final ModelElement me = getModelElement();
+
+        return new LGMAction(Tool3lgmConstants.getResString("new")) {
+            @Override
+            public void execute(final EventObject eo) {
+                // doc.start_transaction(dialog.getTransactionID());
+                Knoten k = null;
+                if (me instanceof Anwendungsbaustein && Schnittstelle.class.isAssignableFrom(searchElementClass)) {
+                    doc.select(me.getContainer(doc), pid);
+                    GraphDocument.createAddicted(doc.getCollection().getSelectedDoc(), me, AwbKommssVerbindung.class, searchElementClass, pid);
+                    if (doc.getLastCreated() != null) {
+                        if (searchElementClass.isAssignableFrom(doc.getLastCreated().getElement().getClass())) {
+                            k = (Knoten) doc.getLastCreated().getElement();
+                        } else {
+                            System.out.println("Was ist mit der Selektion los????");
+                        }
+                    }
+                } else {
+                    doc.createKnotenWithContainer(searchElementClass, pid);
+                    if (doc.getLastCreated() != null) {
+                        k = (Knoten) doc.getLastCreated().getElement();
+                        gdcoll.link(getEdgeType(me, k), me, k, pid);
+                    }
+                }
+                // doc.finish_transaction(dialog.getTransactionID());
+                // doc.distributeEvent(GraphDocument.DATA_CHANGED, null,
+                // null, dialog.getTransactionID());
+                return;
+            }
+        };
+    }
+
 }
