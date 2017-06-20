@@ -5,6 +5,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Strings;
+
 public class StringUtils {
 
     /**
@@ -277,6 +279,22 @@ public class StringUtils {
             }
         }
         return range;
+    }
+
+    public static final String capitalizeFirstChar(final String s) {
+        if (Strings.isNullOrEmpty(s)) {
+            return s;
+        }
+        char firstChar = s.charAt(0);
+        if (Character.isUpperCase(firstChar)) {
+            return s;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(Character.toUpperCase(firstChar));
+        if (s.length() > 1) {
+            sb.append(s.substring(1));
+        }
+        return sb.toString();
     }
 
 }
