@@ -28,18 +28,11 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
@@ -69,12 +62,10 @@ public class LGMActionLibrary {
      * @param srcTree
      * @param targetTree
      * @param edp
-     * @param switchTree
      * @throws ActionNotDefinedForClassException
      */
-    public static final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree, final ElementDialogPanel edp, final boolean switchTree) throws ActionNotDefinedForClassException {
+    public static final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree, final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
 
-        final boolean switchIt = switchTree;
         final JTree tree1 = srcTree;
         final JTree tree2 = targetTree;
         final GraphDocument doc = edp.getGraphDocument();
@@ -82,30 +73,7 @@ public class LGMActionLibrary {
         final ElementPropertyDialog dialog = edp.getDialog();
         final ModelElement modelElement = edp.getModelElement();
 
-        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof DoubleMeaningEdgePanel) {
-            return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
-                @Override
-                public void execute(final EventObject e) {
-                    TreePath[] selpaths = tree1.getSelectionPaths();
-                    if (selpaths != null) {
-                        for (int n = 0; n < selpaths.length; n++) {
-                            // if(lomodel.getChildCount(loroot)>0) return;
-                            LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                            ModelElement me = ((ElementContainer) node.getUserObject()).getElement();
-                            ModelElement topLevelMe = getTopLevelModelElement(tree2);
-                            if (switchIt) {
-                                gdcoll.link(me, topLevelMe, dialog.getTransactionID());
-                            } else {
-                                gdcoll.link(topLevelMe, me, dialog.getTransactionID());
-                            }
-                        }
-                    }
-                }
-
-            };
-        }
-
-        else if (edp instanceof ProzessStructurePanel) {
+        if (edp instanceof ProzessStructurePanel) {
 
             return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
 
@@ -180,12 +148,10 @@ public class LGMActionLibrary {
      * @param srcTree
      * @param targetTree
      * @param edp
-     * @param switchTree
      * @throws ActionNotDefinedForClassException
      */
-    public static final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final ElementDialogPanel edp, final boolean switchTree) throws ActionNotDefinedForClassException {
+    public static final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
 
-        final boolean switchIt = switchTree;
         final JTree tree1 = srcTree;
         final JTree tree2 = targetTree;
         final GDCollection gdcoll = edp.getGraphDocument().getCollection();
@@ -193,38 +159,7 @@ public class LGMActionLibrary {
         final ElementDialogPanel pane = edp;
         final ModelElement modelElement = edp.getModelElement();
 
-        if (edp instanceof StructurePanel || edp instanceof NConnectionPanel || edp instanceof DoubleMeaningEdgePanel) {
-
-            LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
-
-                @Override
-                public void execute(final EventObject e) {
-                    TreePath[] selpaths = tree1.getSelectionPaths();
-                    if (selpaths != null) {
-                        for (int n = 0; n < selpaths.length; n++) {
-                            // if(lomodel.getChildCount(loroot)>0) return;
-                            LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                            ElementContainer knot = (ElementContainer) node.getUserObject();
-
-                            ModelElement topLevelModelElement;
-                            if (tree2 == null) {
-                                topLevelModelElement = getTopLevelModelElement(tree1);
-                            } else {
-                                topLevelModelElement = getTopLevelModelElement(tree2);
-                            }
-
-                            if (switchIt == true) {
-                                gdcoll.unlink(knot.getElement(), topLevelModelElement, dialog.getTransactionID());
-                            } else {
-                                gdcoll.unlink(topLevelModelElement, knot.getElement(), dialog.getTransactionID());
-                            }
-                        }
-                    }
-                }
-            };
-            return returnAction;
-
-        } else if (edp instanceof ProzessStructurePanel) {
+        if (edp instanceof ProzessStructurePanel) {
             return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
                 @Override
                 public void execute(final EventObject e) {
@@ -552,61 +487,6 @@ public class LGMActionLibrary {
                 }
             }
         };
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Erzeugen eines neuen Elements
-     * realisiert.
-     *
-     * @param panel
-     * @param elementClass
-     * @throws ActionNotDefinedForClassException
-     */
-    public static final LGMAction getNewElementAction(final ElementDialogPanel panel, final Class<? extends ModelElement> elementClass) throws ActionNotDefinedForClassException {
-
-        final GraphDocument doc = panel.getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
-        final ElementPropertyDialog dialog = panel.getDialog();
-        final ModelElement modelElement = panel.getModelElement();
-
-        if (panel instanceof LGMDragNDropPanel) {
-            final LGMDragNDropPanel dndPanel = (LGMDragNDropPanel) panel;
-
-            if (panel instanceof NConnectionPanel) {
-                return new LGMAction(Tool3lgmConstants.getResString("new")) {
-                    @Override
-                    public void execute(final EventObject eo) {
-                        // doc.start_transaction(dialog.getTransactionID());
-                        Knoten k = null;
-                        if (modelElement instanceof Anwendungsbaustein && Schnittstelle.class.isAssignableFrom(elementClass)) {
-                            doc.select(modelElement.getContainer(doc), dialog.getTransactionID());
-                            GraphDocument.createAddicted(doc.getCollection().getSelectedDoc(), modelElement, AwbKommssVerbindung.class, elementClass, dialog.getTransactionID());
-                            if (doc.getLastCreated() != null) {
-                                if (elementClass.isAssignableFrom(doc.getLastCreated().getElement().getClass())) {
-                                    k = (Knoten) doc.getLastCreated().getElement();
-                                } else {
-                                    System.out.println("Was ist mit der Selektion los????");
-                                }
-                            }
-                        } else {
-                            doc.createKnotenWithContainer(elementClass, dialog.getTransactionID());
-                            if (doc.getLastCreated() != null) {
-                                k = (Knoten) doc.getLastCreated().getElement();
-                                gdcoll.link(dndPanel.getEdgeType(modelElement, k), modelElement, k, dialog.getTransactionID());
-                            }
-                        }
-                        // doc.finish_transaction(dialog.getTransactionID());
-                        // doc.distributeEvent(GraphDocument.DATA_CHANGED, null,
-                        // null, dialog.getTransactionID());
-                        return;
-                    }
-                };
-            }
-        } else {
-            throw new ActionNotDefinedForClassException(panel.getClass().getName());
-        }
-        return null;
-
     }
 
     /**
