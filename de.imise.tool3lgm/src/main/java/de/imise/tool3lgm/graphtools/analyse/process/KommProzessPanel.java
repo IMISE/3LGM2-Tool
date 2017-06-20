@@ -187,10 +187,6 @@ public class KommProzessPanel extends ElementDialogPanel {
 
     @Override
     public void update() {
-        // System.out.println("update() mit visible==" + isVisible());
-        // der boolean muss immer auf false bleiben, da das Panel sonst nicht
-        // neu aufgebaut wird bei Änderungen
-        setAlreadyInitialized(false);
         // das Panel braucht nur geupdatet zu werden, wenn es sichtbar ist
         if (isVisible()) { // componentShown(new ComponentEvent(this, -1));
             Tool3lgm tool = Static.getTool();
