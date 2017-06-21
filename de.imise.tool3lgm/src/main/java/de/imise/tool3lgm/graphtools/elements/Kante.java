@@ -63,7 +63,7 @@ public abstract class Kante extends ModelElement {
     private String start_hash, end_hash;
 
     /**
-     * 
+     *
      */
     public Kante() {
     }
@@ -568,6 +568,19 @@ public abstract class Kante extends ModelElement {
      */
     public static final boolean isConnectingForward(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         return Kante.isStartClass(edgeClass, startElementClass) && Kante.isEndClass(edgeClass, endElementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die Start- und Endelemente von derselben Klasse sein können, d.h. wenn die beiden Klassen
+     * gleich sind oder eine eine Oberklasse der anderen ist.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public static boolean isConnectingSameElementClasses(final Class<? extends Kante> edgeClass) {
+        Class<? extends ModelElement> startClass = getStartClass(edgeClass);
+        Class<? extends ModelElement> endClass = getEndClass(edgeClass);
+        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
     }
 
     /**
