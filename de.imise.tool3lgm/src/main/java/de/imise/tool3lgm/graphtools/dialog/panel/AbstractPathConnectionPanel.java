@@ -323,16 +323,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Legt für das übergebene Startelement den gesamten Teilpfad ab startEdgeIndex bis einschließlich zur letzten Kante an.
-     *
-     * @param startElement Das Element bei dem der Teilpfad losgehen soll.
-     * @param startEdgeIndex Index der Kante, bei der der anzulegende Teilpfad losgeht
-     */
-    protected void createPath(final ModelElement startElement, final int startEdgeIndex) {
-        connect(startElement, null, startEdgeIndex);
-    }
-
-    /**
      * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an und hängt die übergebenen elements2connect an.
      *
      * @param startElement Das Element bei dem der Teilpfad losgehen soll.
