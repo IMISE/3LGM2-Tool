@@ -118,9 +118,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             Doppelkante edge = (Doppelkante) modelElement;
             Class<? extends Kante> edgeClass = edge.getClass();
 
-            Class<? extends ModelElement> startClass = Kante.getStartClass(edgeClass);
-            Class<? extends ModelElement> endClass = Kante.getEndClass(edgeClass);
-
             String startElementClassName = ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass));
             String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE) + "</i>&nbsp;&nbsp;";
             String endElementClassName = ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass));
@@ -133,8 +130,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
             String startElementName = edge.getStart().getClearName();
             // nur die tatsächliche Richtung hinschreiben
-            boolean connectingSameElementClasses = startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
-            if (!connectingSameElementClasses) {
+            if (!Kante.isConnectingSameElementClasses(edgeClass)) {
                 forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, edge.getDirection()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();
