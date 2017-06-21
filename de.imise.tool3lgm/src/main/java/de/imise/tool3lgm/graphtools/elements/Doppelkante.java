@@ -10,10 +10,16 @@ public abstract class Doppelkante extends Kante {
     protected int direction = FORWARD;
 
     public static final int[] DIRECTION = {
-            NOTCONNECTED, DOUBLE, FORWARD, BACKWARD
+            NOTCONNECTED,
+            DOUBLE,
+            FORWARD,
+            BACKWARD
     };
     public static final String[] DIRECTION_STR = {
-            "NOTCONNECTED", "DOUBLE", "FORWARD", "BACKWARD"
+            "NOTCONNECTED",
+            "DOUBLE",
+            "FORWARD",
+            "BACKWARD"
     };
 
     public Doppelkante() {
@@ -58,7 +64,7 @@ public abstract class Doppelkante extends Kante {
      * über eine Kante von der Aufgabe zum Objekttyp mit der Richtung <code>FORWARD</code> oder über eine Kante
      * vm Objekttyp zur Aufgabe mit der Richtung <code>BACKWARD</code>. Jetzt ist nur noch eine eindeutige Richtung zulässig. Diese ergibt sich aus
      * der Startelementklasse und der Endelementklasse, die in einer konkreten Kantenklasse angegeben sind.
-     * 
+     *
      * @see de.imise.tool3lgm.graphtools.elements.Kante#checkValidity()
      */
     @Override
@@ -78,7 +84,17 @@ public abstract class Doppelkante extends Kante {
                 direction = FORWARD;
             }
         }
+        //nur wenn die Kante auf BACKWARD steht, aber eigentlich FORWARD sein müsste, weil die Richtung ausschließlich
+        //durch die Verbindung vorgegeben wird (das ist bei allen Kanten der Fall, die nicht dieselben Elementarten verbinden
+        //und keine doppelte Bedeutung besitzen), dann jetzt einfach die Richtung auf FORWARD setzen
+        if (direction == BACKWARD && !ModelConstants.isDoubleMeaningEdge(getClass())) {
+            //Kanten zwischen denselben Elementarten dürfen auch eine Richtung haben, alle anderen sind immer FORWARD!
+            if (!Kante.isConnectingSameElementClasses(getClass())) {
+                direction = FORWARD;
+            }
+        }
         return true;
+
     }
 
     @Override
