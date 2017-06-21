@@ -157,24 +157,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (newElementAction != null) {
                 buttonpanel.add(new JButton(newElementAction));
             }
-
         }
-
         initTreeListenerAndDragNDrop();
-
         showFullDialog(true);
     }
-
-    //    private void initDragAndDropTreeActions(final JTree tree) {
-    //        //MouseListener erstellen und an Trees anhängen ...
-    //        LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
-    //        LGMMouseListener lgmMouseListener = new LGMMouseListener(null, null, null, treeMouseAction, null);
-    //        tree.addMouseListener(lgmMouseListener);
-    //        //Start: TreeSelectionListener erstellen und an Trees anhängen ...
-    //        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
-    //        LGMTreeSelectionListener lgmTreeSelectionListener = new LGMTreeSelectionListener(treeSelectionAction);
-    //        tree.addTreeSelectionListener(lgmTreeSelectionListener);
-    //    }
 
     @Override
     public void update() {
@@ -254,15 +240,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int edgeIndex = 0;
         Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
         ModelElement me = getModelElement();
-        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc);
+        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Knoten für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.isSearchParts()) {
-            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc));
+            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
         if (UserProperties.isSearchParents()) {
-            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc));
+            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = Lists.newArrayListWithCapacity(all.size());
@@ -277,7 +263,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             for (LGMTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
                 me = nodeElementContainer.getElement();
-                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc);
+                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
