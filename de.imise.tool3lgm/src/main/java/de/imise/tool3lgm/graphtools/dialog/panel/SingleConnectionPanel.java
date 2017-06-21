@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -24,11 +28,16 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 
 /**
  * @author AXS
- *         Dieses Panel stellt in einer Combobox ein einzelne Element zur Verknüpfung mit dem
+ *         Dieses Panel stellt in einer Combobox ein einzelne Element zur direkten Verknüpfung mit dem
  *         ModelElement des Dialoges zur Auswahl. Je nachdem ob die Verknüpfung über eine normale
  *         {@link Kante} oder eine {@link Composition} läuft, werden andere im Modell befindliche
  *         Elemente zur Verknüpfung angeboten {@link Kante}) oder nicht ({@link Composition}).
  *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
+ *         ABER: Dieses Panel beachtet keine Vererbung. Das heißt es werden immer nur direkt mit
+ *         dem Ausgangselement verbundene Elemente angezeigt. Im PathConnectionPanel hingegen werden
+ *         auch Elemente, die man durch Vererbung erhält, angezeigt. Das ist hier aber nicht sinnvoll,
+ *         da man z.B. jedem Anwendungsbaustein sein eigenes Datenbanksystem geben will, auch wenn ein
+ *         übergeordneter Anwendungsbaustein schon eines besitzt.
  */
 public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
 
@@ -207,6 +216,66 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
                 mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, dialog.getTransactionID());
             }
         };
+    }
+
+    /**
+     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
+     *
+     * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
+     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Kante bestehen ist das das
+     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
+     * @return
+     */
+    private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
+        List<ElementContainer> connectedElements = Lists.newArrayList();
+        connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
+        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
+        for (int i = 0; i < edgeSearchStopIndex; i++) {
+            List<ElementContainer> tempConnectedElements = Lists.newArrayList();
+            for (ElementContainer ec : connectedElements) {
+                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
+            }
+            connectedElements = tempConnectedElements;
+        }
+        return connectedElements;
+    }
+
+    /**
+     * Liefert alle Elemente der searchElementClass, die mit dem Ausgangselement direkt verbunden sind.
+     *
+     * @return
+     */
+    private final List<ElementContainer> getConnectedContainer() {
+        return getConnectedContainer(false);
+    }
+
+    /**
+     * Liefert die Elemente, die auf dem durch die Kanten angegebenen Pfad diejenigen sind, die tatsächlich
+     * mit dem searchElementen verbunden sind. Bei einem Pfad der Länge 1 ist das immer nur das ModelElement
+     * selbst bzw. dessen HauptDokument-Container. Bei einem Pfad der Länge 2 sind es die Elemente in der
+     * Mitte, also immer die direkt nach dem Ausgangs-ModelElement und vor dem searchElement usw.
+     *
+     * @return
+     */
+    private final List<ElementContainer> getSearchElementConnectedContainer() {
+        return getConnectedContainer(true);
+    }
+
+    /**
+     * Trennt alle Verbindungen zwischen den vorletzten Elementen im Kanten-Pfad und den searchElementen.
+     */
+    private final void unlinkAll() {
+        List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
+        GDCollection gdcoll = mainDoc.getCollection();
+        Class<? extends Kante> lastEdgeInPath = edgeClasses[lastEdgeIndex];
+        int lastEdgeDirection = directions[lastEdgeIndex];
+        for (ElementContainer ec : searchElementConnectedContainer) {
+            ModelElement me = ec.getElement();
+            ArrayList<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastEdgeDirection);
+            for (ModelElement connected : connectedElements) {
+                gdcoll.unlink(me, connected, lastEdgeInPath, dialog.getTransactionID());
+            }
+        }
     }
 
 }
