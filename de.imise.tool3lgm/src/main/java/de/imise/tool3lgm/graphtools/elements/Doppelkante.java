@@ -84,17 +84,11 @@ public abstract class Doppelkante extends Kante {
                 direction = FORWARD;
             }
         }
-        //nur wenn die Kante auf BACKWARD steht, aber eigentlich FORWARD sein müsste, weil die Richtung ausschließlich
-        //durch die Verbindung vorgegeben wird (das ist bei allen Kanten der Fall, die nicht dieselben Elementarten verbinden
-        //und keine doppelte Bedeutung besitzen), dann jetzt einfach die Richtung auf FORWARD setzen
-        if (direction == BACKWARD && !ModelConstants.isDoubleMeaningEdge(getClass())) {
-            //Kanten zwischen denselben Elementarten dürfen auch eine Richtung haben, alle anderen sind immer FORWARD!
-            if (!Kante.isConnectingSameElementClasses(getClass())) {
-                direction = FORWARD;
-            }
+        //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
+        if (ModelConstants.isAlwaysDoubleConnectedEdge(getClass())) {
+            direction = DOUBLE;
         }
         return true;
-
     }
 
     @Override

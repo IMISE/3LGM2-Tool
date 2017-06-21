@@ -353,21 +353,14 @@ public final class ModelConstants {
     }
 
     /**
-     * Liste aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
-     * der Grafik dargestelt werden.
-     */
-    private static final Set<Class<? extends Kante>> FORWARD_CONNECTED_EDGE_CLASSES = ImmutableSet.of();
-
-    /**
-     * Prüft, ob die übergebene Klasse eine Kantenklasse ist, die immer nur in Vorwärtsrichtung verbunden werden kann
-     * und somit auch in der Grafik nur in dieser Richtung dargestellt wird.
+     * Prüft, ob bei der Kante die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
+     * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die keine DoubleMeaningEdges,
+     * keine PartOfBeziehungen und keine Compositions sind.
      *
-     * @see #FORWARD_CONNECTED_EDGE_CLASSES
-     * @param edgeClass
      * @return
      */
-    public static final boolean isForwardConnectedEdge(final Class<?> edgeClass) {
-        return FORWARD_CONNECTED_EDGE_CLASSES.contains(edgeClass);
+    public static final boolean isAlwaysDoubleConnectedEdge(final Class<?> edgeClass) {
+        return !(isDoubleMeaningEdge(edgeClass) || PartOfBeziehung.class.isAssignableFrom(edgeClass) || Composition.class.isAssignableFrom(edgeClass));
     }
 
     ///////////////////////////////////////////////////////////////////

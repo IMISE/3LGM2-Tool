@@ -47,7 +47,6 @@ import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -482,8 +481,8 @@ public final class GDCollection extends UserFieldTarget {
             ecDoc.addUndoCommand(GDCommands.CHANGE_FORM + " " + ecDoc.hashString + " " + ecHash + " " + ec.getForm(), pid);
         }
         if (!ec.hasStandardFont()) {
-            ecDoc.addUndoCommand(GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(),
-                    pid);
+            ecDoc.addUndoCommand(
+                    GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
         }
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
@@ -1345,28 +1344,29 @@ public final class GDCollection extends UserFieldTarget {
                     edge.setHashString(edgeHash);
                 }
 
-                Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
-                Class<? extends ModelElement> startClass = startElement.getClass();
-                Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
-                Class<? extends ModelElement> endClass = endElement.getClass();
-                boolean doubleDir = edgeStartClass.isAssignableFrom(startClass) && edgeStartClass.isAssignableFrom(endClass);
-                doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
-                doubleDir = doubleDir && !edgeClass.isAssignableFrom(PartOfBeziehung.class);
-                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
-                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
+                //AXS: geändert am 21.06.2017: jetzt sind immer alle Kanten, die nicht DoubleMeaning, PartOf oder Compisition sind automatisch DOUBLE
+                //Kanten die dieselben Elemente verbinden
+                //                Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
+                //                Class<? extends ModelElement> startClass = startElement.getClass();
+                //                Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
+                //                Class<? extends ModelElement> endClass = endElement.getClass();
+                //                boolean doubleDir = edgeStartClass.isAssignableFrom(startClass) && edgeStartClass.isAssignableFrom(endClass);
+                //                doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
+                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(PartOfBeziehung.class);
+                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
+                //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
 
-                if (doubleDir) {
+                if (ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass)) {
                     ((Doppelkante) edge).setDirection(Doppelkante.DOUBLE);
                 } else {
                     int dir = Doppelkante.FORWARD;
-                    if (!(edgeStartClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass))) {
+                    //AXS: auch am 21.06.2017 geändert
+                    //                    if (!(edgeStartClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass))) {
+                    if (!Kante.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
                         ModelElement dummy = startElement;
                         startElement = endElement;
                         endElement = dummy;
-                        //nur die Rückwärtsrichtung setzen, wenn es keine Kante ist, die immer vorwärts dargestellt werden soll
-                        if (!ModelConstants.isForwardConnectedEdge(edgeClass)) {
-                            dir = Doppelkante.BACKWARD;
-                        }
+                        dir = Doppelkante.BACKWARD;
                     }
                     ((Doppelkante) edge).setDirection(dir);
                 }
