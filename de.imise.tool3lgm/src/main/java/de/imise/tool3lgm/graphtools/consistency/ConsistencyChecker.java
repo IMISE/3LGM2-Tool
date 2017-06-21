@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -18,7 +19,8 @@ import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolutionLibraryVersio
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.NConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -390,12 +392,22 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         if (error instanceof AbstractCardinalityError) {
             ErrorSolution es = solutionsLibrary.getSolution(error);
             if (es == null) {
-                ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog();
-                Class<? extends ModelElement> otherClass = Kante.getOther(((AbstractCardinalityError) error).getEdgeClass(), error.getModelElement().getClass());
-                NConnectionPanel tp = new NConnectionPanel(otherClass, dialog, error instanceof MinCardinalityError, true);
-                String errorTabName = Tool3lgmConstants.getResString("error_error_dialog_tab") + " " + ModelConstants.getDisplayableName(otherClass);
-                dialog.addTab(errorTabName, Tool3lgmConstants.getIcon("error.gif"), tp);
-                dialog.selectTab(errorTabName, tp.getClass());
+                AbstractCardinalityError cardError = (AbstractCardinalityError) error;
+                Class<? extends Kante> edgeClass = cardError.getEdgeClass();
+                ModelElement me = cardError.getModelElement();
+                ElementPropertyDialog dialog = me.getPropertyDialog();
+                String tabName = AbstractPathConnectionPanel.generateName(me.getClass(), edgeClass);
+                int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
+                ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
+                if (existingTabIndex < 0) {
+                    dialog.addPathConnectionPanel(edgeClass);
+                    dialog.setLastTabIcon(Tool3lgmConstants.getIcon("error.gif"));
+                    dialog.setLastTabTitle(tabName);
+                    dialog.selectTab(tabName, PathConnectionPanel.class);
+                } else {
+                    dialog.setTabIcon(existingTabIndex, icon);
+                    dialog.setTabTitle(existingTabIndex, tabName);
+                }
                 dialog.showDialog();
             } else {
                 HashSet<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);

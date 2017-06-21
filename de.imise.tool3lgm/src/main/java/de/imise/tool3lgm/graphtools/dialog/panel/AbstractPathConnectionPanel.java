@@ -142,29 +142,61 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         if (labelEdgeName) {
             westLabelText = directions[labelEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
         } else {
-            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(this.searchElementClass) : ModelConstants.getDisplayablePluralName(this.searchElementClass);
+            Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex);
+            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(labelPathStepEndClass) : ModelConstants.getDisplayablePluralName(labelPathStepEndClass);
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
         setName(westLabelText);
     }
 
+    public static String generateName(final Class<? extends ModelElement> startClass, final Class<? extends Kante>... edgeClasses) {
+        return generateName(startClass, edgeClasses.length - 1, false, null, edgeClasses);
+    }
+
+    private static String generateName(final Class<? extends ModelElement> startClass, final int labelEdgeIndex, final boolean labelEdgeName, final int[] directions, final Class<? extends Kante>... edgeClasses) {
+        int[] usedEdgeDirections = directions != null ? directions : getEdgeDirections(startClass, edgeClasses);
+        String name;
+        Class<? extends Kante> edgeClass = edgeClasses[labelEdgeIndex];
+
+        if (labelEdgeName) {
+            name = directions[labelEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
+        } else {
+            Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex, usedEdgeDirections, edgeClasses);
+            name = isSingleConnectionPath(usedEdgeDirections, edgeClasses) ? ModelConstants.getDisplayableName(labelPathStepEndClass) : ModelConstants.getDisplayablePluralName(labelPathStepEndClass);
+        }
+        name = StringUtils.capitalizeFirstChar(name); // Den ersten Buchstaben des Labels immer groß schreiben
+        return name;
+    }
+
     private int[] getEdgeDirections() {
+        return getEdgeDirections(dialog.getModelElement().getClass(), edgeClasses);
+    }
+
+    private static int[] getEdgeDirections(final Class<? extends ModelElement> startClass, final Class<? extends Kante>[] edgeClasses) {
         int[] returnValue = new int[edgeClasses.length];
         for (int i = 0; i < edgeClasses.length; i++) {
-            Class<? extends ModelElement> clazz = i == 0 ? dialog.getModelElement().getClass() : null;
+            Class<? extends ModelElement> clazz = i == 0 ? startClass : null;
             clazz = clazz == null ? returnValue[i - 1] == FORWARD ? Kante.getEndClass(edgeClasses[i - 1]) : Kante.getStartClass(edgeClasses[i - 1]) : clazz;
             returnValue[i] = Kante.isStartClass(edgeClasses[i], clazz) ? FORWARD : Doppelkante.BACKWARD;
         }
         return returnValue;
     }
 
-    private Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex) {
+    private static Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex, final int[] directions, final Class<? extends Kante>[] edgeClasses) {
         return directions[edgeIndex] == FORWARD ? Kante.getStartClass(edgeClasses[edgeIndex]) : Kante.getEndClass(edgeClasses[edgeIndex]);
     }
 
-    private Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex) {
+    private static Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex, final int[] directions, final Class<? extends Kante>[] edgeClasses) {
         return directions[edgeIndex] == FORWARD ? Kante.getEndClass(edgeClasses[edgeIndex]) : Kante.getStartClass(edgeClasses[edgeIndex]);
+    }
+
+    private Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex) {
+        return getPathStepStartClass(edgeIndex, directions, edgeClasses);
+    }
+
+    private Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex) {
+        return getPathStepEndClass(edgeIndex, directions, edgeClasses);
     }
 
     protected Class<? extends ModelElement> getPathStepEndElementClass(final int edgeIndex) {
@@ -174,24 +206,21 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         return pathStepEndElementClass;
     }
 
+    private boolean isSingleConnectionPath() {
+        return isSingleConnectionPath(directions, edgeClasses);
+    }
+
     /**
      * @return <code>true</code>, wenn maximal 1 Element der {@link #searchElementClass} mit dem Ausgangselement über den
      *         angegebenen Pfad verbunden sein kann. Wenn irgendeine Kante des Pfades mehrfach verbunden sein kann, dann
      *         ist es kein SingleConnectionPath
      */
-    private boolean isSingleConnectionPath() {
+    private static boolean isSingleConnectionPath(final int[] directions, final Class<? extends Kante>[] edgeClasses) {
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends Kante> edgeClass = edgeClasses[i];
-            if (directions[i] == FORWARD) {
-                int maxCard = Kante.getMaxStartToEndCardinality(edgeClass);
-                if (maxCard > 1) {
-                    return false;
-                }
-            } else {
-                int maxCard = Kante.getMaxEndToStartCardinality(edgeClass);
-                if (maxCard > 1) {
-                    return false;
-                }
+            int maxCard = directions[i] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClass) : Kante.getMaxEndToStartCardinality(edgeClass);
+            if (maxCard > 1) {
+                return false;
             }
         }
         return true;

@@ -381,7 +381,7 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
     ///////////////////////////////////////
 
     @Override
-    public void addTab(final String title, final Icon icon, final Component component) {
+    protected void addTab(final String title, final Icon icon, final Component component) {
         if (component instanceof DescriptedSingleConnectionPanel) {
             DescriptedSingleConnectionPanel panel = (DescriptedSingleConnectionPanel) component;
             panel.addSelf();

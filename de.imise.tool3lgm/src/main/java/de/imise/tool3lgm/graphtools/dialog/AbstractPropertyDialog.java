@@ -153,7 +153,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      *
      * @param component
      */
-    public void addTab(final Component component) {
+    protected void addTab(final Component component) {
         addTab(component.getName(), component);
     }
 
@@ -174,8 +174,24 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param icon
      * @param component
      */
-    public void addTab(final String title, final Icon icon, final Component component) {
+    protected void addTab(final String title, final Icon icon, final Component component) {
         tab.addTab(title, icon, component);
+    }
+
+    public void setLastTabIcon(final Icon icon) {
+        setTabIcon(tab.getTabCount() - 1, icon);
+    }
+
+    public void setLastTabTitle(final String title) {
+        setTabTitle(tab.getTabCount() - 1, title);
+    }
+
+    public void setTabIcon(final int tabIndex, final Icon icon) {
+        tab.setIconAt(tabIndex, icon);
+    }
+
+    public void setTabTitle(final int tabIndex, final String title) {
+        tab.setTitleAt(tabIndex, title);
     }
 
     /**
@@ -187,10 +203,10 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> übergeben, wird der
      *            erstbeste passende Tab herausgesucht
      * @param tabComponentClass Oberklasse der Komponente in dem zu selektierenden Tab
-     * @return <code>true</code>, wenn ein Tab der angegebenen Art gefunden und in den Vordergund
+     * @return Index des Tabs, wenn ein Tab der angegebenen Art gefunden und in den Vordergund
      *         geracht werden konnte
      */
-    public boolean selectTab(final String title, final Class<? extends Component> tabComponentClass) {
+    public int selectTab(final String title, final Class<? extends Component> tabComponentClass) {
         for (int i = 0; i < tab.getComponentCount(); i++) {
             Component comp = tab.getComponent(i);
             if (title != null && !tab.getTitleAt(i).equals(title)) {
@@ -200,9 +216,9 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
                 continue;
             }
             tab.setSelectedIndex(i);
-            return true;
+            return i;
         }
-        return false;
+        return -1;
     }
 
     /**
@@ -210,7 +226,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @return
      * @see #selectTab(String, Class)
      */
-    public boolean selectTab(final Class<? extends Component> tabComponentClass) {
+    public int selectTab(final Class<? extends Component> tabComponentClass) {
         return selectTab(null, tabComponentClass);
     }
 
