@@ -52,8 +52,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      * Baut im linken Baum nur die Elemente der letzten Kante des Pfades auf
      */
     @Override
-    protected Collection<LGMTreeNode> buildTree() {
-        Collection<LGMTreeNode> leafNodes = super.buildTree();
+    protected Collection<LGMTreeNode> buildLeftTree() {
+        Collection<LGMTreeNode> leafNodes = super.buildLeftTree();
         //wenn dieses Panel mit einem Pfad der Länge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
         //da es keine Zwischenelemente gibt, die nicht angezeigt werden sollen
         if (edgeClasses.length == 1) {

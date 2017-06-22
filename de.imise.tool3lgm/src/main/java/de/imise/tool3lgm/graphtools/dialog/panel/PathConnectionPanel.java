@@ -51,19 +51,19 @@ import de.imise.util.StringUtils;
 public class PathConnectionPanel extends AbstractExpandablePanel {
 
     protected final LGMTree ltree;
-    protected LGMTree rtree;
+    protected final LGMTree rtree;
     private final DefaultTreeModel lmodel;
-    private DefaultTreeModel rmodel;
-    protected LGMTreeNode lroot;
-    protected LGMTreeNode rroot;
-    private JLabel rLabel;
-    private JScrollPane rScollPane;
-    private JPanel buttonpanel;
+    private final DefaultTreeModel rmodel;
+    protected final LGMTreeNode lroot;
+    protected final LGMTreeNode rroot;
+    private final JLabel rLabel;
+    private final JScrollPane rScollPane;
+    private final JPanel buttonpanel;
     private final boolean showRightTree;
 
-    private LGMAction addAction;
-    private LGMAction removeAction;
-    private LGMAction newElementAction;
+    private final LGMAction addAction;
+    private final LGMAction removeAction;
+    private final LGMAction newElementAction;
 
     public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
         this(dialog, false, showRightTree, edgeClasses);
@@ -157,6 +157,16 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (newElementAction != null) {
                 buttonpanel.add(new JButton(newElementAction));
             }
+        } else {
+            rLabel = null;
+            rroot = null;
+            rmodel = null;
+            addAction = null;
+            removeAction = null;
+            newElementAction = null;
+            buttonpanel = null;
+            rScollPane = null;
+            rtree = null;
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
@@ -164,7 +174,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     @Override
     public void update() {
-        buildLeftTree();
+        updateLeftTree();
         if (showRightTree && isRightSideVisible()) {
             buildRightTree();
         }
@@ -224,11 +234,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
     }
 
-    private void buildLeftTree() {
+    private void updateLeftTree() {
         ltree.saveExpansionAndSelection();
         lroot.removeAllChildren();
         ltree.reset();
-        buildTree();
+        buildLeftTree();
         lmodel.reload();
         ltree.restoreExpansionAndSelection();
     }
@@ -236,7 +246,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     /**
      * Baut im linken Baum den gesamten Pfad auf
      */
-    protected Collection<LGMTreeNode> buildTree() {
+    protected Collection<LGMTreeNode> buildLeftTree() {
         int edgeIndex = 0;
         Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
         ModelElement me = getModelElement();
