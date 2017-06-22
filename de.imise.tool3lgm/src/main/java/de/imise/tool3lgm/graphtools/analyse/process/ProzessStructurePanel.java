@@ -795,120 +795,221 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------
-    /*
-     * public void actionPerformed(ActionEvent e) { // System.out.println(); //
-     * System.out.println("actionPerformed command: " + e.getActionCommand());
-     * super.actionPerformed(e); String str = e.getActionCommand(); if (str.equals("aufklappen")){
-     * if (verify) check3LGMBuisnessProcess(); } if (str.equals("verifikation")) { verify =
-     * verificationCheck.isSelected(); errorBut.setVisible(verify); if (verify){
-     * check3LGMBuisnessProcess(); }else{ checkRightPossibleTasks(); for (int i=0;
-     * i<lroot.getChildCount(); i++)
-     * ((LGMTreeNode)lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_NORMAL_ICON); } return; } if
-     * (str.equals("addueber")) { synchronized (ltree.getTreeLock()){ TreePath selPath =
-     * rtree.getSelectionPath(); //wenn rechts etwas selektiert war if (selPath != null){ //den
-     * selektierten Knoten ermitteln LGMTreeNode node = (LGMTreeNode)selPath.getLastPathComponent();
-     * //wenn es sich bei dem rechts selektierten Knoten um eine Aufgabe handelt if
-     * (node.getUserObject() instanceof NodeContainer){ //seinen Container holen (diese muessen
-     * links im Baum geaddet werden) NodeContainer knot = (NodeContainer)node.getUserObject(); if
-     * (knot.getElement() instanceof Aufgabe){ //wenn links was selektiert ist, dann muss die
-     * naechste Aufgabe ueber bzw. vor der selektierten eingefuegt werden selPath =
-     * ltree.getSelectionPath(); boolean nothingSelected = true; //wenn links etwas selektiert war
-     * if (selPath != null){ nothingSelected=false; node =
-     * (LGMTreeNode)selPath.getLastPathComponent(); //prüfen, ob eine Aufgabe selektiert ist if
-     * ((node.getUserObject() instanceof NodeContainer) &&
-     * (((NodeContainer)node.getUserObject()).getElement() instanceof Aufgabe)){ int selRow =
-     * ltree.getRowForPath(selPath); int index = lmodel.getIndexOfChild(lroot, node);
-     * doc.exec("LINK " + "null" + " " + "null" + " " + modelElement.getHashString() + " " +
-     * knot.getHashString()+ " " + index, dialog.getTransactionID()); //
-     * ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot); selRow++;
-     * while(ltree.getPathForRow(selRow).getPathCount()!=2) selRow++; setSelectionRow(ltree,
-     * selRow); } } //wenn links nichts selektiert war -> einfach hinten anhaengen if
-     * (nothingSelected){ //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht
-     * nicht aktualisiert werden doc.exec("LINK " + "null" + " " + "null" + " " +
-     * modelElement.getHashString() + " " + knot.getHashString()+ " " +
-     * modelElement.countConnections(), dialog.getTransactionID());
-     * ltree.scrollRowToVisible(ltree.getRowCount()-1); } } } } } return; } if
-     * (str.equals("removeueber")) { synchronized (rtree.getTreeLock()){ TreePath selPath =
-     * ltree.getSelectionPath(); //wenn links etwas selektiert war if (selPath != null){ LGMTreeNode
-     * node = (LGMTreeNode)selPath.getLastPathComponent(); //prüfen, ob eine Aufgabe selektiert ist
-     * Object knot = node.getUserObject(); //auf keinen Fall hier gleich auf ElementContainer
-     * casten, weil es auch ein String sein kann !!! if (!(knot instanceof String) &&
-     * (((ElementContainer)knot).getElement() instanceof Aufgabe)){ //es wird eine neue ProzessKante
-     * angelegt, aber der rechte Baum braucht nicht aktualisiert werden int index =
-     * lmodel.getIndexOfChild(lroot, node); doc.exec("UNLINK " + modelElement.getHashString() + " "
-     * + ((ElementContainer)knot).getHashString() + " " + index, dialog.getTransactionID()); }
-     * //####
-     * ########################################################################################
-     * ######## //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem großen Modell rel.
-     * lange dauern kann //Die der auf der linken Seite entfernten Aufgabe auf der rechten Seite
-     * entsprechende wird selektiert. //Diese Funktion geht davon aus, dass der rechte Baum komplett
-     * expandiert ist, was er in dem Fall, //dass alle Kinder von rroot Blätter sind und rroot
-     * selbst nicht angezeigt wird immer automatisch ist. for (int i=0; i<rtree.getRowCount(); i++){
-     * if (((LGMTreeNode)rtree.getPathForRow(i).getLastPathComponent()).getUserObject()==knot){
-     * setSelectionRow(rtree, i); break; } } } return; } } if (str.equals("moveup")){ //Aufaben
-     * haben Pfadlänge 2 (das nicht sichtbare root hat die 1) TreePath selPath =
-     * ltree.getSelectionPath(); //wenn links eine Aufgabe selektiert ist if (selPath != null &&
-     * selPath.getPathCount()==2){ //Position der selektierten Aufgabe im Baum bzw. Prozess holen
-     * int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent()); //wenn nicht die
-     * erste sondern eine Aufgabe dahinter selektiert ist if (pos1>0){ //jetzt die Position der über
-     * der selektierten Aufgabe liegenden Aufgabe holen //-> von dieser alle evtl. expandierten
-     * Unterknoten merken //-> sie removen und unter der selektierten wieder einfügen //-> alles was
-     * von ihr expandiert war, wieder expandieren int pos2 = ltree.getRowForPath(selPath)-1;
-     * TreePath path = ltree.getPathForRow(pos2); while(path.getPathCount()>2){ pos2--; path =
-     * ltree.getPathForRow(pos2); } //wenn die selektierte Aufgabe expandierte Unterknoten hat
-     * (können max. 2 sein, nämlich //"Interpretiert" und "Bearbeitet"), dann sind diese TreePathes
-     * jetzt in enum Enumeration en = ltree.getExpandedDescendants(path); //jetzt den Baum anpassen
-     * (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT) //und weil hier noch die
-     * Expasionen anpasst werden (über enum), soll das auch hier bleiben! LGMTreeNode node =
-     * (LGMTreeNode)lroot.getChildAt(pos1-1); //den oberen Knoten holen
-     * lmodel.removeNodeFromParent(node); //ihn entfernen lmodel.insertNodeInto(node, lroot, pos1);
-     * //ihn einen tiefer als vorher einfügen //wenn die selektierte Aufgabe expandiert war if
-     * (en!=null){ expandFullPath = true; //muss sein wegen treeWillExpand, damits auch wirklich
-     * expandiert wird ltree.expandRow(pos1+1); //den Knoten wieder expandieren
-     * while(en.hasMoreElements()){ ltree.expandPath((TreePath)en.nextElement()); //seine
-     * Unterknoten auch expandieren } //das muss immer nch einem Expandieren zurückgesetzt werden
-     * (siehe treeWillExpand) willExpand = false; expandFullPath = false; }
-     * ltree.scrollPathToVisible(selPath); //jetzt erst die Nummerierungen anpassen (auf keinen Fall
-     * vor dem Expandieren, weil sonst die Pfade nicht mehr stimmen) node.setText("["+(pos1+1)+"] "+
-     * node.getUserObject()); node = (LGMTreeNode)lroot.getChildAt(pos1-1);
-     * node.setText("["+(pos1)+"] "+ node.getUserObject()); //das switchen in den connections vom
-     * Prozess ausführen doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1
-     * + " " + (pos1-1), dialog.getTransactionID()); } } ltree.repaint(); return; } if
-     * (str.equals("movedown")){ //Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
-     * TreePath selPath = ltree.getSelectionPath(); if (selPath != null &&
-     * selPath.getPathCount()==2){ int pos1 = lmodel.getIndexOfChild(lroot,
-     * selPath.getLastPathComponent()); if (pos1<lroot.getChildCount()-1){ int pos2 =
-     * ltree.getRowForPath(selPath)+1; TreePath path = ltree.getPathForRow(pos2);
-     * while(path.getPathCount()>2){ pos2++; path = ltree.getPathForRow(pos2); } Enumeration en =
-     * ltree.getExpandedDescendants(path); LGMTreeNode node = (LGMTreeNode)lroot.getChildAt(pos1+1);
-     * lmodel.removeNodeFromParent(node); lmodel.insertNodeInto(node, lroot, pos1); if (en!=null){
-     * expandFullPath = true; ltree.expandRow(pos1+1); while(en.hasMoreElements()){
-     * ltree.expandPath((TreePath)en.nextElement()); //seine Unterknoten auch expandieren }
-     * willExpand = false; expandFullPath = false; } ltree.scrollPathToVisible(selPath);
-     * node.setText("["+(pos1+1)+"] "+ node.getUserObject()); node =
-     * (LGMTreeNode)lroot.getChildAt(pos1+1); node.setText("["+(pos1+2)+"] "+ node.getUserObject());
-     * doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1 + " " + (pos1+1),
-     * dialog.getTransactionID()); } } ltree.repaint(); return; } if (str.equals("fehler")){
-     * JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
-     * return; } /* Das hier würde sich bei drücken auf Abbrechen nicht zurücknehmen lassen, da das
-     * UNDO für link nicht gesetzt wurde
-     *//*
-       * if (str.equals("clear")){ //diese Funktion geht davon aus, dass der Baum komplett
-       * expandiert ist, was er in dem Fall, //dass alle Kinder von lroot Blätter sind und lroot
-       * selbst nicht angezeigt wird immer automatisch ist. /* for (int i=ltree.getRowCount()-1;
-       * i>=0; i--){ NodeContainer knotCont = (NodeContainer)
-       * ((LGMTreeNode)lroot.getChildAt(i)).getUserObject(); doc.exec("UNLINK " +
-       * prozess.getHashString() + " " + knotCont.getHashString(), dialog.getID());
-       * lroot.remove(i); }
-       *//*
-         * return; } /*
-         */// }
+
+    //    public void actionPerformed(final ActionEvent e) {
+    //        // System.out.println(); //
+    //        System.out.println("actionPerformed command: " + e.getActionCommand());
+    //        super.actionPerformed(e);
+    //        String str = e.getActionCommand();
+    //        if (str.equals("aufklappen")) {
+    //            if (verify) {
+    //                check3LGMBuisnessProcess();
+    //            }
+    //        }
+    //        if (str.equals("verifikation")) {
+    //            verify = verificationCheck.isSelected();
+    //            errorBut.setVisible(verify);
+    //            if (verify) {
+    //                check3LGMBuisnessProcess();
+    //            } else {
+    //                checkRightPossibleTasks();
+    //                for (int i = 0; i < lroot.getChildCount(); i++) {
+    //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_NORMAL_ICON);
+    //                }
+    //            }
+    //            return;
+    //        }
+    //        if (str.equals("addueber")) {
+    //            synchronized (ltree.getTreeLock()) {
+    //                TreePath selPath = rtree.getSelectionPath();
+    //                //wenn rechts etwas selektiert war
+    //                if (selPath != null) {
+    //                    //den selektierten Knoten ermitteln
+    //                    LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+    //                    //wenn es sich bei dem rechts selektierten Knoten um eine Aufgabe handelt
+    //                    if (node.getUserObject() instanceof NodeContainer) { //seinen Container holen (diese muessen links im Baum geaddet werden)
+    //                        NodeContainer knot = (NodeContainer) node.getUserObject();
+    //                        if (knot.getElement() instanceof Aufgabe) {
+    //                            //wenn links was selektiert ist, dann muss die naechste Aufgabe ueber bzw. vor der selektierten eingefuegt werden
+    //                            selPath = ltree.getSelectionPath();
+    //                            boolean nothingSelected = true;
+    //                            //wenn links etwas selektiert war
+    //                            if (selPath != null) {
+    //                                nothingSelected = false;
+    //                                node = (LGMTreeNode) selPath.getLastPathComponent();
+    //                                //prüfen, ob eine Aufgabe selektiert ist
+    //                                if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
+    //                                    int selRow = ltree.getRowForPath(selPath);
+    //                                    int index = lmodel.getIndexOfChild(lroot, node);
+    //                                    doc.exec("LINK " + "null" + " " + "null" + " " + modelElement.getHashString() + " " + knot.getHashString() + " " + index, dialog.getTransactionID());
+    //                                    // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
+    //                                    selRow++;
+    //                                    while (ltree.getPathForRow(selRow).getPathCount() != 2) {
+    //                                        selRow++;
+    //                                    }
+    //                                    setSelectionRow(ltree, selRow);
+    //                                }
+    //                            }
+    //                            //wenn links nichts selektiert war -> einfach hinten anhaengen
+    //                            if (nothingSelected) {
+    //                                //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
+    //                                doc.exec("LINK " + "null" + " " + "null" + " " + modelElement.getHashString() + " " + knot.getHashString() + " " + modelElement.countConnections(), dialog.getTransactionID());
+    //                                ltree.scrollRowToVisible(ltree.getRowCount() - 1);
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            return;
+    //        }
+    //        if (str.equals("removeueber")) {
+    //            synchronized (rtree.getTreeLock()) {
+    //                TreePath selPath = ltree.getSelectionPath();
+    //                //wenn links etwas selektiert war
+    //                if (selPath != null) {
+    //                    LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+    //                    //prüfen, ob eine Aufgabe selektiert ist
+    //                    Object knot = node.getUserObject();
+    //                    //auf keinen Fall hier gleich auf ElementContainer casten, weil es auch ein String sein kann !!!
+    //                    if (!(knot instanceof String) && ((ElementContainer) knot).getElement() instanceof Aufgabe) {
+    //                        //es wird eine neue ProzessKante angelegt, aber der rechte Baum braucht nicht aktualisiert werden
+    //                        int index = lmodel.getIndexOfChild(lroot, node);
+    //                        doc.exec("UNLINK " + modelElement.getHashString() + " " + ((ElementContainer) knot).getHashString() + " " + index, dialog.getTransactionID());
+    //                    }
+    //                    //####################################################################################################
+    //                    //Dies hier evtl. weglassen, da es auf nem lahmen Rechner und nem großen Modell rel. lange dauern kann
+    //                    //Die der auf der linken Seite entfernten Aufgabe auf der rechten Seite entsprechende wird selektiert.
+    //                    //Diese Funktion geht davon aus, dass der rechte Baum komplett expandiert ist, was er in dem Fall,
+    //                    //dass alle Kinder von rroot Blätter sind und rroot selbst nicht angezeigt wird immer automatisch ist.
+    //                    for (int i = 0; i < rtree.getRowCount(); i++) {
+    //                        if (((LGMTreeNode) rtree.getPathForRow(i).getLastPathComponent()).getUserObject() == knot) {
+    //                            setSelectionRow(rtree, i);
+    //                            break;
+    //                        }
+    //                    }
+    //                }
+    //                return;
+    //            }
+    //        }
+    //        if (str.equals("moveup")) {
+    //            //Aufaben haben Pfadlänge 2 das nicht sichtbare root hat die 1)
+    //            TreePath selPath = ltree.getSelectionPath();
+    //            //wenn links eine Aufgabe selektiert ist
+    //            if (selPath != null && selPath.getPathCount() == 2) {
+    //                //Position der selektierten Aufgabe im Baum bzw. Prozess holen
+    //                int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
+    //                //wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
+    //                if (pos1 > 0) {
+    //                    //jetzt die Position der über der selektierten Aufgabe liegenden Aufgabe holen
+    //                    //-> von dieser alle evtl. expandierten Unterknoten merken
+    //                    //-> sie removen und unter der selektierten wieder einfügen
+    //                    //-> alles was von ihr expandiert war, wieder expandieren
+    //                    int pos2 = ltree.getRowForPath(selPath) - 1;
+    //                    TreePath path = ltree.getPathForRow(pos2);
+    //                    while (path.getPathCount() > 2) {
+    //                        pos2--;
+    //                        path = ltree.getPathForRow(pos2);
+    //                    }
+    //                    //wenn die selektierte Aufgabe expandierte Unterknoten hat (können max. 2 sein, nämlich
+    //                    //"Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt in enum
+    //                    Enumeration en = ltree.getExpandedDescendants(path);
+    //                    //jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
+    //                    //und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
+    //                    LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
+    //                    //den oberen Knoten holen
+    //                    lmodel.removeNodeFromParent(node);
+    //                    //ihn entfernen
+    //                    lmodel.insertNodeInto(node, lroot, pos1);
+    //                    //ihn einen tiefer als vorher einfügen
+    //                    //wenn die selektierte Aufgabe expandiert war
+    //                    if (en != null) {
+    //                        expandFullPath = true;
+    //                        //muss sein wegen treeWillExpand, damits auch wirklich expandiert wird
+    //                        ltree.expandRow(pos1 + 1);
+    //                        //den Knoten wieder expandieren
+    //                        while (en.hasMoreElements()) {
+    //                            ltree.expandPath((TreePath) en.nextElement());
+    //                            //seine Unterknoten auch expandieren
+    //                        }
+    //                        //das muss immer nch einem Expandieren zurückgesetzt werden (siehe treeWillExpand)
+    //                        willExpand = false;
+    //                        expandFullPath = false;
+    //                    }
+    //                    ltree.scrollPathToVisible(selPath);
+    //                    //jetzt erst die Nummerierungen anpassen (auf keinen Fall vor dem Expandieren, weil sonst die Pfade nicht mehr stimmen)
+    //                    node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
+    //                    node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
+    //                    node.setText("[" + pos1 + "] " + node.getUserObject());
+    //                    //das switchen in den connections vom Prozess ausführen
+    //                    doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1 + " " + (pos1 - 1), dialog.getTransactionID());
+    //                }
+    //            }
+    //            ltree.repaint();
+    //            return;
+    //        }
+    //        if (str.equals("movedown")) {
+    //            //Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
+    //            TreePath selPath = ltree.getSelectionPath();
+    //            if (selPath != null && selPath.getPathCount() == 2) {
+    //                int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
+    //                if (pos1 < lroot.getChildCount() - 1) {
+    //                    int pos2 = ltree.getRowForPath(selPath) + 1;
+    //                    TreePath path = ltree.getPathForRow(pos2);
+    //                    while (path.getPathCount() > 2) {
+    //                        pos2++;
+    //                        path = ltree.getPathForRow(pos2);
+    //                    }
+    //                    Enumeration en = ltree.getExpandedDescendants(path);
+    //                    LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
+    //                    lmodel.removeNodeFromParent(node);
+    //                    lmodel.insertNodeInto(node, lroot, pos1);
+    //                    if (en != null) {
+    //                        expandFullPath = true;
+    //                        ltree.expandRow(pos1 + 1);
+    //                        while (en.hasMoreElements()) {
+    //                            ltree.expandPath((TreePath) en.nextElement());
+    //                            //seine Unterknoten auch expandieren
+    //                        }
+    //                        willExpand = false;
+    //                        expandFullPath = false;
+    //                    }
+    //                    ltree.scrollPathToVisible(selPath);
+    //                    node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
+    //                    node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
+    //                    node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
+    //                    doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1 + " " + (pos1 + 1), dialog.getTransactionID());
+    //                }
+    //            }
+    //            ltree.repaint();
+    //            return;
+    //        }
+    //        if (str.equals("fehler")) {
+    //            JOptionPane.showMessageDialog(this, errorMessage, errorTitle, JOptionPane.ERROR_MESSAGE);
+    //            return;
+    //        }
+    //
+    //        /*
+    //         * Das hier würde sich bei drücken auf Abbrechen nicht zurücknehmen lassen, da das
+    //         * UNDO für link nicht gesetzt wurde
+    //         */
+    //
+    //        if (str.equals("clear")) {
+    //            //diese Funktion geht davon aus, dass der Baum komplett expandiert ist, was er in dem Fall,
+    //            //dass alle Kinder von lroot Blätter sind und lroot selbst nicht angezeigt wird immer automatisch ist.
+    //            for (int i = ltree.getRowCount() - 1; i >= 0; i--) {
+    //                NodeContainer knotCont = (NodeContainer) ((LGMTreeNode) lroot.getChildAt(i)).getUserObject();
+    //                doc.exec("UNLINK " + prozess.getHashString() + " " + knotCont.getHashString(), dialog.getTransactionID());
+    //                lroot.remove(i);
+    //            }
+    //            return;
+    //        }
+    //    }
 
     @Override
     public void treeWillExpand(final TreeExpansionEvent e) throws ExpandVetoException {
-        // System.out.println("will-expand");
-        // System.out.println(willExpand + "  " + willCollapse + "  " +
-        // expandFullPath);
+        //System.out.println("will-expand");
+        //System.out.println(willExpand + "  " + willCollapse + "  " +
+        //expandFullPath);
         if (!willExpand || expandFullPath) {
             willExpand = true;
             pathToExpandOrCollapse = e.getPath();
@@ -922,7 +1023,7 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
 
     @Override
     public void treeWillCollapse(final TreeExpansionEvent e) throws ExpandVetoException {
-        // System.out.println("will-collapse");
+        //System.out.println("will-collapse");
         if (!willCollapse) {
             willCollapse = true;
             willExpand = false;
@@ -932,9 +1033,6 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
         willCollapse = false;
     }
 
-    /**
-     * @param e
-     */
     public void valueChanged(final TreeSelectionEvent e) {
         // System.out.println("valueChanged");
         selectionChanged = true;
