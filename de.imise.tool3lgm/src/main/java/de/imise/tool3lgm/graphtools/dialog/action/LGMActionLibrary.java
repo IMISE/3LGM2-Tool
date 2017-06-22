@@ -77,10 +77,7 @@ public class LGMActionLibrary {
             @Override
             public void execute(final EventObject eo) {
                 MouseEvent e = (MouseEvent) eo;
-                boolean popup = Tool3lgmConstants.isPopupTrigger(e);
-                boolean doubleClick = !popup && e.getClickCount() > 1;
-                if (popup || doubleClick) {
-
+                if (e.getClickCount() > 0) {
                     //find selection
                     int xin = e.getX();
                     int yin = e.getY();
@@ -91,6 +88,7 @@ public class LGMActionLibrary {
                         if (path == null) {
                             return;
                         }
+                        tree.setSelectionPath(path);
                         LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
                         if (node == null) {
                             return;
@@ -103,31 +101,35 @@ public class LGMActionLibrary {
                         AbstractSingleConnectionPanel singleSelectionPanel = (AbstractSingleConnectionPanel) panel;
                         selection = singleSelectionPanel.getSelection();
                     }
-
-                    //set selection
-                    GraphDocument doc = panel.getGraphDocument();
-                    ElementContainer selected = null;
-                    if (selection instanceof ElementContainer) {
-                        selected = (ElementContainer) selection;
-                    } else if (selection instanceof ModelElement) {
-                        //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
-                        //den Container aus dem Hauptdokument zu ersetzen
-                        ModelElement me = (ModelElement) selection;
-                        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
-                        selected = me.getContainer(mainDoc);
-                    }
-                    if (selected != null) {
-                        doc.select(selected, panel.getTransactionID());
-                        if (popup) {
-                            Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
-                        } else if (doubleClick) {
-                            doc.showPropertyDialog(selected.getElement());
-                        }
-
-                    }
+                    executeMouseAction(selection, panel, e);
                 }
             }
         };
+    }
+
+    private static final void executeMouseAction(final Object selection, final ElementDialogPanel panel, final MouseEvent e) {
+        boolean popup = Tool3lgmConstants.isPopupTrigger(e);
+        boolean doubleClick = !popup && e.getClickCount() > 1;
+        //set selection
+        GraphDocument doc = panel.getGraphDocument();
+        ElementContainer selected = null;
+        if (selection instanceof ElementContainer) {
+            selected = (ElementContainer) selection;
+        } else if (selection instanceof ModelElement) {
+            //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
+            //den Container aus dem Hauptdokument zu ersetzen
+            ModelElement me = (ModelElement) selection;
+            GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+            selected = me.getContainer(mainDoc);
+        }
+        if (selected != null) {
+            doc.select(selected, panel.getTransactionID());
+            if (popup) {
+                Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+            } else if (doubleClick) {
+                doc.showPropertyDialog(selected.getElement());
+            }
+        }
     }
 
     /**
