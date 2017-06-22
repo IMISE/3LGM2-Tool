@@ -5,21 +5,15 @@ package de.imise.tool3lgm.graphtools.dialog.action;
 
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowListener;
 import java.util.EventObject;
 
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.AbstractSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -42,95 +36,6 @@ public class LGMActionLibrary {
      * sollte einfach der Wert von switchTree geändert werden.
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in AbstractSingleConnectionPanel reagiert.
-     *
-     * @param panel
-     * @param edp
-     * @return
-     */
-    public static final LGMAction getMouseAction(final AbstractSingleConnectionPanel panel) {
-        return getMouseActionInternal(panel, panel);
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
-     *
-     * @param tree
-     * @param panel
-     * @return
-     */
-    public static final LGMAction getMouseAction(final JTree tree, final ElementDialogPanel panel) {
-        return getMouseActionInternal(tree, panel);
-    }
-
-    /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
-     *
-     * @param component
-     * @param panel
-     * @return
-     */
-    private static final LGMAction getMouseActionInternal(final JComponent component, final ElementDialogPanel panel) {
-        return new LGMAction() {
-            @Override
-            public void execute(final EventObject eo) {
-                MouseEvent e = (MouseEvent) eo;
-                if (e.getClickCount() > 0) {
-                    //find selection
-                    int xin = e.getX();
-                    int yin = e.getY();
-                    Object selection = null;
-                    if (component instanceof JTree) {
-                        JTree tree = (JTree) component;
-                        TreePath path = tree.getPathForLocation(xin, yin);
-                        if (path == null) {
-                            return;
-                        }
-                        tree.setSelectionPath(path);
-                        LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
-                        if (node == null) {
-                            return;
-                        }
-                        selection = node.getUserObject();
-                    } else if (component instanceof JComboBox) {
-                        JComboBox<?> combobox = (JComboBox<?>) component;
-                        selection = combobox.getSelectedItem();
-                    } else if (panel instanceof AbstractSingleConnectionPanel) {
-                        AbstractSingleConnectionPanel singleSelectionPanel = (AbstractSingleConnectionPanel) panel;
-                        selection = singleSelectionPanel.getSelection();
-                    }
-                    executeMouseAction(selection, panel, e);
-                }
-            }
-        };
-    }
-
-    private static final void executeMouseAction(final Object selection, final ElementDialogPanel panel, final MouseEvent e) {
-        boolean popup = Tool3lgmConstants.isPopupTrigger(e);
-        boolean doubleClick = !popup && e.getClickCount() > 1;
-        //set selection
-        GraphDocument doc = panel.getGraphDocument();
-        ElementContainer selected = null;
-        if (selection instanceof ElementContainer) {
-            selected = (ElementContainer) selection;
-        } else if (selection instanceof ModelElement) {
-            //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
-            //den Container aus dem Hauptdokument zu ersetzen
-            ModelElement me = (ModelElement) selection;
-            GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
-            selected = me.getContainer(mainDoc);
-        }
-        if (selected != null) {
-            doc.select(selected, panel.getTransactionID());
-            if (popup) {
-                Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
-            } else if (doubleClick) {
-                doc.showPropertyDialog(selected.getElement());
-            }
-        }
-    }
 
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die auf das Selektieren von Elementen in

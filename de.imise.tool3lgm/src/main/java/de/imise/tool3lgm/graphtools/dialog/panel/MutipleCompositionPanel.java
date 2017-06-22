@@ -89,7 +89,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         // MouseListener erstellen und an tree anhängen
-        LGMAction treeMouseAction = LGMActionLibrary.getMouseAction(tree, this);
+        LGMAction treeMouseAction = getMouseAction(tree);
         tree.addMouseListener(new LGMMouseListener(null, null, null, treeMouseAction, null));
 
         // TreeSelectionListener erstellen und an tree anhängen

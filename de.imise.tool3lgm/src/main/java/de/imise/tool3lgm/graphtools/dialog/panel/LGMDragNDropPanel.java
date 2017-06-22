@@ -86,7 +86,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
     }
 
     private void addMouseListener(final JTree tree) {
-        LGMAction mousePressedAction = LGMActionLibrary.getMouseAction(tree, this);
+        LGMAction mousePressedAction = getMouseAction(tree);
         MouseListener mousePressedListener = new LGMMouseListener(null, null, null, mousePressedAction, null);
         tree.addMouseListener(mousePressedListener);
     }
