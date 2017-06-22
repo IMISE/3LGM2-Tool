@@ -120,19 +120,12 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
      * diese Action über einen MouseListener an ihre Trees anfügen. Dabei sollte diese Action sowohl
      * bei mousePressed als auch bei mouseEntered aufgerufen werden.
      *
-     * @param dndActionChains
+     * @param dndActionChains Sammlung aller <code>DragNDropActionChain</code>s, die bei einem DragNDrop-Ereignis
+     *            ausgeführt werden können
      */
     private static final LGMAction getDragNDropInitAction(final DragNDropInitializer.DragNDropActionChain[] dndActionChains) {
 
-        final DragNDropInitializer.DragNDropActionChain[] chains = dndActionChains;
-
         return new LGMAction() {
-
-            /**
-             * Sammlung aller <code>DragNDropActionChain</code>s, die bei einem DragNDrop-Ereignis
-             * ausgeführt werden können
-             */
-            private final DragNDropActionChain[] dndActionChains = chains;
 
             /**
              * Variable dient der Trennung von DragNDrop-Ausführung und DragNDrop-Initialisierungen.
@@ -160,17 +153,14 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
             public void execute(final EventObject e) {
                 if (e instanceof MouseEvent) {
                     MouseEvent me = (MouseEvent) e;
-                    if (me.getID() == MouseEvent.MOUSE_ENTERED) {
+                    int id = me.getID();
+                    if (id == MouseEvent.MOUSE_ENTERED) {
                         mouseEntered(me);
-                    } else if (me.getID() == MouseEvent.MOUSE_PRESSED) {
+                    } else if (id == MouseEvent.MOUSE_PRESSED) {
                         mousePressed(me);
-                    } else if (me.getID() == MouseEvent.MOUSE_DRAGGED) {
+                    } else if (id == MouseEvent.MOUSE_DRAGGED) {
                         mousePressed(me);
-                    } else {
-                        return;
                     }
-                } else {
-                    return;
                 }
             }
 
@@ -184,17 +174,12 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
              * @param me
              */
             private void mousePressed(final MouseEvent me) {
-
                 blockDragNDropInitializing = true;
-
                 if (!(me.getSource() instanceof JTree)) {
                     return;
                 }
-
                 JTree focusedTree = (JTree) me.getSource();
-
                 int n = dndActionChains.length;
-
                 if (n > 2) {
                     for (int i = 0; i < n; i++) {
                         JTree tree = dndActionChains[i].getSrcTree();
@@ -203,7 +188,6 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
                         }
                     }
                 }
-
                 blockDragNDropInitializing = false;
                 mouseEntered(me);
             }
@@ -215,7 +199,6 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
              * @param me
              */
             private void mouseEntered(final MouseEvent me) {
-
                 if (blockDragNDropInitializing == false && me.getSource() instanceof JTree) {
                     activateDragNDrop((JTree) me.getSource());
                 }
