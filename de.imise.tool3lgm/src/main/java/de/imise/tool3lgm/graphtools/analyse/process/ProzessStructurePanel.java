@@ -245,7 +245,7 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
 
         try {
             upAction = getMoveUpAction(ltree, this);
-            downAction = LGMActionLibrary.getMoveDownAction(ltree, this);
+            downAction = getMoveDownAction(ltree, this);
         } catch (ActionNotDefinedForClassException e) {
             e.printStackTrace();
         }
@@ -1515,6 +1515,71 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
 
                             // das switchen in den connections vom Prozess ausführen
                             doc.swapEdgePositions(modelElement, pos1, pos1 - 1, dialog.getTransactionID());
+                        }
+                    }
+                    ltree.repaint();
+                    return;
+                }
+            };
+        }
+        throw new ActionNotDefinedForClassException(edp.getClass().getName());
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben eines Elements in
+     * einem Tree realisiert.
+     *
+     * @param tree
+     * @param edp
+     * @throws ActionNotDefinedForClassException
+     */
+    public static final LGMAction getMoveDownAction(final JTree tree, final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
+
+        final ElementDialogPanel pane = edp;
+        final JTree ltree = tree;
+        final DefaultTreeModel lmodel = (DefaultTreeModel) tree.getModel();
+        final LGMTreeNode lroot = (LGMTreeNode) lmodel.getRoot();
+        final GraphDocument doc = edp.getGraphDocument();
+        final ModelElement modelElement = edp.getModelElement();
+        final ElementPropertyDialog dialog = edp.getDialog();
+
+        if (pane instanceof ProzessStructurePanel) {
+            return new LGMAction("", Tool3lgmConstants.getIcon("runter2.gif")) {
+                @Override
+                public void execute(final EventObject eo) {
+                    ProzessStructurePanel panel = (ProzessStructurePanel) pane;
+                    // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
+                    // die 1)
+                    TreePath selPath = ltree.getSelectionPath();
+                    if (selPath != null && selPath.getPathCount() == 2) {
+                        int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
+                        if (pos1 < lroot.getChildCount() - 1) {
+                            int pos2 = ltree.getRowForPath(selPath) + 1;
+                            TreePath path = ltree.getPathForRow(pos2);
+                            while (path.getPathCount() > 2) {
+                                pos2++;
+                                path = ltree.getPathForRow(pos2);
+                            }
+                            Enumeration<TreePath> en = ltree.getExpandedDescendants(path);
+                            LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
+                            lmodel.removeNodeFromParent(node);
+                            lmodel.insertNodeInto(node, lroot, pos1);
+
+                            if (en != null) {
+                                panel.expandFullPath(true);
+                                ltree.expandRow(pos1 + 1);
+                                while (en.hasMoreElements()) {
+                                    ltree.expandPath(en.nextElement()); // seine Unterknoten auch
+                                                                        // expandieren
+                                }
+                                panel.willExpand(false);
+                                panel.expandFullPath(false);
+                            }
+                            ltree.scrollPathToVisible(selPath);
+                            node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
+                            node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
+                            node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
+                            doc.swapEdgePositions(modelElement, pos1, pos1 + 1, dialog.getTransactionID());
                         }
                     }
                     ltree.repaint();
