@@ -3,7 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.EventObject;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
@@ -13,6 +15,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
+import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -44,7 +47,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
      * @param action
      */
     protected final void initTreeListenerAndDragNDrop() {
-        LGMAction action = LGMActionLibrary.getDragNDropInitAction(collectDragNDropActionChains());
+        LGMAction action = getDragNDropInitAction(collectDragNDropActionChains());
         LGMMouseListener ml = new LGMMouseListener(action, action, action, action, action);
         JTree[] trees = getAllDragNDropTrees();
         for (int i = 0; i < trees.length; i++) {
@@ -109,6 +112,134 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
             Log.log(Log.ERROR, getClass().getSimpleName() + ": could'nt find TopLevelAncestor for tree", ex);
         }
         return me;
+    }
+
+    /**
+     * Methode liefert eine neue LGMAction zurück. Diese LGMAction verwaltet das Initialisieren von
+     * DragNDrop in einem Panel. Alle Panels, die DragNDrop-Funktionalität bieten wollen, müssen
+     * diese Action über einen MouseListener an ihre Trees anfügen. Dabei sollte diese Action sowohl
+     * bei mousePressed als auch bei mouseEntered aufgerufen werden.
+     *
+     * @param dndActionChains
+     */
+    private static final LGMAction getDragNDropInitAction(final DragNDropInitializer.DragNDropActionChain[] dndActionChains) {
+
+        final DragNDropInitializer.DragNDropActionChain[] chains = dndActionChains;
+
+        return new LGMAction() {
+
+            /**
+             * Sammlung aller <code>DragNDropActionChain</code>s, die bei einem DragNDrop-Ereignis
+             * ausgeführt werden können
+             */
+            private final DragNDropActionChain[] dndActionChains = chains;
+
+            /**
+             * Variable dient der Trennung von DragNDrop-Ausführung und DragNDrop-Initialisierungen.
+             * Es kann entweder eine DragNDrop-Aktion in einem Panel ausgeführt werden, oder eine
+             * DragNDrop-Aktion für ein Panel initialisiert werden. = <code>true</code>, wenn gerade
+             * eine DragNDrop-Aktion ausgeführt wird =<code>false</code>, sonst
+             */
+            private boolean blockDragNDropInitializing;
+
+            /**
+             * Attribut speichert den zuletzt angeklickten Tree, um mehrfaches Initialisieren von
+             * DragNDrop zu vermeiden.
+             */
+            private JTree lastEnteredTree;
+
+            /**
+             * Falls <code>e</code> ein <code>MouseEvent</code> ist, wird in Abhängigkeit davon, ob
+             * die Maus über einen Tree bewegt bzw. ein Element des Trees angeklickt wurde, die
+             * Methode <code>mouseEntered(MouseEvent me)</code> bzw.
+             * <code>mousePressed(MouseEvent me)</code> aufgerufen.
+             *
+             * @param e
+             */
+            @Override
+            public void execute(final EventObject e) {
+                if (e instanceof MouseEvent) {
+                    MouseEvent me = (MouseEvent) e;
+                    if (me.getID() == MouseEvent.MOUSE_ENTERED) {
+                        mouseEntered(me);
+                    } else if (me.getID() == MouseEvent.MOUSE_PRESSED) {
+                        mousePressed(me);
+                    } else if (me.getID() == MouseEvent.MOUSE_DRAGGED) {
+                        mousePressed(me);
+                    } else {
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            }
+
+            /**
+             * Hier wird, je nach dem welcher der Trees angeklickt wurde, die Selektion der Elemente
+             * in den anderen Trees entfernt. Dadurch werden Uneindeutigkeiten beim DragNDrop
+             * vermieden. Solang die Mousetaste gedrückt bleibt, ist das Initialisieren einer neuen
+             * DragNDrop-Aktion deaktiviert, um das Auführen der aktuellen DragNDrop-Aktion nicht zu
+             * behindern.
+             *
+             * @param me
+             */
+            private void mousePressed(final MouseEvent me) {
+
+                blockDragNDropInitializing = true;
+
+                if (!(me.getSource() instanceof JTree)) {
+                    return;
+                }
+
+                JTree focusedTree = (JTree) me.getSource();
+
+                int n = dndActionChains.length;
+
+                if (n > 2) {
+                    for (int i = 0; i < n; i++) {
+                        JTree tree = dndActionChains[i].getSrcTree();
+                        if (tree != focusedTree) {
+                            tree.removeSelectionPaths(tree.getSelectionPaths());
+                        }
+                    }
+                }
+
+                blockDragNDropInitializing = false;
+                mouseEntered(me);
+            }
+
+            /**
+             * Methode ruft <code>activateDragNDrop(LGMDragNDropTree focusedTree)</code> auf, falls
+             * sich die Mouse über einen der Trees des Panels befindet.
+             *
+             * @param me
+             */
+            private void mouseEntered(final MouseEvent me) {
+
+                if (blockDragNDropInitializing == false && me.getSource() instanceof JTree) {
+                    activateDragNDrop((JTree) me.getSource());
+                }
+            }
+
+            /**
+             * Methode aktiviert die DragNDrop-Funktion vom <code>focusedTree</code> auf alle Trees,
+             * die in den <code>dndActionChains</code> als targetTree dieses Trees vorkommen.
+             *
+             * @param focusedTree
+             */
+            private void activateDragNDrop(final JTree focusedTree) {
+                if (lastEnteredTree == focusedTree) {
+                    return;
+                }
+                lastEnteredTree = focusedTree;
+                for (int i = 0; i < dndActionChains.length; i++) {
+                    DragNDropActionChain dndAC = dndActionChains[i];
+                    if (dndAC.getSrcTree() == focusedTree) {
+                        DragNDropInitializer.initDragNDrop(dndAC);
+                    }
+                }
+            }
+        };
     }
 
 }
