@@ -4,17 +4,13 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.EventObject;
 
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionListener;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -28,7 +24,7 @@ import de.imise.tool3lgm.log.Log;
  *         und Methoden zur Sammlung aller gewünschten DragNDrop-Aktionen bereitgestellt. Achtung!
  *         <code>init()</code> muss von allen erbenden Klassen aufgerufen werden.
  */
-public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
+public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel {
 
     /**
      * Konstruktor Ruft den Super-Konstruktor auf. Setzt Klassen-Attribute auf default-Werte
@@ -54,8 +50,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
             //die Bäume können null sein, da sie nur bei Bedarf initialisiert werden (insbesondere der rechte Baum im PathConnectionPanel)
             if (trees[i] != null) {
                 trees[i].addMouseListener(ml);
-                addMouseListener(trees[i]);
-                addTreeSelectionListener(trees[i]);
+                addListener(trees[i]);
             }
         }
     }
@@ -83,18 +78,6 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionPanel {
      */
     public final Class<? extends Kante> getEdgeType(final ModelElement me1, final ModelElement me2) {
         return null;
-    }
-
-    private void addMouseListener(final JTree tree) {
-        LGMAction mousePressedAction = getMouseAction(tree);
-        MouseListener mousePressedListener = new LGMMouseListener(null, null, null, mousePressedAction, null);
-        tree.addMouseListener(mousePressedListener);
-    }
-
-    private void addTreeSelectionListener(final JTree tree) {
-        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
-        TreeSelectionListener treeSelectionListener = new LGMTreeSelectionListener(treeSelectionAction);
-        tree.addTreeSelectionListener(treeSelectionListener);
     }
 
     /**

@@ -32,7 +32,7 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
     }
 
     private MouseListener createMouseListener() {
-        LGMAction mouseAction = getMouseAction(this);
+        LGMAction mouseAction = getMouseClickedAction();
         MouseListener mouseListener = new LGMMouseListener(null, null, null, mouseAction, null);
         return mouseListener;
     }
@@ -59,13 +59,5 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
             component.addMouseListener(mouseListener);
         }
     }
-
-    /**
-     * Liefert das selektiert Object. Wenn hier ein ModelElement oder ein ElementContainer zurück
-     * kommt, dann wird damit die mouseAction ausgeführt.
-     *
-     * @return
-     */
-    public abstract Object getSelection();
 
 }

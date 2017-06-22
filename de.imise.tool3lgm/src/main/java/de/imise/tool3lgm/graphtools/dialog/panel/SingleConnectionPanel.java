@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -150,7 +151,8 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     }
 
     @Override
-    public final Object getSelection() {
+    protected final Object getSelection(final MouseEvent e) {
+        //das Mausevent ist egal, da immer nur das eine verbundene Element des Panel selektiert sein kann
         return connectedElementsBox != null ? connectedElementsBox.getSelectedItem() : connectedElement;
     }
 

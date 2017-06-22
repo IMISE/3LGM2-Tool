@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JTree;
-import javax.swing.tree.TreePath;
 
 import com.google.common.collect.ImmutableList;
 
@@ -29,7 +25,6 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
 import de.imise.util.Sys;
@@ -538,48 +533,36 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         }
     }
 
+    protected abstract Object getSelection(MouseEvent e);
+
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen in Trees reagiert.
+     * Methode liefert eine <code>LGMAction</code> zurück, die auf Mouse-Aktionen für ein selektiertes Element reagiert.
      *
-     * @param component
      * @return
      */
-    protected final LGMAction getMouseAction(final JComponent component) {
+    protected final LGMAction getMouseClickedAction() {
         return new LGMAction() {
             @Override
             public void execute(final EventObject eo) {
                 MouseEvent e = (MouseEvent) eo;
                 if (e.getClickCount() > 0) {
-                    //find selection
-                    int xin = e.getX();
-                    int yin = e.getY();
-                    Object selection = null;
-                    if (component instanceof JTree) {
-                        JTree tree = (JTree) component;
-                        TreePath path = tree.getPathForLocation(xin, yin);
-                        if (path == null) {
-                            return;
-                        }
-                        tree.setSelectionPath(path);
-                        LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
-                        if (node == null) {
-                            return;
-                        }
-                        selection = node.getUserObject();
-                    } else if (component instanceof JComboBox) {
-                        JComboBox<?> combobox = (JComboBox<?>) component;
-                        selection = combobox.getSelectedItem();
-                    } else if (component instanceof AbstractSingleConnectionPanel) {
-                        AbstractSingleConnectionPanel singleSelectionPanel = (AbstractSingleConnectionPanel) component;
-                        selection = singleSelectionPanel.getSelection();
-                    }
-                    executeMouseAction(selection, e);
+                    Object selection = getSelection(e);
+                    executeMouseClickedAction(selection, e);
                 }
             }
         };
+
     }
 
-    private final void executeMouseAction(final Object selection, final MouseEvent e) {
+    /**
+     * Wenn die übergebene Selektion ein {@link ElementContainer} oder {@link ModelElement} ist, dann
+     * wird bei einem Rechtsklick das Kontextmenü des Elementes gezeigt oder bei einem Doppelklick
+     * wird der Eigenschaftsdialog des Elementes geöffnet.
+     *
+     * @param selection
+     * @param e
+     */
+    private final void executeMouseClickedAction(final Object selection, final MouseEvent e) {
         boolean popup = Tool3lgmConstants.isPopupTrigger(e);
         boolean doubleClick = !popup && e.getClickCount() > 1;
         //set selection

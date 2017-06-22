@@ -20,9 +20,6 @@ import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -34,7 +31,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * Panel für {@link Composition}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
  * Also für alle Compositions, bei denen die maximale Kardinalität zu dem untergeordneten Element > 1 ist.
  */
-public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
+public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
     /**
      * COMMENTME
@@ -51,28 +48,14 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
      */
     private final LGMTreeNode root;
 
-    /**
-     * COMMENTME
-     */
-    private JPanel workingpanel;
-
     private final JPanel buttonpanel;
-
-    /**
-     * COMMENTME
-     */
-    private LGMAction addAction;
-
-    /**
-     * COMMENTME
-     */
-    private LGMAction removeAction;
 
     /**
      * @param dialog
      * @param searchElementClass
      * @param edgeClass
      */
+    @SuppressWarnings("unchecked")
     public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Composition> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
 
@@ -88,31 +71,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
         tree.setCellRenderer(treeRenderer);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-        // MouseListener erstellen und an tree anhängen
-        LGMAction treeMouseAction = getMouseAction(tree);
-        tree.addMouseListener(new LGMMouseListener(null, null, null, treeMouseAction, null));
+        // MouseListener und SelectionListener erstellen und an tree anhängen
+        addListener(tree);
 
-        // TreeSelectionListener erstellen und an tree anhängen
-        LGMAction treeSelectionAction = LGMActionLibrary.getTreeSelectionAction(tree, this);
-        tree.addTreeSelectionListener(new LGMTreeSelectionListener(treeSelectionAction));
-
-        /*
-         * Start: Buttons & Actions erstellen und registrieren ...
-         */
-        JButton addButton = new JButton();
-        JButton removeButton = new JButton();
-
-        try {
-            addAction = getCreateNewElementAction();
-            removeAction = getDisconnectAction();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        addButton.setAction(addAction);
-        removeButton.setAction(removeAction);
-        /*
-         * ... end: Buttons & Actions erstellen und registrieren
-         */
+        JButton addButton = new JButton(getCreateNewElementAction());
+        JButton removeButton = new JButton(getDisconnectAction());
 
         JScrollPane sp = new JScrollPane(tree);
 
@@ -139,7 +102,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
 
     @Override
     public void update() {
-        // remove(workingpanel);
         root.removeAllChildren();
         ModelElement modelElement = getModelElement();
         List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
