@@ -52,12 +52,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     protected final LGMTree ltree;
     protected LGMTree rtree;
-    private final DefaultTreeModel model;
-    private DefaultTreeModel abmodel;
-    protected LGMTreeNode root;
-    protected LGMTreeNode abroot;
-    private JLabel rtreeLabel;
-    private JScrollPane sp2;
+    private final DefaultTreeModel lmodel;
+    private DefaultTreeModel rmodel;
+    protected LGMTreeNode lroot;
+    protected LGMTreeNode rroot;
+    private JLabel rLabel;
+    private JScrollPane rScollPane;
     private JPanel buttonpanel;
     private final boolean showRightTree;
 
@@ -100,9 +100,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         westLabel.setText(ltreeLabelString);
         JLabel ltreeLabel = westLabel;
-        root = new LGMTreeNode(getModelElement().getContainer(mainDoc), false);
-        model = new DefaultTreeModel(root);
-        ltree = new LGMTree(model, mainDoc);
+        lroot = new LGMTreeNode(getModelElement().getContainer(mainDoc), false);
+        lmodel = new DefaultTreeModel(lroot);
+        ltree = new LGMTree(lmodel, mainDoc);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
@@ -131,15 +131,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.weightx = 1d;
             constraints.weighty = 1d;
             constraints.fill = GridBagConstraints.BOTH;
-            rtreeLabel = new JLabel(rtreeLabelString);
-            abroot = new LGMTreeNode(rtreeLabelString, false);
-            abmodel = new DefaultTreeModel(abroot);
-            rtree = new LGMTree(abmodel, mainDoc);
+            rLabel = new JLabel(rtreeLabelString);
+            rroot = new LGMTreeNode(rtreeLabelString, false);
+            rmodel = new DefaultTreeModel(rroot);
+            rtree = new LGMTree(rmodel, mainDoc);
             rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             rtree.setCellRenderer(treeRenderer);
-            sp2 = new JScrollPane(rtree);
+            rScollPane = new JScrollPane(rtree);
 
             //            initDragAndDropTreeActions(rtree);
             //            initDragAndDropTreeActions(ltree);
@@ -173,27 +173,27 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     @Override
-    public void showFullDialog() {
+    protected final void showFullDialog() {
         if (showRightTree) {
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.NONE;
             add(this, buttonpanel, constraints, 1, 3, 1, 2);
             constraints.anchor = GridBagConstraints.WEST;
-            add(this, rtreeLabel, constraints, 2, 0, 1, 1);
+            add(this, rLabel, constraints, 2, 0, 1, 1);
             constraints.anchor = GridBagConstraints.WEST;
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 1d;
             constraints.weighty = 1d;
-            add(this, sp2, constraints, 2, 1, 1, 4);
+            add(this, rScollPane, constraints, 2, 1, 1, 4);
         }
     }
 
     @Override
-    protected void showPartlyDialog() {
+    protected final void showPartlyDialog() {
         if (showRightTree) {
             remove(buttonpanel);
-            remove(rtreeLabel);
-            remove(sp2);
+            remove(rLabel);
+            remove(rScollPane);
         }
     }
 
@@ -226,10 +226,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private void buildLeftTree() {
         ltree.saveExpansionAndSelection();
-        root.removeAllChildren();
+        lroot.removeAllChildren();
         ltree.reset();
         buildTree();
-        model.reload();
+        lmodel.reload();
         ltree.restoreExpansionAndSelection();
     }
 
@@ -253,7 +253,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = Lists.newArrayListWithCapacity(all.size());
         for (ElementContainer ec : all) {
-            LGMTreeNode node = ltree.addObject(ec, root, null, true, false, false);
+            LGMTreeNode node = ltree.addObject(ec, lroot, null, true, false, false);
             firstLevelNodes.add(node);
         }
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
@@ -288,12 +288,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private void buildRightTree() {
         rtree.saveExpansion();
         rtree.saveSelection();
-        abroot.removeAllChildren();
+        rroot.removeAllChildren();
         rtree.reset();
         for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass, true, true)) {
-            rtree.addObject(ec, abroot, childrenToExcludeFromRtree, false, true);
+            rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, true);
         }
-        abmodel.reload();
+        rmodel.reload();
         rtree.restoreExpansion();
         rtree.restoreSelection();
     }

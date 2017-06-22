@@ -70,13 +70,13 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                 LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
                 ModelElement parentMe = getNodeModelElement(leafParent);
                 nodeToUserObjectPath.put(leaf, parentMe);
-                root.add(leaf);
+                lroot.add(leaf);
             }
             //alle Elemente vom root abhängen
-            root.removeAllChildren();
+            lroot.removeAllChildren();
             //alle Blätter direkt an den root hängen
             for (LGMTreeNode leaf : leafNodes) {
-                root.add(leaf);
+                lroot.add(leaf);
             }
         }
         return leafNodes;
