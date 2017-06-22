@@ -31,7 +31,8 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Das Panel für die Bausteinschnittstellen
+ * Panel für {@link Composition}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
+ * Also für alle Compositions, bei denen die maximale Kardinalität zu dem untergeordneten Element > 1 ist.
  */
 public class MutipleCompositionPanel extends AbstractPathConnectionPanel {
 
