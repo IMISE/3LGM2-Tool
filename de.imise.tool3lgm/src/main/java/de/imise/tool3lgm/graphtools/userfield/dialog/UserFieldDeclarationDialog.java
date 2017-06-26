@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.USERFIELD;
 import static de.imise.tool3lgm.graphtools.GraphDocument.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_EDGES;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES;
@@ -20,6 +19,8 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.exportDefinitions;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.importDefinitions;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -38,7 +39,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -62,14 +62,11 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldXMLParser;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
-import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -420,55 +417,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         fieldListModel.add(index, noc);
     }
 
-    /**
-     * Defnition importieren
-     *
-     * @return
-     */
-    private boolean importDef() {
-        ExtendedFileChooser dialog = new ExtendedFileChooser(UserFieldDeclarationDialog.class);
-        dialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilters(USERFIELD));
-        dialog.setMultiSelectionEnabled(false);
-        if (dialog.showOpenDialog(this) != ExtendedFileChooser.APPROVE_OPTION) {
-            return false;
-        }
-        try {
-            UserFieldXMLParser parser = new UserFieldXMLParser(dialog.getSelectedFile(), definitions);
-            parser.parseDocument();
-        } catch (Exception exp) {
-            Log.show(Log.ERROR, "IOException while parsing UserFieldFile", exp);
-            return false;
-        }
-        updateFieldList();
-        return true;
-    }
-
-    /**
-     * Defnition exportieren
-     *
-     * @return
-     */
-    private boolean exportDef() {
-        ExtendedFileChooser dialog = new ExtendedFileChooser(UserFieldDeclarationDialog.class);
-        dialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(USERFIELD));
-        dialog.setMultiSelectionEnabled(false);
-        if (dialog.showSaveDialog(this) != ExtendedFileChooser.APPROVE_OPTION) {
-            return false;
-        }
-
-        try {
-            RandomAccessFile raw = new RandomAccessFile(dialog.getSelectedFile(), "rw");
-            raw.setLength(0);
-            raw.writeBytes(definitions.toXMLString(false));
-            raw.close();
-        } catch (Exception exp) {
-            Log.show(Log.ERROR, "IOException while parsing UserFieldFile", exp);
-            return false;
-        }
-        return true;
-
-    }
-
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getActionCommand().equals("ok")) {
@@ -497,12 +445,12 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             returnValue = -1;
             dispose();
         } else if (e.getActionCommand().equals("import")) {
-            if (importDef()) {
+            if (importDefinitions(this, definitions)) {
                 updateFieldList();
                 returnValue = 1;
             }
         } else if (e.getActionCommand().equals("export")) {
-            exportDef();
+            exportDefinitions(this, definitions);
 
         } else if (e.getActionCommand().equals("add")) {
             //Typ der seleketierten Klasse holen
