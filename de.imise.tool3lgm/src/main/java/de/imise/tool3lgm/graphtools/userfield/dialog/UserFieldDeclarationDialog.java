@@ -385,7 +385,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      * Aktualisiert die Liste der {@link UserField}s für die selektierte Klasse
      */
     private void updateFieldList() {
-        //die Angabe für Start und Endklasse sind nur Testweise
         clearFieldList();
         Class<?> selClass = (Class<?>) classComboBox.getSelectedObject();
         if (selClass == null || !UserFieldTarget.class.isAssignableFrom(selClass)) {
@@ -395,20 +394,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         for (UserField uf : definitions.getUserFields(clazz)) {
             addFieldListEntry(uf);
         }
-        //		if (clazz != UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
-        //			for (int i = 0; i < definitions.getUserFieldCount(clazz); i++) {
-        //				UserField field = definitions.get(clazz, i);
-        //				addFieldListEntry(field);
-        //			}
-        //		} else {
-        //			int attributeCount = definitions.getGlobalUserFieldCount();
-        //			for (int i = 0; i < attributeCount; i++) {
-        //				UserField globalField = definitions.getGlobal(i);
-        //				if (!globalField.hasStyle(UserField.Style.FORMAT))
-        //					addFieldListEntry(globalField);
-        //			}
-        //		}
-
     }
 
     private void clearFieldList() {
