@@ -32,11 +32,8 @@ import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.LayoutManager;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -56,6 +53,7 @@ import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -65,6 +63,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -72,7 +71,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 /**
  * @author Thomas Rudert Dialog to create, edit, remove, import and export user-definied property-fields for model-elements
  */
-public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener, ListSelectionListener, MouseListener {
+public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener, ListSelectionListener {
 
     /** combobox to select a model-class */
     private AlphabeticalComboBox classComboBox;
@@ -90,10 +89,10 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     private JButton editButton;
 
     /** button to remove a userField */
-    private JButton removeButton;
+    private JButton deleteButton;
 
     /** button to add new userField */
-    private JButton addButton;
+    private JButton newButton;
 
     /** Buttons zum Vertauschen der Reihenfolge von Attributen */
     private JButton upButton, downButton;
@@ -216,8 +215,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         fieldListModel = new DefaultListModel();
         fieldList = new JList(fieldListModel);
         fieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        fieldList.addListSelectionListener(this);
-        fieldList.addMouseListener(this);
 
         panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel1.add(new JLabel(Tool3lgmConstants.getResString("userFieldDialog_class") + ": "));
@@ -235,10 +232,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         panel2 = new JPanel(layout);
         constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0);
 
-        addButton = new JButton(Tool3lgmConstants.getResString("new"));
-        addButton.setActionCommand("add");
-        addButton.addActionListener(this);
-        addButton.setEnabled(false);
+        newButton = createDisabledButton("new");
         constraints.gridwidth = 1;
         //Anstelle des Buttons die ComboBox einfügen
 
@@ -248,36 +242,24 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
         constraints.gridx++;
         constraints.gridwidth = 3;
-        panel2.add(addButton, constraints);
+        panel2.add(newButton, constraints);
         constraints.gridx--;
-        editButton = new JButton(Tool3lgmConstants.getResString("editButtonText"));
-        editButton.setActionCommand("edit");
-        editButton.addActionListener(this);
-        editButton.setEnabled(false);
+        editButton = createDisabledButton("editButtonText");
         constraints.gridy = 1;
         constraints.gridwidth = 4;
         panel2.add(editButton, constraints);
 
-        removeButton = new JButton(Tool3lgmConstants.getResString("delete"));
-        removeButton.setActionCommand("remove");
-        removeButton.addActionListener(this);
-        removeButton.setEnabled(false);
+        deleteButton = createDisabledButton("delete");
         constraints.gridy = 2;
         constraints.gridwidth = 4;
-        panel2.add(removeButton, constraints);
+        panel2.add(deleteButton, constraints);
 
-        downButton = new JButton(Tool3lgmConstants.getIcon("runter2.gif"));
-        downButton.setActionCommand("down");
-        downButton.addActionListener(this);
-        downButton.setEnabled(false);
+        downButton = createDisabledButton("runter2.gif");
         constraints.gridwidth = 2;
         constraints.gridy = 3;
         panel2.add(downButton, constraints);
 
-        upButton = new JButton(Tool3lgmConstants.getIcon("hoch2.gif"));
-        upButton.setActionCommand("up");
-        upButton.addActionListener(this);
-        upButton.setEnabled(false);
+        upButton = createDisabledButton("hoch2.gif");
         constraints.gridwidth = 2;
         constraints.gridx = 2;
         constraints.gridy = 3;
@@ -294,26 +276,18 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         layout = new BoxLayout(panel1, BoxLayout.X_AXIS);
         panel1.setLayout(layout);
         panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        button = new JButton(Tool3lgmConstants.getResString("importButtonText"));
-        button.setActionCommand("import");
-        button.addActionListener(this);
+        button = createButton("importButtonText");
         panel2.add(button);
 
-        button = new JButton(Tool3lgmConstants.getResString("exportButtonText"));
-        button.setActionCommand("export");
-        button.addActionListener(this);
+        button = createButton("exportButtonText");
         panel2.add(button);
         panel1.add(panel2);
 
         panel2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        button = new JButton(Tool3lgmConstants.getResString("ok"));
-        button.setActionCommand("ok");
-        button.addActionListener(this);
+        button = createButton("ok");
         panel2.add(button);
-        button = new JButton(Tool3lgmConstants.getResString("cancel"));
-        button.setActionCommand("cancel");
-        button.addActionListener(this);
+        button = createButton("cancel");
         panel2.add(button);
         panel1.add(panel2);
         pane.add(panel1, BorderLayout.SOUTH);
@@ -322,6 +296,8 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             defaultSize = getSize();
         }
         //ersten Eintrag selektieren (= globale Variablen)
+        fieldList.addListSelectionListener(this);
+        fieldList.addMouseListener(new DoubleClickListener(editButton));
         classComboBox.setSelectedIndex(0);
 
     }
@@ -417,9 +393,20 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         fieldListModel.add(index, noc);
     }
 
+    private ActionEvent lastActionEvent = null;
+
+    private boolean is(final String commandKey) {
+        return lastActionEvent.getActionCommand().equals(commandKey);
+    }
+
+    private boolean is(final Object commandSource) {
+        return lastActionEvent.getSource() == commandSource;
+    }
+
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getActionCommand().equals("ok")) {
+        lastActionEvent = e;
+        if (is("ok")) {
             dispose();
 
             gdcol.removeUserFieldValues(removedUserFields);
@@ -432,7 +419,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             if (gdcoll != null) {
                 gdcoll.getMainGraphDocument().distributeEvent(DATA_CHANGED);
             }
-        } else if (e.getActionCommand().equals("cancel")) {
+        } else if (is("cancel")) {
 
             if (returnValue != 0) {
                 if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("userFieldDialog_warning_message"), Tool3lgmConstants.getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION,
@@ -444,15 +431,15 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
             returnValue = -1;
             dispose();
-        } else if (e.getActionCommand().equals("import")) {
+        } else if (is("importButtonText")) {
             if (importDefinitions(this, definitions)) {
                 updateFieldList();
                 returnValue = 1;
             }
-        } else if (e.getActionCommand().equals("export")) {
+        } else if (is("exportButtonText")) {
             exportDefinitions(this, definitions);
 
-        } else if (e.getActionCommand().equals("add")) {
+        } else if (is(newButton)) {
             //Typ der seleketierten Klasse holen
             Class<?> selectedClass = (Class<?>) classComboBox.getSelectedObject();
 
@@ -494,7 +481,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 //wieder aus den Definitions entfernen
                 definitions.remove(userField);
             }
-        } else if (e.getActionCommand().equals("edit")) {
+        } else if (is(editButton)) {
 
             //aus der Liste der UserFields das selektierte holen
             Object selectedItem = fieldList.getSelectedValue();
@@ -530,7 +517,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 //den Formel-Editor-Dialog kann man solange nicht verlassen, wie sich Formeln im Kreis referenzieren
             } while (definitions.hasCrossReferences());
 
-        } else if (e.getActionCommand().equals("remove")) {
+        } else if (is(deleteButton)) {
             NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
             UserField userField = noc.getObject();
 
@@ -559,51 +546,45 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             }
             returnValue = -1;
 
-        } else if (e.getActionCommand().equals("up")) {
+        } else if (is(upButton)) {
             UserField userField;
-            //if(fieldListModel.get(fieldList.getSelectedIndex()) instanceof
-            // NamedObjectContainer)
-            //	{
             NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
             userField = noc.getObject();
-
-            //	}
-            //	else
-            //		userField = (UserField)
-            // fieldListModel.get(fieldList.getSelectedIndex());
-
-            //int index = fieldListModel.indexOf(userField);
-
             int index = fieldListModel.indexOf(noc);
-
             fieldListModel.remove(index);
             int newIndex = Math.max(0, index - 1);
-            //fieldListModel.insertElementAt(userField, newIndex);
             fieldListModel.insertElementAt(noc, newIndex);
             definitions.insert(userField, newIndex);
             fieldList.setSelectedIndex(index > 0 ? --index : index);
             returnValue = 1;
 
-        } else if (e.getActionCommand().equals("down")) {
+        } else if (is(downButton)) {
             UserField userField;
             NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
             userField = noc.getObject();
-
-            //int index = fieldListModel.indexOf(userField);
             int index = fieldListModel.indexOf(noc);
             fieldListModel.remove(index);
             int newIndex = Math.min(fieldListModel.size(), index + 1);
-            //fieldListModel.insertElementAt(userField, newIndex);
             fieldListModel.insertElementAt(noc, newIndex);
             definitions.insert(userField, newIndex);
             fieldList.setSelectedIndex(index < fieldListModel.getSize() - 1 ? ++index : index);
             returnValue = 1;
 
-        } else if (e.getSource().equals(classComboBox)) {
+        } else if (is(classComboBox)) {
             updateFieldList();
             updateUserFieldTypeComboBox();
-            addButton.setEnabled(true);
+            newButton.setEnabled(true);
         }
+    }
+
+    private JButton createButton(final String resKey) {
+        return EasyComponents.createButton(this, resKey);
+    }
+
+    private JButton createDisabledButton(final String resKey) {
+        JButton button = createButton(resKey);
+        button.setEnabled(false);
+        return button;
     }
 
     /**
@@ -616,36 +597,15 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         if (e.getSource() == fieldList) {
-            boolean enabled = !fieldList.isSelectionEmpty();
-            editButton.setEnabled(enabled);
-            removeButton.setEnabled(enabled);
-            downButton.setEnabled(enabled);
-            upButton.setEnabled(enabled);
-
+            setButtonsEnabled(!fieldList.isSelectionEmpty());
         }
     }
 
-    @Override
-    public void mouseClicked(final MouseEvent e) {
-        if (e.getSource() == fieldList && e.getClickCount() > 1 && fieldList.getSelectedIndex() > -1 && fieldList.getSelectedIndex() == fieldList.locationToIndex(new Point(e.getX(), e.getY()))) {
-            editButton.doClick();
-        }
-    }
-
-    @Override
-    public void mouseEntered(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(final MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(final MouseEvent e) {
+    private void setButtonsEnabled(final boolean enabled) {
+        editButton.setEnabled(enabled);
+        deleteButton.setEnabled(enabled);
+        downButton.setEnabled(enabled);
+        upButton.setEnabled(enabled);
     }
 
     @Override
