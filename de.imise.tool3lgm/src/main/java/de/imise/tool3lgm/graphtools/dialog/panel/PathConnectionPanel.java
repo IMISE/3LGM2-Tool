@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
+import java.awt.Component;
 /**
  * @author AXS created on 20.05.2007
  */
@@ -15,6 +16,7 @@ import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -41,7 +43,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.Pair;
 import de.imise.util.StringUtils;
 
 /**
@@ -52,7 +53,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     protected final LGMTree ltree;
     protected final LGMTree rtree;
-    private final DefaultTreeModel lmodel;
+    protected final DefaultTreeModel lmodel;
     private final DefaultTreeModel rmodel;
     protected final LGMTreeNode lroot;
     protected final LGMTreeNode rroot;
@@ -94,30 +95,29 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
         }
         String rtreeLabelString = getResString("frei");
-        Pair<String, String> treeLabels = StringUtils.makeSameLength(ltreeLabelString, rtreeLabelString);
-        ltreeLabelString = StringUtils.capitalizeFirstChar(treeLabels.getFirstItem());
-        rtreeLabelString = StringUtils.capitalizeFirstChar(treeLabels.getSecondItem());
+        ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);
+        rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
 
         westLabel.setText(ltreeLabelString);
         JLabel ltreeLabel = westLabel;
-        lroot = new LGMTreeNode(getModelElement().getContainer(mainDoc), false);
+        lroot = new LGMTreeNode(getModelElement().getContainer(mainDoc), false, getSortLeftTreeRootChildrenAlphabetical());
         lmodel = new DefaultTreeModel(lroot);
         ltree = new LGMTree(lmodel, mainDoc);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
-        ltree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
         JScrollPane sp = new JScrollPane(ltree);
 
         constraints.ipadx = 0;
         constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
-        add(this, ltreeLabel, constraints, 0, 0, 1, 1);
+        add(this, ltreeLabel, constraints, 0, 0, 2, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, sp, constraints, 0, 1, 1, 4);
+        add(this, sp, constraints, 0, 1, 2, 4);
 
         if (showRightTree) {
             constraints.anchor = GridBagConstraints.EAST;
@@ -127,7 +127,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
             //            constraints.ipadx = -30;
             //            constraints.ipady = -10;
-            add(this, viewButton, constraints, 0, 5, 1, 1);
+            add(this, viewButton, constraints, 1, 5, 1, 1);
             constraints.weightx = 1d;
             constraints.weighty = 1d;
             constraints.fill = GridBagConstraints.BOTH;
@@ -135,14 +135,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             rroot = new LGMTreeNode(rtreeLabelString, false);
             rmodel = new DefaultTreeModel(rroot);
             rtree = new LGMTree(rmodel, mainDoc);
-            rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             rtree.setCellRenderer(treeRenderer);
             rScollPane = new JScrollPane(rtree);
-
-            //            initDragAndDropTreeActions(rtree);
-            //            initDragAndDropTreeActions(ltree);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -157,6 +154,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (newElementAction != null) {
                 buttonpanel.add(new JButton(newElementAction));
             }
+            makeSameSize(westLabel, rLabel);
+            // dieses setzen der Dimension muss sein, damit sich der rechte Baum nie
+            // mehr Platz holt,
+            // als ihm in den Constraints gegeben wurde (spLinks und spRechts haben
+            // beide weigthx=0.5)
+            // ->jetzt ist es egal, wenn im linken Baum nichts steht, beide Baeume
+            // sind immer gleich breit!
+            rScollPane.setPreferredSize(new Dimension(1, 1));
+
         } else {
             rLabel = null;
             rroot = null;
@@ -170,6 +176,40 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
+    }
+
+    private void makeSameSize(final JComponent c1, final JComponent c2) {
+        JComponent larger = c1.getPreferredSize().width > c2.getPreferredSize().width ? c1 : c2;
+        JComponent smaller = larger == c1 ? c2 : c1;
+        smaller.setPreferredSize(larger.getPreferredSize());
+        smaller.setMinimumSize(larger.getMinimumSize());
+        smaller.setMaximumSize(larger.getMaximumSize());
+    }
+
+    public void addUnderLeftTree(final Component c, final GridBagConstraints gbc) {
+        add(this, c, gbc, 0, 5, 1, 1);
+    }
+
+    public void addSouth(final Component c, final GridBagConstraints gbc, final int gridwidth) {
+        add(this, c, gbc, 0, 6, gridwidth, 1);
+    }
+
+    /**
+     * Wenn <code>true</code> werden die TreeNodes unter dem Root im linken Baum sortiert
+     *
+     * @return
+     */
+    protected boolean getSortLeftTreeRootChildrenAlphabetical() {
+        return true;
+    }
+
+    /**
+     * Rückgabewert legt fest, wie die Selektion in den Bäumen ist
+     *
+     * @return
+     */
+    protected int getTreesSelectionModel() {
+        return TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
     }
 
     @Override
@@ -187,14 +227,14 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (showRightTree) {
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.NONE;
-            add(this, buttonpanel, constraints, 1, 3, 1, 2);
+            add(this, buttonpanel, constraints, 2, 3, 1, 2);
             constraints.anchor = GridBagConstraints.WEST;
-            add(this, rLabel, constraints, 2, 0, 1, 1);
+            add(this, rLabel, constraints, 3, 0, 1, 1);
             constraints.anchor = GridBagConstraints.WEST;
             constraints.fill = GridBagConstraints.BOTH;
             constraints.weightx = 1d;
             constraints.weighty = 1d;
-            add(this, rScollPane, constraints, 2, 1, 1, 4);
+            add(this, rScollPane, constraints, 3, 1, 1, 4);
         }
     }
 
@@ -245,6 +285,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     /**
      * Baut im linken Baum den gesamten Pfad auf
+     *
+     * @return Collection aller Blätter im Baum
      */
     protected Collection<LGMTreeNode> buildLeftTree() {
         int edgeIndex = 0;
