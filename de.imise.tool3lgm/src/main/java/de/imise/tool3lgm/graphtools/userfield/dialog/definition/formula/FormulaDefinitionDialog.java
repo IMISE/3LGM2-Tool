@@ -54,6 +54,7 @@ import javax.swing.border.EmptyBorder;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
@@ -194,8 +195,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
 
-        okButton = getButton("ok");
-        cancelButton = getButton("cancel");
+        okButton = createButton("ok");
+        cancelButton = createButton("cancel");
 
         accountingFunctionsButtonPanel = new AccountingFunctionsButtonPanel();
         operatorAndNumberInputPanel = new CalculatorStyledButtonPanel();
@@ -321,16 +322,8 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         return panel;
     }
 
-    private JButton getButton(final String resKey) {
-        String buttonText = resKey;
-        try {
-            buttonText = Tool3lgmConstants.getResString(resKey);
-        } catch (Exception e) {
-        }
-        JButton button = new JButton(buttonText);
-        button.setActionCommand(resKey);
-        button.addActionListener(this);
-        return button;
+    private JButton createButton(final String resKey) {
+        return EasyComponents.createButton(this, resKey);
     }
 
     private static ExtendedTextArea createFormulaTextArea() {
@@ -651,9 +644,9 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         public FormulaControlButtonPanel() {
             super(new GridLayout(1, 3));
             setBorder(getPanelBorder("formula_control"));
-            undoButton = getButton("undo");
-            leaveBracketButton = getButton(LEAVE_BRACKET_ESCAPE_CHARS);
-            clearFormulaButton = getButton("clearFormula");
+            undoButton = createButton("undo");
+            leaveBracketButton = createButton(LEAVE_BRACKET_ESCAPE_CHARS);
+            clearFormulaButton = createButton("clearFormula");
             Border border = getPanelBorder("formula_control");
             setBorder(border);
             setLayout(new GridBagLayout());
@@ -677,14 +670,14 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         public AccountingFunctionsButtonPanel() {
             super(new GridLayout(3, 3));
             setBorder(getPanelBorder("accounting_functions"));
-            buttonsum = getButton(ACCOUNTING_FUNCTION_SUM);
-            buttonMult = getButton(ACCOUNTING_FUNCTION_MULT);
-            buttonteilwertsumme = getButton(ACCOUNTING_FUNCTION_TWSUM);
-            buttonmax = getButton(ACCOUNTING_FUNCTION_MAX);
-            buttonmin = getButton(ACCOUNTING_FUNCTION_MIN);
-            buttonmittelwert = getButton(ACCOUNTING_FUNCTION_AVG);
-            buttonindikator = getButton(ACCOUNTING_FUNCTION_INDI);
-            buttonReference = getButton(ACCOUNTING_FUNCTION_REF);
+            buttonsum = createButton(ACCOUNTING_FUNCTION_SUM);
+            buttonMult = createButton(ACCOUNTING_FUNCTION_MULT);
+            buttonteilwertsumme = createButton(ACCOUNTING_FUNCTION_TWSUM);
+            buttonmax = createButton(ACCOUNTING_FUNCTION_MAX);
+            buttonmin = createButton(ACCOUNTING_FUNCTION_MIN);
+            buttonmittelwert = createButton(ACCOUNTING_FUNCTION_AVG);
+            buttonindikator = createButton(ACCOUNTING_FUNCTION_INDI);
+            buttonReference = createButton(ACCOUNTING_FUNCTION_REF);
             addButtons();
         }
 
@@ -729,15 +722,15 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         public CalculatorStyledButtonPanel() {
             super(new GridBagLayout());
             setBorder(getPanelBorder("nums_and_operators"));
-            buttonplus = getButton(OPERATOR_PLUS);
-            buttonminus = getButton(OPERATOR_MINUS);
-            buttonmult = getButton(OPERATOR_MULT);
-            buttondiv = getButton(OPERATOR_DIV);
-            buttonbrackets = getButton(BRACKETS);
+            buttonplus = createButton(OPERATOR_PLUS);
+            buttonminus = createButton(OPERATOR_MINUS);
+            buttonmult = createButton(OPERATOR_MULT);
+            buttondiv = createButton(OPERATOR_DIV);
+            buttonbrackets = createButton(BRACKETS);
             char decimalSeparator = new DecimalFormat().getDecimalFormatSymbols().getDecimalSeparator();
-            buttoncomma = getButton("" + decimalSeparator);
+            buttoncomma = createButton("" + decimalSeparator);
             for (int i = 0; i < numberButtons.length; i++) {
-                numberButtons[i] = getButton(new Integer(i).toString());
+                numberButtons[i] = createButton(new Integer(i).toString());
             }
             addButtons();
         }
