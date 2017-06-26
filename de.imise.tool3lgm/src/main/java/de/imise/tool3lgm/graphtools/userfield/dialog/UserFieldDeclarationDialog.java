@@ -1,5 +1,26 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.USERFIELD;
+import static de.imise.tool3lgm.graphtools.GraphDocument.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_EDGES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.userfield.CostingUtil.getDisplayableStyleName;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER_FORMULA;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.ID;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
+import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -18,7 +39,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.RandomAccessFile;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -35,11 +55,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -135,7 +154,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     /**
      * show the dialog
-     * 
+     *
      * @param owner Frame which owns the dialog
      * @param doc actual which give the context of <code>GDCollection</code> and <code>UserFieldDefinitions</code>
      * @return -1 if cancel was selected, 0 if ok was selected but k was changed by user, 1 if user made changes and pressed ok-button
@@ -154,26 +173,25 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         classComboBox.setMaximumRowCount(13);
         //Modellklasse zur
 
-        classComboBox.addItem(UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS, UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
+        classComboBox.addItem(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
         classComboBox.addSeparator(true);
 
         //alle nicht abstracten Knotenklassen hinzufügen
-        for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
-            if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {
-                continue;
+        for (Class<? extends ModelElement> elementClass : ALL_NODES) {
+            if (!ModelConstants.isAbstract(elementClass)) {
+                classComboBox.addItem(elementClass, getDisplayableName(elementClass));
             }
-            classComboBox.addItem(ModelConstants.ALL_NODES[i], ModelConstants.getDisplayableName(ModelConstants.ALL_NODES[i]));
         }
         classComboBox.addSeparator(true);
 
         //alle Kantenklassen jeweils mit hin und Rückrichtung
-        for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
-            classComboBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-            classComboBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
+        for (Class<? extends Kante> edgeClass : ALL_EDGES) {
+            classComboBox.addItem(edgeClass, getFullForwardMetaAssociationName(edgeClass));
+            classComboBox.addItem(edgeClass, getFullBackwardMetaAssociationName(edgeClass));
+
         }
-        //nichts selektieren
-        classComboBox.setSelectedIndex(-1);
         classComboBox.addActionListener(this);
+
     }
 
     /**
@@ -306,6 +324,9 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             pack();
             defaultSize = getSize();
         }
+        //ersten Eintrag selektieren (= globale Variablen)
+        classComboBox.setSelectedIndex(0);
+
     }
 
     /**
@@ -325,33 +346,37 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             return;
         }
 
-        userFieldTypeComboBox.addItem(UserField.Style.CHECK_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.CHECK_BOX));
-        userFieldTypeComboBox.addItem(UserField.Style.COMBO_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.COMBO_BOX));
-        userFieldTypeComboBox.addItem(UserField.Style.HYPERLINK, CostingUtil.getDisplayableStyleName(UserField.Style.HYPERLINK));
-        userFieldTypeComboBox.addItem(UserField.Style.MULTI_LINE, CostingUtil.getDisplayableStyleName(UserField.Style.MULTI_LINE));
-        userFieldTypeComboBox.addItem(UserField.Style.RADIO_BUTTON, CostingUtil.getDisplayableStyleName(UserField.Style.RADIO_BUTTON));
-        userFieldTypeComboBox.addItem(UserField.Style.SEPARATOR, CostingUtil.getDisplayableStyleName(UserField.Style.SEPARATOR));
-        userFieldTypeComboBox.addItem(UserField.Style.SINGLE_LINE, CostingUtil.getDisplayableStyleName(UserField.Style.SINGLE_LINE));
-        userFieldTypeComboBox.addItem(UserField.Style.ID, CostingUtil.getDisplayableStyleName(UserField.Style.ID));
+        addType(CHECK_BOX);
+        addType(COMBO_BOX);
+        addType(HYPERLINK);
+        addType(MULTI_LINE);
+        addType(RADIO_BUTTON);
+        addType(SEPARATOR);
+        addType(SINGLE_LINE);
+        addType(ID);
 
-        // Die Kennzahl kann immer zu Auswahl gestellt werden. 
+        // Die Kennzahl kann immer zu Auswahl gestellt werden.
         //Nur wenn es sich um eine Modellvariable handelt, darf die Kennzahlformel nicht angeboten werden, sonst schon
-        userFieldTypeComboBox.addItem(UserField.Style.CLASSIFICATION_NUMBER, CostingUtil.getDisplayableStyleName(UserField.Style.CLASSIFICATION_NUMBER));
-        if (selClass != UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
-            userFieldTypeComboBox.addItem(UserField.Style.CLASSIFICATION_NUMBER_FORMULA, CostingUtil.getDisplayableStyleName(UserField.Style.CLASSIFICATION_NUMBER_FORMULA));
+        addType(CLASSIFICATION_NUMBER);
+        if (selClass != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+            addType(CLASSIFICATION_NUMBER_FORMULA);
         }
+    }
+
+    private void addType(final UserField.Style style) {
+        userFieldTypeComboBox.addItem(style, getDisplayableStyleName(style));
     }
 
     /**
      * Gibt in Anghänigkeit des übergebenen userfields den style dessen als String zurück.
-     * 
+     *
      * @param u
      * @return String, der den ausgeschirebenen Style enthält.
      */
     private static final String getUserFieldStyle(final UserField u) {
         String userFieldStyle = "";
         if (u != null) {
-            userFieldStyle = CostingUtil.getDisplayableStyleName(u.getStyle());
+            userFieldStyle = getDisplayableStyleName(u.getStyle());
         }
         return userFieldStyle;
     }
@@ -379,7 +404,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         //			int attributeCount = definitions.getGlobalUserFieldCount();
         //			for (int i = 0; i < attributeCount; i++) {
         //				UserField globalField = definitions.getGlobal(i);
-        //				if (!globalField.hasStyle(UserField.Style.FORMAT)) 
+        //				if (!globalField.hasStyle(UserField.Style.FORMAT))
         //					addFieldListEntry(globalField);
         //			}
         //		}
@@ -392,7 +417,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     /**
      * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
-     * 
+     *
      * @param userField
      */
     private void addFieldListEntry(final UserField userField) {
@@ -401,7 +426,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     /**
      * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
-     * 
+     *
      * @param userField
      * @param index
      */
@@ -412,12 +437,12 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     /**
      * Defnition importieren
-     * 
+     *
      * @return
      */
     private boolean importDef() {
         ExtendedFileChooser dialog = new ExtendedFileChooser(UserFieldDeclarationDialog.class);
-        dialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.USERFIELD));
+        dialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilters(USERFIELD));
         dialog.setMultiSelectionEnabled(false);
         if (dialog.showOpenDialog(this) != ExtendedFileChooser.APPROVE_OPTION) {
             return false;
@@ -435,12 +460,12 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     /**
      * Defnition exportieren
-     * 
+     *
      * @return
      */
     private boolean exportDef() {
         ExtendedFileChooser dialog = new ExtendedFileChooser(UserFieldDeclarationDialog.class);
-        dialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.USERFIELD));
+        dialog.setFileFilters(true, Tool3lgmConstants.getFileNameExtensionFilter(USERFIELD));
         dialog.setMultiSelectionEnabled(false);
         if (dialog.showSaveDialog(this) != ExtendedFileChooser.APPROVE_OPTION) {
             return false;
@@ -472,7 +497,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
             GDCollection gdcoll = definitions.getCollection();
             if (gdcoll != null) {
-                gdcoll.getMainGraphDocument().distributeEvent(GraphDocument.DATA_CHANGED);
+                gdcoll.getMainGraphDocument().distributeEvent(DATA_CHANGED);
             }
         } else if (e.getActionCommand().equals("cancel")) {
 
@@ -557,7 +582,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                     //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrektr aktualisert wird
                     int selectedIndex = fieldList.getSelectedIndex();
 
-                    //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen, 
+                    //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen,
                     //damit der evtl. geänderte korrekt Name angezeigt wird
                     fieldListModel.remove(selectedIndex);
                     addFieldListEntry(userField, selectedIndex);
@@ -582,7 +607,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
             if (showWarningForDeletingUserFields) {
                 String[] frage = {
-                    Tool3lgmConstants.getResString("dontShowAgain")
+                        Tool3lgmConstants.getResString("dontShowAgain")
                 };
                 Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, Tool3lgmConstants.getResString("warnung"), Tool3lgmConstants.getResString("allValuesWouldBeDeleted"), frage);
 
@@ -657,11 +682,12 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     @Override
     public void valueChanged(final ListSelectionEvent e) {
-        if (e.getSource().equals(fieldList)) {
-            editButton.setEnabled(!fieldList.isSelectionEmpty());
-            removeButton.setEnabled(!fieldList.isSelectionEmpty());
-            downButton.setEnabled(!fieldList.isSelectionEmpty());
-            upButton.setEnabled(!fieldList.isSelectionEmpty());
+        if (e.getSource() == fieldList) {
+            boolean enabled = !fieldList.isSelectionEmpty();
+            editButton.setEnabled(enabled);
+            removeButton.setEnabled(enabled);
+            downButton.setEnabled(enabled);
+            upButton.setEnabled(enabled);
 
         }
     }
