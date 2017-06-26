@@ -322,12 +322,8 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      */
     private void updateFieldList() {
         clearFieldList();
-        Class<?> selClass = (Class<?>) classComboBox.getSelectedObject();
-        if (selClass == null || !UserFieldTarget.class.isAssignableFrom(selClass)) {
-            return;
-        }
-        Class<? extends UserFieldTarget> clazz = selClass.asSubclass(UserFieldTarget.class);
-        for (UserField uf : definitions.getUserFields(clazz)) {
+        Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
+        for (UserField uf : definitions.getUserFields(selectedClass)) {
             addFieldListEntry(uf);
         }
     }
