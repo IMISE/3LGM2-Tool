@@ -23,7 +23,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
 
     /**
      * Gibt das Element zurück, welches durch diese Kante Teil des anderen Elementes ist.
-     * 
+     *
      * @return Partelement der Kante
      */
     public ModelElement getPart() {
@@ -32,7 +32,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
 
     /**
      * Gibt das Element zurück, welches durch diese Kante das Oberelement des anderen Elementes ist.
-     * 
+     *
      * @return Parentelement der Kante
      */
     public ModelElement getParent() {
@@ -41,7 +41,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
 
     /**
      * Gibt die Teilelementklasse der Teil-Von-Beziehung zurück
-     * 
+     *
      * @param poClass
      * @return
      */
@@ -51,7 +51,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
 
     /**
      * Gibt die Elementklasse der Teil-Von-Beziehung zurück, die nicht die Teilelementklasse ist
-     * 
+     *
      * @param poClass
      * @return
      */
@@ -61,7 +61,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Teilelementklasse der übergebenen Kante zuweisungskompatibel ist.
-     * 
+     *
      * @param poClass
      * @param meClass
      * @return
@@ -73,7 +73,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Kante zuweisungskompatibel ist, ide nicht
      * die Teilelementklasse ist.
-     * 
+     *
      * @param poClass
      * @param meClass
      * @return
@@ -98,24 +98,9 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     @Override
-    public boolean putXMLFieldString(final String field, final String value) {
-        if (field.equals("state")) {
-            for (int i = 0; i < DIRECTION_STR.length; i++) {
-                if (value.equals(DIRECTION_STR[i])) {
-                    setDirection(i - 1);
-                    return true;
-                }
-            }
-            return false;
-        }
-        return super.putXMLFieldString(field, value);
-    }
-
-    @Override
     public final void setDirection(final int _state) {
         ModelElement start = k1;
         ModelElement end = k2;
-
         switch (_state) {
         case Doppelkante.DOUBLE:
             break;
@@ -129,12 +114,10 @@ public abstract class PartOfBeziehung extends Doppelkante {
             super.setDirection(Doppelkante.FORWARD);
             break;
         }
-
         if (isInCircle()) {
             k1 = start;
             k2 = end;
         }
-
         return;
     }
 
@@ -142,7 +125,6 @@ public abstract class PartOfBeziehung extends Doppelkante {
     public void setKnots(final ModelElement part, final ModelElement parent, final boolean registerInKnots) {
         ModelElement start = k1;
         ModelElement end = k2;
-
         super.setKnots(part, parent, registerInKnots);
         if (isInCircle()) {
             part.removeEdge(this);
@@ -155,12 +137,10 @@ public abstract class PartOfBeziehung extends Doppelkante {
     public void setKnotsAndInsert(final ModelElement part, final int partEdgePos, final ModelElement parent, final int parentEdgePos) {
         ModelElement start = k1;
         ModelElement end = k2;
-
         k1 = part;
         k2 = parent;
         part.insertEdge(this, partEdgePos);
         parent.insertEdge(this, parentEdgePos);
-
         if (isInCircle()) {
             part.removeEdge(this);
             parent.removeEdge(this);
@@ -199,8 +179,8 @@ public abstract class PartOfBeziehung extends Doppelkante {
         if (k1 != null && k2 != null) {
             boolean retVal = k2.isPartOf(k1);
             if (retVal) {
-                Log.show(Log.INFO, Tool3lgmConstants.getErrString("kreis") + "\n" + Tool3lgmConstants.getResString("ModelElement_p") + ":\n" + ModelConstants.getDisplayableName(k1) + ": " + k1.getName() + "\n" + ModelConstants.getDisplayableName(k2)
-                        + ": " + k2.getName());
+                Log.show(Log.INFO, Tool3lgmConstants.getErrString("kreis") + "\n" + Tool3lgmConstants.getResString("ModelElement_p") + ":\n" + ModelConstants.getDisplayableName(k1) + ": " + k1.getName() + "\n" + ModelConstants.getDisplayableName(k2) + ": "
+                        + k2.getName());
             }
             return retVal;
         }
