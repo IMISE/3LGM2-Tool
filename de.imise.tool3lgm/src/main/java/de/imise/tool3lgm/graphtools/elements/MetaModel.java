@@ -94,11 +94,6 @@ public abstract class MetaModel {
     public abstract Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges();
 
     /**
-     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
-     */
-    public abstract Set<Class<? extends Kante>> getMultipleEdgeClasses();
-
-    /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
      * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
