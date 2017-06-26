@@ -26,9 +26,10 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     /**
-     * Mappt von einem Endelement auf
+     * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linke Baum darüber liegenden
+     * Knotens. Das ist der Knoten, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
      */
-    private Map<LGMTreeNode, ModelElement> nodeToUserObjectPath;
+    private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
     public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
         super(dialog, showRightTree, edgeClasses);
@@ -59,17 +60,17 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         if (edgeClasses.length == 1) {
             return leafNodes;
         }
-        if (nodeToUserObjectPath == null) {
-            nodeToUserObjectPath = Maps.newHashMap();
+        if (nodeToParentModelElement == null) {
+            nodeToParentModelElement = Maps.newHashMap();
         } else {
-            nodeToUserObjectPath.clear();
+            nodeToParentModelElement.clear();
         }
         if (!leafNodes.isEmpty()) {
             //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
             for (LGMTreeNode leaf : leafNodes) {
                 LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
                 ModelElement parentMe = getNodeModelElement(leafParent);
-                nodeToUserObjectPath.put(leaf, parentMe);
+                nodeToParentModelElement.put(leaf, parentMe);
                 lroot.add(leaf);
             }
             //alle Elemente vom root abhängen
@@ -104,7 +105,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                     //immer nur die letzte Kante im Pfad entfernen
                     //das ist der Index der Kante im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = edgeClasses.length - 1;
-                    ModelElement parentOfElement2Disconnect = nodeToUserObjectPath.get(node);
+                    ModelElement parentOfElement2Disconnect = nodeToParentModelElement.get(node);
                     disconnect(parentOfElement2Disconnect, element2Disconnect, treePathEdgeIndex);
                 }
             }
