@@ -316,19 +316,8 @@ public final class ModelConstants {
         return getOrderedEdgeClasses(elementClass).contains(edgeClass);
     }
 
-    /**
-     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
-     */
-    private static final Set<Class<? extends Kante>> MULTIPLE_EDGE_CLASSES = metaModel.getMultipleEdgeClasses();
-
-    /**
-     * Liefert <code>true</code>, wenn über Kanten der übergebenen Kantenklasse dieselben 2 Elemente merhfach verbunden sein können.
-     *
-     * @param edgeClass
-     * @return
-     */
     public static final boolean isMultipleEdgeClass(final Class<? extends Kante> edgeClass) {
-        return MULTIPLE_EDGE_CLASSES.contains(edgeClass);
+        return MultipleConnectionEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**

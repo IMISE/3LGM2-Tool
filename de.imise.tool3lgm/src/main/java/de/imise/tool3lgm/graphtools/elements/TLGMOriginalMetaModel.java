@@ -438,14 +438,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     /**
-     * Set aller Kanten, bei denen dieselben 2 Elemente merhfach über dieselbe Kantenart miteinander verbunden sein können.
-     */
-    @Override
-    public final Set<Class<? extends Kante>> getMultipleEdgeClasses() {
-        return ImmutableSet.<Class<? extends Kante>> of(PrzAufVerbindung.class);
-    }
-
-    /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
      * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen

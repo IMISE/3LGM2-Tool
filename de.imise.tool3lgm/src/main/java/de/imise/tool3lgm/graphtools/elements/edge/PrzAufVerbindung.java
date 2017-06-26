@@ -3,36 +3,38 @@
  */
 package de.imise.tool3lgm.graphtools.elements.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.MultipleConnectionEdge;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 
 /**
  * @author Thomas
  */
-public final class PrzAufVerbindung extends Doppelkante {
+public final class PrzAufVerbindung extends MultipleConnectionEdge {
 
     //    public static final Class[] stcl = {Prozess.class};
     public static final Class<? extends ModelElement> stcl = Prozess.class;
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
     //	public static final Class[] etcl = {Aufgabe.class};
 
-    //	private static Object[][] stcl = {{Prozess.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] stcl = {{Prozess.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public PrzAufVerbindung() {
         super();
     }
