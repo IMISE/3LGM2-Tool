@@ -1,11 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog;
 
 import static de.imise.tool3lgm.graphtools.GraphDocument.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_EDGES;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.userfield.CostingUtil.getDisplayableStyleName;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
@@ -17,8 +12,6 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
-import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.importDefinitions;
 
@@ -54,9 +47,6 @@ import javax.swing.event.ListSelectionListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
-import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -74,7 +64,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener, ListSelectionListener {
 
     /** combobox to select a model-class */
-    private AlphabeticalComboBox classComboBox;
+    private UserFieldDeclarationDialogClassComboBox classComboBox;
 
     /**
      * list with the defined userFields Es wird hier keine AplphabeticalJList genutzt, weil die Elemente in der Reinhenfolge angezeigt werden sollen,
@@ -165,29 +155,8 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      * Initialiert die <code>ComboBox</code> mit den Klasseneinträgen, für die <code>UserField</code> s definiert werden können.
      */
     private void createClassComboBox() {
-        classComboBox = new AlphabeticalComboBox();
-        classComboBox.setMaximumRowCount(13);
-        //Modellklasse zur
-
-        classComboBox.addItem(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
-        classComboBox.addSeparator(true);
-
-        //alle nicht abstracten Knotenklassen hinzufügen
-        for (Class<? extends ModelElement> elementClass : ALL_NODES) {
-            if (!ModelConstants.isAbstract(elementClass)) {
-                classComboBox.addItem(elementClass, getDisplayableName(elementClass));
-            }
-        }
-        classComboBox.addSeparator(true);
-
-        //alle Kantenklassen jeweils mit hin und Rückrichtung
-        for (Class<? extends Kante> edgeClass : ALL_EDGES) {
-            classComboBox.addItem(edgeClass, getFullForwardMetaAssociationName(edgeClass));
-            classComboBox.addItem(edgeClass, getFullBackwardMetaAssociationName(edgeClass));
-
-        }
+        classComboBox = new UserFieldDeclarationDialogClassComboBox(13);
         classComboBox.addActionListener(this);
-
     }
 
     /**
@@ -232,7 +201,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         panel2 = new JPanel(layout);
         constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0);
 
-        newButton = createDisabledButton("new");
+        newButton = createButton("new");
         constraints.gridwidth = 1;
         //Anstelle des Buttons die ComboBox einfügen
 
@@ -298,8 +267,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         //ersten Eintrag selektieren (= globale Variablen)
         fieldList.addListSelectionListener(this);
         fieldList.addMouseListener(new DoubleClickListener(editButton));
-        classComboBox.setSelectedIndex(0);
-
+        classComboBox.selectFirstItem();
     }
 
     /**
@@ -314,11 +282,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         userFieldTypeComboBox.setEnabled(true);
         userFieldTypeComboBox.removeAllItems();
 
-        Class<?> selClass = (Class<?>) classComboBox.getSelectedObject();
-        if (selClass == null) {
-            return;
-        }
-
         addType(CHECK_BOX);
         addType(COMBO_BOX);
         addType(HYPERLINK);
@@ -331,7 +294,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         // Die Kennzahl kann immer zu Auswahl gestellt werden.
         //Nur wenn es sich um eine Modellvariable handelt, darf die Kennzahlformel nicht angeboten werden, sonst schon
         addType(CLASSIFICATION_NUMBER);
-        if (selClass != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
+        if (!classComboBox.isGlobalUserFieldClassSelected()) {
             addType(CLASSIFICATION_NUMBER_FORMULA);
         }
     }
@@ -441,13 +404,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
         } else if (is(newButton)) {
             //Typ der seleketierten Klasse holen
-            Class<?> selectedClass = (Class<?>) classComboBox.getSelectedObject();
-
-            //wenn keine Klasse, für die man Kennzahlen und Formeln definieren kann, selektiert ist
-            if (!UserFieldTarget.class.isAssignableFrom(selectedClass)) {
-                return;
-            }
-            Class<? extends UserFieldTarget> selClass = selectedClass.asSubclass(UserFieldTarget.class);
+            Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
 
             //Definitionseditor für das neue userField anzeigen
             UserField.Style style = (UserField.Style) userFieldTypeComboBox.getSelectedObject();
@@ -458,7 +415,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
             //jetzt kann nur noch ein Knoten- oder Kantentyp selektiert sein
             //-> neues userField für die selektierte Klassenart anlegen
-            UserField userField = new UserField(selClass, style, definitions);
+            UserField userField = new UserField(selectedClass, style, definitions);
 
             //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
             definitions.add(userField);
@@ -573,7 +530,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         } else if (is(classComboBox)) {
             updateFieldList();
             updateUserFieldTypeComboBox();
-            newButton.setEnabled(true);
         }
     }
 
