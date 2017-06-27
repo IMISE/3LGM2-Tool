@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.GraphDocument.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.userfield.CostingUtil.getDisplayableStyleName;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
@@ -14,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.importDefinitions;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -32,14 +34,11 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -70,10 +69,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      * list with the defined userFields Es wird hier keine AplphabeticalJList genutzt, weil die Elemente in der Reinhenfolge angezeigt werden sollen,
      * die der User vorgibt.
      */
-    private JList fieldList;
-
-    /** the model with the data for fieldList */
-    private DefaultListModel fieldListModel;
+    private UserFieldDeclarationDialogFieldList fieldList;
 
     /** button to edit a userField */
     private JButton editButton;
@@ -181,9 +177,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
         createClassComboBox();
-        fieldListModel = new DefaultListModel();
-        fieldList = new JList(fieldListModel);
-        fieldList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        fieldList = new UserFieldDeclarationDialogFieldList(definitions);
 
         panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panel1.add(new JLabel(Tool3lgmConstants.getResString("userFieldDialog_class") + ": "));
@@ -303,55 +297,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         userFieldTypeComboBox.addItem(style, getDisplayableStyleName(style));
     }
 
-    /**
-     * Gibt in Anghänigkeit des übergebenen userfields den style dessen als String zurück.
-     *
-     * @param u
-     * @return String, der den ausgeschirebenen Style enthält.
-     */
-    private static final String getUserFieldStyle(final UserField u) {
-        String userFieldStyle = "";
-        if (u != null) {
-            userFieldStyle = getDisplayableStyleName(u.getStyle());
-        }
-        return userFieldStyle;
-    }
-
-    /**
-     * Aktualisiert die Liste der {@link UserField}s für die selektierte Klasse
-     */
-    private void updateFieldList() {
-        clearFieldList();
-        Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
-        for (UserField uf : definitions.getUserFields(selectedClass)) {
-            addFieldListEntry(uf);
-        }
-    }
-
-    private void clearFieldList() {
-        fieldListModel.removeAllElements();
-    }
-
-    /**
-     * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
-     *
-     * @param userField
-     */
-    private void addFieldListEntry(final UserField userField) {
-        addFieldListEntry(userField, fieldListModel.size());
-    }
-
-    /**
-     * Fügt zur Liste der <code>UserField</code>s das übergebene <code>UserField</code> hinzu.
-     *
-     * @param userField
-     * @param index
-     */
-    private void addFieldListEntry(final UserField userField, final int index) {
-        NamedObjectContainer<UserField> noc = new NamedObjectContainer<UserField>(userField, userField.getName() + "  ( " + getUserFieldStyle(userField) + " )");
-        fieldListModel.add(index, noc);
-    }
-
     private ActionEvent lastActionEvent = null;
 
     private boolean is(final String commandKey) {
@@ -367,19 +312,15 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         lastActionEvent = e;
         if (is("ok")) {
             dispose();
-
             gdcol.removeUserFieldValues(removedUserFields);
-
             if (!UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
                 return;
             }
-
             GDCollection gdcoll = definitions.getCollection();
             if (gdcoll != null) {
                 gdcoll.getMainGraphDocument().distributeEvent(DATA_CHANGED);
             }
         } else if (is("cancel")) {
-
             if (returnValue != 0) {
                 if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("userFieldDialog_warning_message"), Tool3lgmConstants.getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE)) {
@@ -387,45 +328,39 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 }
             }
             definitions.getCollection().setUserFieldDefinitions(oldUserFieldDefionitions);
-
             returnValue = -1;
             dispose();
         } else if (is("importButtonText")) {
             if (importDefinitions(this, definitions)) {
-                updateFieldList();
+                fieldList.update(classComboBox.getSelectedClass());
                 returnValue = 1;
             }
         } else if (is("exportButtonText")) {
             exportDefinitions(this, definitions);
-
         } else if (is(newButton)) {
             //Typ der seleketierten Klasse holen
             Class<? extends UserFieldTarget> selectedClass = classComboBox.getSelectedClass();
-
             //Definitionseditor für das neue userField anzeigen
             UserField.Style style = (UserField.Style) userFieldTypeComboBox.getSelectedObject();
             if (style == null) {
                 JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("choose_type_first"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
             //jetzt kann nur noch ein Knoten- oder Kantentyp selektiert sein
             //-> neues userField für die selektierte Klassenart anlegen
             UserField userField = new UserField(selectedClass, style, definitions);
-
             //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne
             definitions.add(userField);
-
             //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
             int userDefinitionDialogReturnValue;
             do {
                 userDefinitionDialogReturnValue = UserFieldDefinitionDialog.showDialog(this, userField, gdcol);
-            } while (userDefinitionDialogReturnValue == UserFieldDefinitionDialog.OK && definitions.hasCrossReferences());
+            } while (userDefinitionDialogReturnValue == OK && definitions.hasCrossReferences());
 
             //wenn der Dialog über OK verlassen wurde
-            if (userDefinitionDialogReturnValue == UserFieldDefinitionDialog.OK) {
+            if (userDefinitionDialogReturnValue == OK) {
                 //das neue UserField anzeigen
-                addFieldListEntry(userField);
+                fieldList.addEntry(userField);
                 returnValue = 1;
                 //den Definitions sagen, dass sich was geändert hat
                 definitions.getCollection().getUserFieldDefinitions().initReset();
@@ -435,7 +370,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 definitions.remove(userField);
             }
         } else if (is(editButton)) {
-
             //aus der Liste der UserFields das selektierte holen
             Object selectedItem = fieldList.getSelectedValue();
             //keins gefunden -> raus
@@ -444,23 +378,13 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             }
             @SuppressWarnings("unchecked")
             UserField userField = ((NamedObjectContainer<UserField>) selectedItem).getObject();
-
             //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
             String oldFormula = userField.getFormula();
-
             do {
                 gdcol.getUserFieldDefinitions().setConsistencyUnknown();
                 //Definitionseditor für das zu bearbeitende userField anzeigen
                 if (UserFieldDefinitionDialog.showDialog(this, userField, gdcol) == UserFieldDefinitionDialog.OK) {
-                    //aus der Liste entfernen und wieder hinzufügen, damit der Anzeigename korrektr aktualisert wird
-                    int selectedIndex = fieldList.getSelectedIndex();
-
-                    //Das Element aus der Liste entfernen und an alter Stelle wieder neu hinzufügen,
-                    //damit der evtl. geänderte korrekt Name angezeigt wird
-                    fieldListModel.remove(selectedIndex);
-                    addFieldListEntry(userField, selectedIndex);
-                    fieldList.setSelectedIndex(selectedIndex);
-
+                    fieldList.refreshSelected();
                     returnValue = 1;
                 } else {
                     // Wenn der Definitionsdialog für Kennzahlformeln abgebrochen wurde, wird die alte Formel zurückgesetzt.
@@ -471,18 +395,15 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             } while (definitions.hasCrossReferences());
 
         } else if (is(deleteButton)) {
-            NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
-            UserField userField = noc.getObject();
-
+            UserField userField = fieldList.getSelected();
             //Bevor ein userField gelöscht wird, wird nochmal eine Sicherheitsabfrage gestellt.
             //Wenn die Siocherheitsabfrage nicht bestätigt wird, wird cancel true. D.h. das Löschen wird abgebrochen.
             boolean cancel = false;
-
             if (showWarningForDeletingUserFields) {
                 String[] frage = {
-                        Tool3lgmConstants.getResString("dontShowAgain")
+                        getResString("dontShowAgain")
                 };
-                Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, Tool3lgmConstants.getResString("warnung"), Tool3lgmConstants.getResString("allValuesWouldBeDeleted"), frage);
+                Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, getResString("warnung"), getResString("allValuesWouldBeDeleted"), frage);
 
                 if (result == null) {
                     cancel = true;
@@ -490,41 +411,21 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                     showWarningForDeletingUserFields = false;
                 }
             }
-
             //Alle gelöschten UserFields merken
-            if (cancel == false) {
+            if (!cancel) {
                 removedUserFields.addAll(definitions.remove(userField));
-                updateFieldList();
+                fieldList.update(classComboBox.getSelectedClass());
                 returnValue = 1;
             }
             returnValue = -1;
-
         } else if (is(upButton)) {
-            UserField userField;
-            NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
-            userField = noc.getObject();
-            int index = fieldListModel.indexOf(noc);
-            fieldListModel.remove(index);
-            int newIndex = Math.max(0, index - 1);
-            fieldListModel.insertElementAt(noc, newIndex);
-            definitions.insert(userField, newIndex);
-            fieldList.setSelectedIndex(index > 0 ? --index : index);
+            fieldList.moveUp();
             returnValue = 1;
-
         } else if (is(downButton)) {
-            UserField userField;
-            NamedObjectContainer<UserField> noc = (NamedObjectContainer<UserField>) fieldListModel.get(fieldList.getSelectedIndex());
-            userField = noc.getObject();
-            int index = fieldListModel.indexOf(noc);
-            fieldListModel.remove(index);
-            int newIndex = Math.min(fieldListModel.size(), index + 1);
-            fieldListModel.insertElementAt(noc, newIndex);
-            definitions.insert(userField, newIndex);
-            fieldList.setSelectedIndex(index < fieldListModel.getSize() - 1 ? ++index : index);
+            fieldList.moveDown();
             returnValue = 1;
-
         } else if (is(classComboBox)) {
-            updateFieldList();
+            fieldList.update(classComboBox.getSelectedClass());
             updateUserFieldTypeComboBox();
         }
     }
