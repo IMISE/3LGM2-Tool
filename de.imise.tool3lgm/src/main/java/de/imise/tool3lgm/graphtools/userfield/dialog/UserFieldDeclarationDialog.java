@@ -267,7 +267,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         //ersten Eintrag selektieren (= globale Variablen)
         fieldList.addListSelectionListener(this);
         fieldList.addMouseListener(new DoubleClickListener(editButton));
-        classComboBox.selectFirstItem();
+        classComboBox.restoreSelection();
     }
 
     /**

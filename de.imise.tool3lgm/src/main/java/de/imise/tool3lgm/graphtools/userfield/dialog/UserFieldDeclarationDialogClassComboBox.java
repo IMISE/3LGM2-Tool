@@ -16,6 +16,8 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 
 public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBox {
 
+    private static int lastSelectedIndex = 0;
+
     /**
      * @param maxRowCount
      */
@@ -38,8 +40,8 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         }
     }
 
-    public void selectFirstItem() {
-        setSelectedIndex(0);
+    public void restoreSelection() {
+        setSelectedIndex(lastSelectedIndex);
     }
 
     public Class<? extends UserFieldTarget> getSelectedClass() {
@@ -48,6 +50,12 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
 
     public boolean isGlobalUserFieldClassSelected() {
         return getSelectedClass() == GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+    }
+
+    @Override
+    public void setSelectedItem(final Object anObject) {
+        super.setSelectedItem(anObject);
+        lastSelectedIndex = getSelectedIndex();
     }
 
 }
