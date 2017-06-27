@@ -51,7 +51,6 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.NamedObjectContainer;
 import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
@@ -370,20 +369,13 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
                 definitions.remove(userField);
             }
         } else if (is(editButton)) {
-            //aus der Liste der UserFields das selektierte holen
-            Object selectedItem = fieldList.getSelectedValue();
-            //keins gefunden -> raus
-            if (selectedItem == null) {
-                return;
-            }
-            @SuppressWarnings("unchecked")
-            UserField userField = ((NamedObjectContainer<UserField>) selectedItem).getObject();
+            UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
             //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
             String oldFormula = userField.getFormula();
             do {
                 gdcol.getUserFieldDefinitions().setConsistencyUnknown();
                 //Definitionseditor für das zu bearbeitende userField anzeigen
-                if (UserFieldDefinitionDialog.showDialog(this, userField, gdcol) == UserFieldDefinitionDialog.OK) {
+                if (UserFieldDefinitionDialog.showDialog(this, userField, gdcol) == OK) {
                     fieldList.refreshSelected();
                     returnValue = 1;
                 } else {
@@ -395,29 +387,13 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             } while (definitions.hasCrossReferences());
 
         } else if (is(deleteButton)) {
-            UserField userField = fieldList.getSelected();
-            //Bevor ein userField gelöscht wird, wird nochmal eine Sicherheitsabfrage gestellt.
-            //Wenn die Siocherheitsabfrage nicht bestätigt wird, wird cancel true. D.h. das Löschen wird abgebrochen.
-            boolean cancel = false;
-            if (showWarningForDeletingUserFields) {
-                String[] frage = {
-                        getResString("dontShowAgain")
-                };
-                Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, getResString("warnung"), getResString("allValuesWouldBeDeleted"), frage);
-
-                if (result == null) {
-                    cancel = true;
-                } else if (result[0] != null) {
-                    showWarningForDeletingUserFields = false;
-                }
-            }
-            //Alle gelöschten UserFields merken
-            if (!cancel) {
+            UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
+            if (reallyDelete()) {
+                //Alle gelöschten UserFields merken
                 removedUserFields.addAll(definitions.remove(userField));
                 fieldList.update(classComboBox.getSelectedClass());
-                returnValue = 1;
+                returnValue = -1;
             }
-            returnValue = -1;
         } else if (is(upButton)) {
             fieldList.moveUp();
             returnValue = 1;
@@ -428,6 +404,24 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             fieldList.update(classComboBox.getSelectedClass());
             updateUserFieldTypeComboBox();
         }
+    }
+
+    private boolean reallyDelete() {
+        //Bevor ein userField gelöscht wird, wird nochmal eine Sicherheitsabfrage gestellt.
+        //Wenn die Siocherheitsabfrage nicht bestätigt wird, wird cancel true. D.h. das Löschen wird abgebrochen.
+        boolean delete = true;
+        if (showWarningForDeletingUserFields) {
+            String[] frage = {
+                    getResString("dontShowAgain")
+            };
+            Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, getResString("warnung"), getResString("allValuesWouldBeDeleted"), frage);
+            if (result == null) { //Cancel gedrückt
+                delete = false;
+            } else if (result[0] != null) {
+                showWarningForDeletingUserFields = false;
+            }
+        }
+        return delete;
     }
 
     private JButton createButton(final String resKey) {
