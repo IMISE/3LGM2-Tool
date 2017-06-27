@@ -387,10 +387,17 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             } while (definitions.hasCrossReferences());
 
         } else if (is(deleteButton)) {
-            UserField userField = fieldList.getSelected(); // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
             if (reallyDelete()) {
-                //Alle gelöschten UserFields merken
-                removedUserFields.addAll(definitions.remove(userField));
+                // null-Check kann man sich sparen, weil die Buttons deaktiviert sind, wenn nichts selektiert ist
+                int[] selectedIndices = fieldList.getSelectedIndices();
+                for (int selectedIndex : selectedIndices) {
+                    UserField userField = fieldList.get(selectedIndex);
+                    //das aktuelle UserField kann schon gelöscht worden sein, durch das löschen eines vorhergehenden in der Schleife
+                    if (!removedUserFields.contains(userField)) {
+                        //Alle gelöschten UserFields merken
+                        removedUserFields.addAll(definitions.remove(userField));
+                    }
+                }
                 fieldList.update(classComboBox.getSelectedClass());
                 returnValue = -1;
             }
@@ -444,15 +451,16 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         if (e.getSource() == fieldList) {
-            setButtonsEnabled(!fieldList.isSelectionEmpty());
+            int selectionCount = fieldList.getSelectedIndices().length;
+            setButtonsEnabled(selectionCount == 1, selectionCount > 1);
         }
     }
 
-    private void setButtonsEnabled(final boolean enabled) {
-        editButton.setEnabled(enabled);
-        deleteButton.setEnabled(enabled);
-        downButton.setEnabled(enabled);
-        upButton.setEnabled(enabled);
+    private void setButtonsEnabled(final boolean isSingleUserFieldSelected, final boolean isMultiUserFieldSelected) {
+        editButton.setEnabled(isSingleUserFieldSelected);
+        deleteButton.setEnabled(isSingleUserFieldSelected || isMultiUserFieldSelected);
+        downButton.setEnabled(isSingleUserFieldSelected);
+        upButton.setEnabled(isSingleUserFieldSelected);
     }
 
     @Override
