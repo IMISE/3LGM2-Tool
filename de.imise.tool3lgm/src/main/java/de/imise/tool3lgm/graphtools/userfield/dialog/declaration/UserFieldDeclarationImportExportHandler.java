@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.USERFIELD;
 

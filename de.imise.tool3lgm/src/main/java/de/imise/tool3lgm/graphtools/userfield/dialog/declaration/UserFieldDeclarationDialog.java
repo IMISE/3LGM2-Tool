@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.userfield.dialog;
+package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.GraphDocument.DATA_CHANGED;
@@ -13,8 +13,8 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.MULTI_LINE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SEPARATOR;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE;
-import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.exportDefinitions;
-import static de.imise.tool3lgm.graphtools.userfield.dialog.UserFieldDeclarationImportExportHandler.importDefinitions;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
+import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
 
 import java.awt.BorderLayout;
