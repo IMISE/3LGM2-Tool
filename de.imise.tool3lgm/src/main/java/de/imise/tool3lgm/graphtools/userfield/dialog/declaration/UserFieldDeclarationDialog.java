@@ -17,75 +17,32 @@ import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFiel
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
-import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.event.DoubleClickListener;
-import de.imise.util.swing.component.AlphabeticalComboBox;
-import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * @author Thomas Rudert Dialog to create, edit, remove, import and export user-definied property-fields for model-elements
  */
-public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener, ListSelectionListener {
-
-    /** combobox to select a model-class */
-    private UserFieldDeclarationDialogClassComboBox classComboBox;
-
-    /**
-     * list with the defined userFields Es wird hier keine AplphabeticalJList genutzt, weil die Elemente in der Reinhenfolge angezeigt werden sollen,
-     * die der User vorgibt.
-     */
-    private UserFieldDeclarationDialogFieldList fieldList;
-
-    /** button to edit a userField */
-    private JButton editButton;
-
-    /** button to remove a userField */
-    private JButton deleteButton;
-
-    /** button to add new userField */
-    private JButton newButton;
-
-    /** Buttons zum Vertauschen der Reihenfolge von Attributen */
-    private JButton upButton, downButton;
-
-    /**
-     * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes festgelegt wird
-     */
-    private AlphabeticalComboBox userFieldTypeComboBox;
+public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarationDialog implements ActionListener, ListSelectionListener {
 
     /** Die <code>GDCollection</code> in dessen Kontext gerade gearbeitet wird. */
     private final GDCollection gdcol;
@@ -97,8 +54,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      * Clone der Definitionen vor allen Änderungen. Wird beim Abbrechen auf diese Defnition zurück gesetzt.
      */
     private final UserFieldDefinitions oldUserFieldDefionitions;
-
-    private static Dimension defaultSize = null;
 
     /**
      * return-value of dialog <br>
@@ -126,7 +81,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      * @throws java.awt.HeadlessException
      */
     private UserFieldDeclarationDialog(final Frame owner, final GDCollection gdcol) throws HeadlessException {
-        super(owner, Tool3lgmConstants.getResString("userfields"), true);
+        super(owner, gdcol.getUserFieldDefinitions());
         this.gdcol = gdcol;
         definitions = gdcol.getUserFieldDefinitions();
         oldUserFieldDefionitions = (UserFieldDefinitions) definitions.clone();
@@ -147,119 +102,21 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     }
 
     /**
-     * Initialiert die <code>ComboBox</code> mit den Klasseneinträgen, für die <code>UserField</code> s definiert werden können.
-     */
-    private void createClassComboBox() {
-        classComboBox = new UserFieldDeclarationDialogClassComboBox(13);
-        classComboBox.addActionListener(this);
-    }
-
-    /**
      * Initialisiert den Dialog.
      */
     private void init() {
-        JButton button;
-        JPanel panel1;
-        JPanel panel2;
-        JPanel panel3;
-        JScrollPane scrollPane;
-        LayoutManager layout;
-        GridBagConstraints constraints;
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent e) {
                 //Schließen üer das Kreuz = Cancel
-                UserFieldDeclarationDialog.this.actionPerformed(new ActionEvent(UserFieldDeclarationDialog.this, e.getID(), "cancel"));
+                cancelButton.doClick();
             }
         });
-        Container pane = getContentPane();
-        pane.setLayout(new BorderLayout());
-        createClassComboBox();
-        fieldList = new UserFieldDeclarationDialogFieldList(definitions);
-
-        panel1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panel1.add(new JLabel(Tool3lgmConstants.getResString("userFieldDialog_class") + ": "));
-        panel1.add(classComboBox);
-
-        pane.add(panel1, BorderLayout.NORTH);
-
-        panel1 = new JPanel(new BorderLayout());
-        panel1.add(new JLabel(Tool3lgmConstants.getResString("userFieldDialog_fields") + ":"), BorderLayout.NORTH);
-        scrollPane = new JScrollPane(fieldList);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        panel1.add(scrollPane, BorderLayout.CENTER);
-
-        layout = new GridBagLayout();
-        panel2 = new JPanel(layout);
-        constraints = new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0);
-
-        newButton = createButton("new");
-        constraints.gridwidth = 1;
-        //Anstelle des Buttons die ComboBox einfügen
-
-        userFieldTypeComboBox = new AlphabeticalComboBox();
-        userFieldTypeComboBox.setEnabled(false);
-        panel2.add(userFieldTypeComboBox, constraints);
-
-        constraints.gridx++;
-        constraints.gridwidth = 3;
-        panel2.add(newButton, constraints);
-        constraints.gridx--;
-        editButton = createDisabledButton("editButtonText");
-        constraints.gridy = 1;
-        constraints.gridwidth = 4;
-        panel2.add(editButton, constraints);
-
-        deleteButton = createDisabledButton("delete");
-        constraints.gridy = 2;
-        constraints.gridwidth = 4;
-        panel2.add(deleteButton, constraints);
-
-        downButton = createDisabledButton("runter2.gif");
-        constraints.gridwidth = 2;
-        constraints.gridy = 3;
-        panel2.add(downButton, constraints);
-
-        upButton = createDisabledButton("hoch2.gif");
-        constraints.gridwidth = 2;
-        constraints.gridx = 2;
-        constraints.gridy = 3;
-        panel2.add(upButton, constraints);
-        panel3 = new JPanel();
-        panel3.setBorder(null);
-        panel2.setBorder(null);
-        panel3.add(panel2);
-        panel1.add(panel3, BorderLayout.EAST);
-        panel1.setBorder(new EmptyBorder(5, 5, 5, 5));
-        pane.add(panel1, BorderLayout.CENTER);
-
-        panel1 = new JPanel();
-        layout = new BoxLayout(panel1, BoxLayout.X_AXIS);
-        panel1.setLayout(layout);
-        panel2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        button = createButton("importButtonText");
-        panel2.add(button);
-
-        button = createButton("exportButtonText");
-        panel2.add(button);
-        panel1.add(panel2);
-
-        panel2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        button = createButton("ok");
-        panel2.add(button);
-        button = createButton("cancel");
-        panel2.add(button);
-        panel1.add(panel2);
-        pane.add(panel1, BorderLayout.SOUTH);
-        if (defaultSize == null) {
-            pack();
-            defaultSize = getSize();
-        }
         //ersten Eintrag selektieren (= globale Variablen)
         fieldList.addListSelectionListener(this);
         fieldList.addMouseListener(new DoubleClickListener(editButton));
+        classComboBox.addActionListener(this);
         classComboBox.restoreSelection();
     }
 
@@ -272,7 +129,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
      */
     private void updateUserFieldTypeComboBox() {
 
-        userFieldTypeComboBox.setEnabled(true);
         userFieldTypeComboBox.removeAllItems();
 
         addType(CHECK_BOX);
@@ -298,10 +154,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
 
     private ActionEvent lastActionEvent = null;
 
-    private boolean is(final String commandKey) {
-        return lastActionEvent.getActionCommand().equals(commandKey);
-    }
-
     private boolean is(final Object commandSource) {
         return lastActionEvent.getSource() == commandSource;
     }
@@ -309,7 +161,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
     @Override
     public void actionPerformed(final ActionEvent e) {
         lastActionEvent = e;
-        if (is("ok")) {
+        if (is(okButton)) {
             dispose();
             gdcol.removeUserFieldValues(removedUserFields);
             if (!UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
@@ -319,7 +171,7 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             if (gdcoll != null) {
                 gdcoll.getMainGraphDocument().distributeEvent(DATA_CHANGED);
             }
-        } else if (is("cancel")) {
+        } else if (is(cancelButton)) {
             if (returnValue != 0) {
                 if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("userFieldDialog_warning_message"), Tool3lgmConstants.getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE)) {
@@ -329,12 +181,12 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
             definitions.getCollection().setUserFieldDefinitions(oldUserFieldDefionitions);
             returnValue = -1;
             dispose();
-        } else if (is("importButtonText")) {
+        } else if (is(importButton)) {
             if (importDefinitions(this, definitions)) {
                 fieldList.update(classComboBox.getSelectedClass());
                 returnValue = 1;
             }
-        } else if (is("exportButtonText")) {
+        } else if (is(exportButton)) {
             exportDefinitions(this, definitions);
         } else if (is(newButton)) {
             //Typ der seleketierten Klasse holen
@@ -431,16 +283,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         return delete;
     }
 
-    private JButton createButton(final String resKey) {
-        return EasyComponents.createButton(this, resKey);
-    }
-
-    private JButton createDisabledButton(final String resKey) {
-        JButton button = createButton(resKey);
-        button.setEnabled(false);
-        return button;
-    }
-
     /**
      * @return
      */
@@ -461,11 +303,6 @@ public final class UserFieldDeclarationDialog extends AbstractSizeAndPositionRes
         deleteButton.setEnabled(isSingleUserFieldSelected || isMultiUserFieldSelected);
         downButton.setEnabled(isSingleUserFieldSelected);
         upButton.setEnabled(isSingleUserFieldSelected);
-    }
-
-    @Override
-    public Dimension getDefaultSize() {
-        return defaultSize;
     }
 
 }
