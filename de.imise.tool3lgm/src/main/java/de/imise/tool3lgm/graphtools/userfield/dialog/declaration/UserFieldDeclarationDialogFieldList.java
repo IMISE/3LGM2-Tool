@@ -80,8 +80,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
     }
 
     public UserField get(final int i) {
-        int selectedIndex = getSelectedIndex();
-        NamedObjectContainer<UserField> selectedValue = selectedIndex < 0 ? null : model.get(selectedIndex);
+        NamedObjectContainer<UserField> selectedValue = i < 0 ? null : model.get(i);
         return selectedValue == null ? null : selectedValue.getObject();
     }
 
