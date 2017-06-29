@@ -95,15 +95,16 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
         this.modelElement = modelElement;
 
-        JPanel up = new JPanel(new GridLayout(1, 1));
         tab.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
+        JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
         up.add(headerPanel);
         update();
 
         descripPanel = new DescripPanel(this);
         tab.addTab(Tool3lgmConstants.getResString("general"), descripPanel);
+        addPartOfStructurePanel();
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
@@ -130,6 +131,33 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         getContentPane().add(tab, BorderLayout.CENTER);
         getContentPane().add(buttonpanel, BorderLayout.SOUTH);
 
+        addSizeOrPositionChangedListener();
+        setSizeAndLocation();
+    }
+
+    private void addSizeOrPositionChangedListener() {
+        addComponentListener(new ComponentListener() {
+            @Override
+            public void componentHidden(final ComponentEvent e) {
+            }
+
+            @Override
+            public void componentMoved(final ComponentEvent e) {
+                dialogPositionOrSizeChanged();
+            }
+
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                dialogPositionOrSizeChanged();
+            }
+
+            @Override
+            public void componentShown(final ComponentEvent e) {
+            }
+        });
+    }
+
+    private void setSizeAndLocation() {
         pack();
         JFrame mainFrame = Static.getMainFrame();
         int xx = mainFrame.getX() + 100;
@@ -154,31 +182,9 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
         setLocation(xx, yy);
         setSize(lastWidth, lastHeight);
-
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentHidden(final ComponentEvent e) {
-            }
-
-            @Override
-            public void componentMoved(final ComponentEvent e) {
-                dialogPositionOrSizeChanged();
-            }
-
-            @Override
-            public void componentResized(final ComponentEvent e) {
-                dialogPositionOrSizeChanged();
-            }
-
-            @Override
-            public void componentShown(final ComponentEvent e) {
-            }
-        });
-
-        addPartOfStructurePanel();
     }
 
-    private void addPartOfStructurePanel() {
+    private List<Class<? extends PartOfBeziehung>> getRealPartOfs() {
         Class<? extends ModelElement> elementClass = modelElement.getClass();
         Class<? extends PartOfBeziehung>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
         Class<? extends PartOfBeziehung>[] isPartOfEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
@@ -188,6 +194,11 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
                 realPartOfs.add(partOf);
             }
         }
+        return realPartOfs;
+    }
+
+    private void addPartOfStructurePanel() {
+        List<Class<? extends PartOfBeziehung>> realPartOfs = getRealPartOfs();
         if (realPartOfs.size() == 1) {
             StructurePanel structurePanel = new StructurePanel(this, realPartOfs.get(0));
             structurePanel.setName(Tool3lgmConstants.getResString("strukt"));
