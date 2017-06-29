@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
-import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ClassificationNumberFormulaPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.DistributionWeightEditorPanel;
@@ -43,14 +43,13 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.Distributi
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.FractionValueSumPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.ModelVariableEditorPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.NodeTypeUserFieldEditorPanel;
-import de.imise.util.swing.component.TabbedPane;
 
 /**
  * Dialog zur Massendateneingabe von Kennzahlen, Modelvariablen und Verteilungsgewichten
- * 
+ *
  * @author fstephan
  */
-public class UserFieldEditorDialog extends AbstractPropertyDialog {
+public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
     /**
      * Die Standardgröße des Dialoges
@@ -73,7 +72,7 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
     private static UserFieldEditorDialog editor = null;
 
     private final ImmutableList<AbstractUserFieldEditorPanel> tablePanels = ImmutableList.of(
-    //Kennzahlen
+            //Kennzahlen
             new NodeTypeUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER")),
             //Verteilungsgewichte
             new DistributionWeightEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting")),
@@ -121,9 +120,6 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
         applyButton = new JButton();
         okButton = new JButton();
         cancelButton = new JButton();
-
-        // TabPanel initialisieren
-        tab = new TabbedPane();
 
         // Panel zu Darstellen von Übernehmen Button, OK Button, Cancel Button initialisieren
         controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -213,7 +209,7 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
         constraints.gridy++;
         constraints.weighty = 0;
 
-        // Anfügen des controlPanels an den Dialog 
+        // Anfügen des controlPanels an den Dialog
         add(controlPanel, constraints);
 
         // Constraints für ElementsAtPointPanel
@@ -444,7 +440,7 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
 
     /**
      * Liefert einen neuen <code>UserFieldEditorDialog</code>.<br>
-     * 
+     *
      * @param owner Frame, das diesen Dialog enthält
      * @param gdcoll Modell, das die Daten für die Kennzahlen und Verteilungsgewichte der ModelElemente enthält
      * @return JDialog
@@ -464,7 +460,7 @@ public class UserFieldEditorDialog extends AbstractPropertyDialog {
      * Änderungen rückgängig gemacht werden, oder das Schließen des Dialogs abgebrochen wird. Außerdem wird beim Schließen des Dialoges seine Größe
      * und Position gespeichert und beim erneuten Öffnen wieder auf diese Werte gesetzt. Die Speicherung dieser Werte erfolgt allerdings nur, wenn der
      * Dialog durch "Ok" beendet wird.
-     * 
+     *
      * @see java.awt.Window#dispose()
      */
     @Override

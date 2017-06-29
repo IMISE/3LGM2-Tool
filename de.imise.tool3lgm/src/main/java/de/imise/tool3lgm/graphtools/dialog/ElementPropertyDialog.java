@@ -50,7 +50,7 @@ import de.imise.util.swing.component.TabbedPane;
  *
  * @author N.N., AXS
  */
-public class ElementPropertyDialog extends AbstractPropertyDialog implements ActionListener, InTransactionListener {
+public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, InTransactionListener {
 
     /**
      * COMMENTME
@@ -96,7 +96,6 @@ public class ElementPropertyDialog extends AbstractPropertyDialog implements Act
         this.modelElement = modelElement;
 
         JPanel up = new JPanel(new GridLayout(1, 1));
-        tab = new TabbedPane();
         tab.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         headerPanel = new ElementDialogHeaderPanel(this);
