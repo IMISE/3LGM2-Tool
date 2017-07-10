@@ -18,7 +18,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xml.IXMLSource;
+import de.imise.tool3lgm.xml.XMLSource;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
 
 /**
@@ -29,7 +29,7 @@ import de.imise.tool3lgm.xml.XMLCharacterCoder;
  *
  * @author Thomas Rudert
  */
-public final class UserField implements Cloneable, Comparator<ModelElement>, IXMLSource, IHashSource {
+public final class UserField implements Cloneable, Comparator<ModelElement>, XMLSource, HashSource {
 
     public static enum Style {
         SEPARATOR {

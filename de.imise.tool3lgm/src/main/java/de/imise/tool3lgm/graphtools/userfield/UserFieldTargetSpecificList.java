@@ -9,12 +9,12 @@ import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.IXMLSource;
+import de.imise.tool3lgm.xml.XMLSource;
 
 /**
  * @author Thomas Rudert
  */
-public class UserFieldTargetSpecificList<T extends IHashSource & IXMLSource> implements Cloneable, Iterable<T>, IXMLSource {
+public class UserFieldTargetSpecificList<T extends HashSource & XMLSource> implements Cloneable, Iterable<T>, XMLSource {
 
     private Class<? extends UserFieldTarget> targetClass;
 
