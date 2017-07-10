@@ -178,7 +178,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         // Anfügen von panelCN + panelDW + panelMV an das HauptPanel
         initTab();
 
-        if (tab.getComponentCount() > 0) {
+        if (getTabCount() > 0) {
             initDialogWithTabContent();
         } else {
             initDialogWithNoContentMessage();
@@ -198,7 +198,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         constraints.fill = GridBagConstraints.BOTH;
 
         // HauptPanel an den Dialog anfügen
-        add(tab, constraints);
+        add(getTabComponent(), constraints);
 
         // Anfügen von Übernehmen-,OK- und CancelButton an das controlPanel
         initControlPanel();
@@ -249,7 +249,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
     private void initTab() {
         for (AbstractUserFieldEditorPanel tablePanel : tablePanels) {
             if (tablePanel.hasValues()) {
-                tab.addTab(tablePanel.getName(), tablePanel);
+                addTab(tablePanel.getName(), tablePanel);
             }
         }
     }

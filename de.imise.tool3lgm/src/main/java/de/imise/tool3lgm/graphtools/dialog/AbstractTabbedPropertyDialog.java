@@ -3,16 +3,21 @@ package de.imise.tool3lgm.graphtools.dialog;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.util.List;
 
 import javax.swing.Icon;
+import javax.swing.JComponent;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.util.swing.component.TabbedPane;
 
 public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialog {
 
     /** TabbedPane in das alle Panels kommen */
-    protected TabbedPane tab;
+    private final TabbedPane tab;
 
     public AbstractTabbedPropertyDialog(final GDCollection gdcoll) {
         super(gdcoll);
@@ -37,6 +42,10 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     protected void addTab(final Component component) {
         addTab(component.getName(), component);
+    }
+
+    protected JComponent getTabComponent() {
+        return tab;
     }
 
     /**
@@ -110,6 +119,19 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     public int selectTab(final Class<? extends Component> tabComponentClass) {
         return selectTab(null, tabComponentClass);
+    }
+
+    public ElementDialogPanel getSelectedElementDialogPanel() {
+        Component selectedComponent = tab.getSelectedComponent();
+        return selectedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) selectedComponent : null;
+    }
+
+    protected int getTabCount() {
+        return tab.getTabCount();
+    }
+
+    protected Component getTabComponentAt(final int index) {
+        return tab.getTabComponentAt(index);
     }
 
 }

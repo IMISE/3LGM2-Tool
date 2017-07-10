@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -43,7 +44,6 @@ import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.swing.component.TabbedPane;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Knoten und Kanten.<br>
@@ -95,7 +95,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
         this.modelElement = modelElement;
 
-        tab.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        JComponent tabComponent = getTabComponent();
+        tabComponent.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
@@ -103,12 +104,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         update();
 
         descripPanel = new DescripPanel(this);
-        tab.addTab(Tool3lgmConstants.getResString("general"), descripPanel);
+        addTab(Tool3lgmConstants.getResString("general"), descripPanel);
         addPartOfStructurePanel();
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
-            tab.addTab(Tool3lgmConstants.getResString("userfields"), new PropertyDialogUserFieldPanel(this));
+            addTab(Tool3lgmConstants.getResString("userfields"), new PropertyDialogUserFieldPanel(this));
         }
 
         JPanel buttonpanel = new JPanel();
@@ -128,7 +129,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         buttonpanel.add(bp, BorderLayout.EAST);
 
         getContentPane().add(up, BorderLayout.NORTH);
-        getContentPane().add(tab, BorderLayout.CENTER);
+        getContentPane().add(tabComponent, BorderLayout.CENTER);
         getContentPane().add(buttonpanel, BorderLayout.SOUTH);
 
         addSizeOrPositionChangedListener();
@@ -184,6 +185,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         setSize(lastWidth, lastHeight);
     }
 
+    /**
+     * Liefert alle {@link PartOfBeziehung}en, bei denen die Kindelemente auch wieder Kindelemente haben können (also wo die
+     * Start- und Endklasse der PartOBeziehung gleich ist).
+     *
+     * @return
+     */
     private List<Class<? extends PartOfBeziehung>> getRealPartOfs() {
         Class<? extends ModelElement> elementClass = modelElement.getClass();
         Class<? extends PartOfBeziehung>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
@@ -229,20 +236,20 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
      */
     private void commit() {
         //alle Panels committen
-        for (int m = 0; m < tab.getTabCount(); m++) {
-            Component comp = tab.getComponentAt(m);
+        for (int m = 0; m < getTabCount(); m++) {
+            Component comp = getTabComponentAt(m);
             if (comp instanceof ElementDialogPanel) {
-                ((ElementDialogPanel) tab.getComponentAt(m)).commit();
+                ((ElementDialogPanel) comp).commit();
             }
         }
         //alle anderen Dialoge updaten
         for (ElementPropertyDialog pd : ModelConstants.getDialogs()) {
-            TabbedPane tp = pd.tab;
             // this wird in update klargemacht...
             if (pd != this) {
-                for (int m = 0; m < tp.getTabCount(); m++) {
-                    if (tp.getComponentAt(m) instanceof ElementDialogPanel) {
-                        ((ElementDialogPanel) tp.getComponentAt(m)).update();
+                for (int m = 0; m < getTabCount(); m++) {
+                    Component comp = getTabComponentAt(m);
+                    if (comp instanceof ElementDialogPanel) {
+                        ((ElementDialogPanel) comp).update();
                     }
                 }
             }
@@ -258,7 +265,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         if (doUpdate) {
             update();
         } else {
-            ((ElementDialogPanel) tab.getSelectedComponent()).update();
+            ElementDialogPanel selectedElementDialogPanel = getSelectedElementDialogPanel();
+            if (selectedElementDialogPanel != null) {
+                selectedElementDialogPanel.update();
+            }
         }
         doc.finish_transaction(getTransactionID());
         doc.distributeEvent(GraphDocument.DATA_CHANGED, getTransactionID());
@@ -359,8 +369,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         }
 
         headerPanel.update();
-        for (int i = 0; i < tab.getTabCount(); i++) {
-            Component c = tab.getComponentAt(i);
+        for (int i = 0; i < getTabCount(); i++) {
+            Component c = getTabComponentAt(i);
             if (c instanceof ElementDialogPanel) {
                 ((ElementDialogPanel) c).update();
             }
