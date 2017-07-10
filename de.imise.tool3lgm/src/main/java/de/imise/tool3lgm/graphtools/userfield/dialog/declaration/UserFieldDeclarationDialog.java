@@ -45,7 +45,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarationDialog implements ActionListener, ListSelectionListener {
 
     /** Die <code>GDCollection</code> in dessen Kontext gerade gearbeitet wird. */
-    private final GDCollection gdcol;
+    private final GDCollection gdcoll;
 
     /** Speichert alle defnierten benutzerdefinierten Eigenschaftsfelder */
     private final UserFieldDefinitions definitions;
@@ -80,10 +80,10 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      * @param owner
      * @throws java.awt.HeadlessException
      */
-    private UserFieldDeclarationDialog(final Frame owner, final GDCollection gdcol) throws HeadlessException {
-        super(owner, gdcol.getUserFieldDefinitions());
-        this.gdcol = gdcol;
-        definitions = gdcol.getUserFieldDefinitions();
+    private UserFieldDeclarationDialog(final Frame owner, final GDCollection gdcoll) throws HeadlessException {
+        super(owner, gdcoll.getUserFieldDefinitions());
+        this.gdcoll = gdcoll;
+        definitions = gdcoll.getUserFieldDefinitions();
         oldUserFieldDefionitions = (UserFieldDefinitions) definitions.clone();
         init();
     }
@@ -95,8 +95,8 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      * @param doc actual which give the context of <code>GDCollection</code> and <code>UserFieldDefinitions</code>
      * @return -1 if cancel was selected, 0 if ok was selected but k was changed by user, 1 if user made changes and pressed ok-button
      */
-    public static int showDialog(final Frame owner, final GDCollection gdcol) {
-        UserFieldDeclarationDialog dialog = new UserFieldDeclarationDialog(owner, gdcol);
+    public static int showDialog(final Frame owner, final GDCollection gdcoll) {
+        UserFieldDeclarationDialog dialog = new UserFieldDeclarationDialog(owner, gdcoll);
         dialog.setVisible(true);
         return dialog.returnValue;
     }
@@ -163,7 +163,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         lastActionEvent = e;
         if (is(okButton)) {
             dispose();
-            gdcol.removeUserFieldValues(removedUserFields);
+            gdcoll.removeUserFieldValues(removedUserFields);
             if (!UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
                 return;
             }
@@ -205,7 +205,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //solange den Dialog zur Definition der Eigenschaften des neuen UserFields zeigen, bis nur konsitente Werte eingegeben wurden
             int userDefinitionDialogReturnValue;
             do {
-                userDefinitionDialogReturnValue = UserFieldDefinitionDialog.showDialog(this, userField, gdcol);
+                userDefinitionDialogReturnValue = UserFieldDefinitionDialog.showDialog(this, userField, gdcoll);
             } while (userDefinitionDialogReturnValue == OK && definitions.hasCrossReferences());
 
             //wenn der Dialog über OK verlassen wurde
@@ -225,9 +225,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //die alte Formel des UserFields holen (die ist nur bei UserFields mit dem Formula-Style nicht null, aber das ist egal)
             String oldFormula = userField.getFormula();
             do {
-                gdcol.getUserFieldDefinitions().setConsistencyUnknown();
+                gdcoll.getUserFieldDefinitions().setConsistencyUnknown();
                 //Definitionseditor für das zu bearbeitende userField anzeigen
-                if (UserFieldDefinitionDialog.showDialog(this, userField, gdcol) == OK) {
+                if (UserFieldDefinitionDialog.showDialog(this, userField, gdcoll) == OK) {
                     fieldList.refreshSelected();
                     returnValue = 1;
                 } else {
