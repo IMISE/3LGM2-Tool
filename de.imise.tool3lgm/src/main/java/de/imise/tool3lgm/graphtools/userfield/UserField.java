@@ -18,6 +18,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.xml.IXMLSource;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
 
 /**
@@ -28,7 +29,7 @@ import de.imise.tool3lgm.xml.XMLCharacterCoder;
  *
  * @author Thomas Rudert
  */
-public final class UserField implements Cloneable, Comparator<ModelElement> {
+public final class UserField implements Cloneable, Comparator<ModelElement>, IXMLSource, IHashSource {
 
     public static enum Style {
         SEPARATOR {
@@ -510,8 +511,9 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
     /**
      * @return Das <code>UserField</code> in XML-Notation.
      */
+    @Override
     public String toXMLString() {
-        StringBuilder sb = new StringBuilder("<userFieldDef hash=\"");
+        StringBuilder sb = new StringBuilder("    <userFieldDef hash=\"");
         sb.append(hashCode);
         //bei Modell-Attributen wird die targetClass nicht als UserField ins
         // Tag geschrieben
@@ -520,43 +522,43 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
             sb.append(targetClass.getSimpleName());
         }
         sb.append("\">");
-        sb.append("<userFieldName>");
+        sb.append("        <userFieldName>");
         sb.append(XMLCharacterCoder.encodeString(name));
         sb.append("</userFieldName>");
-        sb.append("<userFieldDescription>");
+        sb.append("        <userFieldDescription>");
         sb.append(XMLCharacterCoder.encodeString(description));
         sb.append("</userFieldDescription>");
-        sb.append("<userFieldStyle>");
+        sb.append("        <userFieldStyle>");
         sb.append(style.name());
         sb.append("</userFieldStyle>");
-        sb.append("<userFieldTreeVis>");
+        sb.append("        <userFieldTreeVis>");
         sb.append(String.valueOf(treeVisibility));
         sb.append("</userFieldTreeVis>");
 
         if (listValues != null) {
             for (String lv : listValues) {
-                sb.append("<userFieldStandardValue>");
+                sb.append("        <userFieldStandardValue>");
                 sb.append(XMLCharacterCoder.encodeString(lv));
                 sb.append("</userFieldStandardValue>");
             }
         }
         if (style == Style.CLASSIFICATION_NUMBER) {
             if (formatUserField != null) {
-                sb.append("<userFieldFormatHash>");
+                sb.append("        <userFieldFormatHash>");
                 sb.append(formatUserField.getHashCode());
                 sb.append("</userFieldFormatHash>");
             }
         } else if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
-            sb.append("<userFieldFormula>");
+            sb.append("        <userFieldFormula>");
             sb.append(formulaString);
             sb.append("</userFieldFormula>");
             if (formatUserField != null) {
-                sb.append("<userFieldFormatHash>");
+                sb.append("        <userFieldFormatHash>");
                 sb.append(formatUserField.getHashCode());
                 sb.append("</userFieldFormatHash>");
             }
         } else if (style == Style.FORMAT) {
-            sb.append("<userFieldFormatString>");
+            sb.append("        <userFieldFormatString>");
             sb.append(XMLCharacterCoder.encodeString(getFormatExportString()));
             sb.append("</userFieldFormatString>");
         }
@@ -775,6 +777,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement> {
      *
      * @return hashCode des <code>UserField</code> s
      */
+    @Override
     public String getHashCode() {
         return hashCode;
     }
