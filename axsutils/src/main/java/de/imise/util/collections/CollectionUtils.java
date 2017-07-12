@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 /**
  * Stellt Funktionen für Objektsammlungen bereit, die <code>Arrays</code> und <code>Collections</code> nicht bieten.
- * 
+ *
  * @author AXS
  * @version 0.0.7
  */
@@ -15,7 +15,7 @@ public abstract class CollectionUtils {
     /**
      * Liefert einen Namen zurück, der aus dem Prefix und einem mit Leerzeichen abgetrennten
      * Index ab 1 besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt, wird zurückgegeben.
-     * 
+     *
      * @param prefix
      * @param alreadyExistingNames
      * @return
@@ -24,56 +24,103 @@ public abstract class CollectionUtils {
         return getNextIndicatedName(prefix, null, alreadyExistingNames);
     }
 
+    public static final String getNextIndicatedName(final String unindicatedName, final Iterable<?> alreadyExistingNames, final boolean brackets, final boolean indicateFirst) {
+        if (!indicateFirst) {
+            String trimmedUnindicatedName = unindicatedName.trim();
+            if (!containsName(trimmedUnindicatedName, alreadyExistingNames, true)) {
+                return unindicatedName;
+            }
+        }
+        String namePrefix = brackets ? unindicatedName + "(" : unindicatedName;
+        String namePostfix = brackets ? ")" : "";
+        String name = getNextIndicatedName(namePrefix, namePostfix, 2, alreadyExistingNames);
+        return name;
+    }
+
     /**
      * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und dem übergebenen Postfix
      * besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt,
      * wird zurückgegeben.
-     * 
+     *
      * @param prefix
      * @param postfix
      * @param alreadyExistingNames
      * @return
      */
-    public static final String getNextIndicatedName(String prefix, String postfix, final Collection<?> alreadyExistingNames) {
+    public static final String getNextIndicatedName(final String prefix, final String postfix, final Iterable<?> alreadyExistingNames) {
+        return getNextIndicatedName(prefix, postfix, 1, alreadyExistingNames);
+    }
+
+    /**
+     * Liefert einen Namen zurück, der aus dem Prefix und einem Index ab 1 und dem übergebenen Postfix
+     * besteht. Der erste Name dieser Form, der nicht in der übergebene <code>Collection</code> vorkommt,
+     * wird zurückgegeben.
+     *
+     * @param prefix
+     * @param postfix
+     * @param startIndex
+     * @param alreadyExistingNames
+     * @return
+     */
+    public static final String getNextIndicatedName(String prefix, String postfix, final int startIndex, final Iterable<?> alreadyExistingNames) {
         if (prefix == null) {
             prefix = "";
         }
         if (postfix == null) {
             postfix = "";
         }
+        StringBuilder newNameBuilder = new StringBuilder(prefix);
         if (alreadyExistingNames == null) {
-            return prefix + "1" + postfix;
+            return newNameBuilder.append("1").append(postfix).toString();
         }
-        int index = 0;
-        StringBuilder newName = new StringBuilder(prefix);
+        int index = startIndex;
         while (true) {
-            index++;
-            newName.setLength(prefix.length());
-            newName.append(index);
-            newName.append(postfix);
-            boolean newNameIsAvailable = true;
-            Iterator<?> it = alreadyExistingNames.iterator();
-            while (it.hasNext()) {
-                Object o = it.next();
-                if (o == null) {
-                    continue;
-                }
-                String n = o.toString();
-                if (n.equals(newName.toString())) {
-                    newNameIsAvailable = false;
-                    break;
-                }
+            newNameBuilder.setLength(prefix.length());
+            newNameBuilder.append(index);
+            newNameBuilder.append(postfix);
+            String newName = newNameBuilder.toString();
+            if (!containsName(newName, alreadyExistingNames, false)) {
+                return newName;
             }
-            if (newNameIsAvailable) {
-                return newName.toString();
+            index++;
+        }
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn ein Objekt in der Collection alreadyExistingNames über seine toString()-Funktion den
+     * übergebenen Namen zurück liefert.
+     *
+     * @param name
+     * @param alreadyExistingNames
+     * @param trim
+     * @return
+     */
+    private static final boolean containsName(String name, final Iterable<?> alreadyExistingNames, final boolean trim) {
+        if (alreadyExistingNames == null) {
+            return false;
+        }
+        name = trim ? name.trim() : name;
+        boolean containsName = false;
+        Iterator<?> it = alreadyExistingNames.iterator();
+        while (it.hasNext()) {
+            Object o = it.next();
+            if (o == null) {
+                continue;
+            }
+            String n = trim ? o.toString().trim() : o.toString();
+            if (n.equals(name)) {
+                containsName = true;
+                break;
             }
         }
+        return containsName;
+
     }
 
     /**
      * Fügt zwei Arrays zu einem zusammen. Zuerst kommen die Elemente
      * des zuerst übergebenen Arrays, dann die des zweiten.
-     * 
+     *
      * @param array1
      *            erstes Array
      * @param array2
@@ -91,7 +138,7 @@ public abstract class CollectionUtils {
     /**
      * Fügt zwei Class-Arrays zu einem zusammen. Zuerst kommen die Elemente
      * des zuerst übergebenen Arrays, dann die des zweiten.
-     * 
+     *
      * @param array1
      *            erstes Array
      * @param array2
@@ -123,7 +170,7 @@ public abstract class CollectionUtils {
     /**
      * Liefert eine <code>Collection</code> aller Elemente deren Klassenname <b>genau</b> dem
      * übergebenen entspricht.
-     * 
+     *
      * @param source
      * @param clazz
      * @return <code>Collection</code> aller Elemente der angegebenen Klasse.
@@ -136,7 +183,7 @@ public abstract class CollectionUtils {
     /**
      * Liefert eine <code>Collection</code> aller Elemente die Insatnz einer Klasse des
      * übergebenen Namens sind.
-     * 
+     *
      * @param source
      * @param clazz
      * @return <code>Collection</code> aller Elemente, die Instanz der angegebenen Klasse sind.
@@ -148,7 +195,7 @@ public abstract class CollectionUtils {
 
     /**
      * Gibt wieder, ob die spezifizierte Collection Instanzen der spezifizierten Klasse enthält.
-     * 
+     *
      * @param source
      *            zu durchsuchende Collection
      * @param clazz
@@ -174,7 +221,7 @@ public abstract class CollectionUtils {
 
     /**
      * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der spezifizierten Klasse enthält.
-     * 
+     *
      * @param source
      *            zu durchsuchende Collection
      * @param clazz
@@ -200,7 +247,7 @@ public abstract class CollectionUtils {
 
     /**
      * Gibt wieder, ob die spezifizierte Collection ausschließlich Instanzen der spezifizierten Klassen enthält.
-     * 
+     *
      * @param source
      *            zu durchsuchende Collection
      * @param includeSubClasses
@@ -240,7 +287,7 @@ public abstract class CollectionUtils {
      * Wird strict == <code>true</code> uebergeben, dann sind die zurueckgegebenen Elemente
      * unmittelbar Instanzen der Klasse, bei <code>false</code> sind sie Instanzen der Klasse
      * oder Instanzen von abgeleiteten Klassen.
-     * 
+     *
      * @param source
      * @param clazz
      * @param strict
@@ -271,7 +318,7 @@ public abstract class CollectionUtils {
     /**
      * Gibt eine neue <code>ArrayList</code> zurück, die jedes Element aus der übergebenen Liste
      * genau einmal enthält.
-     * 
+     *
      * @param list
      */
     public static final ArrayList<?> _getNoMultiplesList(final ArrayList<?> list) {
@@ -287,7 +334,7 @@ public abstract class CollectionUtils {
 
     /**
      * Löscht aus der übergebenen Liste jedes mehrfache Vorkommen des selben Elementes.
-     * 
+     *
      * @param list
      */
     public static final void _removeMultiples(final ArrayList<?> list) {
@@ -304,7 +351,7 @@ public abstract class CollectionUtils {
     /**
      * Fügt der Sammlung <code>col1</code> alle Elemente aus <code>col2</code> einmal hinzu, die
      * bisher nicht in <code>col1</code> vorkamen.
-     * 
+     *
      * @param col1
      * @param col2
      * @return
@@ -330,7 +377,7 @@ public abstract class CollectionUtils {
      * sein.
      * <p>
      * Diese Methode bildet dabei die Zeilen und Spalten von <code>rows</code> identisch auf die Zeilen und Spalten des zurückgegebenen Arrays ab.
-     * 
+     *
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
      * @param rows
@@ -352,7 +399,7 @@ public abstract class CollectionUtils {
             Collection<? extends T> row = null;
             if (nextRow instanceof Collection<?>) { // rows ist mehrdimensional
                 row = (Collection<? extends T>) nextRow;
-            } else { // rows ist nicht 2-dimensional 
+            } else { // rows ist nicht 2-dimensional
                 throw new IllegalArgumentException("The given Collection is not 2 dimensional");
             }
 
@@ -402,7 +449,7 @@ public abstract class CollectionUtils {
      * Stelle im <code>String[][]</code> geschrieben.
      * <p>
      * Ist <code>objectArray=null</code> wird <code>null</code> zurückgegeben.
-     * 
+     *
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
      * @param objectArray
@@ -430,7 +477,7 @@ public abstract class CollectionUtils {
      * Stelle im <code>String[]</code> geschrieben.
      * <p>
      * Ist <code>objectArray=null</code> wird <code>null</code> zurückgegeben.
-     * 
+     *
      * @throws ArrayIndexOutOfBoundsException
      * @throws IllegalArgumentException
      * @param objectArray
@@ -498,7 +545,7 @@ public abstract class CollectionUtils {
 
     /**
      * Liefert eine von eckicken Klammern eingerahmte und durch Kommas separierte Listendarstellung des übergebenen Arrays.
-     * 
+     *
      * @param array
      * @return
      */
@@ -508,7 +555,7 @@ public abstract class CollectionUtils {
 
     /**
      * Liefert einen String in dem einfach die Rückgabewerte der toString()-Methode aller übergebenen Objects aneinadergehängt wird.
-     * 
+     *
      * @param array
      * @return
      */
@@ -518,7 +565,7 @@ public abstract class CollectionUtils {
 
     /**
      * Allgemeine Funktion um einen Listenausdruck eines Arrays zu bekommen
-     * 
+     *
      * @param array
      *            Das aufzulistende Array
      * @param suffix
@@ -554,7 +601,7 @@ public abstract class CollectionUtils {
     /**
      * Berechnet das Maximum der Größen der {@link Collection}s.<br>
      * Falls keine Collections enthalten sind, wird <code>-1</code> zurückgegeben.
-     * 
+     *
      * @param allCollections
      * @return
      * @throws NullPointerException
