@@ -2475,8 +2475,7 @@ public final class GDCollection extends UserFieldTarget {
                                 bitmaps.add(container.get3LGMLayout().icon);
                             }
                             userFields.addAll(knp.getUserFieldInputValueKeys());
-                            // resolveCopyDependencies(knp,
-                            // elements,userFields);
+                            // resolveCopyDependencies(knp, elements,userFields);
                         }
                     }
                 }

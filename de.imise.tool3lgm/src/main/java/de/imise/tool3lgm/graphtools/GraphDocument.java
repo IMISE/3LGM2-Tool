@@ -5261,11 +5261,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     ////////////////////////////
 
     /**
-     * @return
-     */
-    public abstract String getCopyString();
-
-    /**
      *
      */
     public void sortKanten() {
