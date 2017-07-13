@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
@@ -21,7 +22,7 @@ import de.imise.util.collections.CollectionUtils;
 /**
  * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen (selektierte Knoten, Kanten und Knickpunkte).
  * Zusätzlich dazu wird sich das zuletzt zur Selektion hinzugefügte Element gemerkt.
- * 
+ *
  * @author AXS
  *         created on 11.12.2006
  */
@@ -90,7 +91,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert das zuletzt selektierte Element, auf das sich alle Aktionen beziehen.
-     * 
+     *
      * @return
      */
     public ElementContainer getLastSelected() {
@@ -100,7 +101,7 @@ public class ModelSelection implements Set<ElementContainer> {
     /**
      * Einheitliche Schnittstelle zum internen setzen von {@link #lastSelected}.
      * Dient nur der Möglichkeit hier mal auszugeben, welches Element das ist.
-     * 
+     *
      * @param lastSelected
      */
     private void setLastSelected(final ElementContainer lastSelected) {
@@ -115,7 +116,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert die Anzahl der selektierten Objekte
-     * 
+     *
      * @see java.util.Set#size()
      */
     @Override
@@ -126,7 +127,7 @@ public class ModelSelection implements Set<ElementContainer> {
     /**
      * Liefert die Liste der aktuell selektierten <code>ModelElements</code>.<br />
      * Das zuletzt selektierte Element ist auch in dieser Liste das letzte Element.
-     * 
+     *
      * @return
      *         Liste der ModellElemente der selektierten ElementContainer
      */
@@ -147,7 +148,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert alle Elementklassen aller selektierten Knotenelemente ohne das zuletzt selektierte Element.
-     * 
+     *
      * @return
      */
     public HashSet<Class<? extends ModelElement>> getSelectedRealElementClasses() {
@@ -163,7 +164,7 @@ public class ModelSelection implements Set<ElementContainer> {
     /**
      * Setzt die Selektion auf die übergebenen Objekte.<br>
      * Jedes Objekt wird maximal einmal hinzugefügt.
-     * 
+     *
      * @param selectedObjects
      */
     public void set(final Collection<? extends ElementContainer> selectedObjects) {
@@ -251,18 +252,55 @@ public class ModelSelection implements Set<ElementContainer> {
 
     @Override
     public Iterator<ElementContainer> iterator() {
-        return iterable().iterator();
+        return new SelectionIterator();
     }
 
-    /**
-     * @return
-     */
-    public Iterable<ElementContainer> iterable() {
-        ArrayList<ElementContainer> al = new ArrayList<ElementContainer>(size());
-        al.addAll(selectedRealNodeContainer);
-        al.addAll(selectedEdgeContainer);
-        al.addAll(selectedBendpointContainer);
-        return al;
+    private class SelectionIterator implements Iterator<ElementContainer> {
+
+        private int index;
+
+        private final Iterator<NodeContainer> nodeContainerIt;
+
+        private final Iterator<EdgeContainer> edgeContainerIt;
+
+        private final Iterator<BendpointContainer> bendpointContainerIt;
+
+        public SelectionIterator() {
+            index = 0;
+            nodeContainerIt = selectedRealNodeContainer.iterator();
+            edgeContainerIt = selectedEdgeContainer.iterator();
+            bendpointContainerIt = selectedBendpointContainer.iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < size();
+        }
+
+        @Override
+        public ElementContainer next() {
+            int nodesCount = selectedRealNodeContainer.size();
+            int edgesCount = selectedEdgeContainer.size();
+            ElementContainer ec = null;
+            if (index < nodesCount) {
+                ec = nodeContainerIt.next();
+            } else if (index < nodesCount + edgesCount) {
+                ec = edgeContainerIt.next();
+            } else if (index < nodesCount + edgesCount + selectedBendpointContainer.size()) {
+                ec = bendpointContainerIt.next();
+            }
+            index++;
+            if (ec == null) {
+                throw new NoSuchElementException();
+            }
+            return ec;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
     /**
@@ -290,7 +328,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * Liefert eine neu erzeugte Liste aller selektierten Container. Die Reihenfolge der
      * Elemente ist zufällig, aber das zueltzt selektierte Element ist immer ganz hinten
      * in der Liste. Diese Rückgabeliste kann genutzt werden, um über die Funktion {@link #set(Collection)} eine alte Selektion wiederherzustellen.
-     * 
+     *
      * @return
      */
     public ArrayList<ElementContainer> getSelectedContainer() {
@@ -462,7 +500,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * In der Selektion sind zwar {@link ElementContainer}, aber hier kommt die Oberklasse
      * der in den Containern befindlichen Unterklassen von {@link ModelElement} zurück.
      * Wenn nichts selektiert ist, ist dieser Wert <code>null</code>.
-     * 
+     *
      * @return
      */
     public Class<? extends ModelElement> _getMostSpecialRealElementsClass() {
@@ -472,7 +510,7 @@ public class ModelSelection implements Set<ElementContainer> {
     /**
      * Liefert <code>true</code>, wenn die selektierten Elemente vereinbar sind. Das gilt,
      * wenn die <code>mostSpecialFullSelectionElementClass</code> nicht abtract ist und wenigstens 2 Elemente selektiert sind.
-     * 
+     *
      * @return Returns the joinableElements.
      */
     public boolean isJoinableElementsSelected() {
@@ -481,7 +519,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert <code>true</code>, wenn nur Knickpunkte in der Selektion vorkommen.
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlyBendpoints() {
@@ -491,7 +529,7 @@ public class ModelSelection implements Set<ElementContainer> {
     /**
      * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind (= ohne grafische
      * Repräsentation immer in allen Teilmodellen vorkommen).
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlyUniqueNodes() {
@@ -510,7 +548,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Gibt wieder, ob nur untergeordnete Elemente in den RealNodes selektiert sind.
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlySlaveRealNodes() {
@@ -524,7 +562,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Gibt wieder, ob ausschließlich {@link ElementContainer} von {@link Textfeld} und {@link Knickpunkt} selektiert sind.
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlyBendpointsAndTextfields() {
@@ -534,7 +572,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert die Anzahl an selektierten Modellelementen (also alles außer Knickpunkte und Kanten).
-     * 
+     *
      * @return
      */
     public int getSelectedRealElementContainerCount() {
@@ -543,7 +581,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert die Anzahl der Knickpunkte in der Selektion.
-     * 
+     *
      * @return
      */
     public int getSelectedBendpointContainerCount() {
@@ -552,7 +590,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Liefert die Anzahl der Kanten in der Selektion.
-     * 
+     *
      * @return
      */
     public int getSelectedEdgeContainerCount() {
