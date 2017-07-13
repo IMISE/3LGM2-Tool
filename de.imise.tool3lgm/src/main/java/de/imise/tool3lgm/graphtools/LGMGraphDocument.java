@@ -5,12 +5,16 @@
  */
 package de.imise.tool3lgm.graphtools;
 
+import static de.imise.tool3lgm.graphtools.GDCollection.getModelElements;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -283,6 +287,15 @@ public class LGMGraphDocument extends GraphDocument {
         return new File(Tool3lgmConstants.getClipboardPath()).exists();
     }
 
+    private List<ModelElement> getSortedSelection() {
+        List<NodeContainer>[] sortingElements = new List[layer.length];
+        for (int i = 0; i < layer.length; i++) {
+            sortingElements[i] = layer[i].getKnoten();
+        }
+        List<ElementContainer> sortedSelection = selectedContainer.getSortedSelection(sortingElements);
+        return getModelElements(sortedSelection);
+    }
+
     /**
      * @param masterTag
      * @return
@@ -291,13 +304,13 @@ public class LGMGraphDocument extends GraphDocument {
         String masterTag = "tool3lgm_clipboard";
         StringBuilder retVal = new StringBuilder(ToolXMLParser.getCurrentVersionString() + "<" + masterTag + ">");
 
-        ArrayList<ModelElement> elements = new ArrayList<ModelElement>(selectedContainer.size());
-        HashSet<UserField> userFields = new HashSet<UserField>(selectedContainer.size());
-        getCollection().resolveCopyDependencies(selectedContainer, elements, userFields);
+        List<ModelElement> copyElements = getSortedSelection();
+        Set<UserField> userFields = new HashSet<UserField>();
+        gdcoll.resolveCopyDependencies(copyElements, userFields);
 
         retVal.append(gdcoll.getUserFieldDefinitions().getCopyString(userFields) + "<objects>");
 
-        for (ModelElement me : elements) {
+        for (ModelElement me : copyElements) {
             if (me.avoidDuplicates()) {
                 retVal.append("<avoidDuplicates>" + me.toXMLString() + "</avoidDuplicates>");
             } else {
@@ -310,7 +323,7 @@ public class LGMGraphDocument extends GraphDocument {
         ElementContainer container;
         HashSet<String> icons = new HashSet<String>();
 
-        for (ModelElement me : elements) {
+        for (ModelElement me : copyElements) {
             if (me.isUnique()) {
                 continue;
             }
@@ -626,9 +639,9 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
 
-        ArrayList<ModelElement> copyElements = new ArrayList<ModelElement>();
-        HashSet<UserField> userFields = new HashSet<UserField>();
-        gdcoll.resolveCopyDependencies(selectedContainer, copyElements, userFields);
+        List<ModelElement> copyElements = getSortedSelection();
+        Set<UserField> userFields = new HashSet<UserField>();
+        gdcoll.resolveCopyDependencies(copyElements, userFields);
 
         for (UserField uf : userFields) {
             if (uf != null) {

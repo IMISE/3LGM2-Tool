@@ -33,6 +33,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -702,7 +705,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void deleteElements(final String[] elementHashesToDelete, final GraphDocument gdoc, final int pid) {
-        ArrayList<ModelElement> elementsToDelete = new ArrayList<ModelElement>(elementHashesToDelete.length);
+        List<ModelElement> elementsToDelete = Lists.newArrayListWithCapacity(elementHashesToDelete.length);
         for (String elementHash : elementHashesToDelete) {
             ModelElement me = doc.findElementCoded(elementHash);
             elementsToDelete.add(me);
@@ -714,7 +717,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param elementsToDelete
      * @param pid
      */
-    public final void deleteElements(final ArrayList<? extends ModelElement> elementsToDelete, final int pid) {
+    public final void deleteElements(final List<? extends ModelElement> elementsToDelete, final int pid) {
         deleteElements(elementsToDelete, doc, pid);
     }
 
@@ -726,16 +729,16 @@ public final class GDCollection extends UserFieldTarget {
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
-    public final void deleteElements(final ArrayList<? extends ModelElement> elementsToDelete, final GraphDocument gdoc, final int pid) {
+    public final void deleteElements(final List<? extends ModelElement> elementsToDelete, final GraphDocument gdoc, final int pid) {
         //das wird die Liste mit allen zu löschenden Elementen. Das sind alle Elemente aus <code>elementsToDelete</code>,
         //alle Kanten dieser Elemente und rekursiv alle von den zu löschenden Elementen abhängigen Elemente (min. Karfinalität=1)
         //sowie deren Kanten
-        ArrayList<ModelElement> allElementsToDelete = new ArrayList<ModelElement>(elementsToDelete);
+        List<ModelElement> allElementsToDelete = Lists.newArrayList(elementsToDelete);
         //In dieses Set kommen alle Elemente, deren Löschen man nicht in den RedoKommandos loggen muss, weil beim Löschen eines
         //anderen Elementes eine minimale Kardinalität unterschritten ist, so dass sie automatisch mitgelöscht werden
-        HashSet<ModelElement> dependentDeletedElements = new HashSet<ModelElement>();
+        Set<ModelElement> dependentDeletedElements = Sets.newHashSet();
         //das wird die Liste aller zu löschenden Verbindungen
-        ArrayList<Kante> edgesToDelete = new ArrayList<Kante>();
+        List<Kante> edgesToDelete = Lists.newArrayList();
 
         gdoc.start_transaction(pid);
 
@@ -2484,13 +2487,12 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param elements ArrayList with ElementContainer
      * @param result ArrayList with hastStrings
      * @param userFields
      */
-    public void resolveCopyDependencies(final Collection<ElementContainer> elements, final ArrayList<ModelElement> result, final Set<UserField> userFields) {
-        for (ElementContainer ec : elements) {
-            ModelElement me = ec.getElement();
+    public void resolveCopyDependencies(final List<ModelElement> result, final Set<UserField> userFields) {
+        for (int i = 0; i < result.size(); i++) {
+            ModelElement me = result.get(i);
             if (!result.contains(me)) {
                 if (!(me instanceof Knickpunkt)) {
                     result.add(me);
@@ -2507,7 +2509,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param knoten der dessen abhängige Element gefunden werden sollen
      * @return HashSet mit den HashStrings der gefundenen Elementen
      */
-    private void resolveCopyDependencies(final ModelElement me, final ArrayList<ModelElement> elements, final Set<UserField> userFields) {
+    private void resolveCopyDependencies(final ModelElement me, final List<ModelElement> elements, final Set<UserField> userFields) {
         if (me instanceof Knickpunkt) {
             return;
         }

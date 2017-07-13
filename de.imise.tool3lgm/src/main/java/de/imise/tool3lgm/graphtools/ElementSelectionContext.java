@@ -1,7 +1,8 @@
 package de.imise.tool3lgm.graphtools;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -14,19 +15,14 @@ public class ElementSelectionContext {
     /**
      * COMMENTME
      */
-    private static final int INITIAL_CAPACITY = 100;
-
-    /**
-     * COMMENTME
-     */
     protected ModelSelection selectedContainer;
 
     /**
-     * 
+     *
      */
     public ElementSelectionContext() {
         super();
-        selectedContainer = new ModelSelection(INITIAL_CAPACITY);
+        selectedContainer = new ModelSelection();
     }
 
     /**
@@ -63,7 +59,7 @@ public class ElementSelectionContext {
 
     /**
      * Löscht die aktuelle Selektion.
-     * 
+     *
      * @return
      */
     public void clearSelection() {
@@ -73,24 +69,24 @@ public class ElementSelectionContext {
     /**
      * Liefert die Liste der aktuell selektierten {@link ModelElement}s.<br />
      * Das zuletzt selektierte Element ist auch in dieser Liste das letzte Element.
-     * 
+     *
      * @return
      *         Liste der ModellElemente der selektierten ElementContainer
      * @see ModelSelection#getSelectedElements()
      */
-    public final ArrayList<ModelElement> getSelectedElements() {
+    public final List<ModelElement> getSelectedElements() {
         return selectedContainer.getSelectedElements();
     }
 
     /**
      * Liefert die Liste der aktuell selektierten {@link ElementContainer}.<br />
      * Der zuletzt selektierte Container ist in dieser Liste das letzte Element.
-     * 
+     *
      * @return
      *         Liste der selektierten {@link ElementContainer}
      * @see ModelSelection#getSelectedContainer()
      */
-    public final ArrayList<ElementContainer> getSelectedContainer() {
+    public final List<ElementContainer> getSelectedContainer() {
         return selectedContainer.getSelectedContainer();
     }
 
@@ -113,7 +109,7 @@ public class ElementSelectionContext {
      * Fügt den angegebenen {@link ElementContainer} als letztes Element zur Selektion hinzu.
      * Falls es schon in der Selektion vorhanden war, wird das alte Vorkommen entfernt.
      * Diese Aktion wird weder Undo-/Redo-technisch geloggt noch wird ein Event gefeuert.
-     * 
+     *
      * @param mc
      * @see #addToSelection(ElementContainer, int)
      */
@@ -142,7 +138,7 @@ public class ElementSelectionContext {
 
     /**
      * Gibt wieder, wieviele {@link ElementContainer} selektiert sind.
-     * 
+     *
      * @return
      */
     public int getSelectionSize() {
@@ -185,7 +181,7 @@ public class ElementSelectionContext {
      * @return
      * @see de.imise.tool3lgm.graphtools.ModelSelection#getSelectedRealElementClasses()
      */
-    public HashSet<Class<? extends ModelElement>> getSelectedRealElementClasses() {
+    public Set<Class<? extends ModelElement>> getSelectedRealElementClasses() {
         return selectedContainer.getSelectedRealElementClasses();
     }
 
@@ -198,7 +194,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn genau 1 Element selektiert ist.
-     * 
+     *
      * @return
      */
     public boolean isSingleSelection() {
@@ -207,7 +203,7 @@ public class ElementSelectionContext {
 
     /**
      * Gibt zurück, ob mehr als ein {@link ElementContainer} selektiert ist.
-     * 
+     *
      * @return
      */
     public final boolean isMultipleSelection() {
@@ -216,7 +212,7 @@ public class ElementSelectionContext {
 
     /**
      * Gibt zurück, ob mehr als ein {@link NodeContainer} oder {@link BendpointContainer} selektiert ist.
-     * 
+     *
      * @return
      */
     public final boolean isMultipleNodeSelection() {
@@ -225,7 +221,7 @@ public class ElementSelectionContext {
 
     /**
      * Gibt zurück, ob mehr als ein {@link NodeContainer} selektiert ist.
-     * 
+     *
      * @return
      */
     public final boolean isMultipleRealNodeSelection() {
@@ -235,7 +231,7 @@ public class ElementSelectionContext {
     /**
      * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer} selektiert ist. {@link BendpointContainer} als Unterklasse von
      * {@link NodeContainer} zählen auch.
-     * 
+     *
      * @return
      */
     public boolean isSelectedAtLeastOneNode() {
@@ -244,7 +240,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn mind. ein {@link BendpointContainer} selektiert ist.
-     * 
+     *
      * @return
      */
     public boolean isSelectedAtLeastOneBendpoint() {
@@ -253,7 +249,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn mind. ein {@link EdgeContainer} selektiert ist.
-     * 
+     *
      * @return
      */
     public boolean isSelectedAtLeastOneEdge() {
@@ -262,7 +258,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn mind. ein {@link NodeContainer} selektiert ist, der kein {@link BendpointContainer} ist.
-     * 
+     *
      * @return
      */
     public boolean isSelectedAtLeastOneRealNode() {
@@ -271,7 +267,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn nur {@link NodeContainer} selektiert sind.
-     * 
+     *
      * @return
      */
     public final boolean isSelectedOnlyNodes() {
@@ -280,7 +276,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn nur {@link BendpointContainer} selektiert sind.
-     * 
+     *
      * @return
      */
     public final boolean isSelectedOnlyBendpoints() {
@@ -289,7 +285,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn nur {@link EdgeContainer} selektiert sind.
-     * 
+     *
      * @return
      */
     public final boolean isSelectedOnlyEdges() {
@@ -298,7 +294,7 @@ public class ElementSelectionContext {
 
     /**
      * Liefert <code>true</code>, wenn nur {@link NodeContainer} selektiert sind, die keine {@link BendpointContainer} sind.
-     * 
+     *
      * @return
      */
     public final boolean isSelectedOnlyRealNodes() {
@@ -308,7 +304,7 @@ public class ElementSelectionContext {
     /**
      * Gibt wieder, ob alle ausgewählten Elemente <em>unique</em> sind, also in allen Teilmodellen
      * vorkommen und keine grafische Repräsentation besitzen.
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlyUnique() {
@@ -317,7 +313,7 @@ public class ElementSelectionContext {
 
     /**
      * Gibt wieder, ob die selektierten Elemente ausschließlich im Teilmodell existieren
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlySubmodelElements() {
@@ -326,7 +322,7 @@ public class ElementSelectionContext {
 
     /**
      * Gibt wieder, ob nur untergeordnete Elemente in den RealNodes selektiert sind.
-     * 
+     *
      * @return
      */
     public boolean isSelectedOnlySlaveRealNodes() {
@@ -335,7 +331,7 @@ public class ElementSelectionContext {
 
     /**
      * Giebt einen Ausgabestring der Selektion zurück.
-     * 
+     *
      * @return
      */
     public String selectionToString() {

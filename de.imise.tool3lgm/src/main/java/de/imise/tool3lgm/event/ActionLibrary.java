@@ -9,6 +9,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -266,13 +267,13 @@ public class ActionLibrary {
 
             GraphDocument doc = Static.getSelectedDoc();
             boolean knickpunkte = doc.isSelectedOnlyBendpoints();
-            ArrayList<Action> actions = new ArrayList<Action>();
+            List<Action> actions = new ArrayList<Action>();
 
             if (!knickpunkte) {
                 ModelElement me1 = doc.getLastSelected().getElement();
                 Class<? extends ModelElement> me1Class = me1.getClass();
 
-                ArrayList<ModelElement> selectedElements = doc.getSelectedElements();
+                List<ModelElement> selectedElements = doc.getSelectedElements();
 
                 for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                     for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(me1Class, me2Class)) {
@@ -630,7 +631,7 @@ public class ActionLibrary {
                 }
                 GraphDocument doc = getSelectedDoc();
                 doc.start_transaction(TransactionManager.STANDARD_PID);
-                ArrayList<ModelElement> selectedElements = doc.getSelectedElements();
+                List<ModelElement> selectedElements = doc.getSelectedElements();
                 for (int i = 0; i < selectedElements.size(); i++) {
                     removeChilds(selectedElements.get(i), doc);
                 }

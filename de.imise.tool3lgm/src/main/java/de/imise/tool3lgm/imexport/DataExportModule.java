@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -66,7 +67,7 @@ public class DataExportModule {
 
             UserFieldDefinitions ufDef = doc.getCollection().getUserFieldDefinitions();
             //Elemente selektiert -> nur die selekierten exportieren
-            ArrayList<ModelElement> elements = doc.getSelectedElements();
+            List<ModelElement> elements = doc.getSelectedElements();
             //wenn nichts selektiert war -> alles exportieren
             if (elements.size() == 0) {
                 elements = doc.getModelItems(ModelElement.class, true, true);

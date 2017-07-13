@@ -17,6 +17,8 @@ import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import com.google.common.collect.Lists;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -609,10 +611,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             ModelElement lastSelected = doc.getLastSelected().getElement();
             Class<? extends ModelElement> lastSelectedClass = lastSelected.getClass();
 
-            ArrayList<ModelElement> selectedElements = doc.getSelectedElements();
+            List<ModelElement> selectedElements = doc.getSelectedElements();
 
-            ArrayList<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<NamedObjectContainer<JMenuItem>>();
-            ArrayList<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<NamedObjectContainer<JMenuItem>>();
+            List<NamedObjectContainer<JMenuItem>> connectableItems = Lists.newArrayList();
+            List<NamedObjectContainer<JMenuItem>> disconnectableItems = Lists.newArrayList();
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(lastSelectedClass, me2Class)) {

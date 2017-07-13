@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -2323,7 +2324,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
-        ArrayList<ElementContainer> selection = expandSelection(UserProperties.isMoveSubelements(), true);
+        List<ElementContainer> selection = expandSelection(UserProperties.isMoveSubelements(), true);
         for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
                 coordinateKnot(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
@@ -2446,8 +2447,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return <code>null</code>, wenn keine Erweiterung der bestehenden Selektion nötig war, sonst
      *         die alte Selektion
      */
-    private ArrayList<ElementContainer> expandSelection(final boolean addAllParts, final boolean addAllSlaves) {
-        ArrayList<ElementContainer> container2Select = new ArrayList<ElementContainer>();
+    private List<ElementContainer> expandSelection(final boolean addAllParts, final boolean addAllSlaves) {
+        List<ElementContainer> container2Select = Lists.newArrayList();
         for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
             ModelElement me = nc.getElement();
             if (addAllParts) {
@@ -2476,7 +2477,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (container2Select.size() == 0) {
             return null;
         }
-        ArrayList<ElementContainer> oldSelection = getSelectedContainer();
+        List<ElementContainer> oldSelection = getSelectedContainer();
         ElementContainer lastSelected = oldSelection.get(oldSelection.size() - 1);
         for (ElementContainer ec : container2Select) {
             addSimpleToSelection(ec);
@@ -2492,7 +2493,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *
      * @param selection
      */
-    private void setSelection(final ArrayList<ElementContainer> selection) {
+    private void setSelection(final List<ElementContainer> selection) {
         if (selection != null) {
             selectedContainer.set(selection);
         }
@@ -2516,7 +2517,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Das rekursive Auf- und Zuklappen merkt sich über diese Liste, welche Elemente bereits in einem
      * Durchgang angefasst wurden.
      */
-    private static ArrayList<ElementContainer> tmpExpandedElements = new ArrayList<ElementContainer>(20);
+    private static List<ElementContainer> tmpExpandedElements = Lists.newArrayList();
 
     /**
      * Das rekursive Auf- und Zuklappen merkt sich über diesen Wert, wie oft die Rekursion in einem

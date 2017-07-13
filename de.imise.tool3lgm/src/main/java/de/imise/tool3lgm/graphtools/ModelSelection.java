@@ -5,8 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
+import org.testng.collections.Lists;
+
+import com.google.common.collect.Sets;
 
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -124,6 +129,22 @@ public class ModelSelection implements Set<ElementContainer> {
         return selectedRealNodeContainer.size() + selectedBendpointContainer.size() + selectedEdgeContainer.size();
     }
 
+    public final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
+        List<ElementContainer> returnList = new ArrayList<ElementContainer>(size());
+        returnList.addAll(selectedRealNodeContainer);
+        int insertIndex = 0;
+        for (List<NodeContainer> orderSource : orderSources) {
+            for (NodeContainer nc : orderSource) {
+                if (returnList.remove(nc)) {
+                    returnList.add(insertIndex++, nc);
+                }
+            }
+        }
+        returnList.addAll(selectedEdgeContainer);
+        returnList.addAll(selectedBendpointContainer);
+        return returnList;
+    }
+
     /**
      * Liefert die Liste der aktuell selektierten <code>ModelElements</code>.<br />
      * Das zuletzt selektierte Element ist auch in dieser Liste das letzte Element.
@@ -151,8 +172,8 @@ public class ModelSelection implements Set<ElementContainer> {
      *
      * @return
      */
-    public HashSet<Class<? extends ModelElement>> getSelectedRealElementClasses() {
-        HashSet<Class<? extends ModelElement>> returnClasses = new HashSet<Class<? extends ModelElement>>();
+    public Set<Class<? extends ModelElement>> getSelectedRealElementClasses() {
+        Set<Class<? extends ModelElement>> returnClasses = Sets.newHashSet();
         for (NodeContainer nc : selectedRealNodeContainer) {
             if (lastSelected != nc) {
                 returnClasses.add(nc.getElement().getClass());
@@ -331,7 +352,7 @@ public class ModelSelection implements Set<ElementContainer> {
      *
      * @return
      */
-    public ArrayList<ElementContainer> getSelectedContainer() {
+    public List<ElementContainer> getSelectedContainer() {
         ArrayList<ElementContainer> al = new ArrayList<ElementContainer>(size());
         al.addAll(selectedRealNodeContainer);
         al.addAll(selectedEdgeContainer);
