@@ -213,7 +213,7 @@ public class LGMGraphDocument extends GraphDocument {
     /**
      *
      */
-    public synchronized final void copyToClipboard() {
+    private synchronized void copyToClipboard() {
         if (selectedContainer.size() == 0) {
             return;
         }
@@ -232,7 +232,7 @@ public class LGMGraphDocument extends GraphDocument {
             //			start_transaction(TransactionManager.STANDARD_PID);
             //			addRedoCommand(GraphDocument.CMD.COPY + " ", TransactionManager.STANDARD_PID);
 
-            raf.writeBytes(getCopyString());
+            raf.writeBytes(createClipboardContent());
 
             //			finish_transaction(TransactionManager.STANDARD_PID);
             distributeEventIntern(SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
@@ -243,8 +243,8 @@ public class LGMGraphDocument extends GraphDocument {
             Object[] buttons = new Object[] {
                     Tool3lgmConstants.getResString("ok")
             };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
-                    null, buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION,
+                    JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -256,7 +256,7 @@ public class LGMGraphDocument extends GraphDocument {
     /**
      *
      */
-    public synchronized final void cutToClipboard() {
+    private synchronized void cutToClipboard() {
         start_transaction(TransactionManager.STANDARD_PID);
         copyToClipboard();
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
@@ -268,7 +268,7 @@ public class LGMGraphDocument extends GraphDocument {
     /**
      *
      */
-    public synchronized final void clearClipboard() {
+    private synchronized final void clearClipboard() {
         File f = new File(Tool3lgmConstants.getClipboardPath());
         if (f.exists()) {
             f.delete();
@@ -283,20 +283,16 @@ public class LGMGraphDocument extends GraphDocument {
         return new File(Tool3lgmConstants.getClipboardPath()).exists();
     }
 
-    @Override
-    public final String getCopyString() {
-        return getCopyString("tool3lgm_clipboard");
-    }
-
     /**
      * @param masterTag
      * @return
      */
-    public final String getCopyString(final String masterTag) {
+    private final String createClipboardContent() {
+        String masterTag = "tool3lgm_clipboard";
         StringBuilder retVal = new StringBuilder(ToolXMLParser.getCurrentVersionString() + "<" + masterTag + ">");
 
-        ArrayList<ModelElement> elements = new ArrayList<ModelElement>(selectedContainer.size() * 100);
-        HashSet<UserField> userFields = new HashSet<UserField>(selectedContainer.size() * 10);
+        ArrayList<ModelElement> elements = new ArrayList<ModelElement>(selectedContainer.size());
+        HashSet<UserField> userFields = new HashSet<UserField>(selectedContainer.size());
         getCollection().resolveCopyDependencies(selectedContainer, elements, userFields);
 
         retVal.append(gdcoll.getUserFieldDefinitions().getCopyString(userFields) + "<objects>");
@@ -346,7 +342,7 @@ public class LGMGraphDocument extends GraphDocument {
     /**
      *
      */
-    public synchronized void pasteClipboard() {
+    private synchronized void pasteClipboard() {
         File file = new File(Tool3lgmConstants.getClipboardPath());
         if (!file.exists()) {
             return;
