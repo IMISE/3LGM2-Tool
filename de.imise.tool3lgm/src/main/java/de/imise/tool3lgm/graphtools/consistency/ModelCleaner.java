@@ -72,6 +72,9 @@ public class ModelCleaner {
             return;
         }
 
+        boolean bulkMode = gdcoll.isBulkMode();
+        gdcoll.setBulkMode(true);
+
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
 
         ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>();
@@ -348,6 +351,8 @@ public class ModelCleaner {
             doc.initKnotContainers();
             doc.initTraceContainers();
         }
+
+        gdcoll.setBulkMode(bulkMode);
     }
 
     /**
