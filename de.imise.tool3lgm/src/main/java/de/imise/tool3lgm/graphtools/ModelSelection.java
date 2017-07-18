@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.testng.collections.Lists;
-
 import com.google.common.collect.Sets;
 
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
@@ -129,6 +127,16 @@ public class ModelSelection implements Set<ElementContainer> {
         return selectedRealNodeContainer.size() + selectedBendpointContainer.size() + selectedEdgeContainer.size();
     }
 
+    /**
+     * Liefert die Selektion. Wenn die Parameter-Listen nicht leer sind, dann werden die selektierten Knoten, die in
+     * den Parameter-Listen enthalten sind, am Anfang der Rückgabeliste in derselben Reihenfolge eingetragen, in der sie
+     * in den Parameter-Listen stehen.
+     * Die Parameter-Listen sollten die node-Listen der LayerContainer sein, so dass die Rückgabe-Liste die Reihenfolge
+     * enthält, mit der die Knoten auf dem Layer gezeichnet werden.
+     *
+     * @param orderSources
+     * @return
+     */
     public final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
         List<ElementContainer> returnList = new ArrayList<ElementContainer>(size());
         returnList.addAll(selectedRealNodeContainer);
