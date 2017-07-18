@@ -100,7 +100,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
     public void mousePressed(final MouseEvent e) {
 
         if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
-            ContextGenerator.setControlled(true);
+            Tool3lgm.getContextGenerator().setControlled(true);
         }
 
         boolean right_button = false;
@@ -203,7 +203,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
     @Override
     public void mouseReleased(final MouseEvent e) {
-        ContextGenerator.setControlled(false);
+        Tool3lgm.getContextGenerator().setControlled(false);
     }
 
     /**

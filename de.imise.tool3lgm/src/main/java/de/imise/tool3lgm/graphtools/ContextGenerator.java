@@ -127,46 +127,28 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * COMMENTME
      */
     private static LGMGraphDocument doc;
-    /**
-     * COMMENTME
-     */
-    static String[] fontnamestr;
-    /**
-     * COMMENTME
-     */
-    static JMenuItem[] fontnames, fontsizes, fontstyles;
 
     /**
      * COMMENTME
      */
-    static int x_space, y_space, x_content, y_content;
+    private boolean controlled = false;
+    /**
+     * COMMENTME
+     */
+    private JPopupMenu menu = null;
+    /**
+     * COMMENTME
+     */
+    private boolean resizing = false;
 
-    /**
-     * COMMENTME
-     */
-    static protected boolean controlled = false;
-    /**
-     * COMMENTME
-     */
-    static protected JPopupMenu menu = null;
-    /**
-     * COMMENTME
-     */
-    static protected boolean resizing = false;
-
-    /**
-     * COMMENTME
-     */
+    /** Icon für das Herstellen einer Verbindung */
     static ImageIcon verbindung_anlegen = Tool3lgmConstants.getIcon("verbindung_anlegen.gif");
-    /**
-     * COMMENTME
-     */
+
+    /** Icon für das Trennen einer Verbindung */
     static ImageIcon verbindung_trennen = Tool3lgmConstants.getIcon("verbindung_trennen.gif");
 
-    /**
-     * COMMENTME
-     */
-    protected ElementContainer mc = null;
+    /** Element, das den Kontekt vorgibt, also das Element auf das sich die Aktionen beziehen. */
+    private ElementContainer mc = null;
 
     /**
      * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
@@ -182,7 +164,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @param b
      */
-    public static final void setControlled(final boolean b) {
+    public final void setControlled(final boolean b) {
         controlled = b;
     }
 
@@ -1591,7 +1573,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private static void right_layer_none(final Component gdl, final int xin, final int yin) {
+    private void right_layer_none(final Component gdl, final int xin, final int yin) {
         //TODO: FST: showMenu
         //FSTContextMenu.showMenu(gdl, xin, yin);
         menu = getLayerContextMenu();
@@ -1603,7 +1585,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private static void right_layer_knots(final Component gdl, final int xin, final int yin) {
+    private void right_layer_knots(final Component gdl, final int xin, final int yin) {
         menu = getLayerContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1613,7 +1595,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private static void right_layer_traces(final Component gdl, final int xin, final int yin) {
+    private void right_layer_traces(final Component gdl, final int xin, final int yin) {
         menu = getLayerContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1623,7 +1605,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private static void right_layer_multi(final Component gdl, final int xin, final int yin) {
+    private void right_layer_multi(final Component gdl, final int xin, final int yin) {
         menu = getLayerContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1980,12 +1962,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 for (final AbstractAnalyse ana : analysen) {
                     JMenuItem item = new JMenuItem(ana.getName());
                     menu.add(item);
-                    item.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(final ActionEvent e) {
-                            ana.setAnalysisResult(doc);
-                        }
-                    });
+                    item.addActionListener(e -> ana.setAnalysisResult(doc));
                 }
             } else {
                 menu.setEnabled(false);
@@ -2044,23 +2021,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private static final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
         JMenu menu = new JMenu(gdcoll.getName());
         JMenuItem item = new JMenuItem(Tool3lgmConstants.getResString("main_model"));
-        item.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                doc.copySelectedToModel(gdcoll.getMainGraphDocument());
-            }
-        });
+        item.addActionListener(e -> doc.copySelectedToModel(gdcoll.getMainGraphDocument()));
         menu.add(item);
 
         for (final Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
-            item.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    doc.copySelectedToModel(szen);
-                }
-            });
+            item.addActionListener(e -> doc.copySelectedToModel(szen));
             menu.add(item);
         }
 
@@ -2110,21 +2076,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
 
             item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc.getCollection().getName());
-            item.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    doc.joinElements(doc2, false);
-                }
-            });
+            item.addActionListener(e -> doc.joinElements(doc2, false));
             menu.add(item);
 
             item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc2.getCollection().getName());
-            item.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    ((LGMGraphDocument) doc2).joinElements(doc, false);
-                }
-            });
+            item.addActionListener(e -> ((LGMGraphDocument) doc2).joinElements(doc, false));
             menu.add(item);
 
             //			item = new JMenuItem(Tool3lgmConstants.getResourceString("join_elements_result_both"));

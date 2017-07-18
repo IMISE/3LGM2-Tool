@@ -14,7 +14,6 @@ import java.awt.event.MouseWheelListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.ContextGenerator;
 import de.imise.tool3lgm.graphtools.GDCommands;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.Szenario;
@@ -397,7 +396,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
 
         if ((e.getModifiers() & (InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)) != 0) {
-            ContextGenerator.setControlled(true);
+            Tool3lgm.getContextGenerator().setControlled(true);
         }
 
         ElementContainer ka = getMouseOverElementContainer();
@@ -446,7 +445,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     @Override
     public void mousePressed(final MouseEvent e) {
         if ((e.getModifiers() & (InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)) != 0) {
-            ContextGenerator.setControlled(true);
+            Tool3lgm.getContextGenerator().setControlled(true);
         }
         xin = e.getX();
         yin = e.getY();
@@ -733,7 +732,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         ka = null;
         mouse_dragged = false;
 
-        ContextGenerator.setControlled(false);
+        Tool3lgm.getContextGenerator().setControlled(false);
     }
 
     @Override
