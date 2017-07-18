@@ -54,7 +54,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     private static final double BENDPOINT_LINE_DIFFERENCE_ANGLE_IN_DEG = 0.0002;
 
     /**
-     * COMMENTME
+     * X- und Y-Koordinate, an die auf dieser Komponente geklickt wurde.
      */
     private int xin = 0, yin = 0;
 
@@ -97,25 +97,31 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     public static Rectangle grabbedElementsFullRect;
 
-    /**
-     * COMMENTME
-     */
-    private boolean left_button = false, right_button = false;
+    /** <code>true</code>, wenn die linke Maustaste gedrückt wurde */
+    private boolean left_button = false;
 
-    /**
-     * COMMENTME
-     */
-    private boolean grabbed = false, sized = false, mouse_makes_knot = false, mouse_makes_trace = false, mouse_dragged = false;
+    /** <code>true</code>, wenn die rechte Maustaste gedrückt wurde */
+    private boolean right_button = false;
+
+    /** <code>true</code>, wenn ein Element mit beim Mausklick getroffen wurde */
+    private boolean grabbed = false;
+
+    /** <code>true</code>, wenn bei einem Element auf einen Resize-Button geklickt wurde */
+    private boolean sized = false;
+
+    /** Elementklasse, die angelegt werden soll, wenn die beim Klick neue Elemente erzeugt werden sollen */
+    private Class<? extends Knoten> mouse_makes_node;
+
+    /** <code>true</code>, wenn beim Mausklick eine Kante angelegt werden soll */
+    private boolean mouse_makes_edge = false;
+
+    /** <code>true</code>, wenn die Maus gedragged wird */
+    private boolean mouse_dragged = false;
 
     /**
      * COMMENTME
      */
     private ElementContainer ka;
-
-    /**
-     * COMMENTME
-     */
-    private Knoten next_knot;
 
     /**
      * COMMENTME
@@ -141,7 +147,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         yin = 0;
         grabbed = false;
         sized = false;
-        setMouseMakesKnot(false);
+        setMouseMakesKnot(null);
         check_size();
     }
 
@@ -163,38 +169,14 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      *
      * @param k
      */
-    public final void setNextKnot(final Knoten k) {
+    public final void setMouseMakesKnot(final Class<? extends Knoten> k) {
         if (k == null) {
-            return;
-        }
-        next_knot = k;
-        //              System.out.println("Klasse von k ist " + k.getClass().getName());
-    }
-
-    /**
-     * COMMENTME
-     *
-     * @return
-     */
-    public final Knoten getNextKnot() {
-        return next_knot;
-    }
-
-    /**
-     * COMMENTME
-     *
-     * @param b
-     */
-    public final void setMouseMakesKnot(final boolean b) {
-        if (b) {
-            mouse_makes_trace = false;
-        }
-        mouse_makes_knot = b;
-        if (b) {
-            setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-        } else {
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        } else {
+            mouse_makes_edge = false;
+            setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         }
+        mouse_makes_node = k;
     }
 
     /**
@@ -204,9 +186,9 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     public final void setMouseMakesTrace(final boolean b) {
         if (b) {
-            mouse_makes_knot = false;
+            mouse_makes_node = null;
         }
-        mouse_makes_trace = b;
+        mouse_makes_edge = b;
         if (b) {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         } else {
@@ -469,7 +451,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
             doc.setKnotInsertPosition(Math.round(xreal[g] / UserProperties.getRasterWidth()) * UserProperties.getRasterWidth(), Math.round(yreal[g] / UserProperties.getRasterWidth()) * UserProperties.getRasterWidth());
 
-            if (mouse_makes_trace && left_button) {
+            if (mouse_makes_edge && left_button) {
                 doc.deselectAll(false);
                 ka = chooseObject(doc.getLayer(g), xreal[g], yreal[g]);
                 if (ka != null) {
@@ -478,11 +460,11 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     repaint();
                     break;
                 }
-            } else if (mouse_makes_knot && left_button) {
+            } else if (mouse_makes_node != null && left_button) {
                 if (-page_width / 2 < xreal[g] && page_width / 2 > xreal[g] && -page_height / 2 < yreal[g] && page_height / 2 > yreal[g]) {
-                    if (next_knot.layerFor() == g) {
+                    if (ModelConstants.layerFor(mouse_makes_node) == g) {
                         Tool3lgm.setLastActionPosition(xin + getX(), yin + getY());
-                        doc.createKnotenWithContainer(next_knot.getClass(), TransactionManager.STANDARD_PID);
+                        doc.createKnotenWithContainer(mouse_makes_node, TransactionManager.STANDARD_PID);
                         revalidate();
                         repaint();
                     }
@@ -594,7 +576,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         yin = e.getY();
         computeRealCoordinates(false);
 
-        if (mouse_makes_trace && left_button) {
+        if (mouse_makes_edge && left_button) {
             for (int g = 4; g >= 0; g -= 2) {
                 if (!multi_view && doc.getLayer(g) != doc.getActiveLayer()) {
                     continue;
@@ -609,7 +591,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     break;
                 }
             }
-        } else if (mouse_makes_knot && left_button) {
+        } else if (mouse_makes_node != null && left_button) {
         } else {
             // Jede einzelne der 3 Ebenen wird erstmal durchkaemmt.
             loop2: for (int k = 4; k >= 0; k -= 2) {
@@ -836,7 +818,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     @Override
     public final void mouseDragged(final MouseEvent e) {
-        if (mouse_makes_trace) {
+        if (mouse_makes_edge) {
             return;
         }
         xin = e.getX();

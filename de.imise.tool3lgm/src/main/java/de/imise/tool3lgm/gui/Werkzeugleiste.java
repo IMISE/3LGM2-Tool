@@ -251,9 +251,8 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         InputGraphArea area = ((ToolInternalFrame) frame).getInputGraphArea();
         button.setIcon(Tool3lgmConstants.getIcon("fill.gif"));
         button.setSelected(true);
-        area.setMouseMakesKnot(false);
+        area.setMouseMakesKnot(null);
         area.setMouseMakesTrace(false);
-        area.setNextKnot(null);
     }
 
     @Override
@@ -311,43 +310,37 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         if (e.getSource() == aufgabe) {
             aufgabe.setIcon(Tool3lgmConstants.getIcon("dummy.gif"));
             if (area != null) {
-                area.setMouseMakesKnot(true);
-                area.setNextKnot(new Aufgabe());
+                area.setMouseMakesKnot(Aufgabe.class);
             }
         }
         if (e.getSource() == objekttyp) {
             objekttyp.setIcon(Tool3lgmConstants.getIcon("dummy.gif"));
             if (area != null) {
-                area.setMouseMakesKnot(true);
-                area.setNextKnot(new Objekttyp());
+                area.setMouseMakesKnot(Objekttyp.class);
             }
         }
         if (e.getSource() == rechAwbaustein) {
             rechAwbaustein.setIcon(Tool3lgmConstants.getIcon("dummy.gif"));
             if (area != null) {
-                area.setMouseMakesKnot(true);
-                area.setNextKnot(new RechAnwendungsbaustein());
+                area.setMouseMakesKnot(RechAnwendungsbaustein.class);
             }
         }
         if (e.getSource() == konAwbaustein) {
             rechAwbaustein.setIcon(Tool3lgmConstants.getIcon("dummy.gif"));
             if (area != null) {
-                area.setMouseMakesKnot(true);
-                area.setNextKnot(new KonAnwendungsbaustein());
+                area.setMouseMakesKnot(KonAnwendungsbaustein.class);
             }
         }
         if (e.getSource() == dvbaustein) {
             dvbaustein.setIcon(Tool3lgmConstants.getIcon("dummy.gif"));
             if (area != null) {
-                area.setMouseMakesKnot(true);
-                area.setNextKnot(new PhysischerDVBaustein());
+                area.setMouseMakesKnot(PhysischerDVBaustein.class);
             }
         }
         if (e.getSource() == kante) {
             kante.setIcon(Tool3lgmConstants.getIcon("dummy.gif"));
             if (area != null) {
                 area.setMouseMakesTrace(true);
-                area.setNextKnot(null);
             }
         }
     }
