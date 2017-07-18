@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -32,7 +30,8 @@ import de.imise.util.collections.CollectionUtils;
 public class ModelSelection implements Set<ElementContainer> {
 
     /**
-     * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren {@link NodeContainer}
+     * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren {@link NodeContainer}. Das
+     * sollte in alle Metamodellen {@link ModelElement} sein, muss es aber in Zukunft nicht.
      */
     private static final Class<?> COMMON_REAL_ELEMENTS_SUPER_CLASS = ReflectionUtils.getCommonSuperClass(ModelConstants.ALL_NODES);
 
@@ -181,7 +180,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      */
     public Set<Class<? extends ModelElement>> getSelectedRealElementClasses() {
-        Set<Class<? extends ModelElement>> returnClasses = Sets.newHashSet();
+        Set<Class<? extends ModelElement>> returnClasses = new HashSet<Class<? extends ModelElement>>();
         for (NodeContainer nc : selectedRealNodeContainer) {
             if (lastSelected != nc) {
                 returnClasses.add(nc.getElement().getClass());
