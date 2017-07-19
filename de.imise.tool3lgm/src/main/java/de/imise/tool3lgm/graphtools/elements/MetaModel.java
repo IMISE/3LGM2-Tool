@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 
 /**
  * @author N.N., AXS
@@ -20,6 +21,12 @@ public abstract class MetaModel {
      * eingelesen werden können.
      */
     protected abstract Map<String, String> getOldToNewClassName();
+
+    /////////////////////////
+    // GraphViewDefinition //
+    /////////////////////////
+
+    public abstract GraphViewDefinition getGraphViewDefinition();
 
     ////////////
     // Knoten //

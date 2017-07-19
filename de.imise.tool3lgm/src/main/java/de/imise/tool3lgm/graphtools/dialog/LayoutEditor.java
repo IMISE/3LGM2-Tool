@@ -55,7 +55,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
     /**
      * Initialisiert den Grafikdialog.
-     * 
+     *
      * @param f
      * @param document
      */
@@ -69,9 +69,9 @@ public class LayoutEditor extends JDialog implements ActionListener {
         my_mapping.adapt(doc.getMapping());
         setTitle(Tool3lgmConstants.getResString("layout_edit"));
 
-        wieviele = ModelConstants.ALL_NODES_SET.size() - GraphViewDefinition.getUnpaintableCount() + 4; // Sicherheit
-                                                                                                       // geht
-                                                                                                       // vor!
+        GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
+
+        wieviele = graphViewDefinition.getPaintableNodesCount() + 4; // Sicherheit geht vor!
 
         insets = new Insets(0, 0, 0, 0);
         knoten = new NodeContainer[wieviele];
@@ -142,7 +142,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (ModelConstants.isAbstract(ModelConstants.ALL_DOMAIN_LAYER_NODES[c])) {
                 continue;
             }
-            if (GraphViewDefinition.isUnpaintable(ModelConstants.ALL_DOMAIN_LAYER_NODES[c])) {
+            if (!graphViewDefinition.isPaintable(ModelConstants.ALL_DOMAIN_LAYER_NODES[c])) {
                 continue;
             }
             NodeContainer kc = new NodeContainer((Knoten) ModelConstants.createElement(ModelConstants.ALL_DOMAIN_LAYER_NODES[c], true), mydoc);
@@ -187,7 +187,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (ModelConstants.isAbstract(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
                 continue;
             }
-            if (GraphViewDefinition.isUnpaintable(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
+            if (!graphViewDefinition.isPaintable(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
                 continue;
             }
             // nur für Knoten kann man das Layout im Moment festlegen -> Kanten
@@ -239,7 +239,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (ModelConstants.isAbstract(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c])) {
                 continue;
             }
-            if (GraphViewDefinition.isUnpaintable(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c])) {
+            if (!graphViewDefinition.isPaintable(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c])) {
                 continue;
             }
             NodeContainer kc = new NodeContainer((Knoten) ModelConstants.createElement(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c], true), mydoc);
@@ -306,8 +306,8 @@ public class LayoutEditor extends JDialog implements ActionListener {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == abbrechen) {

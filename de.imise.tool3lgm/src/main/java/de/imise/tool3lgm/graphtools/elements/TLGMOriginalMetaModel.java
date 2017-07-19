@@ -83,6 +83,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
 import de.imise.tool3lgm.graphtools.elements.node.Standort;
 import de.imise.tool3lgm.graphtools.elements.node.Subnetz;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 
 @SuppressWarnings({
         "unchecked",
@@ -96,6 +97,17 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     protected final Map<String, String> getOldToNewClassName() {
         return oldToNewName;
+    }
+
+    /////////////////////////
+    // GraphViewDefinition //
+    /////////////////////////
+
+    private final GraphViewDefinition graphViewDefinition = new TLGMGraphViewDefinion();
+
+    @Override
+    public GraphViewDefinition getGraphViewDefinition() {
+        return graphViewDefinition;
     }
 
     ////////////
@@ -491,7 +503,8 @@ public class TLGMOriginalMetaModel extends MetaModel {
                                     AufAufOrgVerbindung.class,
                                     AwbkAufOrgVerbindung.class
                             }
-                    }), new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
+                    }),
+                    new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
                             {
                                     PdvbkAwbVerbindung.class
                             }

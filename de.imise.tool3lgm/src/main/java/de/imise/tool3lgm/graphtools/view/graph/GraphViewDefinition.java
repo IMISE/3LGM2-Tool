@@ -1,46 +1,35 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsprogramm;
-import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteintyp;
-import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.DBVerwaltungssystem;
-import de.imise.tool3lgm.graphtools.elements.node.Datensatztyp;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumententyp;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.Ereignistyp;
-import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsprozess;
-import de.imise.tool3lgm.graphtools.elements.node.Kommunikationsstandard;
-import de.imise.tool3lgm.graphtools.elements.node.Nachrichtentyp;
-import de.imise.tool3lgm.graphtools.elements.node.Netzprotokoll;
-import de.imise.tool3lgm.graphtools.elements.node.Netztyp;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationseinheit;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationsplan;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
-import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
-import de.imise.tool3lgm.graphtools.elements.node.Standort;
-import de.imise.tool3lgm.graphtools.elements.node.Subnetz;
+import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
+import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
+import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
 
 /**
  * @author AXS
  */
 public abstract class GraphViewDefinition {
 
-    /** Klassen aller Knoten, die nicht in der Grafik dargestellt werden */
-    private static final HashSet<Class<? extends ModelElement>> UNPAINTABLE_NODES = new HashSet<>();
-    static {
-        @SuppressWarnings("rawtypes")
-        Class[] unpaintableNodes = { ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class, Dokumententyp.class, EreignisDokumentenTyp.class, EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsprozess.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class, Prozess.class, Softwareprodukt.class,
-                Standort.class, Subnetz.class, };
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        HashSet<Class<? extends ModelElement>> tmp_set = new HashSet(Arrays.asList(unpaintableNodes));
-        UNPAINTABLE_NODES.addAll(tmp_set);
+    protected abstract Class<? extends ModelElement>[] getPaintableNodes();
+
+    private final Set<Class<? extends ModelElement>> allPaintableNodes;
+
+    public GraphViewDefinition() {
+        ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
+        for (Class<? extends ModelElement> paintableNodeClass : getPaintableNodes()) {
+            allPaintableNodesSetBuilder.add(paintableNodeClass);
+        }
+        //Diese Klassen müssen noch hinzugefügt werden, da sie auch dargestellt werden
+        allPaintableNodesSetBuilder.add(Knickpunkt.class);
+        allPaintableNodesSetBuilder.add(TextfeldFach.class);
+        allPaintableNodesSetBuilder.add(TextfeldLog.class);
+        allPaintableNodesSetBuilder.add(TextfeldPhy.class);
+        allPaintableNodes = allPaintableNodesSetBuilder.build();
     }
 
     /**
@@ -49,8 +38,8 @@ public abstract class GraphViewDefinition {
      * @param elementClass
      * @return
      */
-    public static final boolean isUnpaintable(final Class<?> elementClass) {
-        return UNPAINTABLE_NODES.contains(elementClass);
+    public final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
+        return allPaintableNodes.contains(elementClass);
     }
 
     /**
@@ -58,8 +47,8 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    public static final int getUnpaintableCount() {
-        return UNPAINTABLE_NODES.size();
+    public final int getPaintableNodesCount() {
+        return allPaintableNodes.size();
     }
 
 }

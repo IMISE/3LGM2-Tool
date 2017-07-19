@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.collections.CollectionUtils;
 
@@ -595,7 +596,6 @@ public final class ModelConstants {
     /**
      * Array aller Pfade, die in der grafischen Ansicht als Interebenenbeziehungen dargestellt werden.
      */
-    @SuppressWarnings("unchecked")
     public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = metaModel.getInterLayerConnectedElementPathes();
 
     /**
@@ -701,8 +701,11 @@ public final class ModelConstants {
     /** Mappt vom Klassennamen auf die Klasse. Ist der Cache für die Funktion {@link #getClassForName(String)} */
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
 
-    /** Alle Modellelementklassen, die instaziierbar sind und in jedem Metamodell automatisch enthalten sind */
-    private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class.getSimpleName(), TextfeldFach.class.getSimpleName(), TextfeldLog.class.getSimpleName(), TextfeldPhy.class.getSimpleName());
+    /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
+    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, TextfeldFach.class, TextfeldLog.class, TextfeldPhy.class);
+
+    /** Klassennamen aller Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
+    private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPE_NAMES = CollectionUtils.getSimpleClassNames(META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES);
 
     /**
      * Prüft, ob in dem übergebenen className mindestens 2 Punkte stehen.
@@ -745,7 +748,7 @@ public final class ModelConstants {
             //package als alle Metamodellklassen. Das hier sollte eigentlich nicht die
             //ModelConstants wissen, sondern das sind Tool3lgmConstants, da die Klassen
             //nicht modellabhängig sind
-            if (META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES.contains(classname)) {
+            if (META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPE_NAMES.contains(classname)) {
                 fullClassName = Tool3lgmConstants.ELEMENTS_PACKAGE_NAME + classname;
             } else {
                 fullClassName = NODE_PACKAGE_NAME + classname;
@@ -1517,6 +1520,15 @@ public final class ModelConstants {
             elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
         }
         return false;
+    }
+
+    /**
+     * Liefert die {@link GraphViewDefinition} des Metamodells
+     *
+     * @return
+     */
+    public static final GraphViewDefinition getGraphViewDefinition() {
+        return metaModel.getGraphViewDefinition();
     }
 
 }
