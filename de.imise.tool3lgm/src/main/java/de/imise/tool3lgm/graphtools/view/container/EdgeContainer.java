@@ -20,7 +20,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.KnotenRenderer;
+import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -248,7 +248,7 @@ public class EdgeContainer extends ElementContainer {
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (KnotenRenderer.isInside(kc1, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(kc1, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -270,7 +270,7 @@ public class EdgeContainer extends ElementContainer {
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (KnotenRenderer.isInside(kc2, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(kc2, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -291,7 +291,7 @@ public class EdgeContainer extends ElementContainer {
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (KnotenRenderer.isInside(kc1, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(kc1, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -310,7 +310,7 @@ public class EdgeContainer extends ElementContainer {
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (KnotenRenderer.isInside(kc2, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(kc2, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -339,7 +339,7 @@ public class EdgeContainer extends ElementContainer {
             rad1 = rad2;
         }
 
-        if (KnotenRenderer.isInside(kc1, endx, endy) || KnotenRenderer.isInside(kc2, startx, starty)) {
+        if (NodeRenderer.isInside(kc1, endx, endy) || NodeRenderer.isInside(kc2, startx, starty)) {
             over_lapping = true;
         } else {
             over_lapping = false;

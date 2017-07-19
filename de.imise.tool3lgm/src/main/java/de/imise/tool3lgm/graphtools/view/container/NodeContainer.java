@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.KnotenRenderer;
+import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
@@ -432,7 +432,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     @Override
     protected void paintComponent(final Graphics g) {
-        KnotenRenderer.render(g, this, doc);
+        NodeRenderer.render(g, this, doc);
     }
 
     /**

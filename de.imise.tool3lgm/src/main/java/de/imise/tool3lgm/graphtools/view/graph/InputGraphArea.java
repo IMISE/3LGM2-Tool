@@ -492,7 +492,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                         doc.getCollection().setActiveLayer(g);
                     }
 
-                    setCursor(new Cursor(KnotenRenderer.getLastResizeCursor()));
+                    setCursor(new Cursor(NodeRenderer.getLastResizeCursor()));
 
                     sized = true;
                     Tool3lgm.getContextGenerator().processMouseEvent(left_button, right_button, this, xin, yin);
@@ -759,7 +759,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             if (!k.isVisible()) {
                 continue;
             }
-            if (k.isSelected() && KnotenRenderer.getResizeCursor(k, x, y) != Cursor.DEFAULT_CURSOR) {
+            if (k.isSelected() && NodeRenderer.getResizeCursor(k, x, y) != Cursor.DEFAULT_CURSOR) {
                 return k;
             }
         }
@@ -789,7 +789,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 if (!k.isVisible()) {
                     continue;
                 }
-                if (KnotenRenderer.isInside(k, x, y)) {
+                if (NodeRenderer.isInside(k, x, y)) {
                     return k;
                 }
             }
@@ -816,7 +816,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             if (!k.isVisible()) {
                 continue;
             }
-            if (KnotenRenderer.isInside(k, x, y)) {
+            if (NodeRenderer.isInside(k, x, y)) {
                 return k;
             }
         }

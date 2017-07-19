@@ -61,7 +61,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.KnotenRenderer;
+import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
@@ -1608,7 +1608,7 @@ public class ActionLibrary {
             public static final Action ANALYSIS_COLOR = new StaticAction(ActionIdentifier.analysis_color, PPP) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    KnotenRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), KnotenRenderer.analysisColor);
+                    NodeRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), NodeRenderer.analysisColor);
                 }
             };
 

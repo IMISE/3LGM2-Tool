@@ -26,7 +26,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu entscheiden, ob er sich
  * am Rand eines grafischen Elementes befindet und wenn ja, an welcher Position.<br>
  */
-public final class KnotenRenderer {
+public final class NodeRenderer {
 
     /**
      * Breite der Boxen, die auf die Ecken und die Mitte der Seitenlinien von selektierten
