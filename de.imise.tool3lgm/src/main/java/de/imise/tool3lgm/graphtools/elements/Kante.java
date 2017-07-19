@@ -692,11 +692,6 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public final boolean hasLayout() {
-        return false;
-    }
-
-    @Override
     public final boolean hasSortedKanten() {
         return false;
     }

@@ -73,11 +73,6 @@ public abstract class EtntEtdtKombination extends Knoten {
     }
 
     @Override
-    public boolean hasLayout() {
-        return false;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

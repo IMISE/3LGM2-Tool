@@ -29,8 +29,8 @@ public class Knickpunkt extends Knoten {
     private int index = 0;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public Knickpunkt() {
         super();
     }
@@ -48,11 +48,6 @@ public class Knickpunkt extends Knoten {
         retVal.kc = kc;
         retVal.index = index;
         return retVal;
-    }
-
-    @Override
-    public boolean hasLayout() {
-        return true;
     }
 
     @Override

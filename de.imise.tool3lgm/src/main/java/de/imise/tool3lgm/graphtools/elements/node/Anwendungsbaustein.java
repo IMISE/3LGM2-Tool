@@ -6,8 +6,8 @@ import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 public abstract class Anwendungsbaustein extends Knoten {
 
     /**
-	 * 
-	 */
+     *
+     */
     public Anwendungsbaustein() {
         super();
     }
@@ -18,12 +18,7 @@ public abstract class Anwendungsbaustein extends Knoten {
     }
 
     @Override
-    public boolean hasLayout() {
-        return true;
-    }
-
-    @Override
-    public boolean hasSortedKanten() {
+    public final boolean hasSortedKanten() {
         return false;
     }
 

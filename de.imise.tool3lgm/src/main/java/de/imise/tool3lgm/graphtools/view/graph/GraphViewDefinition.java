@@ -4,7 +4,10 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.elements.LayerKnoten;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
@@ -49,6 +52,38 @@ public abstract class GraphViewDefinition {
      */
     public final int getPaintableNodesCount() {
         return allPaintableNodes.size();
+    }
+
+    public final boolean hasLayout(final Class<? extends ModelElement> elementClass) {
+        if (isPaintable(elementClass)) {
+            return true;
+        }
+        if (LayerKnoten.class.isAssignableFrom(elementClass)) {
+            return true;
+        }
+        return hasOrderedEdgeClassesToPaintable(elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse Kanten bei denen die Reihenfolge relevant ist,
+     * zu anderen Elementarten hat, die selbst paintable sind. Wenn das der Fall ist, dann kann an diese
+     * anderen Elemente die Nummer(n) der Kanten geschrieben werden. In welcher Farbe das geschieht, bestimmt
+     * das Layout des Ausgangselementes.
+     *
+     * @return
+     */
+    private boolean hasOrderedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
+        Set<Class<? extends Kante>> orderedEdgeClasses = ModelConstants.getOrderedEdgeClasses(elementClass);
+        if (orderedEdgeClasses == null) {
+            return false;
+        }
+        for (Class<? extends Kante> edgeClass : orderedEdgeClasses) {
+            Class<? extends ModelElement> other = Kante.getOther(edgeClass, elementClass);
+            if (isPaintable(other)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

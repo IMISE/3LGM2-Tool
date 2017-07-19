@@ -43,26 +43,8 @@ public final class Bausteinschnittstelle extends Schnittstelle {
     }
 
     @Override
-    public boolean hasLayout() {
-        return true;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }
-
-    //	/**
-    //	 * COMMENTME
-    //	 */
-    //	public static final Class[] MASTER_TYPES = {
-    //		Anwendungsbaustein.class,
-    //		RechAnwendungsbaustein.class,
-    //		KonAnwendungsbaustein.class,
-    //	};
-    //
-    //	public final Class[] getMasterTypes()  {
-    //		return MASTER_TYPES;
-    //	}
 
 }

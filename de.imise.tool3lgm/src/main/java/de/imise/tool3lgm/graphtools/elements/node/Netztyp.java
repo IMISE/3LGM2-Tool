@@ -24,11 +24,6 @@ public final class Netztyp extends Knoten {
     }
 
     @Override
-    public boolean hasLayout() {
-        return false;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

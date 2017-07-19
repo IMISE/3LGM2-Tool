@@ -2096,10 +2096,9 @@ public abstract class ModelElement extends UserFieldTarget {
         return ModelConstants.getGraphViewDefinition().isPaintable(getClass());
     }
 
-    /**
-     * @return
-     */
-    public abstract boolean hasLayout();
+    public final boolean hasLayout() {
+        return ModelConstants.getGraphViewDefinition().hasLayout(getClass());
+    }
 
     /**
      * @return

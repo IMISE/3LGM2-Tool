@@ -71,11 +71,6 @@ public class AufOrgKombination extends Knoten {
     }
 
     @Override
-    public boolean hasLayout() {
-        return false;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

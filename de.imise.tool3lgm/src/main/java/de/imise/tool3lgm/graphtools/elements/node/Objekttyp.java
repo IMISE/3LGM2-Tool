@@ -98,11 +98,6 @@ public class Objekttyp extends Knoten {
     }
 
     @Override
-    public boolean hasLayout() {
-        return true;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

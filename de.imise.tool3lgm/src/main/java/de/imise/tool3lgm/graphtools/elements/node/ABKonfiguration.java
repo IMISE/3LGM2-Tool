@@ -42,11 +42,6 @@ public final class ABKonfiguration extends Konfiguration {
     }
 
     @Override
-    public boolean hasLayout() {
-        return false;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

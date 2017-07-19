@@ -28,11 +28,6 @@ public final class DBKonfiguration extends Konfiguration {
     }
 
     @Override
-    public boolean hasLayout() {
-        return false;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

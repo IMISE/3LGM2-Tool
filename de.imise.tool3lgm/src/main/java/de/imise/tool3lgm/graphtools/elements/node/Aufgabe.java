@@ -164,11 +164,6 @@ public final class Aufgabe extends Knoten {
     }
 
     @Override
-    public boolean hasLayout() {
-        return true;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

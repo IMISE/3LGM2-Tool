@@ -14,11 +14,6 @@ public final class Benutzungsschnittstelle extends Schnittstelle {
     }
 
     @Override
-    public boolean hasLayout() {
-        return true;
-    }
-
-    @Override
     public boolean hasSortedKanten() {
         return false;
     }

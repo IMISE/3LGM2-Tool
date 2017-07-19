@@ -15,7 +15,7 @@ public class Kommunikationsprozess extends Knoten {
     protected Prozess prozess;
 
     /**
-     * 
+     *
      */
     public Kommunikationsprozess() {
         super();
@@ -43,11 +43,6 @@ public class Kommunikationsprozess extends Knoten {
      */
     public void setProzess(final Prozess prozess) {
         this.prozess = prozess;
-    }
-
-    @Override
-    public boolean hasLayout() {
-        return true;
     }
 
     @Override
