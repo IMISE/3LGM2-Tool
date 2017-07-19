@@ -7,14 +7,4 @@ public final class TextfeldLog extends Textfeld {
         return ModelConstants.LOGICAL_LAYER;
     }
 
-    @Override
-    public boolean hasLayout() {
-        return true;
-    }
-
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }
