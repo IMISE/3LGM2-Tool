@@ -19,7 +19,14 @@ public class GraphElementLayout implements SwingConstants {
      * Layout der Elemente in Modellen, die vorher erstellt wurden.
      */
     public static enum SHAPE {
-        rechteck, oval, dreieck, rundeck, rhombus, tonne, wabe, ordner,
+        rechteck,
+        oval,
+        dreieck,
+        rundeck,
+        rhombus,
+        tonne,
+        wabe,
+        ordner,
     }
 
     public static final int WHITE = 0;
@@ -66,20 +73,32 @@ public class GraphElementLayout implements SwingConstants {
     public static final int VOLL_TRANSPARENT = 0;
 
     public static final String[] FONT_NAMES = {
-            Tool3lgmConstants.getResString("courier"), Tool3lgmConstants.getResString("helvetica"), Tool3lgmConstants.getResString("luc_sans"), Tool3lgmConstants.getResString("serif"), Tool3lgmConstants.getResString("icon"),
+            Tool3lgmConstants.getResString("courier"),
+            Tool3lgmConstants.getResString("helvetica"),
+            Tool3lgmConstants.getResString("luc_sans"),
+            Tool3lgmConstants.getResString("serif"),
+            Tool3lgmConstants.getResString("icon"),
             Tool3lgmConstants.getResString("times")
     };
 
     public static final int[] FONT_SIZES = {
-            10, 12, 14, 18, 24
+            10,
+            12,
+            14,
+            18,
+            24
     };
 
     public static final String[] FONT_STYLE_NAMES = {
-            Tool3lgmConstants.getResString("font_plain"), Tool3lgmConstants.getResString("font_bold"), Tool3lgmConstants.getResString("font_italic")
+            Tool3lgmConstants.getResString("font_plain"),
+            Tool3lgmConstants.getResString("font_bold"),
+            Tool3lgmConstants.getResString("font_italic")
     };
 
     public static final int[] FONT_STYLES = {
-            Font.PLAIN, Font.BOLD, Font.ITALIC
+            Font.PLAIN,
+            Font.BOLD,
+            Font.ITALIC
     };
 
     public static final GraphElementLayout.SHAPE STANDARD_FORM = SHAPE.rechteck;
@@ -105,8 +124,8 @@ public class GraphElementLayout implements SwingConstants {
         STANDARD_ELEMENT_LAYOUT.font = STANDARD_FONT;
         STANDARD_ELEMENT_LAYOUT.icon = null;
 
-        //TODO: den Standard-Linestyle aus den Containern hier her verlegen		
-        //		STANDARD_ELEMENT_LAYOUT.line_style = 
+        //TODO: den Standard-Linestyle aus den Containern hier her verlegen
+        //		STANDARD_ELEMENT_LAYOUT.line_style =
         STANDARD_ELEMENT_LAYOUT.form = STANDARD_FORM;
         STANDARD_ELEMENT_LAYOUT.halign = CENTER;
         STANDARD_ELEMENT_LAYOUT.valign = CENTER;
@@ -172,8 +191,8 @@ public class GraphElementLayout implements SwingConstants {
     public int halign;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public GraphElementLayout() {
         x = 0;
         y = 0;
@@ -181,8 +200,8 @@ public class GraphElementLayout implements SwingConstants {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void reset() {
         width = STANDARD_WIDTH;
         height = STANDARD_HEIGHT;
