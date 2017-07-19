@@ -79,6 +79,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * sondern die Koordinaten des Punktes der rechten unteren Ecke.
      */
     public static Rectangle grabbedElementsRealRect;
+
     /**
      * Wenn Knoten verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
      * Elemente liegen.
@@ -87,6 +88,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * sondern die Koordinaten des Punktes der rechten unteren Ecke.
      */
     public static Rectangle grabbedElementsRasteredRect;
+
     /**
      * Wenn Knoten verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
      * Elemente liegen.
@@ -103,24 +105,32 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     /** <code>true</code>, wenn die rechte Maustaste gedrückt wurde */
     private boolean right_button = false;
 
-    /** <code>true</code>, wenn ein Element mit beim Mausklick getroffen wurde */
+    /**
+     * <code>true</code>, wenn ein Element mit beim Mausklick getroffen wurde
+     */
     private boolean grabbed = false;
 
-    /** <code>true</code>, wenn bei einem Element auf einen Resize-Button geklickt wurde */
+    /**
+     * <code>true</code>, wenn bei einem Element auf einen Resize-Button
+     * geklickt wurde
+     */
     private boolean sized = false;
 
-    /** Elementklasse, die angelegt werden soll, wenn die beim Klick neue Elemente erzeugt werden sollen */
+    /**
+     * Elementklasse, die angelegt werden soll, wenn die beim Klick neue
+     * Elemente erzeugt werden sollen
+     */
     private Class<? extends Knoten> mouse_makes_node;
 
-    /** <code>true</code>, wenn beim Mausklick eine Kante angelegt werden soll */
+    /**
+     * <code>true</code>, wenn beim Mausklick eine Kante angelegt werden soll
+     */
     private boolean mouse_makes_edge = false;
 
     /** <code>true</code>, wenn die Maus gedragged wird */
     private boolean mouse_dragged = false;
 
-    /**
-     * COMMENTME
-     */
+    /** Element, das angeklict wurde */
     private ElementContainer ka;
 
     /**
@@ -135,14 +145,12 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     public InputGraphArea(final GraphDocument gdoc) {
         super(gdoc);
-
         if (gdoc instanceof Szenario) {
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
             Static.getTool().getContentPane().addMouseListener(this);
         }
-
         xin = 0;
         yin = 0;
         grabbed = false;
@@ -158,6 +166,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         multi_view = b;
         findIncludingRectangles();
         super.setMultiViewEnabled(b);
+        doc.distributeEvent(GraphDocument.LAYOUT_CHANGED);
     }
 
     // --- kleine Hilfsmethoden --- Ende ---
@@ -383,19 +392,19 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
         ElementContainer ka = getMouseOverElementContainer();
 
-        //		ElementContainer ka = null;
+        // ElementContainer ka = null;
         //
-        //		if (multi_view) {
-        //			for (int c = 4; c >= 0; c -= 2) {
-        //				ka = chooseObject(doc.getLayer(c), xreal[c], yreal[c]);
-        //				if (ka != null) {
-        //					break;
-        //				}
-        //			}
-        //		} else {
-        //			int ebene = doc.getCollection().getActiveLayer();
-        //			ka = chooseObject(doc.getLayer(ebene), xreal[ebene], yreal[ebene]);
-        //		}
+        // if (multi_view) {
+        // for (int c = 4; c >= 0; c -= 2) {
+        // ka = chooseObject(doc.getLayer(c), xreal[c], yreal[c]);
+        // if (ka != null) {
+        // break;
+        // }
+        // }
+        // } else {
+        // int ebene = doc.getCollection().getActiveLayer();
+        // ka = chooseObject(doc.getLayer(ebene), xreal[ebene], yreal[ebene]);
+        // }
 
         if (ka != null) {
             doc.select(ka, 0);
@@ -403,8 +412,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
         // Verknüpftes Teilmodell öffnen
         if ((e.getModifiers() & InputEvent.ALT_MASK) != 0) {
-            //Component source, int id, long when, int modifiers,
-            //int keyCode, char keyChar, int keyLocation
+            // Component source, int id, long when, int modifiers,
+            // int keyCode, char keyChar, int keyLocation
             dispatchEvent(new KeyEvent(this, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
             Static.getTool().changeToLinked(doc);
             return;
@@ -416,7 +425,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             return;
         }
 
-        //Knickpunkte bei Doppelklicks löschen
+        // Knickpunkte bei Doppelklicks löschen
         if (ka instanceof BendpointContainer) {
             doc.getCollection().removeBendpoint(((BendpointContainer) ka).getKnickpunktKnoten(), TransactionManager.STANDARD_PID);
         } else if (ka != null) {
@@ -551,7 +560,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
             }
         }
-        //			System.err.println(" finished" + System.currentTimeMillis() / 100);
+        // System.err.println(" finished" + System.currentTimeMillis() / 100);
     }
 
     @Override
@@ -616,7 +625,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                         }
                     }
 
-                    //wenn ein Knickpunkt gedraggt wurde
+                    // wenn ein Knickpunkt gedraggt wurde
                     if (mouse_dragged && ka != null && ka instanceof BendpointContainer) {
                         //Prüfe ob er gelöscht werden soll. Das soll er, wenn er auf einer Linie
                         //zwischen den anderen Knickpunkten oder den Endpunkten der Kante liegt
@@ -626,12 +635,12 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                         Point postPos = kpc.getSuccessorPosition();
 
                         //wenn der Knickpunkt auf seinen Vorgänger- oder Nachfolgerknickpunkt gedragged
-                        //wurde -> lösche ihn
+                        // wurde -> lösche ihn
                         if (Math.abs(prePos.x - pos.x) < BENDPOINT_OVERLAY_TOLERANCE && Math.abs(prePos.y - pos.y) < BENDPOINT_OVERLAY_TOLERANCE
                                 || Math.abs(postPos.x - pos.x) < BENDPOINT_OVERLAY_TOLERANCE && Math.abs(postPos.y - pos.y) < BENDPOINT_OVERLAY_TOLERANCE) {
                             doc.getCollection().removeBendpoint(kpc.getKnickpunktKnoten(), TransactionManager.STANDARD_PID);
                             //prüfe, ob der Knickpunkt mit einer gewissen Toleranz auf fast einer Linie mit seinen Außenpunkten
-                            //liegt -> wenn ja -> lösche ihn
+                            // liegt -> wenn ja -> lösche ihn
                         } else {
                             //Koodinaten transformieren um immer in den positiven Bereich zu kommen
                             int minX = Math.min(prePos.x, pos.x);
@@ -652,10 +661,10 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                             //wird true, wenn die X-Koordinate des Knickpunktes nach dem Draggen größer oder kleiner
                             //ist, als die Koordinaten der beiden Knickpunkte, zwischen denen sich der aktuell gedraggte befindet
                             boolean xOut = pos.x < prePos.x && pos.x < postPos.x || pos.x > prePos.x && pos.x > postPos.x;
-                            //dasselbe wie xOut nur für y
+                            // dasselbe wie xOut nur für y
                             boolean yOut = pos.y < prePos.y && pos.y < postPos.y || pos.y > prePos.y && pos.y > postPos.y;
 
-                            //System.err.println(xOut + "  " + yOut);
+                            // System.err.println(xOut + " " + yOut);
                             //System.err.println("minX=" + minX + "   minY=" + minY);
 
                             //wenn der Knickpunkt mit beiden Koordinaten wirklich zw. den beiden ihn umgebenden Knickpunkten liegt
@@ -674,14 +683,14 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                                 //Strecke zw. Vorgängerknickpunkt und Nachfolger
                                 double c = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 
-                                //Cosinus des Winkels zw. a und c
+                                // Cosinus des Winkels zw. a und c
                                 double cosAlpha = (-(a * a) + b * b + c * c) / (2d * b * c);
 
                                 //Wenn die Differenz der beiden Winkel die Toleranz unterschreitet = die Knickpunkte
                                 //liegen nahezu auf einer Linie (der Cosinus ist 1, wenn der Winkel 0 Grad beträgt ->
-                                //daher die Abweichung von 1 bestimmen)
+                                // daher die Abweichung von 1 bestimmen)
                                 if (Math.abs(1d - cosAlpha) < BENDPOINT_LINE_DIFFERENCE_ANGLE_IN_DEG) {
-                                    //Lösche den aktuellen Knickpunkt
+                                    // Lösche den aktuellen Knickpunkt
                                     doc.getCollection().removeBendpoint(kpc.getKnickpunktKnoten(), TransactionManager.STANDARD_PID);
                                 }
 
@@ -689,7 +698,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                                 //System.err.println("a="+a + "   b="+b + "   c=" + c);
 
                                 //System.err.println(cosAlpha + "  " + BENDPOINT_LINE_DIFFERENCE_ANGLE_IN_DEG);
-                                //System.err.println("-----------------------");
+                                // System.err.println("-----------------------");
                             }
                         }
 
@@ -706,8 +715,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     Tool3lgm.getContextGenerator().setEbeneGetroffen(false);
                     break;
                 }
-            } //loop
-        } //else
+            } // loop
+        } // else
 
         left_button = false;
         right_button = false;
@@ -858,16 +867,16 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             int w = kc.getWidth();
             int h = kc.getHeight();
 
-            //			float ratio = (float) w / (float) h;
+            // float ratio = (float) w / (float) h;
             int u_bound, d_bound, r_bound, l_bound, xd, yd;
 
-            //Beim Resizen rastern
+            // Beim Resizen rastern
             if (UserProperties.isUseRaster()) {
                 float rasterWidth = UserProperties.getRasterWidth();
                 xreal[ebene] = (int) (Math.round(xreal[ebene] / rasterWidth) * rasterWidth);
                 yreal[ebene] = (int) (Math.round(yreal[ebene] / rasterWidth) * rasterWidth);
             }
-            //Die resize-Hände nicht aus der Zeichenfläche lassen
+            // Die resize-Hände nicht aus der Zeichenfläche lassen
             if (xreal[ebene] < -page_width / 2) {
                 xreal[ebene] = -page_width / 2;
             } else if (xreal[ebene] > page_width / 2) {
@@ -971,13 +980,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 int deltaX = lastXreal[ebene] - xreal[ebene];
                 int deltaY = lastYreal[ebene] - yreal[ebene];
                 //Anzahl der Pixel, bei denen ein Knickpunkt statt auf dem Raster auf der gleichen Höhe oder Weite einrasten soll,
-                //die sein Vorgänger- oder Nachfolger auf der Kante haben
+                // die sein Vorgänger- oder Nachfolger auf der Kante haben
                 int bendpointTolerance = 3;
 
-                //wenn gerastert werden soll
+                // wenn gerastert werden soll
                 if (UserProperties.isUseRaster()) {
 
-                    //X - Richtung
+                    // X - Richtung
 
                     grabbedElementsRealRect.x -= deltaX;
                     grabbedElementsRealRect.width -= deltaX;
@@ -1019,7 +1028,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                         }
                     }
 
-                    //Y - Richtung
+                    // Y - Richtung
 
                     grabbedElementsRealRect.y -= deltaY;
                     grabbedElementsRealRect.height -= deltaY;
@@ -1096,7 +1105,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
 
                 //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Kante gedragged werden, da grabbed
-                //nur bei Knoten oder Kanten true gesetzt wird
+                // nur bei Knoten oder Kanten true gesetzt wird
             } else /* if (ka instanceof EdgeContainer) */ {
                 //der Einfügepunkt muss der Punkt sein, an dem die Maus vor dem Draggen war, denn sonst kann es vorkommen, dass bei mouseKlicked()
                 //die Kante getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
@@ -1118,8 +1127,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         xin = e.getX();
         yin = e.getY();
         computeRealCoordinates(false);
-        //		ElementContainer ec = getMouseOverElementContainer();
-        //		System.err.println(ec);
+        // ElementContainer ec = getMouseOverElementContainer();
+        // System.err.println(ec);
     }
 
     @Override
