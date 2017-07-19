@@ -30,27 +30,22 @@ import de.imise.tool3lgm.graphtools.elements.node.Subnetz;
 /**
  * @author AXS
  */
-public class GraphViewConstants {
+public abstract class GraphViewDefinition {
 
     /** Klassen aller Knoten, die nicht in der Grafik dargestellt werden */
-    private static final HashSet<Class<? extends ModelElement>> UNPAINTABLE_NODES = new HashSet<Class<? extends ModelElement>>();
+    private static final HashSet<Class<? extends ModelElement>> UNPAINTABLE_NODES = new HashSet<>();
     static {
         @SuppressWarnings("rawtypes")
-        Class[] unpaintableNodes = {
-                ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class, Dokumententyp.class, EreignisDokumentenTyp.class,
-                EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsprozess.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class, Prozess.class,
-                Softwareprodukt.class, Standort.class, Subnetz.class,
-        };
-        @SuppressWarnings({
-                "rawtypes", "unchecked"
-        })
+        Class[] unpaintableNodes = { ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class, Dokumententyp.class, EreignisDokumentenTyp.class, EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsprozess.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class, Prozess.class, Softwareprodukt.class,
+                Standort.class, Subnetz.class, };
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         HashSet<Class<? extends ModelElement>> tmp_set = new HashSet(Arrays.asList(unpaintableNodes));
         UNPAINTABLE_NODES.addAll(tmp_set);
     }
 
     /**
      * Liefert <code>true</code>, wenn die Elementklasse nicht in der Grafik dargestellt wird.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -60,7 +55,7 @@ public class GraphViewConstants {
 
     /**
      * Liefert die Anzahl der nicht dargestellten instanziierbaren Unterklassen von {@link ModelElement}
-     * 
+     *
      * @return
      */
     public static final int getUnpaintableCount() {

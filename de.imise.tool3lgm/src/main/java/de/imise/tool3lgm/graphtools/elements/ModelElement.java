@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphViewConstants;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.util.Alphabetical;
@@ -2087,7 +2087,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public boolean isUnpaintable() {
-        return GraphViewConstants.isUnpaintable(getClass());
+        return GraphViewDefinition.isUnpaintable(getClass());
     }
 
     /**
