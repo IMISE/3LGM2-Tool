@@ -3,6 +3,9 @@ package de.imise.util.collections;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Stellt Funktionen für Objektsammlungen bereit, die <code>Arrays</code> und <code>Collections</code> nicht bieten.
@@ -115,6 +118,22 @@ public abstract class CollectionUtils {
         }
         return containsName;
 
+    }
+
+    /**
+     * Liefert eine Liste der SimpleClassNames der übergebenen Objekte. Bei übergebenen Objekten, die selbst
+     * Klassen sind, wird der Name dieser Klasse zurück gegeben.
+     *
+     * @param elements
+     * @return
+     */
+    public static final <T> Set<String> getSimpleClassNames(final Iterable<T> elements) {
+        ImmutableSet.Builder<String> classNames = new ImmutableSet.Builder<String>();
+        for (T element : elements) {
+            Class<?> clazz = element instanceof Class ? (Class<?>) element : element.getClass();
+            classNames.add(clazz.getSimpleName());
+        }
+        return classNames.build();
     }
 
     /**
