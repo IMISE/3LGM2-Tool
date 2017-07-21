@@ -318,7 +318,7 @@ public final class ModelConstants {
     }
 
     public static final boolean isMultipleEdgeClass(final Class<? extends Kante> edgeClass) {
-        return MultipleConnectionEdge.class.isAssignableFrom(edgeClass);
+        return MultipleEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**

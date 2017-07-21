@@ -3,8 +3,14 @@ package de.imise.tool3lgm.graphtools.elements;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
+import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author N.N., AXS
@@ -61,24 +67,46 @@ public abstract class MetaModel {
 
     public abstract Class[] getTreeCreatablePhysicalLayerNodes();
 
+    private Class[] allNodes = null;
+
+    @SuppressWarnings("unchecked")
+    public Class<? extends ModelElement>[] getAllNodes() {
+        //muss lazy initialisiert werden, um ExceptionInInitializerError zu verhindern
+        if (allNodes == null) {
+            allNodes = CollectionUtils.joinArrays(getAllDomainLayerNodes(), getAllInterDomainLogicalLayerNodes(), getAllLogicalLayerNodes(), getAllInterLogicalPhysicalLayerNodes(), getAllPhysicalLayerNodes());
+        }
+        return allNodes;
+    }
+
     ////////////
     // Kanten //
     ////////////
 
     /** Alle Kanten der FE als Array */
-    public abstract Class[] getAllDomainLayerEdges();
+    public abstract Class<? extends Kante>[] getAllDomainLayerEdges();
 
     /** Alle Kanten zw. FE und LWE als Array */
-    public abstract Class[] getAllInterDomainLogicalLayerEdges();
+    public abstract Class<? extends Kante>[] getAllInterDomainLogicalLayerEdges();
 
     /** Alle Kanten der LWE als Array */
-    public abstract Class[] getAllLogicalLayerEdges();
+    public abstract Class<? extends Kante>[] getAllLogicalLayerEdges();
 
     /** Alle Kanten zw. LWE und PWE als Array */
-    public abstract Class[] getAllInterLogicalPhysicalLayerEdges();
+    public abstract Class<? extends Kante>[] getAllInterLogicalPhysicalLayerEdges();
 
     /** Alle Kanten der PWE als Array */
-    public abstract Class[] getAllPhysicalLayerEdges();
+    public abstract Class<? extends Kante>[] getAllPhysicalLayerEdges();
+
+    private Class<? extends Kante>[] allEdges = null;
+
+    @SuppressWarnings("unchecked")
+    public Class<? extends Kante>[] getAllEdges() {
+        //muss lazy initialisiert werden, um ExceptionInInitializerError zu verhindern
+        if (allEdges == null) {
+            allEdges = CollectionUtils.joinArrays(getAllDomainLayerEdges(), getAllInterDomainLogicalLayerEdges(), getAllLogicalLayerEdges(), getAllInterLogicalPhysicalLayerEdges(), getAllPhysicalLayerEdges());
+        }
+        return allEdges;
+    }
 
     ///////////////////////////////////
     // spezielle Knoteneigenschaften //
@@ -98,7 +126,43 @@ public abstract class MetaModel {
      * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    public abstract Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges();
+    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges() {
+        ImmutableMap.Builder<Class<? extends ModelElement>, Set<Class<? extends Kante>>> mapBuilder = ImmutableMap.builder();
+        Iterable<Class<? extends Kante>> orderedEdges = getOrderedEdges();
+        for (Class<? extends ModelElement> elementClass : getAllNodes()) {
+            ImmutableSet.Builder<Class<? extends Kante>> orderedEdgesForElementClass = new ImmutableSet.Builder<>();
+            for (Class<? extends Kante> edgeClass : orderedEdges) {
+                if (Kante.isStartClass(edgeClass, elementClass)) {
+                    orderedEdgesForElementClass.add(edgeClass);
+                }
+            }
+            ImmutableSet<Class<? extends Kante>> orderedEdgesSet = orderedEdgesForElementClass.build();
+            if (!orderedEdgesSet.isEmpty()) {
+                mapBuilder.put(elementClass, orderedEdgesForElementClass.build());
+            }
+        }
+        return mapBuilder.build();
+    }
+
+    private Set<Class<? extends Kante>> getOrderedEdges() {
+        ImmutableSet.Builder<Class<? extends Kante>> orderedEdges = new ImmutableSet.Builder<>();
+        for (Class<? extends Kante> edgeClass : getAllEdges()) {
+            if (OrderedEdge.class.isAssignableFrom(edgeClass)) {
+                orderedEdges.add(edgeClass);
+            }
+        }
+        return orderedEdges.build();
+    }
+
+    /**
+     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Bedeutung haben.
+     */
+    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges(final int i) {
+        Set<Class<? extends Kante>> processOrderedEdgeClasses = ImmutableSet.<Class<? extends Kante>> of(PrzAufVerbindung.class);
+        Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> elementClassToOrderedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Kante>>> of(Prozess.class, processOrderedEdgeClasses);
+        return elementClassToOrderedEdges;
+    }
 
     /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des

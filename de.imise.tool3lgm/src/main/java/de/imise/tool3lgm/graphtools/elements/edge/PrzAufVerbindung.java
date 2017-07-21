@@ -3,16 +3,18 @@
  */
 package de.imise.tool3lgm.graphtools.elements.edge;
 
+import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.MultipleConnectionEdge;
+import de.imise.tool3lgm.graphtools.elements.MultipleEdge;
+import de.imise.tool3lgm.graphtools.elements.OrderedEdge;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 
 /**
  * @author Thomas
  */
-public final class PrzAufVerbindung extends MultipleConnectionEdge {
+public final class PrzAufVerbindung extends Doppelkante implements OrderedEdge, MultipleEdge {
 
     //    public static final Class[] stcl = {Prozess.class};
     public static final Class<? extends ModelElement> stcl = Prozess.class;
@@ -26,18 +28,6 @@ public final class PrzAufVerbindung extends MultipleConnectionEdge {
             ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
-
-    //	public static final Class[] etcl = {Aufgabe.class};
-
-    //	private static Object[][] stcl = {{Prozess.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-
-    /**
-     * 
-     */
-    public PrzAufVerbindung() {
-        super();
-    }
 
     /**
      * @param knot1

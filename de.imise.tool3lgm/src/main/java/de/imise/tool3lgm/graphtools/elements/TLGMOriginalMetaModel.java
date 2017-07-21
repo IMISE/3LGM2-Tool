@@ -439,17 +439,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
     ///////////////////////////////////
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben.
-     */
-    @Override
-    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges() {
-        Set<Class<? extends Kante>> processOrderedEdgeClasses = ImmutableSet.<Class<? extends Kante>> of(PrzAufVerbindung.class);
-        Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> elementClassToOrderedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Kante>>> of(Prozess.class, processOrderedEdgeClasses);
-        return elementClassToOrderedEdges;
-    }
-
-    /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
      * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
