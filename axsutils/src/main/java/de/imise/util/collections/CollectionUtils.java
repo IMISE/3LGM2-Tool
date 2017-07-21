@@ -1,5 +1,6 @@
 package de.imise.util.collections;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -170,6 +171,44 @@ public abstract class CollectionUtils {
         System.arraycopy(array1, 0, retVal, 0, array1.length);
         System.arraycopy(array2, 0, retVal, array1.length, array2.length);
         return retVal;
+    }
+
+    /**
+     * Fügt eine beliebige Anzahl von Arrays mti gleichen Typen zusammen.
+     * Diese Funktion ist die abgewandelte Variante aus org.apache.commons.lang3.ArrayUtils.
+     *
+     * @param arrays
+     * @return
+     */
+    public static <T> T[] joinArrays(final T[]... arrays) {
+        final Class<?> type1 = arrays[0].getClass().getComponentType();
+        int fullSize = 0;
+        for (int i = 0; i < arrays.length; i++) {
+            fullSize += arrays[i].length;
+        }
+        @SuppressWarnings("unchecked") // OK, because array is of type T
+        final T[] joinedArray = (T[]) Array.newInstance(type1, fullSize);
+        int offset = 0;
+        for (int i = 0; i < arrays.length; i++) {
+            int length = arrays[i].length;
+            try {
+                System.arraycopy(arrays[i], 0, joinedArray, offset, length);
+            } catch (final ArrayStoreException ase) {
+                // Check if problem was due to incompatible types
+                /*
+                 * We do this here, rather than before the copy because:
+                 * - it would be a wasted check most of the time
+                 * - safer, in case check turns out to be too strict
+                 */
+                final Class<?> type2 = arrays[i].getClass().getComponentType();
+                if (!type1.isAssignableFrom(type2)) {
+                    throw new IllegalArgumentException("Cannot store " + type2.getName() + " in an array of " + type1.getName(), ase);
+                }
+                throw ase; // No, so rethrow original
+            }
+            offset += length;
+        }
+        return joinedArray;
     }
 
     /**
