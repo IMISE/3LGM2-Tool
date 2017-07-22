@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -27,13 +26,9 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.util.Alphabetical;
 import de.imise.util.HTMLConverter;
+import de.imise.util.HashStringGenerator;
 
 public abstract class ModelElement extends UserFieldTarget {
-
-    /**
-     * Anzahl bereits neu angelegter Elemente
-     */
-    private static int elementCounter = 0;
 
     /**
      * Die Ebene auf der sich dieses Element befindet
@@ -75,9 +70,6 @@ public abstract class ModelElement extends UserFieldTarget {
     private String toStringName = null;
     private static final StringBuilder suffixBuf = new StringBuilder("");
     private static final StringBuilder textBuf = new StringBuilder("");
-
-    /** Trenner für die einzelnen Sektionen des HashStrings */
-    public static final String HASH_STRING_DELIMITER = "_";
 
     /**
      * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell näher
@@ -143,17 +135,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param me
      * @return
      */
-    public static final String getNewHashString(final ModelElement me) {
-        return getNewHashString(me.getClass());
-    }
-
-    /**
-     * @param elementClass
-     * @return
-     */
-    public static final String getNewHashString(final Class<? extends ModelElement> elementClass) {
-        elementCounter++;
-        return ModelConstants.getShortName(elementClass) + HASH_STRING_DELIMITER + new Date().getTime() + HASH_STRING_DELIMITER + elementCounter;
+    private static final String getNewHashString(final ModelElement me) {
+        return HashStringGenerator.getHash(ModelConstants.getShortName(me.getClass()));
     }
 
     /**
@@ -231,25 +214,6 @@ public abstract class ModelElement extends UserFieldTarget {
     /** Gibt den Namen des Objektes zurueck */
     public String getName() {
         return name;
-    }
-
-    /** 01.01.1970 als Date */
-    public static final Date STANDARD_CREATION_DATE = new Date(0);
-
-    /**
-     * Berechnet aus dem HashString das Datum, an dem das Element erstellt wurde. Lässt sich das Datum aus irgendwelchen Gründen nicht berechnen kommt
-     * new STANDARD_CREATION_DATE = new Date(0) zurück.
-     *
-     * @return
-     */
-    public Date getCreationDate() {
-        try {
-            String h = getHashString();
-            long l = Long.parseLong(h.substring(h.indexOf(HASH_STRING_DELIMITER) + 1, h.lastIndexOf(HASH_STRING_DELIMITER)));
-            return new Date(l);
-        } catch (Exception e) {
-            return STANDARD_CREATION_DATE;
-        }
     }
 
     @Override
