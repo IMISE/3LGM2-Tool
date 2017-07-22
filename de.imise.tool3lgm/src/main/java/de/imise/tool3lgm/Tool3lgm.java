@@ -118,9 +118,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public static final boolean DEBUG = false;
 
-    /** date and time when calling constructor */
-    public Date date;
-
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
 
@@ -404,8 +401,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         defaults.put("OptionPane.noButtonText", Tool3lgmConstants.getResString("no"));
         defaults.put("OptionPane.yesButtonText", Tool3lgmConstants.getResString("yes"));
 
-        date = new Date();
-
         //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
@@ -443,7 +438,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         Help.getHelp().enableHelpKey(rootPane, "willkommen");
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
-
     }
 
     /**
