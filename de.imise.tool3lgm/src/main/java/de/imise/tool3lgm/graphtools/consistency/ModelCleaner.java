@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.util.HashStringGenerator;
 
 /**
  * Stellt Funktionen, mit denen das Modell bereinigt werden kann.
@@ -100,7 +101,7 @@ public class ModelCleaner {
                     // anderer ist als der auf dem Layer des docs
                     if (layerElemMe.getContainer(doc) != layerElemCont) {
                         if (PRINT_ERRORS) {
-                            System.err.println("1: " + layerElemMe.getClass().getSimpleName() + " " + doc + " " + layerElemMe.getClearName() + " " + layerElemMe.getHashString() + " " + layerElemMe.getCreationDate());
+                            print(layerElemMe, doc, 1);
                         }
                         // im ContainerTable denselben Container setzen, wie im Layer
                         layerElemMe.setContainer(doc, layerElemCont);
@@ -111,7 +112,7 @@ public class ModelCleaner {
                         // trat noch nie auf, aber sicher ist sicher)
                         if (layerElemMe.getContainer(mainDoc) == null) {
                             if (PRINT_ERRORS) {
-                                System.err.println("2: " + layerElemMe.getClass().getSimpleName() + " " + doc + " " + layerElemMe.getClearName() + " " + layerElemMe.getHashString() + " " + layerElemMe.getCreationDate());
+                                print(layerElemMe, doc, 2);
                             }
                             layerElemCont.clone(false, mainDoc);
                         }
@@ -122,7 +123,7 @@ public class ModelCleaner {
                         // PdvbStoVerbindung, PdvbBtypVerbindung und DbsDatVerbindung auf)
                         if (layerElemMe.isUnique()) {
                             if (PRINT_ERRORS) {
-                                System.err.println("3: " + layerElemMe.getClass().getSimpleName() + " " + doc + " " + layerElemMe.getClearName() + " " + layerElemMe.getHashString() + " " + layerElemMe.getCreationDate());
+                                print(layerElemMe, doc, 3);
                             }
                             layerElemMe.removeContainer(doc);
                             lc.remove(layerElemCont);
@@ -150,21 +151,21 @@ public class ModelCleaner {
                     if (me instanceof Knickpunkt) {
                         if (!lc.getKnickpunkte().contains(ec)) {
                             if (PRINT_ERRORS) {
-                                System.err.println("4: " + me.getClass().getSimpleName() + " " + doc + " " + me.getClearName() + " " + me.getHashString() + " " + me.getCreationDate());
+                                print(me, doc, 4);
                             }
                             lc.add(ec);
                         }
                     } else if (me instanceof Knoten) {
                         if (!lc.getKnoten().contains(ec)) {
                             if (PRINT_ERRORS) {
-                                System.err.println("5: " + me.getClass().getSimpleName() + " " + doc + " " + me.getClearName() + " " + me.getHashString() + " " + me.getCreationDate());
+                                print(me, doc, 5);
                             }
                             lc.add(ec);
                         }
                     } else if (me instanceof Kante) {
                         if (!lc.getKanten().contains(ec)) {
                             if (PRINT_ERRORS) {
-                                System.err.println("6: " + me.getClass().getSimpleName() + " " + doc + " " + me.getClearName() + " " + me.getHashString() + " " + me.getCreationDate());
+                                print(me, doc, 6);
                             }
                             lc.add(ec);
                         }
@@ -353,6 +354,13 @@ public class ModelCleaner {
         }
 
         gdcoll.setBulkMode(bulkMode);
+    }
+
+    private void print(final ModelElement me, final GraphDocument doc, final int id) {
+        if (PRINT_ERRORS) {
+            String hashString = me.getHashString();
+            System.err.println(id + ": " + me.getClass().getSimpleName() + " " + doc + " " + me.getClearName() + " " + hashString + " " + HashStringGenerator.getCreationTimeMedium(hashString));
+        }
     }
 
     /**
