@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.util.HashStringGenerator;
 
 /**
  * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw. anzeigt. Es zeigt
@@ -104,7 +105,6 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         if (ModelConstants.isNodeType(getModelElement().getClass())) {
             typeLabel.setText(ModelConstants.getDisplayableName(modelElement));
             labelLabel.setText("<html><b>" + modelElement.getClearName() + "</b></html>");
-            idLabel.setText(modelElement.getHashString() + "        " + getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
             GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(((Knoten) modelElement).getAssociatedDoc());
             if (vdoc == null) {
                 subModelLabelLabel.setVisible(false);
@@ -137,8 +137,9 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
             nameLabel.setText("<html><b>" + startElementName + "</b>" + forwardEdgeClassName + "<b>" + endElementName + "</b></html>");
             labelLabel.setText("<html>" + modelElement.getClearName() + "</html>");
-            idLabel.setText(modelElement.getHashString() + "        " + getResString("created") + ": " + modelElement.getCreationDate().toLocaleString());
         }
+        String hashString = modelElement.getHashString();
+        idLabel.setText(hashString + "        " + getResString("created") + ": " + HashStringGenerator.getCreationTimeMedium(hashString));
     }
 
 }
