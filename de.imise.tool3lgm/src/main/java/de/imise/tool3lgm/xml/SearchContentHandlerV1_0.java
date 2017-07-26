@@ -4,7 +4,8 @@
 package de.imise.tool3lgm.xml;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 
@@ -23,11 +24,11 @@ public class SearchContentHandlerV1_0 {
 
     protected GDCollection gdcoll = null;
 
-    protected ArrayList<ArrayList<ModelElement>> path = new ArrayList<ArrayList<ModelElement>>(50);
-    protected Hashtable<String, ArrayList<ModelElement>> variables = new Hashtable<String, ArrayList<ModelElement>>(10);
-    protected ArrayList<ModelElement> roots = new ArrayList<ModelElement>(5000);
-    protected ArrayList<ModelElement> currentKnots = new ArrayList<ModelElement>(5000);
-    protected ArrayList<Kante> currentTraces = new ArrayList<Kante>(5000);
+    protected ArrayList<ArrayList<ModelElement>> path = new ArrayList<>(50);
+    protected Map<String, ArrayList<ModelElement>> variables = new HashMap<>(10);
+    protected ArrayList<ModelElement> roots = new ArrayList<>(5000);
+    protected ArrayList<ModelElement> currentKnots = new ArrayList<>(5000);
+    protected ArrayList<Kante> currentTraces = new ArrayList<>(5000);
 
     /**
      * @param coll
@@ -92,22 +93,22 @@ public class SearchContentHandlerV1_0 {
         if (qName.equals("select")) {
         } else if (qName.equals("forward")) {
             path.add(new ArrayList<ModelElement>(currentTraces));
-            path.add(new ArrayList<ModelElement>(currentKnots));
+            path.add(new ArrayList<>(currentKnots));
             currentKnots.clear();
             currentTraces.clear();
         } else if (qName.equals("backward")) {
             path.add(new ArrayList<ModelElement>(currentTraces));
-            path.add(new ArrayList<ModelElement>(currentKnots));
+            path.add(new ArrayList<>(currentKnots));
             currentKnots.clear();
             currentTraces.clear();
         } else if (qName.equals("any")) {
             path.add(new ArrayList<ModelElement>(currentTraces));
-            path.add(new ArrayList<ModelElement>(currentKnots));
+            path.add(new ArrayList<>(currentKnots));
             currentKnots.clear();
             currentTraces.clear();
         } else if (qName.equals("both")) {
             path.add(new ArrayList<ModelElement>(currentTraces));
-            path.add(new ArrayList<ModelElement>(currentKnots));
+            path.add(new ArrayList<>(currentKnots));
             currentKnots.clear();
             currentTraces.clear();
         }

@@ -266,7 +266,7 @@ public class DataImportModule {
     //                String evtTypExtID = "";
     //
     //                StringBuilder extIDStringBuilder = new StringBuilder(100000);
-    //                Hashtable<String, String> extIDTable = new Hashtable<String, String>();
+    //                Map<String, String> extIDTable = new HashMap<String, String>();
     //                StringBuilder userFieldXMLStringBuilder = new StringBuilder(100000);
     //                int realIndex = 0;
     //                for (int j = 0; j < tokens.size(); j++) {

@@ -4,7 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.swing.ImageIcon;
@@ -248,7 +248,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @param name
      * @param ImageTable
      */
-    public void setIcon(final String name, final Hashtable<String, byte[]> ImageTable) {
+    public void setIcon(final String name, final Map<String, byte[]> ImageTable) {
         if (me.isUnpaintable()) {
             return;
         }

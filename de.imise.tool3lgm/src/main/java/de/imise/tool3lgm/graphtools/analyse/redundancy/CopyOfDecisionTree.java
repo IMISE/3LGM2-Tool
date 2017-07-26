@@ -183,7 +183,7 @@ public class CopyOfDecisionTree {
             }
         }
 
-        // Jetzt sind die 2 Hashtables, die für jeden AWB auf alle von ihm unterstützten
+        // Jetzt sind die 2 HashMaps, die für jeden AWB auf alle von ihm unterstützten
         // Aufgaben mappen (awbToFuncsSets)und für jede Aufgabe auf die sie unterstützenden
         // AWBs (funcToAWBSets), initialisiert.
         // Für Aufgaben, die von gar keinem AWB unterstützt werden, gibts es keinen Eintrag
@@ -197,10 +197,10 @@ public class CopyOfDecisionTree {
             ModelElement as = applicationSystems.get(awb);
 
             // Set aller Aufgaben, die der AWB unterstützt
-            AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
+            Set<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
 
             // wenn der AWB gar keine Aufgaben unterstützt -> als uunnützt merken und nächster AWB
-            if (funcsOfAWB.size() == 0) {
+            if (funcsOfAWB.isEmpty()) {
                 result.notSupportingAWB.add(as);
                 continue;
             }

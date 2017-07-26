@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.JCheckBox;
@@ -309,7 +309,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void redo(final int pid) {
-        Hashtable<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
+        Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = transStackTable.remove(pidInteger);
         if (transStackInteger == null) {
@@ -351,7 +351,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void undo(final int pid) {
-        Hashtable<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
+        Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = transStackTable.remove(pidInteger);
         if (transStackInteger == null) {
@@ -1455,7 +1455,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (log) {
             gdcoll.getTman().startTransaction("", "", pid, this);
         }
-        Hashtable<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
+        Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = transStackTable.remove(pidInteger);
         if (transStackInteger == null) {
@@ -1502,7 +1502,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (gdcoll.isBulkMode()) {
             return;
         }
-        Hashtable<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
+        Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = transStackTable.remove(pidInteger);
         if (transStackInteger == null) {

@@ -15,9 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.CRC32;
 import java.util.zip.DataFormatException;
@@ -96,7 +97,7 @@ public final class GDCollection extends UserFieldTarget {
      * festestellen, dass es als Unteraktion einer anderen Transaktion gestartet wurde und nicht selbst die äußerste
      * Transaktion war.
      */
-    private final Hashtable<Integer, Integer> transStackTable = new Hashtable<>();
+    private final Map<Integer, Integer> transStackTable = new HashMap<>();
     //	/*{
     //
     //		@Override
@@ -173,7 +174,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Verzeichnis der Bitmap-Icons
      */
-    private final Hashtable<String, byte[]> iconTable = new Hashtable<>();
+    private final Map<String, byte[]> iconTable = new HashMap<>();
 
     /**
      * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
@@ -212,7 +213,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @return the transStackTable
      */
-    public final Hashtable<Integer, Integer> getTransStackTable() {
+    public final Map<Integer, Integer> getTransStackTable() {
         return transStackTable;
     }
 
@@ -1974,7 +1975,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @return
      */
-    public Hashtable<String, byte[]> getIconTable() {
+    public Map<String, byte[]> getIconTable() {
         return iconTable;
     }
 

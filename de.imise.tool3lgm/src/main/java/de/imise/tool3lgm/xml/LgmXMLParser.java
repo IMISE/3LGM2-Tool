@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.StringReader;
-import java.util.Hashtable;
+import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -61,7 +61,7 @@ public class LgmXMLParser extends DefaultHandler {
     private String color_name;
     private int red, green, blue, alpha;
     private boolean read_mapping = true;
-    private Hashtable<String, byte[]> iconTable = null;
+    private Map<String, byte[]> iconTable = null;
     private boolean loadIcons = false;
 
     static SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -837,7 +837,7 @@ public class LgmXMLParser extends DefaultHandler {
      * @param _select
      * @return
      */
-    public LGMGraphDocument process(final StringReader inputBuffer, final LGMGraphDocument _doc, final Hashtable<String, byte[]> imageTable, final boolean loadIcons, final boolean _select) {
+    public LGMGraphDocument process(final StringReader inputBuffer, final LGMGraphDocument _doc, final Map<String, byte[]> imageTable, final boolean loadIcons, final boolean _select) {
         return process(inputBuffer, _doc, imageTable, loadIcons);
     }
 
@@ -848,7 +848,7 @@ public class LgmXMLParser extends DefaultHandler {
      * @param loadIcons
      * @return
      */
-    public LGMGraphDocument process(final StringReader inputBuffer, final LGMGraphDocument _doc, final Hashtable<String, byte[]> imageTable, final boolean loadIcons) {
+    public LGMGraphDocument process(final StringReader inputBuffer, final LGMGraphDocument _doc, final Map<String, byte[]> imageTable, final boolean loadIcons) {
         this.loadIcons = loadIcons;
         iconTable = imageTable;
 
@@ -890,7 +890,7 @@ public class LgmXMLParser extends DefaultHandler {
      * @param select
      * @return
      */
-    public LGMGraphDocument process(final RandomAccessFile raf, final LGMGraphDocument _doc, final Hashtable<String, byte[]> iconTable, final boolean loadIcons, final boolean select) {
+    public LGMGraphDocument process(final RandomAccessFile raf, final LGMGraphDocument _doc, final Map<String, byte[]> iconTable, final boolean loadIcons, final boolean select) {
         StringBuilder strbuf = new StringBuilder();
         try {
             raf.seek(0);
@@ -928,7 +928,7 @@ public class LgmXMLParser extends DefaultHandler {
         return false;
     }
 
-    public static GraphDocument loadString(final StringReader strBuffer, final LGMGraphDocument _doc, final Hashtable<String, byte[]> ImageTable, final boolean loadIcons) {
+    public static GraphDocument loadString(final StringReader strBuffer, final LGMGraphDocument _doc, final Map<String, byte[]> ImageTable, final boolean loadIcons) {
         LgmXMLParser p = new LgmXMLParser();
 
         GraphDocument retVal = p.process(strBuffer, _doc, ImageTable, loadIcons, true);
@@ -952,7 +952,7 @@ public class LgmXMLParser extends DefaultHandler {
         return str.indexOf("<?xml") == 0 || str.indexOf("<graph>") == 0;
     }
 
-    public static LGMGraphDocument loadFile(final RandomAccessFile raf, final LGMGraphDocument _doc, final Hashtable<String, byte[]> iconTable, final boolean loadIcons, final boolean select) {
+    public static LGMGraphDocument loadFile(final RandomAccessFile raf, final LGMGraphDocument _doc, final Map<String, byte[]> iconTable, final boolean loadIcons, final boolean select) {
         LgmXMLParser p = new LgmXMLParser();
         return p.process(raf, _doc, iconTable, loadIcons, select);
     }
