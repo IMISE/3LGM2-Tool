@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -18,12 +18,12 @@ public final class DBKonfiguration extends Konfiguration {
     }
 
     @Override
-    public ArrayList<ElementContainer> getClientContainer(final GraphDocument doc) {
+    public List<ElementContainer> getClientContainer(final GraphDocument doc) {
         return getConnectedContainer(Anwendungsbaustein.class, doc);
     }
 
     @Override
-    public ArrayList<ElementContainer> getServerContainer(final GraphDocument doc) {
+    public List<ElementContainer> getServerContainer(final GraphDocument doc) {
         return getConnectedContainer(PhysischerDVBaustein.class, doc);
     }
 

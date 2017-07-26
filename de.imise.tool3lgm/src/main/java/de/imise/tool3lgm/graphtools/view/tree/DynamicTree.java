@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JTree;
@@ -134,7 +134,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     /**
      * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den Baum als {@link GraphDocumentListener} hinzu. Beim vorherigen
      * {@link GraphDocument} des Baumes wird der Baum als Listener entfernt.
-     * 
+     *
      * @param doc
      */
     public void setGraphDocument(final GraphDocument doc) {
@@ -233,7 +233,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             }
 
             LGMTreeNode elementNode = kc.getTreeNode();
-            //			if (kc.getElement() instanceof Prozess) { 
+            //			if (kc.getElement() instanceof Prozess) {
             //				kc.checkIcon();
             //				elementNode = new LGMTreeNode(kc, true, false);
             //			}
@@ -269,7 +269,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
 
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-        ArrayList<ElementContainer> all = kc.getElement().getDirectPartContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
+        List<ElementContainer> all = kc.getElement().getDirectPartContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
         loop1: for (int i = 0; i < all.size(); i++) {
             ElementContainer pc = all.get(i);
             ElementContainer pc2 = pc.getElement().getContainer(selDoc);
@@ -293,7 +293,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             LGMTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                ArrayList<ElementContainer> directParentElements = pc.getElement().getDirectParentContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
+                List<ElementContainer> directParentElements = pc.getElement().getDirectParentContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
@@ -510,8 +510,8 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     static int count = 0;
 
     /**
-	 * 
-	 */
+     * 
+     */
     void buildTree() {
         if (doc == null) {
             return;
@@ -525,7 +525,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
         int ebene, n;
         for (ebene = 4; ebene >= 0; ebene -= 2) {
-            ArrayList<NodeContainer> knoten = maindoc.getLayer(ebene).getKnotenAlphabetical();
+            List<NodeContainer> knoten = maindoc.getLayer(ebene).getKnotenAlphabetical();
             for (n = 0; n < knoten.size(); n++) {
                 NodeContainer ec = knoten.get(n);
                 ModelElement me = ec.getElement();
@@ -601,8 +601,8 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void refreshTree() {
         for (int i = 0; i < nodesToClear.length; i++) {
             refreshNode(nodesToClear[i]);
@@ -611,7 +611,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
     /**
      * Wenn die Layer-Nummer gültig ist, wird der zugehörige Ebenenknoten selektiert und ggf. zu ihm hingescollt.
-     * 
+     *
      * @param layer
      */
     public void selectLayerNode(final int layer) {
@@ -635,7 +635,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     /**
      * Über diese Funktion kann der {@link DynamicTreeSelectionListener} den Layer wechseln, wenn
      * ein Layerknoten im Baum selektiert wurde.
-     * 
+     *
      * @param node
      * @return
      */

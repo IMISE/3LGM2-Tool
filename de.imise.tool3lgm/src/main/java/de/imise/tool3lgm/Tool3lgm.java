@@ -27,7 +27,9 @@ import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.help.CSH;
@@ -146,7 +148,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private AbstractInternalFrame activeFrame = null;
 
     /** alle GDCollections */
-    private final ArrayList<GDCollection> collections = new ArrayList<GDCollection>();
+    private final List<GDCollection> collections = new ArrayList<>();
 
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
     int dividerLocation = 200;
@@ -613,20 +615,20 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      *            {@link GDCollection} to print or <code>null</code> if all {@link GDCollection}s should be printed
      */
     public final void printStatistic(final GDCollection gdc, final boolean useElements, final boolean alphabetic) {
-        ArrayList<GDCollection> collections = this.collections;
+        List<GDCollection> collections = this.collections;
         if (gdc != null) {
-            collections = new ArrayList<GDCollection>();
+            collections = new ArrayList<>();
             collections.add(gdc);
         }
         for (GDCollection gdcoll : collections) {
             GraphDocument mainDoc = gdcoll.getMainGraphDocument();
 
-            ArrayList<ElementContainer> allContainer = useElements ? null : mainDoc.getElementContainer(ModelElement.class, true, alphabetic);
-            ArrayList<ModelElement> allElements = useElements ? mainDoc.getModelItems(ModelElement.class, true, alphabetic) : null;
+            List<ElementContainer> allContainer = useElements ? null : mainDoc.getElementContainer(ModelElement.class, true, alphabetic);
+            List<ModelElement> allElements = useElements ? mainDoc.getModelItems(ModelElement.class, true, alphabetic) : null;
 
-            Hashtable<Class<? extends ModelElement>, Integer> class2ElementCount = new Hashtable<Class<? extends ModelElement>, Integer>();
-            Hashtable<Class<? extends ModelElement>, Integer> class2ContainerCountFromGraphDocuments = new Hashtable<Class<? extends ModelElement>, Integer>();
-            Hashtable<Class<? extends ModelElement>, Integer> class2ContainerCountFromModelElements = new Hashtable<Class<? extends ModelElement>, Integer>();
+            Map<Class<? extends ModelElement>, Integer> class2ElementCount = new HashMap<>();
+            Map<Class<? extends ModelElement>, Integer> class2ContainerCountFromGraphDocuments = new HashMap<>();
+            Map<Class<? extends ModelElement>, Integer> class2ContainerCountFromModelElements = new HashMap<>();
             //für alle ElementContainer im MainDoc = alle, die es gibt!
             for (Object ecOrMe : useElements ? allElements : allContainer) {
                 //Anzahl der Modellelemente im Gesamtmodell hochzählen
@@ -637,7 +639,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
                 class2ElementCount.put(meClass, count);
 
-                ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>(gdcoll.getSzenarioCount() + 1);
+                List<GraphDocument> docs = new ArrayList<>(gdcoll.getSzenarioCount() + 1);
                 for (Szenario szen : gdcoll.getSzenarios()) {
                     docs.add(szen);
                 }
@@ -680,7 +682,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
             System.err.println("Modellstatistik: " + gdcoll.getName());
             System.err.println("-------------------------------------");
-            ArrayList<Class<? extends ModelElement>> classList = new ArrayList<Class<? extends ModelElement>>(class2ElementCount.keySet());
+            List<Class<? extends ModelElement>> classList = new ArrayList<>(class2ElementCount.keySet());
             Alphabetical.sort(classList);
             //für jede Elementklasse
             for (Class<? extends ModelElement> elementClass : classList) {
@@ -1217,7 +1219,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         progressDialog = new ProgressDialog(this, Tool3lgmConstants.getResString("close_model") + " " + gdcoll.getName(), true);
 
-        ArrayList<ElementPropertyDialog> dialogs = ModelConstants.getDialogs();
+        List<ElementPropertyDialog> dialogs = ModelConstants.getDialogs();
         for (int n = 0; n < dialogs.size(); n++) {
             ElementPropertyDialog pd = dialogs.get(n);
             // wenn der Dialog zum zu schließenden Modell gehört
@@ -1463,7 +1465,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void windowClosing(final WindowEvent e) {
         //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
-        ArrayList<GDCollection> collections = new ArrayList<GDCollection>(this.collections);
+        List<GDCollection> collections = new ArrayList<>(this.collections);
         //die letzte ist immer die aktive
         for (int i = collections.size() - 1; i >= 0; i--) {
             GDCollection gdcoll = collections.get(i);
@@ -1752,8 +1754,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * @return Kopie der Liste der <code>GDCollection</code>s
      */
-    public ArrayList<GDCollection> getCollections() {
-        return new ArrayList<GDCollection>(collections);
+    public List<GDCollection> getCollections() {
+        return new ArrayList<>(collections);
     }
 
     /**

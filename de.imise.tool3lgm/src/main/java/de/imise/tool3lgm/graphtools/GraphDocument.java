@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -93,17 +92,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    public ArrayList<GraphDocumentListener> listener;
+    public List<GraphDocumentListener> listener;
 
     /**
      * COMMENTME
      */
-    public ArrayList<InTransactionListener> inlistener;
+    public List<InTransactionListener> inlistener;
 
     /**
      * COMMENTME
      */
-    public ArrayList<ElementContainer> analysisResult;
+    public List<ElementContainer> analysisResult;
 
     /**
      * COMMENTME
@@ -202,12 +201,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         hashString = "DOC" + "_" + new Date().getTime();
 
-        analysisResult = new ArrayList<ElementContainer>(100);
+        analysisResult = new ArrayList<>();
         if (listener == null) {
-            listener = new ArrayList<GraphDocumentListener>();
+            listener = new ArrayList<>();
         }
         if (inlistener == null) {
-            inlistener = new ArrayList<InTransactionListener>();
+            inlistener = new ArrayList<>();
         }
         if (mapping == null) {
             mapping = new Mapping();
@@ -515,7 +514,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
         } else if (command.equals(GDCommands.CHECK_CONSISTENCY.toString())) {
             GraphDocument doc = gdcoll.getMainGraphDocument();
-            ArrayList<ModelElement> elements = doc.getModelItems(Aufgabe.class, false);
+            List<ModelElement> elements = doc.getModelItems(Aufgabe.class, false);
             for (ModelElement me : elements) {
                 if (me.toString().equals("Dokumentation des Informationssystems")) {
                     System.err.println(me.getParentConnectedContainer(AufOrgKombination.class, doc));
@@ -1174,7 +1173,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             Static.getTool().createSzenarioFrame(szen);
             //Selection clonen, weil sie sich während der Ausführung ändert!
-            addElementsToSzenario(szen.getHashString(), new ArrayList<ElementContainer>(selectedContainer), pid);
+            addElementsToSzenario(szen.getHashString(), new ArrayList<>(selectedContainer), pid);
             break;
 
         case REMOVE_SZENARIO:
@@ -1229,7 +1228,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             switch (argc) {
             case 1:
-                linkElementsToSzenario(argv[0], new ArrayList<ElementContainer>(selectedContainer), pid);
+                linkElementsToSzenario(argv[0], new ArrayList<>(selectedContainer), pid);
                 break;
             default:
                 linkElementToSzenario(argv[0], argv[1], pid);
@@ -1237,7 +1236,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case LINK_SELECTED_TO_NEW_SZENARIO:
-            linkElementsToNewSzenario(new ArrayList<ElementContainer>(selectedContainer), pid);
+            linkElementsToNewSzenario(new ArrayList<>(selectedContainer), pid);
             break;
 
         case REMOVE_ELEMENT_FROM_SZENARIO:
@@ -1376,7 +1375,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             StreamTokenizer st = new StreamTokenizer(new StringReader(line));
             st.wordChars('\\', '\\');
             st.wordChars('_', '_');
-            ArrayList<String> tokens = new ArrayList<String>();
+            List<String> tokens = new ArrayList<>();
             try {
                 int t = st.nextToken();
                 while (t != StreamTokenizer.TT_EOF) {
@@ -1608,7 +1607,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void adaptMapping(final Mapping map) {
         mapping.adapt(map);
         for (int i = 0; i < 5; i++) {
-            ArrayList<NodeContainer> elementContainers = layer[i].getKnoten();
+            List<NodeContainer> elementContainers = layer[i].getKnoten();
             for (NodeContainer kc : elementContainers) {
                 kc.refreshFont();
                 kc.refreshText();
@@ -2448,7 +2447,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *         die alte Selektion
      */
     private List<ElementContainer> expandSelection(final boolean addAllParts, final boolean addAllSlaves) {
-        List<ElementContainer> container2Select = Lists.newArrayList();
+        List<ElementContainer> container2Select = new ArrayList<>();
         for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
             ModelElement me = nc.getElement();
             if (addAllParts) {
@@ -2517,7 +2516,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Das rekursive Auf- und Zuklappen merkt sich über diese Liste, welche Elemente bereits in einem
      * Durchgang angefasst wurden.
      */
-    private static List<ElementContainer> tmpExpandedElements = Lists.newArrayList();
+    private static List<ElementContainer> tmpExpandedElements = new ArrayList<>();
 
     /**
      * Das rekursive Auf- und Zuklappen merkt sich über diesen Wert, wie oft die Rekursion in einem
@@ -2629,7 +2628,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ec.setExpanded(false);
         }
         ModelElement me = ec.getElement();
-        ArrayList<ElementContainer> all = me.getDirectPartContainer(szen);
+        List<ElementContainer> all = me.getDirectPartContainer(szen);
         for (ElementContainer c : all) {
             if (tmpExpandedElements.contains(c)) {
                 continue;
@@ -2700,7 +2699,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @return
      */
-    public final ArrayList<GraphDocumentListener> getGraphDocumentListeners() {
+    public final List<GraphDocumentListener> getGraphDocumentListeners() {
         return listener;
     }
 
@@ -3150,7 +3149,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
-        ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>(selectedContainer.size());
+        List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
         for (ElementContainer ec : getElementContainer(Knoten.class)) {
             if (selectedContainer.contains(ec)) {
                 returnList.add(ec);
@@ -3235,8 +3234,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String hashString, final int pid) {
-        return createKnotenWithContainer(elementClass, name, description, hashString, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB,
-                GDCommands.INVALID_SHAPE, GDCommands.INVALID_BENDPOINT_INDEX, pid);
+        return createKnotenWithContainer(elementClass, name, description, hashString, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB, GDCommands.INVALID_SHAPE,
+                GDCommands.INVALID_BENDPOINT_INDEX, pid);
     }
 
     /**
@@ -3534,8 +3533,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GDCollection gdcoll = doc.getCollection();
         gdcoll.link(edgeClass, master, slave, pid);
 
-        ArrayList<Long> times1 = new ArrayList<Long>();
-        ArrayList<Long> times2 = new ArrayList<Long>();
+        List<Long> times1 = new ArrayList<>();
+        List<Long> times2 = new ArrayList<>();
         for (Szenario szen : gdcoll.getSzenarios()) {
             if (master.getContainer(szen) != null) {
                 long l = System.currentTimeMillis();
@@ -3639,7 +3638,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         szen.start_transaction(pid);
 
-        ArrayList<Kante> edges = masterElement.getEdgesWith(slaveElement, ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class));
+        List<Kante> edges = masterElement.getEdgesWith(slaveElement, ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class));
         if (edges.size() == 0 || !(szen instanceof Szenario)) {
             finish_transaction(pid);
             return null;
@@ -4245,7 +4244,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommandIfNotExist(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(me.getName()), pid);
         //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
         //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
-        //		ArrayList<ModelElement> connected = me.getConnectedElements(ModelElement.class);
+        //		List<ModelElement> connected = me.getConnectedElements(ModelElement.class);
         //		for (ModelElement connMe : connected) {
         //			String name = connMe.getName();
         //			if (name.startsWith(me.getName())) {
@@ -4589,7 +4588,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         start_transaction(pid, log);
         for (Class<? extends ModelElement> c : kc.getKnoten().getCopyDependencies()) {
-            ArrayList<ElementContainer> dependentObjects = kc.getKnoten().getConnectedContainer(c, this);
+            List<ElementContainer> dependentObjects = kc.getKnoten().getConnectedContainer(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
                 NodeContainer sc = (NodeContainer) dependentObjects.get(j);
                 Knoten sk = sc.getKnoten();
@@ -4614,8 +4613,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void joinSelected(final int pid) {
         if (selectedContainer.size() > 1) {
             String targetHash = getLastSelected().getHashString();
-            ArrayList<ElementContainer> selection = new ArrayList<ElementContainer>(selectedContainer);
-            for (ElementContainer ec : new ArrayList<ElementContainer>(selection)) {
+            List<ElementContainer> selection = new ArrayList<>(selectedContainer);
+            for (ElementContainer ec : new ArrayList<>(selection)) {
                 joinElements(ec.getHashString(), targetHash, pid);
             }
         }
@@ -4672,7 +4671,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         int pid = TransactionManager.STANDARD_PID;
         gdoc.start_transaction(pid, false);
         for (int i = 0; i < layer.length; i++) {
-            for (EdgeContainer oldKC : new ArrayList<EdgeContainer>(layer[i].getKanten())) {
+            for (EdgeContainer oldKC : new ArrayList<>(layer[i].getKanten())) {
                 Kante kante = oldKC.getEdge();
                 ModelElement ks = kante.getStart();
                 ModelElement ke = kante.getEnd();
@@ -4702,7 +4701,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         int pid = TransactionManager.STANDARD_PID;
         gdoc.start_transaction(pid, false);
         for (LayerContainer lc : gdoc.layer) {
-            for (NodeContainer knotenC : new ArrayList<NodeContainer>(lc.getKnoten())) {
+            for (NodeContainer knotenC : new ArrayList<>(lc.getKnoten())) {
                 Knoten knoten = knotenC.getKnoten();
                 for (Szenario szen : gdcoll.getSzenarios()) {
                     ElementContainer ec = knoten.getContainer(szen);
@@ -4770,7 +4769,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     @Deprecated
     public void _createNewEdgeClasses() {
         for (int i = 0; i < layer.length; i++) {
-            ArrayList<EdgeContainer> oldEdgesCont = new ArrayList<EdgeContainer>(layer[i].getKanten());
+            List<EdgeContainer> oldEdgesCont = new ArrayList<>(layer[i].getKanten());
             for (EdgeContainer edgeC : oldEdgesCont) {
                 Kante edge = edgeC.getEdge();
                 if (edge instanceof KommBeziehung) {
@@ -4862,13 +4861,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public void relinkETNT() {
         start_transaction(TransactionManager.STANDARD_PID);
 
-        ArrayList<ModelElement> all = getModelItems(KommBeziehung.class);
+        List<ModelElement> all = getModelItems(KommBeziehung.class);
         for (int i = 0; i < all.size(); i++) {
             KommBeziehung kz = (KommBeziehung) all.get(i);
             Bausteinschnittstelle bs1 = (Bausteinschnittstelle) kz.getStart();
             Bausteinschnittstelle bs2 = (Bausteinschnittstelle) kz.getEnd();
             //hin
-            ArrayList<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.FORWARD);
+            List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.FORWARD);
             for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.BACKWARD)) {
                 if (empf.contains(kc)) {
                     gdcoll.link(KommbezEtntVerbindung.class, kc.getElement(), kz, TransactionManager.STANDARD_PID);
@@ -4907,7 +4906,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
      * @return Liste mit ElementContainer oder <code>null</code>
      */
-    public final ArrayList<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz) {
+    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz) {
         return getElementContainer(clazz, true);
     }
 
@@ -4920,7 +4919,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param subClassElements wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
      * @return Liste mit ElementContainer oder <code>null</code>
      */
-    public final ArrayList<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean subClassElements) {
+    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean subClassElements) {
         return getElementContainer(clazz, subClassElements, false);
     }
 
@@ -4935,12 +4934,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param alphabetical
      * @return
      */
-    public final ArrayList<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
+    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
 
         //		long start = System.currentTimeMillis();
 
         GraphDocument document = ModelConstants.isUnique(clazz) ? getCollection().getMainGraphDocument() : this;
-        ArrayList<ElementContainer> objects = new ArrayList<ElementContainer>();
+        List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen
         int ebene = ModelConstants.layerFor(clazz);
         //Indizes der zu durchsuchenden Ebenen
@@ -4957,7 +4956,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Ebene holen
             LayerContainer lc = document.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
-            ArrayList<ArrayList<? extends ElementContainer>> layerElements = new ArrayList<ArrayList<? extends ElementContainer>>();
+            List<List<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
             if (clazz == Knickpunkt.class) {
                 layerElements.add(lc.getKnickpunkte());
@@ -4981,7 +4980,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 //wenn eine Unterklasse von ModelElement gesucht werden soll
             } else {
                 //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
-                for (ArrayList<? extends ElementContainer> ecList : layerElements) {
+                for (List<? extends ElementContainer> ecList : layerElements) {
                     //für jede dieser ElementContainerlisten
                     for (ElementContainer ec : ecList) {
                         //wenn das ModelElement des Conatainers der gesuchten Klasse entspricht
@@ -5015,7 +5014,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
      * @return ArrayList mit allen gefundenen Elementen
      */
-    public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz) {
+    public final List<ModelElement> getModelItems(final Class<? extends ModelElement> clazz) {
         return getModelItems(clazz, false);
     }
 
@@ -5027,7 +5026,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *            RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
      * @return ArrayList mit allen gefundenen Elementen
      */
-    public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+    public final List<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
         return getModelItems(clazz, includeSubClasses, false);
     }
 
@@ -5042,7 +5041,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
      * @return ArrayList mit allen gefundenen Elementen
      */
-    public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
+    public final List<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
         return getModelItems(clazz, includeSubClasses, false, alphabetical);
     }
 
@@ -5059,25 +5058,25 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *            für das Gesamtmodell geprüft.
      * @param alphabetical
      *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
-     * @return ArrayList mit allen gefundenen Elementen
+     * @return List mit allen gefundenen Elementen
      */
-    public final ArrayList<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
+    public final List<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
 
         if (clazz == null) {
-            return new ArrayList<ModelElement>(0);
+            return new ArrayList<>(0);
         }
 
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
         if (!includeSubClasses || clazz == Knickpunkt.class) {
-            ArrayList<Class<? extends ModelElement>> searchClasses = new ArrayList<Class<? extends ModelElement>>();
+            List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
             return getModelItemsForClasses(ModelConstants.isUnique(clazz) ? getCollection().getMainGraphDocument() : this, searchClasses, absolutePartsOnly, alphabetical);
             //			return getModelItemsForSingleClass(clazz, absolutePartsOnly, alphabetical);
         }
 
-        ArrayList<ModelElement> objects = null;
-        ArrayList<Class<? extends ModelElement>> searchClassesUnique = new ArrayList<Class<? extends ModelElement>>();
-        ArrayList<Class<? extends ModelElement>> searchClassesNotUnique = new ArrayList<Class<? extends ModelElement>>();
+        List<ModelElement> objects = null;
+        List<Class<? extends ModelElement>> searchClassesUnique = new ArrayList<>();
+        List<Class<? extends ModelElement>> searchClassesNotUnique = new ArrayList<>();
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
             if (ModelConstants.isAbstract(elementClass)) {
                 continue;
@@ -5099,7 +5098,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             objects = getModelItemsForClasses(getCollection().getMainGraphDocument(), searchClassesUnique, absolutePartsOnly, alphabetical);
         }
         if (searchClassesNotUnique.size() > 0) {
-            ArrayList<ModelElement> elems = getModelItemsForClasses(this, searchClassesNotUnique, absolutePartsOnly, alphabetical);
+            List<ModelElement> elems = getModelItemsForClasses(this, searchClassesNotUnique, absolutePartsOnly, alphabetical);
             if (objects == null) {
                 objects = elems;
             } else {
@@ -5120,9 +5119,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param alphabetical
      * @return
      */
-    private static ArrayList<ModelElement> getModelItemsForClasses(final GraphDocument doc, final ArrayList<Class<? extends ModelElement>> searchClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
+    private static List<ModelElement> getModelItemsForClasses(final GraphDocument doc, final List<Class<? extends ModelElement>> searchClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
 
-        ArrayList<ModelElement> objects = new ArrayList<ModelElement>();
+        List<ModelElement> objects = new ArrayList<>();
 
         //Indizes der zu durchsuchenden Ebenen
         int i1 = Integer.MAX_VALUE;
@@ -5165,7 +5164,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Ebene holen
             LayerContainer lc = doc.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
-            ArrayList<ArrayList<? extends ElementContainer>> layerElements = new ArrayList<ArrayList<? extends ElementContainer>>();
+            List<List<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
             if (searchBendpoints) {
                 layerElements.add(lc.getKnickpunkte());
@@ -5180,7 +5179,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
 
             //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
-            for (ArrayList<? extends ElementContainer> ecList : layerElements) {
+            for (List<? extends ElementContainer> ecList : layerElements) {
                 //für jede dieser ElementContainerlisten
                 for (ElementContainer ec : ecList) {
                     ModelElement me = ec.getElement();
@@ -5248,7 +5247,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (modelElementOrContainerList == null) {
             return null;
         }
-        List<ElementContainer> returnList = new ArrayList<ElementContainer>();
+        List<ElementContainer> returnList = new ArrayList<>();
         for (Object o : modelElementOrContainerList) {
             ElementContainer ec = o instanceof ElementContainer ? getElementContainer((ElementContainer) o) : getElementContainer((ModelElement) o);
             if (ec == null) {

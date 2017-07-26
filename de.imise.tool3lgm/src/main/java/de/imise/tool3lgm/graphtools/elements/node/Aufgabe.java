@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -77,20 +78,20 @@ public final class Aufgabe extends Knoten {
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
      */
-    public ArrayList<ElementContainer> getAllKonfigs(final GraphDocument doc, ArrayList<ElementContainer> allPartsAndParents) {
-        ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>();
+    public List<ElementContainer> getAllKonfigs(final GraphDocument doc, List<ElementContainer> allPartsAndParents) {
+        List<ElementContainer> returnList = new ArrayList<>();
         if (allPartsAndParents == null) {
-            allPartsAndParents = new ArrayList<ElementContainer>();
+            allPartsAndParents = new ArrayList<>();
         }
 
-        ArrayList<ElementContainer> aufOrg = getConnectedContainer(AufOrgKombination.class, doc);
+        List<ElementContainer> aufOrg = getConnectedContainer(AufOrgKombination.class, doc);
         for (int i = 0; i < aufOrg.size(); i++) {
-            ArrayList<ElementContainer> konfigs = ((NodeContainer) aufOrg.get(i)).getKnoten().getConnectedContainer(ABKonfiguration.class, doc);
+            List<ElementContainer> konfigs = ((NodeContainer) aufOrg.get(i)).getKnoten().getConnectedContainer(ABKonfiguration.class, doc);
             returnList.addAll(konfigs);
         }
         //Liste in die die NodeContainer der Aufgaben kommen, von denen diese
         // Aufgabe Konfigurationen erbt
-        ArrayList<ElementContainer> partsAndParents = new ArrayList<ElementContainer>();
+        List<ElementContainer> partsAndParents = new ArrayList<>();
         for (ElementContainer parent : getParentContainer(doc, false)) {
             if (!allPartsAndParents.contains(parent)) {
                 partsAndParents.add(parent);
@@ -101,7 +102,7 @@ public final class Aufgabe extends Knoten {
         for (ElementContainer ppc : partsAndParents) {
             Aufgabe ppAuf = (Aufgabe) ppc.getElement();
             //alle Konfigurationen holen
-            ArrayList<ElementContainer> konfigs = ppAuf.getAllKonfigs(doc, allPartsAndParents);
+            List<ElementContainer> konfigs = ppAuf.getAllKonfigs(doc, allPartsAndParents);
             returnList.addAll(konfigs);
         }
         return returnList;
@@ -115,8 +116,8 @@ public final class Aufgabe extends Knoten {
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
      */
-    public ArrayList<ElementContainer> getAllDifferentKonfigs(final GraphDocument doc) {
-        ArrayList<ElementContainer> returnList = getAllKonfigs(doc, null);
+    public List<ElementContainer> getAllDifferentKonfigs(final GraphDocument doc) {
+        List<ElementContainer> returnList = getAllKonfigs(doc, null);
         int size = returnList.size();
         ABKonfiguration[] konfigs = new ABKonfiguration[size];
         for (int i = 0; i < size; i++) {
@@ -146,7 +147,7 @@ public final class Aufgabe extends Knoten {
     }
 
     @Override
-    public ArrayList<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
+    public List<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
         return getAllDifferentKonfigs(doc);
     }
 

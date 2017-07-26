@@ -14,7 +14,7 @@ import de.imise.util.NamedObjectContainer;
 
 /**
  * Erzeugt ein neues Model für den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
- * 
+ *
  * @author Ich
  * @create 19.08.2015
  */
@@ -22,7 +22,7 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * Erzeugt ein neues Model für den Table des <code>AbstractElementTypeUserFieldEditorPanel</code>s
-     * 
+     *
      * @param doc
      */
     public GeneralUserFieldTableModel(final GraphDocument doc) {
@@ -58,7 +58,7 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
 
     /**
      * Erstellt und setzt Kennzahlen-Modeldaten
-     * 
+     *
      * @param elementClass
      * @param showTopLevel
      * @param showInner
@@ -70,9 +70,9 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
         List<UserField> userFieldList = definitions.getUserFields(elementClass, userFieldStyle);
 
         //Ermitteln der ModelElemente zu elementClass
-        ArrayList<ModelElement> allModelElements = doc.getModelItems(elementClass, true, true);
-        ArrayList<ModelElement> modelElements = new ArrayList<ModelElement>(allModelElements.size());
-        //TODO:FST,XHB. Wenn die Kante PDVBKAWBVerb übergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt. 
+        List<ModelElement> allModelElements = doc.getModelItems(elementClass, true, true);
+        List<ModelElement> modelElements = new ArrayList<>(allModelElements.size());
+        //TODO:FST,XHB. Wenn die Kante PDVBKAWBVerb übergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt.
         // Dann sollte aber auch keine Exception mehr fliegen. prüf mal bitte, warum das so ist?!
 
         for (int i = 0; i < allModelElements.size(); i++) {
@@ -91,17 +91,17 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
             userFieldList.clear();
         }
 
-        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(modelElements.size());
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<>(modelElements.size());
         // RowHeader aufbauen
         for (ModelElement me : modelElements) {
-            NamedObjectContainer<ModelElement> rowElementContainer = new NamedObjectContainer<ModelElement>(me, me.getName());
+            NamedObjectContainer<ModelElement> rowElementContainer = new NamedObjectContainer<>(me, me.getName());
             rowIdentifiers.add(rowElementContainer);
         }
 
-        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(userFieldList.size());
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<>(userFieldList.size());
         // ColumnHeader aufbauen
         for (UserField userField : userFieldList) {
-            NamedObjectContainer<UserField> columnUserFieldContainer = new NamedObjectContainer<UserField>(userField, userField.getName());
+            NamedObjectContainer<UserField> columnUserFieldContainer = new NamedObjectContainer<>(userField, userField.getName());
             columnIdentifiers.add(columnUserFieldContainer);
         }
 
@@ -112,7 +112,7 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
             for (int j = 0; j < data[0].length; j++) {
                 UserField uf = userFieldList.get(j);
                 String value = uf.getValue(me);
-                data[i][j] = new NamedObjectContainer<UserField>(uf, value);
+                data[i][j] = new NamedObjectContainer<>(uf, value);
             }
         }
 

@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -757,7 +758,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param initialContainer
      * @return
      */
-    public ArrayList<ElementContainer> getSurrogateContainer() {
+    public List<ElementContainer> getSurrogateContainer() {
         return getSurrogateContainer(this);
     }
 
@@ -765,8 +766,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param initialContainer
      * @return
      */
-    private ArrayList<ElementContainer> getSurrogateContainer(final ElementContainer initialContainer) {
-        ArrayList<ElementContainer> retVal = new ArrayList<ElementContainer>(1);
+    private List<ElementContainer> getSurrogateContainer(final ElementContainer initialContainer) {
+        List<ElementContainer> retVal = new ArrayList<>(1);
 
         if (isVisible()) {
             retVal.add(this);
@@ -788,7 +789,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             return retVal;
         }
 
-        ArrayList<ElementContainer> all = me.getDirectParentContainer(doc);
+        List<ElementContainer> all = me.getDirectParentContainer(doc);
         if (all.size() == 0) {
             retVal.add(this);
             return retVal;

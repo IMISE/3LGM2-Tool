@@ -6,8 +6,8 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -181,7 +181,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
             rtree.saveExpansionAndSelection();
             rroot.removeAllChildren();
             rtree.reset();
-            ArrayList<ElementContainer> all = mainDoc.getElementContainer(me.getClass());
+            List<ElementContainer> all = mainDoc.getElementContainer(me.getClass());
             all.remove(meContainer);
             for (ElementContainer ec : all) {
                 rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, false, true);

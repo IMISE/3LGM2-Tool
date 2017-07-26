@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -78,7 +79,7 @@ public class ModelCleaner {
 
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
 
-        ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>();
+        List<GraphDocument> docs = new ArrayList<>();
         docs.add(mainDoc);
         for (Szenario szen : gdcoll.getSzenarios()) {
             docs.add(szen);
@@ -91,7 +92,7 @@ public class ModelCleaner {
         // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
             for (LayerContainer lc : doc.getLayers()) {
-                ArrayList<ElementContainer> allEc = new ArrayList<ElementContainer>(lc.getKnoten());
+                List<ElementContainer> allEc = new ArrayList<>(lc.getKnoten());
                 allEc.addAll(lc.getKanten());
                 allEc.addAll(lc.getKnickpunkte());
                 // für alle Container des aktuellen GraphDocuments
@@ -181,7 +182,7 @@ public class ModelCleaner {
         int pid = TransactionManager.STANDARD_PID;
         // Alle Knickpunkte löschen, die keiner Kante zugeordnet sind. So etwas trat in alten Modellen
         // auf und sollte gleich am Anfang ausgeschlossen werden
-        ArrayList<ElementContainer> al = new ArrayList<ElementContainer>();
+        List<ElementContainer> al = new ArrayList<>();
         for (Szenario szen : gdcoll.getSzenarios()) {
             for (ElementContainer kc : szen.getElementContainer(Knickpunkt.class)) {
                 BendpointContainer bpc = (BendpointContainer) kc;
@@ -217,7 +218,7 @@ public class ModelCleaner {
 
         // Alle inkonsistenten Kanten löschen = alle Kanten, denen Start- oder Endelement fehlen
         // oder die dieselben Elemente mehrfach verbinden, obwohl sie nur 1 mal verbunden sein sollten
-        ArrayList<ModelElement> edges = mainDoc.getModelItems(Kante.class, true);
+        List<ModelElement> edges = mainDoc.getModelItems(Kante.class, true);
         for (int i = 0; i < edges.size(); i++) {
             Kante edge = (Kante) edges.get(i);
             // Kanten mit fehlendem Start- und Endelement löschen
@@ -278,7 +279,7 @@ public class ModelCleaner {
 
             // alle Radiobuttons, Comboboxes und Kennzahlen, die beim Zusammenführen irgendwelche
             // komischen Werte zusammengeführt bekommen haben, wieder berichtigen
-            for (UserField uf : new ArrayList<UserField>(me.getUserFieldInputValueKeys())) {
+            for (UserField uf : new ArrayList<>(me.getUserFieldInputValueKeys())) {
                 if (uf == null) {
                     continue;
                 }
@@ -302,7 +303,7 @@ public class ModelCleaner {
                     if (uf.getStyle() != Style.RADIO_BUTTON && uf.getStyle() != Style.COMBO_BOX || uf.getStyle() == Style.CHECK_BOX) {
                         continue;
                     }
-                    ArrayList<String> listValues = new ArrayList<String>(uf.getListValuesCount());
+                    List<String> listValues = new ArrayList<>(uf.getListValuesCount());
                     loop: for (int t = 0; t < uf.getListValuesCount(); t++) {
                         String listValue = uf.getListValueAt(t);
                         for (String superFlous : superflousStrings) {
@@ -385,7 +386,7 @@ public class ModelCleaner {
         sourceString = sourceString.trim();
         // Liste mit allen Tokens des Ausgangsstring, die durch "-ZUSAMMENGEFÜHRT-" voneinander
         // getrennt im Ausgangsstring stehen
-        ArrayList<String> subStringList = new ArrayList<String>();
+        List<String> subStringList = new ArrayList<>();
         // ArrayList<String> subStringDelimiterStringList = new ArrayList<String>();
 
         // Index, ab dem nach dem nächsten Auftreten von "-ZUSAMMENGEFÜHRT-" gesucht wird
@@ -638,14 +639,14 @@ public class ModelCleaner {
      */
     public boolean hasCloneableConfigs(final Aufgabe auf) {
         // hole alle AufOrgKombinationen der Aufgabe
-        ArrayList<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
+        List<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
         // wenn die Aufgabe nichts zu vererben hat -> nächste Aufgabe
         if (aufOrgs.size() == 0) {
             return false;
         }
         // hole alle Blattaufgaben, die der aktuellen Aufgabe untergeordnet sind
         // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nächste Aufgabe
-        ArrayList<ElementContainer> absParts = auf.getAbsolutePartContainer(gdcoll.getMainGraphDocument());
+        List<ElementContainer> absParts = auf.getAbsolutePartContainer(gdcoll.getMainGraphDocument());
         if (absParts.size() == 0) {
             return false;
         }
@@ -674,7 +675,7 @@ public class ModelCleaner {
      */
     private boolean cloneConfigsToParts(final Aufgabe auf, final int transactionId) {
         // hole alle AufOrgKombinationen der Aufgabe
-        ArrayList<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
+        List<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
         // wenn die Aufgabe nichts zu vererben hat -> nächste Aufgabe
         if (aufOrgs.size() == 0) {
             return false;
@@ -684,7 +685,7 @@ public class ModelCleaner {
 
         // hole alle Blattaufgaben, die der aktuellen Aufgabe untergeordnet sind
         // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nächste Aufgabe
-        ArrayList<ElementContainer> absParts = auf.getAbsolutePartContainer(mainDoc);
+        List<ElementContainer> absParts = auf.getAbsolutePartContainer(mainDoc);
         if (absParts.size() == 0) {
             return false;
         }
@@ -701,7 +702,7 @@ public class ModelCleaner {
         // jetzt die originale AufOrgKombination und alle ihre Konfigurationen löschen
         for (Iterator<ModelElement> aufOrgsIt = aufOrgs.iterator(); aufOrgsIt.hasNext();) {
             AufOrgKombination aufOrg = (AufOrgKombination) aufOrgsIt.next();
-            ArrayList<ModelElement> abKonfigs = aufOrg.getConnectedElements(ABKonfiguration.class);
+            List<ModelElement> abKonfigs = aufOrg.getConnectedElements(ABKonfiguration.class);
 
             String[] hashesToDelete = new String[abKonfigs.size() + 1];
             hashesToDelete[0] = aufOrg.getHashString();
@@ -729,7 +730,7 @@ public class ModelCleaner {
         mainDoc.start_transaction(transactionId);
 
         // alle Aufgaben holen
-        ArrayList<ModelElement> aufgaben = mainDoc.getModelItems(Aufgabe.class);
+        List<ModelElement> aufgaben = mainDoc.getModelItems(Aufgabe.class);
         // für jede Aufgabe
         for (Iterator<ModelElement> aufIt = aufgaben.iterator(); aufIt.hasNext();) {
             Aufgabe auf = (Aufgabe) aufIt.next();
@@ -783,7 +784,7 @@ public class ModelCleaner {
      * @param resultStringKey
      */
     public static final void removeInconsistentElements(final GDCollection gdcoll, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement>[] connectedElementClasses, final String resultStringKey) {
-        HashSet<ModelElement> elems = getNotConnected(gdcoll.getMainGraphDocument(), searchElementClass, connectedElementClasses);
+        Set<ModelElement> elems = getNotConnected(gdcoll.getMainGraphDocument(), searchElementClass, connectedElementClasses);
         if (elems.size() > 0) {
             String[] hashesToDelete = new String[elems.size()];
             int i = 0;
@@ -809,12 +810,12 @@ public class ModelCleaner {
      *            sein dürfen
      * @return Liste aller gefundenen Elemente
      */
-    private static HashSet<ModelElement> getNotConnected(final GraphDocument doc, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement>[] connectedElementClasses) {
-        ArrayList<ModelElement> searchElems = doc.getModelItems(searchElementClass, true);
-        HashSet<ModelElement> returnList = new HashSet<ModelElement>();
+    private static Set<ModelElement> getNotConnected(final GraphDocument doc, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement>[] connectedElementClasses) {
+        List<ModelElement> searchElems = doc.getModelItems(searchElementClass, true);
+        Set<ModelElement> returnList = new HashSet<>();
         // zählt die Anzahl der zu zu löschenden Konfigurationen
         for (ModelElement elem : searchElems) {
-            ArrayList<ModelElement> connectedElems = elem.getConnectedElements(connectedElementClasses[0]);
+            List<ModelElement> connectedElems = elem.getConnectedElements(connectedElementClasses[0]);
             for (int i = 1; i < connectedElementClasses.length && connectedElems.size() == 0; i++) {
                 connectedElems.addAll(elem.getConnectedElements(connectedElementClasses[i]));
             }

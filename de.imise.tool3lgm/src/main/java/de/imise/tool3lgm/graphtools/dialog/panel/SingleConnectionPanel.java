@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
@@ -273,7 +272,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         int lastEdgeDirection = directions[lastEdgeIndex];
         for (ElementContainer ec : searchElementConnectedContainer) {
             ModelElement me = ec.getElement();
-            ArrayList<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastEdgeDirection);
+            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastEdgeDirection);
             for (ModelElement connected : connectedElements) {
                 gdcoll.unlink(me, connected, lastEdgeInPath, dialog.getTransactionID());
             }

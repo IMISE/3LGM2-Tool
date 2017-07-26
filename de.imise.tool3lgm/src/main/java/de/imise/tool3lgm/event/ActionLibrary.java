@@ -267,7 +267,7 @@ public class ActionLibrary {
 
             GraphDocument doc = Static.getSelectedDoc();
             boolean knickpunkte = doc.isSelectedOnlyBendpoints();
-            List<Action> actions = new ArrayList<Action>();
+            List<Action> actions = new ArrayList<>();
 
             if (!knickpunkte) {
                 ModelElement me1 = doc.getLastSelected().getElement();
@@ -432,7 +432,7 @@ public class ActionLibrary {
          * sind
          */
         public static final Action[] getLastUsedFilesOpenActions() {
-            ArrayList<File> files = UserProperties.getLastUsedFiles();
+            List<File> files = UserProperties.getLastUsedFiles();
             Action[] actions = new Action[files.size()];
 
             for (int i = 0; i < actions.length; i++) {
@@ -726,7 +726,7 @@ public class ActionLibrary {
              */
             private void removeChilds(final ModelElement me, final GraphDocument doc) {
                 GDCollection gdcoll = doc.getCollection();
-                ArrayList<ModelElement> parts = me.getDirectPartElements();
+                List<ModelElement> parts = me.getDirectPartElements();
                 while (parts.size() > 0) {
                     ModelElement part = parts.get(0);
                     removeChilds(part, doc);
@@ -741,7 +741,7 @@ public class ActionLibrary {
                         if (edge instanceof PartOfBeziehung) {
                             continue;
                         }
-                        ArrayList<ModelElement> parentElements = part.getDirectParentElements();
+                        List<ModelElement> parentElements = part.getDirectParentElements();
                         for (ModelElement parent : parentElements) {
                             ModelElement start = edge.getStart() == part ? parent : edge.getStart();
                             ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
@@ -2138,7 +2138,7 @@ public class ActionLibrary {
     @Deprecated
     public static Action[] toActionArray(final Class<?> clazz) throws IllegalArgumentException, IllegalAccessException {
         Field[] fields = clazz.getFields();
-        Collection<Action> tmp = new ArrayList<Action>(fields.length);
+        Collection<Action> tmp = new ArrayList<>(fields.length);
         Object o;
         for (int i = 0; i < fields.length; i++) {
             o = new Object();

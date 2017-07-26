@@ -141,13 +141,13 @@ public final class Prozess extends Knoten {
             aufgabe = aufgaben.get(pos);
         }
 
-        List<LGMProzessStep> returnList = new ArrayList<LGMProzessStep>(10);
+        List<LGMProzessStep> returnList = new ArrayList<>();
         //alle Objekttypen holen, die aufgabe interpretiert
 
         //		GraphDocument doc = aufgabe.getGraphDocument();
 
         //Alle von der Aufgabe interpretierten OT in ein Set legen
-        Set<ModelElement> setOfInterpretedObjectTypes = new HashSet<ModelElement>();
+        Set<ModelElement> setOfInterpretedObjectTypes = new HashSet<>();
         //Alle von den Parts und Parents der Aufgabe interpretierten OT diesem Set hinzufügen
         for (ModelElement auf : aufgabe.getPartAndParentElements()) {
             setOfInterpretedObjectTypes.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, Doppelkante.BACKWARD));
@@ -157,7 +157,7 @@ public final class Prozess extends Knoten {
         for (int i = 0; i < pos; i++) {
             ModelElement startAufgabe = aufgaben.get(i);
             //hole die bearbeiteten Objekttypen der i-ten Aufgabe in der Aufgabenliste des Prozesses
-            Set<ModelElement> usedObjekttypenOfAufgabe = new HashSet<ModelElement>();
+            Set<ModelElement> usedObjekttypenOfAufgabe = new HashSet<>();
             for (ModelElement auf : startAufgabe.getPartAndParentElements()) {
                 usedObjekttypenOfAufgabe.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, Doppelkante.FORWARD));
             }
@@ -208,7 +208,7 @@ public final class Prozess extends Knoten {
 
         //Array von ArrayListen der Konfigurationen aller Aufgaben
         @SuppressWarnings("unchecked")
-        ArrayList<ModelElement>[] konfigs = new ArrayList[aufgaben.size()];
+        List<ModelElement>[] konfigs = new ArrayList[aufgaben.size()];
 
         //steht die gleiche Aufgabe mehrmals in aufgaben, so bekommt sie an jeder Stelle die gleiche
         //Konfigurationsreferenz -> diese braucht dann nur 1x gesetzt werden
@@ -233,13 +233,13 @@ public final class Prozess extends Knoten {
         //		}
 
         //Gesamtliste aller in den uebergebenen Aufgaben moeglichen BuisnessProcessSteps zusammenbauen
-        List<LGMProzessStep> returnList = new ArrayList<LGMProzessStep>(100);
+        List<LGMProzessStep> returnList = new ArrayList<>();
         for (int i = 1; i < aufgaben.size(); i++) {
             returnList.addAll(getProcessStepsForAufgabe(aufgaben, i, false));
         }
         //		System.out.println(returnList.size() + " Geschäftsprozessschritte sind identifiziert worden");
         //jetzt geht es darum, für jeden BuisnessProcessSteps dieser Liste alle seine Varianten unterschiedlicher Konfigurationen zu erzeugen
-        ArrayList<LGMProzessStep> varianten = new ArrayList<LGMProzessStep>(100);
+        List<LGMProzessStep> varianten = new ArrayList<>();
         //für jeden Geschäftsprzessschritt in returnList
         for (int i = 0; i < returnList.size(); i++) {
             //hole den Schritt

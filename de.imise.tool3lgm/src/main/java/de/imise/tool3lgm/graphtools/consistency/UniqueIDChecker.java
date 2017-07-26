@@ -25,19 +25,19 @@ public class UniqueIDChecker {
 
     /**
      * Liefert eine Liste aller {@link AbstractIDError} in dem übergebenen Modell
-     * 
+     *
      * @param gdcoll
      * @return
      */
     public List<AbstractIDError> getIDErrors(final GDCollection gdcoll) {
-        ArrayList<AbstractIDError> idErrors = new ArrayList<AbstractIDError>();
+        List<AbstractIDError> idErrors = new ArrayList<>();
         UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();
         GraphDocument doc = gdcoll.getMainGraphDocument();
         //alle ID-UserFields aller Klassen
         Iterable<UserField> idUserFields = ufd.getIDUserFields();
         //die letzte TargetClass und die zuletzt rausgesuchte Menge aller Elemente dieser Klassen cachen
         Class<? extends UserFieldTarget> userFieldTargetClass = null;
-        ArrayList<ModelElement> userFieldTargetClassElements = null;
+        List<ModelElement> userFieldTargetClassElements = null;
         Multimap<String, ModelElement> idValueToElements = ArrayListMultimap.create();
         for (UserField idUserField : idUserFields) {
             Class<? extends UserFieldTarget> newUserFieldTargetClass = idUserField.getTargetClass();
@@ -63,7 +63,7 @@ public class UniqueIDChecker {
                 Collection<ModelElement> elementsWithSameID = idValueToElements.get(idValue);
                 if (elementsWithSameID.size() > 1) {
                     for (ModelElement me : elementsWithSameID) {
-                        Collection<ModelElement> allWithSameID = new ArrayList<ModelElement>(elementsWithSameID);
+                        Collection<ModelElement> allWithSameID = new ArrayList<>(elementsWithSameID);
                         AbstractIDError idError = new IDNotUniqueError(me, idUserField, gdcoll, allWithSameID);
                         idErrors.add(idError);
                     }
@@ -78,7 +78,7 @@ public class UniqueIDChecker {
      * Das Element selbst ist auch immer in der Liste, also ist die Rückgabeliste immer mind. 1 groß, es sei denn das UserField passt gar
      * nicht zum Element.
      * ACHTUNG: Das hier geht für beliebige UserFields - nicht nur für ID-USerFields!
-     * 
+     *
      * @param userField
      * @param me
      * @param value
@@ -88,11 +88,11 @@ public class UniqueIDChecker {
         Class<? extends ModelElement> meClass = me.getClass();
         //das UserField ist nicht für das übergebene Element definiert -> leere Liste
         if (!userField.getTargetClass().isAssignableFrom(meClass)) {
-            return new ArrayList<ModelElement>();
+            return new ArrayList<>();
         }
         GDCollection gdcoll = me.getCollection();
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        ArrayList<ModelElement> modelItems = mainDoc.getModelItems(meClass);
+        List<ModelElement> modelItems = mainDoc.getModelItems(meClass);
         for (int i = modelItems.size() - 1; i >= 0; i--) {
             ModelElement other = modelItems.get(i);
             if (other != me) {
@@ -109,7 +109,7 @@ public class UniqueIDChecker {
 
     //    /**
     //     * Fügt der übergebenen Error-Liste alle ID-Errors des übergebenen Elementes hinzu.
-    //     * 
+    //     *
     //     * @param me
     //     * @param returnList
     //     */
@@ -121,7 +121,7 @@ public class UniqueIDChecker {
     //    /**
     //     * Prüft für ein ModelElement, ob es ID-UserFields besitzt deren Werte mit dem anderer Elemente
     //     * übereinstimmen.
-    //     * 
+    //     *
     //     * @param me
     //     * @return
     //     */
@@ -140,7 +140,7 @@ public class UniqueIDChecker {
     //
     //    /**
     //     * Wenn das übergebene UserField ein ID-UserField ist, das zum übergebenen Element passt
-    //     * 
+    //     *
     //     * @param me
     //     * @param idUserField
     //     * @return

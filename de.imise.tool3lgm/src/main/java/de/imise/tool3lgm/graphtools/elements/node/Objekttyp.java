@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -43,8 +44,8 @@ public class Objekttyp extends Knoten {
      * @param collections
      * @return
      */
-    public ArrayList<ModelElement> getStorePlaces(final boolean databases, final boolean collections) {
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
+    public List<ModelElement> getStorePlaces(final boolean databases, final boolean collections) {
+        List<ModelElement> returnList = new ArrayList<>();
         if (!databases && !collections) {
             return returnList;
         }
@@ -68,11 +69,11 @@ public class Objekttyp extends Knoten {
         }
         //Liste in die die Objekttypen kommen, von denen
         // dieser Objekttyp Repräsentationsformen erbt
-        ArrayList<ModelElement> partsAndParents = getParentElements(false);
+        List<ModelElement> partsAndParents = getParentElements(false);
         //für jeden OT von dem geerbt wird
         for (ModelElement me : partsAndParents) {
             //alle storePlaces holen
-            ArrayList<ModelElement> stores = ((Objekttyp) me).getStorePlaces(databases, collections);
+            List<ModelElement> stores = ((Objekttyp) me).getStorePlaces(databases, collections);
             //wenn diese bisher noch nicht eingesammelt wurden -> zur
             // returnList hinzufügen
             for (ModelElement store : stores) {
@@ -85,9 +86,9 @@ public class Objekttyp extends Knoten {
     }
 
     @Override
-    public ArrayList<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
-        ArrayList<ModelElement> storePlaces = getStorePlaces(true, true);
-        ArrayList<ElementContainer> storePlacesContainer = new ArrayList<ElementContainer>(storePlaces.size());
+    public List<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
+        List<ModelElement> storePlaces = getStorePlaces(true, true);
+        List<ElementContainer> storePlacesContainer = new ArrayList<>(storePlaces.size());
         for (ModelElement me : storePlaces) {
             ElementContainer ec = me.getContainer(doc);
             if (ec != null) {

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -51,10 +52,10 @@ public class B1ExportPlugin implements Plugin {
                 if (doc == null) {
                     return;
                 }
-                ArrayList<ElementContainer> functions = doc.getElementContainer(Aufgabe.class);
+                List<ElementContainer> functions = doc.getElementContainer(Aufgabe.class);
                 //maximale Tiefe der Aufgabenhierarchie feststellen
                 int maxHierarchyDepth = 0;
-                ArrayList<ElementContainer> absolutePartContainer = new ArrayList<ElementContainer>();
+                List<ElementContainer> absolutePartContainer = new ArrayList<>();
                 for (ElementContainer funcEc : functions) {
                     ModelElement func = funcEc.getElement();
                     if (func.hasDirectPartContainer(doc)) {
@@ -110,14 +111,14 @@ public class B1ExportPlugin implements Plugin {
         GraphDocument doc = leafFuncEc.getGraphDocument();
         //Liste von Listen mit den Parents der übergebenen Funktion. In der ersten Liste steht die übergebenen
         //Funktion, in der zweiten ihre direkten Parents, in der dritten deren Parents usw.
-        ArrayList<ArrayList<ElementContainer>> parentLists = new ArrayList<ArrayList<ElementContainer>>();
-        ArrayList<ElementContainer> parents = new ArrayList<ElementContainer>();
+        List<List<ElementContainer>> parentLists = new ArrayList<>();
+        List<ElementContainer> parents = new ArrayList<>();
         parents.add(leafFuncEc);
         parentLists.add(parents);
         parents = func.getDirectParentContainer(doc);
         while (parents.size() > 0) {
             parentLists.add(parents);
-            ArrayList<ElementContainer> newParents = new ArrayList<ElementContainer>();
+            List<ElementContainer> newParents = new ArrayList<>();
             for (ElementContainer parent : parents) {
                 newParents.addAll(parent.getElement().getDirectParentContainer(doc));
             }
@@ -156,7 +157,7 @@ public class B1ExportPlugin implements Plugin {
         linePartBuilder.append("\t");
 
         //für jede AufOrgKombination bzw. damit verknüpfe OEs muss eine eigene Zeile generiert werden
-        ArrayList<ElementContainer> aufOrgCombis = func.getConnectedContainer(AufOrgKombination.class, doc);
+        List<ElementContainer> aufOrgCombis = func.getConnectedContainer(AufOrgKombination.class, doc);
         //wenn gar keine OEs verknüpft sind -> einfach nur die Aufgabenhierarchie zurück geben.
         if (aufOrgCombis.size() == 0) {
             appendNoOeConnected(linePartBuilder);
@@ -171,7 +172,7 @@ public class B1ExportPlugin implements Plugin {
         StringBuilder fullLinesBuilder = new StringBuilder();
 
         for (ElementContainer aufOrgComb : aufOrgCombis) {
-            ArrayList<ElementContainer> oes = aufOrgComb.getElement().getConnectedContainer(Organisationseinheit.class, doc);
+            List<ElementContainer> oes = aufOrgComb.getElement().getConnectedContainer(Organisationseinheit.class, doc);
             //an der AufOrgKombi hängen keine OEs -> Zeile ist zu Ende
             if (oes.size() == 0) {
                 fullLinesBuilder.append(lineStart);
@@ -190,7 +191,7 @@ public class B1ExportPlugin implements Plugin {
 
             //ACHTUNG: es werden einfach alle Konfigurationen ausgeblendet, also einfach nur alle verknüpften AWBs eingesammelt,
             //egal ob sie in einer oder mehreren Konfigurationen stecken. Sonst müsste man für jede Konfig eine weitere Zeile anlegen
-            ArrayList<ElementContainer> awbs = new ArrayList<ElementContainer>();
+            List<ElementContainer> awbs = new ArrayList<>();
             for (ElementContainer awbKonf : aufOrgComb.getElement().getConnectedContainer(ABKonfiguration.class, doc)) {
                 awbs.addAll(awbKonf.getElement().getConnectedContainer(Anwendungsbaustein.class, doc));
             }
@@ -211,12 +212,12 @@ public class B1ExportPlugin implements Plugin {
 
             //Physische DV-Baustein-Konfigs holen. ACHTUNG: Auch hier werden einfach alle Konfigurationen in einen
             //Topf geworfen, also alle PDVB
-            ArrayList<ElementContainer> pdvbKonfigs = new ArrayList<ElementContainer>();
+            List<ElementContainer> pdvbKonfigs = new ArrayList<>();
             for (ElementContainer awb : awbs) {
                 pdvbKonfigs.addAll(awb.getElement().getConnectedContainer(DBKonfiguration.class, doc));
             }
 
-            ArrayList<ElementContainer> pdvbs = new ArrayList<ElementContainer>();
+            List<ElementContainer> pdvbs = new ArrayList<>();
             for (ElementContainer pdvbKonf : pdvbKonfigs) {
                 pdvbs.addAll(pdvbKonf.getElement().getConnectedContainer(PhysischerDVBaustein.class, doc));
             }
@@ -274,7 +275,7 @@ public class B1ExportPlugin implements Plugin {
      * @param containerList
      * @return
      */
-    private static final String getNamesListColumn(final ArrayList<ElementContainer> containerList) {
+    private static final String getNamesListColumn(final List<ElementContainer> containerList) {
         return getStringListColumn(containerList, false);
     }
 
@@ -282,7 +283,7 @@ public class B1ExportPlugin implements Plugin {
      * @param containerList
      * @return
      */
-    private static final String getHashListColumn(final ArrayList<ElementContainer> containerList) {
+    private static final String getHashListColumn(final List<ElementContainer> containerList) {
         return getStringListColumn(containerList, true);
     }
 
@@ -291,7 +292,7 @@ public class B1ExportPlugin implements Plugin {
      * @param hash
      * @return
      */
-    private static final String getStringListColumn(final ArrayList<ElementContainer> containerList, final boolean hash) {
+    private static final String getStringListColumn(final List<ElementContainer> containerList, final boolean hash) {
         StringBuilder sb = new StringBuilder();
         for (ElementContainer ec : containerList) {
             if (hash) {
@@ -352,8 +353,8 @@ public class B1ExportPlugin implements Plugin {
      */
     public int getHierarchyDepth(final ElementContainer ec) {
         GraphDocument doc = ec.getGraphDocument();
-        HashSet<ElementContainer> nextStepStartContainer = new HashSet<ElementContainer>();
-        HashSet<ElementContainer> resultContainer = new HashSet<ElementContainer>();
+        HashSet<ElementContainer> nextStepStartContainer = new HashSet<>();
+        HashSet<ElementContainer> resultContainer = new HashSet<>();
         nextStepStartContainer.add(ec);
         int hierarchy = 1;
         while (true) {

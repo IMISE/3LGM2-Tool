@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GDCommands;
@@ -54,12 +52,12 @@ public abstract class ModelElement extends UserFieldTarget {
      * Table, der von einem <code>GraphDocument</code> auf den Container des Elemtentes in diesem <code>GraphDocument</code> mappt, wenn es darin
      * vorkommt.
      */
-    private Hashtable<GraphDocument, ElementContainer> containerTable = new Hashtable<GraphDocument, ElementContainer>(3, 1);
+    private Hashtable<GraphDocument, ElementContainer> containerTable = new Hashtable<>(3, 1);
 
     /**
      * Liste aller Assoziationen zu anderen Elementen
      */
-    private List<Kante> edges = Lists.newArrayList();
+    private List<Kante> edges = new ArrayList<>();
 
     /**
      * Ein StringBuilder, der gebraucht wird, um die Namen der Elemente zusammen zu bauen. Er ist statisch, damit man ihn nicht ständig neu anlegen
@@ -99,9 +97,9 @@ public abstract class ModelElement extends UserFieldTarget {
         retVal.htmlName = htmlName;
         retVal.descr = descr;
         retVal.hashstring = getNewHashString(this);
-        retVal.containerTable = new Hashtable<GraphDocument, ElementContainer>(3, 1);
+        retVal.containerTable = new Hashtable<>(3, 1);
 
-        retVal.edges = new ArrayList<Kante>(3);
+        retVal.edges = new ArrayList<>(3);
 
         for (UserField key : getUserFieldInputValueKeys()) {
             retVal.setUserFieldInputValue(key, getUserFieldInputValue(key).toString());
@@ -162,7 +160,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final Set<GraphDocument> getMySzenarios() {
-        return new HashSet<GraphDocument>(containerTable.keySet());
+        return new HashSet<>(containerTable.keySet());
     }
 
     /**
@@ -290,7 +288,7 @@ public abstract class ModelElement extends UserFieldTarget {
             return;
         }
         mySzenarios.remove(gdcoll.getMainGraphDocument());
-        ArrayList<GraphDocument> mySortedSzenarios = new ArrayList<GraphDocument>(mySzenarios);
+        List<GraphDocument> mySortedSzenarios = new ArrayList<>(mySzenarios);
         Alphabetical.sort(mySortedSzenarios);
         nameBuffer.append("      ");
         nameBuffer.append(mySortedSzenarios);
@@ -366,7 +364,7 @@ public abstract class ModelElement extends UserFieldTarget {
         suffixBuf.setLength(0);
         if (this instanceof RechAnwendungsbaustein) {
             for (ModelElement awp : getConnectedElements(Anwendungsprogramm.class)) {
-                ArrayList<ModelElement> connectedSwp = awp.getConnectedElements(Softwareprodukt.class);
+                List<ModelElement> connectedSwp = awp.getConnectedElements(Softwareprodukt.class);
                 //Kein Softwareprodukt verbunden -> weiter
                 if (connectedSwp.size() == 0) {
                     continue;
@@ -567,7 +565,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Fuegt diesem Knoten in der ArrayList connections an der Position pos die Kante kante hinzu.
+     * Fuegt diesem Knoten in der List connections an der Position pos die Kante kante hinzu.
      */
     public boolean insertEdge(final Kante kante, int pos) {
         if (kante == null || edges.contains(kante)) {
@@ -584,7 +582,7 @@ public abstract class ModelElement extends UserFieldTarget {
         return true;
     }
 
-    public void setEdges(final ArrayList<Kante> associations) {
+    public void setEdges(final List<Kante> associations) {
         edges = associations;
     }
 
@@ -808,8 +806,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction
      * @return
      */
-    public ArrayList<Kante> getEdge(final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final int direction) {
-        ArrayList<Kante> kanten = null;
+    public List<Kante> getEdge(final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final int direction) {
+        List<Kante> kanten = null;
         if (Doppelkante.FORWARD == direction) {
             kanten = getEdgesTo(elemClass, edgeClass);
         } else if (Doppelkante.BACKWARD == direction) {
@@ -824,7 +822,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param modelElement
      * @return
      */
-    public final ArrayList<Kante> getEdgesWith(final ModelElement modelElement) {
+    public final List<Kante> getEdgesWith(final ModelElement modelElement) {
         return getEdgesWith(modelElement, null);
     }
 
@@ -833,7 +831,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @return
      */
-    public final ArrayList<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass) {
+    public final List<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass) {
         return getEdgesWith(modelElement, edgeClass, GDCommands.INVALID_EDGE_INDEX);
     }
 
@@ -843,12 +841,12 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param position
      * @return
      */
-    public final ArrayList<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position) {
+    public final List<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position) {
         return getEdgesWith(modelElement, edgeClass, position, Doppelkante.ANY);
     }
 
-    ///*	public final ArrayList<Kante> getEdgesWith(ModelElement modelElement, Class<? extends Kante> edgeClass, int position) {
-    //		ArrayList<Kante> retVal = new ArrayList<Kante>();
+    ///*	public final List<Kante> getEdgesWith(ModelElement modelElement, Class<? extends Kante> edgeClass, int position) {
+    //		List<Kante> retVal = new ArrayList<Kante>();
     //		if (modelElement == null)
     //			return retVal;
     //		for (int c = 0; c < edges.size(); c++) {
@@ -869,7 +867,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @return
      */
-    public final ArrayList<Kante> getEdgesTo(final ModelElement modelElement, final Class<? extends Kante> edgeClass) {
+    public final List<Kante> getEdgesTo(final ModelElement modelElement, final Class<? extends Kante> edgeClass) {
         return getEdgesWith(modelElement, edgeClass, GDCommands.INVALID_EDGE_INDEX, Doppelkante.FORWARD);
     }
 
@@ -879,7 +877,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param position
      * @return
      */
-    public final ArrayList<Kante> getEdgesTo(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position) {
+    public final List<Kante> getEdgesTo(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position) {
         return getEdgesWith(modelElement, edgeClass, position, Doppelkante.FORWARD);
     }
 
@@ -890,8 +888,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction
      * @return
      */
-    public final ArrayList<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position, final int direction) {
-        ArrayList<Kante> retVal = new ArrayList<Kante>();
+    public final List<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position, final int direction) {
+        List<Kante> retVal = new ArrayList<>();
         if (modelElement == null) {
             return retVal;
         }
@@ -922,9 +920,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * Sucht alle Kanten, die diesen Knoten mit Knoten des angegebenen Typs verbinden.
      *
      * @param elementClass Klasse der verbundenen Knoten
-     * @return ArrayList mit allen gefundenen Kanten
+     * @return List mit allen gefundenen Kanten
      */
-    public final ArrayList<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass) {
+    public final List<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass) {
         return getEdgesWith(elementClass, null);
     }
 
@@ -934,9 +932,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
-     * @return ArrayList mit allen gefundenen Kanten
+     * @return List mit allen gefundenen Kanten
      */
-    public final ArrayList<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public final List<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
         return getEdgesWith(elementClass, edgeClass, Doppelkante.ANY);
     }
 
@@ -946,9 +944,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
-     * @return ArrayList mit allen gefundenen Kanten
+     * @return List mit allen gefundenen Kanten
      */
-    public final ArrayList<Kante> getEdgesTo(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public final List<Kante> getEdgesTo(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
         return getEdgesWith(elementClass, edgeClass, Doppelkante.FORWARD);
     }
 
@@ -958,9 +956,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
-     * @return ArrayList mit allen gefundenen Kanten
+     * @return List mit allen gefundenen Kanten
      */
-    public final ArrayList<Kante> getEdgesFrom(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public final List<Kante> getEdgesFrom(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
         return getEdgesWith(elementClass, edgeClass, Doppelkante.BACKWARD);
     }
 
@@ -972,10 +970,10 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @param Richtung der Kante nach der gesucht werden soll (<code>Doppelkante.ANY</code>, <code>Doppelkante.FORWARD</code> oder
      *            <code>Doppelkante.BACKWARD</code>)
-     * @return ArrayList mit allen gefundenen Kanten
+     * @return List mit allen gefundenen Kanten
      */
-    public final ArrayList<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass, final int direction) {
-        ArrayList<Kante> l_connections = new ArrayList<Kante>();
+    public final List<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass, final int direction) {
+        List<Kante> l_connections = new ArrayList<>();
         for (Kante o_kante : edges) {
             if (edgeClass != null && !edgeClass.isAssignableFrom(o_kante.getClass())) {
                 continue;
@@ -1003,9 +1001,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param searchElementClass Art der verbundenen Elemente, deren Container geliefert werden sollen
      * @param doc Knoten aus diesem Dokument
-     * @return ArrayList mit ElementContainer der gefundenen Knoten
+     * @return List mit ElementContainer der gefundenen Knoten
      */
-    public final ArrayList<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
+    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
         return getConnectedContainer(searchElementClass, doc, null, Doppelkante.ANY, true);
     }
 
@@ -1014,9 +1012,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param doc Knoten aus diesem Dokument
      * @param searchEdgeClass Art der zu suchenden verbindungen
-     * @return ArrayList mit ElementContainer der gefundenen Knoten
+     * @return List mit ElementContainer der gefundenen Knoten
      */
-    public final ArrayList<ElementContainer> getConnectedContainer(final GraphDocument doc, final Class<? extends Kante> searchEdgeClass) {
+    public final List<ElementContainer> getConnectedContainer(final GraphDocument doc, final Class<? extends Kante> searchEdgeClass) {
         return getConnectedContainer(ModelElement.class, doc, searchEdgeClass);
     }
 
@@ -1026,7 +1024,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @return
      */
-    public final ArrayList<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass) {
+    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass) {
         return getConnectedContainer(searchElementClass, doc, edgeClass, Doppelkante.ANY, true);
     }
 
@@ -1037,7 +1035,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction
      * @return
      */
-    public final ArrayList<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction) {
+    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction) {
         return getConnectedContainer(searchElementClass, doc, edgeClass, direction, true);
     }
 
@@ -1049,11 +1047,11 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc Knoten aus diesem Dokument
      * @param start true = Verbindungen beginnen nicht bei diesem Knoten
      * @param end true = Verbindungen enden nicht bei diesem Knoten
-     * @return ArrayList mit ElementContainer der gefundenen Knoten
+     * @return List mit ElementContainer der gefundenen Knoten
      */
     @SuppressWarnings("unchecked")
-    public final ArrayList<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final boolean alphabetical) {
-        return (ArrayList<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, true, alphabetical);
+    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final boolean alphabetical) {
+        return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, true, alphabetical);
     }
 
     ////////////////////
@@ -1069,7 +1067,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit verbundenen <code>ModelElement</code>s
      * @see #getPartConnectedContainer(Class, GraphDocument, Class, int)
      */
-    public final ArrayList<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
+    public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
         return getPartConnectedContainer(searchElementClass, doc, null, Doppelkante.ANY);
     }
 
@@ -1082,7 +1080,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit verbundenen <code>ModelElement</code>s
      * @see #getPartConnectedContainer(Class, GraphDocument, Class, int)
      */
-    public final ArrayList<ElementContainer> getPartConnectedContainer(final GraphDocument doc, final Class<? extends Kante> searchEdgeClass) {
+    public final List<ElementContainer> getPartConnectedContainer(final GraphDocument doc, final Class<? extends Kante> searchEdgeClass) {
         return getPartConnectedContainer(ModelElement.class, doc, searchEdgeClass, Doppelkante.ANY);
     }
 
@@ -1097,9 +1095,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
-    public final ArrayList<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction) {
+    public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction) {
         //Rückgabeliste
-        ArrayList<ElementContainer> connected = new ArrayList<ElementContainer>();
+        List<ElementContainer> connected = new ArrayList<>();
         //Liste aller Teile holen (direkte und indirekte)
         for (ModelElement me : getPartElements(false)) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Knoten hinzu
@@ -1117,7 +1115,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit verbundenen <code>ModelElement</code>s
      * @see #getParentConnectedContainer(Class, GraphDocument, Class, int)
      */
-    public final ArrayList<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
+    public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
         return getParentConnectedContainer(searchElementClass, doc, null, Doppelkante.ANY);
     }
 
@@ -1132,11 +1130,11 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
-    public final ArrayList<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction) {
+    public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction) {
         //Rückgabeliste
-        ArrayList<ElementContainer> connected = new ArrayList<ElementContainer>();
+        List<ElementContainer> connected = new ArrayList<>();
         //für alle Oberelemente
-        ArrayList<ModelElement> al = getParentElements(false);
+        List<ModelElement> al = getParentElements(false);
 
         for (ModelElement me : al) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Knoten hinzu
@@ -1151,9 +1149,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc
      * @return Liste mit den Containern der direkten Teilelemente
      */
-    public ArrayList<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
+    public List<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
         Class<? extends PartOfBeziehung>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
-        ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>();
+        List<ElementContainer> returnList = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> c : hasPartsEdgeClasses) {
             returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, PartOfBeziehung.PARENT_TO_PART_DIRECTION));
         }
@@ -1166,9 +1164,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc
      * @return Liste mit den Containern der direkten oberelemente
      */
-    public ArrayList<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
+    public List<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
         Class<? extends PartOfBeziehung>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
-        ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>();
+        List<ElementContainer> returnList = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
             returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, PartOfBeziehung.PART_TO_PARENT_DIRECTION));
         }
@@ -1198,16 +1196,16 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Liefert ein <code>ArrayList</code> aller <code>ElementContainer</code>, deren Elemente Teil dieses Elementes sind, aber selbst keine Teile
+     * Liefert ein <code>List</code> aller <code>ElementContainer</code>, deren Elemente Teil dieses Elementes sind, aber selbst keine Teile
      * besitzen. <br>
      *
      * @return Liste mit <code>ElementContainer</code>n, die die absoluten Kindelemente sind
      */
-    public final ArrayList<ElementContainer> getAbsolutePartContainer(final GraphDocument doc) {
-        ArrayList<ElementContainer> parts = getDirectPartContainer(doc);
+    public final List<ElementContainer> getAbsolutePartContainer(final GraphDocument doc) {
+        List<ElementContainer> parts = getDirectPartContainer(doc);
         for (int i = 0; i < parts.size(); i++) {
             ModelElement part = parts.get(i).getElement();
-            ArrayList<ElementContainer> partParts = part.getDirectPartContainer(doc);
+            List<ElementContainer> partParts = part.getDirectPartContainer(doc);
             if (partParts.size() > 0) {
                 parts.remove(i--);
                 parts.addAll(partParts);
@@ -1225,12 +1223,12 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param testonly Wenn <code>true</code> wird beim ersten gefundenen Element abgerochen und <code>true</code> zurück gegeben
      * @return <code>true</code>, wenn mind. ein Element gefunden wurde, das in die Rückgabeliste gehört
      */
-    private final boolean getPartOrParentContainer(final ArrayList<ElementContainer> returnList, GraphDocument doc, final boolean parts, final boolean testonly) {
+    private final boolean getPartOrParentContainer(final List<ElementContainer> returnList, GraphDocument doc, final boolean parts, final boolean testonly) {
         if (returnList == null || returnList.size() == 0 || returnList.get(0) == null) {
             return false;
         }
         doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
-        ArrayList<ElementContainer> partsOrParents = null;
+        List<ElementContainer> partsOrParents = null;
         if (parts) {
             partsOrParents = returnList.get(returnList.size() - 1).getElement().getDirectPartContainer(doc);
         } else {
@@ -1262,8 +1260,8 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return Liste mit <code>ModelElement</code>en
      */
-    public final ArrayList<ModelElement> getPartAndParentElements() {
-        HashSet<ModelElement> returnSet = new HashSet<ModelElement>();
+    public final List<ModelElement> getPartAndParentElements() {
+        Set<ModelElement> returnSet = new HashSet<>();
         for (ModelElement parent : getParentElements()) {
             returnSet.addAll(parent.getPartElements());
         }
@@ -1271,7 +1269,7 @@ public abstract class ModelElement extends UserFieldTarget {
             returnSet.addAll(getPartElements());
             returnSet.add(this);
         }
-        return new ArrayList<ModelElement>(returnSet);
+        return new ArrayList<>(returnSet);
     }
 
     /**
@@ -1281,9 +1279,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc <code>GraphDocument</code> in dem gesucht werden soll
      * @return Liste mit <code>ElementContainer</code>n
      */
-    public final ArrayList<ElementContainer> getPartAndParentContainer(final GraphDocument doc) {
-        ArrayList<ModelElement> partsAndParents = getPartAndParentElements();
-        ArrayList<ElementContainer> returnList = new ArrayList<ElementContainer>(partsAndParents.size());
+    public final List<ElementContainer> getPartAndParentContainer(final GraphDocument doc) {
+        List<ModelElement> partsAndParents = getPartAndParentElements();
+        List<ElementContainer> returnList = new ArrayList<>(partsAndParents.size());
         for (ModelElement me : partsAndParents) {
             ElementContainer ec = me.getContainer(doc);
             if (ec != null) {
@@ -1298,9 +1296,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param addMeAsFirst
      * @return
      */
-    private final ArrayList<ElementContainer> getPartOrParentContainer(GraphDocument doc, final boolean addMeAsFirst, final boolean parts) {
+    private final List<ElementContainer> getPartOrParentContainer(GraphDocument doc, final boolean addMeAsFirst, final boolean parts) {
         doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
-        ArrayList<ElementContainer> al = new ArrayList<ElementContainer>();
+        List<ElementContainer> al = new ArrayList<>();
         al.add(getContainer(doc));
         getPartOrParentContainer(al, doc, parts, false);
         if (!addMeAsFirst) {
@@ -1314,9 +1312,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param doc
      * @param addMeAsFirst
-     * @return Eine <code>ArrayList</code> gefüllt mit <code>ElementContainer</code>n.
+     * @return Eine <code>List</code> gefüllt mit <code>ElementContainer</code>n.
      */
-    public final ArrayList<ElementContainer> getPartContainer(final GraphDocument doc, final boolean addMeAsFirst) {
+    public final List<ElementContainer> getPartContainer(final GraphDocument doc, final boolean addMeAsFirst) {
         return getPartOrParentContainer(doc, addMeAsFirst, true);
     }
 
@@ -1324,22 +1322,22 @@ public abstract class ModelElement extends UserFieldTarget {
      * Gibt die Parts in Form von <code>ModelElement</code> zurück.
      *
      * @param addMeAsFirst
-     * @return Eine <code>ArrayList</code> gefüllt mit <code>ModelElement</code>s.
+     * @return Eine <code>List</code> gefüllt mit <code>ModelElement</code>s.
      */
-    public final ArrayList<ModelElement> getPartElements(final boolean addMeAsFirst) {
+    public final List<ModelElement> getPartElements(final boolean addMeAsFirst) {
         if (!addMeAsFirst) {
-            return new ArrayList<ModelElement>(getPartElements());
+            return new ArrayList<>(getPartElements());
         }
         Set<ModelElement> s = getPartElements();
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>(s.size() + 1);
+        List<ModelElement> returnList = new ArrayList<>(s.size() + 1);
         returnList.add(this);
         returnList.addAll(s);
         return returnList;
     }
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
-    public final HashSet<ModelElement> getParentElements() {
-        HashSet<ModelElement> list = new HashSet<ModelElement>();
+    public final Set<ModelElement> getParentElements() {
+        Set<ModelElement> list = new HashSet<>();
         getParentElementsRecursive(list);
         return list;
     }
@@ -1360,8 +1358,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
-    public final HashSet<ModelElement> getPartElements() {
-        HashSet<ModelElement> list = new HashSet<ModelElement>();
+    public final Set<ModelElement> getPartElements() {
+        Set<ModelElement> list = new HashSet<>();
         getPartElementsRecursive(list);
         return list;
     }
@@ -1386,9 +1384,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return
      */
-    public final ArrayList<ModelElement> getDirectPartElements() {
+    public final List<ModelElement> getDirectPartElements() {
         Class<? extends PartOfBeziehung>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
+        List<ModelElement> returnList = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> c : hasPartEdgeClasses) {
             returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.BACKWARD));
         }
@@ -1400,9 +1398,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return
      */
-    public final ArrayList<ModelElement> getDirectParentElements() {
+    public final List<ModelElement> getDirectParentElements() {
         Class<? extends PartOfBeziehung>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
+        List<ModelElement> returnList = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
             returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.FORWARD));
         }
@@ -1414,9 +1412,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param doc
      * @param addMeAsFirst
-     * @return Eine <code>ArrayList</code> gefüllt mit <code>ElementContainer</code>n.
+     * @return Eine <code>List</code> gefüllt mit <code>ElementContainer</code>n.
      */
-    public final ArrayList<ElementContainer> getParentContainer(final GraphDocument doc, final boolean addMeAsFirst) {
+    public final List<ElementContainer> getParentContainer(final GraphDocument doc, final boolean addMeAsFirst) {
         return getPartOrParentContainer(doc, addMeAsFirst, false);
     }
 
@@ -1425,14 +1423,14 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param doc
      * @param addMeAsFirst
-     * @return Eine <code>ArrayList</code> gefüllt mit <code>ModelElement</code>s.
+     * @return Eine <code>List</code> gefüllt mit <code>ModelElement</code>s.
      */
-    public final ArrayList<ModelElement> getParentElements(final boolean addMeAsFirst) {
+    public final List<ModelElement> getParentElements(final boolean addMeAsFirst) {
         if (!addMeAsFirst) {
-            return new ArrayList<ModelElement>(getParentElements());
+            return new ArrayList<>(getParentElements());
         }
         Set<ModelElement> s = getParentElements();
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>(s.size() + 1);
+        List<ModelElement> returnList = new ArrayList<>(s.size() + 1);
         returnList.add(this);
         returnList.addAll(s);
         return returnList;
@@ -1443,14 +1441,14 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return
      */
-    public final HashSet<ModelElement> getAbsolutePartElements() {
-        HashSet<ModelElement> returnSet = new HashSet<ModelElement>(1);
-        HashSet<ModelElement> parts = new HashSet<ModelElement>();
+    public final Set<ModelElement> getAbsolutePartElements() {
+        Set<ModelElement> returnSet = new HashSet<>(1);
+        Set<ModelElement> parts = new HashSet<>();
         parts.add(this);
         while (parts.size() > 0) {
-            HashSet<ModelElement> partParts = new HashSet<ModelElement>();
+            Set<ModelElement> partParts = new HashSet<>();
             for (ModelElement part : parts) {
-                ArrayList<ModelElement> pParts = part.getDirectPartElements();
+                List<ModelElement> pParts = part.getDirectPartElements();
                 if (pParts.size() == 0) {
                     returnSet.add(part);
                 } else {
@@ -1468,7 +1466,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public final boolean isInPartOfCyle(GraphDocument doc) {
         doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
-        ArrayList<ElementContainer> al = new ArrayList<ElementContainer>();
+        List<ElementContainer> al = new ArrayList<>();
         al.add(getContainer(doc));
         return getPartOrParentContainer(al, doc, true, true);
     }
@@ -1548,9 +1546,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param testonly Wenn <code>true</code> wird beim ersten gefundenen Element abgerochen und <code>true</code> zurück gegeben
      * @return <code>true</code>, wenn mind. ein Element gefunden wurde, das in die Rückgabeliste gehört / Braucht man vielleicht und sollte in
      *         Analogie zu den Part-OfBeziehungen (oder irgendwie über dieselbe Funktion gemacht werden private final boolean
-     *         getCompositionMasterOrSlaveContainer(ArrayList<ElementContainer> returnList, GraphDocument doc, boolean slave, boolean testonly) { if
+     *         getCompositionMasterOrSlaveContainer(List<ElementContainer> returnList, GraphDocument doc, boolean slave, boolean testonly) { if
      *         ((returnList == null) || (returnList.size() == 0) || (returnList.get(0) == null)) return false; doc =
-     *         (isUnique() ? doc.getCollection().getGraphDocument() : doc); ArrayList<ElementContainer> masterOrSlaves = null; if (slave)
+     *         (isUnique() ? doc.getCollection().getGraphDocument() : doc); List<ElementContainer> masterOrSlaves = null; if (slave)
      *         masterOrSlaves = returnList.get(returnList.size()-1).getElement().getDirectCompositionSlaveContainer(doc); else
      *         masterOrSlaves = returnList.get(returnList.size()-1).getElement().getDirectCompositionMasterContainer(doc); for (int i = 0; i <
      *         masterOrSlaves.size(); i++) { boolean found = false; ElementContainer ms = masterOrSlaves.get(i); if
@@ -1563,8 +1561,8 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return
      */
-    public final ArrayList<? extends ModelElement> getDirectCompositionSlaveElements() {
-        ArrayList<ModelElement> retVal = new ArrayList<ModelElement>();
+    public final List<? extends ModelElement> getDirectCompositionSlaveElements() {
+        List<ModelElement> retVal = new ArrayList<>();
         for (Kante edge : getEdges()) {
             if (edge instanceof Composition) {
                 Composition comp = (Composition) edge;
@@ -1582,9 +1580,9 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return
      */
-    public final ArrayList<? extends ModelElement> getDirectCompositionMasterElements() {
+    public final List<? extends ModelElement> getDirectCompositionMasterElements() {
         //meistens ist es genau ein Master
-        ArrayList<ModelElement> retVal = new ArrayList<ModelElement>(1);
+        List<ModelElement> retVal = new ArrayList<>(1);
         for (Kante edge : getEdges()) {
             if (edge instanceof Composition) {
                 Composition comp = (Composition) edge;
@@ -1603,7 +1601,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return
      */
-    public final ArrayList<ElementContainer> getDirectCompositionSlaveContainer(final GraphDocument doc) {
+    public final List<ElementContainer> getDirectCompositionSlaveContainer(final GraphDocument doc) {
         return getContainer(getDirectCompositionSlaveElements(), doc);
     }
 
@@ -1614,7 +1612,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return
      */
-    public final ArrayList<ElementContainer> getDirectCompositionMasterContainer(final GraphDocument doc) {
+    public final List<ElementContainer> getDirectCompositionMasterContainer(final GraphDocument doc) {
         return getContainer(getDirectCompositionMasterElements(), doc);
     }
 
@@ -1627,29 +1625,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc
      * @return
      */
-    public static final ArrayList<ElementContainer> getContainer(final ArrayList<? extends ModelElement> elements, final GraphDocument doc) {
-        ArrayList<ElementContainer> container = new ArrayList<ElementContainer>(elements.size());
+    public static final List<ElementContainer> getContainer(final List<? extends ModelElement> elements, final GraphDocument doc) {
+        List<ElementContainer> container = new ArrayList<>(elements.size());
         for (ModelElement me : elements) {
             container.add(me.getContainer(doc));
         }
         return container;
     }
-
-    //	public final ArrayList<? extends ModelElement> getCompositionSlaveElements(){
-    //		return null;
-    //	}
-    //
-    //	public final ArrayList<? extends ModelElement> getCompositionMasterElements(){
-    //		return null;
-    //	}
-    //
-    //	public final ArrayList<ElementContainer> getCompositionSlaveContainer(GraphDocument doc){
-    //		return null;
-    //	}
-    //
-    //	public final ArrayList<ElementContainer> getCompositionMasterContainer(GraphDocument doc){
-    //		return null;
-    //	}
 
     //////////////////////
     // Ende Composition //
@@ -1662,7 +1644,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param searchElementClass
      * @return
      */
-    public final ArrayList<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass) {
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass) {
         return getConnectedElements(searchElementClass, (Class<? extends Kante>) null);
     }
 
@@ -1673,7 +1655,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @return
      */
-    public final ArrayList<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
         return getConnectedElements(searchElementClass, edgeClass, Doppelkante.ANY);
     }
 
@@ -1685,7 +1667,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction
      * @return
      */
-    public final ArrayList<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass, final int direction) {
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass, final int direction) {
         return getConnectedElements(searchElementClass, edgeClass, direction, false);
     }
 
@@ -1696,9 +1678,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @param direction
      * @param alphabetical
-     * @return ArrayList mit allen verbundenen Knoten
+     * @return List mit allen verbundenen Knoten
      */
-    public final ArrayList<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass, final int direction, final boolean alphabetical) {
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass, final int direction, final boolean alphabetical) {
         return getConnectedElements(searchElementClass, null, edgeClass, direction, alphabetical);
     }
 
@@ -1711,11 +1693,11 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @param direction
      * @param alphabetical
-     * @return ArrayList mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
      */
     @SuppressWarnings("unchecked")
-    public final ArrayList<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final boolean alphabetical) {
-        return (ArrayList<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, false, alphabetical);
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final boolean alphabetical) {
+        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, false, alphabetical);
     }
 
     /**
@@ -1731,10 +1713,10 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param container wenn <code>true</code>, werden die <code>ElementContainer</code> der gefundenen Elemente zurück gegeben; sonst die Elemente
      *            selbst
      * @param alphabetical
-     * @return ArrayList mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
+     * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
      */
-    private final ArrayList<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final boolean container, final boolean alphabetical) {
-        ArrayList<Object> knoten = new ArrayList<Object>(edges.size());
+    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final boolean container, final boolean alphabetical) {
+        List<Object> knoten = new ArrayList<>(edges.size());
 
         if (doc == null && container) {
             System.err.println("Can't find ElementContainer with an null-GraphDocument");
@@ -1823,9 +1805,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * Gibt alle <code>ModelElement</code>s zurück, die mit diesem <code>ModelElement</code> im angegebenen <code>GraphDocument</code> verbunden sind.
      *
      * @param edgeClass alle Kanten des Types
-     * @return ArrayList mit den verbundenen ModelElementen
+     * @return List mit den verbundenen ModelElementen
      */
-    public ArrayList<ModelElement> getConnectedElementsByEdge(final Class<? extends Kante> edgeClass) {
+    public List<ModelElement> getConnectedElementsByEdge(final Class<? extends Kante> edgeClass) {
         return getConnectedElementsByEdge(Kante.getOther(edgeClass, getClass()), edgeClass);
     }
 
@@ -1835,10 +1817,10 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass alle Kanten des Types
      * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
      *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
-     * @return ArrayList mit den verbundenen ModelElementen
+     * @return List mit den verbundenen ModelElementen
      */
-    public ArrayList<ModelElement> getConnectedElementsByEdge(final Class<? extends ModelElement> targetElementClass, final Class<? extends Kante> edgeClass) {
-        ArrayList<ModelElement> retVal = new ArrayList<ModelElement>(edges.size());
+    public List<ModelElement> getConnectedElementsByEdge(final Class<? extends ModelElement> targetElementClass, final Class<? extends Kante> edgeClass) {
+        List<ModelElement> retVal = new ArrayList<>(edges.size());
         for (Kante edge : edges) {
             if (edgeClass.isAssignableFrom(edge.getClass())) {
                 ModelElement me = edge.getOther(this);
@@ -1881,8 +1863,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass Klasse der zu suchenden Kanten
      * @return
      */
-    public final ArrayList<Kante> getEdges(final Class<? extends Kante> edgeClass) {
-        ArrayList<Kante> returnList = new ArrayList<Kante>(edges.size());
+    public final List<Kante> getEdges(final Class<? extends Kante> edgeClass) {
+        List<Kante> returnList = new ArrayList<>(edges.size());
         for (Kante edge : edges) {
             if (edgeClass.isAssignableFrom(edge.getClass())) {
                 returnList.add(edge);
@@ -2076,7 +2058,7 @@ public abstract class ModelElement extends UserFieldTarget {
         //Wenn es sich bei dieser Kantenart nicht um eine mehrfach zwischend denselben Elementen anlgebare Kante handelt
         if (!ModelConstants.isMultipleEdgeClass(edgeClass)) {
             //wenn schon eine solche Kante zwischen den beiden Elementen existiert
-            ArrayList<Kante> edges = getEdgesTo(me, edgeClass);
+            List<Kante> edges = getEdgesTo(me, edgeClass);
             if (edges != null && edges.size() > 0) {
                 return false;
             }
@@ -2215,7 +2197,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
         //UserFields zusammenführen. Bei allen UserFIelds, bei denen nur ein Element einen Wert hat oder sich die Werte nicht
         //unterscheiden, nimm nur einen gültigen Wert. Haben beide einen unterschiedlichen Wert, führe sie String-technisch zusammen
-        HashSet<UserField> allKeys = new HashSet<UserField>(getUserFieldInputValueKeys());
+        Set<UserField> allKeys = new HashSet<>(getUserFieldInputValueKeys());
         allKeys.addAll(other.getUserFieldInputValueKeys());
 
         for (UserField keyUserField : allKeys) {

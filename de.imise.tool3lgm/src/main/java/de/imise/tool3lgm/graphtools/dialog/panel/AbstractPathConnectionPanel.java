@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
 
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
@@ -463,7 +462,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 int minCardinalityForwardToOther = Kante.getMinStartToEndCardinality(edgeType);
                 if (minCardinalityForwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
-                    ArrayList<Kante> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
+                    List<Kante> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
                     //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
                     int edgesForwardToCount = edgesForwardTo.size();
                     //wenn weitere Kanten angelegt werden müssen
@@ -484,7 +483,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 int minCardinalityBackwardToOther = Kante.getMinEndToStartCardinality(edgeType);
                 if (minCardinalityBackwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
-                    ArrayList<Kante> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);
+                    List<Kante> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);
                     //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
                     int edgesBackwardToCount = edgesBackwardTo.size();
                     //wenn weitere Kanten angelegt werden müssen

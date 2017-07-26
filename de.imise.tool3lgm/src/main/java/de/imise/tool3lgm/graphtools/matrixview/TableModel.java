@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.matrixview;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -16,7 +16,7 @@ import de.imise.tool3lgm.log.Log;
 
 /**
  * Beschreibt und verwaltet die Daten einer Matrixsicht über eine (Teil-) Modell
- * 
+ *
  * @author Thomas Rudert, AXS (23.10.07)
  */
 public class TableModel implements Iterable<TableCell> {
@@ -24,10 +24,10 @@ public class TableModel implements Iterable<TableCell> {
     /**
      * ArrayList mit den ModelElementen für die Spalten. <br>
      */
-    private ArrayList<ModelElement> colHeader;
+    private List<ModelElement> colHeader;
 
     /** ArrayList mit den ModelElementen für die Zeilen */
-    private ArrayList<ModelElement> rowHeader;
+    private List<ModelElement> rowHeader;
 
     private Set<TableCell> cellsSet = null;
 
@@ -49,8 +49,9 @@ public class TableModel implements Iterable<TableCell> {
     private boolean absolutePartsOnly = false;
 
     /**
-     * Legt ein neues <code>TableModel</code> an, das erstmal gar nichts darstellt, sondern nur das <code>GraphDocument</code> kennt, aus dem nach dem setzen von gültigen Zeilen und Spaltenklassen die Elementverknüpfungen anzeigen soll. Konstruktor
-     * 
+     * Legt ein neues <code>TableModel</code> an, das erstmal gar nichts darstellt, sondern nur das <code>GraphDocument</code> kennt, aus dem nach dem
+     * setzen von gültigen Zeilen und Spaltenklassen die Elementverknüpfungen anzeigen soll. Konstruktor
+     *
      * @param graphDocument das (Teil-)Modell
      */
     public TableModel(final GraphDocument graphDocument) {
@@ -58,9 +59,10 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * Legt ein neues <code>TableModel</code> an, das in den Zeilen alle Elemente der Klasse <code>rowElementClass</code> und in den Spalten alle Elemente der Klasse <code>colElementClass</code> sowie alle ihre Verbindungen darstellt, wenn die beiden
+     * Legt ein neues <code>TableModel</code> an, das in den Zeilen alle Elemente der Klasse <code>rowElementClass</code> und in den Spalten alle
+     * Elemente der Klasse <code>colElementClass</code> sowie alle ihre Verbindungen darstellt, wenn die beiden
      * Klassen gültige Elementklassen sind. Sind sie ungültig, wird nichts dargestellt.
-     * 
+     *
      * @param graphDocument das (Teil-)Modell
      * @param rowClass Zeilenklasse
      * @param colClass Spaltenklasse
@@ -88,19 +90,19 @@ public class TableModel implements Iterable<TableCell> {
 
     /**
      * gibt ArrayListe mit den String für die Zeilenüberschriften zurück
-     * 
+     *
      * @return ArrayList mit Strings der Zeilenüberschriften
      */
-    public ArrayList<ModelElement> getRowHeaders() {
+    public List<ModelElement> getRowHeaders() {
         return rowHeader;
     }
 
     /**
      * gibt ArrayListe mit den Strings für die Spaltenüberschriften zurück
-     * 
+     *
      * @return ArrayList mit STrings der Spaltenüberschriften
      */
-    public ArrayList<ModelElement> getColHeaders() {
+    public List<ModelElement> getColHeaders() {
         return colHeader;
     }
 
@@ -152,7 +154,7 @@ public class TableModel implements Iterable<TableCell> {
 
     /**
      * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
-     * 
+     *
      * @return <code>true</code>, wenn gültige Klassen ein gültiger Metapfad gesetzt sind, sonst <code>false</code>
      */
     public boolean isValid() {
@@ -167,7 +169,7 @@ public class TableModel implements Iterable<TableCell> {
      */
     private void updateAllCellEntries() {
 
-        cellsSet = new HashSet<TableCell>(colHeader.size() * rowHeader.size());
+        cellsSet = new HashSet<>(colHeader.size() * rowHeader.size());
 
         if (metaPath == null) {
             return;

@@ -96,7 +96,7 @@ public final class GDCollection extends UserFieldTarget {
      * festestellen, dass es als Unteraktion einer anderen Transaktion gestartet wurde und nicht selbst die äußerste
      * Transaktion war.
      */
-    private final Hashtable<Integer, Integer> transStackTable = new Hashtable<Integer, Integer>();
+    private final Hashtable<Integer, Integer> transStackTable = new Hashtable<>();
     //	/*{
     //
     //		@Override
@@ -128,7 +128,7 @@ public final class GDCollection extends UserFieldTarget {
     private LGMGraphDocument doc;
 
     /** Liste aller <code>GraphDocumentListener</code> */
-    private final ArrayList<GraphDocumentListener> listener = new ArrayList<GraphDocumentListener>();
+    private final List<GraphDocumentListener> listener = new ArrayList<>();
     /**
      * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
      * das davor selektierte direkt davor und so weiter. Jedes <code>GraphDocument</code> der Collection - also
@@ -136,12 +136,12 @@ public final class GDCollection extends UserFieldTarget {
      * selektierte aktiviert, im <code>ModelBrowser</code> selektiert und sein Grafikfenster in den Vordergrund
      * geholt.
      */
-    private final ArrayList<LGMGraphDocument> activeGraphDocumentsList = new ArrayList<LGMGraphDocument>();
+    private final List<LGMGraphDocument> activeGraphDocumentsList = new ArrayList<>();
 
     /**
      * Set aller Szenarios in alphabetischer Reihenfolge.
      */
-    private final AlphabeticalSet<Szenario> szenarios = new AlphabeticalSet<Szenario>();
+    private final AlphabeticalSet<Szenario> szenarios = new AlphabeticalSet<>();
 
     /** Dokument wurde geaendert */
     private boolean changed;
@@ -173,7 +173,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Verzeichnis der Bitmap-Icons
      */
-    private final Hashtable<String, byte[]> iconTable = new Hashtable<String, byte[]>(100);
+    private final Hashtable<String, byte[]> iconTable = new Hashtable<>();
 
     /**
      * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
@@ -324,7 +324,7 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
         //alle Elemente des Szenarios löschen -> das kann man dann auch wieder zurück nehmen
-        ArrayList<ElementContainer> elementsToDelete = new ArrayList<ElementContainer>(100);
+        List<ElementContainer> elementsToDelete = new ArrayList<>();
 
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer layer = szenario.getLayer(ModelConstants.LAYERS[i]);
@@ -484,8 +484,8 @@ public final class GDCollection extends UserFieldTarget {
             ecDoc.addUndoCommand(GDCommands.CHANGE_FORM + " " + ecDoc.hashString + " " + ecHash + " " + ec.getForm(), pid);
         }
         if (!ec.hasStandardFont()) {
-            ecDoc.addUndoCommand(
-                    GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+            ecDoc.addUndoCommand(GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(),
+                    pid);
         }
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
@@ -512,7 +512,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public void removeContainerFromSubmodel(final ElementContainer ec, final int pid) {
-        ArrayList<ElementContainer> container = new ArrayList<ElementContainer>();
+        List<ElementContainer> container = new ArrayList<>();
         container.add(ec);
         removeContainerFromSubmodel(container, pid);
     }
@@ -529,7 +529,7 @@ public final class GDCollection extends UserFieldTarget {
     public void removeContainerFromSubmodel(final Collection<ElementContainer> elementsToRemove, final int pid) {
         boolean transctionStarted = false;
         GraphDocument szen = null;
-        ArrayList<ElementContainer> reallyContainerToRemove = new ArrayList<ElementContainer>();
+        List<ElementContainer> reallyContainerToRemove = new ArrayList<>();
         for (ElementContainer ec : elementsToRemove) {
             GraphDocument ecDoc = ec.getGraphDocument();
             //man kann hier nur Elemente aus demselben Szenario (also nicht aus dem Hauptmodell und alle aus dem
@@ -606,7 +606,7 @@ public final class GDCollection extends UserFieldTarget {
             return false;
         }
         //erstmal alle Knickpunkte löschen
-        ArrayList<BendpointContainer> bendPointContainerList = edgeContainer.getBendpointContainerList();
+        List<BendpointContainer> bendPointContainerList = edgeContainer.getBendpointContainerList();
         //die bendPointContainerList wird beim removeBendpoint-Aufruf selbst geändert -> daher einfach von hinten die
         //Knickpunkte löschen.
         for (int k = bendPointContainerList.size() - 1; k >= 0; k--) {
@@ -683,7 +683,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void deleteElement(final ModelElement me, final GraphDocument gdoc, final int pid) {
-        ArrayList<ModelElement> list = new ArrayList<ModelElement>();
+        List<ModelElement> list = new ArrayList<>();
         list.add(me);
         deleteElements(list, gdoc, pid);
     }
@@ -803,7 +803,7 @@ public final class GDCollection extends UserFieldTarget {
 
         //alle Elemente einfach aus den Szenarien löschen
         for (Szenario szen : szenarios) {
-            HashSet<ElementContainer> elementContainer = new HashSet<ElementContainer>();
+            Set<ElementContainer> elementContainer = new HashSet<>();
             for (ModelElement me : allElementsToDelete) {
                 ElementContainer ec = me.getContainer(szen);
                 if (ec instanceof EdgeContainer) {
@@ -1079,7 +1079,7 @@ public final class GDCollection extends UserFieldTarget {
             //minimale kardinalität für die Unterelemente
             int minCardForSubType = Kante.getMinCardinality(me.getClass(), subTypeEdgeClass);
             //bisher verbundene Anzahl von Unterelementen
-            ArrayList<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
+            List<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
             //soviele Unterelemente wie fehlen neu anlegen
             for (int i = connectedSubTypes.size(); i < minCardForSubType; i++) {
                 String name;
@@ -1109,7 +1109,7 @@ public final class GDCollection extends UserFieldTarget {
         for (Szenario szen : szenarios) {
             Set<Class<? extends ModelElement>> startClasses = ModelConstants.getInterLayerStartClasses(clazz);
             for (Class<? extends ModelElement> startClass : startClasses) {
-                ArrayList<ElementContainer> startECs = szen.getElementContainer(startClass);
+                List<ElementContainer> startECs = szen.getElementContainer(startClass);
                 for (ElementContainer ec : startECs) {
                     if (((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections()) {
                         konfC.setVisible(true);
@@ -1398,7 +1398,7 @@ public final class GDCollection extends UserFieldTarget {
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
                     int maxElemCardinality = edge.isStartClass(startElement.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
-                    ArrayList<Kante> edgeList = startElement.getEdgesWith(edge.isStartClass(startElement.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
+                    List<Kante> edgeList = startElement.getEdgesWith(edge.isStartClass(startElement.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
@@ -1603,7 +1603,7 @@ public final class GDCollection extends UserFieldTarget {
         }
 
         Kante ka = null;
-        ArrayList<Kante> edges = k1.getEdgesWith(k2, edgeClass, edgeIndex);
+        List<Kante> edges = k1.getEdgesWith(k2, edgeClass, edgeIndex);
 
         if (edges.size() == 0) {
             return;
@@ -2271,13 +2271,13 @@ public final class GDCollection extends UserFieldTarget {
         }
 
         /* ModellElemente, die kopiert werden müssen */
-        ArrayList<ModelElement> elements = new ArrayList<ModelElement>(size);
+        List<ModelElement> elements = new ArrayList<>(size);
 
         /* HashStrings aller Icons, die kopiert werden müssen */
-        Set<String> bitmaps = new HashSet<String>();
+        Set<String> bitmaps = new HashSet<>();
 
-        bitmaps = new HashSet<String>(collection.getIconTable().size());
-        HashSet<UserField> userFields = new HashSet<UserField>();
+        bitmaps = new HashSet<>(collection.getIconTable().size());
+        Set<UserField> userFields = new HashSet<>();
 
         collection.resolveCopyDependencies(importSzenarios, elements, bitmaps, userFields);
         for (UserField uf : userFields) {
@@ -2373,13 +2373,13 @@ public final class GDCollection extends UserFieldTarget {
         }
 
         /* hastStrings aller ModellElemente, die kopiert werden müssen */
-        ArrayList<ModelElement> elements = new ArrayList<ModelElement>(size);
+        List<ModelElement> elements = new ArrayList<>(size);
 
         /* HashStrings aller Icons, die kopiert werden müssen */
-        HashSet<String> bitmaps = new HashSet<String>(iconTable.size());
+        Set<String> bitmaps = new HashSet<>(iconTable.size());
 
         /* HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen */
-        HashSet<UserField> userFields = new HashSet<UserField>();
+        Set<UserField> userFields = new HashSet<>();
 
         resolveCopyDependencies(export, elements, bitmaps, userFields);
 
@@ -2434,7 +2434,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param userFields
      *            Set, in welches die zu kopierenden benutzdefinierten Eigenschaftsfelder geschrieben werden
      */
-    private void resolveCopyDependencies(final GraphDocument[] export, final ArrayList<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
+    private void resolveCopyDependencies(final GraphDocument[] export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = doc.getLayer(ModelConstants.LAYERS[i]);
@@ -3162,8 +3162,8 @@ public final class GDCollection extends UserFieldTarget {
      * @param elementContainer
      * @return
      */
-    public static final ArrayList<ModelElement> getModelElements(final Collection<? extends ElementContainer> elementContainer) {
-        ArrayList<ModelElement> al = new ArrayList<ModelElement>(elementContainer.size());
+    public static final List<ModelElement> getModelElements(final Collection<? extends ElementContainer> elementContainer) {
+        List<ModelElement> al = new ArrayList<>(elementContainer.size());
         for (ElementContainer ec : elementContainer) {
             al.add(ec.getElement());
         }
@@ -3216,7 +3216,7 @@ public final class GDCollection extends UserFieldTarget {
      *            <code>UserField</code> s deren Eingabewerte gelöscht werden
      *            sollen
      */
-    public void removeUserFieldValues(final ArrayList<UserField> userFieldsToRemove) {
+    public void removeUserFieldValues(final List<UserField> userFieldsToRemove) {
         for (UserField userField : userFieldsToRemove) {
             if (userField.isGlobalOrFormat()) {
                 removeUserField(userField);

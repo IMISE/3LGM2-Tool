@@ -5,7 +5,7 @@
 package de.imise.tool3lgm.graphtools.userfield.calculator;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -217,8 +217,8 @@ public class Calculator {
         String result = null;
 
         // Der FormelStack beinhaltet alle Operanden und Operatoren.
-        Stack<String> formelStack = new Stack<String>();
-        Stack<String> tmp_stack = new Stack<String>();
+        Stack<String> formelStack = new Stack<>();
+        Stack<String> tmp_stack = new Stack<>();
         // hier wird aus dem StringTokenizer ein Stack gemacht, um auf die Elemente besser zugreifen zu können.
 
         while (st.hasMoreTokens()) {
@@ -276,7 +276,7 @@ public class Calculator {
 
         // In einer Schleife: In den operandenStack werden nur die Operanden aus dem FormelStack kopiert, bis der erste Operator kommt. Dann werden die letzten zwei Operanden aus dem operandenStack mit dem nun folgenen Operator aus dem formelStack verrechnet.
         // Das Ergebnis kommt wieder auf den formelStack und die Schleife beginnt von vorn.
-        Stack<String> operandenStack = new Stack<String>();
+        Stack<String> operandenStack = new Stack<>();
         // Hier erfolgt das Berechnen einer Operation.
 
         while (!formelStack.empty()) {
@@ -519,8 +519,8 @@ public class Calculator {
      * @param direction
      * @return
      */
-    public static final ArrayList<Kante> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final String direction) {
-        ArrayList<Kante> kanten = null;
+    public static final List<Kante> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final String direction) {
+        List<Kante> kanten = null;
         //Alle Kanten mit der richtigen Richtung holen
         if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
             kanten = me.getEdgesTo(elemClass, edgeClass);
@@ -558,7 +558,7 @@ public class Calculator {
         }
         Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
 
-        ArrayList<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
+        List<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
         if (kanten.size() == 0) {
@@ -668,7 +668,7 @@ public class Calculator {
         Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
 
         //Alle Kanten mit der richtigen Richtung holen
-        ArrayList<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
+        List<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
         if (kanten.size() == 0) {
@@ -758,7 +758,7 @@ public class Calculator {
      */
     private String getIndi(final UserFieldTarget target, final String indicatorFormula) {
         StringTokenizer st = new StringTokenizer(indicatorFormula, "| ()");
-        Stack<String> stack = new Stack<String>();
+        Stack<String> stack = new Stack<>();
         int stacksize = 0;
         while (st.hasMoreElements()) {
             //Falls der Wert ein Komma enthält, muss es durch einen . ersetzt
@@ -773,7 +773,7 @@ public class Calculator {
             stacksize++;
         }
         //erstes und zweites Element wegschmeißen
-        Stack<String> tmp_stack = new Stack<String>();
+        Stack<String> tmp_stack = new Stack<>();
         while (!stack.empty()) {
             tmp_stack.push(stack.pop());
         }
@@ -839,7 +839,7 @@ public class Calculator {
      * @return Postfixnotation der Formel
      */
     private static final String getPostFix(String infix) {
-        Stack<String> stack = new Stack<String>();
+        Stack<String> stack = new Stack<>();
         stack.push("(");
         infix += " )";
         StringTokenizer st = new StringTokenizer(infix);

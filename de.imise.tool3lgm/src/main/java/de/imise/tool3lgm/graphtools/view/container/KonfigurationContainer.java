@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -143,15 +144,15 @@ public class KonfigurationContainer extends NodeContainer {
         GraphDocument selectedDoc = frame.getGraphDocument();
 
         Konfiguration konf = (Konfiguration) getElement();
-        ArrayList<ElementContainer> start = konf.getServerContainer(selectedDoc);
-        ArrayList<ElementContainer> end = konf.getClientContainer(selectedDoc);
+        List<ElementContainer> start = konf.getServerContainer(selectedDoc);
+        List<ElementContainer> end = konf.getClientContainer(selectedDoc);
 
         for (int a = 0; a < start.size(); a++) {
             NodeContainer c1 = (NodeContainer) start.get(a);
             if (c1 == null) {
                 continue;
             }
-            ArrayList<ElementContainer> c1C = null;
+            List<ElementContainer> c1C = null;
             if (!c1.isVisible()) {
                 c1C = c1.getSurrogateContainer();
             } else {
@@ -178,7 +179,7 @@ public class KonfigurationContainer extends NodeContainer {
                         if (c2 == null) {
                             continue;
                         }
-                        ArrayList<ElementContainer> c2C = null;
+                        List<ElementContainer> c2C = null;
                         if (!c2.isVisible()) {
                             c2C = c2.getSurrogateContainer();
                         } else {

@@ -5,9 +5,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -105,11 +106,11 @@ public class ExportPdvb4AwbPlugin implements Plugin {
         for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, Doppelkante.ANY, true)) {
 
             //Alle verbundenen Phys. Datenbverarbeitungsbausteine holen und davon alle absoluten Parts
-            ArrayList<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, Doppelkante.ANY, true);
-            HashSet<ModelElement> absolutePartPdvbs = new HashSet<ModelElement>();
+            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, Doppelkante.ANY, true);
+            Set<ModelElement> absolutePartPdvbs = new HashSet<>();
             for (int i = 0; i < pdvbList.size(); i++) {
                 ModelElement pdvb = pdvbList.get(i);
-                HashSet<ModelElement> absoluteParts = pdvb.getAbsolutePartElements();
+                Set<ModelElement> absoluteParts = pdvb.getAbsolutePartElements();
                 if (absoluteParts.size() > 0) {
                     absolutePartPdvbs.addAll(absoluteParts);
                 } else {

@@ -168,7 +168,7 @@ public class LGMGraphDocument extends GraphDocument {
     public void _duplicateAufOrgs() {
         for (ElementContainer aufOrgC : getElementContainer(AufOrgKombination.class)) {
             ModelElement aufOrg = aufOrgC.getElement();
-            ArrayList<ElementContainer> orgs = aufOrg.getConnectedContainer(Organisationseinheit.class, this);
+            List<ElementContainer> orgs = aufOrg.getConnectedContainer(Organisationseinheit.class, this);
             while (orgs.size() > 1) {
                 NodeContainer orgC = (NodeContainer) orgs.get(0);
                 Knoten org = orgC.getKnoten();
@@ -194,7 +194,7 @@ public class LGMGraphDocument extends GraphDocument {
     public void _duplicateABKonfs() {
         for (ElementContainer konfC : getElementContainer(ABKonfiguration.class)) {
             ModelElement konf = konfC.getElement();
-            ArrayList<ElementContainer> aufOrgs = konf.getConnectedContainer(AufOrgKombination.class, this);
+            List<ElementContainer> aufOrgs = konf.getConnectedContainer(AufOrgKombination.class, this);
             while (aufOrgs.size() > 1) {
                 ElementContainer aufOrgC = aufOrgs.get(0);
                 ModelElement aufOrg = aufOrgC.getElement();
@@ -204,7 +204,7 @@ public class LGMGraphDocument extends GraphDocument {
                 newKonfC.getKnoten().setContainer(this, newKonfC);
                 layer[3].add(newKonfC);
                 gdcoll.link(AwbkAufOrgVerbindung.class, newKonfC.getElement(), aufOrg, TransactionManager.STANDARD_PID);
-                ArrayList<ElementContainer> awbs = konf.getConnectedContainer(Anwendungsbaustein.class, this);
+                List<ElementContainer> awbs = konf.getConnectedContainer(Anwendungsbaustein.class, this);
                 for (ElementContainer awbC : awbs) {
                     gdcoll.link(AwbAwbkVerbindung.class, newKonfC.getElement(), awbC.getElement(), TransactionManager.STANDARD_PID);
                 }
@@ -247,8 +247,8 @@ public class LGMGraphDocument extends GraphDocument {
             Object[] buttons = new Object[] {
                     Tool3lgmConstants.getResString("ok")
             };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION,
-                    JOptionPane.ERROR_MESSAGE, null, buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
+                    null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -305,7 +305,7 @@ public class LGMGraphDocument extends GraphDocument {
         StringBuilder retVal = new StringBuilder(ToolXMLParser.getCurrentVersionString() + "<" + masterTag + ">");
 
         List<ModelElement> copyElements = getSortedSelection();
-        Set<UserField> userFields = new HashSet<UserField>();
+        Set<UserField> userFields = new HashSet<>();
         gdcoll.resolveCopyDependencies(copyElements, userFields);
 
         retVal.append(gdcoll.getUserFieldDefinitions().getCopyString(userFields) + "<objects>");
@@ -321,7 +321,7 @@ public class LGMGraphDocument extends GraphDocument {
         retVal.append("</objects><szenario>");
 
         ElementContainer container;
-        HashSet<String> icons = new HashSet<String>();
+        HashSet<String> icons = new HashSet<>();
 
         for (ModelElement me : copyElements) {
             if (me.isUnique()) {
@@ -412,7 +412,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param elementClass
      */
     public void clearTextRightDown(final Class<? extends Knoten> elementClass) {
-        ArrayList<ElementContainer> elemContainer = getElementContainer(elementClass);
+        List<ElementContainer> elemContainer = getElementContainer(elementClass);
         for (int i = 0; i < elemContainer.size(); i++) {
             ((NodeContainer) elemContainer.get(i)).setAdditionalTextRightDown(null);
         }
@@ -640,7 +640,7 @@ public class LGMGraphDocument extends GraphDocument {
         }
 
         List<ModelElement> copyElements = getSortedSelection();
-        Set<UserField> userFields = new HashSet<UserField>();
+        Set<UserField> userFields = new HashSet<>();
         gdcoll.resolveCopyDependencies(copyElements, userFields);
 
         for (UserField uf : userFields) {
@@ -651,10 +651,10 @@ public class LGMGraphDocument extends GraphDocument {
 
         ModelElement newE;
 
-        ArrayList<Kante> edges = new ArrayList<Kante>();
-        ArrayList<BendpointContainer> knickpunkte = new ArrayList<BendpointContainer>();
+        List<Kante> edges = new ArrayList<>();
+        List<BendpointContainer> knickpunkte = new ArrayList<>();
 
-        ArrayList<ElementContainer> tmpActive = new ArrayList<ElementContainer>(selectedContainer);
+        List<ElementContainer> tmpActive = new ArrayList<>(selectedContainer);
 
         mainDoc.deselectAll(false);
 
@@ -730,7 +730,7 @@ public class LGMGraphDocument extends GraphDocument {
                             throw new Exception(Tool3lgmConstants.getErrString("error"));
                         }
                         dest.getLayer(kante.layerFor()).add(newC);
-                        ArrayList<BendpointContainer> kpList = newC.getBendpointContainerList();
+                        List<BendpointContainer> kpList = newC.getBendpointContainerList();
                         for (int j = 0; j < kpList.size(); j++) {
                             dest.getLayer(kante.layerFor()).add(kpList.get(j));
                         }
@@ -739,7 +739,7 @@ public class LGMGraphDocument extends GraphDocument {
                     destMainDoc.addToSelection(kante.getContainer(destMainDoc), pid);
                 }
             }
-            ArrayList<EdgeContainer> edgeConts = new ArrayList<EdgeContainer>();
+            List<EdgeContainer> edgeConts = new ArrayList<>();
             while (!knickpunkte.isEmpty()) {
                 BendpointContainer kp = knickpunkte.remove(0);
                 BendpointContainer oldKP = findBendpointContainerCoded(kp.getHashString());

@@ -5,6 +5,7 @@ package de.imise.tool3lgm;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -86,7 +87,7 @@ public class Static {
      *
      * @return
      */
-    public static ArrayList<GDCollection> getCollections() {
+    public static List<GDCollection> getCollections() {
         if (tool == null) {
             return null;
         }
@@ -321,12 +322,9 @@ public class Static {
      * @param messageResKey
      */
     public static void showMessgae(final Component parenComponent, final String messageResKey) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                String message = Tool3lgmConstants.getResString(messageResKey);
-                JOptionPane.showMessageDialog(parenComponent, message);
-            }
+        SwingUtilities.invokeLater(() -> {
+            String message = Tool3lgmConstants.getResString(messageResKey);
+            JOptionPane.showMessageDialog(parenComponent, message);
         });
     }
 

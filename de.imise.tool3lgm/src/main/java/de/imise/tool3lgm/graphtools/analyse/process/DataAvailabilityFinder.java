@@ -152,7 +152,7 @@ public class DataAvailabilityFinder {
      * @return
      */
     public Collection<SameTypePair<ModelElement>> getMissingCommunicationLinks(final Collection<ModelElement> sender, final Collection<ModelElement> receiver, final Objekttyp objecttype) {
-        List<SameTypePair<ModelElement>> returnList = new ArrayList<SameTypePair<ModelElement>>();
+        List<SameTypePair<ModelElement>> returnList = new ArrayList<>();
         for (ModelElement send : sender) {
             Anwendungsbaustein sAWB = (Anwendungsbaustein) send;
             for (ModelElement reci : receiver) {
@@ -162,7 +162,7 @@ public class DataAvailabilityFinder {
                 ShortestCommunicationPathFinder.MinimalCommunicationPath minPath = commPathFinder.getShortestPath(sAWB, (Anwendungsbaustein) reci, objecttype);
                 List<ModelElement> al = minPath.getAwbPath();
                 if (al == null || al.size() == 0) {
-                    returnList.add(new SameTypePair<ModelElement>(send, reci));
+                    returnList.add(new SameTypePair<>(send, reci));
                 }
             }
         }
@@ -179,7 +179,7 @@ public class DataAvailabilityFinder {
      * @return
      */
     public ShortestCommunicationPathFinder.MinimalCommunicationPath getMinimalInterpretingPath(final Aufgabe function, final Objekttyp objecttype) {
-        ArrayList<ModelElement> aufOrgKombis = function.getConnectedElements(AufOrgKombination.class);
+        List<ModelElement> aufOrgKombis = function.getConnectedElements(AufOrgKombination.class);
         // von der Aufgabe und ihren Oberaufgaben alle Konfigs einsammeln
         for (ModelElement aufParent : function.getParentElements()) {
             aufOrgKombis.addAll(aufParent.getConnectedElements(AufOrgKombination.class));
@@ -283,7 +283,7 @@ public class DataAvailabilityFinder {
         // int unavailableET = 0;
 
         // alle Berabeiten/Interpretieren-Beziehungen holen
-        ArrayList<ModelElement> readUpdateEdges = doc.getModelItems(AufObjVerbindung.class);
+        Iterable<ModelElement> readUpdateEdges = doc.getModelItems(AufObjVerbindung.class);
 
         for (ModelElement e : readUpdateEdges) {
             Doppelkante edge = (Doppelkante) e;
@@ -315,13 +315,13 @@ public class DataAvailabilityFinder {
             outputDialog.appendln("Speicherorte des Objekttyps:");
             outputDialog.appendln(mac.expandPartOfElementSet(mac.getDirectMasterAndStorageApplicationSystems(ot)).toString().replace('\n', ' '));
 
-            ArrayList<ModelElement> aufOrgKombis = auf.getConnectedElements(AufOrgKombination.class);
+            List<ModelElement> aufOrgKombis = auf.getConnectedElements(AufOrgKombination.class);
             // von der Aufgabe und ihren Oberaufgaben alle Konfigs einsammeln
             for (ModelElement parent : auf.getParentElements()) {
                 aufOrgKombis.addAll(parent.getConnectedElements(AufOrgKombination.class));
             }
             for (ModelElement aufOrg : aufOrgKombis) {
-                ArrayList<ModelElement> abKonfigs = aufOrg.getConnectedElements(ABKonfiguration.class);
+                List<ModelElement> abKonfigs = aufOrg.getConnectedElements(ABKonfiguration.class);
                 if (abKonfigs.size() == 0) {
                     outputDialog.appendln("Konfiguration:");
                     outputDialog.appendln("[]");
@@ -330,7 +330,7 @@ public class DataAvailabilityFinder {
                     continue;
                 }
                 for (ModelElement abKonf : abKonfigs) {
-                    ArrayList<ModelElement> konfigAWBs = abKonf.getConnectedElements(Anwendungsbaustein.class);
+                    List<ModelElement> konfigAWBs = abKonf.getConnectedElements(Anwendungsbaustein.class);
                     outputDialog.appendln("Konfiguration:");
                     s = konfigAWBs.toString().replace('\n', ' ');
                     outputDialog.appendln(s);
@@ -374,19 +374,19 @@ public class DataAvailabilityFinder {
             s = s.replace('\n', ' ');
             outputDialog.appendln(s, true);
             outputDialog.appendln("Master-Anwendungssysteme des Objekttyps:");
-            List<ModelElement> awbList = new ArrayList<ModelElement>(mac.expandPartOfElementSet(mac.getDirectMasterApplicationSystems(ot)));
+            List<ModelElement> awbList = new ArrayList<>(mac.expandPartOfElementSet(mac.getDirectMasterApplicationSystems(ot)));
             Alphabetical.sort(awbList);
             outputDialog.appendln(awbList.toString().replace('\n', ' '));
             outputDialog.appendln("Speichernde Anwendungssysteme des Objekttyps:");
-            awbList = new ArrayList<ModelElement>(mac.expandPartOfElementSet(mac.getDirectStorageApplicationSystems(ot)));
+            awbList = new ArrayList<>(mac.expandPartOfElementSet(mac.getDirectStorageApplicationSystems(ot)));
             Alphabetical.sort(awbList);
             outputDialog.appendln(awbList.toString().replace('\n', ' '));
             outputDialog.appendln("Master- und speichernde Anwendungssysteme des Objekttyps:");
-            awbList = new ArrayList<ModelElement>(mac.expandPartOfElementSet(mac.getDirectMasterAndStorageApplicationSystems(ot)));
+            awbList = new ArrayList<>(mac.expandPartOfElementSet(mac.getDirectMasterAndStorageApplicationSystems(ot)));
             Alphabetical.sort(awbList);
             outputDialog.appendln(awbList.toString().replace('\n', ' '));
 
-            ArrayList<ModelElement> aufOrgKombis = auf.getConnectedElements(AufOrgKombination.class);
+            List<ModelElement> aufOrgKombis = auf.getConnectedElements(AufOrgKombination.class);
             // von der Aufgabe und ihren Oberaufgaben alle Konfigs einsammeln
             for (ModelElement aufParent : auf.getParentElements()) {
                 aufOrgKombis.addAll(aufParent.getConnectedElements(AufOrgKombination.class));

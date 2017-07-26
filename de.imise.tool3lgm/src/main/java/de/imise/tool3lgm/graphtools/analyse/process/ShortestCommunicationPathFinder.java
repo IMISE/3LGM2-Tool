@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.GDCollection;
@@ -24,7 +25,7 @@ import de.imise.util.SameTypePair;
 /**
  * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade ermittelt werden.
  * Integer.MAX_VALUE
- * 
+ *
  * @author AXS Created on 19.06.2008
  */
 public class ShortestCommunicationPathFinder {
@@ -43,7 +44,7 @@ public class ShortestCommunicationPathFinder {
      * oder empfangen werden kann. Der Index einer Schnittstelle in dieser Liste entspricht dem
      * Index der Schnittstelle in der Kosten- und Pfadmatrix.
      */
-    private final HashMap<ModelElement, ArrayList<ModelElement>> objectTypeToInterfaceList = new HashMap<ModelElement, ArrayList<ModelElement>>();
+    private final Map<ModelElement, List<ModelElement>> objectTypeToInterfaceList = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf die dazugehörige Kostenmatrix der Kommunikationswege. Eine
@@ -56,7 +57,7 @@ public class ShortestCommunicationPathFinder {
      * Wert: int-Wert der Kosten, die Kommunikation von Zeilenschnittstelle zu Spaltenschnittstelle
      * verursacht. Gibt es keine Kommunikationsweg, sind die Kosten <code>INFINITY</code>.
      */
-    private final HashMap<ModelElement, int[][]> objectTypeToCostMatrix = new HashMap<ModelElement, int[][]>();
+    private final Map<ModelElement, int[][]> objectTypeToCostMatrix = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf die dazugehörige Pfadmatrix der Kommunikationswege. Eine
@@ -71,7 +72,7 @@ public class ShortestCommunicationPathFinder {
      * beschreiben. Wenn es einen Pfad gibt, sind die Zeilen- und Spaltenschnittstelle immer auch
      * enthalten.
      */
-    private final HashMap<ModelElement, ArrayList<ModelElement>[][]> objectTypeToPathMatrix = new HashMap<ModelElement, ArrayList<ModelElement>[][]>();
+    private final Map<ModelElement, List<ModelElement>[][]> objectTypeToPathMatrix = new HashMap<>();
 
     /**
      * Cache zur effizienten Untersuchung von Beziehungen zwischen Elementen
@@ -209,7 +210,7 @@ public class ShortestCommunicationPathFinder {
 
     /**
      * Das hier ist der Floyd-Warhall-Algorhytmus.
-     * 
+     *
      * @param o Index des Objekttyps, für den die Pfadmatrix mit den kürzesten Pfaden aufgebaut
      *            werden soll.
      */
@@ -224,17 +225,17 @@ public class ShortestCommunicationPathFinder {
         // über den Pfad: Objekttyp - Repräsentationsform - ETNTKombination <-> KommBeziehung -
         // Start und Ende der Kante
         // kann man alle Schnittstellen einsammeln, die den Objekttyp überhaupt übertragen können
-        ArrayList<ModelElement> interfaces = new ArrayList<ModelElement>();
+        List<ModelElement> interfaces = new ArrayList<>();
         // Liste aller Schnittstellenpaare, von denen der Objekttyp von der ersten zur zweiten
         // Schnittstelle geschickt
         // werden kann. Wird ein Objekttyp mit Teil-Objekttypen über eine Kommunikationsbeziehung
         // geschickt, so gilt
         // das auch für alle seine Teile
-        HashSet<SameTypePair<ModelElement>> sendToReceiveInterfacePairs = new HashSet<SameTypePair<ModelElement>>();
+        Set<SameTypePair<ModelElement>> sendToReceiveInterfacePairs = new HashSet<>();
 
         // Repräsentationsformen des OT und seiner übergeordneten Objekttypen holen
         Collection<ModelElement> otAndParents = analyzerCache.getObjectTypeAndParents(ot);
-        HashSet<ModelElement> reprSet = new HashSet<ModelElement>();
+        Set<ModelElement> reprSet = new HashSet<>();
         for (ModelElement otParent : otAndParents) {
             reprSet.addAll(otParent.getConnectedElements(Repraesentationsform.class, ObjReprVerbindung.class));
         }
@@ -246,7 +247,8 @@ public class ShortestCommunicationPathFinder {
             // einsammeln
             for (ModelElement etntdtKombi : ntdt.getConnectedElements(EtntEtdtKombination.class)) {
                 int[] directions = {
-                        Doppelkante.FORWARD, Doppelkante.BACKWARD
+                        Doppelkante.FORWARD,
+                        Doppelkante.BACKWARD
                 };
                 for (int d = 0; d < directions.length; d++) {
                     // für alle Kommunikationsverbindungen, die den Objekttyp in der jewieligen
@@ -262,9 +264,9 @@ public class ShortestCommunicationPathFinder {
                             interfaces.add(end);
                         }
                         if (directions[d] == Doppelkante.FORWARD) {
-                            sendToReceiveInterfacePairs.add(new SameTypePair<ModelElement>(start, end));
+                            sendToReceiveInterfacePairs.add(new SameTypePair<>(start, end));
                         } else {
-                            sendToReceiveInterfacePairs.add(new SameTypePair<ModelElement>(end, start));
+                            sendToReceiveInterfacePairs.add(new SameTypePair<>(end, start));
                         }
                     }
                 }
@@ -277,7 +279,7 @@ public class ShortestCommunicationPathFinder {
 
         int[][] costMatrix = new int[N][N];
         @SuppressWarnings("unchecked")
-        ArrayList<ModelElement>[][] pathMatrix = new ArrayList[N][N];
+        List<ModelElement>[][] pathMatrix = new ArrayList[N][N];
 
         objectTypeToCostMatrix.put(ot, costMatrix);
         objectTypeToPathMatrix.put(ot, pathMatrix);
@@ -292,7 +294,7 @@ public class ShortestCommunicationPathFinder {
         for (int z = 0; z < N; z++) {
             // wird die Liste aller Schnittstellen, die die aktuelle Schnittstelle mit OT erreichen
             // kann
-            ArrayList<ModelElement> allConnectedFromSSWithOT = new ArrayList<ModelElement>();
+            List<ModelElement> allConnectedFromSSWithOT = new ArrayList<>();
 
             ModelElement sZ = interfaces.get(z);
             for (SameTypePair<ModelElement> ssPair : sendToReceiveInterfacePairs) {
@@ -304,7 +306,7 @@ public class ShortestCommunicationPathFinder {
             // Eigentlich sollte eine Schnittstelle immer genau mit 1 Anwendungssystem verbunden
             // sein. Damit im Fehlerfall (keins oder mehr als 1)
             // keine üble Exception fliegt, gehen wir hier mal nicht von dem "eigentlich"-Fall aus
-            Collection<ModelElement> sameAWBsOfInterfaceZ = new HashSet<ModelElement>();
+            Collection<ModelElement> sameAWBsOfInterfaceZ = new HashSet<>();
             for (ModelElement awb : sZ.getConnectedElements(Anwendungsbaustein.class, AwbKommssVerbindung.class)) {
                 sameAWBsOfInterfaceZ.addAll(analyzerCache.getSameApplicationSystems(awb));
             }
@@ -321,12 +323,12 @@ public class ShortestCommunicationPathFinder {
                     continue;
                 }
                 ModelElement sS = interfaces.get(s);
-                ArrayList<ModelElement> awbOfInterfaceS = sS.getConnectedElements(Anwendungsbaustein.class, AwbKommssVerbindung.class);
+                List<ModelElement> awbOfInterfaceS = sS.getConnectedElements(Anwendungsbaustein.class, AwbKommssVerbindung.class);
                 // wenn die beiden Schniistellen auf dem selben Baustein liegen, haben sie die
                 // Kosten 0 und man muss sich den Pfad merken
                 if (sameAWBsOfInterfaceZ.containsAll(awbOfInterfaceS)) {
                     costMatrix[z][s] = 0;
-                    pathMatrix[z][s] = new ArrayList<ModelElement>();
+                    pathMatrix[z][s] = new ArrayList<>();
                     pathMatrix[z][s].add(sZ);
                     pathMatrix[z][s].add(sS);
                     // f1++;
@@ -335,7 +337,7 @@ public class ShortestCommunicationPathFinder {
                     // über die der Objekttyp verschickt werden kann -> Kosten 1 und Pfad merken
                 } else if (allConnectedFromSSWithOT.contains(sS)) {
                     costMatrix[z][s] = 1;
-                    pathMatrix[z][s] = new ArrayList<ModelElement>();
+                    pathMatrix[z][s] = new ArrayList<>();
                     pathMatrix[z][s].add(sZ);
                     pathMatrix[z][s].add(sS);
                     // f2++;
@@ -356,7 +358,7 @@ public class ShortestCommunicationPathFinder {
                     int tempDistance = costMatrix[z][pivot] + costMatrix[pivot][s];
                     if (tempDistance < costMatrix[z][s]) {
                         costMatrix[z][s] = tempDistance;
-                        pathMatrix[z][s] = new ArrayList<ModelElement>(pathMatrix[z][pivot]);
+                        pathMatrix[z][s] = new ArrayList<>(pathMatrix[z][pivot]);
                         for (int k = 1; k < pathMatrix[pivot][s].size(); k++) {
 
                             pathMatrix[z][s].add(pathMatrix[pivot][s].get(k));
@@ -374,9 +376,9 @@ public class ShortestCommunicationPathFinder {
      * @return
      */
     public MinimalCommunicationPath getShortestPath(final Anwendungsbaustein startAWB, final Anwendungsbaustein endAWB, final Objekttyp objekttyp) {
-        ArrayList<ModelElement> start = new ArrayList<ModelElement>(1);
+        List<ModelElement> start = new ArrayList<>(1);
         start.add(startAWB);
-        ArrayList<ModelElement> end = new ArrayList<ModelElement>(1);
+        List<ModelElement> end = new ArrayList<>(1);
         end.add(endAWB);
         return getShortestPath(start, end, objekttyp);
     }
@@ -415,12 +417,12 @@ public class ShortestCommunicationPathFinder {
         /**
          * Comment for <code>interfacePath</code>
          */
-        private ArrayList<ModelElement> interfacePath;
+        private List<ModelElement> interfacePath;
 
         /**
          * Comment for <code>awbPath</code>
          */
-        private ArrayList<ModelElement> awbPath;
+        private List<ModelElement> awbPath;
 
         /**
          * Comment for <code>pathCosts</code>
@@ -457,7 +459,7 @@ public class ShortestCommunicationPathFinder {
             // wenn keine Kommunikation nötig ist, weil Start- und Endbaustein auf demselben
             // Gesamtbaustein liegen
             if (sameAWBInStartEnd != null) {
-                awbPath = new ArrayList<ModelElement>();
+                awbPath = new ArrayList<>();
                 awbPath.add(sameAWBInStartEnd);
                 pathCosts = 0;
                 interfacePathLength = 0;
@@ -483,7 +485,7 @@ public class ShortestCommunicationPathFinder {
                 // wenn keine Kommunikation nötig ist, weil Start- und Endbaustein auf demselben
                 // Gesamtbaustein liegen
                 if (sameAWBInStartEnd != null) {
-                    awbPath = new ArrayList<ModelElement>();
+                    awbPath = new ArrayList<>();
                     awbPath.add(sameAWBInStartEnd);
                     pathCosts = 0;
                     interfacePathLength = 0;
@@ -494,10 +496,10 @@ public class ShortestCommunicationPathFinder {
             // den sPathFinder für den Objekttyp initilisieren, falls nicht schon passiert
             sPathFinder.initShortestPath(objekttyp);
             int[][] costMatrix = sPathFinder.objectTypeToCostMatrix.get(objekttyp);
-            ArrayList<ModelElement>[][] pathMatrix = sPathFinder.objectTypeToPathMatrix.get(objekttyp);
+            List<ModelElement>[][] pathMatrix = sPathFinder.objectTypeToPathMatrix.get(objekttyp);
 
-            HashSet<ModelElement> startSchnittStellen = new HashSet<ModelElement>();
-            HashSet<ModelElement> endSchnittStellen = new HashSet<ModelElement>();
+            Set<ModelElement> startSchnittStellen = new HashSet<>();
+            Set<ModelElement> endSchnittStellen = new HashSet<>();
             // alle Schnittstellen der Startkonfiguration holen
             for (ModelElement awb : fullStartAWBs) {
                 startSchnittStellen.addAll(sPathFinder.analyzerCache.getInterfaces(awb));
@@ -521,7 +523,7 @@ public class ShortestCommunicationPathFinder {
                         continue loop;
                     }
                     // den Pfad zw. den beiden Schnittstellen holen
-                    ArrayList<ModelElement> path = pathMatrix[posOfStartInSchnittStellen][posOfEndInSchnittStellen];
+                    List<ModelElement> path = pathMatrix[posOfStartInSchnittStellen][posOfEndInSchnittStellen];
                     // wenn es einen gibt, dessen Länge bstimmen
                     int length = path == null ? INFINITY : path.size();
                     // wenn der aktuelle Pfad kostengünstiger oder kürzer
@@ -536,7 +538,7 @@ public class ShortestCommunicationPathFinder {
                 }
             }
             if (interfacePath != null) {
-                awbPath = new ArrayList<ModelElement>();
+                awbPath = new ArrayList<>();
                 for (ModelElement ss : interfacePath) {
                     ModelElement owner = ss.getConnectedElements(Anwendungsbaustein.class).get(0);
                     if (awbPath.size() == 0 || awbPath.size() > 0 && awbPath.get(awbPath.size() - 1) != owner) {

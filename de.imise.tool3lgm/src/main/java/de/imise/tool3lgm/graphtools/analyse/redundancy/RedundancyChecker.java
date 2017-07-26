@@ -11,6 +11,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
@@ -99,7 +101,7 @@ public class RedundancyChecker extends WindowAdapter {
         RedundancyChecker rc = new RedundancyChecker();
 
         // Liste in die alle zu füllenden RedundancyAnalysisResult kommen
-        ArrayList<RedundancyAnalysisResult> resultList = new ArrayList<RedundancyAnalysisResult>();
+        List<RedundancyAnalysisResult> resultList = new ArrayList<>();
 
         do {
             String message = "";
@@ -252,7 +254,7 @@ public class RedundancyChecker extends WindowAdapter {
         }
         ConsistencyChecker consistencyChecker = Static.getTool().getConsistencyChecker();
         consistencyChecker.setConsistencyDefinition(consistencyDefinition);
-        ArrayList<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
+        List<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText
@@ -292,7 +294,7 @@ public class RedundancyChecker extends WindowAdapter {
      * @param doc Modell für das die XMLAnalyse durchgeführt wurde
      * @param redundancyAnalysisResults
      */
-    private static void showResult(final ArrayList<RedundancyAnalysisResult> redundancyAnalysisResults) {
+    private static void showResult(final List<RedundancyAnalysisResult> redundancyAnalysisResults) {
 
         if (redundancyAnalysisResults == null || redundancyAnalysisResults.size() == 0) {
             return;
@@ -335,7 +337,7 @@ public class RedundancyChecker extends WindowAdapter {
 
             // Nicht verzichtbare Anwendungssysteme
             outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_not_dispensible_title") + ":", true);
-            AlphabeticalSet<ModelElement> al = new AlphabeticalSet<ModelElement>(result.exclusiveAWB);
+            Set<ModelElement> al = new AlphabeticalSet<>(result.exclusiveAWB);
             al.addAll(result.moreNeededAWB);
             if (al.size() == 0) {
                 outputDialog.appendln(Tool3lgmConstants.getResString("none"));
@@ -537,12 +539,12 @@ public class RedundancyChecker extends WindowAdapter {
         /**
          * Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
          */
-        private final ArrayList<RedundancyAnalysisResult> resultList;
+        private final List<RedundancyAnalysisResult> resultList;
 
         /**
          * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
          */
-        public RedundancyThread(final ArrayList<RedundancyAnalysisResult> resultsToFill) {
+        public RedundancyThread(final List<RedundancyAnalysisResult> resultsToFill) {
             super();
             resultList = resultsToFill;
         }

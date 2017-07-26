@@ -1,9 +1,9 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -20,7 +20,7 @@ import de.imise.tool3lgm.log.Log;
  * Systems" veröffentlicht hat. Es geht um Funktionale Redundanzrate und Funktionale
  * Untersättigungsrate sowie um Datenredundanz von Objekttypen. Das ganze ist eine Art Vorläufer zur
  * "richtigen" Funktionalen Redundanzanalyse.
- * 
+ *
  * @author AXS
  */
 public class SimpleRedundancyAnalysis {
@@ -56,7 +56,7 @@ public class SimpleRedundancyAnalysis {
      * @param show
      */
     public void computeRedundance(final Class<? extends Knoten> elementClass, final boolean show) {
-        ArrayList<ElementContainer> allElemCont = doc.getElementContainer(elementClass, true);
+        List<ElementContainer> allElemCont = doc.getElementContainer(elementClass, true);
         int size = allElemCont.size();
         if (size == 0) {
             return;
@@ -92,7 +92,7 @@ public class SimpleRedundancyAnalysis {
         for (int i = 0; i < leafsSize; i++) {
             Knoten knoten = (Knoten) leafs[i].getElement();
             // vom Knoten die Liste seiner Elemente holen, die für diesen Knoten redundant sind
-            ArrayList<ElementContainer> redundanceTypes = knoten.getRedundanceTypes(doc);
+            List<ElementContainer> redundanceTypes = knoten.getRedundanceTypes(doc);
             // Anzahl der Elemente in redundanceTypes holen
             size = redundanceTypes.size();
             // wenn es redundante Elemente besitzt

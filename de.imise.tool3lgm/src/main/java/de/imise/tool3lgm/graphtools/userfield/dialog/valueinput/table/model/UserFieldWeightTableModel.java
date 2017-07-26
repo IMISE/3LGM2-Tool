@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -48,7 +47,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * Sucht die RowElements und ColumnElements für alle Elemente heraus, die durch die übergebene Kantenart in der übergebenen
      * Richtung verbunden sein können. Dabei sind die RowElements immer die Start-Elemente der Kante in der angegebenen Richtung (!) und die
      * ColumnElements immer die EndElemente in der angegebenen Kantenrichtung
-     * 
+     *
      * @param edgeClass
      * @param direction
      * @return
@@ -72,12 +71,12 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                 allColumnElements.remove(i);
             }
         }
-        return new Pair<List<ModelElement>, List<ModelElement>>(allRowElements, allColumnElements);
+        return new Pair<>(allRowElements, allColumnElements);
     }
 
     /**
      * Sucht die RowElements genau für das eine übergebene columnElement heraus.
-     * 
+     *
      * @param edgeClass
      * @param direction
      * @param columnElement
@@ -104,13 +103,13 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
         List<ModelElement> allColumnElements = ImmutableList.of(columnElement);
 
-        return new Pair<List<ModelElement>, List<ModelElement>>(allRowElements, allColumnElements);
+        return new Pair<>(allRowElements, allColumnElements);
     }
 
     /**
      * Wenn das übergebene <code>columnElement</code> null ist, wird {@link #getRowAndColumnElements(Class, int)} aufgetrufen, sonst
      * {@link #getRowAndColumnElements(Class, int, ModelElement)}
-     * 
+     *
      * @param edgeClass
      * @param direction
      * @param columnElement
@@ -128,7 +127,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
     /**
      * Erstellt und setzt Verteilungsgewicht-Modeldaten
-     * 
+     *
      * @param edgeClass
      * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
      *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
@@ -155,7 +154,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                         edge = ce.getEdgeTo(re, edgeClass);
                     }
                 } else {
-                    ArrayList<Kante> edges = ce.getEdgesWith(re, edgeClass);
+                    List<Kante> edges = ce.getEdgesWith(re, edgeClass);
                     if (!edges.isEmpty()) {
                         edge = edges.get(0);
                     }
@@ -166,23 +165,23 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                 }
 
                 String value = field.getValue(edge);
-                data[r][c] = new NamedObjectContainer<UserField>(field, value);
+                data[r][c] = new NamedObjectContainer<>(field, value);
 
             }
         }
 
         // RowHeader aufbauen
-        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(allRowElements.size());
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<>(allRowElements.size());
         for (int i = 0; i < allRowElements.size(); i++) {
             ModelElement me = allRowElements.get(i);
-            rowIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
+            rowIdentifiers.add(new NamedObjectContainer<>(me, me.getName()));
         }
 
         // ColumnHeader aufbauen
-        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.size());
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<>(columnElements.size());
         for (int j = 0; j < columnElements.size(); j++) {
             ModelElement me = columnElements.get(j);
-            columnIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
+            columnIdentifiers.add(new NamedObjectContainer<>(me, me.getName()));
         }
 
         // Daten setzen

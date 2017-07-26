@@ -1,9 +1,9 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.consistency;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -45,10 +45,10 @@ class ConsistencyErrorTableGenerator {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     void updateTable() {
-        ArrayList<AbstractError> errors = checker.getAllInconsistencies();
+        List<AbstractError> errors = checker.getAllInconsistencies();
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
         model.setErrors(errors);
         table.clearSelection();
@@ -70,7 +70,7 @@ class ConsistencyErrorTableGenerator {
 
     /**
      * Nicht editierbarer JTable.
-     * 
+     *
      * @author AXS
      */
     private class UneditableJTable extends JTable {

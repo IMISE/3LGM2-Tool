@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -214,23 +215,23 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         return getInconsistencies(AbstractCardinalityError.class).size() > 0;
     }
 
-    public ArrayList<AbstractError> getAllInconsistencies() {
+    public List<AbstractError> getAllInconsistencies() {
         return getInconsistencies(AbstractError.class);
     }
 
-    public ArrayList<AbstractError> getCardinalityInconsistencies() {
+    public List<AbstractError> getCardinalityInconsistencies() {
         return getInconsistencies(AbstractCardinalityError.class);
     }
 
-    public ArrayList<AbstractError> getIDInconsistencies() {
+    public List<AbstractError> getIDInconsistencies() {
         return getInconsistencies(AbstractIDError.class);
     }
 
     /**
      * @return
      */
-    private ArrayList<AbstractError> getInconsistencies(final Class<? extends AbstractError> errorClass) {
-        ArrayList<AbstractError> errors = new ArrayList<>();
+    private List<AbstractError> getInconsistencies(final Class<? extends AbstractError> errorClass) {
+        List<AbstractError> errors = new ArrayList<>();
 
         if (gdcoll == null) {
             return errors;
@@ -256,7 +257,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param me
      * @param returnList
      */
-    private void addCardinalityErrors(final ModelElement me, final ArrayList<AbstractError> returnList) {
+    private void addCardinalityErrors(final ModelElement me, final List<AbstractError> returnList) {
         Class<? extends ModelElement> meClass = me.getClass();
         Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
         // nur Elementarten beachten, die wenigstens eine Kante besitzen können
@@ -274,9 +275,9 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 boolean meHasStartClass = Kante.isStartClass(edgeClass, me.getClass());
                 boolean meHasEndClass = Kante.isEndClass(edgeClass, me.getClass());
 
-                ArrayList<Kante> connections = me.getEdges(edgeClass);
-                ArrayList<Kante> meIsStartConnections = new ArrayList<>();
-                ArrayList<Kante> meIsEndConnections = new ArrayList<>();
+                List<Kante> connections = me.getEdges(edgeClass);
+                List<Kante> meIsStartConnections = new ArrayList<>();
+                List<Kante> meIsEndConnections = new ArrayList<>();
                 for (Kante edge : connections) {
                     if (edge.isStart(me)) {
                         meIsStartConnections.add(edge);

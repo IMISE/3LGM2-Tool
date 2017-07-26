@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.calculator;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -20,7 +20,7 @@ public class PartValueSumFunction {
      * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Kante über die verrechent wird eine
      * <code>PartOfBeziehung</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
      * immer die Richtung.
-     * 
+     *
      * @param definitions
      * @param resultUserField
      * @param me : Modelelement
@@ -32,7 +32,7 @@ public class PartValueSumFunction {
         TWSumArguments args = new TWSumArguments(twsumFormula, definitions);
 
         //alle verbundenen Elemente mit einem aufzuteilenden Attribut holen
-        ArrayList<Kante> connectionsTo = Calculator.getEdges(me, args.elementClass, args.edgeClass, args.direction);
+        List<Kante> connectionsTo = Calculator.getEdges(me, args.elementClass, args.edgeClass, args.direction);
 
         //Wenn keine Elemente verbunden sind
         if (connectionsTo.size() == 0) {
@@ -128,7 +128,7 @@ public class PartValueSumFunction {
         //Alle Kanten vom Element dessen Kennzahlwert aufgeteilt werden
         // soll zu anderen Elementen holen, die von der
         //gleichen Art sind, wie das Element, das den Wert bekommen soll
-        ArrayList<Kante> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
+        List<Kante> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
 
         //wenn mit einer Gleichverteilung gerechnet werden soll, dann
         // braucht man die Kanten nur zu zählen
@@ -188,7 +188,7 @@ public class PartValueSumFunction {
 
     /**
      * Gibt die Gegenrichtung zurück, wenn eine gültige Richtung als String übergeben wurde.
-     * 
+     *
      * @param direction
      * @return
      */
@@ -206,7 +206,7 @@ public class PartValueSumFunction {
 
     /**
      * Liefert
-     * 
+     *
      * @param userField
      * @return
      */

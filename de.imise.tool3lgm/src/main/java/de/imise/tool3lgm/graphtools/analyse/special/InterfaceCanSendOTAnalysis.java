@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 
@@ -45,14 +46,14 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
 
     @Override
     public List<ElementContainer> getResult(final GraphDocument doc) {
-        HashSet<ModelElement> result = new HashSet<ModelElement>();
-        ArrayList<ModelElement> selectedInterfaces = new ArrayList<ModelElement>();
+        Set<ModelElement> result = new HashSet<>();
+        List<ModelElement> selectedInterfaces = new ArrayList<>();
         for (ModelElement me : doc.getSelectedElements()) {
             if (me instanceof Bausteinschnittstelle) {
                 selectedInterfaces.add(me);
             }
         }
-        HashSet<ModelElement> connectedObjectTypes = new HashSet<ModelElement>();
+        Set<ModelElement> connectedObjectTypes = new HashSet<>();
         for (ModelElement bs : selectedInterfaces) {
             connectedObjectTypes.addAll(getSendableObjectTypes(bs));
         }
@@ -70,7 +71,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
         if (new MultipleOptionPane().showComponentDialog(Static.getMainFrame(), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
             return null;
         }
-        List<ModelElement> objectTypes = new ArrayList<ModelElement>();
+        List<ModelElement> objectTypes = new ArrayList<>();
         for (Object o : objectTypeList.getSelectedValues()) {
             objectTypes.add((ModelElement) o);
         }
@@ -80,7 +81,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
         }
         result.addAll(objectTypes);
 
-        HashSet<ModelElement> testedBS = new HashSet<ModelElement>();
+        Set<ModelElement> testedBS = new HashSet<>();
         // Alle Schnittstellen des
         for (int i = 0; i < selectedInterfaces.size(); i++) {
             ModelElement bs = selectedInterfaces.get(i);
@@ -103,7 +104,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
                 testedBS.add(otherBS);
                 result.add(otherBS);
                 // AWB der Empfangsschnittstelle holen
-                ArrayList<ModelElement> allAwbOfBs = otherBS.getConnectedElements(Anwendungsbaustein.class, AwbKommssVerbindung.class);
+                List<ModelElement> allAwbOfBs = otherBS.getConnectedElements(Anwendungsbaustein.class, AwbKommssVerbindung.class);
                 // Liste um alle AWB erweitern, die zum selben Baustein gehören (alle Parts, Parents
                 // und Geschwister des AWB)
                 for (int j = allAwbOfBs.size() - 1; j >= 0; j--) {
@@ -115,7 +116,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
                 }
             }
         }
-        ArrayList<ElementContainer> resultList = new ArrayList<ElementContainer>(result.size());
+        List<ElementContainer> resultList = new ArrayList<>(result.size());
         for (ModelElement me : result) {
             ElementContainer ec = me.getContainer(doc);
             if (ec != null) {
@@ -132,9 +133,9 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      * @param bs
      * @return
      */
-    private static final ArrayList<ModelElement> getSendableObjectTypes(final ModelElement bs) {
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
-        ArrayList<Kante> kommBeziehungen = bs.getEdges(KommBeziehung.class);
+    private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs) {
+        List<ModelElement> returnList = new ArrayList<>();
+        List<Kante> kommBeziehungen = bs.getEdges(KommBeziehung.class);
         for (ModelElement kommBez : kommBeziehungen) {
             returnList.addAll(getSendableObjectTypes(bs, (Kante) kommBez));
         }
@@ -149,8 +150,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      * @param communicationLink
      * @return
      */
-    private static final ArrayList<ModelElement> getSendableObjectTypes(final ModelElement bs, final Kante communicationLink) {
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
+    private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs, final Kante communicationLink) {
+        List<ModelElement> returnList = new ArrayList<>();
         int direction = communicationLink.getStart() == bs ? Doppelkante.BACKWARD : Doppelkante.FORWARD;
         for (ModelElement etnt : communicationLink.getConnectedElements(EtntEtdtKombination.class, KommbezEtntVerbindung.class, direction)) {
             for (ModelElement ntdt : etnt.getConnectedElements(Repraesentationsform.class)) {
@@ -168,10 +169,10 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      * @param objectTypes
      * @return
      */
-    private static final ArrayList<ModelElement> getSendingCommunicationLinks(final ModelElement bs, final Collection<ModelElement> objectTypes) {
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>();
+    private static final List<ModelElement> getSendingCommunicationLinks(final ModelElement bs, final Collection<ModelElement> objectTypes) {
+        List<ModelElement> returnList = new ArrayList<>();
         for (ModelElement commLink : bs.getEdges(KommBeziehung.class)) {
-            ArrayList<ModelElement> sendableObjectTypes = getSendableObjectTypes(bs, (Kante) commLink);
+            List<ModelElement> sendableObjectTypes = getSendableObjectTypes(bs, (Kante) commLink);
             sendableObjectTypes.retainAll(objectTypes);
             if (sendableObjectTypes.size() > 0) {
                 returnList.add(commLink);

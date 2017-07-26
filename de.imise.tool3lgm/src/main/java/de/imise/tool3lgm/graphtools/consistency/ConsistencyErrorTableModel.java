@@ -1,9 +1,10 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.consistency;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -23,13 +24,18 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
      * @author astruebi
      */
     public static enum COL_NAMES {
-        number, errorType, elementType, element, connectionType, description
+        number,
+        errorType,
+        elementType,
+        element,
+        connectionType,
+        description
     }
 
     public ConsistencyErrorTableModel() {
         super();
         COL_NAMES[] colIdentifiers = COL_NAMES.values();
-        Vector<String> colNames = new Vector<String>(colIdentifiers.length);
+        Vector<String> colNames = new Vector<>(colIdentifiers.length);
         for (COL_NAMES cn : colIdentifiers) {
             colNames.add(Tool3lgmConstants.getErrString(cn.toString()));
         }
@@ -39,7 +45,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     /**
      * @param dataVector
      */
-    public void setErrors(ArrayList<AbstractError> dataVector) {
+    public void setErrors(List<AbstractError> dataVector) {
 
         if (dataVector == null) {
             dataVector = new ArrayList<AbstractError>(0);
@@ -65,7 +71,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
             setValueAt(new Integer(i + 1), i, COL_NAMES.number.ordinal());
 
             // Fehlertyp
-            NamedObjectContainer<AbstractError> type = new NamedObjectContainer<AbstractError>(error, error.getTypeString());
+            NamedObjectContainer<AbstractError> type = new NamedObjectContainer<>(error, error.getTypeString());
             setValueAt(type, i, COL_NAMES.errorType.ordinal());
 
             ModelElement me = error.getModelElement();

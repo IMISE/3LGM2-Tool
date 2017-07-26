@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -31,18 +31,18 @@ public abstract class EtntEtdtKombination extends Knoten {
     @Override
     public String getName() {
         String name = "";
-        ArrayList<ModelElement> arrayList = getConnectedElements(Ereignistyp.class);
-        if (arrayList.size() > 0) {
-            name += ((Ereignistyp) arrayList.get(0)).getName();
+        List<ModelElement> connected = getConnectedElements(Ereignistyp.class);
+        if (!connected.isEmpty()) {
+            name += ((Ereignistyp) connected.get(0)).getName();
         }
         name += " - ";
-        arrayList = getConnectedElements(Nachrichtentyp.class);
-        if (arrayList.size() > 0) {
-            name += ((Nachrichtentyp) arrayList.get(0)).getName();
+        connected = getConnectedElements(Nachrichtentyp.class);
+        if (!connected.isEmpty()) {
+            name += ((Nachrichtentyp) connected.get(0)).getName();
         }
-        arrayList = getConnectedElements(Dokumententyp.class);
-        if (arrayList.size() > 0) {
-            name += ((Dokumententyp) arrayList.get(0)).getName();
+        connected = getConnectedElements(Dokumententyp.class);
+        if (!connected.isEmpty()) {
+            name += ((Dokumententyp) connected.get(0)).getName();
         }
         return name;
     }

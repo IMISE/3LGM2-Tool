@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -14,8 +14,8 @@ import de.imise.tool3lgm.log.Log;
 public abstract class Konfiguration extends Knoten {
 
     /**
-	 * 
-	 */
+     *
+     */
     public Konfiguration() {
         super();
     }
@@ -36,13 +36,13 @@ public abstract class Konfiguration extends Knoten {
      * @param doc
      * @return
      */
-    public abstract ArrayList<ElementContainer> getClientContainer(GraphDocument doc);
+    public abstract List<ElementContainer> getClientContainer(GraphDocument doc);
 
     /**
      * @param doc
      * @return
      */
-    public abstract ArrayList<ElementContainer> getServerContainer(GraphDocument doc);
+    public abstract List<ElementContainer> getServerContainer(GraphDocument doc);
 
     @Override
     public ElementContainer createContainer(final GraphDocument doc) {
@@ -50,8 +50,9 @@ public abstract class Konfiguration extends Knoten {
     }
 
     /**
-     * Gibt true zurück, wenn eine Konfiguration im uebergebenen GraphDocument enthalten ist, also dann, wenn mind. ein Client und ein Server in doc existiert. False sonst.
-     * 
+     * Gibt true zurück, wenn eine Konfiguration im uebergebenen GraphDocument enthalten ist, also dann, wenn mind. ein Client und ein Server in doc
+     * existiert. False sonst.
+     *
      * @param GraphDocument
      */
     public boolean isInGraphDocument(final GraphDocument doc) {
@@ -66,8 +67,8 @@ public abstract class Konfiguration extends Knoten {
     public boolean hasSameServer(final Konfiguration konfig, final GraphDocument doc) {
         //Konfigurationen sind identisch, wenn sie im Hauptmodell dieselben Bausteine als Server haben???
         //		doc = doc.getCollection().getGraphDocument();
-        ArrayList<ElementContainer> thisServer = getServerContainer(doc);
-        ArrayList<ElementContainer> konfigServers = konfig.getServerContainer(doc);
+        List<ElementContainer> thisServer = getServerContainer(doc);
+        List<ElementContainer> konfigServers = konfig.getServerContainer(doc);
         if (konfigServers.size() != thisServer.size()) {
             return false;
         }

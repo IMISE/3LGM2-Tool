@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionIdentifier;
@@ -17,8 +17,8 @@ import de.imise.tool3lgm.log.Log;
 public abstract class Knoten extends ModelElement {
 
     /**
-	 * 
-	 */
+     *
+     */
     public Knoten() {
         super();
     }
@@ -68,17 +68,18 @@ public abstract class Knoten extends ModelElement {
 
     /**
      * Gibt eine Liste der Container zurueck, die für diesen Knoten redundant sein koennen. (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
-     * 
+     *
      * @param doc
      * @return
      */
-    public ArrayList<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
+    public List<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
         return null;
     }
 
     /**
-     * Diese Funktion ist bis jetzt nur in Aufgabe überschrieben und sollte den String zurückliefern, der ueber dem Layer angezeigt wird, wenn die Redundanzinformationen gewünscht werden.
-     * 
+     * Diese Funktion ist bis jetzt nur in Aufgabe überschrieben und sollte den String zurückliefern, der ueber dem Layer angezeigt wird, wenn die
+     * Redundanzinformationen gewünscht werden.
+     *
      * @param redundance
      * @param saturation
      * @return
@@ -89,7 +90,7 @@ public abstract class Knoten extends ModelElement {
 
     /**
      * Gibt einen {@link ActionIdentifier} wieder, der diesen {@link Knoten} identifiziert.
-     * 
+     *
      * @return
      */
     public ActionIdentifier getIdentifier() {

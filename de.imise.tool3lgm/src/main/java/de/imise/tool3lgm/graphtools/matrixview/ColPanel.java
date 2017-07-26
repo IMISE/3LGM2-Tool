@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 public class ColPanel extends JPanel {
 
     /** ArrayList mit den Strings der Namen der Spaltenelemente */
-    private ArrayList<ModelElement> cols;
+    private List<ModelElement> cols;
 
     /** Integer, der die Spaltenbreite definiert */
     private double deltaY = Double.NaN;
@@ -46,10 +46,10 @@ public class ColPanel extends JPanel {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param _cols ArrayList mit Strings der Spaltenüberschriften
      */
-    public ColPanel(final ArrayList<ModelElement> _cols) {
+    public ColPanel(final List<ModelElement> _cols) {
         super();
         cols = _cols;
     }
@@ -91,7 +91,7 @@ public class ColPanel extends JPanel {
 
     /**
      * bestimmt die benötigten Parameter delta und max_height und legt die Größe der Component fest
-     * 
+     *
      * @param g Graphics
      */
     private void setRequiredParam(final Graphics g) {
@@ -136,7 +136,7 @@ public class ColPanel extends JPanel {
 
     /**
      * gibt Spaltenbreite in Pixel zurück
-     * 
+     *
      * @return int Spaltenbreite in Pixeln
      */
     public int getColWidth() {
@@ -145,7 +145,7 @@ public class ColPanel extends JPanel {
 
     /**
      * gibt Anzahl der Spalten zurück
-     * 
+     *
      * @return int Anzahl der Spalten
      */
     public int getNumberOfCols() {
@@ -154,7 +154,7 @@ public class ColPanel extends JPanel {
 
     /**
      * Method getCol return String of header of column at position
-     * 
+     *
      * @param i int-position in pixels
      * @return String header of column
      */
@@ -169,14 +169,14 @@ public class ColPanel extends JPanel {
     /**
      * @param cols
      */
-    public void setCols(final ArrayList<ModelElement> cols) {
+    public void setCols(final List<ModelElement> cols) {
         this.cols = cols;
         initialized = false;
     }
 
     /**
      * Method getColIndex return index of column at position
-     * 
+     *
      * @param i int-position in pixels
      * @return int index of column
      */

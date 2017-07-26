@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.elements.node;
 
-import java.util.ArrayList;
-
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -47,17 +45,16 @@ public class AufOrgKombination extends Knoten {
 
     @Override
     public String toString() {
-        ArrayList<ModelElement> oe = getConnectedElements(Organisationseinheit.class);
         StringBuilder retVal = new StringBuilder(Tool3lgmConstants.getResString("in_oes"));
         retVal.append(": ");
         boolean first = true;
-        for (int i = 0; i < oe.size(); i++) {
+        for (ModelElement oe : getConnectedElements(Organisationseinheit.class)) {
             if (!first) {
                 retVal.append(", ");
             } else {
                 first = false;
             }
-            retVal.append(oe.get(i));
+            retVal.append(oe);
         }
         return retVal.toString();
     }

@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.matrixview;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -11,13 +11,13 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
  * Klasse zum Zeichnen der Zeilenköpfe für die Analysetabelle
- * 
+ *
  * @author Thomas Rudert
  */
 public class RowPanel extends JPanel {
 
     /** ArrayList mit Strings der Namen der Zeilenelement */
-    private ArrayList<? extends ModelElement> rows;
+    private List<? extends ModelElement> rows;
 
     /** Integer der die Zeilenhöhe definiert */
     private int delta = -1;
@@ -35,10 +35,10 @@ public class RowPanel extends JPanel {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param _rows ArrayList mit Strings der Zeilenüberschriften
      */
-    public RowPanel(final ArrayList<ModelElement> _rows) {
+    public RowPanel(final List<ModelElement> _rows) {
         super();
         rows = _rows;
     }
@@ -61,7 +61,7 @@ public class RowPanel extends JPanel {
 
     /**
      * Bestimmt die benötigten Parameter delta und max_length und legt die Größe der Component fest
-     * 
+     *
      * @param g Graphics
      */
     private void setRequiredParam(final Graphics g) {
@@ -88,7 +88,7 @@ public class RowPanel extends JPanel {
 
     /**
      * Gibt Anzahl der Zeilen zurück
-     * 
+     *
      * @return int Anzahl der Zeilen
      */
     public int getNumberOfRows() {
@@ -97,7 +97,7 @@ public class RowPanel extends JPanel {
 
     /**
      * Gibt Zeilenhöhe in Pixeln zurück
-     * 
+     *
      * @return int Zeilenhöhe in Pixeln
      */
     public int getRowHeight() {
@@ -106,7 +106,7 @@ public class RowPanel extends JPanel {
 
     /**
      * Method getRow return String of header of row at position
-     * 
+     *
      * @param i int-position in pixels
      * @return String header of column
      */
@@ -122,14 +122,14 @@ public class RowPanel extends JPanel {
     /**
      * @param rows
      */
-    public void setRows(final ArrayList<? extends ModelElement> rows) {
+    public void setRows(final List<? extends ModelElement> rows) {
         this.rows = rows;
         initialized = false;
     }
 
     /**
      * Method getRowIndex return index of row at position
-     * 
+     *
      * @param i int-position in pixels
      * @return int index of row
      */

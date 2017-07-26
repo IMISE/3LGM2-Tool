@@ -6,9 +6,7 @@ import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.Abs
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.NO;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -41,7 +39,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     /**
      * Im Gegensatz zur Oberklasse wird hier nur true zürück gegeben, wenn die übergebene Elementklasse Formel-UserFields hat,
      * die eine einfache Teilwertsumme sind.
-     * 
+     *
      * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_FORMULA</code>) ist
@@ -169,7 +167,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
             boolean selectedEdgeDirectionForward = isSelectedEdgeDirectionForward();
             Class<? extends ModelElement> elementClass = selectedEdgeDirectionForward ? Kante.getStartClass(selectedEdgeClass) : Kante.getEndClass(selectedEdgeClass);
             GraphDocument doc = definitions.getCollection().getMainGraphDocument();
-            ArrayList<ModelElement> elements = doc.getModelItems(elementClass, true, true);
+            List<ModelElement> elements = doc.getModelItems(elementClass, true, true);
             for (ModelElement me : elements) {
                 elementBox.addItem(me);
             }
@@ -182,12 +180,9 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
      */
     private void setActionsForElementBox() {
         final FractionValueSumPanel finalPanel = this;
-        ItemListener il = new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
-                finalPanel.drawTable();
-                finalPanel.distributeSelectionChangedEvent();
-            }
+        ItemListener il = e -> {
+            finalPanel.drawTable();
+            finalPanel.distributeSelectionChangedEvent();
         };
 
         elementBox.addItemListener(il);

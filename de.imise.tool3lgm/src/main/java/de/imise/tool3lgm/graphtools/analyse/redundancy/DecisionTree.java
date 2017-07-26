@@ -5,8 +5,10 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -67,7 +69,7 @@ public class DecisionTree {
     /**
      * Liste der Blätter im Baum.
      */
-    private ArrayList<DecisionTreeNode> leafs = new ArrayList<>();
+    private List<DecisionTreeNode> leafs = new ArrayList<>();
 
     /**
      * Wird gebraucht, um bei großen Bäumen den zu Ende gehenden Speicher wieder zu bereinigen
@@ -100,16 +102,16 @@ public class DecisionTree {
     private boolean stop = false;
 
     /** Liste aller AWB, die betrachtet werden */
-    private ArrayList<ModelElement> applicationSystems;
+    private List<ModelElement> applicationSystems;
 
     /**
      * Table der für jede Aufgabe das Set aller von ihr unterstützten AWBs enthält.
      */
-    private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> funcToAWBSets = new Hashtable<>();
+    private final Map<ModelElement, AlphabeticalSet<ModelElement>> funcToAWBSets = new HashMap<>();
     /**
      * Table der für jeden AWB das Set aller von ihm unterstützten Aufgaben enthält.
      */
-    private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> awbToFuncsSets = new Hashtable<>();
+    private final Map<ModelElement, AlphabeticalSet<ModelElement>> awbToFuncsSets = new HashMap<>();
 
     /**
      * @param resultToFill Analyseergebnis, das gefüllt werden soll
@@ -840,7 +842,7 @@ public class DecisionTree {
      * Elemente, die das Element überflüssig machen
      */
     private void findSameSupporter() {
-        ArrayList<AlphabeticalSet<ModelElement>> uselessLists = new ArrayList<>(2);
+        List<AlphabeticalSet<ModelElement>> uselessLists = new ArrayList<>(2);
         uselessLists.add(result.uselessAWB);
         uselessLists.add(result.moreUselessAWB);
         for (AlphabeticalSet<ModelElement> uselessList : uselessLists) {
@@ -880,7 +882,7 @@ public class DecisionTree {
      */
     private final void initEqualsSets(final AlphabeticalSet<ModelElement> notExclusiveAWBSet) {
         // Liste für alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
-        ArrayList<ModelElement> maybeNotrequiredAWB = new ArrayList<>();
+        List<ModelElement> maybeNotrequiredAWB = new ArrayList<>();
 
         // Liste in die alle Alphabetical-Sets mit den jeweils gleichen Aufgaben kommen
         result.equalsSets = new ArrayList<>();
@@ -915,7 +917,7 @@ public class DecisionTree {
      * Löscht im Baum alle Äste, die nicht zu bereits bekannten minimalen Lösungen führen.
      */
     private void clearMemory() {
-        ArrayList<DecisionTreeNode> leafsNew = new ArrayList<>();
+        List<DecisionTreeNode> leafsNew = new ArrayList<>();
         for (DecisionTreeNode node : leafs) {
             // wenn bei einem Blatt die Kosten die aktuellen Minimalkosten überschreiten
             if (node.getValue() > minPathCosts) {
