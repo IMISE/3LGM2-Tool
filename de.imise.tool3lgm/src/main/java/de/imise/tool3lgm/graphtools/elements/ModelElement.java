@@ -406,31 +406,6 @@ public abstract class ModelElement extends UserFieldTarget {
 
     }
 
-    //	/**
-    //	 * Alte Variante. Hier könnte es ein Problem geben, wenn der zuerst im Iterator gefundene Container
-    //	 * kleiner ist, als 35x30, dann bekommen alle weiteren Container unabhängig von der Größe
-    //	 * auch einen leeren String als Anzeigetext
-    //	 */
-    //	public void refreshText() {
-    //		Iterator<ElementContainer> it = containerTable.values().iterator();
-    //		if (it.hasNext()) {
-    //			ElementContainer ec = it.next();
-    //			ec.refreshText();
-    //			String text = ec.getText();
-    //			if (this instanceof Bausteinschnittstelle)
-    //				//TODO:AXS 15.02.2012: wieder entfernen
-    ////				System.err.println("ModelElement.refreshText() " + this + " -> " + text);
-    //			while (it.hasNext()) {
-    //				ElementContainer ec2 = it.next();
-    //				if ((ec2.getWidth() < 35) && (ec2.getHeight() < 30))
-    //					ec2.setText("");
-    //				else
-    //					ec2.setText(text);
-    ////				System.err.println("ModelElement.refreshText() " + this + " -> " + text + );
-    //			}
-    //		}
-    //	}
-
     /**
      *
      */
