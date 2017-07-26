@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
@@ -229,7 +230,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @return
      */
     private ArrayList<AbstractError> getInconsistencies(final Class<? extends AbstractError> errorClass) {
-        ArrayList<AbstractError> errors = new ArrayList<AbstractError>();
+        ArrayList<AbstractError> errors = new ArrayList<>();
 
         if (gdcoll == null) {
             return errors;
@@ -274,8 +275,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 boolean meHasEndClass = Kante.isEndClass(edgeClass, me.getClass());
 
                 ArrayList<Kante> connections = me.getEdges(edgeClass);
-                ArrayList<Kante> meIsStartConnections = new ArrayList<Kante>();
-                ArrayList<Kante> meIsEndConnections = new ArrayList<Kante>();
+                ArrayList<Kante> meIsStartConnections = new ArrayList<>();
+                ArrayList<Kante> meIsEndConnections = new ArrayList<>();
                 for (Kante edge : connections) {
                     if (edge.isStart(me)) {
                         meIsStartConnections.add(edge);
@@ -347,26 +348,26 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param error
      * @return
      */
-    private HashSet<ModelElement> getSolutionPropertyDialogElement(final AbstractError error) {
+    private Set<ModelElement> getSolutionPropertyDialogElement(final AbstractError error) {
         if (error == null) {
             return null;
         }
         ErrorSolution es = solutionsLibrary.getSolution(error);
         if (es == null) {
-            return new HashSet<ModelElement>();
+            return new HashSet<>();
         }
         MetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
         GDCollection gdcoll = error.getGdcoll();
         // GraphDocument mainDoc = gdcoll.getGraphDocument();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
-            HashSet<ModelElement> connected = PathFinder.getDirectConnectedElements(me, pathToDialogElement, gdcoll);
+            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, pathToDialogElement, gdcoll);
             if (connected.size() == 0) {
                 return null;
             }
             return connected;
         }
-        HashSet<ModelElement> al = new HashSet<ModelElement>(1);
+        Set<ModelElement> al = new HashSet<>(1);
         al.add(error.getModelElement());
         return al;
     }
@@ -410,7 +411,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 }
                 dialog.showDialog();
             } else {
-                HashSet<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
+                Set<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
                 if (solutionPropertyDialogElement == null || solutionPropertyDialogElement.size() == 0) {
                     return;
                 }

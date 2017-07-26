@@ -8,8 +8,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -75,10 +75,10 @@ public class DataExportModule {
 
             //Alle Elementklassen in der Reihenfolge zusammen sammeln, in der sie exportiert werden sollen (erst
             //alphabetisch alle Knotenklassen, dann alle Kantenklassen
-            ArrayList<Class<? extends ModelElement>> elementClasses = new ArrayList<Class<? extends ModelElement>>();
+            ArrayList<Class<? extends ModelElement>> elementClasses = new ArrayList<>();
             elementClasses.addAll(ModelConstants.ALL_NODES_SET);
             Alphabetical.sort(elementClasses);
-            ArrayList<Class<? extends ModelElement>> edgeClasses = new ArrayList<Class<? extends ModelElement>>();
+            ArrayList<Class<? extends ModelElement>> edgeClasses = new ArrayList<>();
             edgeClasses.addAll(ModelConstants.ALL_EDGES_SET);
             //Kommunikationsbeziehungen sind Knoten und Kanten -> einfach alle Kanten von den Knoten abziehen, damit die nicht 2 mal drin sind
             elementClasses.removeAll(edgeClasses);
@@ -127,7 +127,7 @@ public class DataExportModule {
                     v = "";
                     for (MetaPath metaPath : metaPaths2Export) {
                         if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
-                            HashSet<ModelElement> connected = PathFinder.getDirectConnectedElements(me, metaPath, doc.getCollection());
+                            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, metaPath, doc.getCollection());
                             for (ModelElement con : connected) {
                                 v += con.getName() + ", ";
                             }

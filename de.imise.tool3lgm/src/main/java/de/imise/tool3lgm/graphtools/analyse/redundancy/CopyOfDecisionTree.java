@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -22,7 +23,7 @@ import de.imise.util.collections.AlphabeticalSet;
  * Mittlerweile ist die ganze XMLAnalyse so allgemein, dass man alle Elemente die über einen Pfad
  * verbunden sind, gegenseitig auf Redundanz testen kann. Alle Kommentare und Variablenbenennungen
  * gehen aber vom oben genannten Szenario aus.
- * 
+ *
  * @author AXS
  */
 public class CopyOfDecisionTree {
@@ -66,7 +67,7 @@ public class CopyOfDecisionTree {
     /**
      * Liste der Blätter im Baum.
      */
-    private ArrayList<DecisionTreeNode> leafs = new ArrayList<DecisionTreeNode>();
+    private ArrayList<DecisionTreeNode> leafs = new ArrayList<>();
 
     /**
      * Wird gebraucht, um bei großen Bäumen den zu Ende gehenden Speicher wieder zu bereinigen
@@ -76,7 +77,7 @@ public class CopyOfDecisionTree {
     /**
      * Alle Aufgaben, die durch AWB in der Menge <code>exclusiveAWB</code> erledigt werden.
      */
-    private final AlphabeticalSet<ModelElement> exclusiveFuncs = new AlphabeticalSet<ModelElement>();
+    private final AlphabeticalSet<ModelElement> exclusiveFuncs = new AlphabeticalSet<>();
 
     /**
      * Ergebnis der XMLAnalyse
@@ -104,11 +105,11 @@ public class CopyOfDecisionTree {
     /**
      * Table der für jede Aufgabe das Set aller von ihr unterstützten AWBs enthält.
      */
-    private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> funcToAWBSets = new Hashtable<ModelElement, AlphabeticalSet<ModelElement>>();
+    private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> funcToAWBSets = new Hashtable<>();
     /**
      * Table der für jeden AWB das Set aller von ihm unterstützten Aufgaben enthält.
      */
-    private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> awbToFuncsSets = new Hashtable<ModelElement, AlphabeticalSet<ModelElement>>();
+    private final Hashtable<ModelElement, AlphabeticalSet<ModelElement>> awbToFuncsSets = new Hashtable<>();
 
     /**
      * @param resultToFill Analyseergebnis, das gefüllt werden soll
@@ -150,19 +151,19 @@ public class CopyOfDecisionTree {
 
         // Set aller Aufgaben, die von mehr als einem AWB unterstützt werden und von keinem AWB, der
         // mind. eine Aufgabe exklusiv unterstützt
-        AlphabeticalSet<ModelElement> notExclusiveFuncSet = new AlphabeticalSet<ModelElement>();
+        AlphabeticalSet<ModelElement> notExclusiveFuncSet = new AlphabeticalSet<>();
         // Set aller AWB, die mind. eine Aufgabe unterstützen, die auch von anderen AWB unterstützt
         // wird
-        AlphabeticalSet<ModelElement> notExclusiveAWBSet = new AlphabeticalSet<ModelElement>();
+        AlphabeticalSet<ModelElement> notExclusiveAWBSet = new AlphabeticalSet<>();
 
         // für jeden AWB
         for (ModelElement as : applicationSystems) {
 
             // Set aller Aufgaben, die der AWB unterstützt
-            AlphabeticalSet<ModelElement> funcsOfAWB = new AlphabeticalSet<ModelElement>();
+            AlphabeticalSet<ModelElement> funcsOfAWB = new AlphabeticalSet<>();
             awbToFuncsSets.put(as, funcsOfAWB);
-            HashSet<ModelElement> funcsAwb = PathFinder.getConnectedElements(as, result.getEndClass(), result.getMetaPath());
-            HashSet<ModelElement> leafFuncAwb = new HashSet<ModelElement>(funcsAwb.size());
+            Set<ModelElement> funcsAwb = PathFinder.getConnectedElements(as, result.getEndClass(), result.getMetaPath());
+            Set<ModelElement> leafFuncAwb = new HashSet<>(funcsAwb.size());
             for (ModelElement func : funcsAwb) {
                 leafFuncAwb.addAll(func.getAbsolutePartElements());
             }
@@ -172,7 +173,7 @@ public class CopyOfDecisionTree {
                 AlphabeticalSet<ModelElement> AWBsOfFunc = funcToAWBSets.get(func);
                 // wenn es für die aktuelle Aufgabe noch kein solches Set gibt -> eins anlegen
                 if (AWBsOfFunc == null) {
-                    AWBsOfFunc = new AlphabeticalSet<ModelElement>();
+                    AWBsOfFunc = new AlphabeticalSet<>();
                     funcToAWBSets.put(func, AWBsOfFunc);
                 }
                 // unterstützte Aufgabe des AWB merken
@@ -227,7 +228,7 @@ public class CopyOfDecisionTree {
         // für alle AWB, die mind. eine aber keine Aufgabe exklusiv unterstützen prüfe, ob schon
         // alle
         // ihre Aufgaben von exklusiv unterstützenden AWBs unterstützt werden
-        AlphabeticalSet<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<ModelElement>();
+        AlphabeticalSet<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<>();
         for (ModelElement as : notExclusiveAWBSet) {
             // wird true, wenn der AWB mind. eine Aufgabe unterstützt, die von keinem AWB
             // unterstützt
@@ -445,7 +446,7 @@ public class CopyOfDecisionTree {
 
     /**
      * Initialisiert den Entscheidungsbaum
-     * 
+     *
      * @return <code>true</code>, wenn die Berechnung nicht abgebrochen wurde
      */
     private boolean createTree() {
@@ -759,7 +760,7 @@ public class CopyOfDecisionTree {
      */
     private void extractTree() {
         // Set das alle Elemente in minimalen Ästen genau einmal enthält
-        AlphabeticalSet<ModelElement> minimalUnionSet = new AlphabeticalSet<ModelElement>();
+        AlphabeticalSet<ModelElement> minimalUnionSet = new AlphabeticalSet<>();
 
         // für alle Blätter
         for (int i = 0; i < leafs.size(); i++) {
@@ -835,7 +836,7 @@ public class CopyOfDecisionTree {
      * Elemente, die das Element überflüssig machen
      */
     private void findSameSupporter() {
-        ArrayList<AlphabeticalSet<ModelElement>> uselessLists = new ArrayList<AlphabeticalSet<ModelElement>>(2);
+        ArrayList<AlphabeticalSet<ModelElement>> uselessLists = new ArrayList<>(2);
         uselessLists.add(result.uselessAWB);
         uselessLists.add(result.moreUselessAWB);
         for (AlphabeticalSet<ModelElement> uselessList : uselessLists) {
@@ -849,13 +850,13 @@ public class CopyOfDecisionTree {
      * Wenn die Redundanz von Anwendungsbausteinen bezüglich Aufgaben berechnet wird, dann liefert
      * die Funktion für einen Anwendungsbaustein alle anderen Anwendungsbauteine, die dieselben
      * Aufgaben unterstützen.
-     * 
+     *
      * @param me
      * @return
      */
     private final AlphabeticalSet<ModelElement> getSameSupporter(final ModelElement me) {
         Collection<ModelElement> supported = PathFinder.getConnectedElements(me, result.getEndClass(), result.getMetaPath());
-        AlphabeticalSet<ModelElement> returnSet = new AlphabeticalSet<ModelElement>();
+        AlphabeticalSet<ModelElement> returnSet = new AlphabeticalSet<>();
         for (ModelElement supped : supported) {
             Collection<ModelElement> supporter = PathFinder.getConnectedElements(supped, result.getStartClass(), result.getMetaPath());
             for (ModelElement supper : supporter) {
@@ -870,15 +871,15 @@ public class CopyOfDecisionTree {
     /**
      * Findet alle Mengen von AWBs aus den kombinierbaren AWBs, die man gegeneinander austauschen
      * kann, da sie dieselben Aufgaben unterstützen.
-     * 
+     *
      * @param Set aller bisher als nicht exklusiv und nicht überflüssig erkannten AWB
      */
     private final void initEqualsSets(final AlphabeticalSet<ModelElement> notExclusiveAWBSet) {
         // Liste für alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
-        ArrayList<ModelElement> maybeNotrequiredAWB = new ArrayList<ModelElement>();
+        ArrayList<ModelElement> maybeNotrequiredAWB = new ArrayList<>();
 
         // Liste in die alle Alphabetical-Sets mit den jeweils gleichen Aufgaben kommen
-        result.equalsSets = new ArrayList<AlphabeticalSet<ModelElement>>();
+        result.equalsSets = new ArrayList<>();
 
         // für alle AWB, auf die nur mit den exklusiven nicht verzichtet werden kann
         for (ModelElement notExclusiveAWB : notExclusiveAWBSet) {
@@ -892,7 +893,7 @@ public class CopyOfDecisionTree {
         // einer der
         // AWBs enthalten. Dieser eine ist immer der erste in der jeweiligen sameList
         for (int i = 0; i < maybeNotrequiredAWB.size(); i++) {
-            AlphabeticalSet<ModelElement> sameList = new AlphabeticalSet<ModelElement>();
+            AlphabeticalSet<ModelElement> sameList = new AlphabeticalSet<>();
             sameList.add(maybeNotrequiredAWB.get(i));
             Object funcOfAWB_I = awbToFuncsSets.get(maybeNotrequiredAWB.get(i));
             for (int j = i + 1; j < maybeNotrequiredAWB.size(); j++) {
@@ -910,7 +911,7 @@ public class CopyOfDecisionTree {
      * Löscht im Baum alle Äste, die nicht zu bereits bekannten minimalen Lösungen führen.
      */
     private void clearMemory() {
-        ArrayList<DecisionTreeNode> leafsNew = new ArrayList<DecisionTreeNode>();
+        ArrayList<DecisionTreeNode> leafsNew = new ArrayList<>();
         for (DecisionTreeNode node : leafs) {
             // wenn bei einem Blatt die Kosten die aktuellen Minimalkosten überschreiten
             if (node.getValue() > minPathCosts) {

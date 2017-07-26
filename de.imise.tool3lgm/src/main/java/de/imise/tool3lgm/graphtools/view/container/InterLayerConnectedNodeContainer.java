@@ -1,12 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import java.util.HashSet;
+import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
+import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -16,7 +17,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
  * und {@link Anwendungsbaustein}e darstellt.
  * <p>
  * Im Unterschied zur Oberklasse kann hier das Anzeigen der Interebenenbeziehungen gesteurt werden.
- * 
+ *
  * @author fstephan
  */
 public class InterLayerConnectedNodeContainer extends NodeContainer {
@@ -54,7 +55,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param k
      * @param doc
      */
@@ -67,7 +68,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
      * Überprüft initial ob Interebenenbeziehungen angezeigt werden sollen. <br>
      * Dafür wird überprüft, ob auf der jeweiligen Ebene das Anzeigen aller Interebenenbeziehungen
      * aktiviert ist oder nicht.
-     * 
+     *
      * @param doc
      */
     protected void init(final GraphDocument doc) {
@@ -82,7 +83,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
 
     /**
      * (De-)aktiviert das Anzeigen der Interebenenbeziehungen
-     * 
+     *
      * @param show
      * @param doc
      */
@@ -90,7 +91,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
         showInterLayerConnections = show;
         for (MetaPath metaPath : ModelConstants.INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
             if (metaPath.getStartClass().isAssignableFrom(me.getClass())) {
-                HashSet<ModelElement> dirCon = PathFinder.getDirectConnectedElements(me, metaPath, doc.getCollection());
+                Set<ModelElement> dirCon = PathFinder.getDirectConnectedElements(me, metaPath, doc.getCollection());
                 for (ModelElement connected : dirCon) {
                     ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
                     if (ec != null) {

@@ -4,10 +4,11 @@
 package de.imise.tool3lgm.graphtools.path;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -79,7 +80,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * Stellt Funktionen bereit, mit denen konkrete Pfade zu definierten Metapfaden ermittelt werden können.
- * 
+ *
  * @author Thomas Rudert
  * @author AXS (5.10.2007)
  */
@@ -88,12 +89,12 @@ public final class PathFinder {
     /**
      * COMMENTME
      */
-    private static HashMap<String, MetaPath[]> metaPathes = new HashMap<String, MetaPath[]>(100);
+    private static Map<String, MetaPath[]> metaPathes = new HashMap<>();
 
     /**
      * Liste der Elementtypen, für die ein Pfad in init() definiert wurde (wird z.B. für die Comboboxen in der Matrixsicht gebraucht)
      */
-    private static HashSet<Class<? extends ModelElement>> elementClassesInPathes = new HashSet<Class<? extends ModelElement>>();
+    private static Set<Class<? extends ModelElement>> elementClassesInPathes = new HashSet<>();
 
     static {
         try {
@@ -105,7 +106,7 @@ public final class PathFinder {
 
     /**
      * Liefert alle <code>MetaPath</code>es, die zwischen Elementen der Art <code>startClass</code> und <code>endClass</code> definiert sind.
-     * 
+     *
      * @param startClass
      * @param endClass
      * @return
@@ -115,16 +116,16 @@ public final class PathFinder {
     }
 
     //	/**
-    //	 * Wenn die übergebene <code>startClass</code> die Start- oder Endklasse der ersten Assoziation dieses 
-    //	 * Pfades ist und die übergebene <code>endClass</code> in der letzten Assoziation des Pfades vorkommt, 
+    //	 * Wenn die übergebene <code>startClass</code> die Start- oder Endklasse der ersten Assoziation dieses
+    //	 * Pfades ist und die übergebene <code>endClass</code> in der letzten Assoziation des Pfades vorkommt,
     //	 * dann kommt der übergebene Pfad zurück.<br />
-    //	 * 
+    //	 *
     //	 * Wenn die übergebene <code>startClass</code> eine Endklasse des übergebenen Metapfades ist und die übergebene
-    //	 * <code>endClass</code> eine Startklasse des übergebenen Metapfades, dann kommt ein Metapfad zurück, in dem 
+    //	 * <code>endClass</code> eine Startklasse des übergebenen Metapfades, dann kommt ein Metapfad zurück, in dem
     //	 * die Assoziationen genau anders herum sind als im übergebenen MetaPfad.<br />
-    //	 * 
+    //	 *
     //	 * Wenn Start- und Endklassen in keiner der Richtungen übereinstimmen, kommt <code>null</code> zurück.
-    //	 * 
+    //	 *
     //	 * @param startClass
     //	 * @param endClass
     //	 * @param metaPath
@@ -144,7 +145,7 @@ public final class PathFinder {
     //		//nicht zu den Start und Zielklassen -> es kommt null zurück
     //		if (!switchAssociations)
     //			return null;
-    //		
+    //
     //		@SuppressWarnings("unchecked")
     //		Class<? extends Kante>[][] path = new Class[metaPath.countPathes()][metaPath.getEdgeClasses(0).length];
     //		//von allen Assoziationslisten alle Assoziationen umdrehen
@@ -170,11 +171,9 @@ public final class PathFinder {
         if (!UserProperties.isSearchParts() && !UserProperties.isSearchParents()) {
             return isConnected(element1, element2, metaPath, false);
         }
-
         int retVal = Doppelkante.NOTCONNECTED;
-
-        Set<ModelElement> list1 = new HashSet<ModelElement>();
-        Set<ModelElement> list2 = new HashSet<ModelElement>();
+        Set<ModelElement> list1 = new HashSet<>();
+        Set<ModelElement> list2 = new HashSet<>();
         list1.add(element1);
         list2.add(element2);
         if (UserProperties.isSearchParts()) {
@@ -186,11 +185,9 @@ public final class PathFinder {
             list2.addAll(element2.getParentElements());
         }
         Iterator<ModelElement> iterator1 = list1.iterator();
-        Iterator<ModelElement> iterator2;
-
         while (iterator1.hasNext()) {
             element1 = iterator1.next();
-            iterator2 = list2.iterator();
+            Iterator<ModelElement> iterator2 = list2.iterator();
             while (iterator2.hasNext()) {
                 element2 = iterator2.next();
                 int con = isConnected(element1, element2, metaPath, false);
@@ -268,11 +265,8 @@ public final class PathFinder {
             }
             return Doppelkante.NOTCONNECTED;
         }
-
         int retVal;
-
-        ArrayList<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
-
+        List<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
         for (ModelElement me : elements) {
             if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != Doppelkante.NOTCONNECTED) {
                 if (metaPath.getControl() == position) {
@@ -294,39 +288,39 @@ public final class PathFinder {
 
     //	/**
     //	 * Liefert alle Elemente, die im angegebenen Modell mit dem übergebenen Element über den angegebenen Pfad verbunden sind.
-    //	 * 
+    //	 *
     //	 * @param me
     //	 * @param metaPath
     //	 * @param gdcoll
     //	 * @return
     //	 * /
-    //	public static final HashSet<ModelElement> getDirectConnectedElements(ModelElement me, MetaPath metaPath, GDCollection gdcoll){
-    //		HashSet<ModelElement> startElements = new HashSet<ModelElement>();
+    //	public static final Set<ModelElement> getDirectConnectedElements(ModelElement me, MetaPath metaPath, GDCollection gdcoll){
+    //		Set<ModelElement> startElements = new HashSet<ModelElement>();
     //		startElements.add(me);
-    //		HashSet<ModelElement> endElements = new HashSet<ModelElement>();
+    //		Set<ModelElement> endElements = new HashSet<ModelElement>();
     //		for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++){
     //			for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++){
     //				endElements.clear();
     //				for (ModelElement startElem : startElements)
     //					endElements.addAll(startElem.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[assoIndex]));
     //			}
-    //			startElements = endElements; 
+    //			startElements = endElements;
     //		}
     //		return endElements;
     //	}
 
     /**
      * Liefert alle Elemente, die im angegebenen Modell mit dem übergebenen Element über den angegebenen Pfad verbunden sind.
-     * 
+     *
      * @param me
      * @param metaPath
      * @param gdcoll
      * @return
      */
-    public static final HashSet<ModelElement> getDirectConnectedElements(final ModelElement me, final MetaPath metaPath, final GDCollection gdcoll) {
-        HashSet<ModelElement> startElements = new HashSet<ModelElement>();
+    public static final Set<ModelElement> getDirectConnectedElements(final ModelElement me, final MetaPath metaPath, final GDCollection gdcoll) {
+        Set<ModelElement> startElements = new HashSet<>();
         startElements.add(me);
-        HashSet<ModelElement> endElements = new HashSet<ModelElement>();
+        Set<ModelElement> endElements = new HashSet<>();
         for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++) {
             for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
                 endElements.clear();
@@ -342,11 +336,11 @@ public final class PathFinder {
 
     //	/**
     //	 * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den
-    //	 * angegebenen Pfad verbunden Elemente zurück.  
-    //	 * 
+    //	 * angegebenen Pfad verbunden Elemente zurück.
+    //	 *
     //	 * @param me
     //	 * @param targetElementClass
-    //	 * 		Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des 
+    //	 * 		Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des
     //	 * 		Metapfades übereinstimmen, sondern kann eine spezielle Unterklasse sein.
     //	 * @param metaPath
     //	 * @param gdcoll
@@ -364,7 +358,7 @@ public final class PathFinder {
     //				for (ModelElement startElem : startElements)
     //					endElements.addAll(startElem.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[index]));
     //			}
-    //			startElements = endElements; 
+    //			startElements = endElements;
     //		}
     //		if (endElements==null)
     //			return null;
@@ -377,24 +371,24 @@ public final class PathFinder {
 
     /**
      * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den angegebenen Pfad verbunden Elemente zurück.
-     * 
+     *
      * @param me
      * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
      *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
      * @param metaPath
      * @return
      */
-    public static final HashSet<ModelElement> getConnectedElements(final ModelElement me, final Class<? extends ModelElement> targetElementClass, final MetaPath metaPath) {
-        HashSet<ModelElement> startElements = me.getParentElements();
+    public static final Set<ModelElement> getConnectedElements(final ModelElement me, final Class<? extends ModelElement> targetElementClass, final MetaPath metaPath) {
+        Set<ModelElement> startElements = me.getParentElements();
         startElements.add(me);
-        HashSet<ModelElement> endElements = null;
+        Set<ModelElement> endElements = null;
         //das übergebene Element ist Startklasse des Pfades?
         boolean pathStartClass = Kante.isStartOrEndClass(metaPath.getEdgeClasses(0)[0], me.getClass());
         //für alle Assoziationen jedes inneren MetaPfades des übergebenen Gesamtmetapfades
         for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++) {
             //für jeden inneren MetaPfad
             for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
-                endElements = new HashSet<ModelElement>();
+                endElements = new HashSet<>();
                 //wenn das übergebene Element von der Startklasse des Pfades ist, laufe die einzelnen
                 //Assoziationen des Metapfades von vorne durch, sonst von hinten
                 int index = pathStartClass ? assoIndex : metaPath.getLength() - 1 - assoIndex;
@@ -411,7 +405,7 @@ public final class PathFinder {
         if (endElements == null) {
             return null;
         }
-        HashSet<ModelElement> reallyEndElements = new HashSet<ModelElement>(endElements.size());
+        Set<ModelElement> reallyEndElements = new HashSet<>(endElements.size());
         for (ModelElement elem : endElements) {
             if (targetElementClass.isAssignableFrom(elem.getClass())) {
                 reallyEndElements.add(elem);
@@ -422,7 +416,7 @@ public final class PathFinder {
 
     /**
      * Berechnet einen eindeutigen Schlüssel für 2 übergebene Klassen.
-     * 
+     *
      * @param elementClass1
      * @param elementClass2
      * @return
@@ -443,7 +437,7 @@ public final class PathFinder {
 
     /**
      * Setzt den übergenen Metapfad in die HashMap aller Metapfade
-     * 
+     *
      * @param metaPath
      */
     private static final void put(final MetaPath[] metaPath) {
@@ -458,427 +452,478 @@ public final class PathFinder {
 
         /* Aufgabe - Objekttyp */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Objekttyp.class, new Class[][] {
-                {
-                    AufObjVerbindung.class
-                }
-            }, new Color[] {
-                    Color.ORANGE, Color.BLUE, Color.GREEN
-            }, new String[] {
-                    s("Aufgabe") + " " + s("text_bearb") + " " + s("text_und") + " " + s("text_inter") + " " + s("Objekttyp"), s("Aufgabe") + " " + s("text_bearb") + " " + s("Objekttyp"), s("Aufgabe") + " " + s("text_inter") + " " + s("Objekttyp")
-            })
+                new MetaPath(Aufgabe.class, Objekttyp.class, new Class[][] {
+                        {
+                                AufObjVerbindung.class
+                        }
+                }, new Color[] {
+                        Color.ORANGE,
+                        Color.BLUE,
+                        Color.GREEN
+                }, new String[] {
+                        s("Aufgabe") + " " + s("text_bearb") + " " + s("text_und") + " " + s("text_inter") + " " + s("Objekttyp"),
+                        s("Aufgabe") + " " + s("text_bearb") + " " + s("Objekttyp"),
+                        s("Aufgabe") + " " + s("text_inter") + " " + s("Objekttyp")
+                })
         });
 
         /* Aufgabe - Aufgabe */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Aufgabe.class, new Class[][] {
-                {
-                    AufAufVerbindung.class
-                }
-            }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
+                new MetaPath(Aufgabe.class, Aufgabe.class, new Class[][] {
+                        {
+                                AufAufVerbindung.class
+                        }
+                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
         });
 
         /* Aufgabe - Organisationseinheit */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Organisationseinheit.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_wird_erledigt_in") + " " + s("Organisationseinheit"))
+                new MetaPath(Aufgabe.class, Organisationseinheit.class, new Class[][] {
+                        {
+                                AufAufOrgVerbindung.class,
+                                OrgAufOrgVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_wird_erledigt_in") + " " + s("Organisationseinheit"))
         });
 
         /* Aufgabe - Anwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein"))
+                new MetaPath(Aufgabe.class, Anwendungsbaustein.class, new Class[][] {
+                        {
+                                AufAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Aufgabe - RechAnwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein"))
+                new MetaPath(Aufgabe.class, RechAnwendungsbaustein.class, new Class[][] {
+                        {
+                                AufAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Aufgabe - KonAnwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein"))
+                new MetaPath(Aufgabe.class, KonAnwendungsbaustein.class, new Class[][] {
+                        {
+                                AufAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Aufgabe - PhyDVBaustein */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("PhysischerDVBaustein"))
+                new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, new Class[][] {
+                        {
+                                AufAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class,
+                                PdvbkAwbVerbindung.class,
+                                PdvbPdvbkVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("PhysischerDVBaustein"))
         });
 
         /* Aufgabe - Standort */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Standort.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class, PdvbStoVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_erledigt") + " " + s("Standort"))
+                new MetaPath(Aufgabe.class, Standort.class, new Class[][] {
+                        {
+                                AufAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class,
+                                PdvbkAwbVerbindung.class,
+                                PdvbPdvbkVerbindung.class,
+                                PdvbStoVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_erledigt") + " " + s("Standort"))
         });
 
         /* Objekttyp - Datensatztyp */
         put(new MetaPath[] {
-            new MetaPath(Objekttyp.class, Datensatztyp.class, new Class[][] {
-                {
-                    ObjReprVerbindung.class
-                }
-            }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Datensatztyp"))
+                new MetaPath(Objekttyp.class, Datensatztyp.class, new Class[][] {
+                        {
+                                ObjReprVerbindung.class
+                        }
+                }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Datensatztyp"))
         });
 
         /* Objekttyp - Dokumententyp */
         put(new MetaPath[] {
-            new MetaPath(Objekttyp.class, Dokumententyp.class, new Class[][] {
-                {
-                    ObjReprVerbindung.class
-                }
-            }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Dokumententyp"))
+                new MetaPath(Objekttyp.class, Dokumententyp.class, new Class[][] {
+                        {
+                                ObjReprVerbindung.class
+                        }
+                }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Dokumententyp"))
         });
 
         /* Objekttyp - Nachrichtentyp */
         put(new MetaPath[] {
-            new MetaPath(Objekttyp.class, Nachrichtentyp.class, new Class[][] {
-                {
-                    ObjReprVerbindung.class
-                }
-            }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Nachrichtentyp"))
+                new MetaPath(Objekttyp.class, Nachrichtentyp.class, new Class[][] {
+                        {
+                                ObjReprVerbindung.class
+                        }
+                }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Nachrichtentyp"))
         });
 
         /* Objekttyp - Dokumentensammlung */
         put(new MetaPath[] {
-            new MetaPath(Objekttyp.class, Dokumentensammlung.class, new Class[][] {
-                {
-                    ObjLogspVerbindung.class
-                }
-            }, s("Objekttyp") + " " + s("text_fuehrend") + " " + s("Dokumentensammlung"))
+                new MetaPath(Objekttyp.class, Dokumentensammlung.class, new Class[][] {
+                        {
+                                ObjLogspVerbindung.class
+                        }
+                }, s("Objekttyp") + " " + s("text_fuehrend") + " " + s("Dokumentensammlung"))
         });
 
         /* Objekttyp - Datenbanksystem */
         put(new MetaPath[] {
                 new MetaPath(Objekttyp.class, Datenbanksystem.class, new Class[][] {
-                    {
-                        ObjLogspVerbindung.class
-                    }
+                        {
+                                ObjLogspVerbindung.class
+                        }
                 }, s("Objekttyp") + " " + s("text_fuehrend") + " " + s("Datenbanksystem")), new MetaPath(Objekttyp.class, Datenbanksystem.class, new Class[][] {
-                    {
-                            ObjReprVerbindung.class, DbsDatVerbindung.class,
-                    }
+                        {
+                                ObjReprVerbindung.class,
+                                DbsDatVerbindung.class,
+                        }
                 }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Datenbanksystem")),
         });
 
         /* Aufgabe - Softwareprodukt */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Softwareprodukt.class, new Class[][] {
-                {
-                    SwpAufVerbindung.class
-                }
-            }, s("Aufgabe") + " " + s("text_kann_unterstuetzt") + " " + s("Softwareprodukt"))
+                new MetaPath(Aufgabe.class, Softwareprodukt.class, new Class[][] {
+                        {
+                                SwpAufVerbindung.class
+                        }
+                }, s("Aufgabe") + " " + s("text_kann_unterstuetzt") + " " + s("Softwareprodukt"))
         });
 
         /* Aufgabe - Ereignistyp */
         put(new MetaPath[] {
-            new MetaPath(Aufgabe.class, Ereignistyp.class, new Class[][] {
-                {
-                    EtAufVerbindung.class
-                }
-            }, s("Ereignistyp") + " " + s("text_ausloesen") + " " + s("Aufgabe"))
+                new MetaPath(Aufgabe.class, Ereignistyp.class, new Class[][] {
+                        {
+                                EtAufVerbindung.class
+                        }
+                }, s("Ereignistyp") + " " + s("text_ausloesen") + " " + s("Aufgabe"))
         });
 
         /* Anwendungsbaustein - Bausteinschnittstelle */
         put(new MetaPath[] {
-            new MetaPath(Anwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
-                {
-                    AwbKommssVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
+                new MetaPath(Anwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
         });
 
         /* RechAnwendungsbaustein - Bausteinschnittstelle */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
-                {
-                    AwbKommssVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
+                new MetaPath(RechAnwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
         });
 
         /* KonAnwendungsbaustein - Bausteinschnittstelle */
         put(new MetaPath[] {
-            new MetaPath(KonAnwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
-                {
-                    AwbKommssVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
+                new MetaPath(KonAnwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
         });
 
         /* Anwendungsbaustein - Benutzungsschnittstelle */
         put(new MetaPath[] {
-            new MetaPath(Anwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
-                {
-                    AwbKommssVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
+                new MetaPath(Anwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
         });
 
         /* RechAnwendungsbaustein - Benutzungsschnittstelle */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
-                {
-                    AwbKommssVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
+                new MetaPath(RechAnwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
         });
 
         /* KonAnwendungsbaustein - Benutzungsschnittstelle */
         put(new MetaPath[] {
-            new MetaPath(KonAnwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
-                {
-                    AwbKommssVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
+                new MetaPath(KonAnwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
         });
 
         /* RechAnwendungsbaustein - Datenbanksystem */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, Datenbanksystem.class, new Class[][] {
-                {
-                    RawbDbsVerbindung.class
-                }
-            }, s("RechAnwendungsbaustein") + " " + s("text_besitzt") + " " + s("Datenbanksystem"))
+                new MetaPath(RechAnwendungsbaustein.class, Datenbanksystem.class, new Class[][] {
+                        {
+                                RawbDbsVerbindung.class
+                        }
+                }, s("RechAnwendungsbaustein") + " " + s("text_besitzt") + " " + s("Datenbanksystem"))
         });
 
         /* KonAnwendungsbaustein - Dokumentensammlung */
         put(new MetaPath[] {
-            new MetaPath(KonAnwendungsbaustein.class, Dokumentensammlung.class, new Class[][] {
-                {
-                    KawbDoksVerbindung.class
-                }
-            }, s("KonAnwendungsbaustein") + " " + s("text_besitzt") + " " + s("Dokumentensammlung"))
+                new MetaPath(KonAnwendungsbaustein.class, Dokumentensammlung.class, new Class[][] {
+                        {
+                                KawbDoksVerbindung.class
+                        }
+                }, s("KonAnwendungsbaustein") + " " + s("text_besitzt") + " " + s("Dokumentensammlung"))
         });
 
         /* Anwendungsbaustein - PhyDVBaustein */
         put(new MetaPath[] {
-            new MetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
+                new MetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
+                        {
+                                PdvbkAwbVerbindung.class,
+                                PdvbPdvbkVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
         });
 
         /* RechAnwendungsbaustein - PhyDVBaustein */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
+                new MetaPath(RechAnwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
+                        {
+                                PdvbkAwbVerbindung.class,
+                                PdvbPdvbkVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
         });
 
         /* KonAnwendungsbaustein - PhyDVBaustein */
         put(new MetaPath[] {
-            new MetaPath(KonAnwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
+                new MetaPath(KonAnwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
+                        {
+                                PdvbkAwbVerbindung.class,
+                                PdvbPdvbkVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
         });
 
         /* Organisationseinheit - Organisationseinheit */
         put(new MetaPath[] {
-            new MetaPath(Organisationseinheit.class, Organisationseinheit.class, new Class[][] {
-                {
-                    OrgOrgVerbindung.class
-                }
-            }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
+                new MetaPath(Organisationseinheit.class, Organisationseinheit.class, new Class[][] {
+                        {
+                                OrgOrgVerbindung.class
+                        }
+                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
         });
 
         /* Organisationseinheit - PhyDVBaustein */
         put(new MetaPath[] {
-            new MetaPath(Organisationseinheit.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class
-                }
-            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("PhysischerDVBaustein"))
+                new MetaPath(Organisationseinheit.class, PhysischerDVBaustein.class, new Class[][] {
+                        {
+                                OrgAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class,
+                                PdvbkAwbVerbindung.class,
+                                PdvbPdvbkVerbindung.class
+                        }
+                }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("PhysischerDVBaustein"))
         });
 
         /* Organisationseinheit - Anwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(Organisationseinheit.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
-                }
-            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
+                new MetaPath(Organisationseinheit.class, Anwendungsbaustein.class, new Class[][] {
+                        {
+                                OrgAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class
+                        }
+                }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Organisationseinheit - RechAnwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(Organisationseinheit.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
-                }
-            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
+                new MetaPath(Organisationseinheit.class, RechAnwendungsbaustein.class, new Class[][] {
+                        {
+                                OrgAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class
+                        }
+                }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Organisationseinheit - KonAnwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(Organisationseinheit.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class
-                }
-            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
+                new MetaPath(Organisationseinheit.class, KonAnwendungsbaustein.class, new Class[][] {
+                        {
+                                OrgAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class
+                        }
+                }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
         /* Objekttyp - Objekttyp */
         put(new MetaPath[] {
-            new MetaPath(Objekttyp.class, Objekttyp.class, new Class[][] {
-                {
-                    ObjObjVerbindung.class
-                }
-            }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
+                new MetaPath(Objekttyp.class, Objekttyp.class, new Class[][] {
+                        {
+                                ObjObjVerbindung.class
+                        }
+                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
         });
 
         /* Subnetz - Netzprotokoll */
         put(new MetaPath[] {
-            new MetaPath(Subnetz.class, Netzprotokoll.class, new Class[][] {
-                {
-                    SubnNetzpVerbindung.class
-                }
-            }, s("Subnetz") + " " + s("text_basiert") + " " + s("Netzprotokoll"))
+                new MetaPath(Subnetz.class, Netzprotokoll.class, new Class[][] {
+                        {
+                                SubnNetzpVerbindung.class
+                        }
+                }, s("Subnetz") + " " + s("text_basiert") + " " + s("Netzprotokoll"))
         });
 
         /* Subnetz - Netztyp */
         put(new MetaPath[] {
-            new MetaPath(Subnetz.class, Netztyp.class, new Class[][] {
-                {
-                    SubnNetztVerbindung.class
-                }
-            }, s("Subnetz") + " " + s("text_basiert") + " " + s("Netztyp"))
+                new MetaPath(Subnetz.class, Netztyp.class, new Class[][] {
+                        {
+                                SubnNetztVerbindung.class
+                        }
+                }, s("Subnetz") + " " + s("text_basiert") + " " + s("Netztyp"))
         });
 
         /* PhyDVBaustein - Subnetz */
         put(new MetaPath[] {
-            new MetaPath(PhysischerDVBaustein.class, Subnetz.class, new Class[][] {
-                {
-                    PdvbSubnVerbindung.class
-                }
-            }, s("PhysischerDVBaustein") + " " + s("text_gehoert") + " " + s("Subnetz"))
+                new MetaPath(PhysischerDVBaustein.class, Subnetz.class, new Class[][] {
+                        {
+                                PdvbSubnVerbindung.class
+                        }
+                }, s("PhysischerDVBaustein") + " " + s("text_gehoert") + " " + s("Subnetz"))
         });
 
         /* PhyDVBaustein - Standort */
         put(new MetaPath[] {
-            new MetaPath(PhysischerDVBaustein.class, Standort.class, new Class[][] {
-                {
-                    PdvbStoVerbindung.class
-                }
-            }, s("PhysischerDVBaustein") + " " + s("text_hat") + " " + s("Standort"))
+                new MetaPath(PhysischerDVBaustein.class, Standort.class, new Class[][] {
+                        {
+                                PdvbStoVerbindung.class
+                        }
+                }, s("PhysischerDVBaustein") + " " + s("text_hat") + " " + s("Standort"))
         });
 
         /* PhyDVBaustein - Bausteintyp */
         put(new MetaPath[] {
-            new MetaPath(PhysischerDVBaustein.class, Bausteintyp.class, new Class[][] {
-                {
-                    PdvbBtypVerbindung.class
-                }
-            }, s("PhysischerDVBaustein") + " " + s("text_ist") + " " + s("Bausteintyp"))
+                new MetaPath(PhysischerDVBaustein.class, Bausteintyp.class, new Class[][] {
+                        {
+                                PdvbBtypVerbindung.class
+                        }
+                }, s("PhysischerDVBaustein") + " " + s("text_ist") + " " + s("Bausteintyp"))
         });
 
         /* PhyDVBaustein - PhyDVBaustein */
         put(new MetaPath[] {
                 new MetaPath(PhysischerDVBaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                    {
-                        PdvbPdvbVerbindung.class
-                    }
+                        {
+                                PdvbPdvbVerbindung.class
+                        }
                 }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true), new MetaPath(PhysischerDVBaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                    {
-                        DatenuebertragungsVerbindung.class
-                    }
+                        {
+                                DatenuebertragungsVerbindung.class
+                        }
                 }, s("PhysischerDVBaustein") + " " + s("text_verbunden") + " " + s("PhysischerDVBaustein"))
         });
 
         /* Organisationseinheit - Softwareprodukt */
         put(new MetaPath[] {
-            new MetaPath(Organisationseinheit.class, Softwareprodukt.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class
-                }
-            }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Softwareprodukt"))
+                new MetaPath(Organisationseinheit.class, Softwareprodukt.class, new Class[][] {
+                        {
+                                OrgAufOrgVerbindung.class,
+                                AwbkAufOrgVerbindung.class,
+                                AwbAwbkVerbindung.class,
+                                RawbAwpVerbindung.class,
+                                AwpSwpVerbindung.class
+                        }
+                }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Softwareprodukt"))
         });
 
         /* Anwendungsbaustein - Kommunikationsstandard */
         put(new MetaPath[] {
-            new MetaPath(Anwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class, BssKommstVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
+                new MetaPath(Anwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class,
+                                BssKommstVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* RechAnwendungsbaustein - Kommunikationsstandard */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class, BssKommstVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
+                new MetaPath(RechAnwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class,
+                                BssKommstVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* KonAnwendungsbaustein - Kommunikationsstandard */
         put(new MetaPath[] {
-            new MetaPath(KonAnwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class, BssKommstVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
+                new MetaPath(KonAnwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class,
+                                BssKommstVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard"))
         });
 
         /* RechAnwendungsbaustein - Softwareprodukt */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, new Class[][] {
-                {
-                        RawbAwpVerbindung.class, AwpSwpVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Softwareprodukt"))
+                new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, new Class[][] {
+                        {
+                                RawbAwpVerbindung.class,
+                                AwpSwpVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Softwareprodukt"))
         });
 
         /* KonAnwendungsbaustein - Organisationsplan */
         put(new MetaPath[] {
-            new MetaPath(KonAnwendungsbaustein.class, Organisationsplan.class, new Class[][] {
-                {
-                    KawbOrgpVerbindung.class
-                }
-            }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Organisationsplan"))
+                new MetaPath(KonAnwendungsbaustein.class, Organisationsplan.class, new Class[][] {
+                        {
+                                KawbOrgpVerbindung.class
+                        }
+                }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Organisationsplan"))
         });
 
         /* Objekttyp - RechAnwendungsbaustein */
         put(new MetaPath[] {
                 new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
-                    {
-                            ObjLogspVerbindung.class, RawbDbsVerbindung.class
-                    }
+                        {
+                                ObjLogspVerbindung.class,
+                                RawbDbsVerbindung.class
+                        }
                 }, s("Objekttyp") + " " + s("text_fuehrenden") + " " + s("Anwendungsbaustein")), new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
-                    {
-                            ObjReprVerbindung.class, DbsDatVerbindung.class, RawbDbsVerbindung.class
-                    }
+                        {
+                                ObjReprVerbindung.class,
+                                DbsDatVerbindung.class,
+                                RawbDbsVerbindung.class
+                        }
                 }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Anwendungsbaustein")), new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
                         {
-                                ObjReprVerbindung.class, EtntNatVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
+                                ObjReprVerbindung.class,
+                                EtntNatVerbindung.class,
+                                BssEtntVerbindung.class,
+                                AwbKommssVerbindung.class
                         }, {
-                                ObjReprVerbindung.class, EtntDotVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
+                                ObjReprVerbindung.class,
+                                EtntDotVerbindung.class,
+                                BssEtntVerbindung.class,
+                                AwbKommssVerbindung.class
                         }
                 }, s("Objekttyp") + " " + s("text_kommuniziert") + " " + s("Anwendungsbaustein"))
         });
@@ -886,18 +931,27 @@ public final class PathFinder {
         /* Objekttyp - KonAnwendungsbaustein */
         put(new MetaPath[] {
                 new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
-                    {
-                            ObjLogspVerbindung.class, KawbDoksVerbindung.class
-                    }
+                        {
+                                ObjLogspVerbindung.class,
+                                KawbDoksVerbindung.class
+                        }
                 }, s("Objekttyp") + " " + s("text_fuehrenden") + " " + s("Anwendungsbaustein")), new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
-                    {
-                            ObjReprVerbindung.class, DoksDokVerbindung.class, KawbDoksVerbindung.class
-                    }
+                        {
+                                ObjReprVerbindung.class,
+                                DoksDokVerbindung.class,
+                                KawbDoksVerbindung.class
+                        }
                 }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Anwendungsbaustein")), new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
                         {
-                                ObjReprVerbindung.class, EtntNatVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
+                                ObjReprVerbindung.class,
+                                EtntNatVerbindung.class,
+                                BssEtntVerbindung.class,
+                                AwbKommssVerbindung.class
                         }, {
-                                ObjReprVerbindung.class, EtntDotVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
+                                ObjReprVerbindung.class,
+                                EtntDotVerbindung.class,
+                                BssEtntVerbindung.class,
+                                AwbKommssVerbindung.class
                         }
                 }, s("Objekttyp") + " " + s("text_kommuniziert") + " " + s("Anwendungsbaustein"))
         });
@@ -906,83 +960,113 @@ public final class PathFinder {
         put(new MetaPath[] {
                 new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
                         {
-                            RawbRawbVerbindung.class
+                                RawbRawbVerbindung.class
                         }, {
-                            AwbKawbVerbindung.class
+                                AwbKawbVerbindung.class
                         }
                 }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true), new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                    {
-                            AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
-                    }
+                        {
+                                AwbKommssVerbindung.class,
+                                KommBeziehung.class,
+                                AwbKommssVerbindung.class
+                        }
                 }, new Color[] {
-                        Color.ORANGE, Color.BLUE, Color.GREEN
+                        Color.ORANGE,
+                        Color.BLUE,
+                        Color.GREEN
                 }, new String[] {
-                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
                 }, 1, true),
         });
 
         /* RechAnwendungsbaustein - RechAnwendungsbaustein */
         put(new MetaPath[] {
                 new MetaPath(RechAnwendungsbaustein.class, RechAnwendungsbaustein.class, new Class[][] {
-                    {
-                        RawbRawbVerbindung.class
-                    }
+                        {
+                                RawbRawbVerbindung.class
+                        }
                 }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true), new MetaPath(RechAnwendungsbaustein.class, RechAnwendungsbaustein.class, new Class[][] {
-                    {
-                            AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
-                    }
+                        {
+                                AwbKommssVerbindung.class,
+                                KommBeziehung.class,
+                                AwbKommssVerbindung.class
+                        }
                 }, new Color[] {
-                        Color.ORANGE, Color.BLUE, Color.GREEN
+                        Color.ORANGE,
+                        Color.BLUE,
+                        Color.GREEN
                 }, new String[] {
-                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
                 }, 1, true)
         });
 
         /* KonAnwendungsbaustein - Anwendungsbaustein */
         put(new MetaPath[] {
                 new MetaPath(KonAnwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                    {
-                        AwbKawbVerbindung.class
-                    }
+                        {
+                                AwbKawbVerbindung.class
+                        }
                 }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true), new MetaPath(KonAnwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                    {
-                            AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
-                    }
+                        {
+                                AwbKommssVerbindung.class,
+                                KommBeziehung.class,
+                                AwbKommssVerbindung.class
+                        }
                 }, new Color[] {
-                        Color.ORANGE, Color.BLUE, Color.GREEN
+                        Color.ORANGE,
+                        Color.BLUE,
+                        Color.GREEN
                 }, new String[] {
-                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
                 }, 1, true)
         });
 
         /* KonAnwendungsbaustein - KonAnwendungsbaustein */
         put(new MetaPath[] {
                 new MetaPath(KonAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
-                    {
-                        AwbKawbVerbindung.class
-                    }
+                        {
+                                AwbKawbVerbindung.class
+                        }
                 }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true), new MetaPath(KonAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
-                    {
-                            AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
-                    }
+                        {
+                                AwbKommssVerbindung.class,
+                                KommBeziehung.class,
+                                AwbKommssVerbindung.class
+                        }
                 }, new Color[] {
-                        Color.ORANGE, Color.BLUE, Color.GREEN
+                        Color.ORANGE,
+                        Color.BLUE,
+                        Color.GREEN
                 }, new String[] {
-                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
                 }, 1, true)
         });
 
         /* RechAnwendungsbaustein - KonAnwendungsbaustein */
         put(new MetaPath[] {
-            new MetaPath(RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
-                }
-            }, new Color[] {
-                    Color.ORANGE, Color.BLUE, Color.GREEN
-            }, new String[] {
-                    s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_sendet") + " " + s("spalte"), s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
-            }, 1, true)
+                new MetaPath(RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
+                        {
+                                AwbKommssVerbindung.class,
+                                KommBeziehung.class,
+                                AwbKommssVerbindung.class
+                        }
+                }, new Color[] {
+                        Color.ORANGE,
+                        Color.BLUE,
+                        Color.GREEN
+                }, new String[] {
+                        s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
+                        s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
+                }, 1, true)
         });
 
         initElementTypesInPathes();
