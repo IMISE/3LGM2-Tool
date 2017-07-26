@@ -389,12 +389,14 @@ public abstract class ModelElement extends UserFieldTarget {
         if (isHyperlink()) {
             textBuf.append("<U>");
         }
-        textBuf.append(HTMLConverter.getHTMLString(name).replaceAll("&#10;", "<BR>").replaceAll("\\\\&#45;", "-<BR>"));
+        HTMLConverter.appendDecimalEncodedHTMLString(textBuf, name);
         if (isHyperlink()) {
             textBuf.append("</U>");
         }
         textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
-        textBuf.append(suffixBuf.length() > 0 ? HTMLConverter.getHTMLString(suffixBuf.toString()) : "");
+        if (suffixBuf.length() > 0) {
+            HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString());
+        }
         textBuf.append("</CENTER></HTML>");
         htmlName = textBuf.toString();
 
@@ -2232,7 +2234,8 @@ public abstract class ModelElement extends UserFieldTarget {
                 descr = descr.concat("\n-" + joined + "-\n" + other.descr);
             }
         }
-        htmlName = HTMLConverter.getHTMLString(name).replaceAll("&#10;", "<BR>").replaceAll("\\\\&#45;", "-<BR>");
+
+        htmlName = HTMLConverter.getDecimalEncodedHTMLString(name);
         refreshText();
 
         //UserFields zusammenführen. Bei allen UserFIelds, bei denen nur ein Element einen Wert hat oder sich die Werte nicht

@@ -95,7 +95,7 @@ public class SpecialInfoLabel extends JLabel {
 
         text2Insert.append(fontName);
         text2Insert.append("\" size=\"" + fontSize + "\" color=\"");
-        text2Insert.append(HTMLConverter.getHTMLColor(fontColor));
+        HTMLConverter.appendHTMLColor(text2Insert, fontColor);
         switch (fontStyle) {
         case Font.PLAIN:
             text2Insert.append("\">");
@@ -129,8 +129,8 @@ public class SpecialInfoLabel extends JLabel {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void buildInfo() {
         StringBuilder sb = new StringBuilder("<HTML><BODY>");
         for (int i = 0; i < ownerAndText.getSize(); i++) {
@@ -165,8 +165,8 @@ public class SpecialInfoLabel extends JLabel {
         private final ArrayList<String> strings;
 
         /**
-		 * 
-		 */
+         *
+         */
         public ObjectAndText() {
             objects = new ArrayList<Object>();
             strings = new ArrayList<String>();
@@ -200,8 +200,8 @@ public class SpecialInfoLabel extends JLabel {
         }
 
         /**
-		 * 
-		 */
+         *
+         */
         public void clear() {
             objects.clear();
             strings.clear();
