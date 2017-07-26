@@ -188,7 +188,7 @@ public class DecisionTree {
             }
         }
 
-        // Jetzt sind die 2 Hashtables, die für jeden AWB auf alle von ihm unterstützten
+        // Jetzt sind die 2 HashMaps, die für jeden AWB auf alle von ihm unterstützten
         // Aufgaben mappen (awbToFuncsSets)und für jede Aufgabe auf die sie unterstützenden
         // AWBs (funcToAWBSets), initialisiert.
         // Für Aufgaben, die von gar keinem AWB unterstützt werden, gibts es keinen Eintrag
@@ -202,7 +202,7 @@ public class DecisionTree {
             ModelElement as = applicationSystems.get(awb);
 
             // Set aller Aufgaben, die der AWB unterstützt
-            AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
+            Set<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
 
             // wenn der AWB gar keine Aufgaben unterstützt -> als uunnützt merken und nächster AWB
             if (funcsOfAWB.size() == 0) {
@@ -235,14 +235,14 @@ public class DecisionTree {
         // für alle AWB, die mind. eine aber keine Aufgabe exklusiv unterstützen prüfe, ob schon
         // alle
         // ihre Aufgaben von exklusiv unterstützenden AWBs unterstützt werden
-        AlphabeticalSet<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<>();
+        Set<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<>();
         for (ModelElement as : notExclusiveAWBSet) {
             // wird true, wenn der AWB mind. eine Aufgabe unterstützt, die von keinem AWB
             // unterstützt
             // wird, die eine Aufgabe als einziger unterstützt
             boolean allAlreadySupported = true;
             // alle vom as unterstützten Aufgaben holen
-            AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
+            Set<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
             // für jede dieser Aufgaben
             for (ModelElement f : funcsOfAWB) {
                 // wenn sie noch nicht von den exklusiv unterstützenden AWBs erledigt wird
@@ -880,7 +880,7 @@ public class DecisionTree {
      *
      * @param Set aller bisher als nicht exklusiv und nicht überflüssig erkannten AWB
      */
-    private final void initEqualsSets(final AlphabeticalSet<ModelElement> notExclusiveAWBSet) {
+    private final void initEqualsSets(final Set<ModelElement> notExclusiveAWBSet) {
         // Liste für alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
         List<ModelElement> maybeNotrequiredAWB = new ArrayList<>();
 
@@ -892,7 +892,7 @@ public class DecisionTree {
             Alphabetical.insert(maybeNotrequiredAWB, notExclusiveAWB);
             // aus dem Set der vom AWB unterstützten Aufgaben all die entfernen, die schon
             // von den exklusiven AWBs erledigt werden (die braucht man nicht beachten)
-            AlphabeticalSet<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWB);
+            Set<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWB);
             funcOfAWB.removeAll(exclusiveFuncs);
         }
         // aus notExclusiveButNeededAWB alle AWB entfernen, die dasselbe tun, d.h. es bleibt genau
