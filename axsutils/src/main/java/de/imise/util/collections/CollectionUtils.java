@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -129,7 +130,7 @@ public abstract class CollectionUtils {
      * @return
      */
     public static final <T> Set<String> getSimpleClassNames(final Iterable<T> elements) {
-        ImmutableSet.Builder<String> classNames = new ImmutableSet.Builder<String>();
+        ImmutableSet.Builder<String> classNames = new ImmutableSet.Builder<>();
         for (T element : elements) {
             Class<?> clazz = element instanceof Class ? (Class<?>) element : element.getClass();
             classNames.add(clazz.getSimpleName());
@@ -353,7 +354,7 @@ public abstract class CollectionUtils {
      */
     @SuppressWarnings("unchecked")
     private static final <T> ArrayList<T> getAllElementsOf(final Collection<?> source, final Class<T> clazz, final boolean strict) {
-        ArrayList<T> retList = new ArrayList<T>();
+        ArrayList<T> retList = new ArrayList<>();
         Iterator<?> it = source.iterator();
         if (!strict) {
             while (it.hasNext()) {
@@ -380,7 +381,7 @@ public abstract class CollectionUtils {
      * @param list
      */
     public static final ArrayList<?> _getNoMultiplesList(final ArrayList<?> list) {
-        ArrayList<Object> returnList = new ArrayList<Object>(list.size());
+        ArrayList<Object> returnList = new ArrayList<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             Object o = list.get(i);
             if (!returnList.contains(o)) {
@@ -679,38 +680,66 @@ public abstract class CollectionUtils {
      * @param iterables
      * @return
      */
-    public static <T> Iterable<T> getCommonIterable(final Iterable<?>... iterables) {
-        return new Iterable<T>() {
+    public static <T> Iterable<T> getCommonIterable(final Iterable<? extends T>... iterables) {
+        return () -> new Iterator<T>() {
+
+            int currentIterableIndex = 0;
+
+            Iterator<? extends T> currentIterator = null;
+
+            private void init() {
+                if (iterables != null && iterables.length != 0) {
+                    if (currentIterator == null) {
+                        if (currentIterableIndex < iterables.length) {
+                            currentIterator = iterables[currentIterableIndex].iterator();
+                        }
+                    } else if (!currentIterator.hasNext()) {
+                        currentIterableIndex++;
+                        currentIterator = null;
+                        init();
+                    }
+                }
+            }
+
             @Override
-            public Iterator<T> iterator() {
-                return new Iterator<T>() {
+            public boolean hasNext() {
+                init();
+                return currentIterator != null && currentIterator.hasNext();
+            }
 
-                    int actualIterableIndex = 0;
+            @Override
+            public T next() {
+                init();
+                return currentIterator.next();
+            }
 
-                    @Override
-                    public boolean hasNext() {
-                        if (iterables == null || actualIterableIndex == iterables.length) {
-                            return false;
-                        }
-                        if (iterables[actualIterableIndex].iterator().hasNext()) {
-                            return true;
-                        }
-                        actualIterableIndex++;
-                        return hasNext();
-                    }
-
-                    @Override
-                    public T next() {
-                        return (T) iterables[actualIterableIndex].iterator().next();
-                    }
-
-                    @Override
-                    public void remove() {
-                        iterables[actualIterableIndex].iterator().remove();
-                    }
-                };
+            @Override
+            public void remove() {
+                init();
+                currentIterator.remove();
             }
         };
+    }
+
+    public static void main(final String[] args) {
+        List<String> strings = new ArrayList<>();
+        strings.add("eins");
+        strings.add("zwei");
+        strings.add("drei");
+        List<Integer> ints = new ArrayList<>();
+        ints.add(new Integer(1));
+        ints.add(new Integer(2));
+        ints.add(new Integer(3));
+        List<?>[] lists = {
+                strings,
+                ints
+        };
+        for (Object o : getCommonIterable(strings, ints)) {
+            System.err.println(o);
+        }
+        for (Object o : getCommonIterable(lists)) {
+            System.err.println(o);
+        }
     }
 
 }
