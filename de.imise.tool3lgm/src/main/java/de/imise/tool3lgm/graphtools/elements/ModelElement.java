@@ -1,10 +1,11 @@
 package de.imise.tool3lgm.graphtools.elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -52,7 +53,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Table, der von einem <code>GraphDocument</code> auf den Container des Elemtentes in diesem <code>GraphDocument</code> mappt, wenn es darin
      * vorkommt.
      */
-    private Hashtable<GraphDocument, ElementContainer> containerTable = new Hashtable<>(3, 1);
+    private Map<GraphDocument, ElementContainer> containerTable = new HashMap<>(3, 1);
 
     /**
      * Liste aller Assoziationen zu anderen Elementen
@@ -97,7 +98,7 @@ public abstract class ModelElement extends UserFieldTarget {
         retVal.htmlName = htmlName;
         retVal.descr = descr;
         retVal.hashstring = getNewHashString(this);
-        retVal.containerTable = new Hashtable<>(3, 1);
+        retVal.containerTable = new HashMap<>(3, 1);
 
         retVal.edges = new ArrayList<>(3);
 
@@ -2136,9 +2137,9 @@ public abstract class ModelElement extends UserFieldTarget {
     //	}
 
     /**
-     * @return {@link Hashtable} aller Container dieses Elementes
+     * @return {@link HashMap} aller Container dieses Elementes
      */
-    public Hashtable<GraphDocument, ElementContainer> getContainerTable() {
+    public Map<GraphDocument, ElementContainer> getContainerTable() {
         return containerTable;
     }
 
