@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -43,13 +45,13 @@ import de.imise.tool3lgm.log.Log;
 public class ToolContentHandlerV2_0 implements ContentHandler {
 
     /** gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString, Wert ist neuer HashString */
-    protected HashMap<String, String> hashCodes;
+    protected Map<String, String> hashCodes;
 
     /** Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei copyAndPaste) */
-    protected ArrayList<Kante> kanten;
+    protected List<Kante> kanten;
 
     /** KantenContainer deren computeBorderPoints()-Methode aufgerufen werden muss */
-    protected ArrayList<EdgeContainer> kantenContainer;
+    protected List<EdgeContainer> kantenContainer;
 
     /** GDCollection in die die Element geschrieben werden */
     protected GDCollection collection;
@@ -95,7 +97,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
      * HashString des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
      * laden. Das passiert in der Methode setIcon();
      */
-    protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<NodeContainer>();
+    protected List<NodeContainer> containerWithIcon = new ArrayList<>();
 
     /**
      * option beim Kopieren<br>
@@ -333,9 +335,9 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 copyAndPaste = collection.getCopyAndPaste();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
-                hashCodes = new HashMap<String, String>();
-                kanten = new ArrayList<Kante>();
-                kantenContainer = new ArrayList<EdgeContainer>();
+                hashCodes = new HashMap<>();
+                kanten = new ArrayList<>();
+                kantenContainer = new ArrayList<>();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -547,7 +549,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("bitmap")) {
-                if (iconKey != null && !collection.getIconTable().contains(iconKey)) {
+                if (iconKey != null && !collection.getIconTable().containsKey(iconKey)) {
                     collection.getIconTable().put(iconKey, Base64.decode(elementValue.toString()));
                 }
 

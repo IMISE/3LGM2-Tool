@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -53,22 +55,22 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
      * Wert ist neuer HashString
      */
-    protected HashMap<String, String> hashCodes;
+    protected Map<String, String> hashCodes;
 
     /**
      * Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei
      * copyAndPaste)
      */
-    protected ArrayList<ModelElement> kanten;
+    protected List<ModelElement> kanten;
 
     /** {@link BendpointContainer}, die den Kanten zugeordnet werden müssen (bei copyAndPaste) */
-    protected ArrayList<BendpointContainer> knickpunke;
+    protected List<BendpointContainer> knickpunke;
 
     /**
      * KantenContainer deren computeBorderPoints()-Methode aufgerufen werden
      * muss
      */
-    protected ArrayList<ElementContainer> kantenContainer;
+    protected List<ElementContainer> kantenContainer;
 
     /** GDCollection in die die Element geschrieben werden */
     protected GDCollection collection;
@@ -121,7 +123,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * noch das eigentliche Icon aus der Hashmap der Collection laden. Das
      * passiert in der Methode setIcon();
      */
-    protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<NodeContainer>();
+    protected List<NodeContainer> containerWithIcon = new ArrayList<>();
 
     /**
      * aktuelles userField bei der Definition der benutzerdefinierten
@@ -422,10 +424,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 copyAndPaste = collection.getCopyAndPaste();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
-                hashCodes = new HashMap<String, String>();
-                kanten = new ArrayList<ModelElement>();
-                knickpunke = new ArrayList<BendpointContainer>();
-                kantenContainer = new ArrayList<ElementContainer>();
+                hashCodes = new HashMap<>();
+                kanten = new ArrayList<>();
+                knickpunke = new ArrayList<>();
+                kantenContainer = new ArrayList<>();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -706,7 +708,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("bitmap")) {
-                if (iconKey != null && !collection.getIconTable().contains(iconKey)) {
+                if (iconKey != null && !collection.getIconTable().containsKey(iconKey)) {
                     collection.getIconTable().put(iconKey, Base64.decode(elementValue.toString()));
                 }
 
