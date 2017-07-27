@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -314,10 +313,9 @@ public final class PathFinder {
      *
      * @param me
      * @param metaPath
-     * @param gdcoll
      * @return
      */
-    public static final Set<ModelElement> getDirectConnectedElements(final ModelElement me, final MetaPath metaPath, final GDCollection gdcoll) {
+    public static final Set<ModelElement> getDirectConnectedElements(final ModelElement me, final MetaPath metaPath) {
         Set<ModelElement> startElements = new HashSet<>();
         startElements.add(me);
         Set<ModelElement> endElements = new HashSet<>();

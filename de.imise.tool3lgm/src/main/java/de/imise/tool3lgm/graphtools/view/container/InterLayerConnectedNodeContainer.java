@@ -91,7 +91,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
         showInterLayerConnections = show;
         for (MetaPath metaPath : ModelConstants.INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
             if (metaPath.getStartClass().isAssignableFrom(me.getClass())) {
-                Set<ModelElement> dirCon = PathFinder.getDirectConnectedElements(me, metaPath, doc.getCollection());
+                Set<ModelElement> dirCon = PathFinder.getDirectConnectedElements(me, metaPath);
                 for (ModelElement connected : dirCon) {
                     ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
                     if (ec != null) {
@@ -100,7 +100,7 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
                 }
                 if (!isExpanded()) {
                     for (ModelElement part : me.getPartElements()) {
-                        for (ModelElement connected : PathFinder.getDirectConnectedElements(part, metaPath, doc.getCollection())) {
+                        for (ModelElement connected : PathFinder.getDirectConnectedElements(part, metaPath)) {
                             ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
                             if (ec != null) {
                                 ec.setVisible(show);

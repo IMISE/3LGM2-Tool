@@ -388,7 +388,7 @@ public abstract class ModelElement extends UserFieldTarget {
         suffixBuf.setLength(0);
         MetaPath nameExtension = getNameExtension();
         if (nameExtension != null) {
-            Collection<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(this, nameExtension, getCollection());
+            Collection<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(this, nameExtension);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht

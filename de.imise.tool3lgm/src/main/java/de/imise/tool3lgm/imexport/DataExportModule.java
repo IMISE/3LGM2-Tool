@@ -127,7 +127,7 @@ public class DataExportModule {
                     v = "";
                     for (MetaPath metaPath : metaPaths2Export) {
                         if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
-                            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, metaPath, doc.getCollection());
+                            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, metaPath);
                             for (ModelElement con : connected) {
                                 v += con.getName() + ", ";
                             }

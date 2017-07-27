@@ -358,11 +358,9 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
             return new HashSet<>();
         }
         MetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
-        GDCollection gdcoll = error.getGdcoll();
-        // GraphDocument mainDoc = gdcoll.getGraphDocument();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
-            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, pathToDialogElement, gdcoll);
+            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, pathToDialogElement);
             if (connected.size() == 0) {
                 return null;
             }
