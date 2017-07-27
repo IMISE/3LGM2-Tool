@@ -378,7 +378,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private JMenu getSubElemMenu() {
         ModelElement selected = doc.getLastSelected().getElement();
         JMenu sub_elem = new JMenu(Tool3lgmConstants.getResString("unterg_el"));
-        HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>> slavePairs = new HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>>();
+        HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
         for (Class<? extends Composition> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
             Class<? extends ModelElement> abstractSlaves = Composition.getSlaveType(compositionClass);
             for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves)) {
@@ -390,7 +390,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             return sub_elem;
         }
 
-        ArrayList<JMenuItem> items = new ArrayList<JMenuItem>(slavePairs.size());
+        ArrayList<JMenuItem> items = new ArrayList<>(slavePairs.size());
 
         for (Pair<Class<? extends Composition>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends Composition> compositionClass = slavePair.getFirstItem();
@@ -620,8 +620,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
                             String label = ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
@@ -642,8 +642,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
@@ -666,8 +666,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                             actDir = Doppelkante.BACKWARD;
                             label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
@@ -688,8 +688,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         // Doppeldeutige Kanten mit identischer Start- und
                         // Endklasse brauchen nur 1x angeboten werden
@@ -713,8 +713,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                             actDir = Doppelkante.BACKWARD;
                             label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
@@ -735,8 +735,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                         }
                     } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
@@ -757,8 +757,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 break;
                             }
                         }
-                        connectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                        disconnectableItems.add(new NamedObjectContainer<JMenuItem>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                     }
                 }
             }
@@ -1887,7 +1887,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     public ArrayList<JMenuItem> getEinfuegenMenu() {
-        ArrayList<JMenuItem> eintraege = new ArrayList<JMenuItem>();
+        ArrayList<JMenuItem> eintraege = new ArrayList<>();
         if (getDoc() == null) {
             return eintraege;
         }
