@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.elements;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,9 +14,8 @@ import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GDCommands;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsprogramm;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Softwareprodukt;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -329,6 +329,18 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
+    /**
+     * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern
+     * unter der eigentlichen Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
+     * Elementen.
+     * Diese Funktion darf nicht einfach refactored werden und wenn doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME
+     * ebenfalls umbenannt werden.
+     */
+    protected MetaPath getNameExtension() {
+        return null;
+    }
+
+    /**
      * Setzt den Namen des Objektes und sortiert die Liste der {@link NodeContainer} im LayerContainer, wenn sort==true
      *
      * @param name
@@ -339,12 +351,7 @@ public abstract class ModelElement extends UserFieldTarget {
         if (name == null) {
             return;
         }
-        if (name.equalsIgnoreCase("null")) {
-            this.name = "";
-        } else {
-            this.name = name;
-        }
-
+        this.name = name.equalsIgnoreCase("null") ? "" : name;
         updateNameWithSzens();
 
         //Knoten der Layer neu sortieren
@@ -357,33 +364,47 @@ public abstract class ModelElement extends UserFieldTarget {
                 }
             }
         }
-
         if (isUnpaintable()) {
             return;
         }
+        updateHTMLName();
+        for (ElementContainer ec : containerTable.values()) {
+            ec.refreshText();
+        }
+    }
 
+    private void updateHTMLNameSuffixBuffer() {
         suffixBuf.setLength(0);
-        if (this instanceof RechAnwendungsbaustein) {
-            for (ModelElement awp : getConnectedElements(Anwendungsprogramm.class)) {
-                List<ModelElement> connectedSwp = awp.getConnectedElements(Softwareprodukt.class);
-                //Kein Softwareprodukt verbunden -> weiter
-                if (connectedSwp.size() == 0) {
-                    continue;
-                }
-                //genau ein Softwareprodukt verbunden, das denselben Namen hat wie dieser Anwendungsbaustein -> weiter (damit in der Grafik nicht
-                //2 mal dasselbe steht, wenn der Baustein genau wie das SWP genannt wurde
-                if (connectedSwp.size() == 1 && connectedSwp.get(0).getClearName().equals(getClearName())) {
-                    continue;
-                }
-                //in allen anderen Fällen kommt das SWP in Klammmern hinter den Bausteinnamen
-                for (ModelElement swp : connectedSwp) {
+        MetaPath nameExtension = getNameExtension();
+        if (nameExtension != null) {
+            Collection<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(this, nameExtension, getCollection());
+            //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
+            if (!directConnectedElements.isEmpty()) {
+                //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht
+                //2 mal dasselbe steht)
+                ModelElement firstConnected = directConnectedElements.iterator().next();
+                if (directConnectedElements.size() == 1) {
+                    if (!firstConnected.getClearName().equals(getClearName())) {
+                        suffixBuf.append("(").append(firstConnected.getName()).append(")");
+                    }
+                } else {
                     suffixBuf.append("(");
-                    suffixBuf.append(swp.getName());
+                    //in allen anderen Fällen kommen die verbundenen Elemente in Klammmern hinter den Elementnamen
+                    for (ModelElement swp : directConnectedElements) {
+                        suffixBuf.append(swp.getName());
+                        suffixBuf.append(", ");
+                    }
+                    //das letzte Komma wieder löschen
+                    suffixBuf.setLength(suffixBuf.length() - 2);
                     suffixBuf.append(")");
                 }
             }
         }
-        textBuf.delete(0, textBuf.length());
+    }
+
+    private void updateHTMLName() {
+        updateHTMLNameSuffixBuffer();
+        textBuf.setLength(0);
         textBuf.append("<HTML><CENTER>");
         if (isHyperlink()) {
             textBuf.append("<U>");
@@ -398,10 +419,6 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         textBuf.append("</CENTER></HTML>");
         htmlName = textBuf.toString();
-
-        for (ElementContainer ec : containerTable.values()) {
-            ec.refreshText();
-        }
 
     }
 

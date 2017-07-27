@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.RawbAwpVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.RawbDbsVerbindung;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 
 public final class RechAnwendungsbaustein extends Anwendungsbaustein {
 
@@ -48,6 +49,11 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
         dialog.addPathConnectionInfoPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
         return dialog;
+    }
+
+    @Override
+    protected MetaPath getNameExtension() {
+        return new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
     }
 
 }
