@@ -1,9 +1,9 @@
 package de.imise.util;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ReflectionUtils {
      * dann werden ihre Oberklassen gesucht. Der Rückgabewert ist wenigstens {@link Object}, wenn beide
      * übergebenen Objekte keine speziellere gemeinsame Oberklasse besitzen.
      * <code>null</code> kommt nur zurück, wenn beide übergebenen Objekte <code>null</code> waren.
-     * 
+     *
      * @param o1
      * @param o2
      * @return
@@ -61,7 +61,7 @@ public class ReflectionUtils {
      * anderen Elementen die speziellste gemeinsame Klasse gesucht.<br>
      * Ist die Liste <code>null</code> oder leer oder die Indices ungültig, kommt hier <code>null</code> zurück.
      * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
-     * 
+     *
      * @param objectList
      * @param startIndex
      * @param endIndex
@@ -83,7 +83,7 @@ public class ReflectionUtils {
      * anderen Elementen die speziellste gemeinsame Klasse gesucht.<br>
      * Ist die Liste <code>null</code> oder leer , kommt hier <code>null</code> zurück.
      * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
-     * 
+     *
      * @param objectList
      * @param startIndex
      * @param endIndex
@@ -112,7 +112,7 @@ public class ReflectionUtils {
      * enthaltenen Elemente.<br>
      * Ist die Liste <code>null</code> oder leer, kommt hier <code>null</code> zurück. Ansonsten
      * wird mindestens <code>Object.class</code> zurückgeliefert.
-     * 
+     *
      * @param objectArray
      * @return
      */
@@ -134,7 +134,7 @@ public class ReflectionUtils {
      * Liefert die speziellere Klasse der beiden Objekte, wenn das eine Objekt eine Unterklasse des anderen ist. Wenn sie vererbungstechnisch
      * nicht zusammen hängen, dann kommt <code>null</code> zurück. Werden als Objekte Klasse übergeben, dann wird für diese Klassen dieser
      * Zusammenhang gerpüft.
-     * 
+     *
      * @param o1
      * @param o2
      * @return
@@ -154,7 +154,7 @@ public class ReflectionUtils {
     /**
      * Entfernt alle Klassen aus der übergebenen Klassenliste,
      * von denen eine Oberklasse in der Liste vorkommt.
-     * 
+     *
      * @param classList
      * @return
      */
@@ -176,7 +176,7 @@ public class ReflectionUtils {
     /**
      * Entfernt alle Klassen aus der übergebenen Klassenliste,
      * von denen eine Unterklasse in der Liste vorkommt.
-     * 
+     *
      * @param classList
      * @return
      */
@@ -198,15 +198,15 @@ public class ReflectionUtils {
     /**
      * Gibt <code>true</code> zurück, wenn mind. ein Element in der übergebenen Liste enthalten ist
      * und alle Elemente in der Liste dieselbe Klasse besitzen, sonst false.
-     * 
+     *
      * @param objectList
      * @return
      */
-    public static boolean hasSameClass(final ArrayList<?> objectList) {
-        if (objectList.size() == 0) {
+    public static boolean hasSameClass(final Iterable<?> objectList) {
+        Iterator<?> it = objectList.iterator();
+        if (!it.hasNext()) {
             return false;
         }
-        Iterator<?> it = objectList.iterator();
         Class<?> firstClass = it.next().getClass();
         while (it.hasNext()) {
             if (!firstClass.equals(it.next().getClass())) {
@@ -219,7 +219,7 @@ public class ReflectionUtils {
     /**
      * Gibt den ersten Index des Objektes zurück, das mit der übergebenen Klasse zuweisungskompatibel ist. Ist ein
      * enthaltenes Objekt selbst eine Klasse, dass wird deren Zuweisungskompatibilität überprüft.
-     * 
+     *
      * @param objectList
      * @param clazz
      * @return
@@ -243,7 +243,7 @@ public class ReflectionUtils {
      * Liefert <code>true</code>, wenn die übergebene Objektliste wenigstens ein zu der übergebenen Klasse
      * zuweisungskompatibles Objekt enthält. Sind Elemente in der Objektliste selbst Klassen, so wird deren
      * Zuweisungskompatibilität geprüft.
-     * 
+     *
      * @param objectList
      * @param clazz
      * @return
@@ -255,7 +255,7 @@ public class ReflectionUtils {
 
     /**
      * Gibt wieder, ob die übergebene Klasse <code>abstract</code> ist.
-     * 
+     *
      * @param clazz
      * @return
      */
@@ -266,7 +266,7 @@ public class ReflectionUtils {
     /**
      * Liefert den absoluten Pfad zum Verzeichnis, in dem sich die übergebene Klasse im
      * Dateisystem befindet.
-     * 
+     *
      * @return
      */
     public static final String getAbsoluteDirectory(final Class<?> clazz) {
@@ -277,13 +277,48 @@ public class ReflectionUtils {
 
     /**
      * Liefert die Datei der übergebenen Klasse.
-     * 
+     *
      * @param clazz
      * @return
      */
     public static final File getClassFile(final Class<?> clazz) {
         URL absolutePath = clazz.getResource(clazz.getSimpleName() + ".class");
         return new File(absolutePath.getPath());
+    }
+
+    /**
+     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen (keine Interfaces)
+     * bis maximal zur Oberklasse maxSuperClass ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
+     * Die Klasse maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich Object.class durchsucht werden,
+     * muss als maxSuperClass null angegeben werden.
+     *
+     * @param clazz
+     * @param maxSuperClass
+     * @param fieldName
+     * @return
+     */
+    public static final Object getField(final Class<?> clazz, final Class<?> maxSuperClass, final String fieldName) {
+        Class<?> elementClass = clazz;
+        try {
+            boolean breakWhile = false;
+            while (elementClass != null) {
+                for (Field fld : elementClass.getDeclaredFields()) {
+                    if (fld.getName().equals(fieldName)) {
+                        return fld.get(fld);
+                    }
+                }
+                if (breakWhile) {
+                    break;
+                }
+                elementClass = elementClass.getSuperclass();
+                if (elementClass == maxSuperClass) {
+                    breakWhile = true;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
