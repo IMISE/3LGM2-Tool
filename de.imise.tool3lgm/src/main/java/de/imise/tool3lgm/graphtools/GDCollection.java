@@ -1660,6 +1660,13 @@ public final class GDCollection extends UserFieldTarget {
         doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
     }
 
+    private void updateElementNames() {
+        List<ModelElement> modelItemsWithNameExtensions = GraphDocumentHandler.getModelItems(this, ModelConstants.ELEMENTS_WITH_NAME_EXTENSIONS);
+        for (ModelElement me : modelItemsWithNameExtensions) {
+            me.updateNameExtensions();
+        }
+    }
+
     //ENDE LINK //
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //#############################################################################################//
@@ -3053,6 +3060,7 @@ public final class GDCollection extends UserFieldTarget {
             for (c = 0; c < anzahl; c++) {
                 listener.get(c).dataChanged(source);
             }
+            updateElementNames();
             break;
         case GraphDocument.ELEMENT_GRAPHICS_CHANGED:
             for (c = 0; c < anzahl; c++) {

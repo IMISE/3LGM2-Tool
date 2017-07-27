@@ -329,6 +329,11 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
+     * Name der Funtkion, die den MetaPfad zu verbundenen Elementen angibt, von denen der Name
+     * zusätzlich zum eigenen Elementnamen in der Grafik angezeigt werden soll.
+     */
+    public static final String GET_NAME_EXTENSION_METHOD_NAME = "getNameExtension";
+
     /**
      * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern
      * unter der eigentlichen Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
@@ -338,6 +343,12 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     protected MetaPath getNameExtension() {
         return null;
+    }
+
+    public void updateNameExtensions() {
+        if (getNameExtension() != null) {
+            setName(name);
+        }
     }
 
     /**

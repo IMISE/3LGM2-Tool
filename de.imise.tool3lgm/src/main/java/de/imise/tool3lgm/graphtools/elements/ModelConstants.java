@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -284,6 +285,8 @@ public final class ModelConstants {
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
     public static final Set<Class<? extends Knoten>> UNIQUE_NODES = metaModel.getUniqueNodes();
+
+    public static final Set<Class<? extends ModelElement>> ELEMENTS_WITH_NAME_EXTENSIONS = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, ALL_ELEMENTS);
 
     ///////////////////////////////////
     // spezielle Kanteneigenschaften //
