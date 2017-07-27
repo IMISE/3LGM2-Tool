@@ -7,6 +7,9 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 
 public class ReflectionUtils {
 
@@ -319,6 +322,26 @@ public class ReflectionUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Liefert ein Set aller übergebenen Klassen zurück, die eine Methode mit dem übergebenen Namen haben.
+     * Oberklassen werden nicht berücksichtigt.
+     *
+     * @param name
+     * @param classes
+     * @return
+     */
+    public static <T> Set<Class<? extends T>> hasMethod(final String name, final Class<? extends T>... classes) {
+        ImmutableSet.Builder<Class<? extends T>> returnClasses = new ImmutableSet.Builder<>();
+        for (Class<? extends T> clazz : classes) {
+            try {
+                clazz.getDeclaredMethod(name);
+                returnClasses.add(clazz);
+            } catch (NoSuchMethodException | SecurityException e) {
+            }
+        }
+        return returnClasses.build();
     }
 
 }
