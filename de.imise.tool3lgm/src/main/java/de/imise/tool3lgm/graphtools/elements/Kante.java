@@ -1,13 +1,12 @@
 package de.imise.tool3lgm.graphtools.elements;
 
-import java.lang.reflect.Field;
-
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.ReflectionUtils;
 
 /**
  * @author N.N.
@@ -406,7 +405,7 @@ public abstract class Kante extends ModelElement {
             return true;
         }
         //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
-        //der Start- und Endelemente mit den Metaklassen üerbeinstimmen.
+        //der Start- und Endelemente mit den Metaklassen übereinstimmen.
         return startClassOk && endClassOk;
     }
 
@@ -416,47 +415,23 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
+     * @param edgeClass
      * @param start
      * @return
      */
-    private static final Class<? extends ModelElement> getStartEndClass(Class<? extends Kante> edgeClass, final boolean start) {
+    private static final Class<? extends ModelElement> getStartEndClass(final Class<? extends Kante> edgeClass, final boolean start) {
         String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
-        try {
-            while (Kante.class.isAssignableFrom(edgeClass)) {
-                for (Field fld : edgeClass.getDeclaredFields()) {
-                    if (fld.getName().toLowerCase().equals(fieldName)) {
-                        return (Class<? extends ModelElement>) fld.get(fld);
-                    }
-                }
-                edgeClass = edgeClass.getSuperclass().asSubclass(Kante.class);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (Class<? extends ModelElement>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
     }
 
     /**
+     * @param edgeClass
      * @param start
      * @return
      */
     protected static final int[] getStartEndCardinality(final Class<? extends Kante> edgeClass, final boolean start) {
         String fieldName = start ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
-        Class<?> elementClass = edgeClass;
-        try {
-            while (elementClass != ModelElement.class) {
-                for (Field fld : elementClass.getDeclaredFields()) {
-                    if (fld.getName().toLowerCase().equals(fieldName)) {
-                        return (int[]) fld.get(fld);
-                    }
-                }
-                elementClass = elementClass.getSuperclass();
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        //		System.err.println(getClass().getSimpleName() + ": " +fieldName + " (" + elementClass.getSimpleName()+")");
-        return null;
+        return (int[]) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
     }
 
     /**
