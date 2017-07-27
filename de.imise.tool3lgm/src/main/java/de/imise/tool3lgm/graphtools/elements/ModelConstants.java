@@ -88,7 +88,7 @@ public final class ModelConstants {
     /**
      * Liste aller geöffneten Dialoge
      */
-    public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<ElementPropertyDialog>();
+    public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<>();
 
     /**
      * Unendlich als maximaler Integer
@@ -360,7 +360,7 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
      */
-    public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]>();
+    public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<>();
 
     /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
@@ -375,7 +375,7 @@ public final class ModelConstants {
         if (elementClasses != null) {
             return elementClasses;
         }
-        HashSet<Class<? extends ModelElement>> al = new HashSet<Class<? extends ModelElement>>();
+        HashSet<Class<? extends ModelElement>> al = new HashSet<>();
         for (Class<? extends ModelElement> clazz : ALL_NODES) {
             if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
                 al.add(clazz);
@@ -399,7 +399,7 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse selbst besitzt oder von einer ihrer Oberklassen erbt.
      */
-    private static final HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
+    private static final HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<>();
 
     /**
      * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
@@ -413,7 +413,7 @@ public final class ModelConstants {
         if (edgeClasses != null) {
             return edgeClasses;
         }
-        ArrayList<Class<? extends Kante>> elementClassEdgeClasses = new ArrayList<Class<? extends Kante>>();
+        ArrayList<Class<? extends Kante>> elementClassEdgeClasses = new ArrayList<>();
         for (Class<? extends Kante> edgeClass : ALL_EDGES) {
             if (Kante.isStartOrEndClass(edgeClass, elementClass)) {
                 elementClassEdgeClasses.add(edgeClass);
@@ -449,7 +449,7 @@ public final class ModelConstants {
      * dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als Schlüssel
      * einsetzt.
      */
-    private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>>();
+    private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<>();
 
     /**
      * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
@@ -468,10 +468,10 @@ public final class ModelConstants {
                 return edgeClasses;
             }
         } else {
-            elementClassToEdgeClass = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
+            elementClassToEdgeClass = new HashMap<>();
             ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass1, elementClassToEdgeClass);
         }
-        ArrayList<Class<? extends Kante>> resultEdgeClasses = new ArrayList<Class<? extends Kante>>();
+        ArrayList<Class<? extends Kante>> resultEdgeClasses = new ArrayList<>();
         for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass1)) {
             if (Kante.isConnecting(edgeClass, elementClass1, elementClass2)) {
                 resultEdgeClasses.add(edgeClass);
@@ -489,7 +489,7 @@ public final class ModelConstants {
         elementClassToEdgeClass.put(elementClass2, returnClasses);
         elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass2);
         if (elementClassToEdgeClass == null) {
-            elementClassToEdgeClass = new HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>();
+            elementClassToEdgeClass = new HashMap<>();
             ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass2, elementClassToEdgeClass);
         }
         elementClassToEdgeClass.put(elementClass1, returnClasses);
@@ -620,7 +620,7 @@ public final class ModelConstants {
      * @return
      */
     public final static Set<Class<? extends ModelElement>> getInterLayerStartClasses(final Class<? extends ModelElement> endClass) {
-        Set<Class<? extends ModelElement>> startClasses = new HashSet<Class<? extends ModelElement>>();
+        Set<Class<? extends ModelElement>> startClasses = new HashSet<>();
         for (MetaPath path : INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
             if (path.getEndClass().isAssignableFrom(endClass)) {
                 startClasses.add(path.getStartClass());
@@ -699,7 +699,7 @@ public final class ModelConstants {
     }
 
     /** Mappt vom Klassennamen auf die Klasse. Ist der Cache für die Funktion {@link #getClassForName(String)} */
-    private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<String, Class<? extends ModelElement>>();
+    private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<>();
 
     /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, TextfeldFach.class, TextfeldLog.class, TextfeldPhy.class);
@@ -1039,11 +1039,11 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart Teilemente untergeordnet werden kann.
      */
-    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
+    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<>(5);
     /**
      * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart als Teilement untergeordnet werden kann.
      */
-    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]>(5);
+    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<>(5);
     //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
     //gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
     //kann man die Warnungen nur für die ganze Datei unterdrücken
@@ -1146,9 +1146,9 @@ public final class ModelConstants {
 
         //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
         if (elementClassToHashShortName == null) {
-            elementClassToHashShortName = new HashMap<Class<? extends ModelElement>, String>();
+            elementClassToHashShortName = new HashMap<>();
             //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
-            HashSet<String> allShortNames = new HashSet<String>();
+            HashSet<String> allShortNames = new HashSet<>();
             loop1: for (int i = 0; i < ALL_NODES.length; i++) {
                 String s = ALL_NODES[i].getSimpleName();
                 //wenn der Klassenname aus weniger als 4 Zeichen besteht
@@ -1360,7 +1360,7 @@ public final class ModelConstants {
     @SuppressWarnings("unchecked")
     private static Class<? extends Composition>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
         Class<? extends Kante>[] elementClassEdges = getEdgeTypes(elementClass);
-        ArrayList<Class<? extends Kante>> subEdgeTypes = new ArrayList<Class<? extends Kante>>(elementClassEdges.length);
+        ArrayList<Class<? extends Kante>> subEdgeTypes = new ArrayList<>(elementClassEdges.length);
         for (Class<? extends Kante> edgeClass : elementClassEdges) {
             if (isComposition(edgeClass)) {
                 if (isMaster) {
@@ -1426,7 +1426,7 @@ public final class ModelConstants {
         if (compositions.length == 0) {
             return EMPTY_ELEMENT_CLASS_ARRAY;
         }
-        ArrayList<Class<? extends ModelElement>> slaveElementClasses = new ArrayList<Class<? extends ModelElement>>(compositions.length);
+        ArrayList<Class<? extends ModelElement>> slaveElementClasses = new ArrayList<>(compositions.length);
         for (Class<? extends Composition> compClass : compositions) {
             Class<? extends ModelElement> slaveType = Composition.getSlaveType(compClass);
             if (!slaveElementClasses.contains(slaveType)) {
