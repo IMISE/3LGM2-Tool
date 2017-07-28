@@ -205,13 +205,12 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
                 // Neues Element anlegen
                 if (selected == panel.createNew) {
                     panel.connectToFirstPath(null);
-
+                    panel.update();
                 } else if (selected instanceof NodeContainer) { //vorhandemes Element verknüpfen
                     ElementContainer container2Connect = (ElementContainer) selected;
                     ModelElement element2Connect = container2Connect.getElement();
                     panel.connectToFirstPath(element2Connect);
                 }
-
                 modelElement.getContainer(mainDoc).refreshText();
                 mainDoc.finish_transaction(dialog.getTransactionID());
                 mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, dialog.getTransactionID());
