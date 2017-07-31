@@ -131,7 +131,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     protected Component getTabComponentAt(final int index) {
-        return tab.getTabComponentAt(index);
+        return tab.getComponentAt(index);
     }
 
 }
