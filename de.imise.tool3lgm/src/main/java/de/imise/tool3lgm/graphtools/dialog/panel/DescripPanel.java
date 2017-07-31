@@ -10,8 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.GraphDocument;
@@ -26,17 +24,23 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * @author N.N., AXS (4/2017)
  * @create Long time ago
  */
-public class DescripPanel extends ElementDialogPanel implements DocumentListener {
+public class DescripPanel extends ElementDialogPanel /* implements DocumentListener */ {
 
     private final ExtendedTextPane descriptionTextPane;
 
     private final LimitedSizeScrollTextPane nameTextPane;
 
-    private final ArrayList<ElementDialogPanel> panels = new ArrayList<ElementDialogPanel>();
+    private final ArrayList<ElementDialogPanel> panels = new ArrayList<>();
 
     private final GridBagConstraints gbc = new GridBagConstraints();
 
     private int gridy = 0;
+
+    /** Name des ModelElements beim letzten Update des Dialoges */
+    private String lastName = null;
+
+    /** Beschreibung des ModelElements beim letzten Update des Dialoges */
+    private String lastDescription = null;
 
     /**
      * @param dialog
@@ -72,24 +76,24 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
 
     }
 
-    private void updateName() {
-        ModelElement modelElement = getModelElement();
-        String name = modelElement.getName();
-        String nameText = nameTextPane.getText();
-        if (!name.equals(nameText)) {
-            nameTextPane.setText(modelElement.getName());
-        }
-    }
-
     @Override
     public void update() {
-        nameTextPane.removeDocumentListener(this);
-        updateName();
-        ModelElement modelElement = getModelElement();
-        descriptionTextPane.setText(modelElement.getDescription());
-        nameTextPane.setCaretPosition(0);
-        descriptionTextPane.setCaretPosition(0);
-        nameTextPane.addDocumentListener(this); //erst nach dem initialen setText den Listener ranhängen, sonst wird gleich commit aufgerufen
+        ModelElement me = getModelElement();
+        //nur den Namen und die Beschreibung updaten, wenn sie anders sind als das, was im Textfeld steht
+        //das sollte nur beim ersten Update nach dem Init der Fall sein oder falls diese Felder außerhalb
+        //des Dialoges geändert wurden
+        String name = me.getName();
+        if (!name.equals(lastName)) {
+            lastName = name;
+            nameTextPane.setText(name);
+            nameTextPane.setCaretPosition(0);
+        }
+        String description = me.getDescription();
+        if (!description.equals(lastDescription)) {
+            lastDescription = description;
+            descriptionTextPane.setText(description);
+            descriptionTextPane.setCaretPosition(0);
+        }
         for (int m = 0; m < panels.size(); m++) {
             panels.get(m).update();
         }
@@ -133,11 +137,9 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
 
     @Override
     public void commit() {
-        nameTextPane.removeDocumentListener(this);
         ModelElement me = getModelElement();
         String newName = nameTextPane.getText();
-        // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion
-        // ändern
+        // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion ändern
         String name = me.getName();
         if (newName != null && !newName.equals(name)) {
             doc.setName(me, newName, dialog.getTransactionID());
@@ -157,21 +159,6 @@ public class DescripPanel extends ElementDialogPanel implements DocumentListener
         for (int m = 0; m < panels.size(); m++) {
             panels.get(m).commit();
         }
-        nameTextPane.addDocumentListener(this);
     }
 
-    @Override
-    public void insertUpdate(final DocumentEvent e) {
-        commit();
-    }
-
-    @Override
-    public void removeUpdate(final DocumentEvent e) {
-        commit();
-    }
-
-    @Override
-    public void changedUpdate(final DocumentEvent e) {
-        commit();
-    }
 }
