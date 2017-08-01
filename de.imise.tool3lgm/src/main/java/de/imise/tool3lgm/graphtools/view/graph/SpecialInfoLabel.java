@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.view.container.AdditionalLabelTextGenerator;
-import de.imise.util.HTMLConverter;
+import de.imise.util.htmlxml.HTMLConverter;
 
 /**
  * @author AXS

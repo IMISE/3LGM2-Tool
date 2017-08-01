@@ -22,10 +22,10 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.util.Alphabetical;
-import de.imise.util.HTMLConverter;
 import de.imise.util.HashStringGenerator;
+import de.imise.util.htmlxml.HTMLConverter;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 
 public abstract class ModelElement extends UserFieldTarget {
 

@@ -18,9 +18,9 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.tool3lgm.xml.XMLSource;
 import de.imise.util.HashStringGenerator;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
  * Ein <code>UserField</code> ist ein Element bzw. Objekt, dass Element- und Kantenklassen zugewiesen werden kann. Mit Hilfe dieses Elementes können

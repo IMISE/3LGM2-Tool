@@ -58,9 +58,9 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.Base64;
 import de.imise.tool3lgm.xml.LgmXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLParser;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**

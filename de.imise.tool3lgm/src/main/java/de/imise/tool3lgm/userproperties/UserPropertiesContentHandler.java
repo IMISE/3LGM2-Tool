@@ -17,8 +17,8 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
 import de.imise.util.Locales;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.io.FileHandler;
 
 /**

@@ -10,7 +10,7 @@ import java.util.Set;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
  * Oberklasse für alle Klassen, denen man benutzerdefinierte Eigenschaften geben kann. Hinweis: Beim Löschen eines UserFields bleibt sein Hash und

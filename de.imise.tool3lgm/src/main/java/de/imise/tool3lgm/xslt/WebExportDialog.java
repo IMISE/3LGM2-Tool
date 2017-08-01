@@ -41,7 +41,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.component.text.ExtendedTextField;

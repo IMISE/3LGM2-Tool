@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.Base64;
 import de.imise.tool3lgm.xml.ToolXMLParser;
-import de.imise.tool3lgm.xml.XMLCharacterCoder;
+import de.imise.util.htmlxml.XMLCharacterCoder;
 
 public class GDCollectionImExportHandler {
 
