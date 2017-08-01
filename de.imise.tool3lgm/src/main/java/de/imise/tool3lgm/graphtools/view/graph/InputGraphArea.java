@@ -29,8 +29,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.Werkzeugleiste;
-import de.imise.tool3lgm.tools.UnfloatableToolBar;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
  * COMMENTME

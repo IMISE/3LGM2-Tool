@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.UnfloatableToolBar;
+import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)

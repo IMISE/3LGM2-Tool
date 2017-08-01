@@ -23,7 +23,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
-import de.imise.tool3lgm.tools.UnfloatableToolBar;
+import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
  * Klasse für die Werkzeugleiste eines InternalFrame mit Matrixdarstellung

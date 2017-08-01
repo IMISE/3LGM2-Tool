@@ -97,10 +97,10 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.tools.BrowseUtils;
-import de.imise.tool3lgm.tools.UnfloatableToolBar;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.io.FileNameExtensionFilterAndFileFilter;
+import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.ProgressDialog;
 

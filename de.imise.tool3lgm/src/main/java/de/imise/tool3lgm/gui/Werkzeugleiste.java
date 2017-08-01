@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.tools.UnfloatableToolBar;
+import de.imise.util.swing.component.UnfloatableToolBar;
 
 public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener, ChangeListener {
 

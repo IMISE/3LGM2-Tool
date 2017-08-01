@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.UnfloatableToolBar;
+import de.imise.util.swing.component.UnfloatableToolBar;
 
 // TODO: alles auf die Actions umstellen, die auch das Menü benutzt. Die Actions sollten aber auch gleich mit den Icons klarkommen
 public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener {
