@@ -1,4 +1,4 @@
-package de.imise.util;
+package de.imise.util.htmlxml;
 
 import java.awt.Color;
 
