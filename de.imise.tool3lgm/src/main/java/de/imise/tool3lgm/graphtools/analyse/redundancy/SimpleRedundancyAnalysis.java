@@ -8,11 +8,11 @@ import java.util.List;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 /**
  * Diese Klasse führt die Redundnazanalyse, die Dr. Birgit Brigl 1995 in "Brigl B, Hübner-Bloder G,

@@ -11,19 +11,19 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntDotVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.EtntNatVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommbezEtntVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntDotVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommbezEtntVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EreignisDokumentenTyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EreignisNachrichtenTyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 
 /**
  * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade ermittelt werden.

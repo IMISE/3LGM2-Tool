@@ -11,15 +11,15 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommbezEtntVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.Repraesentationsform;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommbezEtntVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Repraesentationsform;
 import de.imise.util.SameTypePair;
 
 /**

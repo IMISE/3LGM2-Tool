@@ -36,7 +36,6 @@ import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -50,6 +49,7 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;

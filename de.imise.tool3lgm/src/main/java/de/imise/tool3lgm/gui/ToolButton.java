@@ -9,10 +9,10 @@ import javax.swing.JToggleButton;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 /**
  * @author N.N.

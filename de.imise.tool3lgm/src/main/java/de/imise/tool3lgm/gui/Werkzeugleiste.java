@@ -16,14 +16,14 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener, ChangeListener {

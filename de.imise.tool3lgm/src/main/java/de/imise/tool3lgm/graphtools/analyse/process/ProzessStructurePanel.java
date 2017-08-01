@@ -47,17 +47,15 @@ import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.AufObjVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.PrzAufVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.tools.LGMTree;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**

@@ -9,10 +9,10 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 
 /**
  * @author AXS To change this generated comment go to Window>Preferences>Java>Code Generation>Code

@@ -8,15 +8,15 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
-import de.imise.tool3lgm.graphtools.elements.edge.AwbKommssVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DbsDatVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.DoksDokVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjLogspVerbindung;
-import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.Repraesentationsform;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DoksDokVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Repraesentationsform;
 
 /**
  * Stellt Funktionen bereit, um 'teure' Anfragen an ein Model effizient wiederholen zu können.

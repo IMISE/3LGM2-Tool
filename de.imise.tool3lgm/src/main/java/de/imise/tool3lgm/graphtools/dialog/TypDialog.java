@@ -18,8 +18,8 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 
 public class TypDialog extends JDialog implements ActionListener, KeyListener {
 

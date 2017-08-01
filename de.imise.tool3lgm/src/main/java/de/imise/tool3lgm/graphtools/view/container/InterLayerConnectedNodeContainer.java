@@ -5,12 +5,12 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 /**
  * Von {@link NodeContainer} abgeleitete Klasse, die den Container für {@link Aufgabe}n

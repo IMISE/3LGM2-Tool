@@ -11,17 +11,17 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.Benutzungsschnittstelle;
-import de.imise.tool3lgm.graphtools.elements.node.Datenbanksystem;
-import de.imise.tool3lgm.graphtools.elements.node.Dokumentensammlung;
-import de.imise.tool3lgm.graphtools.elements.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationsplan;
-import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.graphtools.elements.node.RechAnwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Benutzungsschnittstelle;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Dokumentensammlung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationsplan;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 
 public class Mapping {
 

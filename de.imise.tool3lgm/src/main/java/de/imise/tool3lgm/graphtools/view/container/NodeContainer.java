@@ -14,12 +14,12 @@ import javax.swing.JOptionPane;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**

@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 

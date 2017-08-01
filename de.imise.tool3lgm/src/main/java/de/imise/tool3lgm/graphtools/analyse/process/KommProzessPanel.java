@@ -32,15 +32,15 @@ import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.Organisationseinheit;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.AdditionalLabelTextGenerator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 
 /**
  * @author AXS Dieses Panel ist das KommunikationsprozessPanel im ElementPropertyDialog eines

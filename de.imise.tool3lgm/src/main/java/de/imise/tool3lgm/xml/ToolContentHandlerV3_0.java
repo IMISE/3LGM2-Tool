@@ -21,7 +21,6 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -37,6 +36,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen

@@ -16,12 +16,12 @@ import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
-import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 
 /**
  * @author N.N

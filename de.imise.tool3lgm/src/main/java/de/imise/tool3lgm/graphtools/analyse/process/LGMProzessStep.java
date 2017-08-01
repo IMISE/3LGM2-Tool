@@ -10,12 +10,12 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.node.ABKonfiguration;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
-import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
-import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
-import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
-import de.imise.tool3lgm.graphtools.elements.node.Prozess;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 
 /**
  * @author AXS To change this generated comment go to Window>Preferences>Java>Code Generation>Code

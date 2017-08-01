@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 

@@ -14,7 +14,6 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.Textfeld;
-import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
@@ -25,6 +24,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
