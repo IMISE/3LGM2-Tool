@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.view.graph;
 
 /**
  * @author Thomas Rudert

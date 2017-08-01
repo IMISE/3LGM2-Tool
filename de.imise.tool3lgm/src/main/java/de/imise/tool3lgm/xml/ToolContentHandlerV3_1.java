@@ -8,7 +8,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.Szenario;
-import de.imise.tool3lgm.graphtools.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
 /**
  * @author Thomas Rudert
