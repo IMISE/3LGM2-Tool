@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.swing.Action;
 import javax.swing.DebugGraphics;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -22,7 +21,6 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -186,7 +184,7 @@ public abstract class Tool3lgmConstants {
     public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 
     /** Mappt von einem {@link FileFilterType} auf den dazugehörigen {@link FileNameExtensionFilter} */
-    private static final HashMap<FileFilterType, FileNameExtensionFilter> FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER = new HashMap<Tool3lgmConstants.FileFilterType, FileNameExtensionFilter>();
+    private static final HashMap<FileFilterType, FileNameExtensionFilter> FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER = new HashMap<>();
 
     /** Map aller Global einsetzbarer {@link KeyStroke}s */
     public static final Map<ActionIdentifier, KeyStroke> KEYSTROKES = new KeyStrokeMap(ActionIdentifier.ACTION_NEW_MODEL, KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_OPEN_MODEL, KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK,
@@ -196,11 +194,6 @@ public abstract class Tool3lgmConstants {
             KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 
     // Ende FileFilter
-
-    /**
-     * Array aller {@link Action}s, die im gesamten Baukasten durch ihre dazugehörigen {@link KeyStroke}s ausgelöst werden können
-     */
-    private static Action[] KEYSTROKE_ACTIONS;
 
     /**
      * Alle Benutzereinstelllungen und damit auch die Locale initialisieren
@@ -518,34 +511,6 @@ public abstract class Tool3lgmConstants {
      */
     public static KeyStroke getKeyStroke(final ActionIdentifier key) {
         return KEYSTROKES.get(key);
-    }
-
-    /**
-     * Gibt ein Array aller {@link Action}s wieder, die im gesamten Baukasten durch ihre dazugehörigen {@link KeyStroke}s ausgelöst werden können.
-     *
-     * @see #KEYSTROKES
-     * @return
-     */
-    public static Action[] getKeyStrokeActions() {
-        if (KEYSTROKE_ACTIONS == null) {
-            KEYSTROKE_ACTIONS = new Action[] {
-                    ActionLibrary.FileActions.ACTION_NEW_MODEL,
-                    ActionLibrary.FileActions.OPEN,
-                    ActionLibrary.FileActions.SAVE,
-                    ActionLibrary.EditActions.REMOVE,
-                    ActionLibrary.EditActions.UNDO,
-                    ActionLibrary.EditActions.REDO,
-                    ActionLibrary.EditActions.SELECT_ALL,
-                    ActionLibrary.EditActions.CUT,
-                    ActionLibrary.EditActions.COPY,
-                    ActionLibrary.EditActions.PASTE,
-                    ActionLibrary.AnalysisActions.OPEN_REPOSITORY,
-                    ActionLibrary.AnalysisActions.OPEN_EDITOR,
-                    ActionLibrary.AnalysisActions.RESET_RESULT
-            };
-        }
-
-        return KEYSTROKE_ACTIONS;
     }
 
     /**
