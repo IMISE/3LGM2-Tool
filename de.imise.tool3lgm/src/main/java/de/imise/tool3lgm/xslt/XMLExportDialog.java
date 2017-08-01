@@ -20,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,6 +29,7 @@ import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.dialog.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -170,24 +169,20 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         buttonChange.setEnabled(false);
         buttonDelete.setEnabled(false);
 
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-            @Override
-            public void valueChanged(final ListSelectionEvent e) {
-                if (table.getSelectedRow() < 0) {
-                    buttonAction.setEnabled(false);
-                    buttonChange.setEnabled(false);
-                    buttonDelete.setEnabled(false);
-                    return;
-                }
-                if (tableModel.getScript(table.getSelectedRow()).isReadOnly()) {
-                    buttonDelete.setEnabled(false);
-                } else {
-                    buttonDelete.setEnabled(true);
-                }
-                buttonAction.setEnabled(true);
-                buttonChange.setEnabled(true);
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (table.getSelectedRow() < 0) {
+                buttonAction.setEnabled(false);
+                buttonChange.setEnabled(false);
+                buttonDelete.setEnabled(false);
+                return;
             }
+            if (tableModel.getScript(table.getSelectedRow()).isReadOnly()) {
+                buttonDelete.setEnabled(false);
+            } else {
+                buttonDelete.setEnabled(true);
+            }
+            buttonAction.setEnabled(true);
+            buttonChange.setEnabled(true);
         });
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -290,11 +285,11 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             Static.setProgressDialogStatusLabel("trans_title");
 
             File tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH, "temporary_XMLFile_for_XSLT-Export.xml");
-
+            GDCollectionImExportHandler imExportHandler = collection.getImExportHandler();
             if (selectedSzenarios.length == collection.getSzenarioCount()) {
-                collection.exportModel(tempXMLFile);
+                imExportHandler.exportModel(tempXMLFile);
             } else {
-                collection.exportSzenarios(selectedSzenarios, tempXMLFile);
+                imExportHandler.exportSzenarios(selectedSzenarios, tempXMLFile);
             }
 
             try {

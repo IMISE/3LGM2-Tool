@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
@@ -721,7 +722,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("title")) {
 
             } else if (qName.equals("version")) {
-                collection.setFileVersion(elementValue.toString());
+                GDCollectionFileHandler fileHandler = collection.getFileHandler();
+                fileHandler.setFileVersion(elementValue.toString());
 
             } else if (qName.equals("avoidDuplicates")) {
                 avoidDuplicates = false;

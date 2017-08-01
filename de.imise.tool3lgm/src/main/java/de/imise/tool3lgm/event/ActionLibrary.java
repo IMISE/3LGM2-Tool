@@ -48,6 +48,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
@@ -1006,7 +1007,9 @@ public class ActionLibrary {
                     oeffnenDialog.setMultiSelectionEnabled(false);
                     oeffnenDialog.setFileFilters(false, Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
                     if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        getSelectedCollection().importSzenarios(oeffnenDialog.getSelectedFile(), true);
+                        GDCollection selectedGDColl = getSelectedCollection();
+                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
+                        imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), true);
                     }
                 }
             };
@@ -1023,7 +1026,9 @@ public class ActionLibrary {
                     oeffnenDialog.setMultiSelectionEnabled(false);
                     oeffnenDialog.setFileFilters(false, Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
                     if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        getSelectedCollection().importModel(oeffnenDialog.getSelectedFile());
+                        GDCollection selectedGDColl = getSelectedCollection();
+                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
+                        imExportHandler.importModel(oeffnenDialog.getSelectedFile());
                     }
                 }
             };

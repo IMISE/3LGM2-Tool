@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.dialog.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.log.Log;
@@ -225,7 +226,8 @@ public class WebExportDialog extends JDialog {
             raf.close();
 
             File tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH + "temporary_XMLFile_for_XSLT-Export.xml");
-            collection.exportModel(tempXMLFile);
+            GDCollectionImExportHandler imExportHandler = collection.getImExportHandler();
+            imExportHandler.exportModel(tempXMLFile);
             for (int i = 0; i < selected.size(); i++) {
                 try {
                     XMLTransformer.transform(selected.get(i).openStream(), selected.get(i).getSource(), tempXMLFile, filesDir + "/xslt" + i + ".html");
@@ -255,10 +257,14 @@ public class WebExportDialog extends JDialog {
                 raf.close();
 
                 tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH + "temporary_XMLFile_for_XSLT-Export.xml");
-                collection.exportSzenarios(szenarios, tempXMLFile);
+                imExportHandler.exportSzenarios(szenarios, tempXMLFile);
                 for (int i = 0; i < selected.size(); i++) {
                     try {
-                        XMLTransformer.transform(selected.get(i).openStream(), selected.get(i).getSource(), tempXMLFile, filesDir + "/szen" + j + "_xslt" + i + ".html");
+                        XSLTScript selectedScript = selected.get(i);
+                        InputStream openStream = selectedScript.openStream();
+                        String sourceName = selectedScript.getSource();
+                        String destinationName = filesDir + "/szen" + j + "_xslt" + i + ".html";
+                        XMLTransformer.transform(openStream, sourceName, tempXMLFile, destinationName);
                     } catch (Error e) {
                         Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
                     }
@@ -531,7 +537,7 @@ public class WebExportDialog extends JDialog {
          * @return Array mit den selektierten Szenarios
          */
         public ArrayList<XSLTScript> getSelectedScripts() {
-            ArrayList<XSLTScript> selected = new ArrayList<XSLTScript>();
+            ArrayList<XSLTScript> selected = new ArrayList<>();
             for (int i = 0; i < selections.length; i++) {
                 if (selections[i].booleanValue()) {
                     selected.add(xslScripts.get(i));

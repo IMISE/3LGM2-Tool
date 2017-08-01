@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -85,7 +86,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
      * HashString des Icons mitgeteilt. Nach dem einlesen der Icons müssen diese Container noch das eigentliche Icon aus der Hashmap der Collection
      * laden. Das passiert in der Methode setIcon();
      */
-    protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<NodeContainer>();
+    protected ArrayList<NodeContainer> containerWithIcon = new ArrayList<>();
 
     /**
      *
@@ -433,7 +434,8 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("title")) {
 
         } else if (qName.equals("version")) {
-            collection.setFileVersion(elementValue.toString());
+            GDCollectionFileHandler fileHandler = collection.getFileHandler();
+            fileHandler.setFileVersion(elementValue.toString());
 
         } else if (qName.equals("modell_3lgm_2")) {
             Static.setProgressDialogStatusLabel("labelReferenceIcons");

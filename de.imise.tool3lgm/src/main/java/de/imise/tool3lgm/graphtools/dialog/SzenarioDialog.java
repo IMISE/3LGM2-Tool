@@ -4,6 +4,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -20,8 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -29,6 +29,7 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -38,7 +39,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  */
 public class SzenarioDialog extends JDialog {
 
-    private final GDCollection collection;
+    private final GDCollection gdcoll;
     private ExtendedTextField destination;
     private final JTable table;
     private JButton ok;
@@ -50,13 +51,13 @@ public class SzenarioDialog extends JDialog {
      * @param collection, GDCollection
      * @throws java.awt.HeadlessException
      */
-    public SzenarioDialog(final Frame owner, final GDCollection collection, final boolean forImport) throws HeadlessException {
+    public SzenarioDialog(final Frame owner, final GDCollection gdcoll, final boolean forImport) throws HeadlessException {
         super(owner, forImport ? Tool3lgmConstants.getResString("importSzenario") : Tool3lgmConstants.getResString("exportSzenario"), true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.collection = collection;
+        this.gdcoll = gdcoll;
 
         getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(new JLabel(Tool3lgmConstants.getResString("labelSource") + collection.getName()), BorderLayout.NORTH);
+        getContentPane().add(new JLabel(Tool3lgmConstants.getResString("labelSource") + gdcoll.getName()), BorderLayout.NORTH);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
@@ -90,7 +91,7 @@ public class SzenarioDialog extends JDialog {
             }));
         }
 
-        panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("cancel")) {
+        panel.add(new JButton(new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 dispose();
@@ -99,7 +100,7 @@ public class SzenarioDialog extends JDialog {
         getContentPane().add(panel, BorderLayout.SOUTH);
 
         panel = new JPanel(new BorderLayout());
-        table = new JTable(new SzenarioTableModel(collection, forImport ? Tool3lgmConstants.getResString("labelImport") : Tool3lgmConstants.getResString("labelExport")));
+        table = new JTable(new SzenarioTableModel(gdcoll, forImport ? getResString("labelImport") : getResString("labelExport")));
         table.setSelectionBackground(table.getBackground());
         table.setSelectionForeground(table.getForeground());
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -112,15 +113,11 @@ public class SzenarioDialog extends JDialog {
         if (!forImport) {
             JPanel panel2 = new JPanel(new BorderLayout(5, 20));
             destination = new ExtendedTextField();
-            destination.addCaretListener(new CaretListener() {
-                @Override
-                public void caretUpdate(final CaretEvent e) {
-                    File f = new File(destination.getText());
-                    ok.setEnabled(f.isAbsolute() && !f.isDirectory());
-                }
-
+            destination.addCaretListener(e -> {
+                File f = new File(destination.getText());
+                ok.setEnabled(f.isAbsolute() && !f.isDirectory());
             });
-            JLabel label = new JLabel(Tool3lgmConstants.getResString("labelDestination"));
+            JLabel label = new JLabel(getResString("labelDestination"));
             label.setLabelFor(destination);
             panel2.add(label, BorderLayout.WEST);
             panel2.add(destination, BorderLayout.CENTER);
@@ -165,14 +162,16 @@ public class SzenarioDialog extends JDialog {
             if (!file.isAbsolute() || file.isDirectory()) {
                 return false;
             }
-            if (file.exists() && file.length() > 0
-                    && JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("quest_overwrite") + "\n(" + file.toString() + ")", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
+            if (file.exists() && file.length() > 0 && JOptionPane.showConfirmDialog(this, getResString("quest_overwrite") + "\n(" + file.toString() + ")", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION) {
                 return false;
             }
 
             Static.showProgressDialog();
             Static.setProgressDialogStatusLabel("exportSzenario");
-            collection.exportSzenarios(((SzenarioTableModel) table.getModel()).getSelectedSzenarios(), file);
+            SzenarioTableModel tableModel = (SzenarioTableModel) table.getModel();
+            Szenario[] tmpSelectedSzenarios = tableModel.getSelectedSzenarios();
+            GDCollectionImExportHandler imExportHandler = gdcoll.getImExportHandler();
+            imExportHandler.exportSzenarios(tmpSelectedSzenarios, file);
             Static.closeProgressDialog();
         }
 

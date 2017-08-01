@@ -3,14 +3,10 @@ package de.imise.tool3lgm.graphtools;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileLock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,11 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.CRC32;
-import java.util.zip.DataFormatException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -32,7 +23,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -40,10 +30,8 @@ import com.google.common.collect.Sets;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -52,6 +40,8 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionFileHandler;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -64,28 +54,19 @@ import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.LGMInputStream;
 import de.imise.tool3lgm.xml.Base64;
-import de.imise.tool3lgm.xml.LGMVersionException;
 import de.imise.tool3lgm.xml.LgmXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.tool3lgm.xml.XMLCharacterCoder;
-import de.imise.tool3lgm.xml.XMLVersionException;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.io.FileHandler;
-import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
  * @author thomas, AXS
  */
 public final class GDCollection extends UserFieldTarget {
-
-    /** Information für Dateiversion (wird bei jedem Aufruf von getFileVersion() um eins erhoeht) */
-    private int fileVersion = 0;
 
     /** Undo- und Redomanager */
     protected TransactionManager tman = new TransactionManager();
@@ -155,19 +136,11 @@ public final class GDCollection extends UserFieldTarget {
     /** Bezeichnung des Dokuments (Dateiname) */
     private String name = "";
 
-    /** the file to load collection from or to save collection in */
-    private RandomAccessFile randomAccessFile;
-    private File file;
-    private FileLock lock;
+    /** Handler zum Speichern und Laden */
+    private final GDCollectionFileHandler fileHandler;
 
-    /** flag, whether file for this collection is only opened for reading */
-    private final boolean isReadOnly = false;
-
-    /** flag, whether the filesystem of the file for this collection supports locking */
-    private boolean lockSupported = false;
-
-    /** flag, whether collection will be saved in compressed zip-file or not */
-    private boolean isZipFile = true;
+    /** Handler für den Im- und Export von (Teil-)Modellen */
+    private final GDCollectionImExportHandler imExportHandler;
 
     public ModelPropertyDialog descriptionFrame;
 
@@ -202,12 +175,29 @@ public final class GDCollection extends UserFieldTarget {
     public GDCollection() {
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
+        fileHandler = new GDCollectionFileHandler(this);
+        imExportHandler = new GDCollectionImExportHandler(this);
         doc.addGraphDocumentListener(userFieldDefinitions);
-        createName();
         tman.addTransActionListener(Static.getTool());
         activeGraphDocumentsList.add(doc);
         //		transStackTable.clear();
         //		transStackTable.put(new Integer(0), new Integer(0));
+    }
+
+    public GDCollectionFileHandler getFileHandler() {
+        return fileHandler;
+    }
+
+    public File getFile() {
+        return fileHandler.getFile();
+    }
+
+    public String getFileVersion() {
+        return fileHandler.getFileVersion();
+    }
+
+    public GDCollectionImExportHandler getImExportHandler() {
+        return imExportHandler;
     }
 
     /**
@@ -271,7 +261,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      * @return
      */
-    private Szenario createSzenario(String title, final boolean askName, final String description, final String szenHash, final boolean log, final int pid) {
+    public Szenario createSzenario(String title, final boolean askName, final String description, final String szenHash, final boolean log, final int pid) {
         if (title == null || title.trim().equals("")) {
             title = CollectionUtils.getNextIndicatedName(Tool3lgmConstants.getResString("submodel") + " #", activeGraphDocumentsList);
         }
@@ -2007,6 +1997,10 @@ public final class GDCollection extends UserFieldTarget {
         return name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     /**
      * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
      */
@@ -2020,52 +2014,6 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
         return title;
-    }
-
-    /**
-     *
-     */
-    private void createName() {
-        int counter = 0;
-        String newName = createName(counter);
-
-        int collectionsCount = Static.getCollectionCount();
-        if (collectionsCount < 0) {
-            return;
-        }
-
-        GDCollection temp;
-        for (int index = 0; index < collectionsCount; index++) {
-            temp = Static.getCollection(index);
-            if (temp.equals(this)) {
-                continue;
-            }
-            if (!temp.getName().equals(newName)) {
-                continue;
-            }
-            index = 0;
-            newName = createName(++counter);
-        }
-
-        name = newName + (isReadOnly ? " " + Tool3lgmConstants.getResString("text_readOnly") : "");
-
-        for (AbstractInternalFrame f : Static.getAllFrames()) {
-            if (f.getCollection().equals(this)) {
-                f.setTitle(getName());
-                Static.getTool().getModelBrowserPanel().updateTitle(this);
-            }
-        }
-    }
-
-    /**
-     * @param counter
-     * @return
-     */
-    private String createName(final int counter) {
-        if (getFile() == null) {
-            return "<" + Tool3lgmConstants.getResString("unbenannt") + (counter > 0 ? " #" + counter : "") + ">";
-        }
-        return getFile().getName() + (isReadOnly ? " <" + Tool3lgmConstants.getResString("text_readOnly") + ">" : "") + (counter > 0 ? " #" + counter : "");
     }
 
     /**
@@ -2088,7 +2036,7 @@ public final class GDCollection extends UserFieldTarget {
      *
      * @return byte[] String with FileVersionInfo and toXMLString()
      */
-    private byte[] getSaveString() {
+    public byte[] getSaveString() {
         try {
             return ToolXMLParser.getCurrentVersionString().concat(toXMLString()).getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -2105,7 +2053,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public String toXMLString() {
         StringBuilder xmlString = new StringBuilder("<modell_3lgm_2>" + "<header>" + "<title>" + XMLCharacterCoder.encodeString(name) + "</title>" + "<description>" + XMLCharacterCoder.encodeString(doc.getDescription()) + "</description>" + "<version>"
-                + XMLCharacterCoder.encodeString(getFileVersion()) + "</version>" + "</header>" + userFieldDefinitions.toXMLString(true) + "<objects>");
+                + XMLCharacterCoder.encodeString(fileHandler.getFileVersion()) + "</version>" + "</header>" + userFieldDefinitions.toXMLString(true) + "<objects>");
         xmlString.append("<model>");
         appendUserFieldXMLString(xmlString);
         xmlString.append("</model>");
@@ -2162,29 +2110,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Speichert das Modell in der angegeben Datei im XML-Format (File wird
-     * geschlossen)
-     *
-     * @param f
-     *            Ziel-Datei beim Speichern
-     */
-    public void exportModel(final File f) {
-        if (!Static.getTool().checkLicenses()) {
-            return;
-        }
-        if (f.exists()) {
-            f.delete();
-        }
-        try {
-            RandomAccessFile file = new RandomAccessFile(f, "rw");
-            file.writeBytes(ToolXMLParser.getCurrentVersionString() + toXMLString());
-            file.close();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-        }
-    }
-
-    /**
      * Speichert das Modell in der angegeben Datei im XML-Format
      * (RandomAccessFile wird nicht geschlossen, um Datei zu sperren)
      *
@@ -2220,217 +2145,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param file
-     */
-    public void importModel(final File file) {
-        importSzenarios(file, false);
-    }
-
-    /**
-     * Importiert Szenarios aus einem anderem Modell in dieses Modell
-     *
-     * @param file
-     *            Modelldatei, aus der Szenarios importiert werden sollen
-     * @param chooseSzenarioDialog
-     *            wenn <code>true</code> kann der
-     */
-    public void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
-        GDCollection collection = new GDCollection();
-
-        Static.showProgressDialog();
-        Static.setProgressDialogTitle(Tool3lgmConstants.getResString("load_model") + " " + file.getName());
-        Static.setProgressDialogStatusLabel("read_progress");
-
-        try {
-            collection.setFile(file);
-            collection.loadFromRAF(file);
-        } catch (Exception exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
-        }
-
-        Static.closeProgressDialog();
-
-        LGMGraphDocument[] importSzenarios = null;
-        if (chooseSzenarioDialog) {
-            importSzenarios = SzenarioDialog.showImportDialog(Static.getMainFrame(), collection);
-        } else {
-            importSzenarios = new LGMGraphDocument[collection.szenarios.size() + 1];
-            importSzenarios[0] = collection.getMainGraphDocument();
-            int i = 1;
-            for (Szenario szenario : collection.szenarios) {
-                importSzenarios[i++] = szenario;
-            }
-        }
-        importSzenarios(importSzenarios, collection);
-    }
-
-    /**
-     * @param importSzenarios
-     * @param collection
-     */
-    private void importSzenarios(final LGMGraphDocument[] importSzenarios, final GDCollection collection) {
-
-        Static.showProgressDialog();
-        Static.setProgressDialogStatusLabel("importSzenario");
-        int size = 0;
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer lc = collection.doc.getLayer(ModelConstants.LAYERS[i]);
-            size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
-        }
-
-        /* ModellElemente, die kopiert werden müssen */
-        List<ModelElement> elements = new ArrayList<>(size);
-
-        /* HashStrings aller Icons, die kopiert werden müssen */
-        Set<String> bitmaps = new HashSet<>();
-
-        bitmaps = new HashSet<>(collection.getIconTable().size());
-        Set<UserField> userFields = new HashSet<>();
-
-        collection.resolveCopyDependencies(importSzenarios, elements, bitmaps, userFields);
-        for (UserField uf : userFields) {
-            userFieldDefinitions.add(uf);
-        }
-
-        for (String bmHash : bitmaps) {
-            iconTable.put(bmHash, collection.getIconTable().get(bmHash));
-        }
-
-        for (ModelElement element : elements) {
-            element.removeAllContainer();
-            ElementContainer container = element.createContainer(doc);
-            doc.getLayer(element.layerFor()).add(container);
-        }
-
-        for (int szenarioIndex = 0; szenarioIndex < importSzenarios.length; szenarioIndex++) {
-            LGMGraphDocument importDoc = importSzenarios[szenarioIndex];
-            if (!(importDoc instanceof Szenario)) {
-                continue;
-            }
-            Szenario newSzenario = createSzenario(importDoc.getTitle() + " (import)", false, importDoc.description, importDoc.hashString, false, TransactionManager.STANDARD_PID);
-            for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                LayerContainer importLayerContainer = importDoc.getLayer(ModelConstants.LAYERS[i]);
-                newSzenario.getLayer(ModelConstants.LAYERS[i]).set3LGMLayout(importLayerContainer.get3LGMLayout());
-                for (NodeContainer importKC : importLayerContainer.getKnoten()) {
-                    ModelElement element = doc.findKnotenCoded(importKC.getElement().getHashString());
-                    ElementContainer container = element.createContainer(newSzenario);
-                    container.set3LGMLayout(importKC.get3LGMLayout());
-                    container.setE3LGMLayout(importKC.getE3LGMLayout());
-                    container.setNE3LGMLayout(importKC.getNE3LGMLayout());
-                    container.setExpanded(importKC.isExpanded());
-                    newSzenario.getLayer(ModelConstants.LAYERS[i]).add(container);
-                    container.refreshText();
-                }
-
-                for (EdgeContainer importKC : importLayerContainer.getKanten()) {
-                    ModelElement element = doc.findKanteCoded(importKC.getElement().getHashString());
-                    if (element == null) {
-                        continue;
-                    }
-                    ((Kante) element).decodeHashStrings(doc);
-                    ElementContainer container = element.createContainer(newSzenario);
-                    container.set3LGMLayout(importKC.get3LGMLayout());
-                    container.setE3LGMLayout(importKC.getE3LGMLayout());
-                    container.setNE3LGMLayout(importKC.getNE3LGMLayout());
-                    container.setExpanded(importKC.isExpanded());
-                    newSzenario.getLayer(ModelConstants.LAYERS[i]).add(container);
-                    container.refreshText();
-                }
-
-                for (BendpointContainer importKC : importLayerContainer.getKnickpunkte()) {
-                    ModelElement element = doc.findKnickpunktCoded(importKC.getElement().getHashString());
-                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Knickpunkt) element).getKantenHash());
-                    if (kc == null) {
-                        continue;
-                    }
-                    element.addEdge(kc.getEdge());
-                    ElementContainer container = element.createContainer(newSzenario);
-                    container.set3LGMLayout(importKC.get3LGMLayout());
-                    container.setE3LGMLayout(importKC.getE3LGMLayout());
-                    container.setNE3LGMLayout(importKC.getNE3LGMLayout());
-                    container.setExpanded(importKC.isExpanded());
-                    newSzenario.getLayer(ModelConstants.LAYERS[i]).add(container);
-                    container.refreshText();
-                    BendpointContainer knC = (BendpointContainer) container;
-                    kc.setKnickpunkt(knC, knC.getKnickpunktKnoten().getIndex());
-                    kc.computeBorderPoints();
-                }
-            }
-
-            Static.getTool().createSzenarioFrame(newSzenario);
-        }
-        Static.closeProgressDialog();
-        userFieldDefinitions.hasCrossReferences();
-        distribute(GraphDocument.DATA_CHANGED);
-    }
-
-    /**
-     * exportiert die übergebenen Szenarios in eine neue Datei
-     *
-     * @param export Array mit den zu exportierenden Szenarios
-     * @param file Datei in die exportiert werden soll
-     */
-    public void exportSzenarios(final Szenario[] export, final File file) {
-        if (!Static.getTool().checkLicenses()) {
-            return;
-        }
-        int size = 0;
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer lc = doc.getLayer(ModelConstants.LAYERS[i]);
-            size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
-        }
-
-        /* hastStrings aller ModellElemente, die kopiert werden müssen */
-        List<ModelElement> elements = new ArrayList<>(size);
-
-        /* HashStrings aller Icons, die kopiert werden müssen */
-        Set<String> bitmaps = new HashSet<>(iconTable.size());
-
-        /* HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen */
-        Set<UserField> userFields = new HashSet<>();
-
-        resolveCopyDependencies(export, elements, bitmaps, userFields);
-
-        /* Datei erstellen und gefundenen Element schreiben */
-        try {
-            RandomAccessFile raf = new RandomAccessFile(file, "rw");
-            raf.seek(0);
-            raf.setLength(0);
-            raf.writeBytes(ToolXMLParser.getCurrentVersionString());
-            raf.writeBytes("<modell_3lgm_2><header><title>" + XMLCharacterCoder.encodeString(name + "(export)") + "</title>" + "<description>" + XMLCharacterCoder.encodeString(doc.getDescription()) + "</description>" + "<version>"
-                    + XMLCharacterCoder.encodeString(getFileVersion()) + "</version></header>" + userFieldDefinitions.getCopyString(userFields) + "<objects>");
-
-            try {
-                for (ModelElement me : elements) {
-                    raf.writeBytes(me.toXMLString());
-                }
-            } catch (NullPointerException e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            }
-
-            raf.writeBytes("</objects>");
-
-            /* xmlString der Szenarios schreiben */
-            for (int szenarioIndex = 0; szenarioIndex < export.length; szenarioIndex++) {
-                raf.writeBytes(export[szenarioIndex].toXMLString());
-            }
-
-            /* xmlString der Icons schreiben */
-
-            raf.writeBytes("<images>");
-
-            for (String hashString : bitmaps) {
-                raf.writeBytes("<bitmap type=\"gif/base64\" hash=\"" + hashString + "\">" + Base64.encode(getIconTable().get(hashString)) + "</bitmap>");
-            }
-
-            raf.writeBytes("</images></modell_3lgm_2>");
-            raf.close();
-        } catch (IOException e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-        }
-    }
-
-    /**
      * Sucht alle Element und Icons, die kopiert werden müssen
      *
      * @param export
@@ -2442,7 +2156,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param userFields
      *            Set, in welches die zu kopierenden benutzdefinierten Eigenschaftsfelder geschrieben werden
      */
-    private void resolveCopyDependencies(final GraphDocument[] export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
+    public void resolveCopyDependencies(final GraphDocument[] export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = doc.getLayer(ModelConstants.LAYERS[i]);
@@ -2608,29 +2322,6 @@ public final class GDCollection extends UserFieldTarget {
     //*/
 
     /**
-     * gibt String mit Versionsdaten der Datei zurück<br>
-     * setzt sich zusammen aus fileVersion_Benutzername_currentTimeMillis()
-     *
-     * @return String mit Versionsdaten der Datei
-     */
-    private String getFileVersion() {
-        return (++fileVersion) + "_" + System.getProperty("user.name") + "_" + System.currentTimeMillis();
-    }
-
-    /**
-     * setzt die int-Variable mit der Dateiversion
-     *
-     * @param String der dim Aufbau dem Rueckgabe-String der Methode getFileVersion() gleicht
-     */
-    public void setFileVersion(final String string) {
-        try {
-            fileVersion = Integer.parseInt(string.substring(0, string.indexOf('_')));
-        } catch (Exception exp) {
-            //			Log.show(Log.ERROR, Tool3lgmConstants.getErrorString("FehlerAllgemein"), exp);
-        }
-    }
-
-    /**
      * @param file
      */
     public void loadClipboard(final File file) {
@@ -2640,7 +2331,7 @@ public final class GDCollection extends UserFieldTarget {
             FileInputStream clipStream = new FileInputStream(file);
             if (LgmXMLParser.isXMLFile(clipStream) && ToolXMLParser.isParseAbleFileVersion(clipStream)) {
                 clipStream.getChannel().position(0);
-                loadXMLFile(clipStream, true);
+                fileHandler.loadXMLFile(clipStream, true);
             }
 
             clipStream.close();
@@ -2653,7 +2344,7 @@ public final class GDCollection extends UserFieldTarget {
     public void loadFile(final InputStream istream) {
         try {
             setBulkMode(true);
-            loadXMLFile(istream, true);
+            fileHandler.loadXMLFile(istream, true);
             setBulkMode(false);
         } catch (Exception e) {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
@@ -2672,355 +2363,6 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void setCopyAndPaste(final int i) {
         copyAndPaste = i;
-    }
-
-    /**
-     * set the file modelElement for this collection
-     *
-     * @param _file the new File for this collection
-     * @return boolean with false, if file is shared (--> readOnly) otherwise true
-     * @author Thomas Rudert
-     */
-    public boolean setFile(final File _file) throws IOException {
-        if (file != null && file.equals(_file)) {
-            return true;
-        }
-
-        if (randomAccessFile != null) {
-            if (lock != null) {
-                lock.release();
-            }
-            randomAccessFile.close();
-            file = null;
-        }
-
-        lockSupported = Tool3lgmConstants.lockSupportedByFileSystem(_file);
-
-        RandomAccessFile raf = null;
-        boolean copiedToUserDir = false;
-        try {
-            raf = new RandomAccessFile(_file, "rw");
-        } catch (IOException e) {
-            File writableFile = new File(Tool3lgmConstants.USER_HOME_DIR_NAME + "/3LGM2Tool", _file.getName());
-            FileHandler.copyFile(_file, writableFile);
-            setFile(writableFile);
-            copiedToUserDir = true;
-        }
-        if (copiedToUserDir) {
-            return true;
-        }
-        if (lockSupported) {
-            lock = raf.getChannel().tryLock(0, Long.MAX_VALUE, true);
-            if (lock == null) {
-                return false;
-            }
-        }
-
-        file = _file;
-        randomAccessFile = raf;
-
-        createName();
-
-        return !isReadOnly;
-    }
-
-    /**
-     * sets flag isZipFile<br/>
-     * if isZipFile is true, collection will be saved into packed zip-File, when saveToFile() is called next time
-     *
-     * @param _zipFile new value for isZipFile
-     * @author Thomas Rudert
-     */
-    public void setSaveAsZipFile(final boolean _zipFile) {
-        isZipFile = _zipFile;
-    }
-
-    /**
-     * @return
-     * @throws Exception
-     */
-    public boolean loadFromRAF() throws Exception {
-        return loadFromRAF(null);
-    }
-
-    /**
-     * Load collection from file which is specified in field file
-     *
-     * @return true if reading was successful
-     * @throws Exception; throws all exceptions happens during reading
-     * @author Thomas Rudert
-     */
-    public boolean loadFromRAF(final File file) throws Exception {
-        Static.getTool().setCursor(Tool3lgmConstants.getWaitCursor());
-
-        RandomAccessFile randomAccessFile;
-        if (file != null) {
-            randomAccessFile = new RandomAccessFile(file, "rw");
-        } else {
-            randomAccessFile = this.randomAccessFile;
-        }
-        setBulkMode(true);
-        boolean readingSuccessful = false;
-        try {
-            randomAccessFile.seek(0);
-            String line = randomAccessFile.readLine();
-            if (line != null) {
-                LGMInputStream fis = new LGMInputStream(randomAccessFile.getFD());
-                if (line.startsWith("<!--ziped Tool3lgmFile-->")) {
-                    readingSuccessful = loadZipFile(fis);
-                    if (readingSuccessful) {
-                        isZipFile = true;
-                    }
-                } else if (line.startsWith("PK")) {
-                    fis.getChannel().position(0);
-                    readingSuccessful = loadZipFile(fis);
-                    if (readingSuccessful) {
-                        isZipFile = true;
-                    }
-                } else {
-                    fis.getChannel().position(0);
-                    readingSuccessful = loadFromFileInputStream(fis);
-                    if (readingSuccessful) {
-                        isZipFile = false;
-                    }
-                }
-                fis.close();
-            } else {
-                randomAccessFile.close();
-                throw new IOException("Could not read file...");
-            }
-        } catch (Exception e) {
-            setBulkMode(false);
-            if (file != null) {
-                randomAccessFile.close();
-            }
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + e, e);
-        }
-
-        if (file != null) {
-            randomAccessFile.close();
-        }
-        setBulkMode(false);
-        Static.getTool().setCursor(Tool3lgmConstants.getNormalCursor());
-        return readingSuccessful;
-
-    }
-
-    /**
-     * load collection from packed zipFile
-     *
-     * @param fileStream the FileInputStream to the file which will be read
-     * @return true, if reading was successful
-     * @throws IOException if something wrong with the FileInputStream or the zip-format
-     * @author Thomas Rudert
-     */
-    public boolean loadZipFile(final InputStream fileStream) throws IOException {
-        ZipInputStream zipStream = new ZipInputStream(fileStream) {
-            @Override
-            public void close() {
-            }
-        };
-        zipStream.getNextEntry();
-        boolean retVal = loadXMLFile(zipStream, false);
-        //		zipStream.close();
-        return retVal;
-    }
-
-    /**
-     * load collection from (not packed) file
-     *
-     * @param fileStream the FileInputStream to the File to load
-     * @return true, if reading was successful
-     * @throws IOException
-     * @throws LGMVersionException, if file-version is not readable
-     * @throws XMLVersionException, if xml-version is not readable
-     * @throws FileNotFoundException
-     * @throws DataFormatException
-     * @author Thomas Rudert
-     */
-    private boolean loadFromFileInputStream(final FileInputStream fileStream) throws IOException, LGMVersionException, XMLVersionException, FileNotFoundException {
-
-        if (!LgmXMLParser.isXMLFile(fileStream) || !ToolXMLParser.isParseAbleFileVersion(fileStream)) {
-            throw new LGMVersionException(Tool3lgmConstants.getResString("to_old_file_format"));
-        }
-        fileStream.getChannel().position(0);
-        return loadXMLFile(fileStream, false);
-    }
-
-    /**
-     * load collection from xml-source
-     *
-     * @param inputStream an InputStream to the xml-source
-     * @return true, if reading was successful
-     * @author Thomas Rudert
-     */
-    private boolean loadXMLFile(final InputStream inputStream, final boolean paste) {
-        try {
-            ToolXMLParser parser = new ToolXMLParser(this, inputStream, paste);
-            parser.parseDocument();
-        } catch (Exception exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + exp, exp);
-            return false;
-        }
-        userFieldDefinitions.hasCrossReferences();
-        return true;
-    }
-
-    /**
-     * @return
-     */
-    public boolean chooseFile() {
-        ExtendedFileChooser fileChooser = new ExtendedFileChooser(null);
-        FileNameExtensionFilter lgmZippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_ZIP);
-        FileNameExtensionFilter lgmUnzippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED);
-        fileChooser.setFileFilters(false, lgmZippedFileFiler, lgmUnzippedFileFiler);
-        fileChooser.setFileFilter(isZipFile() ? lgmZippedFileFiler : lgmUnzippedFileFiler);
-        if (getFile() != null) {
-            fileChooser.setSelectedFile(getFile());
-        }
-        if (fileChooser.showSaveDialog(Static.getMainFrame()) != ExtendedFileChooser.APPROVE_OPTION) {
-            return false;
-        }
-        File pfad = fileChooser.getSelectedFile();
-
-        try {
-            setFile(pfad);
-        } catch (IOException exp) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
-            exp.printStackTrace();
-            return false;
-        }
-        setSaveAsZipFile(fileChooser.getFileFilter() == lgmZippedFileFiler);
-        return true;
-    }
-
-    /**
-     * save collection to file<br/>
-     * if isReadOnly is true do nothing and return false<br/>
-     * if isZipFile write content into compressed file<br/>
-     * create temporary file for writing and if all actions are completed successfully overwrites original file
-     *
-     * @return boolean with true, if and only if filewriting was successful
-     * @author Thomas Rudert
-     */
-    public boolean saveToFile() throws IOException {
-        if (isReadOnly || file == null) {
-            if (!chooseFile()) {
-                return false;
-            }
-        }
-
-        File tempFile = new File(file.getParentFile(), ".tempTool3lgmSaveFile");
-
-        tempFile.delete();
-
-        tempFile.deleteOnExit();
-
-        if (!tempFile.createNewFile()) {
-            return false;
-        }
-
-        FileOutputStream outStream = new FileOutputStream(tempFile);
-
-        if (isZipFile) {
-            saveZipFile(outStream);
-        } else {
-            outStream.write(getSaveString());
-        }
-
-        outStream.close();
-
-        if (tempFile.length() <= 0) {
-            throw new IOException("Empty file!");
-        }
-
-        @SuppressWarnings("resource")
-        //der wird geclosed in forceClose()
-        LGMInputStream tmpIStream = new LGMInputStream(tempFile);
-        randomAccessFile.seek(0);
-        randomAccessFile.setLength(0);
-
-        long l = tempFile.length();
-        int length = new Long(l).intValue();
-        byte[] data = new byte[length];
-        tmpIStream.read(data);
-        ByteBuffer byteBuf = ByteBuffer.wrap(data);
-        //TW
-        if (lockSupported && lock != null) {
-            randomAccessFile.getChannel().write(byteBuf);
-        } else {
-            randomAccessFile.write(data);
-        }
-        tmpIStream.forceClose();
-
-        tempFile.delete();
-
-        return true;
-    }
-
-    /**
-     * save collection as xml-string into an packed zip-file
-     *
-     * @param fileStream FileOutputStream to write in
-     * @throws IOException
-     */
-    private void saveZipFile(final FileOutputStream fileStream) throws IOException {
-        //fileStream.write(new String("<!--ziped Tool3lgmFile-->\n").getBytes());
-
-        byte[] xmlString = getSaveString();
-
-        CRC32 crc = new CRC32();
-        crc.reset();
-        crc.update(xmlString);
-
-        ZipEntry entry = new ZipEntry(getName().substring(0, getName().length() - 5) + "3lgm");
-        entry.setMethod(ZipEntry.DEFLATED);
-        entry.setCrc(crc.getValue());
-
-        ZipOutputStream zipStream = new ZipOutputStream(fileStream);
-        zipStream.setMethod(ZipOutputStream.DEFLATED);
-        zipStream.setLevel(9);
-        zipStream.putNextEntry(entry);
-        zipStream.write(xmlString);
-        zipStream.closeEntry();
-        zipStream.finish();
-    }
-
-    /**
-     * @return
-     */
-    public File getFile() {
-        return file;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isZipFile() {
-        return isZipFile;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isReadOnly() {
-        return isReadOnly;
-    }
-
-    /**
-     *
-     */
-    public void close() {
-        try {
-            if (lock != null) {
-                lock.release();
-            }
-            if (randomAccessFile != null) {
-                randomAccessFile.close();
-            }
-        } catch (Exception exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
-        }
     }
 
     /**

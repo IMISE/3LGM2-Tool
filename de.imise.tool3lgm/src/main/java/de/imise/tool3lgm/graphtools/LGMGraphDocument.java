@@ -627,7 +627,7 @@ public class LGMGraphDocument extends GraphDocument {
             int value = JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("join_speicherfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
             if (value == JOptionPane.YES_OPTION) {
                 try {
-                    if (!destGDColl.saveToFile()) {
+                    if (!destGDColl.getFileHandler().saveToFile()) {
                         return;
                     }
                 } catch (IOException exp) {

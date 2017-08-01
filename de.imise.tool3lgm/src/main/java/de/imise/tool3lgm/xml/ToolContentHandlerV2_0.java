@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -562,7 +563,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
             } else if (qName.equals("title")) {
 
             } else if (qName.equals("version")) {
-                collection.setFileVersion(elementValue.toString());
+                GDCollectionFileHandler fileHandler = collection.getFileHandler();
+                fileHandler.setFileVersion(elementValue.toString());
 
             } else if (qName.equals("modell_3lgm_2")) {
                 Static.setProgressDialogStatusLabel("labelReferenceIcons");

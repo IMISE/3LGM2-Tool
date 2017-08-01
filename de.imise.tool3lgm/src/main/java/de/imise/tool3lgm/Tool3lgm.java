@@ -1,5 +1,8 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -74,6 +77,7 @@ import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -480,30 +484,27 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     private boolean loadFile(final File file, final GDCollection gdcoll) {
         try {
-            if (!gdcoll.setFile(file)) {
-                if (JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("datei_gesperrt"), "", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
+            if (!fileHandler.setFile(file)) {
+                if (JOptionPane.showConfirmDialog(this, getResString("datei_gesperrt"), "", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                     return false;
                 }
             }
-
             if (progressDialog == null) {
-                progressDialog = new ProgressDialog(this, Tool3lgmConstants.getResString("load_model") + " " + file.getName(), true);
+                progressDialog = new ProgressDialog(this, getResString("load_model") + " " + file.getName(), true);
             }
             if (progressDialog != null) {
-                progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("read_progress"));
+                progressDialog.setStatusLabelText(getResString("read_progress"));
             }
-
             update(getGraphics());
-
-            boolean retVal = gdcoll.loadFromRAF();
+            boolean retVal = fileHandler.loadFromRAF();
             return retVal;
         } catch (Exception e) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.FATAL, getErrString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                    Tool3lgmConstants.getResString("ok")
+                    getResString("ok")
             };
-            JOptionPane.showOptionDialog(this, Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons,
-                    null);
+            JOptionPane.showOptionDialog(this, getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             closeProgressDialog();
             return false;
         }
@@ -1183,8 +1184,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 Tool3lgmConstants.getResString("no"),
                 Tool3lgmConstants.getResString("cancel")
         };
-        int answer = JOptionPane.showOptionDialog(this, Tool3lgmConstants.getResString("speicherfrage") + "\n" + (gdcoll.getFile() == null ? gdcoll.getName() : gdcoll.getFile().getName()), Tool3lgmConstants.getResString("tool3lgm"),
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, null);
+        File file = gdcoll.getFile();
+        int answer = JOptionPane.showOptionDialog(this, getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons,
+                null);
 
         if (answer == JOptionPane.YES_OPTION) {
             boolean retVal = fileSave(false);
@@ -1252,11 +1254,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         gdcoll.removeGraphDocumentListener(this);
 
-        gdcoll.close();
+        GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
+        fileHandler.close();
+        UserProperties.addUsedFile(fileHandler.getFile());
 
         collections.remove(gdcoll);
-
-        UserProperties.addUsedFile(gdcoll.getFile());
 
         System.gc();
 
@@ -1286,46 +1288,38 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @return boolean with true if save was successful or save was cancelled
      */
     public boolean fileSave(boolean saveAs) {
-
         //	   long start = System.currentTimeMillis();
-
         if (!checkLicenses()) {
             return false;
         }
-
         /* GDCollection zum ausgewähtlen Frame */
         GraphDocument doc = getSelectedDoc();
         if (doc == null) {
             return false;
         }
         GDCollection gdcoll = doc.getCollection();
-
         new ModelCleaner(gdcoll).cleanModel();
-
-        saveAs = gdcoll.isReadOnly() || saveAs;
-
+        GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
+        saveAs = fileHandler.isReadOnly() || saveAs;
         if (saveAs) {
-            if (!gdcoll.chooseFile()) {
+            if (!fileHandler.chooseFile()) {
                 return true;
             }
         }
-        File datei = gdcoll.getFile();
+        File datei = fileHandler.getFile();
         if (datei == null) {
             return fileSave(true);
         }
         if (!saveToFile(gdcoll)) {
             return false;
         }
-
         JInternalFrame[] allFrames = desktop.getAllFrames();
         for (JInternalFrame frame : allFrames) {
             if (frame instanceof ToolInternalFrame) {
                 ((ToolInternalFrame) frame).updateTitle();
             }
         }
-
         System.gc();
-
         //		long end = System.currentTimeMillis();
         //		System.out.println("Time to write file " + datei.getName() + " (" + datei.length() + " Bytes): " + (end - start) + " Milliseconds");
         //
@@ -1335,13 +1329,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //		System.err.println();
         //		printStatistic(gdCollection, false, true);
         //		System.err.println("###########################################################################");
-
         return true;
     }
 
     public static final boolean saveToFile(final GDCollection gdcoll) {
         try {
-            if (!gdcoll.saveToFile()) {
+            GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
+            if (!fileHandler.saveToFile()) {
                 return false;
             }
         } catch (Exception exp) {
@@ -1477,7 +1471,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //Liste der zuletzt geöffneten Dateien merken
         for (int i = collections.size() - 1; i >= 0; i--) {
-            UserProperties.addUsedFile(collections.get(i).getFile());
+            GDCollection gdcoll = collections.get(i);
+            UserProperties.addUsedFile(gdcoll.getFile());
         }
 
         new File(Tool3lgmConstants.getClipboardPath()).delete();
@@ -1921,7 +1916,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         }
         FileNameExtensionFilterAndFileFilter licenseFileFilter = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC), false);
         File[] licenseFilesArray = Tool3lgmConstants.APPLICATION_DIR.listFiles(licenseFileFilter);
-        ArrayList<File> licenseFiles = new ArrayList<File>();
+        List<File> licenseFiles = new ArrayList<>();
         for (File licenseFile : licenseFilesArray) {
             if (licenseFile.isFile()) {
                 licenseFiles.add(licenseFile);
@@ -1974,8 +1969,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 File file = new File(path.toString());
                 if (file.length() != 0) {
                     for (int j = 0; j < getCollectionCount(); j++) {
-                        GDCollection coll = getCollection(j);
-                        if (coll.getFile().equals(file)) {
+                        GDCollection gdcoll = getCollection(j);
+                        if (gdcoll.getFile().equals(file)) {
                             continue outerLoop;
                         }
                     }
