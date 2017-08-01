@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.elements;
 import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
@@ -88,12 +87,4 @@ public abstract class Knoten extends ModelElement {
         return "";
     }
 
-    /**
-     * Gibt einen {@link ActionIdentifier} wieder, der diesen {@link Knoten} identifiziert.
-     *
-     * @return
-     */
-    public ActionIdentifier getIdentifier() {
-        return null;
-    }
 }
