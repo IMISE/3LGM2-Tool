@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.gui.menu;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -50,8 +50,6 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.menu.FSTContextMenu;
-import de.imise.tool3lgm.gui.menu.MenuCollection;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;

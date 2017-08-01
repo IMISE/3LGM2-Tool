@@ -61,7 +61,6 @@ import com.twatd.licensing.TwatdLicenseLibrary;
 
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.event.AbstractLGMAction;
-import de.imise.tool3lgm.graphtools.ContextGenerator;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -91,6 +90,7 @@ import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.Werkzeugleiste;
+import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
