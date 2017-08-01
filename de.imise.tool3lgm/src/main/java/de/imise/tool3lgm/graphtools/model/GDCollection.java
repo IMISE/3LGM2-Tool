@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
 import java.awt.Point;
 import java.io.File;
@@ -40,8 +40,6 @@ import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
-import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionFileHandler;
-import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;

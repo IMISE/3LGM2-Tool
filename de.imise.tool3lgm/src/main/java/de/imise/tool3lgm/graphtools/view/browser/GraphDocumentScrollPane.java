@@ -5,9 +5,9 @@ package de.imise.tool3lgm.graphtools.view.browser;
 
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
-import de.imise.tool3lgm.graphtools.GraphDocumentOwner;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 
 /**
  * @author imi0wendt

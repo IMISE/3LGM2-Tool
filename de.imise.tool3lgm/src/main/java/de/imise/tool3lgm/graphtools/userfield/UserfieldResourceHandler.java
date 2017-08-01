@@ -6,7 +6,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_DEFAULT_USERPROPE
 import java.io.File;
 
 import de.imise.tool3lgm.ResourceHandler;
-import de.imise.tool3lgm.graphtools.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 public class UserfieldResourceHandler extends ResourceHandler {
 

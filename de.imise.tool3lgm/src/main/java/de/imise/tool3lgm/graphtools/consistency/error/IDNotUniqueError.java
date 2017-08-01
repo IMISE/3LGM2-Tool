@@ -2,8 +2,8 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 
 import java.util.Collection;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**

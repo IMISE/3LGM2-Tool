@@ -8,8 +8,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
 /**

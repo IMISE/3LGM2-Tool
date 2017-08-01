@@ -37,6 +37,11 @@ import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
 import de.imise.tool3lgm.graphtools.elements.node.Prozess;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -360,7 +365,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private static void checkConfigurationSubMenu() {
         boolean b = false;
-        for (ElementContainer selectedEC : doc.selectedContainer) {
+        for (ElementContainer selectedEC : doc.getSelectedRealElementContainerIterable()) {
             b = ModelConstants.isInterLayerStartClass(selectedEC.getElement().getClass());
             if (b) {
                 break;
@@ -825,7 +830,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ALIGNMENT_MENU);
             }
 
-            if (doc.selectedContainer.isJoinableElementsSelected()) {
+            if (doc.isJoinableElementsSelected()) {
                 if (menu.getComponentCount() > 0) {
                     menu.addSeparator();
                 }
@@ -1911,7 +1916,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.add(properties);
         menu.addSeparator();
 
-        boolean do_join = doc.selectedContainer.isJoinableElementsSelected();
+        boolean do_join = doc.isJoinableElementsSelected();
 
         if (do_join) {
             menu.add(join_selected);

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
 /**
  * @author AXS

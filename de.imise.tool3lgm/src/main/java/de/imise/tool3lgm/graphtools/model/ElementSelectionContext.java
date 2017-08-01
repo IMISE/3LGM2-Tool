@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see tool3lgm.graphtools.ModelSelection2#isJoinableElementsSelected()
+     * @see tool3lgm.graphtools.ModelSelection#isJoinableElementsSelected()
      */
     public boolean isJoinableElementsSelected() {
         return selectedContainer.isJoinableElementsSelected();
@@ -35,7 +35,7 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see tool3lgm.graphtools.ModelSelection2#iterableBendpointContainer()
+     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#iterableBendpointContainer()
      */
     public Iterable<BendpointContainer> getSelectedBendpointContainerIterable() {
         return selectedContainer.iterableBendpointContainer();
@@ -43,7 +43,7 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see tool3lgm.graphtools.ModelSelection2#iterableRealElementContainer()
+     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#iterableRealElementContainer()
      */
     public Iterable<NodeContainer> getSelectedRealElementContainerIterable() {
         return selectedContainer.iterableRealElementContainer();
@@ -51,10 +51,18 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see tool3lgm.graphtools.ModelSelection2#iterableedge
+     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#iterableEdgeContainer()
      */
     public Iterable<EdgeContainer> getSelectedEdgeContainerIterable() {
         return selectedContainer.iterableEdgeContainer();
+    }
+
+    /**
+     * @return
+     * @see de.imise.tool3lgm.graphtools.model.ModelSelection.iterable()
+     */
+    public Iterable<ElementContainer> getSelectedContainerIterator() {
+        return selectedContainer.iterable();
     }
 
     /**
@@ -127,7 +135,7 @@ public class ElementSelectionContext {
         if (me == null) {
             return;
         }
-        ArrayList<ElementContainer> deselected = new ArrayList<ElementContainer>();
+        ArrayList<ElementContainer> deselected = new ArrayList<>();
         for (ElementContainer ec : selectedContainer) {
             if (ec.getElement() == me) {
                 deselected.add(ec);
@@ -171,7 +179,7 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see de.imise.tool3lgm.graphtools.ModelSelection#getMostSpecialRealElementsClass()
+     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#getMostSpecialRealElementsClass()
      */
     public Class<? extends ModelElement> _getMostSpecialRealElementsClass() {
         return selectedContainer._getMostSpecialRealElementsClass();
@@ -179,7 +187,7 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see de.imise.tool3lgm.graphtools.ModelSelection#getSelectedRealElementClasses()
+     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#getSelectedRealElementClasses()
      */
     public Set<Class<? extends ModelElement>> getSelectedRealElementClasses() {
         return selectedContainer.getSelectedRealElementClasses();

@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.NamedObjectContainer;
 

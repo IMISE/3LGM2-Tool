@@ -7,8 +7,8 @@ package de.imise.tool3lgm.graphtools.dialog.tools;
 import javax.swing.table.AbstractTableModel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.Szenario;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 
 /**
  * @author Thomas Rudert Tabellenmodell zum auflisten der Szenarios (mit Titel und Beschreibung)

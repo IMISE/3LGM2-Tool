@@ -10,7 +10,6 @@ import java.util.Set;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -20,6 +19,7 @@ import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.AufOrgKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Aufgabe;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.util.Alphabetical;
 import de.imise.util.SameTypePair;
 import de.imise.util.swing.dialog.OutputDialog;

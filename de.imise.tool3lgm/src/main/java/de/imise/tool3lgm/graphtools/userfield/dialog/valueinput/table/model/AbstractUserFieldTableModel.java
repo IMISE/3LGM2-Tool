@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;
 

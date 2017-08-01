@@ -5,7 +5,7 @@ import javax.swing.Action;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
  * Von {@link AbstractLGMAction} abgeleitete Klasse, die eine global einsetzbare Action

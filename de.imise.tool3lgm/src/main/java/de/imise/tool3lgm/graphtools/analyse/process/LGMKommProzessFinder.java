@@ -7,12 +7,12 @@ package de.imise.tool3lgm.graphtools.analyse.process;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.KommBeziehung;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
  * @author AXS To change this generated comment go to Window>Preferences>Java>Code Generation>Code

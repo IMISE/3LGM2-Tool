@@ -1,6 +1,6 @@
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.GDCommands.COORDINATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
 
 import java.awt.Color;
 import java.awt.Dimension;

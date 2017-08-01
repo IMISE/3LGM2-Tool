@@ -11,7 +11,7 @@ import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
-import de.imise.tool3lgm.graphtools.ElementSelectionContext;
+import de.imise.tool3lgm.graphtools.model.ElementSelectionContext;
 import de.imise.util.swing.menu.DynamicMenu;
 import de.imise.util.swing.menu.DynamicPopupMenu;
 import de.imise.util.swing.menu.MenuCreator;

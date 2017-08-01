@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
-import de.imise.tool3lgm.graphtools.GDCommands;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
  * Von {@link StaticAction} abgeleitet Klasse zur Änderung von Layer- und Element-Layout.

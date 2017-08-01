@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -71,9 +71,9 @@ public class ModelSelection implements Set<ElementContainer> {
      */
     public ModelSelection(final int initialCapacity) {
         super();
-        selectedRealNodeContainer = new HashSet<NodeContainer>(initialCapacity);
-        selectedBendpointContainer = new HashSet<BendpointContainer>(initialCapacity);
-        selectedEdgeContainer = new HashSet<EdgeContainer>(initialCapacity);
+        selectedRealNodeContainer = new HashSet<>(initialCapacity);
+        selectedBendpointContainer = new HashSet<>(initialCapacity);
+        selectedEdgeContainer = new HashSet<>(initialCapacity);
     }
 
     /**
@@ -137,7 +137,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      */
     public final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
-        List<ElementContainer> returnList = new ArrayList<ElementContainer>(size());
+        List<ElementContainer> returnList = new ArrayList<>(size());
         returnList.addAll(selectedRealNodeContainer);
         int insertIndex = 0;
         for (List<NodeContainer> orderSource : orderSources) {
@@ -160,7 +160,7 @@ public class ModelSelection implements Set<ElementContainer> {
      *         Liste der ModellElemente der selektierten ElementContainer
      */
     public final ArrayList<ModelElement> getSelectedElements() {
-        ArrayList<ModelElement> returnList = new ArrayList<ModelElement>(size());
+        ArrayList<ModelElement> returnList = new ArrayList<>(size());
         returnList.addAll(GDCollection.getModelElements(selectedRealNodeContainer));
         returnList.addAll(GDCollection.getModelElements(selectedEdgeContainer));
         returnList.addAll(GDCollection.getModelElements(selectedBendpointContainer));
@@ -180,7 +180,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      */
     public Set<Class<? extends ModelElement>> getSelectedRealElementClasses() {
-        Set<Class<? extends ModelElement>> returnClasses = new HashSet<Class<? extends ModelElement>>();
+        Set<Class<? extends ModelElement>> returnClasses = new HashSet<>();
         for (NodeContainer nc : selectedRealNodeContainer) {
             if (lastSelected != nc) {
                 returnClasses.add(nc.getElement().getClass());
@@ -283,6 +283,10 @@ public class ModelSelection implements Set<ElementContainer> {
         return new SelectionIterator();
     }
 
+    public Iterable<ElementContainer> iterable() {
+        return () -> new SelectionIterator();
+    }
+
     private class SelectionIterator implements Iterator<ElementContainer> {
 
         private int index;
@@ -360,7 +364,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      */
     public List<ElementContainer> getSelectedContainer() {
-        ArrayList<ElementContainer> al = new ArrayList<ElementContainer>(size());
+        ArrayList<ElementContainer> al = new ArrayList<>(size());
         al.addAll(selectedRealNodeContainer);
         al.addAll(selectedEdgeContainer);
         al.addAll(selectedBendpointContainer);
@@ -468,7 +472,7 @@ public class ModelSelection implements Set<ElementContainer> {
 
     @Override
     public <T> T[] toArray(final T[] a) {
-        ArrayList<ElementContainer> al = new ArrayList<ElementContainer>(size());
+        ArrayList<ElementContainer> al = new ArrayList<>(size());
         al.addAll(selectedRealNodeContainer);
         al.addAll(selectedEdgeContainer);
         al.addAll(selectedBendpointContainer);

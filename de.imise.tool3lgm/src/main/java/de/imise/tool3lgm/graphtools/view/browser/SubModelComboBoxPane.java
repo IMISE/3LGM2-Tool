@@ -10,8 +10,8 @@ import java.awt.event.ItemListener;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**

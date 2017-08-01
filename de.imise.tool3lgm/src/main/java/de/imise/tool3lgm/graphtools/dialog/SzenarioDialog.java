@@ -26,10 +26,10 @@ import javax.swing.JTable;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
-import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 

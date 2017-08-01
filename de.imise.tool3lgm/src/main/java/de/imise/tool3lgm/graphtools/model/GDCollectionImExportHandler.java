@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.gdcollection;
+package de.imise.tool3lgm.graphtools.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,10 +11,6 @@ import java.util.Set;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
-import de.imise.tool3lgm.graphtools.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;

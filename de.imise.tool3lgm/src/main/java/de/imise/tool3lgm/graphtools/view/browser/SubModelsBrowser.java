@@ -9,8 +9,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 
 /**

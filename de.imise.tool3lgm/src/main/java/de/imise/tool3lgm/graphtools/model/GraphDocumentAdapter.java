@@ -1,7 +1,7 @@
 /*
  * Created on 21.02.2008
  */
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 

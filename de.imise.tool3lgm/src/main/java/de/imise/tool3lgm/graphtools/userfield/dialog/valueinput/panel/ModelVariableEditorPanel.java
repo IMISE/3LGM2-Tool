@@ -6,8 +6,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 import java.awt.GridBagConstraints;
 import java.util.Vector;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;

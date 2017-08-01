@@ -16,7 +16,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
@@ -24,6 +23,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.DBKonfiguration;
 import de.imise.tool3lgm.graphtools.elements.node.PhysischerDVBaustein;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.util.Alphabetical;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;

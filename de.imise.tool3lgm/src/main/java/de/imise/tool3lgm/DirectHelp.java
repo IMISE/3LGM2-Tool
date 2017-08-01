@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 
 import javax.swing.JWindow;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.text.ExtendedTextArea;

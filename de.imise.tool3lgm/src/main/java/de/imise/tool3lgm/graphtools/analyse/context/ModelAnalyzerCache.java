@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -17,6 +16,7 @@ import de.imise.tool3lgm.graphtools.elements.edge.ObjReprVerbindung;
 import de.imise.tool3lgm.graphtools.elements.node.Anwendungsbaustein;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.Repraesentationsform;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 /**
  * Stellt Funktionen bereit, um 'teure' Anfragen an ein Model effizient wiederholen zu können.

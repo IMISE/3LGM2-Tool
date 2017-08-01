@@ -25,11 +25,11 @@ import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.Szenario;
 import de.imise.tool3lgm.graphtools.dialog.SearchPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.tools.SzenarioTableModel;
-import de.imise.tool3lgm.graphtools.gdcollection.GDCollectionImExportHandler;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;

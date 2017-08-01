@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /** momentan wird dieser Listener ausschliesslich von den Dialogen genutzt */

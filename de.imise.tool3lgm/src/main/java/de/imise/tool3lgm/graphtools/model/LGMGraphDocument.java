@@ -3,9 +3,9 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-package de.imise.tool3lgm.graphtools;
+package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.GDCollection.getModelElements;
+import static de.imise.tool3lgm.graphtools.model.GDCollection.getModelElements;
 
 import java.io.File;
 import java.io.IOException;

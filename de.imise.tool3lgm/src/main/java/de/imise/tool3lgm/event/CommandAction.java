@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.Action;
 import javax.swing.Icon;
 
-import de.imise.tool3lgm.graphtools.GDCommands;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
  * Von {@link AbstractLGMAction} abgeleitete Klasse zu Ausführung von {@link GDCommands} im aktiven

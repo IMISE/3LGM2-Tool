@@ -2,12 +2,12 @@ package de.imise.tool3lgm.graphtools.elements.node;
 
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbPdvbkVerbindung;
 import de.imise.tool3lgm.graphtools.elements.edge.PdvbkAwbVerbindung;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 public final class DBKonfiguration extends Konfiguration {

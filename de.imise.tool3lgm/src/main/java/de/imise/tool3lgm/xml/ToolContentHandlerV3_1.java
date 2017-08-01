@@ -6,8 +6,8 @@ package de.imise.tool3lgm.xml;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.Szenario;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
 /**

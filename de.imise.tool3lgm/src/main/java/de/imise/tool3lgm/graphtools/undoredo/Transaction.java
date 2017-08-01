@@ -2,8 +2,8 @@ package de.imise.tool3lgm.graphtools.undoredo;
 
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.graphtools.GDCommands;
-import de.imise.tool3lgm.graphtools.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
  * @author N.N.

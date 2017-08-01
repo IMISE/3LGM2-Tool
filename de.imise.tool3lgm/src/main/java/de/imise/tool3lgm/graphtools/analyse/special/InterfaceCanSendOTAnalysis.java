@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -23,6 +22,7 @@ import de.imise.tool3lgm.graphtools.elements.node.EtntEtdtKombination;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
 import de.imise.tool3lgm.graphtools.elements.node.Repraesentationsform;
 import de.imise.tool3lgm.graphtools.elements.node.Schnittstelle;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.SimpleResourceHandler;
 import de.imise.util.collections.CollectionUtils;

@@ -10,8 +10,8 @@ import javax.swing.JComponent;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.swing.component.TabbedPane;
 
 public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialog {

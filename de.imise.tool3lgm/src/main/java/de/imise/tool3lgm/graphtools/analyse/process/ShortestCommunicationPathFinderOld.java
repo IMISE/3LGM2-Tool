@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.GDCollection;
-import de.imise.tool3lgm.graphtools.GraphDocument;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -24,6 +22,8 @@ import de.imise.tool3lgm.graphtools.elements.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisDokumentenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.EreignisNachrichtenTyp;
 import de.imise.tool3lgm.graphtools.elements.node.Objekttyp;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
  * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade ermittelt werden.

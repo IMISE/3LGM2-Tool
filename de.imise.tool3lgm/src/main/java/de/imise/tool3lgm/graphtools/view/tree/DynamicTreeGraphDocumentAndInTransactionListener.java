@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.graphtools.GraphDocument;
-import de.imise.tool3lgm.graphtools.GraphDocumentListener;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
