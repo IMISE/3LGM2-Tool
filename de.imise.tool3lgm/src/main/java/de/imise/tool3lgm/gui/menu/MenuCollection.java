@@ -9,13 +9,13 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
-import de.imise.tool3lgm.Help;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.plugin.B1ExportPlugin;
 import de.imise.tool3lgm.plugin.ExportPdvb4AwbPlugin;
 import de.imise.util.Alphabetical;

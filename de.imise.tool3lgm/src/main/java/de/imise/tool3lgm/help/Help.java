@@ -1,7 +1,7 @@
 /*
  * Created on 28.04.2004
  */
-package de.imise.tool3lgm;
+package de.imise.tool3lgm.help;
 
 /**
  * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte
@@ -20,6 +20,8 @@ import javax.help.HelpSet;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
+import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;

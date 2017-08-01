@@ -92,6 +92,7 @@ import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.Werkzeugleiste;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
+import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
@@ -1908,12 +1909,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @return
      */
     public final boolean checkLicenses() {
-        try {
-            if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de", "medizin.uni-leipzig.de", "AAA2011")) {
+        if (true) {
             return true;
         }
-        } catch (Exception e) {
-        }
+        //        try {
+        //            if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de", "medizin.uni-leipzig.de", "AAA2011")) {
+        //                return true;
+        //            }
+        //        } catch (Exception e) {
+        //        }
         FileNameExtensionFilterAndFileFilter licenseFileFilter = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC), false);
         File[] licenseFilesArray = Tool3lgmConstants.APPLICATION_DIR.listFiles(licenseFileFilter);
         List<File> licenseFiles = new ArrayList<>();

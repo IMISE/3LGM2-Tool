@@ -1,4 +1,4 @@
-package de.imise.tool3lgm;
+package de.imise.tool3lgm.help;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -7,6 +7,8 @@ import java.io.RandomAccessFile;
 
 import javax.swing.JWindow;
 
+import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
