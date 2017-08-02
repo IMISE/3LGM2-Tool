@@ -15,7 +15,7 @@ import java.util.Iterator;
  *
  * @param <E>
  */
-public class IdentityHashSet<E> extends AbstractSet<E> {
+public class IdentityHashSet<E> extends AbstractSet<E> implements Cloneable {
 
 	private transient IdentityHashMap<E, Object> map;
 
