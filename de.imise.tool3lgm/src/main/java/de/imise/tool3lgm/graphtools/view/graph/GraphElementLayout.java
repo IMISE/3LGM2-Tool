@@ -10,7 +10,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 // TODO: Konzept der Klasse GraphElementLayout überarbeiten und toXMLString-Methode verändern und nur GraphElementLayout-Informationen speichern die
 // nicht Standard aus Mapping entsprechen
 
-public class GraphElementLayout implements SwingConstants {
+public class GraphElementLayout implements SwingConstants, Cloneable {
 
     /**
      * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch in den
