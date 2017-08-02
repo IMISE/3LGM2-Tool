@@ -181,7 +181,6 @@ public enum ActionIdentifier {
     useRaster,
     showRaster,
     signify_linked_elements,
-    // unused_interfaces,
     HIDE_UNASSOCIATED_INTERFACES,
     UNHIDE_ALL_INTERFACES,
     automatic_coloring,
@@ -278,7 +277,7 @@ public enum ActionIdentifier {
      * <p>
      * Per Konvention wird hier der Identifier zurückgegeben, der dem Namen von <code>l</code> im Englischen in Kleinbuchstaben entspricht. Bsp.:
      * {@link Locale#GERMAN} --> {@link #german}
-     * 
+     *
      * @param l
      * @return
      */
@@ -289,7 +288,7 @@ public enum ActionIdentifier {
     /**
      * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen der
      * durch <code>identifier</code> identifizierten {@link StaticAction} entsteht.
-     * 
+     *
      * @param actionCommand
      */
     String getActionCommand() {
@@ -299,7 +298,7 @@ public enum ActionIdentifier {
 
     /**
      * Gibt den {@link KeyStroke} zurück, der die durch diesen Identifier identifizierte {@link StaticAction} auslöst.
-     * 
+     *
      * @return
      */
     KeyStroke getKeyStroke() {
@@ -308,7 +307,7 @@ public enum ActionIdentifier {
 
     /**
      * Gibt das große Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
-     * 
+     *
      * @return
      */
     Icon getLargeIcon() {
@@ -318,7 +317,7 @@ public enum ActionIdentifier {
 
     /**
      * Gibt ausführliche Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung bei Hilfe)
-     * 
+     *
      * @param description
      */
     String getLongDescription() {
@@ -330,7 +329,7 @@ public enum ActionIdentifier {
 
     /**
      * Gibt kurze Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung als Tooltip)
-     * 
+     *
      * @param description
      */
     String getShortDescription() {
@@ -341,7 +340,7 @@ public enum ActionIdentifier {
 
     /**
      * Gibt das kleine Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
-     * 
+     *
      * @return
      */
     Icon getSmallIcon() {
@@ -351,7 +350,7 @@ public enum ActionIdentifier {
 
     /**
      * Gibt den anzuzeigenden Text für die durch diesen Identifier identifizierte {@link StaticAction} wieder.
-     * 
+     *
      * @param
      */
     String getText() {
