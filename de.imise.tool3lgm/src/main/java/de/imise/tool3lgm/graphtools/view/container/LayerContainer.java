@@ -145,32 +145,18 @@ public class LayerContainer extends ElementContainer {
      */
     private void init() {
         if (doc instanceof Szenario) {
-            nodeContainer = new ArrayList<NodeContainer>(100);
-            alphabeticalNodeContainer = new ArrayList<NodeContainer>(100);
-            edgeContainer = new ArrayList<EdgeContainer>(100);
-            bendpointContainer = new ArrayList<BendpointContainer>(50);
+            nodeContainer = new ArrayList<>(100);
+            alphabeticalNodeContainer = new ArrayList<>(100);
+            edgeContainer = new ArrayList<>(100);
+            bendpointContainer = new ArrayList<>(50);
         } else {
-            nodeContainer = new ArrayList<NodeContainer>(500);
-            alphabeticalNodeContainer = new ArrayList<NodeContainer>(500);
-            edgeContainer = new ArrayList<EdgeContainer>(500);
-            bendpointContainer = new ArrayList<BendpointContainer>(1000);
+            nodeContainer = new ArrayList<>(500);
+            alphabeticalNodeContainer = new ArrayList<>(500);
+            edgeContainer = new ArrayList<>(500);
+            bendpointContainer = new ArrayList<>(1000);
         }
-        numberedEdgesNodeContainer = new ArrayList<NodeContainer>(10);
-        tmpEdgeContainer = new ArrayList<EdgeContainer>(100);
-    }
-
-    @Override
-    public Object clone() {
-        LayerContainer retVal;
-        try {
-            retVal = (LayerContainer) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-        retVal.layerNumber = layerNumber;
-
-        return retVal;
+        numberedEdgesNodeContainer = new ArrayList<>(10);
+        tmpEdgeContainer = new ArrayList<>(100);
     }
 
     /**
@@ -950,8 +936,8 @@ public class LayerContainer extends ElementContainer {
      * Funktioniert wie eine Map, bei der die Werte aber in einer Listenreihenfolge erhalten bleiben.
      */
     private class ElementTypeStringPair {
-        ArrayList<Class<?>> elementClassList = new ArrayList<Class<?>>();
-        ArrayList<String> stringList = new ArrayList<String>();
+        ArrayList<Class<?>> elementClassList = new ArrayList<>();
+        ArrayList<String> stringList = new ArrayList<>();
 
         public void set(final Class<?> clazz, final String s) {
             for (int i = 0; i < elementClassList.size(); i++) {

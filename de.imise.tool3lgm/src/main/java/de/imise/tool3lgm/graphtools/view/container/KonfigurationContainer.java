@@ -13,13 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -74,19 +72,6 @@ public class KonfigurationContainer extends NodeContainer {
      */
     public KonfigurationContainer(final Konfiguration neu, final GraphElementLayout l, final GraphDocument gd) {
         super(neu, l, gd);
-    }
-
-    @Override
-    public Object clone() {
-        KonfigurationContainer retVal;
-        try {
-            retVal = (KonfigurationContainer) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-
-        return retVal;
     }
 
     @Override
@@ -156,7 +141,7 @@ public class KonfigurationContainer extends NodeContainer {
             if (!c1.isVisible()) {
                 c1C = c1.getSurrogateContainer();
             } else {
-                c1C = new ArrayList<ElementContainer>(1);
+                c1C = new ArrayList<>(1);
                 c1C.add(c1);
             }
 
@@ -183,7 +168,7 @@ public class KonfigurationContainer extends NodeContainer {
                         if (!c2.isVisible()) {
                             c2C = c2.getSurrogateContainer();
                         } else {
-                            c2C = new ArrayList<ElementContainer>(1);
+                            c2C = new ArrayList<>(1);
                             c2C.add(c2);
                         }
 

@@ -2,11 +2,9 @@ package de.imise.tool3lgm.graphtools.elements;
 
 import java.util.List;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
-import de.imise.tool3lgm.log.Log;
 
 /**
  * @author N.N.
@@ -18,18 +16,6 @@ public abstract class Konfiguration extends Knoten {
      */
     public Konfiguration() {
         super();
-    }
-
-    @Override
-    public Object clone() {
-        Konfiguration retVal;
-        try {
-            retVal = (Konfiguration) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-        return retVal;
     }
 
     /**

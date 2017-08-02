@@ -11,7 +11,6 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
@@ -47,18 +46,6 @@ public final class Aufgabe extends Knoten {
     @Override
     public int layerFor() {
         return ModelConstants.DOMAIN_LAYER;
-    }
-
-    @Override
-    public Object clone() {
-        Aufgabe retVal;
-        try {
-            retVal = (Aufgabe) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-        return retVal;
     }
 
     @Override
@@ -116,7 +103,7 @@ public final class Aufgabe extends Knoten {
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
      */
-    public List<ElementContainer> getAllDifferentKonfigs(final GraphDocument doc) {
+    private List<ElementContainer> getAllDifferentKonfigs(final GraphDocument doc) {
         List<ElementContainer> returnList = getAllKonfigs(doc, null);
         int size = returnList.size();
         ABKonfiguration[] konfigs = new ABKonfiguration[size];
