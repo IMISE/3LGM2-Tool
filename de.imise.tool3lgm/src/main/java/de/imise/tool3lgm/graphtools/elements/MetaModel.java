@@ -126,42 +126,42 @@ public abstract class MetaModel {
      * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges() {
+    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToSortedEdges() {
         ImmutableMap.Builder<Class<? extends ModelElement>, Set<Class<? extends Kante>>> mapBuilder = ImmutableMap.builder();
-        Iterable<Class<? extends Kante>> orderedEdges = getOrderedEdges();
+        Iterable<Class<? extends Kante>> sortedEdges = getSortedEdges();
         for (Class<? extends ModelElement> elementClass : getAllNodes()) {
-            ImmutableSet.Builder<Class<? extends Kante>> orderedEdgesForElementClass = new ImmutableSet.Builder<>();
-            for (Class<? extends Kante> edgeClass : orderedEdges) {
+            ImmutableSet.Builder<Class<? extends Kante>> sortedEdgesForElementClass = new ImmutableSet.Builder<>();
+            for (Class<? extends Kante> edgeClass : sortedEdges) {
                 if (Kante.isStartClass(edgeClass, elementClass)) {
-                    orderedEdgesForElementClass.add(edgeClass);
+                    sortedEdgesForElementClass.add(edgeClass);
                 }
             }
-            ImmutableSet<Class<? extends Kante>> orderedEdgesSet = orderedEdgesForElementClass.build();
-            if (!orderedEdgesSet.isEmpty()) {
-                mapBuilder.put(elementClass, orderedEdgesForElementClass.build());
+            ImmutableSet<Class<? extends Kante>> sortedEdgesSet = sortedEdgesForElementClass.build();
+            if (!sortedEdgesSet.isEmpty()) {
+                mapBuilder.put(elementClass, sortedEdgesForElementClass.build());
             }
         }
         return mapBuilder.build();
     }
 
-    private Set<Class<? extends Kante>> getOrderedEdges() {
-        ImmutableSet.Builder<Class<? extends Kante>> orderedEdges = new ImmutableSet.Builder<>();
+    private Set<Class<? extends Kante>> getSortedEdges() {
+        ImmutableSet.Builder<Class<? extends Kante>> sortedEdges = new ImmutableSet.Builder<>();
         for (Class<? extends Kante> edgeClass : getAllEdges()) {
-            if (OrderedEdge.class.isAssignableFrom(edgeClass)) {
-                orderedEdges.add(edgeClass);
+            if (SortedEdge.class.isAssignableFrom(edgeClass)) {
+                sortedEdges.add(edgeClass);
             }
         }
-        return orderedEdges.build();
+        return sortedEdges.build();
     }
 
     /**
      * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToOrderedEdges(final int i) {
-        Set<Class<? extends Kante>> processOrderedEdgeClasses = ImmutableSet.<Class<? extends Kante>> of(PrzAufVerbindung.class);
-        Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> elementClassToOrderedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Kante>>> of(Prozess.class, processOrderedEdgeClasses);
-        return elementClassToOrderedEdges;
+    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToSortedEdges(final int i) {
+        Set<Class<? extends Kante>> processSortedEdgeClasses = ImmutableSet.<Class<? extends Kante>> of(PrzAufVerbindung.class);
+        Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> elementClassToSortedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Kante>>> of(Prozess.class, processSortedEdgeClasses);
+        return elementClassToSortedEdges;
     }
 
     /**

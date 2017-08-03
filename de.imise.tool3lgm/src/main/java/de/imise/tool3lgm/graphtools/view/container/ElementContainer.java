@@ -329,9 +329,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     public final void setVisible(final boolean v) {
         super.setVisible(v);
         if (v) {
-            Set<Class<? extends Kante>> orderedEdgeClasses = ModelConstants.getOrderedEdgeClasses(me.getClass());
-            if (orderedEdgeClasses != null) {
-                for (Class<? extends Kante> edgeClass : orderedEdgeClasses) {
+            Set<Class<? extends Kante>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(me.getClass());
+            if (sortedEdgeClasses != null) {
+                for (Class<? extends Kante> edgeClass : sortedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {
                         additionalLabelTextGenerator = new AdditionalLabelTextGenerator(this, get3LGMLayout());
                     }

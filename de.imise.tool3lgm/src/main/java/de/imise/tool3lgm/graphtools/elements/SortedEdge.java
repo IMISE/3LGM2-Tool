@@ -6,6 +6,6 @@ package de.imise.tool3lgm.graphtools.elements;
  * @author AXS
  * @created 19.07.2017
  */
-public interface OrderedEdge {
+public interface SortedEdge {
 
 }

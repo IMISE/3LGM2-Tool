@@ -7,14 +7,14 @@ import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.MultipleEdge;
-import de.imise.tool3lgm.graphtools.elements.OrderedEdge;
+import de.imise.tool3lgm.graphtools.elements.SortedEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 
 /**
  * @author Thomas
  */
-public final class PrzAufVerbindung extends Doppelkante implements OrderedEdge, MultipleEdge {
+public final class PrzAufVerbindung extends Doppelkante implements SortedEdge, MultipleEdge {
 
     //    public static final Class[] stcl = {Prozess.class};
     public static final Class<? extends ModelElement> stcl = Prozess.class;

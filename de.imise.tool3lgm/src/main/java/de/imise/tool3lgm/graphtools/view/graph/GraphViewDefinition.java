@@ -61,7 +61,7 @@ public abstract class GraphViewDefinition {
         if (LayerKnoten.class.isAssignableFrom(elementClass)) {
             return true;
         }
-        return hasOrderedEdgeClassesToPaintable(elementClass);
+        return hasSortedEdgeClassesToPaintable(elementClass);
     }
 
     /**
@@ -72,12 +72,12 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    private boolean hasOrderedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
-        Set<Class<? extends Kante>> orderedEdgeClasses = ModelConstants.getOrderedEdgeClasses(elementClass);
-        if (orderedEdgeClasses == null) {
+    private boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
+        Set<Class<? extends Kante>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(elementClass);
+        if (sortedEdgeClasses == null) {
             return false;
         }
-        for (Class<? extends Kante> edgeClass : orderedEdgeClasses) {
+        for (Class<? extends Kante> edgeClass : sortedEdgeClasses) {
             Class<? extends ModelElement> other = Kante.getOther(edgeClass, elementClass);
             if (isPaintable(other)) {
                 return true;

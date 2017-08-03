@@ -297,7 +297,7 @@ public final class ModelConstants {
      * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> ELEMENT_CLASS_TO_ORDERED_EDGES = metaModel.getElementClassToOrderedEdges();
+    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> ELEMENT_CLASS_TO_SORTED_EDGES = metaModel.getElementClassToSortedEdges();
 
     /**
      * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
@@ -306,8 +306,8 @@ public final class ModelConstants {
      *
      * @param elementClass
      */
-    public static final Set<Class<? extends Kante>> getOrderedEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        return ELEMENT_CLASS_TO_ORDERED_EDGES.get(elementClass);
+    public static final Set<Class<? extends Kante>> getSortedEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        return ELEMENT_CLASS_TO_SORTED_EDGES.get(elementClass);
     }
 
     /**
@@ -317,8 +317,8 @@ public final class ModelConstants {
      * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
      * @return
      */
-    public static final boolean isOrderedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return getOrderedEdgeClasses(elementClass).contains(edgeClass);
+    public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+        return getSortedEdgeClasses(elementClass).contains(edgeClass);
     }
 
     public static final boolean isMultipleEdgeClass(final Class<? extends Kante> edgeClass) {
