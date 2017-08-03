@@ -144,13 +144,6 @@ public class GDCollectionFileHandler {
     /**
      * @return
      */
-    public boolean isZipFile() {
-        return isZipFile;
-    }
-
-    /**
-     * @return
-     */
     public boolean isReadOnly() {
         return isReadOnly;
     }
@@ -214,17 +207,6 @@ public class GDCollectionFileHandler {
             return "<" + Tool3lgmConstants.getResString("unbenannt") + (counter > 0 ? " #" + counter : "") + ">";
         }
         return getFile().getName() + (isReadOnly ? " <" + Tool3lgmConstants.getResString("text_readOnly") + ">" : "") + (counter > 0 ? " #" + counter : "");
-    }
-
-    /**
-     * sets flag isZipFile<br/>
-     * if isZipFile is true, collection will be saved into packed zip-File, when saveToFile() is called next time
-     *
-     * @param _zipFile new value for isZipFile
-     * @author Thomas Rudert
-     */
-    public void setSaveAsZipFile(final boolean _zipFile) {
-        isZipFile = _zipFile;
     }
 
     /**
@@ -367,7 +349,7 @@ public class GDCollectionFileHandler {
         FileNameExtensionFilter lgmZippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_ZIP);
         FileNameExtensionFilter lgmUnzippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED);
         fileChooser.setFileFilters(false, lgmZippedFileFiler, lgmUnzippedFileFiler);
-        fileChooser.setFileFilter(isZipFile() ? lgmZippedFileFiler : lgmUnzippedFileFiler);
+        fileChooser.setFileFilter(isZipFile ? lgmZippedFileFiler : lgmUnzippedFileFiler);
         if (getFile() != null) {
             fileChooser.setSelectedFile(getFile());
         }
@@ -383,7 +365,7 @@ public class GDCollectionFileHandler {
             exp.printStackTrace();
             return false;
         }
-        setSaveAsZipFile(fileChooser.getFileFilter() == lgmZippedFileFiler);
+        isZipFile = fileChooser.getFileFilter() == lgmZippedFileFiler;
         return true;
     }
 
