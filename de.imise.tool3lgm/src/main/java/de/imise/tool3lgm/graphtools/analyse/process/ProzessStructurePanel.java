@@ -9,7 +9,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.List;
@@ -52,10 +51,12 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.tools.LGMTree;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
+import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
@@ -158,7 +159,7 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
     /**
      * COMMENTME
      */
-    private ArrayList<ElementContainer> aufgabenContainer;
+    private List<ElementContainer> aufgabenContainer;
 
     /**
      * COMMENTME
@@ -230,7 +231,7 @@ public class ProzessStructurePanel extends AbstractExpandablePanel implements Tr
          * JButton clearBut = new JButton(Tool3lgmConstants.getIcon("clear.gif"));
          * clearBut.setActionCommand("clear"); clearBut.addActionListener(this); /
          */JPanel clearBut = new JPanel(); // Platzhalten für den deaktivierten
-                                          // clearBut;
+                                           // clearBut;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
         JPanel upDownControl = new JPanel(new GridLayout(1, 2));
