@@ -370,7 +370,7 @@ public class Mapping {
      * @author Thomas Rudert
      * @return String der vollstaendige XML-Tag zu diesem Objekt
      */
-    public String toXMLString() {
+    public final String toXMLString() {
         StringBuilder xmlString = new StringBuilder("<mapping>");
         for (Class<? extends ModelElement> elementClass : elementClassToStandardLayoutMap.keySet()) {
             xmlString.append(elementClassToStandardLayoutMap.get(elementClass).toXMLString(elementClass, true));
