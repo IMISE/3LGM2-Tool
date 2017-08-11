@@ -16,7 +16,7 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
  * Oberklasse für alle Klassen, denen man benutzerdefinierte Eigenschaften geben kann. Hinweis: Beim Löschen eines UserFields bleibt sein Hash und
  * Value-Paar in der HashMap. Nimmt man das Löschen zurück, indem man im <code>UserFieldDeclarationDialog</code> auf abbrechen geht, wird die beim
  * Öffnen des Dialogs erstellte Kopie der <code>UserFieldDefinitions</code> zurück gesetzt und alles ist wie vorher.
- * 
+ *
  * @author AXS
  * @created 30.10.2007
  */
@@ -36,11 +36,11 @@ public class UserFieldTarget implements Cloneable {
     /**
      * Ein konstant lereres Set
      */
-    private static final Set<UserField> EMPTY_SET = new HashSet<UserField>(0);
+    private static final Set<UserField> EMPTY_SET = new HashSet<>(0);
 
     /**
-	 * 
-	 */
+     *
+     */
     public UserFieldTarget() {
         super();
     }
@@ -54,7 +54,7 @@ public class UserFieldTarget implements Cloneable {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             return null;
         }
-        retVal.userFieldToInputValuesMap = userFieldToInputValuesMap == null ? null : new HashMap<UserField, String>(userFieldToInputValuesMap);
+        retVal.userFieldToInputValuesMap = userFieldToInputValuesMap == null ? null : new HashMap<>(userFieldToInputValuesMap);
         //Das folgende kann man sich schenken, weil nur neue Strings gesetzt werden. Da man Strings aber nicht ändern kann
         //ohne sie neu zu setzen, können hier die Referenzen erstmal ruhig auch auf das Origibal zeigen
         //		for (UserField key : getUserFieldInputValueKeys())
@@ -70,7 +70,7 @@ public class UserFieldTarget implements Cloneable {
     /**
      * Liefert den vom Benutzer für das <code>UserField</code> mit dem übergebenen HashCode eingegebenen Wert. Wurde noch keiner eingegeben oder
      * gehört das betreffende <code>UserField</code> gar nicht zu diesem <code>UserFieldTarget</code>, kommt <code>null</code> zurück.
-     * 
+     *
      * @param userField
      * @return den eingebenen Wert oder <code>UserField.EMPTY_STRING</code>
      */
@@ -92,7 +92,7 @@ public class UserFieldTarget implements Cloneable {
     public void setUserFieldInputValue(final UserField userField, String value) {
 
         if (userFieldToInputValuesMap == null) {
-            userFieldToInputValuesMap = new HashMap<UserField, String>(5);
+            userFieldToInputValuesMap = new HashMap<>(5);
         }
         userFieldToInputValuesMap.remove(userField);
         value = value.trim();
@@ -106,13 +106,13 @@ public class UserFieldTarget implements Cloneable {
 
     /**
      * Löscht das übergebene <code>UserField</code> aus der Eingabewerte-Map
-     * 
+     *
      * @param userField
      * @return
      */
     public Object removeUserField(final UserField userField) {
 
-        // Wenn für eine Elementart keine primären Kennzahlen definiert sind, 
+        // Wenn für eine Elementart keine primären Kennzahlen definiert sind,
         // ist ist die <code>userFieldToInputValuesMap</code> == null
         // In diesem Fall gibt es auch nichts zu entfernen
         if (userFieldToInputValuesMap == null) {
@@ -133,7 +133,7 @@ public class UserFieldTarget implements Cloneable {
 
     /**
      * Hängt an den übergebenen <code>StringBuilder</code> für jedes <code>UserField</code> einen XML-Eintrag an.
-     * 
+     *
      * @param sb <code>StringBuilder</code>, an den die Einträge gehängt werden
      */
     protected void appendUserFieldXMLString(final StringBuilder sb) {
@@ -155,7 +155,7 @@ public class UserFieldTarget implements Cloneable {
      * <code>UserField</code> aufrufen. Kein anderer! Möchte man den berechneten oder eingegebenen Wert eines <code>UserField</code>s für ein Element
      * abfragen, sollte das immer über die Funktion <code>UserField.getValue(ModelElement)</code> geschehen, da diese ggf. die Neuberechnung von
      * Kennzahlformeln anstößt.
-     * 
+     *
      * @param userField <code>UserField</code> für das der berechnete Wert dieses Elementes zurück gegeben werden soll
      * @see #_getUserFieldInputValue(String)
      * @see #_getUserFieldInputValue(UserField)
@@ -179,7 +179,7 @@ public class UserFieldTarget implements Cloneable {
      */
     protected void setCalculatedUserFieldValue(final UserField userField, final String value) {
         if (userFieldToCalculatedValuesMap == null) {
-            userFieldToCalculatedValuesMap = new HashMap<UserField, String>(1);
+            userFieldToCalculatedValuesMap = new HashMap<>(1);
         }
         userFieldToCalculatedValuesMap.put(userField, value);
     }
