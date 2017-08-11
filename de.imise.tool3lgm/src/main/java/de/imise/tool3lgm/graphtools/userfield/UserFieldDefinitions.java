@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.function.Predicate;
 
 import javax.swing.JOptionPane;
 
@@ -26,6 +27,7 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TW
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -478,6 +480,22 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      */
     public Iterable<UserField> getFormatUserFields() {
         return getUserFields(GLOBAL_FORMAT_IDENTIFIER_CLASS);
+    }
+
+    private static final Predicate<Class<? extends UserFieldTarget>> isSimpleTargetClass() {
+        return c -> c != GLOBAL_FORMAT_IDENTIFIER_CLASS && c != GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+    }
+
+    public Iterable<UserField> getElementClassUserFields() {
+        Set<Class<? extends UserFieldTarget>> keys = classToUserFieldListMap.keySet();
+        ImmutableList.Builder<Iterable<UserField>> iterables = new ImmutableList.Builder<>();
+        for (Class<? extends UserFieldTarget> key : keys) {
+            if (isSimpleTargetClass().test(key)) {
+                iterables.add(classToUserFieldListMap.get(key));
+            }
+        }
+        ImmutableList<Iterable<UserField>> build = iterables.build();
+        return CollectionUtils.getCommonIterable(build);
     }
 
     /**
