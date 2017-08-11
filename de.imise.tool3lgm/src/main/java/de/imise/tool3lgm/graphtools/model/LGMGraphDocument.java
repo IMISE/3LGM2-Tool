@@ -8,7 +8,6 @@ package de.imise.tool3lgm.graphtools.model;
 import static de.imise.tool3lgm.graphtools.model.GDCollection.getModelElements;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -630,7 +629,7 @@ public class LGMGraphDocument extends GraphDocument {
                     if (!destGDColl.getFileHandler().saveToFile()) {
                         return;
                     }
-                } catch (IOException exp) {
+                } catch (Exception exp) {
                     Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
                     return;
                 }
