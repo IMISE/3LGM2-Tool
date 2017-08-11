@@ -28,7 +28,7 @@ public class Mapping {
     /**
      * Mappt von der Elementklasse auf das zugehörige Standard-<code>GraphElementLayout</code>
      */
-    private HashMap<Class<? extends ModelElement>, GraphElementLayout> elementClassToStandardLayoutMap = new HashMap<Class<? extends ModelElement>, GraphElementLayout>();
+    private HashMap<Class<? extends ModelElement>, GraphElementLayout> elementClassToStandardLayoutMap = new HashMap<>();
 
     /**
      * Standardelementlayout. Initial entspricht es dem Standardlayout aus <code>GraphElementLayout</code>
@@ -36,8 +36,8 @@ public class Mapping {
     private GraphElementLayout standardElementLayout = (GraphElementLayout) GraphElementLayout.STANDARD_ELEMENT_LAYOUT.clone();
 
     /**
-	 * 
-	 */
+     *
+     */
     public Mapping() {
         super();
         loadDefaults();
@@ -46,13 +46,13 @@ public class Mapping {
     /**
      * Setzt für diese Map alle Werte der übergebenen. Alle <code>GraphElementLayout</code>s der übergebenen
      * Map werden geclont.
-     * 
+     *
      * @param map
      */
     public final void adapt(final Mapping map) {
         standardElementLayout = (GraphElementLayout) map.standardElementLayout.clone();
         Set<Class<? extends ModelElement>> keySet = map.elementClassToStandardLayoutMap.keySet();
-        elementClassToStandardLayoutMap = new HashMap<Class<? extends ModelElement>, GraphElementLayout>(keySet.size());
+        elementClassToStandardLayoutMap = new HashMap<>(keySet.size());
         for (Class<? extends ModelElement> c : keySet) {
             elementClassToStandardLayoutMap.put(c, (GraphElementLayout) map.elementClassToStandardLayoutMap.get(c).clone());
         }
@@ -60,7 +60,7 @@ public class Mapping {
 
     /**
      * Gibt das allgemeine Standardlayout für alle Elementklassen zurück, die kein eigenes Layout besitzen.
-     * 
+     *
      * @return Returns the standardElementLayout.
      */
     public GraphElementLayout getStandardElementLayout() {
@@ -73,7 +73,7 @@ public class Mapping {
      * Eintrag für diese Elementart, wird das StandardLayout zurück gegeben.<br>
      * Will man das Layout für eine spezielle Elementart setzen, muss man das
      * Layout übder die Funktion <code>getElementClassSpecificLayout(Class)</code> holen.
-     * 
+     *
      * @param me Element, für das das StandardLayout ermitelt werden soll
      * @see #getElementClassSpecificLayout(Class)
      * @return StandardLayout für Elemente der übergebenen Art
@@ -100,7 +100,7 @@ public class Mapping {
      * HashMap eingetragen und zurückgegeben.<br>
      * Über diese Funktion sollte das Layout einer Elementart immer ermittelt werden, wenn man einen Wert setzen
      * möchte. Bei reinen Abfragen kann man das immer über <code>getStandardGraphElementLayout(Class)</code> tun.
-     * 
+     *
      * @param elementClass
      * @see #getStandardGraphElementLayout(Class)
      * @return
@@ -285,7 +285,7 @@ public class Mapping {
         //
         //		layout_new[ModelConstants.ANWENDUNGSBAUSTEIN].bg_color = COLORS[GRAY];
         //		layout_new[ModelConstants.ANWENDUNGSBAUSTEIN].form = RUNDECK;
-        //		
+        //
         //		layout_new[ModelConstants.RECHANWENDUNGSBAUSTEIN].bg_color = COLORS[LIGHTRED];
         //		layout_new[ModelConstants.RECHANWENDUNGSBAUSTEIN].form = RUNDECK;
         //
@@ -301,7 +301,7 @@ public class Mapping {
         //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].form = ORDNER;
         //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].width = 20;
         //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].height = 20;
-        //		
+        //
         //		layout_new[ModelConstants.ORGANISATIONSPLAN].bg_color = COLORS[GREEN];
         //		layout_new[ModelConstants.ORGANISATIONSPLAN].form = RHOMBUS;
         //
@@ -360,7 +360,7 @@ public class Mapping {
         //		layout_new[ModelConstants.KANTE].bg_color = Color.black;
         //		layout_new[ModelConstants.DOPPELKANTE].bg_color = Color.black;
         //		layout_new[ModelConstants.AUF_OBJ_VERBINDUNG].bg_color = Color.black;
-        //		
+        //
         //		layout_new[ModelConstants.KNICKPUNKTKNOTEN].width = 10;
         //		layout_new[ModelConstants.KNICKPUNKTKNOTEN].height = 10;
 
