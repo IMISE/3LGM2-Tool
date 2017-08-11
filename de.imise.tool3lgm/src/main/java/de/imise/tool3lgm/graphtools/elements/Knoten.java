@@ -29,21 +29,11 @@ public abstract class Knoten extends ModelElement {
     }
 
     @Override
-    public final String toXMLString() {
-        return super.toXMLString();
-    }
-
-    @Override
     public ElementContainer createContainer(final GraphDocument doc) {
         if (ModelConstants.isInterLayerStartClass(getClass())) {
             return new InterLayerConnectedNodeContainer(this, doc);
         }
         return new NodeContainer(this, doc);
-    }
-
-    @Override
-    protected StringBuilder getXMLEntities() {
-        return super.getXMLEntities();
     }
 
     @Override
