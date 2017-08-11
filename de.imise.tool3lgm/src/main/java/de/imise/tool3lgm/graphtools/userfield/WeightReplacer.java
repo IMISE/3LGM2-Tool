@@ -1,10 +1,13 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Table;
+import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.graphtools.elements.Kante;
 
@@ -57,6 +60,26 @@ public class WeightReplacer {
         }
         //füge das Replacement hinzu
         return replacer.put(modelElementHash, userFieldHashToReplace, userFieldHashReplacement);
+    }
+
+    public boolean isEmpty() {
+        return isEmptyReplacer() && isEmptyStandardReplacer();
+    }
+
+    public boolean isEmptyReplacer() {
+        return replacer == null || replacer.isEmpty();
+    }
+
+    public boolean isEmptyStandardReplacer() {
+        return standardWeigthReplacer == null || standardWeigthReplacer.isEmpty();
+    }
+
+    public Iterable<Cell<String, String, String>> getReplacerContent() {
+        return replacer == null ? ImmutableSet.of() : replacer.cellSet();
+    }
+
+    public Set<Cell<String, Class<? extends Kante>, String>> getStandardReplacerContent() {
+        return standardWeigthReplacer == null ? ImmutableSet.of() : standardWeigthReplacer.cellSet();
     }
 
     /**
