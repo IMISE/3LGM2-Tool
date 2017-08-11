@@ -59,6 +59,15 @@ public class Mapping {
     }
 
     /**
+     * Liefert einen Iterable über alle Elementklassen, für die ein Standardlayout festgelegt wurde
+     *
+     * @return
+     */
+    public Iterable<Class<? extends ModelElement>> getElementClassesWithStandardLayout() {
+        return elementClassToStandardLayoutMap.keySet();
+    }
+
+    /**
      * Gibt das allgemeine Standardlayout für alle Elementklassen zurück, die kein eigenes Layout besitzen.
      *
      * @return Returns the standardElementLayout.
