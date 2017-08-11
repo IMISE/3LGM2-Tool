@@ -91,9 +91,13 @@ public abstract class Doppelkante extends Kante {
         return true;
     }
 
+    public final String getDirectionName() {
+        return DIRECTION_STR[direction + 1];
+    }
+
     @Override
     public StringBuilder getXMLEntities() {
-        return super.getXMLEntities().append("<field name=\"state\">" + DIRECTION_STR[direction + 1] + "</field>");
+        return super.getXMLEntities().append("<field name=\"state\">" + getDirectionName() + "</field>");
     }
 
     @Override
