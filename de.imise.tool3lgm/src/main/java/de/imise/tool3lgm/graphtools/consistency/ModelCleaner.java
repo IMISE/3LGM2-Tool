@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import com.google.common.collect.Lists;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -182,36 +184,30 @@ public class ModelCleaner {
         int pid = TransactionManager.STANDARD_PID;
         // Alle Knickpunkte löschen, die keiner Kante zugeordnet sind. So etwas trat in alten Modellen
         // auf und sollte gleich am Anfang ausgeschlossen werden
-        List<ElementContainer> al = new ArrayList<>();
-        for (Szenario szen : gdcoll.getSzenarios()) {
-            for (ElementContainer kc : szen.getElementContainer(Knickpunkt.class)) {
-                BendpointContainer bpc = (BendpointContainer) kc;
-                Knickpunkt kp = bpc.getKnickpunktKnoten();
-                EdgeContainer ec = kp.getOwner();
-                // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
-                // KnickpunktContainerListe seines Owners steht -> löschen
-                if (ec == null) {
-                    // System.err.println("nullllll");
-                    // System.err.println(gdcoll.getSzenario(i));
-                    al.add(kc);
-                } else if (ec.getBendpointContainerList().indexOf(bpc) == -1) {
-                    // System.err.println("owner kennt den nicht");
-                    // System.err.println(gdcoll.getSzenario(i));
-                    al.add(kc);
-                }
-
-            }
-        }
-
-        for (ElementContainer kpc2delete : al) {
-            //da die hier zu löschenden Knickpunkte keinen Owner haben, muss man sie einfach aus
-            //all ihren GraphDocuments löschen. Da nicht sicher ist, ob layerFor() des Bendpoints
-            //den richtigen Layer zurück liefert -> einfach auf allen Layern löschen (wo sie nicht
-            //enthalten sind, passiert einfach nichts)
-            ModelElement bendpoint = kpc2delete.getElement();
-            for (GraphDocument doc : bendpoint.getMySzenarios()) {
-                for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                    doc.getLayer(ModelConstants.LAYERS[i]).remove(kpc2delete);
+        List<GraphDocument> allDocs = Lists.newArrayList(gdcoll.getSzenarios());
+        allDocs.add(mainDoc);
+        for (GraphDocument doc : allDocs) {
+            for (LayerContainer lc : doc.getLayers()) {
+                List<BendpointContainer> benpoints = lc.getKnickpunkte();
+                for (int i = benpoints.size() - 1; i >= 0; i--) {
+                    BendpointContainer bpc = benpoints.get(i);
+                    Knickpunkt bp = bpc.getKnickpunktKnoten();
+                    EdgeContainer ec = bp.getOwner();
+                    // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
+                    // KnickpunktContainerListe seines Owners steht -> löschen
+                    boolean ok = true;
+                    if (ec == null) {
+                        // System.err.println("nullllll");
+                        // System.err.println(gdcoll.getSzenario(i));
+                        ok = false;
+                    } else if (ec.getBendpointContainerList().indexOf(bpc) == -1) {
+                        // System.err.println("owner kennt den nicht");
+                        // System.err.println(gdcoll.getSzenario(i));
+                        ok = false;
+                    }
+                    if (!ok) {
+                        benpoints.remove(i);
+                    }
                 }
             }
         }
