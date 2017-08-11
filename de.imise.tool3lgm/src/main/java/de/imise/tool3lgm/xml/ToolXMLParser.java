@@ -252,7 +252,7 @@ public class ToolXMLParser {
         //beim Einlesen werden Elemente mit generierten Namen evtl. nicht richtig eingelesen, weil
         //die Elemente, aus denen ihr Name generiert wird evtl. nach ihnen eingelesen werden ->
         //einfach nach dem kompletten Einlesen nochmal sortieren
-        ArrayList<GraphDocument> docs = new ArrayList<GraphDocument>(gdcoll.getSzenarioCount() + 1);
+        ArrayList<GraphDocument> docs = new ArrayList<>(gdcoll.getSzenarioCount() + 1);
         for (Szenario szen : gdcoll.getSzenarios()) {
             docs.add(szen);
         }
@@ -342,7 +342,19 @@ public class ToolXMLParser {
     }
 
     public static String getCurrentVersionString() {
-        return supportedXMLVersions[supportedXMLVersions.length - 1] + "\n" + supportedFileVersions[supportedFileVersions.length - 1] + "\n";
+        return supportedXMLVersions[supportedXMLVersions.length - 1] + "\n" + getCurrentFileVersion() + "\n";
+    }
+
+    public static final String getCurrentFileVersion() {
+        return supportedFileVersions[supportedFileVersions.length - 1];
+    }
+
+    public static final String getCurrentFileVersionBare() {
+        String fileVersion = supportedFileVersions[supportedFileVersions.length - 1];
+        if (fileVersion.startsWith("<!--")) {
+            fileVersion = fileVersion.substring("<!--".length(), fileVersion.length() - "-->".length());
+        }
+        return fileVersion;
     }
 
     //	/**
