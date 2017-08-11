@@ -645,7 +645,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, XML
      * @return
      */
     public boolean hasClassfificationStyle() {
-        return Style.CLASSIFICATION_NUMBER_STYLES.contains(style);
+        return isClassificationStyle(style);
     }
 
     /**
@@ -848,7 +848,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, XML
             return;
         }
         if (listValues == null) {
-            listValues = new ArrayList<String>();
+            listValues = new ArrayList<>();
         }
         listValues.add(value);
     }
@@ -868,7 +868,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, XML
      *
      * @return
      */
-    private String getFormatExportString() {
+    public String getFormatExportString() {
         StringBuilder sb = new StringBuilder(FORMAT_DECIMAL_PLACES_PREFIX);
         if (numberFormat != null) {
             sb.append(numberFormat.getMinimumFractionDigits());
@@ -1006,7 +1006,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, XML
         userField.formatUserField = formatUserField;
         userField.formatUnit = formatUnit == null ? null : new String(formatUnit);
         userField.formulaString = formulaString == null ? null : new String(formulaString);
-        userField.listValues = listValues == null ? null : new ArrayList<String>(listValues);
+        userField.listValues = listValues == null ? null : new ArrayList<>(listValues);
         userField.name = name == null ? null : new String(name);
         userField.style = style;
         userField.targetClass = targetClass;
@@ -1328,7 +1328,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, XML
             return null;
         }
         StringTokenizer st = new StringTokenizer(formulaString, " ()+-/*|");
-        HashSet<String> hashList = new HashSet<String>(st.countTokens());
+        HashSet<String> hashList = new HashSet<>(st.countTokens());
         while (st.hasMoreElements()) {
             String token = st.nextToken();
             if (token.startsWith(USERFIELD_HASH_STRING_PREFIX)) {
