@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -35,10 +36,10 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
 
     /** Mappt von der Elementklasse auf die dafür definierte Liste von <code>UserField</code>s */
-    private HashMap<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<Class<? extends UserFieldTarget>, UserFieldList>();
+    private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
 
     /** Mappt von den HashCodes der UserFields auf das UserField */
-    private HashMap<String, UserField> hashStringToUserFieldMap = new HashMap<String, UserField>();
+    private Map<String, UserField> hashStringToUserFieldMap = new HashMap<>();
 
     /** Berechnet für diese Defnition alle Kennzahlen der konkreten Elemente */
     private final Calculator calculator;
@@ -49,7 +50,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     /**
      * Liste aller UserFields, die Formeln darstellen
      */
-    private ArrayList<UserField> formulaUserFieldList = new ArrayList<UserField>();
+    private List<UserField> formulaUserFieldList = new ArrayList<>();
 
     /**
      * guava-Table für die Speicherung, bei welchem ModelElement welches Verteilungsgeweichtg in
@@ -202,8 +203,8 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * @param userField
      * @return Liste aller gelöschten <code>UserField</code>s
      */
-    public ArrayList<UserField> remove(final UserField userField) {
-        ArrayList<UserField> deleted = new ArrayList<UserField>();
+    public List<UserField> remove(final UserField userField) {
+        ArrayList<UserField> deleted = new ArrayList<>();
         UserFieldList ufl = classToUserFieldListMap.get(userField.getTargetClass());
         if (ufl == null) {
             return deleted;
@@ -226,7 +227,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             //wenn das zu löschende UserField ein UserField ist, das bei einem anderen in der Formel vorkommen kann (Kennzahl, Kennzahlformel, Verteilungsgewicht)
         } else if (userField.isClassificationUserField()) {
 
-            ArrayList<UserField> userFieldsToDelete = new ArrayList<UserField>();
+            ArrayList<UserField> userFieldsToDelete = new ArrayList<>();
             userFieldsToDelete.add(userField);
             for (int i = 0; i < userFieldsToDelete.size(); i++) {
                 UserField uncheckedField = userFieldsToDelete.get(i);
@@ -242,7 +243,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             }
             //wenn mehr als ein Feld gelöscht werden soll, warnen
             if (userFieldsToDelete.size() > 1) {
-                ArrayList<UserField> tmpList = new ArrayList<UserField>(userFieldsToDelete);
+                ArrayList<UserField> tmpList = new ArrayList<>(userFieldsToDelete);
                 if (userFieldsToDelete.size() > MAX_USED_USERFIELD_DELETE_NUMBER) {
                     tmpList.clear();
                     for (int i = 0; i < 10; i++) {
@@ -284,13 +285,13 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             return null;
         }
         def.gdcoll = getCollection();
-        def.classToUserFieldListMap = new HashMap<Class<? extends UserFieldTarget>, UserFieldList>(classToUserFieldListMap);
+        def.classToUserFieldListMap = new HashMap<>(classToUserFieldListMap);
         for (Class<? extends UserFieldTarget> key : classToUserFieldListMap.keySet()) {
             def.classToUserFieldListMap.put(key, (UserFieldList) def.classToUserFieldListMap.get(key).clone());
         }
 
-        def.formulaUserFieldList = new ArrayList<UserField>(formulaUserFieldList);
-        def.hashStringToUserFieldMap = new HashMap<String, UserField>(hashStringToUserFieldMap);
+        def.formulaUserFieldList = new ArrayList<>(formulaUserFieldList);
+        def.hashStringToUserFieldMap = new HashMap<>(hashStringToUserFieldMap);
         for (String key : hashStringToUserFieldMap.keySet()) {
             def.hashStringToUserFieldMap.put(key, def.hashStringToUserFieldMap.get(key).clone());
         }
@@ -396,26 +397,21 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             return ImmutableList.of();
         }
         final Iterator<UserField> userFieldsIterator = fieldList.iterator();
-        Iterable<UserField> userFieldsIterable = new Iterable<UserField>() {
+        Iterable<UserField> userFieldsIterable = () -> new Iterator<UserField>() {
+
             @Override
-            public Iterator<UserField> iterator() {
-                return new Iterator<UserField>() {
+            public boolean hasNext() {
+                return userFieldsIterator.hasNext();
+            }
 
-                    @Override
-                    public boolean hasNext() {
-                        return userFieldsIterator.hasNext();
-                    }
+            @Override
+            public UserField next() {
+                return userFieldsIterator.next();
+            }
 
-                    @Override
-                    public UserField next() {
-                        return userFieldsIterator.next();
-                    }
-
-                    @Override
-                    public void remove() {
-                        userFieldsIterator.remove();
-                    }
-                };
+            @Override
+            public void remove() {
+                userFieldsIterator.remove();
             }
         };
         return userFieldsIterable;
@@ -436,9 +432,9 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     public List<UserField> getUserFields(final Class<? extends UserFieldTarget> userFieldTargetClass, final Set<UserField.Style> styles) {
         if (styles == null || styles.size() == 0) {
             UserFieldList fieldList = classToUserFieldListMap.get(userFieldTargetClass);
-            return fieldList != null ? fieldList.getData() : new ArrayList<UserField>(0);
+            return fieldList != null ? fieldList.getData() : new ArrayList<>(0);
         }
-        ArrayList<UserField> returnList = new ArrayList<UserField>();
+        ArrayList<UserField> returnList = new ArrayList<>();
         for (UserField uf : getUserFields(userFieldTargetClass)) {
             if (styles.contains(uf.getStyle())) {
                 returnList.add(uf);
@@ -488,7 +484,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * @return all id userfields for all target classes
      */
     public List<UserField> getIDUserFields() {
-        ArrayList<UserField> idUserFields = new ArrayList<UserField>();
+        ArrayList<UserField> idUserFields = new ArrayList<>();
         for (Class<? extends UserFieldTarget> userFieldTargetClass : classToUserFieldListMap.keySet()) {
             UserFieldList userFields = classToUserFieldListMap.get(userFieldTargetClass);
             for (UserField userField : userFields) {
@@ -717,7 +713,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      *         wenn es keine Kreisreferenzen gibt
      */
     private ArrayList<UserField> makeFormulaUserFieldListConsistent() {
-        ArrayList<UserField> calculateableFormulaList = new ArrayList<UserField>(formulaUserFieldList.size());
+        ArrayList<UserField> calculateableFormulaList = new ArrayList<>(formulaUserFieldList.size());
         while (true) {
             //Größe der Liste der berechenbaren USerFields merken -> nur wenn sie in jedem
             //Durchlauf wächst, sind die Formeln konsistent
@@ -777,7 +773,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
             //enthaltenen UserFields refrenzieren sich an mindesten einer Stelle in ihren Formeln gegenseitig (es reicht
             //schon, dass sich 2 Formeln gegenseitig referenzieren, von denen dann der ganze Rest abhängt)
             if (lastSortedListSize == calculateableFormulaList.size()) {
-                ArrayList<UserField> inconsistentUserFields = new ArrayList<UserField>(formulaUserFieldList);
+                ArrayList<UserField> inconsistentUserFields = new ArrayList<>(formulaUserFieldList);
                 //füge zur globalen Liste wieder alle entfernten Elemente hinzu
                 calculateableFormulaList.addAll(formulaUserFieldList);
                 formulaUserFieldList = calculateableFormulaList;
@@ -820,7 +816,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
         //in der Liste aller Formel-UserFields (formulaUserFieldList) ein UserField für die
         //betreffende Elementart gefunden wurde. Beim nächsten UserField für diese Elementart
         //braucht man nicht noch einmal alle UserFields zu löschen)
-        HashSet<Class<?>> resetedElementClasses = new HashSet<Class<?>>(15);
+        HashSet<Class<?>> resetedElementClasses = new HashSet<>(15);
 
         //Das Hauptdokument der GDCollection holen (UserField-Änderungen gelten immer für alle
         //Elemente, also immer im Hauptdokument arbeiten)
@@ -895,7 +891,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * @return Liste aller USerFields, die das übergebene Format-Userfield als benutzen
      */
     public ArrayList<UserField> getFormatUser(final UserField format) {
-        ArrayList<UserField> returnList = new ArrayList<UserField>();
+        ArrayList<UserField> returnList = new ArrayList<>();
 
         if (!format.hasStyle(UserField.Style.FORMAT)) {
             return returnList;
