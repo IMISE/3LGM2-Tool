@@ -104,6 +104,10 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final GraphElementLayout.SHAPE STANDARD_FORM = SHAPE.rechteck;
     public static final int STANDARD_WIDTH = 90;
     public static final int STANDARD_HEIGHT = 50;
+    public static final int STANDARD_LINE_THICKNESS = 1;
+    public static final int STANDARD_LINE_STYLE = 0;
+    public static final int STANDARD_VALIGN = CENTER;
+    public static final int STANDARD_HALIGN = CENTER;
     //	public static final Color  STANDARD_TRACE_COLOR = Color.BLACK;
     public static final Color STANDARD_BORDER_COLOR = Color.BLACK;
     public static final Color STANDARD_NODE_COLOR = COLORS[RED];
@@ -127,8 +131,8 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         //TODO: den Standard-Linestyle aus den Containern hier her verlegen
         //		STANDARD_ELEMENT_LAYOUT.line_style =
         STANDARD_ELEMENT_LAYOUT.form = STANDARD_FORM;
-        STANDARD_ELEMENT_LAYOUT.halign = CENTER;
-        STANDARD_ELEMENT_LAYOUT.valign = CENTER;
+        STANDARD_ELEMENT_LAYOUT.halign = STANDARD_VALIGN;
+        STANDARD_ELEMENT_LAYOUT.valign = STANDARD_HALIGN;
         STANDARD_ELEMENT_LAYOUT.width = STANDARD_WIDTH;
 
     }
@@ -177,8 +181,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /** Höhe */
     public int height;
 
-    //TODO:prüfen ob das der Gesamte Pfad zum Icon ist und ob das überhaupt gebraucht wird. EIgentlich müsste hier das Icon rein und nicht ein String
-    /** Name des Icons */
+    /** Hash-Key des Icons */
     public String icon;
 
     /** Stil des Rahmens bei Knoten oder der Linie bei Kanten */
@@ -191,7 +194,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public int halign;
 
     /**
-     * 
+     *
      */
     public GraphElementLayout() {
         x = 0;
@@ -200,7 +203,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     }
 
     /**
-     * 
+     *
      */
     public void reset() {
         width = STANDARD_WIDTH;
@@ -208,13 +211,13 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         bg_color = null; // default: wie im Mapping
         fg_color = null; // default: Color.black
         border_color = null; // default: Color.black
-        line_thickness = 1;
+        line_thickness = STANDARD_LINE_THICKNESS;
         icon = null;
         font = null;
         form = null;
-        line_style = 0;
-        valign = CENTER;
-        halign = CENTER;
+        line_style = STANDARD_LINE_STYLE;
+        valign = STANDARD_VALIGN;
+        halign = STANDARD_HALIGN;
     }
 
     @Override
