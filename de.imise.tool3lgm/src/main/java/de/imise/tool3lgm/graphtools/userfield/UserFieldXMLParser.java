@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.userfield;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -14,6 +13,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.xml.ToolXMLWriter;
 
 /**
  * @author Thomas Rudert seit Version Beta 2 P26
@@ -60,16 +60,7 @@ public class UserFieldXMLParser {
     }
 
     public static final boolean exportDefinitions(final File file, final UserFieldDefinitions definitions) {
-        try {
-            RandomAccessFile raw = new RandomAccessFile(file, "rw");
-            raw.setLength(0);
-            raw.writeBytes(definitions.toXMLString(false));
-            raw.close();
-        } catch (Exception exp) {
-            Log.show(Log.ERROR, "IOException while parsing UserFieldFile", exp);
-            return false;
-        }
-        return true;
+        return ToolXMLWriter.writeUserFieldDefinitions(definitions, file);
     }
 
 }

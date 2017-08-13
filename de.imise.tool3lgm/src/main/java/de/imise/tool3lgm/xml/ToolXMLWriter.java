@@ -22,6 +22,7 @@ import javax.xml.stream.XMLStreamException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
@@ -43,6 +44,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.log.Log;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 import de.imise.util.io.FileHandler;
 
@@ -57,12 +59,10 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /** Hashes aller Icons, die von den über diesen Writer exportierten Elementen tatsächlich genutzt werden */
     private final Set<String> usedIconHashes;
 
-    private ToolXMLWriter(final GDCollection gdcoll, final File file, final boolean zip) throws XMLStreamException, FactoryConfigurationError, IOException {
+    protected ToolXMLWriter(final GDCollection gdcoll, final File file, final boolean zip) throws XMLStreamException, FactoryConfigurationError, IOException {
         super(file, zip ? getZipEntryName(file) : null);
         this.gdcoll = gdcoll;
-        usedIconHashes = new HashSet<>();
-        writeModel();
-        finish();
+        usedIconHashes = gdcoll != null ? new HashSet<>() : null;
     }
 
     /**
@@ -111,12 +111,35 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param gdcoll
      * @param file
      * @param zip
-     * @throws XMLStreamException
-     * @throws FactoryConfigurationError
-     * @throws IOException
+     * @return
      */
-    public static void write(final GDCollection gdcoll, final File file, final boolean zip) throws XMLStreamException, FactoryConfigurationError, IOException {
-        new ToolXMLWriter(gdcoll, file, zip);
+    public static boolean write(final GDCollection gdcoll, final File file, final boolean zip) {
+        try {
+            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, zip);
+            toolXMLWriter.writeModel();
+            toolXMLWriter.finish();
+        } catch (Exception e) {
+            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param definitions
+     * @param file
+     * @return
+     */
+    public static boolean writeUserFieldDefinitions(final UserFieldDefinitions definitions, final File file) {
+        try {
+            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(null, file, false);
+            toolXMLWriter.writeUserFieldDefinitions(definitions, false);
+            toolXMLWriter.finish();
+        } catch (Exception e) {
+            Log.show(Log.ERROR, "Exception while exporting UserFieldFile", e);
+            return false;
+        }
+        return true;
     }
 
     /////////////////////////////////////////////
@@ -132,7 +155,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeElement("description", gdcoll.getMainGraphDocument().getDescription());
         writeElement("version", gdcoll.getFileVersion());
         writeEndElement(); //</header>
-        writeUserFieldDefinitions(true);
+        writeUserFieldDefinitions(gdcoll.getUserFieldDefinitions(), true);
         writeStartElement("objects"); //<objects>
         writeStartElement("model"); //<model>
         writeUserFieldValues(gdcoll);
@@ -151,13 +174,13 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     //////////////////////////
 
     /**
-     * @return
+     * @param definitions
+     * @param appendWeightReplacer
      * @throws XMLStreamException
      */
-    public void writeUserFieldDefinitions(final boolean appendWeightReplacer) throws XMLStreamException {
+    private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
         writeStartElement("userFieldDefinitions");
         //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
-        UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         for (UserField uf : definitions.getFormatUserFields()) {
             writeUserField(uf);
         }
@@ -173,7 +196,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement();
     }
 
-    public void writeUserField(final UserField uf) throws XMLStreamException {
+    protected void writeUserField(final UserField uf) throws XMLStreamException {
         writeStartElement("userFieldDef");
         //bei Modell-Attributen wird die targetClass nicht als UserField ins
         // Tag geschrieben
@@ -207,7 +230,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement();
     }
 
-    public void writeUserFieldWeightReplacer(final WeightReplacer weightReplacer) throws XMLStreamException {
+    private void writeUserFieldWeightReplacer(final WeightReplacer weightReplacer) throws XMLStreamException {
         if (!weightReplacer.isEmpty()) {
             writeStartElement("weightReplacer");
             if (!weightReplacer.isEmptyReplacer()) {
@@ -279,7 +302,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /**
      * @return String der vollstaendige XML-Tag zu diesem Objekt
      */
-    private void writeModelElement(final ModelElement me) throws XMLStreamException {
+    public void writeModelElement(final ModelElement me) throws XMLStreamException {
         writeStartElement("element"); //<element>
         writeAttribute("class", me.getClass().getSimpleName());
         writeAttribute("hash", me.getHashString());
@@ -386,7 +409,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         }
     }
 
-    private void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
+    protected void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
         writeStartElement("container"); //<container>
         writeAttribute("hash", ec.getHashString());
         if (!(ec instanceof EdgeContainer)) {
@@ -490,14 +513,17 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         for (String iconHashString : iconTable.keySet()) {
             //nur die Icons in den XML-Stream schreiben, die von den exportierten Elementen auch genutzt werden
             if (usedIconHashes.contains(iconHashString)) {
-                writeStartElement("bitmap"); //<bitmap>
-                writeAttribute("type", "gif/base64");
-                writeAttribute("hash", iconHashString);
-                byte[] icon = iconTable.get(iconHashString);
-                writeCharacters(Base64.encode(icon));
-                writeEndElement(); //</bitmap>
+                writeImage(iconHashString, iconTable.get(iconHashString));
             }
         }
+    }
+
+    protected void writeImage(final String iconHashString, final byte[] icon) throws XMLStreamException {
+        writeStartElement("bitmap"); //<bitmap>
+        writeAttribute("type", "gif/base64");
+        writeAttribute("hash", iconHashString);
+        writeCharacters(Base64.encode(icon));
+        writeEndElement(); //</bitmap>
     }
 
 }

@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.Base64;
 import de.imise.tool3lgm.xml.ToolXMLParser;
+import de.imise.tool3lgm.xml.ToolXMLWriter;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 
 public class GDCollectionImExportHandler {
@@ -275,13 +276,7 @@ public class GDCollectionImExportHandler {
         if (f.exists()) {
             f.delete();
         }
-        try {
-            RandomAccessFile file = new RandomAccessFile(f, "rw");
-            file.writeBytes(ToolXMLParser.getCurrentVersionString() + gdcoll.toXMLString());
-            file.close();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-        }
+        ToolXMLWriter.write(gdcoll, f, false);
     }
 
 }

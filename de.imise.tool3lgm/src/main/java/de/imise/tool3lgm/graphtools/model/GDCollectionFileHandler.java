@@ -380,20 +380,27 @@ public class GDCollectionFileHandler {
      * @throws FactoryConfigurationError
      * @throws XMLStreamException
      */
-    public boolean saveToFile() throws IOException, XMLStreamException, FactoryConfigurationError {
-        if (isReadOnly || file == null) {
-            if (!chooseFile()) {
+    public boolean saveToFile() {
+        try {
+            if (isReadOnly || file == null) {
+                if (!chooseFile()) {
+                    return false;
+                }
+            }
+            File tempFile = new File(file.getParentFile(), ".tempTool3lgmSaveFile");
+            tempFile.delete();
+            tempFile.deleteOnExit();
+            if (!tempFile.createNewFile()) {
                 return false;
             }
-        }
-        File tempFile = new File(file.getParentFile(), ".tempTool3lgmSaveFile");
-        tempFile.delete();
-        tempFile.deleteOnExit();
-        if (!tempFile.createNewFile()) {
+            if (!ToolXMLWriter.write(gdcoll, tempFile, isZipFile)) {
+                return false;
+            }
+            copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
+        } catch (Exception e) {
+            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + e, e);
             return false;
         }
-        ToolXMLWriter.write(gdcoll, tempFile, isZipFile);
-        copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
         return true;
     }
 
