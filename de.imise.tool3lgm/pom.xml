@@ -67,13 +67,6 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.6</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/net.java.dev.stax-utils/stax-utils -->
-		<dependency>
-    		<groupId>net.java.dev.stax-utils</groupId>
-    		<artifactId>stax-utils</artifactId>
-    		<version>20070216</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.bea.xml/jsr173-ri -->
 	</dependencies>
 	<version>0.0.1-SNAPSHOT</version>
 <!-- <properties>
