@@ -9,7 +9,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCollection.getModelElements;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -49,8 +48,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xml.Base64;
-import de.imise.tool3lgm.xml.ToolXMLParser;
+import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
 
 /**
  * @author thomas
@@ -220,40 +218,8 @@ public class LGMGraphDocument extends GraphDocument {
         if (selectedContainer.size() == 0) {
             return;
         }
-
         gdcoll.setCopyAndPaste(0);
-
-        File cbPfad = new File(Tool3lgmConstants.getClipboardPath());
-        if (cbPfad.exists()) {
-            cbPfad.delete();
-        }
-
-        RandomAccessFile raf = null;
-        try {
-            raf = new RandomAccessFile(cbPfad, "rw");
-            raf.setLength(0);
-            //			start_transaction(TransactionManager.STANDARD_PID);
-            //			addRedoCommand(GraphDocument.CMD.COPY + " ", TransactionManager.STANDARD_PID);
-
-            raf.writeBytes(createClipboardContent());
-
-            //			finish_transaction(TransactionManager.STANDARD_PID);
-            distributeEventIntern(SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
-
-            raf.close();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            Object[] buttons = new Object[] {
-                    Tool3lgmConstants.getResString("ok")
-            };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + cbPfad.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
-                    null, buttons, null);
-            e.printStackTrace();
-            return;
-        }
-
-        //		gdcoll.saveCopyData(raf);
-
+        ToolXMLClipboardWriter.writeClipboard(this);
     }
 
     /**
@@ -293,62 +259,6 @@ public class LGMGraphDocument extends GraphDocument {
         }
         List<ElementContainer> sortedSelection = selectedContainer.getSortedSelection(sortingElements);
         return getModelElements(sortedSelection);
-    }
-
-    /**
-     * @param masterTag
-     * @return
-     */
-    private final String createClipboardContent() {
-        String masterTag = "tool3lgm_clipboard";
-        StringBuilder retVal = new StringBuilder(ToolXMLParser.getCurrentVersionString() + "<" + masterTag + ">");
-
-        List<ModelElement> copyElements = getSortedSelection();
-        Set<UserField> userFields = new HashSet<>();
-        gdcoll.resolveCopyDependencies(copyElements, userFields);
-
-        retVal.append(gdcoll.getUserFieldDefinitions().getCopyString(userFields) + "<objects>");
-
-        for (ModelElement me : copyElements) {
-            if (me.avoidDuplicates()) {
-                retVal.append("<avoidDuplicates>" + me.toXMLString() + "</avoidDuplicates>");
-            } else {
-                retVal.append(me.toXMLString());
-            }
-        }
-
-        retVal.append("</objects><szenario>");
-
-        ElementContainer container;
-        HashSet<String> icons = new HashSet<>();
-
-        for (ModelElement me : copyElements) {
-            if (me.isUnique()) {
-                continue;
-            }
-            container = me.getContainer(this);
-            if (container == null) {
-                continue;
-            }
-            retVal.append(container.toXMLString());
-            if (container.get3LGMLayout() != null && container.get3LGMLayout().icon != null) {
-                icons.add(container.get3LGMLayout().icon);
-            }
-        }
-        retVal.append("</szenario><images>");
-
-        for (String iconHashString : icons) {
-            retVal.append("<bitmap type=\"gif/base64\" hash=\"" + iconHashString + "\">");
-            byte[] icon = gdcoll.getIconTable().get(iconHashString);
-            try {
-                retVal.append(Base64.encode(icon));
-            } catch (Exception e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            }
-            retVal.append("</bitmap>");
-        }
-        retVal.append("</images></" + masterTag + ">");
-        return retVal.toString();
     }
 
     /**
