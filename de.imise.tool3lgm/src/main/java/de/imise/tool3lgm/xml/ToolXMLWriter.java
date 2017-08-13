@@ -58,7 +58,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     private final Set<String> usedIconHashes;
 
     private ToolXMLWriter(final GDCollection gdcoll, final File file, final boolean zip) throws XMLStreamException, FactoryConfigurationError, IOException {
-        super(file, getZipEntryName(file));
+        super(file, zip ? getZipEntryName(file) : null);
         this.gdcoll = gdcoll;
         usedIconHashes = new HashSet<>();
         writeModel();
