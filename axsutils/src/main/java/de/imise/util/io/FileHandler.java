@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * Diese Klasse stellt allgemeine Funktionen für den Umgang mit Dateien zur Verfügung.
- * 
+ *
  * @author AXS
  * @created 17.04.06
  */
@@ -29,7 +29,7 @@ public class FileHandler {
      * Sollte die Datei noch nicht existieren und <code>testonly</code> ist <code>false</code>,
      * dann wird die Datei angelegt.
      * Achtung: Es werden immer Dateien und keine Verzeichnisse angelegt.
-     * 
+     *
      * @param file
      *            Datei deren Beschreibbarkeit getestet werden soll
      * @param testonly
@@ -69,7 +69,7 @@ public class FileHandler {
      * Liefert <code>true</code> zurück, wenn das übergebene {@link File} beschreibbar ist.
      * Sollte die Datei noch nicht existieren, wird sie angelegt. <br>
      * Achtung: Es werden immer Dateien und keine Verzeichnisse angelegt.
-     * 
+     *
      * @param file
      * @return
      */
@@ -79,7 +79,7 @@ public class FileHandler {
 
     /**
      * Kopiert alle Daten aus <code>source</code> in <code>dest</code>.
-     * 
+     *
      * @param source Eingangsdatenstrom
      * @param dest Ausgangsdatenstrom
      * @return
@@ -113,7 +113,7 @@ public class FileHandler {
     /**
      * Kopiert eine Datei in eine andere.
      * Existiert die Zieldatei, wird sie überschrieben.
-     * 
+     *
      * @param source - die Quelldatei-URL
      * @param dest - die Zieldatei
      * @return true, wenn das Kopieren geklappt hat
@@ -132,7 +132,7 @@ public class FileHandler {
     /**
      * Kopiert eine Datei in eine andere.
      * Existiert die Zieldatei, wird sie überschrieben.
-     * 
+     *
      * @param source - die Quelldatei-URL
      * @param dest - die Zieldatei
      * @return true, wenn das Kopieren geklappt hat
@@ -150,7 +150,7 @@ public class FileHandler {
     /**
      * Kopiert eine Datei in eine andere.
      * Existiert die Zieldatei, wird sie überschrieben.
-     * 
+     *
      * @param source - die Quelldatei
      * @param dest - die Zieldatei
      * @return true, wenn das Kopieren geklappt hat
@@ -167,7 +167,7 @@ public class FileHandler {
 
     /**
      * Schreibt den String in die Datei
-     * 
+     *
      * @param file
      * @param content
      * @return
@@ -215,7 +215,7 @@ public class FileHandler {
 
     /**
      * Liest den Inhalt von <code>file</code> in einen String aus und gibt diesen wieder.
-     * 
+     *
      * @param file
      * @return
      */
@@ -245,12 +245,13 @@ public class FileHandler {
     /**
      * Noch nicht korrekt implementiert!
      * <p>
-     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code> besteht, falls die zulässige Zeichenanzahl nicht überschritten wird. <br>
+     * Gibt einfach ein Array wieder, das ausschließlich aus <code>file</code> besteht, falls die zulässige Zeichenanzahl nicht überschritten wird.
+     * <br>
      * Sonst wird eine Exception geworfen.
      * <p>
      * Ziel: Zerlegt <code>file</code> in einzelne Dateien, sodass die Anzahl ihrer Zeichen kleiner als {@link Integer#MAX_VALUE} ist. Damit können
      * dann alle Zeichen der einzelnen Dateien in jeweils einem <code>charArray</code> erfasst werden.
-     * 
+     *
      * @param file
      * @return
      */
@@ -259,7 +260,7 @@ public class FileHandler {
         // TODO: FST: korrekt implementieren
         if (file.length() <= Integer.MAX_VALUE) { // kein splitten notwendig
             return new File[] {
-                file
+                    file
             };
         }
         throw new IllegalArgumentException("Die Datei: " + file.getName() + " überschreitet die zulässige Größe");
@@ -267,7 +268,7 @@ public class FileHandler {
 
     /**
      * Erzeugt eine tmporäre Datei
-     * 
+     *
      * @param prefix
      *            Dateiname
      * @param suffix
@@ -294,7 +295,7 @@ public class FileHandler {
      * Es werden dabei nur Dateien mit dem spezifizierten Suffix in die Liste übernommen.<br>
      * Diese Dateien werden an die übergebene Liste angefügt, welche am Ende der Traversierung
      * zurückgegeben wird.
-     * 
+     *
      * @param parent
      *            zu durchsuchendes Verzeichnis
      * @param fileExtension
@@ -327,7 +328,7 @@ public class FileHandler {
      * Liefert die nächste Datei im angegebenen Pfad, die noch nicht existiert.
      * Wird der Counter nicht restartet, dann wird vom letzten Index der beim
      * Aufruf dieser Funktion ermittelt wurde weitergesucht.
-     * 
+     *
      * @param filePath
      * @param extension
      * @param restartCounter
@@ -355,4 +356,36 @@ public class FileHandler {
         return f;
     }
 
+    /**
+     * Liefert die Endung der Datei, wenn wenigestens ein Punkt im Dateinamen steht. Ist der Punkt das letzte Zeichen,
+     * kommt ein leerer String zurück (bei withDot == false) oder nur der Punktt (bei withDot == true).
+     * Ist kein Punkt vorhanden, kommt immer <code>null</code> zurück.
+     *
+     * @param file Datei deren Endung ermittelt werden soll
+     * @param withDot wenn <code>true</code>, dann enthält der Rückgabe-String am Anfang den Punkt (wenn der Dateiname mind. einen Punkt enthält)
+     * @return Endung der Datei mit oder ohne Punkt oder null, wenn kein Punkt vorhanden ist
+     */
+    public static String getExtension(final File file, final boolean withDot) {
+        return getExtension(file.getName(), withDot);
+    }
+
+    /**
+     * Liefert die Endung des Dateinames, wenn wenigestens ein Punkt im Dateinamen steht. Ist der Punkt das letzte Zeichen,
+     * kommt ein leerer String zurück (bei withDot == false) oder nur der Punktt (bei withDot == true).
+     * Ist kein Punkt vorhanden, kommt immer <code>null</code> zurück.
+     *
+     * @param fileName Name der Datei deren Endung ermittelt werden soll
+     * @param withDot wenn <code>true</code>, dann enthält der Rückgabe-String am Anfang den Punkt (wenn der Dateiname mind. einen Punkt enthält)
+     * @return Endung der Datei mit oder ohne Punkt oder null, wenn kein Punkt vorhanden ist
+     */
+    public static String getExtension(final String fileName, final boolean withDot) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex < 0) {
+            return null;
+        }
+        if (dotIndex == fileName.length() - 1) {
+            return withDot ? "." : "";
+        }
+        return fileName.substring(withDot ? dotIndex : dotIndex + 1);
+    }
 }
