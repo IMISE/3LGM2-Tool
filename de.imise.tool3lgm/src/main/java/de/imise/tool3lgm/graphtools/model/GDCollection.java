@@ -3,10 +3,8 @@ package de.imise.tool3lgm.graphtools.model;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -2030,20 +2028,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * build the String for saving the collection
-     *
-     * @return byte[] String with FileVersionInfo and toXMLString()
-     */
-    public byte[] getSaveString() {
-        try {
-            return ToolXMLParser.getCurrentVersionString().concat(toXMLString()).getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("error_convert_utf8"));
-        }
-        return null;
-    }
-
-    /**
      * @author Thomas Rudert
      * @param preString
      *            der Tag wird mit diesen String eingerueckt
@@ -2105,22 +2089,6 @@ public final class GDCollection extends UserFieldTarget {
         xmlString.append("</images></modell_3lgm_2>");
 
         return xmlString.toString();
-    }
-
-    /**
-     * Speichert das Modell in der angegeben Datei im XML-Format
-     * (RandomAccessFile wird nicht geschlossen, um Datei zu sperren)
-     *
-     * @param f
-     *            Ziel-Datei beim Speichern
-     */
-    public void saveXMLFile(final RandomAccessFile f) throws IOException {
-        if (!Static.getTool().checkLicenses()) {
-            return;
-        }
-        f.seek(0);
-        f.setLength(0);
-        f.writeBytes(ToolXMLParser.getCurrentVersionString() + toXMLString());
     }
 
     /**
