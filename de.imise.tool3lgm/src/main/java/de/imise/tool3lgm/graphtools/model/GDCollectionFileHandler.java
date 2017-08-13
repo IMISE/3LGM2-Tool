@@ -19,6 +19,8 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -30,6 +32,7 @@ import de.imise.tool3lgm.tools.LGMInputStream;
 import de.imise.tool3lgm.xml.LGMVersionException;
 import de.imise.tool3lgm.xml.LgmXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLParser;
+import de.imise.tool3lgm.xml.ToolXMLWriter;
 import de.imise.tool3lgm.xml.XMLVersionException;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
@@ -377,34 +380,39 @@ public class GDCollectionFileHandler {
      *
      * @return boolean with true, if and only if filewriting was successful
      * @author Thomas Rudert
+     * @throws IOException
+     * @throws FactoryConfigurationError
+     * @throws XMLStreamException
      */
-    public boolean saveToFile() throws IOException {
+    public boolean saveToFile() throws IOException, XMLStreamException, FactoryConfigurationError {
         if (isReadOnly || file == null) {
             if (!chooseFile()) {
                 return false;
             }
         }
-
         File tempFile = new File(file.getParentFile(), ".tempTool3lgmSaveFile");
-
         tempFile.delete();
-
         tempFile.deleteOnExit();
-
         if (!tempFile.createNewFile()) {
             return false;
         }
+        //        //alter Speichermechanismus
+        //        FileOutputStream outStream = new FileOutputStream(tempFile);
+        //        if (isZipFile) {
+        //            saveZipFile(outStream);
+        //        } else {
+        //            outStream.write(gdcoll.getSaveString());
+        //        }
+        //        outStream.close();
+        //        // Testweises rausschreiben der neune Speicherung
+        //        File f = new File(file.getAbsolutePath() + (isZipFile ? ".z3lgm" : ".3lgm"));
+        //        ToolXMLWriter.write(gdcoll, f, isZipFile);
+        ToolXMLWriter.write(gdcoll, tempFile, isZipFile);
+        copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
+        return true;
+    }
 
-        FileOutputStream outStream = new FileOutputStream(tempFile);
-
-        if (isZipFile) {
-            saveZipFile(outStream);
-        } else {
-            outStream.write(gdcoll.getSaveString());
-        }
-
-        outStream.close();
-
+    private static void copyTempToDestinationFile(final File tempFile, final RandomAccessFile randomAccessFile, final boolean lockSupported, final FileLock lock) throws IOException {
         if (tempFile.length() <= 0) {
             throw new IOException("Empty file!");
         }
@@ -429,8 +437,6 @@ public class GDCollectionFileHandler {
         tmpIStream.forceClose();
 
         tempFile.delete();
-
-        return true;
     }
 
     /**
