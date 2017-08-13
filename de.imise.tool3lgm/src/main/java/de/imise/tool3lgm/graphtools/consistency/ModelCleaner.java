@@ -190,21 +190,34 @@ public class ModelCleaner {
             for (LayerContainer lc : doc.getLayers()) {
                 List<BendpointContainer> benpoints = lc.getKnickpunkte();
                 for (int i = benpoints.size() - 1; i >= 0; i--) {
-                    BendpointContainer bpc = benpoints.get(i);
-                    Knickpunkt bp = bpc.getKnickpunktKnoten();
-                    EdgeContainer ec = bp.getOwner();
-                    // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
-                    // KnickpunktContainerListe seines Owners steht -> löschen
                     boolean ok = true;
-                    if (ec == null) {
-                        // System.err.println("nullllll");
-                        // System.err.println(gdcoll.getSzenario(i));
+                    BendpointContainer bpc = benpoints.get(i);
+                    Knickpunkt bp = bpc.getKnickpunktKnoten(); //das hier ist der Container aus dem Hauptdokument
+                    if (bp.getContainerCount() != 2) {
                         ok = false;
-                    } else if (ec.getBendpointContainerList().indexOf(bpc) == -1) {
-                        // System.err.println("owner kennt den nicht");
-                        // System.err.println(gdcoll.getSzenario(i));
-                        ok = false;
+                    } else {
+                        EdgeContainer ec = bp.getOwner(); //das hier ist der Container aus dem (einzigen) Szenario, in dem der Knickpunkt vorkommt
+                        // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
+                        // KnickpunktContainerListe seines Owners steht -> löschen
+                        if (ec == null) {
+                            // System.err.println("nullllll");
+                            // System.err.println(gdcoll.getSzenario(i));
+                            ok = false;
+                        } else {
+                            GraphDocument ecDoc = ec.getGraphDocument(); // das hier muss ein Szeario sein, weil der Owner des Knickpunktes nur in einem Szenario sein kann
+                            if (ecDoc == null || !(ecDoc instanceof Szenario)) {
+                                ok = false;
+                            } else {
+                                ElementContainer szenBpc = bp.getContainer(ecDoc);
+                                if (ec.getBendpointContainerList().indexOf(szenBpc) == -1) {
+                                    // System.err.println("owner kennt den nicht");
+                                    // System.err.println(gdcoll.getSzenario(i));
+                                    ok = false;
+                                }
+                            }
+                        }
                     }
+
                     if (!ok) {
                         benpoints.remove(i);
                     }
