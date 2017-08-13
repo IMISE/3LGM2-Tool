@@ -6,17 +6,13 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileLock;
-import java.util.zip.CRC32;
 import java.util.zip.DataFormatException;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.stream.FactoryConfigurationError;
@@ -396,17 +392,6 @@ public class GDCollectionFileHandler {
         if (!tempFile.createNewFile()) {
             return false;
         }
-        //        //alter Speichermechanismus
-        //        FileOutputStream outStream = new FileOutputStream(tempFile);
-        //        if (isZipFile) {
-        //            saveZipFile(outStream);
-        //        } else {
-        //            outStream.write(gdcoll.getSaveString());
-        //        }
-        //        outStream.close();
-        //        // Testweises rausschreiben der neune Speicherung
-        //        File f = new File(file.getAbsolutePath() + (isZipFile ? ".z3lgm" : ".3lgm"));
-        //        ToolXMLWriter.write(gdcoll, f, isZipFile);
         ToolXMLWriter.write(gdcoll, tempFile, isZipFile);
         copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
         return true;
@@ -437,35 +422,6 @@ public class GDCollectionFileHandler {
         tmpIStream.forceClose();
 
         tempFile.delete();
-    }
-
-    /**
-     * save collection as xml-string into an packed zip-file
-     *
-     * @param fileStream FileOutputStream to write in
-     * @throws IOException
-     */
-    private void saveZipFile(final FileOutputStream fileStream) throws IOException {
-        //fileStream.write(new String("<!--ziped Tool3lgmFile-->\n").getBytes());
-
-        byte[] xmlString = gdcoll.getSaveString();
-
-        CRC32 crc = new CRC32();
-        crc.reset();
-        crc.update(xmlString);
-
-        String name = gdcoll.getName();
-        ZipEntry entry = new ZipEntry(name.substring(0, name.length() - 5) + "3lgm");
-        entry.setMethod(ZipEntry.DEFLATED);
-        entry.setCrc(crc.getValue());
-
-        ZipOutputStream zipStream = new ZipOutputStream(fileStream);
-        zipStream.setMethod(ZipOutputStream.DEFLATED);
-        zipStream.setLevel(9);
-        zipStream.putNextEntry(entry);
-        zipStream.write(xmlString);
-        zipStream.closeEntry();
-        zipStream.finish();
     }
 
 }
