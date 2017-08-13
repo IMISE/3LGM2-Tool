@@ -3,10 +3,14 @@ package de.imise.util.collections;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -721,7 +725,102 @@ public abstract class CollectionUtils {
         };
     }
 
-    public static void main(final String[] args) {
+    /**
+     * @param iterables
+     * @return
+     */
+    public static <T> Iterable<T> getCommonIterable(final List<Iterable<T>> iterables) {
+        return () -> new Iterator<T>() {
+
+            int currentIterableIndex = 0;
+
+            Iterator<? extends T> currentIterator = null;
+
+            private void init() {
+                if (iterables != null && iterables.size() != 0) {
+                    if (currentIterator == null) {
+                        if (currentIterableIndex < iterables.size()) {
+                            currentIterator = iterables.get(currentIterableIndex).iterator();
+                        }
+                    } else if (!currentIterator.hasNext()) {
+                        currentIterableIndex++;
+                        currentIterator = null;
+                        init();
+                    }
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                init();
+                return currentIterator != null && currentIterator.hasNext();
+            }
+
+            @Override
+            public T next() {
+                init();
+                return currentIterator.next();
+            }
+
+            @Override
+            public void remove() {
+                init();
+                currentIterator.remove();
+            }
+        };
+    }
+
+    public static <K, V> Iterable<V> getValuesIterable(final Map<K, Iterable<V>> map) {
+        return getValuesIterable(map, null);
+    }
+
+    public static <K, V> Iterable<V> getValuesIterable(final Map<K, Iterable<V>> map, final Predicate<K> keyCondition) {
+        Set<K> keys = map.keySet();
+        ImmutableList.Builder<Iterable<V>> iterables = new ImmutableList.Builder<>();
+        for (K key : keys) {
+            if (keyCondition == null || keyCondition.test(key)) {
+                iterables.add(map.get(key));
+            }
+        }
+        ImmutableList<Iterable<V>> build = iterables.build();
+        return getCommonIterable(build);
+    }
+
+    private enum MapKey {
+        ONE,
+        TWO,
+        THREE,
+    }
+
+    private static final Set<MapKey> specialKeys = ImmutableSet.of(MapKey.TWO);
+
+    public static Predicate<MapKey> isNotTwo() {
+        return key -> !specialKeys.contains(key);
+    };
+
+    private static void testMapIterable() {
+        Map<MapKey, Iterable<String>> map = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        list.add("eins");
+        list.add("zwei");
+        list.add("drei");
+        map.put(MapKey.ONE, list);
+        list = new ArrayList<>();
+        list.add("vier");
+        list.add("fünf");
+        list.add("sechs");
+        map.put(MapKey.TWO, list);
+        list = new ArrayList<>();
+        list.add("sieben");
+        list.add("acht");
+        list.add("neun");
+        map.put(MapKey.THREE, list);
+        for (String s : getValuesIterable(map, isNotTwo())) {
+            System.err.println(s);
+        }
+    }
+
+    private static void testCommonIterable() {
         List<String> strings = new ArrayList<>();
         strings.add("eins");
         strings.add("zwei");
@@ -740,6 +839,10 @@ public abstract class CollectionUtils {
         for (Object o : getCommonIterable(lists)) {
             System.err.println(o);
         }
+    }
+
+    public static void main(final String[] args) {
+        testMapIterable();
     }
 
 }
