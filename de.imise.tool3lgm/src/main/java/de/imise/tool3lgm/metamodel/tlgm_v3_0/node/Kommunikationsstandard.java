@@ -26,11 +26,6 @@ public final class Kommunikationsstandard extends Knoten {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public boolean avoidDuplicates() {
         return true;
     }

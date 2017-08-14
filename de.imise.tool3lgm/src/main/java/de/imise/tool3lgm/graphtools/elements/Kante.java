@@ -648,11 +648,6 @@ public abstract class Kante extends ModelElement {
         return end_hash;
     }
 
-    @Override
-    public final boolean hasSortedKanten() {
-        return false;
-    }
-
     /**
      * @param coll
      * @return

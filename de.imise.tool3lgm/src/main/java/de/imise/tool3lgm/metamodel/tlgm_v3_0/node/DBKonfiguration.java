@@ -28,11 +28,6 @@ public final class DBKonfiguration extends Konfiguration {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class);

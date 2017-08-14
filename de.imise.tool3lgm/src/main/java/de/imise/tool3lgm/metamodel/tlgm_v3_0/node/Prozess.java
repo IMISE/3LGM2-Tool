@@ -351,9 +351,4 @@ public final class Prozess extends Knoten {
     //
     //	*/
 
-    @Override
-    public boolean hasSortedKanten() {
-        return true;
-    }
-
 }

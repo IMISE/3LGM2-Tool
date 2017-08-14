@@ -589,8 +589,9 @@ public class LayerContainer extends ElementContainer {
                 nodeContainer.add(nc);
             }
             Alphabetical.insert(alphabeticalNodeContainer, nc);
-            if (((NodeContainer) comp).getKnoten().hasSortedKanten()) {
-                numberedEdgesNodeContainer.add((NodeContainer) comp);
+            Knoten node = nc.getKnoten();
+            if (ModelConstants.hasSortedEdges(node.getClass())) {
+                numberedEdgesNodeContainer.add(nc);
             }
         }
         ((ElementContainer) comp).setParent(this);

@@ -2015,11 +2015,6 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @return
-     */
-    public abstract boolean hasSortedKanten();
-
-    /**
      * @return <code>true</code>, wenn die Elementart eine PartOfBeziehung hat
      */
     public final boolean canHaveParts() {

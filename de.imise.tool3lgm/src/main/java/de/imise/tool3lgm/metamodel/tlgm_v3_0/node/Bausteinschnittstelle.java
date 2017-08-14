@@ -42,9 +42,4 @@ public final class Bausteinschnittstelle extends Schnittstelle {
         return dialog;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

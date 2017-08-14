@@ -42,8 +42,4 @@ public final class ABKonfiguration extends Konfiguration {
         return getConnectedContainer(Anwendungsbaustein.class, doc);
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
 }

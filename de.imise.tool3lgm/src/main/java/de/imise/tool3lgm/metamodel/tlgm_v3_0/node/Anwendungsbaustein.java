@@ -17,9 +17,4 @@ public abstract class Anwendungsbaustein extends Knoten {
         return ModelConstants.LOGICAL_LAYER;
     }
 
-    @Override
-    public final boolean hasSortedKanten() {
-        return false;
-    }
-
 }

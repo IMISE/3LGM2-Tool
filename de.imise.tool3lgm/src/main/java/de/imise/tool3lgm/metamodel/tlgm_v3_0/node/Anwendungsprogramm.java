@@ -43,9 +43,4 @@ public final class Anwendungsprogramm extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

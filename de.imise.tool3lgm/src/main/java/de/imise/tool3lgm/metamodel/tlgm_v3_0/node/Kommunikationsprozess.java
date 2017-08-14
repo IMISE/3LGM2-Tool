@@ -45,9 +45,4 @@ public class Kommunikationsprozess extends Knoten {
         this.prozess = prozess;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return true;
-    }
-
 }

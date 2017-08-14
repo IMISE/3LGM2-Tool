@@ -19,11 +19,6 @@ public final class Nachrichtentyp extends Repraesentationsform {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public boolean avoidDuplicates() {
         return true;
     }

@@ -13,9 +13,4 @@ public final class Benutzungsschnittstelle extends Schnittstelle {
         return super.createPropertyDialog();
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

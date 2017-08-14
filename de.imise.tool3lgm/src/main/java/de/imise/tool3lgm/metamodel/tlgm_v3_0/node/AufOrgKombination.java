@@ -67,9 +67,4 @@ public class AufOrgKombination extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

@@ -51,11 +51,6 @@ public class Knickpunkt extends Knoten {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public ElementContainer createContainer(final GraphDocument doc) {
         return new BendpointContainer(this, doc);
     }

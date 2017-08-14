@@ -289,6 +289,10 @@ public final class ModelConstants {
 
     public static final Set<Class<? extends ModelElement>> ELEMENTS_WITH_NAME_EXTENSIONS = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, ALL_ELEMENTS);
 
+    public static final boolean hasSortedEdges(final Class<? extends ModelElement> elementClass) {
+        return getSortedEdgeClasses(elementClass) != null; // nur bei Elementklasse mit wenigstens einer SortedEdge komzm nich null zurück
+    }
+
     ///////////////////////////////////
     // spezielle Kanteneigenschaften //
     ///////////////////////////////////
@@ -318,7 +322,8 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return getSortedEdgeClasses(elementClass).contains(edgeClass);
+        return SortedEdge.class.isAssignableFrom(edgeClass) && Kante.isStartClass(edgeClass, elementClass);
+        //return getSortedEdgeClasses(elementClass).contains(edgeClass); //das kommt auf dasselbe raus wie das oben. Ich konnte mich nicht entscheiden, was besser ist -> daher nur auskommentiert
     }
 
     public static final boolean isMultipleEdgeClass(final Class<? extends Kante> edgeClass) {

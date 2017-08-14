@@ -151,8 +151,4 @@ public final class Aufgabe extends Knoten {
         return sb.toString();
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
 }

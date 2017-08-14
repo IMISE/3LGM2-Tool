@@ -124,7 +124,8 @@ public abstract class MetaModel {
 
     /**
      * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben.
+     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Kante werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
+     * man nach solcher Elementklasse in der Map sucht und kein leeres Set.
      */
     public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToSortedEdges() {
         ImmutableMap.Builder<Class<? extends ModelElement>, Set<Class<? extends Kante>>> mapBuilder = ImmutableMap.builder();
@@ -137,6 +138,7 @@ public abstract class MetaModel {
                 }
             }
             ImmutableSet<Class<? extends Kante>> sortedEdgesSet = sortedEdgesForElementClass.build();
+            //Elementklasse nur eintragen, wenn es wenigstens eine Kante gibt, bei der die Reihenfolge relevant ist
             if (!sortedEdgesSet.isEmpty()) {
                 mapBuilder.put(elementClass, sortedEdgesForElementClass.build());
             }

@@ -21,11 +21,6 @@ public class Dokumententyp extends Repraesentationsform {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public boolean avoidDuplicates() {
         return true;
     }

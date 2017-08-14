@@ -27,11 +27,6 @@ public final class Standort extends Knoten {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public boolean avoidDuplicates() {
         return true;
     }

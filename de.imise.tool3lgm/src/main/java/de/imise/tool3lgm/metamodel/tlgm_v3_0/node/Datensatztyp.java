@@ -19,11 +19,6 @@ public class Datensatztyp extends Repraesentationsform {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public boolean avoidDuplicates() {
         return false;
     }

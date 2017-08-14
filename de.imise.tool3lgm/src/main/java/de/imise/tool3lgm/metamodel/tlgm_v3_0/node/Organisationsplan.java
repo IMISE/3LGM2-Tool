@@ -23,9 +23,4 @@ public final class Organisationsplan extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

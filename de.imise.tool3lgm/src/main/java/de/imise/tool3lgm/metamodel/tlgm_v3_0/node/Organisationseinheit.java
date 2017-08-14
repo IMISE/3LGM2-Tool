@@ -27,9 +27,4 @@ public final class Organisationseinheit extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

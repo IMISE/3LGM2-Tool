@@ -24,11 +24,6 @@ public final class Netzprotokoll extends Knoten {
     }
 
     @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
-    @Override
     public boolean avoidDuplicates() {
         return true;
     }

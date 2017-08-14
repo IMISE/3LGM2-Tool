@@ -98,9 +98,4 @@ public class Objekttyp extends Knoten {
         return storePlacesContainer;
     }
 
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
-    }
-
 }

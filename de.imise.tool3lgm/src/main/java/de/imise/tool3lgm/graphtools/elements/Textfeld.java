@@ -9,9 +9,4 @@ public abstract class Textfeld extends Knoten {
         super();
     }
 
-    @Override
-    public final boolean hasSortedKanten() {
-        return false;
-    }
-
 }

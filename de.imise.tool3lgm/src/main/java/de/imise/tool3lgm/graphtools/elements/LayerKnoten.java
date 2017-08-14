@@ -9,7 +9,7 @@ package de.imise.tool3lgm.graphtools.elements;
 public class LayerKnoten extends Knoten {
 
     /**
-     * 
+     *
      */
     public LayerKnoten() {
         super();
@@ -18,11 +18,6 @@ public class LayerKnoten extends Knoten {
     @Override
     public int layerFor() {
         return ModelConstants.NO_LAYER;
-    }
-
-    @Override
-    public boolean hasSortedKanten() {
-        return false;
     }
 
 }
