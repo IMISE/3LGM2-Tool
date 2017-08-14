@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,10 +25,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.Base64;
-import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
-import de.imise.util.htmlxml.XMLCharacterCoder;
 
 public class GDCollectionImExportHandler {
 
@@ -187,74 +182,31 @@ public class GDCollectionImExportHandler {
     /**
      * exportiert die übergebenen Szenarios in eine neue Datei
      *
-     * @param export Array mit den zu exportierenden Szenarios
+     * @param szenarios Liste mit den zu exportierenden Szenarios
      * @param file Datei in die exportiert werden soll
      */
-    public void exportSzenarios(final List<Szenario> export, final File file) {
+    public void exportSzenarios(final List<Szenario> szenarios, final File file) {
         if (!Static.getTool().checkLicenses()) {
             return;
         }
-        int size = 0;
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer lc = mainDoc.getLayer(ModelConstants.LAYERS[i]);
-            size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
-        }
-
-        /* hastStrings aller ModellElemente, die kopiert werden müssen */
-        List<ModelElement> elements = new ArrayList<>(size);
-
-        /* HashStrings aller Icons, die kopiert werden müssen */
-        Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        Set<String> bitmaps = new HashSet<>(iconTable.size());
-
-        /* HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen */
-        Set<UserField> userFields = new HashSet<>();
-
-        gdcoll.resolveCopyDependencies(export, elements, bitmaps, userFields);
-
-        String name = gdcoll.getName() + "(export)";
-        name = XMLCharacterCoder.encodeString(name);
-        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
-        String description = mainDoc.getDescription();
-        description = XMLCharacterCoder.encodeString(description);
-        String fileVersion = gdcoll.getFileVersion();
-        fileVersion = XMLCharacterCoder.encodeString(fileVersion);
-        /* Datei erstellen und gefundenen Element schreiben */
-        try {
-            RandomAccessFile raf = new RandomAccessFile(file, "rw");
-            raf.seek(0);
-            raf.setLength(0);
-            raf.writeBytes(ToolXMLParser.getCurrentVersionString());
-            raf.writeBytes("<modell_3lgm_2><header><title>" + name + "</title>" + "<description>" + description + "</description>" + "<version>" + fileVersion + "</version></header>" + userFieldDefinitions.getCopyString(userFields) + "<objects>");
-
-            try {
-                for (ModelElement me : elements) {
-                    raf.writeBytes(me.toXMLString());
-                }
-            } catch (NullPointerException e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+        if (szenarios.size() == gdcoll.getSzenarioCount()) {
+            exportModel(file);
+        } else {
+            int size = 0;
+            GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
+                LayerContainer lc = mainDoc.getLayer(ModelConstants.LAYERS[i]);
+                size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
             }
-
-            raf.writeBytes("</objects>");
-
-            /* xmlString der Szenarios schreiben */
-            for (Szenario szen : export) {
-                raf.writeBytes(szen.toXMLString());
-            }
-
-            /* xmlString der Icons schreiben */
-
-            raf.writeBytes("<images>");
-
-            for (String hashString : bitmaps) {
-                raf.writeBytes("<bitmap type=\"gif/base64\" hash=\"" + hashString + "\">" + Base64.encode(gdcoll.getIconTable().get(hashString)) + "</bitmap>");
-            }
-
-            raf.writeBytes("</images></modell_3lgm_2>");
-            raf.close();
-        } catch (IOException e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            // hastStrings aller ModellElemente, die kopiert werden müssen
+            List<ModelElement> elements = new ArrayList<>(size);
+            // HashStrings aller Icons, die kopiert werden müssen
+            Map<String, byte[]> iconTable = gdcoll.getIconTable();
+            Set<String> iconHashes = new HashSet<>(iconTable.size());
+            // HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen
+            Set<UserField> userFields = new HashSet<>();
+            gdcoll.resolveCopyDependencies(szenarios, elements, iconHashes, userFields);
+            ToolXMLWriter.writeExport(gdcoll, file, szenarios, elements, userFields, iconHashes);
         }
     }
 

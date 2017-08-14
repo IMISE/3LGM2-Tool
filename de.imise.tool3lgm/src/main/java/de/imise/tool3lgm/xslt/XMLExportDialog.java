@@ -287,11 +287,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
             File tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH, "temporary_XMLFile_for_XSLT-Export.xml");
             GDCollectionImExportHandler imExportHandler = collection.getImExportHandler();
-            if (selectedSzenarios.size() == collection.getSzenarioCount()) {
-                imExportHandler.exportModel(tempXMLFile);
-            } else {
-                imExportHandler.exportSzenarios(selectedSzenarios, tempXMLFile);
-            }
+            imExportHandler.exportSzenarios(selectedSzenarios, tempXMLFile);
 
             try {
                 XMLTransformer.transform(tableModel.getScript(selectedRow).openStream(), tableModel.getScript(selectedRow).getSource(), tempXMLFile, fileString);
