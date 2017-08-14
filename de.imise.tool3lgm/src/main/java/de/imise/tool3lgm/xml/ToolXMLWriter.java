@@ -11,7 +11,9 @@ import java.awt.Font;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -143,15 +145,50 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         return true;
     }
 
+    /**
+     * Schreibt nur einen Teil der Teilmodelle und Elemente eines Modells
+     * 
+     * @param gdcoll
+     * @param file
+     * @param szenarios
+     * @param elements
+     * @param userFields
+     * @param iconHashes
+     * @return
+     */
+    public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconHashes) {
+        try {
+            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, false);
+            toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFields, iconHashes);
+            toolXMLWriter.finish();
+        } catch (Exception e) {
+            Log.show(Log.ERROR, "Exception while exporting UserFieldFile", e);
+            return false;
+        }
+        return true;
+    }
+
     /////////////////////////////////////////////
     // Hauptfunktion zum Schreiben des Modells //
     /////////////////////////////////////////////
 
     private void writeModel() throws XMLStreamException {
-        writeModel(gdcoll.getName(), null);
+        writeModel(gdcoll.getName(), null, null, null, null);
     }
 
-    private void writeModel(final String name, final Iterable<UserField> userFields) throws XMLStreamException {
+    /**
+     * Schreibt eine Modell in eine XML-Datei.
+     *
+     * @param name Name des Modells in der Datei
+     * @param szenarios Liste der Teilmodelle, die geschrieben werden sollen. Ist diese Liste <code>null</code>, werden alle Teilmodell geschrieben.
+     * @param elements Liste der Elemente, die geschrieben werden sollen. Ist diese Liste <code>null</code>, werden alle Elemente geschrieben.
+     * @param userFields Alle UserFields, die geschrieben werden sollen. Ist dieses {@link Iterable} <code>null</code>, werden alle UserFields
+     *            geschrieben.
+     * @param iconHashes HashStrings aller Icons, die geschrieben werden sollen. Ist dieses {@link Iterable} <code>null</code>, werden alle Icons
+     *            geschrieben.
+     * @throws XMLStreamException
+     */
+    private void writeModel(final String name, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconHashes) throws XMLStreamException {
         writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
@@ -168,11 +205,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeStartElement("model"); //<model>
         writeUserFieldValues(gdcoll);
         writeEndElement(); //</model>
-        writeModelElements();
+        writeModelElements(elements);
         writeEndElement(); //</objects>
-        writeSzenarios();
+        writeSzenarios(szenarios, elements);
         writeStartElement("images"); //<images>
-        writeImages();
+        writeImages(iconHashes == null ? gdcoll.getIconTable().keySet() : iconHashes);
         writeEndElement(); //</images>
         writeEndElement(); //</modell_3lgm_2>
     }
@@ -276,9 +313,9 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     ///////////////////////////////////////////
 
     /**
-     * Hängt an den übergebenen <code>StringBuilder</code> für jedes <code>UserField</code> einen XML-Eintrag an.
+     * Schreibt das übergebene userFieldTarget in die XML-Datei
      *
-     * @param sb <code>StringBuilder</code>, an den die Einträge gehängt werden
+     * @param userFieldTarget
      * @throws XMLStreamException
      */
     private void writeUserFieldValues(final UserFieldTarget userFieldTarget) throws XMLStreamException {
@@ -297,24 +334,41 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     // ModelElements //
     ///////////////////
 
-    private void writeModelElements() throws XMLStreamException {
-        LGMGraphDocument doc = gdcoll.getMainGraphDocument();
-        for (LayerContainer lc : doc.getLayers()) {
-            for (NodeContainer kc : lc.getKnoten()) {
-                writeModelElement(kc.getElement());
+    /**
+     * Schreibt die übergebenen ModellElemente in die XML-Datei oder alle ModellElemente der Collection, wenn die übergebenen Elemente
+     * <code>null</code> sind.
+     *
+     * @param elements Elemente, die rausgeschrieben werden sollen. Ist dieses Object <code>null</code>, dann werden alle Elemente des
+     *            Gesamtmodells rausgeschrieben
+     * @throws XMLStreamException
+     */
+    private void writeModelElements(final Iterable<ModelElement> elements) throws XMLStreamException {
+        if (elements != null) {
+            for (ModelElement me : elements) {
+                writeModelElement(me);
             }
-            doc.sortKanten();
-            for (EdgeContainer kc : lc.getKanten()) {
-                writeModelElement(kc.getElement());
-            }
-            for (BendpointContainer kc : lc.getKnickpunkte()) {
-                writeModelElement(kc.getElement());
+        } else {
+            LGMGraphDocument doc = gdcoll.getMainGraphDocument();
+            for (LayerContainer lc : doc.getLayers()) {
+                for (NodeContainer kc : lc.getKnoten()) {
+                    writeModelElement(kc.getElement());
+                }
+                doc.sortKanten();
+                for (EdgeContainer kc : lc.getKanten()) {
+                    writeModelElement(kc.getElement());
+                }
+                for (BendpointContainer kc : lc.getKnickpunkte()) {
+                    writeModelElement(kc.getElement());
+                }
             }
         }
     }
 
     /**
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
+     * Schreibt das übergebene Modellelement in die XML-Datei
+     *
+     * @param me
+     * @throws XMLStreamException
      */
     public void writeModelElement(final ModelElement me) throws XMLStreamException {
         writeStartElement("element"); //<element>
@@ -359,10 +413,15 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /////////////////////////////
 
     /**
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
+     * @param szenarios Liste der Szenarios, die rausgeschrieben werden sollen. Ist die Liste <code>null</code>, werden alle Szenarios rausgeschrieben
+     * @param elements ist diese Collection nicht null, werden nur die Elemente der Szenarios rausgeschrieben, die sich in der Collection befinden
+     * @throws XMLStreamException
      */
-    private void writeSzenarios() throws XMLStreamException {
+    private void writeSzenarios(final List<Szenario> szenarios, final Collection<ModelElement> elements) throws XMLStreamException {
         for (Szenario szen : gdcoll.getSzenarios()) {
+            if (szenarios != null && !szenarios.contains(szen)) {
+                continue;
+            }
             writeStartElement("szenario"); //<szenario>
             writeAttribute("hash", szen.getHashString());
             writeAttribute("titel", szen.getTitle());
@@ -391,7 +450,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 writeGraphElementLayout(elementClass, standardElementLayout, true);
             }
             writeEndElement(); //"</mapping>"
-            writeLayerContainer(szen);
+            writeLayerContainer(szen, elements);
             writeEndElement(); //</szenario>
         }
     }
@@ -401,23 +460,31 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     //////////////////////////////////
 
     /**
-     * @param preString der Tag wird mit diesen String eingerueckt
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     * @see de.imise.tool3lgm.graphtools.view.container.ElementContainer#toXMLString()
+     * Schreibt die LayerContainer mit ihren enthaltenen ElementContainern der Layer in die XML-Datei
+     *
+     * @param szen Teilmodell das geschrieben werden soll
+     * @param elements ist diese Collection nicht <code>null</code>, werden nur die darin enthaltenen Elemente rausgeschrieben
+     * @throws XMLStreamException
      */
-    private void writeLayerContainer(final Szenario szen) throws XMLStreamException {
+    private void writeLayerContainer(final Szenario szen, final Collection<ModelElement> elements) throws XMLStreamException {
         for (LayerContainer lc : szen.getLayers()) {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
             writeGraphElementLayout(null, lc.get3LGMLayout(), true);
             for (NodeContainer kc : lc.getKnoten()) {
-                writeElementContainer(kc);
+                if (elements == null || elements.contains(kc.getElement())) {
+                    writeElementContainer(kc);
+                }
             }
             for (EdgeContainer kc : lc.getKanten()) {
-                writeElementContainer(kc);
+                if (elements == null || elements.contains(kc.getElement())) {
+                    writeElementContainer(kc);
+                }
             }
             for (BendpointContainer kc : lc.getKnickpunkte()) {
-                writeElementContainer(kc);
+                if (elements == null || elements.contains(kc.getElement())) {
+                    writeElementContainer(kc);
+                }
             }
             writeEndElement(); //</layer>
         }
@@ -448,6 +515,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /**
      * @param elementClass Elementklasse, für die das Layout geschrieben werden soll (wenn null, dann für Layer)
      * @param layout Layout zu diesr Elementklasse
+     * @param expanded wenn <code>true</code>, wird das normale Layout geschrieben, wenn <code>false</code> das zusammengeklappte Layout
      * @throws XMLStreamException
      */
     private void writeGraphElementLayout(final Class<?> elementClass, final GraphElementLayout layout, final boolean expanded) throws XMLStreamException {
@@ -522,11 +590,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     // ICONS //
     ///////////
 
-    private void writeImages() throws XMLStreamException {
-        Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        writeImages(iconTable.keySet());
-    }
-
+    /**
+     * Schreibt alle Icons in die XML-Datei, deren HashString in den übergebenen iconHashStrings vorkommen
+     *
+     * @param iconHashStrings
+     * @throws XMLStreamException
+     */
     private void writeImages(final Iterable<String> iconHashStrings) throws XMLStreamException {
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
         for (String iconHashString : iconHashStrings) {
