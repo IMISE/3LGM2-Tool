@@ -25,7 +25,6 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
-import de.imise.util.htmlxml.XMLCharacterCoder;
 
 public abstract class ModelElement extends UserFieldTarget {
 
@@ -475,28 +474,6 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * if you overwrite this methode in a sub-class nevertheless please always call this methode by super.getXMLEntities()
-     *
-     * @return xml-tags for name, description and userFields
-     */
-    protected StringBuilder getXMLEntities() {
-        if (name == null) {
-            name = "";
-        }
-        if (descr == null) {
-            descr = "";
-        }
-        StringBuilder retVal = new StringBuilder();
-        retVal.append("<field name=\"layer\">" + layer + "</field>");
-        retVal.append("<field name=\"name\">" + XMLCharacterCoder.encodeString(name) + "</field>");
-        retVal.append("<field name=\"description\">" + XMLCharacterCoder.encodeString(descr) + "</field>");
-        retVal.append(associatedSzenHashString != null && associatedSzenHashString != "" ? "<field name=\"assoc_szen\">" + associatedSzenHashString + "</field>" : "");
-
-        appendUserFieldXMLString(retVal);
-        return retVal;
-    }
-
-    /**
      * setzt die UserField(Felder) zu einem Objekt
      *
      * @param field Bezeichnung des Feldes
@@ -531,21 +508,6 @@ public abstract class ModelElement extends UserFieldTarget {
         }
 
         return false;
-    }
-
-    /**
-     * @author Thomas Rudert
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     */
-    public String toXMLString() {
-        StringBuilder sb = new StringBuilder("<element class=\"");
-        sb.append(getClass().getSimpleName());
-        sb.append("\" hash=\"");
-        sb.append(hashstring);
-        sb.append("\">");
-        sb.append(getXMLEntities());
-        sb.append("</element>");
-        return sb.toString();
     }
 
     /**

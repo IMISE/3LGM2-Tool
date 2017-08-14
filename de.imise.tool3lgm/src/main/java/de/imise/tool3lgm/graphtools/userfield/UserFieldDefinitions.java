@@ -305,33 +305,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     }
 
     /**
-     * @return
-     */
-    public String toXMLString(final boolean appendWeightReplacer) {
-        StringBuilder retVal = new StringBuilder("<userFieldDefinitions>");
-
-        //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
-        UserFieldList formatUserFields = classToUserFieldListMap.get(GLOBAL_FORMAT_IDENTIFIER_CLASS);
-        if (formatUserFields != null) {
-            retVal.append(formatUserFields.toXMLString());
-        }
-        UserFieldList modelUserFields = classToUserFieldListMap.get(GLOBAL_USERFIELD_IDENTIFIER_CLASS);
-        if (modelUserFields != null) {
-            retVal.append(modelUserFields.toXMLString());
-        }
-        for (Class<? extends UserFieldTarget> clazz : classToUserFieldListMap.keySet()) {
-            if (clazz != GLOBAL_FORMAT_IDENTIFIER_CLASS && clazz != GLOBAL_USERFIELD_IDENTIFIER_CLASS) {
-                retVal.append(classToUserFieldListMap.get(clazz).toXMLString());
-            }
-        }
-        if (appendWeightReplacer) {
-            retVal.append(weightReplacer.toXMLString());
-        }
-        retVal.append("</userFieldDefinitions>\n");
-        return retVal.toString();
-    }
-
-    /**
      * @param otherDef
      */
     public void addAll(final UserFieldDefinitions otherDef) {
@@ -340,22 +313,6 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
                 add(uf);
             }
         }
-    }
-
-    /**
-     * @param keySet
-     * @return
-     */
-    public String getCopyString(final Set<UserField> userFields) {
-        if (userFields.isEmpty()) {
-            return "";
-        }
-        StringBuilder retVal = new StringBuilder("<userFieldDefinitions>");
-        for (UserField uf : userFields) {
-            retVal.append(uf.toXMLString());
-        }
-        retVal.append("</userFieldDefinitions>\n");
-        return retVal.toString();
     }
 
     /**

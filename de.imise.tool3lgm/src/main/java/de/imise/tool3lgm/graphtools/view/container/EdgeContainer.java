@@ -33,7 +33,7 @@ public class EdgeContainer extends ElementContainer {
      * COMMENTME
      */
     final static float dash1[] = {
-        10.0f
+            10.0f
     };
 
     /**
@@ -64,11 +64,11 @@ public class EdgeContainer extends ElementContainer {
     /**
      * COMMENTME
      */
-    protected ArrayList<BendpointContainer> knickpunkte = new ArrayList<BendpointContainer>(1);
+    protected ArrayList<BendpointContainer> knickpunkte = new ArrayList<>(1);
 
     /**
-	 * 
-	 */
+     * 
+     */
     public EdgeContainer() {
         super();
     }
@@ -196,8 +196,8 @@ public class EdgeContainer extends ElementContainer {
 
     // Komplett aus Kante
     /**
-	 * 
-	 */
+     * 
+     */
     public void computeBorderPoints() {
         // String h = getHashString();
         // if (h.equals("KAN_1061988438094_1409") || h.equals("KAN_1061988438094_1480") || h.equals("KAN_1061988438094_1426"))
@@ -424,7 +424,7 @@ public class EdgeContainer extends ElementContainer {
     /**
      * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefügt werden würde, wenn der die übergebenen
      * Koordinaten besitzt.
-     * 
+     *
      * @param x
      * @param y
      * @return
@@ -436,7 +436,7 @@ public class EdgeContainer extends ElementContainer {
     /**
      * Liefert den Index, an dem in die Liste <code>knickpunkte</code> ein neuer Knickpunkt eingefügt werden würde, wenn der die übergebenen
      * Koordinaten besitzt.
-     * 
+     *
      * @param x
      * @param y
      * @param tolerance
@@ -469,7 +469,7 @@ public class EdgeContainer extends ElementContainer {
     /**
      * Setzt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
      * Koordinaten berechnet.
-     * 
+     *
      * @param kp
      * @param index
      */
@@ -488,7 +488,7 @@ public class EdgeContainer extends ElementContainer {
     /**
      * Fügt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
      * Koordinaten berechnet.
-     * 
+     *
      * @param kp
      * @param index
      */
@@ -700,18 +700,6 @@ public class EdgeContainer extends ElementContainer {
     @Override
     public final void refreshText() {
         // hier passiert nichts
-    }
-
-    /**
-     * @author Thomas Rudert
-     * @param preString
-     *            der Tag wird mit diesen String eingerueckt
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     * @see de.imise.tool3lgm.graphtools.view.container.ElementContainer#toXMLString()
-     */
-    @Override
-    public String toXMLString() {
-        return "<container hash=\"" + me.getHashString() + "\" />";
     }
 
 }

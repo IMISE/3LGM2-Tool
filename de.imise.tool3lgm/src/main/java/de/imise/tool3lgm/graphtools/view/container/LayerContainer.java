@@ -15,7 +15,6 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -26,7 +25,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
@@ -527,16 +525,6 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @param preString
-     * @param _layer
-     * @param forCopy
-     * @return
-     */
-    public String getXMLString(final String preString, final int _layer, final boolean forCopy) {
-        return "<layer" + (_layer != -1 ? " number=\"" + _layer + "\"" : "") + ">\n" + getELayoutXMLString(forCopy) + "</layer>";
-    }
-
-    /**
      * @param hashString
      * @return
      */
@@ -813,44 +801,6 @@ public class LayerContainer extends ElementContainer {
         if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
             ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(showInterLayerConnections);
         }
-    }
-
-    /**
-     * @author Thomas Rudert
-     * @param preString der Tag wird mit diesen String eingerueckt
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     * @see de.imise.tool3lgm.graphtools.view.container.ElementContainer#toXMLString()
-     */
-    @Override
-    public String toXMLString() {
-        StringBuilder xmlString = new StringBuilder("<layer number=\"" + layerNumber + "\">");
-        xmlString.append(layout.toXMLString(true));
-
-        for (NodeContainer ec : nodeContainer) {
-            try {
-                xmlString.append(ec.toXMLString());
-            } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-            }
-        }
-        for (EdgeContainer ec : edgeContainer) {
-            try {
-                xmlString.append(ec.toXMLString());
-            } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-            }
-        }
-        for (BendpointContainer ec : bendpointContainer) {
-            try {
-                xmlString.append(ec.toXMLString());
-            } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-            }
-        }
-
-        xmlString.append("</layer>");
-
-        return xmlString.toString();
     }
 
     /**

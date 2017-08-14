@@ -339,24 +339,6 @@ public abstract class Kante extends ModelElement {
         return " - ";
     }
 
-    @Override
-    public final String toXMLString() {
-        if (k1 == null || k2 == null) {
-            return "";
-        }
-        return super.toXMLString();
-    }
-
-    @Override
-    public StringBuilder getXMLEntities() {
-        if (!checkValidity()) {
-            System.out.println("Start- bzw. Endknoten entspricht nicht den Kardinalitaeten! hash: " + getHashString());
-            System.out.println(getClass().getSimpleName() + "\t" + k1 + "\t" + k2);
-
-        }
-        return super.getXMLEntities().append("<field name=\"start\">" + k1.getHashString() + "</field>" + "<field name=\"end\">" + k2.getHashString() + "</field>");
-    }
-
     /**
      * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
      *

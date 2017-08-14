@@ -96,11 +96,6 @@ public abstract class Doppelkante extends Kante {
     }
 
     @Override
-    public StringBuilder getXMLEntities() {
-        return super.getXMLEntities().append("<field name=\"state\">" + getDirectionName() + "</field>");
-    }
-
-    @Override
     public final boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("state")) {
             for (int i = 0; i < DIRECTION_STR.length; i++) {

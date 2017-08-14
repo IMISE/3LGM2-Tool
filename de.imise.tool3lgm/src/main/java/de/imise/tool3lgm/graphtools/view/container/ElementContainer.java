@@ -647,38 +647,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * Für das GraphElementLayout bei expanded = true
-     *
-     * @param preString
-     * @param forCopy
-     * @return
-     */
-    protected final String getELayoutXMLString(final boolean forCopy) {
-        String layout_str = expandedLayout != null ? expandedLayout.getXMLString(forCopy, true) : "";
-        return layout_str.equals("<layout></layout>") ? "" : layout_str;
-    }
-
-    /**
-     * für das GraphElementLayout bei expanded = false
-     *
-     * @param preString
-     * @param forCopy
-     * @return
-     */
-    protected final String getNELayoutXMLString(final boolean forCopy) {
-        String layout_str = nonExpandedLayout != null ? nonExpandedLayout.getXMLString(forCopy, false) : "";
-        return layout_str.equals("<nelayout></nelayout>\n") ? "" : layout_str;
-    }
-
-    /**
-     * @param forCopy
-     * @return
-     */
-    public String getSlimXMLString(final boolean forCopy) {
-        return "<container hash=\"" + me.getHashString() + "\">" + getELayoutXMLString(forCopy) + getNELayoutXMLString(forCopy) + "<expanded>" + expanded + "</expanded>" + "</container>";
-    }
-
-    /**
      *
      */
     public void refreshFont() {
@@ -714,45 +682,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      *
      */
     public abstract void refreshText();
-
-    /**
-     * @return
-     */
-    private final String getLayoutXMLString() {
-        StringBuilder xmlString = new StringBuilder();
-
-        if (expandedLayout != null) {
-            String layoutString = expandedLayout.toXMLString(ModelElement.class, true);
-            if (!layoutString.equals("<layout></layout>")) {
-                xmlString.append(layoutString);
-            }
-        }
-        if (nonExpandedLayout != null) {
-            String layoutString = nonExpandedLayout.toXMLString(ModelElement.class, false);
-            if (!layoutString.equals("<nelayout></nelayout>")) {
-                xmlString.append(layoutString);
-            }
-        }
-
-        return xmlString.toString();
-    }
-
-    /**
-     * @author Thomas Rudert
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     */
-    public String toXMLString() {
-        StringBuilder xmlString = new StringBuilder("<container hash=\"" + me.getHashString() + "\">");
-
-        xmlString.append("<expanded>" + expanded + "</expanded>");
-        xmlString.append("<visible>" + isVisible() + "</visible>");
-
-        xmlString.append(getLayoutXMLString());
-
-        xmlString.append("</container>");
-
-        return xmlString.toString();
-    }
 
     /**
      * @param initialContainer

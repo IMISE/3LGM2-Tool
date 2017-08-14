@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.model;
 
 import java.util.Date;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -14,8 +13,6 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
-import de.imise.tool3lgm.log.Log;
-import de.imise.util.htmlxml.XMLCharacterCoder;
 
 public class Szenario extends LGMGraphDocument {
 
@@ -47,7 +44,7 @@ public class Szenario extends LGMGraphDocument {
 
     /**
      * Fügt eine Kopie des übergebene ElementContainers in dieses Szenario ein.
-     * 
+     *
      * @param ec
      * @return
      */
@@ -89,7 +86,7 @@ public class Szenario extends LGMGraphDocument {
 
     /**
      * Holt das Slave-Element der übergegebenen <code>Composition</code> in dieses Szenario
-     * 
+     *
      * @param k
      * @param sourceDoc
      */
@@ -122,7 +119,7 @@ public class Szenario extends LGMGraphDocument {
 
     //	/**
     //	 * Erzeugt alle Kanten für den übergebenen ElementContainer.
-    //	 * 
+    //	 *
     //	 * @param egdeStartOrEndContainer
     //	 * @param sourceDoc
     //	 * 			Haupt- oder Teilmodell, aus dem das Element und die Kanten übernommen werden sollen
@@ -132,16 +129,16 @@ public class Szenario extends LGMGraphDocument {
     //	 * @param pid
     //	 */
     //	public void createEdgeContainer(ElementContainer egdeStartOrEndContainer, GraphDocument sourceDoc, boolean select, int pid) {
-    //		
+    //
     //		Diese Version der Funktion funktioniert nicht richtig -> es werdfen keine Kanten auf dem Layer hinzugefügt -> die alte Version wieder eingebaut
-    //		
+    //
     //		start_transaction(pid, false);
     //		//wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
     //		if ((egdeStartOrEndContainer != null) && (!egdeStartOrEndContainer.getElement().isUnique())) {
     //			//für alle Kanten des Elements
     //			for (Kante ka : egdeStartOrEndContainer.getElement().getEdges()) {
     //				ElementContainer edgeCont = ka.getContainer(this);
-    //				
+    //
     //				//wenn die Kante nicht bereits in diesem Szenario vorkommt
     //				if (edgeCont != null) {
     //					//bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
@@ -164,14 +161,14 @@ public class Szenario extends LGMGraphDocument {
     //					}
     //				}
     //			}
-    //		} 
+    //		}
     //		finish_transaction(pid, false);
     //		distributeEvent(DATA_CHANGED);
     //	}
 
     /**
      * Erzeugt alle Kanten für den übergebenen ElementContainer.
-     * 
+     *
      * @param egdeStartOrEndContainer
      * @param sourceDoc
      *            Haupt- oder Teilmodell, aus dem das Element und die Kanten übernommen werden sollen
@@ -220,8 +217,8 @@ public class Szenario extends LGMGraphDocument {
         }
         //AXS 05.09.2008: else-Fall mal heraus genommen, weil der nur irgendwelche Symptome bei Inkonsistenzen mit dem
         //  Holzhammer behebt. wenn alles richtig läuft, darf das hier meiner meinung gar nicht auftreten
-        // 
-        //		
+        //
+        //
         //		else {
         //			//für jede Ebene dieses Szenarios
         //			for (LayerContainer lc : layer) {
@@ -246,7 +243,7 @@ public class Szenario extends LGMGraphDocument {
         //								EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
         //								//wenn es keine gab
         //								if (oldKC == null){
-        //									//hole den Container der Kante aus dem hauptdokument des Quelldokuments (das muss nicht dasslebe 
+        //									//hole den Container der Kante aus dem hauptdokument des Quelldokuments (das muss nicht dasslebe
         //									//Hauptdokument dieses Szenarios sein
         //									oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
         //								}
@@ -309,37 +306,6 @@ public class Szenario extends LGMGraphDocument {
         }
 
         return super.isMyElement(me);
-    }
-
-    /**
-     * @author Thomas Rudert
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     */
-    public String toXMLString() {
-        StringBuilder xmlString = new StringBuilder("<szenario hash=\"" + hashString + "\" titel=\"" + XMLCharacterCoder.encodeString(getTitle()) + "\">");
-        xmlString.append("<description>" + XMLCharacterCoder.encodeString(description) + "</description>");
-
-        /* Informationen über Ansicht speichern */
-        if (getFrame() != null) {
-            try {
-                xmlString.append("<view><selected>" + getFrame().isSelected() + "</selected><x>" + getFrame().getScrollPane().getViewport().getViewPosition().x + "</x><y>" + getFrame().getScrollPane().getViewport().getViewPosition().y + "</y><zoom>"
-                        + getFrame().getInputGraphArea().getZoomFactor() + "</zoom><degree>" + getFrame().getInputGraphArea().getMultiViewDegree() + "</degree><shift>" + getFrame().getInputGraphArea().getMultiViewPitchShift() + "</shift><pageSizeFactor>"
-                        + getPageSizeFactor() + "</pageSizeFactor><activeLayer>" + gdcoll.getActiveLayer() + "</activeLayer><multiView>" + getFrame().getInputGraphArea().isMultiViewEnabled() + "</multiView></view>");
-            } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-            }
-        }
-
-        xmlString.append(mapping.toXMLString());
-
-        for (int i = 0; i < layer.length; i++) {
-            xmlString.append(layer[i].toXMLString());
-        }
-
-        xmlString.append("</szenario>");
-
-        return xmlString.toString();
-
     }
 
     /**

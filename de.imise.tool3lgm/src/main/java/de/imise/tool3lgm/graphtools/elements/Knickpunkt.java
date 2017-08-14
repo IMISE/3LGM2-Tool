@@ -29,7 +29,7 @@ public class Knickpunkt extends Knoten {
     private int index = 0;
 
     /**
-     * 
+     *
      */
     public Knickpunkt() {
         super();
@@ -72,14 +72,6 @@ public class Knickpunkt extends Knoten {
      */
     public void setKantenHash(final String kantenHash) {
         this.kantenHash = kantenHash == null ? "" : kantenHash;
-    }
-
-    @Override
-    protected StringBuilder getXMLEntities() {
-        if (kc == null) {
-            return super.getXMLEntities();
-        }
-        return super.getXMLEntities().append("<field name=\"kantenHash\">" + kc.getHashString() + "</field>").append("<field name=\"index\">" + kc.getIndexOfKnickpunkt(this) + "</field>");
     }
 
     @Override

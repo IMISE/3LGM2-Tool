@@ -18,9 +18,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xml.XMLSource;
 import de.imise.util.HashStringGenerator;
-import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
  * Ein <code>UserField</code> ist ein Element bzw. Objekt, dass Element- und Kantenklassen zugewiesen werden kann. Mit Hilfe dieses Elementes können
@@ -30,7 +28,7 @@ import de.imise.util.htmlxml.XMLCharacterCoder;
  *
  * @author Thomas Rudert
  */
-public final class UserField implements Cloneable, Comparator<ModelElement>, XMLSource, HashSource {
+public final class UserField implements Cloneable, Comparator<ModelElement>, HashSource {
 
     public static enum Style {
         SEPARATOR {
@@ -502,65 +500,6 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, XML
      */
     public UserField(final String hashCode, final UserFieldDefinitions definitions) {
         this(null, hashCode, definitions);
-    }
-
-    /**
-     * @return Das <code>UserField</code> in XML-Notation.
-     */
-    @Override
-    public String toXMLString() {
-        StringBuilder sb = new StringBuilder("    <userFieldDef hash=\"");
-        sb.append(hashCode);
-        //bei Modell-Attributen wird die targetClass nicht als UserField ins
-        // Tag geschrieben
-        if (!isGlobalOrFormat()) {
-            sb.append("\" elementClass=\"");
-            sb.append(targetClass.getSimpleName());
-        }
-        sb.append("\">");
-        sb.append("        <userFieldName>");
-        sb.append(XMLCharacterCoder.encodeString(name));
-        sb.append("</userFieldName>");
-        sb.append("        <userFieldDescription>");
-        sb.append(XMLCharacterCoder.encodeString(description));
-        sb.append("</userFieldDescription>");
-        sb.append("        <userFieldStyle>");
-        sb.append(style.name());
-        sb.append("</userFieldStyle>");
-        sb.append("        <userFieldTreeVis>");
-        sb.append(String.valueOf(treeVisibility));
-        sb.append("</userFieldTreeVis>");
-
-        if (listValues != null) {
-            for (String lv : listValues) {
-                sb.append("        <userFieldStandardValue>");
-                sb.append(XMLCharacterCoder.encodeString(lv));
-                sb.append("</userFieldStandardValue>");
-            }
-        }
-        if (style == Style.CLASSIFICATION_NUMBER) {
-            if (formatUserField != null) {
-                sb.append("        <userFieldFormatHash>");
-                sb.append(formatUserField.getHashCode());
-                sb.append("</userFieldFormatHash>");
-            }
-        } else if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
-            sb.append("        <userFieldFormula>");
-            sb.append(formulaString);
-            sb.append("</userFieldFormula>");
-            if (formatUserField != null) {
-                sb.append("        <userFieldFormatHash>");
-                sb.append(formatUserField.getHashCode());
-                sb.append("</userFieldFormatHash>");
-            }
-        } else if (style == Style.FORMAT) {
-            sb.append("        <userFieldFormatString>");
-            sb.append(XMLCharacterCoder.encodeString(getFormatExportString()));
-            sb.append("</userFieldFormatString>");
-        }
-        sb.append("</userFieldDef>");
-        return sb.toString();
-
     }
 
     /**

@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
-import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Strings;
@@ -179,49 +178,4 @@ public class WeightReplacer {
         return UNIFORMLY_DISTRIBUTED.equals(userFieldHashReplacement);
     }
 
-    /**
-     * @return
-     */
-    public String toXMLString() {
-        if (replacer == null && standardWeigthReplacer == null) {
-            return "";
-        }
-        StringBuilder retVal = new StringBuilder("<weightReplacer>");
-        if (replacer != null) {
-            retVal.append("<replacer>");
-            for (String modelElementHash : replacer.rowKeySet()) {
-                Map<String, String> userFieldHashToReplacementMap = replacer.row(modelElementHash);
-                for (String userFieldHash : userFieldHashToReplacementMap.keySet()) {
-                    final String replaceUserFieldHash = userFieldHashToReplacementMap.get(userFieldHash);
-                    retVal.append("<replacerEntry elementHash=\"");
-                    retVal.append(modelElementHash);
-                    retVal.append("\" userFieldHash=\"");
-                    retVal.append(userFieldHash);
-                    retVal.append("\" replaceUserFieldHash=\"");
-                    retVal.append(replaceUserFieldHash);
-                    retVal.append("\"/>");
-                }
-            }
-            retVal.append("</replacer>");
-        }
-        if (standardWeigthReplacer != null) {
-            retVal.append("<standardWeigthReplacer>");
-            for (String modelElementHash : standardWeigthReplacer.rowKeySet()) {
-                Map<Class<? extends Kante>, String> edgeClassToReplacementMap = standardWeigthReplacer.row(modelElementHash);
-                for (Class<? extends Kante> edgeClass : edgeClassToReplacementMap.keySet()) {
-                    final String replaceUserFieldHash = edgeClassToReplacementMap.get(edgeClass);
-                    retVal.append("<standardWeigthReplacerEntry elementHash=\"");
-                    retVal.append(modelElementHash);
-                    retVal.append("\" edgeClass=\"");
-                    retVal.append(edgeClass.getSimpleName());
-                    retVal.append("\" replaceUserFieldHash=\"");
-                    retVal.append(replaceUserFieldHash);
-                    retVal.append("\"/>");
-                }
-            }
-            retVal.append("</standardWeigthReplacer>");
-        }
-        retVal.append("</weightReplacer>");
-        return retVal.toString();
-    }
 }

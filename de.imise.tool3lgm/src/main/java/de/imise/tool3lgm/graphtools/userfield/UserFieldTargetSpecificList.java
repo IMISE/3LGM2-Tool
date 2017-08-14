@@ -9,12 +9,11 @@ import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.xml.XMLSource;
 
 /**
  * @author Thomas Rudert
  */
-public class UserFieldTargetSpecificList<T extends HashSource & XMLSource> implements Cloneable, Iterable<T>, XMLSource {
+public class UserFieldTargetSpecificList<T extends HashSource> implements Cloneable, Iterable<T> {
 
     private Class<? extends UserFieldTarget> targetClass;
 
@@ -99,18 +98,6 @@ public class UserFieldTargetSpecificList<T extends HashSource & XMLSource> imple
         collection.targetClass = targetClass;
         collection.list = Lists.newArrayList(list);
         return collection;
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public final String toXMLString() {
-        String retVal = new String();
-        for (T element : list) {
-            retVal = retVal.concat(element.toXMLString());
-        }
-        return retVal;
     }
 
     /**
