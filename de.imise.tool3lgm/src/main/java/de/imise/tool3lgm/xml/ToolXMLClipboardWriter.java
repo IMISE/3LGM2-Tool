@@ -63,9 +63,9 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         Set<UserField> userFields = new HashSet<>();
         gdcoll.resolveCopyDependencies(copyElements, userFields);
 
-        writeStartDocument("UTF-8", "1.0");
-        writeComment(ToolXMLParser.getCurrentFileVersionBare());
+        writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
+        writeUserFieldDefinitions(userFields);
         writeStartElement("userFieldDefinitions"); //<userFieldDefinitions>
         for (UserField uf : userFields) {
             writeUserField(uf);

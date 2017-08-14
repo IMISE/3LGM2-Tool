@@ -45,6 +45,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 import de.imise.util.io.FileHandler;
 
@@ -147,15 +148,22 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /////////////////////////////////////////////
 
     private void writeModel() throws XMLStreamException {
-        writeStartDocument("UTF-8", "1.0");
-        writeComment(ToolXMLParser.getCurrentFileVersionBare());
+        writeModel(gdcoll.getName(), null);
+    }
+
+    private void writeModel(final String name, final Iterable<UserField> userFields) throws XMLStreamException {
+        writeStartDocument();
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
-        writeElement("title", gdcoll.getName());
+        writeElement("title", name);
         writeElement("description", gdcoll.getMainGraphDocument().getDescription());
         writeElement("version", gdcoll.getFileVersion());
         writeEndElement(); //</header>
-        writeUserFieldDefinitions(gdcoll.getUserFieldDefinitions(), true);
+        if (userFields == null) {
+            writeUserFieldDefinitions(gdcoll.getUserFieldDefinitions(), true);
+        } else {
+            writeUserFieldDefinitions(userFields);
+        }
         writeStartElement("objects"); //<objects>
         writeStartElement("model"); //<model>
         writeUserFieldValues(gdcoll);
@@ -169,6 +177,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeEndElement(); //</modell_3lgm_2>
     }
 
+    protected void writeStartDocument() throws XMLStreamException {
+        writeStartDocument("UTF-8", "1.0");
+        writeComment(ToolXMLParser.getCurrentFileVersionBare());
+    }
+
     //////////////////////////
     // UserFieldDefinitions //
     //////////////////////////
@@ -179,20 +192,21 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeUserFieldDefinitions(final UserFieldDefinitions definitions, final boolean appendWeightReplacer) throws XMLStreamException {
+        Iterable<UserField> userFields = CollectionUtils.getCommonIterable(definitions.getFormatUserFields(), definitions.getGlobalUserFields(), definitions.getElementClassUserFields());
+        writeUserFieldDefinitions(userFields, appendWeightReplacer ? definitions.getWeightReplacer() : null);
+    }
+
+    protected void writeUserFieldDefinitions(final Iterable<UserField> userFields) throws XMLStreamException {
+        writeUserFieldDefinitions(userFields, null);
+    }
+
+    protected void writeUserFieldDefinitions(final Iterable<UserField> userFields, final WeightReplacer weightReplacer) throws XMLStreamException {
         writeStartElement("userFieldDefinitions");
         //Zuerst immer die Formate und dann immer die globalen Varialen rausschreiben
-        for (UserField uf : definitions.getFormatUserFields()) {
+        for (UserField uf : userFields) {
             writeUserField(uf);
         }
-        for (UserField uf : definitions.getGlobalUserFields()) {
-            writeUserField(uf);
-        }
-        for (UserField uf : definitions.getElementClassUserFields()) {
-            writeUserField(uf);
-        }
-        if (appendWeightReplacer) {
-            writeUserFieldWeightReplacer(definitions.getWeightReplacer());
-        }
+        writeUserFieldWeightReplacer(weightReplacer);
         writeEndElement();
     }
 
@@ -231,7 +245,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     }
 
     private void writeUserFieldWeightReplacer(final WeightReplacer weightReplacer) throws XMLStreamException {
-        if (!weightReplacer.isEmpty()) {
+        if (weightReplacer != null && !weightReplacer.isEmpty()) {
             writeStartElement("weightReplacer");
             if (!weightReplacer.isEmptyReplacer()) {
                 writeStartElement("replacer");
@@ -510,7 +524,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     private void writeImages() throws XMLStreamException {
         Map<String, byte[]> iconTable = gdcoll.getIconTable();
-        for (String iconHashString : iconTable.keySet()) {
+        writeImages(iconTable.keySet());
+    }
+
+    private void writeImages(final Iterable<String> iconHashStrings) throws XMLStreamException {
+        Map<String, byte[]> iconTable = gdcoll.getIconTable();
+        for (String iconHashString : iconHashStrings) {
             //nur die Icons in den XML-Stream schreiben, die von den exportierten Elementen auch genutzt werden
             if (usedIconHashes.contains(iconHashString)) {
                 writeImage(iconHashString, iconTable.get(iconHashString));
