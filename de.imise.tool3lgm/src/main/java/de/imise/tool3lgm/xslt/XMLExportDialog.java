@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -250,8 +251,8 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         }
 
         if (e.getActionCommand().equals("trans_action") && selectedRow >= 0) {
-            Szenario[] selectedSzenarios = ((SzenarioTableModel) szenarioTable.getModel()).getSelectedSzenarios();
-            if (selectedSzenarios.length == 0) {
+            List<Szenario> selectedSzenarios = ((SzenarioTableModel) szenarioTable.getModel()).getSelectedSzenarios();
+            if (selectedSzenarios.isEmpty()) {
                 return;
             }
 
@@ -286,7 +287,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
 
             File tempXMLFile = new File(Tool3lgmConstants.TEMP_PATH, "temporary_XMLFile_for_XSLT-Export.xml");
             GDCollectionImExportHandler imExportHandler = collection.getImExportHandler();
-            if (selectedSzenarios.length == collection.getSzenarioCount()) {
+            if (selectedSzenarios.size() == collection.getSzenarioCount()) {
                 imExportHandler.exportModel(tempXMLFile);
             } else {
                 imExportHandler.exportSzenarios(selectedSzenarios, tempXMLFile);

@@ -2056,15 +2056,15 @@ public final class GDCollection extends UserFieldTarget {
      * @param userFields
      *            Set, in welches die zu kopierenden benutzdefinierten Eigenschaftsfelder geschrieben werden
      */
-    public void resolveCopyDependencies(final GraphDocument[] export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
+    public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = doc.getLayer(ModelConstants.LAYERS[i]);
             for (int knotenIndex = 0; knotenIndex < lc.getKnotenCount(); knotenIndex++) {
                 Knoten knoten = lc.getNodeContainer(knotenIndex).getKnoten();
-                for (int szenarioIndex = 0; szenarioIndex < export.length; szenarioIndex++) {
-                    if (export[szenarioIndex].isMyElement(knoten)) {
-                        ElementContainer container = knoten.getContainer(export[szenarioIndex]);
+                for (GraphDocument doc : export) {
+                    if (doc.isMyElement(knoten)) {
+                        ElementContainer container = knoten.getContainer(doc);
                         if (!elements.contains(knoten)) {
                             elements.add(knoten);
                             String iconName = ((NodeContainer) container).getIconString();
@@ -2079,8 +2079,8 @@ public final class GDCollection extends UserFieldTarget {
             }
             for (int kantenIndex = 0; kantenIndex < lc.getKantenCount(); kantenIndex++) {
                 Kante kante = lc.getEdgeContainer(kantenIndex).getEdge();
-                for (int szenarioIndex = 0; szenarioIndex < export.length; szenarioIndex++) {
-                    if (export[szenarioIndex].isMyElement(kante)) {
+                for (GraphDocument doc : export) {
+                    if (doc.isMyElement(kante)) {
                         if (!elements.contains(kante)) {
                             elements.add(kante);
                             userFields.addAll(kante.getUserFieldInputValueKeys());
@@ -2091,9 +2091,9 @@ public final class GDCollection extends UserFieldTarget {
             }
             for (int knpIndex = 0; knpIndex < lc.getKnickpunkteCount(); knpIndex++) {
                 Knickpunkt knp = lc.getBendpointContainer(knpIndex).getKnickpunktKnoten();
-                for (int szenarioIndex = 0; szenarioIndex < export.length; szenarioIndex++) {
-                    if (export[szenarioIndex].isMyElement(knp)) {
-                        ElementContainer container = knp.getContainer(export[szenarioIndex]);
+                for (GraphDocument doc : export) {
+                    if (doc.isMyElement(knp)) {
+                        ElementContainer container = knp.getContainer(doc);
                         if (!elements.contains(knp)) {
                             elements.add(knp);
                             if (container.get3LGMLayout() != null && container.get3LGMLayout().icon != null && container.get3LGMLayout().icon != "") {

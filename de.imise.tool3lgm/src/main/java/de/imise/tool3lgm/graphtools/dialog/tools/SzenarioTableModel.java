@@ -4,7 +4,11 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.tools;
 
+import java.util.List;
+
 import javax.swing.table.AbstractTableModel;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -32,7 +36,7 @@ public class SzenarioTableModel extends AbstractTableModel {
 
     /**
      * erstellt das Tabellemodell
-     * 
+     *
      * @param collection GDCollection mit den Szenarios
      * @param selectioColName Titel der Spalte zum Auswählen der Szenarios
      */
@@ -122,24 +126,17 @@ public class SzenarioTableModel extends AbstractTableModel {
 
     /**
      * gibt die ausgewählten Szenarios zurück
-     * 
+     *
      * @return Array mit den selektierten Szenarios
      */
-    public Szenario[] getSelectedSzenarios() {
-        int counter = 0;
+    public List<Szenario> getSelectedSzenarios() {
+        ImmutableList.Builder<Szenario> selectedSzenarios = new ImmutableList.Builder<>();
         for (int i = 0; i < selections.length; i++) {
             if (selections[i].booleanValue()) {
-                counter++;
+                selectedSzenarios.add(collection.getSzenario(i));
             }
         }
-        Szenario[] selectedSzenarios = new Szenario[counter];
-        counter = 0;
-        for (int i = 0; i < selections.length; i++) {
-            if (selections[i].booleanValue()) {
-                selectedSzenarios[counter++] = collection.getSzenario(i);
-            }
-        }
-        return selectedSzenarios;
+        return selectedSzenarios.build();
     }
 
 }

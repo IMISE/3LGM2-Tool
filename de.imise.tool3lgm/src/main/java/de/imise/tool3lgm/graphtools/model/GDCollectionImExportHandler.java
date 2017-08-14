@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
@@ -70,25 +72,21 @@ public class GDCollectionImExportHandler {
 
         Static.closeProgressDialog();
 
-        LGMGraphDocument[] importSzenarios = null;
+        ImmutableList.Builder<GraphDocument> importSzenarios = new ImmutableList.Builder<>();
         if (chooseSzenarioDialog) {
-            importSzenarios = SzenarioDialog.showImportDialog(Static.getMainFrame(), sourceGDColl);
+            importSzenarios.addAll(SzenarioDialog.showImportDialog(Static.getMainFrame(), sourceGDColl));
         } else {
-            importSzenarios = new LGMGraphDocument[sourceGDColl.getSzenarioCount() + 1];
-            importSzenarios[0] = sourceGDColl.getMainGraphDocument();
-            int i = 1;
-            for (Szenario szenario : sourceGDColl.getSzenarios()) {
-                importSzenarios[i++] = szenario;
-            }
+            importSzenarios.add(sourceGDColl.getMainGraphDocument());
+            importSzenarios.addAll(sourceGDColl.getSzenarios());
         }
-        importSzenarios(importSzenarios, sourceGDColl);
+        importSzenarios(importSzenarios.build(), sourceGDColl);
     }
 
     /**
      * @param importSzenarios
      * @param sourceGDColl
      */
-    private void importSzenarios(final LGMGraphDocument[] importSzenarios, final GDCollection sourceGDColl) {
+    private void importSzenarios(final List<GraphDocument> importSzenarios, final GDCollection sourceGDColl) {
 
         Static.showProgressDialog();
         Static.setProgressDialogStatusLabel("importSzenario");
@@ -125,9 +123,7 @@ public class GDCollectionImExportHandler {
             ElementContainer container = element.createContainer(mainDoc);
             mainDoc.getLayer(element.layerFor()).add(container);
         }
-
-        for (int szenarioIndex = 0; szenarioIndex < importSzenarios.length; szenarioIndex++) {
-            LGMGraphDocument importDoc = importSzenarios[szenarioIndex];
+        for (GraphDocument importDoc : importSzenarios) {
             if (!(importDoc instanceof Szenario)) {
                 continue;
             }
@@ -194,7 +190,7 @@ public class GDCollectionImExportHandler {
      * @param export Array mit den zu exportierenden Szenarios
      * @param file Datei in die exportiert werden soll
      */
-    public void exportSzenarios(final Szenario[] export, final File file) {
+    public void exportSzenarios(final List<Szenario> export, final File file) {
         if (!Static.getTool().checkLicenses()) {
             return;
         }
@@ -243,8 +239,8 @@ public class GDCollectionImExportHandler {
             raf.writeBytes("</objects>");
 
             /* xmlString der Szenarios schreiben */
-            for (int szenarioIndex = 0; szenarioIndex < export.length; szenarioIndex++) {
-                raf.writeBytes(export[szenarioIndex].toXMLString());
+            for (Szenario szen : export) {
+                raf.writeBytes(szen.toXMLString());
             }
 
             /* xmlString der Icons schreiben */

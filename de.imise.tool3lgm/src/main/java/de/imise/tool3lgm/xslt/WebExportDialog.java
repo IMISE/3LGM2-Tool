@@ -26,6 +26,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.xml.transform.TransformerException;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
@@ -245,11 +247,10 @@ public class WebExportDialog extends JDialog {
             }
             tempXMLFile.delete();
 
-            Szenario[] szenarios = new Szenario[1];
             int j = 0;
             for (Szenario szen : collection.getSzenarios()) {
-                szenarios[0] = szen;
-                Static.setProgressDialogStatusLabel("webExport", ": " + szenarios[0].getTitle());
+                ImmutableList<Szenario> szenarios = ImmutableList.of(szen);
+                Static.setProgressDialogStatusLabel("webExport", ": " + szen.getTitle());
 
                 raf = new RandomAccessFile(new File(filesDir, "szen" + j + "_description.html"), "rw");
                 raf.setLength(0);
@@ -271,7 +272,7 @@ public class WebExportDialog extends JDialog {
                 }
                 tempXMLFile.delete();
 
-                GDCollection gdcoll = szenarios[0].getCollection();
+                GDCollection gdcoll = szen.getCollection();
                 int activeLayer = gdcoll.getActiveLayer();
 
                 BasicGraphArea area = new BasicGraphArea(szen);

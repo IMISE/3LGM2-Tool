@@ -12,6 +12,7 @@ import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -22,6 +23,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -44,7 +47,7 @@ public class SzenarioDialog extends JDialog {
     private final JTable table;
     private JButton ok;
 
-    private Szenario[] selectedSzenarios = new Szenario[0];
+    private List<Szenario> selectedSzenarios = ImmutableList.of();
 
     /**
      * @param owner, Frame, which is the owner of this dialog
@@ -146,13 +149,13 @@ public class SzenarioDialog extends JDialog {
      * @param collection die GDCollection aus der die Szenarios importiert werden sollen
      * @return Array mit den Szenarios die importiert werden sollen
      */
-    public static Szenario[] showImportDialog(final JFrame owner, final GDCollection collection) {
+    public static List<Szenario> showImportDialog(final JFrame owner, final GDCollection collection) {
         SzenarioDialog dialog = new SzenarioDialog(owner, collection, true);
         dialog.setVisible(true);
         return dialog.getReturnValue();
     }
 
-    public Szenario[] getReturnValue() {
+    public List<Szenario> getReturnValue() {
         return selectedSzenarios;
     }
 
@@ -169,7 +172,7 @@ public class SzenarioDialog extends JDialog {
             Static.showProgressDialog();
             Static.setProgressDialogStatusLabel("exportSzenario");
             SzenarioTableModel tableModel = (SzenarioTableModel) table.getModel();
-            Szenario[] tmpSelectedSzenarios = tableModel.getSelectedSzenarios();
+            List<Szenario> tmpSelectedSzenarios = tableModel.getSelectedSzenarios();
             GDCollectionImExportHandler imExportHandler = gdcoll.getImExportHandler();
             imExportHandler.exportSzenarios(tmpSelectedSzenarios, file);
             Static.closeProgressDialog();
