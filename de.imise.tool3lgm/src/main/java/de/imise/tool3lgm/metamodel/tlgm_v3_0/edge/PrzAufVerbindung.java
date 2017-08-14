@@ -29,6 +29,10 @@ public final class PrzAufVerbindung extends Doppelkante implements SortedEdge, M
     };
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
+    public PrzAufVerbindung() {
+        super();
+    }
+
     /**
      * @param knot1
      * @param knot2
