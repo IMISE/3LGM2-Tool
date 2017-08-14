@@ -51,12 +51,10 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
-import de.imise.tool3lgm.xml.Base64;
 import de.imise.tool3lgm.xml.LgmXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
@@ -2025,70 +2023,6 @@ public final class GDCollection extends UserFieldTarget {
             descriptionFrame.dispose();
             descriptionFrame = null;
         }
-    }
-
-    /**
-     * @author Thomas Rudert
-     * @param preString
-     *            der Tag wird mit diesen String eingerueckt
-     * @return String der vollstaendige XML-Tag zu diesem Objekt
-     */
-    public String toXMLString() {
-        StringBuilder xmlString = new StringBuilder("<modell_3lgm_2>" + "<header>" + "<title>" + XMLCharacterCoder.encodeString(name) + "</title>" + "<description>" + XMLCharacterCoder.encodeString(doc.getDescription()) + "</description>" + "<version>"
-                + XMLCharacterCoder.encodeString(fileHandler.getFileVersion()) + "</version>" + "</header>" + userFieldDefinitions.toXMLString(true) + "<objects>");
-        xmlString.append("<model>");
-        appendUserFieldXMLString(xmlString);
-        xmlString.append("</model>");
-        for (LayerContainer lc : doc.layer) {
-            for (NodeContainer kc : lc.getKnoten()) {
-                try {
-                    xmlString.append(kc.getElement().toXMLString());
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-                }
-            }
-            doc.sortKanten();
-            for (EdgeContainer kc : lc.getKanten()) {
-                try {
-                    xmlString.append(kc.getElement().toXMLString());
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-                }
-            }
-            for (BendpointContainer kc : lc.getKnickpunkte()) {
-                try {
-                    xmlString.append(kc.getElement().toXMLString());
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), ex);
-                }
-            }
-        }
-
-        xmlString.append("</objects>");
-
-        for (Szenario szen : szenarios) {
-            xmlString.append(szen.toXMLString());
-        }
-
-        xmlString.append("<images>");
-
-        for (String iconHashString : getIconTable().keySet()) {
-            if (xmlString.indexOf(iconHashString) == -1) {
-                continue;
-            }
-            xmlString.append("<bitmap type=\"gif/base64\" hash=\"" + iconHashString + "\">");
-            byte[] icon = getIconTable().get(iconHashString);
-            try {
-                xmlString.append(Base64.encode(icon));
-            } catch (Exception e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            }
-            xmlString.append("</bitmap>");
-        }
-
-        xmlString.append("</images></modell_3lgm_2>");
-
-        return xmlString.toString();
     }
 
     /**
