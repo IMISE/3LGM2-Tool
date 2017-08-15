@@ -198,7 +198,7 @@ public class ElementSelectionContext {
      * @return
      * @see de.imise.tool3lgm.graphtools.model.ModelSelection#getSortedSelection(List...)
      */
-    public final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
+    protected final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
         return selectedContainer.getSortedSelection(orderSources);
     }
 

@@ -2109,12 +2109,13 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * @param elements ArrayList with ElementContainer
      * @param result ArrayList with hastStrings
      * @param userFields
      */
-    public void resolveCopyDependencies(final List<ModelElement> result, final Set<UserField> userFields) {
-        for (int i = 0; i < result.size(); i++) {
-            ModelElement me = result.get(i);
+    public void resolveCopyDependencies(final Collection<ElementContainer> elements, final List<ModelElement> result, final Set<UserField> userFields) {
+        for (ElementContainer ec : elements) {
+            ModelElement me = ec.getElement();
             if (!result.contains(me)) {
                 if (!(me instanceof Knickpunkt)) {
                     result.add(me);

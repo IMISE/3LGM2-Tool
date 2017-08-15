@@ -2,6 +2,7 @@ package de.imise.tool3lgm.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,10 @@ import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 
@@ -42,26 +41,17 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         return true;
     }
 
-    private List<ModelElement> getSortedSelection(final GraphDocument doc) {
-        List<LayerContainer> layers = doc.getLayers();
-        int layerCount = layers.size();
-        List<NodeContainer>[] sortingElements = new List[layerCount];
-        for (int i = 0; i < layerCount; i++) {
-            sortingElements[i] = layers.get(i).getKnoten();
-        }
-        List<ElementContainer> sortedSelection = doc.getSortedSelection(sortingElements);
-        return GDCollection.getModelElements(sortedSelection);
-    }
-
     /**
      * @param masterTag
      * @return
      * @throws XMLStreamException
      */
     private final void writeClipboardContent() throws XMLStreamException {
-        List<ModelElement> copyElements = getSortedSelection(selectedDoc);
+        List<ModelElement> copyElements = new ArrayList<>();
         Set<UserField> userFields = new HashSet<>();
-        gdcoll.resolveCopyDependencies(copyElements, userFields);
+        LGMGraphDocument lgmDoc = (LGMGraphDocument) selectedDoc;
+        List<ElementContainer> sortedSelection = lgmDoc.getSortedSelection();
+        gdcoll.resolveCopyDependencies(sortedSelection, copyElements, userFields);
 
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>

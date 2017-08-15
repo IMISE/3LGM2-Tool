@@ -5,8 +5,6 @@
  */
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.model.GDCollection.getModelElements;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -252,13 +250,12 @@ public class LGMGraphDocument extends GraphDocument {
         return new File(Tool3lgmConstants.getClipboardPath()).exists();
     }
 
-    private List<ModelElement> getSortedSelection() {
+    public final List<ElementContainer> getSortedSelection() {
         List<NodeContainer>[] sortingElements = new List[layer.length];
         for (int i = 0; i < layer.length; i++) {
             sortingElements[i] = layer[i].getKnoten();
         }
-        List<ElementContainer> sortedSelection = selectedContainer.getSortedSelection(sortingElements);
-        return getModelElements(sortedSelection);
+        return selectedContainer.getSortedSelection(sortingElements);
     }
 
     /**
@@ -543,9 +540,9 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
 
-        List<ModelElement> copyElements = getSortedSelection();
+        List<ModelElement> copyElements = new ArrayList<>();
         Set<UserField> userFields = new HashSet<>();
-        gdcoll.resolveCopyDependencies(copyElements, userFields);
+        gdcoll.resolveCopyDependencies(getSortedSelection(), copyElements, userFields);
 
         for (UserField uf : userFields) {
             if (uf != null) {
