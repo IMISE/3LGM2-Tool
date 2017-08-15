@@ -45,11 +45,6 @@ public final class Softwareprodukt extends Knoten {
     }
 
     @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
-    @Override
     public int layerFor() {
         return ModelConstants.LOGICAL_LAYER;
     }

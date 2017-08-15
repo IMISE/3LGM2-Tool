@@ -23,8 +23,4 @@ public final class Bausteintyp extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
 }

@@ -12,6 +12,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -63,7 +64,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeEndElement(); //</userFieldDefinitions>
         writeStartElement("objects"); //<objects>
         for (ModelElement me : copyElements) {
-            if (me.avoidDuplicates()) {
+            if (ModelConstants.avoidDuplicates(me.getClass())) {
                 writeStartElement("avoidDuplicates"); //<avoidDuplicates>
                 writeModelElement(me);
                 writeEndElement(); //</avoidDuplicates>

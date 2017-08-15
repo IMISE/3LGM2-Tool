@@ -1931,19 +1931,6 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * COMMENTME
-     */
-    @SuppressWarnings("unchecked")
-    protected static final Class<ModelElement>[] EMPTY_CLASS_ARRAY = new Class[0];
-
-    /**
-     * Gibt zurück, welche Knoten zusätzlich mit einem Knoten zu kopieren sind
-     */
-    public Class<? extends ModelElement>[] getCopyDependencies() {
-        return EMPTY_CLASS_ARRAY;
-    }
-
-    /**
      * @return <code>true</code>, wenn das Elemente alle Kanten in ausreichender Anzahl hat, die es haben muss
      *         (= Kanten, bei denen die minimale Kardinalität > 0 ist)
      */
@@ -2138,15 +2125,6 @@ public abstract class ModelElement extends UserFieldTarget {
             return doc.getCollection();
         }
         return null;
-    }
-
-    /**
-     * @author Thomas Rudert sollte auf true gesetzt werden, wenn beim Kopieren kein Duplikat erstellte werden soll, falls das Modelelement nur durch
-     *         aufgeloeste copyDependencies mitkopiert wird <br>
-     *         (Bsp: kopieren von PhyDvBausteinen soll der Standort nicht doppelt vorhanden sein)
-     */
-    public boolean avoidDuplicates() {
-        return false;
     }
 
     /**

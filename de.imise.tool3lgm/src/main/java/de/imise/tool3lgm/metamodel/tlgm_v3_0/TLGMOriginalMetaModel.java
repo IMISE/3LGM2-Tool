@@ -6,6 +6,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.elements.CopyDependencies;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.MetaModel;
@@ -112,6 +113,17 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     public GraphViewDefinition getGraphViewDefinition() {
         return graphViewDefinition;
+    }
+
+    //////////////////////
+    // CopyDependencies //
+    //////////////////////
+
+    private final CopyDependencies copyDependencies = new TLGMCopyDependencies();
+
+    @Override
+    public CopyDependencies getCopyDependencies() {
+        return copyDependencies;
     }
 
     ////////////
@@ -496,8 +508,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
                                     AufAufOrgVerbindung.class,
                                     AwbkAufOrgVerbindung.class
                             }
-                    }),
-                    new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
+                    }), new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
                             {
                                     PdvbkAwbVerbindung.class
                             }

@@ -26,9 +26,4 @@ public final class DBVerwaltungssystem extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
 }

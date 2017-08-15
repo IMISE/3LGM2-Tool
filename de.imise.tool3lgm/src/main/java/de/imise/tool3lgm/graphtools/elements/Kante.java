@@ -671,14 +671,6 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public boolean avoidDuplicates() {
-        if (k1 == null || k2 == null) {
-            return false;
-        }
-        return k1.avoidDuplicates() || k2.avoidDuplicates();
-    }
-
-    @Override
     public boolean join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
         if (super.join(other, overwriteHashstringAndExtIDs)) {
             k1 = ((Kante) other).k1;

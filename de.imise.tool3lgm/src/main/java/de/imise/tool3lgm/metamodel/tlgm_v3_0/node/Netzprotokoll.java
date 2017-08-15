@@ -23,9 +23,4 @@ public final class Netzprotokoll extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
 }

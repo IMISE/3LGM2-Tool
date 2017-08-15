@@ -15,23 +15,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
 public class AufOrgKombination extends Knoten {
 
     /**
-     * COMMENTME
-     */
-    @SuppressWarnings({
-            "rawtypes"
-    })
-    public static final Class[] COPY_DEPENDENCY = {
-            ABKonfiguration.class,
-            Organisationseinheit.class,
-    };
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<? extends ModelElement>[] getCopyDependencies() {
-        return COPY_DEPENDENCY;
-    }
-
-    /**
      *
      */
     public AufOrgKombination() {

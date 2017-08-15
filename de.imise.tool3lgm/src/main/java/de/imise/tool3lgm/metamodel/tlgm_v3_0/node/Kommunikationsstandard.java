@@ -25,9 +25,4 @@ public final class Kommunikationsstandard extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
 }

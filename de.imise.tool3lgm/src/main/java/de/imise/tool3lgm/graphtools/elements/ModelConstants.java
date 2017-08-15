@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.elements;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -1538,6 +1539,16 @@ public final class ModelConstants {
      */
     public static final GraphViewDefinition getGraphViewDefinition() {
         return metaModel.getGraphViewDefinition();
+    }
+
+    private static CopyDependencies copyDependencies = metaModel.getCopyDependencies();
+
+    public static Collection<Class<? extends ModelElement>> getCopyDependencies(final Class<? extends ModelElement> elementClass) {
+        return copyDependencies.get(elementClass);
+    }
+
+    public static boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
+        return copyDependencies.avoidDuplicates(elementClass);
     }
 
 }

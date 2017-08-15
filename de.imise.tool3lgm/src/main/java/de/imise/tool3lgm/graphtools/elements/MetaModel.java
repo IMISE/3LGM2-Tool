@@ -34,6 +34,12 @@ public abstract class MetaModel {
 
     public abstract GraphViewDefinition getGraphViewDefinition();
 
+    //////////////////////
+    // CopyDependencies //
+    //////////////////////
+
+    public abstract CopyDependencies getCopyDependencies();
+
     ////////////
     // Knoten //
     ////////////

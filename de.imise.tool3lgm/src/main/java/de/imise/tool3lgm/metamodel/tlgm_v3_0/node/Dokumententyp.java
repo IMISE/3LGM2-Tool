@@ -20,9 +20,4 @@ public class Dokumententyp extends Repraesentationsform {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
 }

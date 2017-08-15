@@ -18,9 +18,4 @@ public class Datensatztyp extends Repraesentationsform {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return false;
-    }
-
 }

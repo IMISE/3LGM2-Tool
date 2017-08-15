@@ -72,9 +72,4 @@ public abstract class EtntEtdtKombination extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
 }

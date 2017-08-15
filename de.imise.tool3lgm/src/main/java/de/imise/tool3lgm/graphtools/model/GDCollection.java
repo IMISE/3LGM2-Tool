@@ -2162,7 +2162,7 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
 
-        for (Class<? extends ModelElement> elemClass : me.getCopyDependencies()) {
+        for (Class<? extends ModelElement> elemClass : ModelConstants.getCopyDependencies(me.getClass())) {
             for (ElementContainer ec : me.getConnectedContainer(elemClass, doc)) {
                 ModelElement connected = ec.getElement();
                 if (!elements.contains(connected)) {

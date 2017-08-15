@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
@@ -14,25 +13,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbAwpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbDbsVerbindung;
 
 public final class RechAnwendungsbaustein extends Anwendungsbaustein {
-
-    /**
-     * COMMENTME
-     */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] COPY_DEPENDENCY = {
-            Bausteinschnittstelle.class,
-            Benutzungsschnittstelle.class,
-            Datenbanksystem.class,
-            Anwendungsprogramm.class,
-            DBKonfiguration.class,
-            ABKonfiguration.class,
-    };
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<? extends ModelElement>[] getCopyDependencies() {
-        return COPY_DEPENDENCY;
-    }
 
     public RechAnwendungsbaustein() {
         super();

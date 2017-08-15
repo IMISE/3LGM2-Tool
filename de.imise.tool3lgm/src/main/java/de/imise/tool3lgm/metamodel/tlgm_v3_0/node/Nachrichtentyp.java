@@ -18,9 +18,4 @@ public final class Nachrichtentyp extends Repraesentationsform {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
-
 }

@@ -4587,7 +4587,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid, log);
-        for (Class<? extends ModelElement> c : kc.getKnoten().getCopyDependencies()) {
+        for (Class<? extends ModelElement> c : ModelConstants.getCopyDependencies(kc.getKnoten().getClass())) {
             List<ElementContainer> dependentObjects = kc.getKnoten().getConnectedContainer(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
                 NodeContainer sc = (NodeContainer) dependentObjects.get(j);

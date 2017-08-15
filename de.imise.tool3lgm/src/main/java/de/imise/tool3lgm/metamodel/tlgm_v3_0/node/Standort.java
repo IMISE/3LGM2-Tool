@@ -26,8 +26,4 @@ public final class Standort extends Knoten {
         return dialog;
     }
 
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
-    }
 }

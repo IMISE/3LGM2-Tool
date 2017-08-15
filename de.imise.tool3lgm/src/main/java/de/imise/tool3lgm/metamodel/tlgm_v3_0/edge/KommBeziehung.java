@@ -8,30 +8,12 @@ import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EreignisDokumentenTyp;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EreignisNachrichtenTyp;
 
 /**
  * @author thomas
  */
 public final class KommBeziehung extends Doppelkante {
 
-    /**
-     * COMMENTME
-     */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] COPY_DEPENDENCY = {
-            EreignisNachrichtenTyp.class,
-            EreignisDokumentenTyp.class,
-    };
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<? extends ModelElement>[] getCopyDependencies() {
-        return COPY_DEPENDENCY;
-    }
-
-    //	public static final Class[] stcl = {Bausteinschnittstelle.class};
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
     public static final int[] scard = {
             ModelConstants.ZERO,
@@ -44,14 +26,6 @@ public final class KommBeziehung extends Doppelkante {
     };
     public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
 
-    //	public static final Class[] etcl = {Bausteinschnittstelle.class};
-
-    //	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-
-    /**
-     *
-     */
     public KommBeziehung() {
         super();
     }

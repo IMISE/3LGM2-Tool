@@ -43,23 +43,6 @@ public final class Prozess extends Knoten {
     public static int colorCounter = 0;
     public int color;
 
-    /**
-     * COMMENTME
-     */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] COPY_DEPENDENCY = {
-            Aufgabe.class,
-    };
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<? extends ModelElement>[] getCopyDependencies() {
-        return COPY_DEPENDENCY;
-    }
-
-    /**
-     *
-     */
     public Prozess() {
         super();
         // das hier ist insofern problematisch, als dass beim Erstellen (nicht aus Datei) eines Prozeses immer der Konstruktor

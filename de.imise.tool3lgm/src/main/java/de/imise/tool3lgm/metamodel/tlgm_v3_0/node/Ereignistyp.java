@@ -3,29 +3,11 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntEtVerbindung;
 
 public final class Ereignistyp extends Knoten {
 
-    /**
-     * COMMENTME
-     */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] COPY_DEPENDENCY = {
-            Kommunikationsstandard.class,
-    };
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Class<? extends ModelElement>[] getCopyDependencies() {
-        return COPY_DEPENDENCY;
-    }
-
-    /**
-     *
-     */
     public Ereignistyp() {
         super();
     }
@@ -41,11 +23,6 @@ public final class Ereignistyp extends Knoten {
         dialog.addPathConnectionPanel(EtAufVerbindung.class);
         dialog.addPathConnectionInfoPanel(EtntEtVerbindung.class);
         return dialog;
-    }
-
-    @Override
-    public boolean avoidDuplicates() {
-        return true;
     }
 
 }
