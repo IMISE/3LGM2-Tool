@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -2134,11 +2133,11 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final GDCollection getCollection() {
-        Iterator<GraphDocument> docIt = getContainerTable().keySet().iterator();
-        if (!docIt.hasNext()) {
-            return null;
+        //gibt vom erstbesten doc die gdcoll zurück
+        for (GraphDocument doc : getContainerTable().keySet()) {
+            return doc.getCollection();
         }
-        return docIt.next().getCollection();
+        return null;
     }
 
     /**
