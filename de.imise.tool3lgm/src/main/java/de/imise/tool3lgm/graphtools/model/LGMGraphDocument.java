@@ -29,7 +29,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
-import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
@@ -195,7 +194,7 @@ public class LGMGraphDocument extends GraphDocument {
                 ModelElement aufOrg = aufOrgC.getElement();
                 gdcoll.unlink(konf, aufOrg, -1, TransactionManager.STANDARD_PID);
 
-                KonfigurationContainer newKonfC = (KonfigurationContainer) konfC.clone(true, this);
+                NodeContainer newKonfC = (NodeContainer) konfC.clone(true, this);
                 newKonfC.getKnoten().setContainer(this, newKonfC);
                 layer[3].add(newKonfC);
                 gdcoll.link(AwbkAufOrgVerbindung.class, newKonfC.getElement(), aufOrg, TransactionManager.STANDARD_PID);

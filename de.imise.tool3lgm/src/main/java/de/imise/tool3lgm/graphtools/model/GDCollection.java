@@ -45,7 +45,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
-import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -1040,11 +1039,6 @@ public final class GDCollection extends UserFieldTarget {
         setInteractiveMode(false);
         createInitialSubtypes(me, pid);
 
-        // Sichtbarkeit der Interebenenbeziehungen prüfen
-        if (nc instanceof KonfigurationContainer) {
-            checkInterLayerConnectionVisibility((KonfigurationContainer) nc);
-        }
-
         setInteractiveMode(old_mode);
         doc.finish_transaction(pid);
         doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
@@ -1078,32 +1072,6 @@ public final class GDCollection extends UserFieldTarget {
                 link(subTypeEdgeClass, me, skC, pid);
                 connectedSubTypes.add(skC);
             }
-        }
-    }
-
-    /**
-     * Überprüft, in welchen {@link Szenario}s, Interebenenbeziehung angezeigt werden sollen und aktiviert
-     * gegeben Falls das Anzeigen der neu anglegten Instanz.
-     *
-     * @param interLayerEndClass
-     */
-    void checkInterLayerConnectionVisibility(final KonfigurationContainer konfC) {
-
-        Class<? extends ModelElement> clazz = konfC.getElement().getClass();
-
-        for (Szenario szen : szenarios) {
-            Set<Class<? extends ModelElement>> startClasses = ModelConstants.getInterLayerStartClasses(clazz);
-            for (Class<? extends ModelElement> startClass : startClasses) {
-                List<ElementContainer> startECs = szen.getElementContainer(startClass);
-                for (ElementContainer ec : startECs) {
-                    if (((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections()) {
-                        konfC.setVisible(true);
-                        return;
-                    }
-                }
-            }
-            konfC.setVisible(false);
-            szen.getFrame().repaint();
         }
     }
 

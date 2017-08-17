@@ -3,7 +3,6 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -83,52 +82,52 @@ public final class Aufgabe extends Knoten {
      * @param doc Graphdocument
      * @return ArrayList aller im uebergebenen Graphdocument existierenden Konfigurationen der Aufgabe
      */
-    private List<ElementContainer> getAllDifferentKonfigs(final GraphDocument doc) {
-        List<ElementContainer> returnList = getAllKonfigs(doc, null);
-        int size = returnList.size();
-        ABKonfiguration[] konfigs = new ABKonfiguration[size];
-        for (int i = 0; i < size; i++) {
-            konfigs[i] = (ABKonfiguration) returnList.get(i).getElement();
-        }
-        for (int i = 0; i < size; i++) {
-            if (konfigs[i] == null) {
-                continue;
-            }
-            for (int j = i + 1; j < size; j++) {
-                if (konfigs[j] == null) {
-                    continue;
-                }
-                if (konfigs[i].hasSameServer(konfigs[j], doc)) {
-                    konfigs[j] = null;
-                }
-            }
-        }
-        //hier braucht man nur bis zum 1. Element gehen, da das 0. nach dem
-        // oberen Verfahren nie null sein kann
-        for (int i = size - 1; i >= 0; i--) {
-            if (konfigs[i] == null) {
-                returnList.remove(i);
-            }
-        }
-        return returnList;
-    }
-
-    @Override
-    public List<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
-        return getAllDifferentKonfigs(doc);
-    }
-
-    @Override
-    public String getRedundanceString(final float redundance, final float saturation) {
-        StringBuilder sb = new StringBuilder(40);
-        sb.append(Tool3lgmConstants.getResString("redundancy_factor"));
-        sb.append(": ");
-        sb.append(new Float(redundance));
-        sb.append("   ");
-        sb.append(Tool3lgmConstants.getResString("saturation_factor"));
-        sb.append(": ");
-        sb.append(new Float(saturation));
-        return sb.toString();
-    }
+    //    private List<ElementContainer> getAllDifferentKonfigs(final GraphDocument doc) {
+    //        List<ElementContainer> returnList = getAllKonfigs(doc, null);
+    //        int size = returnList.size();
+    //        ABKonfiguration[] konfigs = new ABKonfiguration[size];
+    //        for (int i = 0; i < size; i++) {
+    //            konfigs[i] = (ABKonfiguration) returnList.get(i).getElement();
+    //        }
+    //        for (int i = 0; i < size; i++) {
+    //            if (konfigs[i] == null) {
+    //                continue;
+    //            }
+    //            for (int j = i + 1; j < size; j++) {
+    //                if (konfigs[j] == null) {
+    //                    continue;
+    //                }
+    //                if (konfigs[i].hasSameServer(konfigs[j], doc)) {
+    //                    konfigs[j] = null;
+    //                }
+    //            }
+    //        }
+    //        //hier braucht man nur bis zum 1. Element gehen, da das 0. nach dem
+    //        // oberen Verfahren nie null sein kann
+    //        for (int i = size - 1; i >= 0; i--) {
+    //            if (konfigs[i] == null) {
+    //                returnList.remove(i);
+    //            }
+    //        }
+    //        return returnList;
+    //    }
+    //
+    //    @Override
+    //    public List<ElementContainer> getRedundanceTypes(final GraphDocument doc) {
+    //        return getAllDifferentKonfigs(doc);
+    //    }
+    //
+    //    @Override
+    //    public String getRedundanceString(final float redundance, final float saturation) {
+    //        StringBuilder sb = new StringBuilder(40);
+    //        sb.append(Tool3lgmConstants.getResString("redundancy_factor"));
+    //        sb.append(": ");
+    //        sb.append(new Float(redundance));
+    //        sb.append("   ");
+    //        sb.append(Tool3lgmConstants.getResString("saturation_factor"));
+    //        sb.append(": ");
+    //        sb.append(new Float(saturation));
+    //        return sb.toString();
+    //    }
 
 }

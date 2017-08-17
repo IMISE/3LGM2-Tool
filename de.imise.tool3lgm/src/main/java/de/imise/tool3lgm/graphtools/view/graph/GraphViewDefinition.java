@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
@@ -12,6 +14,7 @@ import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 
 /**
  * @author AXS
@@ -21,6 +24,8 @@ public abstract class GraphViewDefinition {
     protected abstract Class<? extends ModelElement>[] getPaintableNodes();
 
     private final Set<Class<? extends ModelElement>> allPaintableNodes;
+
+    private Map<Class<? extends ModelElement>, MetaPath> classToConfigurationPaths = null;
 
     public GraphViewDefinition() {
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
@@ -84,6 +89,23 @@ public abstract class GraphViewDefinition {
             }
         }
         return false;
+    }
+
+    protected abstract MetaPath[] getConfigurationPaths();
+
+    public MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
+        //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Kante.getStartClass(...)
+        if (classToConfigurationPaths == null) {
+            classToConfigurationPaths = new HashMap<>();
+            //Map mit den Klassen zu ihren Konfigurationspfaden speichern
+            for (MetaPath metaPath : getConfigurationPaths()) {
+                Class<? extends ModelElement>[] instanciableAssignableClasses = ModelConstants.getInstanciableAssignableClasses(metaPath.getStartClass());
+                for (Class<? extends ModelElement> instanciableElementClass : instanciableAssignableClasses) {
+                    classToConfigurationPaths.put(instanciableElementClass, metaPath);
+                }
+            }
+        }
+        return classToConfigurationPaths.get(elementClass);
     }
 
 }

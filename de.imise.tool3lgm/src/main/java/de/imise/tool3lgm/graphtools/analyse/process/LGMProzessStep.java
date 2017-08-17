@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
@@ -90,10 +89,10 @@ public class LGMProzessStep {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
     /**
-	 * 
-	 */
-    public LGMProzessStep(final ModelElement parentProzess, final ModelElement startAufgabe, final ModelElement endAufgabe, final ModelElement objektTyp, final ABKonfiguration startAufgabeKonf, final ABKonfiguration endAufgabeKonf,
-            final int startPosition, final int endPosition) {
+     * 
+     */
+    public LGMProzessStep(final ModelElement parentProzess, final ModelElement startAufgabe, final ModelElement endAufgabe, final ModelElement objektTyp, final ABKonfiguration startAufgabeKonf, final ABKonfiguration endAufgabeKonf, final int startPosition,
+            final int endPosition) {
         super();
         this.parentProzess = (Prozess) parentProzess;
         this.startAufgabe = (Aufgabe) startAufgabe;
@@ -106,15 +105,15 @@ public class LGMProzessStep {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public LGMProzessStep(final ModelElement parentProzess, final ModelElement startAufgabe, final ModelElement endAufgabe, final ModelElement objektTyp, final int startPosition, final int endPosition) {
         this(parentProzess, startAufgabe, endAufgabe, objektTyp, null, null, startPosition, endPosition);
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public LGMProzessStep clone(final Object o) {
         LGMProzessStep s = (LGMProzessStep) o;
         LGMProzessStep returnStep = new LGMProzessStep(s.getParentProzess(), s.startAufgabe, s.endAufgabe, s.objektTyp, s.startAufgabeKonf, s.endAufgabeKonf, s.startPosition, s.endPosition);
@@ -126,13 +125,13 @@ public class LGMProzessStep {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public static LGMProzessStep cloneAndSetKonfigs(final Object step, final Object startKonfig, final Object endKonfig) {
         LGMProzessStep s = (LGMProzessStep) step;
         LGMProzessStep returnStep = new LGMProzessStep(s.getParentProzess(), s.startAufgabe, s.endAufgabe, s.objektTyp, s.startAufgabeKonf, s.endAufgabeKonf, s.startPosition, s.endPosition);
-        returnStep.setStartAufgabeKonf((ABKonfiguration) startKonfig);
-        returnStep.setEndAufgabeKonf((Konfiguration) endKonfig);
+        returnStep.setStartAufgabeKonf((ModelElement) startKonfig);
+        returnStep.setEndAufgabeKonf((ModelElement) endKonfig);
         return returnStep;
     }
 
@@ -159,7 +158,7 @@ public class LGMProzessStep {
 
     /**
      * Prüft, ob für den Step eine gültige Start-Aufgabe besitzt
-     * 
+     *
      * @return <code>true</code>, wenn der Step eine gültige Start-Aufgabe besitzt sonst
      *         <code>false</code>
      */
@@ -169,7 +168,7 @@ public class LGMProzessStep {
 
     /**
      * Prüft, ob für den Step eine gültige End-Aufgabe besitzt
-     * 
+     *
      * @return <code>true</code>, wenn der Step eine gültige End-Aufgabe besitzt sonst
      *         <code>false</code>
      */
@@ -179,7 +178,7 @@ public class LGMProzessStep {
 
     /**
      * Prüft, ob alle Variablen mit gültigen Werten belegt sind, also nicht <code>null</code> sind.
-     * 
+     *
      * @return <code>true</code>, wenn alle Variablen nicht <code>null</code> sind.
      */
     public boolean isCorrect() {
@@ -291,7 +290,7 @@ public class LGMProzessStep {
      */
     public List<Kante> getKommProzessKanten() {
         if (kommProzessKanten == null) {
-            return new ArrayList<Kante>(1);
+            return new ArrayList<>(1);
         }
         return kommProzessKanten;
     }
@@ -301,7 +300,7 @@ public class LGMProzessStep {
      */
     public List<ModelElement> getKommProzessSchnittstellen() {
         if (kommProzessSchnittstellen == null) {
-            return new ArrayList<ModelElement>(1);
+            return new ArrayList<>(1);
         }
         return kommProzessSchnittstellen;
     }
@@ -311,7 +310,7 @@ public class LGMProzessStep {
      */
     public List<ModelElement> getStartAufgabeKonfBausteine() {
         if (startAufgabeKonf == null) {
-            return new ArrayList<ModelElement>(1);
+            return new ArrayList<>(1);
         }
         List<ModelElement> al = startAufgabeKonf.getConnectedElements(Anwendungsbaustein.class);
         return al;
@@ -322,7 +321,7 @@ public class LGMProzessStep {
      */
     public List<ModelElement> getEndAufgabeKonfBausteine() {
         if (endAufgabeKonf == null) {
-            return new ArrayList<ModelElement>(1);
+            return new ArrayList<>(1);
         }
         List<ModelElement> al = endAufgabeKonf.getConnectedElements(Anwendungsbaustein.class);
         return al;

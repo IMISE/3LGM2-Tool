@@ -30,7 +30,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -339,7 +338,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     me = step.getStartAufgabeKonf(); // Startkonfiguration
                     if (me != null) {
                         // Startkonfigurationsbausteine
-                        table.setValueAt(((Konfiguration) me).getConnectedContainer(Anwendungsbaustein.class, doc), i, START_BAUSTEINE);
+                        table.setValueAt(me.getConnectedContainer(Anwendungsbaustein.class, doc), i, START_BAUSTEINE);
                         // Startorganisationseinheit
                         table.setValueAt(step.getStartAufOrgKombination().getContainer(doc), i, START_ORGEINHEIT);
                     } else {
@@ -350,7 +349,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     me = step.getEndAufgabeKonf(); // Endkonfiguration
                     if (me != null) {
                         // Endkonfigurationsbausteine
-                        table.setValueAt(((Konfiguration) me).getConnectedContainer(Anwendungsbaustein.class, doc), i, END_BAUSTEINE);
+                        table.setValueAt(me.getConnectedContainer(Anwendungsbaustein.class, doc), i, END_BAUSTEINE);
                         // Endorganisationseinheit
                         table.setValueAt(step.getEndAufOrgKombination().getContainer(doc), i, END_ORGEINHEIT);
                     } else {
@@ -461,10 +460,10 @@ public class KommProzessPanel extends ElementDialogPanel {
 
                 specialInfoOwner.add(selectedStep);
 
-                List<ElementContainer> allSpecialInfoTargetContainer = new ArrayList<ElementContainer>();
+                List<ElementContainer> allSpecialInfoTargetContainer = new ArrayList<>();
                 if (showKonfs) {
                     List<ModelElement> specialInfoTargets = selectedStep.getRealCommunicationStartKonf();
-                    List<ElementContainer> specialInfoTargetContainer = new ArrayList<ElementContainer>(specialInfoTargets != null ? specialInfoTargets.size() : 0);
+                    List<ElementContainer> specialInfoTargetContainer = new ArrayList<>(specialInfoTargets != null ? specialInfoTargets.size() : 0);
                     if (specialInfoTargets != null) {
                         specialInfoTargetContainer.addAll(doc.getElementContainer(specialInfoTargets));
                         allSpecialInfoTargetContainer.addAll(specialInfoTargetContainer);

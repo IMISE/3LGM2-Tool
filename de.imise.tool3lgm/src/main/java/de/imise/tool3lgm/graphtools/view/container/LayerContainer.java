@@ -469,24 +469,13 @@ public class LayerContainer extends ElementContainer {
         }
 
         if (!UserProperties.isPaintEdgesOnlyForSelectedElements()) {
-
             for (BendpointContainer ec : bendpointContainer) {
                 ec.paint(g);
             }
-            if (ModelConstants.isInterLayer(layerNumber)) {
-                KonfigurationContainer.colorCounter = 0;
-                for (NodeContainer nc : doc.getCollection().getMainGraphDocument().getLayer(layerNumber).nodeContainer) {
-                    KonfigurationContainer kc = (KonfigurationContainer) nc;
-                    kc.setShift(x_shift, y_shift);
-                    kc.paint(g);
-                }
-            }
-
             paintingSurrogates = true;
             for (EdgeContainer ec : tmpEdgeContainer) {
                 ec.paint(g);
             }
-
             paintingSurrogates = false;
         }
 
@@ -799,7 +788,7 @@ public class LayerContainer extends ElementContainer {
      *            Container, dessen Interebenenbeziehungen (de-)aktiviert werden sollen
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections, final ElementContainer ec) {
-        if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
+        if (ec instanceof InterLayerConnectedNodeContainer) {
             ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(showInterLayerConnections);
         }
     }

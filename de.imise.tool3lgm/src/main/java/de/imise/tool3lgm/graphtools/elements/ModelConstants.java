@@ -15,7 +15,6 @@ import com.google.common.collect.Maps;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -604,39 +603,13 @@ public final class ModelConstants {
     }
 
     /**
-     * Array aller Pfade, die in der grafischen Ansicht als Interebenenbeziehungen dargestellt werden.
-     */
-    public static final MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = metaModel.getInterLayerConnectedElementPathes();
-
-    /**
      * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
      *
      * @param elementClass
      * @return
      */
     public final static boolean isInterLayerStartClass(final Class<? extends ModelElement> elementClass) {
-        for (MetaPath mp : INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
-            if (mp.getStartClass().isAssignableFrom(elementClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Gibt alle Startklassen zurück, die über eine Interebenenbeziehung der spezifizierten Endklasse verfügen.
-     *
-     * @param endClass Endklasse der Interebenenbeziehung
-     * @return
-     */
-    public final static Set<Class<? extends ModelElement>> getInterLayerStartClasses(final Class<? extends ModelElement> endClass) {
-        Set<Class<? extends ModelElement>> startClasses = new HashSet<>();
-        for (MetaPath path : INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
-            if (path.getEndClass().isAssignableFrom(endClass)) {
-                startClasses.add(path.getStartClass());
-            }
-        }
-        return startClasses;
+        return getGraphViewDefinition().getInterLayerMetaPath(elementClass) != null;
     }
 
     /**

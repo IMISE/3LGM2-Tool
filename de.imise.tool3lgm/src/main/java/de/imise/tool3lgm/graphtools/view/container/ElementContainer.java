@@ -46,7 +46,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * COMMENTME
      */
-    protected static Stroke meduimStroke = new BasicStroke(4);
+    public static Stroke meduimStroke = new BasicStroke(4);
     /**
      * COMMENTME
      */

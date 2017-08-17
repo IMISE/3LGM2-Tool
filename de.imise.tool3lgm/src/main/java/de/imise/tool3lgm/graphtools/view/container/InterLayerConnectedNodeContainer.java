@@ -1,13 +1,11 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import java.util.Set;
+import java.awt.Color;
+import java.awt.Graphics;
 
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
@@ -20,10 +18,15 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
  *
  * @author fstephan
  */
-public class InterLayerConnectedNodeContainer extends NodeContainer {
+public final class InterLayerConnectedNodeContainer extends NodeContainer {
 
     /** Gibt wieder, ob die Interebenenbeziehungen angezeigt werden sollen, oder nicht. */
     private boolean showInterLayerConnections = false;
+
+    /** Gibt wieder, ob die Interebenenbeziehungen gehighlighted werden sollen, oder nicht. */
+    private boolean highlightInterLayerConnections = false;
+
+    private Color interLayerConnectionColor = null;
 
     /**
      * @param neu
@@ -89,26 +92,30 @@ public class InterLayerConnectedNodeContainer extends NodeContainer {
      */
     public void setShowInterLayerConnections(final boolean show) {
         showInterLayerConnections = show;
-        for (MetaPath metaPath : ModelConstants.INTER_LAYER_CONNECTED_ELEMENT_PATHES) {
-            if (metaPath.getStartClass().isAssignableFrom(me.getClass())) {
-                Set<ModelElement> dirCon = PathFinder.getDirectConnectedElements(me, metaPath);
-                for (ModelElement connected : dirCon) {
-                    ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
-                    if (ec != null) {
-                        ec.setVisible(show);
-                    }
-                }
-                if (!isExpanded()) {
-                    for (ModelElement part : me.getPartElements()) {
-                        for (ModelElement connected : PathFinder.getDirectConnectedElements(part, metaPath)) {
-                            ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
-                            if (ec != null) {
-                                ec.setVisible(show);
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
+
+    public boolean isHighlightInterLayerConnections() {
+        return highlightInterLayerConnections;
+    }
+
+    public void setHighlightInterLayerConnections(final boolean highlightInterLayerConnections) {
+        this.highlightInterLayerConnections = highlightInterLayerConnections;
+    }
+
+    @Override
+    protected void paintComponent(final Graphics g) {
+        if (showInterLayerConnections) {
+            ConfigurationRenderer.render(g, this, doc);
+        }
+        super.paintComponent(g);
+    }
+
+    public Color getInterLayerConnectionColor() {
+        return interLayerConnectionColor;
+    }
+
+    public void setInterLayerConnectionColor(final Color interLayerConnectionColor) {
+        this.interLayerConnectionColor = interLayerConnectionColor;
+    }
+
 }

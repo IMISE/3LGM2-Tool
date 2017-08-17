@@ -20,7 +20,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
-import de.imise.tool3lgm.graphtools.elements.Konfiguration;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -29,7 +28,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
-import de.imise.tool3lgm.graphtools.view.container.KonfigurationContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
@@ -148,8 +146,6 @@ public class LgmXMLParser extends DefaultHandler {
                 }
                 if (me instanceof Kante) {
                     ec = new EdgeContainer((Kante) me, doc);
-                } else if (me instanceof Konfiguration) {
-                    ec = new KonfigurationContainer((Konfiguration) me, doc);
                 } else if (ModelConstants.isInterLayerStartClass(me.getClass())) {
                     ec = new InterLayerConnectedNodeContainer((Knoten) me, doc);
                 } else {
@@ -182,8 +178,6 @@ public class LgmXMLParser extends DefaultHandler {
                 if (me.isUnique() && doc instanceof Szenario) {
                     me = null;
                     ec = null;
-                } else if (me instanceof Konfiguration) {
-                    ec = new KonfigurationContainer((Konfiguration) me, doc);
                 } else if (ModelConstants.isInterLayerStartClass(me.getClass())) {
                     ec = new InterLayerConnectedNodeContainer((Knoten) me, doc);
                 } else if (me instanceof Knoten) {

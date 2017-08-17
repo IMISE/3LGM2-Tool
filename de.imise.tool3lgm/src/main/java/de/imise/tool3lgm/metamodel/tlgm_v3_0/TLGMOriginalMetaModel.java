@@ -11,7 +11,6 @@ import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.MetaModel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
@@ -494,29 +493,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
-
-    private MetaPath[] INTER_LAYER_CONNECTED_ELEMENT_PATHES = null;
-
-    @Override
-    public MetaPath[] getInterLayerConnectedElementPathes() {
-        //die MetaPfade müssen hier über diesen umständlichen Weg initialisiert werden, da wenn man sie
-        //außerhalb dieser Funktion gleich der Variable zuweist, die gesamt Initialisierung fehl schlägt
-        if (INTER_LAYER_CONNECTED_ELEMENT_PATHES == null) {
-            INTER_LAYER_CONNECTED_ELEMENT_PATHES = new MetaPath[] {
-                    new MetaPath(Aufgabe.class, ABKonfiguration.class, new Class[][] {
-                            {
-                                    AufAufOrgVerbindung.class,
-                                    AwbkAufOrgVerbindung.class
-                            }
-                    }), new MetaPath(Anwendungsbaustein.class, DBKonfiguration.class, new Class[][] {
-                            {
-                                    PdvbkAwbVerbindung.class
-                            }
-                    }),
-            };
-        }
-        return INTER_LAYER_CONNECTED_ELEMENT_PATHES;
-    }
 
     private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of(AufOrgKombination.class, EtntEtdtKombination.class);
 
