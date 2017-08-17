@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
@@ -54,32 +55,32 @@ public class LayerContainer extends ElementContainer {
     /**
      * Liste, aus der die Grafik aufgebaut wird (Reihenfolge der Elemente bestimmt, welches zuerst gemalt wird)
      */
-    private ArrayList<NodeContainer> nodeContainer;
+    private List<NodeContainer> nodeContainer;
 
     /**
      * Liste, aus der der Baum aufgebaut wird (Reihenfolge der Elemente wird alphabetisch gehalten)
      */
-    private ArrayList<NodeContainer> alphabeticalNodeContainer;
+    private List<NodeContainer> alphabeticalNodeContainer;
 
     /**
      *
      */
-    private ArrayList<EdgeContainer> edgeContainer;
+    private List<EdgeContainer> edgeContainer;
 
     /**
      *
      */
-    private ArrayList<BendpointContainer> bendpointContainer;
+    private List<BendpointContainer> bendpointContainer;
 
     /**
      * sortElements enthaelt alle Knoten(Container), fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
      */
-    private ArrayList<NodeContainer> numberedEdgesNodeContainer;
+    private List<NodeContainer> numberedEdgesNodeContainer;
 
     /**
      *
      */
-    private ArrayList<EdgeContainer> tmpEdgeContainer;
+    private List<EdgeContainer> tmpEdgeContainer;
 
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
     //	private String additionalTextAbove, additionalTextDown;
@@ -655,28 +656,28 @@ public class LayerContainer extends ElementContainer {
     /**
      * @return
      */
-    public ArrayList<NodeContainer> getKnotenAlphabetical() {
+    public List<NodeContainer> getKnotenAlphabetical() {
         return alphabeticalNodeContainer;
     }
 
     /**
      * @return
      */
-    public ArrayList<NodeContainer> getKnoten() {
+    public List<NodeContainer> getKnoten() {
         return nodeContainer;
     }
 
     /**
      * @return
      */
-    public ArrayList<EdgeContainer> getKanten() {
+    public List<EdgeContainer> getKanten() {
         return edgeContainer;
     }
 
     /**
      * @return
      */
-    public ArrayList<BendpointContainer> getKnickpunkte() {
+    public List<BendpointContainer> getKnickpunkte() {
         return bendpointContainer;
     }
 
@@ -876,8 +877,8 @@ public class LayerContainer extends ElementContainer {
      * Funktioniert wie eine Map, bei der die Werte aber in einer Listenreihenfolge erhalten bleiben.
      */
     private class ElementTypeStringPair {
-        ArrayList<Class<?>> elementClassList = new ArrayList<>();
-        ArrayList<String> stringList = new ArrayList<>();
+        List<Class<?>> elementClassList = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
 
         public void set(final Class<?> clazz, final String s) {
             for (int i = 0; i < elementClassList.size(); i++) {
