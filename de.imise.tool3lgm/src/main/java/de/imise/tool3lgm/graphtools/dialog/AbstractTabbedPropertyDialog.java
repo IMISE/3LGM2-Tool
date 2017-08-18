@@ -126,6 +126,16 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
         return selectedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) selectedComponent : null;
     }
 
+    public List<String> getTabNames() {
+        ImmutableList.Builder<String> tabNames = ImmutableList.builder();
+        for (int i = 0; i < tab.getTabCount(); i++) {
+            String title = tab.getTitleAt(i);
+            tabNames.add(title);
+
+        }
+        return tabNames.build();
+    }
+
     protected int getTabCount() {
         return tab.getTabCount();
     }
