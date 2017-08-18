@@ -65,6 +65,12 @@ public final class ModelConstants {
             DOMAIN_LAYER
     };
 
+    public static final int MIN_LAYER_INDEX = PHYSICAL_LAYER;
+
+    public static final int MAX_LAYER_INDEX = DOMAIN_LAYER;
+
+    public static final int LAYER_COUNT = LAYERS.length;
+
     public static final boolean isInterLayer(final int layerIndex) {
         return layerIndex % 2 == 1;
     }
