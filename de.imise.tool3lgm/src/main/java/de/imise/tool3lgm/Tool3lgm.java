@@ -1912,12 +1912,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (true) {
             return true;
         }
-        //        try {
-        //            if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de", "medizin.uni-leipzig.de", "AAA2011")) {
-        //                return true;
-        //            }
-        //        } catch (Exception e) {
-        //        }
+        try {
+            //            if (TwatdLicenseLibrary.checkHostName("imise.uni-leipzig.de", "medizin.uni-leipzig.de", "AAA2011")) {
+            //                return true;
+            //            }
+        } catch (Exception e) {
+        }
         FileNameExtensionFilterAndFileFilter licenseFileFilter = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LIC), false);
         File[] licenseFilesArray = Tool3lgmConstants.APPLICATION_DIR.listFiles(licenseFileFilter);
         List<File> licenseFiles = new ArrayList<>();
