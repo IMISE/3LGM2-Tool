@@ -13,6 +13,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.util.StringUtils;
 
 public class Szenario extends LGMGraphDocument {
 
@@ -35,7 +36,7 @@ public class Szenario extends LGMGraphDocument {
         setTitle(title == null ? "" : title);
         setDescription(description);
         //wenn der HashString gültig und noch nicht vergeben ist -> setze ihn
-        if (hashString != null && !hashString.trim().equals("") && !hashString.trim().equals("null") && gdcoll.getGraphDocumentCoded(hashString) == null) {
+        if (StringUtils.isValid(hashString, "null") && gdcoll.getGraphDocumentCoded(hashString) == null) {
             this.hashString = hashString;
         } else {
             this.hashString = "SZN" + "_" + new Date().getTime() + "_" + szenCounter++;
