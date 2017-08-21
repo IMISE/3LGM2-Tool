@@ -297,4 +297,33 @@ public class StringUtils {
         return sb.toString();
     }
 
+    /**
+     * Liefert <code>true</code>, wenn der übergebene String <code>null</code> ist, leer ist oder nur aus WhiteSpaces besteht.
+     *
+     * @param s
+     * @return
+     */
+    public static final boolean isNullOrEmptyOrBlank(final String s) {
+        return s == null || !s.trim().isEmpty();
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der übergebene String <code>null</code> ist, leer ist, nur aus WhiteSpaces besteht oder
+     * gleich einem der übergebenen invalidValues ist.
+     *
+     * @param s
+     * @param invalidValues
+     * @return
+     */
+    public static final boolean isValid(final String s, final String... invalidValues) {
+        if (isNullOrEmptyOrBlank(s)) {
+            return false;
+        }
+        for (String invalid : invalidValues) {
+            if (s.equals(invalid)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
