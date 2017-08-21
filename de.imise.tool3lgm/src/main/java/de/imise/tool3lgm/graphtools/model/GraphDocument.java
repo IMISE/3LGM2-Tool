@@ -212,8 +212,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             mapping = new Mapping();
         }
 
-        layer = new LayerContainer[5];
-        for (int c = 0; c < 5; c++) {
+        layer = new LayerContainer[LAYER_COUNT];
+        for (int c = 0; c < layer.length; c++) {
             layer[c] = new LayerContainer(new LayerKnoten(), this, c);
             layer[c].setColor(Color.white);
         }
@@ -1606,8 +1606,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void adaptMapping(final Mapping map) {
         mapping.adapt(map);
-        for (int i = 0; i < 5; i++) {
-            List<NodeContainer> elementContainers = layer[i].getKnoten();
+        for (LayerContainer lc : layer) {
+            List<NodeContainer> elementContainers = lc.getKnoten();
             for (NodeContainer kc : elementContainers) {
                 kc.refreshFont();
                 kc.refreshText();
@@ -3411,15 +3411,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return getCollection().getMainGraphDocument().findKnotenCoded(hashString);
         }
 
-        if (hashString == null) {
-            return null;
+        if (hashString != null) {
+            for (LayerContainer lc : layer) {
+                for (ElementContainer ec : lc.getKnoten()) {
+                    if (hashString.equals(ec.getHashString())) {
+                        return ec.getElement();
         }
-        Knoten me;
-        for (int d = 0; d < 5; d++) {
-            for (int c = 0; c < layer[d].getKnotenCount(); c++) {
-                me = layer[d].getNodeContainer(c).getKnoten();
-                if (hashString.equals(me.getHashString())) {
-                    return me;
                 }
             }
         }
@@ -3436,15 +3433,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return getCollection().getMainGraphDocument().findKanteCoded(hashString);
         }
 
-        if (hashString == null) {
-            return null;
+        if (hashString != null) {
+            for (LayerContainer lc : layer) {
+                for (EdgeContainer ec : lc.getKanten()) {
+                    if (hashString.equals(ec.getHashString())) {
+                        return ec.getEdge();
         }
-        Kante me;
-        for (int d = 0; d < 5; d++) {
-            for (int c = 0; c < layer[d].getKantenCount(); c++) {
-                me = layer[d].getEdgeContainer(c).getEdge();
-                if (hashString.equals(me.getHashString())) {
-                    return me;
                 }
             }
         }
@@ -3464,12 +3458,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (hashString == null) {
             return null;
         }
-        Knickpunkt me;
-        for (int d = 0; d < 5; d++) {
-            for (int c = 0; c < layer[d].getKnickpunkteCount(); c++) {
-                me = layer[d].getBendpointContainer(c).getKnickpunktKnoten();
-                if (hashString.equals(me.getHashString())) {
-                    return me;
+        if (hashString != null) {
+            for (LayerContainer lc : layer) {
+                for (BendpointContainer bc : lc.getKnickpunkte()) {
+                    if (hashString.equals(bc.getHashString())) {
+                        return bc.getKnickpunktKnoten();
+                    }
                 }
             }
         }
@@ -3486,11 +3480,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void raiseSlaves(final ElementContainer kn) {
         int ebene = kn.layerFor();
-        if (!(ebene == 0 || ebene == 4 || ebene == 2)) {
-            return;
-        }
+        if (!ModelConstants.isInterLayer(ebene)) {
         layer[ebene].raiseSlaves(kn, 0);
         distributeEvent(GROUP_ORDER_CHANGED, null, layer[ebene], 0);
+    }
     }
 
     ////////////////////////////////////////////
@@ -4377,14 +4370,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param removeAllSpecialInfos
      */
     public final void clearHightLighted(final boolean removeAllSpecialInfos) {
-        for (int c = 0; c < 5; c++) {
-            for (NodeContainer ec : layer[c].getKnoten()) {
                 if (removeAllSpecialInfos) {
+            for (LayerContainer lc : layer) {
+                for (ElementContainer ec : lc.getKnoten()) {
                     ec.removeAllSpecialInfosFromThisContainer();
                 }
-            }
-            for (EdgeContainer ec : layer[c].getKanten()) {
-                if (removeAllSpecialInfos) {
+                for (ElementContainer ec : lc.getKanten()) {
                     ec.removeAllSpecialInfosFromThisContainer();
                 }
             }
@@ -4728,8 +4719,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GraphDocument gdoc = gdcoll.getMainGraphDocument();
         final int PID = TransactionManager.STANDARD_PID;
         gdoc.start_transaction(PID, false);
-        for (int i = 0; i < layer.length; i++) {
-            LayerContainer lc = gdoc.getLayer(i);
+        for (LayerContainer lc : gdoc.layer) {
             for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
                 EdgeContainer kc = lc.getEdgeContainer(j);
                 Kante ka = kc.getEdge();
@@ -4743,8 +4733,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         for (Szenario szen : gdcoll.getSzenarios()) {
             szen.start_transaction(PID, false);
-            for (int i = 0; i < layer.length; i++) {
-                LayerContainer lc = szen.getLayer(i);
+            for (LayerContainer lc : szen.layer) {
                 for (int j = lc.getKnotenCount() - 1; j >= 0; j--) {
                     NodeContainer kc = lc.getNodeContainer(j);
                     if (kc.getKnoten() == null) {
@@ -4941,18 +4930,18 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GraphDocument document = ModelConstants.isUnique(clazz) ? getCollection().getMainGraphDocument() : this;
         List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen
-        int ebene = ModelConstants.layerFor(clazz);
+        int layer = ModelConstants.layerFor(clazz);
         //Indizes der zu durchsuchenden Ebenen
-        int i1 = 0;
-        int i2 = 5;
+        int minLayer = MIN_LAYER_INDEX;
+        int maxLayer = MAX_LAYER_INDEX;
         //wenn die Elementklasse auf genau einer Ebene zu Hause ist
-        if (ebene > -1) {
+        if (layer != NO_LAYER) {
             //Indizes der Ebenen so anpassen, dass nur die Ebene der Elementklasse durchsucht wird
-            i1 = ebene;
-            i2 = ebene + 1;
+            minLayer = layer;
+            maxLayer = layer;
         }
         //alle zu durchsuchenden Ebenen durchlaufen
-        for (int i = i1; i < i2; i++) {
+        for (int i = minLayer; i <= maxLayer; i++) {
             //Ebene holen
             LayerContainer lc = document.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
