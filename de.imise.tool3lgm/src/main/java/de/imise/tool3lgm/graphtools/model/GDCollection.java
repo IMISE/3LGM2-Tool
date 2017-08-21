@@ -1,5 +1,92 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgm.getLastActionPosition;
+import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
+import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Doppelkante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.DOMAIN_LAYER;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ELEMENTS_WITH_NAME_EXTENSIONS;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYERS;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.UNIQUE_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getClassForName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getCopyDependencies;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getEdgeTypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getInitialSubtypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getSubordinatedJoinbleTypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.hasObjektDialog;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isAlwaysDoubleConnectedEdge;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isDoubleMeaningEdge;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isGenerateName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isInterLayerStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.layerFor;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FONT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.DELETE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS_NAME;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_HALIGN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_VALIGN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_ELEMENT_FROM_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_ICON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.Z_MOVE;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.ACTIVE_LAYER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.COLORS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.ELEMENT_ADDED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.ELEMENT_DELETED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.ELEMENT_GRAPHICS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.GROUP_ORDER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.LAYOUT_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.getDecodedParseSaveString;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.getParseSaveString;
+import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelItems;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_ELEMENT_LAYOUT;
+import static de.imise.tool3lgm.log.Log.ERROR;
+import static de.imise.tool3lgm.xml.LgmXMLParser.isXMLFile;
+import static de.imise.tool3lgm.xml.ToolXMLParser.isParseAbleFileVersion;
+import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
+import static java.lang.Integer.parseInt;
+import static javax.swing.BoxLayout.Y_AXIS;
+import static javax.swing.JOptionPane.DEFAULT_OPTION;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+import static javax.swing.JOptionPane.PLAIN_MESSAGE;
+
 import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,12 +109,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
@@ -47,13 +131,10 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
-import de.imise.tool3lgm.xml.LgmXMLParser;
-import de.imise.tool3lgm.xml.ToolXMLParser;
+import de.imise.util.StringUtils;
 import de.imise.util.collections.AlphabeticalSet;
-import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
@@ -72,6 +153,7 @@ public final class GDCollection extends UserFieldTarget {
      * Transaktion war.
      */
     private final Map<Integer, Integer> transStackTable = new HashMap<>();
+
     //	/*{
     //
     //		@Override
@@ -95,7 +177,6 @@ public final class GDCollection extends UserFieldTarget {
     //		}
     //
     //	}*/;
-
     /** Definition der benutzerdefinierten Eigenschaften, Kennzahlen, Kanennzahlformel und Formaten */
     private UserFieldDefinitions userFieldDefinitions;
 
@@ -104,6 +185,7 @@ public final class GDCollection extends UserFieldTarget {
 
     /** Liste aller <code>GraphDocumentListener</code> */
     private final List<GraphDocumentListener> listener = new ArrayList<>();
+
     /**
      * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
      * das davor selektierte direkt davor und so weiter. Jedes <code>GraphDocument</code> der Collection - also
@@ -160,7 +242,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * COMMENTME
      */
-    private int active_layer = 4;
+    private int active_layer = DOMAIN_LAYER;
 
     /**
      *
@@ -244,7 +326,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     public Szenario createSzenario(final String title, final boolean askName, final String description, final String szenHash, final boolean logWithStandardPID) {
-        return createSzenario(title, askName, description, szenHash, logWithStandardPID, TransactionManager.STANDARD_PID);
+        return createSzenario(title, askName, description, szenHash, logWithStandardPID, STANDARD_PID);
     }
 
     /**
@@ -256,7 +338,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public Szenario createSzenario(String title, final boolean askName, final String description, final String szenHash, final boolean log, final int pid) {
         if (title == null || title.trim().equals("")) {
-            title = CollectionUtils.getNextIndicatedName(Tool3lgmConstants.getResString("submodel") + " #", activeGraphDocumentsList);
+            title = getNextIndicatedName(getResString("submodel") + " #", activeGraphDocumentsList);
         }
         if (askName) {
             title = askName(title);
@@ -264,14 +346,13 @@ public final class GDCollection extends UserFieldTarget {
         if (title == null) {
             return null;
         }
-
         Szenario szenario = new Szenario(this, title, description, szenHash);
         szenarios.add(szenario);
         activeGraphDocumentsList.add(szenario);
         if (log) {
             doc.start_transaction(pid);
-            doc.addUndoCommand(GDCommands.REMOVE_SZENARIO + " " + szenario.getHashString(), pid);
-            doc.addRedoCommand(GDCommands.CREATE_SZENARIO + " " + GraphDocument.getParseSaveString(szenario.getTitle()) + " " + GraphDocument.getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
+            doc.addUndoCommand(REMOVE_SZENARIO + " " + szenario.getHashString(), pid);
+            doc.addRedoCommand(CREATE_SZENARIO + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
         szenario.addGraphDocumentListener(userFieldDefinitions);
@@ -288,56 +369,45 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public void deleteSzenario(final String szenHash, final int pid) {
-        GraphDocument szenario = getGraphDocumentCoded(szenHash);
-        if (!(szenario instanceof Szenario)) {
+        GraphDocument szen = getGraphDocumentCoded(szenHash);
+        if (!(szen instanceof Szenario)) {
             return;
         }
-
         doc.start_transaction(pid);
-
         //bei allen Elementen, die mit dem zu löschenden Teilmodell verknüpft sind
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer layer = doc.getLayer(ModelConstants.LAYERS[i]);
-            for (int j = 0; j < layer.getKnotenCount(); j++) {
-                Knoten knoten = layer.getNodeContainer(j).getKnoten();
-                String associatedDoc = knoten.getAssociatedDoc();
+        for (LayerContainer layer : doc.getLayers()) {
+            for (NodeContainer nc : layer.getKnoten()) {
+                Knoten node = nc.getKnoten();
+                String associatedDoc = node.getAssociatedDoc();
                 if (associatedDoc != null && associatedDoc.equals(szenHash)) {
-                    knoten.setAssociatedDoc(null);
+                    node.setAssociatedDoc(null);
                 }
             }
         }
         //alle Elemente des Szenarios löschen -> das kann man dann auch wieder zurück nehmen
         List<ElementContainer> elementsToDelete = new ArrayList<>();
-
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer layer = szenario.getLayer(ModelConstants.LAYERS[i]);
+        for (LayerContainer layer : szen.getLayers()) {
             elementsToDelete.addAll(layer.getKnickpunkte());
             elementsToDelete.addAll(layer.getKanten());
             elementsToDelete.addAll(layer.getKnoten());
         }
         removeContainerFromSubmodel(elementsToDelete, pid);
-
-        szenarios.remove(szenario);
-        activeGraphDocumentsList.remove(szenario);
-
-        for (int layerID = 0; layerID < ModelConstants.LAYERS.length; layerID++) {
-            doc.addUndoCommand(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layerID + " " + szenario.layer[layerID].getColor().getRGB(), pid);
-            doc.addUndoCommand(GDCommands.CHANGE_LAYER_ALPHA + " " + szenHash + " " + layerID + " " + szenario.layer[layerID].getAlpha(), pid);
-            doc.addUndoCommand(GDCommands.CHANGE_LAYER_SIZE_FACTOR + " " + szenHash + " " + szenario.getPageSizeFactor(), pid);
-
+        szenarios.remove(szen);
+        activeGraphDocumentsList.remove(szen);
+        for (int layerIndex : LAYERS) {
+            doc.addUndoCommand(CHANGE_LAYER_COLOR + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getColor().getRGB(), pid);
+            doc.addUndoCommand(CHANGE_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
+            doc.addUndoCommand(CHANGE_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
         }
-        doc.addUndoCommand(GDCommands.CREATE_SZENARIO + " " + GraphDocument.getParseSaveString(szenario.getTitle()) + " " + GraphDocument.getParseSaveString(szenario.getDescription()) + " " + szenario.hashString, pid);
-        doc.addRedoCommand(GDCommands.REMOVE_SZENARIO + " " + szenario.hashString, pid);
-
+        doc.addUndoCommand(CREATE_SZENARIO + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
+        doc.addRedoCommand(REMOVE_SZENARIO + " " + szen.hashString, pid);
         //wenn das Beschreibungsfenster offen ist -> den Tab des zu löschenden Teimodells löschen
         if (descriptionFrame != null) {
             descriptionFrame.update();
             //			descriptionFrame.removeTab(szenario);
         }
-
-        Static.getTool().closeFrame(szenario);
-
+        Static.getTool().closeFrame(szen);
         doc.finish_transaction(pid);
         changed = true;
     }
@@ -358,7 +428,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         //			descriptionFrame.renameTab(szen);
         Static.getTool().getModelBrowserPanel().updateTitle(szen);
-        distribute(GraphDocument.DATA_CHANGED, null, null, doc, TransactionManager.STANDARD_PID);
+        distribute(DATA_CHANGED, null, null, doc, STANDARD_PID);
         return true;
     }
 
@@ -407,8 +477,8 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     private static final String askName(final String szenname) {
-        NameAndColorInputDialog d = new NameAndColorInputDialog(Static.getMainFrame());
-        d.showDialog(Tool3lgmConstants.getResString("szenario_name_anfrage"), szenname);
+        NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
+        d.showDialog(getResString("szenario_name_anfrage"), szenname);
         return d.getInputString();
     }
 
@@ -419,25 +489,25 @@ public final class GDCollection extends UserFieldTarget {
     private static final boolean askNameAndColor(final ElementContainer ec) {
         ModelElement me = ec.getElement();
         while (true) {
-            NameAndColorInputDialog d = new NameAndColorInputDialog(Static.getMainFrame());
+            NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
             //TODO:Prozess gegen etwas allg. ersetzen (z. B. coloredElement als Eigenschaft von Element-Klassen)
-
-            Point dialogPosition = Tool3lgm.getLastActionPosition();
+            Point dialogPosition = getLastActionPosition();
             if (dialogPosition == null) {
                 dialogPosition = new Point(100, 100);
             }
             boolean showColorChooser = me instanceof Prozess;
-            d.showDialog(Tool3lgmConstants.getResString("name_eing"), me.toString(), dialogPosition.x, dialogPosition.y, showColorChooser);
-            if (d.getInputString() == null) {
+            d.showDialog(getResString("name_eing"), me.toString(), dialogPosition.x, dialogPosition.y, showColorChooser);
+            String inputString = d.getInputString();
+            if (inputString == null) {
                 return false;
             }
             if (d.getInputColor() != null) {
                 ec.get3LGMLayout().bg_color = d.getInputColor();
             }
-            if (d.getInputString().equals("") || d.getInputString().equals(me.toString())) {
+            if (inputString.equals("") || inputString.equals(me.toString())) {
                 return true;
             }
-            me.setName(d.getInputString());
+            me.setName(inputString);
             return true;
         }
     }
@@ -445,7 +515,6 @@ public final class GDCollection extends UserFieldTarget {
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * Fügt unter der angegebenen PID die UndoKommandos ein, um das Layout des übergebenen Containers
      * wieder herzustellen.
@@ -460,33 +529,33 @@ public final class GDCollection extends UserFieldTarget {
             return;
         }
         String ecHash = ec.getHashString();
+        String ecDocHash = ecDoc.hashString;
         if (ec.getColor() != null) {
-            ecDoc.addUndoCommand(GDCommands.CHANGE_COLOR + " " + ecDoc.hashString + " " + ecHash + " " + ec.getColor().getRGB(), pid);
-            ecDoc.addUndoCommand(GDCommands.CHANGE_ALPHA + " " + ecDoc.hashString + " " + ecHash + " " + ec.getAlpha(), pid);
+            ecDoc.addUndoCommand(CHANGE_COLOR + " " + ecDocHash + " " + ecHash + " " + ec.getColor().getRGB(), pid);
+            ecDoc.addUndoCommand(CHANGE_ALPHA + " " + ecDocHash + " " + ecHash + " " + ec.getAlpha(), pid);
         }
         if (ec.getForm() != null) {
-            ecDoc.addUndoCommand(GDCommands.CHANGE_FORM + " " + ecDoc.hashString + " " + ecHash + " " + ec.getForm(), pid);
+            ecDoc.addUndoCommand(CHANGE_FORM + " " + ecDocHash + " " + ecHash + " " + ec.getForm(), pid);
         }
         if (!ec.hasStandardFont()) {
-            ecDoc.addUndoCommand(GDCommands.CHANGE_FONT + " " + ecDoc.hashString + " " + ecHash + " " + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(),
-                    pid);
+            ecDoc.addUndoCommand(CHANGE_FONT + " " + ecDocHash + " " + ecHash + " " + GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
         }
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
             String iconName = kc.getIconString();
             if (iconName != null) {
-                ecDoc.addUndoCommand(GDCommands.SET_ICON + " " + ecDoc.hashString + " " + ecHash + " " + iconName, pid);
+                ecDoc.addUndoCommand(SET_ICON + " " + ecDocHash + " " + ecHash + " " + iconName, pid);
             }
-            ecDoc.addUndoCommand(GDCommands.Z_MOVE + " " + ecDoc.hashString + " " + ecHash + " " + ecDoc.layer[ec.layerFor()].indexOf(ec), pid);
-            ecDoc.addUndoCommand(GDCommands.COORDINATE_KNOT + " " + ecDoc.hashString + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
+            ecDoc.addUndoCommand(Z_MOVE + " " + ecDocHash + " " + ecHash + " " + ecDoc.layer[ec.layerFor()].indexOf(ec), pid);
+            ecDoc.addUndoCommand(COORDINATE_KNOT + " " + ecDocHash + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
             if (!kc.isVisible()) {
-                ecDoc.addUndoCommand(GDCommands.SET_VISIBLE + " " + false + " " + ecDoc.hashString + " " + ecHash, pid);
+                ecDoc.addUndoCommand(SET_VISIBLE + " " + false + " " + ecDocHash + " " + ecHash, pid);
             }
-            if (ec.getValign() != GraphElementLayout.STANDARD_ELEMENT_LAYOUT.valign) {
-                ecDoc.addUndoCommand(GDCommands.LABEL_VALIGN + " " + ecDoc.hashString + " " + ecHash + " " + kc.get3LGMLayout().valign, pid);
+            if (ec.getValign() != STANDARD_ELEMENT_LAYOUT.valign) {
+                ecDoc.addUndoCommand(LABEL_VALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().valign, pid);
             }
-            if (ec.getHalign() != GraphElementLayout.STANDARD_ELEMENT_LAYOUT.halign) {
-                ecDoc.addUndoCommand(GDCommands.LABEL_HALIGN + " " + ecDoc.hashString + " " + ecHash + " " + kc.get3LGMLayout().halign, pid);
+            if (ec.getHalign() != STANDARD_ELEMENT_LAYOUT.halign) {
+                ecDoc.addUndoCommand(LABEL_HALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().halign, pid);
             }
         }
     }
@@ -548,7 +617,6 @@ public final class GDCollection extends UserFieldTarget {
             //dieser Container kann wirklich gelöscht werden -> merken
             reallyContainerToRemove.add(ec);
             for (Kante edge : me.getEdges()) {
-
                 //den Container der Kante mit allen Knickpunkten im aktuellen Teilmodell löschen
                 if (!simpleRemoveEdgeContainer((EdgeContainer) edge.getContainer(szen), pid)) {
                     continue;
@@ -567,7 +635,6 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         }
-
         //wenn es nichts zu löschen gab -> raus
         if (!transctionStarted) {
             return;
@@ -596,12 +663,11 @@ public final class GDCollection extends UserFieldTarget {
         for (int k = bendPointContainerList.size() - 1; k >= 0; k--) {
             removeBendpoint(bendPointContainerList.get(k).getKnickpunktKnoten(), pid);
         }
-
         Kante edge = edgeContainer.getEdge();
         GraphDocument doc = edgeContainer.getGraphDocument();
         //jetzt den KantenContainer einfach löschen
         edge.removeContainer(doc);
-        doc.layer[ModelConstants.layerFor(edge.getClass())].remove(edgeContainer);
+        doc.layer[layerFor(edge.getClass())].remove(edgeContainer);
         return true;
     }
 
@@ -623,31 +689,31 @@ public final class GDCollection extends UserFieldTarget {
             }
             addLayoutUndoCommands(ec, pid);
             ModelElement me = ec.getElement();
-            ecDoc.addRedoCommand(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO + " " + ecDoc.hashString + " " + me.getHashString(), pid);
+            ecDoc.addRedoCommand(REMOVE_ELEMENT_FROM_SZENARIO + " " + ecDoc.hashString + " " + me.getHashString(), pid);
             me.removeContainer(ecDoc);
-            ecDoc.layer[ModelConstants.layerFor(me.getClass())].remove(ec);
+            ecDoc.layer[layerFor(me.getClass())].remove(ec);
         }
         //das Undo das die Container wieder einfügt muss als letztes kommen, weil es als erstes beim
         //Rückgängig machen wieder ausgeführt wird
         for (ElementContainer ec : containerToRemove) {
             ModelElement me = ec.getElement();
             if (logSubElements || !ModelConstants.isSlaveType(me.getClass())) {
-                ecDoc.addUndoCommand(GDCommands.ADD_ELEMENT_TO_SZENARIO + " " + ecDoc.hashString + " " + me.getHashString(), pid);
+                ecDoc.addUndoCommand(ADD_ELEMENT_TO_SZENARIO + " " + ecDoc.hashString + " " + me.getHashString(), pid);
             }
         }
         if (!transActionStarted) {
             return;
         }
         ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
-        ecDoc.distributeEvent(GraphDocument.SELECTION_CHANGED, pid);
+        ecDoc.distributeEvent(DATA_CHANGED, pid);
+        ecDoc.distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
      * @param me
      */
     public void delete(final ModelElement me) {
-        deleteElement(me, TransactionManager.STANDARD_PID);
+        deleteElement(me, STANDARD_PID);
     }
 
     /**
@@ -689,7 +755,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void deleteElements(final String[] elementHashesToDelete, final GraphDocument gdoc, final int pid) {
-        List<ModelElement> elementsToDelete = Lists.newArrayListWithCapacity(elementHashesToDelete.length);
+        List<ModelElement> elementsToDelete = new ArrayList<>(elementHashesToDelete.length);
         for (String elementHash : elementHashesToDelete) {
             ModelElement me = doc.findElementCoded(elementHash);
             elementsToDelete.add(me);
@@ -717,29 +783,24 @@ public final class GDCollection extends UserFieldTarget {
         //das wird die Liste mit allen zu löschenden Elementen. Das sind alle Elemente aus <code>elementsToDelete</code>,
         //alle Kanten dieser Elemente und rekursiv alle von den zu löschenden Elementen abhängigen Elemente (min. Karfinalität=1)
         //sowie deren Kanten
-        List<ModelElement> allElementsToDelete = Lists.newArrayList(elementsToDelete);
+        List<ModelElement> allElementsToDelete = new ArrayList<>(elementsToDelete);
         //In dieses Set kommen alle Elemente, deren Löschen man nicht in den RedoKommandos loggen muss, weil beim Löschen eines
         //anderen Elementes eine minimale Kardinalität unterschritten ist, so dass sie automatisch mitgelöscht werden
-        Set<ModelElement> dependentDeletedElements = Sets.newHashSet();
+        Set<ModelElement> dependentDeletedElements = new HashSet<>();
         //das wird die Liste aller zu löschenden Verbindungen
-        List<Kante> edgesToDelete = Lists.newArrayList();
-
+        List<Kante> edgesToDelete = new ArrayList<>();
         gdoc.start_transaction(pid);
-
         for (int i = 0; i < allElementsToDelete.size(); i++) {
             ModelElement me = allElementsToDelete.get(i);
-
             if (me == null) {
                 allElementsToDelete.remove(i--);
                 continue;
             }
-
             //den evtl. geöffneten Dialog des Elementes scließen
-            ElementPropertyDialog dialog = ModelConstants.hasObjektDialog(me);
+            ElementPropertyDialog dialog = hasObjektDialog(me);
             if (dialog != null) {
                 dialog.performOK();
             }
-
             //Knickpunkte kann man gleich löschen
             if (me instanceof Knickpunkt) {
                 ElementContainer kpc = me.getContainer(gdoc);
@@ -762,7 +823,8 @@ public final class GDCollection extends UserFieldTarget {
                     //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
                     //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
                     //auf Gleichheit muss getestet werden, weil die Kante ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
-                    if (elem != null && elem.countConnections(edge.getClass()) <= Kante.getMinCardinality(elem.getClass(), edge.getClass())) {
+                    Class<? extends Kante> edgeClass = edge.getClass();
+                    if (elem != null && elem.countConnections(edgeClass) <= getMinCardinality(elem.getClass(), edgeClass)) {
                         if (!allElementsToDelete.contains(elem)) {
                             allElementsToDelete.add(elem);
                             dependentDeletedElements.add(elem);
@@ -770,7 +832,6 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-
             for (Kante edge : me.getEdges()) {
                 //auch Kanten können Kanten haben usw., daher müssen sie diese Schleife auch durchlaufen
                 if (!allElementsToDelete.contains(edge)) {
@@ -778,13 +839,12 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         }
-        if (allElementsToDelete.size() == 0) {
+        if (allElementsToDelete.isEmpty()) {
             gdoc.finish_transaction(pid);
-            gdoc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
-            gdoc.distributeEvent(GraphDocument.SELECTION_CHANGED, pid);
+            gdoc.distributeEvent(DATA_CHANGED, pid);
+            gdoc.distributeEvent(SELECTION_CHANGED, pid);
             return;
         }
-
         //alle Elemente einfach aus den Szenarien löschen
         for (Szenario szen : szenarios) {
             Set<ElementContainer> elementContainer = new HashSet<>();
@@ -798,7 +858,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             simpleRemoveContainerFromSzenario(elementContainer, true, pid);
         }
-        while (edgesToDelete.size() > 0) {
+        while (!edgesToDelete.isEmpty()) {
             for (int i = 0; i < edgesToDelete.size(); i++) {
                 Kante edge = edgesToDelete.get(i);
                 //immer erst nur Kanten ohne Kanten löschen
@@ -810,19 +870,26 @@ public final class GDCollection extends UserFieldTarget {
                 //bei inkonsistenten Kanten nicht loggen
                 if (ks != null && ke != null) {
                     //alle Kanten sind Doppelkanten, deswegen hier keine Prüfung
-                    switch (((Doppelkante) edge).getDirection()) {
-                    case Doppelkante.FORWARD:
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdgeIndex(edge) + " " + ke.getEdgeIndex(edge), pid);
-                        doc.addRedoCommand(GDCommands.DELETE + " " + edge.getHashString(), pid);
+                    String edgeClassName = edge.getClass().getName();
+                    String edgeHash = edge.getHashString();
+                    String startHash = ks.getHashString();
+                    String endHash = ke.getHashString();
+                    int startEdgeIndex = ks.getEdgeIndex(edge);
+                    int endEdgeIndex = ke.getEdgeIndex(edge);
+                    int direction = ((Doppelkante) edge).getDirection();
+                    switch (direction) {
+                    case FORWARD:
+                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
+                        doc.addRedoCommand(DELETE + " " + edgeHash, pid);
                         break;
-                    case Doppelkante.BACKWARD:
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ke.getHashString() + " " + ks.getHashString() + " " + ke.getEdgeIndex(edge) + " " + ks.getEdgeIndex(edge), pid);
-                        doc.addRedoCommand(GDCommands.DELETE + " " + edge.getHashString(), pid);
+                    case BACKWARD:
+                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
+                        doc.addRedoCommand(DELETE + " " + edgeHash, pid);
                         break;
-                    case Doppelkante.DOUBLE:
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ke.getHashString() + " " + ks.getHashString() + " " + ke.getEdgeIndex(edge) + " " + ks.getEdgeIndex(edge), pid);
-                        doc.addUndoCommand(GDCommands.LINK + " " + edge.getClass().getName() + " " + edge.getHashString() + " " + ks.getHashString() + " " + ke.getHashString() + " " + ks.getEdgeIndex(edge) + " " + ke.getEdgeIndex(edge), pid);
-                        doc.addRedoCommand(GDCommands.DELETE + " " + edge.getHashString(), pid);
+                    case DOUBLE:
+                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
+                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
+                        doc.addRedoCommand(DELETE + " " + edgeHash, pid);
                         break;
                     }
                     ks.removeEdge(edge);
@@ -833,32 +900,32 @@ public final class GDCollection extends UserFieldTarget {
                 //				int layer = ModelConstants.layerFor(edge.getClass());
                 //				this.doc.layer[layer].remove(edgeCont);
                 //				System.err.println("GDCollection.deleteElements() line 848");
-                doc.layer[ModelConstants.layerFor(edge.getClass())].remove(edge.getContainer(doc));
+                doc.layer[layerFor(edge.getClass())].remove(edge.getContainer(doc));
                 //jetzt den Container selbst löschen (kann man sich sparen, weil die Kante seobst nicht mehr gepsüeichert wird)
                 edge.removeContainer(doc);
                 edgesToDelete.remove(i--);
             }
         }
-
         //jetzt alle Knoten im Hauptmodell löschen
         for (ModelElement me : allElementsToDelete) {
             if (me instanceof Kante || me instanceof Knickpunkt) {
                 continue;
             }
-            doc.addUndoCommand(GDCommands.CREATE_KNOT + " " + me.getClass().getName() + " " + GraphDocument.getParseSaveString(me.getName()) + " " + GraphDocument.getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
+            Class<? extends ModelElement> meClass = me.getClass();
+            String meHash = me.getHashString();
+            doc.addUndoCommand(CREATE_KNOT + " " + meClass.getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + meHash, pid);
             if (!dependentDeletedElements.contains(me)) {
-                doc.addRedoCommand(GDCommands.DELETE + " " + me.getHashString(), pid);
+                doc.addRedoCommand(DELETE + " " + meHash, pid);
             }
             //den Container des zu löschenden Elementes im Hauptmodell holen
-            doc.layer[ModelConstants.layerFor(me.getClass())].remove(me.getContainer(doc));
+            doc.layer[layerFor(meClass)].remove(me.getContainer(doc));
             //und danach erst im Table des Elements
-            //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nicrgends mehr gespecihert werden sollte
+            //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nirgends mehr gespeichert werden sollte
             //me.removeContainer(this.doc);
         }
         gdoc.finish_transaction(pid);
-        gdoc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
-        gdoc.distributeEvent(GraphDocument.SELECTION_CHANGED, pid);
-
+        gdoc.distributeEvent(DATA_CHANGED, pid);
+        gdoc.distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
@@ -868,35 +935,33 @@ public final class GDCollection extends UserFieldTarget {
      * @param kpk
      * @param pid
      */
-    public final void removeBendpoint(final Knickpunkt kpk, final int pid) {
-        BendpointContainer kc = kpk.getBendpointContainer();
-        if (kc == null) {
+    public final void removeBendpoint(final Knickpunkt bendpoint, final int pid) {
+        BendpointContainer bendpointContainer = bendpoint.getBendpointContainer();
+        if (bendpointContainer == null) {
             return;
         }
-        //das GraphDocument holen, aus dem der übergebene Container stammt
-        GraphDocument kcDoc = kc.getGraphDocument();
-        kcDoc.start_transaction(pid);
-        Knickpunkt kp = kc.getKnickpunktKnoten();
+        //das GraphDocument holen, aus dem der übergebene Container stammt (das ist immer ein Szenario)
+        GraphDocument szen = bendpointContainer.getGraphDocument();
+        szen.start_transaction(pid);
         //hole den Container der Kante, auf der der Knickpunkt angezeigt wird (Dieser EdgeContainer ist
         //immer in einem Szenario)
-        EdgeContainer edgeC = kp.getOwner();
+        EdgeContainer edgeC = bendpoint.getOwner();
         //fuer das UndoKommando die Position merken, an der sich der Knickpunkt auf der Kante befunden hat.
-        int oldIndex = edgeC.getIndexOfKnickpunkt(kp);
-        //hole das Teilmodell in dem der Knickpunkt angezeigt wird
-        GraphDocument szenario = edgeC.getGraphDocument();
+        int oldIndex = edgeC.getIndexOfKnickpunkt(bendpoint);
         //entferne den Knickpunkt von der Kante
-        edgeC.removeKnickpunkt(kp);
+        edgeC.removeKnickpunkt(bendpoint);
         edgeC.computeBorderPoints();
         int layerIndex = edgeC.layerFor();
         //den Knickpunkt im Teilmodell löschen
-        szenario.getLayer(layerIndex).remove(kc);
+        szen.getLayer(layerIndex).remove(bendpointContainer);
         //den Knickpunkt im Hauptmodell löschen
-        doc.getLayer(layerIndex).remove(kp.getContainer(doc));
-        kcDoc.addRedoCommand(GDCommands.DELETE + " " + kp.getHashString(), pid);
-        kcDoc.addUndoCommand(GDCommands.INSERT_BENDING_POINT + " " + szenario.getHashString() + " " + edgeC.getHashString() + " " + kc.getHashString() + " " + kc.getX() + " " + kc.getY() + " " + oldIndex, pid);
-        kcDoc.finish_transaction(pid);
-        kcDoc.distributeEvent(GraphDocument.ELEMENT_DELETED, kc, doc.layer[kp.layerFor()], pid);
-        kcDoc.distributeEvent(GraphDocument.SELECTION_CHANGED, kc, doc.layer[kp.layerFor()], pid);
+        doc.getLayer(layerIndex).remove(bendpoint.getContainer(doc));
+        szen.addRedoCommand(DELETE + " " + bendpoint.getHashString(), pid);
+        szen.addUndoCommand(INSERT_BENDING_POINT + " " + szen.getHashString() + " " + edgeC.getHashString() + " " + bendpointContainer.getHashString() + " " + bendpointContainer.getX() + " " + bendpointContainer.getY() + " " + oldIndex, pid);
+        szen.finish_transaction(pid);
+        LayerContainer lc = doc.layer[bendpoint.layerFor()];
+        szen.distributeEvent(ELEMENT_DELETED, bendpointContainer, lc, pid);
+        szen.distributeEvent(SELECTION_CHANGED, bendpointContainer, lc, pid);
     }
 
     //ENDE REMOVE //
@@ -904,7 +969,6 @@ public final class GDCollection extends UserFieldTarget {
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //ANFANG ADD //
-
     /**
      * @param szenHashString
      * @param kanteHashString
@@ -920,60 +984,52 @@ public final class GDCollection extends UserFieldTarget {
         if (!(szen instanceof Szenario)) {
             return null;
         }
-
-        BendpointContainer kpc = szen.findBendpointContainerCoded(bendpointHashString);
-        if (kpc != null) {
-            return kpc;
+        BendpointContainer bendpointContainer = szen.findBendpointContainerCoded(bendpointHashString);
+        if (bendpointContainer != null) {
+            return bendpointContainer;
         }
-
-        EdgeContainer kc = null;
-        if (kanteHashString != null && !kanteHashString.equals("")) {
-            kc = szen.findEdgeContainerCoded(kanteHashString);
+        EdgeContainer edgeContainer = null;
+        if (!isNullOrEmpty(kanteHashString)) {
+            edgeContainer = szen.findEdgeContainerCoded(kanteHashString);
         }
-        if (kc != null) {
-            szen.select(kc, pid);
+        if (edgeContainer != null) {
+            szen.select(edgeContainer, pid);
         } else {
             if (!szen.isSelectedOnlyEdges()) {
                 return null;
             }
-            kc = (EdgeContainer) szen.getLastSelected();
+            edgeContainer = (EdgeContainer) szen.getLastSelected();
         }
-
-        Knickpunkt kp = new Knickpunkt();
-        kp.setName(doc.getNextNewName(kp.getClass()));
-        kpc = new BendpointContainer(kp, szen);
-
-        if (bendpointHashString != null && !bendpointHashString.equals("")) {
-            kpc.getKnoten().setHashString(bendpointHashString);
+        Knickpunkt bendpoint = new Knickpunkt();
+        bendpoint.setName(doc.getNextNewName(bendpoint.getClass()));
+        bendpointContainer = new BendpointContainer(bendpoint, szen);
+        if (!isNullOrEmpty(bendpointHashString)) {
+            bendpointContainer.getKnoten().setHashString(bendpointHashString);
         }
-
         szen.start_transaction(pid);
-        if (bendpointIndex == GDCommands.INVALID_BENDPOINT_INDEX) {
-            bendpointIndex = kc.getKnickpunktInsertIndex(x, y);
+        if (bendpointIndex == INVALID_BENDPOINT_INDEX) {
+            bendpointIndex = edgeContainer.getKnickpunktInsertIndex(x, y);
         }
-
         //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante,
-        szen.addRedoCommand(GDCommands.INSERT_BENDING_POINT + " " + szenHashString + " " + kc.getHashString() + " " + kp.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
-        szen.addUndoCommand(GDCommands.DELETE + " " + kp.getHashString(), pid);
-
+        szen.addRedoCommand(INSERT_BENDING_POINT + " " + szenHashString + " " + edgeContainer.getHashString() + " " + bendpoint.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
+        szen.addUndoCommand(DELETE + " " + bendpoint.getHashString(), pid);
         // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Kante)
-        int layerNumber = kc.getElement().layerFor();
-        if (szen.getLayer(layerNumber).add(kpc) == null) {
+        int layerNumber = edgeContainer.getElement().layerFor();
+        if (szen.getLayer(layerNumber).add(bendpointContainer) == null) {
             szen.undo(pid);
             return null;
         }
-        doc.getLayer(layerNumber).add(new BendpointContainer(kp, doc));
-
-        kc.addKnickpunkt(kpc, bendpointIndex);
-        if (x != GDCommands.INVALID_POSITION_X && y != GDCommands.INVALID_POSITION_Y) {
-            kpc.setLocation(x, y);
+        doc.getLayer(layerNumber).add(new BendpointContainer(bendpoint, doc));
+        edgeContainer.addKnickpunkt(bendpointContainer, bendpointIndex);
+        if (x != INVALID_POSITION_X && y != INVALID_POSITION_Y) {
+            bendpointContainer.setLocation(x, y);
         }
-        szen.select(kpc, pid);
+        szen.select(bendpointContainer, pid);
         szen.finish_transaction(pid);
-        szen.distributeEvent(GraphDocument.DATA_CHANGED, pid);
-        szen.distributeEvent(GraphDocument.SELECTION_CHANGED, pid);
-        kc.computeBorderPoints();
-        return kpc;
+        szen.distributeEvent(DATA_CHANGED, pid);
+        szen.distributeEvent(SELECTION_CHANGED, pid);
+        edgeContainer.computeBorderPoints();
+        return bendpointContainer;
     }
 
     /**
@@ -985,48 +1041,41 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     public NodeContainer createKnotenWithContainer(final Class<? extends Knoten> elementClass, final String name, final String description, final String hashString, final int pid) {
-
         //Knickpunkte kann man über diese Funktion nicht anlegen
         if (Knickpunkt.class.isAssignableFrom(elementClass)) {
             return null;
         }
-
         Knoten me = null;
         NodeContainer nc = null;
         try {
             me = elementClass.newInstance();
             nc = (NodeContainer) me.createContainer(doc);
         } catch (Exception ex) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+            Log.show(ERROR, getErrString("FehlerAllgemein"), ex);
             return null;
         }
-
-        if (hashString != null && !hashString.trim().equals("") && !hashString.equals("null")) {
+        if (StringUtils.isValid(hashString, "null")) {
             me.setHashString(hashString);
         }
-        if (name != null && !name.equals("")) {
-            me.setName(GraphDocument.getDecodedParseSaveString(name));
+        if (!Strings.isNullOrEmpty(name)) {
+            me.setName(getDecodedParseSaveString(name));
         } else {
             me.setName(doc.getNextNewName(me.getClass()), false);
-
-            if (isInteractiveMode() && !ModelConstants.isGenerateName(me.getClass())) {
+            if (isInteractiveMode() && !isGenerateName(me.getClass())) {
                 if (!askNameAndColor(nc)) {
                     return null;
                 }
             }
         }
-
         if (description != null && !description.trim().equals("")) {
-            me.setDescription(GraphDocument.getDecodedParseSaveString(description));
+            me.setDescription(getDecodedParseSaveString(description));
         }
-
         doc.start_transaction(pid);
-        doc.addRedoCommand(GDCommands.CREATE_KNOT + " " + me.getClass().getName() + " " + GraphDocument.getParseSaveString(me.getName()) + " " + GraphDocument.getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
+        doc.addRedoCommand(CREATE_KNOT + " " + me.getClass().getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
         if (nc.getColor() != null) {
-            doc.addRedoCommand(GDCommands.CHANGE_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
+            doc.addRedoCommand(CHANGE_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
         }
-        doc.addUndoCommand(GDCommands.DELETE + " " + me.getHashString(), pid);
-
+        doc.addUndoCommand(DELETE + " " + me.getHashString(), pid);
         // den Layer bestimmen auf dem das Element eingefügt werden soll
         int layerNumber = me.layerFor();
         LayerContainer lc = doc.getLayer(layerNumber);
@@ -1034,14 +1083,12 @@ public final class GDCollection extends UserFieldTarget {
             doc.undo(pid);
             return null;
         }
-
         boolean old_mode = isInteractiveMode();
         setInteractiveMode(false);
         createInitialSubtypes(me, pid);
-
         setInteractiveMode(old_mode);
         doc.finish_transaction(pid);
-        doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
         return nc;
     }
 
@@ -1053,10 +1100,10 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void createInitialSubtypes(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
-        for (Class<? extends Kante> subTypeEdgeClass : ModelConstants.getInitialSubtypes(elementClass)) {
-            Class<? extends ModelElement> subType = Kante.isStartClass(subTypeEdgeClass, elementClass) ? Kante.getEndClass(subTypeEdgeClass) : Kante.getStartClass(subTypeEdgeClass);
+        for (Class<? extends Kante> subTypeEdgeClass : getInitialSubtypes(elementClass)) {
+            Class<? extends ModelElement> subType = isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
             //minimale kardinalität für die Unterelemente
-            int minCardForSubType = Kante.getMinCardinality(me.getClass(), subTypeEdgeClass);
+            int minCardForSubType = getMinCardinality(me.getClass(), subTypeEdgeClass);
             //bisher verbundene Anzahl von Unterelementen
             List<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
             //soviele Unterelemente wie fehlen neu anlegen
@@ -1064,9 +1111,9 @@ public final class GDCollection extends UserFieldTarget {
                 String name;
                 //wenn mehrere Unterelemene existieren können, dann durchnummerieren
                 if (minCardForSubType > 1) {
-                    name = CollectionUtils.getNextIndicatedName(ModelConstants.getDisplayableName(subType) + " ", " " + Tool3lgmConstants.getResString("fuer") + " " + me.getName(), connectedSubTypes);
+                    name = getNextIndicatedName(getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
                 } else {
-                    name = ModelConstants.getDisplayableName(subType) + " " + Tool3lgmConstants.getResString("fuer") + " " + me.getName();
+                    name = getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
                 }
                 ModelElement skC = createKnotenWithContainer(subType.asSubclass(Knoten.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
@@ -1086,7 +1133,7 @@ public final class GDCollection extends UserFieldTarget {
         } else {
             if (kc instanceof BendpointContainer) {
                 nc = new BendpointContainer((Knickpunkt) kc.getKnoten(), doc);
-            } else if (ModelConstants.isInterLayerStartClass(kc.getElement().getClass())) {
+            } else if (isInterLayerStartClass(kc.getElement().getClass())) {
                 kc = new InterLayerConnectedNodeContainer(kc.getKnoten(), doc);
             } else {
                 nc = new NodeContainer(kc.getKnoten(), doc);
@@ -1104,7 +1151,6 @@ public final class GDCollection extends UserFieldTarget {
         Kante k = kc.getEdge();
         EdgeContainer ec = new EdgeContainer(kc, doc);
         doc.getLayer(l).add(ec);
-
         boolean bulkMode = isBulkMode();
         setBulkMode(true);
         for (Szenario szen : szenarios) {
@@ -1118,7 +1164,6 @@ public final class GDCollection extends UserFieldTarget {
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //START LINK //
-
     /**
      * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert.<br>
      *
@@ -1150,7 +1195,7 @@ public final class GDCollection extends UserFieldTarget {
      * @see #link(String, String, ModelElement, ModelElement, int, int)
      */
     public final Kante link(final ModelElement startElement, final ModelElement endElement, final int pid) {
-        return link(GDCommands.INVALID_EDGE_CLASS_NAME, GDCommands.INVALID_HASH_STRING, startElement, endElement, GDCommands.INVALID_EDGE_INDEX, GDCommands.INVALID_EDGE_INDEX, true, pid);
+        return link(INVALID_EDGE_CLASS_NAME, INVALID_HASH_STRING, startElement, endElement, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
     }
 
     /**
@@ -1161,7 +1206,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     public Kante link(final Class<? extends Kante> edgeClass, final ModelElement k1, final ModelElement k2, final int pid) {
-        return link(edgeClass, GDCommands.INVALID_HASH_STRING, k1, k2, pid);
+        return link(edgeClass, INVALID_HASH_STRING, k1, k2, pid);
     }
 
     /**
@@ -1174,9 +1219,9 @@ public final class GDCollection extends UserFieldTarget {
      */
     public Kante link(final Class<? extends Kante> edgeClass, final String edgeHash, final ModelElement k1, final ModelElement k2, final int pid) {
         if (edgeClass == null) {
-            return link(GDCommands.INVALID_EDGE_CLASS_NAME, edgeHash, k1, k2, GDCommands.INVALID_EDGE_INDEX, GDCommands.INVALID_EDGE_INDEX, true, pid);
+            return link(INVALID_EDGE_CLASS_NAME, edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
         }
-        return link(edgeClass.getSimpleName(), edgeHash, k1, k2, GDCommands.INVALID_EDGE_INDEX, GDCommands.INVALID_EDGE_INDEX, true, pid);
+        return link(edgeClass.getSimpleName(), edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
     }
 
     /**
@@ -1189,7 +1234,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     public Kante link(final Class<? extends Kante> edgeClass, final ModelElement startElement, final ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
-        return link(edgeClass.getSimpleName(), GDCommands.INVALID_HASH_STRING, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex, true, pid);
+        return link(edgeClass.getSimpleName(), INVALID_HASH_STRING, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex, true, pid);
     }
 
     /**
@@ -1220,42 +1265,32 @@ public final class GDCollection extends UserFieldTarget {
      *         die neu angelegte Kante zwischen den beiden Elementen oder die Kante, die bereits existierte
      */
     public Kante link(String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
-
         //		System.err.println("GDCollection.link() " + me1 + "\t" + me2);
-
-        if (startElement == null || endElement == null) {
+        if (startElement == null || endElement == null || startElement == endElement) {
             return null;
         }
-        if (startElement == endElement) {
-            return null;
-        }
-
         Kante edge = null;
         EdgeContainer kac = null;
-
         Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
         Class<? extends Kante> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Kante.class);
-
         if (edgeClass != null && !Kante.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
-
         doc.start_transaction(pid);
-
         try {
             //wenn keine Kantenklasse angegeben wurde, muss diese ermittelt werden. Wenn sie nicht eindeutig ist, wird der Benutzer per Dialog gefragt.
             if (edgeClass == null) {
-                Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(startElement.getClass(), endElement.getClass());
+                Class<? extends Kante>[] edgeClasses = getEdgeTypes(startElement.getClass(), endElement.getClass());
                 if (edgeClasses == null || edgeClasses.length == 0) {
                     return null;
                 }
                 edgeClass = edgeClasses[0];
                 if (edgeClasses.length > 1) {
                     JPanel messagePanel = new JPanel();
-                    messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+                    messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
                     ButtonGroup buttonGroup = new ButtonGroup();
                     for (int i = 0; i < edgeClasses.length; i++) {
-                        JRadioButton b = new JRadioButton(ModelConstants.getForwardMetaAssociationName(edgeClasses[i]));
+                        JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edgeClasses[i]));
                         b.setActionCommand(edgeClasses[i].getName());
                         messagePanel.add(b);
                         buttonGroup.add(b);
@@ -1263,44 +1298,39 @@ public final class GDCollection extends UserFieldTarget {
                             b.setSelected(true);
                         }
                     }
-                    JOptionPane optionPane = new JOptionPane(messagePanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-                    JDialog dialog = optionPane.createDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("choose_trace"));
+                    JOptionPane optionPane = new JOptionPane(messagePanel, PLAIN_MESSAGE, DEFAULT_OPTION);
+                    JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
                     dialog.setVisible(true);
                     edgeClassName = buttonGroup.getSelection().getActionCommand();
-                    edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
+                    edgeClass = getClassForName(edgeClassName).asSubclass(Kante.class);
                 }
             }
-
             edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
-
             if (edge != null) {
                 doc.finish_transaction(pid);
                 return edge;
             }
-
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             if (edge != null) {
                 if (edge instanceof Doppelkante) {
-                    ((Doppelkante) edge).setDirection(Doppelkante.DOUBLE);
-                    doc.addRedoCommand(GDCommands.LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startElement.getHashString() + " " + endElement.getHashString() + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                    doc.addUndoCommand(GDCommands.UNLINK + " " + startElement.getHashString() + " " + endElement.getHashString() + " " + startElementEdgeIndex, pid);
+                    ((Doppelkante) edge).setDirection(DOUBLE);
+                    String startHash = startElement.getHashString();
+                    String endHash = endElement.getHashString();
+                    doc.addRedoCommand(LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                    doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + startElementEdgeIndex, pid);
                 }
-
             } else {
-
                 try {
                     edge = edgeClass.newInstance();
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log.show(ERROR, getErrString("FehlerAllgemein"), e);
                     doc.undo(pid);
                     return null;
                 }
-
                 if (edgeHash != null && !edgeHash.equals("")) {
                     edge.setHashString(edgeHash);
                 }
-
-                //AXS: geändert am 21.06.2017: jetzt sind immer alle Kanten, die nicht DoubleMeaning, PartOf oder Compisition sind automatisch DOUBLE
+                //AXS: geändert am 21.06.2017: jetzt sind immer alle Kanten, die nicht DoubleMeaning, PartOf oder Composition sind automatisch DOUBLE
                 //Kanten die dieselben Elemente verbinden
                 //                Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
                 //                Class<? extends ModelElement> startClass = startElement.getClass();
@@ -1311,28 +1341,24 @@ public final class GDCollection extends UserFieldTarget {
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(PartOfBeziehung.class);
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
-
-                if (ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass)) {
-                    ((Doppelkante) edge).setDirection(Doppelkante.DOUBLE);
+                if (isAlwaysDoubleConnectedEdge(edgeClass)) {
+                    ((Doppelkante) edge).setDirection(DOUBLE);
                 } else {
-                    int dir = Doppelkante.FORWARD;
+                    int dir = FORWARD;
                     //AXS: auch am 21.06.2017 geändert
                     //                    if (!(edgeStartClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass))) {
-                    if (!Kante.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
+                    if (!isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
                         ModelElement dummy = startElement;
                         startElement = endElement;
                         endElement = dummy;
-                        dir = Doppelkante.BACKWARD;
+                        dir = BACKWARD;
                     }
                     ((Doppelkante) edge).setDirection(dir);
                 }
-
                 edge.setKnotsAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
-
                 if (edge.getStart() != null && edge.getEnd() != null) {
                     kac = new EdgeContainer(edge, doc);
                     edge.setName(doc.getNextNewName(edge.getClass()), false);
-
                     addEdge(kac, kac.layerFor(), pid);
                 } else {
                     if (edge.getStart() == null && edge.getEnd() != null) {
@@ -1342,22 +1368,30 @@ public final class GDCollection extends UserFieldTarget {
                         edge.getStart().removeEdge(edge);
                     }
                 }
-
-                doc.addRedoCommand(GDCommands.LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startElement.getHashString() + " " + endElement.getHashString() + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(GDCommands.UNLINK + " " + startElement.getHashString() + " " + endElement.getHashString() + " " + startElementEdgeIndex, pid);
-
+                String startHash = startElement.getHashString();
+                String endHash = endElement.getHashString();
+                doc.addRedoCommand(LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + startElementEdgeIndex, pid);
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
-                    int maxElemCardinality = edge.isStartClass(startElement.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
-                    List<Kante> edgeList = startElement.getEdgesWith(edge.isStartClass(startElement.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
+                    Class<? extends ModelElement> startClass = startElement.getClass();
+                    Class<? extends ModelElement> endClass = endElement.getClass();
+                    boolean startElementIsEdgeStart = edge.isStartClass(startClass);
+                    boolean endElementIsEdgeStart = edge.isStartClass(endClass);
+                    Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
+                    Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
+                    int maxStartToEndCardinality = edge.getMaxStartToEndCardinality();
+                    int maxEndToStartCardinality = edge.getMaxEndToStartCardinality();
+                    int maxElemCardinality = startElementIsEdgeStart ? maxStartToEndCardinality : maxEndToStartCardinality;
+                    List<Kante> edgeList = startElement.getEdgesWith(startElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
-                    maxElemCardinality = edge.isStartClass(endElement.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
-                    edgeList = endElement.getEdgesWith(edge.isStartClass(endElement.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
+                    maxElemCardinality = endElementIsEdgeStart ? maxStartToEndCardinality : maxEndToStartCardinality;
+                    edgeList = endElement.getEdgesWith(endElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
@@ -1365,13 +1399,12 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
             doc.undo(pid);
             return null;
         }
-
         doc.finish_transaction(pid);
-        doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
         return edge;
     }
 
@@ -1411,7 +1444,7 @@ public final class GDCollection extends UserFieldTarget {
     //							b.setSelected(true);
     //					}
     //					JOptionPane optionPane = new JOptionPane(messagePanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-    //					JDialog dialog = optionPane.createDialog(Tool3lgm.tool, Tool3lgmConstants.getResString("choose_trace"));
+    //					JDialog dialog = optionPane.createDialog(Tool3lgm.tool, getResString("choose_trace"));
     //					dialog.setVisible(true);
     //					edgeClassName = buttonGroup.getSelection().getActionCommand();
     //					edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
@@ -1490,7 +1523,6 @@ public final class GDCollection extends UserFieldTarget {
     //		doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
     //		return edge;
     //	}
-
     /**
      * @param knothash1
      * @param knothash2
@@ -1520,7 +1552,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void unlink(final ModelElement k1, final ModelElement k2, final int pid) {
-        unlink(k1, k2, GDCommands.INVALID_EDGE_INDEX, pid);
+        unlink(k1, k2, INVALID_EDGE_INDEX, pid);
     }
 
     /**
@@ -1530,7 +1562,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void unlink(final ModelElement k1, final ModelElement k2, final int edgeIndex, final int pid) {
-        unlink(k1, k2, GDCommands.INVALID_EDGE_CLASS, edgeIndex, pid);
+        unlink(k1, k2, INVALID_EDGE_CLASS, edgeIndex, pid);
     }
 
     /**
@@ -1540,34 +1572,32 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void unlink(final ModelElement k1, final ModelElement k2, final Class<? extends Kante> edgeClass, final int pid) {
-        unlink(k1, k2, edgeClass, GDCommands.INVALID_EDGE_INDEX, pid);
+        unlink(k1, k2, edgeClass, INVALID_EDGE_INDEX, pid);
     }
 
     /**
-     * @param k1
-     * @param k2
+     * @param me1
+     * @param me2
      * @param edgeClass
      * @param edgeIndex
      * @param pid
      */
-    public final void unlink(final ModelElement k1, ModelElement k2, final Class<? extends Kante> edgeClass, final int edgeIndex, final int pid) {
-        if (k1 == null || k2 == null) {
+    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Kante> edgeClass, final int edgeIndex, final int pid) {
+        if (me1 == null || me2 == null) {
             return;
         }
-
-        Kante ka = null;
-        List<Kante> edges = k1.getEdgesWith(k2, edgeClass, edgeIndex);
-
-        if (edges.size() == 0) {
+        Kante edge = null;
+        List<Kante> edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
+        if (edges.isEmpty()) {
             return;
         } else if (edges.size() == 1) {
-            ka = edges.get(0);
+            edge = edges.get(0);
         } else {
             JPanel messagePanel = new JPanel();
-            messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+            messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
             for (int i = 0; i < edges.size(); i++) {
-                JRadioButton b = new JRadioButton(ModelConstants.getForwardMetaAssociationName(edges.get(i).getClass()));
+                JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edges.get(i).getClass()));
                 if (i == 0) {
                     b.setSelected(true);
                 }
@@ -1575,45 +1605,46 @@ public final class GDCollection extends UserFieldTarget {
                 messagePanel.add(b);
                 buttonGroup.add(b);
             }
-            JOptionPane optionPane = new JOptionPane(messagePanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-            JDialog dialog = optionPane.createDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("choose_trace"));
+            JOptionPane optionPane = new JOptionPane(messagePanel, PLAIN_MESSAGE, DEFAULT_OPTION);
+            JDialog dialog = optionPane.createDialog(getMainFrame(), getResString("choose_trace"));
             dialog.setVisible(true);
-            int index = Integer.parseInt(buttonGroup.getSelection().getActionCommand());
-            ka = edges.get(index);
+            int index = parseInt(buttonGroup.getSelection().getActionCommand());
+            edge = edges.get(index);
         }
-
-        if (k2 == k1) {
-            k2 = ka.getStart();
+        if (me2 == me1) {
+            me2 = edge.getStart();
         }
-
+        String me1Hash = me1.getHashString();
+        String me2Hash = me2.getHashString();
+        String edgeClassName = edgeClass == null ? "null" : edgeClass.getName();
         doc.start_transaction(pid);
-        doc.addRedoCommand(GDCommands.UNLINK + " " + k1.getHashString() + " " + k2.getHashString() + " " + (edgeClass == null ? "null" : edgeClass.getName()) + " " + edgeIndex, pid);
+        doc.addRedoCommand(UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + edgeIndex, pid);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
-
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Kante
-        if (ModelConstants.isDoubleMeaningEdge(ka.getClass())) {
-            Doppelkante dlk = (Doppelkante) ka;
-            if (dlk.getDirection() == Doppelkante.DOUBLE) {
-                if (dlk.getStart() == k1) {
-                    doc.addUndoCommand(GDCommands.LINK + " " + dlk.getClass().getName() + " " + dlk.getHashString() + " " + k1.getHashString() + " " + k2.getHashString() + " " + k1.getEdgeIndex(dlk) + " " + k2.getEdgeIndex(dlk), pid);
-                    dlk.setDirection(Doppelkante.BACKWARD);
+        Class<? extends Kante> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
+        if (isDoubleMeaningEdge(absoluteEdgeClass)) {
+            Doppelkante dlk = (Doppelkante) edge;
+            if (dlk.getDirection() == DOUBLE) {
+                if (dlk.getStart() == me1) {
+                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + dlk.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(dlk) + " " + me2.getEdgeIndex(dlk), pid);
+                    dlk.setDirection(BACKWARD);
                 } else {
-                    doc.addUndoCommand(GDCommands.LINK + " " + dlk.getClass().getName() + " " + dlk.getHashString() + " " + k2.getHashString() + " " + k1.getHashString() + " " + k2.getEdgeIndex(dlk) + " " + k1.getEdgeIndex(dlk), pid);
-                    dlk.setDirection(Doppelkante.FORWARD);
+                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + dlk.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(dlk) + " " + me1.getEdgeIndex(dlk), pid);
+                    dlk.setDirection(FORWARD);
                 }
             } else {
-                deleteElement(ka, doc, pid);
+                deleteElement(edge, doc, pid);
             }
         } else {
-            deleteElement(ka, doc, pid);
+            deleteElement(edge, doc, pid);
         }
         doc.finish_transaction(pid);
-        doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
     }
 
     private void updateElementNames() {
-        List<ModelElement> modelItemsWithNameExtensions = GraphDocumentHandler.getModelItems(this, ModelConstants.ELEMENTS_WITH_NAME_EXTENSIONS);
+        List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, ELEMENTS_WITH_NAME_EXTENSIONS);
         for (ModelElement me : modelItemsWithNameExtensions) {
             me.updateNameExtensions();
         }
@@ -1623,7 +1654,6 @@ public final class GDCollection extends UserFieldTarget {
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
-
     /**
      * @param hashString1
      * @param hashString2
@@ -1633,35 +1663,30 @@ public final class GDCollection extends UserFieldTarget {
     public boolean join(final String hashString1, final String hashString2, final GraphDocument source, final int pid) {
         ModelElement modelElement1 = doc.findElementCoded(hashString1);
         ModelElement modelElement2 = doc.findElementCoded(hashString2);
-
         if (modelElement1 == null || modelElement2 == null || modelElement1 == modelElement2) {
             return false;
         }
-
         //prüfen, ob es sich um Knoten gleichen Typs handelt (nur diese können vereint werden)
         if (!(modelElement1 instanceof Knoten && modelElement2 instanceof Knoten)) {
-            JOptionPane.showMessageDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("nur_knoten_sel"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             return false;
         }
         Knoten knoten1 = (Knoten) modelElement1;
         Knoten knoten2 = (Knoten) modelElement2;
         if (knoten1.getClass() != knoten2.getClass()) {
-            JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("nur_gleiche_sel"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             return false;
         }
-
         //Beginne umhängen der Kanten
         doc.start_transaction(pid);
         for (Szenario s : szenarios) {
             s.start_transaction(pid, false);
         }
-
         //Namen und Beschreibung des zu löschenden Knoten an den verbleibenden anhängen
         //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
         knoten2.join(knoten1, false);
         //knoten2.createNameWithSzens(doc);
-
-        for (Class<? extends ModelElement> clazz : ModelConstants.getSubordinatedJoinbleTypes(knoten2.getClass())) {
+        for (Class<? extends ModelElement> clazz : getSubordinatedJoinbleTypes(knoten2.getClass())) {
             List<ModelElement> sjt1 = knoten1.getConnectedElements(clazz);
             List<ModelElement> sjt2 = knoten2.getConnectedElements(clazz);
             if (sjt1.size() > 0 && sjt2.size() > 0) {
@@ -1670,18 +1695,15 @@ public final class GDCollection extends UserFieldTarget {
                 join(me1.getHashString(), me2.getHashString(), source, pid);
             }
         }
-
         //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Kante selbst irgenwie darum kümmern!
         List<Kante> kantenVector1 = (List<Kante>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
         List<Kante> kantenVector2 = (List<Kante>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
-
         //für jede Kante vom zu löschenden Knoten
         while (kantenVector1.size() > 0) {
             Kante kante = kantenVector1.get(0);
             startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Kante merken
             endKnoten = kante.getEnd(); //Endknoten -"-
-
             //zu löschenden Knoten durch den verbleibenden ersetzen
             if (startKnoten == knoten1) {
                 startKnoten = knoten2;
@@ -1690,7 +1712,6 @@ public final class GDCollection extends UserFieldTarget {
                 startKnoten = kante.getStart();
                 endKnoten = knoten2;
             }
-
             boolean deleteKante = false;
             if (startKnoten == endKnoten) {
                 deleteKante = true;
@@ -1700,7 +1721,7 @@ public final class GDCollection extends UserFieldTarget {
                 try {
                     testKante = kante.getClass().newInstance();
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log.show(ERROR, getErrString("FehlerAllgemein"), e);
                     continue;
                 }
                 testKante.setKnots(startKnoten, endKnoten, false);
@@ -1714,24 +1735,17 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-
             if (deleteKante) { //wenn die Kante doppelt vorkommen würde
-
                 deleteElement(kante, doc, pid);
-                //				doc.removeEdge(kante, pid);//Kante einfach
-                // komplett löschen
+                //				doc.removeEdge(kante, pid);//Kante einfach komplett löschen
             } else { //Kante muss umgehängt werden
-                knoten1.removeEdge(kante); //im zu löschenden Knoten die
-                                           // Kante entfernen
-                kante.setKnots(startKnoten, endKnoten);//die Kante wirklich an
-                                                       // knoten2 binden
+                knoten1.removeEdge(kante); //im zu löschenden Knoten die Kante entfernen
+                kante.setKnots(startKnoten, endKnoten);//die Kante wirklich an knoten2 binden
             }
         }
-
         for (Szenario szen : szenarios) {
             NodeContainer kc1 = (NodeContainer) knoten1.getContainer(szen);
             NodeContainer kc2 = (NodeContainer) knoten2.getContainer(szen);
-
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
             if (kc2 == null && kc1 != null) {
                 //				szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
@@ -1754,17 +1768,13 @@ public final class GDCollection extends UserFieldTarget {
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
-
         deleteElement(knoten1, doc, pid);
         //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Knoten komplett löschen
-
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
         }
-
         //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig
         tman.clearTransactionQueue();
-
         doc.finish_transaction(pid);
         distribute(GraphDocument.DATA_CHANGED, null, null, source, pid);
         return true;
@@ -1861,7 +1871,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param bitmask
      */
     public final void distribute(final int bitmask) {
-        distribute(bitmask, null, null, null, TransactionManager.STANDARD_PID);
+        distribute(bitmask, null, null, null, STANDARD_PID);
     }
 
     /**
@@ -1913,7 +1923,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             imf.close();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
         }
         return iconKey;
     }
@@ -1971,7 +1981,7 @@ public final class GDCollection extends UserFieldTarget {
         String title = name;
         if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
             String extension = title.substring(lastPointIndex + 1);
-            if (Tool3lgmConstants.isExtension(extension)) {
+            if (isExtension(extension)) {
                 title = title.substring(0, lastPointIndex);
             }
         }
@@ -2026,48 +2036,43 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
-        for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            LayerContainer lc = doc.getLayer(ModelConstants.LAYERS[i]);
-            for (int knotenIndex = 0; knotenIndex < lc.getKnotenCount(); knotenIndex++) {
-                Knoten knoten = lc.getNodeContainer(knotenIndex).getKnoten();
+        for (LayerContainer lc : doc.getLayers()) {
+            for (NodeContainer nc : lc.getKnoten()) {
+                Knoten node = nc.getKnoten();
                 for (GraphDocument doc : export) {
-                    if (doc.isMyElement(knoten)) {
-                        ElementContainer container = knoten.getContainer(doc);
-                        if (!elements.contains(knoten)) {
-                            elements.add(knoten);
+                    if (doc.isMyElement(node)) {
+                        ElementContainer container = node.getContainer(doc);
+                        if (!elements.contains(node)) {
+                            elements.add(node);
                             String iconName = ((NodeContainer) container).getIconString();
                             if (iconName != null) {
                                 bitmaps.add(iconName);
                             }
-                            userFields.addAll(knoten.getUserFieldInputValueKeys());
-                            resolveCopyDependencies(knoten, elements, userFields);
+                            userFields.addAll(node.getUserFieldInputValueKeys());
+                            resolveCopyDependencies(node, elements, userFields);
                         }
                     }
                 }
             }
-            for (int kantenIndex = 0; kantenIndex < lc.getKantenCount(); kantenIndex++) {
-                Kante kante = lc.getEdgeContainer(kantenIndex).getEdge();
+            for (EdgeContainer ec : lc.getKanten()) {
+                Kante edge = ec.getEdge();
                 for (GraphDocument doc : export) {
-                    if (doc.isMyElement(kante)) {
-                        if (!elements.contains(kante)) {
-                            elements.add(kante);
-                            userFields.addAll(kante.getUserFieldInputValueKeys());
-                            resolveCopyDependencies(kante, elements, userFields);
+                    if (doc.isMyElement(edge)) {
+                        if (!elements.contains(edge)) {
+                            elements.add(edge);
+                            userFields.addAll(edge.getUserFieldInputValueKeys());
+                            resolveCopyDependencies(edge, elements, userFields);
                         }
                     }
                 }
             }
-            for (int knpIndex = 0; knpIndex < lc.getKnickpunkteCount(); knpIndex++) {
-                Knickpunkt knp = lc.getBendpointContainer(knpIndex).getKnickpunktKnoten();
+            for (BendpointContainer bc : lc.getKnickpunkte()) {
+                Knickpunkt bendpoint = bc.getKnickpunktKnoten();
                 for (GraphDocument doc : export) {
-                    if (doc.isMyElement(knp)) {
-                        ElementContainer container = knp.getContainer(doc);
-                        if (!elements.contains(knp)) {
-                            elements.add(knp);
-                            if (container.get3LGMLayout() != null && container.get3LGMLayout().icon != null && container.get3LGMLayout().icon != "") {
-                                bitmaps.add(container.get3LGMLayout().icon);
-                            }
-                            userFields.addAll(knp.getUserFieldInputValueKeys());
+                    if (doc.isMyElement(bendpoint)) {
+                        if (!elements.contains(bendpoint)) {
+                            elements.add(bendpoint);
+                            userFields.addAll(bendpoint.getUserFieldInputValueKeys());
                             // resolveCopyDependencies(knp, elements,userFields);
                         }
                     }
@@ -2104,7 +2109,6 @@ public final class GDCollection extends UserFieldTarget {
         if (me instanceof Knickpunkt) {
             return;
         }
-
         if (me instanceof Kante) {
             for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getKnickpunkte()) {
                 Knickpunkt kp = kpC.getKnickpunktKnoten();
@@ -2129,8 +2133,7 @@ public final class GDCollection extends UserFieldTarget {
                 resolveCopyDependencies(end, elements, userFields);
             }
         }
-
-        for (Class<? extends ModelElement> elemClass : ModelConstants.getCopyDependencies(me.getClass())) {
+        for (Class<? extends ModelElement> elemClass : getCopyDependencies(me.getClass())) {
             for (ElementContainer ec : me.getConnectedContainer(elemClass, doc)) {
                 ModelElement connected = ec.getElement();
                 if (!elements.contains(connected)) {
@@ -2138,7 +2141,6 @@ public final class GDCollection extends UserFieldTarget {
                     userFields.addAll(connected.getUserFieldInputValueKeys());
                     resolveCopyDependencies(connected, elements, userFields);
                 }
-
                 for (Kante e : me.getEdgesWith(connected)) {
                     if (!elements.contains(e)) {
                         elements.add(e);
@@ -2148,7 +2150,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         }
-        //elements wird in der Schleife vergrößert -> nicht über den Iterator gehen
+        //elements wird in der Schleife vergrößert -> nicht über Iterable gehen
         for (int i = 0; i < elements.size(); i++) {
             ModelElement m = elements.get(i);
             for (Kante ka : me.getEdgesWith(m)) {
@@ -2159,7 +2161,6 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         }
-
     }
 
     //	/*
@@ -2189,7 +2190,6 @@ public final class GDCollection extends UserFieldTarget {
     //		kopiere das ganze Element rekursiv
     //
     //*/
-
     /**
      * @param file
      */
@@ -2198,15 +2198,14 @@ public final class GDCollection extends UserFieldTarget {
         try {
             setBulkMode(true);
             FileInputStream clipStream = new FileInputStream(file);
-            if (LgmXMLParser.isXMLFile(clipStream) && ToolXMLParser.isParseAbleFileVersion(clipStream)) {
+            if (isXMLFile(clipStream) && isParseAbleFileVersion(clipStream)) {
                 clipStream.getChannel().position(0);
                 fileHandler.loadXMLFile(clipStream, true);
             }
-
             clipStream.close();
             setBulkMode(false);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
         }
     }
 
@@ -2216,7 +2215,7 @@ public final class GDCollection extends UserFieldTarget {
             fileHandler.loadXMLFile(istream, true);
             setBulkMode(false);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
         }
     }
 
@@ -2259,58 +2258,54 @@ public final class GDCollection extends UserFieldTarget {
         if (isBulkMode()) {
             return;
         }
-
         if (source == null) {
             source = doc;
         }
-
-        int c;
-        int anzahl = listener.size();
         switch (bitmask) {
-        case GraphDocument.DATA_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).dataChanged(source);
+        case DATA_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.dataChanged(source);
             }
             updateElementNames();
             break;
-        case GraphDocument.ELEMENT_GRAPHICS_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).elementGraphicsChanged(source, last_elem);
+        case ELEMENT_GRAPHICS_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.elementGraphicsChanged(source, last_elem);
             }
             break;
-        case GraphDocument.LAYOUT_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).layoutChanged(source);
+        case LAYOUT_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.layoutChanged(source);
             }
             break;
-        case GraphDocument.ELEMENT_ADDED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).elementAdded(source, last_elem);
+        case ELEMENT_ADDED:
+            for (GraphDocumentListener l : listener) {
+                l.elementAdded(source, last_elem);
             }
             break;
-        case GraphDocument.ELEMENT_DELETED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).elementDeleted(source, last_elem);
+        case ELEMENT_DELETED:
+            for (GraphDocumentListener l : listener) {
+                l.elementDeleted(source, last_elem);
             }
             break;
-        case GraphDocument.GROUP_ORDER_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).groupOrderChanged(source);
+        case GROUP_ORDER_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.groupOrderChanged(source);
             }
             break;
-        case GraphDocument.ACTIVE_LAYER_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).activeLayerChanged(source);
+        case ACTIVE_LAYER_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.activeLayerChanged(source);
             }
             break;
-        case GraphDocument.COLORS_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).colorsChanged(source);
+        case COLORS_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.colorsChanged(source);
             }
             break;
-        case GraphDocument.SELECTION_CHANGED:
-            for (c = 0; c < anzahl; c++) {
-                listener.get(c).selectionChanged(source);
+        case SELECTION_CHANGED:
+            for (GraphDocumentListener l : listener) {
+                l.selectionChanged(source);
             }
             break;
         default:
@@ -2369,7 +2364,7 @@ public final class GDCollection extends UserFieldTarget {
      * Selektiert in allen Teilmodellen alle einmaligen Elemente
      */
     public void selectAllUniques() {
-        for (Class<? extends ModelElement> elemClass : ModelConstants.UNIQUE_NODES) {
+        for (Class<? extends ModelElement> elemClass : UNIQUE_NODES) {
             for (ElementContainer ec : doc.getElementContainer(elemClass)) {
                 addToSelection(ec);
             }
@@ -2394,11 +2389,11 @@ public final class GDCollection extends UserFieldTarget {
      * @param layer
      */
     public void setActiveLayer(final int layer) {
-        if (layer < 0 || layer > 4 || active_layer == layer) {
+        if (layer < MIN_LAYER_INDEX || layer > MAX_LAYER_INDEX || active_layer == layer) {
             return;
         }
         active_layer = layer;
-        distribute(GraphDocument.ACTIVE_LAYER_CHANGED);
+        distribute(ACTIVE_LAYER_CHANGED);
     }
 
     /**
@@ -2424,7 +2419,6 @@ public final class GDCollection extends UserFieldTarget {
             //TODO:AXS:USERFIELD
             //hier müssen bei allen USerfieldTargets alle Userfields ausgetauscht werden, die sie über ihre UserField2Value-Maps referenzieren
         }
-
         setChanged(true);
     }
 
@@ -2451,5 +2445,4 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
     }
-
 }
