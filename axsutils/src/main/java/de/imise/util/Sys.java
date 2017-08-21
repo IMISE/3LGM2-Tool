@@ -23,11 +23,11 @@ public class Sys {
         errInternal(maxTraceSteps, message);
     }
 
-    public static void out(final int maxTraceSteps, final Object... message) {
+    public static void outn(final int maxTraceSteps, final Object... message) {
         outInternal(maxTraceSteps, message);
     }
 
-    public static void err(final int maxTraceSteps, final Object... message) {
+    public static void errn(final int maxTraceSteps, final Object... message) {
         errInternal(maxTraceSteps, message);
     }
 
