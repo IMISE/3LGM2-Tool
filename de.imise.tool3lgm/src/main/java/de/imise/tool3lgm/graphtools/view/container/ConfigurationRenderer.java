@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.MEDUIM_STROKE;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -35,6 +37,7 @@ public class ConfigurationRenderer {
             Color.red,
             Color.yellow
     };
+
     public static int colorCounter = 0;
 
     private static final ConfigurationRenderer renderer = new ConfigurationRenderer();
@@ -126,7 +129,7 @@ public class ConfigurationRenderer {
                         }
                         if (configurationStart.isHighlightInterLayerConnections()) {
                             g.setColor(Color.green);
-                            gc.setStroke(ElementContainer.meduimStroke);
+                            gc.setStroke(MEDUIM_STROKE);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + x_shift, kc2.getY() + y_shift);
                             gc.setStroke(s);
                             g.setColor(elem_col);

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -618,7 +619,7 @@ public class EdgeContainer extends ElementContainer {
             boolean fatFrame = false;
             if (isResult || isHighLight) {
                 fatFrame = true;
-                gc.setStroke(fatStroke);
+                gc.setStroke(FAT_STROKE);
             }
 
             if (!paintingSurrogates && isDashed()) {

@@ -1,12 +1,15 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import java.awt.BasicStroke;
+import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getSlaveElementTypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getSortedEdgeClasses;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,11 +22,12 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 import de.imise.tool3lgm.log.Log;
 
@@ -38,21 +42,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * Diese Labels werden (wenn sie Text enthalten) an der jeweiligen Position beim Container dargestellt
      */
     protected SpecialInfoLabel northLabel, eastLabel, southLabel, westLabel;
-
-    /**
-     * COMMENTME
-     */
-    protected static Stroke fatStroke = new BasicStroke(7);
-    /**
-     * COMMENTME
-     */
-    public static Stroke meduimStroke = new BasicStroke(4);
-    /**
-     * COMMENTME
-     */
-    protected static Stroke neStroke = new BasicStroke(4, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 1, new float[] {
-            10
-    }, 10);
 
     /**
      * COMMENTME
@@ -100,12 +89,11 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      */
     public ElementContainer() {
         super();
-
         listenerList = null;
-        setHorizontalAlignment(SwingConstants.CENTER);
-        setVerticalAlignment(SwingConstants.CENTER);
-        setHorizontalTextPosition(SwingConstants.CENTER);
-        setVerticalTextPosition(SwingConstants.BOTTOM);
+        setHorizontalAlignment(CENTER);
+        setVerticalAlignment(CENTER);
+        setHorizontalTextPosition(CENTER);
+        setVerticalTextPosition(BOTTOM);
     }
 
     /**
@@ -114,73 +102,72 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     protected AdditionalLabelTextGenerator additionalLabelTextGenerator = null;
 
     /**
-     * @param element
-     * @param gd
+     * @param me
+     * @param doc
      */
-    public ElementContainer(final ModelElement element, final GraphDocument gd) {
+    public ElementContainer(final ModelElement me, final GraphDocument doc) {
         this();
-        me = element;
-
-        if (gd != null) {
+        this.me = me;
+        if (doc != null) {
             if (!me.isUnique()) {
-                me.setContainer(gd, this);
-                doc = gd;
+                this.doc = doc;
+                me.setContainer(doc, this);
             } else {
-                me.setContainer(gd.getCollection().getMainGraphDocument(), this);
-                doc = gd.getCollection().getMainGraphDocument();
+                GDCollection gdcoll = doc.getCollection();
+                this.doc = gdcoll.getMainGraphDocument();
+                me.setContainer(this.doc, this);
             }
-        }
-
-        if (doc != null && me.hasLayout()) {
-            expandedLayout = new GraphElementLayout();
-            layout = expandedLayout;
-            setFont(layout.getFont());
-            frameColor = new Color(0, 0, 0, 255);
+            if (me.hasLayout()) {
+                expandedLayout = new GraphElementLayout();
+                layout = expandedLayout;
+                setFont(layout.getFont());
+                frameColor = new Color(0, 0, 0, 255);
+            }
         }
     }
 
     /**
-     * @param alt
-     * @param gd
+     * @param ec
+     * @param doc
      */
-    public ElementContainer(final ElementContainer alt, final GraphDocument gd) {
-        this(alt.getElement(), gd);
-        boolean exp = alt.isExpanded();
-        if (alt.getE3LGMLayout() != null) {
-            expandedLayout = (GraphElementLayout) alt.getE3LGMLayout().clone();
+    public ElementContainer(final ElementContainer ec, final GraphDocument doc) {
+        this(ec.getElement(), doc);
+        boolean exp = ec.isExpanded();
+        if (ec.getE3LGMLayout() != null) {
+            expandedLayout = (GraphElementLayout) ec.getE3LGMLayout().clone();
         }
-        if (alt.getNE3LGMLayout() != null) {
-            nonExpandedLayout = (GraphElementLayout) alt.getNE3LGMLayout().clone();
+        if (ec.getNE3LGMLayout() != null) {
+            nonExpandedLayout = (GraphElementLayout) ec.getNE3LGMLayout().clone();
         }
         if (exp) {
             layout = expandedLayout;
         } else {
             layout = nonExpandedLayout;
         }
-        alt.setExpanded(exp);
+        ec.setExpanded(exp);
     }
 
     /**
      * @param neu
-     * @param l
+     * @param layout
      * @param gd
      */
-    public ElementContainer(final ModelElement neu, final GraphElementLayout l, final GraphDocument gd) {
+    public ElementContainer(final ModelElement neu, final GraphElementLayout layout, final GraphDocument gd) {
         this(neu, gd);
-        expandedLayout = l;
-        layout = expandedLayout;
+        expandedLayout = layout;
+        this.layout = expandedLayout;
     }
 
     /**
-     * @param cont
+     * @param parent
      */
-    public void setParent(final Container cont) {
+    public void setParent(final Container parent) {
         if (containerParent != null) {
-            if (containerParent != cont) {
+            if (containerParent != parent) {
                 containerParent.remove(this);
             }
         }
-        containerParent = cont;
+        containerParent = parent;
     }
 
     @Override
@@ -190,19 +177,18 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     /**
      * @param cloneModelElement
-     * @param _doc
+     * @param doc
      * @return
      */
-    public ElementContainer clone(final boolean cloneModelElement, final GraphDocument _doc) {
+    public ElementContainer clone(final boolean cloneModelElement, final GraphDocument doc) {
         ElementContainer retVal;
         try {
             retVal = getClass().newInstance();
-            //retVal = (ElementContainer) super.clone();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), e);
             return null;
         }
-        retVal.doc = _doc;
+        retVal.doc = doc;
         retVal.me = cloneModelElement ? (ModelElement) me.clone() : me;
         retVal.me.setContainer(retVal.doc, retVal);
         retVal.setVisible(isVisible());
@@ -215,7 +201,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (frameColor != null) {
             retVal.frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), frameColor.getAlpha());
         }
-
         return retVal;
     }
 
@@ -227,10 +212,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * @param el
+     * @param me
      */
-    public void setElement(final ModelElement el) {
-        me = el;
+    public void setElement(final ModelElement me) {
+        this.me = me;
         me.setContainer(doc, this);
     }
 
@@ -242,29 +227,29 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * @param l
+     * @param layout
      */
-    public void set3LGMLayout(final GraphElementLayout l) {
-        if (me.hasLayout() && l != null) {
-            layout = l;
+    public void set3LGMLayout(final GraphElementLayout layout) {
+        if (me.hasLayout() && layout != null) {
+            this.layout = layout;
         }
     }
 
     /**
-     * @param l
+     * @param layout
      */
-    public void setE3LGMLayout(final GraphElementLayout l) {
+    public void setE3LGMLayout(final GraphElementLayout layout) {
         if (me.hasLayout()) {
-            expandedLayout = l;
+            expandedLayout = layout;
         }
     }
 
     /**
-     * @param l
+     * @param layout
      */
-    public void setNE3LGMLayout(final GraphElementLayout l) {
+    public void setNE3LGMLayout(final GraphElementLayout layout) {
         if (me.hasLayout()) {
-            nonExpandedLayout = l;
+            nonExpandedLayout = layout;
         }
     }
 
@@ -293,17 +278,17 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * legt fest, ob dieses Element durch das Aufklappen seines (ggf. existierenden)
      * übergeordneten Elements sichtbar gemacht wurde
      */
-    public void setExpanded(final boolean exp) {
-        if (exp == expanded) {
+    public void setExpanded(final boolean expanded) {
+        if (expanded == this.expanded) {
             return;
         }
-        if (expanded) {
+        if (this.expanded) {
             expandedLayout = layout;
         } else {
             nonExpandedLayout = layout;
         }
-        expanded = exp;
-        if (expanded) {
+        this.expanded = expanded;
+        if (this.expanded) {
             if (expandedLayout == null && nonExpandedLayout != null) {
                 expandedLayout = (GraphElementLayout) nonExpandedLayout.clone();
             }
@@ -314,7 +299,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             }
             layout = nonExpandedLayout;
         }
-
         for (Kante edge : me.getEdges()) {
             ElementContainer kc = edge.getContainer(doc);
             if (kc == null) {
@@ -326,10 +310,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     @Override
-    public final void setVisible(final boolean v) {
-        super.setVisible(v);
-        if (v) {
-            Set<Class<? extends Kante>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(me.getClass());
+    public final void setVisible(final boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            Set<Class<? extends Kante>> sortedEdgeClasses = getSortedEdgeClasses(me.getClass());
             if (sortedEdgeClasses != null) {
                 for (Class<? extends Kante> edgeClass : sortedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {
@@ -338,15 +322,12 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
                     additionalLabelTextGenerator.writeNumberListToTargets(me.getConnectedElementsByEdge(edgeClass), doc);
                 }
             }
-        } else {
-            if (additionalLabelTextGenerator != null) {
-                additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
-            }
+        } else if (additionalLabelTextGenerator != null) {
+            additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
         }
-
-        for (Class<? extends ModelElement> c : ModelConstants.getSlaveElementTypes(me.getClass())) {
+        for (Class<? extends ModelElement> c : getSlaveElementTypes(me.getClass())) {
             for (ElementContainer sC : me.getConnectedContainer(c, doc)) {
-                sC.setVisible(v);
+                sC.setVisible(visible);
             }
         }
     }
@@ -433,8 +414,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         setFont(layout.getFont());
     }
 
-    static int i = 0;
-
     @Override
     public final void setFont(final Font font) {
         if (layout == null) {
@@ -451,11 +430,14 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             return layout.getFont();
         }
         Font font = null;
-        if (doc != null && doc.getMapping() != null) {
-            font = doc.getMapping().getStandardFont(me);
+        if (doc != null) {
+            Mapping mapping = doc.getMapping();
+            if (mapping != null) {
+                font = mapping.getStandardFont(me);
+            }
         }
         if (font == null) {
-            font = GraphElementLayout.STANDARD_FONT;
+            font = STANDARD_FONT;
         }
         return font;
     }
@@ -464,10 +446,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * Gibt die Form zurueck
      */
     public final GraphElementLayout.SHAPE getForm() {
-        if (layout != null) {
-            return layout.form;
-        }
-        return null;
+        return layout == null ? null : layout.form;
     }
 
     /**
@@ -476,10 +455,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param form
      */
     public final void setForm(final GraphElementLayout.SHAPE form) {
-        if (layout == null) {
-            return;
+        if (layout != null) {
+            layout.form = form;
         }
-        layout.form = form;
     }
 
     /**
@@ -539,13 +517,11 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (layout == null) {
             return;
         }
-
         if (c != null) {
             layout.bg_color = new Color(c.getRed(), c.getGreen(), c.getBlue(), layout.bg_color != null ? layout.bg_color.getAlpha() : 255);
         } else {
             layout.bg_color = null;
         }
-
         //		addSpecialInfoToMyTargets(true);
     }
 
@@ -588,7 +564,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         } else if (alpha > 255) {
             alpha = 255;
         }
-
         if (alpha >= 0 && alpha < 256) {
             layout.bg_color = new Color(layout.bg_color.getRed(), layout.bg_color.getGreen(), layout.bg_color.getBlue(), alpha);
         }
@@ -612,7 +587,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (layout != null) {
             return layout.valign;
         }
-        return SwingConstants.CENTER;
+        return CENTER;
     }
 
     /**
@@ -622,7 +597,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (layout != null) {
             return layout.halign;
         }
-        return SwingConstants.CENTER;
+        return CENTER;
     }
 
     /**
@@ -697,12 +672,10 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      */
     private List<ElementContainer> getSurrogateContainer(final ElementContainer initialContainer) {
         List<ElementContainer> retVal = new ArrayList<>(1);
-
         if (isVisible()) {
             retVal.add(this);
             return retVal;
         }
-
         for (Kante edge : me.getEdges()) {
             if (edge instanceof Composition) {
                 Composition comp = (Composition) edge;
@@ -717,7 +690,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (retVal.size() > 0) {
             return retVal;
         }
-
         List<ElementContainer> all = me.getDirectParentContainer(doc);
         if (all.size() == 0) {
             retVal.add(this);
@@ -782,7 +754,6 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             g.fillRect(0, 0, 14, 14);
             treeIcon = new ImageIcon(image);
         }
-
     }
 
     /**

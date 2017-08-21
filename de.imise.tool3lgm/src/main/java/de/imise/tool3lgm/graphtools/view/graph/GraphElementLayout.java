@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Stroke;
 
 import javax.swing.SwingConstants;
 
@@ -11,6 +13,23 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 // nicht Standard aus Mapping entsprechen
 
 public class GraphElementLayout implements SwingConstants, Cloneable {
+
+    /**
+     * COMMENTME
+     */
+    public static final Stroke FAT_STROKE = new BasicStroke(7);
+
+    /**
+     * COMMENTME
+     */
+    public static final Stroke MEDUIM_STROKE = new BasicStroke(4);
+
+    /**
+     * COMMENTME
+     */
+    public static final Stroke NE_STROKE = new BasicStroke(4, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 1, new float[] {
+            10
+    }, 10);
 
     /**
      * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch in den
@@ -30,14 +49,23 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     }
 
     public static final int WHITE = 0;
+
     public static final int YELLOW = 1;
+
     public static final int GREEN = 2;
+
     public static final int BLUE = 3;
+
     public static final int GRAY = 4;
+
     public static final int RED = 5;
+
     public static final int ORANGE = 6;
+
     public static final int BLACK = 7;
+
     public static final int LIGHTRED = 8;
+
     public static final int LIGHTGREEN = 9;
 
     public static final Color[] COLORS = new Color[10];
