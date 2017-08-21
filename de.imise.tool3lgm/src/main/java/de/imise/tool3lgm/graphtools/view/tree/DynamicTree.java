@@ -1,5 +1,21 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.DOMAIN_LAYER;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LOGICAL_LAYER;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.PHYSICAL_LAYER;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_DOMAIN_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_LOGICAL_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_PHYSICAL_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isInterLayer;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.userproperties.UserProperties.isEnableSubmodelBrowser;
+import static de.imise.tool3lgm.userproperties.UserProperties.isShowPartOfHierarchy;
+import static de.imise.tool3lgm.userproperties.UserProperties.isShowUserDefinedPropertiesInModelBrowser;
+
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
@@ -9,16 +25,13 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
@@ -32,23 +45,22 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * @author N.N.
  */
 public final class DynamicTree extends JTree implements UserFieldListener, GraphDocumentOwner {
-
     /**
      * Knoten für die Fachliche Ebene
      */
-    private final LGMTreeNode fachebene = new LGMTreeNode(Tool3lgmConstants.getResString("domain_layer"), false, true);
+    private final LGMTreeNode fachebene = new LGMTreeNode(getResString("domain_layer"), false, true);
     /**
      * Knoten für die Logische Werkzeugebene
      */
-    private final LGMTreeNode logebene = new LGMTreeNode(Tool3lgmConstants.getResString("logical_tool_layer"), false, true);
+    private final LGMTreeNode logebene = new LGMTreeNode(getResString("logical_tool_layer"), false, true);
     /**
      * Knoten für die physische Werkzeugebene
      */
-    private final LGMTreeNode phyebene = new LGMTreeNode(Tool3lgmConstants.getResString("physical_tool_layer"), false, true);
+    private final LGMTreeNode phyebene = new LGMTreeNode(getResString("physical_tool_layer"), false, true);
     /**
      * COMMENTME
      */
-    private final LGMTreeNode awb = new LGMTreeNode(Tool3lgmConstants.getResString("Anwendungsbaustein_p"), false, true);;
+    private final LGMTreeNode awb = new LGMTreeNode(getResString("Anwendungsbaustein_p"), false, true);;
     /**
      * COMMENTME
      */
@@ -61,26 +73,20 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      * COMMENTME
      */
     private LGMTreeNode textFieldPhysicalLayer = null;
-
     /**
      * COMMENTME
      */
     private GraphDocument doc;
-
     private final DynamicTreeSelectionListener selectionListener;
-
     private final DynamicTreeGraphDocumentAndInTransactionListener transactionListener;
-
     /**
      * Alle Knoten deren Kinder immer wieder removed und neu angelegt werden.
      */
-    private final LGMTreeNode[] nodesToClear = new LGMTreeNode[ModelConstants.TREE_DOMAIN_LAYER_NODES.length + ModelConstants.TREE_LOGICAL_LAYER_NODES.length + ModelConstants.TREE_PHYSICAL_LAYER_NODES.length];
-
+    private final LGMTreeNode[] nodesToClear = new LGMTreeNode[TREE_DOMAIN_LAYER_NODES.length + TREE_LOGICAL_LAYER_NODES.length + TREE_PHYSICAL_LAYER_NODES.length];
     /**
      * Transaktions-ID, mit der der Baum alle seine Änderungen vornimmt.
      */
-    public static final int PID = TransactionManager.STANDARD_PID;
-
+    public static final int PID = STANDARD_PID;
     /**
      * COMMENTME
      */
@@ -94,21 +100,18 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      * @param d
      */
     public DynamicTree(final GraphDocument d) {
-        super(new DefaultTreeModel(new LGMTreeNode(Tool3lgmConstants.getResString("browser"), false, false)));
-
+        super(new DefaultTreeModel(new LGMTreeNode(getResString("browser"), false, false)));
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
         doc = d;
         DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
         transactionListener = new DynamicTreeGraphDocumentAndInTransactionListener(this);
-
         setCellRenderer(new TreeRenderer(doc));
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
         setBackground(getBackground());
         setEditable(false);
         putClientProperty("JTree.lineStyle", "Angled");
         setToggleClickCount(-1);
-
         setRootVisible(false);
         setShowsRootHandles(true);
         buildTree();
@@ -163,17 +166,15 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     /**
      * Der allgemeine Baum wird erzeugt oder zurueckgesetzt
      */
+    @SuppressWarnings("unchecked")
     private void createTree() {
         LGMTreeNode top = (LGMTreeNode) treeModel.getRoot();
         if (top.getChildCount() == 0) {
             fachebene.removeAllChildren();
             top.add(fachebene);
-
             int nodesToClearIndex = 0;
-
-            for (int c = 0; c < ModelConstants.TREE_DOMAIN_LAYER_NODES.length; c++) {
-                @SuppressWarnings("unchecked")
-                LGMTreeNode node = new LGMTreeNode(ModelConstants.getDisplayableName(ModelConstants.TREE_DOMAIN_LAYER_NODES[c]), false, false);
+            for (Class<? extends ModelElement> elementClass : TREE_DOMAIN_LAYER_NODES) {
+                LGMTreeNode node = new LGMTreeNode(getDisplayableName(elementClass), false, false);
                 fachebene.add(node);
                 nodesToClear[nodesToClearIndex++] = node;
             }
@@ -181,10 +182,9 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             top.add(logebene);
             awb.removeAllChildren();
             logebene.add(awb);
-            for (int c = 0; c < ModelConstants.TREE_LOGICAL_LAYER_NODES.length; c++) {
-                Class<? extends ModelElement> clazz = ((Class<?>) ModelConstants.TREE_LOGICAL_LAYER_NODES[c]).asSubclass(ModelElement.class);
-                LGMTreeNode node = new LGMTreeNode(ModelConstants.getDisplayableName(clazz), false, false);
-                if (Anwendungsbaustein.class.isAssignableFrom(clazz)) {
+            for (Class<? extends ModelElement> elementClass : TREE_LOGICAL_LAYER_NODES) {
+                LGMTreeNode node = new LGMTreeNode(getDisplayableName(elementClass), false, false);
+                if (Anwendungsbaustein.class.isAssignableFrom(elementClass)) {
                     awb.add(node);
                 } else {
                     logebene.add(node);
@@ -193,15 +193,14 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             }
             phyebene.removeAllChildren();
             top.add(phyebene);
-            for (int c = 0; c < ModelConstants.TREE_PHYSICAL_LAYER_NODES.length; c++) {
-                @SuppressWarnings("unchecked")
-                LGMTreeNode node = new LGMTreeNode(ModelConstants.getDisplayableName(ModelConstants.TREE_PHYSICAL_LAYER_NODES[c]), false, false);
+            for (Class<? extends ModelElement> elementClass : TREE_PHYSICAL_LAYER_NODES) {
+                LGMTreeNode node = new LGMTreeNode(getDisplayableName(elementClass), false, false);
                 phyebene.add(node);
                 nodesToClear[nodesToClearIndex++] = node;
             }
         } else {
-            for (int i = 0; i < nodesToClear.length; i++) {
-                nodesToClear[i].removeAllChildren();
+            for (LGMTreeNode node : nodesToClear) {
+                node.removeAllChildren();
             }
             if (textFieldDomainLayer != null && textFieldDomainLayer.getParent() == fachebene) {
                 fachebene.remove(textFieldDomainLayer);
@@ -231,7 +230,6 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             if (!performingRebuild && getParentNodeOf(kc) != null) {
                 return;
             }
-
             LGMTreeNode elementNode = kc.getTreeNode();
             //			if (kc.getElement() instanceof Prozess) {
             //				kc.checkIcon();
@@ -259,30 +257,24 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         if (showUserDefinedProperties) {
             addUserDefinedProperties(elementNode, performingRebuild, selDoc);
         }
-
         if (!showPartOfHierarchy) {
             return;
         }
-
         ElementContainer kc = (ElementContainer) elementNode.getUserObject();
-
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
-
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-        List<ElementContainer> all = kc.getElement().getDirectPartContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
-        loop1: for (int i = 0; i < all.size(); i++) {
-            ElementContainer pc = all.get(i);
-            ElementContainer pc2 = pc.getElement().getContainer(selDoc);
-            if (pc2 != null) {
-                pc = pc2;
+        List<ElementContainer> all = kc.getElement().getDirectPartContainer(isEnableSubmodelBrowser() ? selDoc : maindoc);
+        loop1: for (ElementContainer pc : all) {
+            ModelElement me = pc.getElement();
+            ElementContainer ecSelDoc = me.getContainer(selDoc);
+            if (ecSelDoc != null) {
+                pc = ecSelDoc;
             }
-
-            if (UserProperties.isEnableSubmodelBrowser()) {
-                if (!pc.getElement().isUnique() && pc.getElement().getContainer(selDoc) == null) {
+            if (isEnableSubmodelBrowser()) {
+                if (!me.isUnique() && ecSelDoc == null) {
                     continue;
                 }
             }
-
             LGMTreeNode p = parent;
             while (p != null) {
                 if (p.getUserObject() == pc) {
@@ -293,7 +285,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             LGMTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                List<ElementContainer> directParentElements = pc.getElement().getDirectParentContainer(UserProperties.isEnableSubmodelBrowser() ? selDoc : maindoc);
+                List<ElementContainer> directParentElements = me.getDirectParentContainer(isEnableSubmodelBrowser() ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
@@ -321,13 +313,11 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     private void addUserDefinedProperties(final LGMTreeNode elementNode, final boolean performingRebuild, final GraphDocument selDoc) {
         ElementContainer ec = (ElementContainer) elementNode.getUserObject();
         ModelElement me = ec.getElement();
-
         Set<UserField> allOfThisElement = me.getUserFieldInputValueKeys();
-
         GDCollection gdcol = doc.getCollection();
         UserFieldDefinitions ufDefs = gdcol.getUserFieldDefinitions();
-
-        for (UserField uf : ufDefs.getUserFields(me.getClass())) {
+        Class<? extends ModelElement> elementClass = me.getClass();
+        for (UserField uf : ufDefs.getUserFields(elementClass)) {
             if (uf.hasStyle(UserField.Style.HYPERLINK)) {
                 if (uf.isTreeVisibility()) {
                     String value = me.getUserFieldInputValue(uf);
@@ -343,12 +333,10 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
                 }
             } else if (uf.isClassificationUserField()) {
                 if (uf.isTreeVisibility()) {
-
                     //					System.err.println("Name:\t\t"+uf.getName());
                     //					System.err.println("mename:\t\t"+me.getName());
                     //					System.err.println("value:\t\t"+uf.getValue(me));
                     //					System.err.println("formatetvalue:\t"+uf.getFormatedValue(me,true)+"\n");
-
                     String label = uf.getName() + ": " + uf.getFormattedValue(me, true);
                     LGMTreeNode childNode = new LGMTreeNode(label, true, false);
                     elementNode.add(childNode);
@@ -361,7 +349,6 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
                 }
             }
         }
-
     }
 
     /**
@@ -389,6 +376,27 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         return (LGMTreeNode) obj.getTreeNode().getParent();
     }
 
+    private static final LGMTreeNode getChildNodeWithName(final LGMTreeNode parent, final String name) {
+        for (int n = 0; n < parent.getChildCount(); n++) {
+            TreeNode childNode = parent.getChildAt(n);
+            if (name.equals(childNode.toString())) {
+                return (LGMTreeNode) childNode;
+            }
+        }
+        return null;
+    }
+
+    private LGMTreeNode getOrCreateTextFieldNode(final LGMTreeNode layerNode, LGMTreeNode textFieldNode) {
+        if (textFieldNode == null) {
+            textFieldNode = new LGMTreeNode(getDisplayableName(Textfeld.class), false, false);
+        }
+        if (textFieldNode.getParent() == null) {
+            textFieldNode.removeAllChildren();
+            layerNode.add(textFieldNode);
+        }
+        return textFieldNode;
+    }
+
     /**
      * @param obj
      * @param layer
@@ -396,112 +404,30 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      */
     protected LGMTreeNode getParentNodeOfType(final NodeContainer obj, final int layer) {
         Knoten me = (Knoten) obj.getElement();
-        String name = ModelConstants.getDisplayableName(me.getClass());
+        String name = getDisplayableName(me.getClass());
         switch (layer) {
-        case 4:
-            for (int n = 0; n < fachebene.getChildCount(); n++) {
-                if (name.equals(fachebene.getChildAt(n).toString())) {
-                    return (LGMTreeNode) fachebene.getChildAt(n);
-                }
-            }
+        case DOMAIN_LAYER:
             if (me instanceof Textfeld) {
-                if (textFieldDomainLayer == null) {
-                    textFieldDomainLayer = new LGMTreeNode(ModelConstants.getDisplayableName(Textfeld.class), false, false);
-                }
-                if (textFieldDomainLayer.getParent() == null) {
-                    textFieldDomainLayer.removeAllChildren();
-                    fachebene.add(textFieldDomainLayer);
-                }
+                textFieldDomainLayer = getOrCreateTextFieldNode(fachebene, textFieldDomainLayer);
                 return textFieldDomainLayer;
             }
-            break;
-        case 2:
+            return getChildNodeWithName(fachebene, name);
+        case LOGICAL_LAYER:
             if (me instanceof Anwendungsbaustein) {
-                for (int n = 0; n < awb.getChildCount(); n++) {
-                    if (name.equals(awb.getChildAt(n).toString())) {
-                        return (LGMTreeNode) awb.getChildAt(n);
-                    }
-                }
-            } else if (me instanceof Textfeld) {
-                if (textFieldLogicalLayer == null) {
-                    textFieldLogicalLayer = new LGMTreeNode(ModelConstants.getDisplayableName(Textfeld.class), false, false);
-                }
-                if (textFieldLogicalLayer.getParent() == null) {
-                    textFieldLogicalLayer.removeAllChildren();
-                    logebene.add(textFieldLogicalLayer);
-                }
-                return textFieldLogicalLayer;
-            } else {
-                for (int n = 0; n < logebene.getChildCount(); n++) {
-                    if (name.equals(logebene.getChildAt(n).toString())) {
-                        return (LGMTreeNode) logebene.getChildAt(n);
-                    }
-                }
-            }
-            break;
-        case 0:
-            for (int n = 0; n < phyebene.getChildCount(); n++) {
-                if (name.equals(phyebene.getChildAt(n).toString())) {
-                    return (LGMTreeNode) phyebene.getChildAt(n);
-                }
+                return getChildNodeWithName(awb, name);
             }
             if (me instanceof Textfeld) {
-                if (textFieldPhysicalLayer == null) {
-                    textFieldPhysicalLayer = new LGMTreeNode(ModelConstants.getDisplayableName(Textfeld.class), false, false);
-                }
-                if (textFieldPhysicalLayer.getParent() == null) {
-                    textFieldPhysicalLayer.removeAllChildren();
-                    phyebene.add(textFieldPhysicalLayer);
-                }
+                textFieldLogicalLayer = getOrCreateTextFieldNode(logebene, textFieldLogicalLayer);
+                return textFieldLogicalLayer;
+            }
+            return getChildNodeWithName(logebene, name);
+        case PHYSICAL_LAYER:
+            if (me instanceof Textfeld) {
+                textFieldPhysicalLayer = getOrCreateTextFieldNode(phyebene, textFieldPhysicalLayer);
                 return textFieldPhysicalLayer;
             }
-            break;
+            return getChildNodeWithName(phyebene, name);
         }
-
-        return null;
-    }
-
-    /**
-     * @param obj
-     * @return
-     */
-    protected LGMTreeNode createAndGetUserDefParentNodeOfType(final NodeContainer obj) {
-
-        Knoten me = (Knoten) obj.getElement();
-        String name = ModelConstants.getDisplayableName(me.getClass());
-
-        switch (me.layerFor()) {
-        case 4:
-            for (int n = 0; n < fachebene.getChildCount(); n++) {
-                if (name.equals(fachebene.getChildAt(n).toString())) {
-                    return (LGMTreeNode) fachebene.getChildAt(n);
-                }
-            }
-            break;
-        case 2:
-            if (me instanceof Anwendungsbaustein) {
-                for (int n = 0; n < awb.getChildCount(); n++) {
-                    if (name.equals(awb.getChildAt(n).toString())) {
-                        return (LGMTreeNode) awb.getChildAt(n);
-                    }
-                }
-            } else {
-                for (int n = 0; n < logebene.getChildCount(); n++) {
-                    if (name.equals(logebene.getChildAt(n).toString())) {
-                        return (LGMTreeNode) logebene.getChildAt(n);
-                    }
-                }
-            }
-            break;
-        case 0:
-            for (int n = 0; n < phyebene.getChildCount(); n++) {
-                if (name.equals(phyebene.getChildAt(n).toString())) {
-                    return (LGMTreeNode) phyebene.getChildAt(n);
-                }
-            }
-            break;
-        }
-
         return null;
     }
 
@@ -510,7 +436,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     static int count = 0;
 
     /**
-     * 
+     *
      */
     void buildTree() {
         if (doc == null) {
@@ -520,32 +446,30 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         selectionListener.setActive(false);
         createTree();
         saveExpansionState();
-        showPartOfHierarchy = UserProperties.isShowPartOfHierarchy();
-        showUserDefinedProperties = UserProperties.isShowUserDefinedPropertiesInModelBrowser();
-
-        int ebene, n;
-        for (ebene = 4; ebene >= 0; ebene -= 2) {
-            List<NodeContainer> knoten = maindoc.getLayer(ebene).getKnotenAlphabetical();
-            for (n = 0; n < knoten.size(); n++) {
-                NodeContainer ec = knoten.get(n);
-                ModelElement me = ec.getElement();
-
+        showPartOfHierarchy = isShowPartOfHierarchy();
+        showUserDefinedProperties = isShowUserDefinedPropertiesInModelBrowser();
+        for (int ebene = MAX_LAYER_INDEX; ebene >= MIN_LAYER_INDEX; ebene--) {
+            if (isInterLayer(ebene)) {
+                continue;
+            }
+            for (NodeContainer nc : maindoc.getLayer(ebene).getKnotenAlphabetical()) {
+                ModelElement me = nc.getElement();
                 if (UserProperties.isEnableSubmodelBrowser()) {
                     if (me.isUnique()) {
-                        if (showPartOfHierarchy && ec.hasParent(maindoc)) {
+                        if (showPartOfHierarchy && nc.hasParent(maindoc)) {
                             continue;
                         }
                     } else {
-                        if (me.getContainer(doc) == null || showPartOfHierarchy && ec.hasParent(doc)) {
+                        if (me.getContainer(doc) == null || showPartOfHierarchy && nc.hasParent(doc)) {
                             continue;
                         }
                     }
                 } else {
-                    if (showPartOfHierarchy && ec.hasParent(maindoc)) {
+                    if (showPartOfHierarchy && nc.hasParent(maindoc)) {
                         continue;
                     }
                 }
-                addObject(ec, true, doc, ebene);
+                addObject(nc, true, doc, ebene);
             }
         }
         ((DefaultTreeModel) treeModel).reload();
@@ -562,7 +486,6 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
-
         for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
             ModelElement me = ec.getElement();
             ec = (NodeContainer) me.getContainer(doc);
@@ -601,7 +524,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * 
+     *
      */
     public void refreshTree() {
         for (int i = 0; i < nodesToClear.length; i++) {
@@ -617,19 +540,18 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     public void selectLayerNode(final int layer) {
         TreePath path = null;
         switch (layer) {
-        case 4:
+        case DOMAIN_LAYER:
             path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene));
             break;
-        case 2:
+        case LOGICAL_LAYER:
             path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene));
             break;
-        case 0:
+        case PHYSICAL_LAYER:
             path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene));
             break;
         }
         setSelectionPath(path);
         scrollPathToVisible(path);
-
     }
 
     /**
@@ -643,19 +565,18 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         boolean layerChanged = false;
         if (node == fachebene) {
             layerChanged = true;
-            doc.getCollection().setActiveLayer(4);
+            doc.getCollection().setActiveLayer(DOMAIN_LAYER);
         } else if (node == logebene) {
             layerChanged = true;
-            doc.getCollection().setActiveLayer(2);
+            doc.getCollection().setActiveLayer(LOGICAL_LAYER);
         } else if (node == phyebene) {
             layerChanged = true;
-            doc.getCollection().setActiveLayer(0);
+            doc.getCollection().setActiveLayer(PHYSICAL_LAYER);
         }
         return layerChanged;
     }
 
     //	----------------------------------------------------------------------------------------------------------------------------------
-
     Enumeration<TreePath> expansionEnum = null;
 
     private void saveExpansionState() {
@@ -674,26 +595,24 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     ///////////////////////
     // UserFieldListener //
     ///////////////////////
-
     @Override
     public void userFieldAdded() {
-        if (UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
+        if (isShowUserDefinedPropertiesInModelBrowser()) {
             buildTree();
         }
     }
 
     @Override
     public void userFieldRemoved() {
-        if (UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
+        if (isShowUserDefinedPropertiesInModelBrowser()) {
             buildTree();
         }
     }
 
     @Override
     public void userFieldValueChanged() {
-        if (UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
+        if (isShowUserDefinedPropertiesInModelBrowser()) {
             refreshTree();
         }
     }
-
 }
