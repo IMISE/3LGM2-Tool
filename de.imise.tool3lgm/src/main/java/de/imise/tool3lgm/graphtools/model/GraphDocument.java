@@ -1,5 +1,9 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYER_COUNT;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
 
 import java.awt.Color;
