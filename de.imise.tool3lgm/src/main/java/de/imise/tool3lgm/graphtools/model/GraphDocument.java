@@ -3012,7 +3012,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             //alle Knickpunkte der Kante, die im Auswahlrechteck liegen ebenfall selektieren
             if (ka.isVisible()) {
-                for (BendpointContainer kpc : ka.getBendpointContainerList()) {
+                for (BendpointContainer kpc : ka.iterateBendpointContainers()) {
                     if (kpc.getX() < right_x && kpc.getX() > left_x && kpc.getY() < right_y && kpc.getY() > left_y && !kpc.isSelected()) {
                         addToSelection(kpc, PID);
                     }

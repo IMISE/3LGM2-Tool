@@ -6,7 +6,6 @@ package de.imise.tool3lgm.graphtools.view.container;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ArrayList;
 
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -18,8 +17,8 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 public class BendpointContainer extends NodeContainer {
 
     /**
-	 * 
-	 */
+     *
+     */
     public BendpointContainer() {
         super();
     }
@@ -64,7 +63,7 @@ public class BendpointContainer extends NodeContainer {
     /**
      * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es der erste Knickpunkt dieser Kante, dann kommt der Startpunkt der
      * Kante zurück.
-     * 
+     *
      * @param bc
      * @return
      */
@@ -75,42 +74,40 @@ public class BendpointContainer extends NodeContainer {
     /**
      * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es der erste Knickpunkt dieser Kante, dann kommt der Startpunkt der
      * Kante zurück.
-     * 
+     *
      * @param bc
      * @return
      */
     public Point getPredecessorPosition() {
         EdgeContainer edgeC = getKnickpunktKnoten().getOwner();
-        ArrayList<BendpointContainer> bendpointContainerList = edgeC.getBendpointContainerList();
-        int pos = bendpointContainerList.indexOf(this);
+        int pos = edgeC.indexOfBendpointContainer(this);
         if (pos == -1) {
             return null;
         }
         if (pos == 0) {
             return new Point(edgeC.startx, edgeC.starty);
         }
-        BendpointContainer bc = bendpointContainerList.get(pos - 1);
+        BendpointContainer bc = edgeC.getBendpointContainer(pos - 1);
         return new Point(bc.getX(), bc.getY());
     }
 
     /**
      * Liefert den Punkt, an dem sich der Knickpunkt nach diesem befindet. Ist es der letzte Knickpunkt dieser Kante, dann kommt der Endpunkt der
      * Kante zurück.
-     * 
+     *
      * @param bc
      * @return
      */
     public Point getSuccessorPosition() {
         EdgeContainer edgeC = getKnickpunktKnoten().getOwner();
-        ArrayList<BendpointContainer> bendpointContainerList = edgeC.getBendpointContainerList();
-        int pos = bendpointContainerList.indexOf(this);
+        int pos = edgeC.indexOfBendpointContainer(this);
         if (pos == -1) {
             return null;
         }
-        if (pos == bendpointContainerList.size() - 1) {
+        if (pos == edgeC.getBendpointContainerCount() - 1) {
             return new Point(edgeC.endx, edgeC.endy);
         }
-        BendpointContainer bc = bendpointContainerList.get(pos + 1);
+        BendpointContainer bc = edgeC.getBendpointContainer(pos + 1);
         return new Point(bc.getX(), bc.getY());
     }
 

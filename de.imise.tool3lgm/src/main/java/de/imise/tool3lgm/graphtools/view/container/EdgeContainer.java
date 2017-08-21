@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,8 +10,8 @@ import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.List;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
@@ -64,10 +66,10 @@ public class EdgeContainer extends ElementContainer {
     /**
      * COMMENTME
      */
-    protected ArrayList<BendpointContainer> knickpunkte = new ArrayList<>(1);
+    protected List<BendpointContainer> knickpunkte = new ArrayList<>(1);
 
     /**
-     * 
+     *
      */
     public EdgeContainer() {
         super();
@@ -107,7 +109,7 @@ public class EdgeContainer extends ElementContainer {
         try {
             retVal = (EdgeContainer) super.clone(cloneModelElement, _doc);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), e);
             return null;
         }
         retVal.startx = startx;
@@ -117,7 +119,7 @@ public class EdgeContainer extends ElementContainer {
         retVal.over_lapping = over_lapping;
         retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
         retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
-        retVal.getBendpointContainerList().clear();
+        retVal.knickpunkte.clear();
         if (_doc instanceof Szenario) {
             for (int i = 0; i < knickpunkte.size(); i++) {
                 BendpointContainer knC = knickpunkte.get(i);
@@ -196,7 +198,7 @@ public class EdgeContainer extends ElementContainer {
 
     // Komplett aus Kante
     /**
-     * 
+     *
      */
     public void computeBorderPoints() {
         // String h = getHashString();
@@ -212,15 +214,17 @@ public class EdgeContainer extends ElementContainer {
         try {
             Kante k;
             if ((k = getEdge()) != null) {
-                if (k.getStart() != null) {
-                    kc1 = k.getStart().getContainer(doc);
+                ModelElement startElement = k.getStart();
+                if (startElement != null) {
+                    kc1 = startElement.getContainer(doc);
                 }
-                if (k.getEnd() != null) {
-                    kc2 = k.getEnd().getContainer(doc);
+                ModelElement endElement = k.getEnd();
+                if (endElement != null) {
+                    kc2 = endElement.getContainer(doc);
                 }
             }
         } catch (NullPointerException e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), e);
         }
         if (kc1 == null || kc2 == null) {
             return;
@@ -236,12 +240,13 @@ public class EdgeContainer extends ElementContainer {
             }
         }
 
-        if (knickpunkte.size() > 0) {
+        if (!knickpunkte.isEmpty()) {
             int i = knickpunkte.size() - 1;
             int left_x = kc1.getX();
             int left_y = kc1.getY();
-            int right_x = knickpunkte.get(0).getX();
-            int right_y = knickpunkte.get(0).getY();
+            BendpointContainer bendpointContainer = knickpunkte.get(0);
+            int right_x = bendpointContainer.getX();
+            int right_y = bendpointContainer.getY();
 
             int middle_x = right_x, middle_y = right_y;
 
@@ -513,8 +518,20 @@ public class EdgeContainer extends ElementContainer {
     /**
      * @return
      */
-    public ArrayList<BendpointContainer> getBendpointContainerList() {
+    public Iterable<BendpointContainer> iterateBendpointContainers() {
         return knickpunkte;
+    }
+
+    public int indexOfBendpointContainer(final BendpointContainer bendpointContainer) {
+        return knickpunkte.indexOf(bendpointContainer);
+    }
+
+    public int getBendpointContainerCount() {
+        return knickpunkte.size();
+    }
+
+    public BendpointContainer getBendpointContainer(final int index) {
+        return knickpunkte.get(index);
     }
 
     /**

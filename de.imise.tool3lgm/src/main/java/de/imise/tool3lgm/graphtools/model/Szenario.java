@@ -73,7 +73,7 @@ public class Szenario extends LGMGraphDocument {
         int layernum = ((LayerContainer) ec.getParent()).getLayerNumber();
         layer[layernum].add(retVal);
         if (retVal instanceof EdgeContainer && !retVal.getElement().isUnpaintable()) {
-            for (BendpointContainer kpC : ((EdgeContainer) retVal).getBendpointContainerList()) {
+            for (BendpointContainer kpC : ((EdgeContainer) retVal).iterateBendpointContainers()) {
                 layer[layernum].add(kpC);
                 getCollection().addNodeToMainDoc(kpC, layernum);
             }

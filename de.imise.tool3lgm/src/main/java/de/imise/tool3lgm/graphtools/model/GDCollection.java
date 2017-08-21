@@ -657,11 +657,10 @@ public final class GDCollection extends UserFieldTarget {
             return false;
         }
         //erstmal alle Knickpunkte löschen
-        List<BendpointContainer> bendPointContainerList = edgeContainer.getBendpointContainerList();
         //die bendPointContainerList wird beim removeBendpoint-Aufruf selbst geändert -> daher einfach von hinten die
-        //Knickpunkte löschen.
-        for (int k = bendPointContainerList.size() - 1; k >= 0; k--) {
-            removeBendpoint(bendPointContainerList.get(k).getKnickpunktKnoten(), pid);
+        //Knickpunkte löschen, dann muss nichts kopiert werden
+        for (int k = edgeContainer.getBendpointContainerCount() - 1; k >= 0; k--) {
+            removeBendpoint(edgeContainer.getBendpointContainer(k).getKnickpunktKnoten(), pid);
         }
         Kante edge = edgeContainer.getEdge();
         GraphDocument doc = edgeContainer.getGraphDocument();

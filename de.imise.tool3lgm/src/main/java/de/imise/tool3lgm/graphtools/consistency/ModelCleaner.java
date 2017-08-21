@@ -209,7 +209,7 @@ public class ModelCleaner {
                                 ok = false;
                             } else {
                                 ElementContainer szenBpc = bp.getContainer(ecDoc);
-                                if (ec.getBendpointContainerList().indexOf(szenBpc) == -1) {
+                                if (ec.indexOfBendpointContainer((BendpointContainer) szenBpc) == -1) {
                                     // System.err.println("owner kennt den nicht");
                                     // System.err.println(gdcoll.getSzenario(i));
                                     ok = false;

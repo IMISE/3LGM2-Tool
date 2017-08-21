@@ -352,7 +352,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                         for (Kante edge : ec.getElement().getEdgesWith(ka.getElement())) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(doc);
                             if (edgeC != null) {
-                                for (BendpointContainer bc : edgeC.getBendpointContainerList()) {
+                                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
                                     grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
                                 }
                             }

@@ -623,16 +623,17 @@ public class LGMGraphDocument extends GraphDocument {
                 if (!kante.reconnect(destGDColl)) {
                     destGDColl.deleteElement(kante, pid);
                 } else {
-                    destGDColl.addEdge((EdgeContainer) kante.getContainer(destMainDoc), kante.layerFor(), pid);
+                    int edgeLayer = kante.layerFor();
+                    destGDColl.addEdge((EdgeContainer) kante.getContainer(destMainDoc), edgeLayer, pid);
                     if (!kante.isUnique() && dest instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) kante.getContainer(dest);
                         if (newC == null) {
                             throw new Exception(Tool3lgmConstants.getErrString("error"));
                         }
-                        dest.getLayer(kante.layerFor()).add(newC);
-                        List<BendpointContainer> kpList = newC.getBendpointContainerList();
-                        for (int j = 0; j < kpList.size(); j++) {
-                            dest.getLayer(kante.layerFor()).add(kpList.get(j));
+                        dest.getLayer(edgeLayer).add(newC);
+                        LayerContainer layerContainer = dest.getLayer(edgeLayer);
+                        for (BendpointContainer bendpointContainer : newC.iterateBendpointContainers()) {
+                            layerContainer.add(bendpointContainer);
                         }
                         newC.computeBorderPoints();
                     }
