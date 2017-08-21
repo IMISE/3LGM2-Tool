@@ -1,5 +1,15 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_ELEMENTS_SET;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.NO_LAYER;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isEdgeType;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isNodeType;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.layerFor;
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,11 +42,9 @@ public class GraphDocumentHandler {
      * @return List mit allen gefundenen Elementen
      */
     public static final List<ModelElement> getModelItems(final GraphDocument doc, final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
-
         if (clazz == null) {
             return new ArrayList<>(0);
         }
-
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
         if (!includeSubClasses || clazz == Knickpunkt.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
@@ -44,11 +52,10 @@ public class GraphDocumentHandler {
             return getModelItemsForClasses(ModelConstants.isUnique(clazz) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
             //          return getModelItemsForSingleClass(clazz, absolutePartsOnly, alphabetical);
         }
-
         List<ModelElement> objects = null;
         List<Class<? extends ModelElement>> searchClassesUnique = new ArrayList<>();
         List<Class<? extends ModelElement>> searchClassesNotUnique = new ArrayList<>();
-        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
+        for (Class<? extends ModelElement> elementClass : ALL_ELEMENTS_SET) {
             if (ModelConstants.isAbstract(elementClass)) {
                 continue;
             }
@@ -60,15 +67,14 @@ public class GraphDocumentHandler {
                 }
             }
         }
-
         if (!(doc instanceof Szenario)) {
             searchClassesUnique.addAll(searchClassesNotUnique);
             searchClassesNotUnique.clear();
         }
-        if (searchClassesUnique.size() > 0) {
+        if (!searchClassesUnique.isEmpty()) {
             objects = getModelItemsForClasses(doc.getCollection().getMainGraphDocument(), searchClassesUnique, absolutePartsOnly, alphabetical);
         }
-        if (searchClassesNotUnique.size() > 0) {
+        if (!searchClassesNotUnique.isEmpty()) {
             List<ModelElement> elems = getModelItemsForClasses(doc, searchClassesNotUnique, absolutePartsOnly, alphabetical);
             if (objects == null) {
                 objects = elems;
@@ -77,12 +83,11 @@ public class GraphDocumentHandler {
             }
         }
         return objects;
-
     }
 
     /**
      * Liefert alle Elemente der angegebenen Arten im Gesamtmodell.
-     * 
+     *
      * @param gdcoll
      * @param searchClasses
      * @return
@@ -102,47 +107,49 @@ public class GraphDocumentHandler {
      * @return
      */
     private static List<ModelElement> getModelItemsForClasses(final GraphDocument doc, final Collection<Class<? extends ModelElement>> searchClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
-
         List<ModelElement> objects = new ArrayList<>();
-
         //Indizes der zu durchsuchenden Ebenen
-        int i1 = Integer.MAX_VALUE;
-        int i2 = Integer.MIN_VALUE;
-
+        int minLayer = MAX_VALUE;
+        int maxLayer = MIN_VALUE;
         boolean searchBendpoints = false;
         boolean searchNodes = false;
         boolean searchEdges = false;
-        //Indizes der Ebenen so anpassen, dass möglichst wenig durchsucht werden muss
+        //zu durchsuchende ElementContainer-Listen bestimmen
         for (Class<? extends ModelElement> searchClass : searchClasses) {
             if (Knickpunkt.class == searchClass) {
                 searchBendpoints = true;
             }
-            if (!searchNodes && ModelConstants.isNodeType(searchClass)) {
+            if (!searchNodes && isNodeType(searchClass)) {
                 searchNodes = true;
             }
-            if (!searchEdges && ModelConstants.isEdgeType(searchClass)) {
+            if (!searchEdges && isEdgeType(searchClass)) {
                 searchEdges = true;
             }
-            //Ebene der gesuchten Elementklasse bestimmen
-            int ebene = ModelConstants.layerFor(searchClass);
-            if (ebene < 0) {
-                i1 = 0;
-                i2 = 5;
-                break;
-            }
-            if (ebene < i1) {
-                i1 = ebene;
-            }
-            if (ebene + 1 > i2) {
-                i2 = ebene + 1;
-            }
-            if (i1 == 0 && i2 == 5) {
+            if (searchBendpoints && searchEdges && searchNodes) {
                 break;
             }
         }
-
+        //Indizes der Ebenen so anpassen, dass möglichst wenig durchsucht werden muss
+        for (Class<? extends ModelElement> searchClass : searchClasses) {
+            //Ebene der gesuchten Elementklasse bestimmen
+            int ebene = layerFor(searchClass);
+            if (ebene == NO_LAYER) {
+                minLayer = MIN_LAYER_INDEX;
+                maxLayer = MAX_LAYER_INDEX;
+                break;
+            }
+            if (ebene < minLayer) {
+                minLayer = ebene;
+            }
+            if (ebene > maxLayer) {
+                maxLayer = ebene;
+            }
+            if (minLayer == MIN_LAYER_INDEX && maxLayer == MAX_LAYER_INDEX) {
+                break;
+            }
+        }
         //alle zu durchsuchenden Ebenen durchlaufen
-        for (int i = i1; i < i2; i++) {
+        for (int i = minLayer; i <= maxLayer; i++) {
             //Ebene holen
             LayerContainer lc = doc.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
@@ -159,7 +166,6 @@ public class GraphDocumentHandler {
             if (searchEdges) {
                 layerElements.add(lc.getKanten());
             }
-
             //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
             for (List<? extends ElementContainer> ecList : layerElements) {
                 //für jede dieser ElementContainerlisten
@@ -177,17 +183,14 @@ public class GraphDocumentHandler {
                 }
             }
         }
-
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
         if (alphabetical && (searchBendpoints || searchEdges)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }
-
         //      long end = System.currentTimeMillis();
         //      System.err.println("getModelItems(" + clazz.getSimpleName() + ", " + includeSubClasses + ", " + alphabetical + ") -> " + (end - start) + " ms " + objects.size() + " Elemente");
-
         return objects;
     }
 }
