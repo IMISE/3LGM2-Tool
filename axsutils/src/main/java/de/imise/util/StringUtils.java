@@ -39,7 +39,6 @@ public class StringUtils {
     public static String[] trimAll(final String[] source) {
         int n = source.length;
         String[] result = new String[n];
-
         for (int j = 0; j < n; j++) {
             result[j] = source[j].trim();
         }
@@ -66,9 +65,8 @@ public class StringUtils {
     public static Pair<String, String> makeSameLength(final String s1, final String s2) {
         String newS1 = fillToLenght(s1, s2.length());
         String newS2 = fillToLenght(s2, s1.length());
-        Pair<String, String> pair = new Pair<String, String>(newS1, newS2);
+        Pair<String, String> pair = new Pair<>(newS1, newS2);
         return pair;
-
     }
 
     public static String fillToLenght(final String s, final int newLenght) {
@@ -121,14 +119,12 @@ public class StringUtils {
             text = text.toLowerCase();
             text2Find = text2Find.toLowerCase();
         }
-
         // falls text2Find tatsächlich ein regulärer Ausdruck ist und auch über reguläre Ausdrücke gesucht wird, ist das hier das kompilierte Pattern aus text2Find
         Pattern regExpPattern = null;
         // Suche nach RegExp -> Pattern compilieren
         if (text2FindAsRegExp) {
             regExpPattern = Pattern.compile(text2Find);
         }
-
         // Rückgabewert, wenn der Suchtext gefunden wurde
         IntRange range = null;
         int startIndex = -2;
@@ -163,7 +159,6 @@ public class StringUtils {
                     break;
                     // außerdem rausspringen, wenn endIndex<=startIndex (entsteht bei wholeWord)
                 }
-
                 if (endIndex <= startIndex) {
                     // SK:
                     if (wrapSearch) {
@@ -179,21 +174,18 @@ public class StringUtils {
                 // immer vom Anfang bis zum Ende suchen!!! Damit der Suchstring in jedem Fall gefunden wird
                 // nur im 2. Durchlauf wirklich den ganzen String durchsuchen. Alle Durchlaüfe danach kommen nur noch zu Stande,
                 // wenn man nach wholeWord sucht. Dann dürfen die Indizes nicht angepasst werden.
-
                 // wenn im Durchlauf kein wholeWord (false positive im Modus whole word) gefunden wurde, darf man hier nicht zurücksetzen (sonst endlosschleife)
                 if (i == 1 && !foundNoWholeWord) {
                     startIndex = 0;
                     endIndex = text.length();
                 }
             }
-
             // Jetzt kann die eigentliche Suche starten
-
             // normale Stringsuche
             if (!text2FindAsRegExp) {
                 int foundIndex = searchForward ? text.indexOf(text2Find, startIndex) : text.lastIndexOf(text2Find, endIndex);
                 if (foundIndex >= 0) {
-                    range = new IntRange(foundIndex, text2Find.length());
+                    range = IntRange.minToLength(foundIndex, text2Find.length());
                     // suche nach regulärem Ausdruck
                 }
             } else {
@@ -205,7 +197,6 @@ public class StringUtils {
                 // wenn vorwärts gesucht werden soll, dann fängt er bei Index 0 an und sucht nur 1 mal. Rückwärt fängt er am Ende an
                 // und sucht nach vorne durch
                 for (int start = searchForward ? startIndex : textPart.length() - 1; start >= 0; start--) {
-
                     if (!m.find(start)) {
                         // bleibt sonst hängen am letzten Wort bei Wrap
                         // ->
@@ -218,12 +209,11 @@ public class StringUtils {
                             continue outerloop;
                         }
                     } else {
-                        range = new IntRange(m.start(), m.end() - m.start());
+                        range = IntRange.minToLength(m.start(), m.end() - m.start());
                         break;
                     }
                 }
             }
-
             // nichts gefunden?
             if (range == null) {
                 // wenn nichts gefunden in 1ter Schleife, weiter machen
@@ -234,31 +224,26 @@ public class StringUtils {
                     break;
                 }
             }
-
             //TODO:AXS:20121122: das hier hinter ist dead Code! oben ist break oder continue. auch oben das SurpressWarnings heraus nehmen und Testen
-
             // Hinweise zu wholeword:
             // ->
             // - wenn der Kandidat korrekt ist, soll der Block durchlaufen und unten break bei (range != null)
             // - wenn es ein false positive ist, muss der Bereich eingeschräankt werden (abhäangig von vorwärts rüuckwärts) und es muss wieder hochgesprungen werden
             // - dann darf oben nicht mehr der Bereich auf 0 zurckgesetzt werden Z164
             // - um sich das zu merken => foundNoWholeWord => es wurde kein ganzes wort gefunden (aber false positive)
-
             // String gefunden, aber suche eigentlich nach ganzem Wort?
             if (wholeWord) {
                 // Wenn ganzes Wort gefunden -> soll hier übersprungen werden
                 // Wenn ganzes Wort dann muss angepasst und zurückgesprungen werden
-
                 // man beachte die 2 Sonderfälle, ganz am Anfang, ganz am Ende
                 // Pos vor dem Wort; 0 beim Anfang
-                int beforePos = Math.max(0, range.getOffset() - 1);
+                int beforePos = Math.max(0, range.min() - 1);
                 // Pos nach dem Wort; len bei Ende
-                int afterPos = Math.min(text.length(), range.getOffset() + range.getLength());
+                int afterPos = Math.min(text.length(), range.min() + range.length());
                 // Zeichenersetzung wenn am Anfang
                 char charBefore = beforePos == 0 ? ' ' : text.charAt(beforePos);
                 // Zeichenersetzung wenn am Ende
                 char charAfter = afterPos == text.length() ? ' ' : text.charAt(afterPos);
-
                 // Wenn nicht von Leerzeichen umgeben -> wieder hochspringen
                 if (!(charBefore < 33 && charAfter < 33)) {
                     // Wenn kein ganzes Wort -> erhöhe startZeiger bei Vorwärtssuche
@@ -272,7 +257,6 @@ public class StringUtils {
                     continue;
                 }
             }
-
             // Ergebnis wurde gefunden
             if (range != null) {
                 break;
