@@ -45,52 +45,66 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * @author N.N.
  */
 public final class DynamicTree extends JTree implements UserFieldListener, GraphDocumentOwner {
+
     /**
      * Knoten für die Fachliche Ebene
      */
     private final LGMTreeNode fachebene = new LGMTreeNode(getResString("domain_layer"), false, true);
+
     /**
      * Knoten für die Logische Werkzeugebene
      */
     private final LGMTreeNode logebene = new LGMTreeNode(getResString("logical_tool_layer"), false, true);
+
     /**
      * Knoten für die physische Werkzeugebene
      */
     private final LGMTreeNode phyebene = new LGMTreeNode(getResString("physical_tool_layer"), false, true);
+
     /**
      * COMMENTME
      */
     private final LGMTreeNode awb = new LGMTreeNode(getResString("Anwendungsbaustein_p"), false, true);;
+
     /**
      * COMMENTME
      */
     private LGMTreeNode textFieldDomainLayer = null;
+
     /**
      * COMMENTME
      */
     private LGMTreeNode textFieldLogicalLayer = null;
+
     /**
      * COMMENTME
      */
     private LGMTreeNode textFieldPhysicalLayer = null;
+
     /**
      * COMMENTME
      */
     private GraphDocument doc;
+
     private final DynamicTreeSelectionListener selectionListener;
+
     private final DynamicTreeGraphDocumentAndInTransactionListener transactionListener;
+
     /**
      * Alle Knoten deren Kinder immer wieder removed und neu angelegt werden.
      */
     private final LGMTreeNode[] nodesToClear = new LGMTreeNode[TREE_DOMAIN_LAYER_NODES.length + TREE_LOGICAL_LAYER_NODES.length + TREE_PHYSICAL_LAYER_NODES.length];
+
     /**
      * Transaktions-ID, mit der der Baum alle seine Änderungen vornimmt.
      */
     public static final int PID = STANDARD_PID;
+
     /**
      * COMMENTME
      */
     private final DefaultTreeModel myModel;
+
     /**
      * COMMENTME
      */
@@ -432,7 +446,9 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     static boolean showPartOfHierarchy = false;
+
     static boolean showUserDefinedProperties = false;
+
     static int count = 0;
 
     /**
