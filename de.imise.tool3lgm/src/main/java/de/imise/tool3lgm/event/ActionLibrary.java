@@ -1,5 +1,9 @@
 package de.imise.tool3lgm.event;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -36,7 +40,6 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -298,7 +301,7 @@ public class ActionLibrary {
                                     }
                                 }
 
-                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, connectable));
+                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + FORWARD, connectable));
                             }
                             if (Kante.isConnectingForward(edgeClass, me2Class, me1Class)) {
                                 String label = ModelConstants.getForwardMetaAssociationName(edgeClass);
@@ -318,11 +321,11 @@ public class ActionLibrary {
                                         break;
                                     }
                                 }
-                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, connectable));
+                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + BACKWARD, connectable));
                             }
                         } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                             if (Kante.isConnectingForward(edgeClass, me1Class, me2Class)) {
-                                String label = ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.FORWARD);
+                                String label = ModelConstants.getMetaAssociationName(edgeClass, false, FORWARD);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -339,9 +342,9 @@ public class ActionLibrary {
                                     }
                                 }
 
-                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, connectable));
+                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + FORWARD, connectable));
 
-                                label = ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.BACKWARD);
+                                label = ModelConstants.getMetaAssociationName(edgeClass, false, BACKWARD);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -357,13 +360,13 @@ public class ActionLibrary {
                                         break;
                                     }
                                 }
-                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, connectable));
+                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + BACKWARD, connectable));
 
                             }
                             // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen
                             // nur 1x angeboten werden
                             if (Kante.isConnectingForward(edgeClass, me2Class, me1Class) && Kante.getStartClass(edgeClass) != Kante.getEndClass(edgeClass)) {
-                                String label = ModelConstants.getMetaAssociationName(edgeClass, true, Doppelkante.FORWARD);
+                                String label = ModelConstants.getMetaAssociationName(edgeClass, true, FORWARD);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -380,9 +383,9 @@ public class ActionLibrary {
                                     }
                                 }
 
-                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, connectable));
+                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + BACKWARD, connectable));
 
-                                label = ModelConstants.getMetaAssociationName(edgeClass, true, Doppelkante.BACKWARD);
+                                label = ModelConstants.getMetaAssociationName(edgeClass, true, BACKWARD);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -399,7 +402,7 @@ public class ActionLibrary {
                                     }
                                 }
 
-                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, connectable));
+                                actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + FORWARD, connectable));
 
                             }
                         } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
@@ -420,7 +423,7 @@ public class ActionLibrary {
                                 }
                             }
 
-                            actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, connectable));
+                            actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + BACKWARD, connectable));
                         }
                     }
                 }
@@ -504,6 +507,7 @@ public class ActionLibrary {
 
         /** Macht letzte Änderung rückgängig */
         public static final Action UNDO = new StaticAction(ActionIdentifier.undo, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -520,6 +524,7 @@ public class ActionLibrary {
 
         /** Macht letztes UNDO rückgängig */
         public static final Action REDO = new StaticAction(ActionIdentifier.redo, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -538,6 +543,7 @@ public class ActionLibrary {
 
         /** Öffnet ein Suche-Fenster */
         public static final Action SEARCH = new StaticAction(ActionIdentifier.search, PPP, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -698,7 +704,7 @@ public class ActionLibrary {
              * (parts.contains(partsParents.get(i))) partsParents.remove(i--); } //sicher ist sicher
              * -> Kopie anlegen, falls durch irgendwelche Seiteneffekte sich die Kantenliste nochmal
              * ändert ArrayList<Kante> partEdges = new ArrayList<Kante>(part.getEdges()); for (int i
-             * = 0; i < partEdges.size(); i++) { Doppelkante edge = (Doppelkante)partEdges.get(i);
+             * = 0; i < partEdges.size(); i++) { edge = (partEdges.get(i);
              * //Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
              * Eigenschaften des Teilelementes //Bekommen soll, werden nicht umgehängt (eigentlich
              * kann das nur die Teil-Von-Kante selbst sein, aber in //neuen Metamodellen wäre auch
@@ -717,9 +723,9 @@ public class ActionLibrary {
              * edge.getMinStartToEndCardinality() : edge.getMinEndToStartCardinality(); if
              * (minElemCardinality > 0) continue; int dir = edge.getDirection(); String edgeName =
              * edge.getName(); String edgeDescrip = edge.getDescription(); Kante newEdge = null; if
-             * (dir == Doppelkante.FORWARD) { newEdge = link(gdcoll, edge, start, end); } else if
-             * (dir == Doppelkante.BACKWARD) { newEdge = link(gdcoll, edge, end, start); } else if
-             * (dir == Doppelkante.DOUBLE) { newEdge = link(gdcoll, edge, start, end); link(gdcoll,
+             * (dir == FORWARD) { newEdge = link(gdcoll, edge, start, end); } else if
+             * (dir == BACKWARD) { newEdge = link(gdcoll, edge, end, start); } else if
+             * (dir == DOUBLE) { newEdge = link(gdcoll, edge, start, end); link(gdcoll,
              * edge, end, start); } doc.setName(newEdge, edgeName, TransactionManager.STANDARD_PID);
              * doc.setDescription(newEdge.getHashString(), edgeDescrip,
              * TransactionManager.STANDARD_PID); } } gdcoll.deleteElement(part, doc,
@@ -750,17 +756,17 @@ public class ActionLibrary {
                             if (minElemCardinality > 0) {
                                 continue;
                             }
-                            int dir = ((Doppelkante) edge).getDirection();
+                            int dir = edge.getDirection();
                             String edgeName = edge.getName();
                             String edgeDescrip = edge.getDescription();
                             Kante newEdge = null;
-                            if (dir == Doppelkante.FORWARD) {
+                            if (dir == FORWARD) {
                                 newEdge = link(gdcoll, edge, start, end);
                                 gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);
-                            } else if (dir == Doppelkante.BACKWARD) {
+                            } else if (dir == BACKWARD) {
                                 newEdge = link(gdcoll, edge, end, start);
                                 gdcoll.unlink(edge.getEnd(), edge.getStart(), edge.getClass(), TransactionManager.STANDARD_PID);
-                            } else if (dir == Doppelkante.DOUBLE) {
+                            } else if (dir == DOUBLE) {
                                 newEdge = link(gdcoll, edge, start, end);
                                 link(gdcoll, edge, end, start);
                                 gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);
@@ -813,6 +819,7 @@ public class ActionLibrary {
 
         /** Öffnet ein Options-Fenster zum Löschen des aktuell ausgewählten Elements */
         public static final Action REMOVE = new StaticAction(ActionIdentifier.remove, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -829,6 +836,7 @@ public class ActionLibrary {
 
         /** Wählt alle Elemente im Teilmodell aus */
         public static final Action SELECT_ALL = new StaticAction(ActionIdentifier.select_all, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -941,6 +949,7 @@ public class ActionLibrary {
 
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
             public static final Action EXPORT_XSLT = new StaticAction(ActionIdentifier.export_xslt, PPP, true) {
+
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (!isEnabled()) {
@@ -1048,6 +1057,7 @@ public class ActionLibrary {
 
         /** Öffnen eines neuen Models */
         public static final Action ACTION_NEW_MODEL = new StaticAction(ActionIdentifier.ACTION_NEW_MODEL) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 getTool().openFile(false);
@@ -1056,6 +1066,7 @@ public class ActionLibrary {
 
         /** Öffnen eines bestehenden Models */
         public static final Action OPEN = new StaticAction(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 getTool().openFile(true);
@@ -1064,6 +1075,7 @@ public class ActionLibrary {
 
         /** Speichern des Models an bekannter Stelle */
         public static final Action SAVE = new StaticAction(ActionIdentifier.ACTION_SAVE_MODEL, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -1078,6 +1090,7 @@ public class ActionLibrary {
 
         /** Speichern des Models an neuer Stelle */
         public static final Action SAVEAS = new StaticAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, PPP, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -1092,6 +1105,7 @@ public class ActionLibrary {
 
         /** Schließen des Models */
         public static final Action CLOSE = new StaticAction(ActionIdentifier.ACTION_CLOSE_MODEL, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -1103,6 +1117,7 @@ public class ActionLibrary {
 
         /** Zeigt die Beschreibung des Tools an */
         public static final Action DESCRIPTION = new StaticAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, PPP, true) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -1119,6 +1134,7 @@ public class ActionLibrary {
 
         /** Drucken des Models (hat keine Wirkung, weil Drucken noch nicht implementiert ist) */
         public static final Action PRINT = new StaticAction(ActionIdentifier.print) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 throw new UnsupportedOperationException("Drucken wird nicht unterstützt");
@@ -1127,6 +1143,7 @@ public class ActionLibrary {
 
         /** Beenden des Programms */
         public static final Action EXIT = new StaticAction(ActionIdentifier.exit) {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Tool3lgm tool3lgm = getTool();
@@ -1599,6 +1616,7 @@ public class ActionLibrary {
 
             /** (De-)Aktiviert das Zeichnen von Kanten nur für selektierte Elemente */
             public static final Action PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS = new StaticAction(ActionIdentifier.paintEdgesOnlyForSelectedElements, (Boolean) UserProperties.isPaintEdgesOnlyForSelectedElements()) {
+
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     UserProperties.setPaintEdgesOnlyForSelectedElements(isSelected());
@@ -1611,6 +1629,7 @@ public class ActionLibrary {
              * Grafik hervorgehovben werden
              */
             public static final Action ANALYSIS_COLOR = new StaticAction(ActionIdentifier.analysis_color, PPP) {
+
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     NodeRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), NodeRenderer.analysisColor);
@@ -1897,6 +1916,7 @@ public class ActionLibrary {
 
             /** (De-)aktiviert die Zeichnen-Toolbar */
             public static final Action SWITCH_SHOW_PAINTING_BAR = new StaticAction(ActionIdentifier.painting, true, true) {
+
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (!isEnabled()) {

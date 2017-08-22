@@ -4,6 +4,9 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.process;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.util.Enumeration;
@@ -30,7 +33,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -222,7 +224,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private void appendObjectTypes(final LGMTreeNode aufgabenContainerNode) {
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
-        List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, Doppelkante.BACKWARD, false);
+        List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
         if (ots.size() > 0) {
             LGMTreeNode tmpNode = new LGMTreeNode(Tool3lgmConstants.getResString("AufObjVerbindung_f_b"), false);
             tmpNode.setSelectable(false);
@@ -233,7 +235,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
             }
             aufgabenContainerNode.add(tmpNode);
         }
-        ots = me.getConnectedContainer(Objekttyp.class, doc, null, Doppelkante.FORWARD, false);
+        ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
         if (ots.size() > 0) {
             LGMTreeNode tmpNode = new LGMTreeNode(Tool3lgmConstants.getResString("AufObjVerbindung_f_f"), false);
             tmpNode.setSelectable(false);
@@ -1059,6 +1061,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
             return new LGMAction(Tool3lgmConstants.getResString("verif")) {
+
                 @Override
                 public void execute(final EventObject e) {
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
@@ -1089,6 +1092,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         if (edp instanceof ProzessStructurePanel) {
             return new LGMAction(Tool3lgmConstants.getResString("fehler")) {
+
                 @Override
                 public void execute(final EventObject e) {
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
@@ -1189,6 +1193,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ModelElement modelElement = getModelElement();
 
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+
             @Override
             public void execute(final EventObject e) {
                 LGMActionLibrary.getDragNDropLocateElementAsTargetAction(targetTree).execute(e);
@@ -1254,6 +1259,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementPropertyDialog dialog = getDialog();
 
         return new LGMAction("", Tool3lgmConstants.getIcon("hoch2.gif")) {
+
             @Override
             public void execute(final EventObject eo) {
                 // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
@@ -1341,6 +1347,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementPropertyDialog dialog = getDialog();
 
         return new LGMAction("", Tool3lgmConstants.getIcon("runter2.gif")) {
+
             @Override
             public void execute(final EventObject eo) {
                 // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat

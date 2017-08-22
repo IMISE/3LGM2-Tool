@@ -3,10 +3,12 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.util.Vector;
@@ -14,7 +16,6 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -36,7 +37,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * <p>
  * Die Dateneingabe erfolgt für jede Klasse von Kantenelementen und jedes für sie definierte Verteilungsgewicht separat - die Auswahl der Klasse
  * erfolgt in der enthaltenen <code>edgeBox</code>, die Auswahl des Verteilungsgewichtes in der <code>weightBox</code>.
- * 
+ *
  * @author fstephan
  */
 public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldEditorPanel {
@@ -83,7 +84,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
 
     /**
      * Konstruktor
-     * 
+     *
      * @param dialog Dialog, der dieses Panel enthält
      * @param name
      */
@@ -106,6 +107,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
          * Bei Änderung der Auswahl in edgeBox, werden in der weightBox die verfügbaren Verteilungsgewichte angezeigt
          */
         AbstractAction action = new AbstractAction() {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Object o = elementTypeBox.getSelectedObject();
@@ -142,29 +144,26 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
      */
     private void setActionsForWeightBox() {
         final DistributionWeightEditorPanel finalPanel = this;
-        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
+        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und
         // Kantentyp gehörige Table im Panel dargestellt.
-        ItemListener il = new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
+        ItemListener il = e -> {
 
-                Object o = weightBox.getSelectedObject();
-                if (o == null) {
-                    return;
-                }
-                if (!o.getClass().isAssignableFrom(UserField.class) || !(elementTypeBox.getSelectedObject() instanceof Class)) {
-                    return;
-                }
-                stopEditing();
-                takeOver();
-
-                // Selektion für nächstes takeOver
-                finalPanel.weightBoxSelection = (UserField) o;
-                finalPanel.columnFilterBoxSelection = null;
-                finalPanel.drawTable();
-                finalPanel.distributeSelectionChangedEvent();
-                finalPanel.setColumnFilterBoxContent();
+            Object o = weightBox.getSelectedObject();
+            if (o == null) {
+                return;
             }
+            if (!o.getClass().isAssignableFrom(UserField.class) || !(elementTypeBox.getSelectedObject() instanceof Class)) {
+                return;
+            }
+            stopEditing();
+            takeOver();
+
+            // Selektion für nächstes takeOver
+            finalPanel.weightBoxSelection = (UserField) o;
+            finalPanel.columnFilterBoxSelection = null;
+            finalPanel.drawTable();
+            finalPanel.distributeSelectionChangedEvent();
+            finalPanel.setColumnFilterBoxContent();
         };
 
         weightBox.addItemListener(il);
@@ -199,23 +198,20 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
 
     private void setActionsForColumnFilterBox() {
         final DistributionWeightEditorPanel finalPanel = this;
-        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
+        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und
         // Kantentyp gehörige Table im Panel dargestellt.
-        ItemListener il = new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
-                Object o = columnFilterBox.getSelectedObject();
-                if (o != null && !(o instanceof ModelElement) || !(weightBox.getSelectedObject() instanceof UserField) || !(elementTypeBox.getSelectedObject() instanceof Class)) {
-                    return;
-                }
-                stopEditing();
-                takeOver();
-
-                // Selektion für nächstes takeOver
-                finalPanel.columnFilterBoxSelection = (ModelElement) o;
-                finalPanel.drawTable();
-                finalPanel.distributeSelectionChangedEvent();
+        ItemListener il = e -> {
+            Object o = columnFilterBox.getSelectedObject();
+            if (o != null && !(o instanceof ModelElement) || !(weightBox.getSelectedObject() instanceof UserField) || !(elementTypeBox.getSelectedObject() instanceof Class)) {
+                return;
             }
+            stopEditing();
+            takeOver();
+
+            // Selektion für nächstes takeOver
+            finalPanel.columnFilterBoxSelection = (ModelElement) o;
+            finalPanel.drawTable();
+            finalPanel.distributeSelectionChangedEvent();
         };
         columnFilterBox.addItemListener(il);
     }
@@ -304,14 +300,14 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     private Kante getEdge(final ModelElement rowElement, final ModelElement columnElement) {
         Kante edge = null;
         // Richtung der Kante und die Kante selbst ermitteln
-        if (choosedEdgeDirection == Doppelkante.FORWARD) {
+        if (choosedEdgeDirection == FORWARD) {
             edge = columnElement.getEdgeTo(rowElement, elementTypeBoxSelection);
 
             if (edge == null) {
                 edge = rowElement.getEdgeTo(columnElement, elementTypeBoxSelection);
             }
         }
-        if (edge == null && choosedEdgeDirection == Doppelkante.BACKWARD) {
+        if (edge == null && choosedEdgeDirection == BACKWARD) {
             edge = rowElement.getEdgeTo(columnElement, elementTypeBoxSelection);
 
             if (edge == null) {
@@ -367,9 +363,9 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         }
         Class<? extends Kante> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Kante.class);
         String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
-        choosedEdgeDirection = Doppelkante.FORWARD;
+        choosedEdgeDirection = FORWARD;
         if (!selectedEdgeName.equals(ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass))) {
-            choosedEdgeDirection = Doppelkante.BACKWARD;
+            choosedEdgeDirection = BACKWARD;
         }
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);

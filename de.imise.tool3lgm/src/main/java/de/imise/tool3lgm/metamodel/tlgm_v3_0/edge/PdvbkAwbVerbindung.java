@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
@@ -12,29 +12,33 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
 /**
  * @author Thomas
  */
-public final class PdvbkAwbVerbindung extends Doppelkante {
+public final class PdvbkAwbVerbindung extends Kante {
 
     //    public static final Class[] stcl = {Anwendungsbaustein.class, RechAnwendungsbaustein.class, KonAnwendungsbaustein.class};
     public static final Class<? extends ModelElement> stcl = Anwendungsbaustein.class;
+
     public static final int[] scard = {
-            ModelConstants.ONE, ModelConstants.ONE
+            ModelConstants.ONE,
+            ModelConstants.ONE
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = DBKonfiguration.class;
 
     //	public static final Class[] etcl = {DBKonfiguration.class};
 
     //	private static Object[][] stcl = {{Anwendungsbaustein.class, ModelConstants.ONE, ModelConstants.UNLIMITED},
     //									{RechAnwendungsbaustein.class, ModelConstants.ONE, ModelConstants.UNLIMITED},
-    //									{KonAnwendungsbaustein.class, ModelConstants.ONE, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{DBKonfiguration.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //									{KonAnwendungsbaustein.class, ModelConstants.ONE, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{DBKonfiguration.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public PdvbkAwbVerbindung() {
         super();
     }

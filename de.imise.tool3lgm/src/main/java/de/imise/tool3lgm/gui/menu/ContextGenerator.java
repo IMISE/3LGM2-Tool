@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +29,6 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -65,62 +67,77 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * COMMENTME
      */
     static JMenu new_logical_tree, new_domain_tree, new_physical_tree;
+
     /**
      * COMMENTME
      */
     private static JMenu internals;
+
     /**
      * COMMENTME
      */
     private static JMenuItem delete_selected, delete_selected_from_szenario, join_selected;
+
     /**
      * COMMENTME
      */
     private static JMenuItem properties, change_layout;
+
     /**
      * COMMENTME
      */
     private static JMenuItem new_fach_text, new_log_text, new_phy_text;
+
     /**
      * COMMENTME
      */
     private static JMenuItem unlinkToSzenario, selectLinkedSzenario;
+
     /**
      * COMMENTME
      */
     private static JMenuItem command_line;
+
     /**
      * COMMENTME
      */
     private static JCheckBoxMenuItem verify, interactive;
+
     /**
      * COMMENTME
      */
     private static JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
+
     /**
      * COMMENTME
      */
     private static JMenuItem color_layer, normalize_layer, layout_layer;
+
     /**
      * COMMENTME
      */
     private static JMenuItem show_configs, hide_configs, set_visible, set_invisible;
+
     /**
      * COMMENTME
      */
     private static JMenuItem layer_show_configs, layer_hide_configs;
+
     /**
      * COMMENTME
      */
     private static JMenuItem aufklappen, zuklappen;
+
     /**
      * COMMENTME
      */
     private static JMenuItem cb_copy, cb_cut, cb_paste, cb_clear;
+
     /**
      * COMMENTME
      */
     private static JMenuItem undo, redo, queue, consistency;
+
     /**
      * COMMENTME
      */
@@ -135,10 +152,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * COMMENTME
      */
     private boolean controlled = false;
+
     /**
      * COMMENTME
      */
     private JPopupMenu menu = null;
+
     /**
      * COMMENTME
      */
@@ -623,8 +642,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
                             String label = ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
@@ -645,12 +664,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                            int actDir = Doppelkante.FORWARD;
+                            int actDir = FORWARD;
                             String label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
                             String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
                             boolean connectable = false;
@@ -672,7 +691,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
-                            actDir = Doppelkante.BACKWARD;
+                            actDir = BACKWARD;
                             label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
                             toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
                             connectable = false;
@@ -697,7 +716,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         // Doppeldeutige Kanten mit identischer Start- und
                         // Endklasse brauchen nur 1x angeboten werden
                         if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && Kante.getStartClass(edgeClass) != Kante.getEndClass(edgeClass)) {
-                            int actDir = Doppelkante.FORWARD;
+                            int actDir = FORWARD;
                             String label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
                             String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
                             boolean connectable = false;
@@ -719,7 +738,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
-                            actDir = Doppelkante.BACKWARD;
+                            actDir = BACKWARD;
                             label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
                             toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
                             connectable = false;
@@ -760,8 +779,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 break;
                             }
                         }
-                        connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + Doppelkante.FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                     }
                 }
             }

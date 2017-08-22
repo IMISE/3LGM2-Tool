@@ -1,12 +1,13 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.List;
 import java.util.Vector;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -53,8 +54,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @return
      */
     private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction) {
-        Class<? extends ModelElement> rowElementClass = direction == Doppelkante.FORWARD ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass);
-        Class<? extends ModelElement> colElementClass = direction == Doppelkante.FORWARD ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
+        Class<? extends ModelElement> rowElementClass = direction == FORWARD ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass);
+        Class<? extends ModelElement> colElementClass = direction == FORWARD ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
         List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
         List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
 
@@ -85,7 +86,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction, final ModelElement columnElement) {
         List<Kante> edges;
         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
-            if (direction == Doppelkante.FORWARD) {
+            if (direction == FORWARD) {
                 edges = columnElement.getEdgesFrom(Kante.getStartClass(edgeClass), edgeClass);
             } else {
                 edges = columnElement.getEdgesTo(Kante.getEndClass(edgeClass), edgeClass);
@@ -148,7 +149,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                 Kante edge = null;
 
                 if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
-                    if (direction == Doppelkante.FORWARD) {
+                    if (direction == FORWARD) {
                         edge = re.getEdgeTo(ce, edgeClass);
                     } else {
                         edge = ce.getEdgeTo(re, edgeClass);

@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

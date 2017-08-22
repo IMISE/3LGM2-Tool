@@ -12,7 +12,7 @@ package de.imise.tool3lgm.graphtools.elements;
  *
  * @author AXS
  */
-public abstract class Composition extends Doppelkante {
+public abstract class Composition extends Kante {
 
     /**
      * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.

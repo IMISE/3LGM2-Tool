@@ -1,6 +1,13 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingSameElementClasses;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getMetaAssociationName;
+import static de.imise.util.HashStringGenerator.getCreationTimeMedium;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,13 +16,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.util.HashStringGenerator;
 
 /**
  * Panel das im Kopf jedes Eigenschaftsdialogs der Elemente deren Namen, ID usw. anzeigt. Es zeigt
@@ -27,9 +32,13 @@ import de.imise.util.HashStringGenerator;
 public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
     private final JLabel typeLabel, labelLabel;
+
     private JLabel nameLabel;
+
     private final JLabel idLabel;
+
     private JLabel submodelLabel;
+
     private JLabel subModelLabelLabel;
 
     public ElementDialogHeaderPanel(final ElementPropertyDialog dialog) {
@@ -101,11 +110,11 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
     @Override
     public void update() {
-        ModelElement modelElement = dialog.getModelElement();
-        if (ModelConstants.isNodeType(getModelElement().getClass())) {
-            typeLabel.setText(ModelConstants.getDisplayableName(modelElement));
-            labelLabel.setText("<html><b>" + modelElement.getClearName() + "</b></html>");
-            GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(((Knoten) modelElement).getAssociatedDoc());
+        ModelElement me = dialog.getModelElement();
+        if (me instanceof Knoten) {
+            typeLabel.setText(getDisplayableName(me));
+            labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
+            GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(me.getAssociatedDoc());
             if (vdoc == null) {
                 subModelLabelLabel.setVisible(false);
                 submodelLabel.setVisible(false);
@@ -114,32 +123,32 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
                 submodelLabel.setVisible(true);
                 submodelLabel.setText(vdoc != null ? "<html>" + vdoc.getTitle() + "</html>" : "----------");
             }
-        } else if (ModelConstants.isEdgeType(getModelElement().getClass())) {
-            Doppelkante edge = (Doppelkante) modelElement;
+        } else if (me instanceof Kante) {
+            Kante edge = (Kante) me;
             Class<? extends Kante> edgeClass = edge.getClass();
 
-            String startElementClassName = ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass));
-            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, Doppelkante.DOUBLE) + "</i>&nbsp;&nbsp;";
-            String endElementClassName = ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass));
+            String startElementClassName = getDisplayableName(getStartClass(edgeClass));
+            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + getMetaAssociationName(edgeClass, false, DOUBLE) + "</i>&nbsp;&nbsp;";
+            String endElementClassName = getDisplayableName(getEndClass(edgeClass));
 
             if (ModelConstants.isAssociationClass(getModelElement().getClass())) {
-                typeLabel.setText("<html>" + ModelConstants.getDisplayableName(modelElement) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
+                typeLabel.setText("<html>" + getDisplayableName(me) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
             } else {
                 typeLabel.setText("<html>" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + "</html>");
             }
 
             String startElementName = edge.getStart().getClearName();
             // nur die tatsächliche Richtung hinschreiben
-            if (!Kante.isConnectingSameElementClasses(edgeClass)) {
-                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ModelConstants.getMetaAssociationName(edgeClass, false, edge.getDirection()) + "</i>&nbsp;&nbsp;";
+            if (!isConnectingSameElementClasses(edgeClass)) {
+                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + getMetaAssociationName(edgeClass, false, edge.getDirection()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();
 
             nameLabel.setText("<html><b>" + startElementName + "</b>" + forwardEdgeClassName + "<b>" + endElementName + "</b></html>");
-            labelLabel.setText("<html>" + modelElement.getClearName() + "</html>");
+            labelLabel.setText("<html>" + me.getClearName() + "</html>");
         }
-        String hashString = modelElement.getHashString();
-        idLabel.setText(hashString + "        " + getResString("created") + ": " + HashStringGenerator.getCreationTimeMedium(hashString));
+        String hashString = me.getHashString();
+        idLabel.setText(hashString + "        " + getResString("created") + ": " + getCreationTimeMedium(hashString));
     }
 
 }

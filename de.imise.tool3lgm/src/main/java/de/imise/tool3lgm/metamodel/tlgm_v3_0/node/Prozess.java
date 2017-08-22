@@ -3,6 +3,9 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +15,6 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.process.LGMProzessStep;
 import de.imise.tool3lgm.graphtools.analyse.process.ProzessStructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -40,7 +42,9 @@ public final class Prozess extends Knoten {
             Color.red,
             Color.yellow
     };
+
     public static int colorCounter = 0;
+
     public int color;
 
     public Prozess() {
@@ -133,7 +137,7 @@ public final class Prozess extends Knoten {
         Set<ModelElement> setOfInterpretedObjectTypes = new HashSet<>();
         //Alle von den Parts und Parents der Aufgabe interpretierten OT diesem Set hinzufügen
         for (ModelElement auf : aufgabe.getPartAndParentElements()) {
-            setOfInterpretedObjectTypes.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, Doppelkante.BACKWARD));
+            setOfInterpretedObjectTypes.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, BACKWARD));
         }
 
         //für alle Aufgaben in der ProzessListe vor der übergebenen Position
@@ -142,7 +146,7 @@ public final class Prozess extends Knoten {
             //hole die bearbeiteten Objekttypen der i-ten Aufgabe in der Aufgabenliste des Prozesses
             Set<ModelElement> usedObjekttypenOfAufgabe = new HashSet<>();
             for (ModelElement auf : startAufgabe.getPartAndParentElements()) {
-                usedObjekttypenOfAufgabe.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, Doppelkante.FORWARD));
+                usedObjekttypenOfAufgabe.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, FORWARD));
             }
             //für jeden dieser Objekttypen
             for (ModelElement usedObjekttyp : usedObjekttypenOfAufgabe) {

@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.analyse.process;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
@@ -247,8 +249,8 @@ public class ShortestCommunicationPathFinder {
             // einsammeln
             for (ModelElement etntdtKombi : ntdt.getConnectedElements(EtntEtdtKombination.class)) {
                 int[] directions = {
-                        Doppelkante.FORWARD,
-                        Doppelkante.BACKWARD
+                        FORWARD,
+                        BACKWARD
                 };
                 for (int d = 0; d < directions.length; d++) {
                     // für alle Kommunikationsverbindungen, die den Objekttyp in der jewieligen
@@ -263,7 +265,7 @@ public class ShortestCommunicationPathFinder {
                         if (!interfaces.contains(end)) {
                             interfaces.add(end);
                         }
-                        if (directions[d] == Doppelkante.FORWARD) {
+                        if (directions[d] == FORWARD) {
                             sendToReceiveInterfacePairs.add(new SameTypePair<>(start, end));
                         } else {
                             sendToReceiveInterfacePairs.add(new SameTypePair<>(end, start));

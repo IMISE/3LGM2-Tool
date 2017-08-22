@@ -1,5 +1,10 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnecting;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
@@ -36,7 +41,6 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -3514,11 +3518,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
         }
-        if (!Kante.isConnecting(edgeClass, master.getClass(), slaveClass)) {
+        if (!isConnecting(edgeClass, master.getClass(), slaveClass)) {
             return null;
         }
         doc.start_transaction(pid);
-        if (master.countConnections(edgeClass) >= Kante.getMaxCardinality(master.getClass(), edgeClass)) {
+        if (master.countConnections(edgeClass) >= getMaxCardinality(master.getClass(), edgeClass)) {
             return null;
         }
         String name = slaveName == null || slaveName.trim().equals("") ? doc.getNextNewName(master.getClearName() + "_", slaveClass) : slaveName;
@@ -3834,7 +3838,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void linkSelected(final Class<? extends Kante> edgeClass, final int direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == Doppelkante.BACKWARD) {
+        if (direction == Kante.BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.link(edgeClass, ec.getElement(), lastSelecedElement, pid);
             }
@@ -3853,7 +3857,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void unlinkSelected(final Class<? extends Kante> edgeClass, final int direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == Doppelkante.BACKWARD) {
+        if (direction == BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.unlink(ec.getElement(), lastSelecedElement, edgeClass, pid);
             }
@@ -4813,18 +4817,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 newEdge.setHashString(edge.getHashString());
                 newEdge.setName(edge.getName());
                 newEdge.setDescription(edge.getDescription());
-                if (edge instanceof Doppelkante) {
-                    if (((Doppelkante) edge).getDirection() == Doppelkante.FORWARD) {
-                        ((Doppelkante) newEdge).setDirection(reverse ? Doppelkante.BACKWARD : Doppelkante.FORWARD);
-                    } else if (((Doppelkante) edge).getDirection() == Doppelkante.BACKWARD) {
-                        ((Doppelkante) newEdge).setDirection(reverse ? Doppelkante.FORWARD : Doppelkante.BACKWARD);
-                    } else {
-                        ((Doppelkante) newEdge).setDirection(Doppelkante.DOUBLE);
-                    }
+                int direction = edge.getDirection();
+                if (direction == FORWARD) {
+                    newEdge.setDirection(reverse ? BACKWARD : FORWARD);
+                } else if (direction == BACKWARD) {
+                    newEdge.setDirection(reverse ? FORWARD : BACKWARD);
                 } else {
-                    ((Doppelkante) newEdge).setDirection(reverse ? Doppelkante.BACKWARD : Doppelkante.FORWARD);
+                    newEdge.setDirection(DOUBLE);
                 }
-
                 edge.getStart().removeEdge(edge);
                 edge.getEnd().removeEdge(edge);
                 gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
@@ -4862,15 +4862,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             Bausteinschnittstelle bs1 = (Bausteinschnittstelle) kz.getStart();
             Bausteinschnittstelle bs2 = (Bausteinschnittstelle) kz.getEnd();
             //hin
-            List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.FORWARD);
-            for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.BACKWARD)) {
+            List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, FORWARD);
+            for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, BACKWARD)) {
                 if (empf.contains(kc)) {
                     gdcoll.link(KommbezEtntVerbindung.class, kc.getElement(), kz, TransactionManager.STANDARD_PID);
                 }
             }
             //zurück
-            empf = bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.FORWARD);
-            for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, Doppelkante.BACKWARD)) {
+            empf = bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, FORWARD);
+            for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, BACKWARD)) {
                 if (empf.contains(kc)) {
                     gdcoll.link(KommbezEtntVerbindung.class, kz, kc.getElement(), TransactionManager.STANDARD_PID);
                 }

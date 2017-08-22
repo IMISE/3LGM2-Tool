@@ -6,9 +6,9 @@ import static de.imise.tool3lgm.Tool3lgm.getLastActionPosition;
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
 import static de.imise.tool3lgm.graphtools.elements.Kante.getMinCardinality;
 import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
@@ -115,7 +115,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -875,7 +874,7 @@ public final class GDCollection extends UserFieldTarget {
                     String endHash = ke.getHashString();
                     int startEdgeIndex = ks.getEdgeIndex(edge);
                     int endEdgeIndex = ke.getEdgeIndex(edge);
-                    int direction = ((Doppelkante) edge).getDirection();
+                    int direction = edge.getDirection();
                     switch (direction) {
                     case FORWARD:
                         doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
@@ -1311,13 +1310,11 @@ public final class GDCollection extends UserFieldTarget {
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             if (edge != null) {
-                if (edge instanceof Doppelkante) {
-                    ((Doppelkante) edge).setDirection(DOUBLE);
-                    String startHash = startElement.getHashString();
-                    String endHash = endElement.getHashString();
-                    doc.addRedoCommand(LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                    doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + startElementEdgeIndex, pid);
-                }
+                edge.setDirection(DOUBLE);
+                String startHash = startElement.getHashString();
+                String endHash = endElement.getHashString();
+                doc.addRedoCommand(LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + startElementEdgeIndex, pid);
             } else {
                 try {
                     edge = edgeClass.newInstance();
@@ -1341,7 +1338,7 @@ public final class GDCollection extends UserFieldTarget {
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
                 if (isAlwaysDoubleConnectedEdge(edgeClass)) {
-                    ((Doppelkante) edge).setDirection(DOUBLE);
+                    edge.setDirection(DOUBLE);
                 } else {
                     int dir = FORWARD;
                     //AXS: auch am 21.06.2017 geändert
@@ -1352,7 +1349,7 @@ public final class GDCollection extends UserFieldTarget {
                         endElement = dummy;
                         dir = BACKWARD;
                     }
-                    ((Doppelkante) edge).setDirection(dir);
+                    edge.setDirection(dir);
                 }
                 edge.setKnotsAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
                 if (edge.getStart() != null && edge.getEnd() != null) {
@@ -1623,14 +1620,13 @@ public final class GDCollection extends UserFieldTarget {
         //ist die Richtung egal und das Unlinken ist das Löschen der Kante
         Class<? extends Kante> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
         if (isDoubleMeaningEdge(absoluteEdgeClass)) {
-            Doppelkante dlk = (Doppelkante) edge;
-            if (dlk.getDirection() == DOUBLE) {
-                if (dlk.getStart() == me1) {
-                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + dlk.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(dlk) + " " + me2.getEdgeIndex(dlk), pid);
-                    dlk.setDirection(BACKWARD);
+            if (edge.getDirection() == DOUBLE) {
+                if (edge.getStart() == me1) {
+                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
+                    edge.setDirection(BACKWARD);
                 } else {
-                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + dlk.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(dlk) + " " + me1.getEdgeIndex(dlk), pid);
-                    dlk.setDirection(FORWARD);
+                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
+                    edge.setDirection(FORWARD);
                 }
             } else {
                 deleteElement(edge, doc, pid);

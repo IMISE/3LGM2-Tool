@@ -3,6 +3,10 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.process;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +15,7 @@ import java.util.Set;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -285,15 +289,15 @@ public class DataAvailabilityFinder {
         // alle Berabeiten/Interpretieren-Beziehungen holen
         Iterable<ModelElement> readUpdateEdges = doc.getModelItems(AufObjVerbindung.class);
 
-        for (ModelElement e : readUpdateEdges) {
-            Doppelkante edge = (Doppelkante) e;
+        for (ModelElement me : readUpdateEdges) {
+            Kante edge = (Kante) me;
             // bei allen Interprtiert-Bezeihungen
             Aufgabe auf = null;
             Objekttyp ot = null;
-            if (edge.getStart() instanceof Aufgabe && (edge.getDirection() == Doppelkante.BACKWARD || edge.getDirection() == Doppelkante.DOUBLE)) {
+            if (edge.getStart() instanceof Aufgabe && (edge.getDirection() == BACKWARD || edge.getDirection() == DOUBLE)) {
                 auf = (Aufgabe) edge.getStart();
                 ot = (Objekttyp) edge.getEnd();
-            } else if (edge.getEnd() instanceof Aufgabe && (edge.getDirection() == Doppelkante.FORWARD || edge.getDirection() == Doppelkante.DOUBLE)) {
+            } else if (edge.getEnd() instanceof Aufgabe && (edge.getDirection() == FORWARD || edge.getDirection() == DOUBLE)) {
                 auf = (Aufgabe) edge.getEnd();
                 ot = (Objekttyp) edge.getStart();
             }
@@ -352,15 +356,15 @@ public class DataAvailabilityFinder {
         outputDialog.appendln("#                         UnstoredET                         #");
         outputDialog.appendln("##############################################################");
 
-        for (ModelElement e : readUpdateEdges) {
-            Doppelkante edge = (Doppelkante) e;
+        for (ModelElement me : readUpdateEdges) {
+            Kante edge = (Kante) me;
             // bei allen Interprtiert-Bezeihungen
             Aufgabe auf = null;
             Objekttyp ot = null;
-            if (edge.getStart() instanceof Aufgabe && (edge.getDirection() == Doppelkante.FORWARD || edge.getDirection() == Doppelkante.DOUBLE)) {
+            if (edge.getStart() instanceof Aufgabe && (edge.getDirection() == FORWARD || edge.getDirection() == DOUBLE)) {
                 auf = (Aufgabe) edge.getStart();
                 ot = (Objekttyp) edge.getEnd();
-            } else if (edge.getEnd() instanceof Aufgabe && (edge.getDirection() == Doppelkante.BACKWARD || edge.getDirection() == Doppelkante.DOUBLE)) {
+            } else if (edge.getEnd() instanceof Aufgabe && (edge.getDirection() == BACKWARD || edge.getDirection() == DOUBLE)) {
                 auf = (Aufgabe) edge.getEnd();
                 ot = (Objekttyp) edge.getStart();
             }

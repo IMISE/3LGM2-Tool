@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.analyse.process;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -117,7 +120,7 @@ public class ShortestCommunicationPathFinderOld {
     }
 
     /**
-     * 
+     *
      */
     private void init() {
         List<ModelElement> bausteine = mainDoc.getModelItems(Anwendungsbaustein.class, true);
@@ -455,11 +458,11 @@ public class ShortestCommunicationPathFinderOld {
         // für jede Kommunikationsbeziehung = Kanten von einer Bss zu einer Bss (das sind alles
         // Doppelkanten)
         for (int r = 0; r < communicationLinks.size(); r++) {
-            Doppelkante commLink = (Doppelkante) communicationLinks.get(r);
+            Kante commLink = (Kante) communicationLinks.get(r);
 
             int[] directions = {
-                    Doppelkante.FORWARD,
-                    Doppelkante.BACKWARD
+                    FORWARD,
+                    BACKWARD
             };
 
             for (int d = 0; d < directions.length; d++) {
@@ -493,7 +496,7 @@ public class ShortestCommunicationPathFinderOld {
                                 objekttypToInterfacePairList.put(objekttyp, sendToReceiveInterfaceList);
                             }
                             ModelElement sendInterface, receiveInterface;
-                            if (directions[d] == Doppelkante.BACKWARD) {
+                            if (directions[d] == BACKWARD) {
                                 sendInterface = commLink.getStart();
                                 receiveInterface = commLink.getEnd();
                             } else {
@@ -814,6 +817,7 @@ public class ShortestCommunicationPathFinderOld {
      * @author AXS
      */
     private class Pair<T> {
+
         /**
          * Erstes <code>ModelElement</code>
          */

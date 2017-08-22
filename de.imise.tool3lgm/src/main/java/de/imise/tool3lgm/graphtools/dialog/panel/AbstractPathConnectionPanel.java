@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
@@ -17,7 +17,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -181,7 +180,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends ModelElement> clazz = i == 0 ? startClass : null;
             clazz = clazz == null ? returnValue[i - 1] == FORWARD ? Kante.getEndClass(edgeClasses[i - 1]) : Kante.getStartClass(edgeClasses[i - 1]) : clazz;
-            returnValue[i] = Kante.isStartClass(edgeClasses[i], clazz) ? FORWARD : Doppelkante.BACKWARD;
+            returnValue[i] = Kante.isStartClass(edgeClasses[i], clazz) ? FORWARD : BACKWARD;
         }
         return returnValue;
     }
@@ -541,6 +540,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     protected final LGMAction getMouseClickedAction() {
         return new LGMAction() {
+
             @Override
             public void execute(final EventObject eo) {
                 MouseEvent e = (MouseEvent) eo;

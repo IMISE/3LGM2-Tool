@@ -1,5 +1,10 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.ANY;
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -63,9 +68,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * muss.
      */
     private static final StringBuilder toStringBuffer = new StringBuilder(40);
+
     private static final StringBuilder nameBuffer = new StringBuilder(40);
+
     private String toStringName = null;
+
     private static final StringBuilder suffixBuf = new StringBuilder("");
+
     private static final StringBuilder textBuf = new StringBuilder("");
 
     /**
@@ -798,9 +807,9 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public List<Kante> getEdge(final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final int direction) {
         List<Kante> kanten = null;
-        if (Doppelkante.FORWARD == direction) {
+        if (FORWARD == direction) {
             kanten = getEdgesTo(elemClass, edgeClass);
-        } else if (Doppelkante.BACKWARD == direction) {
+        } else if (Kante.BACKWARD == direction) {
             kanten = getEdgesFrom(elemClass, edgeClass);
         } else {
             kanten = getEdgesWith(elemClass, edgeClass);
@@ -832,7 +841,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<Kante> getEdgesWith(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position) {
-        return getEdgesWith(modelElement, edgeClass, position, Doppelkante.ANY);
+        return getEdgesWith(modelElement, edgeClass, position, ANY);
     }
 
     ///*	public final List<Kante> getEdgesWith(ModelElement modelElement, Class<? extends Kante> edgeClass, int position) {
@@ -858,7 +867,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<Kante> getEdgesTo(final ModelElement modelElement, final Class<? extends Kante> edgeClass) {
-        return getEdgesWith(modelElement, edgeClass, GDCommands.INVALID_EDGE_INDEX, Doppelkante.FORWARD);
+        return getEdgesWith(modelElement, edgeClass, GDCommands.INVALID_EDGE_INDEX, FORWARD);
     }
 
     /**
@@ -868,7 +877,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<Kante> getEdgesTo(final ModelElement modelElement, final Class<? extends Kante> edgeClass, final int position) {
-        return getEdgesWith(modelElement, edgeClass, position, Doppelkante.FORWARD);
+        return getEdgesWith(modelElement, edgeClass, position, FORWARD);
     }
 
     /**
@@ -892,9 +901,9 @@ public abstract class ModelElement extends UserFieldTarget {
                 continue;
             }
             boolean add = false;
-            if (direction == Doppelkante.FORWARD) {
+            if (direction == FORWARD) {
                 add = ka.isDirecting(this, modelElement);
-            } else if (direction == Doppelkante.BACKWARD) {
+            } else if (direction == BACKWARD) {
                 add = ka.isDirecting(modelElement, this);
             } else {
                 add = ka.isConnecting(this, modelElement);
@@ -925,7 +934,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, Doppelkante.ANY);
+        return getEdgesWith(elementClass, edgeClass, ANY);
     }
 
     /**
@@ -937,7 +946,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Kante> getEdgesTo(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, Doppelkante.FORWARD);
+        return getEdgesWith(elementClass, edgeClass, FORWARD);
     }
 
     /**
@@ -949,7 +958,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Kante> getEdgesFrom(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, Doppelkante.BACKWARD);
+        return getEdgesWith(elementClass, edgeClass, BACKWARD);
     }
 
     /**
@@ -958,8 +967,8 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param elementClass Klasse der verbundenen Knoten
      * @param edgeClass Kanteklasse nach der gesucht werden soll
-     * @param Richtung der Kante nach der gesucht werden soll (<code>Doppelkante.ANY</code>, <code>Doppelkante.FORWARD</code> oder
-     *            <code>Doppelkante.BACKWARD</code>)
+     * @param Richtung der Kante nach der gesucht werden soll (<code>ANY</code>, <code>FORWARD</code> oder
+     *            <code>BACKWARD</code>)
      * @return List mit allen gefundenen Kanten
      */
     public final List<Kante> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass, final int direction) {
@@ -968,11 +977,11 @@ public abstract class ModelElement extends UserFieldTarget {
             if (edgeClass != null && !edgeClass.isAssignableFrom(o_kante.getClass())) {
                 continue;
             }
-            if (direction == Doppelkante.FORWARD) {
+            if (direction == FORWARD) {
                 if (o_kante.getStart() == this && elementClass.isAssignableFrom(o_kante.getEnd().getClass())) {
                     l_connections.add(o_kante);
                 }
-            } else if (direction == Doppelkante.BACKWARD) {
+            } else if (direction == BACKWARD) {
                 if (o_kante.getEnd() == this && elementClass.isAssignableFrom(o_kante.getStart().getClass())) {
                     l_connections.add(o_kante);
                 }
@@ -994,7 +1003,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit ElementContainer der gefundenen Knoten
      */
     public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getConnectedContainer(searchElementClass, doc, null, Doppelkante.ANY, true);
+        return getConnectedContainer(searchElementClass, doc, null, ANY, true);
     }
 
     /**
@@ -1015,7 +1024,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Kante> edgeClass) {
-        return getConnectedContainer(searchElementClass, doc, edgeClass, Doppelkante.ANY, true);
+        return getConnectedContainer(searchElementClass, doc, edgeClass, ANY, true);
     }
 
     /**
@@ -1058,7 +1067,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @see #getPartConnectedContainer(Class, GraphDocument, Class, int)
      */
     public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getPartConnectedContainer(searchElementClass, doc, null, Doppelkante.ANY);
+        return getPartConnectedContainer(searchElementClass, doc, null, ANY);
     }
 
     /**
@@ -1071,7 +1080,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @see #getPartConnectedContainer(Class, GraphDocument, Class, int)
      */
     public final List<ElementContainer> getPartConnectedContainer(final GraphDocument doc, final Class<? extends Kante> searchEdgeClass) {
-        return getPartConnectedContainer(ModelElement.class, doc, searchEdgeClass, Doppelkante.ANY);
+        return getPartConnectedContainer(ModelElement.class, doc, searchEdgeClass, ANY);
     }
 
     /**
@@ -1106,7 +1115,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @see #getParentConnectedContainer(Class, GraphDocument, Class, int)
      */
     public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getParentConnectedContainer(searchElementClass, doc, null, Doppelkante.ANY);
+        return getParentConnectedContainer(searchElementClass, doc, null, ANY);
     }
 
     /**
@@ -1378,7 +1387,7 @@ public abstract class ModelElement extends UserFieldTarget {
         Class<? extends PartOfBeziehung>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         List<ModelElement> returnList = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> c : hasPartEdgeClasses) {
-            returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.BACKWARD));
+            returnList.addAll(getConnectedElements(ModelElement.class, c, BACKWARD));
         }
         return returnList;
     }
@@ -1392,7 +1401,7 @@ public abstract class ModelElement extends UserFieldTarget {
         Class<? extends PartOfBeziehung>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         List<ModelElement> returnList = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> c : isPartEdgeClasses) {
-            returnList.addAll(getConnectedElements(ModelElement.class, c, Doppelkante.FORWARD));
+            returnList.addAll(getConnectedElements(ModelElement.class, c, FORWARD));
         }
         return returnList;
     }
@@ -1646,7 +1655,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
-        return getConnectedElements(searchElementClass, edgeClass, Doppelkante.ANY);
+        return getConnectedElements(searchElementClass, edgeClass, ANY);
     }
 
     /**
@@ -1713,50 +1722,44 @@ public abstract class ModelElement extends UserFieldTarget {
             return knoten;
         }
 
-        for (Kante t : edges) {
-            if (!(t instanceof Doppelkante)) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("inkons_modelldaten_bei") + " " + t.getHashString());
-                continue;
-            }
-            Doppelkante edge = (Doppelkante) t;
-
+        for (Kante edge : edges) {
             if (edgeClass != null && !edgeClass.isAssignableFrom(edge.getClass())) {
                 continue;
             }
 
             ModelElement knot = null;
             switch (direction) {
-            case Doppelkante.ANY:
+            case ANY:
                 knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
                 break;
-            case Doppelkante.FORWARD:
+            case FORWARD:
                 switch (edge.getDirection()) {
-                case Doppelkante.FORWARD:
+                case FORWARD:
                     knot = edge.getEnd() == this ? null : edge.getEnd();
                     break;
-                case Doppelkante.BACKWARD:
+                case BACKWARD:
                     knot = edge.getEnd() == this ? edge.getStart() : null;
                     break;
-                case Doppelkante.DOUBLE:
+                case DOUBLE:
                     knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
                     break;
                 }
                 break;
-            case Doppelkante.BACKWARD:
+            case BACKWARD:
                 switch (edge.getDirection()) {
-                case Doppelkante.FORWARD:
+                case FORWARD:
                     knot = edge.getEnd() == this ? edge.getStart() : null;
                     break;
-                case Doppelkante.BACKWARD:
+                case BACKWARD:
                     knot = edge.getEnd() == this ? null : edge.getEnd();
                     break;
-                case Doppelkante.DOUBLE:
+                case DOUBLE:
                     knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
                     break;
                 }
                 break;
-            case Doppelkante.DOUBLE:
-                if (edge.getDirection() == Doppelkante.DOUBLE) {
+            case DOUBLE:
+                if (edge.getDirection() == DOUBLE) {
                     knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
                 }
                 break;
@@ -1870,7 +1873,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Number of edges with the specified type
      */
     public final int countConnections(final Class<? extends Kante> edgeClass) {
-        return countConnections(edgeClass, Doppelkante.ANY);
+        return countConnections(edgeClass, ANY);
     }
 
     /**
@@ -1884,11 +1887,11 @@ public abstract class ModelElement extends UserFieldTarget {
         int retVal = 0;
         for (Kante edge : edges) {
             if (edgeClass.isAssignableFrom(edge.getClass())) {
-                if (direction == Doppelkante.FORWARD) {
+                if (direction == FORWARD) {
                     if (edge.isStart(this)) {
                         retVal++;
                     }
-                } else if (direction == Doppelkante.BACKWARD) {
+                } else if (direction == BACKWARD) {
                     if (edge.isEnd(this)) {
                         retVal++;
                     }
@@ -1907,7 +1910,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Number of edges with the specified type
      */
     public final int countConnectionsFromThis(final Class<? extends Kante> edgeClass) {
-        return countConnections(edgeClass, Doppelkante.FORWARD);
+        return countConnections(edgeClass, FORWARD);
     }
 
     /**
@@ -1917,7 +1920,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Number of edges with the specified type
      */
     public final int countConnectionsToThis(final Class<? extends Kante> edgeClass) {
-        return countConnections(edgeClass, Doppelkante.BACKWARD);
+        return countConnections(edgeClass, BACKWARD);
     }
 
     /**
@@ -2018,7 +2021,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Testet, ob das Modelelement this in der Richtung direction zu dem ModelElement eine Kante haben kann
      *
      * @param me
-     * @param direction {@link Doppelkante}.FORWARD, {@link Doppelkante}.BACKWARD
+     * @param direction {@link .FORWARD, {@link .BACKWARD
      * @param testCardinality wenn <code>true</code>, wird auch noch getestet, ob die maximale Kardinalität der Verbindungen bereits erreicht ist
      * @return
      */
@@ -2063,7 +2066,7 @@ public abstract class ModelElement extends UserFieldTarget {
     //	 *
     //     * @param me
     //     * @param direction
-    //     * 		{@link Doppelkante}.FORWARD, {@link Doppelkante}.BACKWARD
+    //     * 		{@link .FORWARD, {@link .BACKWARD
     //     * @return
     //     */
     //    public final boolean isLinkable(ModelElement me, int direction) {
@@ -2078,21 +2081,21 @@ public abstract class ModelElement extends UserFieldTarget {
     //		if (edgeClasses.length > 1)
     //			return true;
     //
-    //		Doppelkante edge;
+    //		edge;
     //		for (int i = 0; i < getEdgesCount(); i++) {
-    //			edge = (Doppelkante) getEdge(i);
-    //			if ((direction != Doppelkante.BACKWARD) && edge.isDirecting(this, me))
+    //			edge = ( getEdge(i);
+    //			if ((direction != BACKWARD) && edge.isDirecting(this, me))
     //				return false;
-    //			if ((direction != Doppelkante.FORWARD) && edge.isDirecting(me, this))
+    //			if ((direction != FORWARD) && edge.isDirecting(me, this))
     //				return false;
     //		}
     //
     //		try {
-    //			edge = (Doppelkante) edgeClasses[0].newInstance();
+    //			edge = ( edgeClasses[0].newInstance();
     //			if (edge instanceof PartOfBeziehung) {
-    //				if (direction == Doppelkante.FORWARD && isParentOf(me))
+    //				if (direction == FORWARD && isParentOf(me))
     //					return false;
-    //				if (direction == Doppelkante.BACKWARD && isPartOf(me))
+    //				if (direction == BACKWARD && isPartOf(me))
     //					return false;
     //
     //				if (edge.isStartClass(getClass()) && edge.getMaxStartToEndCardinality()<=countConnections(edge.getClass()))

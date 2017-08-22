@@ -3,6 +3,11 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.NOTCONNECTED;
+
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -163,14 +167,14 @@ public final class PathFinder {
      * @param element2
      * @param metaPath
      * @param doc
-     * @return Doppelkante.NOTCONNECTED / Doppelkante.FORWARD / Doppelkante.BACKWARD / Doppelkante.DOUBLE if path.isImmediate otherwise
-     *         Doppelkante.NOTCONNECTED / Doppelkante.DOUBLE
+     * @return NOTCONNECTED / FORWARD / BACKWARD / DOUBLE if path.isImmediate otherwise
+     *         NOTCONNECTED / DOUBLE
      */
     public static final int isConnected(ModelElement element1, ModelElement element2, final MetaPath metaPath) {
         if (!UserProperties.isSearchParts() && !UserProperties.isSearchParents()) {
             return isConnected(element1, element2, metaPath, false);
         }
-        int retVal = Doppelkante.NOTCONNECTED;
+        int retVal = NOTCONNECTED;
         Set<ModelElement> list1 = new HashSet<>();
         Set<ModelElement> list2 = new HashSet<>();
         list1.add(element1);
@@ -191,18 +195,18 @@ public final class PathFinder {
                 element2 = iterator2.next();
                 int con = isConnected(element1, element2, metaPath, false);
                 switch (con) {
-                case Doppelkante.DOUBLE:
-                    return Doppelkante.DOUBLE;
-                case Doppelkante.FORWARD:
-                    if (retVal == Doppelkante.BACKWARD) {
-                        return Doppelkante.DOUBLE;
+                case DOUBLE:
+                    return DOUBLE;
+                case FORWARD:
+                    if (retVal == BACKWARD) {
+                        return DOUBLE;
                     }
-                    return Doppelkante.FORWARD;
-                case Doppelkante.BACKWARD:
-                    if (retVal == Doppelkante.FORWARD) {
-                        return Doppelkante.DOUBLE;
+                    return FORWARD;
+                case BACKWARD:
+                    if (retVal == FORWARD) {
+                        return DOUBLE;
                     }
-                    return Doppelkante.BACKWARD;
+                    return BACKWARD;
                 }
             }
         }
@@ -221,31 +225,31 @@ public final class PathFinder {
             if (metaPath.getEndClass().isAssignableFrom(element1.getClass()) && metaPath.getStartClass().isAssignableFrom(element2.getClass())) {
                 return isConnected(element2, element1, metaPath, !reverse);
             }
-            return Doppelkante.NOTCONNECTED;
+            return NOTCONNECTED;
         }
 
         for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
             // direkt vebunden?
             if (metaPath.isImmediate(pathIndex)) {
                 if (element1.isConnectedTo(element2, metaPath.getEdgeClasses(pathIndex)[0]) && element1.isConnectedFrom(element2)) {
-                    return Doppelkante.DOUBLE;
+                    return DOUBLE;
                 } else if (element1.isConnectedTo(element2, metaPath.getEdgeClasses(pathIndex)[0])) {
-                    return reverse && metaPath.isDirectional() ? Doppelkante.BACKWARD : Doppelkante.FORWARD;
+                    return reverse && metaPath.isDirectional() ? BACKWARD : FORWARD;
                 } else if (element1.isConnectedFrom(element2, metaPath.getEdgeClasses(pathIndex)[0])) {
-                    return reverse && metaPath.isDirectional() ? Doppelkante.FORWARD : PartOfBeziehung.class.isAssignableFrom(metaPath.getEdgeClasses(pathIndex)[0]) ? Doppelkante.NOTCONNECTED : Doppelkante.BACKWARD;
+                    return reverse && metaPath.isDirectional() ? FORWARD : PartOfBeziehung.class.isAssignableFrom(metaPath.getEdgeClasses(pathIndex)[0]) ? NOTCONNECTED : BACKWARD;
                 }
             } else {
                 switch (isConnected(element1, element2, metaPath, 0, pathIndex)) {
-                case Doppelkante.DOUBLE:
-                    return Doppelkante.DOUBLE;
-                case Doppelkante.FORWARD:
-                    return reverse && metaPath.isDirectional() ? Doppelkante.BACKWARD : Doppelkante.FORWARD;
-                case Doppelkante.BACKWARD:
-                    return reverse && metaPath.isDirectional() ? Doppelkante.FORWARD : Doppelkante.BACKWARD;
+                case DOUBLE:
+                    return DOUBLE;
+                case FORWARD:
+                    return reverse && metaPath.isDirectional() ? BACKWARD : FORWARD;
+                case BACKWARD:
+                    return reverse && metaPath.isDirectional() ? FORWARD : BACKWARD;
                 }
             }
         }
-        return Doppelkante.NOTCONNECTED;
+        return NOTCONNECTED;
     }
 
     /**
@@ -260,29 +264,29 @@ public final class PathFinder {
     private static final int isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
         if (position == metaPath.getLength(pathIndex)) {
             if (current.equals(end)) {
-                return Doppelkante.DOUBLE;
+                return DOUBLE;
             }
-            return Doppelkante.NOTCONNECTED;
+            return NOTCONNECTED;
         }
         int retVal;
         List<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
         for (ModelElement me : elements) {
-            if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != Doppelkante.NOTCONNECTED) {
+            if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != NOTCONNECTED) {
                 if (metaPath.getControl() == position) {
                     if (current.isConnectedTo(me) && current.isConnectedFrom(me)) {
-                        return Doppelkante.DOUBLE;
+                        return DOUBLE;
                     } else if (current.isConnectedTo(me)) {
-                        return Doppelkante.FORWARD;
+                        return FORWARD;
                     } else if (current.isConnectedFrom(me)) {
-                        return Doppelkante.BACKWARD;
+                        return BACKWARD;
                     } else {
-                        return Doppelkante.NOTCONNECTED;
+                        return NOTCONNECTED;
                     }
                 }
                 return retVal;
             }
         }
-        return Doppelkante.NOTCONNECTED;
+        return NOTCONNECTED;
     }
 
     //	/**

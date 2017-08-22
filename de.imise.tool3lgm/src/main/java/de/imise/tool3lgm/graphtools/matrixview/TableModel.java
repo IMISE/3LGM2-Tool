@@ -1,12 +1,13 @@
 package de.imise.tool3lgm.graphtools.matrixview;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.NOTCONNECTED;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -188,7 +189,7 @@ public class TableModel implements Iterable<TableCell> {
                 try {
                     // connected = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath, doc);
                     connected = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath);
-                    if (connected != Doppelkante.NOTCONNECTED) {
+                    if (connected != NOTCONNECTED) {
                         cellsSet.add(new TableCell(i, j, metaPath.getColor(connected)));
                     }
                 } catch (StackOverflowError err) {

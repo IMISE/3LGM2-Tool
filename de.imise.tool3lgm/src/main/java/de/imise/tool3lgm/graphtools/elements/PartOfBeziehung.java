@@ -7,7 +7,7 @@ import de.imise.tool3lgm.log.Log;
  * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Kante ist immer das Kindelement,
  * das Ende der Kante ist immer das Elternelement. Dir Richtung der Kante ist immer forward.
  */
-public abstract class PartOfBeziehung extends Doppelkante {
+public abstract class PartOfBeziehung extends Kante {
 
     public PartOfBeziehung() {
         super();
@@ -26,7 +26,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
      *
      * @return Partelement der Kante
      */
-    public ModelElement getPart() {
+    public final ModelElement getPart() {
         return getStart();
     }
 
@@ -35,7 +35,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
      *
      * @return Parentelement der Kante
      */
-    public ModelElement getParent() {
+    public final ModelElement getParent() {
         return getEnd();
     }
 
@@ -45,7 +45,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
      * @param poClass
      * @return
      */
-    public static Class<? extends ModelElement> getPartClass(final Class<? extends PartOfBeziehung> poClass) {
+    public static final Class<? extends ModelElement> getPartClass(final Class<? extends PartOfBeziehung> poClass) {
         return Kante.getStartClass(poClass);
     }
 
@@ -55,7 +55,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
      * @param poClass
      * @return
      */
-    public static Class<? extends ModelElement> getParentClass(final Class<? extends PartOfBeziehung> poClass) {
+    public static final Class<? extends ModelElement> getParentClass(final Class<? extends PartOfBeziehung> poClass) {
         return Kante.getEndClass(poClass);
     }
 
@@ -66,7 +66,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
      * @param meClass
      * @return
      */
-    public static boolean isPartClass(final Class<? extends PartOfBeziehung> poClass, final Class<? extends ModelElement> meClass) {
+    public static final boolean isPartClass(final Class<? extends PartOfBeziehung> poClass, final Class<? extends ModelElement> meClass) {
         return getPartClass(poClass).isAssignableFrom(meClass);
     }
 
@@ -78,19 +78,19 @@ public abstract class PartOfBeziehung extends Doppelkante {
      * @param meClass
      * @return
      */
-    public static boolean isParentClass(final Class<? extends PartOfBeziehung> poClass, final Class<? extends ModelElement> meClass) {
+    public static final boolean isParentClass(final Class<? extends PartOfBeziehung> poClass, final Class<? extends ModelElement> meClass) {
         return getParentClass(poClass).isAssignableFrom(meClass);
     }
 
     /**
      * Richtung, in der die Kante vom Part auf den Parent zeigt.
      */
-    public static final int PART_TO_PARENT_DIRECTION = Doppelkante.FORWARD;
+    public static final int PART_TO_PARENT_DIRECTION = FORWARD;
 
     /**
      * Richtung, in der die Kante vom Prent auf den Part zeigt.
      */
-    public static final int PARENT_TO_PART_DIRECTION = Doppelkante.BACKWARD;
+    public static final int PARENT_TO_PART_DIRECTION = BACKWARD;
 
     @Override
     public final int getDirection() {
@@ -102,16 +102,16 @@ public abstract class PartOfBeziehung extends Doppelkante {
         ModelElement start = k1;
         ModelElement end = k2;
         switch (_state) {
-        case Doppelkante.DOUBLE:
+        case DOUBLE:
             break;
-        case Doppelkante.FORWARD:
-            super.setDirection(Doppelkante.FORWARD);
+        case FORWARD:
+            super.setDirection(FORWARD);
             break;
-        case Doppelkante.BACKWARD:
+        case BACKWARD:
             ModelElement temp = k1;
             k1 = k2;
             k2 = temp;
-            super.setDirection(Doppelkante.FORWARD);
+            super.setDirection(FORWARD);
             break;
         }
         if (isInCircle()) {
@@ -122,7 +122,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     @Override
-    public void setKnots(final ModelElement part, final ModelElement parent, final boolean registerInKnots) {
+    public final void setKnots(final ModelElement part, final ModelElement parent, final boolean registerInKnots) {
         ModelElement start = k1;
         ModelElement end = k2;
         super.setKnots(part, parent, registerInKnots);
@@ -134,7 +134,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     @Override
-    public void setKnotsAndInsert(final ModelElement part, final int partEdgePos, final ModelElement parent, final int parentEdgePos) {
+    public final void setKnotsAndInsert(final ModelElement part, final int partEdgePos, final ModelElement parent, final int parentEdgePos) {
         ModelElement start = k1;
         ModelElement end = k2;
         k1 = part;
@@ -149,7 +149,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     @Override
-    public void setStartAndInsert(final ModelElement part) {
+    public final void setStartAndInsert(final ModelElement part) {
         ModelElement start = k1;
         k1 = part;
         k1.addEdge(this);
@@ -160,7 +160,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     }
 
     @Override
-    public void setEndAndInsert(final ModelElement parent) {
+    public final void setEndAndInsert(final ModelElement parent) {
         ModelElement end = k2;
 
         k2 = parent;
@@ -175,7 +175,7 @@ public abstract class PartOfBeziehung extends Doppelkante {
     /**
      * @return
      */
-    public boolean isInCircle() {
+    public final boolean isInCircle() {
         if (k1 != null && k2 != null) {
             boolean retVal = k2.isPartOf(k1);
             if (retVal) {

@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.analyse.special;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,7 +13,6 @@ import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -152,7 +154,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      */
     private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs, final Kante communicationLink) {
         List<ModelElement> returnList = new ArrayList<>();
-        int direction = communicationLink.getStart() == bs ? Doppelkante.BACKWARD : Doppelkante.FORWARD;
+        int direction = communicationLink.getStart() == bs ? BACKWARD : FORWARD;
         for (ModelElement etnt : communicationLink.getConnectedElements(EtntEtdtKombination.class, KommbezEtntVerbindung.class, direction)) {
             for (ModelElement ntdt : etnt.getConnectedElements(Repraesentationsform.class)) {
                 returnList.addAll(ntdt.getConnectedElements(Objekttyp.class));

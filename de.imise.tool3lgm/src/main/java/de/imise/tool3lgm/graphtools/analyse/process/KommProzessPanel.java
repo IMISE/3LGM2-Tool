@@ -4,6 +4,8 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.process;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.ANY;
+
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.FontMetrics;
@@ -28,7 +30,6 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -48,40 +49,66 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 public class KommProzessPanel extends ElementDialogPanel {
 
     protected Prozess prozess;
+
     protected NodeContainer prozessC;
 
     private final MyTable table;
+
     private final DefaultTableModel tmodel;
+
     private final JScrollPane tableScrollPane;
 
     private static boolean showTeilmodelle = false;
+
     private JCheckBox showTeilmodelleCheck;
+
     private static boolean enumerateSchnittstellen = false;
+
     private JCheckBox enumerateSchnittstellenCheck;
+
     private static boolean enumerateKanten = true;
+
     private JCheckBox enumerateKantenCheck;
+
     private static boolean writeObjekttypen = false;
+
     private JCheckBox writeObjekttypenCheck;
+
     private static boolean showKonfs = false;
+
     private JCheckBox showKonfsCheck;
+
     private static boolean highlightAllCommElements = false;
+
     private JCheckBox highlightAllCommElementsCheck;
 
     private boolean setColumnWidth = true;
+
     List<LGMProzessStep> allSteps;
 
     // Zeilennummern in der Tabelle
     private static final int COLUMN_COUNT = 11;
+
     private static final int POSITION = 0;
+
     private static final int BEMERKUNGEN = 1;
+
     private static final int START_AUFGABE = 2;
+
     private static final int END_AUFGABE = 3;
+
     private static final int OBJEKTTYP = 4;
+
     private static final int START_BAUSTEINE = 5;
+
     private static final int START_ORGEINHEIT = 6;
+
     private static final int END_BAUSTEINE = 7;
+
     private static final int END_ORGEINHEIT = 8;
+
     private static final int SCHNITTSTELLEN = 9;
+
     private static final int MEDIUM_BREAKS = 10;
 
     /**
@@ -223,7 +250,7 @@ public class KommProzessPanel extends ElementDialogPanel {
     public void updateTable(final boolean checkRowCount) {
         // System.out.println("updateTable");
         // Aufgaben des Prozesses in holen (NICHT alphabetisch sortiert)
-        List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, doc, null, Doppelkante.ANY, false);
+        List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, doc, null, ANY, false);
 
         // Prozess enthält keine Aufgaben und die Zeilenanzahl könnte sich
         // geändert haben
@@ -561,6 +588,7 @@ public class KommProzessPanel extends ElementDialogPanel {
      *
      */
     private class MyTable extends JTable {
+
         KommProzessPanel parent;
 
         /**
@@ -596,6 +624,7 @@ public class KommProzessPanel extends ElementDialogPanel {
         final ElementDialogPanel pane = edp;
         if (pane instanceof KommProzessPanel) {
             return new LGMAction(Tool3lgmConstants.getResString("submodels")) {
+
                 @Override
                 public void execute(final EventObject eo) {
                     KommProzessPanel panel = (KommProzessPanel) pane;
@@ -617,6 +646,7 @@ public class KommProzessPanel extends ElementDialogPanel {
         final ElementDialogPanel pane = edp;
         if (pane instanceof KommProzessPanel) {
             return new LGMAction(resString) {
+
                 @Override
                 public void execute(final EventObject eo) {
                     KommProzessPanel panel = (KommProzessPanel) pane;

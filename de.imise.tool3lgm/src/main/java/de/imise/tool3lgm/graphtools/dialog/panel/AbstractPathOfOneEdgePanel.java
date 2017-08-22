@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 
 import java.util.EventObject;
 

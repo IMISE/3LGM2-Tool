@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
@@ -12,27 +12,31 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Ereignistyp;
 /**
  * @author Thomas
  */
-public final class EtAufVerbindung extends Doppelkante {
+public final class EtAufVerbindung extends Kante {
 
     //    public static final Class[] stcl = {Ereignistyp.class};
     public static final Class<? extends ModelElement> stcl = Ereignistyp.class;
+
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
     //	public static final Class[] etcl = {Aufgabe.class};
 
-    //	private static Object[][] stcl = {{Ereignistyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] stcl = {{Ereignistyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public EtAufVerbindung() {
         super();
     }

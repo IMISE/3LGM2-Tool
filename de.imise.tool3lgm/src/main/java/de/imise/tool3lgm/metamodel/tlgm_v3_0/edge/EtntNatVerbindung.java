@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EreignisNachrichtenTyp;
@@ -12,27 +12,31 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Nachrichtentyp;
 /**
  * @author Thomas
  */
-public final class EtntNatVerbindung extends Doppelkante {
+public final class EtntNatVerbindung extends Kante {
 
     //    public static final Class[] stcl = {EreignisNachrichtenTyp.class};
     public static final Class<? extends ModelElement> stcl = EreignisNachrichtenTyp.class;
+
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.ONE
+            ModelConstants.ZERO,
+            ModelConstants.ONE
     };
+
     public static final Class<? extends ModelElement> etcl = Nachrichtentyp.class;
 
     //	public static final Class[] etcl = {Nachrichtentyp.class};
 
-    //	private static Object[][] stcl = {{EreignisNachrichtenTyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Nachrichtentyp.class, ModelConstants.ZERO, ModelConstants.ONE}}; 
+    //	private static Object[][] stcl = {{EreignisNachrichtenTyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Nachrichtentyp.class, ModelConstants.ZERO, ModelConstants.ONE}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public EtntNatVerbindung() {
         super();
     }

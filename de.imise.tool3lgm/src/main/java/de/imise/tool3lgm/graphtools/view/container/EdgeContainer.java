@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
@@ -13,7 +16,6 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
@@ -141,8 +143,8 @@ public class EdgeContainer extends ElementContainer {
     /**
      * @return
      */
-    public Doppelkante getEdge() {
-        return me instanceof Doppelkante ? (Doppelkante) me : null;
+    public Kante getEdge() {
+        return me instanceof Kante ? (Kante) me : null;
     }
 
     @Override
@@ -629,8 +631,8 @@ public class EdgeContainer extends ElementContainer {
             }
 
             if (i == 0) {
-                Doppelkante dlk = getEdge();
-                if (dlk.getDirection() == Doppelkante.BACKWARD || dlk.getDirection() == Doppelkante.DOUBLE) {
+                Kante dlk = getEdge();
+                if (dlk.getDirection() == BACKWARD || dlk.getDirection() == DOUBLE) {
                     gc.rotate(rad1, startx, starty);
                     // try {
                     g.drawPolygon(p2);
@@ -645,8 +647,8 @@ public class EdgeContainer extends ElementContainer {
                 }
             }
             if (i == numKKnots) {
-                Doppelkante dlk = getEdge();
-                if (dlk.getDirection() == Doppelkante.FORWARD || dlk.getDirection() == Doppelkante.DOUBLE) {
+                Kante dlk = getEdge();
+                if (dlk.getDirection() == FORWARD || dlk.getDirection() == DOUBLE) {
                     gc.rotate(rad2, endx, endy);
                     // try {
                     g.drawPolygon(p1);

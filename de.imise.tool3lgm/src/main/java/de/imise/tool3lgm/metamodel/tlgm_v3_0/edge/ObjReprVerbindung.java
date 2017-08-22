@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
@@ -12,29 +12,33 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Repraesentationsform;
 /**
  * @author Thomas
  */
-public final class ObjReprVerbindung extends Doppelkante {
+public final class ObjReprVerbindung extends Kante {
 
     //	public static final Class[] stcl = {Objekttyp.class};
     public static final Class<? extends ModelElement> stcl = Objekttyp.class;
+
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = Repraesentationsform.class;
 
     //	public static final Class[] etcl = {Datensatztyp.class, Dokumententyp.class, Nachrichtentyp.class};
 
-    //	private static Object[][] stcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Datensatztyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}, 
+    //	private static Object[][] stcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Datensatztyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED},
     //									{Dokumententyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED},
-    //									{Nachrichtentyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //									{Nachrichtentyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public ObjReprVerbindung() {
         super();
     }

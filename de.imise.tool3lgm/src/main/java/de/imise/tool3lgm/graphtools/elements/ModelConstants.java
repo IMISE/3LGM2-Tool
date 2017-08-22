@@ -1,5 +1,9 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,19 +48,27 @@ public final class ModelConstants {
      */
     @SuppressWarnings("unchecked")
     public static final Class<? extends ModelElement>[] EMPTY_ELEMENT_CLASS_ARRAY = new Class[0];
+
     @SuppressWarnings("unchecked")
     public static final Class<? extends Kante>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
+
     @SuppressWarnings("unchecked")
     public static final Class<? extends Composition>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
 
     //Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
     //public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
     public static final int NO_LAYER = -1;
+
     public static final int PHYSICAL_LAYER = 0;
+
     public static final int INTER_LOGICAL_PHYSICAL_LAYER = 1;
+
     public static final int LOGICAL_LAYER = 2;
+
     public static final int INTER_DOMAIN_LOGICAL_LAYER = 3;
+
     public static final int DOMAIN_LAYER = 4;
+
     public static final int[] LAYERS = {
             PHYSICAL_LAYER,
             INTER_LOGICAL_PHYSICAL_LAYER,
@@ -234,21 +246,25 @@ public final class ModelConstants {
             "rawtypes"
     })
     public static final Set<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
+
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
+
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
+
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
+
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
@@ -867,7 +883,7 @@ public final class ModelConstants {
      * @see #getMetaAssociationName(Class, boolean, int)
      */
     public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getForwardMetaAssociationName(edgeClass, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return getForwardMetaAssociationName(edgeClass, DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -910,7 +926,7 @@ public final class ModelConstants {
      * @see #getMetaAssociationName(Class, boolean, int)
      */
     public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getBackwardMetaAssociationName(edgeClass, Doppelkante.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return getBackwardMetaAssociationName(edgeClass, DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -971,9 +987,9 @@ public final class ModelConstants {
             try {
                 sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f"));
             } catch (Exception e) {
-                if (connectionState == Doppelkante.FORWARD) {
+                if (connectionState == FORWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
-                } else if (connectionState == Doppelkante.BACKWARD) {
+                } else if (connectionState == BACKWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
                 } else {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
@@ -985,9 +1001,9 @@ public final class ModelConstants {
             try {
                 sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b"));
             } catch (Exception e) {
-                if (connectionState == Doppelkante.FORWARD) {
+                if (connectionState == FORWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
-                } else if (connectionState == Doppelkante.BACKWARD) {
+                } else if (connectionState == BACKWARD) {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
                 } else {
                     sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
@@ -1029,6 +1045,7 @@ public final class ModelConstants {
      * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart Teilemente untergeordnet werden kann.
      */
     private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<>(5);
+
     /**
      * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart als Teilement untergeordnet werden kann.
      */

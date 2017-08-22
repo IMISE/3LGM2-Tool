@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.plugin;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.ANY;
+
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,7 +18,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbPdvbkVerbindung;
@@ -54,6 +55,7 @@ public class ExportPdvb4AwbPlugin implements Plugin {
     @Override
     public Action getAction() {
         return new AbstractAction(german ? "CSV-Export Anwendungssysteme -> Phys. Datenverabeitungsbausteine" : "CSV Export Application Systems -> Phys. Data Processing Components") {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 GraphDocument doc = Static.getSelectedDoc();
@@ -103,10 +105,10 @@ public class ExportPdvb4AwbPlugin implements Plugin {
      * @return
      */
     private static final String addEntry(final ModelElement applicationSystem, final StringBuilder entryBuilder) {
-        for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, Doppelkante.ANY, true)) {
+        for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, ANY, true)) {
 
             //Alle verbundenen Phys. Datenbverarbeitungsbausteine holen und davon alle absoluten Parts
-            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, Doppelkante.ANY, true);
+            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, ANY, true);
             Set<ModelElement> absolutePartPdvbs = new HashSet<>();
             for (int i = 0; i < pdvbList.size(); i++) {
                 ModelElement pdvb = pdvbList.get(i);

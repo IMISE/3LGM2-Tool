@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
@@ -12,27 +12,31 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
 /**
  * @author Thomas
  */
-public final class PdvbSubnVerbindung extends Doppelkante {
+public final class PdvbSubnVerbindung extends Kante {
 
     //    public static final Class[] stcl = {PhysischerDVBaustein.class};
     public static final Class<? extends ModelElement> stcl = PhysischerDVBaustein.class;
+
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = Subnetz.class;
 
     //	public static final Class[] etcl = {Subnetz.class};
 
-    //	private static Object[][] stcl = {{PhysischerDVBaustein.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Subnetz.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] stcl = {{PhysischerDVBaustein.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Subnetz.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public PdvbSubnVerbindung() {
         super();
     }

@@ -4,7 +4,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
@@ -12,9 +12,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 /**
  * @author thomas
  */
-public final class KommBeziehung extends Doppelkante {
+public final class KommBeziehung extends Kante {
 
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
+
     public static final int[] scard = {
             ModelConstants.ZERO,
             ModelConstants.UNLIMITED
@@ -24,6 +25,7 @@ public final class KommBeziehung extends Doppelkante {
             ModelConstants.ZERO,
             ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
 
     public KommBeziehung() {

@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
@@ -12,27 +12,31 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
 /**
  * @author Thomas
  */
-public final class OrgAufOrgVerbindung extends Doppelkante {
+public final class OrgAufOrgVerbindung extends Kante {
 
     //	public static final Class[] stcl = {AufOrgKombination.class};
     public static final Class<? extends ModelElement> stcl = AufOrgKombination.class;
+
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ONE, ModelConstants.UNLIMITED
+            ModelConstants.ONE,
+            ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = Organisationseinheit.class;
 
     //	public static final Class[] etcl = {Organisationseinheit.class};
 
-    //	private static Object[][] stcl = {{AufOrgKombination.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Organisationseinheit.class, ModelConstants.ONE, ModelConstants.UNLIMITED}}; 
+    //	private static Object[][] stcl = {{AufOrgKombination.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
+    //	private static Object[][] etcl = {{Organisationseinheit.class, ModelConstants.ONE, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public OrgAufOrgVerbindung() {
         super();
     }

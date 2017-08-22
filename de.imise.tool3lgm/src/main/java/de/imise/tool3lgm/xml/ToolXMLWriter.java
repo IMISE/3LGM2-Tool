@@ -25,7 +25,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -147,7 +146,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     /**
      * Schreibt nur einen Teil der Teilmodelle und Elemente eines Modells
-     * 
+     *
      * @param gdcoll
      * @param file
      * @param szenarios
@@ -383,8 +382,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         }
         writeUserFieldValues(me);
 
-        if (me instanceof Doppelkante) {
-            Doppelkante edge = (Doppelkante) me;
+        if (me instanceof Kante) {
+            Kante edge = (Kante) me;
             writeModelElementField("start", edge.getStart().getHashString());
             writeModelElementField("end", edge.getEnd().getHashString());
             writeModelElementField("state", edge.getDirectionName());

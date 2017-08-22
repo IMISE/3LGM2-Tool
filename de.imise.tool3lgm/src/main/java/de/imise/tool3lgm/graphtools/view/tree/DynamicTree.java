@@ -64,7 +64,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     /**
      * COMMENTME
      */
-    private final LGMTreeNode awb = new LGMTreeNode(getResString("Anwendungsbaustein_p"), false, true);;
+    private final LGMTreeNode awb = new LGMTreeNode(getResString("Anwendungsbaustein_p"), false, true);
 
     /**
      * COMMENTME

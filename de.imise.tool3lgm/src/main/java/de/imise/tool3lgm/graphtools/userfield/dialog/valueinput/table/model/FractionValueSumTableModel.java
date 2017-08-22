@@ -1,9 +1,11 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+
 import java.util.List;
 import java.util.Vector;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -23,7 +25,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
 
     /**
      * Entfernt je nach Werten der übergebenen boolean-Varibalen alle Elemente, die nicht dazu passen aus der übergebenen Liste
-     * 
+     *
      * @param elements
      */
     private void removeNotVisibleHierarchyElements(final List<? extends ModelElement> elements, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
@@ -57,7 +59,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
 
         Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
 
-        int direction = edgeForwardDirection ? Doppelkante.FORWARD : Doppelkante.BACKWARD;
+        int direction = edgeForwardDirection ? FORWARD : BACKWARD;
         //alle mit dem Element über die Kante verbundenen Elemente holen
         List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction, true);
 
@@ -68,17 +70,17 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
             fractionValueSumUserFields.clear();
         }
 
-        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(modelElements.size());
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<>(modelElements.size());
         // RowHeader aufbauen
         for (ModelElement rowElement : modelElements) {
-            NamedObjectContainer<ModelElement> rowElementContainer = new NamedObjectContainer<ModelElement>(rowElement, rowElement.getName());
+            NamedObjectContainer<ModelElement> rowElementContainer = new NamedObjectContainer<>(rowElement, rowElement.getName());
             rowIdentifiers.add(rowElementContainer);
         }
 
-        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(fractionValueSumUserFields.size());
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<>(fractionValueSumUserFields.size());
         // ColumnHeader aufbauen
         for (UserField userField : fractionValueSumUserFields) {
-            NamedObjectContainer<UserField> columnUserFieldContainer = new NamedObjectContainer<UserField>(userField, userField.getName());
+            NamedObjectContainer<UserField> columnUserFieldContainer = new NamedObjectContainer<>(userField, userField.getName());
             columnIdentifiers.add(columnUserFieldContainer);
             //der folgende Aufruf stellt sicher, dass immer die aktuellen Werte für die Teilwerte berechnte werden. Beim Abfragen des Wertes des UserFields
             //wird die Map mit den Teilwerten gefüllt, die unten beim Aufbau des Datenvektors abfragt wird.
@@ -92,7 +94,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
             for (int j = 0; j < data[0].length; j++) {
                 UserField userField = fractionValueSumUserFields.get(j);
                 String value = definitions.getPartValueSumSinglePartResults().get(me, userField, fractionValueSource);
-                data[i][j] = new NamedObjectContainer<UserField>(userField, value);
+                data[i][j] = new NamedObjectContainer<>(userField, value);
             }
         }
         //Daten setzen

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
+
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,7 +20,6 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -37,7 +38,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * Definiert ein UserField. Ein UserField bekommt einen Namen, eine Beschreibung, eine Stylezuordnung (Separator, <code>JComboBox</code>,
  * <code>JCheckBox</code>,<code>JRadioButton</code>, <code>JTextField</code>,<code>JTextArea</code>, Kennzahl, KennzahlFormel, Verteilungsgewicht),
  * ein Zahlenformat und Einheit zugeordnet.
- * 
+ *
  * @author Thomas Rudert
  */
 public final class UserFieldDefinitionDialog extends AbstractPropertyDialog implements ActionListener {
@@ -45,7 +46,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     /**
      * Liste, in die alle Panels, die der Dialog anzeigt
      */
-    private final ArrayList<AbstractInputPanel> panelList = new ArrayList<AbstractInputPanel>();
+    private final ArrayList<AbstractInputPanel> panelList = new ArrayList<>();
 
     /**
      * Rückgabewert des Dialoges, wenn er über den Abbrechen-Knopf verlassen wurde
@@ -76,7 +77,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
 
     /**
      * Instanz des Dialogs zur Definition eines <code>UserField</code>
-     * 
+     *
      * @param owner
      * @param userField
      * @param gdcol
@@ -98,6 +99,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
          * schließen des Fensters abfangen (wenn nicht durch Abbrechen-Button veranlasst)
          */
         addWindowListener(new WindowAdapter() {
+
             @Override
             public void windowClosing(final WindowEvent e) {
                 UserFieldDefinitionDialog.this.cancel();
@@ -116,7 +118,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             sb.append(Tool3lgmConstants.getResString(userField.getTargetClass().getSimpleName()));
         } else {
             if (ModelConstants.isEdgeType(userField.getTargetClass())) {
-                sb.append(ModelConstants.getMetaAssociationName(userField.getTargetClass().asSubclass(Kante.class), false, Doppelkante.DOUBLE, true, true));
+                sb.append(ModelConstants.getMetaAssociationName(userField.getTargetClass().asSubclass(Kante.class), false, DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {
                 sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
             }
@@ -180,7 +182,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
 
     /**
      * Zeigt den Dialog für die Definition eines <code>UserField</code>.
-     * 
+     *
      * @param owner
      * @param userField
      * @param doc

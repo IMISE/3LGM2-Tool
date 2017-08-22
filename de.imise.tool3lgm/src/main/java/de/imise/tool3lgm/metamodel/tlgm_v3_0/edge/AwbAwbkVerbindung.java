@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Doppelkante;
+import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
@@ -12,17 +12,21 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 /**
  * @author Thomas To change the template for this generated type comment go to Window>Preferences>Java>Code Generation>Code and Comments
  */
-public final class AwbAwbkVerbindung extends Doppelkante {
+public final class AwbAwbkVerbindung extends Kante {
 
     // public static final Class[] stcl = {ABKonfiguration.class};
     public static final Class<? extends ModelElement> stcl = ABKonfiguration.class;
+
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ONE, ModelConstants.UNLIMITED
+            ModelConstants.ONE,
+            ModelConstants.UNLIMITED
     };
+
     public static final Class<? extends ModelElement> etcl = Anwendungsbaustein.class;
 
     // public static final Class[] etcl = {Anwendungsbaustein.class, RechAnwendungsbaustein.class, KonAnwendungsbaustein.class};
@@ -33,8 +37,8 @@ public final class AwbAwbkVerbindung extends Doppelkante {
     // {KonAnwendungsbaustein.class, ModelConstants.ONE, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     * 
+     */
     public AwbAwbkVerbindung() {
         super();
     }

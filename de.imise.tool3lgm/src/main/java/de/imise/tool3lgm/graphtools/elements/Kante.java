@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isAlwaysDoubleConnectedEdge;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -61,6 +63,35 @@ public abstract class Kante extends ModelElement {
      */
     private String start_hash, end_hash;
 
+    ///////////////////////////////////////////
+    // Richtungskram aus ehemals Doppelkante //
+    ///////////////////////////////////////////
+    public static final int FORWARD = 1;
+
+    public static final int BACKWARD = 2;
+
+    public static final int DOUBLE = 0;
+
+    public static final int ANY = -2;
+
+    public static final int NOTCONNECTED = -1;
+
+    protected int direction = FORWARD;
+
+    public static final int[] DIRECTION = {
+            NOTCONNECTED,
+            DOUBLE,
+            FORWARD,
+            BACKWARD
+    };
+
+    public static final String[] DIRECTION_STR = {
+            "NOTCONNECTED",
+            "DOUBLE",
+            "FORWARD",
+            "BACKWARD"
+    };
+
     /**
      *
      */
@@ -86,7 +117,7 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public Object clone() {
+    public final Object clone() {
         Kante retVal;
         try {
             retVal = (Kante) super.clone();
@@ -96,10 +127,9 @@ public abstract class Kante extends ModelElement {
         }
         retVal.k1 = k1;
         retVal.k2 = k2;
-
         retVal.start_hash = "";
         retVal.end_hash = "";
-
+        retVal.direction = direction;
         return retVal;
     }
 
@@ -109,7 +139,7 @@ public abstract class Kante extends ModelElement {
      * @param kante
      * @return
      */
-    public boolean isEqualTo(final Kante kante) {
+    public final boolean isEqualTo(final Kante kante) {
         return (k1 == kante.getStart() && k2 == kante.getEnd() || k2 == kante.getStart() && k1 == kante.getEnd()) && getClass() == kante.getClass();
         //		if ((k1 == kante.getStart() && k2 == kante.getEnd()) || (k2 == kante.getStart() && k1 == kante.getEnd()))
         //			return true;
@@ -120,7 +150,7 @@ public abstract class Kante extends ModelElement {
      * @param _k1
      * @param _k2
      */
-    public void setKnots(final ModelElement _k1, final ModelElement _k2) {
+    public final void setKnots(final ModelElement _k1, final ModelElement _k2) {
         setKnots(_k1, _k2, true);
     }
 
@@ -210,7 +240,7 @@ public abstract class Kante extends ModelElement {
      * @param me
      * @return
      */
-    public boolean isStart(final ModelElement me) {
+    public final boolean isStart(final ModelElement me) {
         return getStart() == me;
     }
 
@@ -225,7 +255,7 @@ public abstract class Kante extends ModelElement {
      * @param me
      * @return
      */
-    public boolean isEnd(final ModelElement me) {
+    public final boolean isEnd(final ModelElement me) {
         return getEnd() == me;
     }
 
@@ -236,7 +266,7 @@ public abstract class Kante extends ModelElement {
      * @param me
      * @return
      */
-    public ModelElement getOther(final ModelElement me) {
+    public final ModelElement getOther(final ModelElement me) {
         if (isStart(me)) {
             return getEnd();
         }
@@ -254,7 +284,7 @@ public abstract class Kante extends ModelElement {
      * @param meClass Elementklasse der Kante, deren Gegenelementklasse zurück gegeben werden soll
      * @return die andere Elementklasse der Kante, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
      */
-    public static Class<? extends ModelElement> getOther(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> meClass) {
+    public static final Class<? extends ModelElement> getOther(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> meClass) {
         if (isStartClass(edgeClass, meClass)) {
             return getEndClass(edgeClass);
         }
@@ -265,25 +295,30 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public boolean putXMLFieldString(final String field, final String value) {
+    public final boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("start")) {
             start_hash = value;
             return true;
         }
-
         if (field.equals("end")) {
             end_hash = value;
             return true;
         }
-
         if (field.equals("direction")) {
             return true;
         }
-
         if (field.equals("master_slave")) {
             return true;
         }
-
+        if (field.equals("state")) {
+            for (int i = 0; i < DIRECTION_STR.length; i++) {
+                if (value.equals(DIRECTION_STR[i])) {
+                    setDirection(i - 1);
+                    return true;
+                }
+            }
+            return false;
+        }
         return super.putXMLFieldString(field, value);
     }
 
@@ -319,7 +354,7 @@ public abstract class Kante extends ModelElement {
      * @param _k2
      * @return
      */
-    public boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
+    private final boolean isDirectingForward(final ModelElement _k1, final ModelElement _k2) {
         return k1 == _k1 && k2 == _k2;
     }
 
@@ -328,14 +363,14 @@ public abstract class Kante extends ModelElement {
      * @param _k2
      * @return
      */
-    public boolean isConnecting(final ModelElement _k1, final ModelElement _k2) {
+    public final boolean isConnecting(final ModelElement _k1, final ModelElement _k2) {
         return k1 == _k1 && k2 == _k2 || k1 == _k2 && k2 == _k1;
     }
 
     /**
      * @return
      */
-    public String _toString() {
+    public final String _toString() {
         return " - ";
     }
 
@@ -380,10 +415,19 @@ public abstract class Kante extends ModelElement {
             }
             switchClasses = true;
         }
+        //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
+        if (isAlwaysDoubleConnectedEdge(getClass())) {
+            direction = DOUBLE;
+        }
         if (switchClasses) {
             ModelElement dummy = k1;
             k1 = k2;
             k2 = dummy;
+            if (direction == FORWARD) {
+                direction = BACKWARD;
+            } else if (direction == BACKWARD) {
+                direction = FORWARD;
+            }
             return true;
         }
         //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
@@ -392,7 +436,7 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public ElementContainer createContainer(final GraphDocument doc) {
+    public final ElementContainer createContainer(final GraphDocument doc) {
         return new EdgeContainer(this, doc);
     }
 
@@ -403,7 +447,7 @@ public abstract class Kante extends ModelElement {
      */
     private static final Class<? extends ModelElement> getStartEndClass(final Class<? extends Kante> edgeClass, final boolean start) {
         String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
-        return (Class<? extends ModelElement>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+        return ((Class<?>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName)).asSubclass(ModelElement.class);
     }
 
     /**
@@ -637,14 +681,14 @@ public abstract class Kante extends ModelElement {
     /**
      * @return
      */
-    public String getStartHash() {
+    public final String getStartHash() {
         return start_hash;
     }
 
     /**
      * @return
      */
-    public String getEndHash() {
+    public final String getEndHash() {
         return end_hash;
     }
 
@@ -652,7 +696,7 @@ public abstract class Kante extends ModelElement {
      * @param coll
      * @return
      */
-    public boolean reconnect(final GDCollection coll) {
+    public final boolean reconnect(final GDCollection coll) {
         if (k1 == null || k2 == null) {
             return false;
         }
@@ -671,7 +715,7 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public boolean join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
+    public final boolean join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
         if (super.join(other, overwriteHashstringAndExtIDs)) {
             k1 = ((Kante) other).k1;
             k2 = ((Kante) other).k2;
@@ -681,7 +725,7 @@ public abstract class Kante extends ModelElement {
     }
 
     @Override
-    public boolean isUnique() {
+    public final boolean isUnique() {
         if (k1 != null && k2 != null) {
             return k1.isUnique() || k2.isUnique();
         }
@@ -694,6 +738,40 @@ public abstract class Kante extends ModelElement {
             return k1.isUnpaintable() && k2.isUnpaintable();
         }
         return false;
+    }
+
+    ///////////////////////////////////////////
+    // Richtungskram aus ehemals Doppelkante //
+    ///////////////////////////////////////////
+    /**
+     * @return
+     */
+    public int getDirection() {
+        return direction;
+    }
+
+    /**
+     * @param dir
+     */
+    public void setDirection(final int dir) {
+        direction = dir;
+    }
+
+    public final String getDirectionName() {
+        return DIRECTION_STR[direction + 1];
+    }
+
+    public final boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
+        switch (direction) {
+        case DOUBLE:
+            return isConnecting(_k1, _k2);
+        case FORWARD:
+            return isDirectingForward(_k1, _k2);
+        case BACKWARD:
+            return isDirectingForward(_k2, _k1);
+        default:
+            return false;
+        }
     }
 
 }

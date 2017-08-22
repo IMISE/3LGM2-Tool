@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import static de.imise.tool3lgm.Tool3lgm.getContextGenerator;
-import static de.imise.tool3lgm.graphtools.elements.Doppelkante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
