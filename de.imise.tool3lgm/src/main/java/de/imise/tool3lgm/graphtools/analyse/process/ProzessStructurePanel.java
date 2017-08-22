@@ -4,9 +4,9 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.process;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -34,7 +34,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -120,12 +120,12 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private final LGMAction downAction;
 
-    private final Class<? extends Kante> doubleMeaningEdgeClass;
+    private final Class<? extends Edge> doubleMeaningEdgeClass;
 
     /**
      * @param dialog
      */
-    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends Kante> multipleConnectionEgdeClass, final Class<? extends Kante> doubleMeaningEdgeClass) {
+    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends Edge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
         super(dialog, true, getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass);
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
@@ -250,7 +250,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     //    /**
-    //     * Baut im linken Baum nur die Elemente der letzten Kante des Pfades auf
+    //     * Baut im linken Baum nur die Elemente der letzten Edge des Pfades auf
     //     */
     //    @Override
     //    protected Collection<LGMTreeNode> buildLeftTree() {
@@ -302,7 +302,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            objectCounter += doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(Objekttyp.class);
     //            objectCounter += doc.getLayer(ModelConstants.DOMAIN_LAYER).countType(AufObjVerbindung.class);
     //        }
-    //        // wenn auf der FE eine Kante (Prozesskanten zählen nicht mit)
+    //        // wenn auf der FE eine Edge (Prozesskanten zählen nicht mit)
     //        // hinzugekommen ist oder ein Objekttyp gelöscht
     //        // wurde oder der Baum noch leer ist -> Baum einfach komplett neu
     //        // aufbauen

@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 
 import java.util.List;
 import java.util.Vector;
@@ -10,7 +10,7 @@ import java.util.Vector;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -29,7 +29,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     /**
      * @param doc
      * @param edgeClass
-     * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
+     * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
      *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
      * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
@@ -37,7 +37,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
      *            dann wird nur die Spalte dieses Elementes angezeigt.
      */
-    public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Kante> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
+    public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Edge> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
         super(doc);
         if (columnElement == null) {
             setData(edgeClass, direction, field, null);
@@ -48,20 +48,20 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
     /**
      * Sucht die RowElements und ColumnElements für alle Elemente heraus, die durch die übergebene Kantenart in der übergebenen
-     * Richtung verbunden sein können. Dabei sind die RowElements immer die Start-Elemente der Kante in der angegebenen Richtung (!) und die
+     * Richtung verbunden sein können. Dabei sind die RowElements immer die Start-Elemente der Edge in der angegebenen Richtung (!) und die
      * ColumnElements immer die EndElemente in der angegebenen Kantenrichtung
      *
      * @param edgeClass
      * @param direction
      * @return
      */
-    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction) {
+    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction) {
         Class<? extends ModelElement> rowElementClass = direction == FORWARD ? getStartClass(edgeClass) : getEndClass(edgeClass);
         Class<? extends ModelElement> colElementClass = direction == FORWARD ? getEndClass(edgeClass) : getStartClass(edgeClass);
         List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
         List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
 
-        //alle Elemente entfernen, die keine Kante haben, an die ein Verteilungsgewicht gehängt werden könnte
+        //alle Elemente entfernen, die keine Edge haben, an die ein Verteilungsgewicht gehängt werden könnte
         for (int i = allRowElements.size() - 1; i >= 0; i--) {
             ModelElement me = allRowElements.get(i);
             if (me.getEdges(edgeClass).isEmpty()) {
@@ -85,8 +85,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param columnElement
      * @return
      */
-    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction, final ModelElement columnElement) {
-        List<Kante> edges;
+    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction, final ModelElement columnElement) {
+        List<Edge> edges;
         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
             if (direction == FORWARD) {
                 edges = columnElement.getEdgesFrom(getStartClass(edgeClass), edgeClass);
@@ -98,7 +98,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         }
 
         List<ModelElement> allRowElements = Lists.newArrayList();
-        for (Kante edge : edges) {
+        for (Edge edge : edges) {
             ModelElement rowElement = edge.getOther(columnElement);
             allRowElements.add(rowElement);
         }
@@ -118,7 +118,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param columnElement
      * @return
      */
-    private Pair<List<ModelElement>, List<ModelElement>> initRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction, final ModelElement columnElement) {
+    private Pair<List<ModelElement>, List<ModelElement>> initRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction, final ModelElement columnElement) {
         Pair<List<ModelElement>, List<ModelElement>> rowColumnElements;
         if (columnElement == null) {
             rowColumnElements = getRowAndColumnElements(edgeClass, direction);
@@ -132,11 +132,11 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * Erstellt und setzt Verteilungsgewicht-Modeldaten
      *
      * @param edgeClass
-     * @param direction Richtung in der die ausgwählte Kante zu lesen ist. In der Tabelle sthen die Startklassen der Kante in den Zeilen, wenn
+     * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
      *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
      */
-    private void setData(final Class<? extends Kante> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
+    private void setData(final Class<? extends Edge> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
         Pair<List<ModelElement>, List<ModelElement>> rowColumnElements = initRowAndColumnElements(edgeClass, direction, columnElement);
         List<ModelElement> allRowElements = rowColumnElements.getFirstItem();
         List<ModelElement> columnElements = rowColumnElements.getSecondItem();
@@ -148,7 +148,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
             ModelElement re = allRowElements.get(r);
             for (int c = 0; c < columnElements.size(); c++) {
                 ModelElement ce = columnElements.get(c);
-                Kante edge = null;
+                Edge edge = null;
 
                 if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
                     if (direction == FORWARD) {
@@ -157,7 +157,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                         edge = ce.getEdgeTo(re, edgeClass);
                     }
                 } else {
-                    List<Kante> edges = ce.getEdgesWith(re, edgeClass);
+                    List<Edge> edges = ce.getEdgesWith(re, edgeClass);
                     if (!edges.isEmpty()) {
                         edge = edges.get(0);
                     }

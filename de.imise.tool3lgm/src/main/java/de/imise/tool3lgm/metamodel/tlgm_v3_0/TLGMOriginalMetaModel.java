@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.elements.CopyDependencies;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.MetaModel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -455,15 +455,15 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
-     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
+     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Edge
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
-     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
+     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt werden, die
      * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
      * zusammenzufassen.
      */
     @Override
-    public final Set<Class<? extends Kante>> getDoubleMeaningEdgeClasses() {
-        return ImmutableSet.<Class<? extends Kante>> of(
+    public final Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses() {
+        return ImmutableSet.<Class<? extends Edge>> of(
                 //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
                 //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
                 AufObjVerbindung.class,
@@ -475,7 +475,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
                 KommbezEtntVerbindung.class,
                 //vorwärts1: sendet an; rückwärts1: empfängt von
                 //vorwärts2: sendet an; rückwärts2: empfängt von
-                //ACHTUNG: Dies ist auch eine Kante mit doppelter Bedeutung, weil sie das gerichtete
+                //ACHTUNG: Dies ist auch eine Edge mit doppelter Bedeutung, weil sie das gerichtete
                 //Senden und Empfangen zw. Schnittstellen ausdrückt. Da aber beide Endklassen gleich sind
                 //haben sie auch in beiden Richtungen immer dieselb Bedeutung.
                 KommBeziehung.class);
@@ -486,7 +486,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
      * der Grafik dargestelt werden.
      */
     @Override
-    public final Set<Class<? extends Kante>> getForwardConnectedEdgeClasses() {
+    public final Set<Class<? extends Edge>> getForwardConnectedEdgeClasses() {
         return ImmutableSet.of(); //im Moment keine eingetragen
     }
 

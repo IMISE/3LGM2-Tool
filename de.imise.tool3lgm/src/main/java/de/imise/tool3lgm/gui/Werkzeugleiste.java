@@ -14,7 +14,7 @@ import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -131,9 +131,9 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         dvbaustein.addActionListener(this);
         dvbaustein.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
         CSH.setHelpIDString(dvbaustein, "wl_datenverarbeitungsbaustein");
-        // Kante
+        // Edge
         kante = new ToolButton(new AufObjVerbindung(), f.getGraphDocument());
-        kante.setToolTipText(ModelConstants.getDisplayableName(Kante.class));
+        kante.setToolTipText(ModelConstants.getDisplayableName(Edge.class));
         kante.addActionListener(this);
         kante.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
 

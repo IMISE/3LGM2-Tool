@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.matrixview;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.NOTCONNECTED;
+import static de.imise.tool3lgm.graphtools.elements.Edge.NOTCONNECTED;
 
 import java.util.HashSet;
 import java.util.Iterator;

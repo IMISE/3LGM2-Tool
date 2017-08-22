@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -22,7 +22,7 @@ public abstract class AbstractCardinalityError extends AbstractError {
      * @param cardValue
      * @param gdcoll
      */
-    public AbstractCardinalityError(final ModelElement me, final Class<? extends Kante> edgeClass, final GDCollection gdcoll, final int cardValue) {
+    public AbstractCardinalityError(final ModelElement me, final Class<? extends Edge> edgeClass, final GDCollection gdcoll, final int cardValue) {
         super(me, edgeClass, gdcoll);
         this.cardValue = cardValue;
     }
@@ -37,13 +37,13 @@ public abstract class AbstractCardinalityError extends AbstractError {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<? extends Kante> getEdgeClass() {
-        return (Class<? extends Kante>) errorField;
+    public Class<? extends Edge> getEdgeClass() {
+        return (Class<? extends Edge>) errorField;
     }
 
     @Override
     public String getErrorFieldString() {
-        Class<? extends Kante> edgeClass = getEdgeClass();
+        Class<? extends Edge> edgeClass = getEdgeClass();
         return edgeClass != null ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : "";
     }
 

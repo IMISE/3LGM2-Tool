@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.plugin;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.ANY;
+import static de.imise.tool3lgm.graphtools.elements.Edge.ANY;
 
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;

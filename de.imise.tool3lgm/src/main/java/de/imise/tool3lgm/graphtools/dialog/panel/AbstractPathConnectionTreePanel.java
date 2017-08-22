@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
@@ -24,27 +24,27 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
  */
 public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnectionPanel {
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         super(dialog, edgeClasses);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, searchElementClass, edgeClasses);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelEdgeName, edgeClasses);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelEdgeName, searchElementClass, edgeClasses);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, searchEdgeIndex, labelEdgeName, edgeClasses);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelEdgeIndex, labelEdgeName, searchElementClass, edgeClasses);
     }
 

@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 
 import java.awt.Component;
 /**
@@ -36,7 +36,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -48,7 +48,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.StringUtils;
 
 /**
- * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Kante verbundene Elemente
+ * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Edge verbundene Elemente
  * angezeigt, hinzugefügt und entfernt werden.
  */
 public class PathConnectionPanel extends AbstractExpandablePanel {
@@ -79,19 +79,19 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, showRightTree, edgeClasses);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, showRightTree, searchElementClass, edgeClasses);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
         this(dialog, labelLastEdgeName, showRightTree, null, edgeClasses);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
         this.showRightTree = showRightTree;
         setPreferredSize(new Dimension(550, 350));
@@ -99,12 +99,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        //wenn der Pfad aus mehr als einer Kante besteht, dann soll über dem linken Baum einfach "verbunden" stehen
+        //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen
         String ltreeLabelString = lastEdgeIndex > 0 ? getResString("verb") : null;
-        //wenn der Pfad aus nur einer Kante besteht
+        //wenn der Pfad aus nur einer Edge besteht
         if (ltreeLabelString == null) {
-            //schreibe den Namen der Kante in der richtigen Richtung über den linken Baum
-            Class<? extends Kante> lastEdge = edgeClasses[lastEdgeIndex];
+            //schreibe den Namen der Edge in der richtigen Richtung über den linken Baum
+            Class<? extends Edge> lastEdge = edgeClasses[lastEdgeIndex];
             ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
         }
         String rtreeLabelString = getResString("frei");
@@ -266,7 +266,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
 
     /**
-     * Sammelt für die letzte Kante alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
+     * Sammelt für die letzte Edge alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
      * sie bereits verknüpft sind und kein weiteres Mal verknüpft werden können.
      *
      * @param edgeIndex
@@ -280,7 +280,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (clear) {
                 childrenToExcludeFromRtree.clear();
             }
-            //wenn es der Index der letzten Kante ist -> zu den Ausschlusselementen hinzufügen
+            //wenn es der Index der letzten Edge ist -> zu den Ausschlusselementen hinzufügen
             if (edgeIndex == lastEdgeIndex) {
                 childrenToExcludeFromRtree.addAll(potentialExcludeChildren);
             }
@@ -465,7 +465,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
                 TreePath[] path2disconnect = ltree.getSelectionPaths();
                 for (int i = 0; i < path2disconnect.length; i++) {
-                    //das ist der Index der Kante im Pfad, ab der entfernt werden soll
+                    //das ist der Index der Edge im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = path2disconnect[i].getPathCount() - 2;
                     ModelElement element2Unlink = PathConnectionPanel.getPathModelElement(path2disconnect[i]);
                     ModelElement parentOfElement2Unlink = PathConnectionPanel.getPathModelElement(path2disconnect[i].getParentPath());
@@ -479,14 +479,14 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
         int pid = getTransactionID();
-        Class<? extends Kante> edgeClass = edgeClasses[edgeIndexInPath];
+        Class<? extends Edge> edgeClass = edgeClasses[edgeIndexInPath];
         gdcoll.unlink(startInPath, endInPath, edgeClass, pid);
         if (!startInPath.isConsistent()) {
             gdcoll.deleteElement(startInPath, selDoc, pid);
         }
         int nextEdgeIndexInPath = edgeIndexInPath + 1;
         if (nextEdgeIndexInPath < edgeClasses.length) {
-            Class<? extends Kante> nextEdgeClass = edgeClasses[nextEdgeIndexInPath];
+            Class<? extends Edge> nextEdgeClass = edgeClasses[nextEdgeIndexInPath];
             Class<? extends ModelElement> nextElementClassInPath = directions[nextEdgeIndexInPath] == FORWARD ? getEndClass(nextEdgeClass) : getStartClass(nextEdgeClass);
             List<ModelElement> connectedElements = endInPath.getConnectedElements(nextElementClassInPath, nextEdgeClass);
             for (ModelElement connectedElement : connectedElements) {
@@ -509,7 +509,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      */
     protected void connect(final TreePath targetTreePath, final TreePath... sourceTreePaths) {
 
-        //das ist der Index der Kante im Pfad, ab der hinzugefügt werden soll
+        //das ist der Index der Edge im Pfad, ab der hinzugefügt werden soll
         int targetTreePathEdgeIndex = targetTreePath.getPathCount() - 1;
 
         TreePath realTargetTreePath = targetTreePath;

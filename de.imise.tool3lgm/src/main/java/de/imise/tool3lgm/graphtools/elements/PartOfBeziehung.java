@@ -4,10 +4,10 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Kante ist immer das Kindelement,
- * das Ende der Kante ist immer das Elternelement. Dir Richtung der Kante ist immer forward.
+ * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Edge ist immer das Kindelement,
+ * das Ende der Edge ist immer das Elternelement. Dir Richtung der Edge ist immer forward.
  */
-public abstract class PartOfBeziehung extends Kante {
+public abstract class PartOfBeziehung extends Edge {
 
     public PartOfBeziehung() {
         super();
@@ -22,18 +22,18 @@ public abstract class PartOfBeziehung extends Kante {
     }
 
     /**
-     * Gibt das Element zurück, welches durch diese Kante Teil des anderen Elementes ist.
+     * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
      *
-     * @return Partelement der Kante
+     * @return Partelement der Edge
      */
     public final ModelElement getPart() {
         return getStart();
     }
 
     /**
-     * Gibt das Element zurück, welches durch diese Kante das Oberelement des anderen Elementes ist.
+     * Gibt das Element zurück, welches durch diese Edge das Oberelement des anderen Elementes ist.
      *
-     * @return Parentelement der Kante
+     * @return Parentelement der Edge
      */
     public final ModelElement getParent() {
         return getEnd();
@@ -60,7 +60,7 @@ public abstract class PartOfBeziehung extends Kante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Teilelementklasse der übergebenen Kante zuweisungskompatibel ist.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Teilelementklasse der übergebenen Edge zuweisungskompatibel ist.
      *
      * @param poClass
      * @param meClass
@@ -71,7 +71,7 @@ public abstract class PartOfBeziehung extends Kante {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Kante zuweisungskompatibel ist, ide nicht
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Edge zuweisungskompatibel ist, ide nicht
      * die Teilelementklasse ist.
      *
      * @param poClass
@@ -83,12 +83,12 @@ public abstract class PartOfBeziehung extends Kante {
     }
 
     /**
-     * Richtung, in der die Kante vom Part auf den Parent zeigt.
+     * Richtung, in der die Edge vom Part auf den Parent zeigt.
      */
     public static final int PART_TO_PARENT_DIRECTION = FORWARD;
 
     /**
-     * Richtung, in der die Kante vom Prent auf den Part zeigt.
+     * Richtung, in der die Edge vom Prent auf den Part zeigt.
      */
     public static final int PARENT_TO_PART_DIRECTION = BACKWARD;
 

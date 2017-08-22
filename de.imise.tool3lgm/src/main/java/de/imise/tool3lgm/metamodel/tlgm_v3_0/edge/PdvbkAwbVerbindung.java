@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
@@ -12,7 +12,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
 /**
  * @author Thomas
  */
-public final class PdvbkAwbVerbindung extends Kante {
+public final class PdvbkAwbVerbindung extends Edge {
 
     //    public static final Class[] stcl = {Anwendungsbaustein.class, RechAnwendungsbaustein.class, KonAnwendungsbaustein.class};
     public static final Class<? extends ModelElement> stcl = Anwendungsbaustein.class;

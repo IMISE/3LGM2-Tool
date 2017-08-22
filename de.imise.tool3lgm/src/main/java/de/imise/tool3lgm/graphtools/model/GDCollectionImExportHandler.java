@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -142,7 +142,7 @@ public class GDCollectionImExportHandler {
                     if (element == null) {
                         continue;
                     }
-                    ((Kante) element).decodeHashStrings(mainDoc);
+                    ((Edge) element).decodeHashStrings(mainDoc);
                     ElementContainer container = element.createContainer(newSzenario);
                     container.set3LGMLayout(importKC.get3LGMLayout());
                     container.setE3LGMLayout(importKC.getE3LGMLayout());

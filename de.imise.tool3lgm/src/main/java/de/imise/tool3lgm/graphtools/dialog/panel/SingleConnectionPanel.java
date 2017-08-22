@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -30,8 +30,8 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
  * @author AXS
  *         Dieses Panel stellt in einer Combobox ein einzelne Element zur direkten Verknüpfung mit dem
  *         ModelElement des Dialoges zur Auswahl. Je nachdem ob die Verknüpfung über eine normale
- *         {@link Kante} oder eine {@link Composition} läuft, werden andere im Modell befindliche
- *         Elemente zur Verknüpfung angeboten {@link Kante}) oder nicht ({@link Composition}).
+ *         {@link Edge} oder eine {@link Composition} läuft, werden andere im Modell befindliche
+ *         Elemente zur Verknüpfung angeboten {@link Edge}) oder nicht ({@link Composition}).
  *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
  *         ABER: Dieses Panel beachtet keine Vererbung. Das heißt es werden immer nur direkt mit
  *         dem Ausgangselement verbundene Elemente angezeigt. Im PathConnectionPanel hingegen werden
@@ -70,17 +70,17 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, edgeClasses);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
-     *            letzten Kante aus den edgeClasses geschrieben.
+     *            letzten Edge aus den edgeClasses geschrieben.
      * @param edgeClasses
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
 
@@ -222,7 +222,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
      *
      * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
-     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Kante bestehen ist das das
+     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
      *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
      * @return
      */
@@ -267,7 +267,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
     private final void unlinkAll() {
         List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
         GDCollection gdcoll = mainDoc.getCollection();
-        Class<? extends Kante> lastEdgeInPath = edgeClasses[lastEdgeIndex];
+        Class<? extends Edge> lastEdgeInPath = edgeClasses[lastEdgeIndex];
         int lastEdgeDirection = directions[lastEdgeIndex];
         for (ElementContainer ec : searchElementConnectedContainer) {
             ModelElement me = ec.getElement();

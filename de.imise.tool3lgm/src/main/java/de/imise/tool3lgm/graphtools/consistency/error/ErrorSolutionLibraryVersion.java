@@ -6,8 +6,8 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 /**
  * Diese Datei ist aktuell überflüssig und nur noch drin, damit man erkennen kann, wie die ErrorSolutions funktionieren.
  * Im Grunde ist das nur dazu da, im Fehlerfall an einen besseren Ort (Tab in einem Eigenschaftsdialog) zu lenken,
- * als den Dialog des Elementes, bei dem bei einer Kante ein Kardinalitätsfehler besteht, direkt den Reiter für diese
- * fehlerhafte Kante zu öffnen.
+ * als den Dialog des Elementes, bei dem bei einer Edge ein Kardinalitätsfehler besteht, direkt den Reiter für diese
+ * fehlerhafte Edge zu öffnen.
  *
  * @author AXS
  */
@@ -60,9 +60,9 @@ public class ErrorSolutionLibraryVersion {
      * gelöscht werden.
      *
      * @return / private final Pair[] MINCARDINALITY_NO_SOLUTION_ERRORS = { new Pair<Class<? extends
-     *         ModelElement>, Class<? extends Kante>>(DBKonfiguration.class,
+     *         ModelElement>, Class<? extends Edge>>(DBKonfiguration.class,
      *         PdvbkAwbVerbindung.class), new Pair<Class<? extends ModelElement>, Class<? extends
-     *         Kante>>(ABKonfiguration.class, AwbkAufOrgVerbindung.class), }; /**
+     *         Edge>>(ABKonfiguration.class, AwbkAufOrgVerbindung.class), }; /**
      * @param error
      * @return
      */

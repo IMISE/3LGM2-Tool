@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -184,7 +184,7 @@ public class LayerContainer extends ElementContainer {
                     counter++;
                 }
             }
-        } else if (Kante.class.isAssignableFrom(elementClass)) {
+        } else if (Edge.class.isAssignableFrom(elementClass)) {
             for (int c = 0; c < getKantenCount(); c++) {
                 if (getEdgeContainer(c).getElement().getClass() == elementClass) {
                     counter++;
@@ -269,7 +269,7 @@ public class LayerContainer extends ElementContainer {
             return;
         }
         ModelElement me = kc.getElement();
-        for (Kante edge : me.getEdges()) {
+        for (Edge edge : me.getEdges()) {
             if (!(edge instanceof Composition)) {
                 continue;
             }
@@ -452,7 +452,7 @@ public class LayerContainer extends ElementContainer {
 
         for (EdgeContainer ec : edgeContainer) {
             if (UserProperties.isPaintEdgesOnlyForSelectedElements()) {
-                Kante edge = (Kante) ec.getElement();
+                Edge edge = (Edge) ec.getElement();
                 ModelElement start = edge.getStart();
                 ElementContainer startContainer = start.getContainer(doc);
                 if (doc.isSelected(startContainer)) {
@@ -626,7 +626,7 @@ public class LayerContainer extends ElementContainer {
         //fuer alle NodeContainer in numberedEdgesNodeContainer
         for (NodeContainer kc : numberedEdgesNodeContainer) {
             //fuer jede seiner Kanten
-            for (Kante egde : kc.getElement().getEdges()) {
+            for (Edge egde : kc.getElement().getEdges()) {
                 //hole ihren Container
                 EdgeContainer kantCont = (EdgeContainer) egde.getContainer(doc);
                 //loesche ihn aus kanten

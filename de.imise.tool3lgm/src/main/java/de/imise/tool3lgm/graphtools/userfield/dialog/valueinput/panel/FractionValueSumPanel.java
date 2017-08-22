@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_BACKWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD_AND_BACKWARD;
@@ -14,7 +14,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -34,7 +34,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     private final AlphabeticalComboBox elementBox = new AlphabeticalComboBox();
 
     public FractionValueSumPanel(final UserFieldEditorDialog dialog, final String name) {
-        super(dialog, Kante.class, name);
+        super(dialog, Edge.class, name);
         initElementBox();
     }
 
@@ -51,8 +51,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     protected final InsertType getInsertType(final Class<? extends ModelElement> elementClass, final UserFieldDefinitions definitions) {
         //nur Kanten zulassen
         InsertType insertType = NO;
-        if (Kante.class.isAssignableFrom(elementClass)) {
-            Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
+        if (Edge.class.isAssignableFrom(elementClass)) {
+            Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
             //vorwärts
             Class<? extends ModelElement> startElementClass = getStartClass(edgeClass);
             //alle einfachen Teilwertsummen-UserFields holen, die für die startElementClass über die edgeClass definiert sind
@@ -71,10 +71,10 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         return insertType;
     }
 
-    private Class<? extends Kante> getSelectedEdgeClass() {
+    private Class<? extends Edge> getSelectedEdgeClass() {
         Object o = elementTypeBox.getSelectedObject();
         if (o instanceof Class) {
-            return ((Class<?>) o).asSubclass(Kante.class);
+            return ((Class<?>) o).asSubclass(Edge.class);
         }
         return null;
     }
@@ -148,7 +148,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
      * @return <code>true</code>, wenn die selektierte Kantenklasse in Vorwärtsrichtung geselen wird, sonst <code>false</code>.
      */
     private boolean isSelectedEdgeDirectionForward() {
-        Class<? extends Kante> selectedEdgeClass = getSelectedEdgeClass();
+        Class<? extends Edge> selectedEdgeClass = getSelectedEdgeClass();
         String fullForwardMetaAssociationName = ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass);
         String selectedEdgeClassVisibleName = elementTypeBox.getSelectedItem().toString();
         boolean isSelectedEdgeDirectionForward = fullForwardMetaAssociationName.equals(selectedEdgeClassVisibleName);
@@ -164,7 +164,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         elementBox.removeAllItems();
         elementBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_element"));
-        Class<? extends Kante> selectedEdgeClass = getSelectedEdgeClass();
+        Class<? extends Edge> selectedEdgeClass = getSelectedEdgeClass();
         elementBox.setEnabled(selectedEdgeClass != null);
         if (elementBox.isEnabled()) {
             boolean selectedEdgeDirectionForward = isSelectedEdgeDirectionForward();
@@ -193,7 +193,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
 
     @Override
     protected AbstractUserFieldTableModel getTableModel() {
-        Class<? extends Kante> edgeClass = getSelectedEdgeClass();
+        Class<? extends Edge> edgeClass = getSelectedEdgeClass();
         boolean edgeForwardDirection = isSelectedEdgeDirectionForward();
         ModelElement me = (ModelElement) elementBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new FractionValueSumTableModel(me, edgeClass, edgeForwardDirection, hierarchyTypeFilterPane.showTopLevel(), hierarchyTypeFilterPane.showInner(), hierarchyTypeFilterPane.showLeafs());

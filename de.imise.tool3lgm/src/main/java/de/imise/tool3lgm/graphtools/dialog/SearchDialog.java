@@ -57,7 +57,7 @@ import javax.swing.text.JTextComponent;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -516,8 +516,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             data[0] = rowCounter;
             data[1] = ec;
             // data[2] = ec.getGraphDocument().getTitle();
-            if (ec.getElement() instanceof Kante) {
-                data[2] = ModelConstants.getDisplayableName(ec.getElement()) + ": " + ModelConstants.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Kante.class));
+            if (ec.getElement() instanceof Edge) {
+                data[2] = ModelConstants.getDisplayableName(ec.getElement()) + ": " + ModelConstants.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
             } else {
                 data[2] = ModelConstants.getDisplayableName(ec.getElement());
             }
@@ -691,7 +691,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             elementClassBox.addItem(ModelConstants.ALL_NODES[i], ModelConstants.getDisplayableName(ModelConstants.ALL_NODES[i]));
         }
         elementClassBox.addSeparator(true);
-        elementClassBox.addItem(Kante.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
+        elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
         elementClassBox.addSeparator(true);
 
         for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {

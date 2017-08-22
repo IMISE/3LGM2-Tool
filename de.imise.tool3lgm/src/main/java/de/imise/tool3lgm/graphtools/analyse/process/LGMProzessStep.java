@@ -7,7 +7,7 @@ package de.imise.tool3lgm.graphtools.analyse.process;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
@@ -53,7 +53,7 @@ public class LGMProzessStep {
     /**
      * Sequenz der Kanten, über die dieser Prozess kommuniziert werden kann
      */
-    private List<Kante> kommProzessKanten;
+    private List<Edge> kommProzessKanten;
 
     /**
      * KonfigurationContainer, an denen die mögliche Kommunikation wirklich startet
@@ -189,7 +189,7 @@ public class LGMProzessStep {
     /**
      * @param list
      */
-    public void setKommProzessKanten(final List<Kante> list) {
+    public void setKommProzessKanten(final List<Edge> list) {
         kommProzessKanten = list;
     }
 
@@ -288,7 +288,7 @@ public class LGMProzessStep {
     /**
      * @return
      */
-    public List<Kante> getKommProzessKanten() {
+    public List<Edge> getKommProzessKanten() {
         if (kommProzessKanten == null) {
             return new ArrayList<>(1);
         }

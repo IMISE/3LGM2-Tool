@@ -72,7 +72,7 @@ public class GeneralUserFieldTableModel extends AbstractUserFieldTableModel {
         //Ermitteln der ModelElemente zu elementClass
         List<ModelElement> allModelElements = doc.getModelItems(elementClass, true, true);
         List<ModelElement> modelElements = new ArrayList<>(allModelElements.size());
-        //TODO:FST,XHB. Wenn die Kante PDVBKAWBVerb übergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt.
+        //TODO:FST,XHB. Wenn die Edge PDVBKAWBVerb übergeben wurde, bleibt allModelElements leer. Ist auch richtig,solange es keine Soclhe Verbindung gibt.
         // Dann sollte aber auch keine Exception mehr fliegen. prüf mal bitte, warum das so ist?!
 
         for (int i = 0; i < allModelElements.size(); i++) {

@@ -1,10 +1,10 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnecting;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
@@ -41,7 +41,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.LayerKnoten;
@@ -667,11 +667,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 //linkSelected(pid);
                 break;
             case 2:
-                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Kante.class), Integer.parseInt(argv[1]), pid);
+                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
                 break;
             case 6:
                 //Parameter: link(String edgeClassName, String edgeHash, ModelElement k1, ModelElement k2, int edgeIndex, int pid) {
-                /* Kante edge = */gdcoll.link(argv[0], argv[1], argv[2], argv[3], Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
+                /* Edge edge = */gdcoll.link(argv[0], argv[1], argv[2], argv[3], Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
                 //						System.err.println("<Etxrabllatt>");
                 //						System.err.println(edge.getStart() + " (" + edge.getStart().getHashString() + ") " + edge.getEnd() + " (" + edge.getEnd().getHashString() + ")");
                 //						System.err.println("</Etxrabllatt>");
@@ -687,19 +687,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case UNLINK:
             int position = -1;
-            Class<? extends Kante> edgeClass = null;
+            Class<? extends Edge> edgeClass = null;
             switch (argc) {
             case 0:
                 System.err.println("GraphDocument.dispatchCommand() -> LINK mit 0 Argumenten aufgerufen (veraltet)");
                 //						unlinkSelected(pid);
                 break;
             case 2:
-                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Kante.class), Integer.parseInt(argv[1]), pid);
+                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
                 break;
             default:
                 try {
                     position = Integer.parseInt(argv[2]);
-                    edgeClass = ModelConstants.getClassForName(argv[3]).asSubclass(Kante.class);
+                    edgeClass = ModelConstants.getClassForName(argv[3]).asSubclass(Edge.class);
                 } catch (Exception e) {
                     //							Log.log(Log.ERROR, Tool3lgmConstants.getErrorString("FehlerAllgemein"), e);
                 }
@@ -733,7 +733,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case CREATE_ADDICTED:
             GraphDocument doc = getCollection().getGraphDocumentCoded(argv[0]);
             ModelElement master = doc.findElementCoded(argv[1]);
-            edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Kante.class);
+            edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
             Class<? extends ModelElement> slaveClass = ModelConstants.getClassForName(argv[3]);
             createAddicted(doc, master, edgeClass.asSubclass(Composition.class), slaveClass, pid);
             break;
@@ -954,7 +954,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case INSERT_BENDING_POINT:
-            //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante,
+            //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
             gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
             break;
 
@@ -2289,14 +2289,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
         if (!(nc instanceof BendpointContainer)) {
             //bei allen Kanten dieser Knoten
-            for (Kante ka : nc.getKnoten().getEdges()) {
+            for (Edge ka : nc.getKnoten().getEdges()) {
                 EdgeContainer edgeC = (EdgeContainer) ka.getContainer(this);
-                //wenn die Kante keinen Container in diesem Teilmodell hat (dann wird sie
+                //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
                 //auch nicht Grafisch dargestellt und es braucht nichts verschoben werden) -> weiter
                 if (edgeC == null) {
                     continue;
                 }
-                //aktualisiere die Endpunkte der Kante
+                //aktualisiere die Endpunkte der Edge
                 edgeC.computeBorderPoints();
             }
         } else {
@@ -2570,7 +2570,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
         }
         // Anpassen der Kanten
-        for (Kante edge : ec.getElement().getEdges()) {
+        for (Edge edge : ec.getElement().getEdges()) {
             EdgeContainer kc = (EdgeContainer) edge.getContainer(szen);
             if (kc == null) {
                 continue;
@@ -3016,7 +3016,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (start.getX() < right_x && start.getX() > left_x && start.getY() < right_y && start.getY() > left_y && end.getX() < right_x && end.getX() > left_x && end.getY() < right_y && end.getY() > left_y && !ka.isSelected()) {
                 addToSelection(ka, PID);
             }
-            //alle Knickpunkte der Kante, die im Auswahlrechteck liegen ebenfall selektieren
+            //alle Knickpunkte der Edge, die im Auswahlrechteck liegen ebenfall selektieren
             if (ka.isVisible()) {
                 for (BendpointContainer kpc : ka.iterateBendpointContainers()) {
                     if (kpc.getX() < right_x && kpc.getX() > left_x && kpc.getY() < right_y && kpc.getY() > left_y && !kpc.isSelected()) {
@@ -3438,7 +3438,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param hashString
      * @return
      */
-    public Kante findKanteCoded(final String hashString) {
+    public Edge findKanteCoded(final String hashString) {
         if (getCollection().getMainGraphDocument() != this) {
             return getCollection().getMainGraphDocument().findKanteCoded(hashString);
         }
@@ -3587,7 +3587,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Kante addict(final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
+    public final Edge addict(final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
         return addict(hashString, me1, me2, edgeClass, pid);
     }
 
@@ -3599,7 +3599,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Kante addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
+    public final Edge addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
         return addict(szenHash, edgeClass.getSimpleName(), null, me1, me2, -1, pid);
     }
 
@@ -3613,7 +3613,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Kante addict(final String szenHash, final String edgeClassName, final String edgeHash, final String knothash1, final String knothash2, final int position, final int pid) {
+    public final Edge addict(final String szenHash, final String edgeClassName, final String edgeHash, final String knothash1, final String knothash2, final int position, final int pid) {
         ModelElement me1 = findElementCoded(knothash1);
         ModelElement me2 = findElementCoded(knothash2);
         return addict(szenHash, edgeClassName, edgeHash, me1, me2, position, pid);
@@ -3630,7 +3630,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    protected final Kante addict(final String szenHash, final String edgeClassName, final String edgeHash, final ModelElement masterElement, final ModelElement slaveElement, final int position, final int pid) {
+    protected final Edge addict(final String szenHash, final String edgeClassName, final String edgeHash, final ModelElement masterElement, final ModelElement slaveElement, final int position, final int pid) {
         if (masterElement == null || slaveElement == null) {
             return null;
         }
@@ -3641,12 +3641,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         szen.start_transaction(pid);
 
-        List<Kante> edges = masterElement.getEdgesWith(slaveElement, ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class));
+        List<Edge> edges = masterElement.getEdgesWith(slaveElement, ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class));
         if (edges.size() == 0 || !(szen instanceof Szenario)) {
             finish_transaction(pid);
             return null;
         }
-        Kante k = edges.get(0);
+        Edge k = edges.get(0);
         if (!(masterElement instanceof Knoten) || !(slaveElement instanceof Knoten)) {
             return k;
         }
@@ -3685,7 +3685,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         int wieviele = -1;
         ModelElement me = kc.getElement();
-        for (Kante edge : me.getEdges()) {
+        for (Edge edge : me.getEdges()) {
             if (edge instanceof Composition) {
                 ModelElement slave = ((Composition) edge).getSlave();
                 if (slave != me && !slave.isUnpaintable()) {
@@ -3835,7 +3835,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return retVal;
     }
 
-    public final void linkSelected(final Class<? extends Kante> edgeClass, final int direction, final int pid) {
+    public final void linkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
         if (direction == BACKWARD) {
@@ -3854,7 +3854,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param pid
      */
-    public final void unlinkSelected(final Class<? extends Kante> edgeClass, final int direction, final int pid) {
+    public final void unlinkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
         if (direction == BACKWARD) {
@@ -3911,8 +3911,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex1 + " " + edgeIndex2, pid);
         addUndoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex2 + " " + edgeIndex1, pid);
 
-        Kante kante1 = me.getEdge(edgeIndex1);
-        Kante kante2 = me.getEdge(edgeIndex2);
+        Edge kante1 = me.getEdge(edgeIndex1);
+        Edge kante2 = me.getEdge(edgeIndex2);
         me.setEdge(edgeIndex1, kante2);
         me.setEdge(edgeIndex2, kante1);
         String s = kante1.getName();
@@ -4330,7 +4330,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param modelElementHash
      * @param userFieldHashToReplaceOrSimpleEdgeClassName
      *            Das hier ist entweder der Hash eines UserFields oder der SimpleClassName einer Kantenklasse. Wird ein Klassenname übergeben, dann
-     *            wird beim Replacer der Ersetzungshash für die Gleichverteilung der Kante eingetragen, ansonsten wird der Erstzungshash für das
+     *            wird beim Replacer der Ersetzungshash für die Gleichverteilung der Edge eingetragen, ansonsten wird der Erstzungshash für das
      *            UserField mit dem angegebenen Hash eingetragen.
      * @param userFieldHashReplacement
      * @param pid
@@ -4347,7 +4347,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         String oldUserFieldHashReplacement;
         //je nachdem ob die Kantenklasse gefuden wurde oder nicht, wird aus dem Replacer der alte Erstzungshas geladen
         if (edgeElementClass != null) { //Fall 1
-            Class<? extends Kante> edgeClass = edgeElementClass.asSubclass(Kante.class);
+            Class<? extends Edge> edgeClass = edgeElementClass.asSubclass(Edge.class);
             oldUserFieldHashReplacement = replacer.getUniformDistributionReplacement(modelElementHash, edgeClass);
             if (emptyArgument.equals(hashReplacement)) { // Fall 1b.)
                 replacer.removeUniformDistributionReplacement(modelElementHash, edgeClass);
@@ -4564,7 +4564,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void linkElementToSzenario(final String szenHashString, final ElementContainer ec, final int pid) {
 
-        if (ec.getElement() instanceof Kante) {
+        if (ec.getElement() instanceof Edge) {
             return;
         }
         start_transaction(pid);
@@ -4636,7 +4636,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         ElementContainer kc = findNodeContainerCoded(hashString2);
         if (kc != null && kc instanceof NodeContainer) {
-            for (Kante edge : kc.getElement().getEdges()) {
+            for (Edge edge : kc.getElement().getEdges()) {
                 EdgeContainer kac = (EdgeContainer) edge.getContainer(this);
                 if (kac == null) {
                     continue;
@@ -4673,7 +4673,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         gdoc.start_transaction(pid, false);
         for (int i = 0; i < layer.length; i++) {
             for (EdgeContainer oldKC : new ArrayList<>(layer[i].getKanten())) {
-                Kante kante = oldKC.getEdge();
+                Edge kante = oldKC.getEdge();
                 ModelElement ks = kante.getStart();
                 ModelElement ke = kante.getEnd();
                 if (ks == null || ke == null) {
@@ -4682,7 +4682,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (ks.getClass() == Prozess.class || ke.getClass() == Prozess.class) {
                     continue;
                 }
-                for (Kante edge : ks.getEdgesWith(ke, kante.getClass(), -1)) {
+                for (Edge edge : ks.getEdgesWith(ke, kante.getClass(), -1)) {
                     if (edge != kante) {
                         gdcoll.deleteElement(edge, this, pid);
                         //						gdoc.removeEdge(edge, pid);
@@ -4732,7 +4732,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (LayerContainer lc : gdoc.layer) {
             for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
                 EdgeContainer kc = lc.getEdgeContainer(j);
-                Kante ka = kc.getEdge();
+                Edge ka = kc.getEdge();
                 if (ka.getStart() == null || ka.getEnd() == null) {
                     gdcoll.deleteElement(ka, this, PID);
                     //					gdoc.removeEdge(ka, PID);
@@ -4752,7 +4752,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
                 for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
                     EdgeContainer kc = lc.getEdgeContainer(j);
-                    Kante edge = kc.getEdge();
+                    Edge edge = kc.getEdge();
                     if (edge == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
                         gdcoll.removeContainerFromSubmodel(kc, PID);
                     }
@@ -4770,25 +4770,25 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (int i = 0; i < layer.length; i++) {
             List<EdgeContainer> oldEdgesCont = new ArrayList<>(layer[i].getKanten());
             for (EdgeContainer edgeC : oldEdgesCont) {
-                Kante edge = edgeC.getEdge();
+                Edge edge = edgeC.getEdge();
                 if (edge instanceof KommBeziehung) {
                     continue;
                 }
 
                 boolean reverse = false;
-                Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(edge.getStart().getClass(), edge.getEnd().getClass());
+                Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(edge.getStart().getClass(), edge.getEnd().getClass());
                 if (edgeClasses == null || edgeClasses.length == 0) {
                     reverse = true;
                     edgeClasses = ModelConstants.getEdgeTypes(edge.getEnd().getClass(), edge.getStart().getClass());
                 }
                 if (edgeClasses == null || edgeClasses.length == 0) {
-                    System.out.println("Konnte Kante nicht konvertieren: " + edge.getHashString() + "; start: " + edge.getStart().getHashString() + " --> end: " + edge.getEnd().getHashString());
+                    System.out.println("Konnte Edge nicht konvertieren: " + edge.getHashString() + "; start: " + edge.getStart().getHashString() + " --> end: " + edge.getEnd().getHashString());
                     gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
                     //					removeEdge(edge, 0);
                     continue;
                 }
 
-                Kante newEdge = null;
+                Edge newEdge = null;
                 try {
                     if (edge instanceof PartOfBeziehung) {
                         for (int j = 0; j < edgeClasses.length; j++) {
@@ -4802,7 +4802,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     }
 
                     if (newEdge == null) {
-                        System.out.println("Konnte Kante nicht konvertieren: " + edge.getHashString() + "; start: " + edge.getStart().getHashString() + " --> end: " + edge.getEnd().getHashString());
+                        System.out.println("Konnte Edge nicht konvertieren: " + edge.getHashString() + "; start: " + edge.getStart().getHashString() + " --> end: " + edge.getEnd().getHashString());
                         gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
                         //						removeEdge(edge, 0);
                         continue;

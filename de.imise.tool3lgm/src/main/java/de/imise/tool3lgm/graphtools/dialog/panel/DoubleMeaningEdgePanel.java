@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -58,7 +58,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private final LGMAction luaddAction;
     private final LGMAction luremoveAction;
 
-    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
 
         GridBagLayout gbl = new GridBagLayout();

@@ -34,7 +34,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -211,7 +211,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             structurePanel.setName(Tool3lgmConstants.getResString("strukt"));
             addTab(structurePanel);
         } else if (realPartOfs.size() > 1) {
-            //TODO: hier könnte müsste man ein ExtraPanel mit dem Namen Struktur mit den Teil-Von-Beziehungen als UnterPanels anlegen, die mit der jeweiligen Kante benamt sind
+            //TODO: hier könnte müsste man ein ExtraPanel mit dem Namen Struktur mit den Teil-Von-Beziehungen als UnterPanels anlegen, die mit der jeweiligen Edge benamt sind
         }
     }
 
@@ -417,79 +417,79 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addTab(lastCreatedTabbedPanel);
     }
 
-    public void addTabbedPanelPathConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addTabbedPanelPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTabbedPanelPathConnectionPanel(null, edgeClasses);
     }
 
-    public void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, searchElementClass, edgeClasses));
     }
 
-    public void addDescripSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addDescripSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(null, edgeClasses);
     }
 
-    public void addDescripSingleConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public void addDescripSingleConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(false, searchElementClass, edgeClasses);
     }
 
-    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
     }
 
-    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         descripPanel.addSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
-    public void addDescripDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addDescripDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addDescripDescriptedSingleConnectionPanel(false, edgeClasses);
     }
 
-    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addDescripDescriptedSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
     }
 
-    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
-    public void addDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new DescriptedSingleConnectionPanel(this, edgeClasses));
     }
 
-    public void addPathConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(false, edgeClasses);
     }
 
-    public void addPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(false, searchElementClass, edgeClasses);
     }
 
-    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(labelLastEdgeName, null, edgeClasses);
     }
 
-    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         addTab(new PathConnectionPanel(this, labelLastEdgeName, true, searchElementClass, edgeClasses));
     }
 
-    public void addPathConnectionLeafPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionLeafPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionLeafPanel(false, edgeClasses);
     }
 
-    public void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, true, edgeClasses));
     }
 
-    public void addPathConnectionInfoPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addPathConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new PathConnectionPanel(this, false, edgeClasses));
     }
 
-    public void addEdgePanel(final Class<? extends Kante> edgeClass) {
+    public void addEdgePanel(final Class<? extends Edge> edgeClass) {
         addEdgePanel(null, edgeClass);
     }
 
-    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         if (ModelConstants.isComposition(edgeClass)) {
             addTab(new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(Composition.class)));
         } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {

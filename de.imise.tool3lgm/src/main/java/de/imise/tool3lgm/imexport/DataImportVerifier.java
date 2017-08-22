@@ -131,13 +131,13 @@ public class DataImportVerifier {
     }
 
     /**
-     * Fehler 1: Der Name der Kante ist leer
+     * Fehler 1: Der Name der Edge ist leer
      * Fehler 2: Hash mehrfach in der Datei vergeben
      * Fehler 3: Hash wird im Modell bereits für ein Element einer anderen Art verwendet
      * Fehler 4: Das Element, das der Starthash angibt, existiert nicht
-     * Fehler 5: Das Element, das der Starthash angibt, passt nicht zur Kante
+     * Fehler 5: Das Element, das der Starthash angibt, passt nicht zur Edge
      * Fehler 6: Das Element, das der Endhash angibt, existiert nicht
-     * Fehler 7: Das Element, das der Endhash angibt, passt nicht zur Kante
+     * Fehler 7: Das Element, das der Endhash angibt, passt nicht zur Edge
      * 
      * @param edgeLine
      * @param importHashConfiguration
@@ -230,7 +230,7 @@ public class DataImportVerifier {
 
     /**
      * Fehler 1: Das Element, das der Starthash angibt, existiert nicht.
-     * Fehler 2: Das Element, das der Starthash angibt, passt nicht zur Kante.
+     * Fehler 2: Das Element, das der Starthash angibt, passt nicht zur Edge.
      * 
      * @param edgeLine
      * @param importHashConfiguration
@@ -241,7 +241,7 @@ public class DataImportVerifier {
 
     /**
      * Fehler 1: Das Element, das der Endhash angibt, existiert nicht.
-     * Fehler 2: Das Element, das der Endhash angibt, passt nicht zur Kante.
+     * Fehler 2: Das Element, das der Endhash angibt, passt nicht zur Edge.
      * 
      * @param edgeLine
      * @param importHashConfiguration

@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 
 import java.util.List;
 import java.util.Vector;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -20,7 +20,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
         super(doc);
     }
 
-    public FractionValueSumTableModel(final ModelElement me, final Class<? extends Kante> edgeClass, final boolean edgeForwardDirection, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
+    public FractionValueSumTableModel(final ModelElement me, final Class<? extends Edge> edgeClass, final boolean edgeForwardDirection, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
         super(me.getCollection().getMainGraphDocument());
         setData(me, edgeClass, edgeForwardDirection, showTopLevel, showInner, showLeafs);
     }
@@ -53,7 +53,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
     /**
      * Erstellt und setzt Kennzahlen-Modeldaten
      */
-    private void setData(final ModelElement me, final Class<? extends Kante> edgeClass, final boolean edgeForwardDirection, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
+    private void setData(final ModelElement me, final Class<? extends Edge> edgeClass, final boolean edgeForwardDirection, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
         //alle Teilwersummen Userfields des Elementes holen
         // Ermitteln der UserFields zu elementClass
         Class<? extends ModelElement> elementClass = me.getClass();
@@ -62,7 +62,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
         Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? getEndClass(edgeClass) : getStartClass(edgeClass);
 
         int direction = edgeForwardDirection ? FORWARD : BACKWARD;
-        //alle mit dem Element über die Kante verbundenen Elemente holen
+        //alle mit dem Element über die Edge verbundenen Elemente holen
         List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction, true);
 
         removeNotVisibleHierarchyElements(modelElements, showTopLevel, showInner, showLeafs);

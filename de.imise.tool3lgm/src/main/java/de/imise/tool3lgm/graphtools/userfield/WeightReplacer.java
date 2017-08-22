@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 
 public class WeightReplacer {
 
@@ -25,7 +25,7 @@ public class WeightReplacer {
      * auf einen Hash eines UserFields, das die Gleichverteilung als Kantengewicht bei Rechnungen über die Knatenklasse
      * ersetzen soll.
      */
-    private Table<String, Class<? extends Kante>, String> standardWeigthReplacer;
+    private Table<String, Class<? extends Edge>, String> standardWeigthReplacer;
 
     public WeightReplacer() {
     }
@@ -77,7 +77,7 @@ public class WeightReplacer {
         return replacer == null ? ImmutableSet.of() : replacer.cellSet();
     }
 
-    public Set<Cell<String, Class<? extends Kante>, String>> getStandardReplacerContent() {
+    public Set<Cell<String, Class<? extends Edge>, String>> getStandardReplacerContent() {
         return standardWeigthReplacer == null ? ImmutableSet.of() : standardWeigthReplacer.cellSet();
     }
 
@@ -121,7 +121,7 @@ public class WeightReplacer {
      * @param userFieldHashReplacement
      * @return
      */
-    public String setUniformDistributionReplacement(final String modelElementHash, final Class<? extends Kante> edgeClass, final String userFieldHashReplacement) {
+    public String setUniformDistributionReplacement(final String modelElementHash, final Class<? extends Edge> edgeClass, final String userFieldHashReplacement) {
         //wenn kein gültiger HashWert angegeben ist oder die hashes gleich sind -> entferne die evtl. vorhandene Ersetzung
         if (Strings.isNullOrEmpty(userFieldHashReplacement)) {
             return removeUniformDistributionReplacement(modelElementHash, edgeClass);
@@ -141,7 +141,7 @@ public class WeightReplacer {
      * @param modelElementHash
      * @param userFieldHashToReplace
      */
-    public String removeUniformDistributionReplacement(final String modelElementHash, final Class<? extends Kante> edgeClass) {
+    public String removeUniformDistributionReplacement(final String modelElementHash, final Class<? extends Edge> edgeClass) {
         //es kann gar nichts entfernt werden -> raus
         if (standardWeigthReplacer == null) {
             return null;
@@ -164,7 +164,7 @@ public class WeightReplacer {
      * @param edgeClass
      * @return
      */
-    public String getUniformDistributionReplacement(final String modelElementHash, final Class<? extends Kante> edgeClass) {
+    public String getUniformDistributionReplacement(final String modelElementHash, final Class<? extends Edge> edgeClass) {
         return standardWeigthReplacer == null ? null : standardWeigthReplacer.get(modelElementHash, edgeClass);
     }
 

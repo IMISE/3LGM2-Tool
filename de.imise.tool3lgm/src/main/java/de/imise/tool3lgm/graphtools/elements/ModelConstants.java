@@ -2,15 +2,15 @@ package de.imise.tool3lgm.graphtools.elements;
 
 import static de.imise.tool3lgm.graphtools.elements.Composition.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.elements.Composition.getMinMasterToSlaveCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnecting;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnecting;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartOrEndClass;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public final class ModelConstants {
     public static final Class<? extends ModelElement>[] EMPTY_ELEMENT_CLASS_ARRAY = new Class[0];
 
     @SuppressWarnings("unchecked")
-    public static final Class<? extends Kante>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
+    public static final Class<? extends Edge>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
 
     @SuppressWarnings("unchecked")
     public static final Class<? extends Composition>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
@@ -253,39 +253,39 @@ public final class ModelConstants {
             "unchecked",
             "rawtypes"
     })
-    public static final Set<Class<? extends Kante>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
 
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final Set<Class<? extends Kante>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
 
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final Set<Class<? extends Kante>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
 
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final Set<Class<? extends Kante>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
 
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
-    public static final Set<Class<? extends Kante>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
 
     /** Set aller Kantenklassen */
-    public static final Set<Class<? extends Kante>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Kante>> builder().addAll(ALL_DOMAIN_LAYER_EDGES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET).addAll(ALL_LOGICAL_LAYER_EDGES_SET)
+    public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(ALL_DOMAIN_LAYER_EDGES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET).addAll(ALL_LOGICAL_LAYER_EDGES_SET)
             .addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET).addAll(ALL_PHYSICAL_LAYER_EDGES_SET).build();
 
     /** Array aller Kantenklassen */
     @SuppressWarnings("unchecked")
-    public static final Class<? extends Kante>[] ALL_EDGES = new Class[ALL_EDGES_SET.size()];
+    public static final Class<? extends Edge>[] ALL_EDGES = new Class[ALL_EDGES_SET.size()];
     static {
         System.arraycopy(ALL_EDGES_SET.toArray(), 0, ALL_EDGES, 0, ALL_EDGES.length);
     }
@@ -331,7 +331,7 @@ public final class ModelConstants {
      * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> ELEMENT_CLASS_TO_SORTED_EDGES = metaModel.getElementClassToSortedEdges();
+    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> ELEMENT_CLASS_TO_SORTED_EDGES = metaModel.getElementClassToSortedEdges();
 
     /**
      * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
@@ -340,7 +340,7 @@ public final class ModelConstants {
      *
      * @param elementClass
      */
-    public static final Set<Class<? extends Kante>> getSortedEdgeClasses(final Class<? extends ModelElement> elementClass) {
+    public static final Set<Class<? extends Edge>> getSortedEdgeClasses(final Class<? extends ModelElement> elementClass) {
         return ELEMENT_CLASS_TO_SORTED_EDGES.get(elementClass);
     }
 
@@ -351,27 +351,27 @@ public final class ModelConstants {
      * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
      * @return
      */
-    public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return SortedEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
         //return getSortedEdgeClasses(elementClass).contains(edgeClass); //das kommt auf dasselbe raus wie das oben. Ich konnte mich nicht entscheiden, was besser ist -> daher nur auskommentiert
     }
 
-    public static final boolean isMultipleEdgeClass(final Class<? extends Kante> edgeClass) {
+    public static final boolean isMultipleEdgeClass(final Class<? extends Edge> edgeClass) {
         return MultipleEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
-     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
+     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Edge
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
-     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
+     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt werden, die
      * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
      * zusammenzufassen.
      */
-    private static final Set<Class<? extends Kante>> DOUBLE_MEANING_EDGE_CLASSES = metaModel.getDoubleMeaningEdgeClasses();
+    private static final Set<Class<? extends Edge>> DOUBLE_MEANING_EDGE_CLASSES = metaModel.getDoubleMeaningEdgeClasses();
 
     /**
-     * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Kante die Bedeutung angibt.
+     * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Edge die Bedeutung angibt.
      *
      * @see #DOUBLE_MEANING_EDGE_CLASSES
      * @param edgeClass
@@ -382,7 +382,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Prüft, ob bei der Kante die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
+     * Prüft, ob bei der Edge die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
      * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die keine DoubleMeaningEdges,
      * keine PartOfBeziehungen und keine Compositions sind.
      *
@@ -438,7 +438,7 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse selbst besitzt oder von einer ihrer Oberklassen erbt.
      */
-    private static final HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<>();
+    private static final HashMap<Class<? extends ModelElement>, Class<? extends Edge>[]> ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<>();
 
     /**
      * Liefert für eine Elementklasse alle Kantenklassen dieser Klasse zu anderen Elementklassen
@@ -447,19 +447,19 @@ public final class ModelConstants {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static Class<? extends Kante>[] getEdgeTypes(final Class<? extends ModelElement> elementClass) {
-        Class<? extends Kante>[] edgeClasses = ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass);
+    public static Class<? extends Edge>[] getEdgeTypes(final Class<? extends ModelElement> elementClass) {
+        Class<? extends Edge>[] edgeClasses = ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass);
         if (edgeClasses != null) {
             return edgeClasses;
         }
-        ArrayList<Class<? extends Kante>> elementClassEdgeClasses = new ArrayList<>();
-        for (Class<? extends Kante> edgeClass : ALL_EDGES) {
+        ArrayList<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
+        for (Class<? extends Edge> edgeClass : ALL_EDGES) {
             if (isStartOrEndClass(edgeClass, elementClass)) {
                 elementClassEdgeClasses.add(edgeClass);
             }
         }
         int size = elementClassEdgeClasses.size();
-        Class<? extends Kante>[] returnClasses = null;
+        Class<? extends Edge>[] returnClasses = null;
         if (size == 0) {
             returnClasses = EMPTY_EDGE_CLASS_ARRAY;
         } else {
@@ -477,7 +477,7 @@ public final class ModelConstants {
      * @param edgeClass
      * @return
      */
-    public static final boolean hasEdgeType(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public static final boolean hasEdgeType(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return CollectionUtils.arrayContains(getEdgeTypes(elementClass), edgeClass);
     }
 
@@ -488,7 +488,7 @@ public final class ModelConstants {
      * dasselbe Kanteklassen-Array abgelegt - egal in welcher Reihenfolge man die Elementeklassen als Schlüssel
      * einsetzt.
      */
-    private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<>();
+    private static final HashMap<Class<? extends ModelElement>, HashMap<Class<? extends ModelElement>, Class<? extends Edge>[]>> ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES = new HashMap<>();
 
     /**
      * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
@@ -499,10 +499,10 @@ public final class ModelConstants {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static final Class<? extends Kante>[] getEdgeTypes(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
-        HashMap<Class<? extends ModelElement>, Class<? extends Kante>[]> elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass1);
+    public static final Class<? extends Edge>[] getEdgeTypes(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        HashMap<Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassToEdgeClass = ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.get(elementClass1);
         if (elementClassToEdgeClass != null) {
-            Class<? extends Kante>[] edgeClasses = elementClassToEdgeClass.get(elementClass2);
+            Class<? extends Edge>[] edgeClasses = elementClassToEdgeClass.get(elementClass2);
             if (edgeClasses != null) {
                 return edgeClasses;
             }
@@ -510,13 +510,13 @@ public final class ModelConstants {
             elementClassToEdgeClass = new HashMap<>();
             ELEMENT_CLASS_TO_MAP_FROM_ELEMENT_CLASS_TO_EDGE_CLASSES.put(elementClass1, elementClassToEdgeClass);
         }
-        ArrayList<Class<? extends Kante>> resultEdgeClasses = new ArrayList<>();
-        for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass1)) {
+        ArrayList<Class<? extends Edge>> resultEdgeClasses = new ArrayList<>();
+        for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass1)) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
                 resultEdgeClasses.add(edgeClass);
             }
         }
-        Class<? extends Kante>[] returnClasses = null;
+        Class<? extends Edge>[] returnClasses = null;
         int size = resultEdgeClasses.size();
         if (size == 0) {
             returnClasses = EMPTY_EDGE_CLASS_ARRAY;
@@ -541,7 +541,7 @@ public final class ModelConstants {
     //		allElements.addAll(ALL_EDGES_SET);
     //		for (Class<? extends ModelElement> elementClass1 : allElements) {
     //			for (Class<? extends ModelElement> elementClass2 : allElements) {
-    //				Class<? extends Kante>[] et = getEdgeTypes(elementClass1, elementClass2);
+    //				Class<? extends Edge>[] et = getEdgeTypes(elementClass1, elementClass2);
     //				if (et.length==0)
     //					continue;
     //				System.err.println(elementClass1.getSimpleName() + "\t-\t" + elementClass2.getSimpleName());
@@ -608,13 +608,13 @@ public final class ModelConstants {
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Kante} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Edge} ist.
      *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse eine Assoziation ist, sonst <code>false</code>.
      */
     public static final boolean isEdgeType(final Class<?> elementClass) {
-        return Kante.class.isAssignableFrom(elementClass) || EdgeContainer.class.isAssignableFrom(elementClass);
+        return Edge.class.isAssignableFrom(elementClass) || EdgeContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
@@ -625,10 +625,10 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isAssociationClass(final Class<?> elementClass) {
-        if (!Kante.class.isAssignableFrom(elementClass)) {
+        if (!Edge.class.isAssignableFrom(elementClass)) {
             return false;
         }
-        Class<? extends Kante>[] edgeTypes = getEdgeTypes(elementClass.asSubclass(ModelElement.class));
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass.asSubclass(ModelElement.class));
         return edgeTypes != null && edgeTypes.length != 0;
     }
 
@@ -868,18 +868,18 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getForwardMetaAssociationName(edgeClass, false, false);
     }
 
     /**
-     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Kante verbindet.
+     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Edge verbindet.
      *
      * @param edgeClass
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getFullForwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+    public static String getFullForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getForwardMetaAssociationName(edgeClass, true, true);
     }
 
@@ -890,7 +890,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getForwardMetaAssociationName(edgeClass, DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
@@ -902,7 +902,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Kante> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, false, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
@@ -911,18 +911,18 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getBackwardMetaAssociationName(edgeClass, false, false);
     }
 
     /**
-     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Kante verbindet.
+     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Edge verbindet.
      *
      * @param edgeClass
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getFullBackwardMetaAssociationName(final Class<? extends Kante> edgeClass) {
+    public static String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getBackwardMetaAssociationName(edgeClass, true, true);
     }
 
@@ -933,7 +933,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getBackwardMetaAssociationName(edgeClass, DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
@@ -945,7 +945,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Kante> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, true, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
@@ -956,7 +956,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getFullMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int direction) {
+    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int direction) {
         return getMetaAssociationName(edgeClass, switchDefinedDirection, direction, true, true);
     }
 
@@ -964,7 +964,7 @@ public final class ModelConstants {
      * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
      *
      * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Kante von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
+     * @param switchDefinedDirection gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
      *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
      * @param connectionState Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur
@@ -989,7 +989,7 @@ public final class ModelConstants {
      *            </ul>
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int connectionState) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int connectionState) {
         StringBuilder sb = new StringBuilder();
         if (!switchDefinedDirection) {
             try {
@@ -1032,7 +1032,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getMetaAssociationName(final Class<? extends Kante> edgeClass, final boolean switchDefinedDirection, final int direction, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int direction, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         if (!appendPrefixClass && !appendPostfixClass) {
             return getMetaAssociationName(edgeClass, switchDefinedDirection, direction);
         }
@@ -1069,7 +1069,7 @@ public final class ModelConstants {
     private static final void fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES() {
         for (int i = 0; i < ALL_NODES.length; i++) {
             //Hole alle Kantenklassen der Zielklasse und suche alle PartOfBeziehungen
-            for (Class<? extends Kante> c : getEdgeTypes(ALL_NODES[i])) {
+            for (Class<? extends Edge> c : getEdgeTypes(ALL_NODES[i])) {
                 if (PartOfBeziehung.class.isAssignableFrom(c)) {
                     Class<? extends PartOfBeziehung>[] edgeClasses = null;
                     Class<? extends PartOfBeziehung> poClass = c.asSubclass(PartOfBeziehung.class);
@@ -1261,7 +1261,7 @@ public final class ModelConstants {
             }
             return elementClassToHashShortName.get(elementClass).toString();
             //Kanten
-        } else if (Kante.class.isAssignableFrom(elementClass)) {
+        } else if (Edge.class.isAssignableFrom(elementClass)) {
             return EDGE_SHORT_NAME;
         }
         return NO_MODEL_ELEMENT_SHORT_NAME;
@@ -1357,7 +1357,7 @@ public final class ModelConstants {
         }
     }
 
-    public static final boolean isComposition(final Class<? extends Kante> edgeClass) {
+    public static final boolean isComposition(final Class<? extends Edge> edgeClass) {
         return Composition.class.isAssignableFrom(edgeClass);
     }
 
@@ -1373,9 +1373,9 @@ public final class ModelConstants {
      */
     @SuppressWarnings("unchecked")
     private static Class<? extends Composition>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
-        Class<? extends Kante>[] elementClassEdges = getEdgeTypes(elementClass);
-        ArrayList<Class<? extends Kante>> subEdgeTypes = new ArrayList<>(elementClassEdges.length);
-        for (Class<? extends Kante> edgeClass : elementClassEdges) {
+        Class<? extends Edge>[] elementClassEdges = getEdgeTypes(elementClass);
+        ArrayList<Class<? extends Edge>> subEdgeTypes = new ArrayList<>(elementClassEdges.length);
+        for (Class<? extends Edge> edgeClass : elementClassEdges) {
             if (isComposition(edgeClass)) {
                 if (isMaster) {
                     if (isStartClass(edgeClass, elementClass)) {
@@ -1461,7 +1461,7 @@ public final class ModelConstants {
      * @return <code>true</code>, wenn das übergebene ein untergeordnetes Element ist
      */
     public static boolean isSlaveType(final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass)) {
+        for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
             if (isComposition(edgeClass) && isEndClass(edgeClass, elementClass)) {
                 return true;
             }
@@ -1494,7 +1494,7 @@ public final class ModelConstants {
     }
 
     /** Cache für die Funktion {@link #getInitialSubtypes(Class)} */
-    private static Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> INITIAL_SUBTYPES = Maps.newHashMap();
+    private static Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> INITIAL_SUBTYPES = Maps.newHashMap();
 
     /**
      * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also über eine Komposition mit
@@ -1502,10 +1502,10 @@ public final class ModelConstants {
      *
      * @param elementClass
      */
-    public static final Set<Class<? extends Kante>> getInitialSubtypes(final Class<? extends ModelElement> elementClass) {
-        Set<Class<? extends Kante>> initialSubtypes = INITIAL_SUBTYPES.get(elementClass);
+    public static final Set<Class<? extends Edge>> getInitialSubtypes(final Class<? extends ModelElement> elementClass) {
+        Set<Class<? extends Edge>> initialSubtypes = INITIAL_SUBTYPES.get(elementClass);
         if (initialSubtypes == null) {
-            ImmutableSet.Builder<Class<? extends Kante>> initialSubtypesBuilder = ImmutableSet.<Class<? extends Kante>> builder();
+            ImmutableSet.Builder<Class<? extends Edge>> initialSubtypesBuilder = ImmutableSet.<Class<? extends Edge>> builder();
             Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
             for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
                 if (getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {

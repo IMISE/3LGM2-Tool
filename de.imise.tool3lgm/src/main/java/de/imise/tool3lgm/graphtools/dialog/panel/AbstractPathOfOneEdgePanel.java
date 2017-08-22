@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.util.EventObject;
 
@@ -10,7 +10,7 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
- * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der Kantenpfad ist genau eine Kante lang.
+ * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der Kantenpfad ist genau eine Edge lang.
  *
  * @author AXS
  * @created 24.04.2017
@@ -26,7 +26,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel {
 
     /** Die Kantenklasse zum anderen Element */
-    protected final Class<? extends Kante> edgeClass;
+    protected final Class<? extends Edge> edgeClass;
 
     protected final boolean edgeIsForward;
 
@@ -37,7 +37,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         this(dialog, false, searchElementClass, edgeClass);
     }
 
@@ -49,7 +49,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante> edgeClass) {
+    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, labelEdgeName, searchElementClass, edgeClass);
         this.edgeClass = edgeClass;
         edgeIsForward = directions[0] == FORWARD;

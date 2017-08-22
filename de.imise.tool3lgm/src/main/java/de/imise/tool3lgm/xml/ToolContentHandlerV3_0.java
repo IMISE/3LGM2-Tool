@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -236,7 +236,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (element != null) {
                     if (copyAndPaste > 0) {
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
-                        if (element instanceof Kante) {
+                        if (element instanceof Edge) {
                             kanten.add(element);
                         }
                     } else {
@@ -390,7 +390,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String edgeClassName = atts.getValue("edgeClass");
                 String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
-                Class<? extends Kante> edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
+                Class<? extends Edge> edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class);
                 replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
 
                 //            } else if (qName.equals("userFieldName")) {
@@ -761,7 +761,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-                //die HashStrings für das Start- bzw. End-Objekt einer Kante
+                //die HashStrings für das Start- bzw. End-Objekt einer Edge
                 // auflösen und die wirklichen Knoten setzten
                 if (copyAndPaste > 0) {
                     Knickpunkt knp;
@@ -769,9 +769,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         knp = knickpunke.get(i).getKnickpunktKnoten();
                         knp.putXMLFieldString("kanteHash", hashCodes.get(knp.getKantenHash()));
                     }
-                    Kante kante;
+                    Edge kante;
                     for (int i = 0; i < kanten.size(); i++) {
-                        kante = (Kante) kanten.get(i);
+                        kante = (Edge) kanten.get(i);
                         kante.putXMLFieldString("start", hashCodes.get(kante.getStartHash()));
                         kante.putXMLFieldString("end", hashCodes.get(kante.getEndHash()));
                         kante.decodeHashStrings(doc);

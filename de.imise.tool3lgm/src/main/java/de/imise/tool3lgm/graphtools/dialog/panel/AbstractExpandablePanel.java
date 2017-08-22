@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
@@ -33,7 +33,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      */
     protected LGMAction showPartlyAction;
 
-    public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
     }
 

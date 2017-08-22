@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout;
 
 import java.util.Vector;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
@@ -12,9 +12,9 @@ import de.imise.util.NamedObjectContainer;
 
 public class WeightReplaceTableLayout extends AbstractUserFieldTableLayout {
 
-    private final Class<? extends Kante> edgeClass;
+    private final Class<? extends Edge> edgeClass;
 
-    public WeightReplaceTableLayout(final Class<? extends Kante> edgeClass) {
+    public WeightReplaceTableLayout(final Class<? extends Edge> edgeClass) {
         this.edgeClass = edgeClass;
     }
 

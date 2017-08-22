@@ -14,7 +14,7 @@ import de.imise.util.ReflectionUtils;
 /**
  * @author N.N.
  */
-public abstract class Kante extends ModelElement {
+public abstract class Edge extends ModelElement {
 
     /**
      * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Über diesen
@@ -96,14 +96,14 @@ public abstract class Kante extends ModelElement {
     /**
      *
      */
-    public Kante() {
+    public Edge() {
     }
 
     /**
      * @param knot1
      * @param knot2
      */
-    public Kante(final ModelElement knot1, final ModelElement knot2) {
+    public Edge(final ModelElement knot1, final ModelElement knot2) {
         this(knot1, knot2, true);
     }
 
@@ -112,16 +112,16 @@ public abstract class Kante extends ModelElement {
      * @param knot2
      * @param registerInKnots
      */
-    public Kante(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
+    public Edge(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super();
         setKnots(knot1, knot2, registerInKnots);
     }
 
     @Override
     public final Object clone() {
-        Kante retVal;
+        Edge retVal;
         try {
-            retVal = (Kante) super.clone();
+            retVal = (Edge) super.clone();
         } catch (Exception e) {
             Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
             return null;
@@ -135,12 +135,12 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * liefert true, wenn beide Knoten, die die Kante verbindet identisch sind und die Kante von derselben Art ist (Richtung ist egal)
+     * liefert true, wenn beide Knoten, die die Edge verbindet identisch sind und die Edge von derselben Art ist (Richtung ist egal)
      *
      * @param kante
      * @return
      */
-    public final boolean isEqualTo(final Kante kante) {
+    public final boolean isEqualTo(final Edge kante) {
         return (k1 == kante.getStart() && k2 == kante.getEnd() || k2 == kante.getStart() && k1 == kante.getEnd()) && getClass() == kante.getClass();
         //		if ((k1 == kante.getStart() && k2 == kante.getEnd()) || (k2 == kante.getStart() && k1 == kante.getEnd()))
         //			return true;
@@ -171,7 +171,7 @@ public abstract class Kante extends ModelElement {
                 _k2.addEdge(this);
             }
         }
-        //Validität der Kante prüfen und dabei wenn nötig umdrehen (bis Version 3.2
+        //Validität der Edge prüfen und dabei wenn nötig umdrehen (bis Version 3.2
         //ist teilweise die Reihenfolge der Start- und Endelemente von Kanten andersherum gewesen,
         //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
         checkValidity();
@@ -182,7 +182,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Setzt fuer die Kante die Knoten Anfang=_k1 und Ende=_k2 und fügt die Kante bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
+     * Setzt fuer die Edge die Knoten Anfang=_k1 und Ende=_k2 und fügt die Edge bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
      * ein.
      *
      * @param _k1 Knoten
@@ -190,18 +190,18 @@ public abstract class Kante extends ModelElement {
      * @param _k2 Knoten
      */
     /**
-     * @param _k1 Startelement der Kante
-     * @param _k1EdgePos Postion der Kante in der Kantenliste von _k1. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
-     *            Kante hinten angefügt.
-     * @param _k2 Endelement der Kante
-     * @param _k2EdgePos Postion der Kante in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
-     *            Kante hinten angefügt.
+     * @param _k1 Startelement der Edge
+     * @param _k1EdgePos Postion der Edge in der Kantenliste von _k1. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
+     *            Edge hinten angefügt.
+     * @param _k2 Endelement der Edge
+     * @param _k2EdgePos Postion der Edge in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
+     *            Edge hinten angefügt.
      */
     public void setKnotsAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
         k1 = _k1;
         k2 = _k2;
         //wenn PartOfBeziheungen im Kreis modelliert wurden, wird die falsche Beziehung glpeich wieder entfernt
-        //und ihre alten Start- und Endelemente gesetzt, die bei einer neuen Kante immer null waren -> null hier abfangen
+        //und ihre alten Start- und Endelemente gesetzt, die bei einer neuen Edge immer null waren -> null hier abfangen
         if (_k1 != null) {
             _k1.insertEdge(this, _k1EdgePos);
         }
@@ -261,7 +261,7 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Wenn das übergebene Element durch diese Kante mit einem anderen Element verbunden ist, kommt das andere Element der Kante zurück, sons
+     * Wenn das übergebene Element durch diese Edge mit einem anderen Element verbunden ist, kommt das andere Element der Edge zurück, sons
      * <code>null</code>.
      *
      * @param me
@@ -278,14 +278,14 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Wenn die übergebene Elementklasse durch eine Kante der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
-     * dieser anderen Elemente zurück gegeben. Passen Kante und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
+     * Wenn die übergebene Elementklasse durch eine Edge der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
+     * dieser anderen Elemente zurück gegeben. Passen Edge und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
      *
      * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
-     * @param meClass Elementklasse der Kante, deren Gegenelementklasse zurück gegeben werden soll
-     * @return die andere Elementklasse der Kante, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
+     * @param meClass Elementklasse der Edge, deren Gegenelementklasse zurück gegeben werden soll
+     * @return die andere Elementklasse der Edge, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
      */
-    public static final Class<? extends ModelElement> getOther(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> meClass) {
+    public static final Class<? extends ModelElement> getOther(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> meClass) {
         if (isStartClass(edgeClass, meClass)) {
             return getEndClass(edgeClass);
         }
@@ -378,7 +378,7 @@ public abstract class Kante extends ModelElement {
     /**
      * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
      *
-     * @return <code>true</code>, wenn die Kante vollständig richtig ist
+     * @return <code>true</code>, wenn die Edge vollständig richtig ist
      */
     public boolean checkValidity() {
         boolean startClassOk = false, endClassOk = false;
@@ -446,7 +446,7 @@ public abstract class Kante extends ModelElement {
      * @param start
      * @return
      */
-    private static final Class<? extends ModelElement> getStartEndClass(final Class<? extends Kante> edgeClass, final boolean start) {
+    private static final Class<? extends ModelElement> getStartEndClass(final Class<? extends Edge> edgeClass, final boolean start) {
         String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
         return ((Class<?>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName)).asSubclass(ModelElement.class);
     }
@@ -456,7 +456,7 @@ public abstract class Kante extends ModelElement {
      * @param start
      * @return
      */
-    protected static final int[] getStartEndCardinality(final Class<? extends Kante> edgeClass, final boolean start) {
+    protected static final int[] getStartEndCardinality(final Class<? extends Edge> edgeClass, final boolean start) {
         String fieldName = start ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
         return (int[]) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
     }
@@ -465,7 +465,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static final Class<? extends ModelElement> getStartClass(final Class<? extends Kante> edgeClass) {
+    public static final Class<? extends ModelElement> getStartClass(final Class<? extends Edge> edgeClass) {
         return getStartEndClass(edgeClass, true);
     }
 
@@ -480,7 +480,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public final static Class<? extends ModelElement> getEndClass(final Class<? extends Kante> edgeClass) {
+    public final static Class<? extends ModelElement> getEndClass(final Class<? extends Edge> edgeClass) {
         return getStartEndClass(edgeClass, false);
     }
 
@@ -492,19 +492,19 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
      * @return
      */
-    public static final boolean isStartClass(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> elementClass) {
+    public static final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
         return startClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(startClass);
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param elementClass
      * @return
@@ -514,19 +514,19 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
      * @return
      */
-    public static final boolean isEndClass(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> elementClass) {
+    public static final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
         return endClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(endClass);
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param elementClass
      * @return
@@ -536,13 +536,13 @@ public abstract class Kante extends ModelElement {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Kante oder eine Ober- oder Unterklasse davon ist.
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
      * @param elementClass
      * @return
      */
-    public static final boolean isStartOrEndClass(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> elementClass) {
+    public static final boolean isStartOrEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         return isStartClass(edgeClass, elementClass) || isEndClass(edgeClass, elementClass);
     }
 
@@ -554,7 +554,7 @@ public abstract class Kante extends ModelElement {
      * @param elementClass2
      * @return
      */
-    public static final boolean isConnecting(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+    public static final boolean isConnecting(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         return isConnectingForward(edgeClass, elementClass1, elementClass2) || isConnectingForward(edgeClass, elementClass2, elementClass1);
     }
 
@@ -568,7 +568,7 @@ public abstract class Kante extends ModelElement {
      * @param endElementClass
      * @return
      */
-    public static final boolean isConnectingForward(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+    public static final boolean isConnectingForward(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         return isStartClass(edgeClass, startElementClass) && isEndClass(edgeClass, endElementClass);
     }
 
@@ -579,7 +579,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static boolean isConnectingSameElementClasses(final Class<? extends Kante> edgeClass) {
+    public static boolean isConnectingSameElementClasses(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
         return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
@@ -592,7 +592,7 @@ public abstract class Kante extends ModelElement {
      * @param elementClass
      * @return
      */
-    public static final int getMinCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public static final int getMinCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         if (isStartClass(edgeClass, elementClass)) {
             return getMinStartToEndCardinality(edgeClass);
         }
@@ -609,7 +609,7 @@ public abstract class Kante extends ModelElement {
      * @param elementClass
      * @return
      */
-    public static final int getMaxCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public static final int getMaxCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         if (isStartClass(edgeClass, elementClass)) {
             return getMaxStartToEndCardinality(edgeClass);
         }
@@ -623,7 +623,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static final int getMinStartToEndCardinality(final Class<? extends Kante> edgeClass) {
+    public static final int getMinStartToEndCardinality(final Class<? extends Edge> edgeClass) {
         return getStartEndCardinality(edgeClass, false)[0];
     }
 
@@ -638,7 +638,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static final int getMaxStartToEndCardinality(final Class<? extends Kante> edgeClass) {
+    public static final int getMaxStartToEndCardinality(final Class<? extends Edge> edgeClass) {
         return getStartEndCardinality(edgeClass, false)[1];
     }
 
@@ -653,7 +653,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static final int getMinEndToStartCardinality(final Class<? extends Kante> edgeClass) {
+    public static final int getMinEndToStartCardinality(final Class<? extends Edge> edgeClass) {
         return getStartEndCardinality(edgeClass, true)[0];
     }
 
@@ -668,7 +668,7 @@ public abstract class Kante extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static final int getMaxEndToStartCardinality(final Class<? extends Kante> edgeClass) {
+    public static final int getMaxEndToStartCardinality(final Class<? extends Edge> edgeClass) {
         return getStartEndCardinality(edgeClass, true)[1];
     }
 
@@ -718,8 +718,8 @@ public abstract class Kante extends ModelElement {
     @Override
     public final boolean join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
         if (super.join(other, overwriteHashstringAndExtIDs)) {
-            k1 = ((Kante) other).k1;
-            k2 = ((Kante) other).k2;
+            k1 = ((Edge) other).k1;
+            k2 = ((Edge) other).k2;
             return true;
         }
         return false;

@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.event;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isDoubleMeaningEdge;
 
@@ -45,7 +45,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -285,7 +285,7 @@ public class ActionLibrary {
                 List<ModelElement> selectedElements = doc.getSelectedElements();
 
                 for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
-                    for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(me1Class, me2Class)) {
+                    for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(me1Class, me2Class)) {
                         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
                             if (isConnectingForward(edgeClass, me1Class, me2Class)) {
                                 String label = ModelConstants.getBackwardMetaAssociationName(edgeClass);
@@ -667,7 +667,7 @@ public class ActionLibrary {
              *            sollen, ob die verbundenen Elemente dupliziert werden müssten, wenn es
              *            selbst dupliziert werden würde / private void
              *            fillElements2Duplicate(ArrayList<ModelElement> elementsList, int
-             *            sourceIndex) { ModelElement me = elementsList.get(sourceIndex); for (Kante
+             *            sourceIndex) { ModelElement me = elementsList.get(sourceIndex); for (Edge
              *            edge : me.getEdges()) { boolean meIsEdgeStart = edge.isStart(me);
              *            ModelElement connected = meIsEdgeStart ? edge.getEnd() : edge.getStart();
              *            //Mit wievielen Elementen von der Art des parts darf das umzuhängende
@@ -679,13 +679,13 @@ public class ActionLibrary {
              *            Element darf nicht mit einem weiteren Element verbunden if
              *            (actualConnectedToOtherCardinality >= actualConnectedToOtherCardinality) {
              *            } } } /** Dupliziert das übergebene Element und alle seine Verbindungen
-             *            außer die übergebene Kante. Wenn verbundene Elemente bereits mit der
+             *            außer die übergebene Edge. Wenn verbundene Elemente bereits mit der
              *            maximalen Anzahl der
              * @param me
              * @param exceptionalEdge
              * @param alreadyDuplicated Menge aller Elemente, die nicht dupliziert werden sollen, da
              *            sie bereits dupliziert wurde. Damit kann man verhindern, dass Elemente im
-             *            Kreis dupliziert werden / public void duplicate(ModelElement me, Kante
+             *            Kreis dupliziert werden / public void duplicate(ModelElement me, Edge
              *            exceptionalEdge, HashSet<ModelElement> alreadyDuplicated) { } /**
              * @param gdcoll
              * @param oldEdge
@@ -693,7 +693,7 @@ public class ActionLibrary {
              * @param end
              * @return
              */
-            private Kante link(final GDCollection gdcoll, final Kante oldEdge, final ModelElement start, final ModelElement end) {
+            private Edge link(final GDCollection gdcoll, final Edge oldEdge, final ModelElement start, final ModelElement end) {
                 return gdcoll.link(oldEdge.getClass().getSimpleName(), GDCommands.INVALID_HASH_STRING, start, end, GDCommands.INVALID_EDGE_INDEX, GDCommands.INVALID_EDGE_INDEX, false, TransactionManager.STANDARD_PID);
             }
 
@@ -708,11 +708,11 @@ public class ActionLibrary {
              * unterzuhängen, da sie ja auch weggelassen werden) if
              * (parts.contains(partsParents.get(i))) partsParents.remove(i--); } //sicher ist sicher
              * -> Kopie anlegen, falls durch irgendwelche Seiteneffekte sich die Kantenliste nochmal
-             * ändert ArrayList<Kante> partEdges = new ArrayList<Kante>(part.getEdges()); for (int i
+             * ändert ArrayList<Edge> partEdges = new ArrayList<Edge>(part.getEdges()); for (int i
              * = 0; i < partEdges.size(); i++) { edge = (partEdges.get(i);
              * //Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
              * Eigenschaften des Teilelementes //Bekommen soll, werden nicht umgehängt (eigentlich
-             * kann das nur die Teil-Von-Kante selbst sein, aber in //neuen Metamodellen wäre auch
+             * kann das nur die Teil-Von-Edge selbst sein, aber in //neuen Metamodellen wäre auch
              * etwas anderes denkbar) if (edge instanceof PartOfBeziehung) continue; //Mit wievielen
              * Elementen von der Art des parts darf das umzuhängende Element maximal verbunden sein?
              * int maxConnectedToPartCardinality = edge.isStartClass(part.getClass()) ?
@@ -727,7 +727,7 @@ public class ActionLibrary {
              * int minElemCardinality = edge.isStartClass(start.getClass()) ?
              * edge.getMinStartToEndCardinality() : edge.getMinEndToStartCardinality(); if
              * (minElemCardinality > 0) continue; int dir = edge.getDirection(); String edgeName =
-             * edge.getName(); String edgeDescrip = edge.getDescription(); Kante newEdge = null; if
+             * edge.getName(); String edgeDescrip = edge.getDescription(); Edge newEdge = null; if
              * (dir == FORWARD) { newEdge = link(gdcoll, edge, start, end); } else if
              * (dir == BACKWARD) { newEdge = link(gdcoll, edge, end, start); } else if
              * (dir == DOUBLE) { newEdge = link(gdcoll, edge, start, end); link(gdcoll,
@@ -744,11 +744,11 @@ public class ActionLibrary {
                     removeChilds(part, doc);
                     // sicher ist sicher -> Kopie anlegen, falls durch irgendwelche Seiteneffekte
                     // sich die Kantenliste nochmal ändert
-                    for (Kante edge : part.getEdges()) {
+                    for (Edge edge : part.getEdges()) {
                         // Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
                         // Eigenschaften des Teilelementes
                         // Bekommen soll, werden nicht umgehängt (eigentlich kann das nur die
-                        // Teil-Von-Kante selbst sein, aber in
+                        // Teil-Von-Edge selbst sein, aber in
                         // neuen Metamodellen wäre auch etwas anderes denkbar)
                         if (edge instanceof PartOfBeziehung) {
                             continue;
@@ -764,7 +764,7 @@ public class ActionLibrary {
                             int dir = edge.getDirection();
                             String edgeName = edge.getName();
                             String edgeDescrip = edge.getDescription();
-                            Kante newEdge = null;
+                            Edge newEdge = null;
                             if (dir == FORWARD) {
                                 newEdge = link(gdcoll, edge, start, end);
                                 gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);

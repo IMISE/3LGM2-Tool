@@ -3,8 +3,8 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.awt.Color;
 import java.util.ArrayList;

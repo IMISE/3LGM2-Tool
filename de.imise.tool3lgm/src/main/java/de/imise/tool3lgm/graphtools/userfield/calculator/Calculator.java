@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -452,7 +452,7 @@ public class Calculator {
      * Gibt den wert des referenzierten <code>UserField</code> zurück. Die funktion geht davon aus, dass alle übergebenen Parameter korrekt sind.
      *
      * @param resultUserField das konkrete <code>UserField</code>, auf dessen Wert referenziert wird.
-     * @param me Für diese Kante ist die Kennzahlformel definiert. Dieses <code>UserField</code> zeigt auf ein UserField welches an einer
+     * @param me Für diese Edge ist die Kennzahlformel definiert. Dieses <code>UserField</code> zeigt auf ein UserField welches an einer
      *            Elementklasse
      * @param refFormula
      * @return
@@ -474,7 +474,7 @@ public class Calculator {
             direction = st.nextToken();
         }
 
-        Kante kante = (Kante) me;
+        Edge kante = (Edge) me;
         BigDecimal refVg = BigDecimal.ZERO;
         ModelElement elementWithUserField = null;
         // Wenn es sich um eine Teil-von-Beziehung handelt
@@ -519,8 +519,8 @@ public class Calculator {
      * @param direction
      * @return
      */
-    public static final List<Kante> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Kante> edgeClass, final String direction) {
-        List<Kante> kanten = null;
+    public static final List<Edge> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Edge> edgeClass, final String direction) {
+        List<Edge> kanten = null;
         //Alle Kanten mit der richtigen Richtung holen
         if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
             kanten = me.getEdgesTo(elemClass, edgeClass);
@@ -544,9 +544,9 @@ public class Calculator {
         //      ArrayList elements = gd.getAllModelElements(me.getClass(), true);
         StringTokenizer st = new StringTokenizer(formula, " (|)");
 
-        //nächster Token ist der Name der Kante über die UserFields der
+        //nächster Token ist der Name der Edge über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
+        Class<? extends Edge> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
         //nächster Token ist der HashString des UserFields das aufsummiert
         // werden soll -> hole dafür das UserField aus den Definitions
@@ -558,7 +558,7 @@ public class Calculator {
         }
         Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
 
-        List<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
+        List<Edge> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
         if (kanten.size() == 0) {
@@ -572,7 +572,7 @@ public class Calculator {
 
         //für jede dieser Kanten
         for (int j = 0; j < kanten.size(); j++) {
-            Kante k = kanten.get(j);
+            Edge k = kanten.get(j);
             //das verbundene Element holen
             ModelElement connectedElement = k.getStart();
             if (me == connectedElement) {
@@ -652,9 +652,9 @@ public class Calculator {
         //  ArrayList elements = gd.getAllModelElements(me.getClass(), true);
         StringTokenizer st = new StringTokenizer(minMaxFormula, " (|)");
 
-        //nächster Token ist der Name der Kante über die UserFields der
+        //nächster Token ist der Name der Edge über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
+        Class<? extends Edge> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
         //nächster Token ist der HashString des UserFields das aufsummiert
         // werden soll -> hole dafür das UserField aus den Definitions
@@ -668,7 +668,7 @@ public class Calculator {
         Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
 
         //Alle Kanten mit der richtigen Richtung holen
-        List<Kante> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
+        List<Edge> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
         if (kanten.size() == 0) {
@@ -678,7 +678,7 @@ public class Calculator {
         String result = ZERO;
         //für jede dieser Kanten
         for (int j = 0; j < kanten.size(); j++) {
-            Kante k = kanten.get(j);
+            Edge k = kanten.get(j);
             //das verbundene Element holen
             ModelElement connectedElement = k.getStart();
             if (me == connectedElement) {
@@ -731,9 +731,9 @@ public class Calculator {
 
         StringTokenizer st = new StringTokenizer(avgFormula, " (|)");
 
-        //nächster Token ist der Name der Kante über die UserFields der
+        //nächster Token ist der Name der Edge über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        Class<? extends Kante> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Kante.class);
+        Class<? extends Edge> edgeClass = ModelConstants.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
         me.countConnections(edgeClass);
         BigDecimal sumNum = null;

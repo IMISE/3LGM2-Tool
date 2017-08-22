@@ -4,7 +4,7 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.process;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.ANY;
+import static de.imise.tool3lgm.graphtools.elements.Edge.ANY;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -30,7 +30,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -524,7 +524,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     // specialInfoTargetContainer, prozessC.get3LGMLayout());
                 }
 
-                List<Kante> kantenListe = selectedStep.getKommProzessKanten();
+                List<Edge> kantenListe = selectedStep.getKommProzessKanten();
                 List<ElementContainer> kantenContainerListe = doc.getElementContainer(kantenListe);
                 if (enumerateKanten) {
                     allSpecialInfoTargetContainer.addAll(kantenContainerListe);

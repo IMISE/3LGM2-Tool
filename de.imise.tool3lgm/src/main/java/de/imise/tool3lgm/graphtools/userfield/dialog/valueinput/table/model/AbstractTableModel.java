@@ -216,7 +216,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     public final void setValueAt(final Object value, final int row, final int column) {
         NamedObjectContainer<?> oldValueContainer = (NamedObjectContainer<?>) getValueAt(row, column);
         //oldValueContainer == null tritt nur in Tables auf, in denen
-        //Leezellen sind (z.B. für Verteilungsgewichte, an denen keine Kante vorkommt = graue Zellen)
+        //Leezellen sind (z.B. für Verteilungsgewichte, an denen keine Edge vorkommt = graue Zellen)
         //da kann man nichts setzen (egal, was z.B. bei Paste eingefügt werden soll)
         if (oldValueContainer == null) {
             return;

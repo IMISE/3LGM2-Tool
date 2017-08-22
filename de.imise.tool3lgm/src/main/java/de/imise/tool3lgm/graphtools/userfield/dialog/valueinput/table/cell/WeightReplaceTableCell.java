@@ -4,7 +4,7 @@ import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -16,11 +16,11 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 
 public class WeightReplaceTableCell extends UserFieldActivatedTableCell {
 
-    private final Class<? extends Kante> edgeClass;
+    private final Class<? extends Edge> edgeClass;
 
     private final String modelElementHash;
 
-    public WeightReplaceTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final ModelElement me, final Class<? extends Kante> edgeClass, final int column) {
+    public WeightReplaceTableCell(final NamedObjectContainer<UserField> noc, final UserFieldTable table, final ModelElement me, final Class<? extends Edge> edgeClass, final int column) {
         super(noc, table, column);
         modelElementHash = me.getHashString();
         this.edgeClass = edgeClass;

@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.special;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -98,7 +98,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
                 // wird ist nicht schlimm,
                 // da result ein Set ist und sie somit nur einmal darin vorkommt
                 result.add(bs);
-                ModelElement otherBS = ((Kante) commLink).getOther(bs);
+                ModelElement otherBS = ((Edge) commLink).getOther(bs);
                 result.add(commLink);
                 if (testedBS.contains(otherBS)) {
                     continue;
@@ -137,9 +137,9 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      */
     private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs) {
         List<ModelElement> returnList = new ArrayList<>();
-        List<Kante> kommBeziehungen = bs.getEdges(KommBeziehung.class);
+        List<Edge> kommBeziehungen = bs.getEdges(KommBeziehung.class);
         for (ModelElement kommBez : kommBeziehungen) {
-            returnList.addAll(getSendableObjectTypes(bs, (Kante) kommBez));
+            returnList.addAll(getSendableObjectTypes(bs, (Edge) kommBez));
         }
         return returnList;
     }
@@ -152,7 +152,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      * @param communicationLink
      * @return
      */
-    private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs, final Kante communicationLink) {
+    private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs, final Edge communicationLink) {
         List<ModelElement> returnList = new ArrayList<>();
         int direction = communicationLink.getStart() == bs ? BACKWARD : FORWARD;
         for (ModelElement etnt : communicationLink.getConnectedElements(EtntEtdtKombination.class, KommbezEtntVerbindung.class, direction)) {
@@ -174,7 +174,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     private static final List<ModelElement> getSendingCommunicationLinks(final ModelElement bs, final Collection<ModelElement> objectTypes) {
         List<ModelElement> returnList = new ArrayList<>();
         for (ModelElement commLink : bs.getEdges(KommBeziehung.class)) {
-            List<ModelElement> sendableObjectTypes = getSendableObjectTypes(bs, (Kante) commLink);
+            List<ModelElement> sendableObjectTypes = getSendableObjectTypes(bs, (Edge) commLink);
             sendableObjectTypes.retainAll(objectTypes);
             if (sendableObjectTypes.size() > 0) {
                 returnList.add(commLink);

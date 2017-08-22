@@ -11,7 +11,7 @@ import com.google.common.collect.Maps;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
@@ -31,15 +31,15 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      */
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
         super(dialog, showRightTree, edgeClasses);
     }
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, showRightTree, searchElementClass, edgeClasses);
     }
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, showRightTree, edgeClasses);
     }
 
@@ -50,7 +50,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     }
 
     /**
-     * Baut im linken Baum nur die Elemente der letzten Kante des Pfades auf
+     * Baut im linken Baum nur die Elemente der letzten Edge des Pfades auf
      */
     @Override
     protected Collection<LGMTreeNode> buildLeftTree() {
@@ -102,8 +102,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                 for (int i = 0; i < path2disconnect.length; i++) {
                     LGMTreeNode node = (LGMTreeNode) path2disconnect[i].getLastPathComponent();
                     ModelElement element2Disconnect = getNodeModelElement(node);
-                    //immer nur die letzte Kante im Pfad entfernen
-                    //das ist der Index der Kante im Pfad, ab der entfernt werden soll
+                    //immer nur die letzte Edge im Pfad entfernen
+                    //das ist der Index der Edge im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = edgeClasses.length - 1;
                     ModelElement parentOfElement2Disconnect = nodeToParentModelElement.get(node);
                     disconnect(parentOfElement2Disconnect, element2Disconnect, treePathEdgeIndex);

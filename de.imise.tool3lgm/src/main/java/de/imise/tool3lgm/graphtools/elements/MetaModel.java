@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
 
 import java.util.Map;
 import java.util.Set;
@@ -90,24 +90,24 @@ public abstract class MetaModel {
     ////////////
 
     /** Alle Kanten der FE als Array */
-    public abstract Class<? extends Kante>[] getAllDomainLayerEdges();
+    public abstract Class<? extends Edge>[] getAllDomainLayerEdges();
 
     /** Alle Kanten zw. FE und LWE als Array */
-    public abstract Class<? extends Kante>[] getAllInterDomainLogicalLayerEdges();
+    public abstract Class<? extends Edge>[] getAllInterDomainLogicalLayerEdges();
 
     /** Alle Kanten der LWE als Array */
-    public abstract Class<? extends Kante>[] getAllLogicalLayerEdges();
+    public abstract Class<? extends Edge>[] getAllLogicalLayerEdges();
 
     /** Alle Kanten zw. LWE und PWE als Array */
-    public abstract Class<? extends Kante>[] getAllInterLogicalPhysicalLayerEdges();
+    public abstract Class<? extends Edge>[] getAllInterLogicalPhysicalLayerEdges();
 
     /** Alle Kanten der PWE als Array */
-    public abstract Class<? extends Kante>[] getAllPhysicalLayerEdges();
+    public abstract Class<? extends Edge>[] getAllPhysicalLayerEdges();
 
-    private Class<? extends Kante>[] allEdges = null;
+    private Class<? extends Edge>[] allEdges = null;
 
     @SuppressWarnings("unchecked")
-    public Class<? extends Kante>[] getAllEdges() {
+    public Class<? extends Edge>[] getAllEdges() {
         //muss lazy initialisiert werden, um ExceptionInInitializerError zu verhindern
         if (allEdges == null) {
             allEdges = CollectionUtils.joinArrays(getAllDomainLayerEdges(), getAllInterDomainLogicalLayerEdges(), getAllLogicalLayerEdges(), getAllInterLogicalPhysicalLayerEdges(), getAllPhysicalLayerEdges());
@@ -131,21 +131,21 @@ public abstract class MetaModel {
 
     /**
      * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Kante werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
+     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Edge werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
      * man nach solcher Elementklasse in der Map sucht und kein leeres Set.
      */
-    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToSortedEdges() {
-        ImmutableMap.Builder<Class<? extends ModelElement>, Set<Class<? extends Kante>>> mapBuilder = ImmutableMap.builder();
-        Iterable<Class<? extends Kante>> sortedEdges = getSortedEdges();
+    public final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> getElementClassToSortedEdges() {
+        ImmutableMap.Builder<Class<? extends ModelElement>, Set<Class<? extends Edge>>> mapBuilder = ImmutableMap.builder();
+        Iterable<Class<? extends Edge>> sortedEdges = getSortedEdges();
         for (Class<? extends ModelElement> elementClass : getAllNodes()) {
-            ImmutableSet.Builder<Class<? extends Kante>> sortedEdgesForElementClass = new ImmutableSet.Builder<>();
-            for (Class<? extends Kante> edgeClass : sortedEdges) {
+            ImmutableSet.Builder<Class<? extends Edge>> sortedEdgesForElementClass = new ImmutableSet.Builder<>();
+            for (Class<? extends Edge> edgeClass : sortedEdges) {
                 if (isStartClass(edgeClass, elementClass)) {
                     sortedEdgesForElementClass.add(edgeClass);
                 }
             }
-            ImmutableSet<Class<? extends Kante>> sortedEdgesSet = sortedEdgesForElementClass.build();
-            //Elementklasse nur eintragen, wenn es wenigstens eine Kante gibt, bei der die Reihenfolge relevant ist
+            ImmutableSet<Class<? extends Edge>> sortedEdgesSet = sortedEdgesForElementClass.build();
+            //Elementklasse nur eintragen, wenn es wenigstens eine Edge gibt, bei der die Reihenfolge relevant ist
             if (!sortedEdgesSet.isEmpty()) {
                 mapBuilder.put(elementClass, sortedEdgesForElementClass.build());
             }
@@ -153,9 +153,9 @@ public abstract class MetaModel {
         return mapBuilder.build();
     }
 
-    private Set<Class<? extends Kante>> getSortedEdges() {
-        ImmutableSet.Builder<Class<? extends Kante>> sortedEdges = new ImmutableSet.Builder<>();
-        for (Class<? extends Kante> edgeClass : getAllEdges()) {
+    private Set<Class<? extends Edge>> getSortedEdges() {
+        ImmutableSet.Builder<Class<? extends Edge>> sortedEdges = new ImmutableSet.Builder<>();
+        for (Class<? extends Edge> edgeClass : getAllEdges()) {
             if (SortedEdge.class.isAssignableFrom(edgeClass)) {
                 sortedEdges.add(edgeClass);
             }
@@ -167,27 +167,27 @@ public abstract class MetaModel {
      * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    public final Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> getElementClassToSortedEdges(final int i) {
-        Set<Class<? extends Kante>> processSortedEdgeClasses = ImmutableSet.<Class<? extends Kante>> of(PrzAufVerbindung.class);
-        Map<Class<? extends ModelElement>, Set<Class<? extends Kante>>> elementClassToSortedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Kante>>> of(Prozess.class, processSortedEdgeClasses);
+    public final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> getElementClassToSortedEdges(final int i) {
+        Set<Class<? extends Edge>> processSortedEdgeClasses = ImmutableSet.<Class<? extends Edge>> of(PrzAufVerbindung.class);
+        Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> elementClassToSortedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Edge>>> of(Prozess.class, processSortedEdgeClasses);
         return elementClassToSortedEdges;
     }
 
     /**
      * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
-     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Kante
+     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Edge
      * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
-     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Kante dargestellt werden, die
+     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt werden, die
      * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
      * zusammenzufassen.
      */
-    public abstract Set<Class<? extends Kante>> getDoubleMeaningEdgeClasses();
+    public abstract Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses();
 
     /**
      * Menge aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
      * der Grafik dargestelt werden.
      */
-    public abstract Set<Class<? extends Kante>> getForwardConnectedEdgeClasses();
+    public abstract Set<Class<? extends Edge>> getForwardConnectedEdgeClasses();
 
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//

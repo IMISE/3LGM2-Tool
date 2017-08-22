@@ -4,8 +4,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
@@ -27,7 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -42,9 +42,9 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 public class ReferencePanel extends JPanel implements ActionListener {
 
     /**
-     * die Klasse der Kante, zu der die gebunden Elemente und wiederum deren <code>UserField</code>s gesucht werden.
+     * die Klasse der Edge, zu der die gebunden Elemente und wiederum deren <code>UserField</code>s gesucht werden.
      */
-    private final Class<? extends Kante> edgeClass;
+    private final Class<? extends Edge> edgeClass;
 
     /**
      * Das neue <code>UserField</code>
@@ -57,17 +57,17 @@ public class ReferencePanel extends JPanel implements ActionListener {
     private Class<? extends ModelElement>[] classes;
 
     /**
-     * Wenn die Kante eine Teil-Von Beziehung ist, wird dieses Panel angezeigt. Darin befinden sich die Radion Button zum Kennzeichen der Richtung
+     * Wenn die Edge eine Teil-Von Beziehung ist, wird dieses Panel angezeigt. Darin befinden sich die Radion Button zum Kennzeichen der Richtung
      */
     private JPanel directionPanel;
 
     /**
-     * Wenn die Kante eine Teil-Von Beziehung ist, kann der RadioButton die Richung gekennzeichnen
+     * Wenn die Edge eine Teil-Von Beziehung ist, kann der RadioButton die Richung gekennzeichnen
      */
     private JRadioButton vtzmRB;
 
     /**
-     * Wenn die Kante eine Teil-Von Beziehung ist, kann der RadioButton die Richung gekennzeichnen
+     * Wenn die Edge eine Teil-Von Beziehung ist, kann der RadioButton die Richung gekennzeichnen
      */
     private JRadioButton vgzmRB;
 
@@ -86,7 +86,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
      */
     public ReferencePanel(final UserField userField) {
         super();
-        edgeClass = userField.getTargetClass().asSubclass(Kante.class);
+        edgeClass = userField.getTargetClass().asSubclass(Edge.class);
         this.userField = userField;
         init();
     }
@@ -123,7 +123,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         add(new JLabel(getResString("headline_reference_panel")), gbc);
         gbc.gridy++;
 
-        add(new JLabel(getResString("Kante") + ": " + getFullForwardMetaAssociationName(edgeClass)), gbc);
+        add(new JLabel(getResString("Edge") + ": " + getFullForwardMetaAssociationName(edgeClass)), gbc);
         ButtonGroup bg = new ButtonGroup();
         directionPanel = new JPanel(new BorderLayout());
         directionPanel.setBorder(BorderFactory.createTitledBorder(getResString("direction_information")));

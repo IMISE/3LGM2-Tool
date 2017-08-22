@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.model;
 import java.util.Date;
 
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -140,22 +140,22 @@ public class Szenario extends LGMGraphDocument {
     //		//wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
     //		if ((egdeStartOrEndContainer != null) && (!egdeStartOrEndContainer.getElement().isUnique())) {
     //			//für alle Kanten des Elements
-    //			for (Kante ka : egdeStartOrEndContainer.getElement().getEdges()) {
+    //			for (Edge ka : egdeStartOrEndContainer.getElement().getEdges()) {
     //				ElementContainer edgeCont = ka.getContainer(this);
     //
-    //				//wenn die Kante nicht bereits in diesem Szenario vorkommt
+    //				//wenn die Edge nicht bereits in diesem Szenario vorkommt
     //				if (edgeCont != null) {
     //					//bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
     //					if (ka instanceof Composition)
     //						updateSlaveContainers((Composition)ka, sourceDoc);
-    //					//wenn Start und End-Element der Kante einen Container in diesem Szenario haben
+    //					//wenn Start und End-Element der Edge einen Container in diesem Szenario haben
     //					if ((endsAreMine(ka))) {
-    //						//hole den Container der Kante aus dem Quelldokument
+    //						//hole den Container der Edge aus dem Quelldokument
     //						EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
     //						//wenn es keinen gibt, hole den Container aus dem Hauptmodell
     //						if (oldKC == null)
     //							oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
-    //						//füge eine Kopie des Kante-Containers in dieses Szenario ein
+    //						//füge eine Kopie des Edge-Containers in dieses Szenario ein
     //						edgeCont = (EdgeContainer)addContainerCopy(oldKC);
     //						if (edgeCont == null)
     //							continue;
@@ -187,25 +187,25 @@ public class Szenario extends LGMGraphDocument {
         //wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
         if (egdeStartOrEndContainer != null && !egdeStartOrEndContainer.getElement().isUnique()) {
             //für alle Kanten des Elements
-            for (Kante ka : egdeStartOrEndContainer.getElement().getEdges()) {
-                //wenn die Kante nicht bereits in diesem Szenario vorkommt
+            for (Edge ka : egdeStartOrEndContainer.getElement().getEdges()) {
+                //wenn die Edge nicht bereits in diesem Szenario vorkommt
                 boolean b = !isMyElement(ka);
                 if (b) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
                     if (ka instanceof Composition) {
                         updateSlaveContainers((Composition) ka, sourceDoc);
                     }
-                    //wenn Start und End-Element der Kante einen Container in diesem Szenario haben
+                    //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
 
                     b = endsAreMine(ka);
                     if (b) {
-                        //hole den Container der Kante aus dem Quelldokument
+                        //hole den Container der Edge aus dem Quelldokument
                         EdgeContainer oldKC = (EdgeContainer) ka.getContainer(sourceDoc);
                         //wenn es keinen gibt, hole den Container aus dem Hauptmodell
                         if (oldKC == null) {
                             oldKC = (EdgeContainer) ka.getContainer(sourceDoc.getCollection().getMainGraphDocument());
                         }
-                        //füge eine Kopie des Kante-Containers in dieses Szenario ein
+                        //füge eine Kopie des Edge-Containers in dieses Szenario ein
                         EdgeContainer kc = (EdgeContainer) addContainerCopy(oldKC);
                         if (kc == null) {
                             continue;
@@ -234,8 +234,8 @@ public class Szenario extends LGMGraphDocument {
         //					if (el.isUnique())
         //						continue;
         //					//für alle Kanten des Elementes
-        //					for (Kante ka : el.getEdges()) {
-        //						//wenn die aktuelle Kante noch nicht in diesem Szenario ist
+        //					for (Edge ka : el.getEdges()) {
+        //						//wenn die aktuelle Edge noch nicht in diesem Szenario ist
         //						if (!isMyElement(ka)) {
         //							//wenn es sich um eine Composition handelt
         //							if (ka instanceof Composition)
@@ -243,15 +243,15 @@ public class Szenario extends LGMGraphDocument {
         //								updateSlaveContainers((Composition)ka, sourceDoc);
         //							//wenn Start- und Endelement jetzt in diesem Szenario sind
         //							if ((endsAreMine(ka))) {
-        //								//hole den Container der Kante aus dem Quelldokument
+        //								//hole den Container der Edge aus dem Quelldokument
         //								EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
         //								//wenn es keine gab
         //								if (oldKC == null){
-        //									//hole den Container der Kante aus dem hauptdokument des Quelldokuments (das muss nicht dasslebe
+        //									//hole den Container der Edge aus dem hauptdokument des Quelldokuments (das muss nicht dasslebe
         //									//Hauptdokument dieses Szenarios sein
         //									oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
         //								}
-        //								//füge eine Kopie des Kante-Containers in dieses Szenario ein
+        //								//füge eine Kopie des Edge-Containers in dieses Szenario ein
         //								EdgeContainer kc = (EdgeContainer)addContainerCopy(oldKC);
         //								if (kc == null)
         //									continue;
@@ -269,7 +269,7 @@ public class Szenario extends LGMGraphDocument {
         //					ModelElement el = egdeStartOrEndContainer.getElement();
         //					if (el.isUnique())
         //						continue;
-        //					for (Kante ka : el.getEdges()) {
+        //					for (Edge ka : el.getEdges()) {
         //						if (!isMyElement(ka)) {
         //							if ((endsAreMine(ka))) {
         //								EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
@@ -296,7 +296,7 @@ public class Szenario extends LGMGraphDocument {
      * @param t
      * @return
      */
-    public boolean endsAreMine(final Kante t) {
+    public boolean endsAreMine(final Edge t) {
         return isMyElement(t.getStart()) && isMyElement(t.getEnd());
     }
 

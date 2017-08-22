@@ -109,7 +109,7 @@ public class ModelSelection implements Set<ElementContainer> {
     private void setLastSelected(final ElementContainer lastSelected) {
         /*
          * if (lastSelected instanceof EdgeContainer) {
-         * Kante edge = (Kante) lastSelected.getElement();
+         * Edge edge = (Edge) lastSelected.getElement();
          * System.err.println(ModelConstants.getDisplayableName(edge) + ": Start=" + edge.getStart() + " <-> End=" + edge.getEnd());
          * }
          */
@@ -227,7 +227,7 @@ public class ModelSelection implements Set<ElementContainer> {
         if (ec instanceof BendpointContainer) {
             return selectedBendpointContainer.add((BendpointContainer) ec);
         }
-        //Kante hinzugefügt
+        //Edge hinzugefügt
         if (ec instanceof EdgeContainer) {
             return selectedEdgeContainer.add((EdgeContainer) ec);
         }

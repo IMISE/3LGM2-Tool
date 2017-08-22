@@ -5,7 +5,7 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
@@ -18,7 +18,7 @@ public class MaxCardinalityError extends AbstractCardinalityError {
     /**
      * Liste der Kanten, von denen es zuviele gibt
      */
-    private final List<Kante> connections;
+    private final List<Edge> connections;
 
     /**
      * @param me
@@ -27,7 +27,7 @@ public class MaxCardinalityError extends AbstractCardinalityError {
      * @param cardValue
      * @param gdcoll
      */
-    public MaxCardinalityError(final ModelElement me, final Class<? extends Kante> edgeClass, final List<Kante> connections, final GDCollection gdcoll, final int cardValue) {
+    public MaxCardinalityError(final ModelElement me, final Class<? extends Edge> edgeClass, final List<Edge> connections, final GDCollection gdcoll, final int cardValue) {
         super(me, edgeClass, gdcoll, cardValue);
         this.connections = connections;
     }

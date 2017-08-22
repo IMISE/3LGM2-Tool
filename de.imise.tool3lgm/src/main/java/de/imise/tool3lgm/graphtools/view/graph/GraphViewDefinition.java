@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -80,11 +80,11 @@ public abstract class GraphViewDefinition {
      * @return
      */
     private boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
-        Set<Class<? extends Kante>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(elementClass);
+        Set<Class<? extends Edge>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(elementClass);
         if (sortedEdgeClasses == null) {
             return false;
         }
-        for (Class<? extends Kante> edgeClass : sortedEdgeClasses) {
+        for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
             Class<? extends ModelElement> other = getOther(edgeClass, elementClass);
             if (isPaintable(other)) {
                 return true;
@@ -96,7 +96,7 @@ public abstract class GraphViewDefinition {
     protected abstract MetaPath[] getConfigurationPaths();
 
     public MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
-        //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Kante.getStartClass(...)
+        //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();
             //Map mit den Klassen zu ihren Konfigurationspfaden speichern

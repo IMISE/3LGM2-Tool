@@ -1,12 +1,12 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 
-public final class DatenuebertragungsVerbindung extends Kante {
+public final class DatenuebertragungsVerbindung extends Edge {
 
     //    public static final Class[] stcl = {PhysischerDVBaustein.class};
     public static final Class<? extends ModelElement> stcl = PhysischerDVBaustein.class;

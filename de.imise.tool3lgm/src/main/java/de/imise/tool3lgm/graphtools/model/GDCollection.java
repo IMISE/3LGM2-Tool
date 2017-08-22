@@ -6,15 +6,15 @@ import static de.imise.tool3lgm.Tool3lgm.getLastActionPosition;
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnecting;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnecting;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.DOMAIN_LAYER;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ELEMENTS_WITH_NAME_EXTENSIONS;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYERS;
@@ -116,7 +116,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -616,8 +616,8 @@ public final class GDCollection extends UserFieldTarget {
             }
             //dieser Container kann wirklich gelöscht werden -> merken
             reallyContainerToRemove.add(ec);
-            for (Kante edge : me.getEdges()) {
-                //den Container der Kante mit allen Knickpunkten im aktuellen Teilmodell löschen
+            for (Edge edge : me.getEdges()) {
+                //den Container der Edge mit allen Knickpunkten im aktuellen Teilmodell löschen
                 if (!simpleRemoveEdgeContainer((EdgeContainer) edge.getContainer(szen), pid)) {
                     continue;
                 }
@@ -662,7 +662,7 @@ public final class GDCollection extends UserFieldTarget {
         for (int k = edgeContainer.getBendpointContainerCount() - 1; k >= 0; k--) {
             removeBendpoint(edgeContainer.getBendpointContainer(k).getKnickpunktKnoten(), pid);
         }
-        Kante edge = edgeContainer.getEdge();
+        Edge edge = edgeContainer.getEdge();
         GraphDocument doc = edgeContainer.getGraphDocument();
         //jetzt den KantenContainer einfach löschen
         edge.removeContainer(doc);
@@ -787,7 +787,7 @@ public final class GDCollection extends UserFieldTarget {
         //anderen Elementes eine minimale Kardinalität unterschritten ist, so dass sie automatisch mitgelöscht werden
         Set<ModelElement> dependentDeletedElements = new HashSet<>();
         //das wird die Liste aller zu löschenden Verbindungen
-        List<Kante> edgesToDelete = new ArrayList<>();
+        List<Edge> edgesToDelete = new ArrayList<>();
         gdoc.start_transaction(pid);
         for (int i = 0; i < allElementsToDelete.size(); i++) {
             ModelElement me = allElementsToDelete.get(i);
@@ -809,10 +809,10 @@ public final class GDCollection extends UserFieldTarget {
                 removeBendpoint((Knickpunkt) me, pid);
                 allElementsToDelete.remove(i--);
                 continue;
-            } else if (me instanceof Kante) {
-                Kante edge = (Kante) me;
+            } else if (me instanceof Edge) {
+                Edge edge = (Edge) me;
                 edgesToDelete.add(edge);
-                //wenn durch das Löschen der Kante auch die Kardinalität für eins oder beide der durch die Kante verbundenen
+                //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
                 //Elemente unterschritten wurde -> die Elemente auch löschen
                 ModelElement[] startEnd = {
                         edge.getStart(),
@@ -821,8 +821,8 @@ public final class GDCollection extends UserFieldTarget {
                 for (ModelElement elem : startEnd) {
                     //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich
                     //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
-                    //auf Gleichheit muss getestet werden, weil die Kante ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
-                    Class<? extends Kante> edgeClass = edge.getClass();
+                    //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
+                    Class<? extends Edge> edgeClass = edge.getClass();
                     if (elem != null && elem.countConnections(edgeClass) <= getMinCardinality(elem.getClass(), edgeClass)) {
                         if (!allElementsToDelete.contains(elem)) {
                             allElementsToDelete.add(elem);
@@ -831,7 +831,7 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-            for (Kante edge : me.getEdges()) {
+            for (Edge edge : me.getEdges()) {
                 //auch Kanten können Kanten haben usw., daher müssen sie diese Schleife auch durchlaufen
                 if (!allElementsToDelete.contains(edge)) {
                     allElementsToDelete.add(edge);
@@ -859,7 +859,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         while (!edgesToDelete.isEmpty()) {
             for (int i = 0; i < edgesToDelete.size(); i++) {
-                Kante edge = edgesToDelete.get(i);
+                Edge edge = edgesToDelete.get(i);
                 //immer erst nur Kanten ohne Kanten löschen
                 if (edge.hasEdges()) {
                     continue;
@@ -900,14 +900,14 @@ public final class GDCollection extends UserFieldTarget {
                 //				this.doc.layer[layer].remove(edgeCont);
                 //				System.err.println("GDCollection.deleteElements() line 848");
                 doc.layer[layerFor(edge.getClass())].remove(edge.getContainer(doc));
-                //jetzt den Container selbst löschen (kann man sich sparen, weil die Kante seobst nicht mehr gepsüeichert wird)
+                //jetzt den Container selbst löschen (kann man sich sparen, weil die Edge seobst nicht mehr gepsüeichert wird)
                 edge.removeContainer(doc);
                 edgesToDelete.remove(i--);
             }
         }
         //jetzt alle Knoten im Hauptmodell löschen
         for (ModelElement me : allElementsToDelete) {
-            if (me instanceof Kante || me instanceof Knickpunkt) {
+            if (me instanceof Edge || me instanceof Knickpunkt) {
                 continue;
             }
             Class<? extends ModelElement> meClass = me.getClass();
@@ -942,12 +942,12 @@ public final class GDCollection extends UserFieldTarget {
         //das GraphDocument holen, aus dem der übergebene Container stammt (das ist immer ein Szenario)
         GraphDocument szen = bendpointContainer.getGraphDocument();
         szen.start_transaction(pid);
-        //hole den Container der Kante, auf der der Knickpunkt angezeigt wird (Dieser EdgeContainer ist
+        //hole den Container der Edge, auf der der Knickpunkt angezeigt wird (Dieser EdgeContainer ist
         //immer in einem Szenario)
         EdgeContainer edgeC = bendpoint.getOwner();
-        //fuer das UndoKommando die Position merken, an der sich der Knickpunkt auf der Kante befunden hat.
+        //fuer das UndoKommando die Position merken, an der sich der Knickpunkt auf der Edge befunden hat.
         int oldIndex = edgeC.getIndexOfKnickpunkt(bendpoint);
-        //entferne den Knickpunkt von der Kante
+        //entferne den Knickpunkt von der Edge
         edgeC.removeKnickpunkt(bendpoint);
         edgeC.computeBorderPoints();
         int layerIndex = edgeC.layerFor();
@@ -1009,10 +1009,10 @@ public final class GDCollection extends UserFieldTarget {
         if (bendpointIndex == INVALID_BENDPOINT_INDEX) {
             bendpointIndex = edgeContainer.getKnickpunktInsertIndex(x, y);
         }
-        //[0] = SzenHash, [1] = HashString der Kante, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Kante,
+        //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
         szen.addRedoCommand(INSERT_BENDING_POINT + " " + szenHashString + " " + edgeContainer.getHashString() + " " + bendpoint.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
         szen.addUndoCommand(DELETE + " " + bendpoint.getHashString(), pid);
-        // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Kante)
+        // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Edge)
         int layerNumber = edgeContainer.getElement().layerFor();
         if (szen.getLayer(layerNumber).add(bendpointContainer) == null) {
             szen.undo(pid);
@@ -1099,7 +1099,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void createInitialSubtypes(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
-        for (Class<? extends Kante> subTypeEdgeClass : getInitialSubtypes(elementClass)) {
+        for (Class<? extends Edge> subTypeEdgeClass : getInitialSubtypes(elementClass)) {
             Class<? extends ModelElement> subType = isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
             //minimale kardinalität für die Unterelemente
             int minCardForSubType = getMinCardinality(me.getClass(), subTypeEdgeClass);
@@ -1147,7 +1147,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public void addEdge(final EdgeContainer kc, final int l, final int pid) {
-        Kante k = kc.getEdge();
+        Edge k = kc.getEdge();
         EdgeContainer ec = new EdgeContainer(kc, doc);
         doc.getLayer(l).add(ec);
         boolean bulkMode = isBulkMode();
@@ -1164,7 +1164,7 @@ public final class GDCollection extends UserFieldTarget {
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //START LINK //
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert.<br>
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert.<br>
      *
      * @param edgeClassName
      * @param hashString
@@ -1174,26 +1174,26 @@ public final class GDCollection extends UserFieldTarget {
      * @param endElementEdgeIndex
      * @param pid
      * @return
-     *         die neu angelegte Kante zwischen den beiden Elementen oder die Kante, die bereits existierte
+     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
      * @see #link(String, String, ModelElement, ModelElement, int, int)
      */
-    public final Kante link(final String edgeClassName, final String hashString, final String startElementHash, final String endElementHash, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
+    public final Edge link(final String edgeClassName, final String hashString, final String startElementHash, final String endElementHash, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
         ModelElement me1 = doc.findElementCoded(startElementHash);
         ModelElement me2 = doc.findElementCoded(endElementHash);
         return link(edgeClassName, hashString, me1, me2, startElementEdgeIndex, endElementEdgeIndex, true, pid);
     }
 
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert.<br>
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert.<br>
      *
      * @param startElement
      * @param endElement
      * @param pid
      * @return
-     *         die neu angelegte Kante zwischen den beiden Elementen oder die Kante, die bereits existierte
+     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
      * @see #link(String, String, ModelElement, ModelElement, int, int)
      */
-    public final Kante link(final ModelElement startElement, final ModelElement endElement, final int pid) {
+    public final Edge link(final ModelElement startElement, final ModelElement endElement, final int pid) {
         return link(INVALID_EDGE_CLASS_NAME, INVALID_HASH_STRING, startElement, endElement, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
     }
 
@@ -1204,7 +1204,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      * @return
      */
-    public Kante link(final Class<? extends Kante> edgeClass, final ModelElement k1, final ModelElement k2, final int pid) {
+    public Edge link(final Class<? extends Edge> edgeClass, final ModelElement k1, final ModelElement k2, final int pid) {
         return link(edgeClass, INVALID_HASH_STRING, k1, k2, pid);
     }
 
@@ -1216,7 +1216,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      * @return
      */
-    public Kante link(final Class<? extends Kante> edgeClass, final String edgeHash, final ModelElement k1, final ModelElement k2, final int pid) {
+    public Edge link(final Class<? extends Edge> edgeClass, final String edgeHash, final ModelElement k1, final ModelElement k2, final int pid) {
         if (edgeClass == null) {
             return link(INVALID_EDGE_CLASS_NAME, edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
         }
@@ -1232,46 +1232,46 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      * @return
      */
-    public Kante link(final Class<? extends Kante> edgeClass, final ModelElement startElement, final ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
+    public Edge link(final Class<? extends Edge> edgeClass, final ModelElement startElement, final ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
         return link(edgeClass.getSimpleName(), INVALID_HASH_STRING, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex, true, pid);
     }
 
     /**
-     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Kante zwischen ihnen existiert. Die Verbindung
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert. Die Verbindung
      * entsteht immer in Vorwärtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
      *
      * @param edgeClassName
      *            Klassenname der kante, die angelegt werden soll. Ist nur relevant, wenn es mehrere Kantenarten zwischen den Elementen geben kann.
      * @param edgeHash
-     *            Wird ein Wert ungleich <code>null</code> übergeben, wird dieser als HasWert der neuen Kante gesetzt
+     *            Wird ein Wert ungleich <code>null</code> übergeben, wird dieser als HasWert der neuen Edge gesetzt
      * @param startElement
-     *            Startknoten der Kante
+     *            Startknoten der Edge
      * @param endElement
-     *            Endknoten der Kante
+     *            Endknoten der Edge
      * @param edgeIndex
      * @param startElementEdgeIndex
-     *            Position, an der die Kante beim Startelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
+     *            Position, an der die Edge beim Startelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
      *            übergeben werden.
      * @param endElementEdgeIndex
-     *            Position, an der die Kante beim Endelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
+     *            Position, an der die Edge beim Endelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
      *            übergeben werden.
      * @param ensureConsistency
-     *            wenn <code>true</code> wird für die verbundenen Elemente geprüft, ob die Kardinalität mit der neuen Kante
+     *            wenn <code>true</code> wird für die verbundenen Elemente geprüft, ob die Kardinalität mit der neuen Edge
      *            überschritten wird. Wenn ja, werden überzählige Verbindungen gelöscht
      * @param pid
      *            Transaktions-ID mit der die Änderungen am Model durchgeführt werden
      * @return
-     *         die neu angelegte Kante zwischen den beiden Elementen oder die Kante, die bereits existierte
+     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
      */
-    public Kante link(String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
+    public Edge link(String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
         //		System.err.println("GDCollection.link() " + me1 + "\t" + me2);
         if (startElement == null || endElement == null || startElement == endElement) {
             return null;
         }
-        Kante edge = null;
+        Edge edge = null;
         EdgeContainer kac = null;
         Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
-        Class<? extends Kante> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Kante.class);
+        Class<? extends Edge> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Edge.class);
         if (edgeClass != null && !isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
@@ -1279,7 +1279,7 @@ public final class GDCollection extends UserFieldTarget {
         try {
             //wenn keine Kantenklasse angegeben wurde, muss diese ermittelt werden. Wenn sie nicht eindeutig ist, wird der Benutzer per Dialog gefragt.
             if (edgeClass == null) {
-                Class<? extends Kante>[] edgeClasses = getEdgeTypes(startElement.getClass(), endElement.getClass());
+                Class<? extends Edge>[] edgeClasses = getEdgeTypes(startElement.getClass(), endElement.getClass());
                 if (edgeClasses == null || edgeClasses.length == 0) {
                     return null;
                 }
@@ -1301,7 +1301,7 @@ public final class GDCollection extends UserFieldTarget {
                     JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
                     dialog.setVisible(true);
                     edgeClassName = buttonGroup.getSelection().getActionCommand();
-                    edgeClass = getClassForName(edgeClassName).asSubclass(Kante.class);
+                    edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
                 }
             }
             edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
@@ -1382,7 +1382,7 @@ public final class GDCollection extends UserFieldTarget {
                     int maxStartToEndCardinality = edge.getMaxStartToEndCardinality();
                     int maxEndToStartCardinality = edge.getMaxEndToStartCardinality();
                     int maxElemCardinality = startElementIsEdgeStart ? maxStartToEndCardinality : maxEndToStartCardinality;
-                    List<Kante> edgeList = startElement.getEdgesWith(startElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
+                    List<Edge> edgeList = startElement.getEdgesWith(startElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
@@ -1405,17 +1405,17 @@ public final class GDCollection extends UserFieldTarget {
         return edge;
     }
 
-    //	public Kante link(String edgeClassName, String edgeHash, ModelElement me1, ModelElement me2, int direction, int edgeIndex, int pid) {
+    //	public Edge link(String edgeClassName, String edgeHash, ModelElement me1, ModelElement me2, int direction, int edgeIndex, int pid) {
     //		if ((me1 == null) || (me2 == null))
     //			return null;
     //		if (me1 == me2)
     //			return null;
     //
-    //		Kante edge = null;
+    //		Edge edge = null;
     //		EdgeContainer kac = null;
     //
     //		Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
-    //		Class<? extends Kante> edgeClass = edgeClassOrNull==null ? null : edgeClassOrNull.asSubclass(Kante.class);
+    //		Class<? extends Edge> edgeClass = edgeClassOrNull==null ? null : edgeClassOrNull.asSubclass(Edge.class);
     //
     //		if (edgeClass!=null && !isConnecting(edgeClass, me1.getClass(), me2.getClass()))
     //			return null;
@@ -1424,7 +1424,7 @@ public final class GDCollection extends UserFieldTarget {
     //
     //		try {
     //			if (edgeClass==null) {
-    //				Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(me1.getClass(), me2.getClass());
+    //				Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(me1.getClass(), me2.getClass());
     //				if ((edgeClasses == null) || (edgeClasses.length == 0))
     //				    return null;
     //				edgeClass = edgeClasses[0];
@@ -1444,7 +1444,7 @@ public final class GDCollection extends UserFieldTarget {
     //					JDialog dialog = optionPane.createDialog(Tool3lgm.tool, getResString("choose_trace"));
     //					dialog.setVisible(true);
     //					edgeClassName = buttonGroup.getSelection().getActionCommand();
-    //					edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
+    //					edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class);
     //				}
     //			}
     //
@@ -1462,7 +1462,7 @@ public final class GDCollection extends UserFieldTarget {
     //			}else {
     //
     //				try {
-    //					edge = (Kante) edgeClass.newInstance();
+    //					edge = (Edge) edgeClass.newInstance();
     //				} catch (Exception e) {
     //					Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
     //					doc.undo(pid);
@@ -1496,7 +1496,7 @@ public final class GDCollection extends UserFieldTarget {
     //				//verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
     //				//Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolegn, sonst stimmt die Reihenfolge der Kommando nicht.
     //				int maxElemCardinality = edge.isStartClass(me1.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
-    //				ArrayList<Kante> edgeList = me1.getEdgesWith(edge.isStartClass(me1.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
+    //				ArrayList<Edge> edgeList = me1.getEdgesWith(edge.isStartClass(me1.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
     //				edgeList.remove(edge);
     //				if (edgeList.size()>0 && edgeList.size() == maxElemCardinality)
     //					deleteElement(edgeList.get(0), doc, pid);
@@ -1537,7 +1537,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param edgeIndex
      * @param pid
      */
-    public void unlink(final String knothash1, final String knothash2, final Class<? extends Kante> edgeClass, final int edgeIndex, final int pid) {
+    public void unlink(final String knothash1, final String knothash2, final Class<? extends Edge> edgeClass, final int edgeIndex, final int pid) {
         ModelElement me1 = doc.findElementCoded(knothash1);
         ModelElement me2 = doc.findElementCoded(knothash2);
         unlink(me1, me2, edgeClass, edgeIndex, pid);
@@ -1568,7 +1568,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param edgeClass
      * @param pid
      */
-    public final void unlink(final ModelElement k1, final ModelElement k2, final Class<? extends Kante> edgeClass, final int pid) {
+    public final void unlink(final ModelElement k1, final ModelElement k2, final Class<? extends Edge> edgeClass, final int pid) {
         unlink(k1, k2, edgeClass, INVALID_EDGE_INDEX, pid);
     }
 
@@ -1579,12 +1579,12 @@ public final class GDCollection extends UserFieldTarget {
      * @param edgeIndex
      * @param pid
      */
-    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Kante> edgeClass, final int edgeIndex, final int pid) {
+    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int edgeIndex, final int pid) {
         if (me1 == null || me2 == null) {
             return;
         }
-        Kante edge = null;
-        List<Kante> edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
+        Edge edge = null;
+        List<Edge> edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
         if (edges.isEmpty()) {
             return;
         } else if (edges.size() == 1) {
@@ -1618,8 +1618,8 @@ public final class GDCollection extends UserFieldTarget {
         doc.addRedoCommand(UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + edgeIndex, pid);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
-        //ist die Richtung egal und das Unlinken ist das Löschen der Kante
-        Class<? extends Kante> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
+        //ist die Richtung egal und das Unlinken ist das Löschen der Edge
+        Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
         if (isDoubleMeaningEdge(absoluteEdgeClass)) {
             if (edge.getDirection() == DOUBLE) {
                 if (edge.getStart() == me1) {
@@ -1691,14 +1691,14 @@ public final class GDCollection extends UserFieldTarget {
                 join(me1.getHashString(), me2.getHashString(), source, pid);
             }
         }
-        //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Kante selbst irgenwie darum kümmern!
-        List<Kante> kantenVector1 = (List<Kante>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
-        List<Kante> kantenVector2 = (List<Kante>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
+        //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Edge selbst irgenwie darum kümmern!
+        List<Edge> kantenVector1 = (List<Edge>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        List<Edge> kantenVector2 = (List<Edge>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
-        //für jede Kante vom zu löschenden Knoten
+        //für jede Edge vom zu löschenden Knoten
         while (kantenVector1.size() > 0) {
-            Kante kante = kantenVector1.get(0);
-            startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Kante merken
+            Edge kante = kantenVector1.get(0);
+            startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Edge merken
             endKnoten = kante.getEnd(); //Endknoten -"-
             //zu löschenden Knoten durch den verbleibenden ersetzen
             if (startKnoten == knoten1) {
@@ -1712,8 +1712,8 @@ public final class GDCollection extends UserFieldTarget {
             if (startKnoten == endKnoten) {
                 deleteKante = true;
             } else {
-                //abfangen, ob im verbleibenden Knoten an gleicher Stelle schon eine Kante vorkommt, Kante testKante = new Kante(startKnoten, endKnoten, false);
-                Kante testKante;
+                //abfangen, ob im verbleibenden Knoten an gleicher Stelle schon eine Edge vorkommt, Edge testKante = new Edge(startKnoten, endKnoten, false);
+                Edge testKante;
                 try {
                     testKante = kante.getClass().newInstance();
                 } catch (Exception e) {
@@ -1723,7 +1723,7 @@ public final class GDCollection extends UserFieldTarget {
                 testKante.setKnots(startKnoten, endKnoten, false);
                 //TODO:AXS: ich glaube hier fliegen Kanten raus, die in unterschiedliche Richtungen zeigen, weil isEqualTo nur die Elemente und die Kanteklasse prüft
                 for (int i = 0; i < kantenVector2.size(); i++) {
-                    //für jede Kante des verbleibenden Elementes prüfen, ob umzuhängende Kante und eine Kante in
+                    //für jede Edge des verbleibenden Elementes prüfen, ob umzuhängende Edge und eine Edge in
                     // kantenVector2 dieselben Elemente verbindet
                     if (kantenVector2.get(i).isEqualTo(testKante)) {
                         deleteKante = true;
@@ -1731,12 +1731,12 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-            if (deleteKante) { //wenn die Kante doppelt vorkommen würde
+            if (deleteKante) { //wenn die Edge doppelt vorkommen würde
                 deleteElement(kante, doc, pid);
-                //				doc.removeEdge(kante, pid);//Kante einfach komplett löschen
-            } else { //Kante muss umgehängt werden
-                knoten1.removeEdge(kante); //im zu löschenden Knoten die Kante entfernen
-                kante.setKnots(startKnoten, endKnoten);//die Kante wirklich an knoten2 binden
+                //				doc.removeEdge(kante, pid);//Edge einfach komplett löschen
+            } else { //Edge muss umgehängt werden
+                knoten1.removeEdge(kante); //im zu löschenden Knoten die Edge entfernen
+                kante.setKnots(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {
@@ -2051,7 +2051,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
             for (EdgeContainer ec : lc.getKanten()) {
-                Kante edge = ec.getEdge();
+                Edge edge = ec.getEdge();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(edge)) {
                         if (!elements.contains(edge)) {
@@ -2105,7 +2105,7 @@ public final class GDCollection extends UserFieldTarget {
         if (me instanceof Knickpunkt) {
             return;
         }
-        if (me instanceof Kante) {
+        if (me instanceof Edge) {
             for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getKnickpunkte()) {
                 Knickpunkt kp = kpC.getKnickpunktKnoten();
                 String kantenHash = kp.getKantenHash();
@@ -2115,7 +2115,7 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-            Kante edge = (Kante) me;
+            Edge edge = (Edge) me;
             ModelElement start = edge.getStart();
             if (!elements.contains(start)) {
                 elements.add(start);
@@ -2137,7 +2137,7 @@ public final class GDCollection extends UserFieldTarget {
                     userFields.addAll(connected.getUserFieldInputValueKeys());
                     resolveCopyDependencies(connected, elements, userFields);
                 }
-                for (Kante e : me.getEdgesWith(connected)) {
+                for (Edge e : me.getEdgesWith(connected)) {
                     if (!elements.contains(e)) {
                         elements.add(e);
                         userFields.addAll(e.getUserFieldInputValueKeys());
@@ -2149,7 +2149,7 @@ public final class GDCollection extends UserFieldTarget {
         //elements wird in der Schleife vergrößert -> nicht über Iterable gehen
         for (int i = 0; i < elements.size(); i++) {
             ModelElement m = elements.get(i);
-            for (Kante ka : me.getEdgesWith(m)) {
+            for (Edge ka : me.getEdgesWith(m)) {
                 if (!elements.contains(ka)) {
                     elements.add(ka);
                     userFields.addAll(ka.getUserFieldInputValueKeys());

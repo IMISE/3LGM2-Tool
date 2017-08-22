@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -261,7 +261,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         HashSet<Class<? extends ModelElement>> connectedTypes = new HashSet<>();
         for (int e = 0; e < elementClassArray.length; e++) {
             Class<? extends ModelElement> elementClass = ((Class<?>) elementClassArray[e]).asSubclass(ModelElement.class);
-            Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(elementClass);
+            Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(elementClass);
             for (int i = 0; i < edgeClasses.length; i++) {
                 Class<? extends ModelElement> edgeElementClass = getStartClass(edgeClasses[i]);
                 boolean selectedPathStartClassIsEdgeStartClass = false;

@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.process;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -225,7 +225,7 @@ public class ShortestCommunicationPathFinder {
         }
         // alle Schnittstellen einsammeln, die den Objekttyp überhaupt übertragen können
         // über den Pfad: Objekttyp - Repräsentationsform - ETNTKombination <-> KommBeziehung -
-        // Start und Ende der Kante
+        // Start und Ende der Edge
         // kann man alle Schnittstellen einsammeln, die den Objekttyp überhaupt übertragen können
         List<ModelElement> interfaces = new ArrayList<>();
         // Liste aller Schnittstellenpaare, von denen der Objekttyp von der ersten zur zweiten

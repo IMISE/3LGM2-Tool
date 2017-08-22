@@ -3,8 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -16,7 +16,7 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -53,7 +53,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     private final AlphabeticalComboBox columnFilterBox = new AlphabeticalComboBox();
 
     /**
-     * Richtung der Kante, die in der <code>edgeBox</code> ausgewählt ist.
+     * Richtung der Edge, die in der <code>edgeBox</code> ausgewählt ist.
      */
     private int choosedEdgeDirection;
 
@@ -70,7 +70,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     /**
      * Zuletzt ausgewähltes Element in der {@link #edgeBox}
      */
-    private Class<? extends Kante> elementTypeBoxSelection;
+    private Class<? extends Edge> elementTypeBoxSelection;
 
     /**
      * Zuletzt ausgewähltes Element in der {@link #weightBox}
@@ -89,7 +89,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
      * @param name
      */
     public DistributionWeightEditorPanel(final UserFieldEditorDialog dialog, final String name) {
-        super(dialog, Kante.class, UserField.Style.CLASSIFICATION_NUMBER_STYLES, name);
+        super(dialog, Edge.class, UserField.Style.CLASSIFICATION_NUMBER_STYLES, name);
         initWeightBox();
         initColumnFilterBox();
     }
@@ -117,7 +117,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                 stopEditing();
                 takeOver();
                 // Selektion für nächstes takeOver
-                finalPanel.elementTypeBoxSelection = ((Class<?>) o).asSubclass(Kante.class);
+                finalPanel.elementTypeBoxSelection = ((Class<?>) o).asSubclass(Edge.class);
                 //sobald sich in dieser Box die Selektion ändert, dann gleich in der anderen Box das erste Item auswählen
                 finalPanel.setWeightBoxContent();
                 finalPanel.initSelectFirstItem();
@@ -264,7 +264,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                     // Das ModelElement in der j-ten Spalte
                     ModelElement columnElement = (ModelElement) columnIdentifiers.elementAt(j).getObject();
 
-                    Kante edge = getEdge(rowElement, columnElement);
+                    Edge edge = getEdge(rowElement, columnElement);
                     if (edge == null) {
                         continue;
                     }
@@ -297,9 +297,9 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         return UserFieldTableController.getNewDistributionWeightTableController(uftm);
     }
 
-    private Kante getEdge(final ModelElement rowElement, final ModelElement columnElement) {
-        Kante edge = null;
-        // Richtung der Kante und die Kante selbst ermitteln
+    private Edge getEdge(final ModelElement rowElement, final ModelElement columnElement) {
+        Edge edge = null;
+        // Richtung der Edge und die Edge selbst ermitteln
         if (choosedEdgeDirection == FORWARD) {
             edge = columnElement.getEdgeTo(rowElement, elementTypeBoxSelection);
 
@@ -361,7 +361,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         if (!hasSelectedItem()) {
             return;
         }
-        Class<? extends Kante> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Kante.class);
+        Class<? extends Edge> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Edge.class);
         String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
         choosedEdgeDirection = FORWARD;
         if (!selectedEdgeName.equals(ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass))) {

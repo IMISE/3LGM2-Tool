@@ -16,7 +16,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -292,7 +292,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("container")) {
             boolean add = true;
             if (container instanceof EdgeContainer) {
-                Kante k = (Kante) container.getElement();
+                Edge k = (Edge) container.getElement();
                 if (k.getStart().isUnique() || k.getEnd().isUnique()) {
                     add = false;
                 }
@@ -450,7 +450,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
             Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-            /* die HashStrings für das Start- bzw. End-Objekt einer Kante auflösen und die wirklichen Knoten setzten */
+            /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Knoten setzten */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getKanten()) {
                     kc.getEdge().decodeHashStrings(doc);

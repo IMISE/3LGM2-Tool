@@ -65,7 +65,7 @@ import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -713,7 +713,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     nodeCount += count;
                     nodeContFromDoc += contFromDoc;
                     nodeContFromMe += contFromMe;
-                } else if (Kante.class.isAssignableFrom(elementClass)) {
+                } else if (Edge.class.isAssignableFrom(elementClass)) {
                     edgeCount += count;
                     edgeContFromDoc += contFromDoc;
                     edgeContFromMe += contFromMe;

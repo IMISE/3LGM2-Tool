@@ -25,7 +25,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -295,7 +295,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             }
             if (!weightReplacer.isEmptyStandardReplacer()) {
                 writeStartElement("standardWeigthReplacer");
-                for (Cell<String, Class<? extends Kante>, String> replacerEntry : weightReplacer.getStandardReplacerContent()) {
+                for (Cell<String, Class<? extends Edge>, String> replacerEntry : weightReplacer.getStandardReplacerContent()) {
                     writeEmptyElement("standardWeigthReplacerEntry");
                     writeAttribute("elementHash", replacerEntry.getRowKey());
                     writeAttribute("userFieldHash", replacerEntry.getColumnKey().getSimpleName());
@@ -382,8 +382,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         }
         writeUserFieldValues(me);
 
-        if (me instanceof Kante) {
-            Kante edge = (Kante) me;
+        if (me instanceof Edge) {
+            Edge edge = (Edge) me;
             writeModelElementField("start", edge.getStart().getHashString());
             writeModelElementField("end", edge.getEnd().getHashString());
             writeModelElementField("state", edge.getDirectionName());

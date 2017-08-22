@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import static de.imise.tool3lgm.Tool3lgm.getContextGenerator;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
@@ -29,7 +29,7 @@ import java.awt.event.MouseWheelListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -138,7 +138,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     private Class<? extends Knoten> mouse_makes_node;
 
     /**
-     * <code>true</code>, wenn beim Mausklick eine Kante angelegt werden soll
+     * <code>true</code>, wenn beim Mausklick eine Edge angelegt werden soll
      */
     private boolean mouse_makes_edge = false;
 
@@ -349,7 +349,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                             grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
                         }
                         grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
-                        for (Kante edge : ec.getElement().getEdgesWith(ka.getElement())) {
+                        for (Edge edge : ec.getElement().getEdgesWith(ka.getElement())) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(doc);
                             if (edgeC != null) {
                                 for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
@@ -521,7 +521,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     contextGenerator.processMouseEvent(left_button, right_button, this, xin, yin);
                     break;
                 }
-                // 2. Ob man in ein Objekt direkt getroffen hat: Knoten oder Kante
+                // 2. Ob man in ein Objekt direkt getroffen hat: Knoten oder Edge
                 ka = null;
                 ka = chooseObject(layer, x, y);
                 //System.out.println("    start context generating..." + System.currentTimeMillis());
@@ -639,7 +639,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     sized = false;
                     break;
                 }
-                // 2. Ob man in ein Objekt direkt getroffen hat: Knoten oder Kante
+                // 2. Ob man in ein Objekt direkt getroffen hat: Knoten oder Edge
                 if (contextGenerator.getElementGetroffen()) {
                     if (was_selected) {
                         was_selected = false;
@@ -650,7 +650,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     // wenn ein Knickpunkt gedraggt wurde
                     if (mouse_dragged && ka != null && ka instanceof BendpointContainer) {
                         //Prüfe ob er gelöscht werden soll. Das soll er, wenn er auf einer Linie
-                        //zwischen den anderen Knickpunkten oder den Endpunkten der Kante liegt
+                        //zwischen den anderen Knickpunkten oder den Endpunkten der Edge liegt
                         BendpointContainer kpc = (BendpointContainer) ka;
                         Point pos = kpc.getPosition();
                         Point prePos = kpc.getPredecessorPosition();
@@ -797,7 +797,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             }
             for (counter = lc.getKantenCount() - 1; counter >= 0; counter--) {
                 EdgeContainer k = lc.getEdgeContainer(counter);
-                Kante ka = k.getEdge();
+                Edge ka = k.getEdge();
                 ModelElement s = ka.getStart();
                 ModelElement e = ka.getEnd();
                 ElementContainer sc = s.getContainer(doc);
@@ -960,7 +960,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 int deltaX = lastXreal[ebene] - xreal[ebene];
                 int deltaY = lastYreal[ebene] - yreal[ebene];
                 //Anzahl der Pixel, bei denen ein Knickpunkt statt auf dem Raster auf der gleichen Höhe oder Weite einrasten soll,
-                // die sein Vorgänger- oder Nachfolger auf der Kante haben
+                // die sein Vorgänger- oder Nachfolger auf der Edge haben
                 int bendpointTolerance = 3;
                 // wenn gerastert werden soll
                 if (UserProperties.isUseRaster()) {
@@ -1070,11 +1070,11 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 } else {
                     doc.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, STANDARD_PID);
                 }
-                //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Kante gedragged werden, da grabbed
+                //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Edge gedragged werden, da grabbed
                 // nur bei Knoten oder Kanten true gesetzt wird
             } else /* if (ka instanceof EdgeContainer) */ {
                 //der Einfügepunkt muss der Punkt sein, an dem die Maus vor dem Draggen war, denn sonst kann es vorkommen, dass bei mouseKlicked()
-                //die Kante getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
+                //die Edge getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
                 //des Kantenbereichs liegen und der Index des neuen Knickpunktes nicht korrekt bestimmt werden kann.
                 //Da die Einfügeposition anhand der Koodinaten betimmt wird, wird -1 übergeben.
                 ka = doc.getCollection().insertBendingPoint(doc.getHashString(), ka.getElement().getHashString(), INVALID_HASH_STRING, lastXreal[ebene], lastYreal[ebene], INVALID_BENDPOINT_INDEX, STANDARD_PID);

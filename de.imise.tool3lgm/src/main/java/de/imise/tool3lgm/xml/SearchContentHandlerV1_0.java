@@ -10,7 +10,7 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -28,7 +28,7 @@ public class SearchContentHandlerV1_0 {
     protected Map<String, ArrayList<ModelElement>> variables = new HashMap<>(10);
     protected ArrayList<ModelElement> roots = new ArrayList<>(5000);
     protected ArrayList<ModelElement> currentKnots = new ArrayList<>(5000);
-    protected ArrayList<Kante> currentTraces = new ArrayList<>(5000);
+    protected ArrayList<Edge> currentTraces = new ArrayList<>(5000);
 
     /**
      * @param coll

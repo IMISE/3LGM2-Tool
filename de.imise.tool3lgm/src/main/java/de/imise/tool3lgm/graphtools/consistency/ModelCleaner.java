@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -165,7 +165,7 @@ public class ModelCleaner {
                             }
                             lc.add(ec);
                         }
-                    } else if (me instanceof Kante) {
+                    } else if (me instanceof Edge) {
                         if (!lc.getKanten().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 6);
@@ -182,7 +182,7 @@ public class ModelCleaner {
         // ABKonfiguration.class, AufOrgKombination.class, null);
 
         int pid = TransactionManager.STANDARD_PID;
-        // Alle Knickpunkte löschen, die keiner Kante zugeordnet sind. So etwas trat in alten Modellen
+        // Alle Knickpunkte löschen, die keiner Edge zugeordnet sind. So etwas trat in alten Modellen
         // auf und sollte gleich am Anfang ausgeschlossen werden
         List<GraphDocument> allDocs = Lists.newArrayList(gdcoll.getSzenarios());
         allDocs.add(mainDoc);
@@ -227,9 +227,9 @@ public class ModelCleaner {
 
         // Alle inkonsistenten Kanten löschen = alle Kanten, denen Start- oder Endelement fehlen
         // oder die dieselben Elemente mehrfach verbinden, obwohl sie nur 1 mal verbunden sein sollten
-        List<ModelElement> edges = mainDoc.getModelItems(Kante.class, true);
+        List<ModelElement> edges = mainDoc.getModelItems(Edge.class, true);
         for (int i = 0; i < edges.size(); i++) {
-            Kante edge = (Kante) edges.get(i);
+            Edge edge = (Edge) edges.get(i);
             // Kanten mit fehlendem Start- und Endelement löschen
             if (edge.getStart() == null || edge.getEnd() == null) {
                 gdcoll.deleteElement(edge, mainDoc, pid);
@@ -240,7 +240,7 @@ public class ModelCleaner {
             if (ModelConstants.isMultipleEdgeClass(edge.getClass())) {
                 continue;
             }
-            for (Kante edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {
+            for (Edge edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {
                 if (edge != edge2) {
                     gdcoll.deleteElement(edge2, mainDoc, pid);
                     // edge2 befindet sich auf jeden Fall hinter edge in der Liste edges, sonst wäre
@@ -266,7 +266,7 @@ public class ModelCleaner {
                 }
                 for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
                     EdgeContainer kc = lc.getEdgeContainer(j);
-                    Kante edge = kc.getEdge();
+                    Edge edge = kc.getEdge();
                     if (edge == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
                         gdcoll.removeContainerFromSubmodel(kc, pid);
                         continue;
@@ -346,7 +346,7 @@ public class ModelCleaner {
         // Alle initial vorhandenen untergeordneten Elemente erzeugen, die nicht mehr da sind.
         // Diese kann man nicht von Hand neu erzeugen
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_NODES_SET) {
-            Set<Class<? extends Kante>> subTypeEdges = ModelConstants.getInitialSubtypes(elementClass);
+            Set<Class<? extends Edge>> subTypeEdges = ModelConstants.getInitialSubtypes(elementClass);
             if (subTypeEdges == null || subTypeEdges.size() == 0) {
                 continue;
             }
@@ -546,7 +546,7 @@ public class ModelCleaner {
         newAufOrg.setDescription(aufOrg.getDescription());
 
         // für alle Kanten der aktuellen AufOrgKombination
-        for (Kante kante : aufOrg.getEdges()) {
+        for (Edge kante : aufOrg.getEdges()) {
             // bestimme das Element, mit dem die aktuelle AufOrgKombination verbunden ist
             ModelElement elemToConnect;
             if (kante.getStart() == aufOrg) {
@@ -563,7 +563,7 @@ public class ModelCleaner {
                 newKonfig.setDescription(elemToConnect.getDescription());
                 // Alle Verbindungen der Konfiguration auch klonen (außer die zur Originalen
                 // AufOrgKombination)
-                for (Kante edge : elemToConnect.getEdges()) {
+                for (Edge edge : elemToConnect.getEdges()) {
                     if (!(edge instanceof AwbkAufOrgVerbindung)) {
                         ModelElement etc;
                         if (edge.getStart() == elemToConnect) {
@@ -604,7 +604,7 @@ public class ModelCleaner {
     // newAufOrg.setDescription(aufOrg.getDescription());
     //
     // //für alle Kanten der aktuellen AufOrgKombination
-    // for (Kante kante : aufOrg.getEdges()) {
+    // for (Edge kante : aufOrg.getEdges()) {
     // //bestimme das Element, mit dem die aktuelle AufOrgKombination verbunden ist
     // ModelElement elemToConnect;
     // if (kante.getStart()==aufOrg)
@@ -620,7 +620,7 @@ public class ModelCleaner {
     // newKonfig.setDescription(elemToConnect.getDescription());
     // //Alle Verbindungen der Konfiguration auch klonen (außer die zur Originalen
     // AufOrgKombination)
-    // for (Kante edge : elemToConnect.getEdges()) {
+    // for (Edge edge : elemToConnect.getEdges()) {
     // if (!(edge instanceof AwbkAufOrgVerbindung)) {
     // ModelElement etc;
     // if (edge.getStart()==elemToConnect)

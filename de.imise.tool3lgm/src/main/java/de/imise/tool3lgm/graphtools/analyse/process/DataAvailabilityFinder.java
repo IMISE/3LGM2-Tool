@@ -3,9 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.process;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.Set;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -290,7 +290,7 @@ public class DataAvailabilityFinder {
         Iterable<ModelElement> readUpdateEdges = doc.getModelItems(AufObjVerbindung.class);
 
         for (ModelElement me : readUpdateEdges) {
-            Kante edge = (Kante) me;
+            Edge edge = (Edge) me;
             // bei allen Interprtiert-Bezeihungen
             Aufgabe auf = null;
             Objekttyp ot = null;
@@ -301,7 +301,7 @@ public class DataAvailabilityFinder {
                 auf = (Aufgabe) edge.getEnd();
                 ot = (Objekttyp) edge.getStart();
             }
-            // wenn es keine Interpretiert-Beziehung war -> nächste Kante
+            // wenn es keine Interpretiert-Beziehung war -> nächste Edge
             if (auf == null) {
                 continue;
             }
@@ -357,7 +357,7 @@ public class DataAvailabilityFinder {
         outputDialog.appendln("##############################################################");
 
         for (ModelElement me : readUpdateEdges) {
-            Kante edge = (Kante) me;
+            Edge edge = (Edge) me;
             // bei allen Interprtiert-Bezeihungen
             Aufgabe auf = null;
             Objekttyp ot = null;
@@ -368,7 +368,7 @@ public class DataAvailabilityFinder {
                 auf = (Aufgabe) edge.getEnd();
                 ot = (Objekttyp) edge.getStart();
             }
-            // wenn es keine Bearbeitet-Beziehung war -> nächste Kante
+            // wenn es keine Bearbeitet-Beziehung war -> nächste Edge
             if (auf == null) {
                 continue;
             }

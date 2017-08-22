@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -49,7 +49,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     protected Map<String, String> hashCodes;
 
     /** Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei copyAndPaste) */
-    protected List<Kante> kanten;
+    protected List<Edge> kanten;
 
     /** KantenContainer deren computeBorderPoints()-Methode aufgerufen werden muss */
     protected List<EdgeContainer> kantenContainer;
@@ -194,8 +194,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 if (element != null) {
                     if (copyAndPaste > 0) {
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
-                        if (element instanceof Kante) {
-                            kanten.add((Kante) element);
+                        if (element instanceof Edge) {
+                            kanten.add((Edge) element);
                         }
                     } else {
                         element.setHashString(atts.getValue("hash"));
@@ -584,9 +584,9 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-                /* die HashStrings für das Start- bzw. End-Objekt einer Kante auflösen und die wirklichen Knoten setzten */
+                /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Knoten setzten */
                 if (copyAndPaste > 0) {
-                    Kante kante;
+                    Edge kante;
                     for (int i = 0; i < kanten.size(); i++) {
                         kante = kanten.get(i);
                         kante.putXMLFieldString("start", hashCodes.get(kante.getStartHash()));

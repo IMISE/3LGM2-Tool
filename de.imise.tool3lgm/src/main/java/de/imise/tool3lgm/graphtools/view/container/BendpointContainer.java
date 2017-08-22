@@ -61,8 +61,8 @@ public class BendpointContainer extends NodeContainer {
     }
 
     /**
-     * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es der erste Knickpunkt dieser Kante, dann kommt der Startpunkt der
-     * Kante zurück.
+     * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es der erste Knickpunkt dieser Edge, dann kommt der Startpunkt der
+     * Edge zurück.
      *
      * @param bc
      * @return
@@ -72,8 +72,8 @@ public class BendpointContainer extends NodeContainer {
     }
 
     /**
-     * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es der erste Knickpunkt dieser Kante, dann kommt der Startpunkt der
-     * Kante zurück.
+     * Liefert den Punkt, an dem sich der Knickpunkt vor diesem befindet. Ist es der erste Knickpunkt dieser Edge, dann kommt der Startpunkt der
+     * Edge zurück.
      *
      * @param bc
      * @return
@@ -92,8 +92,8 @@ public class BendpointContainer extends NodeContainer {
     }
 
     /**
-     * Liefert den Punkt, an dem sich der Knickpunkt nach diesem befindet. Ist es der letzte Knickpunkt dieser Kante, dann kommt der Endpunkt der
-     * Kante zurück.
+     * Liefert den Punkt, an dem sich der Knickpunkt nach diesem befindet. Ist es der letzte Knickpunkt dieser Edge, dann kommt der Endpunkt der
+     * Edge zurück.
      *
      * @param bc
      * @return

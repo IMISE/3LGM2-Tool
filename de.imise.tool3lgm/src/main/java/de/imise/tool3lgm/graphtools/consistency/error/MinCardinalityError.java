@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
@@ -19,7 +19,7 @@ public class MinCardinalityError extends AbstractCardinalityError {
      * @param cardValue
      * @param gdcoll
      */
-    public MinCardinalityError(final ModelElement me, final Class<? extends Kante> edgeClass, final GDCollection gdcoll, final int cardValue) {
+    public MinCardinalityError(final ModelElement me, final Class<? extends Edge> edgeClass, final GDCollection gdcoll, final int cardValue) {
         super(me, edgeClass, gdcoll, cardValue);
     }
 

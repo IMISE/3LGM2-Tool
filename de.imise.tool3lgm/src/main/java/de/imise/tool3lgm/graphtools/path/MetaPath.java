@@ -3,13 +3,13 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartOrEndClass;
 
 import java.awt.Color;
 import java.util.Arrays;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
@@ -29,7 +29,7 @@ public class MetaPath {
      * Index 1: Index der Metapfade<br>
      * Index 2: Index der Metapfadschritte (Assoziationstypen) im Metpfad
      */
-    private Class<? extends Kante>[][] associations;
+    private Class<? extends Edge>[][] associations;
 
     /**
      * COMMENTME
@@ -71,7 +71,7 @@ public class MetaPath {
      * @param associations EdgeClasses for this path
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>... associations) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         this(startClass, endClass, getPathForAssociations(associations), defaultColor, defaultDescritpion);
     }
 
@@ -82,7 +82,7 @@ public class MetaPath {
      *            end)
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path) {
         this(startClass, endClass, path, defaultColor, defaultDescritpion);
     }
 
@@ -94,7 +94,7 @@ public class MetaPath {
      * @param description String with description for associations (in legend)
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final String description) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String description) {
         this(startClass, endClass, path, description, false);
     }
 
@@ -108,7 +108,7 @@ public class MetaPath {
      *            function reads objecttype )
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final String description, final boolean directional) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String description, final boolean directional) {
         this(startClass, endClass, path, defaultColor, new String[1], -1, directional);
         this.description[0] = description;
     }
@@ -122,7 +122,7 @@ public class MetaPath {
      * @param description String with description for associations (in legend)
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color color, final String description) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String description) {
         this(startClass, endClass, path, new Color[1], new String[1]);
         this.description[0] = description;
         this.color[0] = color;
@@ -137,7 +137,7 @@ public class MetaPath {
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color[] color, final String[] description) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color[] color, final String[] description) {
         this(startClass, endClass, path, color, description, -1, false);
     }
 
@@ -153,7 +153,7 @@ public class MetaPath {
      *            function reads objecttype )
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Kante>[][] path, final Color[] color, final String[] description, final int control, final boolean directional) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color[] color, final String[] description, final int control, final boolean directional) {
         this.directional = directional;
         this.startClass = startClass;
         this.endClass = endClass;
@@ -178,7 +178,7 @@ public class MetaPath {
     private final void ensureAssociationOrder() {
         boolean switchAssociations = false;
         for (int ep = 0; ep < countPathes(); ep++) {
-            Class<? extends Kante>[] edgeClasses = getEdgeClasses(ep);
+            Class<? extends Edge>[] edgeClasses = getEdgeClasses(ep);
             int lastIndex = edgeClasses.length - 1;
             if (isStartOrEndClass(edgeClasses[0], startClass) && isStartOrEndClass(edgeClasses[lastIndex], endClass)) {
                 return;
@@ -194,10 +194,10 @@ public class MetaPath {
         }
 
         @SuppressWarnings("unchecked")
-        Class<? extends Kante>[][] path = new Class[countPathes()][getEdgeClasses(0).length];
+        Class<? extends Edge>[][] path = new Class[countPathes()][getEdgeClasses(0).length];
         //von allen Assoziationslisten alle Assoziationen umdrehen
         for (int ep = 0; ep < countPathes(); ep++) {
-            Class<? extends Kante>[] edgeClasses = getEdgeClasses(ep);
+            Class<? extends Edge>[] edgeClasses = getEdgeClasses(ep);
             int lastIndex = edgeClasses.length - 1;
             for (int i = 0; i < edgeClasses.length; i++) {
                 path[ep][lastIndex - i] = edgeClasses[i];
@@ -209,16 +209,16 @@ public class MetaPath {
     /**
      * @param edgeClass
      * @return /
-     *         @SuppressWarnings("unchecked") private static final Class<? extends Kante>[][] getPathForAssociation(Class<? extends Kante> edgeClass){
+     *         @SuppressWarnings("unchecked") private static final Class<? extends Edge>[][] getPathForAssociation(Class<? extends Edge> edgeClass){
      *         Class<?
-     *         extends Kante>[][] associations = new Class[1][1]; associations[0][0] = edgeClass; return associations;
+     *         extends Edge>[][] associations = new Class[1][1]; associations[0][0] = edgeClass; return associations;
      *         } /**
      * @param edgeClass
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static final Class<? extends Kante>[][] getPathForAssociations(final Class<? extends Kante>... edgeClasses) {
-        Class<? extends Kante>[][] associations = new Class[1][edgeClasses.length];
+    public static final Class<? extends Edge>[][] getPathForAssociations(final Class<? extends Edge>... edgeClasses) {
+        Class<? extends Edge>[][] associations = new Class[1][edgeClasses.length];
         for (int i = 0; i < edgeClasses.length; i++) {
             associations[0][i] = edgeClasses[i];
         }
@@ -297,7 +297,7 @@ public class MetaPath {
     /**
      * Liefert die Klasse des Endelementtyps dieses Pfades im ersten ElementarMetaPath
      *
-     * @param edgeIndex Index der Kante im Elementarpfad, dessen Endklasse ermittelt werden soll
+     * @param edgeIndex Index der Edge im Elementarpfad, dessen Endklasse ermittelt werden soll
      * @return Elementklasse, bei der der Pfadteil endet
      */
     public final Class<? extends ModelElement> getEndClass(final int edgeIndex) {
@@ -308,12 +308,12 @@ public class MetaPath {
      * Liefert die Klasse des Endelementtyps dieses Pfades
      *
      * @param elementarPathIndex Index des Elementarpfades, dessen Endklasse ermittelt werden soll
-     * @param edgeIndex Index der Kante im Elementarpfad, dessen Endklasse ermittelt werden soll
+     * @param edgeIndex Index der Edge im Elementarpfad, dessen Endklasse ermittelt werden soll
      * @return Elementklasse, bei der der Pfadteil endet
      */
     public final Class<? extends ModelElement> getEndClass(final int elementarPathIndex, final int edgeIndex) {
-        Class<? extends Kante>[] currentElementarPath = associations[elementarPathIndex];
-        Class<? extends Kante> currentEdgeClass = currentElementarPath[0];
+        Class<? extends Edge>[] currentElementarPath = associations[elementarPathIndex];
+        Class<? extends Edge> currentEdgeClass = currentElementarPath[0];
         Class<? extends ModelElement> currentElementClass = startClass;
         Class<? extends ModelElement> foundEndClass = getOther(currentEdgeClass, currentElementClass);
         for (int i = 1; i <= edgeIndex; i++) {
@@ -338,7 +338,7 @@ public class MetaPath {
      *
      * @return IDs der Assoziationstypen des Pfades an Position <code>pathIndex</code>
      */
-    public final Class<? extends Kante>[] getEdgeClasses() {
+    public final Class<? extends Edge>[] getEdgeClasses() {
         return associations[0];
     }
 
@@ -348,7 +348,7 @@ public class MetaPath {
      * @param pathIndex Index des Pfadschrittes
      * @return IDs der Assoziationstypen des Pfades an Position <code>pathIndex</code>
      */
-    public final Class<? extends Kante>[] getEdgeClasses(final int pathIndex) {
+    public final Class<? extends Edge>[] getEdgeClasses(final int pathIndex) {
         return associations[pathIndex];
     }
 

@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 
 public enum GDCommands {
@@ -135,7 +135,7 @@ public enum GDCommands {
     public static final String INVALID_DESCRIPTION = "";
     public static final int INVALID_BENDPOINT_INDEX = -1;
     public static final int INVALID_EDGE_INDEX = -1;
-    public static final Class<? extends Kante> INVALID_EDGE_CLASS = null;
+    public static final Class<? extends Edge> INVALID_EDGE_CLASS = null;
     public static final String INVALID_EDGE_CLASS_NAME = "";
 
     @Override

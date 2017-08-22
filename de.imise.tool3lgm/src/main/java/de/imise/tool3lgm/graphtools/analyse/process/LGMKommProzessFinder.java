@@ -7,7 +7,7 @@ package de.imise.tool3lgm.graphtools.analyse.process;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
@@ -87,16 +87,16 @@ public class LGMKommProzessFinder {
             // durchlaufen werden) und
             // Medienbrüche mitzählen
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            List<Kante> kantenList = new ArrayList<Kante>();
+            List<Edge> kantenList = new ArrayList<Edge>();
             List<ModelElement> kommProzessSchnittstellen = step.getKommProzessSchnittstellen();
             int count = kommProzessSchnittstellen.size() - 1;
 
             // diese Medeinbruchberechnung ist nicht mehr aktuell
             // ->Medienwechsel liegt vor:
-            // - bei Wechsel von einer Kante, die einen NT übterträgt auf eine Kante, die einen DT
+            // - bei Wechsel von einer Edge, die einen NT übterträgt auf eine Edge, die einen DT
             // überträgt und umgekehrt
-            // - immer bei einer Kante die sowohl NT als auch DT überträgt
-            // - immer nach einer Kante, die sowohl einen NT als auch einen DT überträgt
+            // - immer bei einer Edge die sowohl NT als auch DT überträgt
+            // - immer nach einer Edge, die sowohl einen NT als auch einen DT überträgt
 
             // speichern, ob die zuletzt übertragene ETNT-Kombination einen Nachrichtentyp und/oder
             // einen Dokumententyp transprotierte
@@ -117,17 +117,17 @@ public class LGMKommProzessFinder {
                 // System.out.println(me1 + "\t"+
                 // me1.getConnectionWith(me2,ModelConstants.BSS_BSS_VERBINDUNG, -1).length + "\t" +
                 // me2);
-                // hole die Kante zw. den beiden Schnittstellen
-                List<Kante> ol = me1.getEdgesWith(me2, KommBeziehung.class);
+                // hole die Edge zw. den beiden Schnittstellen
+                List<Edge> ol = me1.getEdgesWith(me2, KommBeziehung.class);
 
-                // zw. den Schnittstellen muss es keine Kante geben, wenn sie auf dem selben
+                // zw. den Schnittstellen muss es keine Edge geben, wenn sie auf dem selben
                 // Baustein liegen
                 if (ol.size() < 1) {
                     continue;
                 }
 
                 // zw. 2 Schnittstellen kann es max. eine BSS_BSS_VERBINDUNG geben
-                // Kante zur Liste der im Prozessschritt durchlaufenen Kanten hinzufügen
+                // Edge zur Liste der im Prozessschritt durchlaufenen Kanten hinzufügen
                 kantenList.add(ol.get(0));
 
                 // neue Berechnung der Medienbrüche (AXS: 20.10.05)

@@ -13,7 +13,7 @@ import javax.swing.border.Border;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -99,19 +99,19 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         }
     }
 
-    public void addDescriptedSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addDescriptedSingleConnectionPanel(false, edgeClasses);
     }
 
-    public void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
     }
 
-    public void addSingleConnectionPanel(final Class<? extends Kante>... edgeClasses) {
+    public void addSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addSingleConnectionPanel(false, edgeClasses);
     }
 
-    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
     }
 

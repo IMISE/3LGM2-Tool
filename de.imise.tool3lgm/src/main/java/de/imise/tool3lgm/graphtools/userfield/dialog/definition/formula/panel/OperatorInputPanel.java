@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullBackwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
@@ -17,7 +17,7 @@ import java.util.HashSet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -147,7 +147,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         // (also nicht grade angelegt wurde)
         boolean found = false;
         //wird true, wenn die Elementklasse, für die das aktuelle UserField definiert wird, zuweisungskompatibel
-        //zu einer der Zielklassen der ausgewählten Kante ist -> das aktuelle Userfield muss sebst in der Auswahlliste
+        //zu einer der Zielklassen der ausgewählten Edge ist -> das aktuelle Userfield muss sebst in der Auswahlliste
         //erscheinen
         boolean assignableClass = false;
         if (elementClass.isAssignableFrom(userField.getTargetClass())) {
@@ -234,15 +234,15 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         associationBox.removeAllItems();
         //Die Assoziationen zur Box hinzufügenen, bei denen die Startklasse
         // gleich der Element-Klasse ist
-        Class<? extends Kante>[] edgeClasses = getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
+        Class<? extends Edge>[] edgeClasses = getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
 
         for (int i = 0; i < edgeClasses.length; i++) {
-            Class<? extends Kante> tmpEdgeClass = edgeClasses[i];
+            Class<? extends Edge> tmpEdgeClass = edgeClasses[i];
             Class<? extends ModelElement> startClass = getStartClass(tmpEdgeClass);
             Class<? extends ModelElement> endClass = getEndClass(tmpEdgeClass);
 
             //prüfen, ob die Start- und Endklassen gleich ist ->
-            //wenn ja, darf diese Kante nur für Verrechnungen genutzt werden, wenn sie
+            //wenn ja, darf diese Edge nur für Verrechnungen genutzt werden, wenn sie
             //in Vorwärts- und Rückwartsrichtung unterschiedliche Bedeutungen (also eine
             //unterscheidliche Bezeichnung) hat. Bei PartOfBeziehungen sind die Start und
             //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
@@ -284,11 +284,11 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         } else {
             return null;
         }
-        Class<? extends Kante> edgeClass;
+        Class<? extends Edge> edgeClass;
         if (associationBox.getSelectedIndex() < 0) {
             return null;
         }
-        edgeClass = ((Class<? extends Kante>) associationBox.getSelectedObject()).asSubclass(Kante.class);
+        edgeClass = ((Class<? extends Edge>) associationBox.getSelectedObject()).asSubclass(Edge.class);
         //mit Assoziation:
 
         StringBuilder sb = new StringBuilder(vfOperator);
@@ -326,7 +326,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         if (e.getSource() == associationBox) {
-            Class<? extends Kante> edgeClass = (Class<? extends Kante>) associationBox.getSelectedObject();
+            Class<? extends Edge> edgeClass = (Class<? extends Edge>) associationBox.getSelectedObject();
             if (edgeClass == null) {
                 return;
             }

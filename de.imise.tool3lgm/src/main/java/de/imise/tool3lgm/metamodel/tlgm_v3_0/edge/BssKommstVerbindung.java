@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
@@ -12,7 +12,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Kommunikationsstandard;
 /**
  * @author Thomas To change the template for this generated type comment go to Window>Preferences>Java>Code Generation>Code and Comments
  */
-public final class BssKommstVerbindung extends Kante {
+public final class BssKommstVerbindung extends Edge {
 
     //	public static final Class[] stcl = {Bausteinschnittstelle.class};
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;

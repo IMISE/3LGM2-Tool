@@ -1,12 +1,12 @@
 package de.imise.tool3lgm.graphtools.elements;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getBackwardMetaAssociationName;
 
 import java.lang.reflect.Modifier;
@@ -128,23 +128,23 @@ public class MetaModelExporter {
             System.out.println(noc);
             Class<? extends ModelElement> elementClass = noc.getObject().get(0).asSubclass(ModelElement.class);
             if (ModelConstants.isEdgeType(elementClass)) {
-                Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
+                Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 //                String edgeString = getEdgeStringOrg2(edgeClass, ModelElement.class, INDENTION);
                 String edgeString = getEdgeString(edgeClass, INDENTION);
                 System.out.println(edgeString);
             }
-            List<Class<? extends Kante>> edgeClasses = Lists.newArrayList(ModelConstants.getEdgeTypes(elementClass));
+            List<Class<? extends Edge>> edgeClasses = Lists.newArrayList(ModelConstants.getEdgeTypes(elementClass));
             Alphabetical.sort(edgeClasses);
-            List<NamedObjectContainer<Class<? extends Kante>>> edgesStrings = new ArrayList<>();
-            for (Class<? extends Kante> edgeClass : edgeClasses) {
+            List<NamedObjectContainer<Class<? extends Edge>>> edgesStrings = new ArrayList<>();
+            for (Class<? extends Edge> edgeClass : edgeClasses) {
                 if (isDefinedStartOrEndClass(elementClass, edgeClass)) {
-                    //                    NamedObjectContainer<Class<? extends Kante>> nocE = new NamedObjectContainer<Class<? extends Kante>>(edgeClass, getEdgeStringOrg2(edgeClass, elementClass, INDENTION + INDENTION));
-                    NamedObjectContainer<Class<? extends Kante>> nocE = new NamedObjectContainer<>(edgeClass, getEdgeString(edgeClass, INDENTION + INDENTION));
+                    //                    NamedObjectContainer<Class<? extends Edge>> nocE = new NamedObjectContainer<Class<? extends Edge>>(edgeClass, getEdgeStringOrg2(edgeClass, elementClass, INDENTION + INDENTION));
+                    NamedObjectContainer<Class<? extends Edge>> nocE = new NamedObjectContainer<>(edgeClass, getEdgeString(edgeClass, INDENTION + INDENTION));
                     edgesStrings.add(nocE);
                 }
             }
             Alphabetical.sort(edgesStrings);
-            for (NamedObjectContainer<Class<? extends Kante>> nocE : edgesStrings) {
+            for (NamedObjectContainer<Class<? extends Edge>> nocE : edgesStrings) {
                 System.out.println(nocE);
             }
             System.out.println();
@@ -153,14 +153,14 @@ public class MetaModelExporter {
 
     /**
      * Liefert true, wenn die Start- oder Endklasse der übergebenen Kantenklasse genau die übergebene Elementklasse ist. Anders als bei
-     * den statischen Funktionen aus Kante für die Start- und Endklasse werden hier keine Ober- oder Unerklassen der übergebenen Elementklasse
+     * den statischen Funktionen aus Edge für die Start- und Endklasse werden hier keine Ober- oder Unerklassen der übergebenen Elementklasse
      * zugelassen.
      *
      * @param elementClass
      * @param edgeClass
      * @return
      */
-    private static boolean isDefinedStartOrEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    private static boolean isDefinedStartOrEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return getStartClass(edgeClass) == elementClass || getEndClass(edgeClass) == elementClass;
     }
 
@@ -197,7 +197,7 @@ public class MetaModelExporter {
         return classAndSuperClasses.build();
     }
 
-    private static String getEdgeString(final Class<? extends Kante> edgeClass, final String intention) {
+    private static String getEdgeString(final Class<? extends Edge> edgeClass, final String intention) {
         StringBuilder sb = new StringBuilder(intention);
         sb.append(edgeClass.getSimpleName());
         sb.append(": ");
@@ -207,7 +207,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static String getEdgeString(final Class<? extends Kante> edgeClass, final boolean forward) {
+    private static String getEdgeString(final Class<? extends Edge> edgeClass, final boolean forward) {
         StringBuilder sb = new StringBuilder();
         int minEndToStartCardinality = forward ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
         int maxEndToStartCardinality = forward ? getMaxEndToStartCardinality(edgeClass) : getMaxStartToEndCardinality(edgeClass);
@@ -229,7 +229,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static String getEdgeStringOrg2(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
+    private static String getEdgeStringOrg2(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         StringBuilder sb = new StringBuilder();
         boolean forward = isStartClass(edgeClass, readingDirectionStartClass);
@@ -245,7 +245,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static String getEdgeStringOrg(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
+    private static String getEdgeStringOrg(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         int minEndToStartCardinality = getMinEndToStartCardinality(edgeClass);
         int maxEndToStartCardinality = getMaxEndToStartCardinality(edgeClass);

@@ -28,12 +28,12 @@ public class ImportHashConfiguration {
     private final List<String> hashes = new ArrayList<String>();
 
     /**
-     * Mappt von einem Hash einer Kante auf den Hash des Elementes, bei dem die Kante startet
+     * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die Edge startet
      */
     private final HashMap<String, String> edgeHashToStartElementHash = new HashMap<String, String>();
 
     /**
-     * Mappt von einem Hash einer Kante auf den Hash des Elementes, bei dem die Kante endet
+     * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die Edge endet
      */
     private final HashMap<String, String> edgeHashToEndElementHash = new HashMap<String, String>();
 

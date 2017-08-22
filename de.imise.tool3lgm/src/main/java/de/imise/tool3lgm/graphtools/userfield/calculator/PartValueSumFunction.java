@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
@@ -17,7 +17,7 @@ public class PartValueSumFunction {
     /**
      * Errechnet das Ergebnis der Verrechnungsfunktion TEILWERTSUMME. Die Funktion hat 2, 3 oder 4 Argumente. Das erste Argument ist in jedem Fall der
      * Name der Assoziation über den verrechnet wird, das 2. ist immer das <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
-     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Kante über die verrechent wird eine
+     * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Edge über die verrechent wird eine
      * <code>PartOfBeziehung</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
      * immer die Richtung.
      *
@@ -32,7 +32,7 @@ public class PartValueSumFunction {
         TWSumArguments args = new TWSumArguments(twsumFormula, definitions);
 
         //alle verbundenen Elemente mit einem aufzuteilenden Attribut holen
-        List<Kante> connectionsTo = Calculator.getEdges(me, args.elementClass, args.edgeClass, args.direction);
+        List<Edge> connectionsTo = Calculator.getEdges(me, args.elementClass, args.edgeClass, args.direction);
 
         //Wenn keine Elemente verbunden sind
         if (connectionsTo.size() == 0) {
@@ -51,7 +51,7 @@ public class PartValueSumFunction {
         PartValueSumSinglePartResults partResults = definitions.getPartValueSumSinglePartResults();
 
         //jetzt von allen verbundenen den jeweiligen Anteil aufsummieren
-        for (Kante connectionTo : connectionsTo) {
+        for (Edge connectionTo : connectionsTo) {
 
             ModelElement other = connectionTo.getOther(me);
             UserField vgUserField = getReplacer(definitions, other, args.edgeClass, args.vgUserField);
@@ -79,9 +79,9 @@ public class PartValueSumFunction {
         return fullErgString;
     }
 
-    private static String getPartValueSumSingleResult(final ModelElement me, final Kante connectionTo, final UserField vgUserField, final TWSumArguments args, final String backDirection) {
+    private static String getPartValueSumSingleResult(final ModelElement me, final Edge connectionTo, final UserField vgUserField, final TWSumArguments args, final String backDirection) {
 
-        //das Verteilungsgewicht, das an der Kante steht (erstmal Gleichverteilung (also alles 1 annhmen))
+        //das Verteilungsgewicht, das an der Edge steht (erstmal Gleichverteilung (also alles 1 annhmen))
         BigDecimal normalizedVG = BigDecimal.ONE;
         //wenn mit einem explizit angegebenen Verteilungsgewicht gerechnet werden soll
         if (vgUserField != null) {
@@ -100,7 +100,7 @@ public class PartValueSumFunction {
             }
         }
 
-        //das andere Element der Kante holen
+        //das andere Element der Edge holen
         ModelElement connectedElement = connectionTo.getStart();
         if (connectedElement == me) {
             connectedElement = connectionTo.getEnd();
@@ -128,7 +128,7 @@ public class PartValueSumFunction {
         //Alle Kanten vom Element dessen Kennzahlwert aufgeteilt werden
         // soll zu anderen Elementen holen, die von der
         //gleichen Art sind, wie das Element, das den Wert bekommen soll
-        List<Kante> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
+        List<Edge> connectionsFrom = Calculator.getEdges(connectedElement, me.getClass(), args.edgeClass, backDirection);
 
         //wenn mit einer Gleichverteilung gerechnet werden soll, dann
         // braucht man die Kanten nur zu zählen
@@ -136,16 +136,16 @@ public class PartValueSumFunction {
             normalizedVG = Calculator.divide(normalizedVG, new BigDecimal(connectionsFrom.size()));
             //die eingegebenen Verteilungsgweichte müssen normiert werden
         } else {
-            //das Verteilungsgewicht, das an der Kante steht (erstmal
+            //das Verteilungsgewicht, das an der Edge steht (erstmal
             // gleichverteilung (also alles 1 annhmen)
             BigDecimal vgSum = BigDecimal.ZERO;
             //von all diesen Kanten die Verteilungsgewichte aufsummieren
-            // (es gibt mind. eine solche Kante = die der Hinrichtung)
+            // (es gibt mind. eine solche Edge = die der Hinrichtung)
             for (int j = 0; j < connectionsFrom.size(); j++) {
-                Kante connectionFrom = connectionsFrom.get(j);
-                //den Wert des VG der aktuellen Kante holen
+                Edge connectionFrom = connectionsFrom.get(j);
+                //den Wert des VG der aktuellen Edge holen
                 String vgValueString = vgUserField.getValue(connectionFrom);
-                //wenn für eine Kante kein Verteilungsgewicht eingegeben
+                //wenn für eine Edge kein Verteilungsgewicht eingegeben
                 // wurde, wird es als 0 angenommen
                 if (vgValueString.equals(UserField.EMPTY_STRING)) {
                     continue;
@@ -167,7 +167,7 @@ public class PartValueSumFunction {
         return erg.toString();
     }
 
-    private static UserField getReplacer(final UserFieldDefinitions definitions, final ModelElement me, final Class<? extends Kante> edgeClass, final UserField userFieldToReplace) {
+    private static UserField getReplacer(final UserFieldDefinitions definitions, final ModelElement me, final Class<? extends Edge> edgeClass, final UserField userFieldToReplace) {
         UserField field = null;
         WeightReplacer replacer = definitions.getWeightReplacer();
         String modelElementHash = me.getHashString();
@@ -222,7 +222,7 @@ public class PartValueSumFunction {
 
     public static class TWSumArguments {
 
-        public final Class<? extends Kante> edgeClass;
+        public final Class<? extends Edge> edgeClass;
 
         public final UserField kzUserField;
 
@@ -248,7 +248,7 @@ public class PartValueSumFunction {
             }
             //Der erste Token ist der Name der Assoziation, die das VG beherbegrt
             // -> hole die Kantenklasse
-            edgeClass = ModelConstants.getClassForName(token).asSubclass(Kante.class);
+            edgeClass = ModelConstants.getClassForName(token).asSubclass(Edge.class);
 
             String ufHash = st.nextToken();
 

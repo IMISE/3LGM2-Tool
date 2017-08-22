@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 
@@ -31,7 +31,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
      *
      * @param dialog
      */
-    public LGMDragNDropPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Kante>... edgeClasses) {
+    public LGMDragNDropPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
     }
 
@@ -69,14 +69,14 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
     public abstract JTree[] getAllDragNDropTrees();
 
     /**
-     * Gibt die Kante zurück, die man zwischen Elementen der übergebenen Art in diesem Panel neu
+     * Gibt die Edge zurück, die man zwischen Elementen der übergebenen Art in diesem Panel neu
      * erzeugen kann.
      *
      * @param me1
      * @param me2
      * @return
      */
-    public final Class<? extends Kante> getEdgeType(final ModelElement me1, final ModelElement me2) {
+    public final Class<? extends Edge> getEdgeType(final ModelElement me1, final ModelElement me2) {
         return null;
     }
 

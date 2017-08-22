@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -409,7 +409,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
      * @param edgeClass Kantenklasse über die die einfache Teilwertsummenformel rechnnetr
      * @return
      */
-    public List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public List<UserField> getFractionValueSumUserFields(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         List<UserField> userFieldList = getUserFields(elementClass, UserField.Style.CLASSIFICATION_NUMBER_FORMULA);
         for (int i = userFieldList.size() - 1; i >= 0; i--) {
             UserField userField = userFieldList.get(i);

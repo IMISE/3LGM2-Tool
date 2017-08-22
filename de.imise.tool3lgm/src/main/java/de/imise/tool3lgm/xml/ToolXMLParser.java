@@ -177,29 +177,29 @@ public class ToolXMLParser {
         // 				ArrayList connections = mainDoc.getAllModelElements(ModelConstants.ALL_TRACES[i]);
         // 	 			//für jede dieser Kanten
         // 				for (Iterator tracesIt=connections.iterator(); tracesIt.hasNext();){
-        // 	 				Kante trace = (Kante)tracesIt.next();
+        // 	 				Edge trace = (Edge)tracesIt.next();
         // 	 				String elemToDeleteHash = null;
         // 					Object[][] typesAndCardinality = null;
         // 					ModelElement me = null;
         // 	 				//wenn der Hashstring des nicht mehr unterstützten Elementes dem StartHash
-        // 					//der Kante entspricht
+        // 					//der Edge entspricht
         // 					if (trace.getStartHash().equals(deprecatedElementHash)){
-        // 	 					//hole das Endelement der Kante und die Kardinalitäten
+        // 	 					//hole das Endelement der Edge und die Kardinalitäten
         // 						me = mainDoc.findElementCoded(trace.getEndHash());
         // 	 					typesAndCardinality = trace.getStartTypesAndCardinality();
         // 	 	 				//wenn der Hashstring des nicht mehr unterstützten Elementes dem EndHash
-        // 	 					//der Kante entspricht
+        // 	 					//der Edge entspricht
         // 	 				}else if (trace.getEndHash().equals(deprecatedElementHash)){
-        // 	 					//hole das Startelement der Kante und die Kardinalitäten
+        // 	 					//hole das Startelement der Edge und die Kardinalitäten
         // 	 					me = mainDoc.findElementCoded(trace.getStartHash());
         // 	 					typesAndCardinality = trace.getEndTypesAndCardinality();
         // 	 				}
-        // 	 				//entferne die Kante
+        // 	 				//entferne die Edge
         // 					mainDoc.removeTrace(trace, TransactionManager.STANDARD_PID);
-        // 					//wenn das andere Element der Kante auch nicht richtig instanziiert war -> nächste Kante
+        // 					//wenn das andere Element der Edge auch nicht richtig instanziiert war -> nächste Edge
         // 					if (me==null)
         // 						continue;
-        // 					//wenn beim anderen Element der Kante die minimale Kardinalität größer 0 ist (wenn
+        // 					//wenn beim anderen Element der Edge die minimale Kardinalität größer 0 ist (wenn
         // 					//es also dem nicht mehr unterstützten Element untergeordnet ist (z.B. Datenbanken
         // 					//waren gemischten Anwendungsbausteinen untergeordnet -> gemischte Anwendungsbausteine
         // 					//gibt es nicht mehr -> Datenbanken von solchen nicht mehr untertsützten gemischten
@@ -210,7 +210,7 @@ public class ToolXMLParser {
         // 	 	 					if (((Integer)typesAndCardinality[o][1]).intValue()>0)
         // 	 	 	 	 				elemToDeleteHash = trace.getEndHash();
         // 	 				}
-        // 	 				//das andere Element der Kante muss auch gelöscht werden
+        // 	 				//das andere Element der Edge muss auch gelöscht werden
         // 					if (elemToDeleteHash!=null){
         // 	 					mainDoc.remove(elemToDeleteHash, TransactionManager.STANDARD_PID);
         // 	 					//merke es als bereits gelöscht, falls es selbst auch ein nicht mehr

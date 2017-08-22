@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 
@@ -17,7 +17,7 @@ public class ErrorSolution {
      * Assoziationsklasse, deren Anzahl für Elemente der <code>targetClass</code> nicht korrekt sein
      * kann.
      */
-    private final Class<? extends Kante> edgeClass;
+    private final Class<? extends Edge> edgeClass;
 
     /**
      * Pfad ausgehend vom targetElement des Fehlers hin zu den Element(en), in dessen
@@ -50,7 +50,7 @@ public class ErrorSolution {
      * @param panelClass
      * @param panelNameResKey
      */
-    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Kante> edgeClass, final MetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
+    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
         super();
         this.targetClass = targetClass;
         this.edgeClass = edgeClass;
@@ -65,19 +65,19 @@ public class ErrorSolution {
      * @param panelClass
      * @param panelNameResKey
      * @param edgeClassToPanelElement / public ErrorSolution(Class<? extends ModelElement>
-     *            targetClass, Class<? extends Kante> edgeClass, Class<? extends ElementDialogPanel>
-     *            panelClass, String panelNameResKey, Class<? extends Kante>
+     *            targetClass, Class<? extends Edge> edgeClass, Class<? extends ElementDialogPanel>
+     *            panelClass, String panelNameResKey, Class<? extends Edge>
      *            edgeClassToPanelElement, int i){ this(targetClass, edgeClass, (MetaPath)null,
      *            panelClass, panelNameResKey); if (edgeClassToPanelElement!=null) try {
      *            pathToPropertyDialogElement = new MetaPath(targetClass,
-     *            Kante.getOther(edgeClassToPanelElement, targetClass), edgeClassToPanelElement); }
+     *            Edge.getOther(edgeClassToPanelElement, targetClass), edgeClassToPanelElement); }
      *            catch (Exception e) { e.printStackTrace(); } } /**
      * @param targetClass
      * @param edgeClass
      * @param panelClass
      * @param panelNameResKey
      */
-    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Kante> edgeClass, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
+    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
         this(targetClass, edgeClass, (MetaPath) null, panelClass, panelNameResKey);
     }
 
@@ -91,7 +91,7 @@ public class ErrorSolution {
     /**
      * @return the edgeClass
      */
-    public Class<? extends Kante> getEdgeClass() {
+    public Class<? extends Edge> getEdgeClass() {
         return edgeClass;
     }
 

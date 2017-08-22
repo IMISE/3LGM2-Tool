@@ -3,11 +3,11 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.NOTCONNECTED;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.NOTCONNECTED;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartOrEndClass;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -137,11 +137,11 @@ public final class PathFinder {
     //    public static final MetaPath getDirectedMetaPath(Class<? extends ModelElement> startClass, Class<? extends ModelElement> endClass, MetaPath metaPath) {
     //		boolean switchAssociations = false;
     //		for (int ep = 0 ; ep<metaPath.countPathes(); ep++){
-    //			Class<? extends Kante>[] edgeClasses = metaPath.getEdgeClasses(ep);
+    //			Class<? extends Edge>[] edgeClasses = metaPath.getEdgeClasses(ep);
     //			int lastIndex = edgeClasses.length-1;
-    //			if (Kante.isStartOrEndClass(edgeClasses[0], startClass) && Kante.isStartOrEndClass(edgeClasses[lastIndex], endClass))
+    //			if (Edge.isStartOrEndClass(edgeClasses[0], startClass) && Edge.isStartOrEndClass(edgeClasses[lastIndex], endClass))
     //				return metaPath;
-    //			if (Kante.isStartOrEndClass(edgeClasses[0], endClass) && Kante.isStartOrEndClass(edgeClasses[lastIndex], startClass))
+    //			if (Edge.isStartOrEndClass(edgeClasses[0], endClass) && Edge.isStartOrEndClass(edgeClasses[lastIndex], startClass))
     //				switchAssociations = true;
     //		}
     //		//wenn switchAssociations immer noch false ist und er bis hier gekommen ist, dann passt der MetaPath gar
@@ -150,10 +150,10 @@ public final class PathFinder {
     //			return null;
     //
     //		@SuppressWarnings("unchecked")
-    //		Class<? extends Kante>[][] path = new Class[metaPath.countPathes()][metaPath.getEdgeClasses(0).length];
+    //		Class<? extends Edge>[][] path = new Class[metaPath.countPathes()][metaPath.getEdgeClasses(0).length];
     //		//von allen Assoziationslisten alle Assoziationen umdrehen
     //		for (int ep = 0 ; ep<metaPath.countPathes(); ep++){
-    //			Class<? extends Kante>[] edgeClasses = metaPath.getEdgeClasses(ep);
+    //			Class<? extends Edge>[] edgeClasses = metaPath.getEdgeClasses(ep);
     //			int lastIndex = edgeClasses.length-1;
     //			for (int i=0; i<edgeClasses.length; i++){
     //				path[ep][lastIndex-i] = edgeClasses[i];

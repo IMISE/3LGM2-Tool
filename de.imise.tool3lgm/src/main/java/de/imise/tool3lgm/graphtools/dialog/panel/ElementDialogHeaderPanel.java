@@ -1,10 +1,10 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingSameElementClasses;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingSameElementClasses;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getMetaAssociationName;
 import static de.imise.util.HashStringGenerator.getCreationTimeMedium;
@@ -16,7 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -123,9 +123,9 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
                 submodelLabel.setVisible(true);
                 submodelLabel.setText(vdoc != null ? "<html>" + vdoc.getTitle() + "</html>" : "----------");
             }
-        } else if (me instanceof Kante) {
-            Kante edge = (Kante) me;
-            Class<? extends Kante> edgeClass = edge.getClass();
+        } else if (me instanceof Edge) {
+            Edge edge = (Edge) me;
+            Class<? extends Edge> edgeClass = edge.getClass();
 
             String startElementClassName = getDisplayableName(getStartClass(edgeClass));
             String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + getMetaAssociationName(edgeClass, false, DOUBLE) + "</i>&nbsp;&nbsp;";

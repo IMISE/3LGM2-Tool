@@ -4,12 +4,12 @@ import static de.imise.tool3lgm.Static.getCollections;
 import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES;
@@ -84,7 +84,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -674,7 +674,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             List<NamedObjectContainer<JMenuItem>> disconnectableItems = Lists.newArrayList();
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
-                for (Class<? extends Kante> edgeClass : getEdgeTypes(lastSelectedClass, me2Class)) {
+                for (Class<? extends Edge> edgeClass : getEdgeTypes(lastSelectedClass, me2Class)) {
                     if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                             String label = getForwardMetaAssociationName(edgeClass, false, true);
@@ -814,7 +814,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                         }
-                    } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
+                    } else /* if (Edge.isConnecting(edgeClass, me1Class, me2Class)) */ {
                         String label = isStartClass(edgeClass, lastSelectedClass) ? getForwardMetaAssociationName(edgeClass, false, true) : getBackwardMetaAssociationName(edgeClass, false, true);
                         String toolTip = isStartClass(edgeClass, lastSelectedClass) ? getFullForwardMetaAssociationName(edgeClass) : getFullBackwardMetaAssociationName(edgeClass);
                         boolean connectable = false;
@@ -1348,8 +1348,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         }
 
         if (elementGetroffen) {
-            //wenn man auf einer selektierten Kante das Kontexmenü auf einem Knickpunkt öffnet,
-            //dann soll das Kontextmenü aufgehen, als wäre die Kante angeklickt worden und nicht
+            //wenn man auf einer selektierten Edge das Kontexmenü auf einem Knickpunkt öffnet,
+            //dann soll das Kontextmenü aufgehen, als wäre die Edge angeklickt worden und nicht
             //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
             //anzeigen würde
             if (mc instanceof BendpointContainer) {

@@ -363,7 +363,7 @@ public class DataImportModule {
     //
     //                    try {
     //                        if (recvBss != null && sendBss != null) {
-    //                            ArrayList<Kante> connections = recvBss.getEdgesWith(sendBss);
+    //                            ArrayList<Edge> connections = recvBss.getEdgesWith(sendBss);
     //                            if (connections.size() > 0 && kommBez != null) {
     //                                if (!kommBezExtID.equals(connections.get(0).getExternalID("extID_kommBez"))) {
     //                                    continue;
@@ -457,7 +457,7 @@ public class DataImportModule {
     //                        @SuppressWarnings("unused")
     //                        KommbezEtntVerbindung v = null;
     //                        if (/* kommBez != null && */etnt != null) {
-    //                            ArrayList<Kante> connections = kommBez.getEdgesWith(etnt);
+    //                            ArrayList<Edge> connections = kommBez.getEdgesWith(etnt);
     //                            if (connections.size() > 0) {
     //                                vHashString = connections.get(0).getHashString();
     //                            }

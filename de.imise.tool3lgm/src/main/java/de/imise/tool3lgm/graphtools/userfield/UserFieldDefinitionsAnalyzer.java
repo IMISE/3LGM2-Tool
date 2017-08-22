@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield;
 
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 
 public class UserFieldDefinitionsAnalyzer {
@@ -55,7 +55,7 @@ public class UserFieldDefinitionsAnalyzer {
     public boolean hasDistributionWeights() {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
         for (Class<? extends UserFieldTarget> userFieldTarget : userFieldTargets) {
-            if (Kante.class.isAssignableFrom(userFieldTarget)) {
+            if (Edge.class.isAssignableFrom(userFieldTarget)) {
                 Iterable<UserField> userFields = definitions.getUserFields(userFieldTarget);
                 for (UserField userField : userFields) {
                     if (userField.hasClassfificationStyle()) {

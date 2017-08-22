@@ -7,7 +7,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -20,7 +20,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         super(doc);
     }
 
-    public WeightReplaceTableModel(final GraphDocument doc, final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public WeightReplaceTableModel(final GraphDocument doc, final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         super(doc);
         setData(elementClass, edgeClass);
     }
@@ -31,7 +31,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
      * @param elementClass
      * @param edgeClass
      */
-    public void setData(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
+    public void setData(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         //Elementklassen in den Zeilen
         List<ModelElement> allRowElements = doc.getModelItems(elementClass, false, true);
         //Alle KennzahluserFields in den Spalten

@@ -8,7 +8,7 @@ import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwar
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -34,7 +34,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         }
         addSeparator(true);
         //alle Kantenklassen jeweils mit hin und Rückrichtung
-        for (Class<? extends Kante> edgeClass : ALL_EDGES) {
+        for (Class<? extends Edge> edgeClass : ALL_EDGES) {
             addItem(edgeClass, getFullForwardMetaAssociationName(edgeClass));
             addItem(edgeClass, getFullBackwardMetaAssociationName(edgeClass));
         }

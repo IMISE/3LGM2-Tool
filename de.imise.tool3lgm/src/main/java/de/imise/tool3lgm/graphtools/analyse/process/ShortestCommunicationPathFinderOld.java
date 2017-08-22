@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.process;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.analyse.context.ModelAnalyzerCache;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -458,7 +458,7 @@ public class ShortestCommunicationPathFinderOld {
         // für jede Kommunikationsbeziehung = Kanten von einer Bss zu einer Bss (das sind alles
         // Doppelkanten)
         for (int r = 0; r < communicationLinks.size(); r++) {
-            Kante commLink = (Kante) communicationLinks.get(r);
+            Edge commLink = (Edge) communicationLinks.get(r);
 
             int[] directions = {
                     FORWARD,

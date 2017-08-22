@@ -10,7 +10,7 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -32,17 +32,17 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
-    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, edgeClasses);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
-     *            letzten Kante aus den edgeClasses geschrieben.
+     *            letzten Edge aus den edgeClasses geschrieben.
      * @param edgeClasses
      */
-    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
     }
 

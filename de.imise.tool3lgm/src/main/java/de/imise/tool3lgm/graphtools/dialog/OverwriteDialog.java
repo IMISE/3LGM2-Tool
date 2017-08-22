@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -66,13 +66,13 @@ public class OverwriteDialog extends JDialog implements ActionListener {
         getContentPane().add(panel, BorderLayout.CENTER);
         ExtendedTextPane textPane = new ExtendedTextPane();
         textPane.setEditable(false);
-        String text = me1 instanceof Kante ? me1.getName() + "\n--------------------\n" + ((Kante) me1).getStart().getClearName() + "\n - \n" + ((Kante) me1).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me1.getDescription() : me1
+        String text = me1 instanceof Edge ? me1.getName() + "\n--------------------\n" + ((Edge) me1).getStart().getClearName() + "\n - \n" + ((Edge) me1).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me1.getDescription() : me1
                 .getName() + ":\n\n" + me1.getDescription();
         textPane.setText(text);
         panel2.add(new JScrollPane(textPane));
         textPane = new ExtendedTextPane();
         textPane.setEditable(false);
-        text = me2 instanceof Kante ? me2.getName() + "\n--------------------\n" + ((Kante) me2).getStart().getClearName() + "\n - \n" + ((Kante) me2).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me2.getDescription() : me2.getName()
+        text = me2 instanceof Edge ? me2.getName() + "\n--------------------\n" + ((Edge) me2).getStart().getClearName() + "\n - \n" + ((Edge) me2).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me2.getDescription() : me2.getName()
                 + ":\n\n" + me2.getDescription();
         textPane.setText(text);
         panel2.add(new JScrollPane(textPane));

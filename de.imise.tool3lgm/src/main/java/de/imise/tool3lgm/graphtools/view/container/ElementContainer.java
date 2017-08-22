@@ -21,7 +21,7 @@ import javax.swing.SwingConstants;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -301,7 +301,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             }
             layout = nonExpandedLayout;
         }
-        for (Kante edge : me.getEdges()) {
+        for (Edge edge : me.getEdges()) {
             ElementContainer kc = edge.getContainer(doc);
             if (kc == null) {
                 continue;
@@ -315,9 +315,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     public final void setVisible(final boolean visible) {
         super.setVisible(visible);
         if (visible) {
-            Set<Class<? extends Kante>> sortedEdgeClasses = getSortedEdgeClasses(me.getClass());
+            Set<Class<? extends Edge>> sortedEdgeClasses = getSortedEdgeClasses(me.getClass());
             if (sortedEdgeClasses != null) {
-                for (Class<? extends Kante> edgeClass : sortedEdgeClasses) {
+                for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {
                         additionalLabelTextGenerator = new AdditionalLabelTextGenerator(this, get3LGMLayout());
                     }
@@ -678,7 +678,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             retVal.add(this);
             return retVal;
         }
-        for (Kante edge : me.getEdges()) {
+        for (Edge edge : me.getEdges()) {
             if (edge instanceof Composition) {
                 Composition comp = (Composition) edge;
                 if (comp.getSlave() == me) {

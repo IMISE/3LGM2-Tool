@@ -10,7 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 
 /**
  * Abtsractes Panel für Verbindungen mit einer Maximalen Verbindungsanzahl von 1.
@@ -22,11 +22,11 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
 
     private final MouseListener mouseListener = createMouseListener();
 
-    public AbstractSingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Kante>... edgeClasses) {
+    public AbstractSingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, edgeClasses);
     }
 
-    public AbstractSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Kante>... edgeClasses) {
+    public AbstractSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         addMouseActions(westLabel);
     }

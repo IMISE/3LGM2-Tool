@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Ereignistyp;
@@ -12,7 +12,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
 /**
  * @author Thomas
  */
-public final class EtntEtVerbindung extends Kante {
+public final class EtntEtVerbindung extends Edge {
 
     //    public static final Class[] stcl = {EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class};
     public static final Class<? extends ModelElement> stcl = EtntEtdtKombination.class;

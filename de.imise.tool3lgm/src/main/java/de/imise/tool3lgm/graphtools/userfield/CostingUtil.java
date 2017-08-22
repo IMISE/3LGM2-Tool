@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
@@ -249,11 +249,11 @@ public class CostingUtil {
      * @param userField
      * @return Kantenklasse der einfachenTeilwertsummenformel oder <code>null</code>
      */
-    public static final Class<? extends Kante> getSimpleFractionValueSumFormulaEdgeClass(final UserField userField) {
-        Class<? extends Kante> edgeClass = null;
+    public static final Class<? extends Edge> getSimpleFractionValueSumFormulaEdgeClass(final UserField userField) {
+        Class<? extends Edge> edgeClass = null;
         String edgeClassName = extractSimpleFractionValueSumFormulaEdgeClassName(userField);
         if (edgeClassName != null) {
-            edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
+            edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class);
         }
         return edgeClass;
     }

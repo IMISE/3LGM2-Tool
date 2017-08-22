@@ -20,7 +20,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -347,7 +347,7 @@ public class LGMGraphDocument extends GraphDocument {
     //	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
     //	 *
     //	 * Kanten werden nicht richtig in das neue Modell übenommen, d.h. der Container wird in diesem
-    //	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Kante-Container
+    //	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Edge-Container
     //	 * werden aber richtig in den Elementen eingetragen.
     //	 *
     //	 * Die untere Funktion ist die alte Variante; Die hier auskommentierte sollte die neue werden.
@@ -393,7 +393,7 @@ public class LGMGraphDocument extends GraphDocument {
     //			ModelElement me = copyElements.get(i);
     //			if (me instanceof Knickpunkt)
     //				continue;
-    //			for (Kante edge : me.getEdges()) {
+    //			for (Edge edge : me.getEdges()) {
     //				if (copyElements.contains(edge))
     //					continue;
     //				ModelElement other = edge.getOther(me);
@@ -410,7 +410,7 @@ public class LGMGraphDocument extends GraphDocument {
     //		ModelElement newE;
     //
     //		ArrayList<ElementContainer> tmpActive = new ArrayList<ElementContainer>(selectedContainer);
-    //		ArrayList<Kante> edges = new ArrayList<Kante>();
+    //		ArrayList<Edge> edges = new ArrayList<Edge>();
     //		ArrayList<BendpointContainer> knickpunkte = new ArrayList<BendpointContainer>();
     //
     //		mainDoc.deselectAll(false);
@@ -444,9 +444,9 @@ public class LGMGraphDocument extends GraphDocument {
     //
     //					} else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
     //						dest.joinElements(newE, insert, this, false);
-    //						if (newE instanceof Kante) {
-    //							((Kante)newE).reconnect(destGDColl);
-    //							((Kante)newE).refreshText();
+    //						if (newE instanceof Edge) {
+    //							((Edge)newE).reconnect(destGDColl);
+    //							((Edge)newE).refreshText();
     //						}
     //					} else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
     //						continue;
@@ -463,8 +463,8 @@ public class LGMGraphDocument extends GraphDocument {
     //					newMainC.setHighLight(false);
     //					newMainC.refreshText();
     //					destMainDoc.getLayer(newE.layerFor()).add(newMainC);
-    //					if (newE instanceof Kante)
-    //						edges.add((Kante)newE);
+    //					if (newE instanceof Edge)
+    //						edges.add((Edge)newE);
     //					else if (newE instanceof Knickpunkt)
     //						knickpunkte.add((BendpointContainer)newC);
     //					else {
@@ -476,7 +476,7 @@ public class LGMGraphDocument extends GraphDocument {
     //					}
     //				}
     //			}
-    //			for (Kante kante : edges){
+    //			for (Edge kante : edges){
     //				if (!kante.reconnect(destGDColl))
     //					destGDColl.deleteElement(kante, pid);
     //				else {
@@ -563,7 +563,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         ModelElement newE;
 
-        List<Kante> edges = new ArrayList<>();
+        List<Edge> edges = new ArrayList<>();
         List<BendpointContainer> knickpunkte = new ArrayList<>();
 
         List<ElementContainer> tmpActive = new ArrayList<>(selectedContainer);
@@ -600,9 +600,9 @@ public class LGMGraphDocument extends GraphDocument {
 
                     } else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
                         dest.joinElements(newE, insert, this, false);
-                        if (newE instanceof Kante) {
-                            ((Kante) newE).reconnect(destGDColl);
-                            ((Kante) newE).refreshText();
+                        if (newE instanceof Edge) {
+                            ((Edge) newE).reconnect(destGDColl);
+                            ((Edge) newE).refreshText();
                         }
                     } else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
                         continue;
@@ -620,8 +620,8 @@ public class LGMGraphDocument extends GraphDocument {
                             newMainC.setHighLight(false);
                             newMainC.refreshText();
                             destMainDoc.getLayer(newE.layerFor()).add(newMainC);
-                            if (newE instanceof Kante) {
-                                edges.add((Kante) newE);
+                            if (newE instanceof Edge) {
+                                edges.add((Edge) newE);
                             } else if (newE instanceof Knickpunkt) {
                                 knickpunkte.add((BendpointContainer) newC);
                             } else {
@@ -635,7 +635,7 @@ public class LGMGraphDocument extends GraphDocument {
                     }
                 }
             }
-            for (Kante kante : edges) {
+            for (Edge kante : edges) {
                 if (!kante.reconnect(destGDColl)) {
                     destGDColl.deleteElement(kante, pid);
                 } else {
@@ -737,8 +737,8 @@ public class LGMGraphDocument extends GraphDocument {
 
         me1.refreshText();
 
-        for (Kante kante : me2.getEdges()) {
-            Kante oldKante;
+        for (Edge kante : me2.getEdges()) {
+            Edge oldKante;
             /* vorwaerts */
             if (kante.getStart().equals(me2)) {
                 me3 = findElementCoded(kante.getEnd().getHashString());
@@ -751,7 +751,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
 
                 oldKante = kante;
-                kante = (Kante) ModelConstants.createElement(kante, true);
+                kante = (Edge) ModelConstants.createElement(kante, true);
                 kante.setStartAndInsert(me1);
                 kante.setEndAndInsert(me3);
                 /* rueckwaerts */
@@ -766,7 +766,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
 
                 oldKante = kante;
-                kante = (Kante) ModelConstants.createElement(kante, true);
+                kante = (Edge) ModelConstants.createElement(kante, true);
                 kante.setStartAndInsert(me3);
                 kante.setEndAndInsert(me1);
             } else {

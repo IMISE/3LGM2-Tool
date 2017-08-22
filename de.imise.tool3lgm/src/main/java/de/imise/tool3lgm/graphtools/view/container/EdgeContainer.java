@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
@@ -16,7 +16,7 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -82,7 +82,7 @@ public class EdgeContainer extends ElementContainer {
      * @param neu
      * @param gd
      */
-    public EdgeContainer(final Kante neu, final GraphDocument gd) {
+    public EdgeContainer(final Edge neu, final GraphDocument gd) {
         super(neu, gd);
         computeBorderPoints();
     }
@@ -92,7 +92,7 @@ public class EdgeContainer extends ElementContainer {
      * @param l
      * @param gd
      */
-    public EdgeContainer(final Kante neu, final GraphElementLayout l, final GraphDocument gd) {
+    public EdgeContainer(final Edge neu, final GraphElementLayout l, final GraphDocument gd) {
         super(neu, l, gd);
         computeBorderPoints();
     }
@@ -123,7 +123,7 @@ public class EdgeContainer extends ElementContainer {
                 for (int i = 0; i < knickpunkte.size(); i++) {
                     BendpointContainer knC = knickpunkte.get(i);
                     BendpointContainer kp = (BendpointContainer) knC.clone(true, _doc);
-                    kp.getElement().addEdge((Kante) me);
+                    kp.getElement().addEdge((Edge) me);
                     retVal.setKnickpunkt(kp, i);
                 }
             }
@@ -143,8 +143,8 @@ public class EdgeContainer extends ElementContainer {
     /**
      * @return
      */
-    public Kante getEdge() {
-        return me instanceof Kante ? (Kante) me : null;
+    public Edge getEdge() {
+        return me instanceof Edge ? (Edge) me : null;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class EdgeContainer extends ElementContainer {
         return Math.abs(endy - starty) + 20;
     }
 
-    // Komplett aus Kante
+    // Komplett aus Edge
     /**
      * @return
      */
@@ -196,7 +196,7 @@ public class EdgeContainer extends ElementContainer {
         return endy;
     }
 
-    // Komplett aus Kante
+    // Komplett aus Edge
     /**
      *
      */
@@ -212,7 +212,7 @@ public class EdgeContainer extends ElementContainer {
         ElementContainer kc1 = null;
         ElementContainer kc2 = null;
         try {
-            Kante k;
+            Edge k;
             if ((k = getEdge()) != null) {
                 ModelElement startElement = k.getStart();
                 if (startElement != null) {
@@ -398,7 +398,7 @@ public class EdgeContainer extends ElementContainer {
                 if (startC == endC) {
                     continue;
                 }
-                Kante tmpKante = (Kante) me.clone();
+                Edge tmpKante = (Edge) me.clone();
                 tmpKante.setKnots(startC.getElement(), endC.getElement(), false);
                 EdgeContainer tmpC = new EdgeContainer(tmpKante, doc);
                 tmpC.setColor(Color.gray);
@@ -408,7 +408,7 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * Toleranz in Pixeln, mit der man neben die Kante klicken darf, wenn man sie per Mausklick auswählen will oder mit der entschieden wird, an
+     * Toleranz in Pixeln, mit der man neben die Edge klicken darf, wenn man sie per Mausklick auswählen will oder mit der entschieden wird, an
      * welcher Stelle ein neuer Knickpunkt hinzugefügt werden
      * muss.
      */
@@ -631,7 +631,7 @@ public class EdgeContainer extends ElementContainer {
             }
 
             if (i == 0) {
-                Kante dlk = getEdge();
+                Edge dlk = getEdge();
                 if (dlk.getDirection() == BACKWARD || dlk.getDirection() == DOUBLE) {
                     gc.rotate(rad1, startx, starty);
                     // try {
@@ -647,7 +647,7 @@ public class EdgeContainer extends ElementContainer {
                 }
             }
             if (i == numKKnots) {
-                Kante dlk = getEdge();
+                Edge dlk = getEdge();
                 if (dlk.getDirection() == FORWARD || dlk.getDirection() == DOUBLE) {
                     gc.rotate(rad2, endx, endy);
                     // try {

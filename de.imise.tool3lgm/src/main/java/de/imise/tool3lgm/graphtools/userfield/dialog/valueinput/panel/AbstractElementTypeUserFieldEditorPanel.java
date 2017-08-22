@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -180,7 +180,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             if (insertType == AS_MODELELEMENT) {
                 elementTypeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
             } else if (insertType != NO) {
-                Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
+                Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 if (insertType == InsertType.AS_EDGE_FORWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
                     elementTypeBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
                 }
@@ -213,7 +213,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         InsertType insertType = NO;
         for (UserField uf : definitions.getUserFields(elementClass)) {
             if (visibleUserFields.contains(uf.getStyle())) {
-                boolean isEdgeType = Kante.class.isAssignableFrom(elementClass);
+                boolean isEdgeType = Edge.class.isAssignableFrom(elementClass);
                 insertType = isEdgeType ? AS_EDGE_FORWARD_AND_BACKWARD : AS_MODELELEMENT;
                 break;
             }

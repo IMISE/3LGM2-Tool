@@ -1,13 +1,13 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 
-public final class AufObjVerbindung extends Kante {
+public final class AufObjVerbindung extends Edge {
 
     // public static final Class[] stcl = {Aufgabe.class};
     public static final Class<? extends ModelElement> stcl = Aufgabe.class;

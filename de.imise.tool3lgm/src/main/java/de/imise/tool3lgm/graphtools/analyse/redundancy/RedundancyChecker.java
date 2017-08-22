@@ -5,11 +5,11 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ONE;
 
 import java.awt.event.WindowAdapter;
@@ -32,7 +32,7 @@ import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
@@ -225,9 +225,9 @@ public class RedundancyChecker extends WindowAdapter {
         for (RedundancyAnalysisResult result : resultList) {
             MetaPath metaPath = result.getMetaPath();
             for (int i = 0; i < metaPath.countPathes(); i++) {
-                Class<? extends Kante>[] internalMetaPath = metaPath.getEdgeClasses(i);
+                Class<? extends Edge>[] internalMetaPath = metaPath.getEdgeClasses(i);
                 for (int j = 0; j < internalMetaPath.length; j++) {
-                    Class<? extends Kante> edgeClass = internalMetaPath[j];
+                    Class<? extends Edge> edgeClass = internalMetaPath[j];
                     Integer minStartToEndCard = new Integer(getMinStartToEndCardinality(edgeClass));
                     Integer maxStartToEndCard = new Integer(getMaxStartToEndCardinality(edgeClass));
                     Integer minEndToStartCard = new Integer(getMinEndToStartCardinality(edgeClass));

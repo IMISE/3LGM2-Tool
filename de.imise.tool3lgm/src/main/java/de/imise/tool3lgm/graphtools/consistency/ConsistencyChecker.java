@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,7 +27,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -140,7 +140,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
             }
         }
         // für alle explizit angegebenen nicht lösbaren Fehler -> lösche die betreffenden Elemente
-        // for (Pair<Class<? extends ModelElement>, Class<? extends Kante>> pair :
+        // for (Pair<Class<? extends ModelElement>, Class<? extends Edge>> pair :
         // checker.solutionsLibrary.getMinCardinalityNoSolutuinErrors()){
         // ArrayList<ModelElement> elements =
         // gdcoll.getGraphDocument().getModelItems(pair.getFirstItem(), true);
@@ -266,10 +266,10 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      */
     private void addCardinalityErrors(final ModelElement me, final List<AbstractError> returnList) {
         Class<? extends ModelElement> meClass = me.getClass();
-        Class<? extends Kante>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
-        // nur Elementarten beachten, die wenigstens eine Kante besitzen können
+        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
+        // nur Elementarten beachten, die wenigstens eine Edge besitzen können
         if (edgeTypes != null) {
-            for (Class<? extends Kante> edgeClass : edgeTypes) {
+            for (Class<? extends Edge> edgeClass : edgeTypes) {
                 if (consistencyDefinition != null && !consistencyDefinition.contains(edgeClass)) {
                     continue;
                 }
@@ -282,10 +282,10 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 boolean meHasStartClass = isStartClass(edgeClass, me.getClass());
                 boolean meHasEndClass = isEndClass(edgeClass, me.getClass());
 
-                List<Kante> connections = me.getEdges(edgeClass);
-                List<Kante> meIsStartConnections = new ArrayList<>();
-                List<Kante> meIsEndConnections = new ArrayList<>();
-                for (Kante edge : connections) {
+                List<Edge> connections = me.getEdges(edgeClass);
+                List<Edge> meIsStartConnections = new ArrayList<>();
+                List<Edge> meIsEndConnections = new ArrayList<>();
+                for (Edge edge : connections) {
                     if (edge.isStart(me)) {
                         meIsStartConnections.add(edge);
                     } else {
@@ -332,7 +332,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                         returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, maxEndCard));
                     }
                 } else {
-                    System.err.println("Die Kante darf gar nicht für dieses Element existieren!");
+                    System.err.println("Die Edge darf gar nicht für dieses Element existieren!");
                 }
             }
         }
@@ -400,7 +400,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
             ErrorSolution es = solutionsLibrary.getSolution(error);
             if (es == null) {
                 AbstractCardinalityError cardError = (AbstractCardinalityError) error;
-                Class<? extends Kante> edgeClass = cardError.getEdgeClass();
+                Class<? extends Edge> edgeClass = cardError.getEdgeClass();
                 ModelElement me = cardError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
                 String tabName = AbstractPathConnectionPanel.generateName(me.getClass(), edgeClass);

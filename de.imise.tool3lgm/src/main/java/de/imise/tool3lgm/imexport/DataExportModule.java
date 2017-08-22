@@ -21,7 +21,7 @@ import java.util.Set;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
-import de.imise.tool3lgm.graphtools.elements.Kante;
+import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -100,7 +100,7 @@ public class DataExportModule {
                     }
                     if (elementClass != classElement) {
                         classElement = elementClass;
-                        String displayableClassName = isEdgeType(elementClass) ? getFullForwardMetaAssociationName(elementClass.asSubclass(Kante.class)) : getDisplayableName(elementClass);
+                        String displayableClassName = isEdgeType(elementClass) ? getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : getDisplayableName(elementClass);
                         caption = displayableClassName + "\tName\tDescription\tHashString";
                         for (MetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
