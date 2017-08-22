@@ -77,15 +77,25 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
 
     public static final int DATA_CHANGED = 0 << 0;
+
     public static final int ELEMENT_GRAPHICS_CHANGED = 1 << 0;
+
     public static final int LAYOUT_CHANGED = 1 << 1;
+
     public static final int ELEMENT_ADDED = 1 << 2;
+
     public static final int ELEMENT_DELETED = 1 << 3;
+
     public static final int USER_FIELD_VALUE_CHANGED = 1 << 4;
+
     public static final int GROUP_ORDER_CHANGED = 1 << 5;
+
     public static final int ACTIVE_LAYER_CHANGED = 1 << 6;
+
     public static final int COLORS_CHANGED = 1 << 8;
+
     public static final int SELECTION_CHANGED = 1 << 9;
+
     public static final int ELEMENT_NAME_CHANGED = 1 << 10;
 
     /**
@@ -117,14 +127,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * COMMENTME
      */
     protected Mapping mapping;
+
     /**
      * COMMENTME
      */
     protected String description = "";
+
     /**
      * COMMENTME
      */
     private String title = "";
+
     /**
      * COMMENTME
      */
@@ -139,6 +152,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * COMMENTME
      */
     public final static int INITIAL_PAGE_HEIGHT = 768;
+
     /**
      * COMMENTME
      */
@@ -1495,6 +1509,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     @SuppressWarnings("unused")
     private static int iii = 1;
+
     @SuppressWarnings("unused")
     private static int lastTransStackInt = -1;
 
