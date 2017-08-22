@@ -3,6 +3,9 @@
  */
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
 /**
@@ -307,7 +311,7 @@ public class Static {
     public static final Iterable<NodeContainer> iterableSelectedRealElementContainer() {
         GraphDocument doc = getSelectedDoc();
         if (doc == null) {
-            return new ArrayList<NodeContainer>(0);
+            return new ArrayList<>(0);
         }
         return doc.getSelectedRealElementContainerIterable();
     }
@@ -321,11 +325,21 @@ public class Static {
      * @param parenComponent
      * @param messageResKey
      */
-    public static void showMessgae(final Component parenComponent, final String messageResKey) {
+    public static final void showMessgae(final Component parenComponent, final String messageResKey) {
         SwingUtilities.invokeLater(() -> {
-            String message = Tool3lgmConstants.getResString(messageResKey);
+            String message = getResString(messageResKey);
             JOptionPane.showMessageDialog(parenComponent, message);
         });
+    }
+
+    private static OutputDialog errorOutputDialog;
+
+    public static final void showErrorOutputDialog(final Object mainMessage, final Object... message) {
+        if (errorOutputDialog == null) {
+            errorOutputDialog = new OutputDialog(getMainFrame(), getErrString("FehlerAllgemein"));
+        }
+        errorOutputDialog.setVisible(true);
+        errorOutputDialog.appendln(mainMessage, message);
     }
 
 }
