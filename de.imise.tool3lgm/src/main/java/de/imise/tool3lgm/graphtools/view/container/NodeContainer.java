@@ -32,6 +32,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * COMMENTME
      */
     public static final int MIN_X_SIZE = 15;
+
     /**
      * COMMENTME
      */
@@ -145,15 +146,11 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     @Override
-    public ElementContainer clone(final boolean cloneModelElement, final GraphDocument _doc) {
-        NodeContainer retVal;
-        try {
-            retVal = (NodeContainer) super.clone(cloneModelElement, _doc);
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
+    public final ElementContainer clone(final boolean cloneModelElement, final GraphDocument _doc) {
+        NodeContainer retVal = (NodeContainer) super.clone(cloneModelElement, _doc);
+        if (retVal != null) {
+            retVal.init();
         }
-        retVal.init();
         return retVal;
     }
 

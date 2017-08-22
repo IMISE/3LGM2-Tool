@@ -105,28 +105,25 @@ public class EdgeContainer extends ElementContainer {
     }
 
     @Override
-    public ElementContainer clone(final boolean cloneModelElement, final GraphDocument _doc) {
+    public final ElementContainer clone(final boolean cloneModelElement, final GraphDocument _doc) {
         EdgeContainer retVal;
-        try {
-            retVal = (EdgeContainer) super.clone(cloneModelElement, _doc);
-        } catch (Exception e) {
-            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-        retVal.startx = startx;
-        retVal.starty = starty;
-        retVal.endx = endx;
-        retVal.endy = endy;
-        retVal.over_lapping = over_lapping;
-        retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
-        retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
-        retVal.knickpunkte.clear();
-        if (_doc instanceof Szenario) {
-            for (int i = 0; i < knickpunkte.size(); i++) {
-                BendpointContainer knC = knickpunkte.get(i);
-                BendpointContainer kp = (BendpointContainer) knC.clone(true, _doc);
-                kp.getElement().addEdge((Kante) me);
-                retVal.setKnickpunkt(kp, i);
+        retVal = (EdgeContainer) super.clone(cloneModelElement, _doc);
+        if (retVal != null) {
+            retVal.startx = startx;
+            retVal.starty = starty;
+            retVal.endx = endx;
+            retVal.endy = endy;
+            retVal.over_lapping = over_lapping;
+            retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
+            retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
+            retVal.knickpunkte.clear();
+            if (_doc instanceof Szenario) {
+                for (int i = 0; i < knickpunkte.size(); i++) {
+                    BendpointContainer knC = knickpunkte.get(i);
+                    BendpointContainer kp = (BendpointContainer) knC.clone(true, _doc);
+                    kp.getElement().addEdge((Kante) me);
+                    retVal.setKnickpunkt(kp, i);
+                }
             }
         }
         return retVal;

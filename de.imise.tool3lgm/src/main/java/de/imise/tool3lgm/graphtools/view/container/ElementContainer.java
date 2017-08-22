@@ -179,13 +179,15 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param cloneModelElement
      * @param doc
      * @return
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
     public ElementContainer clone(final boolean cloneModelElement, final GraphDocument doc) {
         ElementContainer retVal;
         try {
             retVal = getClass().newInstance();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), e);
+        } catch (InstantiationException | IllegalAccessException e) {
+            Static.showErrorOutputDialog(getErrString("FehlerAllgemein"), e);
             return null;
         }
         retVal.doc = doc;

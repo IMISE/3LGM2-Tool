@@ -62,6 +62,9 @@ public class Szenario extends LGMGraphDocument {
         }
 
         retVal = ec.clone(false, this);
+        if (retVal == null) {
+            return null;
+        }
         if (!(ec.getGraphDocument() instanceof Szenario)) {
             retVal.setFont(null);
             retVal.setAlpha(GraphElementLayout.NICHT_TRANSPARENT);
