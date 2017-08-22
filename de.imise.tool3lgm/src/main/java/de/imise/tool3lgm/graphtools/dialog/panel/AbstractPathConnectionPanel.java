@@ -2,6 +2,13 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
 
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
@@ -179,18 +186,18 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         int[] returnValue = new int[edgeClasses.length];
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends ModelElement> clazz = i == 0 ? startClass : null;
-            clazz = clazz == null ? returnValue[i - 1] == FORWARD ? Kante.getEndClass(edgeClasses[i - 1]) : Kante.getStartClass(edgeClasses[i - 1]) : clazz;
-            returnValue[i] = Kante.isStartClass(edgeClasses[i], clazz) ? FORWARD : BACKWARD;
+            clazz = clazz == null ? returnValue[i - 1] == FORWARD ? getEndClass(edgeClasses[i - 1]) : getStartClass(edgeClasses[i - 1]) : clazz;
+            returnValue[i] = isStartClass(edgeClasses[i], clazz) ? FORWARD : BACKWARD;
         }
         return returnValue;
     }
 
     private static Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex, final int[] directions, final Class<? extends Kante>[] edgeClasses) {
-        return directions[edgeIndex] == FORWARD ? Kante.getStartClass(edgeClasses[edgeIndex]) : Kante.getEndClass(edgeClasses[edgeIndex]);
+        return directions[edgeIndex] == FORWARD ? getStartClass(edgeClasses[edgeIndex]) : getEndClass(edgeClasses[edgeIndex]);
     }
 
     private static Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex, final int[] directions, final Class<? extends Kante>[] edgeClasses) {
-        return directions[edgeIndex] == FORWARD ? Kante.getEndClass(edgeClasses[edgeIndex]) : Kante.getStartClass(edgeClasses[edgeIndex]);
+        return directions[edgeIndex] == FORWARD ? getEndClass(edgeClasses[edgeIndex]) : getStartClass(edgeClasses[edgeIndex]);
     }
 
     private Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex) {
@@ -220,7 +227,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     private static boolean isSingleConnectionPath(final int[] directions, final Class<? extends Kante>[] edgeClasses) {
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends Kante> edgeClass = edgeClasses[i];
-            int maxCard = directions[i] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClass) : Kante.getMaxEndToStartCardinality(edgeClass);
+            int maxCard = directions[i] == FORWARD ? getMaxStartToEndCardinality(edgeClass) : getMaxEndToStartCardinality(edgeClass);
             if (maxCard > 1) {
                 return false;
             }
@@ -286,7 +293,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected boolean isLastPathElementDependent() {
         Class<? extends Kante> edgeClass = edgeClasses[lastEdgeIndex];
         int direction = directions[lastEdgeIndex];
-        int minCardinality = direction == FORWARD ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
+        int minCardinality = direction == FORWARD ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
         return minCardinality > 0;
     }
 
@@ -300,7 +307,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected boolean isLastPathElementNeededForExistence() {
         Class<? extends Kante> edgeClass = edgeClasses[lastEdgeIndex];
         int direction = directions[lastEdgeIndex];
-        int minCardinality = direction == BACKWARD ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
+        int minCardinality = direction == BACKWARD ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
         return minCardinality > 0;
     }
 
@@ -315,7 +322,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //für alle Kanten außer der letzten
         for (int i = 0; i < lastEdgeIndex; i++) {
             //hole die maximale Verbindungsanzahl zum nächsten Element
-            int maxCardinality = directions[i] == FORWARD ? Kante.getMaxStartToEndCardinality(edgeClasses[i]) : Kante.getMaxEndToStartCardinality(edgeClasses[i]);
+            int maxCardinality = directions[i] == FORWARD ? getMaxStartToEndCardinality(edgeClasses[i]) : getMaxEndToStartCardinality(edgeClasses[i]);
             //wenn dieses Zwischenelement mehrfach verbunden sein kann
             if (maxCardinality > 1) {
                 //nicht eindeutig
@@ -413,11 +420,11 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         gdcoll.setInteractiveMode(newInteractiveMode);
 
         //Richtung der Kante FORWARD -> die Endklasse muss angelegt werden, sonst die Startklasse
-        Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? Kante.getEndClass(edgeClassToNewElement) : Kante.getStartClass(edgeClassToNewElement);
+        Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? getEndClass(edgeClassToNewElement) : getStartClass(edgeClassToNewElement);
         //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncähsten Kante ermittelt werden können.
         if (ModelConstants.isAbstract(elementClass2Create)) {
             //Richtung der nächsten Kante FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
-            elementClass2Create = lastEdge ? searchElementClass : directionFromNewElement == FORWARD ? Kante.getStartClass(edgeClassFromNewElement) : Kante.getEndClass(edgeClassFromNewElement);
+            elementClass2Create = lastEdge ? searchElementClass : directionFromNewElement == FORWARD ? getStartClass(edgeClassFromNewElement) : getEndClass(edgeClassFromNewElement);
         }
         //abstracte Elemente können nicht angelegt werden!
         if (ModelConstants.isAbstract(elementClass2Create)) {
@@ -456,9 +463,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 continue;
             }
             //wenn das neu angelegte Element StartElement der Kante ist
-            if (Kante.isStartClass(edgeType, elementClass2Create)) {
+            if (isStartClass(edgeType, elementClass2Create)) {
                 //hole die MinKardnalität zu dem anderen Element der Kante
-                int minCardinalityForwardToOther = Kante.getMinStartToEndCardinality(edgeType);
+                int minCardinalityForwardToOther = getMinStartToEndCardinality(edgeType);
                 if (minCardinalityForwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Kante> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
@@ -479,7 +486,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 //wenn das neu angelegte Element EndElement der Kante ist
             } else {
                 //hole die MinKardnalität zu dem anderen Element der Kante
-                int minCardinalityBackwardToOther = Kante.getMinEndToStartCardinality(edgeType);
+                int minCardinalityBackwardToOther = getMinEndToStartCardinality(edgeType);
                 if (minCardinalityBackwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Kante> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -83,7 +85,7 @@ public abstract class GraphViewDefinition {
             return false;
         }
         for (Class<? extends Kante> edgeClass : sortedEdgeClasses) {
-            Class<? extends ModelElement> other = Kante.getOther(edgeClass, elementClass);
+            Class<? extends ModelElement> other = getOther(edgeClass, elementClass);
             if (isPaintable(other)) {
                 return true;
             }

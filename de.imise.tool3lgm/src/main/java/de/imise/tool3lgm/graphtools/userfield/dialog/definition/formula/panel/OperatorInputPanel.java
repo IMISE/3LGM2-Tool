@@ -1,5 +1,12 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getEdgeTypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,7 +17,6 @@ import java.util.HashSet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -53,7 +59,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
      * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
      * spezielles Verteilungsgewicht genutzt werden soll.
      */
-    private static final String UNIFORMLY_DISTRIBUTED = Tool3lgmConstants.getResString("uniformly_distributed");
+    private static final String UNIFORMLY_DISTRIBUTED = getResString("uniformly_distributed");
 
     /**
      * Eine der beiden Konstanten <code>UserField.SUM</code> oder <code>UserField.TWSUM</code>. Legt die Art der verrechnungsfunktion fest.
@@ -86,7 +92,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         gbc.weightx = 1;
         gbc.weighty = 0;
         gbc.gridy = 0;
-        add(new JLabel(Tool3lgmConstants.getResString("target_of_accounting") + " -> " + Tool3lgmConstants.getResString("source_of_accounting")), gbc);
+        add(new JLabel(getResString("target_of_accounting") + " -> " + getResString("source_of_accounting")), gbc);
         associationBox = new AlphabeticalComboBox();
         associationBox.addActionListener(this);
         gbc.insets.top = 3;
@@ -96,7 +102,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         updateFieldListAssoziation();
         gbc.gridy++;
 
-        add(new JLabel(Tool3lgmConstants.getResString("connected_attributes")), gbc);
+        add(new JLabel(getResString("connected_attributes")), gbc);
         connectedAttributesBox = new AlphabeticalComboBox();
         gbc.gridy++;
         add(connectedAttributesBox, gbc);
@@ -108,7 +114,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
             gbc.gridy++;
-            add(new JLabel(Tool3lgmConstants.getResString("weighting") + ": "), gbc);
+            add(new JLabel(getResString("weighting") + ": "), gbc);
 
             vgBox = new AlphabeticalComboBox();
             vgBox.addActionListener(this);
@@ -151,7 +157,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         //TODO: das hier sollte eine eigen Funktion der UserFieldDefinitions werden
 
         //es
-        HashSet<Class<? extends ModelElement>> elementClassAssignable = new HashSet<Class<? extends ModelElement>>();
+        HashSet<Class<? extends ModelElement>> elementClassAssignable = new HashSet<>();
         for (Class<? extends ModelElement> assClass : ModelConstants.ALL_NODES_SET) {
             if (elementClass.isAssignableFrom(assClass)) {
                 elementClassAssignable.add(assClass);
@@ -162,7 +168,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 elementClassAssignable.add(assClass);
             }
         }
-        HashSet<Class<? extends ModelElement>> allElementClassAssignable = new HashSet<Class<? extends ModelElement>>();
+        HashSet<Class<? extends ModelElement>> allElementClassAssignable = new HashSet<>();
         for (Class<? extends ModelElement> assClass : elementClassAssignable) {
             allElementClassAssignable.add(assClass);
             while (assClass != elementClass) {
@@ -179,7 +185,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 }
                 if (uf.isClassificationUserField()) {
                     if (uf.getName().trim().equals("")) {
-                        String name = Tool3lgmConstants.getResString("this_classification_number");
+                        String name = getResString("this_classification_number");
                         connectedAttributesBox.addSeparator(true);
                         connectedAttributesBox.addItem(uf, name);
                     } else {
@@ -193,7 +199,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         } else if (!found && assignableClass) {
             String name = userField.getName().trim();
             if (name.equals("")) {
-                name = Tool3lgmConstants.getResString("this_classification_number");
+                name = getResString("this_classification_number");
             }
             connectedAttributesBox.addSeparator(true);
             connectedAttributesBox.addItem(userField, name);
@@ -228,12 +234,12 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         associationBox.removeAllItems();
         //Die Assoziationen zur Box hinzufügenen, bei denen die Startklasse
         // gleich der Element-Klasse ist
-        Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
+        Class<? extends Kante>[] edgeClasses = getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
 
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends Kante> tmpEdgeClass = edgeClasses[i];
-            Class<? extends ModelElement> startClass = Kante.getStartClass(tmpEdgeClass);
-            Class<? extends ModelElement> endClass = Kante.getEndClass(tmpEdgeClass);
+            Class<? extends ModelElement> startClass = getStartClass(tmpEdgeClass);
+            Class<? extends ModelElement> endClass = getEndClass(tmpEdgeClass);
 
             //prüfen, ob die Start- und Endklassen gleich ist ->
             //wenn ja, darf diese Kante nur für Verrechnungen genutzt werden, wenn sie
@@ -242,14 +248,14 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
             //sind unterscheidlich. Bei der Beziehung "Phys.-DV-Baustein ist verbunden mit
             //Phys.-DV-Baustein" kann man keine eindeutige Richtung zuordnen.
-            String forwardName = ModelConstants.getFullForwardMetaAssociationName(tmpEdgeClass);
-            String backwardName = ModelConstants.getFullBackwardMetaAssociationName(tmpEdgeClass);
+            String forwardName = getFullForwardMetaAssociationName(tmpEdgeClass);
+            String backwardName = getFullBackwardMetaAssociationName(tmpEdgeClass);
             if (forwardName.equals(backwardName) && (startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass))) {
                 continue;
             }
             if (startClass.isAssignableFrom(userField.getTargetClass())) {
                 if (PartOfBeziehung.class.isAssignableFrom(tmpEdgeClass)) {
-                    associationBox.addItem(tmpEdgeClass, Tool3lgmConstants.getResString("part_to_whole") + " (" + forwardName + ")");
+                    associationBox.addItem(tmpEdgeClass, getResString("part_to_whole") + " (" + forwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, forwardName);
                 }
@@ -257,7 +263,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //das hier darf nicht als else-if geschrieben werden!
             if (endClass.isAssignableFrom(userField.getTargetClass())) {
                 if (PartOfBeziehung.class.isAssignableFrom(tmpEdgeClass)) {
-                    associationBox.addItem(tmpEdgeClass, Tool3lgmConstants.getResString("whole_to_part") + " (" + backwardName + ")");
+                    associationBox.addItem(tmpEdgeClass, getResString("whole_to_part") + " (" + backwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, backwardName);
                 }
@@ -305,7 +311,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         // merken
         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
             sb.append(" | ");
-            if (associationBox.getSelectedItem().toString().equals(Tool3lgmConstants.getResString("part_to_whole") + " (" + ModelConstants.getFullForwardMetaAssociationName(edgeClass) + ")")) {
+            if (associationBox.getSelectedItem().toString().equals(getResString("part_to_whole") + " (" + getFullForwardMetaAssociationName(edgeClass) + ")")) {
                 sb.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);
             } else {
                 sb.append(UserField.DIRECTION_FROM_WHOLE_TO_PART);
@@ -325,11 +331,11 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 return;
             }
             String displayName = associationBox.getSelectedItem().toString();
-            String tmp_string = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
+            String tmp_string = getFullForwardMetaAssociationName(edgeClass);
             if (displayName.equals(tmp_string)) {
-                updateFieldListAttributesOfAssociatedClass(Kante.getEndClass(edgeClass));
+                updateFieldListAttributesOfAssociatedClass(getEndClass(edgeClass));
             } else {
-                updateFieldListAttributesOfAssociatedClass(Kante.getStartClass(edgeClass));
+                updateFieldListAttributesOfAssociatedClass(getStartClass(edgeClass));
             }
             if (vfOperator.equals(UserField.ACCOUNTING_FUNCTION_TWSUM)) {
                 updateVGComboBoxItems(edgeClass);

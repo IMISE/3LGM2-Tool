@@ -15,7 +15,7 @@ import de.imise.util.Pair;
  * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden können, was bei der
  * Konsistenzprüfung als Inkonsistenz angesehen werden soll. Hierrüber kann man die im Metamodell
  * vorgegebenen Kardinalitäten für den Konsistenzcheck ändern bzw. filtern.
- * 
+ *
  * @author AXS
  * @create 17.02.2011
  */
@@ -30,7 +30,7 @@ public class ConsistencyDefinition {
     /**
      * Mappt von einer Kantenklasse auf ihre Kardinalitäten.
      */
-    private final HashMap<Class<? extends Kante>, Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> edgeClassToCardinalities = new HashMap<Class<? extends Kante>, Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>>();
+    private final HashMap<Class<? extends Kante>, Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>> edgeClassToCardinalities = new HashMap<>();
 
     /**
      * Explizite Instanz des Keysets von {@link #edgeClassToCardinalities}, damit es nicht bei jedem
@@ -44,11 +44,11 @@ public class ConsistencyDefinition {
      * keine Kante der in der Liste befindlichen Art haben, wenn ihnen über eine Teil-Von-Beziehung
      * ein anderes Element untergeordnet ist.
      */
-    private final HashMap<Class<? extends ModelElement>, Collection<Class<? extends Kante>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<Class<? extends ModelElement>, Collection<Class<? extends Kante>>>();
+    private final HashMap<Class<? extends ModelElement>, Collection<Class<? extends Kante>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<>();
 
     /**
-	 * 
-	 */
+     *
+     */
     public ConsistencyDefinition() {
         super();
     }
@@ -80,19 +80,18 @@ public class ConsistencyDefinition {
             return;
         }
         if (minStartToEndCardinality == null) {
-            minStartToEndCardinality = Kante.getMinStartToEndCardinality(edgeClass);
+            minStartToEndCardinality = getMinStartToEndCardinality(edgeClass);
         }
         if (maxStartToEndCardinality == null) {
-            maxStartToEndCardinality = Kante.getMaxStartToEndCardinality(edgeClass);
+            maxStartToEndCardinality = getMaxStartToEndCardinality(edgeClass);
         }
         if (minEndToStartCardinality == null) {
-            minEndToStartCardinality = Kante.getMinEndToStartCardinality(edgeClass);
+            minEndToStartCardinality = getMinEndToStartCardinality(edgeClass);
         }
         if (maxEndToStartCardinality == null) {
-            maxEndToStartCardinality = Kante.getMaxEndToStartCardinality(edgeClass);
+            maxEndToStartCardinality = getMaxEndToStartCardinality(edgeClass);
         }
-        edgeClassToCardinalities.put(edgeClass, new Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>(new Pair<Integer, Integer>(minStartToEndCardinality, maxStartToEndCardinality), new Pair<Integer, Integer>(minEndToStartCardinality,
-                maxEndToStartCardinality)));
+        edgeClassToCardinalities.put(edgeClass, new Pair<>(new Pair<>(minStartToEndCardinality, maxStartToEndCardinality), new Pair<>(minEndToStartCardinality, maxEndToStartCardinality)));
         // die Variable keySet wieder null setzen, um sie als geändert zu markieren
         edgeClassCardinalitiesKeySet = null;
     }
@@ -100,7 +99,7 @@ public class ConsistencyDefinition {
     /**
      * Fügt die übergebene Kantenklase mit den ursprünglichen Kardinalitäten der Kante in die Liste
      * ein
-     * 
+     *
      * @param edgeClass
      */
     public void add(final Class<? extends Kante> edgeClass) {
@@ -124,7 +123,7 @@ public class ConsistencyDefinition {
         }
         Collection<Class<? extends Kante>> leafAllowedEdgeClasses = elementToOnlyLeafAllowedEdgeClasses.get(elementClass);
         if (leafAllowedEdgeClasses == null) {
-            leafAllowedEdgeClasses = new HashSet<Class<? extends Kante>>();
+            leafAllowedEdgeClasses = new HashSet<>();
             elementToOnlyLeafAllowedEdgeClasses.put(elementClass, leafAllowedEdgeClasses);
         }
         leafAllowedEdgeClasses.add(edgeClass);
@@ -133,7 +132,7 @@ public class ConsistencyDefinition {
     /**
      * Setzt für diese Elementart, dass alle Kanten nur an Blättern im Teil-Von-Baum dieser Elemente
      * hängen dürfen.
-     * 
+     *
      * @param elementClass
      */
     public void addOnlyLeafAllowedEdges(final Class<? extends ModelElement> elementClass) {
@@ -144,68 +143,68 @@ public class ConsistencyDefinition {
 
     /**
      * Liefert die minimale Kardinalität in Vorwärtsrichtung.
-     * 
+     *
      * @param edgeClass
      * @return
      */
     public final int getMinStartToEndCardinality(final Class<? extends Kante> edgeClass) {
         if (edgeClassToCardinalities == null || edgeClassToCardinalities.size() == 0) {
-            return Kante.getMinStartToEndCardinality(edgeClass);
+            return getMinStartToEndCardinality(edgeClass);
         }
         Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> cards = edgeClassToCardinalities.get(edgeClass);
         if (cards == null) {
-            return Kante.getMinStartToEndCardinality(edgeClass);
+            return getMinStartToEndCardinality(edgeClass);
         }
         return cards.getFirstItem().getFirstItem();
     }
 
     /**
      * Liefert die maximale Kardinalität in Vorwärtsrichtung.
-     * 
+     *
      * @param edgeClass
      * @return
      */
     public final int getMaxStartToEndCardinality(final Class<? extends Kante> edgeClass) {
         if (edgeClassToCardinalities == null || edgeClassToCardinalities.size() == 0) {
-            return Kante.getMaxStartToEndCardinality(edgeClass);
+            return getMaxStartToEndCardinality(edgeClass);
         }
         Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> cards = edgeClassToCardinalities.get(edgeClass);
         if (cards == null) {
-            return Kante.getMaxStartToEndCardinality(edgeClass);
+            return getMaxStartToEndCardinality(edgeClass);
         }
         return cards.getFirstItem().getSecondItem();
     }
 
     /**
      * Liefert die minimale Kardinalität in Rückwärtsrichtung.
-     * 
+     *
      * @param edgeClass
      * @return
      */
     public final int getMinEndToStartCardinality(final Class<? extends Kante> edgeClass) {
         if (edgeClassToCardinalities == null || edgeClassToCardinalities.size() == 0) {
-            return Kante.getMinEndToStartCardinality(edgeClass);
+            return getMinEndToStartCardinality(edgeClass);
         }
         Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> cards = edgeClassToCardinalities.get(edgeClass);
         if (cards == null) {
-            return Kante.getMinEndToStartCardinality(edgeClass);
+            return getMinEndToStartCardinality(edgeClass);
         }
         return cards.getSecondItem().getFirstItem();
     }
 
     /**
      * Liefert die maximale Kardinalität in Rückwärtsrichtung.
-     * 
+     *
      * @param edgeClass
      * @return
      */
     public final int getMaxEndToStartCardinality(final Class<? extends Kante> edgeClass) {
         if (edgeClassToCardinalities == null || edgeClassToCardinalities.size() == 0) {
-            return Kante.getMaxEndToStartCardinality(edgeClass);
+            return getMaxEndToStartCardinality(edgeClass);
         }
         Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> cards = edgeClassToCardinalities.get(edgeClass);
         if (cards == null) {
-            return Kante.getMaxEndToStartCardinality(edgeClass);
+            return getMaxEndToStartCardinality(edgeClass);
         }
         return cards.getSecondItem().getSecondItem();
     }
@@ -213,7 +212,7 @@ public class ConsistencyDefinition {
     /**
      * Liefert <code>true</code>, wenn die Kanteklasse im Key-Set der Map auf die Kardinalitäten
      * enthalten ist oder wenn diese Map leer ist (uns somit alle Kanten als enthalten gelten).
-     * 
+     *
      * @param egdeClass
      * @return
      */

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_BACKWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD_AND_BACKWARD;
@@ -52,14 +54,14 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         if (Kante.class.isAssignableFrom(elementClass)) {
             Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
             //vorwärts
-            Class<? extends ModelElement> startElementClass = Kante.getStartClass(edgeClass);
+            Class<? extends ModelElement> startElementClass = getStartClass(edgeClass);
             //alle einfachen Teilwertsummen-UserFields holen, die für die startElementClass über die edgeClass definiert sind
             List<UserField> fractionValueSumUserFields = definitions.getFractionValueSumUserFields(startElementClass, edgeClass);
             if (!fractionValueSumUserFields.isEmpty()) {
                 insertType = AS_EDGE_FORWARD;
             }
             //rückwärts
-            Class<? extends ModelElement> endElementClass = Kante.getEndClass(edgeClass);
+            Class<? extends ModelElement> endElementClass = getEndClass(edgeClass);
             //alle einfachen Teilwertsummen-UserFields holen, die für die endElementClass über die edgeClass definiert sind
             fractionValueSumUserFields = definitions.getFractionValueSumUserFields(endElementClass, edgeClass);
             if (!fractionValueSumUserFields.isEmpty()) {
@@ -120,6 +122,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
          * Bei Änderung der Auswahl in elementTypeBox, werden in der elementBox die verfügbaren Elemente angezeigt
          */
         AbstractAction action = new AbstractAction() {
+
             @Override
             public void actionPerformed(final ActionEvent e) {
                 //sobald sich in dieser Box die Selektion ändert, dann gleich in der anderen Box das erste Item auswählen
@@ -165,7 +168,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         elementBox.setEnabled(selectedEdgeClass != null);
         if (elementBox.isEnabled()) {
             boolean selectedEdgeDirectionForward = isSelectedEdgeDirectionForward();
-            Class<? extends ModelElement> elementClass = selectedEdgeDirectionForward ? Kante.getStartClass(selectedEdgeClass) : Kante.getEndClass(selectedEdgeClass);
+            Class<? extends ModelElement> elementClass = selectedEdgeDirectionForward ? getStartClass(selectedEdgeClass) : getEndClass(selectedEdgeClass);
             GraphDocument doc = definitions.getCollection().getMainGraphDocument();
             List<ModelElement> elements = doc.getModelItems(elementClass, true, true);
             for (ModelElement me : elements) {

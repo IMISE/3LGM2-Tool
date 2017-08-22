@@ -1,7 +1,63 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Static.getCollections;
+import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
+import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getEdgeTypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.AUFKLAPPEN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_GLOBAL_MAPPING;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_ADDICTED;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.DELETE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ELEMENT_PROPERTIES;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.HIDE_ALL_CONFIGS;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.NORMALIZE_LAYER;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_ELEMENT_FROM_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ZUKLAPPEN;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HALB_TRANSPARENT;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.NICHT_TRANSPARENT;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VOLL_TRANSPARENT;
+import static de.imise.tool3lgm.userproperties.UserProperties.isEnableSubmodelBrowser;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -24,7 +80,6 @@ import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
@@ -49,10 +104,8 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
-import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
@@ -164,10 +217,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private boolean resizing = false;
 
     /** Icon für das Herstellen einer Verbindung */
-    static ImageIcon verbindung_anlegen = Tool3lgmConstants.getIcon("verbindung_anlegen.gif");
+    static ImageIcon verbindung_anlegen = getIcon("verbindung_anlegen.gif");
 
     /** Icon für das Trennen einer Verbindung */
-    static ImageIcon verbindung_trennen = Tool3lgmConstants.getIcon("verbindung_trennen.gif");
+    static ImageIcon verbindung_trennen = getIcon("verbindung_trennen.gif");
 
     /** Element, das den Kontekt vorgibt, also das Element auf das sich die Aktionen beziehen. */
     private ElementContainer mc = null;
@@ -217,55 +270,55 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         int c;
         JMenuItem item;
 
-        new_domain_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
-        for (c = 0; c < ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
-            item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c]));
+        new_domain_tree = new JMenu(getResString("el_neu"));
+        for (c = 0; c < TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
+            item = new JMenuItem(getDisplayableName(TREE_CREATABLE_DOMAIN_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
+            item.setActionCommand(CREATE_KNOT + " " + TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
             new_domain_tree.add(item);
         }
-        new_logical_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
-        for (c = 0; c < ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
-            item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c]));
+        new_logical_tree = new JMenu(getResString("el_neu"));
+        for (c = 0; c < TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
+            item = new JMenuItem(getDisplayableName(TREE_CREATABLE_LOGICAL_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
+            item.setActionCommand(CREATE_KNOT + " " + TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
             new_logical_tree.add(item);
         }
 
-        new_physical_tree = new JMenu(Tool3lgmConstants.getResString("el_neu"));
-        for (c = 0; c < ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
-            item = new JMenuItem(ModelConstants.getDisplayableName(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]));
+        new_physical_tree = new JMenu(getResString("el_neu"));
+        for (c = 0; c < TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
+            item = new JMenuItem(getDisplayableName(TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(GDCommands.CREATE_KNOT + " " + ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
+            item.setActionCommand(CREATE_KNOT + " " + TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
             new_physical_tree.add(item);
         }
 
-        new_fach_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldFach.class.getName());
-        new_log_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldLog.class.getName());
-        new_phy_text = getItem("text_neu", GDCommands.CREATE_KNOT, TextfeldPhy.class.getName());
+        new_fach_text = getItem("text_neu", CREATE_KNOT, TextfeldFach.class.getName());
+        new_log_text = getItem("text_neu", CREATE_KNOT, TextfeldLog.class.getName());
+        new_phy_text = getItem("text_neu", CREATE_KNOT, TextfeldPhy.class.getName());
 
-        properties = getItem("eigenschaften", GDCommands.ELEMENT_PROPERTIES);
-        unlinkToSzenario = getItem("unlinkToSzenario", GDCommands.LINK_SELECTED_TO_SZENARIO, GraphDocument.GDCOMMAND_TEXT_SURROUNDER + "null" + GraphDocument.GDCOMMAND_TEXT_SURROUNDER);
-        selectLinkedSzenario = getItem("selectLinkedSzenario", GDCommands.SELECT_LINKED_SZENARIO);
-        delete_selected = getItem("remove_from_model", GDCommands.DELETE);
+        properties = getItem("eigenschaften", ELEMENT_PROPERTIES);
+        unlinkToSzenario = getItem("unlinkToSzenario", LINK_SELECTED_TO_SZENARIO, GDCOMMAND_TEXT_SURROUNDER + "null" + GDCOMMAND_TEXT_SURROUNDER);
+        selectLinkedSzenario = getItem("selectLinkedSzenario", SELECT_LINKED_SZENARIO);
+        delete_selected = getItem("remove_from_model", DELETE);
         // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
-        delete_selected_from_szenario = getItem("remove_from_submodel", GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, "");
+        delete_selected_from_szenario = getItem("remove_from_submodel", REMOVE_ELEMENT_FROM_SZENARIO, "");
 
-        join_selected = getItem("elemente_vereinigen", GDCommands.JOIN_SELECTED);
+        join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
 
-        change_layout = getItem("global_layout", GDCommands.CHANGE_GLOBAL_MAPPING);
+        change_layout = getItem("global_layout", CHANGE_GLOBAL_MAPPING);
 
-        verify = new JCheckBoxMenuItem(Tool3lgmConstants.getResString("verif"));
+        verify = new JCheckBoxMenuItem(getResString("verif"));
         verify.addActionListener(this);
 
-        interactive = new JCheckBoxMenuItem(Tool3lgmConstants.getResString("intera"));
+        interactive = new JCheckBoxMenuItem(getResString("intera"));
         interactive.addActionListener(this);
 
-        command_line = getItem("befehl", GDCommands.COMMAND_LINE);
-        queue = getItem("queue", GDCommands.PRINT_QUEUE);
-        consistency = getItem("konsistenz", GDCommands.CHECK_CONSISTENCY);
+        command_line = getItem("befehl", COMMAND_LINE);
+        queue = getItem("queue", PRINT_QUEUE);
+        consistency = getItem("konsistenz", CHECK_CONSISTENCY);
 
-        internals = new JMenu(Tool3lgmConstants.getResString("intern"));
+        internals = new JMenu(getResString("intern"));
         internals.add(verify);
         internals.add(interactive);
         internals.addSeparator();
@@ -275,43 +328,43 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         internals.add(consistency);
 
         // weiter mit Grafik-Sachen
-        normalize_layer = getItem("layer_reset_color", GDCommands.NORMALIZE_LAYER);
-        voll_trans_layer = getItem("layer_full_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.VOLL_TRANSPARENT);
-        halb_trans_layer = getItem("layer_semi_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.HALB_TRANSPARENT);
-        nicht_trans_layer = getItem("layer_no_transparency", GDCommands.CHANGE_LAYER_ALPHA, "" + GraphElementLayout.NICHT_TRANSPARENT);
-        color_layer = getItem("layer_change_color", GDCommands.CHANGE_LAYER_COLOR);
+        normalize_layer = getItem("layer_reset_color", NORMALIZE_LAYER);
+        voll_trans_layer = getItem("layer_full_transparency", CHANGE_LAYER_ALPHA, "" + VOLL_TRANSPARENT);
+        halb_trans_layer = getItem("layer_semi_transparency", CHANGE_LAYER_ALPHA, "" + HALB_TRANSPARENT);
+        nicht_trans_layer = getItem("layer_no_transparency", CHANGE_LAYER_ALPHA, "" + NICHT_TRANSPARENT);
+        color_layer = getItem("layer_change_color", CHANGE_LAYER_COLOR);
 
-        JMenu trans_layer = new JMenu(Tool3lgmConstants.getResString("layerTransparencyMenu"));
+        JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
         trans_layer.add(nicht_trans_layer);
         trans_layer.add(halb_trans_layer);
         trans_layer.add(voll_trans_layer);
 
-        layout_layer = new JMenu(Tool3lgmConstants.getResString("layerLayoutMenu"));
+        layout_layer = new JMenu(getResString("layerLayoutMenu"));
         layout_layer.add(normalize_layer);
         layout_layer.add(color_layer);
         layout_layer.add(trans_layer);
 
-        show_configs = getItem("konf_einbl", GDCommands.SHOW_ALL_CONFIGS);
-        hide_configs = getItem("konf_ausbl", GDCommands.HIDE_ALL_CONFIGS);
-        set_visible = getItem("einbl", GDCommands.SET_VISIBLE, "true");
-        set_invisible = getItem("ausbl", GDCommands.SET_VISIBLE, "false");
+        show_configs = getItem("konf_einbl", SHOW_ALL_CONFIGS);
+        hide_configs = getItem("konf_ausbl", HIDE_ALL_CONFIGS);
+        set_visible = getItem("einbl", SET_VISIBLE, "true");
+        set_invisible = getItem("ausbl", SET_VISIBLE, "false");
 
-        configuration_sub_menu = new JMenu(Tool3lgmConstants.getResString("konf"));
+        configuration_sub_menu = new JMenu(getResString("konf"));
         configuration_sub_menu.add(show_configs);
         configuration_sub_menu.add(hide_configs);
 
-        layer_show_configs = getItem("konf_einbl", GDCommands.SHOW_ALL_CONFIGS);
-        layer_hide_configs = getItem("konf_ausbl", GDCommands.HIDE_ALL_CONFIGS);
-        aufklappen = getItem("aufklappen", GDCommands.AUFKLAPPEN);
-        zuklappen = getItem("zuklappen", GDCommands.ZUKLAPPEN);
+        layer_show_configs = getItem("konf_einbl", SHOW_ALL_CONFIGS);
+        layer_hide_configs = getItem("konf_ausbl", HIDE_ALL_CONFIGS);
+        aufklappen = getItem("aufklappen", AUFKLAPPEN);
+        zuklappen = getItem("zuklappen", ZUKLAPPEN);
 
-        JMenu linienstil = new JMenu(Tool3lgmConstants.getResString("linestyle"));
+        JMenu linienstil = new JMenu(getResString("linestyle"));
 
         JMenuItem[] linestyles = new JMenuItem[2];
-        linestyles[0] = new JMenuItem(Tool3lgmConstants.getResString("linestyle_normal"));
-        linestyles[0].setActionCommand(GDCommands.CHANGE_LINE_STYLE + " normal");
-        linestyles[1] = new JMenuItem(Tool3lgmConstants.getResString("linestyle_dashed"));
-        linestyles[1].setActionCommand(GDCommands.CHANGE_LINE_STYLE + " dashes");
+        linestyles[0] = new JMenuItem(getResString("linestyle_normal"));
+        linestyles[0].setActionCommand(CHANGE_LINE_STYLE + " normal");
+        linestyles[1] = new JMenuItem(getResString("linestyle_dashed"));
+        linestyles[1].setActionCommand(CHANGE_LINE_STYLE + " dashes");
         for (JMenuItem jItem : linestyles) {
             jItem.addActionListener(this);
             linienstil.add(jItem);
@@ -331,7 +384,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
         String label = null;
         try {
-            label = Tool3lgmConstants.getResString(resKeyOrString);
+            label = getResString(resKeyOrString);
         } catch (Exception e) {
             label = resKeyOrString;
         }
@@ -399,7 +452,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getSubElemMenu() {
         ModelElement selected = doc.getLastSelected().getElement();
-        JMenu sub_elem = new JMenu(Tool3lgmConstants.getResString("unterg_el"));
+        JMenu sub_elem = new JMenu(getResString("unterg_el"));
         HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
         for (Class<? extends Composition> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
             Class<? extends ModelElement> abstractSlaves = Composition.getSlaveType(compositionClass);
@@ -416,7 +469,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         for (Pair<Class<? extends Composition>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends Composition> compositionClass = slavePair.getFirstItem();
-            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), GDCommands.CREATE_ADDICTED, doc.getHashString() + " " + selected.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
+            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), CREATE_ADDICTED, doc.getHashString() + " " + selected.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
             item.setEnabled(selected.countConnections(compositionClass) < Composition.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
@@ -434,8 +487,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getAddToSzenarioMenu() {
-        JMenu szenario_menu = new JMenu(Tool3lgmConstants.getResString("inszenario"));
-        JMenuItem item = getItem("inneuszenario", GDCommands.ADD_SELECTED_TO_NEW_SZENARIO);
+        JMenu szenario_menu = new JMenu(getResString("inszenario"));
+        JMenuItem item = getItem("inneuszenario", ADD_SELECTED_TO_NEW_SZENARIO);
         szenario_menu.add(item);
         szenario_menu.add(new JSeparator());
 
@@ -446,16 +499,16 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             szenario_menu.add(item);
 
-            if (UserProperties.isEnableSubmodelBrowser() && szen == Static.getSelectedDoc()) {
+            if (isEnableSubmodelBrowser() && szen == Static.getSelectedDoc()) {
                 item.setEnabled(false);
                 continue;
             }
 
             item.addActionListener(this);
-            item.setActionCommand(GDCommands.ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+            item.setActionCommand(ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
         }
 
-        item = getItem("in_all_szenarios", GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS);
+        item = getItem("in_all_szenarios", ADD_SELECTED_TO_ALL_SZENARIOS);
         szenario_menu.add(new JSeparator());
         szenario_menu.add(item);
 
@@ -472,8 +525,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getLinkToSzenarioMenu() {
-        JMenu link_to_szenario_menu = new JMenu(Tool3lgmConstants.getResString("verkn_mit_szen"));
-        JMenuItem item = getItem("verkn_neuszenario", GDCommands.LINK_SELECTED_TO_NEW_SZENARIO);
+        JMenu link_to_szenario_menu = new JMenu(getResString("verkn_mit_szen"));
+        JMenuItem item = getItem("verkn_neuszenario", LINK_SELECTED_TO_NEW_SZENARIO);
         link_to_szenario_menu.add(item);
         link_to_szenario_menu.add(new JSeparator());
 
@@ -487,7 +540,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
 
             item.addActionListener(this);
-            item.setActionCommand(GDCommands.LINK_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+            item.setActionCommand(LINK_SELECTED_TO_SZENARIO + " " + szen.getHashString());
             link_to_szenario_menu.add(item);
         }
         return link_to_szenario_menu;
@@ -621,11 +674,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             List<NamedObjectContainer<JMenuItem>> disconnectableItems = Lists.newArrayList();
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
-                for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(lastSelectedClass, me2Class)) {
+                for (Class<? extends Kante> edgeClass : getEdgeTypes(lastSelectedClass, me2Class)) {
                     if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
-                        if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                            String label = ModelConstants.getForwardMetaAssociationName(edgeClass, false, true);
-                            String toolTip = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
+                        if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                            String label = getForwardMetaAssociationName(edgeClass, false, true);
+                            String toolTip = getFullForwardMetaAssociationName(edgeClass);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -642,12 +695,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
-                        if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-                            String label = ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
-                            String toolTip = ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
+                        if (isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
+                            String label = getBackwardMetaAssociationName(edgeClass, false, true);
+                            String toolTip = getFullBackwardMetaAssociationName(edgeClass);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -664,14 +717,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                        if (Kante.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                        if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                             int actDir = FORWARD;
-                            String label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
-                            String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
+                            String label = getMetaAssociationName(edgeClass, false, actDir, false, true);
+                            String toolTip = getFullMetaAssociationName(edgeClass, false, actDir);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -688,12 +741,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                             actDir = BACKWARD;
-                            label = ModelConstants.getMetaAssociationName(edgeClass, false, actDir, false, true);
-                            toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, false, actDir);
+                            label = getMetaAssociationName(edgeClass, false, actDir, false, true);
+                            toolTip = getFullMetaAssociationName(edgeClass, false, actDir);
                             connectable = false;
                             disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -710,15 +763,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         // Doppeldeutige Kanten mit identischer Start- und
                         // Endklasse brauchen nur 1x angeboten werden
-                        if (Kante.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && Kante.getStartClass(edgeClass) != Kante.getEndClass(edgeClass)) {
+                        if (isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
                             int actDir = FORWARD;
-                            String label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
-                            String toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
+                            String label = getMetaAssociationName(edgeClass, true, actDir, false, true);
+                            String toolTip = getFullMetaAssociationName(edgeClass, true, actDir);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -735,12 +788,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                             actDir = BACKWARD;
-                            label = ModelConstants.getMetaAssociationName(edgeClass, true, actDir, false, true);
-                            toolTip = ModelConstants.getFullMetaAssociationName(edgeClass, true, actDir);
+                            label = getMetaAssociationName(edgeClass, true, actDir, false, true);
+                            toolTip = getFullMetaAssociationName(edgeClass, true, actDir);
                             connectable = false;
                             disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -757,13 +810,13 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                         }
                     } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
-                        String label = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getForwardMetaAssociationName(edgeClass, false, true) : ModelConstants.getBackwardMetaAssociationName(edgeClass, false, true);
-                        String toolTip = Kante.isStartClass(edgeClass, lastSelectedClass) ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
+                        String label = isStartClass(edgeClass, lastSelectedClass) ? getForwardMetaAssociationName(edgeClass, false, true) : getBackwardMetaAssociationName(edgeClass, false, true);
+                        String toolTip = isStartClass(edgeClass, lastSelectedClass) ? getFullForwardMetaAssociationName(edgeClass) : getFullBackwardMetaAssociationName(edgeClass);
                         boolean connectable = false;
                         boolean disconnectable = false;
                         for (ModelElement me2 : selectedElements) {
@@ -779,15 +832,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 break;
                             }
                         }
-                        connectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, GDCommands.UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                     }
                 }
             }
 
             if (connectableItems.size() > 0) {
                 Alphabetical.sort(connectableItems);
-                menu.add(new JLabel(Tool3lgmConstants.getResString("verbinden")));
+                menu.add(new JLabel(getResString("verbinden")));
                 for (NamedObjectContainer<JMenuItem> itemContainer : connectableItems) {
                     menu.add(itemContainer.getObject());
                 }
@@ -795,7 +848,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
             if (disconnectableItems.size() > 0) {
                 Alphabetical.sort(disconnectableItems);
-                menu.add(new JLabel(Tool3lgmConstants.getResString("trennen")));
+                menu.add(new JLabel(getResString("trennen")));
                 for (NamedObjectContainer<JMenuItem> itemContainer : disconnectableItems) {
                     menu.add(itemContainer.getObject());
                 }
@@ -1029,7 +1082,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private static JMenu getLayerMenu() {
-        JMenu menu = new JMenu(Tool3lgmConstants.getResString("layer"));
+        JMenu menu = new JMenu(getResString("layer"));
         JPopupMenu popup = getLayerContextMenu();
         for (Component c : popup.getComponents()) {
             if (c instanceof JMenu) {
@@ -1079,18 +1132,18 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private static JMenu getInternalsMenu() {
         if (!doc.isVerificationMode()) {
             verify.setState(false);
-            verify.setActionCommand(GDCommands.VERIFY_ON.toString());
+            verify.setActionCommand(VERIFY_ON.toString());
         } else {
             verify.setState(true);
-            verify.setActionCommand(GDCommands.VERIFY_OFF.toString());
+            verify.setActionCommand(VERIFY_OFF.toString());
         }
 
         if (!doc.getCollection().isInteractiveMode()) {
             interactive.setState(false);
-            interactive.setActionCommand(GDCommands.INTERACTIVE_MODE_ON.toString());
+            interactive.setActionCommand(INTERACTIVE_MODE_ON.toString());
         } else {
             interactive.setState(true);
-            interactive.setActionCommand(GDCommands.INTERACTIVE_MODE_OFF.toString());
+            interactive.setActionCommand(INTERACTIVE_MODE_OFF.toString());
         }
         return internals;
     }
@@ -1308,7 +1361,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         mc = kc;
                     }
                 }
-
             }
 
             if (mc instanceof NodeContainer) {
@@ -1929,24 +1981,18 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public JPopupMenu getTreeKnotContextMenu() {
         JPopupMenu menu = new JPopupMenu();
-
         menu.add(properties);
         menu.addSeparator();
-
         boolean do_join = doc.isJoinableElementsSelected();
-
         if (do_join) {
             menu.add(join_selected);
             menu.addSeparator();
         }
-
         if (doc instanceof Szenario) {
             menu.add(delete_selected_from_szenario);
         }
-
         menu.add(delete_selected);
         delete_selected.setEnabled(true);
-
         //		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgeführt");
         menu.addPopupMenuListener(this);
         return menu;
@@ -1971,14 +2017,13 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return Analysemenü
      */
     private static JMenu getAnalyseMenu() {
-        JMenu menu = new JMenu(Tool3lgmConstants.getResString("analysis"));
+        JMenu menu = new JMenu(getResString("analysis"));
         ElementContainer ec = doc.getLastSelected();
         if (ec != null && ec.getElement() instanceof Knoten) {
             // Alle Analysen für die ausgewählte Klasse holen
             String klasse = ec.getElement().getClass().getName();
             klasse = klasse.substring(klasse.lastIndexOf('.') + 1);
             List<AbstractAnalyse> analysen = AnalyseRepository.getAnalysenFuerKnoten(klasse);
-
             // Analysen ins Menü eintragen
             if (analysen != null && analysen.size() > 0) {
                 for (final AbstractAnalyse ana : analysen) {
@@ -1997,7 +2042,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        doc.getCollection().getSelectedDoc().exec(e.getActionCommand(), TransactionManager.STANDARD_PID);
+        doc.getCollection().getSelectedDoc().exec(e.getActionCommand(), STANDARD_PID);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------
@@ -2009,8 +2054,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     @Override
     public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
         // das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulöschenden Elemnte kommen
-        delete_selected_from_szenario.setActionCommand(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO + " ");
-        delete_selected.setActionCommand(GDCommands.DELETE + " ");
+        delete_selected_from_szenario.setActionCommand(REMOVE_ELEMENT_FROM_SZENARIO + " ");
+        delete_selected.setActionCommand(DELETE + " ");
         ((JPopupMenu) e.getSource()).removePopupMenuListener(this);
     }
 
@@ -2027,8 +2072,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (Static.getCollectionCount() < 2) {
             return null;
         }
-        JMenu menu = new JMenu(Tool3lgmConstants.getResString("inmodel"));
-        for (GDCollection gdcoll : Static.getCollections()) {
+        JMenu menu = new JMenu(getResString("inmodel"));
+        for (GDCollection gdcoll : getCollections()) {
             if (gdcoll != doc.getCollection()) {
                 menu.add(getSubModelMenu(gdcoll));
             }
@@ -2042,16 +2087,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private static final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
         JMenu menu = new JMenu(gdcoll.getName());
-        JMenuItem item = new JMenuItem(Tool3lgmConstants.getResString("main_model"));
+        JMenuItem item = new JMenuItem(getResString("main_model"));
         item.addActionListener(e -> doc.copySelectedToModel(gdcoll.getMainGraphDocument()));
         menu.add(item);
-
         for (final Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
             item.addActionListener(e -> doc.copySelectedToModel(szen));
             menu.add(item);
         }
-
         return menu;
     }
 
@@ -2062,49 +2105,36 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (mc == null) {
             return null;
         }
-
         if (Static.getCollectionCount() < 2) {
             return null;
         }
-
         if (!doc.isSingleSelection()) {
             return null;
         }
-
-        JMenu menu = new JMenu(Tool3lgmConstants.getResString("join_elements"));
+        JMenu menu = new JMenu(getResString("join_elements"));
         JMenuItem item;
-
         ModelElement me1 = doc.getLastSelected().getElement();
-
         for (GDCollection gdcoll : Static.getCollections()) {
             if (gdcoll == doc.getCollection()) {
                 continue;
             }
-
-            final GraphDocument doc2 = Static.getPreSelectedGDCollection().getSelectedDoc();
-
+            final GraphDocument doc2 = getPreSelectedGDCollection().getSelectedDoc();
             if (!doc2.isSingleSelection()) {
                 continue;
             }
-
             ModelElement me2 = doc2.getLastSelected().getElement();
-
             if (me2.getClass() != me1.getClass()) {
                 continue;
             }
-
             if (menu.getItemCount() > 0) {
                 menu.addSeparator();
             }
-
-            item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc.getCollection().getName());
+            item = new JMenuItem(getResString("join_elements_result") + " " + doc.getCollection().getName());
             item.addActionListener(e -> doc.joinElements(doc2, false));
             menu.add(item);
-
-            item = new JMenuItem(Tool3lgmConstants.getResString("join_elements_result") + " " + doc2.getCollection().getName());
+            item = new JMenuItem(getResString("join_elements_result") + " " + doc2.getCollection().getName());
             item.addActionListener(e -> ((LGMGraphDocument) doc2).joinElements(doc, false));
             menu.add(item);
-
             //			item = new JMenuItem(Tool3lgmConstants.getResourceString("join_elements_result_both"));
             //			item.addActionListener(new ActionListener() {
             //				public void actionPerformed(ActionEvent e) {
@@ -2113,7 +2143,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             //			});
             //			menu.add(item);
         }
-
         return menu.getItemCount() > 0 ? menu : null;
     }
 

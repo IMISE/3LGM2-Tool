@@ -1,5 +1,12 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -139,9 +146,9 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         // gdcoll.getGraphDocument().getModelItems(pair.getFirstItem(), true);
         // for (ModelElement me : elements){
         // //System.err.println(me.getName() + "\t" + me.getHashString() + "\t" +
-        // Kante.getMinCardinality(me.getClass(), pair.getSecondItem()) + "\t" +
+        // getMinCardinality(me.getClass(), pair.getSecondItem()) + "\t" +
         // me.countConnections(pair.getSecondItem()));
-        // if (me.countConnections(pair.getSecondItem()) < Kante.getMinCardinality(me.getClass(),
+        // if (me.countConnections(pair.getSecondItem()) < getMinCardinality(me.getClass(),
         // pair.getSecondItem()))
         // gdcoll.deleteElement(me, TransactionManager.STANDARD_PID);
         // }
@@ -268,12 +275,12 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 }
                 // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
                 // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
-                int minStartCard = consistencyDefinition == null ? Kante.getMinStartToEndCardinality(edgeClass) : consistencyDefinition.getMinStartToEndCardinality(edgeClass);
-                int maxStartCard = consistencyDefinition == null ? Kante.getMaxStartToEndCardinality(edgeClass) : consistencyDefinition.getMaxStartToEndCardinality(edgeClass);
-                int minEndCard = consistencyDefinition == null ? Kante.getMinEndToStartCardinality(edgeClass) : consistencyDefinition.getMinEndToStartCardinality(edgeClass);
-                int maxEndCard = consistencyDefinition == null ? Kante.getMaxEndToStartCardinality(edgeClass) : consistencyDefinition.getMaxEndToStartCardinality(edgeClass);
-                boolean meHasStartClass = Kante.isStartClass(edgeClass, me.getClass());
-                boolean meHasEndClass = Kante.isEndClass(edgeClass, me.getClass());
+                int minStartCard = consistencyDefinition == null ? getMinStartToEndCardinality(edgeClass) : consistencyDefinition.getMinStartToEndCardinality(edgeClass);
+                int maxStartCard = consistencyDefinition == null ? getMaxStartToEndCardinality(edgeClass) : consistencyDefinition.getMaxStartToEndCardinality(edgeClass);
+                int minEndCard = consistencyDefinition == null ? getMinEndToStartCardinality(edgeClass) : consistencyDefinition.getMinEndToStartCardinality(edgeClass);
+                int maxEndCard = consistencyDefinition == null ? getMaxEndToStartCardinality(edgeClass) : consistencyDefinition.getMaxEndToStartCardinality(edgeClass);
+                boolean meHasStartClass = isStartClass(edgeClass, me.getClass());
+                boolean meHasEndClass = isEndClass(edgeClass, me.getClass());
 
                 List<Kante> connections = me.getEdges(edgeClass);
                 List<Kante> meIsStartConnections = new ArrayList<>();

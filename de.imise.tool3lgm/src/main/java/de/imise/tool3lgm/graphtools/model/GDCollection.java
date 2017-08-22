@@ -12,6 +12,7 @@ import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
 import static de.imise.tool3lgm.graphtools.elements.Kante.getMinCardinality;
 import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnecting;
 import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.DOMAIN_LAYER;
@@ -1271,7 +1272,7 @@ public final class GDCollection extends UserFieldTarget {
         EdgeContainer kac = null;
         Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
         Class<? extends Kante> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Kante.class);
-        if (edgeClass != null && !Kante.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
+        if (edgeClass != null && !isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
         doc.start_transaction(pid);
@@ -1416,7 +1417,7 @@ public final class GDCollection extends UserFieldTarget {
     //		Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
     //		Class<? extends Kante> edgeClass = edgeClassOrNull==null ? null : edgeClassOrNull.asSubclass(Kante.class);
     //
-    //		if (edgeClass!=null && !Kante.isConnecting(edgeClass, me1.getClass(), me2.getClass()))
+    //		if (edgeClass!=null && !isConnecting(edgeClass, me1.getClass(), me2.getClass()))
     //			return null;
     //
     //		doc.start_transaction(pid);

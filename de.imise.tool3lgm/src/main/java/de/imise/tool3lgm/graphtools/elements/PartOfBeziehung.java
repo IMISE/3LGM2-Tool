@@ -46,7 +46,7 @@ public abstract class PartOfBeziehung extends Kante {
      * @return
      */
     public static final Class<? extends ModelElement> getPartClass(final Class<? extends PartOfBeziehung> poClass) {
-        return Kante.getStartClass(poClass);
+        return getStartClass(poClass);
     }
 
     /**
@@ -56,7 +56,7 @@ public abstract class PartOfBeziehung extends Kante {
      * @return
      */
     public static final Class<? extends ModelElement> getParentClass(final Class<? extends PartOfBeziehung> poClass) {
-        return Kante.getEndClass(poClass);
+        return getEndClass(poClass);
     }
 
     /**

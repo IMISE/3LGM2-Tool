@@ -1,8 +1,16 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.Composition.getMaxMasterToSlaveCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Composition.getMinMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnecting;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartOrEndClass;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -344,7 +352,7 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return SortedEdge.class.isAssignableFrom(edgeClass) && Kante.isStartClass(edgeClass, elementClass);
+        return SortedEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
         //return getSortedEdgeClasses(elementClass).contains(edgeClass); //das kommt auf dasselbe raus wie das oben. Ich konnte mich nicht entscheiden, was besser ist -> daher nur auskommentiert
     }
 
@@ -446,7 +454,7 @@ public final class ModelConstants {
         }
         ArrayList<Class<? extends Kante>> elementClassEdgeClasses = new ArrayList<>();
         for (Class<? extends Kante> edgeClass : ALL_EDGES) {
-            if (Kante.isStartOrEndClass(edgeClass, elementClass)) {
+            if (isStartOrEndClass(edgeClass, elementClass)) {
                 elementClassEdgeClasses.add(edgeClass);
             }
         }
@@ -504,7 +512,7 @@ public final class ModelConstants {
         }
         ArrayList<Class<? extends Kante>> resultEdgeClasses = new ArrayList<>();
         for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass1)) {
-            if (Kante.isConnecting(edgeClass, elementClass1, elementClass2)) {
+            if (isConnecting(edgeClass, elementClass1, elementClass2)) {
                 resultEdgeClasses.add(edgeClass);
             }
         }
@@ -1030,13 +1038,13 @@ public final class ModelConstants {
         }
         StringBuilder sb = new StringBuilder();
         if (appendPrefixClass) {
-            sb.append(getDisplayableName(!switchDefinedDirection ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass)));
+            sb.append(getDisplayableName(!switchDefinedDirection ? getStartClass(edgeClass) : getEndClass(edgeClass)));
             sb.append(" ");
         }
         sb.append(getMetaAssociationName(edgeClass, switchDefinedDirection, direction));
         if (appendPostfixClass) {
             sb.append(" ");
-            sb.append(getDisplayableName(!switchDefinedDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass)));
+            sb.append(getDisplayableName(!switchDefinedDirection ? getEndClass(edgeClass) : getStartClass(edgeClass)));
         }
         return sb.toString();
     }
@@ -1370,11 +1378,11 @@ public final class ModelConstants {
         for (Class<? extends Kante> edgeClass : elementClassEdges) {
             if (isComposition(edgeClass)) {
                 if (isMaster) {
-                    if (Kante.isStartClass(edgeClass, elementClass)) {
+                    if (isStartClass(edgeClass, elementClass)) {
                         subEdgeTypes.add(edgeClass);
                     }
                 } else {
-                    if (Kante.isEndClass(edgeClass, elementClass)) {
+                    if (isEndClass(edgeClass, elementClass)) {
                         subEdgeTypes.add(edgeClass);
                     }
                 }
@@ -1454,7 +1462,7 @@ public final class ModelConstants {
      */
     public static boolean isSlaveType(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Kante> edgeClass : getEdgeTypes(elementClass)) {
-            if (isComposition(edgeClass) && Kante.isEndClass(edgeClass, elementClass)) {
+            if (isComposition(edgeClass) && isEndClass(edgeClass, elementClass)) {
                 return true;
             }
         }
@@ -1474,7 +1482,7 @@ public final class ModelConstants {
         ImmutableSet.Builder<Class<? extends ModelElement>> subordinatedJoinbleTypes = ImmutableSet.<Class<? extends ModelElement>> builder();
         Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
         for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
-            if (Composition.getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
+            if (getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
                 Class<? extends ModelElement> slaveType = Composition.getSlaveType(compositionEdgeType);
                 Class<? extends ModelElement>[] instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
                 for (Class<? extends ModelElement> instanciableAssignableClass : instanciableAssignableClasses) {
@@ -1500,7 +1508,7 @@ public final class ModelConstants {
             ImmutableSet.Builder<Class<? extends Kante>> initialSubtypesBuilder = ImmutableSet.<Class<? extends Kante>> builder();
             Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
             for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
-                if (Composition.getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
+                if (getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
                     initialSubtypesBuilder.add(compositionEdgeType);
                 }
             }

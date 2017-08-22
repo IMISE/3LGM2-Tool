@@ -3,6 +3,11 @@ package de.imise.tool3lgm.event;
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isDoubleMeaningEdge;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -282,7 +287,7 @@ public class ActionLibrary {
                 for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                     for (Class<? extends Kante> edgeClass : ModelConstants.getEdgeTypes(me1Class, me2Class)) {
                         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
-                            if (Kante.isConnectingForward(edgeClass, me1Class, me2Class)) {
+                            if (isConnectingForward(edgeClass, me1Class, me2Class)) {
                                 String label = ModelConstants.getBackwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
@@ -303,7 +308,7 @@ public class ActionLibrary {
 
                                 actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + FORWARD, connectable));
                             }
-                            if (Kante.isConnectingForward(edgeClass, me2Class, me1Class)) {
+                            if (isConnectingForward(edgeClass, me2Class, me1Class)) {
                                 String label = ModelConstants.getForwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
@@ -323,8 +328,8 @@ public class ActionLibrary {
                                 }
                                 actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + BACKWARD, connectable));
                             }
-                        } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                            if (Kante.isConnectingForward(edgeClass, me1Class, me2Class)) {
+                        } else if (isDoubleMeaningEdge(edgeClass)) {
+                            if (isConnectingForward(edgeClass, me1Class, me2Class)) {
                                 String label = ModelConstants.getMetaAssociationName(edgeClass, false, FORWARD);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
@@ -344,7 +349,7 @@ public class ActionLibrary {
 
                                 actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + FORWARD, connectable));
 
-                                label = ModelConstants.getMetaAssociationName(edgeClass, false, BACKWARD);
+                                label = getMetaAssociationName(edgeClass, false, BACKWARD);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -365,8 +370,8 @@ public class ActionLibrary {
                             }
                             // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen
                             // nur 1x angeboten werden
-                            if (Kante.isConnectingForward(edgeClass, me2Class, me1Class) && Kante.getStartClass(edgeClass) != Kante.getEndClass(edgeClass)) {
-                                String label = ModelConstants.getMetaAssociationName(edgeClass, true, FORWARD);
+                            if (isConnectingForward(edgeClass, me2Class, me1Class) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
+                                String label = getMetaAssociationName(edgeClass, true, FORWARD);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -385,7 +390,7 @@ public class ActionLibrary {
 
                                 actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + BACKWARD, connectable));
 
-                                label = ModelConstants.getMetaAssociationName(edgeClass, true, BACKWARD);
+                                label = getMetaAssociationName(edgeClass, true, BACKWARD);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -405,7 +410,7 @@ public class ActionLibrary {
                                 actions.add(new CommandAction(label, icon, command, edgeClass.getSimpleName() + " " + FORWARD, connectable));
 
                             }
-                        } else /* if (Kante.isConnecting(edgeClass, me1Class, me2Class)) */ {
+                        } else /* if (isConnecting(edgeClass, me1Class, me2Class)) */ {
                             String label = ModelConstants.getForwardMetaAssociationName(edgeClass);
                             boolean connectable = false;
                             boolean disconnectable = false;

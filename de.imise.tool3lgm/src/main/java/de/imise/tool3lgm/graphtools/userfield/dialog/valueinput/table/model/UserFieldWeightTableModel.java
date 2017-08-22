@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
 
 import java.util.List;
 import java.util.Vector;
@@ -54,8 +56,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @return
      */
     private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Kante> edgeClass, final int direction) {
-        Class<? extends ModelElement> rowElementClass = direction == FORWARD ? Kante.getStartClass(edgeClass) : Kante.getEndClass(edgeClass);
-        Class<? extends ModelElement> colElementClass = direction == FORWARD ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
+        Class<? extends ModelElement> rowElementClass = direction == FORWARD ? getStartClass(edgeClass) : getEndClass(edgeClass);
+        Class<? extends ModelElement> colElementClass = direction == FORWARD ? getEndClass(edgeClass) : getStartClass(edgeClass);
         List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
         List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
 
@@ -87,9 +89,9 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
         List<Kante> edges;
         if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
             if (direction == FORWARD) {
-                edges = columnElement.getEdgesFrom(Kante.getStartClass(edgeClass), edgeClass);
+                edges = columnElement.getEdgesFrom(getStartClass(edgeClass), edgeClass);
             } else {
-                edges = columnElement.getEdgesTo(Kante.getEndClass(edgeClass), edgeClass);
+                edges = columnElement.getEdgesTo(getEndClass(edgeClass), edgeClass);
             }
         } else {
             edges = columnElement.getEdges(edgeClass);

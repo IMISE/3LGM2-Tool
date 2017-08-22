@@ -6,6 +6,7 @@ package de.imise.tool3lgm.graphtools.analyse.process;
 
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -125,7 +126,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      * @param dialog
      */
     public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends Kante> multipleConnectionEgdeClass, final Class<? extends Kante> doubleMeaningEdgeClass) {
-        super(dialog, true, Kante.getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass);
+        super(dialog, true, getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass);
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen

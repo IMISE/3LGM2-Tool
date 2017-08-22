@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.STANDARD_ERROR_INT_VALUE;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isAlwaysDoubleConnectedEdge;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -568,7 +569,7 @@ public abstract class Kante extends ModelElement {
      * @return
      */
     public static final boolean isConnectingForward(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
-        return Kante.isStartClass(edgeClass, startElementClass) && Kante.isEndClass(edgeClass, endElementClass);
+        return isStartClass(edgeClass, startElementClass) && isEndClass(edgeClass, endElementClass);
     }
 
     /**
@@ -592,13 +593,13 @@ public abstract class Kante extends ModelElement {
      * @return
      */
     public static final int getMinCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        if (Kante.isStartClass(edgeClass, elementClass)) {
+        if (isStartClass(edgeClass, elementClass)) {
             return getMinStartToEndCardinality(edgeClass);
         }
         if (isEndClass(edgeClass, elementClass)) {
             return getMinEndToStartCardinality(edgeClass);
         }
-        return ModelConstants.STANDARD_ERROR_INT_VALUE;
+        return STANDARD_ERROR_INT_VALUE;
     }
 
     /**
@@ -609,13 +610,13 @@ public abstract class Kante extends ModelElement {
      * @return
      */
     public static final int getMaxCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        if (Kante.isStartClass(edgeClass, elementClass)) {
+        if (isStartClass(edgeClass, elementClass)) {
             return getMaxStartToEndCardinality(edgeClass);
         }
         if (isEndClass(edgeClass, elementClass)) {
             return getMaxEndToStartCardinality(edgeClass);
         }
-        return ModelConstants.STANDARD_ERROR_INT_VALUE;
+        return STANDARD_ERROR_INT_VALUE;
     }
 
     /**

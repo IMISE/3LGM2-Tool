@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
 
 import java.util.List;
 import java.util.Vector;
@@ -57,7 +59,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
         Class<? extends ModelElement> elementClass = me.getClass();
         List<UserField> fractionValueSumUserFields = definitions.getFractionValueSumUserFields(elementClass, edgeClass);
 
-        Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? Kante.getEndClass(edgeClass) : Kante.getStartClass(edgeClass);
+        Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? getEndClass(edgeClass) : getStartClass(edgeClass);
 
         int direction = edgeForwardDirection ? FORWARD : BACKWARD;
         //alle mit dem Element über die Kante verbundenen Elemente holen

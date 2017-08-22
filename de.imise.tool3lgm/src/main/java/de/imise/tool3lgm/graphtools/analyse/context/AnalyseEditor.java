@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
@@ -255,23 +258,23 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         if (elementClassArray == null || elementClassArray.length == 0) {
             return new Class[0];
         }
-        HashSet<Class<? extends ModelElement>> connectedTypes = new HashSet<Class<? extends ModelElement>>();
+        HashSet<Class<? extends ModelElement>> connectedTypes = new HashSet<>();
         for (int e = 0; e < elementClassArray.length; e++) {
             Class<? extends ModelElement> elementClass = ((Class<?>) elementClassArray[e]).asSubclass(ModelElement.class);
             Class<? extends Kante>[] edgeClasses = ModelConstants.getEdgeTypes(elementClass);
             for (int i = 0; i < edgeClasses.length; i++) {
-                Class<? extends ModelElement> edgeElementClass = Kante.getStartClass(edgeClasses[i]);
+                Class<? extends ModelElement> edgeElementClass = getStartClass(edgeClasses[i]);
                 boolean selectedPathStartClassIsEdgeStartClass = false;
                 if (edgeElementClass.isAssignableFrom(elementClass)) {
                     selectedPathStartClassIsEdgeStartClass = true;
                 }
                 if (selectedPathStartClassIsEdgeStartClass) {
-                    edgeElementClass = Kante.getEndClass(edgeClasses[i]);
+                    edgeElementClass = getEndClass(edgeClasses[i]);
                 }
                 connectedTypes.add(edgeElementClass);
             }
         }
-        HashSet<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<Class<? extends ModelElement>>(connectedTypes.size());
+        HashSet<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<>(connectedTypes.size());
         for (Class<? extends ModelElement> c : connectedTypes) {
             allNonAbstractClasses.addAll(Arrays.asList(ModelConstants.getInstanciableAssignableClasses(c)));
         }
@@ -308,7 +311,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
      * Liste aller <code>PathStepComponent</code>s, über die weitere Pfadschritte und bedinungen
      * eingegeben werden können
      */
-    private final ArrayList<PathStepComponent> pathPanels = new ArrayList<PathStepComponent>();
+    private final ArrayList<PathStepComponent> pathPanels = new ArrayList<>();
 
     /** Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt werden kann */
     private final JButton addPathStepPanelBut = new JButton("+"/*

@@ -1,6 +1,16 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getBackwardMetaAssociationName;
+
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -125,11 +135,11 @@ public class MetaModelExporter {
             }
             List<Class<? extends Kante>> edgeClasses = Lists.newArrayList(ModelConstants.getEdgeTypes(elementClass));
             Alphabetical.sort(edgeClasses);
-            List<NamedObjectContainer<Class<? extends Kante>>> edgesStrings = Lists.newArrayList();
+            List<NamedObjectContainer<Class<? extends Kante>>> edgesStrings = new ArrayList<>();
             for (Class<? extends Kante> edgeClass : edgeClasses) {
                 if (isDefinedStartOrEndClass(elementClass, edgeClass)) {
                     //                    NamedObjectContainer<Class<? extends Kante>> nocE = new NamedObjectContainer<Class<? extends Kante>>(edgeClass, getEdgeStringOrg2(edgeClass, elementClass, INDENTION + INDENTION));
-                    NamedObjectContainer<Class<? extends Kante>> nocE = new NamedObjectContainer<Class<? extends Kante>>(edgeClass, getEdgeString(edgeClass, INDENTION + INDENTION));
+                    NamedObjectContainer<Class<? extends Kante>> nocE = new NamedObjectContainer<>(edgeClass, getEdgeString(edgeClass, INDENTION + INDENTION));
                     edgesStrings.add(nocE);
                 }
             }
@@ -151,7 +161,7 @@ public class MetaModelExporter {
      * @return
      */
     private static boolean isDefinedStartOrEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Kante> edgeClass) {
-        return Kante.getStartClass(edgeClass) == elementClass || Kante.getEndClass(edgeClass) == elementClass;
+        return getStartClass(edgeClass) == elementClass || getEndClass(edgeClass) == elementClass;
     }
 
     private static NamedObjectContainer<List<Class<?>>> getSingleElementHierarchy(final Class<? extends ModelElement> elementClass, final boolean appendDisplayableName) {
@@ -172,7 +182,7 @@ public class MetaModelExporter {
             sb.append(ModelConstants.getDisplayableName(elementClass));
             sb.append(")");
         }
-        NamedObjectContainer<List<Class<?>>> noc = new NamedObjectContainer<List<Class<?>>>(classAndSuperClasses, sb.toString());
+        NamedObjectContainer<List<Class<?>>> noc = new NamedObjectContainer<>(classAndSuperClasses, sb.toString());
         return noc;
     }
 
@@ -199,16 +209,16 @@ public class MetaModelExporter {
 
     private static String getEdgeString(final Class<? extends Kante> edgeClass, final boolean forward) {
         StringBuilder sb = new StringBuilder();
-        int minEndToStartCardinality = forward ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
-        int maxEndToStartCardinality = forward ? Kante.getMaxEndToStartCardinality(edgeClass) : Kante.getMaxStartToEndCardinality(edgeClass);
+        int minEndToStartCardinality = forward ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
+        int maxEndToStartCardinality = forward ? getMaxEndToStartCardinality(edgeClass) : getMaxStartToEndCardinality(edgeClass);
         String maxEndToStartCardinalityString = maxEndToStartCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxEndToStartCardinality);
-        int minStartToEndCardinality = forward ? Kante.getMinStartToEndCardinality(edgeClass) : Kante.getMinEndToStartCardinality(edgeClass);
-        int maxStartToEndCardinality = forward ? Kante.getMaxStartToEndCardinality(edgeClass) : Kante.getMaxEndToStartCardinality(edgeClass);
+        int minStartToEndCardinality = forward ? getMinStartToEndCardinality(edgeClass) : getMinEndToStartCardinality(edgeClass);
+        int maxStartToEndCardinality = forward ? getMaxStartToEndCardinality(edgeClass) : getMaxEndToStartCardinality(edgeClass);
         String maxStartToEndCardinalityString = maxStartToEndCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxStartToEndCardinality);
 
-        String startClassName = forward ? ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass)) : ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass));
-        String endClassName = forward ? ModelConstants.getDisplayableName(Kante.getEndClass(edgeClass)) : ModelConstants.getDisplayableName(Kante.getStartClass(edgeClass));
-        String metaAssociationName = forward ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
+        String startClassName = forward ? ModelConstants.getDisplayableName(getStartClass(edgeClass)) : ModelConstants.getDisplayableName(getEndClass(edgeClass));
+        String endClassName = forward ? ModelConstants.getDisplayableName(getEndClass(edgeClass)) : ModelConstants.getDisplayableName(getStartClass(edgeClass));
+        String metaAssociationName = forward ? ModelConstants.getForwardMetaAssociationName(edgeClass) : getBackwardMetaAssociationName(edgeClass);
 
         sb.append(startClassName);
         sb.append(" ");
@@ -222,12 +232,12 @@ public class MetaModelExporter {
     private static String getEdgeStringOrg2(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         StringBuilder sb = new StringBuilder();
-        boolean forward = Kante.isStartClass(edgeClass, readingDirectionStartClass);
-        int minEndToStartCardinality = forward ? Kante.getMinEndToStartCardinality(edgeClass) : Kante.getMinStartToEndCardinality(edgeClass);
-        int maxEndToStartCardinality = forward ? Kante.getMaxEndToStartCardinality(edgeClass) : Kante.getMaxStartToEndCardinality(edgeClass);
+        boolean forward = isStartClass(edgeClass, readingDirectionStartClass);
+        int minEndToStartCardinality = forward ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
+        int maxEndToStartCardinality = forward ? getMaxEndToStartCardinality(edgeClass) : getMaxStartToEndCardinality(edgeClass);
         String maxEndToStartCardinalityString = maxEndToStartCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxEndToStartCardinality);
-        int minStartToEndCardinality = forward ? Kante.getMinStartToEndCardinality(edgeClass) : Kante.getMinEndToStartCardinality(edgeClass);
-        int maxStartToEndCardinality = forward ? Kante.getMaxStartToEndCardinality(edgeClass) : Kante.getMaxEndToStartCardinality(edgeClass);
+        int minStartToEndCardinality = forward ? getMinStartToEndCardinality(edgeClass) : getMinEndToStartCardinality(edgeClass);
+        int maxStartToEndCardinality = forward ? getMaxStartToEndCardinality(edgeClass) : getMaxEndToStartCardinality(edgeClass);
         String maxStartToEndCardinalityString = maxStartToEndCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxStartToEndCardinality);
         String fulldMetaAssociationName = forward ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
         sb.append(intention).append(edgeClassName).append(": [").append(minEndToStartCardinality).append(", ").append(maxEndToStartCardinalityString).append("] ");
@@ -237,11 +247,11 @@ public class MetaModelExporter {
 
     private static String getEdgeStringOrg(final Class<? extends Kante> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
-        int minEndToStartCardinality = Kante.getMinEndToStartCardinality(edgeClass);
-        int maxEndToStartCardinality = Kante.getMaxEndToStartCardinality(edgeClass);
+        int minEndToStartCardinality = getMinEndToStartCardinality(edgeClass);
+        int maxEndToStartCardinality = getMaxEndToStartCardinality(edgeClass);
         String maxEndToStartCardinalityString = maxEndToStartCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxEndToStartCardinality);
-        int minStartToEndCardinality = Kante.getMinStartToEndCardinality(edgeClass);
-        int maxStartToEndCardinality = Kante.getMaxStartToEndCardinality(edgeClass);
+        int minStartToEndCardinality = getMinStartToEndCardinality(edgeClass);
+        int maxStartToEndCardinality = getMaxStartToEndCardinality(edgeClass);
         String maxStartToEndCardinalityString = maxStartToEndCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxStartToEndCardinality);
         String fullForwardMetaAssociationName = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
         StringBuilder sb = new StringBuilder();

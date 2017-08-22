@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -138,7 +140,7 @@ public abstract class MetaModel {
         for (Class<? extends ModelElement> elementClass : getAllNodes()) {
             ImmutableSet.Builder<Class<? extends Kante>> sortedEdgesForElementClass = new ImmutableSet.Builder<>();
             for (Class<? extends Kante> edgeClass : sortedEdges) {
-                if (Kante.isStartClass(edgeClass, elementClass)) {
+                if (isStartClass(edgeClass, elementClass)) {
                     sortedEdgesForElementClass.add(edgeClass);
                 }
             }

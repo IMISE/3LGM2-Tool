@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
 
 import java.awt.Component;
 /**
@@ -52,18 +54,29 @@ import de.imise.util.StringUtils;
 public class PathConnectionPanel extends AbstractExpandablePanel {
 
     protected final LGMTree ltree;
+
     protected final LGMTree rtree;
+
     protected final DefaultTreeModel lmodel;
+
     private final DefaultTreeModel rmodel;
+
     protected final LGMTreeNode lroot;
+
     protected final LGMTreeNode rroot;
+
     private final JLabel rLabel;
+
     private final JScrollPane rScollPane;
+
     private final JPanel buttonpanel;
+
     private final boolean showRightTree;
 
     private final LGMAction addAction;
+
     private final LGMAction removeAction;
+
     private final LGMAction newElementAction;
 
     public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Kante>... edgeClasses) {
@@ -398,6 +411,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     protected LGMAction getConnectAction() {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+
             @Override
             public void execute(final EventObject eo) {
                 //falls in den TargetTree gedroppt wurde -> selektiere den zur DropPosition nächstegelegenen TreePath
@@ -473,7 +487,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int nextEdgeIndexInPath = edgeIndexInPath + 1;
         if (nextEdgeIndexInPath < edgeClasses.length) {
             Class<? extends Kante> nextEdgeClass = edgeClasses[nextEdgeIndexInPath];
-            Class<? extends ModelElement> nextElementClassInPath = directions[nextEdgeIndexInPath] == FORWARD ? Kante.getEndClass(nextEdgeClass) : Kante.getStartClass(nextEdgeClass);
+            Class<? extends ModelElement> nextElementClassInPath = directions[nextEdgeIndexInPath] == FORWARD ? getEndClass(nextEdgeClass) : getStartClass(nextEdgeClass);
             List<ModelElement> connectedElements = endInPath.getConnectedElements(nextElementClassInPath, nextEdgeClass);
             for (ModelElement connectedElement : connectedElements) {
                 disconnect(endInPath, connectedElement, nextEdgeIndexInPath);
@@ -526,6 +540,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             return null;
         }
         return new LGMAction(Tool3lgmConstants.getResString("new")) {
+
             @Override
             public void execute(final EventObject eo) {
                 //wenn eindutig fest steht, an welchen Knoten ein neues Element gehängt werden sollte, dann wird

@@ -4,6 +4,14 @@ import static de.imise.tool3lgm.graphtools.elements.Kante.ANY;
 import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartClass;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -809,7 +817,7 @@ public abstract class ModelElement extends UserFieldTarget {
         List<Kante> kanten = null;
         if (FORWARD == direction) {
             kanten = getEdgesTo(elemClass, edgeClass);
-        } else if (Kante.BACKWARD == direction) {
+        } else if (BACKWARD == direction) {
             kanten = getEdgesFrom(elemClass, edgeClass);
         } else {
             kanten = getEdgesWith(elemClass, edgeClass);
@@ -1801,7 +1809,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit den verbundenen ModelElementen
      */
     public List<ModelElement> getConnectedElementsByEdge(final Class<? extends Kante> edgeClass) {
-        return getConnectedElementsByEdge(Kante.getOther(edgeClass, getClass()), edgeClass);
+        return getConnectedElementsByEdge(getOther(edgeClass, getClass()), edgeClass);
     }
 
     /**
@@ -1945,9 +1953,9 @@ public abstract class ModelElement extends UserFieldTarget {
             //minimale Kardinalität wird erst einmal als 0 angenommen
             int minCardinality = 0;
             //wenn diese Elementart Startklasse der aktuellen Kantenart ist
-            if (Kante.isStartClass(edgeType, meClass)) {
+            if (isStartClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Endklasse holen
-                minCardinality = Kante.getMinStartToEndCardinality(edgeType);
+                minCardinality = getMinStartToEndCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten zu anderen Elementen hat, als nötig
                 if (minCardinality > 0 && getEdgesTo(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -1955,9 +1963,9 @@ public abstract class ModelElement extends UserFieldTarget {
                 }
             }
             //OHNE ELSE-IF! Wenn diese Elementart Endklasse der aktuellen Kantenart ist
-            if (Kante.isEndClass(edgeType, meClass)) {
+            if (isEndClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Startklasse holen
-                minCardinality = Kante.getMinEndToStartCardinality(edgeType);
+                minCardinality = getMinEndToStartCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten von anderen Elementen zu sich hat, als nötig
                 if (minCardinality > 0 && getEdgesFrom(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -2027,7 +2035,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public final boolean isForwardLinkable(final ModelElement me, final Class<? extends Kante> edgeClass, final boolean testCardinality) {
         //wenn die Kante die beiden Elemente nicht in Vorwärtsrichtung verbinden kann
-        if (!Kante.isConnectingForward(edgeClass, getClass(), me.getClass())) {
+        if (!isConnectingForward(edgeClass, getClass(), me.getClass())) {
             return false;
         }
         //Wenn es sich bei dieser Kantenart nicht um eine mehrfach zwischend denselben Elementen anlgebare Kante handelt
@@ -2048,11 +2056,11 @@ public abstract class ModelElement extends UserFieldTarget {
         //wenn das Überschreiten der Kardinalität geprüft werden soll
         if (testCardinality) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (Kante.getMaxStartToEndCardinality(edgeClass) <= countConnections(edgeClass)) {
+            if (getMaxStartToEndCardinality(edgeClass) <= countConnections(edgeClass)) {
                 return false;
             }
             //für das Endelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (Kante.getMaxEndToStartCardinality(edgeClass) <= me.countConnections(edgeClass)) {
+            if (getMaxEndToStartCardinality(edgeClass) <= me.countConnections(edgeClass)) {
                 return false;
             }
         }

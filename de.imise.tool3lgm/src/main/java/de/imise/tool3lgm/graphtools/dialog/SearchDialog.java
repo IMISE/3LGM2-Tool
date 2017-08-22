@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -118,13 +120,13 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     private int checkBoxMode = 0;
 
     /** Checkbox für ignore case Bezeichnung */
-    private final JCheckBox elementName_cb = new JCheckBox(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInName);
+    private final JCheckBox elementName_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInName);
 
     /** Checkbox für ignore case Beschreibung */
-    private final JCheckBox elementDescription_cb = new JCheckBox(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInDescription);
+    private final JCheckBox elementDescription_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInDescription);
 
     /** Checkbox für ignore case Benutzerdef Eigenschaften */
-    private final JCheckBox elementUserField_cb = new JCheckBox(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInUserField);
+    private final JCheckBox elementUserField_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInUserField);
 
     /** Checkbox Checkboxsuche */
     private JComboBox checkBoxAuswahl = new AlphabeticalComboBox();
@@ -142,7 +144,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     private final AlphabeticalComboBox subModelBox = new AlphabeticalComboBox();
 
     /** Suchknopf */
-    private final JButton searchButton = new JButton(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Button"));
+    private final JButton searchButton = new JButton(getResString("SEARCH_DIALOG_USERFIELD_Button"));
 
     /** Ergebnistabelle */
     private static JTable table;
@@ -171,7 +173,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         modelBox.addActionListener(this);
         subModelBox.addActionListener(this);
 
-        setTitle(Tool3lgmConstants.getResString("suchd"));
+        setTitle(getResString("suchd"));
 
         GridBagLayout gbl = new GridBagLayout();
 
@@ -197,15 +199,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         constraints.weightx = 0;
 
         // erste Spalte
-        inputPane.add(new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Modell")), constraints);
+        inputPane.add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Modell")), constraints);
         constraints.gridy++;
-        inputPane.add(new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Teilmodell")), constraints);
+        inputPane.add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Teilmodell")), constraints);
         constraints.gridy++;
-        inputPane.add(new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Elementeart")), constraints);
+        inputPane.add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Elementeart")), constraints);
         constraints.gridy++;
-        inputPane.add(new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_NAME")), constraints);
+        inputPane.add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_NAME")), constraints);
         constraints.gridy++;
-        inputPane.add(new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_BESCHREIBUNG")), constraints);
+        inputPane.add(new JLabel(getResString("SEARCH_DIALOG_USERFIELD_BESCHREIBUNG")), constraints);
 
         // nächste Spalte
         constraints.gridx++;
@@ -256,10 +258,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         // Zeile 1 Subpanel
         JPanel userFieldPanel = new JPanel();
         userFieldPanel.setLayout(new GridBagLayout());
-        userFieldPanel.setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_benutzdef_eig")));
+        userFieldPanel.setBorder(BorderFactory.createTitledBorder(getResString("SEARCH_DIALOG_USERFIELD_benutzdef_eig")));
 
-        JLabel userfieldproperty = new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Attributtyp"));
-        userfieldproperty.setToolTipText(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Attributtyp_TT"));
+        JLabel userfieldproperty = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Attributtyp"));
+        userfieldproperty.setToolTipText(getResString("SEARCH_DIALOG_USERFIELD_Attributtyp_TT"));
         userFieldPanel.add(userfieldproperty, constraints);
 
         constraints.gridx++;
@@ -272,8 +274,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.fill = GridBagConstraints.NONE;
-        JLabel containingText = new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Text"));
-        containingText.setToolTipText(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Text_TT"));
+        JLabel containingText = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_Text"));
+        containingText.setToolTipText(getResString("SEARCH_DIALOG_USERFIELD_Text_TT"));
         userFieldPanel.add(containingText, constraints);
 
         constraints.gridx++;
@@ -288,7 +290,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         // Zeile 3 Checkboxsuche
         constraints.gridx = 0;
         constraints.gridy++;
-        JLabel checkboxFind = new JLabel(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_CB_filter"));
+        JLabel checkboxFind = new JLabel(getResString("SEARCH_DIALOG_USERFIELD_CB_filter"));
         userFieldPanel.add(checkboxFind, constraints);
 
         constraints.gridx = 1;
@@ -304,7 +306,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
         userFieldTypeComboBox.addItemListener(this);
         checkBoxAuswahl.addItemListener(this);
-        userFieldTypeComboBox.setSelectedItem(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"));
+        userFieldTypeComboBox.setSelectedItem(getResString("SEARCH_DIALOG_USERFIELD_all"));
 
         // Searchbutton
         constraints.gridy++;
@@ -438,7 +440,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
             // re3 muss gesetzt werden, sonst wird nie etwas removed, wenn z.b. auf checkboxen
             // eingeschränkt wird
-            if (re3 == null && !userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"))) {
+            if (re3 == null && !userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))) {
                 try {
                     re3 = new RE(" ");
                 } catch (REException e1) {
@@ -456,7 +458,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         String string = me.getUserFieldInputValue(key);
                         // im all-modus und im checkboxmodus muss auf TRUE/FALSE abgefragt werden
                         // + zusätzlich muss label stimmen
-                        if (userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"))
+                        if (userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))
                                 || ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX) && key.getStyle().equals(UserField.Style.CHECK_BOX)) {
                             // -> Checkbox suchen
 
@@ -477,7 +479,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         }
                         // im allmodus und wenn der attributtyp übereinstimmt muss im inhalt gesucht
                         // werden
-                        if (userFieldTypeComboBox.getSelectedObject().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"))
+                        if (userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))
                                 || !((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX) && ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(key.getStyle())) {
                             // -> keine Checkbox suchen, sondern Inhalte
                             // Punkte in Kommas umwandeln
@@ -533,9 +535,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      */
     private static final DefaultTableModel getDefaultTableModel() {
         DefaultTableModel mod = new DefaultTableModel();
-        mod.addColumn(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Col1"));
-        mod.addColumn(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Col2"));
-        mod.addColumn(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_Col3"));
+        mod.addColumn(getResString("SEARCH_DIALOG_USERFIELD_Col1"));
+        mod.addColumn(getResString("SEARCH_DIALOG_USERFIELD_Col2"));
+        mod.addColumn(getResString("SEARCH_DIALOG_USERFIELD_Col3"));
         return mod;
     }
 
@@ -606,7 +608,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         if (component instanceof JMenuItem) {
                             JMenuItem jmi = (JMenuItem) component;
                             // Nur wenn nicht Eigenschaften: Suche starten
-                            if (!jmi.getText().equals(Tool3lgmConstants.getResString("eigenschaften"))) {
+                            if (!jmi.getText().equals(getResString("eigenschaften"))) {
                                 jmi.addActionListener(new ActionListener() {
                                     @Override
                                     public void actionPerformed(final ActionEvent e) {
@@ -677,10 +679,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * Befüllt die elementClassBox
      */
     private void fillElementClassBox() {
-        elementClassBox.addItem(ModelElement.class, Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
+        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
         elementClassBox.addSeparator(true);
 
-        elementClassBox.addItem(Knoten.class, Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
+        elementClassBox.addItem(Knoten.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
         elementClassBox.addSeparator(true);
         for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
             if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {
@@ -689,7 +691,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             elementClassBox.addItem(ModelConstants.ALL_NODES[i], ModelConstants.getDisplayableName(ModelConstants.ALL_NODES[i]));
         }
         elementClassBox.addSeparator(true);
-        elementClassBox.addItem(Kante.class, Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
+        elementClassBox.addItem(Kante.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
         elementClassBox.addSeparator(true);
 
         for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
@@ -718,10 +720,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * Tooltips an wichtigste Elemente
      */
     private void addToolTips() {
-        searchButton.setToolTipText(Tool3lgmConstants.getResString("SEARCH_DIALOG_TT_Button"));
-        elementName.setToolTipText(Tool3lgmConstants.getResString("SEARCH_DIALOG_TT_Textfield"));
-        elementUserField.setToolTipText(Tool3lgmConstants.getResString("SEARCH_DIALOG_TT_Textfield"));
-        elementDescription.setToolTipText(Tool3lgmConstants.getResString("SEARCH_DIALOG_TT_Textfield"));
+        searchButton.setToolTipText(getResString("SEARCH_DIALOG_TT_Button"));
+        elementName.setToolTipText(getResString("SEARCH_DIALOG_TT_Textfield"));
+        elementUserField.setToolTipText(getResString("SEARCH_DIALOG_TT_Textfield"));
+        elementDescription.setToolTipText(getResString("SEARCH_DIALOG_TT_Textfield"));
     }
 
     /**
@@ -781,7 +783,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
         // auswahlmodi für die benutzerdef. eigenschaften
         userFieldTypeComboBox = new AlphabeticalComboBox();
-        userFieldTypeComboBox.addItem(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all"));
+        userFieldTypeComboBox.addItem(getResString("SEARCH_DIALOG_USERFIELD_all"));
         userFieldTypeComboBox.addItem(UserField.Style.CHECK_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.CHECK_BOX));
         userFieldTypeComboBox.addItem(UserField.Style.COMBO_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.COMBO_BOX));
         userFieldTypeComboBox.addItem(UserField.Style.HYPERLINK, CostingUtil.getDisplayableStyleName(UserField.Style.HYPERLINK));
@@ -794,9 +796,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
         // auswahlmodi für die checkboxen
         checkBoxAuswahl = new JComboBox();
-        checkBoxAuswahl.addItem(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_activated_deactivated"));
-        checkBoxAuswahl.addItem(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_activated"));
-        checkBoxAuswahl.addItem(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_deactivated"));
+        checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated_deactivated"));
+        checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated"));
+        checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_deactivated"));
 
     }
 
@@ -849,7 +851,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     @Override
     public void itemStateChanged(final ItemEvent arg0) {
 
-        if (userFieldTypeComboBox.getSelectedItem().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_all")) || userFieldTypeComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
+        if (userFieldTypeComboBox.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_all")) || userFieldTypeComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
             checkBoxAuswahl.setEnabled(true);
         }
 
@@ -858,7 +860,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         // Checkboxmodus (Suche Alle/aktivierte/nicht aktivierte)
         if (checkBoxAuswahl.getSelectedIndex() > 0) {
-            checkBoxMode = checkBoxAuswahl.getSelectedItem().equals(Tool3lgmConstants.getResString("SEARCH_DIALOG_USERFIELD_activated")) ? CHECKBOXMODE_ACTIVATED : CHECKBOXMODE_NOT_ACTIVATED;
+            checkBoxMode = checkBoxAuswahl.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_activated")) ? CHECKBOXMODE_ACTIVATED : CHECKBOXMODE_NOT_ACTIVATED;
         } else {
             checkBoxMode = CHECKBOXMODE_ALL;
         }

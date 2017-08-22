@@ -3,6 +3,15 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
+import static de.imise.tool3lgm.Static.getTool;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ONE;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -18,14 +27,12 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
@@ -57,10 +64,12 @@ public class RedundancyChecker extends WindowAdapter {
      * Konstante für die Einstellung des Benutzers nur Anwendungssysteme zu analysieren
      */
     public static final int APPLICATION_SYSTEM_OPTION = 1;
+
     /**
      * Konstante für die Einstellung des Benutzers nur Organisationssysteme zu analysieren
      */
     public static final int ORGANISATION_SYSTEM_OPTION = 2;
+
     /**
      * Konstante für die Einstellung des Benutzers Anwendungssysteme und Organisationssysteme zu
      * analysieren
@@ -110,24 +119,24 @@ public class RedundancyChecker extends WindowAdapter {
             // "beim Suchen übergeordnete Elemente berücksichtigen"
             // ausgeschaltet ist
             if (!UserProperties.isSearchParents()) {
-                message += Tool3lgmConstants.getResString("ana_fr_search_parents_option_message1");
-                message += Tool3lgmConstants.getResString("itv-bezogene_Opt") + " -> " + Tool3lgmConstants.getResString("consider_parents") + Tool3lgmConstants.getResString("ana_fr_search_parents_option_message2") + "\n\n";
+                message += getResString("ana_fr_search_parents_option_message1");
+                message += getResString("itv-bezogene_Opt") + " -> " + getResString("consider_parents") + getResString("ana_fr_search_parents_option_message2") + "\n\n";
             }
 
-            message += Tool3lgmConstants.getResString("ana_fr_option_question");
+            message += getResString("ana_fr_option_question");
 
-            String con = " " + Tool3lgmConstants.getResString("ana_fr_concerning") + " ";
+            String con = " " + getResString("ana_fr_concerning") + " ";
 
             String[] options = new String[5];
-            options[0] = Tool3lgmConstants.getResString("RechAnwendungsbaustein_p") + con + Tool3lgmConstants.getResString("Aufgabe_p");
-            options[1] = Tool3lgmConstants.getResString("KonAnwendungsbaustein_p") + con + Tool3lgmConstants.getResString("Aufgabe_p");
-            options[2] = Tool3lgmConstants.getResString("Softwareprodukt_p") + con + Tool3lgmConstants.getResString("Aufgabe_p");
-            options[3] = Tool3lgmConstants.getResString("Datenbanksystem_p") + con + Tool3lgmConstants.getResString("Objekttyp_p");
-            options[4] = Tool3lgmConstants.getResString("ana_fr_self_defined_analysis");
+            options[0] = getResString("RechAnwendungsbaustein_p") + con + getResString("Aufgabe_p");
+            options[1] = getResString("KonAnwendungsbaustein_p") + con + getResString("Aufgabe_p");
+            options[2] = getResString("Softwareprodukt_p") + con + getResString("Aufgabe_p");
+            options[3] = getResString("Datenbanksystem_p") + con + getResString("Objekttyp_p");
+            options[4] = getResString("ana_fr_self_defined_analysis");
 
             // null wenn Abrechen gedrückt wurde, sonst ein gültiges
             // Boolean-Array
-            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("redundancy_analysis"), message, options, null);
+            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, null);
 
             // wenn abgebrochen werden soll
             if (selectedOptions == null) {
@@ -146,8 +155,8 @@ public class RedundancyChecker extends WindowAdapter {
             // wenn beide Arten von AWB analysiert werden sollen
             if (selectedOptions[0] != null && selectedOptions[1] != null) {
                 // AnalyseoptionenString für das Result zusammenbasteln
-                String analyzedSystemTypes = Tool3lgmConstants.getResString("RechAnwendungsbaustein_p");
-                analyzedSystemTypes += " " + Tool3lgmConstants.getResString("und") + " " + Tool3lgmConstants.getResString("KonAnwendungsbaustein_p") + con + Tool3lgmConstants.getResString("Aufgabe_p");
+                String analyzedSystemTypes = getResString("RechAnwendungsbaustein_p");
+                analyzedSystemTypes += " " + getResString("und") + " " + getResString("KonAnwendungsbaustein_p") + con + getResString("Aufgabe_p");
                 result = new RedundancyAnalysisResult(gdcoll, Anwendungsbaustein.class, Aufgabe.class, metaPath, analyzedSystemTypes);
                 // nur rechnerbasierte AWB
             } else if (selectedOptions[0] != null) {
@@ -182,7 +191,7 @@ public class RedundancyChecker extends WindowAdapter {
 
             // selbst definierte XMLAnalyse
             if (selectedOptions[4] != null) {
-                MetaPathSelector mps = MetaPathSelector.showDialog(Tool3lgmConstants.getResString("ana_fr_class1_label"), Tool3lgmConstants.getResString("ana_fr_class2_label"), Tool3lgmConstants.getResString("metapath"));
+                MetaPathSelector mps = MetaPathSelector.showDialog(getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"));
                 if (!mps.isValid()) {
                     resultList.clear();
                 } else {
@@ -212,17 +221,17 @@ public class RedundancyChecker extends WindowAdapter {
 
         // alle allgemeinen Konsistenzfehler suchen, die bei Klassen auftreten, die für die
         // Redundanzanalyse relevant sind
-        ConsistencyDefinition consistencyDefinition = new ConsistencyDefinition(Tool3lgmConstants.getResString("redundancy_analysis"));
+        ConsistencyDefinition consistencyDefinition = new ConsistencyDefinition(getResString("redundancy_analysis"));
         for (RedundancyAnalysisResult result : resultList) {
             MetaPath metaPath = result.getMetaPath();
             for (int i = 0; i < metaPath.countPathes(); i++) {
                 Class<? extends Kante>[] internalMetaPath = metaPath.getEdgeClasses(i);
                 for (int j = 0; j < internalMetaPath.length; j++) {
                     Class<? extends Kante> edgeClass = internalMetaPath[j];
-                    Integer minStartToEndCard = new Integer(Kante.getMinStartToEndCardinality(edgeClass));
-                    Integer maxStartToEndCard = new Integer(Kante.getMaxStartToEndCardinality(edgeClass));
-                    Integer minEndToStartCard = new Integer(Kante.getMinEndToStartCardinality(edgeClass));
-                    Integer maxEndToStartCard = new Integer(Kante.getMaxEndToStartCardinality(edgeClass));
+                    Integer minStartToEndCard = new Integer(getMinStartToEndCardinality(edgeClass));
+                    Integer maxStartToEndCard = new Integer(getMaxStartToEndCardinality(edgeClass));
+                    Integer minEndToStartCard = new Integer(getMinEndToStartCardinality(edgeClass));
+                    Integer maxEndToStartCard = new Integer(getMaxEndToStartCardinality(edgeClass));
                     // um korrekte Redundanzanalysen zu liefern, darf einer
                     // Anwendungsbausteinkonfiguration immer nur ein
                     // Anwendungsbaustein zugeordnet sein. Sind es mehr als einer, bedeutet das,
@@ -231,16 +240,16 @@ public class RedundancyChecker extends WindowAdapter {
                     // aber davon ausgehen, dass
                     // man jeweils nur einen in einer Konfiguration braucht.
                     if (edgeClass == AwbAwbkVerbindung.class) {
-                        if (Anwendungsbaustein.class.isAssignableFrom(Kante.getStartClass(edgeClass))) {
+                        if (Anwendungsbaustein.class.isAssignableFrom(getStartClass(edgeClass))) {
                             if (minEndToStartCard.intValue() > 0) {
-                                minEndToStartCard = ModelConstants.ONE;
+                                minEndToStartCard = ONE;
                             }
-                            maxEndToStartCard = ModelConstants.ONE;
+                            maxEndToStartCard = ONE;
                         } else {
                             if (minStartToEndCard.intValue() > 0) {
-                                minStartToEndCard = ModelConstants.ONE;
+                                minStartToEndCard = ONE;
                             }
-                            maxStartToEndCard = ModelConstants.ONE;
+                            maxStartToEndCard = ONE;
                         }
                     }
                     consistencyDefinition.add(edgeClass, minStartToEndCard, maxStartToEndCard, minEndToStartCard, maxEndToStartCard);
@@ -252,19 +261,18 @@ public class RedundancyChecker extends WindowAdapter {
         if (Static.getSelectedGDCollection() != gdcoll) {
             Static.setSelectedDoc(gdcoll.getSelectedDoc(), true);
         }
-        ConsistencyChecker consistencyChecker = Static.getTool().getConsistencyChecker();
+        ConsistencyChecker consistencyChecker = getTool().getConsistencyChecker();
         consistencyChecker.setConsistencyDefinition(consistencyDefinition);
         List<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText
             Object[] options = {
-                    Tool3lgmConstants.getResString("ana_fr_resolve_errors"),
-                    Tool3lgmConstants.getResString("ana_fr_ignore_errors"),
-                    Tool3lgmConstants.getResString("cancel")
+                    getResString("ana_fr_resolve_errors"),
+                    getResString("ana_fr_ignore_errors"),
+                    getResString("cancel")
             };
-            int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("ana_fr_error_message"), Tool3lgmConstants.getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
+            int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
                 ((StaticAction) ActionLibrary.AnalysisActions.ACTIVATE_CONSISTENCY_CHECK).setSelected(true);
                 Static.getTool().setCheckConsistencyState(true);
@@ -279,10 +287,10 @@ public class RedundancyChecker extends WindowAdapter {
 
         rc.redundancyThread.setPriority(Thread.MIN_PRIORITY);
 
-        ProgressDialog pd = new ProgressDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("ana_fr_wait_message_title"), true, rc.redundancyThread);
+        ProgressDialog pd = new ProgressDialog(Static.getMainFrame(), getResString("ana_fr_wait_message_title"), true, rc.redundancyThread);
         pd.addWindowListener(rc);
         pd.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        pd.setStatusLabelText(Tool3lgmConstants.getResString("message_wait"));
+        pd.setStatusLabelText(getResString("message_wait"));
 
         rc.redundancyThread.start();
 
@@ -308,13 +316,13 @@ public class RedundancyChecker extends WindowAdapter {
         OutputDialog outputDialog;
 
         // Titel des Dialoges
-        String title = Tool3lgmConstants.getResString("redundancy_analysis") + " - " + col.getName();
+        String title = getResString("redundancy_analysis") + " - " + col.getName();
 
         outputDialog = new OutputDialog(Static.getMainFrame(), title);
 
         // Titel, Modell, Teilmodell
-        outputDialog.appendln(Tool3lgmConstants.getResString("redundancy_analysis"), true);
-        outputDialog.appendln(Tool3lgmConstants.getResString("model") + "\t\t: " + col.getName());
+        outputDialog.appendln(getResString("redundancy_analysis"), true);
+        outputDialog.appendln(getResString("model") + "\t\t: " + col.getName());
 
         // Letzte Änderung
         File file = col.getFile();
@@ -325,22 +333,22 @@ public class RedundancyChecker extends WindowAdapter {
             cal.setTimeInMillis(file.lastModified());
         }
         DateFormat formater = new SimpleDateFormat();
-        outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_last_change") + "\t: " + formater.format(cal.getTime()));
+        outputDialog.appendln(getResString("ana_fr_last_change") + "\t: " + formater.format(cal.getTime()));
 
         outputDialog.appendln("\n\n");
 
         // alle Results hintereinander ausgeben
         for (RedundancyAnalysisResult result : redundancyAnalysisResults) {
 
-            outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_option") + ": " + result.getAnalyseOptionString(), true);
+            outputDialog.appendln(getResString("ana_fr_option") + ": " + result.getAnalyseOptionString(), true);
             outputDialog.appendln();
 
             // Nicht verzichtbare Anwendungssysteme
-            outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_not_dispensible_title") + ":", true);
+            outputDialog.appendln(getResString("ana_fr_not_dispensible_title") + ":", true);
             Set<ModelElement> al = new AlphabeticalSet<>(result.exclusiveAWB);
             al.addAll(result.moreNeededAWB);
             if (al.size() == 0) {
-                outputDialog.appendln(Tool3lgmConstants.getResString("none"));
+                outputDialog.appendln(getResString("none"));
             } else {
                 int k = 1;
                 for (ModelElement me : al) {
@@ -353,13 +361,13 @@ public class RedundancyChecker extends WindowAdapter {
             // outputDialog.appendln(
             // "Äquivalente Anwendungssysteme, deren Funktionalität man genau 1 mal braucht:"
             // , true);
-            outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_equivalence_class_title") + ":", true);
+            outputDialog.appendln(getResString("ana_fr_equivalence_class_title") + ":", true);
             if (result.equalsSets.size() == 0) {
-                outputDialog.appendln(Tool3lgmConstants.getResString("none"));
+                outputDialog.appendln(getResString("none"));
             } else {
                 for (int i = 0; i < result.equalsSets.size(); i++) {
                     AlphabeticalSet<ModelElement> as = result.equalsSets.get(i);
-                    outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_equivalence_class") + " " + (i + 1) + ":");
+                    outputDialog.appendln(getResString("ana_fr_equivalence_class") + " " + (i + 1) + ":");
                     int j = 1;
                     for (ModelElement me : as) {
                         outputDialog.appendln(j++ + ".)\t" + getElementName(me));
@@ -370,12 +378,12 @@ public class RedundancyChecker extends WindowAdapter {
 
             // Überflüssige
             outputDialog.appendln("\n");
-            outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_superfluous") + ":", true);
+            outputDialog.appendln(getResString("ana_fr_superfluous") + ":", true);
             al.clear();
             al.addAll(result.uselessAWB);
             al.addAll(result.moreUselessAWB);
             if (al.size() == 0) {
-                outputDialog.appendln(Tool3lgmConstants.getResString("none"));
+                outputDialog.appendln(getResString("none"));
             } else {
                 int k = 1;
                 for (ModelElement me : al) {
@@ -403,21 +411,21 @@ public class RedundancyChecker extends WindowAdapter {
             }
 
             outputDialog.appendln("\n\n");
-            outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_redundancy_rate") + ":", true);
+            outputDialog.appendln(getResString("ana_fr_redundancy_rate") + ":", true);
 
             NumberFormat nf = NumberFormat.getPercentInstance();
-            outputDialog.append(Tool3lgmConstants.getResString("ana_fr_rr") + " = " + fullAWBCount + " - " + minimalSetSize + " / " + fullAWBCount + " = ");
+            outputDialog.append(getResString("ana_fr_rr") + " = " + fullAWBCount + " - " + minimalSetSize + " / " + fullAWBCount + " = ");
             if (fullAWBCount > 0) {
                 outputDialog.appendln(nf.format((float) (fullAWBCount - minimalSetSize) / (float) fullAWBCount).toString());
             } else {
-                outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_not_defined"));
+                outputDialog.appendln(getResString("ana_fr_not_defined"));
             }
 
             // nicht verbundene
             outputDialog.appendln("\n\n");
-            outputDialog.appendln(Tool3lgmConstants.getResString("ana_fr_not_conntected") + ":", true);
+            outputDialog.appendln(getResString("ana_fr_not_conntected") + ":", true);
             if (result.notSupportingAWB.size() == 0) {
-                outputDialog.appendln(Tool3lgmConstants.getResString("none"));
+                outputDialog.appendln(getResString("none"));
             } else {
                 int k = 1;
                 for (ModelElement me : result.notSupportingAWB) {

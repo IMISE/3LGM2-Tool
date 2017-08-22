@@ -3,6 +3,14 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getEdgeTypes;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
+import static javax.swing.BorderFactory.createTitledBorder;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,12 +26,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Kante;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -32,7 +36,7 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
  * Das <code>ReferncePanel</code> wird genutzt um für Kennzahlformeln an Kanten die Verrechunugsfunktion Reference zu definieren.
- * 
+ *
  * @author hboehme
  */
 public class ReferencePanel extends JPanel implements ActionListener {
@@ -94,11 +98,11 @@ public class ReferencePanel extends JPanel implements ActionListener {
     private void init() {
         setLayout(new GridBagLayout());
         classes = new Class[1];
-        classes[0] = Kante.getEndClass(edgeClass);
+        classes[0] = getEndClass(edgeClass);
         Class<? extends ModelElement>[] tmpClasses = new Class[1];
-        tmpClasses[0] = Kante.getStartClass(edgeClass);
+        tmpClasses[0] = getStartClass(edgeClass);
 
-        ArrayList<Class<? extends ModelElement>> tmpList = new ArrayList<Class<? extends ModelElement>>();
+        ArrayList<Class<? extends ModelElement>> tmpList = new ArrayList<>();
 
         for (int i = 0; i < classes.length; i++) {
             tmpList.add(classes[i]);
@@ -116,15 +120,15 @@ public class ReferencePanel extends JPanel implements ActionListener {
         gbc.insets = new Insets(0, 3, 0, 3);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel(Tool3lgmConstants.getResString("headline_reference_panel")), gbc);
+        add(new JLabel(getResString("headline_reference_panel")), gbc);
         gbc.gridy++;
 
-        add(new JLabel(Tool3lgmConstants.getResString("Kante") + ": " + ModelConstants.getFullForwardMetaAssociationName(edgeClass)), gbc);
+        add(new JLabel(getResString("Kante") + ": " + getFullForwardMetaAssociationName(edgeClass)), gbc);
         ButtonGroup bg = new ButtonGroup();
         directionPanel = new JPanel(new BorderLayout());
-        directionPanel.setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("direction_information")));
-        vtzmRB = new JRadioButton(Tool3lgmConstants.getResString("part_to_whole"));
-        vgzmRB = new JRadioButton(Tool3lgmConstants.getResString("whole_to_part"));
+        directionPanel.setBorder(BorderFactory.createTitledBorder(getResString("direction_information")));
+        vtzmRB = new JRadioButton(getResString("part_to_whole"));
+        vgzmRB = new JRadioButton(getResString("whole_to_part"));
         directionPanel.add(vtzmRB, BorderLayout.WEST);
         directionPanel.add(vgzmRB, BorderLayout.EAST);
         bg.add(vtzmRB);
@@ -133,24 +137,21 @@ public class ReferencePanel extends JPanel implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        if (PartOfBeziehung.class.isAssignableFrom(edgeClass) || ModelConstants.getEdgeTypes(edgeClass).length != 0) {
+        if (PartOfBeziehung.class.isAssignableFrom(edgeClass) || getEdgeTypes(edgeClass).length != 0) {
             add(directionPanel, gbc);
         } else {
             directionPanel.setVisible(false);
         }
 
         JPanel attributePanel = new JPanel(new GridBagLayout());
-        attributePanel.setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("attributes")));
+        attributePanel.setBorder(createTitledBorder(getResString("attributes")));
 
         classesList = new AlphabeticalJList();
         classesList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 
-        classesList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(final ListSelectionEvent e) {
-                clearUserFieldList();
-                setUserFields();
-            }
+        classesList.addListSelectionListener(e -> {
+            clearUserFieldList();
+            setUserFields();
         });
 
         GridBagConstraints apgbc = new GridBagConstraints();
@@ -161,13 +162,13 @@ public class ReferencePanel extends JPanel implements ActionListener {
         apgbc.fill = GridBagConstraints.BOTH;
         apgbc.weightx = 0.5;
         setClassesInLists(classesList);
-        attributePanel.add(new JLabel(Tool3lgmConstants.getResString("element_class")), apgbc);
+        attributePanel.add(new JLabel(getResString("element_class")), apgbc);
         apgbc.gridy++;
 
         attributePanel.add(new JScrollPane(classesList), apgbc);
 
         apgbc.gridy++;
-        attributePanel.add(new JLabel(Tool3lgmConstants.getResString("attributes")), apgbc);
+        attributePanel.add(new JLabel(getResString("attributes")), apgbc);
         apgbc.gridy++;
         apgbc.gridwidth = 2;
         apgbc.fill = GridBagConstraints.HORIZONTAL;
@@ -202,7 +203,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
 
     /**
      * Hier wird der Ergebnis-String zusammengesetzt
-     * 
+     *
      * @return
      */
     public String getRetVal() {
@@ -235,32 +236,31 @@ public class ReferencePanel extends JPanel implements ActionListener {
      */
     private void setClassesInLists(final AlphabeticalJList classesList) {
         for (int i = 0; i < classes.length; i++) {
-            classesList.addItem(classes[i], ModelConstants.getDisplayableName(classes[i]));
+            classesList.addItem(classes[i], getDisplayableName(classes[i]));
         }
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void setUserFields() {
         UserFieldDefinitions definitions = userField.getDefinitions();
         Class<? extends ModelElement> selectedClass = ((Class<?>) classesList.getSelectedObject()).asSubclass(ModelElement.class);
         for (UserField uf : definitions.getUserFields(selectedClass)) {
             if (uf.isClassificationUserField()) {
                 if (uf.getName().trim().equals("")) {
-                    String name = Tool3lgmConstants.getResString("this_classification_number");
+                    String name = getResString("this_classification_number");
                     userFieldList.addItem(uf, name);
                 } else {
                     userFieldList.addItem(uf);
                 }
             }
         }
-
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private void clearUserFieldList() {
         userFieldList.removeAllElements();
     }

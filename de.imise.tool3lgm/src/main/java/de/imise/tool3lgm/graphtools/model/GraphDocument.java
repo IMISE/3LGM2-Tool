@@ -3838,7 +3838,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void linkSelected(final Class<? extends Kante> edgeClass, final int direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == Kante.BACKWARD) {
+        if (direction == BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.link(edgeClass, ec.getElement(), lastSelecedElement, pid);
             }

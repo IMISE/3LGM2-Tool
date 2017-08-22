@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.elements.Kante.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.DOUBLE;
 import static de.imise.tool3lgm.graphtools.elements.Kante.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.Kante.NOTCONNECTED;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartOrEndClass;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -17,7 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Kante;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
@@ -352,7 +352,7 @@ public final class PathFinder {
     //		HashSet<ModelElement> startElements = me.getParentElements();
     //		startElements.add(me);
     //		HashSet<ModelElement> endElements = null;
-    //		boolean pathStartClass = Kante.isStartOrEndClass(metaPath.getEdgeClasses(0)[0], me.getClass());
+    //		boolean pathStartClass = isStartOrEndClass(metaPath.getEdgeClasses(0)[0], me.getClass());
     //		for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++){
     //			for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++){
     //				endElements = new HashSet<ModelElement>();
@@ -385,7 +385,7 @@ public final class PathFinder {
         startElements.add(me);
         Set<ModelElement> endElements = null;
         //das übergebene Element ist Startklasse des Pfades?
-        boolean pathStartClass = Kante.isStartOrEndClass(metaPath.getEdgeClasses(0)[0], me.getClass());
+        boolean pathStartClass = isStartOrEndClass(metaPath.getEdgeClasses(0)[0], me.getClass());
         //für alle Assoziationen jedes inneren MetaPfades des übergebenen Gesamtmetapfades
         for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++) {
             //für jeden inneren MetaPfad

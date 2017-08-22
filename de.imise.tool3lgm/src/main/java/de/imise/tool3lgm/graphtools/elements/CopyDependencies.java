@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.elements;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getEndClass;
+import static de.imise.tool3lgm.graphtools.elements.Kante.getStartClass;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,7 +55,7 @@ public class CopyDependencies {
     public boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
         if (Kante.class.isAssignableFrom(elementClass)) {
             Class<? extends Kante> edgeClass = elementClass.asSubclass(Kante.class);
-            return avoidDuplicates(Kante.getStartClass(edgeClass)) || avoidDuplicates(Kante.getEndClass(edgeClass));
+            return avoidDuplicates(getStartClass(edgeClass)) || avoidDuplicates(getEndClass(edgeClass));
         }
         return avoidDuplicatesClasses.contains(elementClass);
     }

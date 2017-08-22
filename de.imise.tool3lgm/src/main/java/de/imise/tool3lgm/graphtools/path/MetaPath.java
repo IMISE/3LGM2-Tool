@@ -3,6 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.graphtools.elements.Kante.getOther;
+import static de.imise.tool3lgm.graphtools.elements.Kante.isStartOrEndClass;
+
 import java.awt.Color;
 import java.util.Arrays;
 
@@ -177,10 +180,10 @@ public class MetaPath {
         for (int ep = 0; ep < countPathes(); ep++) {
             Class<? extends Kante>[] edgeClasses = getEdgeClasses(ep);
             int lastIndex = edgeClasses.length - 1;
-            if (Kante.isStartOrEndClass(edgeClasses[0], startClass) && Kante.isStartOrEndClass(edgeClasses[lastIndex], endClass)) {
+            if (isStartOrEndClass(edgeClasses[0], startClass) && isStartOrEndClass(edgeClasses[lastIndex], endClass)) {
                 return;
             }
-            if (Kante.isStartOrEndClass(edgeClasses[0], endClass) && Kante.isStartOrEndClass(edgeClasses[lastIndex], startClass)) {
+            if (isStartOrEndClass(edgeClasses[0], endClass) && isStartOrEndClass(edgeClasses[lastIndex], startClass)) {
                 switchAssociations = true;
             }
         }
@@ -312,11 +315,11 @@ public class MetaPath {
         Class<? extends Kante>[] currentElementarPath = associations[elementarPathIndex];
         Class<? extends Kante> currentEdgeClass = currentElementarPath[0];
         Class<? extends ModelElement> currentElementClass = startClass;
-        Class<? extends ModelElement> foundEndClass = Kante.getOther(currentEdgeClass, currentElementClass);
+        Class<? extends ModelElement> foundEndClass = getOther(currentEdgeClass, currentElementClass);
         for (int i = 1; i <= edgeIndex; i++) {
             currentEdgeClass = currentElementarPath[i];
             currentElementClass = foundEndClass;
-            foundEndClass = Kante.getOther(currentEdgeClass, currentElementClass);
+            foundEndClass = getOther(currentEdgeClass, currentElementClass);
         }
         return foundEndClass;
     }
