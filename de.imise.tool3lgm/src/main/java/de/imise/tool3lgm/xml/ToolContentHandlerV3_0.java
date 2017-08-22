@@ -263,51 +263,51 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
 
                     if (container == null) {
-                        throw new SAXException("Container für ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
+                        throw new SAXException("Could not find Container for ModelObject!\n Name=" + qName + "\n UserField=" + atts.toString());
                     }
                 }
                 element = null;
 
-            } else if (qName.equals("expanded")) {
-
-            } else if (qName.equals("visible")) {
-
-            } else if (qName.equals("x")) {
-
-            } else if (qName.equals("y")) {
-
-            } else if (qName.equals("width")) {
-
-            } else if (qName.equals("height")) {
-
-            } else if (qName.equals("red")) {
-
-            } else if (qName.equals("green")) {
-
-            } else if (qName.equals("blue")) {
-
-            } else if (qName.equals("alpha")) {
-
+                //            } else if (qName.equals("expanded")) {
+                //
+                //            } else if (qName.equals("visible")) {
+                //
+                //            } else if (qName.equals("x")) {
+                //
+                //            } else if (qName.equals("y")) {
+                //
+                //            } else if (qName.equals("width")) {
+                //
+                //            } else if (qName.equals("height")) {
+                //
+                //            } else if (qName.equals("red")) {
+                //
+                //            } else if (qName.equals("green")) {
+                //
+                //            } else if (qName.equals("blue")) {
+                //
+                //            } else if (qName.equals("alpha")) {
+                //
             } else if (qName.equals("color")) {
                 colorString = atts.getValue("name");
                 color = new Color(0, 0, 0, 255);
-
-            } else if (qName.equals("font_family")) {
-
-            } else if (qName.equals("font_size")) {
-
-            } else if (qName.equals("font_style")) {
-
-            } else if (qName.equals("line_style")) {
-
-            } else if (qName.equals("form")) {
-
-            } else if (qName.equals("icon")) {
-
-            } else if (qName.equals("valign")) {
-
-            } else if (qName.equals("halign")) {
-
+                //
+                //            } else if (qName.equals("font_family")) {
+                //
+                //            } else if (qName.equals("font_size")) {
+                //
+                //            } else if (qName.equals("font_style")) {
+                //
+                //            } else if (qName.equals("line_style")) {
+                //
+                //            } else if (qName.equals("form")) {
+                //
+                //            } else if (qName.equals("icon")) {
+                //
+                //            } else if (qName.equals("valign")) {
+                //
+                //            } else if (qName.equals("halign")) {
+                //
             } else if (qName.equals("layout")) {
                 if (container == null && element != null) {
                     container = element.getContainer(doc);
@@ -346,8 +346,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 }
 
-            } else if (qName.equals("description")) {
-
+                //            } else if (qName.equals("description")) {
+                //
             } else if (qName.equals("mapping")) {
                 szenario.setMapping(new Mapping());
 
@@ -359,17 +359,17 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("images")) {
                 Static.setProgressDialogStatusLabel("labelReadIcons");
 
-            } else if (qName.equals("header")) {
-
-            } else if (qName.equals("title")) {
-
-            } else if (qName.equals("version")) {
-
+                //            } else if (qName.equals("header")) {
+                //
+                //            } else if (qName.equals("title")) {
+                //
+                //            } else if (qName.equals("version")) {
+                //
             } else if (qName.equals("avoidDuplicates")) {
                 avoidDuplicates = true;
 
-            } else if (qName.equals("userFieldDefinitions")) {
-
+                //            } else if (qName.equals("userFieldDefinitions")) {
+                //
             } else if (qName.equals("userFieldDef")) {
                 String elementClass = atts.getValue("elementClass");
                 //bei Modellvariablen ist die Elementclass null
@@ -393,26 +393,26 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Class<? extends Kante> edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Kante.class);
                 replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
 
-            } else if (qName.equals("userFieldName")) {
-
-            } else if (qName.equals("userFieldDescription")) {
-
-            } else if (qName.equals("userFieldStyle")) {
-
-            } else if (qName.equals("userFieldTreeVis")) {
-
-            } else if (qName.equals("userFieldStandardValue")) {
-
-            } else if (qName.equals("userFieldInternalAccounting")) {
-
-            } else if (qName.equals("userFieldInternalAccountingWeightUserFieldHash")) {
-
-            } else if (qName.equals("userFieldFormula")) {
-
-            } else if (qName.equals("userFieldFormatHash")) {
-
-            } else if (qName.equals("userFieldFormatString")) {
-
+                //            } else if (qName.equals("userFieldName")) {
+                //
+                //            } else if (qName.equals("userFieldDescription")) {
+                //
+                //            } else if (qName.equals("userFieldStyle")) {
+                //
+                //            } else if (qName.equals("userFieldTreeVis")) {
+                //
+                //            } else if (qName.equals("userFieldStandardValue")) {
+                //
+                //            } else if (qName.equals("userFieldInternalAccounting")) {
+                //
+                //            } else if (qName.equals("userFieldInternalAccountingWeightUserFieldHash")) {
+                //
+                //            } else if (qName.equals("userFieldFormula")) {
+                //
+                //            } else if (qName.equals("userFieldFormatHash")) {
+                //
+                //            } else if (qName.equals("userFieldFormatString")) {
+                //
             } else if (qName.equals("modell_3lgm_2")) {
                 doc = collection.getMainGraphDocument();
                 collection.setCopyAndPaste(0);
@@ -435,8 +435,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            e.printStackTrace();
+            Log.show(Log.ERROR, e);
         }
     }
 
@@ -786,8 +785,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            e.printStackTrace();
+            Log.show(Log.ERROR, e);
         }
     }
 

@@ -145,6 +145,7 @@ public class ToolXMLParser {
     }
 
     public void parseDocument() throws SAXException, IOException {
+        Log.showErrorDialog = true;
         //		deprecatedElementHashes = new HashSet();
         Static.setProgressDialogStatusLabel("labelReadFile");
 
@@ -272,6 +273,7 @@ public class ToolXMLParser {
         //		for (Class<? extends ModelElement> elementClass : allUsedElementClasses)
         //			System.err.println(elementClass.getName());
         //*/
+        Log.showErrorDialog = false;
     }
 
     /**

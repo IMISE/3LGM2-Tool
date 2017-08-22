@@ -5,10 +5,8 @@ package de.imise.tool3lgm.xml;
 
 import java.util.ArrayList;
 
-import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -23,6 +21,7 @@ import de.imise.tool3lgm.log.Log;
 public class ToolContentHandlerV3_2 extends ToolContentHandlerV3_1 {
 
     private boolean paste = false;
+
     private ArrayList<ElementContainer> pastedElements;
 
     /**
@@ -32,7 +31,7 @@ public class ToolContentHandlerV3_2 extends ToolContentHandlerV3_1 {
         super(coll);
         this.paste = paste;
         if (paste) {
-            pastedElements = new ArrayList<ElementContainer>(5000);
+            pastedElements = new ArrayList<>(5000);
         }
     }
 
@@ -48,16 +47,16 @@ public class ToolContentHandlerV3_2 extends ToolContentHandlerV3_1 {
                 }
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            e.printStackTrace();
+            Log.show(Log.ERROR, e);
         }
     }
 
-    @Override
-    public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
-        elementValue.setLength(0);
-        super.startElement(namespaceURI, localName, qName, atts);
-    }
+    // kann man weglassen, solange hier nichts passiert
+    //    @Override
+    //    public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
+    //        elementValue.setLength(0);
+    //        super.startElement(namespaceURI, localName, qName, atts);
+    //    }
 
     @Override
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
@@ -78,8 +77,7 @@ public class ToolContentHandlerV3_2 extends ToolContentHandlerV3_1 {
                     element = null;
                     container = null;
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-                    e.printStackTrace();
+                    Log.show(Log.ERROR, e);
                 }
             }
         } else {
