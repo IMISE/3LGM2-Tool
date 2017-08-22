@@ -6,7 +6,7 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 import java.util.List;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -55,7 +55,7 @@ public class SimpleRedundancyAnalysis {
      * @param elementClass
      * @param show
      */
-    public void computeRedundance(final Class<? extends Knoten> elementClass, final boolean show) {
+    public void computeRedundance(final Class<? extends Node> elementClass, final boolean show) {
         List<ElementContainer> allElemCont = doc.getElementContainer(elementClass, true);
         int size = allElemCont.size();
         if (size == 0) {
@@ -90,8 +90,8 @@ public class SimpleRedundancyAnalysis {
 
         // für jedes Element in leafs
         for (int i = 0; i < leafsSize; i++) {
-            Knoten knoten = (Knoten) leafs[i].getElement();
-            // vom Knoten die Liste seiner Elemente holen, die für diesen Knoten redundant sind
+            Node knoten = (Node) leafs[i].getElement();
+            // vom Node die Liste seiner Elemente holen, die für diesen Node redundant sind
             List<ElementContainer> redundanceTypes = knoten.getRedundanceTypes(doc);
             // Anzahl der Elemente in redundanceTypes holen
             size = redundanceTypes.size();
@@ -118,7 +118,7 @@ public class SimpleRedundancyAnalysis {
             leafs[i].setAdditionalTextRightDown(new Integer(size).toString());
         }
         if (show) {
-            Knoten knoten;
+            Node knoten;
             try {
                 knoten = elementClass.newInstance();
             } catch (Exception ex) {

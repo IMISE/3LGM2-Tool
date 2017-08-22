@@ -46,7 +46,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Eigenschaftsdialog für Modellelemnte, also Knoten und Kanten.<br>
+ * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
  *
  * @author N.N., AXS
  */

@@ -8,7 +8,7 @@ import javax.swing.JToggleButton;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -29,7 +29,7 @@ public class ToolButton extends JToggleButton {
      * @param k
      * @param gd
      */
-    public ToolButton(final Knoten k, final GraphDocument gd) {
+    public ToolButton(final Node k, final GraphDocument gd) {
         super();
         knot = new NodeContainer(k, gd);
         knot.setSizeForButtons(18, 14);

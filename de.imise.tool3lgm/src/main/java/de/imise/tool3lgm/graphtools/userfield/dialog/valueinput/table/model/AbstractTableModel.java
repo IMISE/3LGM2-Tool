@@ -62,7 +62,7 @@ public abstract class AbstractTableModel extends DefaultTableModel {
     protected GraphDocument doc;
 
     /**
-     * Beinhaltet alle UserFields in einer HashMap, die für Knoten, Kanten und das Modell deklariert und definiert wurden.
+     * Beinhaltet alle UserFields in einer HashMap, die für Node, Kanten und das Modell deklariert und definiert wurden.
      */
     protected final UserFieldDefinitions definitions;
 

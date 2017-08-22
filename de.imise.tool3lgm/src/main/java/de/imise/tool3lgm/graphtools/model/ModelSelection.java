@@ -21,7 +21,7 @@ import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen (selektierte Knoten, Kanten und Knickpunkte).
+ * Grundklasse zur Verwaltung der Modellselektion. Sie besteht aus 3 Mengen (selektierte Node, Kanten und Knickpunkte).
  * Zusätzlich dazu wird sich das zuletzt zur Selektion hinzugefügte Element gemerkt.
  *
  * @author AXS
@@ -127,11 +127,11 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Liefert die Selektion. Wenn die Parameter-Listen nicht leer sind, dann werden die selektierten Knoten, die in
+     * Liefert die Selektion. Wenn die Parameter-Listen nicht leer sind, dann werden die selektierten Node, die in
      * den Parameter-Listen enthalten sind, am Anfang der Rückgabeliste in derselben Reihenfolge eingetragen, in der sie
      * in den Parameter-Listen stehen.
      * Die Parameter-Listen sollten die node-Listen der LayerContainer sein, so dass die Rückgabe-Liste die Reihenfolge
-     * enthält, mit der die Knoten auf dem Layer gezeichnet werden.
+     * enthält, mit der die Node auf dem Layer gezeichnet werden.
      *
      * @param orderSources
      * @return
@@ -232,12 +232,12 @@ public class ModelSelection implements Set<ElementContainer> {
             return selectedEdgeContainer.add((EdgeContainer) ec);
         }
 
-        //Knoten (der kein Knickpunkt ist) hinzugefügt
+        //Node (der kein Knickpunkt ist) hinzugefügt
         if (!selectedRealNodeContainer.add((NodeContainer) ec)) {
             return false;
         }
 
-        //braucht nur ausgeführt werden, wenn ein richtiger Knoten hinzugekommen ist
+        //braucht nur ausgeführt werden, wenn ein richtiger Node hinzugekommen ist
         updateSelectionState();
         return true;
     }

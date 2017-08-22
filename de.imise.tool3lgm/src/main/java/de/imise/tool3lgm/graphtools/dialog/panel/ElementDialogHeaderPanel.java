@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -111,7 +111,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
     @Override
     public void update() {
         ModelElement me = dialog.getModelElement();
-        if (me instanceof Knoten) {
+        if (me instanceof Node) {
             typeLabel.setText(getDisplayableName(me));
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
             GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(me.getAssociatedDoc());

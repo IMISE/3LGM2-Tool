@@ -13,7 +13,7 @@ import de.imise.tool3lgm.log.Log;
 /**
  * @author imi0wendt
  */
-public class Knickpunkt extends Knoten {
+public class Knickpunkt extends Node {
 
     /**
      * COMMENTME

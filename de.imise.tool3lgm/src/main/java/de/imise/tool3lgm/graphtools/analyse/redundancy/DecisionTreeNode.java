@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 /**
- * Knoten eines Entscheidungsbaumes.<br>
- * Man kann in beide Richtungen navigieren, d.h. ein Knoten kennt seinen Vater-Knoten und seine
- * beiden Kindknoten (wenn vorhanden). Hat ein Knoten nur einen Kindknoten, so ist dieser immer der
- * erste Kindknoten (<code>firstNode</code>). Entfernt man von einem Knoten mit 2 Kindknoten den
- * ersten Knoten, so wird der vormals zweite Kindknoten dann der erste.<br>
+ * Node eines Entscheidungsbaumes.<br>
+ * Man kann in beide Richtungen navigieren, d.h. ein Node kennt seinen Vater-Node und seine
+ * beiden Kindknoten (wenn vorhanden). Hat ein Node nur einen Kindknoten, so ist dieser immer der
+ * erste Kindknoten (<code>firstNode</code>). Entfernt man von einem Node mit 2 Kindknoten den
+ * ersten Node, so wird der vormals zweite Kindknoten dann der erste.<br>
  * Es können maximal 2 Kindknoten hinzugefügt werden.<br>
- * Jeder Knoten hat einen <code>boolean</code>-Status. Im Kontext eines Entscheidungsbaumes gibt der
- * Status an, ob ein Element, das der Knoten repräsentiert, dazugehört oder nicht.
+ * Jeder Node hat einen <code>boolean</code>-Status. Im Kontext eines Entscheidungsbaumes gibt der
+ * Status an, ob ein Element, das der Node repräsentiert, dazugehört oder nicht.
  * 
  * @author AXS
  */
@@ -89,8 +89,8 @@ public class DecisionTreeNode {
     boolean deleted = false;
 
     /**
-     * Entfernt den übergebenen Knoten von diesem Knoten, wenn er der Vater davon ist. Falls der zu
-     * löschende Knoten der erste Kindknoten ist und es noch einen zweiten Knidknoten gibt, ist der
+     * Entfernt den übergebenen Node von diesem Node, wenn er der Vater davon ist. Falls der zu
+     * löschende Node der erste Kindknoten ist und es noch einen zweiten Knidknoten gibt, ist der
      * ehemals zweite nach dem Löschen der erste.
      * 
      * @param node

@@ -18,7 +18,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -73,7 +73,7 @@ public class LayerContainer extends ElementContainer {
     private List<BendpointContainer> bendpointContainer;
 
     /**
-     * sortElements enthaelt alle Knoten(Container), fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
+     * sortElements enthaelt alle Node(Container), fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
      */
     private List<NodeContainer> numberedEdgesNodeContainer;
 
@@ -131,7 +131,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die alphabetische Liste der Knoten erneut. Das muss man machen, da beim initialen einfügen
+     * Sortiert die alphabetische Liste der Node erneut. Das muss man machen, da beim initialen einfügen
      * noch nicht die Namen der zusammengesetzten ETNTKombinationen bekannt sind, so dass sie beim laden
      * in der Regel falsch einsortiert wurden.
      */
@@ -178,7 +178,7 @@ public class LayerContainer extends ElementContainer {
      */
     public int countType(final Class<? extends ModelElement> elementClass) {
         int counter = 0;
-        if (Knoten.class.isAssignableFrom(elementClass)) {
+        if (Node.class.isAssignableFrom(elementClass)) {
             for (int c = 0; c < getKnotenCount(); c++) {
                 if (getNodeContainer(c).getKnoten().getClass() == elementClass) {
                     counter++;
@@ -579,7 +579,7 @@ public class LayerContainer extends ElementContainer {
                 nodeContainer.add(nc);
             }
             Alphabetical.insert(alphabeticalNodeContainer, nc);
-            Knoten node = nc.getKnoten();
+            Node node = nc.getKnoten();
             if (ModelConstants.hasSortedEdges(node.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
             }
@@ -619,7 +619,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die KantenContainer in kanten so um, dass ihre Reihenfolge für alle Knoten(Container)
+     * Sortiert die KantenContainer in kanten so um, dass ihre Reihenfolge für alle Node(Container)
      * in sortKnot der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
      */
     public void sortKanten() {

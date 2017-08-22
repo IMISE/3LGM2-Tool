@@ -324,13 +324,13 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            return;
     //        }
     //        // wenn dem Prozess eine neue Aufgabe hinzugefügt wurde muss der neue
-    //        // Knoten eingefügt werden
+    //        // Node eingefügt werden
     //        // (dies hat im Gegensatz zum kompletten Neuaufbau den Vorteil, dass
-    //        // expandierte Knoten expandiert bleiben und
+    //        // expandierte Node expandiert bleiben und
     //        // nur deswegen hier der ganze Aufwand)
     //        else if (lroot.getChildCount() < aufgabenContainer.size()) {
-    //            // nach dem Knoten, welcher neu eingefügt wird, muss die
-    //            // Nummerierung aller folgenden Knoten
+    //            // nach dem Node, welcher neu eingefügt wird, muss die
+    //            // Nummerierung aller folgenden Node
     //            // um 1 erhöht werden. Das passiert erst ab da, wenn
     //            // actualizeNodes==true ist.
     //            boolean actualizeNodes = false;
@@ -354,11 +354,11 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                // wenn im Baum eine andere Aufgabe steht als an der selben
     //                // Position in sub
     //                if (((LGMTreeNode) lroot.getChildAt(m)).getUserObject() != aufgabenContainer.get(m)) {
-    //                    // lösche diesen Knoten im Baum
+    //                    // lösche diesen Node im Baum
     //                    lmodel.removeNodeFromParent((LGMTreeNode) lroot.getChildAt(m));
     //                    // dieselbe Position muss nochmal getestet werden
     //                    m--;
-    //                    // ab jetzt muss für alle folgenden Knoten, die nicht auch
+    //                    // ab jetzt muss für alle folgenden Node, die nicht auch
     //                    // gelöscht werden, die Nummerierung angepasst werden
     //                    actualizeNodes = true;
     //                    // wenn die Aufgabe erhalten bleibt und hinter einer Aufgabe
@@ -368,7 +368,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                    ((LGMTreeNode) lroot.getChildAt(m)).setText("[" + (m + 1) + "] " + aufgabenContainer.get(m));
     //                }
     //            }
-    //            // am Ende alle Knoten löschen, die mehr im Baum sind, als in der
+    //            // am Ende alle Node löschen, die mehr im Baum sind, als in der
     //            // Aufgabenliste sub
     //            while (lroot.getChildCount() > aufgabenContainer.size()) {
     //                lmodel.removeNodeFromParent((LGMTreeNode) lroot.getChildAt(lroot.getChildCount() - 1));
@@ -435,9 +435,9 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                    // wenn der momentane Pfad eine Aufgabe ist
     //                    if (selPath.getPathCount() == 2) {
     //                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-    //                        // wenn von mind. einem Knoten VOR dem selektierten bzw.
+    //                        // wenn von mind. einem Node VOR dem selektierten bzw.
     //                        // (wenn nichts selektiert ist) dem
-    //                        // letzten Knoten mit der i-ten rechten Aufgabe einen
+    //                        // letzten Node mit der i-ten rechten Aufgabe einen
     //                        // LGM-Buisness-Process-Step bildet, dann
     //                        // soll die i-te rechte Aufgabe selektierbar sein
     //                        List<LGMProzessStep> al = prozess.getProcessStepsForAufgabe(aufgaben, ((NodeContainer) node.getUserObject()).getElement(), selRow, true);
@@ -541,9 +541,9 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                TreePath selPath = rtree.getSelectionPath();
     //                //wenn rechts etwas selektiert war
     //                if (selPath != null) {
-    //                    //den selektierten Knoten ermitteln
+    //                    //den selektierten Node ermitteln
     //                    LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-    //                    //wenn es sich bei dem rechts selektierten Knoten um eine Aufgabe handelt
+    //                    //wenn es sich bei dem rechts selektierten Node um eine Aufgabe handelt
     //                    if (node.getUserObject() instanceof NodeContainer) { //seinen Container holen (diese muessen links im Baum geaddet werden)
     //                        NodeContainer knot = (NodeContainer) node.getUserObject();
     //                        if (knot.getElement() instanceof Aufgabe) {
@@ -633,7 +633,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                    //jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
     //                    //und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
     //                    LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
-    //                    //den oberen Knoten holen
+    //                    //den oberen Node holen
     //                    lmodel.removeNodeFromParent(node);
     //                    //ihn entfernen
     //                    lmodel.insertNodeInto(node, lroot, pos1);
@@ -643,7 +643,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                        expandFullPath = true;
     //                        //muss sein wegen treeWillExpand, damits auch wirklich expandiert wird
     //                        ltree.expandRow(pos1 + 1);
-    //                        //den Knoten wieder expandieren
+    //                        //den Node wieder expandieren
     //                        while (en.hasMoreElements()) {
     //                            ltree.expandPath((TreePath) en.nextElement());
     //                            //seine Unterknoten auch expandieren
@@ -861,7 +861,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            return;
     //        }
     //        // wenn in einem der Bäume 1x geklickt wurde oder durch Doppelklicken
-    //        // auf einen Knoten mit Pfadlänge>2 (also
+    //        // auf einen Node mit Pfadlänge>2 (also
     //        // alles ausser der Wurzel und den Aufgaben)
     //        // (pathToExpandOrCollapse ist nur != null, wenn vorher treeWillExpand
     //        // oder treeWillCollapse ausgelöst wurde)
@@ -877,10 +877,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                // passiert
     //                expandFullPath = true;
     //                int row = tree.getRowForPath(pathToExpandOrCollapse);
-    //                // Expandieren des obersten Knoten des zu expandierenden Knotens
+    //                // Expandieren des obersten Node des zu expandierenden Knotens
     //                tree.expandRow(row);
     //                for (int n = row + 1; n < tree.getRowCount(); n++) {
-    //                    // alle Knoten mit Pfadlänge größer 2 unter diesem Knoten
+    //                    // alle Node mit Pfadlänge größer 2 unter diesem Node
     //                    // expandieren (das >2 bewirkt, dass nur bis
     //                    // zur nächsten Aufgabe expandiert wird)
     //                    if (tree.getPathForRow(n).getPathCount() > 2) {
@@ -1130,9 +1130,9 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                     TreePath selPath = srcTree.getSelectionPath();
                     // wenn rechts etwas selektiert war
                     if (selPath != null) {
-                        // den selektierten Knoten ermitteln
+                        // den selektierten Node ermitteln
                         LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
-                        // wenn es sich bei dem rechts selektierten Knoten
+                        // wenn es sich bei dem rechts selektierten Node
                         // um eine Aufgabe handelt
                         if (node.getUserObject() instanceof NodeContainer) {
                             // seinen Container holen (diese muessen links
@@ -1295,7 +1295,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                         // und weil hier noch die Expasionen anpasst werden (über enum), soll
                         // das auch hier bleiben!
                         LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1); // den
-                        // oberen Knoten holen
+                        // oberen Node holen
                         lmodel.removeNodeFromParent(node); // ihn entfernen
                         lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher
                                                                   // einfügen, wenn die
@@ -1304,7 +1304,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                         if (en != null) {
                             panel.expandFullPath(true); // muss sein wegen treeWillExpand,
                                                         // damits auch wirklich expandiert wird
-                            ltree.expandRow(pos1 + 1); // den Knoten wieder expandieren
+                            ltree.expandRow(pos1 + 1); // den Node wieder expandieren
                             while (en.hasMoreElements()) {
                                 ltree.expandPath(en.nextElement()); // seine Unterknoten auch
                                                                     // expandieren

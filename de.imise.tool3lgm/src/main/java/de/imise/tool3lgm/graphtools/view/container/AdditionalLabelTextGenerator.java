@@ -73,7 +73,7 @@ public class AdditionalLabelTextGenerator {
     }
 
     //	/**
-    //	 * Diese Funktion muesste für alle Knoten speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
+    //	 * Diese Funktion muesste für alle Node speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
     //	 * in einem eigenen Container ueberschrieben werden.
     //	 */ 
     //	public boolean addSpecialInfoToMyTargets(boolean remove) {
@@ -83,7 +83,7 @@ public class AdditionalLabelTextGenerator {
     //	}
 
     //	/**
-    //	 * Diese Funktion muesste für alle Knoten speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
+    //	 * Diese Funktion muesste für alle Node speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
     //	 * in einem eigenen Container ueberschrieben werden.
     //	 */
     //	public boolean addSpecialInfoToMyTargets(boolean remove) {

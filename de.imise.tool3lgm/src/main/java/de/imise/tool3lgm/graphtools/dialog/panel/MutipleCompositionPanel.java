@@ -19,7 +19,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -110,7 +110,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             root.add(node);
         }
         if (UserProperties.isSearchParts()) {
-            all = ((Knoten) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
+            all = ((Node) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new LGMTreeNode(all.get(m), false);
                 node.setSelectable(false);
@@ -118,7 +118,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             }
         }
         if (UserProperties.isSearchParents()) {
-            all = ((Knoten) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
+            all = ((Node) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new LGMTreeNode(all.get(m), false);
                 node.setSelectable(false);

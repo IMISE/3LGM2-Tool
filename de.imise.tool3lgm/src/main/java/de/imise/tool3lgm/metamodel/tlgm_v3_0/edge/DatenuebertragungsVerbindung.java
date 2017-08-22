@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
@@ -32,7 +32,7 @@ public final class DatenuebertragungsVerbindung extends Edge {
         super();
     }
 
-    public DatenuebertragungsVerbindung(final Knoten k1, final Knoten k2) {
+    public DatenuebertragungsVerbindung(final Node k1, final Node k2) {
         super(k1, k2);
     }
 

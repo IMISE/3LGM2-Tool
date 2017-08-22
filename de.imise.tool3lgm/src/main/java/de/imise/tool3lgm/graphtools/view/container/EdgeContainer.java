@@ -18,7 +18,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -136,7 +136,7 @@ public class EdgeContainer extends ElementContainer {
      * @param _k2
      * @param gd
      */
-    public void setKnots(final Knoten _k1, final Knoten _k2, final GraphDocument gd) {
+    public void setKnots(final Node _k1, final Node _k2, final GraphDocument gd) {
         getEdge().setKnots(_k1, _k2);
     }
 

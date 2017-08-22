@@ -31,7 +31,7 @@ import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Beinhaltet alle <code>UserField</code>s in einer <code>HashMap</code>, die für Knoten, Kanten und das Modell deklariert und definiert wurden.
+ * Beinhaltet alle <code>UserField</code>s in einer <code>HashMap</code>, die für Node, Kanten und das Modell deklariert und definiert wurden.
  *
  * @author Thomas Rudert
  */

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntEtVerbindung;
@@ -14,7 +14,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntKommstVerbindung;
  * @author N.N.
  * @create Long time ago
  */
-public abstract class EtntEtdtKombination extends Knoten {
+public abstract class EtntEtdtKombination extends Node {
 
     /**
      *

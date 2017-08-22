@@ -118,7 +118,7 @@ import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -378,7 +378,7 @@ public final class GDCollection extends UserFieldTarget {
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
         for (LayerContainer layer : doc.getLayers()) {
             for (NodeContainer nc : layer.getKnoten()) {
-                Knoten node = nc.getKnoten();
+                Node node = nc.getKnoten();
                 String associatedDoc = node.getAssociatedDoc();
                 if (associatedDoc != null && associatedDoc.equals(szenHash)) {
                     node.setAssociatedDoc(null);
@@ -905,7 +905,7 @@ public final class GDCollection extends UserFieldTarget {
                 edgesToDelete.remove(i--);
             }
         }
-        //jetzt alle Knoten im Hauptmodell löschen
+        //jetzt alle Node im Hauptmodell löschen
         for (ModelElement me : allElementsToDelete) {
             if (me instanceof Edge || me instanceof Knickpunkt) {
                 continue;
@@ -1039,12 +1039,12 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final Class<? extends Knoten> elementClass, final String name, final String description, final String hashString, final int pid) {
+    public NodeContainer createKnotenWithContainer(final Class<? extends Node> elementClass, final String name, final String description, final String hashString, final int pid) {
         //Knickpunkte kann man über diese Funktion nicht anlegen
         if (Knickpunkt.class.isAssignableFrom(elementClass)) {
             return null;
         }
-        Knoten me = null;
+        Node me = null;
         NodeContainer nc = null;
         try {
             me = elementClass.newInstance();
@@ -1114,7 +1114,7 @@ public final class GDCollection extends UserFieldTarget {
                 } else {
                     name = getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
                 }
-                ModelElement skC = createKnotenWithContainer(subType.asSubclass(Knoten.class), name, "", null, pid).getElement();
+                ModelElement skC = createKnotenWithContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
                 connectedSubTypes.add(skC);
             }
@@ -1662,13 +1662,13 @@ public final class GDCollection extends UserFieldTarget {
         if (modelElement1 == null || modelElement2 == null || modelElement1 == modelElement2) {
             return false;
         }
-        //prüfen, ob es sich um Knoten gleichen Typs handelt (nur diese können vereint werden)
-        if (!(modelElement1 instanceof Knoten && modelElement2 instanceof Knoten)) {
+        //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
+        if (!(modelElement1 instanceof Node && modelElement2 instanceof Node)) {
             JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             return false;
         }
-        Knoten knoten1 = (Knoten) modelElement1;
-        Knoten knoten2 = (Knoten) modelElement2;
+        Node knoten1 = (Node) modelElement1;
+        Node knoten2 = (Node) modelElement2;
         if (knoten1.getClass() != knoten2.getClass()) {
             JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             return false;
@@ -1678,7 +1678,7 @@ public final class GDCollection extends UserFieldTarget {
         for (Szenario s : szenarios) {
             s.start_transaction(pid, false);
         }
-        //Namen und Beschreibung des zu löschenden Knoten an den verbleibenden anhängen
+        //Namen und Beschreibung des zu löschenden Node an den verbleibenden anhängen
         //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
         knoten2.join(knoten1, false);
         //knoten2.createNameWithSzens(doc);
@@ -1695,12 +1695,12 @@ public final class GDCollection extends UserFieldTarget {
         List<Edge> kantenVector1 = (List<Edge>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
         List<Edge> kantenVector2 = (List<Edge>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
-        //für jede Edge vom zu löschenden Knoten
+        //für jede Edge vom zu löschenden Node
         while (kantenVector1.size() > 0) {
             Edge kante = kantenVector1.get(0);
             startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Edge merken
             endKnoten = kante.getEnd(); //Endknoten -"-
-            //zu löschenden Knoten durch den verbleibenden ersetzen
+            //zu löschenden Node durch den verbleibenden ersetzen
             if (startKnoten == knoten1) {
                 startKnoten = knoten2;
                 endKnoten = kante.getEnd();
@@ -1712,7 +1712,7 @@ public final class GDCollection extends UserFieldTarget {
             if (startKnoten == endKnoten) {
                 deleteKante = true;
             } else {
-                //abfangen, ob im verbleibenden Knoten an gleicher Stelle schon eine Edge vorkommt, Edge testKante = new Edge(startKnoten, endKnoten, false);
+                //abfangen, ob im verbleibenden Node an gleicher Stelle schon eine Edge vorkommt, Edge testKante = new Edge(startKnoten, endKnoten, false);
                 Edge testKante;
                 try {
                     testKante = kante.getClass().newInstance();
@@ -1735,7 +1735,7 @@ public final class GDCollection extends UserFieldTarget {
                 deleteElement(kante, doc, pid);
                 //				doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
-                knoten1.removeEdge(kante); //im zu löschenden Knoten die Edge entfernen
+                knoten1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
                 kante.setKnots(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
             }
         }
@@ -1758,14 +1758,14 @@ public final class GDCollection extends UserFieldTarget {
             if (nc != null) {
                 szen.createEdgeContainer(nc, szen, false, pid);
                 nc.refreshText();
-                // alle abhängigen Knoten vor den zusammengeführten stellen
+                // alle abhängigen Node vor den zusammengeführten stellen
                 szen.start_transaction(TransactionManager.STANDARD_PID, false);
                 szen.moveDependentKnotsUp(nc, TransactionManager.STANDARD_PID, false);
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
         deleteElement(knoten1, doc, pid);
-        //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Knoten komplett löschen
+        //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
         }
@@ -1833,7 +1833,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @param elementClass
      */
-    public final void clearTextRightDown(final Class<? extends Knoten> elementClass) {
+    public final void clearTextRightDown(final Class<? extends Node> elementClass) {
         if (doc != null) {
             doc.clearTextRightDown(elementClass);
             doc.clearLayerText(elementClass);
@@ -1851,7 +1851,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param elementClass
      * @param show
      */
-    public final void computeRedundance(final Class<? extends Knoten> elementClass, final boolean show) {
+    public final void computeRedundance(final Class<? extends Node> elementClass, final boolean show) {
         if (doc != null) {
             doc.getSimpleRedundancyAnalysis().computeRedundance(elementClass, show);
         }
@@ -2034,7 +2034,7 @@ public final class GDCollection extends UserFieldTarget {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (LayerContainer lc : doc.getLayers()) {
             for (NodeContainer nc : lc.getKnoten()) {
-                Knoten node = nc.getKnoten();
+                Node node = nc.getKnoten();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(node)) {
                         ElementContainer container = node.getContainer(doc);

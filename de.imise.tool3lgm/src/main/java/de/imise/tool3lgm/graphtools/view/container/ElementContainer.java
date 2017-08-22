@@ -347,7 +347,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * Erzeugt die angezeigte Bezeichnung. Für Knoten werden in eckigen Klammern durch Kommas getrennt
+     * Erzeugt die angezeigte Bezeichnung. Für Node werden in eckigen Klammern durch Kommas getrennt
      * alle Szenarien aufgelistet, in denen sie ausser im momentan angezeigten noch vorkommen.
      *
      * @see java.awt.Component#toString()

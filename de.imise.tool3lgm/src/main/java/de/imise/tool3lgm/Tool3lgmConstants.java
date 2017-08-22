@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.StaticAction;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -100,8 +100,8 @@ public abstract class Tool3lgmConstants {
     /** Pfad ins Home-Verzeichnis des Benutzers */
     public static final String USER_HOME_DIR_NAME = System.getProperty("user.home");
 
-    /** Name des Packages in dem alle Knoten-Klassen liegen, die allgemein gebraucht werden (Knickpunkte, Textfelder) */
-    public static final String ELEMENTS_PACKAGE_NAME = Knoten.class.getPackage().getName() + ".";
+    /** Name des Packages in dem alle Node-Klassen liegen, die allgemein gebraucht werden (Knickpunkte, Textfelder) */
+    public static final String ELEMENTS_PACKAGE_NAME = Node.class.getPackage().getName() + ".";
 
     /** Name des Packages in dem die GDCollection liegt */
     public static final String GD_PACKAGE_NAME = GDCollection.class.getPackage().getName() + ".";

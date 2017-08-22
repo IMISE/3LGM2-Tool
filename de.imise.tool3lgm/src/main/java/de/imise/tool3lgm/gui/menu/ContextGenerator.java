@@ -86,7 +86,7 @@ import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
@@ -534,8 +534,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
 
-            /* ist Knoten schon mit diesem Szenario verknüpft */
-            if (mc != null && mc.getElement() instanceof Knoten && szen.getHashString().equals(((Knoten) mc.getElement()).getAssociatedDoc())) {
+            /* ist Node schon mit diesem Szenario verknüpft */
+            if (mc != null && mc.getElement() instanceof Node && szen.getHashString().equals(((Node) mc.getElement()).getAssociatedDoc())) {
                 item.setEnabled(false);
             }
 
@@ -1323,7 +1323,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 }
                 return;
             }
-            // nur Knoten selektiert
+            // nur Node selektiert
             if (doc.isSelectedOnlyNodes()) {
                 if (left_button && !controlled) {
                     left_knothand_noshift_knots();
@@ -1335,7 +1335,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 }
                 return;
             }
-            // Knoten und Kanten selektiert
+            // Node und Kanten selektiert
             if (left_button && !controlled) {
                 left_knothand_noshift_multi();
                 return;
@@ -1396,7 +1396,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     }
                     return;
                 }
-                // nur Knoten selektiert
+                // nur Node selektiert
                 if (doc.isSelectedOnlyNodes()) {
                     if (left_button && !controlled) {
                         left_knot_noshift_knots();
@@ -1412,7 +1412,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     }
                     return;
                 }
-                // Knoten und Kanten selektiert
+                // Node und Kanten selektiert
                 if (left_button && !controlled) {
                     left_knot_noshift_multi();
                     return;
@@ -1459,7 +1459,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     }
                     return;
                 }
-                // nur Knoten selektiert
+                // nur Node selektiert
                 if (doc.isSelectedOnlyNodes()) {
                     if (left_button && !controlled) {
                         left_trace_noshift_knots();
@@ -1475,7 +1475,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     }
                     return;
                 }
-                // Knoten und Kanten selektiert
+                // Node und Kanten selektiert
                 if (left_button && !controlled) {
                     left_trace_noshift_multi();
                     return;
@@ -1525,7 +1525,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 }
                 return;
             }
-            // nur Knoten selektiert
+            // nur Node selektiert
             if (doc.isSelectedOnlyNodes()) {
                 if (left_button && !controlled) {
                     left_layer_noshift_knots();
@@ -1541,7 +1541,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 }
                 return;
             }
-            // Knoten und Kanten selektiert
+            // Node und Kanten selektiert
             if (left_button && !controlled) {
                 left_layer_noshift_multi();
                 return;
@@ -1684,9 +1684,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.show(gdl, xin, yin);
     }
 
-    // Klicks in Knoten
+    // Klicks in Node
 
-    // Rechte Maustaste auf Knoten
+    // Rechte Maustaste auf Node
 
     /**
      * @param gdl
@@ -1730,14 +1730,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private void right_knot_multi(final Component gdl, final int xin, final int yin) {
         doc.addToSelection(mc, 0);
-        //Wenn mind. 2 Knoten selektiert sind und das Kontextmenü auf einem Knoten aufgerufen wurde,
+        //Wenn mind. 2 Node selektiert sind und das Kontextmenü auf einem Node aufgerufen wurde,
         //kann man auch das Knotenkontextmenü anbieten
         //		menu = getMultiContextMenu();
         menu = getMultiKnotContextMenu(gdl);
         menu.show(gdl, xin, yin);
     }
 
-    // Linke Maustaste auf Knoten
+    // Linke Maustaste auf Node
 
     /**
      *
@@ -1905,7 +1905,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.show(gdl, xin, yin);
     }
 
-    // Klicks in die Knoten-Haende
+    // Klicks in die Node-Haende
 
     // Klicks mit rechts
     /*
@@ -2019,7 +2019,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private static JMenu getAnalyseMenu() {
         JMenu menu = new JMenu(getResString("analysis"));
         ElementContainer ec = doc.getLastSelected();
-        if (ec != null && ec.getElement() instanceof Knoten) {
+        if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
             String klasse = ec.getElement().getClass().getName();
             klasse = klasse.substring(klasse.lastIndexOf('.') + 1);

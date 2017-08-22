@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 
 public class UserFieldDefinitionsAnalyzer {
 
@@ -34,7 +34,7 @@ public class UserFieldDefinitionsAnalyzer {
     public boolean hasStyle(final UserField.Style style) {
         Set<Class<? extends UserFieldTarget>> userFieldTargets = definitions.getUserFieldTargets();
         for (Class<? extends UserFieldTarget> userFieldTarget : userFieldTargets) {
-            if (Knoten.class.isAssignableFrom(userFieldTarget)) {
+            if (Node.class.isAssignableFrom(userFieldTarget)) {
                 Iterable<UserField> userFields = definitions.getUserFields(userFieldTarget);
                 for (UserField userField : userFields) {
                     if (userField.hasStyle(style)) {

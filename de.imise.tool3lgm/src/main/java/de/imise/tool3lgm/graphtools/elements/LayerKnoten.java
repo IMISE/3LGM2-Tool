@@ -6,7 +6,7 @@ package de.imise.tool3lgm.graphtools.elements;
 /**
  * @author thomas
  */
-public class LayerKnoten extends Knoten {
+public class LayerKnoten extends Node {
 
     /**
      *

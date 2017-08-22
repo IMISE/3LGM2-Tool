@@ -67,7 +67,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
@@ -709,7 +709,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     bendCount += count;
                     bendContFromDoc += contFromDoc;
                     bendContFromMe += contFromMe;
-                } else if (Knoten.class.isAssignableFrom(elementClass)) {
+                } else if (Node.class.isAssignableFrom(elementClass)) {
                     nodeCount += count;
                     nodeContFromDoc += contFromDoc;
                     nodeContFromMe += contFromMe;
@@ -719,7 +719,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     edgeContFromMe += contFromMe;
                 }
             }
-            System.err.println("Knoten      " + nodeCount + " " + nodeContFromDoc + " " + nodeContFromMe);
+            System.err.println("Node      " + nodeCount + " " + nodeContFromDoc + " " + nodeContFromMe);
             System.err.println("Kanten      " + edgeCount + " " + edgeContFromDoc + " " + edgeContFromMe);
             System.err.println("Knickpunkte " + bendCount + " " + bendContFromDoc + " " + bendContFromMe);
 
@@ -1776,7 +1776,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public void changeToLinked(final GraphDocument doc) {
         ModelElement me = doc.getLastSelected().getElement();
-        if (!(me instanceof Knoten)) {
+        if (!(me instanceof Node)) {
             return;
         }
         ToolInternalFrame frame = null;

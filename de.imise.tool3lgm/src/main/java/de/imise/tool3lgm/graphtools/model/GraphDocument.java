@@ -43,7 +43,7 @@ import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -1783,7 +1783,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * einem Knoten ein Symbol zuweisen
+     * einem Node ein Symbol zuweisen
      *
      * @param hashCode
      * @param iconKey
@@ -2262,7 +2262,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     // --- GraphElementLayout-Verwaltung --- Ende ---
 
-    // --- Methoden auf Knoten --- Anfang ---
+    // --- Methoden auf Node --- Anfang ---
 
     /**
      * @param nc
@@ -2288,7 +2288,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
         if (!(nc instanceof BendpointContainer)) {
-            //bei allen Kanten dieser Knoten
+            //bei allen Kanten dieser Node
             for (Edge ka : nc.getKnoten().getEdges()) {
                 EdgeContainer edgeC = (EdgeContainer) ka.getContainer(this);
                 //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
@@ -2374,14 +2374,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Liefert <code>true</code>, wenn selektierte Knoten aneinander ausgerichtet
+     * Liefert <code>true</code>, wenn selektierte Node aneinander ausgerichtet
      * werden können.
      *
      * @return
      */
     public boolean isAlignable() {
-        //Mehrfach selektierte Knoten, wobei der zuletzt selektierte ein richtiger Knoten sein muss (also
-        //kein Knickpunkt) und der zuletzt selektierte Knoten zeichenbar sein muss
+        //Mehrfach selektierte Node, wobei der zuletzt selektierte ein richtiger Node sein muss (also
+        //kein Knickpunkt) und der zuletzt selektierte Node zeichenbar sein muss
         return isMultipleNodeSelection() && getLastSelected() instanceof NodeContainer && !getLastSelected().isUnpaintable();
     }
 
@@ -2508,7 +2508,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
     }
 
-    // --- Methoden auf Knoten --- Ende ---
+    // --- Methoden auf Node --- Ende ---
 
     /**
      * für vergröbern und verfeinern
@@ -2992,7 +2992,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         start_transaction(PID, false);
         deselectAll(true);
-        //alle Knoten im angegebenen Bereich selektieren
+        //alle Node im angegebenen Bereich selektieren
         for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getKnoten()) {
             if (kn.getElement().isUnpaintable()) {
                 continue;
@@ -3160,7 +3160,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
         List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
-        for (ElementContainer ec : getElementContainer(Knoten.class)) {
+        for (ElementContainer ec : getElementContainer(Node.class)) {
             if (selectedContainer.contains(ec)) {
                 returnList.add(ec);
             }
@@ -3268,9 +3268,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             final GraphElementLayout.SHAPE form, final int bendpoint_index, final int pid) {
         lastCreated = null;
         start_transaction(pid);
-        if (Knoten.class.isAssignableFrom(elementClass)) {
+        if (Node.class.isAssignableFrom(elementClass)) {
             //das neue Element im Hauptdokument anlegen
-            lastCreated = gdcoll.createKnotenWithContainer(elementClass.asSubclass(Knoten.class), name, description, hashString, pid);
+            lastCreated = gdcoll.createKnotenWithContainer(elementClass.asSubclass(Node.class), name, description, hashString, pid);
         }
         if (lastCreated != null && !lastCreated.getElement().isUnique() && this instanceof Szenario) {
             lastCreated = addElementToSzenario(this.hashString, lastCreated, pid);
@@ -3647,7 +3647,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return null;
         }
         Edge k = edges.get(0);
-        if (!(masterElement instanceof Knoten) || !(slaveElement instanceof Knoten)) {
+        if (!(masterElement instanceof Node) || !(slaveElement instanceof Node)) {
             return k;
         }
         NodeContainer masterContainer = (NodeContainer) masterElement.getContainer(szen);
@@ -4427,7 +4427,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (ElementContainer ec : elements) {
                 ModelElement me = ec.getElement();
                 Class<? extends ModelElement> elementClass = me.getClass();
-                if (!(me instanceof Knoten) || szen.isMyElement(me) || ModelConstants.isUnique(elementClass)) {
+                if (!(me instanceof Node) || szen.isMyElement(me) || ModelConstants.isUnique(elementClass)) {
                     continue;
                 }
                 if (ModelConstants.isSlaveType(elementClass)) {
@@ -4592,7 +4592,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             List<ElementContainer> dependentObjects = kc.getKnoten().getConnectedContainer(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
                 NodeContainer sc = (NodeContainer) dependentObjects.get(j);
-                Knoten sk = sc.getKnoten();
+                Node sk = sc.getKnoten();
                 if (!isMyElement(sk)) {
                     continue;
                 }
@@ -4703,7 +4703,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         gdoc.start_transaction(pid, false);
         for (LayerContainer lc : gdoc.layer) {
             for (NodeContainer knotenC : new ArrayList<>(lc.getKnoten())) {
-                Knoten knoten = knotenC.getKnoten();
+                Node knoten = knotenC.getKnoten();
                 for (Szenario szen : gdcoll.getSzenarios()) {
                     ElementContainer ec = knoten.getContainer(szen);
                     if (ec == null) {
@@ -5003,10 +5003,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Node oder Kanten) zurück.<br/>
      * Es werden nur Instanzen genau dieser Klasse zurück gegeben.
      *
-     * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
+     * @param clazz Klasse der gesuchten Elementart (Node oder Kanten)
      * @return ArrayList mit allen gefundenen Elementen
      */
     public final List<ModelElement> getModelItems(final Class<? extends ModelElement> clazz) {
@@ -5014,9 +5014,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Node oder Kanten) zurück.<br/>
      *
-     * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
+     * @param clazz Klasse der gesuchten Elementart (Node oder Kanten)
      * @param includeSubClasses boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt auch
      *            RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
      * @return ArrayList mit allen gefundenen Elementen
@@ -5026,9 +5026,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Node oder Kanten) zurück.<br/>
      *
-     * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
+     * @param clazz Klasse der gesuchten Elementart (Node oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
      *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
@@ -5041,9 +5041,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Node oder Kanten) zurück.<br/>
      *
-     * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
+     * @param clazz Klasse der gesuchten Elementart (Node oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
      *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.

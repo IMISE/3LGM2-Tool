@@ -11,12 +11,12 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
  * @author N.N.
  * @create Long time ago
  */
-public abstract class Knoten extends ModelElement {
+public abstract class Node extends ModelElement {
 
     /**
      *
      */
-    public Knoten() {
+    public Node() {
         super();
     }
 
@@ -42,7 +42,7 @@ public abstract class Knoten extends ModelElement {
     }
 
     /**
-     * Gibt eine Liste der Container zurueck, die für diesen Knoten redundant sein koennen. (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
+     * Gibt eine Liste der Container zurueck, die für diesen Node redundant sein koennen. (Beispielsweise in Aufgabe und Objekttyp ueberschrieben)
      *
      * @param doc
      * @return

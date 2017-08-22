@@ -30,7 +30,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -87,7 +87,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     private final int[] lastXreal = new int[ModelConstants.LAYERS.length], lastYreal = new int[ModelConstants.LAYERS.length];
 
     /**
-     * Wenn Knoten verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
+     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
      * Elemente liegen.
      * Dies ist der Bereich, in dem die Elemente liegen würden, wenn ohne Raster verschoben wird.
      * ACHTUNG: <code>height</code> und <code>width</code> dieses Rechtecks sind nicht die wirkliche Weite
@@ -96,7 +96,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     public static Rectangle grabbedElementsRealRect;
 
     /**
-     * Wenn Knoten verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
+     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
      * Elemente liegen.
      * Dies ist der Bereich, in dem die Elemente liegen würden, wenn mit Raster verschoben wird.
      * ACHTUNG: <code>height</code> und <code>width</code> dieses Rechtecks sind nicht die wirkliche Weite
@@ -105,7 +105,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     public static Rectangle grabbedElementsRasteredRect;
 
     /**
-     * Wenn Knoten verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
+     * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
      * Elemente liegen.
      * Dies ist der Bereich, in dem die Elemente und alle ihre evtl. nicht selektierten, aber bei der
      * "mit Teilelementen verschieben"-Option ebenfalls verschobenen Elemente.
@@ -135,7 +135,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * Elementklasse, die angelegt werden soll, wenn die beim Klick neue
      * Elemente erzeugt werden sollen
      */
-    private Class<? extends Knoten> mouse_makes_node;
+    private Class<? extends Node> mouse_makes_node;
 
     /**
      * <code>true</code>, wenn beim Mausklick eine Edge angelegt werden soll
@@ -190,7 +190,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      *
      * @param k
      */
-    public final void setMouseMakesKnot(final Class<? extends Knoten> k) {
+    public final void setMouseMakesKnot(final Class<? extends Node> k) {
         if (k == null) {
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } else {
@@ -521,7 +521,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     contextGenerator.processMouseEvent(left_button, right_button, this, xin, yin);
                     break;
                 }
-                // 2. Ob man in ein Objekt direkt getroffen hat: Knoten oder Edge
+                // 2. Ob man in ein Objekt direkt getroffen hat: Node oder Edge
                 ka = null;
                 ka = chooseObject(layer, x, y);
                 //System.out.println("    start context generating..." + System.currentTimeMillis());
@@ -639,7 +639,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     sized = false;
                     break;
                 }
-                // 2. Ob man in ein Objekt direkt getroffen hat: Knoten oder Edge
+                // 2. Ob man in ein Objekt direkt getroffen hat: Node oder Edge
                 if (contextGenerator.getElementGetroffen()) {
                     if (was_selected) {
                         was_selected = false;
@@ -1071,7 +1071,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     doc.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, STANDARD_PID);
                 }
                 //wenn nicht irgendwelche Elemente gedragged werden mussten, kann hier nur noch auf einer Edge gedragged werden, da grabbed
-                // nur bei Knoten oder Kanten true gesetzt wird
+                // nur bei Node oder Kanten true gesetzt wird
             } else /* if (ka instanceof EdgeContainer) */ {
                 //der Einfügepunkt muss der Punkt sein, an dem die Maus vor dem Draggen war, denn sonst kann es vorkommen, dass bei mouseKlicked()
                 //die Edge getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb

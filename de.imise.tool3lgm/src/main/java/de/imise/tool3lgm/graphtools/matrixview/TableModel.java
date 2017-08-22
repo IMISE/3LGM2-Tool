@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
@@ -108,17 +108,17 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     /**
-     * @return {@link Knoten} für Zeilenelement
+     * @return {@link Node} für Zeilenelement
      */
-    public Knoten getRowKnot(final int rowIndex) {
-        return rowIndex < rowHeader.size() ? (Knoten) rowHeader.get(rowIndex) : null;
+    public Node getRowKnot(final int rowIndex) {
+        return rowIndex < rowHeader.size() ? (Node) rowHeader.get(rowIndex) : null;
     }
 
     /**
-     * @return {@link Knoten} für Spaltenelement
+     * @return {@link Node} für Spaltenelement
      */
-    public Knoten getColKnot(final int colIndex) {
-        return colIndex < colHeader.size() ? (Knoten) colHeader.get(colIndex) : null;
+    public Node getColKnot(final int colIndex) {
+        return colIndex < colHeader.size() ? (Node) colHeader.get(colIndex) : null;
     }
 
     /**

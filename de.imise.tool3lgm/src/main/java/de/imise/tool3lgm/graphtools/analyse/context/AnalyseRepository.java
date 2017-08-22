@@ -86,7 +86,7 @@ public class AnalyseRepository {
     }
 
     /**
-     * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Knoten entspricht.
+     * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Node entspricht.
      *
      * @param elementClassName
      * @return ArrayList, in der jeder Eintrag eine XMLAnalyse ist.

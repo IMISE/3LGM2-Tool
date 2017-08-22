@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -33,7 +33,7 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
      * @param l
      * @param doc
      */
-    public InterLayerConnectedNodeContainer(final Knoten neu, final GraphElementLayout l, final GraphDocument doc) {
+    public InterLayerConnectedNodeContainer(final Node neu, final GraphElementLayout l, final GraphDocument doc) {
         super(neu, l, doc);
         init(doc);
     }
@@ -62,7 +62,7 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
      * @param k
      * @param doc
      */
-    public InterLayerConnectedNodeContainer(final Knoten k, final GraphDocument doc) {
+    public InterLayerConnectedNodeContainer(final Node k, final GraphDocument doc) {
         super(k, doc);
         init(doc);
     }

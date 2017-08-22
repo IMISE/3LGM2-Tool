@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -150,8 +150,8 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
             left_button = true;
         }
 
-        Knoten rknot = tableModel.getRowKnot(rowHeaderPanel.getRowIndex(e.getY()));
-        Knoten cknot = tableModel.getColKnot(colHeaderPanel.getColIndex(e.getX()));
+        Node rknot = tableModel.getRowKnot(rowHeaderPanel.getRowIndex(e.getY()));
+        Node cknot = tableModel.getColKnot(colHeaderPanel.getColIndex(e.getX()));
 
         if (rknot == null || cknot == null) {
             return;

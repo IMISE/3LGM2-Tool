@@ -450,7 +450,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
             Static.setProgressDialogStatusLabel("labelConnectTraces");
 
-            /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Knoten setzten */
+            /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getKanten()) {
                     kc.getEdge().decodeHashStrings(doc);

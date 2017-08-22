@@ -304,7 +304,7 @@ public class Static {
     // Selektionen //
 
     /**
-     * Gibt zurück, ob wenigstens ein richtiger Knoten selektiert ist
+     * Gibt zurück, ob wenigstens ein richtiger Node selektiert ist
      *
      * @see GraphDocument#isSelectedAtLeastOneRealNode()
      */

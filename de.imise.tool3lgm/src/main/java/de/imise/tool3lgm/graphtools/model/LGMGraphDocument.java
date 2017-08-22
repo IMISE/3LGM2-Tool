@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -169,7 +169,7 @@ public class LGMGraphDocument extends GraphDocument {
             int size = orgs.size();
             while (orgs.size() > 1 && lastSize != size) {
                 NodeContainer orgC = (NodeContainer) orgs.get(0);
-                Knoten org = orgC.getKnoten();
+                Node org = orgC.getKnoten();
                 gdcoll.unlink(aufOrg, org, -1, STANDARD_PID);
                 NodeContainer newAufOrgC = (NodeContainer) aufOrgC.clone(true, this);
                 if (newAufOrgC != null) {
@@ -328,7 +328,7 @@ public class LGMGraphDocument extends GraphDocument {
     /**
      * @param elementClass
      */
-    public void clearTextRightDown(final Class<? extends Knoten> elementClass) {
+    public void clearTextRightDown(final Class<? extends Node> elementClass) {
         List<ElementContainer> elemContainer = getElementContainer(elementClass);
         for (int i = 0; i < elemContainer.size(); i++) {
             ((NodeContainer) elemContainer.get(i)).setAdditionalTextRightDown(null);

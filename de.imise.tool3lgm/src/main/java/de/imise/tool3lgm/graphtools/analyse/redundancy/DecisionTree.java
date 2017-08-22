@@ -460,7 +460,7 @@ public class DecisionTree {
         // Kostenwert des aktuell betrachteten Astes
         int pathCosts = 0;
 
-        // der aktuell betrachtete Knoten im Baum. Er repräsentiert einen AWB
+        // der aktuell betrachtete Node im Baum. Er repräsentiert einen AWB
         DecisionTreeNode actNode = root;
 
         // RedundancyChecker.printData(data);
@@ -495,14 +495,14 @@ public class DecisionTree {
             // nach sich zieht.
             // prüfen, ob jede Aufgabe, die der aktuelle AWB unterstützt bereits durch
             // die AWB in der Ergebnismenge unterstützt werden -> wenn ja -> dieser AWB bekommt
-            // nur einen Knoten mit minus
+            // nur einen Node mit minus
 
             // Anzahl der Aufgaben, die der aktuelle AWB untertstützt, die auch von den AWBs in
             // der Ergebnismenge unterstützt werden
             int alreadySupported = 0;
             // wird true, wenn der aktuelle AWB mind eine Aufgabe als letzter möglicher AWB
             // unterstützen kann.
-            // (da immer zuerst die Minus-Knoten eines Aplit-Knotens hinzugefügt werden, muss eine
+            // (da immer zuerst die Minus-Node eines Aplit-Knotens hinzugefügt werden, muss eine
             // Aufgabe aber
             // wenigstens von dem letzten möglichen AWB dann unterstützt werden)
             boolean lastSupporter = false;
@@ -526,7 +526,7 @@ public class DecisionTree {
 
                 lastSupporter = false;
 
-                // Jetzt für alle AWB-Knoten die breits im Baum sind, prüfen, ob sie die aktuelle
+                // Jetzt für alle AWB-Node die breits im Baum sind, prüfen, ob sie die aktuelle
                 // Aufgabe auch unterstützen. Man kann sich im Baum das zurückgehen sparen, wenn
                 // die Aufgabe gar nicht von einem AWB mit einem kleineren Index als dem aktuellen
                 // unterstützt wird (firstSupportIndex[auf]>=awb) und braucht nur soviele Schritte
@@ -538,8 +538,8 @@ public class DecisionTree {
                     // Index des AWB vor dem aktuellen merken (= Index des Parent in der Matrix)
                     int a = awb - 1;
                     do {
-                        // wenn ein Knoten 'gebraucht' wird (= Knoten mit einem Plus) und der von
-                        // dem Knoten
+                        // wenn ein Node 'gebraucht' wird (= Node mit einem Plus) und der von
+                        // dem Node
                         // repräsentierte AWB die aktulelle Aufgabe auch unterstützt
                         if (parent.isNeeded() && data[a][auf] != 0) {
                             // merke, dass die Aufgabe bereits durch AWBs im Baum untertsützt wird
@@ -547,7 +547,7 @@ public class DecisionTree {
                             // brich die Suche ab
                             break;
                         }
-                        // hole den Parent-Knoten des aktuellen Knotens
+                        // hole den Parent-Node des aktuellen Knotens
                         parent = parent.getParent();
                         // Index des Parents in der Datenmatrix anpassen
                         a--;
@@ -573,14 +573,14 @@ public class DecisionTree {
             // dem
             // aktuellen AWB mind. ein AWB danach auch die Aufgabe -> füge einen Plus und einen
             // Minus-
-            // Knoten ein
+            // Node ein
             if (alreadySupported < supportedAuf[awb]) {
                 pathCosts++;
                 // im Pfad werden noch nicht alle Aufgaben unterstützt und ein weiterer AWB erhöht
                 // die Kosten
                 // noch nicht über das Minimum; Sollten die minimalen Pfadkosten hier überschritten
                 // werden, wird
-                // kein neuer Knoten angehängt, sondern es wurden nur die Kosten des aktuellen
+                // kein neuer Node angehängt, sondern es wurden nur die Kosten des aktuellen
                 // Pfades erhöht.
                 if (pathCosts <= minPathCosts) {
                     if (awb == awbCount) {
@@ -626,11 +626,11 @@ public class DecisionTree {
 
                     // den Parent des aktuellen Knotens holen
                     DecisionTreeNode parent = actNode.getParent();
-                    // den 2. Knoten des parents holen
+                    // den 2. Node des parents holen
                     DecisionTreeNode secondChild = parent.getSecondNode();
-                    // wenn der aktuelle Knoten der erste Knoten ist
+                    // wenn der aktuelle Node der erste Node ist
                     if (actNode != secondChild) {
-                        // wenn es aber einen 2. Knoten gibt
+                        // wenn es aber einen 2. Node gibt
                         if (secondChild != null) {
                             // lösche den aktuellen und mache den ehemals 2. zum aktuellen
                             parent.removeChild(actNode);
@@ -654,7 +654,7 @@ public class DecisionTree {
                         parent.removeChild(actNode);
                         actNode = parent;
                         awb--;
-                        // der aktuelle Knoten ist das 2. Kind -> das erste muss erhalten bleiben
+                        // der aktuelle Node ist das 2. Kind -> das erste muss erhalten bleiben
                     } else {
                         // lösche actNode und mache den parent zu actNode
                         if (actNode.isNeeded()) {
@@ -703,10 +703,10 @@ public class DecisionTree {
 
                     // den Parent des aktuellen Knotens holen
                     DecisionTreeNode parent = actNode.getParent();
-                    // den 2. Knoten des parents holen
+                    // den 2. Node des parents holen
                     DecisionTreeNode secondChild = parent.getSecondNode();
 
-                    // wenn der 2. Knoten leer ist oder der aktuelle schon der 2. Knoten ist
+                    // wenn der 2. Node leer ist oder der aktuelle schon der 2. Node ist
                     if (secondChild == null || secondChild == actNode) {
                         // wenn man hier bis zur Wurzel zurückgekommen ist, ist man fertig
                         if (parent == root) {
@@ -729,9 +729,9 @@ public class DecisionTree {
                         } else {
                             pathCosts++;
                         }
-                        // wenn vorher ein Plus-Knoten als 2. Knoten eingefügt wurde, der jetzt aber
+                        // wenn vorher ein Plus-Node als 2. Node eingefügt wurde, der jetzt aber
                         // das bekannte
-                        // Minimum überschreitet -> lösche diesen Knoten, gehe auf den parent und
+                        // Minimum überschreitet -> lösche diesen Node, gehe auf den parent und
                         // dann weiter zurück
                         if (pathCosts > minPathCosts) {
                             // wenn man hier bis zur Wurzel zurückgekommen ist, ist man fertig

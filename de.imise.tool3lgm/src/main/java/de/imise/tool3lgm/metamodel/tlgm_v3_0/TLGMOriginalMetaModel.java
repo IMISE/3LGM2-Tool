@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.elements.CopyDependencies;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.MetaModel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
@@ -126,10 +126,10 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     ////////////
-    // Knoten //
+    // Node //
     ////////////
 
-    /** Alle Knoten der FE als Array */
+    /** Alle Node der FE als Array */
     private static final Class[] ALL_DOMAIN_LAYER_NODES = {
             Aufgabe.class,
             AufOrgKombination.class,
@@ -139,7 +139,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             Prozess.class,
     };
 
-    /** Alle Knoten, die im Baum sichtbar auf der FE sichtbar sind */
+    /** Alle Node, die im Baum sichtbar auf der FE sichtbar sind */
     private static final Class[] TREE_DOMAIN_LAYER_NODES = {
             Aufgabe.class,
             //          AufOrgKombination.class,
@@ -158,12 +158,12 @@ public class TLGMOriginalMetaModel extends MetaModel {
             //          Rolle.class,
     };
 
-    /** Alle Knoten zw. FE und LWE als Array */
+    /** Alle Node zw. FE und LWE als Array */
     private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
             ABKonfiguration.class,
     };
 
-    /** Alle Knoten der LWE als Array */
+    /** Alle Node der LWE als Array */
     private final Class[] ALL_LOGICAL_LAYER_NODES = {
             RechAnwendungsbaustein.class,
             KonAnwendungsbaustein.class,
@@ -186,7 +186,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             //auch die Assoziationsklasse hier eintagen
             KommBeziehung.class,
 
-            //abstracte Knoten müssen hier auch eingetragen werden
+            //abstracte Node müssen hier auch eingetragen werden
             Anwendungsbaustein.class,
             EtntEtdtKombination.class,
             Schnittstelle.class,
@@ -227,12 +227,12 @@ public class TLGMOriginalMetaModel extends MetaModel {
             EreignisDokumentenTyp.class,
     };
 
-    /** Alle Knoten zw. LWE und PWE als Array */
+    /** Alle Node zw. LWE und PWE als Array */
     private final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = {
             DBKonfiguration.class,
     };
 
-    /** Alle Knoten der PWE als Array */
+    /** Alle Node der PWE als Array */
     private final Class[] ALL_PHYSICAL_LAYER_NODES = {
             PhysischerDVBaustein.class,
             Standort.class,
@@ -242,7 +242,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             Netzprotokoll.class,
     };
 
-    /** Alle Knoten der PWE im Baum als Array */
+    /** Alle Node der PWE im Baum als Array */
     private final Class[] TREE_PHYSICAL_LAYER_NODES = {
             PhysischerDVBaustein.class,
             Standort.class,
@@ -433,7 +433,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             Subnetz.class,
     };
 
-    private final Set<Class<? extends Knoten>> UNIQUE_NODES = ImmutableSet.of(ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class,
+    private final Set<Class<? extends Node>> UNIQUE_NODES = ImmutableSet.of(ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class,
             Dokumententyp.class, EreignisDokumentenTyp.class, EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class,
             Softwareprodukt.class, Standort.class, Subnetz.class);
 
@@ -445,7 +445,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
     @Override
-    public final Set<Class<? extends Knoten>> getUniqueNodes() {
+    public final Set<Class<? extends Node>> getUniqueNodes() {
         return UNIQUE_NODES;
     }
 

@@ -380,8 +380,8 @@ public abstract class ModelElement extends UserFieldTarget {
         this.name = name.equalsIgnoreCase("null") ? "" : name;
         updateNameWithSzens();
 
-        //Knoten der Layer neu sortieren
-        if (sort && this instanceof Knoten) {
+        //Node der Layer neu sortieren
+        if (sort && this instanceof Node) {
             for (ElementContainer ec : containerTable.values()) {
                 NodeContainer kc = (NodeContainer) ec;
                 LayerContainer lc = kc.getMyLayerContainer();
@@ -558,11 +558,11 @@ public abstract class ModelElement extends UserFieldTarget {
 
     public abstract ElementContainer createContainer(GraphDocument doc);
 
-    //ehemals in Knoten.java
+    //ehemals in Node.java
 
     /* --- Funktionen im Netzwerk --- Anfang --- */
 
-    /** Fuegt diesem Knoten eine Edge zu. */
+    /** Fuegt diesem Node eine Edge zu. */
     public boolean addEdge(final Edge kante) {
         if (kante == null || edges.contains(kante)) {
             return false;
@@ -572,7 +572,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Fuegt diesem Knoten in der List connections an der Position pos die Edge kante hinzu.
+     * Fuegt diesem Node in der List connections an der Position pos die Edge kante hinzu.
      */
     public boolean insertEdge(final Edge kante, int pos) {
         if (kante == null || edges.contains(kante)) {
@@ -602,19 +602,19 @@ public abstract class ModelElement extends UserFieldTarget {
         return true;
     }
 
-    /** Entfernt die angegebene Edge vom Knoten. */
+    /** Entfernt die angegebene Edge vom Node. */
     public final void removeEdge(final Edge kante) {
         edges.remove(kante);
     }
 
-    /** Entfernt alle Kanten vom Knoten. */
+    /** Entfernt alle Kanten vom Node. */
     public final void removeEdges() {
         edges.clear();
     }
 
     /* --- Funktionen im Netzwerk --- Ende --- */
 
-    /** Ermittelt, ob der Knoten an eine Edge gebunden ist oder nicht. */
+    /** Ermittelt, ob der Node an eine Edge gebunden ist oder nicht. */
     public final boolean hasEdges() {
         if (edges.size() > 0) {
             return true;
@@ -622,7 +622,7 @@ public abstract class ModelElement extends UserFieldTarget {
         return false;
     }
 
-    /** Gibt die Zahl der Kanten zurueck, an die der Knoten gebunden ist. */
+    /** Gibt die Zahl der Kanten zurueck, an die der Node gebunden ist. */
     public final int getEdgesCount() {
         return edges.size();
     }
@@ -648,7 +648,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * @param index
-     * @return Knoten ueber die Verbindung Nummer <i>index </i> zurueck
+     * @return Node ueber die Verbindung Nummer <i>index </i> zurueck
      */
     public final ModelElement getConnectedElement(final int index) {
         Edge k = getEdge(index);
@@ -663,7 +663,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * @param edge
-     * @return <code>true</code>, wenn Edge <i>k</i> an diesem Knoten ansetzt, sonst <code>false</code>
+     * @return <code>true</code>, wenn Edge <i>k</i> an diesem Node ansetzt, sonst <code>false</code>
      */
     public final boolean hasConnection(final Edge edge) {
         if (edges.indexOf(edge) >= 0) {
@@ -924,9 +924,9 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Sucht alle Kanten, die diesen Knoten mit Knoten des angegebenen Typs verbinden.
+     * Sucht alle Kanten, die diesen Node mit Node des angegebenen Typs verbinden.
      *
-     * @param elementClass Klasse der verbundenen Knoten
+     * @param elementClass Klasse der verbundenen Node
      * @return List mit allen gefundenen Kanten
      */
     public final List<Edge> getEdgesWith(final Class<? extends ModelElement> elementClass) {
@@ -934,10 +934,10 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Knoten mit Knoten des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node mit Node des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
      * <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
      *
-     * @param elementClass Klasse der verbundenen Knoten
+     * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @return List mit allen gefundenen Kanten
      */
@@ -946,10 +946,10 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Knoten in Vorwärtsrichtung mit Knoten des angegebenen Typs verbinden. Wird als
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node in Vorwärtsrichtung mit Node des angegebenen Typs verbinden. Wird als
      * <code>edgeClass</code> <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
      *
-     * @param elementClass Klasse der verbundenen Knoten
+     * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @return List mit allen gefundenen Kanten
      */
@@ -958,10 +958,10 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Knoten in Rückwärtsrichtung mit Knoten des angegebenen Typs verbinden. Wird als
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node in Rückwärtsrichtung mit Node des angegebenen Typs verbinden. Wird als
      * <code>edgeClass</code> <code>null</code> übergeben, werden alle Kantenarten zurückgegeben.
      *
-     * @param elementClass Klasse der verbundenen Knoten
+     * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @return List mit allen gefundenen Kanten
      */
@@ -970,10 +970,10 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Sucht alle Kanten des angegebenen Typs, die diesen Knoten mit Knoten des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
+     * Sucht alle Kanten des angegebenen Typs, die diesen Node mit Node des angegebenen Typs verbinden. Wird als <code>edgeClass</code>
      * <code>null</code> übergeben, werden alle Kanten zurückgegeben.
      *
-     * @param elementClass Klasse der verbundenen Knoten
+     * @param elementClass Klasse der verbundenen Node
      * @param edgeClass Kanteklasse nach der gesucht werden soll
      * @param Richtung der Edge nach der gesucht werden soll (<code>ANY</code>, <code>FORWARD</code> oder
      *            <code>BACKWARD</code>)
@@ -1003,23 +1003,23 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Gibt eine alphabetisch sortierte Liste aller ElementContainer der mit diesem Knoten verbundenen Knoten der Klasse
+     * Gibt eine alphabetisch sortierte Liste aller ElementContainer der mit diesem Node verbundenen Node der Klasse
      * <code>searchElementClass</code>, die in doc enthalten, sind zurueck
      *
      * @param searchElementClass Art der verbundenen Elemente, deren Container geliefert werden sollen
-     * @param doc Knoten aus diesem Dokument
-     * @return List mit ElementContainer der gefundenen Knoten
+     * @param doc Node aus diesem Dokument
+     * @return List mit ElementContainer der gefundenen Node
      */
     public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
         return getConnectedContainer(searchElementClass, doc, null, ANY, true);
     }
 
     /**
-     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Knoten übder die angegebene Kantenart verbundenen sind.
+     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Node übder die angegebene Kantenart verbundenen sind.
      *
-     * @param doc Knoten aus diesem Dokument
+     * @param doc Node aus diesem Dokument
      * @param searchEdgeClass Art der zu suchenden verbindungen
-     * @return List mit ElementContainer der gefundenen Knoten
+     * @return List mit ElementContainer der gefundenen Node
      */
     public final List<ElementContainer> getConnectedContainer(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass) {
         return getConnectedContainer(ModelElement.class, doc, searchEdgeClass);
@@ -1047,14 +1047,14 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Gibt eine alphabetisch sotrierte Liste aller ElementContainer der mit diesem Knoten verbundenen Knoten des Klasse searchElementClass, die in
+     * Gibt eine alphabetisch sotrierte Liste aller ElementContainer der mit diesem Node verbundenen Node des Klasse searchElementClass, die in
      * doc enthalten, sind zurueck
      *
      * @param searchElementClass Elementklasse deren Objekte zurück gegeben werden sollen
-     * @param doc Knoten aus diesem Dokument
-     * @param start true = Verbindungen beginnen nicht bei diesem Knoten
-     * @param end true = Verbindungen enden nicht bei diesem Knoten
-     * @return List mit ElementContainer der gefundenen Knoten
+     * @param doc Node aus diesem Dokument
+     * @param start true = Verbindungen beginnen nicht bei diesem Node
+     * @param end true = Verbindungen enden nicht bei diesem Node
+     * @return List mit ElementContainer der gefundenen Node
      */
     @SuppressWarnings("unchecked")
     public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final int direction, final boolean alphabetical) {
@@ -1107,7 +1107,7 @@ public abstract class ModelElement extends UserFieldTarget {
         List<ElementContainer> connected = new ArrayList<>();
         //Liste aller Teile holen (direkte und indirekte)
         for (ModelElement me : getPartElements(false)) {
-            //füge zur Rückgabeliste alle über die angegebene Art verbundenen Knoten hinzu
+            //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
             connected.addAll(me.getConnectedContainer(searchElementClass, doc, edgeClass, direction));
         }
         return connected;
@@ -1144,7 +1144,7 @@ public abstract class ModelElement extends UserFieldTarget {
         List<ModelElement> al = getParentElements(false);
 
         for (ModelElement me : al) {
-            //füge zur Rückgabeliste alle über die angegebene Art verbundenen Knoten hinzu
+            //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
             connected.addAll(me.getConnectedContainer(searchElementClass, doc, edgeClass, direction));
         }
         return connected;
@@ -1685,7 +1685,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @param direction
      * @param alphabetical
-     * @return List mit allen verbundenen Knoten
+     * @return List mit allen verbundenen Node
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final int direction, final boolean alphabetical) {
         return getConnectedElements(searchElementClass, null, edgeClass, direction, alphabetical);
@@ -1978,14 +1978,14 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Ueberprueft, ob der Knoten zur Menge der UNIQUE_KNOTS gehoert, ob er also ein Knoten ist, der im gesamten Modell nur einmal vorkommt
+     * Ueberprueft, ob der Node zur Menge der UNIQUE_KNOTS gehoert, ob er also ein Node ist, der im gesamten Modell nur einmal vorkommt
      */
     public boolean isUnique() {
         return ModelConstants.isUnique(getClass());
     }
 
     /**
-     * Ueberprueft, ob der Knoten ein untergeodnetes Element ist.
+     * Ueberprueft, ob der Node ein untergeodnetes Element ist.
      *
      * @return
      */

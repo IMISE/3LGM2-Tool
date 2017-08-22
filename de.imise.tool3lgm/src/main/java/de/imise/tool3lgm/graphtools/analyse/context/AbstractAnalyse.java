@@ -15,7 +15,7 @@ public abstract class AbstractAnalyse {
     /** der Name der Analyse. */
     protected String name;
 
-    /** der Knoten, bei dem die Analyse beginnt. */
+    /** der Node, bei dem die Analyse beginnt. */
     protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<Class<? extends ModelElement>>();
 
     /**
@@ -39,7 +39,7 @@ public abstract class AbstractAnalyse {
     /**
      * Gibt die Namen der Knotentypen zurück, auf die die XMLAnalyse angewandt werden kann.<br>
      * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse verwendet, sondern nur
-     * bei der Zuordnung, welche Analysen für wlche Knoten zur Verfügung stehen.
+     * bei der Zuordnung, welche Analysen für wlche Node zur Verfügung stehen.
      *
      * @return eine ArrayList der Startknoten.
      */

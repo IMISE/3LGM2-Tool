@@ -762,7 +762,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
                 //die HashStrings für das Start- bzw. End-Objekt einer Edge
-                // auflösen und die wirklichen Knoten setzten
+                // auflösen und die wirklichen Node setzten
                 if (copyAndPaste > 0) {
                     Knickpunkt knp;
                     for (int i = 0; i < knickpunke.size(); i++) {

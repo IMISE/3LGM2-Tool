@@ -135,7 +135,7 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * liefert true, wenn beide Knoten, die die Edge verbindet identisch sind und die Edge von derselben Art ist (Richtung ist egal)
+     * liefert true, wenn beide Node, die die Edge verbindet identisch sind und die Edge von derselben Art ist (Richtung ist egal)
      *
      * @param kante
      * @return
@@ -182,12 +182,12 @@ public abstract class Edge extends ModelElement {
     }
 
     /**
-     * Setzt fuer die Edge die Knoten Anfang=_k1 und Ende=_k2 und fügt die Edge bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
+     * Setzt fuer die Edge die Node Anfang=_k1 und Ende=_k2 und fügt die Edge bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
      * ein.
      *
-     * @param _k1 Knoten
+     * @param _k1 Node
      * @param pos int Position
-     * @param _k2 Knoten
+     * @param _k2 Node
      */
     /**
      * @param _k1 Startelement der Edge

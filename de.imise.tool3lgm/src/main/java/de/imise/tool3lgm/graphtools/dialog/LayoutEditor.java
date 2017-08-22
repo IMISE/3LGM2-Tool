@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -145,7 +145,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (!graphViewDefinition.isPaintable(ModelConstants.ALL_DOMAIN_LAYER_NODES[c])) {
                 continue;
             }
-            NodeContainer kc = new NodeContainer((Knoten) ModelConstants.createElement(ModelConstants.ALL_DOMAIN_LAYER_NODES[c], true), mydoc);
+            NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(ModelConstants.ALL_DOMAIN_LAYER_NODES[c], true), mydoc);
             knoten[counter + offset] = kc;
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_DOMAIN_LAYER_NODES[c]));
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
@@ -190,12 +190,12 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (!graphViewDefinition.isPaintable(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
                 continue;
             }
-            // nur für Knoten kann man das Layout im Moment festlegen -> Kanten
+            // nur für Node kann man das Layout im Moment festlegen -> Kanten
             // auslassen
-            if (!Knoten.class.isAssignableFrom(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
+            if (!Node.class.isAssignableFrom(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
                 continue;
             }
-            NodeContainer kc = new NodeContainer((Knoten) ModelConstants.createElement(ModelConstants.ALL_LOGICAL_LAYER_NODES[c], true), mydoc);
+            NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(ModelConstants.ALL_LOGICAL_LAYER_NODES[c], true), mydoc);
             knoten[counter + offset] = kc;
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_LOGICAL_LAYER_NODES[c]));
@@ -242,7 +242,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (!graphViewDefinition.isPaintable(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c])) {
                 continue;
             }
-            NodeContainer kc = new NodeContainer((Knoten) ModelConstants.createElement(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c], true), mydoc);
+            NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c], true), mydoc);
             knoten[counter + offset] = kc;
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c]));

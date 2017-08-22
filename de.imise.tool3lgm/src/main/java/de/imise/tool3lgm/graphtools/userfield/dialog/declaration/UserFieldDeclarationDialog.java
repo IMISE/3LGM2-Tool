@@ -197,7 +197,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
                 JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("choose_type_first"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            //jetzt kann nur noch ein Knoten- oder Kantentyp selektiert sein
+            //jetzt kann nur noch ein Node- oder Kantentyp selektiert sein
             //-> neues userField für die selektierte Klassenart anlegen
             UserField userField = new UserField(selectedClass, style, definitions);
             //das neu erzeugte UserField sofort zur ausgewählten Klasse hinzufügne

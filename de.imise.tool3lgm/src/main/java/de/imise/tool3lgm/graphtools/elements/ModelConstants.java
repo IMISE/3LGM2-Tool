@@ -45,7 +45,7 @@ public final class ModelConstants {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
      * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
      * eingelesen werden können.
      */
@@ -99,7 +99,7 @@ public final class ModelConstants {
     public static final String EDGE_SHORT_NAME = "DLK";
 
     /**
-     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Knoten noch Kantenklasse
+     * Short-Name der zurückgegeben wird, wenn die an <code>getShortName(Class)</code> übergebene Klasse weder eine gültige Node noch Kantenklasse
      * ist.
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
@@ -138,41 +138,41 @@ public final class ModelConstants {
      */
     public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
 
-    /** Alle Knoten der FE als Array */
+    /** Alle Node der FE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
 
-    /** Alle im Baum sichtbaren Knoten */
+    /** Alle im Baum sichtbaren Node */
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_DOMAIN_LAYER_NODES = metaModel.getTreeDomainLayerNodes();
 
-    /** Alle Knoten der FE als HashSet */
+    /** Alle Node der FE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
 
-    /** Alle im Baum auf der FE anlegbaren Knoten */
+    /** Alle im Baum auf der FE anlegbaren Node */
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = metaModel.getTreeCreatableDomainLayerNodes();
 
-    /** Alle Knoten zw. FE und LWE als Array */
+    /** Alle Node zw. FE und LWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = metaModel.getAllInterDomainLogicalLayerNodes();
 
-    /** Alle Knoten zw. FE und LWE als HashSet */
+    /** Alle Node zw. FE und LWE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
 
-    /** Alle Knoten der LWE als Array */
+    /** Alle Node der LWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_LOGICAL_LAYER_NODES = metaModel.getAllLogicalLayerNodes();
 
-    /** Alle Knoten der LWE als HashSet */
+    /** Alle Node der LWE als HashSet */
     @SuppressWarnings({
             "rawtypes",
             "unchecked"
@@ -185,29 +185,29 @@ public final class ModelConstants {
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = metaModel.getTreeCreatableLogicalLayerNodes();
 
-    /** Alle Knoten zw. LWE und PWE als Array */
+    /** Alle Node zw. LWE und PWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
 
-    /** Alle Knoten zw. LWE und PWE als HashSet */
+    /** Alle Node zw. LWE und PWE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
 
-    /** Alle Knoten der PWE als Array */
+    /** Alle Node der PWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_PHYSICAL_LAYER_NODES = metaModel.getAllPhysicalLayerNodes();
 
-    /** Alle Knoten der PWE als HashSet */
+    /** Alle Node der PWE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
 
-    /** Alle Knoten der PWE im Baum als Array */
+    /** Alle Node der PWE im Baum als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] TREE_PHYSICAL_LAYER_NODES = metaModel.getTreePhysicalLayerNodes();
 
@@ -315,7 +315,7 @@ public final class ModelConstants {
     public static final Class[] IMPORTABLE_NODES = metaModel.getImportableNodes();
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
-    public static final Set<Class<? extends Knoten>> UNIQUE_NODES = metaModel.getUniqueNodes();
+    public static final Set<Class<? extends Node>> UNIQUE_NODES = metaModel.getUniqueNodes();
 
     public static final Set<Class<? extends ModelElement>> ELEMENTS_WITH_NAME_EXTENSIONS = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, ALL_ELEMENTS);
 
@@ -578,17 +578,17 @@ public final class ModelConstants {
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} oder {@link NodeContainer} ist.
      *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
      */
     public static final boolean isNodeType(final Class<?> elementClass) {
-        return Knoten.class.isAssignableFrom(elementClass) || NodeContainer.class.isAssignableFrom(elementClass);
+        return Node.class.isAssignableFrom(elementClass) || NodeContainer.class.isAssignableFrom(elementClass);
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} oder {@link NodeContainer} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} oder {@link NodeContainer} ist.
      *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
@@ -598,7 +598,7 @@ public final class ModelConstants {
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Knoten} ist.
+     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} ist.
      *
      * @param elementClass
      * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
@@ -1252,8 +1252,8 @@ public final class ModelConstants {
             }
         }
 
-        //Knoten
-        if (Knoten.class.isAssignableFrom(elementClass)) {
+        //Node
+        if (Node.class.isAssignableFrom(elementClass)) {
             Object o = elementClassToHashShortName.get(elementClass);
             //ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
             if (o == null) {
@@ -1274,7 +1274,7 @@ public final class ModelConstants {
      * @return int Ebene
      */
     public static final int layerFor(final Class<? extends ModelElement> elementClass) {
-        if (Knoten.class.isAssignableFrom(elementClass)) {
+        if (Node.class.isAssignableFrom(elementClass)) {
             if (ALL_DOMAIN_LAYER_NODES_SET.contains(elementClass)) {
                 return DOMAIN_LAYER;
             }
@@ -1521,7 +1521,7 @@ public final class ModelConstants {
     private final static Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = metaModel.getGenerateNameClasses();
 
     /**
-     * dieser boolean muss in allen Knoten auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen
+     * dieser boolean muss in allen Node auf true gesetzt werden, die eine eigene toString() besitzen, welche aus anderen Modellelementen den Namen
      * generiert (siehe AufOrgKombination, EtntEtdtKombination)
      *
      * @return

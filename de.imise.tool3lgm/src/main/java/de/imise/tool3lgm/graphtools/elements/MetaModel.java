@@ -23,7 +23,7 @@ public abstract class MetaModel {
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Knoten- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
      * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
      * eingelesen werden können.
      */
@@ -42,19 +42,19 @@ public abstract class MetaModel {
     public abstract CopyDependencies getCopyDependencies();
 
     ////////////
-    // Knoten //
+    // Node //
     ////////////
 
-    /** Alle Knoten der FE als Array */
+    /** Alle Node der FE als Array */
     public abstract Class[] getAllDomainLayerNodes();
 
-    /** Alle Knoten, die im Baum sichtbar auf der FE sichtbar sind */
+    /** Alle Node, die im Baum sichtbar auf der FE sichtbar sind */
     public abstract Class[] getTreeDomainLayerNodes();
 
     /** Alle Knotenklassen der FE, die man im Baum neu erzeugen kann */
     public abstract Class[] getTreeCreatableDomainLayerNodes();
 
-    /** Alle Knoten zw. FE und LWE als Array */
+    /** Alle Node zw. FE und LWE als Array */
     public abstract Class[] getAllInterDomainLogicalLayerNodes();
 
     public abstract Class[] getAllLogicalLayerNodes();
@@ -63,13 +63,13 @@ public abstract class MetaModel {
 
     public abstract Class[] getTreeCreatableLogicalLayerNodes();
 
-    /** Alle Knoten zw. LWE und PWE als Array */
+    /** Alle Node zw. LWE und PWE als Array */
     public abstract Class[] getAllInterLogicalPhysicalLayerNodes();
 
-    /** Alle Knoten der PWE als Array */
+    /** Alle Node der PWE als Array */
     public abstract Class[] getAllPhysicalLayerNodes();
 
-    /** Alle Knoten der PWE im Baum als Array */
+    /** Alle Node der PWE im Baum als Array */
     public abstract Class[] getTreePhysicalLayerNodes();
 
     public abstract Class[] getTreeCreatablePhysicalLayerNodes();
@@ -123,7 +123,7 @@ public abstract class MetaModel {
     public abstract Class[] getImportableNodes();
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
-    public abstract Set<Class<? extends Knoten>> getUniqueNodes();
+    public abstract Set<Class<? extends Node>> getUniqueNodes();
 
     ///////////////////////////////////
     // spezielle Kanteneigenschaften //

@@ -307,7 +307,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ModelElement me = getModelElement();
         List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
-        // nur Knoten für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
+        // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.isSearchParts()) {
             all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
@@ -425,7 +425,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 TreePath[] sourceTreePaths = rtree.getSelectionPaths();
                 connect(targetTreeSelectionPath, sourceTreePaths);
 
-                //TODO: das hier expandiert das neue überhaupt nicht, sondern nur bis zum vorher schon geöffneten Knoten. Das ist doof!
+                //TODO: das hier expandiert das neue überhaupt nicht, sondern nur bis zum vorher schon geöffneten Node. Das ist doof!
                 ltree.expandPath(targetTreeSelectionPath);
                 ltree.clearSelection();
                 return;
@@ -543,7 +543,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
             @Override
             public void execute(final EventObject eo) {
-                //wenn eindutig fest steht, an welchen Knoten ein neues Element gehängt werden sollte, dann wird
+                //wenn eindutig fest steht, an welchen Node ein neues Element gehängt werden sollte, dann wird
                 //es auch gleich angehängt
                 if (isConnectionPointUnique) {
                     connectToFirstPath(null);

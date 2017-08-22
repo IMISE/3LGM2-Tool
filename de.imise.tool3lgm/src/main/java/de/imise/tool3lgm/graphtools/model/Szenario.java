@@ -226,7 +226,7 @@ public class Szenario extends LGMGraphDocument {
         //		else {
         //			//für jede Ebene dieses Szenarios
         //			for (LayerContainer lc : layer) {
-        //				//für alle Knoten der Ebene (das können im Schleifendurchlauf mehr werden -> nicht über den Iterator gehen)
+        //				//für alle Node der Ebene (das können im Schleifendurchlauf mehr werden -> nicht über den Iterator gehen)
         //				for (int j = 0; j < lc.getKnotenCount(); j++) {
         //					egdeStartOrEndContainer = lc.getNodeContainer(j);
         //					ModelElement el = egdeStartOrEndContainer.getElement();

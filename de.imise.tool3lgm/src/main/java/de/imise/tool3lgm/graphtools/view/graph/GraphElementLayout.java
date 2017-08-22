@@ -146,7 +146,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final Font STANDARD_FONT = new Font(STANDARD_FONT_NAME, STANDARD_FONT_STYLE, STANDARD_FONT_SIZE);
 
     /**
-     * Standardlayout für alle Knoten und Kanten, die kein spezielles eigenes Layout haben
+     * Standardlayout für alle Node und Kanten, die kein spezielles eigenes Layout haben
      */
     public static final GraphElementLayout STANDARD_ELEMENT_LAYOUT = new GraphElementLayout();
     static {
@@ -171,13 +171,13 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /** Vordergrund bzw. Schriftfarbe */
     public Color fg_color;
 
-    /** Farbe des Rahmens bei Knoten bzw. der Linie bei Assoziationen */
+    /** Farbe des Rahmens bei Node bzw. der Linie bei Assoziationen */
     public Color border_color;
 
-    /** Dicke des Rahmnes bei Knoten bzw. der Linie der Assoziationen */
+    /** Dicke des Rahmnes bei Node bzw. der Linie der Assoziationen */
     public int line_thickness;
 
-    /** Form (momentan nur bei Knoten genutzt) */
+    /** Form (momentan nur bei Node genutzt) */
     public GraphElementLayout.SHAPE form;
 
     /** Schriftart */
@@ -212,7 +212,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /** Hash-Key des Icons */
     public String icon;
 
-    /** Stil des Rahmens bei Knoten oder der Linie bei Kanten */
+    /** Stil des Rahmens bei Node oder der Linie bei Kanten */
     public int line_style;
 
     /** vertikale Ausrichtung des Labeltextes */

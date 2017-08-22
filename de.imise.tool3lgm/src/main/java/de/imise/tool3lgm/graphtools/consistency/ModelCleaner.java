@@ -14,7 +14,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -158,7 +158,7 @@ public class ModelCleaner {
                             }
                             lc.add(ec);
                         }
-                    } else if (me instanceof Knoten) {
+                    } else if (me instanceof Node) {
                         if (!lc.getKnoten().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 5);
@@ -251,7 +251,7 @@ public class ModelCleaner {
             }
         }
 
-        // Alle Knoten- und KantenContainer löschen, bei denen das zugehörige ModelElement null ist
+        // Alle Node- und KantenContainer löschen, bei denen das zugehörige ModelElement null ist
         for (Szenario szen : gdcoll.getSzenarios()) {
             for (int i = 0; i < Integer.MAX_VALUE; i++) {
                 LayerContainer lc = szen.getLayer(i);
@@ -332,7 +332,7 @@ public class ModelCleaner {
 
         // Alle evtl. auch fehlenden Kanten in allen Szenarios nachtragen und die Slave-Elemente
         // an die richtige Stelle bringen
-        for (ModelElement me : mainDoc.getModelItems(Knoten.class, true)) {
+        for (ModelElement me : mainDoc.getModelItems(Node.class, true)) {
             for (Szenario szen : gdcoll.getSzenarios()) {
                 ElementContainer ec = me.getContainer(szen);
                 if (ec == null) {

@@ -27,9 +27,9 @@ public class GraphDocumentHandler {
     }
 
     /**
-     * Gibt alle Modellelemente (Knoten oder Kanten) zurück.<br/>
+     * Gibt alle Modellelemente (Node oder Kanten) zurück.<br/>
      *
-     * @param clazz Klasse der gesuchten Elementart (Knoten oder Kanten)
+     * @param clazz Klasse der gesuchten Elementart (Node oder Kanten)
      * @param includeSubClasses
      *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
      *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
@@ -158,7 +158,7 @@ public class GraphDocumentHandler {
             if (searchBendpoints) {
                 layerElements.add(lc.getKnickpunkte());
             }
-            //Knoten, die keine Knickpunkte sind
+            //Node, die keine Knickpunkte sind
             if (searchNodes) {
                 layerElements.add(alphabetical ? lc.getKnotenAlphabetical() : lc.getKnoten());
             }

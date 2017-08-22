@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -61,7 +61,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     //
     /**
-     * String, der unten links neben den Knoten geschrieben werden
+     * String, der unten links neben den Node geschrieben werden
      * (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
      */
     private String[] additionalTextRightDownLines;
@@ -88,7 +88,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @param neu
      * @param gd
      */
-    public NodeContainer(final Knoten neu, final GraphDocument gd) {
+    public NodeContainer(final Node neu, final GraphDocument gd) {
         super(neu, gd);
         init();
     }
@@ -98,7 +98,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @param l
      * @param gd
      */
-    public NodeContainer(final Knoten neu, final GraphElementLayout l, final GraphDocument gd) {
+    public NodeContainer(final Node neu, final GraphElementLayout l, final GraphDocument gd) {
         super(neu, l, gd);
         init();
     }
@@ -141,7 +141,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         }
 
         if (me != null) {
-            linkWithSzenario(((Knoten) me).getAssociatedDoc() != null);
+            linkWithSzenario(((Node) me).getAssociatedDoc() != null);
         }
     }
 
@@ -362,16 +362,16 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     //	public final void setSymmetric(boolean b) {
-    //        ((Knoten)me).setSymmetric(b);
-    //        if (((Knoten)me).Symmetric()) layout.height=layout.width;
+    //        ((Node)me).setSymmetric(b);
+    //        if (((Node)me).Symmetric()) layout.height=layout.width;
     //		refreshText();
     //	}
 
     /**
      * @return
      */
-    public Knoten getKnoten() {
-        return (Knoten) me;
+    public Node getKnoten() {
+        return (Node) me;
     }
 
     @Override

@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitionsAnalyzer;
@@ -13,11 +13,11 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.Abst
 public class NodeTypeUserFieldEditorPanel extends AbstractElementTypeUserFieldEditorPanel {
 
     public NodeTypeUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Style visibleUserField, final String name) {
-        super(dialog, Knoten.class, visibleUserField, name);
+        super(dialog, Node.class, visibleUserField, name);
     }
 
     public NodeTypeUserFieldEditorPanel(final UserFieldEditorDialog dialog, final Set<Style> visibleUserFields, final String name) {
-        super(dialog, Knoten.class, visibleUserFields, name);
+        super(dialog, Node.class, visibleUserFields, name);
     }
 
     @Override

@@ -25,7 +25,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -47,17 +47,17 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 public final class DynamicTree extends JTree implements UserFieldListener, GraphDocumentOwner {
 
     /**
-     * Knoten für die Fachliche Ebene
+     * Node für die Fachliche Ebene
      */
     private final LGMTreeNode fachebene = new LGMTreeNode(getResString("domain_layer"), false, true);
 
     /**
-     * Knoten für die Logische Werkzeugebene
+     * Node für die Logische Werkzeugebene
      */
     private final LGMTreeNode logebene = new LGMTreeNode(getResString("logical_tool_layer"), false, true);
 
     /**
-     * Knoten für die physische Werkzeugebene
+     * Node für die physische Werkzeugebene
      */
     private final LGMTreeNode phyebene = new LGMTreeNode(getResString("physical_tool_layer"), false, true);
 
@@ -91,7 +91,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     private final DynamicTreeGraphDocumentAndInTransactionListener transactionListener;
 
     /**
-     * Alle Knoten deren Kinder immer wieder removed und neu angelegt werden.
+     * Alle Node deren Kinder immer wieder removed und neu angelegt werden.
      */
     private final LGMTreeNode[] nodesToClear = new LGMTreeNode[TREE_DOMAIN_LAYER_NODES.length + TREE_LOGICAL_LAYER_NODES.length + TREE_PHYSICAL_LAYER_NODES.length];
 
@@ -303,7 +303,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
-                //nur in diesem seltenen Fals den expansionState von allen Knoten retten würde, die mehr als einen Parent haben.
+                //nur in diesem seltenen Fals den expansionState von allen Node retten würde, die mehr als einen Parent haben.
                 if (directParentElements.size() < 2) {
                     NodeContainer nc = (NodeContainer) pc;
                     childNode = nc.getTreeNode();
@@ -417,7 +417,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      * @return
      */
     protected LGMTreeNode getParentNodeOfType(final NodeContainer obj, final int layer) {
-        Knoten me = (Knoten) obj.getElement();
+        Node me = (Node) obj.getElement();
         String name = getDisplayableName(me.getClass());
         switch (layer) {
         case DOMAIN_LAYER:
@@ -524,7 +524,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      * @param knot
      * @return
      */
-    public static final int getLayerOf(final Knoten knot) {
+    public static final int getLayerOf(final Node knot) {
         return knot.layerFor();
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 
 /**
@@ -110,10 +110,10 @@ public class RowPanel extends JPanel {
      * @param i int-position in pixels
      * @return String header of column
      */
-    public Knoten getRow(int i) {
+    public Node getRow(int i) {
         i = getRowIndex(i);
         if (i < rows.size() && i >= 0) {
-            return (Knoten) rows.get(i);
+            return (Node) rows.get(i);
         }
 
         return null;

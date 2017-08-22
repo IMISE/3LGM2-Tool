@@ -3,12 +3,12 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 
 /**
  *
  */
-public abstract class LogischerSpeicher extends Knoten {
+public abstract class LogischerSpeicher extends Node {
 
     /**
      *

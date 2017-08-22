@@ -86,7 +86,7 @@ public class DataExportModule {
             Alphabetical.sort(elementClasses);
             ArrayList<Class<? extends ModelElement>> edgeClasses = new ArrayList<>();
             edgeClasses.addAll(ALL_EDGES_SET);
-            //Kommunikationsbeziehungen sind Knoten und Kanten -> einfach alle Kanten von den Knoten abziehen, damit die nicht 2 mal drin sind
+            //Kommunikationsbeziehungen sind Node und Kanten -> einfach alle Kanten von den Node abziehen, damit die nicht 2 mal drin sind
             elementClasses.removeAll(edgeClasses);
             Alphabetical.sort(edgeClasses);
             elementClasses.addAll(edgeClasses);

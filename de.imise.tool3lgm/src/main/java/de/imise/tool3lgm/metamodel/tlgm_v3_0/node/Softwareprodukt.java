@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
@@ -11,7 +11,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SwpAufVerbindung;
  * @author N.N.
  * @create Long time ago
  */
-public final class Softwareprodukt extends Knoten {
+public final class Softwareprodukt extends Node {
 
     /**
      *

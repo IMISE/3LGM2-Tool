@@ -58,7 +58,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -682,7 +682,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
         elementClassBox.addSeparator(true);
 
-        elementClassBox.addItem(Knoten.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
+        elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
         elementClassBox.addSeparator(true);
         for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
             if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {

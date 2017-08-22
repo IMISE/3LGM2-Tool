@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
-import de.imise.tool3lgm.graphtools.elements.Knoten;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
@@ -26,7 +26,7 @@ public class ClassificationNumberFormulaPanel extends AbstractElementTypeUserFie
      * @param name
      */
     public ClassificationNumberFormulaPanel(final UserFieldEditorDialog dialog, final String name) {
-        this(dialog, Knoten.class, name);
+        this(dialog, Node.class, name);
     }
 
     /**

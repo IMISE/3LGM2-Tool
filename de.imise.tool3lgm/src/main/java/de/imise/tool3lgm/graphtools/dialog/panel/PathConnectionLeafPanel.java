@@ -27,7 +27,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     /**
      * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linke Baum darüber liegenden
-     * Knotens. Das ist der Knoten, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
+     * Knotens. Das ist der Node, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
      */
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 

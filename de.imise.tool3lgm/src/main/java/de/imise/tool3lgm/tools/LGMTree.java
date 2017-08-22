@@ -221,7 +221,7 @@ public class LGMTree extends CorrectSelectionTree {
      * denen des übergebenen Baumes entspricht.
      * Diese Funktion ist hilfreich, falls in Dialogen "von einem Baum in einen anderen" etwas übernommen
      * wurde. Im Quellbaum ist das Element dann häufig nicht mehr selektierbar, im Zielbaum erkennt man
-     * nicht, dass es selektiert sein soll, außer man sicht nach den Knoten mit dem gleichen UserObject.
+     * nicht, dass es selektiert sein soll, außer man sicht nach den Node mit dem gleichen UserObject.
      *
      * @param selectionSource Der Baum dessen Selektion nachgebildet werden soll
      */
