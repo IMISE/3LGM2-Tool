@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.xml.ToolXMLParser.isParseAbleFileVersion;
+import static de.imise.tool3lgm.xml.ToolXMLParser.isXMLFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +28,6 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMInputStream;
 import de.imise.tool3lgm.xml.LGMVersionException;
-import de.imise.tool3lgm.xml.LgmXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
 import de.imise.tool3lgm.xml.XMLVersionException;
@@ -43,7 +44,9 @@ public class GDCollectionFileHandler {
 
     /** the file to load collection from or to save collection in */
     private RandomAccessFile randomAccessFile;
+
     private File file;
+
     private FileLock lock;
 
     /** flag, whether file for this collection is only opened for reading */
@@ -289,6 +292,7 @@ public class GDCollectionFileHandler {
      */
     public boolean loadZipFile(final InputStream fileStream) throws IOException {
         ZipInputStream zipStream = new ZipInputStream(fileStream) {
+
             @Override
             public void close() {
             }
@@ -312,8 +316,7 @@ public class GDCollectionFileHandler {
      * @author Thomas Rudert
      */
     private boolean loadFromFileInputStream(final FileInputStream fileStream) throws IOException, LGMVersionException, XMLVersionException, FileNotFoundException {
-
-        if (!LgmXMLParser.isXMLFile(fileStream) || !ToolXMLParser.isParseAbleFileVersion(fileStream)) {
+        if (!isXMLFile(fileStream) || !isParseAbleFileVersion(fileStream)) {
             throw new LGMVersionException(getResString("to_old_file_format"));
         }
         fileStream.getChannel().position(0);

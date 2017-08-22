@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
+import de.imise.tool3lgm.log.Log;
 
 /**
  * @author Thomas Rudert
@@ -50,6 +51,7 @@ public class ToolXMLParser {
             "<?xml version='1.0' encoding='utf-8'?>",
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     };
+
     private static String[] supportedFileVersions = {
             "<!--Tool3lgmFile version='1.0'-->",
             "<!--Tool3lgmFile version='1.1'-->",
@@ -273,6 +275,27 @@ public class ToolXMLParser {
     }
 
     /**
+     * @param fileStream
+     * @return
+     */
+    public static boolean isXMLFile(final FileInputStream fileStream) {
+        String line = "";
+        try {
+            fileStream.getChannel().position(0);
+            byte[] chars = new byte["<graph>".length()];
+            fileStream.read(chars);
+            line = new String(chars);
+        } catch (Exception e) {
+            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            return false;
+        }
+        if (line.startsWith("<?xml") || line.startsWith("<graph>")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @param file
      * @return
      * @throws IOException, FileNotFoundException
@@ -303,6 +326,7 @@ public class ToolXMLParser {
         //		System.err.println(s);
         //*/
         DataInputStream dataStream = new DataInputStream(inputStream) {
+
             @Override
             public void close() {
             }

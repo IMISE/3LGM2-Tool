@@ -66,7 +66,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.xml.LgmXMLParser;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.ImageChooser;
@@ -187,11 +186,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * COMMENTME
      */
     protected File process_file;
-
-    /**
-     * COMMENTME
-     */
-    private final LgmXMLParser lgmXMLParser = new LgmXMLParser();
 
     /**
      * COMMENTME
@@ -475,13 +469,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             description = string;
             gdcoll.setChanged(true);
         }
-    }
-
-    /**
-     * @return
-     */
-    public LgmXMLParser getLgmXMLParser() {
-        return lgmXMLParser;
     }
 
     /**
@@ -3435,7 +3422,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 for (ElementContainer ec : lc.getKnoten()) {
                     if (hashString.equals(ec.getHashString())) {
                         return ec.getElement();
-        }
+                    }
                 }
             }
         }
@@ -3457,7 +3444,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 for (EdgeContainer ec : lc.getKanten()) {
                     if (hashString.equals(ec.getHashString())) {
                         return ec.getEdge();
-        }
+                    }
                 }
             }
         }
@@ -3500,9 +3487,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void raiseSlaves(final ElementContainer kn) {
         int ebene = kn.layerFor();
         if (!ModelConstants.isInterLayer(ebene)) {
-        layer[ebene].raiseSlaves(kn, 0);
-        distributeEvent(GROUP_ORDER_CHANGED, null, layer[ebene], 0);
-    }
+            layer[ebene].raiseSlaves(kn, 0);
+            distributeEvent(GROUP_ORDER_CHANGED, null, layer[ebene], 0);
+        }
     }
 
     ////////////////////////////////////////////
@@ -4389,7 +4376,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param removeAllSpecialInfos
      */
     public final void clearHightLighted(final boolean removeAllSpecialInfos) {
-                if (removeAllSpecialInfos) {
+        if (removeAllSpecialInfos) {
             for (LayerContainer lc : layer) {
                 for (ElementContainer ec : lc.getKnoten()) {
                     ec.removeAllSpecialInfosFromThisContainer();

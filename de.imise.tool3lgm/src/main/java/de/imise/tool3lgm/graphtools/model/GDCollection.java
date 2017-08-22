@@ -78,8 +78,8 @@ import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelIt
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_ELEMENT_LAYOUT;
 import static de.imise.tool3lgm.log.Log.ERROR;
-import static de.imise.tool3lgm.xml.LgmXMLParser.isXMLFile;
 import static de.imise.tool3lgm.xml.ToolXMLParser.isParseAbleFileVersion;
+import static de.imise.tool3lgm.xml.ToolXMLParser.isXMLFile;
 import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
 import static java.lang.Integer.parseInt;
 import static javax.swing.BoxLayout.Y_AXIS;
