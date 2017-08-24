@@ -29,11 +29,11 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -100,27 +100,11 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     @Override
-    public Object clone() {
-        ModelElement retVal;
-        try {
-            retVal = (ModelElement) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-
-        retVal.name = name;
-        retVal.htmlName = htmlName;
-        retVal.descr = descr;
+    public ModelElement clone() {
+        ModelElement retVal = (ModelElement) super.clone();
         retVal.hashstring = getNewHashString(this);
         retVal.containerTable = new HashMap<>(3, 1);
-
         retVal.edges = new ArrayList<>(3);
-
-        for (UserField key : getUserFieldInputValueKeys()) {
-            retVal.setUserFieldInputValue(key, getUserFieldInputValue(key).toString());
-        }
-
         return retVal;
     }
 
@@ -2169,22 +2153,26 @@ public abstract class ModelElement extends UserFieldTarget {
         htmlName = HTMLConverter.getDecimalEncodedHTMLString(name);
         refreshText();
 
-        //UserFields zusammenführen. Bei allen UserFIelds, bei denen nur ein Element einen Wert hat oder sich die Werte nicht
+        //UserFields zusammenführen. Bei allen UserFields, bei denen nur ein Element einen Wert hat oder sich die Werte nicht
         //unterscheiden, nimm nur einen gültigen Wert. Haben beide einen unterschiedlichen Wert, führe sie String-technisch zusammen
-        Set<UserField> allKeys = new HashSet<>(getUserFieldInputValueKeys());
+        Set<String> allKeys = new HashSet<>(getUserFieldInputValueKeys());
         allKeys.addAll(other.getUserFieldInputValueKeys());
-
-        for (UserField keyUserField : allKeys) {
-            String value = getUserFieldInputValue(keyUserField);
-            String otherValue = other.getUserFieldInputValue(keyUserField);
+        UserFieldDefinitions userFieldDefinitions = getCollection().getUserFieldDefinitions();
+        for (String keyUserFieldHash : allKeys) {
+            UserField userField = userFieldDefinitions.getUserField(keyUserFieldHash);
+            if (userField == null) {
+                continue; // keine Ahnung, ob dieser Fall eintreten kann!?
+            }
+            String value = getUserFieldInputValue(keyUserFieldHash);
+            String otherValue = other.getUserFieldInputValue(keyUserFieldHash);
             if (otherValue != UserField.EMPTY_STRING) {
                 if (value == UserField.EMPTY_STRING) {
-                    setUserFieldInputValue(keyUserField, otherValue);
+                    setUserFieldInputValue(keyUserFieldHash, otherValue);
                     //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
                 } else if (!value.equals(otherValue)) {
                     //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
-                    if (!keyUserField.isClassificationUserField()) {
-                        setUserFieldInputValue(keyUserField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
+                    if (!userField.isClassificationUserField()) {
+                        setUserFieldInputValue(keyUserFieldHash, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
                     }
                 }
             }
