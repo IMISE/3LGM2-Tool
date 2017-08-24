@@ -7,15 +7,12 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.log.Log;
-
 /**
  * @author Thomas Rudert
  */
 public class UserFieldTargetSpecificList<T extends HashSource> implements Cloneable, Iterable<T> {
 
-    private Class<? extends UserFieldTarget> targetClass;
+    private final Class<? extends UserFieldTarget> targetClass;
 
     private ArrayList<T> list = Lists.newArrayList();
 
@@ -87,16 +84,15 @@ public class UserFieldTargetSpecificList<T extends HashSource> implements Clonea
     }
 
     @Override
-    public final Object clone() {
+    public final UserFieldTargetSpecificList<T> clone() {
         UserFieldTargetSpecificList<T> collection = null;
         try {
             collection = (UserFieldTargetSpecificList<T>) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
+        } catch (CloneNotSupportedException e) {
+            //this should never happen since we are cloneable
+            throw new InternalError(e);
         }
-        collection.targetClass = targetClass;
-        collection.list = Lists.newArrayList(list);
+        collection.list = new ArrayList<>(list);
         return collection;
     }
 
