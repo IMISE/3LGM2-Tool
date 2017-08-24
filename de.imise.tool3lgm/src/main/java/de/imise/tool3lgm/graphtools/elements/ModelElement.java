@@ -12,6 +12,7 @@ import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +30,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -2155,24 +2155,19 @@ public abstract class ModelElement extends UserFieldTarget {
 
         //UserFields zusammenführen. Bei allen UserFields, bei denen nur ein Element einen Wert hat oder sich die Werte nicht
         //unterscheiden, nimm nur einen gültigen Wert. Haben beide einen unterschiedlichen Wert, führe sie String-technisch zusammen
-        Set<String> allKeys = new HashSet<>(getUserFieldInputValueKeys());
-        allKeys.addAll(other.getUserFieldInputValueKeys());
-        UserFieldDefinitions userFieldDefinitions = getCollection().getUserFieldDefinitions();
-        for (String keyUserFieldHash : allKeys) {
-            UserField userField = userFieldDefinitions.getUserField(keyUserFieldHash);
-            if (userField == null) {
-                continue; // keine Ahnung, ob dieser Fall eintreten kann!?
-            }
-            String value = getUserFieldInputValue(keyUserFieldHash);
-            String otherValue = other.getUserFieldInputValue(keyUserFieldHash);
-            if (otherValue != UserField.EMPTY_STRING) {
-                if (value == UserField.EMPTY_STRING) {
-                    setUserFieldInputValue(keyUserFieldHash, otherValue);
+        Set<UserField> allElementUserFields = new HashSet<>(getUserFieldInputValueKeys());
+        allElementUserFields.addAll(other.getUserFieldInputValueKeys());
+        for (UserField userField : allElementUserFields) {
+            String value = getUserFieldInputValue(userField);
+            String otherValue = other.getUserFieldInputValue(userField);
+            if (otherValue != EMPTY_STRING) {
+                if (value == EMPTY_STRING) {
+                    setUserFieldInputValue(userField, otherValue);
                     //wenn es einen otherValue gibt, der sich vom value unterscheidet -> füge sie zusammen
                 } else if (!value.equals(otherValue)) {
                     //Bei Kennzahlen bleibt es einfach der Wert des ersten Elements
                     if (!userField.isClassificationUserField()) {
-                        setUserFieldInputValue(keyUserFieldHash, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
+                        setUserFieldInputValue(userField, value.toString().concat(" -" + joined + "- ").concat(otherValue.toString()));
                     }
                 }
             }
