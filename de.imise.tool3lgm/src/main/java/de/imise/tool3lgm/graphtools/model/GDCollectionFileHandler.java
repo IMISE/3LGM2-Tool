@@ -223,7 +223,7 @@ public class GDCollectionFileHandler {
      * Load collection from file which is specified in field file
      *
      * @return true if reading was successful
-     * @throws Exception; throws all exceptions happens during reading
+     * @throws Exception; throws all exceptions happen during reading
      * @author Thomas Rudert
      */
     public boolean loadFromRAF(final File file) throws Exception {
