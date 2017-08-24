@@ -3,12 +3,10 @@
  */
 package de.imise.tool3lgm.graphtools.elements;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.log.Log;
 
 /**
  * @author imi0wendt
@@ -19,10 +17,12 @@ public class Knickpunkt extends Node {
      * COMMENTME
      */
     private String kantenHash = "";
+
     /**
      * COMMENTME
      */
     private EdgeContainer kc = null;
+
     /**
      * COMMENTME
      */
@@ -33,21 +33,6 @@ public class Knickpunkt extends Node {
      */
     public Knickpunkt() {
         super();
-    }
-
-    @Override
-    public Object clone() {
-        Knickpunkt retVal;
-        try {
-            retVal = (Knickpunkt) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-        retVal.kantenHash = kantenHash;
-        retVal.kc = kc;
-        retVal.index = index;
-        return retVal;
     }
 
     @Override
