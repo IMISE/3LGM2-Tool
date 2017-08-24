@@ -3,12 +3,10 @@ package de.imise.tool3lgm.graphtools.elements;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.STANDARD_ERROR_INT_VALUE;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isAlwaysDoubleConnectedEdge;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -118,19 +116,10 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public final Object clone() {
-        Edge retVal;
-        try {
-            retVal = (Edge) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
-        }
-        retVal.k1 = k1;
-        retVal.k2 = k2;
+    public final Edge clone() {
+        Edge retVal = (Edge) super.clone();
         retVal.start_hash = "";
         retVal.end_hash = "";
-        retVal.direction = direction;
         return retVal;
     }
 
