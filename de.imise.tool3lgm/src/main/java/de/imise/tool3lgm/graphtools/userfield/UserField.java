@@ -16,7 +16,6 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.HashStringGenerator;
 
@@ -60,7 +59,6 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
                 if (v2 == null) {
                     return 1;
                 }
-
                 boolean b1 = UserField.CHECKBOX_TRUE.equals(v1);
                 boolean b2 = UserField.CHECKBOX_TRUE.equals(v2);
                 if (b1) {
@@ -90,7 +88,6 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
                 if (v2 == null || v2.isEmpty()) {
                     return 1;
                 }
-
                 Integer i1 = uf.listValues.indexOf(v1);
                 Integer i2 = uf.listValues.indexOf(v2);
                 int retval = i1.compareTo(i2);
@@ -387,8 +384,10 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
 
     /**
      * Ist der <code>String</code>, durch den das <code>UserField</code> eindeutig identifizierbar wird.
+     * Dieser ist final, da UserFields nur geclont werden, um eine Sicherheitskopie vor einer Änderung
+     * anzulegen, die eventuell zurück genommen wird, so dass der alte hashCode erhalten bleiben muss.
      */
-    private String hashCode;
+    private final String hashCode;
 
     /**
      * Gibt an, zu welcher Klasse das <code>UserField</code> gehört.
@@ -933,23 +932,12 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
         try {
             userField = (UserField) super.clone();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
+            //this should never happen since we are cloneable
+            throw new InternalError(e);
         }
-
-        //clonen aller Eigenschaften in alphabetischer Reihenfolge
-        userField.definitions = definitions;
-        userField.description = description == null ? null : new String(description);
-        userField.hashCode = new String(hashCode);
+        //clonen aller Eigenschaften, die nicht auf dieselbe Object-Referenz zeigen sollen, die durch super.clone() hergestellt wurde
         userField.numberFormat = numberFormat == null ? null : (NumberFormat) numberFormat.clone();
-        userField.formatUserField = formatUserField;
-        userField.formatUnit = formatUnit == null ? null : new String(formatUnit);
-        userField.formulaString = formulaString == null ? null : new String(formulaString);
         userField.listValues = listValues == null ? null : new ArrayList<>(listValues);
-        userField.name = name == null ? null : new String(name);
-        userField.style = style;
-        userField.targetClass = targetClass;
-        userField.treeVisibility = treeVisibility;
         return userField;
     }
 
