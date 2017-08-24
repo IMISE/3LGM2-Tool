@@ -118,9 +118,9 @@ import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -2044,7 +2044,6 @@ public final class GDCollection extends UserFieldTarget {
                             if (iconName != null) {
                                 bitmaps.add(iconName);
                             }
-                            userFields.addAll(node.getUserFieldInputValueKeys());
                             resolveCopyDependencies(node, elements, userFields);
                         }
                     }
@@ -2056,7 +2055,6 @@ public final class GDCollection extends UserFieldTarget {
                     if (doc.isMyElement(edge)) {
                         if (!elements.contains(edge)) {
                             elements.add(edge);
-                            userFields.addAll(edge.getUserFieldInputValueKeys());
                             resolveCopyDependencies(edge, elements, userFields);
                         }
                     }
@@ -2068,8 +2066,6 @@ public final class GDCollection extends UserFieldTarget {
                     if (doc.isMyElement(bendpoint)) {
                         if (!elements.contains(bendpoint)) {
                             elements.add(bendpoint);
-                            userFields.addAll(bendpoint.getUserFieldInputValueKeys());
-                            // resolveCopyDependencies(knp, elements,userFields);
                         }
                     }
                 }
@@ -2088,7 +2084,6 @@ public final class GDCollection extends UserFieldTarget {
             if (!result.contains(me)) {
                 if (!(me instanceof Knickpunkt)) {
                     result.add(me);
-                    userFields.addAll(me.getUserFieldInputValueKeys());
                     resolveCopyDependencies(me, result, userFields);
                 }
             }
@@ -2105,6 +2100,9 @@ public final class GDCollection extends UserFieldTarget {
         if (me instanceof Knickpunkt) {
             return;
         }
+        for (UserField userField : me.getUserFieldInputValueKeys()) {
+            userFields.add(userField);
+        }
         if (me instanceof Edge) {
             for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getKnickpunkte()) {
                 Knickpunkt kp = kpC.getKnickpunktKnoten();
@@ -2119,13 +2117,11 @@ public final class GDCollection extends UserFieldTarget {
             ModelElement start = edge.getStart();
             if (!elements.contains(start)) {
                 elements.add(start);
-                userFields.addAll(start.getUserFieldInputValueKeys());
                 resolveCopyDependencies(start, elements, userFields);
             }
             ModelElement end = edge.getEnd();
             if (!elements.contains(end)) {
                 elements.add(end);
-                userFields.addAll(end.getUserFieldInputValueKeys());
                 resolveCopyDependencies(end, elements, userFields);
             }
         }
@@ -2134,13 +2130,11 @@ public final class GDCollection extends UserFieldTarget {
                 ModelElement connected = ec.getElement();
                 if (!elements.contains(connected)) {
                     elements.add(connected);
-                    userFields.addAll(connected.getUserFieldInputValueKeys());
                     resolveCopyDependencies(connected, elements, userFields);
                 }
                 for (Edge e : me.getEdgesWith(connected)) {
                     if (!elements.contains(e)) {
                         elements.add(e);
-                        userFields.addAll(e.getUserFieldInputValueKeys());
                         resolveCopyDependencies(e, elements, userFields);
                     }
                 }
@@ -2152,7 +2146,6 @@ public final class GDCollection extends UserFieldTarget {
             for (Edge ka : me.getEdgesWith(m)) {
                 if (!elements.contains(ka)) {
                     elements.add(ka);
-                    userFields.addAll(ka.getUserFieldInputValueKeys());
                     resolveCopyDependencies(ka, elements, userFields);
                 }
             }
