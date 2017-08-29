@@ -61,8 +61,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /** Hashes aller Icons, die von den über diesen Writer exportierten Elementen tatsächlich genutzt werden */
     private final Set<String> usedIconHashes;
 
-    protected ToolXMLWriter(final GDCollection gdcoll, final File file, final boolean zip) throws XMLStreamException, FactoryConfigurationError, IOException {
-        super(file, zip ? getZipEntryName(file) : null);
+    protected ToolXMLWriter(final GDCollection gdcoll, final File file) throws XMLStreamException, FactoryConfigurationError, IOException {
+        this(gdcoll, file, null);
+    }
+
+    protected ToolXMLWriter(final GDCollection gdcoll, final File file, final String zipEntryName) throws XMLStreamException, FactoryConfigurationError, IOException {
+        super(file, zipEntryName);
         this.gdcoll = gdcoll;
         usedIconHashes = gdcoll != null ? new HashSet<>() : null;
     }
@@ -71,7 +75,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @param file
      * @return
      */
-    private static final String getZipEntryName(final File file) {
+    public static final String getZipEntryName(final File file) {
         String fileName = file.getName();
         FileNameExtensionFilter zipFileNameExtensionFilter = getFileNameExtensionFilter(LGM3_ZIP);
         String zipFileNameExtension = zipFileNameExtensionFilter.getExtensions()[0];
@@ -112,12 +116,21 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /**
      * @param gdcoll
      * @param file
-     * @param zip
      * @return
      */
-    public static boolean write(final GDCollection gdcoll, final File file, final boolean zip) {
+    public static boolean write(final GDCollection gdcoll, final File file) {
+        return write(gdcoll, file, null);
+    }
+
+    /**
+     * @param gdcoll
+     * @param file
+     * @param zipEntryName
+     * @return
+     */
+    public static boolean write(final GDCollection gdcoll, final File file, final String zipEntryName) {
         try {
-            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, zip);
+            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, zipEntryName);
             toolXMLWriter.writeModel();
             toolXMLWriter.finish();
         } catch (Exception e) {
@@ -134,7 +147,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      */
     public static boolean writeUserFieldDefinitions(final UserFieldDefinitions definitions, final File file) {
         try {
-            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(null, file, false);
+            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(null, file);
             toolXMLWriter.writeUserFieldDefinitions(definitions, false);
             toolXMLWriter.finish();
         } catch (Exception e) {
@@ -157,7 +170,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      */
     public static boolean writeExport(final GDCollection gdcoll, final File file, final List<Szenario> szenarios, final Collection<ModelElement> elements, final Iterable<UserField> userFields, final Iterable<String> iconHashes) {
         try {
-            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file, false);
+            ToolXMLWriter toolXMLWriter = new ToolXMLWriter(gdcoll, file);
             toolXMLWriter.writeModel(gdcoll.getName() + " (export)", szenarios, elements, userFields, iconHashes);
             toolXMLWriter.finish();
         } catch (Exception e) {

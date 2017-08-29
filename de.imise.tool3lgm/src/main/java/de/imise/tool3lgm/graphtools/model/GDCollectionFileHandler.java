@@ -397,7 +397,8 @@ public class GDCollectionFileHandler {
             if (!tempFile.createNewFile()) {
                 return false;
             }
-            if (!ToolXMLWriter.write(gdcoll, tempFile, isZipFile)) {
+            String zipEntryName = isZipFile ? ToolXMLWriter.getZipEntryName(file) : null;
+            if (!ToolXMLWriter.write(gdcoll, tempFile, zipEntryName)) {
                 return false;
             }
             UserProperties.setWorkingDirectory(file);

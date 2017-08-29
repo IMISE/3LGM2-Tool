@@ -224,7 +224,7 @@ public class GDCollectionImExportHandler {
         if (f.exists()) {
             f.delete();
         }
-        ToolXMLWriter.write(gdcoll, f, false);
+        ToolXMLWriter.write(gdcoll, f);
     }
 
 }
