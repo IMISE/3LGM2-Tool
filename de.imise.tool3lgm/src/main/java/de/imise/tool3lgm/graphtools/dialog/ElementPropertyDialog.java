@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -17,8 +18,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -195,7 +194,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         Class<? extends ModelElement> elementClass = modelElement.getClass();
         Class<? extends PartOfBeziehung>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
         Class<? extends PartOfBeziehung>[] isPartOfEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
-        List<Class<? extends PartOfBeziehung>> realPartOfs = Lists.newArrayList();
+        List<Class<? extends PartOfBeziehung>> realPartOfs = new ArrayList<>();
         for (Class<? extends PartOfBeziehung> partOf : isPartOfEdgeClasses) {
             if (CollectionUtils.arrayContains(hasPartsEdgeClasses, partOf)) {
                 realPartOfs.add(partOf);

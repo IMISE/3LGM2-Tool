@@ -1,15 +1,14 @@
 package de.imise.tool3lgm.tools;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -31,7 +30,7 @@ public class LGMTree extends CorrectSelectionTree {
         super(treeModel);
     }
 
-    Collection<ElementContainer> elementsAdded = Sets.newHashSet();
+    Collection<ElementContainer> elementsAdded = new HashSet<>();
 
     public void reset() {
         elementsAdded.clear();
@@ -107,7 +106,7 @@ public class LGMTree extends CorrectSelectionTree {
     /**
      * <code>ArrayList</code> mit den <code>String</code>s der expandierten Pfade
      */
-    private final List<String> expandedPathStrings = Lists.newArrayList();
+    private final List<String> expandedPathStrings = new ArrayList<>();
 
     /**
      * Aktuelle Expansion merken

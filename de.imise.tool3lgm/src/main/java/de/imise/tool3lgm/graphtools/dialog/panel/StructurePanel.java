@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -15,8 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-
-import com.google.common.collect.Sets;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -44,7 +43,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     /**
      * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden sollen, weil sie links schon verknüpft sind
      */
-    private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
+    private final Collection<ElementContainer> childrenToExcludeFromRtree = new HashSet<>();
 
     private LGMAction loaddAction;
     private LGMAction loremoveAction;

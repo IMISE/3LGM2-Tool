@@ -17,8 +17,6 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.google.common.collect.Lists;
-
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -175,8 +173,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         return edgeIsForward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
-    ArrayList<ElementContainer> childrenToExcludeFromRotree = Lists.newArrayList();
-    ArrayList<ElementContainer> childrenToExcludeFromRutree = Lists.newArrayList();
+    ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<>();
+    ArrayList<ElementContainer> childrenToExcludeFromRutree = new ArrayList<>();
 
     @Override
     public void update() {

@@ -4,11 +4,11 @@ import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -97,7 +97,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
             edges = columnElement.getEdges(edgeClass);
         }
 
-        List<ModelElement> allRowElements = Lists.newArrayList();
+        List<ModelElement> allRowElements = new ArrayList<>();
         for (Edge edge : edges) {
             ModelElement rowElement = edge.getOther(columnElement);
             allRowElements.add(rowElement);

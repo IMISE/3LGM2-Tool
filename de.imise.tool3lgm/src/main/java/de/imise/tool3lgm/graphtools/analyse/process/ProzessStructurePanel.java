@@ -261,7 +261,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            return leafNodes;
     //        }
     //        if (nodeToUserObjectPath == null) {
-    //            nodeToUserObjectPath = Maps.newHashMap();
+    //            nodeToUserObjectPath = new HashMap<>();
     //        } else {
     //            nodeToUserObjectPath.clear();
     //        }

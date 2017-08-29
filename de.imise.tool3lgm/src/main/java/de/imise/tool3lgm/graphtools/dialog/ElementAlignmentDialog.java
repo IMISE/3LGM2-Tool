@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -17,8 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -73,7 +72,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
     }
 
     private void initSelectedElementContainer() {
-        selectedElementContainer = Lists.newArrayList();
+        selectedElementContainer = new ArrayList<>();
         if (doc != null) {
             for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
                 ModelElement me = ec.getElement();

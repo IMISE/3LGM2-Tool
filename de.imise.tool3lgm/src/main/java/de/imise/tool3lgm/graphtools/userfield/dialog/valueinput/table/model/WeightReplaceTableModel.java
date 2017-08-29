@@ -1,10 +1,10 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Edge;
@@ -27,7 +27,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
 
     /**
      * Setzt Verteilungsgewichtsersetzungsgewichte
-     * 
+     *
      * @param elementClass
      * @param edgeClass
      */
@@ -41,8 +41,8 @@ public class WeightReplaceTableModel extends AbstractTableModel {
 
         //falls man Filter wollte (z.B. nur Blattelemente oder so etwas, müsste man das hier tun
         //Analgo zu den anderen Panels
-        List<ModelElement> rowElements = Lists.newArrayList();
-        List<UserField> columnElements = Lists.newArrayList();
+        List<ModelElement> rowElements = new ArrayList<>();
+        List<UserField> columnElements = new ArrayList<>();
         Object[][] data = new Object[allRowElements.size()][allColumnElements.size()];
 
         // temp_data, rowElements, columnElements erstellen
@@ -62,7 +62,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
 
                 WeightReplacer weightReplacer = definitions.getWeightReplacer();
                 String replaceUserFieldHash;
-                //im Falle des Platzhalters für das nicht wirklich vorhandene UserFieldWeight für die Gleichverteilung 
+                //im Falle des Platzhalters für das nicht wirklich vorhandene UserFieldWeight für die Gleichverteilung
                 if (ce == null) {
                     replaceUserFieldHash = weightReplacer.getUniformDistributionReplacement(re.getHashString(), edgeClass);
                 } else { //ansonsten einfach den genauen Ersetzungshash suchen
@@ -79,14 +79,14 @@ public class WeightReplaceTableModel extends AbstractTableModel {
         }
 
         // RowHeader aufbauen
-        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>(rowElements.size());
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<>(rowElements.size());
         for (int i = 0; i < rowElements.size(); i++) {
             ModelElement me = rowElements.get(i);
-            rowIdentifiers.add(new NamedObjectContainer<ModelElement>(me, me.getName()));
+            rowIdentifiers.add(new NamedObjectContainer<>(me, me.getName()));
         }
 
         // ColumnHeader aufbauen
-        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(columnElements.size());
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<>(columnElements.size());
         for (int j = 0; j < columnElements.size(); j++) {
             UserField userField = columnElements.get(j);
             //wenn das UserField null ist, dann ist das der Platzhalter für die Gleichverteilung
@@ -115,7 +115,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
 
     /**
      * Liefert einen Container, für die Gleichverteilung.
-     * 
+     *
      * @return
      */
     public static NamedObjectContainer<UserField> getUniformlyDistributedValueContainer() {
@@ -125,7 +125,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     /**
      * Liefert <code>true</code>, wenn der übergebene Container eine Gleichverteilung repräsentiert (also
      * das Object im Container <code>null</code> ist).
-     * 
+     *
      * @param value
      * @return
      */
@@ -136,7 +136,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
     /**
      * Liefert einen Container, bei dem als String der Name des übergebenen UserFields gesetzt ist.
      * Ist das übergebene UserField <code>null</code>, kommt en Container für die Gleichverteilung zurück.
-     * 
+     *
      * @param userField
      * @return
      */
@@ -149,7 +149,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
 
     /**
      * Liefert einen Container für das übergebene UserField, dessen String ein Leerzeichen ist.
-     * 
+     *
      * @param userField
      * @return
      */

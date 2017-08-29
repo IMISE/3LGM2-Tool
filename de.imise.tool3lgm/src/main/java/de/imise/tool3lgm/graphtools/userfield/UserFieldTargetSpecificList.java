@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 /**
  * @author Thomas Rudert
@@ -14,7 +13,7 @@ public class UserFieldTargetSpecificList<T extends HashSource> implements Clonea
 
     private final Class<? extends UserFieldTarget> targetClass;
 
-    private ArrayList<T> list = Lists.newArrayList();
+    protected List<T> list = new ArrayList<>();
 
     /**
      * @param targetClass

@@ -11,10 +11,10 @@ import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getBackwardMe
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.util.Alphabetical;
@@ -85,8 +85,8 @@ public class MetaModelExporter {
     }
 
     private static List<NamedObjectContainer<List<Class<?>>>> getElementsHierarchies(final Class<? extends ModelElement>[] classes) {
-        List<Class<? extends ModelElement>> allClasses = Lists.newArrayList(classes);
-        List<NamedObjectContainer<List<Class<?>>>> elementHierarchies = Lists.newArrayList();
+        List<Class<? extends ModelElement>> allClasses = Arrays.asList(classes);
+        List<NamedObjectContainer<List<Class<?>>>> elementHierarchies = new ArrayList<>();
         for (Class<? extends ModelElement> elementClass : allClasses) {
             NamedObjectContainer<List<Class<?>>> noc = getSingleElementHierarchy(elementClass, false);
             elementHierarchies.add(noc);
@@ -96,7 +96,7 @@ public class MetaModelExporter {
     }
 
     private static void printHierarchyTree(final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
-        List<Class<?>> lastElementHierarchy = Lists.newArrayList();
+        List<Class<?>> lastElementHierarchy = new ArrayList<>();
         for (NamedObjectContainer<List<Class<?>>> noc : elementsHierarchies) {
             List<Class<?>> elementHierarchy = noc.getObject();
             for (int i = elementHierarchy.size() - 1; i >= 0; i--) {
@@ -133,7 +133,7 @@ public class MetaModelExporter {
                 String edgeString = getEdgeString(edgeClass, INDENTION);
                 System.out.println(edgeString);
             }
-            List<Class<? extends Edge>> edgeClasses = Lists.newArrayList(ModelConstants.getEdgeTypes(elementClass));
+            List<Class<? extends Edge>> edgeClasses = Arrays.asList(ModelConstants.getEdgeTypes(elementClass));
             Alphabetical.sort(edgeClasses);
             List<NamedObjectContainer<Class<? extends Edge>>> edgesStrings = new ArrayList<>();
             for (Class<? extends Edge> edgeClass : edgeClasses) {

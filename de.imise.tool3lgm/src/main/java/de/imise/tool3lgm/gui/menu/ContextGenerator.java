@@ -76,8 +76,6 @@ import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import com.google.common.collect.Lists;
-
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.event.ActionLibrary;
@@ -86,9 +84,9 @@ import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
@@ -670,8 +668,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             List<ModelElement> selectedElements = doc.getSelectedElements();
 
-            List<NamedObjectContainer<JMenuItem>> connectableItems = Lists.newArrayList();
-            List<NamedObjectContainer<JMenuItem>> disconnectableItems = Lists.newArrayList();
+            List<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<>();
+            List<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<>();
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 for (Class<? extends Edge> edgeClass : getEdgeTypes(lastSelectedClass, me2Class)) {

@@ -2,11 +2,10 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.util.Collection;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.tree.TreePath;
-
-import com.google.common.collect.Maps;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -61,7 +60,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             return leafNodes;
         }
         if (nodeToParentModelElement == null) {
-            nodeToParentModelElement = Maps.newHashMap();
+            nodeToParentModelElement = new HashMap<>();
         } else {
             nodeToParentModelElement.clear();
         }

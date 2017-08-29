@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.userfield.calculator;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -13,13 +13,13 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
  * Hält für alle ModelElemente, denen eine einfache Teilwertsummenformel als UserField zugeordnet ist,
  * eine Liste mit dem jeweiligen Element und dem Teilwert, den dieses Element zu dem Gesamtergebnis
  * der Teilwertsumme beiträgt.
- * 
+ *
  * @author Ich
  * @create 26.10.2015
  */
 public class PartValueSumSinglePartResults {
 
-    private final Map<ModelElement, Table<UserField, ModelElement, String>> results = Maps.newHashMap();
+    private final Map<ModelElement, Table<UserField, ModelElement, String>> results = new HashMap<>();
 
     public PartValueSumSinglePartResults() {
     }

@@ -13,8 +13,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -26,9 +28,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.beust.jcommander.internal.Sets;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -263,7 +263,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     /**
      * Set aller TreeNodes, die im linken Baum bereits verknüpft sind und im rechten nicht mehr auftauchen sollen
      */
-    private final Collection<ElementContainer> childrenToExcludeFromRtree = Sets.newHashSet();
+    private final Collection<ElementContainer> childrenToExcludeFromRtree = new HashSet<>();
 
     /**
      * Sammelt für die letzte Edge alle Elemente ein, die im rechten Baum nicht mehr angezeigt werden sollen, weil
@@ -316,7 +316,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
-        List<LGMTreeNode> firstLevelNodes = Lists.newArrayListWithCapacity(all.size());
+        List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
         for (ElementContainer ec : all) {
             LGMTreeNode node = ltree.addObject(ec, lroot, null, true, false, false);
             firstLevelNodes.add(node);
@@ -324,7 +324,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
         for (edgeIndex = 1; edgeIndex < edgeClasses.length; edgeIndex++) {
             pathStepEndClass = getPathStepEndElementClass(edgeIndex);
-            List<LGMTreeNode> newNextStartNodes = Lists.newArrayList();
+            List<LGMTreeNode> newNextStartNodes = new ArrayList<>();
             for (LGMTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
                 me = nodeElementContainer.getElement();

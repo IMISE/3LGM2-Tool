@@ -23,7 +23,6 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -1494,7 +1493,7 @@ public final class ModelConstants {
     }
 
     /** Cache für die Funktion {@link #getInitialSubtypes(Class)} */
-    private static Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> INITIAL_SUBTYPES = Maps.newHashMap();
+    private static Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> INITIAL_SUBTYPES = new HashMap<>();
 
     /**
      * Liefert für eine Elementklasse alle Elementklassen, die ihr untergeordnet sind (also über eine Komposition mit
