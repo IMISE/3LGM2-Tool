@@ -629,7 +629,7 @@ public class UserProperties {
 
     /** @return Kopie der Liste aller Verzeichnisse, in denen nach XSLT-Scripten gesucht wird */
     public static ArrayList<File> getXSLSearchDirs() {
-        return new ArrayList<File>(xslSearchDirs);
+        return new ArrayList<>(xslSearchDirs);
     }
 
     public static boolean addXslSearchDir(final File file) {
@@ -644,12 +644,12 @@ public class UserProperties {
         return xslSearchDirs.addAll(fileList);
     }
 
-    //////////////////
-    // userHomePath //
-    //////////////////
+    //////////////////////
+    // workingDirectory //
+    //////////////////////
 
     /** users home directory */
-    private static File userHomePath = FileSystemView.getFileSystemView().getDefaultDirectory();
+    private static File workingDirectory = FileSystemView.getFileSystemView().getDefaultDirectory();
 
     /**
      * setzt das Standardverzeichnis zum Laden und Speichern von Modellen und
@@ -657,8 +657,15 @@ public class UserProperties {
      *
      * @param path File mit Pfandangabe
      */
-    public static void setUserHomePath(final File path) {
-        userHomePath = path;
+    public static void setWorkingDirectory(final File path) {
+        File directory = path.isDirectory() ? path : path.getParentFile();
+        try {
+            if (directory != null && directory.canRead()) {
+                workingDirectory = directory;
+            }
+        } catch (Exception e) {
+            // mache nichts -> behalte altes Verzeichnis
+        }
     }
 
     /**
@@ -667,8 +674,8 @@ public class UserProperties {
      *
      * @return File des Standardverzeichnisses
      */
-    public static File getUserHomePath() {
-        return userHomePath;
+    public static File getWorkingDirectory() {
+        return workingDirectory;
     }
 
     //////////////

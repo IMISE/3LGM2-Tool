@@ -542,13 +542,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 return false;
             }
         } else if (open == true) {
-            ExtendedFileChooser chooser = new ExtendedFileChooser(null);
+            ExtendedFileChooser chooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
             chooser.setMultiSelectionEnabled(false);
             FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
             if (chooser.showOpenDialog(this, false, lgmFileFilter) == ExtendedFileChooser.APPROVE_OPTION) {
                 file = chooser.getSelectedFile();
                 progressDialog = new ProgressDialog(this, Tool3lgmConstants.getResString("load_model") + " " + file.getName(), true);
-
+                UserProperties.setWorkingDirectory(file);
                 chooser.setVisible(false);
                 if (!loadFile(file, gdcoll)) {
                     if (progressDialog != null) {

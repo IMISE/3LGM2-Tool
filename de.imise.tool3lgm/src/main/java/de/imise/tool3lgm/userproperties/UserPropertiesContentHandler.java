@@ -37,8 +37,8 @@ public class UserPropertiesContentHandler implements ContentHandler {
     private final StringBuilder elementValue = new StringBuilder();
 
     /**
-	 * 
-	 */
+     *
+     */
     protected UserPropertiesContentHandler() {
         super();
     }
@@ -153,6 +153,10 @@ public class UserPropertiesContentHandler implements ContentHandler {
         } else if (equals(qName, "showRemoveWarning")) {
             UserProperties.setShowRemoveWarning(Boolean.valueOf(value).booleanValue());
 
+        } else if (equals(qName, "workingDirectory")) {
+            File f = new File(XMLCharacterCoder.decodeString(value));
+            UserProperties.setWorkingDirectory(f);
+
         } else if (equals(qName, "usedFile")) {
             File f = new File(XMLCharacterCoder.decodeString(value));
             if (f.exists()) {
@@ -172,7 +176,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
 
     /**
      * Vergleicht die 2 Strings auf Gleichheit ohne Beachtung der Groß- und Kleinschreibung.
-     * 
+     *
      * @param s1
      * @param s2
      * @return
@@ -271,6 +275,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
             raf.writeBytes("\t<RMIRegistryPort>" + UserProperties.getRMIRegistryPort() + "</RMIRegistryPort>\n");
             raf.writeBytes("\t<checkConsistency>" + UserProperties.isCheckConsistency() + "</checkConsistency>\n");
             raf.writeBytes("\t<showRemoveWarning>" + UserProperties.isShowRemoveWarning() + "</showRemoveWarning>\n");
+            raf.writeBytes("\t<workingDirectory>" + XMLCharacterCoder.encodeString(UserProperties.getWorkingDirectory().toString()) + "</workingDirectory>\n");
 
             ArrayList<File> usedFiles = UserProperties.getLastUsedFiles();
             while (usedFiles.size() > 0) {

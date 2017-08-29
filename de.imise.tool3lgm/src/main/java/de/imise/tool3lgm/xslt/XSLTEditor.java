@@ -203,7 +203,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
      * @return boolean with true, if save was successful
      */
     private boolean saveAsFile() {
-        File lastUserDir = UserProperties.getUserHomePath();
+        File lastUserDir = UserProperties.getWorkingDirectory();
         ExtendedFileChooser saveDialog = new ExtendedFileChooser(XSLTEditor.class);
         saveDialog.addChoosableFileFilter(XSLTFileHandler.XSLT_FILE_FILTER.getFileNameExtensionFilter());
         saveDialog.setFileFilter(XSLTFileHandler.XSLT_FILE_FILTER.getFileNameExtensionFilter());
@@ -216,7 +216,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
             return false;
         }
         file = saveDialog.getSelectedFile();
-        UserProperties.setUserHomePath(file.getParentFile());
+        UserProperties.setWorkingDirectory(file.getParentFile());
         readOnly = false;
         buttonSave.setEnabled(true);
         UserProperties.addXslSearchDir(file.getParentFile());

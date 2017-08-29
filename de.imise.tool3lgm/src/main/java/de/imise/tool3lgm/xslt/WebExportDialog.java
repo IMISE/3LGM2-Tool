@@ -133,7 +133,7 @@ public class WebExportDialog extends JDialog {
             modelName = modelName.substring(0, modelName.lastIndexOf("."));
         }
 
-        destination.setText(UserProperties.getUserHomePath().toString() + File.separator + "3LGM_export_" + modelName);
+        destination.setText(UserProperties.getWorkingDirectory().toString() + File.separator + "3LGM_export_" + modelName);
         destination.setEditable(false);
         panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("explore")) {
             @Override
@@ -184,7 +184,7 @@ public class WebExportDialog extends JDialog {
             path = new File(destination.getText());
         } catch (Exception e) {
             try {
-                path = new File(UserProperties.getUserHomePath().getCanonicalPath() + File.separator + "_tool3lgm_webexport");
+                path = new File(UserProperties.getWorkingDirectory().getCanonicalPath() + File.separator + "_tool3lgm_webexport");
             } catch (Exception ex) {
                 Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
                 return;

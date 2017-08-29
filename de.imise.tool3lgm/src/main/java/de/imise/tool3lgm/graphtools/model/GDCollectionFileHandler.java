@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMInputStream;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.LGMVersionException;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
@@ -347,7 +348,7 @@ public class GDCollectionFileHandler {
      * @return
      */
     public boolean chooseFile() {
-        ExtendedFileChooser fileChooser = new ExtendedFileChooser(null);
+        ExtendedFileChooser fileChooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
         FileNameExtensionFilter lgmZippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_ZIP);
         FileNameExtensionFilter lgmUnzippedFileFiler = Tool3lgmConstants.getFileNameExtensionFilter(FileFilterType.LGM3_UNZIPPED);
         fileChooser.setFileFilters(false, lgmZippedFileFiler, lgmUnzippedFileFiler);
@@ -399,6 +400,7 @@ public class GDCollectionFileHandler {
             if (!ToolXMLWriter.write(gdcoll, tempFile, isZipFile)) {
                 return false;
             }
+            UserProperties.setWorkingDirectory(file);
             copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
         } catch (Exception e) {
             Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + e, e);
