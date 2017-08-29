@@ -99,19 +99,19 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     private final JButton deleteButton;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final JButton refreshButton;
 
     /**
-	 * 
-	 */
-    private final HashSet<String> unitBoxElements = new HashSet<String>();
+     * 
+     */
+    private final HashSet<String> unitBoxElements = new HashSet<>();
     /**
      * Wenn Formate über dieses Panel gelöscht werden, dann wird in dieser Map jeweils in einer <code>ArrayList</code> gespeichert, welche UserFields
      * dieses Format benutzt haben. Wenn Abbrechen aufgerufen wird, müssen die Formate wieder alle gesetzt werden.
      */
-    private final HashMap<UserField, ArrayList<UserField>> deletedFormatToFormatUser = new HashMap<UserField, ArrayList<UserField>>();
+    private final HashMap<UserField, ArrayList<UserField>> deletedFormatToFormatUser = new HashMap<>();
 
     /**
      * In dieser Liste werden die neu angelegten Format- <code>UserField</code> s gespeichert bis <code>commit()</code> aufgerufen wurde. Im Falle von
@@ -130,7 +130,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         this.userField = userField;
         this.definitions = definitions;
         setLayout(new GridBagLayout());
-        newFormatesList = new ArrayList<UserField>();
+        newFormatesList = new ArrayList<>();
         setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("formatPaneBorder")));
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
         formatComboBox = new AlphabeticalComboBox();
@@ -245,8 +245,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                 formatComboBox.addItem(uf, getFormatPatternString(uf));
 
                 // In mehrern Formatvorlagen können selbstverständlich auch die Einheiten mehrmals vorkommen.
-                // Damit für die Definition eines neuen Formates die Einheiten nicht mehrmals angeboten werden, 
-                // müssen sie hier gefiltert werden. 
+                // Damit für die Definition eines neuen Formates die Einheiten nicht mehrmals angeboten werden,
+                // müssen sie hier gefiltert werden.
                 String formatUnit = uf.getFormatUnit();
                 if (formatUnit != null) {
                     unitBoxElements.add(formatUnit);
@@ -270,7 +270,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
     /**
      * Liefert einen Anzeige- <code>String</code> des übergebenen Format- <code>UserField</code>s.
-     * 
+     *
      * @param userField
      * @return Anzeige- <code>String</code> des Formates. Wenn kein Format eingestellt ist, kommt <code>null</code> zurück;
      */
@@ -296,7 +296,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
     /**
      * Gibt zu dem selektierten Element der <code>formatComboBox</code> das Format als <code>UserField</code> zurück.
-     * 
+     *
      * @return das Objekt <code>UserField</code> zu dem selektierten Element der <code>formatComboBox</code>
      */
     private UserField getSelectedFormatUserField() {
@@ -310,7 +310,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     /**
      * Prüft, ob eine neu anzulegende Formatvorlage schon vorhanden ist. 2 Formate sind gleich, wenn sie die gleich Anzahl von Nachkommastellen und
      * die gleiche Einheit besitzen.
-     * 
+     *
      * @return Wenn ein Duplikat entdeckt wird, gibt die Methode <code>true</code> zurück, sonst <code>false</code>.
      */
     private boolean isDuplicateFormat() {
@@ -339,7 +339,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
     /**
      * Wenn die Standardformate noch nicht vorhanden sind, werden sie angelegt ( Im Kostenmodell und in der <code>formatComboBox</code>.
-     * 
+     *
      * @param fractionDigits Die Anzahl der Nachkommastellen für die Darstellung des Kennzhahlwertes
      * @param unit Die Einheit, in der die Kennzahl angegeben ist.
      */
@@ -358,7 +358,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
     /**
      * Schreibt die neue Formatvorlage als Modellvariable in Form eines <code>UserField</code> s in die <code>GDCollection</code>
-     * 
+     *
      * @return das neu erzeugte <code>UserField</code>
      */
     private UserField addNewFormat() {
@@ -468,6 +468,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
             }
             deletedFormatToFormatUser.put(formatToDelete, formatUser);
             definitions.remove(formatToDelete);
+            //testen,warum das hier gemacht wird!?
             definitions.getCollection().setUserFieldDefinitions(definitions);
             initFormatComboBox();
             formatComboBox.setSelectedObject(userField.getFormatUserField());
