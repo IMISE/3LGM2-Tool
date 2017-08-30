@@ -696,6 +696,7 @@ public abstract class CollectionUtils {
                     if (currentIterator == null) {
                         if (currentIterableIndex < iterables.length) {
                             currentIterator = iterables[currentIterableIndex].iterator();
+                            init(); // das muss sein, falls ein Iterator leer ist! Damit wird er übersprungen und nicht hier abgebrochen.
                         }
                     } else if (!currentIterator.hasNext()) {
                         currentIterableIndex++;
