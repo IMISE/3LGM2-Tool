@@ -8,16 +8,13 @@ package de.imise.util.swing.component;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
-
-import com.google.common.collect.Sets;
 
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -54,14 +51,11 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
         setViewportView(textPane);
         this.maxLines = maxLines;
         //		if (maxLines>1){
-        textPane.addCaretListener(new CaretListener() {
-            @Override
-            public void caretUpdate(final CaretEvent e) {
-                setSize(new Dimension(getSize().width, getPreferredSize().height));
-                Component comp = getParent();
-                if (comp != null) {
-                    ((JComponent) getParent()).revalidate();
-                }
+        textPane.addCaretListener(e -> {
+            setSize(new Dimension(getSize().width, getPreferredSize().height));
+            Component comp = getParent();
+            if (comp != null) {
+                ((JComponent) getParent()).revalidate();
             }
         });
         //		}
@@ -151,7 +145,7 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
         return textPane.getSelectionEnd();
     }
 
-    private final Set<KeyListener> keyListeners = Sets.newHashSet();
+    private final Set<KeyListener> keyListeners = new HashSet<>();
 
     @Override
     public synchronized void addKeyListener(final KeyListener listener) {
@@ -169,7 +163,7 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
         keyListeners.remove(listener);
     }
 
-    private final Set<DocumentListener> documentListeners = Sets.newHashSet();
+    private final Set<DocumentListener> documentListeners = new HashSet<>();
 
     public void addDocumentListener(final DocumentListener listener) {
         //jeden Listener nur 1 x hinzufügen
