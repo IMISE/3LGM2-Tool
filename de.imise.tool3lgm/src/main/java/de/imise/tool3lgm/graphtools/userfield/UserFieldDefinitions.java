@@ -26,8 +26,8 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TWSumArguments;
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.collections.ExtendedMap;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -35,7 +35,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  *
  * @author Thomas Rudert
  */
-public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
+public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler implements Cloneable {
 
     /** Mappt von der Elementklasse auf die dafür definierte Liste von <code>UserField</code>s */
     private Map<Class<? extends UserFieldTarget>, UserFieldList> classToUserFieldListMap = new HashMap<>();
@@ -44,13 +44,16 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     private Map<String, UserField> hashStringToUserFieldMap = new HashMap<>();
 
     /** Berechnet für diese Defnition alle Kennzahlen der konkreten Elemente */
-    private final Calculator calculator;
+    private Calculator calculator;
 
     /** Enthält für alle einfachen Teilwertsummen alle Zwischenergebnisse **/
     private final PartValueSumSinglePartResults partValueSumSinglePartResults;
 
     /**
-     * Liste aller UserFields, die Formeln darstellen
+     * Liste aller UserFields, die Formeln darstellen. Die Reihenfolge ist relevant für die
+     * Konsistenz der Definition. Wenn Formeln andere Formeln referenzieren, dann müssen die
+     * referenzierten Formeln in der Liste immer vor den Formeln stehen, durch die sie
+     * referenziert werden.
      */
     private List<UserField> formulaUserFieldList = new ArrayList<>();
 
@@ -64,7 +67,7 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     /**
      * Analyzer, über den der Zustand dieser {@link UserFieldDefinitions} abgefragt werden kann
      */
-    private final UserFieldDefinitionsAnalyzer definitionsAnalyzer;
+    private UserFieldDefinitionsAnalyzer definitionsAnalyzer;
 
     /**
      * Klasse, über die die sogenannten Modellvariablen identifiziert werden, also Variablen, die nicht für ein spezielles Element sondern für das
@@ -278,30 +281,78 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
     }
 
     @Override
-    public Object clone() {
+    public UserFieldDefinitions clone() {
         UserFieldDefinitions def = null;
         try {
             def = (UserFieldDefinitions) super.clone();
-        } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            return null;
+        } catch (CloneNotSupportedException e) {
+            //this should never happen since we are cloneable
+            throw new InternalError(e);
         }
-        def.gdcoll = getCollection();
-        def.classToUserFieldListMap = new HashMap<>(classToUserFieldListMap);
-        for (Class<? extends UserFieldTarget> key : classToUserFieldListMap.keySet()) {
-            def.classToUserFieldListMap.put(key, (UserFieldList) def.classToUserFieldListMap.get(key).clone());
-        }
-
-        def.formulaUserFieldList = new ArrayList<>(formulaUserFieldList);
+        //Alle Eigenschaften clonen, die ein anderes Object sein müssen, als beim Original
+        //die Map mit allen Userfields, die von ihren HashStrings auf das UserField mappt clonen
         def.hashStringToUserFieldMap = new HashMap<>(hashStringToUserFieldMap);
+        //jedes einzelne UserField clonen (erstmal nur in dieser Map)
         for (String key : hashStringToUserFieldMap.keySet()) {
-            def.hashStringToUserFieldMap.put(key, def.hashStringToUserFieldMap.get(key).clone());
+            UserField userFieldClone = def.hashStringToUserFieldMap.get(key).clone();
+            userFieldClone.setDefinitions(def);
+            def.hashStringToUserFieldMap.put(key, userFieldClone);
         }
+        //die Map, die von den UserFieldTargetClasses auf die Liste der dafür defnierten
+        //UserFields mappt auch clonen und alle darin enthaltenen UserFields durch die
+        //oben erzeugten Clone ersetzen
+        def.classToUserFieldListMap = new HashMap<>(classToUserFieldListMap);
+        for (Class<? extends UserFieldTarget> targetClass : def.classToUserFieldListMap.keySet()) {
+            UserFieldList userFieldList = def.classToUserFieldListMap.get(targetClass);
+            //die Listen in der Map selbst müssen auch geclont werden
+            userFieldList = (UserFieldList) userFieldList.clone();
+            //Listen mit ihren clones ersetzen
+            def.classToUserFieldListMap.put(targetClass, userFieldList);
+            //in der geclonten Listen die UserFields mit den clones ersetzen
+            replaceWithClones(userFieldList, def.hashStringToUserFieldMap);
+        }
+        //in der Liste mit allen Formel-UserFields auch die Original durch die clone ersetzen
+        def.formulaUserFieldList = new ArrayList<>(formulaUserFieldList);
+        replaceWithClones(def.formulaUserFieldList, def.hashStringToUserFieldMap);
 
-        // Dem Calculator muss man die extra noch mitgeben, da er sonst mit einer alten Definitions rechnet.
-        calculator.setUserFieldDefinitions(def.getCollection().getUserFieldDefinitions());
-
+        //eigenen Calculator für den clone initialisieren
+        def.calculator = new Calculator(def);
+        //den Analyzer ersetzen
+        def.definitionsAnalyzer = new UserFieldDefinitionsAnalyzer(def);
         return def;
+    }
+
+    /**
+     * Ersetzt die UserFields in der übergebenen Liste durch die aus der übergebenen Map mit demselben HashString.
+     * Weil UserFieldList nicht das Interface {@link List} implementiert muss man im Grunde dieselbe Funktion hier 2 mal schreiben.
+     * Die UserFieldList soll aber nicht List implementieren, weil es zu aufwändig wäre, sie für alle darin enthaltenen Funktionen
+     * konsitent zu halten
+     *
+     * @param userFieldList
+     * @param hashStringToClonedUserFieldMap
+     */
+    private static void replaceWithClones(final UserFieldList userFieldList, final Map<String, UserField> hashStringToClonedUserFieldMap) {
+        for (int i = 0; i < userFieldList.size(); i++) {
+            UserField orgUserField = userFieldList.get(i);
+            String userFieldHash = orgUserField.getHashCode();
+            UserField cloneUserField = hashStringToClonedUserFieldMap.get(userFieldHash);
+            userFieldList.set(i, cloneUserField);
+        }
+    }
+
+    /**
+     * Ersetzt die UserFields in der übergebenen Liste durch die aus der übergebenen Map mit demselben HashString.
+     *
+     * @param userFieldList
+     * @param hashStringToClonedUserFieldMap
+     */
+    private static void replaceWithClones(final List<UserField> userFieldList, final Map<String, UserField> hashStringToClonedUserFieldMap) {
+        for (int i = 0; i < userFieldList.size(); i++) {
+            UserField orgUserField = userFieldList.get(i);
+            String userFieldHash = orgUserField.getHashCode();
+            UserField cloneUserField = hashStringToClonedUserFieldMap.get(userFieldHash);
+            userFieldList.set(i, cloneUserField);
+        }
     }
 
     /**
@@ -893,6 +944,10 @@ public class UserFieldDefinitions extends UserFieldDefinitionChangeHandler imple
 
     public Set<Class<? extends UserFieldTarget>> getUserFieldTargets() {
         return classToUserFieldListMap.keySet();
+    }
+
+    public String toExtendedToString() {
+        return ExtendedMap.toString(hashStringToUserFieldMap);
     }
 
     @Override

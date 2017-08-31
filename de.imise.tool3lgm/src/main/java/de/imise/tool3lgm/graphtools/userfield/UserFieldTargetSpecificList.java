@@ -43,14 +43,18 @@ public class UserFieldTargetSpecificList<T extends HashSource> implements Clonea
         if (insertIndex >= 0) {
             insert(element, insertIndex);
         }
-        if (!list.contains(element)) {
-            list.add(element);
-        } else {
-            // Das hier ermöglich das Importieren von userFields.
-            // Es werden somit schon bestehende userField und deren Eiegenschaften überschrieben
-            list.remove(element);
-            list.add(element);
-        }
+        list.remove(element);
+        list.add(element);
+    }
+
+    /**
+     * Ersetzt das element am gegebenen Index durch das übergebene.
+     *
+     * @param index
+     * @param element
+     */
+    public void set(final int index, final T element) {
+        list.set(index, element);
     }
 
     /**
@@ -83,16 +87,17 @@ public class UserFieldTargetSpecificList<T extends HashSource> implements Clonea
     }
 
     @Override
-    public final UserFieldTargetSpecificList<T> clone() {
-        UserFieldTargetSpecificList<T> collection = null;
+    public UserFieldTargetSpecificList<T> clone() {
+        UserFieldTargetSpecificList<T> clone = null;
         try {
-            collection = (UserFieldTargetSpecificList<T>) super.clone();
+            clone = (UserFieldTargetSpecificList<T>) super.clone();
         } catch (CloneNotSupportedException e) {
             //this should never happen since we are cloneable
             throw new InternalError(e);
         }
-        collection.list = new ArrayList<>(list);
-        return collection;
+        //die Liste selbst clonen
+        clone.list = new ArrayList<>(list);
+        return clone;
     }
 
     /**

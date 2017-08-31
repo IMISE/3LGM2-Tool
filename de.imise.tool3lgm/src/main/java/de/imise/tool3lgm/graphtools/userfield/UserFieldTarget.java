@@ -55,12 +55,31 @@ public class UserFieldTarget implements Cloneable {
             return null;
         }
         retVal.userFieldToInputValuesMap = userFieldToInputValuesMap == null ? null : new HashMap<>(userFieldToInputValuesMap);
-        //Das folgende kann man sich schenken, weil nur neue Strings gesetzt werden. Da man Strings aber nicht ändern kann
-        //ohne sie neu zu setzen, können hier die Referenzen erstmal ruhig auch auf das Origibal zeigen
-        //		for (UserField key : getUserFieldInputValueKeys())
-        //			retVal.setUserFieldInputValue(key, new String(getUserFieldInputValue(key)));
 
         return retVal;
+    }
+
+    /**
+     * Ersetzt alle UserFields in der Map der Eingabewerte durch die in der übergebenen Definition mit demselben HashString.
+     *
+     * @param definitions
+     */
+    public void replaceUserFields(final UserFieldDefinitions definitions) {
+        //Kopie des bestehenden KeySets anlegen. toArray() ist Performace-technisch am besten
+        //nicht einfach über keySet() iterieren, weil sich das Set in der Schleife ändert!
+        if (userFieldToInputValuesMap != null) {
+            Set<UserField> keySet = userFieldToInputValuesMap.keySet();
+            Object[] oldUserFields = keySet.toArray();
+            for (Object oldUserFieldObject : oldUserFields) {
+                if (oldUserFieldObject != null) {
+                    UserField oldUserField = (UserField) oldUserFieldObject;
+                    String userFieldHashCode = oldUserField.getHashCode();
+                    UserField newUserField = definitions.getUserField(userFieldHashCode);
+                    String inputValue = userFieldToInputValuesMap.remove(oldUserField);
+                    userFieldToInputValuesMap.put(newUserField, inputValue);
+                }
+            }
+        }
     }
 
     ////////////////////////////

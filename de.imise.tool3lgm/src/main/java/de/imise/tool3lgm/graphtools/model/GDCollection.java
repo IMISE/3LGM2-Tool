@@ -2405,8 +2405,12 @@ public final class GDCollection extends UserFieldTarget {
     public void setUserFieldDefinitions(final UserFieldDefinitions newDef) {
         if (newDef != null && newDef != userFieldDefinitions) {
             userFieldDefinitions = newDef;
-            //TODO:AXS:USERFIELD
-            //hier müssen bei allen USerfieldTargets alle Userfields ausgetauscht werden, die sie über ihre UserField2Value-Maps referenzieren
+            //die eigenen UserFields mit den neuen ersetzen
+            replaceUserFields(newDef);
+            //hier müssen bei allen UserfieldTargets alle Userfields ausgetauscht werden, die sie über ihre UserField2Value-Maps referenzieren
+            for (ModelElement me : getModelItems(doc, ModelElement.class, true, false, false)) {
+                me.replaceUserFields(newDef);
+            }
         }
         setChanged(true);
     }
