@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
+import com.google.common.base.Strings;
+
 import de.imise.util.swing.component.text.ExtendedTextArea;
 
 /**
@@ -68,7 +70,9 @@ public class OutputDialog extends JDialog implements WindowListener {
      * @param text
      */
     public void appendln(final Object text, final Object... additionalText) {
-        appendlnInternal(text);
+        if (text != null) {
+            appendlnInternal(text);
+        }
         if (additionalText != null) {
             for (Object o : additionalText) {
                 appendlnInternal(o);
@@ -84,20 +88,26 @@ public class OutputDialog extends JDialog implements WindowListener {
     }
 
     /**
-     * @param text
+     * @param message
      */
-    private void appendlnInternal(final Object text) {
-        if (text != null) {
-            if (text instanceof Throwable) {
-                Throwable t = (Throwable) text;
-                append(t.getMessage());
+    private void appendlnInternal(final Object message) {
+        if (message != null) {
+            if (message instanceof Throwable) {
+                Throwable t = (Throwable) message;
+                String tMessage = t.getMessage();
+                if (!Strings.isNullOrEmpty(tMessage)) {
+                    append(tMessage);
+                    append("\n");
+                }
+                append(t.getClass().getName());
                 append("\n");
                 for (StackTraceElement traceElem : t.getStackTrace()) {
+                    append("\t");
                     append(traceElem.toString());
                     append("\n");
                 }
             } else {
-                append(text.toString());
+                append(message.toString());
                 append("\n");
             }
         } else {
