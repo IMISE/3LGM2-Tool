@@ -19,8 +19,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.google.common.base.Strings;
-
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 
@@ -171,11 +169,7 @@ public class Log {
             typ = JOptionPane.ERROR_MESSAGE;
         }
         if (showErrorDialog) {
-            if (!Strings.isNullOrEmpty(meldung)) {
-                Static.showErrorOutputDialog(meldung, t);
-            } else {
-                Static.showErrorOutputDialog(t);
-            }
+            Static.showErrorOutputDialog(meldung, t);
         } else {
             JOptionPane.showConfirmDialog(getParentComponent(), meldung, titel, JOptionPane.DEFAULT_OPTION, typ);
         }
