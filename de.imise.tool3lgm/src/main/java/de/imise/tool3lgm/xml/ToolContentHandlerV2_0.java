@@ -108,6 +108,17 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     protected boolean avoidDuplicates = false;
 
     /**
+     * Faktor, um den die Position von per Paste eingefügten Elementen in x und y Richtung nach unten
+     * verschoben wird. Mehrmaliges Hintereinandereinfügen erhöht diesen Faktor, so dass die kopierten
+     * Elemente immer schräg unter den originalen bzw. zuletzt eingefügten Elementen landen.
+     */
+    private int copyAndPastePositionShift = 0;
+
+    private final boolean isCopyAndPaste() {
+        return copyAndPastePositionShift > 0;
+    }
+
+    /**
      *
      */
     public ToolContentHandlerV2_0(final GDCollection coll) {
@@ -137,7 +148,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
         doc._cleanContainers();
         doc._removeMultipleTraces();
 
-        if (copyAndPaste > 0) {
+        if (isCopyAndPaste()) {
             for (EdgeContainer kc : kantenContainer) {
                 kc.computeBorderPoints();
             }
@@ -165,8 +176,6 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     public void endPrefixMapping(final String arg0) throws SAXException {
     }
 
-    int copyAndPaste = 0;
-
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
         try {
@@ -192,7 +201,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
 
                 if (element != null) {
-                    if (copyAndPaste > 0) {
+                    if (isCopyAndPaste()) {
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
                         if (element instanceof Edge) {
                             kanten.add((Edge) element);
@@ -205,7 +214,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 avoidDuplicates = true;
 
             } else if (qName.equals("container")) {
-                if (copyAndPaste > 0) {
+                if (isCopyAndPaste()) {
                     element = doc.findElementCoded(hashCodes.get(atts.getValue("hash")).toString());
                 } else {
                     element = doc.findElementCoded(atts.getValue("hash"));
@@ -221,7 +230,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                         throw new SAXException("Container für ModelObject nicht gefunden!\n Name=" + qName + "\n UserField=" + atts.toString());
                     }
 
-                    if (copyAndPaste > 0 && container instanceof EdgeContainer) {
+                    if (isCopyAndPaste() && container instanceof EdgeContainer) {
                         kantenContainer.add((EdgeContainer) container);
                     }
                 }
@@ -301,7 +310,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
             } else if (qName.equals("szenario")) {
                 Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
 
-                if (copyAndPaste <= 0) {
+                if (!isCopyAndPaste()) {
                     szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 }
 
@@ -326,11 +335,11 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
             } else if (qName.equals("modell_3lgm_2")) {
                 doc = collection.getMainGraphDocument();
-                copyAndPaste = collection.resetCopyAndPaste();
+                copyAndPastePositionShift = collection.resetPasteCounter();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
                 doc = Static.getSelectedGDCollection().getMainGraphDocument();
-                copyAndPaste = collection.increaseCopyAndPaste();
+                copyAndPastePositionShift = collection.increasePasteCounter();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
                 hashCodes = new HashMap<>();
@@ -373,12 +382,12 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 avoidDuplicates = false;
 
             } else if (qName.equals("container")) {
-                if (container != null && (copyAndPaste > 0 || !szenario.equals(doc))) {
+                if (container != null && (isCopyAndPaste() || !szenario.equals(doc))) {
                     szenario.getLayer(container.getElement().layerFor()).add(container);
                     //				container.refreshText();
                 }
 
-                if (copyAndPaste > 0) {
+                if (isCopyAndPaste()) {
                     szenario.addSimpleToSelection(container);
                 }
 
@@ -402,8 +411,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
                 layout.x = Integer.parseInt(elementValue.toString());
 
-                if (copyAndPaste > 0) {
-                    layout.x = layout.x + 10 * copyAndPaste;
+                if (isCopyAndPaste()) {
+                    layout.x = layout.x + 10 * copyAndPastePositionShift;
                 }
 
             } else if (qName.equals("y")) {
@@ -412,8 +421,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
                 layout.y = Integer.parseInt(elementValue.toString());
 
-                if (copyAndPaste > 0) {
-                    layout.y = layout.y + 10 * copyAndPaste;
+                if (isCopyAndPaste()) {
+                    layout.y = layout.y + 10 * copyAndPastePositionShift;
                 }
 
             } else if (qName.equals("width")) {
@@ -582,7 +591,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 Static.setProgressDialogStatusLabel("labelConnectTraces");
 
                 /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten */
-                if (copyAndPaste > 0) {
+                if (isCopyAndPaste()) {
                     Edge kante;
                     for (int i = 0; i < kanten.size(); i++) {
                         kante = kanten.get(i);

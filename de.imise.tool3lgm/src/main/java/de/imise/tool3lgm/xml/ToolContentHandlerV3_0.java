@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getClassForName;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -196,9 +198,15 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     }
 
     /**
-     * COMMENTME
+     * Faktor, um den die Position von per Paste eingefügten Elementen in x und y Richtung nach unten
+     * verschoben wird. Mehrmaliges Hintereinandereinfügen erhöht diesen Faktor, so dass die kopierten
+     * Elemente immer schräg unter den originalen bzw. zuletzt eingefügten Elementen landen.
      */
-    int copyAndPaste = 0;
+    private int copyAndPastePositionShift = 0;
+
+    private final boolean isCopyAndPaste() {
+        return copyAndPastePositionShift > 0;
+    }
 
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
@@ -234,7 +242,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
                 if (element != null) {
-                    if (copyAndPaste > 0) {
+                    if (isCopyAndPaste()) {
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
                         if (element instanceof Edge) {
                             kanten.add(element);
@@ -244,7 +252,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
                 }
             } else if (qName.equals("container")) {
-                if (copyAndPaste > 0) {
+                if (isCopyAndPaste()) {
                     element = doc.findElementCoded(hashCodes.get(atts.getValue("hash")).toString());
                 } else {
                     element = doc.findElementCoded(atts.getValue("hash"));
@@ -342,7 +350,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("szenario")) {
                 Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
 
-                if (copyAndPaste <= 0) {
+                if (!isCopyAndPaste()) {
                     szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 }
 
@@ -376,7 +384,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (elementClass == null) {
                     userField = new UserField(atts.getValue("hash"), collection.getUserFieldDefinitions());
                 } else {
-                    userField = new UserField(ModelConstants.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
+                    userField = new UserField(getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
                 }
             } else if (qName.equals("replacerEntry")) {
                 String elementHash = atts.getValue("elementHash");
@@ -390,7 +398,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String edgeClassName = atts.getValue("edgeClass");
                 String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
-                Class<? extends Edge> edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class);
+                Class<? extends Edge> edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
                 replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
 
                 //            } else if (qName.equals("userFieldName")) {
@@ -415,11 +423,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //
             } else if (qName.equals("modell_3lgm_2")) {
                 doc = collection.getMainGraphDocument();
-                copyAndPaste = collection.resetCopyAndPaste();
+                copyAndPastePositionShift = collection.resetPasteCounter();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
                 doc = Static.getSelectedGDCollection().getMainGraphDocument();
-                copyAndPaste = collection.increaseCopyAndPaste();
+                copyAndPastePositionShift = collection.increasePasteCounter();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
                 hashCodes = new HashMap<>();
@@ -483,7 +491,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 else {
                     collection.setUserFieldInputValue(userFieldDefinitions.getUserField(field), val);
                 }
-
                 field = null;
 
             } else if (qName.equals("element")) {
@@ -499,17 +506,14 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 container = null;
 
             } else if (qName.equals("container")) {
-
                 if (tmp_container != null) {
                     container = tmp_container;
                     tmp_container = null;
                 } else if (container != null) {
-                    if (copyAndPaste > 0 || !szenario.equals(doc)) {
+                    if (isCopyAndPaste() || !szenario.equals(doc)) {
                         szenario.getLayer(container.getElement().layerFor()).add(container);
-                        //						container.refreshText();
                     }
-
-                    if (copyAndPaste > 0) {
+                    if (isCopyAndPaste()) {
                         if (container instanceof EdgeContainer) {
                             kantenContainer.add(container);
                         } else if (container instanceof BendpointContainer) {
@@ -518,7 +522,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         szenario.addSimpleToSelection(container);
                     }
                 }
-
                 container = null;
 
             } else if (qName.equals("expanded")) {
@@ -536,8 +539,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 layout.x = Integer.parseInt(elementValue.toString());
 
-                if (copyAndPaste > 0) {
-                    layout.x = layout.x + 10 * copyAndPaste;
+                if (isCopyAndPaste()) {
+                    layout.x = layout.x + 10 * copyAndPastePositionShift;
                 }
 
             } else if (qName.equals("y")) {
@@ -546,8 +549,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 layout.y = Integer.parseInt(elementValue.toString());
 
-                if (copyAndPaste > 0) {
-                    layout.y = layout.y + 10 * copyAndPaste;
+                if (isCopyAndPaste()) {
+                    layout.y = layout.y + 10 * copyAndPastePositionShift;
                 }
 
             } else if (qName.equals("width")) {
@@ -680,7 +683,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 layer = null;
 
             } else if (qName.equals("szenario")) {
-                if (copyAndPaste > 0) {
+                if (isCopyAndPaste()) {
                     for (int i = 0; i < knickpunke.size(); i++) {
                         BendpointContainer knickpunkt = knickpunke.get(i);
                         Knickpunkt kn = knickpunkt.getKnickpunktKnoten();
@@ -760,7 +763,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 //die HashStrings für das Start- bzw. End-Objekt einer Edge
                 // auflösen und die wirklichen Node setzten
-                if (copyAndPaste > 0) {
+                if (isCopyAndPaste()) {
                     Knickpunkt knp;
                     for (int i = 0; i < knickpunke.size(); i++) {
                         knp = knickpunke.get(i).getKnickpunktKnoten();
