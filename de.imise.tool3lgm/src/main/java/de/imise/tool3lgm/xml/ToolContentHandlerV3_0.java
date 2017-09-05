@@ -415,14 +415,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //
             } else if (qName.equals("modell_3lgm_2")) {
                 doc = collection.getMainGraphDocument();
-                collection.setCopyAndPaste(0);
-                copyAndPaste = collection.getCopyAndPaste();
+                copyAndPaste = collection.resetCopyAndPaste();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
                 doc = Static.getSelectedGDCollection().getMainGraphDocument();
-                copyAndPaste = collection.getCopyAndPaste();
-                collection.setCopyAndPaste(copyAndPaste + 1);
-                copyAndPaste = collection.getCopyAndPaste();
+                copyAndPaste = collection.increaseCopyAndPaste();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
                 hashCodes = new HashMap<>();

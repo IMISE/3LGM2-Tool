@@ -235,7 +235,8 @@ public final class GDCollection extends UserFieldTarget {
     private int iconCounter = 0;
 
     /**
-     * COMMENTME
+     * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem Paste in die Grafik kopiert werden.
+     * Jedes Mal, wenn gepastet wird ohne eine neue Kopie anzufertigen, dann wird der Counter hochgezählt.
      */
     private int copyAndPaste;
 
@@ -2209,17 +2210,15 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @return
+     *
      */
-    public int getCopyAndPaste() {
+    public int resetCopyAndPaste() {
+        copyAndPaste = 0;
         return copyAndPaste;
     }
 
-    /**
-     * @param i
-     */
-    public void setCopyAndPaste(final int i) {
-        copyAndPaste = i;
+    public int increaseCopyAndPaste() {
+        return ++copyAndPaste;
     }
 
     /**
