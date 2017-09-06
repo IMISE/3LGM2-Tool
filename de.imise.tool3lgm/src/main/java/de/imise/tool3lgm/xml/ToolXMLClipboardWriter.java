@@ -58,11 +58,6 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
         writeAttribute("time", String.valueOf(System.currentTimeMillis()));
         writeUserFieldDefinitions(userFields);
-        writeStartElement("userFieldDefinitions"); //<userFieldDefinitions>
-        for (UserField uf : userFields) {
-            writeUserField(uf);
-        }
-        writeEndElement(); //</userFieldDefinitions>
         writeStartElement("objects"); //<objects>
         for (ModelElement me : copyElements) {
             if (ModelConstants.avoidDuplicates(me.getClass())) {
