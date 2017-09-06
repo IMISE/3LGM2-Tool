@@ -37,7 +37,7 @@ public final class AwbAwbkVerbindung extends Edge {
     // {KonAnwendungsbaustein.class, ModelConstants.ONE, ModelConstants.UNLIMITED}};
 
     /**
-     * 
+     *
      */
     public AwbAwbkVerbindung() {
         super();
@@ -58,11 +58,6 @@ public final class AwbAwbkVerbindung extends Edge {
      */
     public AwbAwbkVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.INTER_DOMAIN_LOGICAL_LAYER;
     }
 
 }

@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -20,11 +19,6 @@ public class Objekttyp extends Node {
      */
     public Objekttyp() {
         super();
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
     @Override

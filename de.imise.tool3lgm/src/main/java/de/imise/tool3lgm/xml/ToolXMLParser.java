@@ -63,6 +63,7 @@ public class ToolXMLParser {
             "<!--Tool3lgmFile version='3.3'-->",
             "<!--Tool3lgmFile version='3.4'-->",
             "<!--Tool3lgmFile version='3.5'-->",
+            //            "<!--Tool3lgmFile version='3.6'-->",
     };
 
     private final SAXParser parser;
@@ -121,11 +122,11 @@ public class ToolXMLParser {
             break;
 
         case 6:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_2(collection, paste));
+            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
             break;
 
         case 7:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_2(collection, paste));
+            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
             break;
 
         case 8:
@@ -133,6 +134,10 @@ public class ToolXMLParser {
                     //umbeannt wurden, was aber den Parser nicht kümmert)
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_4(collection, paste));
             break;
+
+        //        case 10:
+        //            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_5(collection, paste));
+        //            break;
 
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");

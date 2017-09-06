@@ -1,5 +1,5 @@
 /*
- * Created on 26.11.2003 To change this generated comment go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 26.11.2003
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
@@ -15,9 +15,8 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.process.LGMProzessStep;
 import de.imise.tool3lgm.graphtools.analyse.process.ProzessStructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
@@ -55,11 +54,6 @@ public final class Prozess extends Node {
 
         color = colorCounter;
         colorCounter = (colorCounter + 1) % farben.length;
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
     @Override

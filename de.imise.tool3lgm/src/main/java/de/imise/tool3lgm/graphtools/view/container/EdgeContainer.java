@@ -18,8 +18,8 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;

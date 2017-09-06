@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -14,7 +14,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datensatztyp;
  */
 public final class DbsDatVerbindung extends Edge {
 
-    //	public static final Class[] stcl = {Datenbanksystem.class};
     public static final Class<? extends ModelElement> stcl = Datenbanksystem.class;
 
     public static final int[] scard = {
@@ -29,13 +28,8 @@ public final class DbsDatVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Datensatztyp.class;
 
-    //	public static final Class[] etcl = {Datensatztyp.class};
-
-    //	private static Object[][] stcl = {{Datenbanksystem.class, ModelConstants.ONE, ModelConstants.ONE}};
-    //	private static Object[][] etcl = {{Datensatztyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-
     /**
-     * 
+     *
      */
     public DbsDatVerbindung() {
         super();
@@ -56,11 +50,6 @@ public final class DbsDatVerbindung extends Edge {
      */
     public DbsDatVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

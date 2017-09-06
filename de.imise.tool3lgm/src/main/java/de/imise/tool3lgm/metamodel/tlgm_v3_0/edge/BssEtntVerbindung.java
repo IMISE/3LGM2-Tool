@@ -14,7 +14,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
  */
 public final class BssEtntVerbindung extends Edge {
 
-    //	public static final Class[] stcl = {Bausteinschnittstelle.class};
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
 
     public static final int[] scard = {
@@ -29,14 +28,8 @@ public final class BssEtntVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = EtntEtdtKombination.class;
 
-    //	public static final Class[] etcl = {EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class};
-
-    //	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{EreignisNachrichtenTyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED},
-    //								   {EreignisDokumentenTyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-
     /**
-     * 
+     *
      */
     public BssEtntVerbindung() {
         super();
@@ -57,11 +50,6 @@ public final class BssEtntVerbindung extends Edge {
      */
     public BssEtntVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -14,7 +14,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Nachrichtentyp;
  */
 public final class EtntNatVerbindung extends Edge {
 
-    //    public static final Class[] stcl = {EreignisNachrichtenTyp.class};
     public static final Class<? extends ModelElement> stcl = EreignisNachrichtenTyp.class;
 
     public static final int[] scard = {
@@ -29,13 +28,8 @@ public final class EtntNatVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Nachrichtentyp.class;
 
-    //	public static final Class[] etcl = {Nachrichtentyp.class};
-
-    //	private static Object[][] stcl = {{EreignisNachrichtenTyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{Nachrichtentyp.class, ModelConstants.ZERO, ModelConstants.ONE}};
-
     /**
-     * 
+     *
      */
     public EtntNatVerbindung() {
         super();
@@ -56,11 +50,6 @@ public final class EtntNatVerbindung extends Edge {
      */
     public EtntNatVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

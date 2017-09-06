@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -14,7 +14,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
  */
 public final class PdvbStoVerbindung extends Edge {
 
-    //    public static final Class[] stcl = {PhysischerDVBaustein.class};
     public static final Class<? extends ModelElement> stcl = PhysischerDVBaustein.class;
 
     public static final int[] scard = {
@@ -29,13 +28,8 @@ public final class PdvbStoVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Standort.class;
 
-    //	public static final Class[] etcl = {Standort.class};
-
-    //	private static Object[][] stcl = {{PhysischerDVBaustein.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{Standort.class, ModelConstants.ZERO, ModelConstants.ONE}};
-
     /**
-     * 
+     *
      */
     public PdvbStoVerbindung() {
         super();
@@ -56,11 +50,6 @@ public final class PdvbStoVerbindung extends Edge {
      */
     public PdvbStoVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.PHYSICAL_LAYER;
     }
 
 }

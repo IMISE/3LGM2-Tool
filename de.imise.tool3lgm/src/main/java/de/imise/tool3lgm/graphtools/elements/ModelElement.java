@@ -116,17 +116,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public int layerFor() {
-        return layer;
-    }
-
-    /**
-     * does nothing because layer ist defined by 3lgm-specifications <br/>
-     * overwrite method in classes with no definite layer, like oldTrace
-     *
-     * @param layer
-     */
-    public final void setLayer(final int layer) {
-        this.layer = layer;
+        return ModelConstants.layerFor(getClass());
     }
 
     /**
@@ -493,14 +483,6 @@ public abstract class ModelElement extends UserFieldTarget {
             }
             return true;
 
-        }
-        if (field.equals("layer")) {
-            int layer = Integer.parseInt(value);
-            if (layer < 0 || layer > ModelConstants.LAYERS.length) {
-                layer = ModelConstants.layerFor(getClass());
-            }
-            setLayer(layer);
-            return true;
         }
         if (field.equals("assoc_szen")) {
             setAssociatedDoc(value);

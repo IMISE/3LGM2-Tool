@@ -1,5 +1,5 @@
 /*
- * Created on 20.01.2004 To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Created on 20.01.2004
  */
 package de.imise.tool3lgm.graphtools.elements;
 
@@ -8,16 +8,8 @@ package de.imise.tool3lgm.graphtools.elements;
  */
 public class LayerKnoten extends Node {
 
-    /**
-     *
-     */
     public LayerKnoten() {
         super();
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.NO_LAYER;
     }
 
 }

@@ -159,10 +159,6 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             element = ModelConstants.createElement(elementClass, false);
             if (element != null) {
                 element.setHashString(atts.getValue("hash"));
-
-                if (atts.getValue("layer") != null) {
-                    element.setLayer(Integer.parseInt(atts.getValue("layer")));
-                }
             }
         } else if (qName.equals("container")) {
             element = doc.findElementCoded(atts.getValue("hash"));

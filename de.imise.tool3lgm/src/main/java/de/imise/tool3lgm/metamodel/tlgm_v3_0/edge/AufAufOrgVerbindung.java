@@ -35,7 +35,7 @@ public final class AufAufOrgVerbindung extends Edge {
     // private static Object[][] etcl = {{AufOrgKombination.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-     * 
+     *
      */
     public AufAufOrgVerbindung() {
         super();
@@ -56,11 +56,6 @@ public final class AufAufOrgVerbindung extends Edge {
      */
     public AufAufOrgVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
 }

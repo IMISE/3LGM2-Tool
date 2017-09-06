@@ -2213,7 +2213,7 @@ public final class GDCollection extends UserFieldTarget {
      *
      */
     public int resetPasteCounter() {
-        pasteCounter = 0;
+        pasteCounter = 1;
         return pasteCounter;
     }
 

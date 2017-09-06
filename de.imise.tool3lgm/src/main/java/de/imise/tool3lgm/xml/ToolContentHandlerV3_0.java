@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.createElement;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getClassForName;
 
 import java.awt.Color;
@@ -54,26 +55,35 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
  */
 public class ToolContentHandlerV3_0 implements ContentHandler {
 
-    /**
-     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString,
-     * Wert ist neuer HashString
-     */
-    protected Map<String, String> hashCodes;
+    private static String lastCopyFileTimeStamp = "";
+
+    private boolean paste = false;
+
+    /** Alle über Copy&Paste eingefügten Elemente. Diese werden am Ende selected(true) gesetzt */
+    private List<ElementContainer> pastedElements;
+
+    private final Map<String, BendpointContainer> hashToMainDocBendpointContainer = new HashMap<>();
+
+    private Map<String, BendpointContainer> hashToSzenarioBendpointContainer;
 
     /**
-     * Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei
-     * copyAndPaste)
+     * Faktor, um den die Position von per Paste eingefügten Elementen in x und y Richtung nach unten
+     * verschoben wird. Mehrmaliges Hintereinandereinfügen erhöht diesen Faktor, so dass die kopierten
+     * Elemente immer schräg unter den originalen bzw. zuletzt eingefügten Elementen landen.
      */
-    protected List<ModelElement> kanten;
+    private int copyAndPastePositionShift = 0;
 
-    /** {@link BendpointContainer}, die den Kanten zugeordnet werden müssen (bei copyAndPaste) */
-    protected List<BendpointContainer> knickpunke;
+    private final boolean isCopyAndPaste() {
+        return copyAndPastePositionShift > 0;
+    }
 
     /**
-     * KantenContainer deren computeBorderPoints()-Methode aufgerufen werden
-     * muss
+     * gänderte Hashcodes (bei copyAndPaste) Schlüssel ist alter HashString, Wert ist neuer HashString
      */
-    protected List<ElementContainer> kantenContainer;
+    private Map<String, String> oldToNewHashString;
+
+    /** Alle Kanten. Am Ende müssem deren hashStrings (start, end) aufgelöst werden. */
+    private final List<Edge> edges = new ArrayList<>();
 
     /** GDCollection in die die Element geschrieben werden */
     protected GDCollection collection;
@@ -102,7 +112,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /** aktueller ElementContainer */
     protected ElementContainer container = null;
 
-    protected ElementContainer tmp_container = null;
+    /** wird gesetzt, wenn der aktuelle Container gelont werden soll */
+    private ElementContainer tmp_container = null;
 
     /** definiert den Namen eines field-objektes */
     protected String field = null;
@@ -145,8 +156,20 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      * @param coll
      */
     public ToolContentHandlerV3_0(final GDCollection coll) {
+        this(coll, false);
+    }
+
+    /**
+     * @param coll
+     * @param paste
+     */
+    public ToolContentHandlerV3_0(final GDCollection coll, final boolean paste) {
         super();
         collection = coll;
+        this.paste = paste;
+        if (paste) {
+            pastedElements = new ArrayList<>();
+        }
         doc = collection.getMainGraphDocument();
         szenario = collection.getSelectedDoc();
         userFieldDefinitions = coll.getUserFieldDefinitions();
@@ -182,6 +205,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             //			collection.getSzenario(i).refreshSpecialInfoTargets();
         }
         doc._refreshSubordinatedElementsInSzenarios();
+        doc.deselectAll(true);
+        if (paste) {
+            for (ElementContainer ec : pastedElements) {
+                doc.addToSelection(ec, 0);
+            }
+        }
 
         doc = null;
         containerWithIcon = null;
@@ -197,26 +226,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     public void endPrefixMapping(final String arg0) throws SAXException {
     }
 
-    /**
-     * Faktor, um den die Position von per Paste eingefügten Elementen in x und y Richtung nach unten
-     * verschoben wird. Mehrmaliges Hintereinandereinfügen erhöht diesen Faktor, so dass die kopierten
-     * Elemente immer schräg unter den originalen bzw. zuletzt eingefügten Elementen landen.
-     */
-    private int copyAndPastePositionShift = 0;
-
-    private final boolean isCopyAndPaste() {
-        return copyAndPastePositionShift > 0;
-    }
-
     @Override
     public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
         try {
             elementValue.setLength(0);
-
-            //		System.out.println("start: " + qName + (atts.getValue("hash") !=
-            // null ? " hash="+atts.getValue("hash") : "") +
-            // (atts.getValue("name") != null ? " name="+atts.getValue("name") :
-            // ""));
 
             if (qName.equals("field")) {
                 field = atts.getValue("name");
@@ -227,7 +240,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("element")) {
                 Class<? extends ModelElement> elementClass = null;
                 try {
-                    elementClass = ModelConstants.getClassForName(atts.getValue("class"));
+                    String className = atts.getValue("class");
+                    elementClass = getClassForName(className);
                 } catch (Exception e) {
                     throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }
@@ -235,27 +249,37 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (avoidDuplicates) {
                     element = doc.findElementCoded(atts.getValue("hash"));
                     if (element == null) {
-                        element = ModelConstants.createElement(elementClass, false);
+                        element = createElement(elementClass, false);
                     }
                 } else {
-                    element = ModelConstants.createElement(elementClass, false);
+                    element = createElement(elementClass, false);
                 }
 
                 if (element != null) {
+                    String hashString = atts.getValue("hash");
                     if (isCopyAndPaste()) {
-                        hashCodes.put(atts.getValue("hash"), element.getHashString());
-                        if (element instanceof Edge) {
-                            kanten.add(element);
-                        }
+                        String newHashString = element.getHashString();
+                        oldToNewHashString.put(hashString, newHashString);
                     } else {
-                        element.setHashString(atts.getValue("hash"));
+                        element.setHashString(hashString);
+                    }
+
+                    if (element instanceof Edge) {
+                        edges.add((Edge) element);
                     }
                 }
             } else if (qName.equals("container")) {
+                String hashString = atts.getValue("hash");
                 if (isCopyAndPaste()) {
-                    element = doc.findElementCoded(hashCodes.get(atts.getValue("hash")).toString());
+                    element = doc.findElementCoded(oldToNewHashString.get(hashString).toString());
                 } else {
-                    element = doc.findElementCoded(atts.getValue("hash"));
+                    element = doc.findElementCoded(hashString);
+                }
+                if (element == null) {
+                    BendpointContainer bendpointContainer = hashToMainDocBendpointContainer.get(hashString);
+                    if (bendpointContainer != null) {
+                        element = bendpointContainer.getElement();
+                    }
                 }
 
                 //				if (element == null)
@@ -345,7 +369,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     }
                 }
             } else if (qName.equals("layer")) {
-                layer = szenario.getLayer(Integer.parseInt(atts.getValue("number")));
+                String value = atts.getValue("number");
+                //wieder aktivieren, wenn die ToolContentVersion 3.6 aktiviert wird
+                //                int layerIndex = Integer.parseInt(value) / 2; //die alten Layer gingen von 0 bis 4 (mit den 2 Zwischenlayern, die es jetzt nicht mehr gibt)
+                int layerIndex = Integer.parseInt(value);
+                layer = szenario.getLayer(layerIndex);
 
             } else if (qName.equals("szenario")) {
                 Static.setProgressDialogStatusLabel("labelReadSzenario", atts.getValue("titel") + " ...");
@@ -353,6 +381,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (!isCopyAndPaste()) {
                     szenario = collection.createSzenario(atts.getValue("titel"), false, "", atts.getValue("hash"), false);
                 }
+                hashToSzenarioBendpointContainer = new HashMap<>();
 
                 //            } else if (qName.equals("description")) {
                 //
@@ -423,17 +452,19 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //
             } else if (qName.equals("modell_3lgm_2")) {
                 doc = collection.getMainGraphDocument();
-                copyAndPastePositionShift = collection.resetPasteCounter();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
+                String timeStamp = atts.getValue("time");
+                if (timeStamp == null || lastCopyFileTimeStamp.equals(timeStamp)) {
+                    copyAndPastePositionShift = collection.increasePasteCounter();
+                } else {
+                    copyAndPastePositionShift = collection.resetPasteCounter();
+                    lastCopyFileTimeStamp = timeStamp;
+                }
                 doc = Static.getSelectedGDCollection().getMainGraphDocument();
-                copyAndPastePositionShift = collection.increasePasteCounter();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
-                hashCodes = new HashMap<>();
-                kanten = new ArrayList<>();
-                knickpunke = new ArrayList<>();
-                kantenContainer = new ArrayList<>();
+                oldToNewHashString = new HashMap<>();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -473,6 +504,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, elementValue.toString());
+                    } else if (field.equals("layer")) {
+                        //Tue nichts. Bei Modellen bis zur 3.5 stand der Layer noch mit im ModelElement. Danach nicht mehr, weil er sich immer
+                        //aus den ModelConstants bzw. aus dem beim Einlesen der Elemente gerafde aktiven Layer ergibt.
+                        //Weg lassen darf man die Abfrage hier aber auch nicht, weil wenn layer als Attribut angegeben ist und nicht hier ausgewertet
+                        //wird, dann kommt es zu einem Fehler, wenn man dieses Attribut gar nicht auswertet
                     } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(collection, element, field, elementValue.toString())) {
                         if (!element.putXMLFieldString(field, elementValue.toString())) {
                             throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
@@ -494,16 +530,32 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 field = null;
 
             } else if (qName.equals("element")) {
-                if (element != null && (!avoidDuplicates || element.getContainer(doc) == null)) {
-                    container = element.createContainer(doc);
-                    int layer = element.layerFor();
-                    if (layer < 0 || layer >= ModelConstants.LAYERS.length) {
-                        throw new SAXException("ModelElement hat ungueltige Ebenenangabe! hash=" + element.getHashString() + "layerFor=" + element.layerFor());
+                if (element != null) {
+                    try {
+                        if (!avoidDuplicates || element.getContainer(doc) == null) {
+                            container = element.createContainer(doc);
+                            int layer = ModelConstants.NO_LAYER;
+                            try {
+                                layer = element.layerFor(); //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Daher try-catch
+                                LayerContainer layerContainer = doc.getLayer(layer);
+                                layerContainer.add(container);
+                            } catch (Exception e) {
+                                if (container instanceof BendpointContainer) {
+                                    hashToMainDocBendpointContainer.put(element.getHashString(), (BendpointContainer) container);
+                                } else {
+                                    throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                                }
+                            }
+                        }
+                        if (paste) {
+                            pastedElements.add(container);
+                        }
+                        element = null;
+                        container = null;
+                    } catch (Exception e) {
+                        Log.show(Log.ERROR, e);
                     }
-                    doc.getLayer(element.layerFor()).add(container);
                 }
-                element = null;
-                container = null;
 
             } else if (qName.equals("container")) {
                 if (tmp_container != null) {
@@ -511,14 +563,19 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     tmp_container = null;
                 } else if (container != null) {
                     if (isCopyAndPaste() || !szenario.equals(doc)) {
-                        szenario.getLayer(container.getElement().layerFor()).add(container);
+                        ModelElement me = container.getElement();
+                        try {
+                            int layer = me.layerFor();
+                            LayerContainer layerContainer = szenario.getLayer(layer);
+                            layerContainer.add(container);
+                        } catch (Exception e) {
+                            //mache nichts. Knickpunkte werfen bei layerFor() eine Exception. Sie werden später dem Layer ihrer Kante hinzugefügt
+                        }
+                    }
+                    if (container instanceof BendpointContainer) {
+                        hashToSzenarioBendpointContainer.put(container.getHashString(), (BendpointContainer) container);
                     }
                     if (isCopyAndPaste()) {
-                        if (container instanceof EdgeContainer) {
-                            kantenContainer.add(container);
-                        } else if (container instanceof BendpointContainer) {
-                            knickpunke.add((BendpointContainer) container);
-                        }
                         szenario.addSimpleToSelection(container);
                     }
                 }
@@ -683,16 +740,22 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 layer = null;
 
             } else if (qName.equals("szenario")) {
-                if (isCopyAndPaste()) {
-                    for (int i = 0; i < knickpunke.size(); i++) {
-                        BendpointContainer knickpunkt = knickpunke.get(i);
-                        Knickpunkt kn = knickpunkt.getKnickpunktKnoten();
-                        kn.setKantenHash(hashCodes.get(kn.getKantenHash()));
-                        EdgeContainer kc = knickpunkt.getGraphDocument().findEdgeContainerCoded(kn.getKantenHash());
-                        if (kc != null) {
-                            kn.addEdge(kc.getEdge());
-                            kc.setKnickpunkt(knickpunkt, kn.getIndex());
-                        }
+                for (BendpointContainer benpointContainer : hashToSzenarioBendpointContainer.values()) {
+                    Knickpunkt bendpoint = benpointContainer.getKnickpunktKnoten();
+                    String bendpointEdgeHash = bendpoint.getKantenHash();
+
+                    if (isCopyAndPaste()) {
+                        bendpointEdgeHash = oldToNewHashString.get(bendpointEdgeHash);
+                    }
+                    EdgeContainer kc = benpointContainer.getGraphDocument().findEdgeContainerCoded(bendpointEdgeHash);
+                    if (kc != null) {
+                        bendpoint.addEdge(kc.getEdge());
+                        bendpoint.setOwner(kc);
+                        kc.setKnickpunkt(benpointContainer, bendpoint.getIndex());
+                        int layer = bendpoint.layerFor();
+                        BendpointContainer mainDocBendpointContainer = hashToMainDocBendpointContainer.get(bendpoint.getHashString());
+                        doc.getLayer(layer).add(mainDocBendpointContainer);
+                        szenario.getLayer(layer).add(benpointContainer);
                     }
                 }
 
@@ -764,24 +827,17 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //die HashStrings für das Start- bzw. End-Objekt einer Edge
                 // auflösen und die wirklichen Node setzten
                 if (isCopyAndPaste()) {
-                    Knickpunkt knp;
-                    for (int i = 0; i < knickpunke.size(); i++) {
-                        knp = knickpunke.get(i).getKnickpunktKnoten();
-                        knp.putXMLFieldString("kanteHash", hashCodes.get(knp.getKantenHash()));
+                    for (BendpointContainer bendpointContainer : hashToMainDocBendpointContainer.values()) {
+                        Knickpunkt bendpoint = bendpointContainer.getKnickpunktKnoten();
+                        bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getKantenHash()));
                     }
-                    Edge kante;
-                    for (int i = 0; i < kanten.size(); i++) {
-                        kante = (Edge) kanten.get(i);
-                        kante.putXMLFieldString("start", hashCodes.get(kante.getStartHash()));
-                        kante.putXMLFieldString("end", hashCodes.get(kante.getEndHash()));
-                        kante.decodeHashStrings(doc);
+                }
+                for (Edge edge : edges) {
+                    if (isCopyAndPaste()) {
+                        edge.putXMLFieldString("start", oldToNewHashString.get(edge.getStartHash()));
+                        edge.putXMLFieldString("end", oldToNewHashString.get(edge.getEndHash()));
                     }
-                } else {
-                    for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                        for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getKanten()) {
-                            kc.getEdge().decodeHashStrings(doc);
-                        }
-                    }
+                    edge.decodeHashStrings(doc);
                 }
             }
         } catch (Exception e) {

@@ -1,5 +1,5 @@
 /*
- * Created on 12.01.2004 To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Created on 12.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -38,11 +38,6 @@ public final class KommBeziehung extends Edge {
      */
     public KommBeziehung(final ModelElement knot1, final ModelElement knot2) {
         super(knot1, knot2);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -14,7 +14,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
  */
 public final class ObjLogspVerbindung extends Edge {
 
-    //    public static final Class[] stcl = {Objekttyp.class};
     public static final Class<? extends ModelElement> stcl = Objekttyp.class;
 
     public static final int[] scard = {
@@ -29,14 +28,8 @@ public final class ObjLogspVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = LogischerSpeicher.class;
 
-    //	public static final Class[] etcl = {Datenbanksystem.class, Dokumentensammlung.class};
-
-    //	private static Object[][] stcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{Datenbanksystem.class, ModelConstants.ZERO, ModelConstants.ONE},
-    //									{Dokumentensammlung.class, ModelConstants.ZERO, ModelConstants.ONE}};
-
     /**
-     * 
+     *
      */
     public ObjLogspVerbindung() {
         super();
@@ -57,11 +50,6 @@ public final class ObjLogspVerbindung extends Edge {
      */
     public ObjLogspVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.INTER_DOMAIN_LOGICAL_LAYER;
     }
 
 }

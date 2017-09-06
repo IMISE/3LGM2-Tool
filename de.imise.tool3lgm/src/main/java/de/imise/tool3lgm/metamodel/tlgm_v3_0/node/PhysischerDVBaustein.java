@@ -2,7 +2,6 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbBtypVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbPdvbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbStoVerbindung;
@@ -13,11 +12,6 @@ public class PhysischerDVBaustein extends Node {
 
     public PhysischerDVBaustein() {
         super();
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.PHYSICAL_LAYER;
     }
 
     @Override

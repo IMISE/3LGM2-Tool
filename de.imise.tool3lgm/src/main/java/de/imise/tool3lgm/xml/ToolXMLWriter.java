@@ -386,7 +386,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeStartElement("element"); //<element>
         writeAttribute("class", me.getClass().getSimpleName());
         writeAttribute("hash", me.getHashString());
-        writeModelElementField("layer", me.layerFor());
         writeModelElementField("name", me.getName());
         writeModelElementField("description", me.getDescription());
         String associatedSzenHashString = me.getAssociatedDoc();

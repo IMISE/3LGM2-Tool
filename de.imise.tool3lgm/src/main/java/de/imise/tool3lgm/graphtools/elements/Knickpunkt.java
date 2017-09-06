@@ -104,4 +104,9 @@ public class Knickpunkt extends Node {
         return (BendpointContainer) getContainer(getGraphDocument());
     }
 
+    @Override
+    public int layerFor() {
+        return kc.layerFor();
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -29,7 +29,7 @@ public final class DoksDokVerbindung extends Edge {
     public static final Class<? extends ModelElement> etcl = Dokumententyp.class;
 
     /**
-     * 
+     *
      */
     public DoksDokVerbindung() {
         super();
@@ -50,11 +50,6 @@ public final class DoksDokVerbindung extends Edge {
      */
     public DoksDokVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

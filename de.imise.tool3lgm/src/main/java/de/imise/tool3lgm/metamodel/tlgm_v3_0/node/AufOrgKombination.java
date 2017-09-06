@@ -2,9 +2,8 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
 
@@ -19,11 +18,6 @@ public class AufOrgKombination extends Node {
      */
     public AufOrgKombination() {
         super();
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
     @Override

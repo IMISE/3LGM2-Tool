@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -1266,6 +1267,50 @@ public final class ModelConstants {
         return NO_MODEL_ELEMENT_SHORT_NAME;
     }
 
+    private static Map<Class<? extends ModelElement>, Integer> ELEMENT_CLASS_TO_LAYER = createELEMENT_CLASS_TO_LAYER_MAP();
+
+    private static Map<Class<? extends ModelElement>, Integer> createELEMENT_CLASS_TO_LAYER_MAP() {
+        //        ImmutableMap.Builder<Class<? extends ModelElement>, Integer> map = new ImmutableMap.Builder<>();
+        Map<Class<? extends ModelElement>, Integer> map = new HashMap<>();
+        for (Class<? extends ModelElement> elementClass : ALL_DOMAIN_LAYER_NODES_SET) {
+            map.put(elementClass, DOMAIN_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET) {
+            map.put(elementClass, INTER_DOMAIN_LOGICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_LOGICAL_LAYER_NODES_SET) {
+            map.put(elementClass, LOGICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET) {
+            map.put(elementClass, INTER_LOGICAL_PHYSICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_PHYSICAL_LAYER_NODES_SET) {
+            map.put(elementClass, PHYSICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_DOMAIN_LAYER_EDGES_SET) {
+            map.put(elementClass, DOMAIN_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET) {
+            map.put(elementClass, INTER_DOMAIN_LOGICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_LOGICAL_LAYER_EDGES_SET) {
+            map.put(elementClass, LOGICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET) {
+            map.put(elementClass, INTER_LOGICAL_PHYSICAL_LAYER);
+        }
+        for (Class<? extends ModelElement> elementClass : ALL_PHYSICAL_LAYER_EDGES_SET) {
+            map.put(elementClass, PHYSICAL_LAYER);
+        }
+        map.put(TextfeldFach.class, DOMAIN_LAYER);
+        map.put(TextfeldLog.class, LOGICAL_LAYER);
+        map.put(TextfeldPhy.class, PHYSICAL_LAYER);
+        //        return map.build();
+        //nicht über den Builder gehen, weil die key-Klassen mehrfach in den Sets vorkommen können. Der Builder beendet dann mit einem Error.
+        ImmutableMap<Class<? extends ModelElement>, Integer> returnMap = ImmutableMap.copyOf(map);
+        return returnMap;
+    }
+
     /**
      * gibt die Ebene eine Objekttypes zurueck
      *
@@ -1273,50 +1318,8 @@ public final class ModelConstants {
      * @return int Ebene
      */
     public static final int layerFor(final Class<? extends ModelElement> elementClass) {
-        if (Node.class.isAssignableFrom(elementClass)) {
-            if (ALL_DOMAIN_LAYER_NODES_SET.contains(elementClass)) {
-                return DOMAIN_LAYER;
-            }
-            if (ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET.contains(elementClass)) {
-                return INTER_DOMAIN_LOGICAL_LAYER;
-            }
-            if (ALL_LOGICAL_LAYER_NODES_SET.contains(elementClass)) {
-                return LOGICAL_LAYER;
-            }
-            if (ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET.contains(elementClass)) {
-                return INTER_LOGICAL_PHYSICAL_LAYER;
-            }
-            if (ALL_PHYSICAL_LAYER_NODES_SET.contains(elementClass)) {
-                return PHYSICAL_LAYER;
-            }
-        } else {
-            if (ALL_DOMAIN_LAYER_EDGES_SET.contains(elementClass)) {
-                return DOMAIN_LAYER;
-            }
-            if (ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET.contains(elementClass)) {
-                return INTER_DOMAIN_LOGICAL_LAYER;
-            }
-            if (ALL_LOGICAL_LAYER_EDGES_SET.contains(elementClass)) {
-                return LOGICAL_LAYER;
-            }
-            if (ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET.contains(elementClass)) {
-                return INTER_LOGICAL_PHYSICAL_LAYER;
-            }
-            if (ALL_PHYSICAL_LAYER_EDGES_SET.contains(elementClass)) {
-                return PHYSICAL_LAYER;
-            }
-
-        }
-        if (elementClass == TextfeldFach.class) {
-            return DOMAIN_LAYER;
-        }
-        if (elementClass == TextfeldLog.class) {
-            return LOGICAL_LAYER;
-        }
-        if (elementClass == TextfeldPhy.class) {
-            return PHYSICAL_LAYER;
-        }
-        return NO_LAYER;
+        Integer layer = ELEMENT_CLASS_TO_LAYER.get(elementClass);
+        return layer == null ? NO_LAYER : layer.intValue();
     }
 
     /**

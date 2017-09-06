@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -13,25 +13,21 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
  */
 public class PdvbPdvbVerbindung extends PartOfBeziehung {
 
-    //    public static final Class[] stcl = {PhysischerDVBaustein.class};
     public static final Class<? extends ModelElement> stcl = PhysischerDVBaustein.class;
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = PhysischerDVBaustein.class;
 
-    //	public static final Class[] etcl = {PhysischerDVBaustein.class};
-
-    //	private static Object[][] stcl = {{PhysischerDVBaustein.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{PhysischerDVBaustein.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-
     /**
-	 * 
-	 */
+     * 
+     */
     public PdvbPdvbVerbindung() {
         super();
     }
@@ -51,11 +47,6 @@ public class PdvbPdvbVerbindung extends PartOfBeziehung {
      */
     public PdvbPdvbVerbindung(final ModelElement k1, final ModelElement k2, final boolean registerInKnots) {
         super(k1, k2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.PHYSICAL_LAYER;
     }
 
 }

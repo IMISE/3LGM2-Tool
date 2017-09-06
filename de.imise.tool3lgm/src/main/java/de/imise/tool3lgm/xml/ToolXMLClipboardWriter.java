@@ -56,6 +56,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
 
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>
+        writeAttribute("time", String.valueOf(System.currentTimeMillis()));
         writeUserFieldDefinitions(userFields);
         writeStartElement("userFieldDefinitions"); //<userFieldDefinitions>
         for (UserField uf : userFields) {

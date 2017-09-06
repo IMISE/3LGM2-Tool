@@ -16,11 +16,13 @@ public final class AufAufVerbindung extends PartOfBeziehung {
     // public static final Class[] stcl = {Aufgabe.class};
     public static final Class<? extends ModelElement> stcl = Aufgabe.class;
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
@@ -30,8 +32,8 @@ public final class AufAufVerbindung extends PartOfBeziehung {
     // private static Object[][] etcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-	 * 
-	 */
+     *
+     */
     public AufAufVerbindung() {
         super();
     }
@@ -51,11 +53,6 @@ public final class AufAufVerbindung extends PartOfBeziehung {
      */
     public AufAufVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
 }

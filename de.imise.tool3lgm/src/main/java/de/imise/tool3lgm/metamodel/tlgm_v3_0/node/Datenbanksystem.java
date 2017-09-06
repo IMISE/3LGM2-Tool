@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDbvsVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
@@ -11,11 +10,6 @@ public final class Datenbanksystem extends LogischerSpeicher {
 
     public Datenbanksystem() {
         super();
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
     @Override

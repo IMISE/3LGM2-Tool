@@ -26,8 +26,15 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
         super(coll);
     }
 
+    /**
+     * @param coll
+     */
+    public ToolContentHandlerV3_1(final GDCollection coll, final boolean paste) {
+        super(coll, paste);
+    }
+
     @Override
-    public final void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
+    public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
         //        elementValue.setLength(0);
         //        if (qName.equals("x")) {
         //
@@ -48,7 +55,7 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
         //
         //        } else if (qName.equals("activeLayer")) {
         //
-        //        } else 
+        //        } else
         if (qName.equals("view")) {
             viewParameter = new ViewParameter();
         }

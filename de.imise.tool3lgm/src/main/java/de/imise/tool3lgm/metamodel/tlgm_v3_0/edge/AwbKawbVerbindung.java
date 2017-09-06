@@ -16,17 +16,19 @@ public final class AwbKawbVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> stcl = Anwendungsbaustein.class;
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = KonAnwendungsbaustein.class;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public AwbKawbVerbindung() {
         super();
     }
@@ -46,11 +48,6 @@ public final class AwbKawbVerbindung extends PartOfBeziehung {
      */
     public AwbKawbVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

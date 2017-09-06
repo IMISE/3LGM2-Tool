@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -16,7 +16,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
  */
 public final class PrzAufVerbindung extends Edge implements SortedEdge, MultipleEdge {
 
-    //    public static final Class[] stcl = {Prozess.class};
     public static final Class<? extends ModelElement> stcl = Prozess.class;
 
     public static final int[] scard = {
@@ -50,11 +49,6 @@ public final class PrzAufVerbindung extends Edge implements SortedEdge, Multiple
      */
     public PrzAufVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
 }

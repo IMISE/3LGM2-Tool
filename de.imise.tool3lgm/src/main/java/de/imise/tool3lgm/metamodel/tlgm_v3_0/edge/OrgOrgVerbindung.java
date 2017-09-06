@@ -1,5 +1,5 @@
 /*
- * Created on 06.04.2004 To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Created on 06.04.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -13,25 +13,21 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
  */
 public final class OrgOrgVerbindung extends PartOfBeziehung {
 
-    //    public static final Class[] stcl = {Organisationseinheit.class};
     public static final Class<? extends ModelElement> stcl = Organisationseinheit.class;
     public static final int[] scard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
 
     public static final int[] ecard = {
-            ModelConstants.ZERO, ModelConstants.UNLIMITED
+            ModelConstants.ZERO,
+            ModelConstants.UNLIMITED
     };
     public static final Class<? extends ModelElement> etcl = Organisationseinheit.class;
 
-    //	public static final Class[] etcl = {Organisationseinheit.class};
-
-    //	private static Object[][] stcl = {{Organisationseinheit.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-    //	private static Object[][] etcl = {{Organisationseinheit.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}}; 
-
     /**
-	 * 
-	 */
+     * 
+     */
     public OrgOrgVerbindung() {
         super();
     }
@@ -51,11 +47,6 @@ public final class OrgOrgVerbindung extends PartOfBeziehung {
      */
     public OrgOrgVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
 }

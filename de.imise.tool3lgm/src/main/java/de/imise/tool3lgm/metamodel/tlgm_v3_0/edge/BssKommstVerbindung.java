@@ -1,5 +1,5 @@
 /*
- * Created on 16.01.2004 To change the template for this generated file go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 16.01.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
@@ -10,11 +10,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Kommunikationsstandard;
 
 /**
- * @author Thomas To change the template for this generated type comment go to Window>Preferences>Java>Code Generation>Code and Comments
+ * @author Thomas
  */
 public final class BssKommstVerbindung extends Edge {
 
-    //	public static final Class[] stcl = {Bausteinschnittstelle.class};
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
 
     public static final int[] scard = {
@@ -29,13 +28,8 @@ public final class BssKommstVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Kommunikationsstandard.class;
 
-    //	public static final Class[] etcl = {Kommunikationsstandard.class};
-
-    //	private static Object[][] stcl = {{Bausteinschnittstelle.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    //	private static Object[][] etcl = {{Kommunikationsstandard.class, ModelConstants.ZERO, ModelConstants.ONE}};
-
     /**
-     * 
+     *
      */
     public BssKommstVerbindung() {
         super();
@@ -56,11 +50,6 @@ public final class BssKommstVerbindung extends Edge {
      */
     public BssKommstVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

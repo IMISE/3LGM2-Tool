@@ -12,7 +12,7 @@ import de.imise.tool3lgm.log.Log;
 /**
  * @author AXS
  */
-public class ToolContentHandlerV3_4 extends ToolContentHandlerV3_2 {
+public class ToolContentHandlerV3_4 extends ToolContentHandlerV3_1 {
 
     /**
      * @param coll

@@ -18,9 +18,9 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
@@ -585,7 +585,6 @@ public class LayerContainer extends ElementContainer {
             }
         }
         ((ElementContainer) comp).setParent(this);
-        ((ElementContainer) comp).getElement().setLayer(layerNumber);
         if (!(doc.getCollection().getSelectedDoc() instanceof Szenario)) {
             comp.setVisible(false);
         }

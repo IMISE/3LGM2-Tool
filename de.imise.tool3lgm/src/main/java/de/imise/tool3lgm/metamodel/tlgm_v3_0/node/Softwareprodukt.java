@@ -1,9 +1,8 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SwpAufVerbindung;
 
@@ -13,9 +12,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SwpAufVerbindung;
  */
 public final class Softwareprodukt extends Node {
 
-    /**
-     *
-     */
     public Softwareprodukt() {
         super();
     }
@@ -42,11 +38,6 @@ public final class Softwareprodukt extends Node {
         dialog.addPathConnectionPanel(SwpAufVerbindung.class);
         dialog.addPathConnectionPanel(AwpSwpVerbindung.class);
         return dialog;
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
 }

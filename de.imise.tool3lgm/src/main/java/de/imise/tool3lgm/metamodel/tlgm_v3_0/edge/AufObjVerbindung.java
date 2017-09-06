@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 
@@ -39,11 +39,6 @@ public final class AufObjVerbindung extends Edge {
 
     public AufObjVerbindung(final Node k1, final Node k2, final boolean registerInKnots) {
         super(k1, k2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.DOMAIN_LAYER;
     }
 
 }

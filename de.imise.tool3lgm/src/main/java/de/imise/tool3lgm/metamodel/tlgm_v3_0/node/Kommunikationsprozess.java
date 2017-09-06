@@ -1,11 +1,10 @@
 /*
- * Created on 09.02.2004 To change this generated comment go to Window>Preferences>Java>Code Generation>Code and Comments
+ * Created on 09.02.2004
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 
 /**
  * @author AXS
@@ -19,11 +18,6 @@ public class Kommunikationsprozess extends Node {
      */
     public Kommunikationsprozess() {
         super();
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.LOGICAL_LAYER;
     }
 
     @Override

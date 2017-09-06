@@ -35,7 +35,7 @@ public final class AwbkAufOrgVerbindung extends Edge {
     //	private static Object[][] etcl = {{ABKonfiguration.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
 
     /**
-     * 
+     *
      */
     public AwbkAufOrgVerbindung() {
         super();
@@ -56,11 +56,6 @@ public final class AwbkAufOrgVerbindung extends Edge {
      */
     public AwbkAufOrgVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
         super(knot1, knot2, registerInKnots);
-    }
-
-    @Override
-    public int layerFor() {
-        return ModelConstants.INTER_DOMAIN_LOGICAL_LAYER;
     }
 
 }
