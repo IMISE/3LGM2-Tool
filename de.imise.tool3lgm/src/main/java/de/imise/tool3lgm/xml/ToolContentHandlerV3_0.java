@@ -271,12 +271,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("container")) {
                 String hashString = atts.getValue("hash");
                 if (isCopyAndPaste()) {
-                    element = doc.findElementCoded(oldToNewHashString.get(hashString).toString());
+                    element = doc.findElementCoded(oldToNewHashString.get(hashString));
                 } else {
                     element = doc.findElementCoded(hashString);
                 }
                 if (element == null) {
-                    BendpointContainer bendpointContainer = hashToMainDocBendpointContainer.get(hashString);
+                    BendpointContainer bendpointContainer = hashToMainDocBendpointContainer.get(isCopyAndPaste() ? oldToNewHashString.get(hashString) : hashString);
                     if (bendpointContainer != null) {
                         element = bendpointContainer.getElement();
                     }
