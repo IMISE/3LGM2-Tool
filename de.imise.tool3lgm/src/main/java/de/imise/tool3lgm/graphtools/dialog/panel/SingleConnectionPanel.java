@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
@@ -9,13 +12,11 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
 import de.imise.tool3lgm.graphtools.elements.Composition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -102,7 +103,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
-        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, Tool3lgmConstants.getResString("auswahlPanel_neu") + " " + ModelConstants.getDisplayableName(searchElementClass)) : null;
+        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
