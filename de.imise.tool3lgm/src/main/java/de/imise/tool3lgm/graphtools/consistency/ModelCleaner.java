@@ -1,8 +1,21 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_ELEMENTS_SET;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES_SET;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getInitialSubtypes;
+import static de.imise.tool3lgm.graphtools.model.GraphDocument.createTransactionId;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -10,8 +23,6 @@ import javax.swing.JOptionPane;
 
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
@@ -20,27 +31,13 @@ import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.util.HashStringGenerator;
 
 /**
@@ -181,7 +178,6 @@ public class ModelCleaner {
         // es in alten Modellen aus irgend einem Grund sehr viele removeInconsistentElements(gdcoll,
         // ABKonfiguration.class, AufOrgKombination.class, null);
 
-        int pid = TransactionManager.STANDARD_PID;
         // Alle Knickpunkte löschen, die keiner Edge zugeordnet sind. So etwas trat in alten Modellen
         // auf und sollte gleich am Anfang ausgeschlossen werden
         List<GraphDocument> allDocs = Lists.newArrayList(gdcoll.getSzenarios());
@@ -232,7 +228,7 @@ public class ModelCleaner {
             Edge edge = (Edge) edges.get(i);
             // Kanten mit fehlendem Start- und Endelement löschen
             if (edge.getStart() == null || edge.getEnd() == null) {
-                gdcoll.deleteElement(edge, mainDoc, pid);
+                gdcoll.deleteElement(edge, mainDoc, STANDARD_PID);
                 continue;
             }
             // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
@@ -242,7 +238,7 @@ public class ModelCleaner {
             }
             for (Edge edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {
                 if (edge != edge2) {
-                    gdcoll.deleteElement(edge2, mainDoc, pid);
+                    gdcoll.deleteElement(edge2, mainDoc, STANDARD_PID);
                     // edge2 befindet sich auf jeden Fall hinter edge in der Liste edges, sonst wäre
                     // vorher edge2 schon mal edge gewesen und edge wäre dann edge2 gewesen. ALso kann
                     // man edge2 einfach hinten aus der Liste entfernen.
@@ -261,14 +257,14 @@ public class ModelCleaner {
                 for (int j = lc.getKnotenCount() - 1; j >= 0; j--) {
                     NodeContainer kc = lc.getNodeContainer(j);
                     if (kc.getKnoten() == null) {
-                        gdcoll.removeContainerFromSubmodel(kc, pid);
+                        gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
                     }
                 }
                 for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
                     EdgeContainer kc = lc.getEdgeContainer(j);
                     Edge edge = kc.getEdge();
                     if (edge == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
-                        gdcoll.removeContainerFromSubmodel(kc, pid);
+                        gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
                         continue;
                     }
                 }
@@ -283,8 +279,8 @@ public class ModelCleaner {
         };
         for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(ModelElement.class, true)) {
             // Element-Namen und Beschreibungen bereinigen
-            me.setName(getCleanString(me.getName(), Tool3lgmConstants.getResString("joined"), superflousStrings));
-            me.setDescription(getCleanString(me.getDescription(), Tool3lgmConstants.getResString("joined"), superflousStrings));
+            me.setName(getCleanString(me.getName(), getResString("joined"), superflousStrings));
+            me.setDescription(getCleanString(me.getDescription(), getResString("joined"), superflousStrings));
 
             // alle Radiobuttons, Comboboxes und Kennzahlen, die beim Zusammenführen irgendwelche
             // komischen Werte zusammengeführt bekommen haben, wieder berichtigen
@@ -292,7 +288,7 @@ public class ModelCleaner {
                 if (uf == null) {
                     continue;
                 }
-                if (uf.getStyle() == Style.RADIO_BUTTON || uf.getStyle() == Style.COMBO_BOX || uf.getStyle() == Style.CLASSIFICATION_NUMBER) {
+                if (uf.getStyle() == RADIO_BUTTON || uf.getStyle() == COMBO_BOX || uf.getStyle() == CLASSIFICATION_NUMBER) {
                     String value = me.getUserFieldInputValue(uf);
                     for (String superFlous : superflousStrings) {
                         int superFlousStart = value.indexOf(superFlous);
@@ -304,19 +300,19 @@ public class ModelCleaner {
             }
 
             UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
-            for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
+            for (Class<? extends ModelElement> elementClass : ALL_ELEMENTS_SET) {
                 for (UserField uf : definitions.getUserFields(elementClass)) {
                     // eigentlich haben Checkboxen keine Listenwerte, da sie nur true oder false für
                     // eine einzelne Box darsellen, aber falls aus der einzelnen Checkbox mal eine
                     // ButtonGroup mit mehreren Checkboxes gemacht wird, haut das hier gleich hin.
-                    if (uf.getStyle() != Style.RADIO_BUTTON && uf.getStyle() != Style.COMBO_BOX || uf.getStyle() == Style.CHECK_BOX) {
+                    if (uf.getStyle() != RADIO_BUTTON && uf.getStyle() != COMBO_BOX || uf.getStyle() == CHECK_BOX) {
                         continue;
                     }
                     List<String> listValues = new ArrayList<>(uf.getListValuesCount());
                     loop: for (int t = 0; t < uf.getListValuesCount(); t++) {
                         String listValue = uf.getListValueAt(t);
                         for (String superFlous : superflousStrings) {
-                            if (listValue.indexOf(superFlous) >= 0 || listValue.equals(UserField.EMPTY_STRING)) {
+                            if (listValue.indexOf(superFlous) >= 0 || listValue.equals(EMPTY_STRING)) {
                                 continue loop;
                             }
                         }
@@ -338,20 +334,20 @@ public class ModelCleaner {
                 if (ec == null) {
                     continue;
                 }
-                szen.createEdgeContainer(ec, szen, false, pid);
+                szen.createEdgeContainer(ec, szen, false, STANDARD_PID);
                 szen.raiseSlaves(ec);
             }
         }
 
         // Alle initial vorhandenen untergeordneten Elemente erzeugen, die nicht mehr da sind.
         // Diese kann man nicht von Hand neu erzeugen
-        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_NODES_SET) {
-            Set<Class<? extends Edge>> subTypeEdges = ModelConstants.getInitialSubtypes(elementClass);
+        for (Class<? extends ModelElement> elementClass : ALL_NODES_SET) {
+            Set<Class<? extends Edge>> subTypeEdges = getInitialSubtypes(elementClass);
             if (subTypeEdges == null || subTypeEdges.size() == 0) {
                 continue;
             }
             for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, false)) {
-                gdcoll.createInitialSubtypes(me, TransactionManager.STANDARD_PID);
+                gdcoll.createInitialSubtypes(me, STANDARD_PID);
             }
         }
 
@@ -477,288 +473,6 @@ public class ModelCleaner {
         return sb.toString();
     }
 
-    // ///////////////////////////////////////////////////////
-    // Funktionen, die bestimmte Inkonsistenzen beseitigen //
-    // ///////////////////////////////////////////////////////
-
-    // TODO:AXS:showResultDialog wird in den folgenden Funktionen gar nicht beachtet
-
-    /**
-     * Löscht alle inkonsitenten Anwendungsbaustein-Konfigurationen aus dem Gesamtmodell.<br>
-     * Inkonsitente Anwendungsbaustein-Konfigurationen sind mit keinem Anwendungsbaustein verbunden.
-     *
-     * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
-     */
-    @SuppressWarnings("unchecked")
-    void removeInconsistentAWBConfigurationsWithoutAWB(final boolean showResultDialog) {
-        @SuppressWarnings("rawtypes")
-        Class[] connectedElementClasses = {
-                Anwendungsbaustein.class,
-                RechAnwendungsbaustein.class,
-                KonAnwendungsbaustein.class,
-        };
-        removeInconsistentElements(gdcoll, ABKonfiguration.class, connectedElementClasses, "clean_result_inconsistent_abwconfig");
-    }
-
-    /**
-     * Löscht alle <code>AufOrgKombination</code>en, die mit keiner <code>Aufgabe</code> oder keiner <code>Organisationseinheit</code> verbunden sind.
-     *
-     * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
-     */
-    void removeInconsistentAufOrgKombinations(final boolean showResultDialog) {
-        removeInconsistentElements(gdcoll, AufOrgKombination.class, Organisationseinheit.class, "clean_result_inconsistent_auforg");
-    }
-
-    /**
-     * Löscht alle inkonsitenten Physischen Datenverarbeitungsbaustein-Konfigurationen aus dem
-     * Gesamtmodell.<br>
-     * Inkonsitente Physischen Datenverarbeitungsbaustein-Konfigurationen sind mit keinem physischen
-     * Datenverarbeitungsbaustein verbunden.
-     *
-     * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
-     */
-    void removeInconsistentPDVBConfigurations(final boolean showResultDialog) {
-        removeInconsistentElements(gdcoll, DBKonfiguration.class, PhysischerDVBaustein.class, "clean_result_inconsistent_pdvbconfig");
-    }
-
-    // //////////////////////////////////////////////////////////////////////////////////////////////
-    // Konfigurationen von Aufgaben umhängen (hat eigentlich nichts mit dem Model cleanen zu tun) //
-    // //////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen <code>ABKonfiguration</code>en und AWB. Die
-     * <code>AufOrgKombination</code> und die <code>ABKonfiguration</code>en werden neu angelegt mit allen Assoziationen, die sie zu
-     * anderen Elementen haben.
-     *
-     * @param gdcoll
-     * @param auf
-     * @param aufOrg
-     */
-    private static final void cloneConfig(final GDCollection gdcoll, final Aufgabe auf, final AufOrgKombination aufOrg, final int transactionID) {
-        // eine neue AufOrgKombi anlegen, diese mit der Aufgabe verbinden und Name und Beschreibung
-        // der alten AufOrgKombi
-        // für die neue übernehmen
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
-
-        mainDoc.createKnotenWithContainer(AufOrgKombination.class, aufOrg.getName(), aufOrg.getDescription(), transactionID);
-        ModelElement newAufOrg = mainDoc.getLastCreated().getElement();
-        gdcoll.link(AufAufOrgVerbindung.class, auf, newAufOrg, transactionID);
-        newAufOrg.setDescription(aufOrg.getDescription());
-
-        // für alle Kanten der aktuellen AufOrgKombination
-        for (Edge kante : aufOrg.getEdges()) {
-            // bestimme das Element, mit dem die aktuelle AufOrgKombination verbunden ist
-            ModelElement elemToConnect;
-            if (kante.getStart() == aufOrg) {
-                elemToConnect = kante.getEnd();
-            } else {
-                elemToConnect = kante.getStart();
-            }
-            // wenn das verbundene Element eine AWB-Konfiguration ist, muss diese auch für
-            // jeden AWB neu angelegt werden
-            if (elemToConnect instanceof ABKonfiguration) {
-                mainDoc.createKnotenWithContainer(ABKonfiguration.class, elemToConnect.getName(), elemToConnect.getDescription(), transactionID);
-                ModelElement newKonfig = mainDoc.getLastCreated().getElement();
-                gdcoll.link(AwbkAufOrgVerbindung.class, newAufOrg, newKonfig, transactionID);
-                newKonfig.setDescription(elemToConnect.getDescription());
-                // Alle Verbindungen der Konfiguration auch klonen (außer die zur Originalen
-                // AufOrgKombination)
-                for (Edge edge : elemToConnect.getEdges()) {
-                    if (!(edge instanceof AwbkAufOrgVerbindung)) {
-                        ModelElement etc;
-                        if (edge.getStart() == elemToConnect) {
-                            etc = edge.getEnd();
-                        } else {
-                            etc = edge.getStart();
-                        }
-                        gdcoll.link(edge.getClass(), newKonfig, etc, transactionID);
-                    }
-                }
-                // alle anderen Verbindungen der AufOrgKombination zu Organisationseinheiten sein
-                // ebenfalls klonen
-            } else if (elemToConnect instanceof Organisationseinheit) {
-                gdcoll.link(OrgAufOrgVerbindung.class, newAufOrg, elemToConnect, transactionID);
-            }
-        }
-
-    }
-
-    // /**
-    // * Hängt der Aufgabe eine AufOrgKombination</code> unter mit den gleichen
-    // <code>ABKonfiguration</code>en
-    // * und AWB. Die <code>AufOrgKombination</code> und die <code>ABKonfiguration</code>en werden
-    // neu
-    // * angelegt mit allen Assoziationen, die sie zu anderen Elementen haben.
-    // * @param gdcoll
-    // * @param auf
-    // * @param aufOrg
-    // */
-    // private static final void cloneConfig(GDCollection gdcoll, Aufgabe auf, AufOrgKombination
-    // aufOrg, int transactionID) {
-    // //eine neue AufOrgKombi anlegen, diese mit der Aufgabe verbinden und Name und Beschreibung
-    // der alten AufOrgKombi
-    // //für die neue übernehmen
-    // ModelElement newAufOrg = gdcoll.createKnotenWithContainer(AufOrgKombination.class,
-    // aufOrg.getName(), transactionID).getElement();
-    // gdcoll.link(AufAufOrgVerbindung.class, auf, newAufOrg, transactionID);
-    // newAufOrg.setDescription(aufOrg.getDescription());
-    //
-    // //für alle Kanten der aktuellen AufOrgKombination
-    // for (Edge kante : aufOrg.getEdges()) {
-    // //bestimme das Element, mit dem die aktuelle AufOrgKombination verbunden ist
-    // ModelElement elemToConnect;
-    // if (kante.getStart()==aufOrg)
-    // elemToConnect = kante.getEnd();
-    // else
-    // elemToConnect = kante.getStart();
-    // //wenn das verbundene Element eine AWB-Konfiguration ist, muss diese auch für
-    // //jeden AWB neu angelegt werden
-    // if (elemToConnect instanceof ABKonfiguration) {
-    // ModelElement newKonfig = gdcoll.createKnotenWithContainer(ABKonfiguration.class,
-    // elemToConnect.getName(), transactionID).getElement();
-    // gdcoll.link(AwbkAufOrgVerbindung.class, newAufOrg, newKonfig, transactionID);
-    // newKonfig.setDescription(elemToConnect.getDescription());
-    // //Alle Verbindungen der Konfiguration auch klonen (außer die zur Originalen
-    // AufOrgKombination)
-    // for (Edge edge : elemToConnect.getEdges()) {
-    // if (!(edge instanceof AwbkAufOrgVerbindung)) {
-    // ModelElement etc;
-    // if (edge.getStart()==elemToConnect)
-    // etc = edge.getEnd();
-    // else
-    // etc = edge.getStart();
-    // gdcoll.link(edge.getClass(), newKonfig, etc, transactionID);
-    // }
-    // }
-    // //alle anderen Verbindungen der AufOrgKombination zu Organisationseinheiten sein ebenfalls
-    // klonen
-    // }else if (elemToConnect instanceof Organisationseinheit) {
-    // gdcoll.link(OrgAufOrgVerbindung.class, newAufOrg, elemToConnect, transactionID);
-    // }
-    // }
-    //
-    // }
-
-    /**
-     * Prüft, ob die übergebene <code>Aufgabe</code> Konfigurationen besitzt, die sie an vorhandene
-     * Teilaufgaben weitergeben kann.
-     *
-     * @param auf
-     * @return
-     */
-    public boolean hasCloneableConfigs(final Aufgabe auf) {
-        // hole alle AufOrgKombinationen der Aufgabe
-        List<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
-        // wenn die Aufgabe nichts zu vererben hat -> nächste Aufgabe
-        if (aufOrgs.size() == 0) {
-            return false;
-        }
-        // hole alle Blattaufgaben, die der aktuellen Aufgabe untergeordnet sind
-        // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nächste Aufgabe
-        List<ElementContainer> absParts = auf.getAbsolutePartContainer(gdcoll.getMainGraphDocument());
-        if (absParts.size() == 0) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @param auf
-     * @see #cloneConfigsToParts(Aufgabe, int)
-     */
-    public final void cloneConfigsToParts(final Aufgabe auf) {
-        int transactionId = GraphDocument.createTransactionId();
-        GraphDocument doc = gdcoll.getMainGraphDocument();
-        doc.start_transaction(transactionId);
-        cloneConfigsToParts(auf, transactionId);
-        doc.finish_transaction(transactionId, false);
-        doc.distributeEvent(GraphDocument.DATA_CHANGED, transactionId);
-    }
-
-    /**
-     * Gibt alle Konfigurationen der übergebenen Aufgabe an ihre Teilaufgaben weiter.<br>
-     * Im Einzelnen werden für jede Teilaufgabe alle Konfigurationen mit allen
-     *
-     * @param auf
-     * @param transactionId
-     */
-    private boolean cloneConfigsToParts(final Aufgabe auf, final int transactionId) {
-        // hole alle AufOrgKombinationen der Aufgabe
-        List<ModelElement> aufOrgs = auf.getConnectedElementsByEdge(AufAufOrgVerbindung.class);
-        // wenn die Aufgabe nichts zu vererben hat -> nächste Aufgabe
-        if (aufOrgs.size() == 0) {
-            return false;
-        }
-
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
-
-        // hole alle Blattaufgaben, die der aktuellen Aufgabe untergeordnet sind
-        // wenn sie keine Blattaufgaben hat, kann sie an niemanden etwas vererben -> nächste Aufgabe
-        List<ElementContainer> absParts = auf.getAbsolutePartContainer(mainDoc);
-        if (absParts.size() == 0) {
-            return false;
-        }
-        // für alle absoluten Teilaufgaben
-        for (Iterator<ElementContainer> absPartsIt = absParts.iterator(); absPartsIt.hasNext();) {
-            Aufgabe aufPart = (Aufgabe) absPartsIt.next().getElement();
-            // für alle AufOrgKombinationen, die für jede Teilaufgabe neu angelegt werden muss
-            for (Iterator<ModelElement> aufOrgsIt = aufOrgs.iterator(); aufOrgsIt.hasNext();) {
-                AufOrgKombination aufOrg = (AufOrgKombination) aufOrgsIt.next();
-                // alle AufOrgKombinationen und ihre Konfigurationen klonen
-                cloneConfig(gdcoll, aufPart, aufOrg, transactionId);
-            }
-        }
-        // jetzt die originale AufOrgKombination und alle ihre Konfigurationen löschen
-        for (Iterator<ModelElement> aufOrgsIt = aufOrgs.iterator(); aufOrgsIt.hasNext();) {
-            AufOrgKombination aufOrg = (AufOrgKombination) aufOrgsIt.next();
-            List<ModelElement> abKonfigs = aufOrg.getConnectedElements(ABKonfiguration.class);
-
-            String[] hashesToDelete = new String[abKonfigs.size() + 1];
-            hashesToDelete[0] = aufOrg.getHashString();
-            for (int i = 0; i < abKonfigs.size(); i++) {
-                hashesToDelete[i + 1] = abKonfigs.get(i).getHashString();
-            }
-            gdcoll.deleteElements(hashesToDelete, transactionId);
-            // mainDoc.removeElements(hashesToDelete, transactionId);
-        }
-        return true;
-    }
-
-    /**
-     * Klont von Aufgaben sämtliche AufOrgKombinationen mit sämtlichen AWB-Konfigurationen an die
-     * Teilaufgaben und entfernt die Originale von der Oberaufgabe.
-     *
-     * @param showResultDialog wenn <code>true</code>, wird ein Dialog mit demErgebnis angezeigt
-     */
-    public final void copyAufOrgKombinationsToAufLeafs(final boolean showResultDialog) {
-        int transactionId = GraphDocument.createTransactionId();
-
-        int aufCount = 0;
-
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        mainDoc.start_transaction(transactionId);
-
-        // alle Aufgaben holen
-        List<ModelElement> aufgaben = mainDoc.getModelItems(Aufgabe.class);
-        // für jede Aufgabe
-        for (Iterator<ModelElement> aufIt = aufgaben.iterator(); aufIt.hasNext();) {
-            Aufgabe auf = (Aufgabe) aufIt.next();
-            if (hasCloneableConfigs(auf)) {
-                System.err.println(auf);
-            }
-            if (cloneConfigsToParts(auf, transactionId)) {
-                aufCount++;
-            }
-        }
-        mainDoc.finish_transaction(transactionId, false);
-        mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, transactionId);
-        if (showResultDialog) {
-            String resultString = "Es wurde von " + aufCount + " Aufgaben Konfigurationen an Teilaufgaben übertragen.";
-            JOptionPane.showMessageDialog(Static.getMainFrame(), resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
-        }
-
-    }
-
     // /////////////////////////
     // Allgemeine Funktionen //
     // /////////////////////////
@@ -800,12 +514,12 @@ public class ModelCleaner {
             for (ModelElement me : elems) {
                 hashesToDelete[i++] = me.getHashString();
             }
-            gdcoll.deleteElements(hashesToDelete, GraphDocument.createTransactionId());
+            gdcoll.deleteElements(hashesToDelete, createTransactionId());
         }
         String resultString = null;
         if (resultStringKey != null && !resultStringKey.trim().equals("")) {
-            resultString = elems.size() + " " + Tool3lgmConstants.getResString(resultStringKey);
-            JOptionPane.showMessageDialog(Static.getMainFrame(), resultString, Tool3lgmConstants.getResString("clean_model"), JOptionPane.INFORMATION_MESSAGE);
+            resultString = elems.size() + " " + getResString(resultStringKey);
+            JOptionPane.showMessageDialog(getMainFrame(), resultString, getResString("clean_model"), INFORMATION_MESSAGE);
         }
     }
 
