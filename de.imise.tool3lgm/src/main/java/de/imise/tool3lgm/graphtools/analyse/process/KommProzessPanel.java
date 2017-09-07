@@ -46,8 +46,39 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 /**
  * @author AXS Dieses Panel ist das KommunikationsprozessPanel im ElementPropertyDialog eines
  *         (Geschäfts-)Prozesses
+ *         Diese Panel wird im Modemnt nicht genutzt und müsste wiederhergestellt werden, falls es noch einmal gebraucht wird.
  */
 public class KommProzessPanel extends ElementDialogPanel {
+
+    // das folgende sind die Resourcen zu diesem Panel.Im Zuge der Lolösung des Metamodells aus dem Baukasten, sind sie erstmal hier
+    //gelandet. Sie sind Metamodell-spezifisch und gehören somit nicht in die allg. Resourcen
+
+    //    # Prozess
+    //    start_aufg                  Startaufgabe
+    //    end_aufg                    Endaufgabe
+    //    start_bausteine             Startkonfiguration
+    //    start_orgeinh               Startorganisationseinheit
+    //    end_bausteine               Endkonfiguration
+    //    end_orgeinh                 Endorganisationseinheit
+    //    schnittstellen              Schnittstellen
+    //    medium_breaks               Medienbrüche
+    //    kanten_nummern              Kantennummern
+    //    schnitt_nummern             Schnittstellennummern
+    //    alles_hervorheben           alles hervorheben
+    //
+    //    # Prozess
+    //    start_aufg                  Start function
+    //    end_aufg                    End function
+    //    start_bausteine             Start configuration
+    //    start_orgeinh               Start organizational unit
+    //    end_bausteine               End configuration
+    //    end_orgeinh                 End organizational unit
+    //    schnittstellen              Interfaces
+    //    medium_breaks               Medium breaks
+    //    kanten_nummern              Edge numbers
+    //    schnitt_nummern             Interface numbers
+    //    alles_hervorheben           Highlight all
+    //
 
     protected Prozess prozess;
 
