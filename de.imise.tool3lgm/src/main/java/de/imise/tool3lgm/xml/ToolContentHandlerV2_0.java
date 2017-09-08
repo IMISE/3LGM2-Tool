@@ -146,7 +146,6 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     @Override
     public void endDocument() throws SAXException {
         doc._cleanContainers();
-        doc._removeMultipleTraces();
 
         if (isCopyAndPaste()) {
             for (EdgeContainer kc : kantenContainer) {

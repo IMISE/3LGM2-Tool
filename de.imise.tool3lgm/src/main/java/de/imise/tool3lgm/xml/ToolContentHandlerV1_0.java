@@ -117,8 +117,6 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     public void endDocument() throws SAXException {
         Static.setProgressDialogStatusLabel("label_convert");
         doc._cleanContainers();
-        doc._createNewEdgeClasses();
-        doc._removeMultipleTraces();
         doc._duplicateAufOrgs();
         doc._duplicateABKonfs();
 

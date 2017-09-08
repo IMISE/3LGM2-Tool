@@ -197,7 +197,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     @Override
     public void endDocument() throws SAXException {
         doc._cleanContainers();
-        doc._removeMultipleTraces();
 
         for (Szenario szen : collection.getSzenarios()) {
             szen.initKnotContainers();

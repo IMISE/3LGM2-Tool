@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxCardinality;
 import static de.imise.tool3lgm.graphtools.elements.Edge.isConnecting;
@@ -64,11 +63,8 @@ import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommbezEtntVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
@@ -522,13 +518,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 exec(answer, "", pid, log);
             }
         } else if (command.equals(GDCommands.CHECK_CONSISTENCY.toString())) {
-            GraphDocument doc = gdcoll.getMainGraphDocument();
-            List<ModelElement> elements = doc.getModelItems(Aufgabe.class, false);
-            for (ModelElement me : elements) {
-                if (me.toString().equals("Dokumentation des Informationssystems")) {
-                    System.err.println(me.getParentConnectedContainer(AufOrgKombination.class, doc));
-                }
-            }
+            //            GraphDocument doc = gdcoll.getMainGraphDocument();
+            //            List<ModelElement> elements = doc.getModelItems(Aufgabe.class, false);
+            //            for (ModelElement me : elements) {
+            //                if (me.toString().equals("Dokumentation des Informationssystems")) {
+            //                    System.err.println(me.getParentConnectedContainer(AufOrgKombination.class, doc));
+            //                }
+            //            }
 
             //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden
             //			for (Class<? extends ModelElement> meClass : ModelConstants.ALL_NODES){
@@ -4667,36 +4663,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @deprecated
      */
     @Deprecated
-    public void _removeMultipleTraces() {
-        GraphDocument gdoc = getCollection().getMainGraphDocument();
-        int pid = TransactionManager.STANDARD_PID;
-        gdoc.start_transaction(pid, false);
-        for (int i = 0; i < layer.length; i++) {
-            for (EdgeContainer oldKC : new ArrayList<>(layer[i].getKanten())) {
-                Edge kante = oldKC.getEdge();
-                ModelElement ks = kante.getStart();
-                ModelElement ke = kante.getEnd();
-                if (ks == null || ke == null) {
-                    continue;
-                }
-                if (ks.getClass() == Prozess.class || ke.getClass() == Prozess.class) {
-                    continue;
-                }
-                for (Edge edge : ks.getEdgesWith(ke, kante.getClass(), -1)) {
-                    if (edge != kante) {
-                        gdcoll.deleteElement(edge, this, pid);
-                        //						gdoc.removeEdge(edge, pid);
-                    }
-                }
-            }
-        }
-        gdoc.finish_transaction(pid, false);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
     public void _refreshSubordinatedElementsInSzenarios() {
         GraphDocument gdoc = getCollection().getMainGraphDocument();
         int pid = TransactionManager.STANDARD_PID;
@@ -4759,94 +4725,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
             szen.finish_transaction(PID, false);
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public void _createNewEdgeClasses() {
-        for (int i = 0; i < layer.length; i++) {
-            List<EdgeContainer> oldEdgesCont = new ArrayList<>(layer[i].getKanten());
-            for (EdgeContainer edgeC : oldEdgesCont) {
-                Edge edge = edgeC.getEdge();
-                if (edge instanceof KommBeziehung) {
-                    continue;
-                }
-
-                boolean reverse = false;
-                Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(edge.getStart().getClass(), edge.getEnd().getClass());
-                if (edgeClasses == null || edgeClasses.length == 0) {
-                    reverse = true;
-                    edgeClasses = ModelConstants.getEdgeTypes(edge.getEnd().getClass(), edge.getStart().getClass());
-                }
-                if (edgeClasses == null || edgeClasses.length == 0) {
-                    System.out.println("Konnte Edge nicht konvertieren: " + edge.getHashString() + "; start: " + edge.getStart().getHashString() + " --> end: " + edge.getEnd().getHashString());
-                    gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
-                    //					removeEdge(edge, 0);
-                    continue;
-                }
-
-                Edge newEdge = null;
-                try {
-                    if (edge instanceof PartOfBeziehung) {
-                        for (int j = 0; j < edgeClasses.length; j++) {
-                            if ((newEdge = edgeClasses[j].newInstance()) instanceof PartOfBeziehung) {
-                                break;
-                            }
-                        }
-                        newEdge = null;
-                    } else {
-                        newEdge = edgeClasses[0].newInstance();
-                    }
-
-                    if (newEdge == null) {
-                        System.out.println("Konnte Edge nicht konvertieren: " + edge.getHashString() + "; start: " + edge.getStart().getHashString() + " --> end: " + edge.getEnd().getHashString());
-                        gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
-                        //						removeEdge(edge, 0);
-                        continue;
-                    }
-                } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-                    gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
-                    //					removeEdge(edge, 0);
-                    continue;
-                }
-
-                newEdge.setHashString(edge.getHashString());
-                newEdge.setName(edge.getName());
-                newEdge.setDescription(edge.getDescription());
-                int direction = edge.getDirection();
-                if (direction == FORWARD) {
-                    newEdge.setDirection(reverse ? BACKWARD : FORWARD);
-                } else if (direction == BACKWARD) {
-                    newEdge.setDirection(reverse ? FORWARD : BACKWARD);
-                } else {
-                    newEdge.setDirection(DOUBLE);
-                }
-                edge.getStart().removeEdge(edge);
-                edge.getEnd().removeEdge(edge);
-                gdcoll.deleteElement(edge, this, TransactionManager.STANDARD_PID);
-                //				removeEdge(edge, 0);
-
-                if (reverse) {
-                    newEdge.setKnots(edge.getEnd(), edge.getStart());
-                } else {
-                    newEdge.setKnots(edge.getStart(), edge.getEnd());
-                }
-                if (newEdge.getStart() != null && newEdge.getEnd() != null) {
-                    layer[i].add(newEdge.createContainer(this));
-                    for (GraphDocument gdoc : edge.getMySzenarios()) {
-                        if (!gdoc.equals(this)) {
-                            if (newEdge.getStart().getContainer(gdoc) != null && newEdge.getEnd().getContainer(gdoc) != null) {
-                                gdoc.getLayer(i).add(newEdge.createContainer(gdoc));
-                            }
-                        }
-                    }
-                }
-
-            }
         }
     }
 
