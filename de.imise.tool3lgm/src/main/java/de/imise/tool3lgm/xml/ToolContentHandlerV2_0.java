@@ -142,7 +142,6 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
      *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
         if (isCopyAndPaste()) {
@@ -157,8 +156,6 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 //				collection.getSzenario(i).refreshSpecialInfoTargets();
             }
         }
-        doc._refreshSubordinatedElementsInSzenarios();
-
         doc = null;
         containerWithIcon = null;
         collection = null;

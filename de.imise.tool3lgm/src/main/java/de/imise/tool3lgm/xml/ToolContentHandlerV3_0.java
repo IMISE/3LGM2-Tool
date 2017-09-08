@@ -193,7 +193,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
      *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
         for (Szenario szen : collection.getSzenarios()) {
@@ -201,14 +200,12 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             szen.initTraceContainers();
             //			collection.getSzenario(i).refreshSpecialInfoTargets();
         }
-        doc._refreshSubordinatedElementsInSzenarios();
         doc.deselectAll(true);
         if (paste) {
             for (ElementContainer ec : pastedElements) {
                 doc.addToSelection(ec, 0);
             }
         }
-
         doc = null;
         containerWithIcon = null;
         collection = null;

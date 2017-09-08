@@ -27,7 +27,6 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
      *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
         Static.setProgressDialogStatusLabel("label_convert");
@@ -36,8 +35,6 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
             szen.initTraceContainers();
             //szen.refreshSpecialInfoTargets();
         }
-        doc._refreshSubordinatedElementsInSzenarios();
-
         doc = null;
         containerWithIcon = null;
         collection = null;

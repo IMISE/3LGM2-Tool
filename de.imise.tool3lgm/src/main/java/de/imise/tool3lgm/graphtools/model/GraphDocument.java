@@ -4660,34 +4660,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @deprecated
-     */
-    @Deprecated
-    public void _refreshSubordinatedElementsInSzenarios() {
-        GraphDocument gdoc = getCollection().getMainGraphDocument();
-        int pid = TransactionManager.STANDARD_PID;
-        gdoc.start_transaction(pid, false);
-        for (LayerContainer lc : gdoc.layer) {
-            for (NodeContainer knotenC : new ArrayList<>(lc.getKnoten())) {
-                Node knoten = knotenC.getKnoten();
-                for (Szenario szen : gdcoll.getSzenarios()) {
-                    ElementContainer ec = knoten.getContainer(szen);
-                    if (ec == null) {
-                        continue;
-                    }
-                    szen.createEdgeContainer(ec, szen, false, pid);
-                    szen.raiseSlaves(ec);
-                }
-            }
-        }
-        gdoc.deselectAll(true);
-        for (Szenario szen : gdcoll.getSzenarios()) {
-            szen.deselectAll(true);
-        }
-        gdoc.finish_transaction(pid, false);
-    }
-
-    /**
      *
      */
     public void relinkETNT() {

@@ -124,8 +124,6 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             szen.initTraceContainers();
             //szen.refreshSpecialInfoTargets();
         }
-        doc._refreshSubordinatedElementsInSzenarios();
-
         doc = null;
         containerWithIcon = null;
         collection = null;
