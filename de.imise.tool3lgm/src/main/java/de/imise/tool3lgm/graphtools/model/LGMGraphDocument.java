@@ -5,8 +5,6 @@
  */
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,18 +32,11 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
 
@@ -155,69 +146,6 @@ public class LGMGraphDocument extends GraphDocument {
             }
         }
         super.distributeEventIntern(bitmask, last_elem, last_group, pid);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public void _duplicateAufOrgs() {
-        for (ElementContainer aufOrgC : getElementContainer(AufOrgKombination.class)) {
-            ModelElement aufOrg = aufOrgC.getElement();
-            List<ElementContainer> orgs = aufOrg.getConnectedContainer(Organisationseinheit.class, this);
-            int lastSize = -1;
-            int size = orgs.size();
-            while (orgs.size() > 1 && lastSize != size) {
-                NodeContainer orgC = (NodeContainer) orgs.get(0);
-                Node org = orgC.getKnoten();
-                gdcoll.unlink(aufOrg, org, -1, STANDARD_PID);
-                NodeContainer newAufOrgC = (NodeContainer) aufOrgC.clone(true, this);
-                if (newAufOrgC != null) {
-                    layer[4].add(newAufOrgC);
-                    gdcoll.link(OrgAufOrgVerbindung.class, newAufOrgC.getElement(), org, STANDARD_PID);
-                    for (ElementContainer aufC : aufOrg.getConnectedContainer(Aufgabe.class, this)) {
-                        gdcoll.link(AufAufOrgVerbindung.class, newAufOrgC.getElement(), aufC.getElement(), STANDARD_PID);
-                    }
-                    for (ElementContainer abkC : aufOrg.getConnectedContainer(ABKonfiguration.class, this)) {
-                        gdcoll.link(AwbkAufOrgVerbindung.class, newAufOrgC.getElement(), abkC.getElement(), STANDARD_PID);
-                    }
-                }
-                lastSize = size;
-                orgs = aufOrg.getConnectedContainer(Organisationseinheit.class, this);
-                size = orgs.size();
-            }
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public void _duplicateABKonfs() {
-        for (ElementContainer konfC : getElementContainer(ABKonfiguration.class)) {
-            ModelElement konf = konfC.getElement();
-            List<ElementContainer> aufOrgs = konf.getConnectedContainer(AufOrgKombination.class, this);
-            int lastSize = -1;
-            int size = aufOrgs.size();
-            while (aufOrgs.size() > 1 && lastSize != size) {
-                ElementContainer aufOrgC = aufOrgs.get(0);
-                ModelElement aufOrg = aufOrgC.getElement();
-                gdcoll.unlink(konf, aufOrg, -1, STANDARD_PID);
-                NodeContainer newKonfC = (NodeContainer) konfC.clone(true, this);
-                if (newKonfC != null) {
-                    newKonfC.getKnoten().setContainer(this, newKonfC);
-                    layer[3].add(newKonfC);
-                    gdcoll.link(AwbkAufOrgVerbindung.class, newKonfC.getElement(), aufOrg, STANDARD_PID);
-                    List<ElementContainer> awbs = konf.getConnectedContainer(Anwendungsbaustein.class, this);
-                    for (ElementContainer awbC : awbs) {
-                        gdcoll.link(AwbAwbkVerbindung.class, newKonfC.getElement(), awbC.getElement(), STANDARD_PID);
-                    }
-                }
-                lastSize = size;
-                aufOrgs = konf.getConnectedContainer(AufOrgKombination.class, this);
-                size = aufOrgs.size();
-            }
-        }
     }
 
     /**

@@ -112,13 +112,9 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
      *
      * @see org.xml.sax.ContentHandler#endDocument()
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
         Static.setProgressDialogStatusLabel("label_convert");
-        doc._duplicateAufOrgs();
-        doc._duplicateABKonfs();
-
         for (Szenario szen : collection.getSzenarios()) {
             szen.initKnotContainers();
             szen.initTraceContainers();
