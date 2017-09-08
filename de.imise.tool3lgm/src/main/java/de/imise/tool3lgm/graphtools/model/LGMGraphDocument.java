@@ -32,10 +32,8 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
@@ -44,12 +42,6 @@ import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
  * @author thomas
  */
 public class LGMGraphDocument extends GraphDocument {
-
-    /** Anzeigen aller {@link ABKonfiguration}en */
-    public static boolean showAllACConfigurations = false;
-
-    /** Anzeigen aller {@link DBKonfiguration}en */
-    public static boolean showAllPDPConfigurations = false;
 
     /**
      * @param _gdcoll
@@ -710,17 +702,4 @@ public class LGMGraphDocument extends GraphDocument {
         }
     }
 
-    /**
-     * @return the showAllAbKonfigs
-     */
-    public boolean isShowAllABKonfigs() {
-        return showAllACConfigurations;
-    }
-
-    /**
-     * @return the showAllDBKonfigs
-     */
-    public boolean isShowAllDBKonfigs() {
-        return showAllPDPConfigurations;
-    }
 }
