@@ -4688,47 +4688,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @deprecated
-     */
-    @Deprecated
-    public void _cleanContainers() {
-        GraphDocument gdoc = gdcoll.getMainGraphDocument();
-        final int PID = TransactionManager.STANDARD_PID;
-        gdoc.start_transaction(PID, false);
-        for (LayerContainer lc : gdoc.layer) {
-            for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
-                EdgeContainer kc = lc.getEdgeContainer(j);
-                Edge ka = kc.getEdge();
-                if (ka.getStart() == null || ka.getEnd() == null) {
-                    gdcoll.deleteElement(ka, this, PID);
-                    //					gdoc.removeEdge(ka, PID);
-                }
-            }
-        }
-        gdoc.finish_transaction(PID, false);
-
-        for (Szenario szen : gdcoll.getSzenarios()) {
-            szen.start_transaction(PID, false);
-            for (LayerContainer lc : szen.layer) {
-                for (int j = lc.getKnotenCount() - 1; j >= 0; j--) {
-                    NodeContainer kc = lc.getNodeContainer(j);
-                    if (kc.getKnoten() == null) {
-                        gdcoll.removeContainerFromSubmodel(kc, PID);
-                    }
-                }
-                for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
-                    EdgeContainer kc = lc.getEdgeContainer(j);
-                    Edge edge = kc.getEdge();
-                    if (edge == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
-                        gdcoll.removeContainerFromSubmodel(kc, PID);
-                    }
-                }
-            }
-            szen.finish_transaction(PID, false);
-        }
-    }
-
-    /**
      *
      */
     public void relinkETNT() {

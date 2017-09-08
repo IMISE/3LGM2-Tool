@@ -145,8 +145,6 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
-        doc._cleanContainers();
-
         if (isCopyAndPaste()) {
             for (EdgeContainer kc : kantenContainer) {
                 kc.computeBorderPoints();

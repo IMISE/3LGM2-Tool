@@ -196,8 +196,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     @SuppressWarnings("deprecation")
     @Override
     public void endDocument() throws SAXException {
-        doc._cleanContainers();
-
         for (Szenario szen : collection.getSzenarios()) {
             szen.initKnotContainers();
             szen.initTraceContainers();
