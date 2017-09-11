@@ -5,6 +5,9 @@
  */
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getClassForName;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,7 +36,6 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
@@ -71,34 +73,41 @@ public class LGMGraphDocument extends GraphDocument {
             clearClipboard();
             break;
 
-        case HIDE_UNASSOCIATED_INTERFACES:
-            for (ElementContainer ss : getElementContainer(Bausteinschnittstelle.class, true)) {
-                if (ss.getElement().getConnectedContainer(Bausteinschnittstelle.class, this).size() == 0) {
-                    ss.setVisible(false);
+        case HIDE_UNASSOCIATED: {
+            Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
+            Class<? extends Edge> egdeClass = getClassForName(argv[1]).asSubclass(Edge.class);
+            for (ElementContainer ec : getElementContainer(elementClass, true)) {
+                ModelElement me = ec.getElement();
+                List<ElementContainer> connectedContainer = me.getConnectedContainer(this, egdeClass);
+                if (connectedContainer.isEmpty()) {
+                    ec.setVisible(false);
                 }
             }
-            distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
-        case UNHIDE_ALL_INTERFACES:
-            for (ElementContainer ss : getElementContainer(Bausteinschnittstelle.class, true)) {
-                ss.setVisible(true);
+        }
+        case UNHIDE_ALL: {
+            Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
+            for (ElementContainer ec : getElementContainer(elementClass, true)) {
+                ec.setVisible(true);
             }
-            distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
+        }
         case SHOW_ALL_CONFIGS:
         case HIDE_ALL_CONFIGS:
-            boolean visible = command == GDCommands.SHOW_ALL_CONFIGS;
+            boolean visible = command == SHOW_ALL_CONFIGS;
             if (argc == 0) {
                 if (!isSelection()) {
                     layer[gdcoll.getActiveLayer()].setShowAllInterLayerConnections(visible);
-                    distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+                    distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
                 } else {
                     for (ElementContainer ec : selectedContainer) {
                         if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
                             ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(visible);
                         }
                     }
-                    distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+                    distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
                 }
                 break;
             }

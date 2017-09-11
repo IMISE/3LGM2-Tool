@@ -1,10 +1,17 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
+import de.imise.tool3lgm.graphtools.elements.Edge;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbPdvbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
@@ -16,6 +23,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
+import de.imise.util.Pair;
 
 public class TLGMGraphViewDefinion extends GraphViewDefinition {
 
@@ -46,6 +54,11 @@ public class TLGMGraphViewDefinion extends GraphViewDefinition {
                 new MetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
         };
         return configurationPaths;
+    }
+
+    @Override
+    public List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> getHidableIfNotConnected() {
+        return ImmutableList.of(new Pair<>(Bausteinschnittstelle.class, KommBeziehung.class));
     }
 
 }

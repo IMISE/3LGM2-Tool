@@ -22,8 +22,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.StaticAction;
-import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -552,6 +552,29 @@ public abstract class Tool3lgmConstants {
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
         return resourceBundle.getString(key);
+    }
+
+    /**
+     * Gets a string for the given key from this resource bundle or one of its parents.
+     * Wenn replacements übergeben werden, dann werden diese in den Originalstring eingesetzt.
+     * Wo ersetzt werden soll wird durch den in geschweifte Klammern gesetzten Index des
+     * einzusetztenden Replacements festgelegt.
+     * Beispiel: der Res-String liefert "Alle {0} ersetzen" und als replacement wird ein
+     * Parameter "Aufgaben" übergeben. Der Ergebnisstring ist dann "Alle Aufgaben ersetzen".
+     *
+     * @param key
+     *            String with key for resource or the key
+     * @param replacements
+     *            Ersetzungen
+     * @return String with value of resource
+     */
+    public static String getResString(final Object key, final String... replacements) {
+        String s = getResString(key.toString());
+        for (int i = 0; i < replacements.length; i++) {
+            String currentReplacementMarker = "{" + i + "}";
+            s = s.replace(currentReplacementMarker, replacements[i]);
+        }
+        return s;
     }
 
     /**

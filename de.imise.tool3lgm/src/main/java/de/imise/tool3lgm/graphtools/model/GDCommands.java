@@ -115,8 +115,8 @@ public enum GDCommands {
 
     SHOW_ALL_CONFIGS,
     HIDE_ALL_CONFIGS,
-    HIDE_UNASSOCIATED_INTERFACES,
-    UNHIDE_ALL_INTERFACES,
+    HIDE_UNASSOCIATED,
+    UNHIDE_ALL,
 
     //spezielle Kommandos
     COMMAND_LINE,

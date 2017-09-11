@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.view.graph;
 import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.util.Pair;
 
 /**
  * @author AXS
@@ -108,6 +110,16 @@ public abstract class GraphViewDefinition {
             }
         }
         return classToConfigurationPaths.get(elementClass);
+    }
+
+    /**
+     * Liefert alle Elementklassen, die man in der Grafik ausblenden kann, wenn sie über keine Kante der zugehörigen
+     * Kantenart verfügen.
+     *
+     * @return
+     */
+    public List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> getHidableIfNotConnected() {
+        return null;
     }
 
 }

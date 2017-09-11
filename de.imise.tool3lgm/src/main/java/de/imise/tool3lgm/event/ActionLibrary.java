@@ -1,11 +1,14 @@
 package de.imise.tool3lgm.event;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayablePluralName;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getGraphViewDefinition;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isDoubleMeaningEdge;
 
@@ -81,6 +84,7 @@ import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
+import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -1681,34 +1685,47 @@ public class ActionLibrary {
                 }
             };
 
+            /** Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde. */
+            public static final StaticAction HIDE_UNHIDE_UNASSOCIATED[] = create_HIDE_UNHIDE_UNASSOCIATED_Actions();
+
             /**
-             * (Deaktiviert das Anzeigen von Bausteinschnittstellen ohne Kommunikationspartner im
-             * Teilmodell
+             * Erzeugt das Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde.
+             *
+             * @param hide
+             * @return
              */
-            public static final StaticAction HIDE_UNASSOCIATED_INTERFACES = new StaticAction(ActionIdentifier.HIDE_UNASSOCIATED_INTERFACES) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
-                    exec(GDCommands.HIDE_UNASSOCIATED_INTERFACES);
+            private static final StaticAction[] create_HIDE_UNHIDE_UNASSOCIATED_Actions() {
+                List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = getGraphViewDefinition().getHidableIfNotConnected();
+                if (hidableIfNotConnected == null || hidableIfNotConnected.isEmpty()) {
+                    return null;
                 }
-
-            };
-
-            /** Zeigt alle ausgeblendeten Bausteinschnittstellen wieder an */
-            public static final StaticAction UNHIDE_ALL_INTERFACES = new StaticAction(ActionIdentifier.UNHIDE_ALL_INTERFACES) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
-                    exec(GDCommands.UNHIDE_ALL_INTERFACES);
+                StaticAction[] actions = new StaticAction[hidableIfNotConnected.size() * 2];
+                for (int i = 0; i < actions.length; i++) {
+                    Pair<Class<? extends ModelElement>, Class<? extends Edge>> hidable = hidableIfNotConnected.get(i / 2);
+                    Class<? extends ModelElement> elementClass = hidable.getFirstItem();
+                    final boolean hide = i % 2 == 0;
+                    StaticAction hideAction = new StaticAction(hide ? ActionIdentifier.HIDE_UNASSOCIATED : ActionIdentifier.UNHIDE_ALL) {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            if (!isEnabled()) {
+                                return;
+                            }
+                            if (hide) {
+                                exec(GDCommands.HIDE_UNASSOCIATED, elementClass.getSimpleName() + " " + hidable.getSecondItem().getSimpleName());
+                            } else {
+                                exec(GDCommands.UNHIDE_ALL, elementClass.getSimpleName());
+                            }
+                        }
+                    };
+                    //das hier auf keine Fall mit static import ersetzen, weil er dann statt der GDCommands die Action nimmt, die genauso heißen und null sind
+                    String resKey = hide ? GDCommands.HIDE_UNASSOCIATED.name() : GDCommands.UNHIDE_ALL.name();
+                    String elemebtClassPluralName = getDisplayablePluralName(elementClass);
+                    String fullActionDisplayName = getResString(resKey, elemebtClassPluralName);
+                    hideAction.setText(fullActionDisplayName);
+                    actions[i] = hideAction;
                 }
-
-            };
+                return actions;
+            }
 
             /** (De-)Aktiviert die automatische Farbzuweisung zu Konfigurationslinien */
             public static final Action AUTOMATIC_COLORING = new StaticAction(ActionIdentifier.automatic_coloring, (Boolean) UserProperties.isAssignConfigurationColors()) {
