@@ -22,8 +22,7 @@ public class ResourceHandler {
 
     /**
      * Liefert eine Liste der relativen Pfade aller Dateien mit der übergebenen Endung im Resourcenverzeichnis der aktuellen Locale. Werden für die
-     * aktuelle Locale keine
-     * Dateien gefunden, werden die Pfade zu den englischen Dateien geladen.
+     * aktuelle Locale keine Dateien gefunden, werden die Pfade zu den englischen Dateien geladen.
      *
      * @return Liste aller Dateien mit der angegebenen Endung im angegebenen Resourcenverzeichnis
      */
@@ -42,7 +41,7 @@ public class ResourceHandler {
                 path = devTimeResourceBaseDirName + "en";
                 dir = new File(path);
             }
-            ArrayList<String> fileNameList = new ArrayList<String>(files.length);
+            ArrayList<String> fileNameList = new ArrayList<>(files.length);
             for (int i = 0; i < files.length; i++) {
                 String s = files[i].getCanonicalPath();
                 if (!s.endsWith("." + fileExtension)) {
@@ -68,7 +67,7 @@ public class ResourceHandler {
             }
 
             String packagePattern = jarResourceBaseDirName + UserProperties.getLocale().getLanguage() + "/[^/]+\\." + fileExtension;
-            ArrayList<JarEntry> jarEntries = new ArrayList<JarEntry>();
+            ArrayList<JarEntry> jarEntries = new ArrayList<>();
 
             if (entries == null) {
                 return new String[0];
