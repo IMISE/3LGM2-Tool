@@ -12,12 +12,12 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.elements.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
-import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;

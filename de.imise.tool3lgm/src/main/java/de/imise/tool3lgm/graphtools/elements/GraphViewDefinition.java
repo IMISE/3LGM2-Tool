@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.view.graph;
+package de.imise.tool3lgm.graphtools.elements;
 
 import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
 
@@ -9,14 +9,6 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.LayerKnoten;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
-import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
-import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.util.Pair;
 

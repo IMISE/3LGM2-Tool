@@ -8,10 +8,10 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.elements.CopyDependencies;
 import de.imise.tool3lgm.graphtools.elements.Edge;
+import de.imise.tool3lgm.graphtools.elements.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.elements.MetaModel;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;

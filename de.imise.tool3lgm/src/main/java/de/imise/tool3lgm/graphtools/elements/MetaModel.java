@@ -8,7 +8,6 @@ import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.util.collections.CollectionUtils;
