@@ -6,6 +6,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.elements.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.elements.CopyDependencies;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.GraphViewDefinition;
@@ -110,7 +111,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     private final GraphViewDefinition graphViewDefinition = new TLGMGraphViewDefinion();
 
     @Override
-    public GraphViewDefinition getGraphViewDefinition() {
+    public final GraphViewDefinition getGraphViewDefinition() {
         return graphViewDefinition;
     }
 
@@ -121,8 +122,17 @@ public class TLGMOriginalMetaModel extends MetaModel {
     private final CopyDependencies copyDependencies = new TLGMCopyDependencies();
 
     @Override
-    public CopyDependencies getCopyDependencies() {
+    public final CopyDependencies getCopyDependencies() {
         return copyDependencies;
+    }
+
+    ////////////////////////
+    // AnalysisDefinition //
+    ////////////////////////
+
+    @Override
+    protected Class<? extends AnalysisDefinition> getAnalysisDefinitionClass() {
+        return TLGMAnalysisDefinition.class;
     }
 
     ////////////

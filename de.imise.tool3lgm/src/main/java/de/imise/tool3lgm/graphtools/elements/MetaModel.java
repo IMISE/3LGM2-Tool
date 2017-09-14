@@ -40,6 +40,29 @@ public abstract class MetaModel {
 
     public abstract CopyDependencies getCopyDependencies();
 
+    ////////////////////////
+    // AnalysisDefinition //
+    ////////////////////////
+
+    protected Class<? extends AnalysisDefinition> getAnalysisDefinitionClass() {
+        return null;
+    }
+
+    private AnalysisDefinition analysisDefinition;
+
+    public final AnalysisDefinition getAnalysisDefinition() {
+        //der lazy-init ist notwendig, da es sonst zu einem InitializingError kommt, da die ModelConstants noch nicht durchinitialisiert sind
+        if (analysisDefinition == null) {
+            try {
+                analysisDefinition = getAnalysisDefinitionClass().newInstance();
+            } catch (NullPointerException | InstantiationException | IllegalAccessException e) {
+                analysisDefinition = new AnalysisDefinition() {
+                };
+            }
+        }
+        return analysisDefinition;
+    }
+
     ////////////
     // Node //
     ////////////

@@ -1832,36 +1832,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param elementClass
-     */
-    public final void clearTextRightDown(final Class<? extends Node> elementClass) {
-        if (doc != null) {
-            doc.clearTextRightDown(elementClass);
-            doc.clearLayerText(elementClass);
-        }
-        for (Szenario szen : szenarios) {
-            szen.clearTextRightDown(elementClass);
-            szen.clearLayerText(elementClass);
-        }
-    }
-
-    /**
-     * show wird in LGMGraphDocument ausgewertet und legt fest, ob ein Text bezüglich der
-     * allgemeinen Redundanz über dem Layer angezeigt werden soll (momentan nur bei Aufgabe)
-     *
-     * @param elementClass
-     * @param show
-     */
-    public final void computeRedundance(final Class<? extends Node> elementClass, final boolean show) {
-        if (doc != null) {
-            doc.getSimpleRedundancyAnalysis().computeRedundance(elementClass, show);
-        }
-        for (Szenario s : szenarios) {
-            s.getSimpleRedundancyAnalysis().computeRedundance(elementClass, show);
-        }
-    }
-
-    /**
      * Wenn die anderen Parameter aus der Methode <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code> nicht angegeben
      * werden können, kann man hiermit ein allgemeines Ereignis feuern.
      *

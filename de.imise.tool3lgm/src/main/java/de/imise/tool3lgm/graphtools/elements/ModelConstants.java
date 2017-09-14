@@ -1556,4 +1556,13 @@ public final class ModelConstants {
         return copyDependencies.avoidDuplicates(elementClass);
     }
 
+    /**
+     * Liefert die {@link AnalysisDefinition} des Metamodells
+     *
+     * @return
+     */
+    public static final AnalysisDefinition getAnalysisDefinition() {
+        return metaModel.getAnalysisDefinition();
+    }
+
 }

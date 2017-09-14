@@ -375,6 +375,17 @@ public final class PathFinder {
      * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den angegebenen Pfad verbunden Elemente zurück.
      *
      * @param me
+     * @param metaPath
+     * @return
+     */
+    public static final Set<ModelElement> getConnectedElements(final ModelElement me, final MetaPath metaPath) {
+        return getConnectedElements(me, metaPath.getEndClass(), metaPath);
+    }
+
+    /**
+     * Liefert alle Elemente die mit dem übergebeben Element oder seinen Elternelementen über den angegebenen Pfad verbunden Elemente zurück.
+     *
+     * @param me
      * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
      *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
      * @param metaPath

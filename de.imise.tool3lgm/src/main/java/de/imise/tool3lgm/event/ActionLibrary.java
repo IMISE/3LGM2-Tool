@@ -30,6 +30,10 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
+import org.apache.commons.lang3.tuple.Triple;
+
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -48,6 +52,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
+import de.imise.tool3lgm.graphtools.elements.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
@@ -59,6 +64,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
@@ -78,8 +84,6 @@ import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xslt.WebExportDialog;
@@ -1537,59 +1541,50 @@ public class ActionLibrary {
 
             /** (De-)Aktiviert das Erzeugen eines Teilmodells für die XMLAnalyse */
             public static final Action NEW_SUBMODEL = new StaticAction(ActionIdentifier.create_submodel, (Boolean) UserProperties.isNewSubmodelForAnalysis()) {
-
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     UserProperties.setNewSubmodelForAnalysis(isSelected());
                 }
             };
 
-            /**
-             * (De-)Aktiviert das Anzeigen von Konfigurations-Redundanz für {@link Aufgabe}n. TODO:
-             * AXS,FTS: Wirft Exception seit ToolMenu
-             */
-            public static final Action CONFIGURATIONAL_REDUNDANCY = new StaticAction(ActionIdentifier.configurational_redundancy, (Boolean) UserProperties.isShowABKonfigRedundance()) {
+            public static final Action[] SIMPLE_REDUNDANCIES = create_SIMPLE_REDUNDANCIES_Actions();
 
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    boolean isSelected = isSelected();
-                    UserProperties.setShowABKonfigRedundance(isSelected);
-                    if (isSelected) {
-                        for (GDCollection col : getTool().getCollections()) {
-                            col.computeRedundance(Aufgabe.class, true);
+            public static final Action[] create_SIMPLE_REDUNDANCIES_Actions() {
+                //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
+                AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
+                final ImmutableList<Triple<MetaPath, MetaPath, Boolean>> simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinition();
+                //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
+                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
+                for (int i = 0; i < returnActions.length; i++) {
+                    //Definition einer der aktuellen SimpleRedundancyAnalysis holen
+                    final Triple<MetaPath, MetaPath, Boolean> singleSimpleRedundancyAnalysisDefinition = simpleRedundancyAnalysisDefinition.get(i);
+                    MetaPath metaPath = singleSimpleRedundancyAnalysisDefinition.getLeft();
+                    MetaPath pathToDifferences = singleSimpleRedundancyAnalysisDefinition.getMiddle();
+                    boolean showFullSystemResult = singleSimpleRedundancyAnalysisDefinition.getRight();
+                    StaticAction action = new StaticAction(ActionIdentifier.SIMPLE_REDUNDNANCY_ANALYSIS) {
+                        @Override
+                        public void actionPerformed(final ActionEvent e) {
+                            for (GDCollection gdcoll : getTool().getCollections()) {
+                                gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(metaPath, pathToDifferences, showFullSystemResult);
+                                for (Szenario szenario : gdcoll.getSzenarios()) {
+                                    szenario.switchSimpleRedundancyAnalysisState(metaPath, pathToDifferences, showFullSystemResult);
+                                }
+                            }
+                            distributeElementGraphicsChanged();
                         }
-                    } else {
-                        for (GDCollection col : getTool().getCollections()) {
-                            col.clearTextRightDown(Aufgabe.class);
-                        }
-                    }
-                    distributeElementGraphicsChanged();
+                    };
+                    String resKey = ActionIdentifier.SIMPLE_REDUNDNANCY_ANALYSIS.name();
+                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
+                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
+                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
+                    action.setText(fullActionDisplayName);
+                    returnActions[i] = action;
                 }
-            };
-
-            /** (De-)Aktiviert das Anzeigen von Daten-Redundanz für {@link Objekttyp}en */
-            public static final Action DATA_REDUNDANCY = new StaticAction(ActionIdentifier.data_redundancy, (Boolean) UserProperties.isShowDataRedundance()) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    boolean isSelected = isSelected();
-                    UserProperties.setShowDataRedundance(isSelected);
-                    if (isSelected) {
-                        for (GDCollection col : getTool().getCollections()) {
-                            col.computeRedundance(Objekttyp.class, false);
-                        }
-                    } else {
-                        for (GDCollection col : getTool().getCollections()) {
-                            col.clearTextRightDown(Objekttyp.class);
-                        }
-                    }
-                    distributeElementGraphicsChanged();
-                }
-            };
+                return returnActions;
+            }
 
             /** (De-)Aktiviert die Kennzahlberechnung */
             public static final Action ACTIVATE_CALCULATION = new StaticAction(ActionIdentifier.activate_calculation, (Boolean) UserProperties.isEnableClassificationNumberCalculation()) {
-
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     UserProperties.setEnableClassificationNumberCalculation(isSelected());
@@ -1607,7 +1602,6 @@ public class ActionLibrary {
 
             /** (De-)Aktiviert das Anzeigen einer Warnung vor dem Löschen eines Elements */
             public static final Action SHOW_REMOVE_WARNING = new StaticAction(ActionIdentifier.removeWarning, (Boolean) UserProperties.isShowRemoveWarning()) {
-
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     UserProperties.setShowRemoveWarning(isSelected());
@@ -1719,8 +1713,8 @@ public class ActionLibrary {
                     };
                     //das hier auf keine Fall mit static import ersetzen, weil er dann statt der GDCommands die Action nimmt, die genauso heißen und null sind
                     String resKey = hide ? GDCommands.HIDE_UNASSOCIATED.name() : GDCommands.UNHIDE_ALL.name();
-                    String elemebtClassPluralName = getDisplayablePluralName(elementClass);
-                    String fullActionDisplayName = getResString(resKey, elemebtClassPluralName);
+                    String elementClassPluralName = getDisplayablePluralName(elementClass);
+                    String fullActionDisplayName = getResString(resKey, elementClassPluralName);
                     hideAction.setText(fullActionDisplayName);
                     actions[i] = hideAction;
                 }

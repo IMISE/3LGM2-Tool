@@ -162,8 +162,7 @@ public enum ActionIdentifier {
     data_availability,
     consistency_check,
     create_submodel,
-    configurational_redundancy,
-    data_redundancy,
+    SIMPLE_REDUNDNANCY_ANALYSIS,
 
     // options
     // General

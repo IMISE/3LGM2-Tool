@@ -83,8 +83,7 @@ public class LayerContainer extends ElementContainer {
     private List<EdgeContainer> tmpEdgeContainer;
 
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
-    //	private String additionalTextAbove, additionalTextDown;
-    private ElementTypeStringPair additionalTextAbove, additionalTextDown;
+    private KeyObjectStringMap additionalTextAbove, additionalTextDown;
 
     private boolean showInterLayerConnections = false;
 
@@ -802,136 +801,67 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @return
-     */
-    public String getAdditionalTextAbove() {
-        return additionalTextAbove.getText();
-    }
-
-    /**
-     * @return
-     */
-    public String getAdditionalTextDown() {
-        return additionalTextDown.getText();
-    }
-
-    /**
-     * @param elementClass
+     * @param key
      * @param string
      */
-    public void setAdditionalTextAbove(final Class<? extends ModelElement> elementClass, final String string) {
+    public void setAdditionalTextAbove(final Object key, final String string) {
         if (additionalTextAbove == null) {
-            additionalTextAbove = new ElementTypeStringPair();
+            additionalTextAbove = new KeyObjectStringMap();
         }
-        additionalTextAbove.set(elementClass, string);
+        additionalTextAbove.set(key, string);
     }
 
     /**
-     * @param elementClass
-     * @param string
+     * @param key
      */
-    public void addAdditionalTextAbove(final Class<? extends ModelElement> elementClass, final String string) {
-        if (additionalTextAbove == null) {
-            additionalTextAbove = new ElementTypeStringPair();
-            additionalTextAbove.set(elementClass, string);
-            return;
-        }
-        additionalTextAbove.add(elementClass, string);
-    }
-
-    /**
-     * @param elementClass
-     */
-    public void removeAdditionalTextAbove(final Class<? extends ModelElement> elementClass) {
+    public void removeAdditionalTextAbove(final Object key) {
         if (additionalTextAbove == null) {
             return;
         }
-        additionalTextAbove.remove(elementClass);
+        additionalTextAbove.remove(key);
     }
 
     /**
+     * @param key
      * @param string
      */
-    public void setAdditionalTextDown(final Class<? extends ModelElement> elementClass, final String string) {
+    public void setAdditionalTextDown(final Object key, final String string) {
         if (additionalTextDown == null) {
-            additionalTextDown = new ElementTypeStringPair();
+            additionalTextDown = new KeyObjectStringMap();
         }
-        additionalTextDown.set(elementClass, string);
-    }
-
-    /**
-     * @param elementClass
-     * @param string
-     */
-    public void addAdditionalTextDown(final Class<? extends ModelElement> elementClass, final String string) {
-        if (additionalTextDown == null) {
-            additionalTextDown = new ElementTypeStringPair();
-            additionalTextDown.set(elementClass, string);
-            return;
-        }
-        additionalTextDown.add(elementClass, string);
+        additionalTextDown.set(key, string);
     }
 
     /**
      * Funktioniert wie eine Map, bei der die Werte aber in einer Listenreihenfolge erhalten bleiben.
      */
-    private class ElementTypeStringPair {
-        List<Class<?>> elementClassList = new ArrayList<>();
+    private class KeyObjectStringMap {
+        List<Object> keyList = new ArrayList<>();
         List<String> stringList = new ArrayList<>();
 
-        public void set(final Class<?> clazz, final String s) {
-            for (int i = 0; i < elementClassList.size(); i++) {
-                if (elementClassList.get(i) == clazz) {
+        public void set(final Object key, final String s) {
+            for (int i = 0; i < keyList.size(); i++) {
+                if (keyList.get(i) == key) {
                     stringList.set(i, s);
                     return;
                 }
             }
-            elementClassList.add(clazz);
+            keyList.add(key);
             stringList.add(s);
         }
 
         /**
-         * @param clazz
-         * @param s
+         * @param key
          */
-        public void add(final Class<?> clazz, final String s) {
-            for (int i = 0; i < elementClassList.size(); i++) {
-                if (elementClassList.get(i) == clazz) {
-                    StringBuilder sb = new StringBuilder(stringList.get(i));
-                    sb.append(s);
-                    stringList.set(i, sb.toString());
-                    return;
-                }
-            }
-            elementClassList.add(clazz);
-            stringList.add(s);
-        }
-
-        /**
-         * @param clazz
-         */
-        public void remove(final Class<?> clazz) {
-            for (int i = 0; i < elementClassList.size(); i++) {
-                if (elementClassList.get(i) == clazz) {
-                    elementClassList.remove(i);
+        public void remove(final Object key) {
+            for (int i = 0; i < keyList.size(); i++) {
+                if (keyList.get(i) == key) {
+                    keyList.remove(i);
                     stringList.remove(i);
                     return;
                 }
             }
         }
-
-        //		/**
-        //		 * @param clazz
-        //		 * @return
-        //		 */
-        //		public String getString(Class<?> clazz) {
-        //			for (int i = 0; i < elementClassList.size(); i++) {
-        //				if (elementClassList.get(i) == clazz) {
-        //					return stringList.get(i);
-        //				}
-        //			}
-        //			return null;
-        //		}
 
         /**
          * @return

@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.elements.Node;
@@ -564,7 +566,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     public void setAdditionalTextRightDown(final String string) {
-        if (string == null) {
+        if (Strings.isNullOrEmpty(string)) {
             additionalTextRightDown = null;
             additionalTextRightDownLines = null;
             return;

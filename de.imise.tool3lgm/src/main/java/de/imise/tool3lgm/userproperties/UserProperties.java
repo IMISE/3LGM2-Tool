@@ -508,50 +508,6 @@ public class UserProperties {
         showExpansionSign = b;
     }
 
-    ////////////////////////////
-    // showABKonfigRedundance //
-    ////////////////////////////
-
-    /**
-     * Anwendungbaustein-Konfigurationsredundanz anzeigen.<br>
-     * Diese Option wird nicht gespeichert, weil es vertretbar ist, dass der Benutzer die Option wieder
-     * einschaltet, wenn ihn der Wert interessiert. Außerdem ist diese Option eher modellspezifisch
-     * als eine globale Benutzeroption.
-     */
-    private static transient boolean showABKonfigRedundance;
-
-    /** @return showABKonfigRedundance */
-    public static boolean isShowABKonfigRedundance() {
-        return showABKonfigRedundance;
-    }
-
-    /** @param b */
-    public static void setShowABKonfigRedundance(final boolean b) {
-        showABKonfigRedundance = b;
-    }
-
-    ////////////////////////
-    // showDataRedundance //
-    ////////////////////////
-
-    /**
-     * Datenredundanz anzeigen.<br>
-     * Diese Option wird nicht gespeichert, weil es vertretbar ist, dass der Benutzer die Option wieder
-     * einschaltet, wenn ihn der Wert interessiert. Außerdem ist diese Option eher modellspezifisch
-     * als eine globale Benutzeroption.
-     */
-    private static boolean showDataRedundance;
-
-    /** @return showDataRedundance */
-    public static boolean isShowDataRedundance() {
-        return showDataRedundance;
-    }
-
-    /** @param b */
-    public static void setShowDataRedundance(final boolean b) {
-        showDataRedundance = b;
-    }
-
     //////////////////////
     // showMediumBreaks //
     //////////////////////

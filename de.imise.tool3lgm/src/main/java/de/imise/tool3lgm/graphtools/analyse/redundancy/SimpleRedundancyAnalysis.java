@@ -3,16 +3,21 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
-import java.util.List;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayablePluralName;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 /**
  * Diese Klasse führt die Redundnazanalyse, die Dr. Birgit Brigl 1995 in "Brigl B, Hübner-Bloder G,
@@ -25,18 +30,18 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
  */
 public class SimpleRedundancyAnalysis {
 
-    // TODO: Diese Werte müssten ein Feld werden, da jedes Element das einen eigenen Redundanzfaktor
-    // besitzt, auch einen Gesamtsystemsredunddanzfaktor benötigt.
-    // momentan wird der Gesamtfaktor nur für Aufgaben berechnet und für Objekttypen fällt er unter
-    // den Tisch
     /**
-     * COMMENTME
+     * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
+     * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
+     * die potenziell redundanten Elemente.
      */
-    protected float redundanceFak = 0;
+    private final MetaPath metaPath;
+
     /**
-     * COMMENTME
+     * Wird hier ein gültiger Pfad angegeben, müssen sich die über den metaPath verbundenen Elemente in den über diesen
+     * Pfad verbundenen Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
      */
-    protected float saturationFak = 0;
+    private final MetaPath pathToDifferences;
 
     /**
      * Das Teilmodell, dessen Redundanz ausgerechnet werden soll
@@ -44,35 +49,34 @@ public class SimpleRedundancyAnalysis {
     private final GraphDocument doc;
 
     /**
+     * Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
+     */
+    private final boolean showFullSystemResults;
+
+    /**
+     * @param metaPath
+     * @param pathToDifferences
      * @param doc
      */
-    public SimpleRedundancyAnalysis(final GraphDocument doc) {
-        super();
-        this.doc = doc;
+    public SimpleRedundancyAnalysis(final MetaPath metaPath, final MetaPath pathToDifferences, final GraphDocument doc) {
+        this(metaPath, pathToDifferences, doc, true);
     }
 
     /**
-     * @param elementClass
-     * @param show
+     * @param metaPath
+     * @param pathToDifferences
+     * @param doc
+     * @param showFullSystemResults
      */
-    public void computeRedundance(final Class<? extends Node> elementClass, final boolean show) {
-        List<ElementContainer> allElemCont = doc.getElementContainer(elementClass, true);
-        int size = allElemCont.size();
-        if (size == 0) {
-            return;
-        }
-        NodeContainer[] leafs = new NodeContainer[size];
-        int leafsSize = 0;
-        // in leafs alle Elemente einsammlen, die Blätter sind
-        for (int i = 0; i < size; i++) {
-            leafs[leafsSize] = (NodeContainer) allElemCont.get(i);
-            // den VariablenWert des aktuellen Elements reseten
-            leafs[leafsSize].setVariable(0);
-            // leafsSize nur erhöhen, wenn aktuelles Element keine Parts hat
-            if (!leafs[leafsSize].getElement().hasDirectPartContainer(doc)) {
-                leafsSize++;
-            }
-        }
+    public SimpleRedundancyAnalysis(final MetaPath metaPath, final MetaPath pathToDifferences, final GraphDocument doc, final boolean showFullSystemResults) {
+        this.metaPath = metaPath;
+        this.pathToDifferences = pathToDifferences;
+        this.doc = doc;
+        this.showFullSystemResults = showFullSystemResults;
+    }
+
+    public void computeRedundancy() {
+        List<ElementContainer> allPartContainer = getAllAbsolutePartContainer();
 
         // Aufgabe: Gesamtanzahl der Konfigurationen an den Blättern (Aufgaben ohne Teilaufgaben)
         // Objekttyp:Gesamtanzahl der Datenbanken "an den Blättern" (Objekttypen ohne Teile)
@@ -88,64 +92,145 @@ public class SimpleRedundancyAnalysis {
         // Objekttyp:Gesamtanzahl der redundanten DBS an den Blättern
         int totalRedundanceCount = 0;
 
-        // für jedes Element in leafs
-        for (int i = 0; i < leafsSize; i++) {
-            Node knoten = (Node) leafs[i].getElement();
-            // vom Node die Liste seiner Elemente holen, die für diesen Node redundant sind
-            List<ElementContainer> redundanceTypes = knoten.getRedundanceTypes(doc);
+        for (ElementContainer ec : allPartContainer) {
+            // Liste der Elemente holen, die für diesen Container redundant sind
+            //#################################
+            //das hier musste dekativiert werden, damit nach dem entfernen der Funktion aus Node keine Fehler entstehen. Bei Raktivierung -> Umschreiben
+            //List<ElementContainer> redundanceTypes = new ArrayList<>(); //knoten.getRedundanceTypes(doc);
+            List<ElementContainer> redundanceTypes = getDifferentRedundanceElements(ec);
+            //#################################
             // Anzahl der Elemente in redundanceTypes holen
-            size = redundanceTypes.size();
+            int size = redundanceTypes.size();
             // wenn es redundante Elemente besitzt
             if (size > 1) {
                 // Gesamtanzahl der redundanten Elemente um die Anzahl des aktuellen Elementes
                 // erhöhen
                 totalRedundanceCount += size - 1;
-                // wenn das aktuelle Element gar Verbindungen zu einem evtl. redundanten Element
-                // besitzt (Untersättigung)
+                // wenn das aktuelle Element gar keine Verbindungen zu einem evtl. redundanten
+                // Element besitzt (Untersättigung)
             } else if (size == 0) {
                 targetTypesWithoutRedundanceType++;
             }
             // Aufgabe: Gesamtanzahl der Konfigs um Anzahl der Konfigs der aktuellen Aufgabe erhöhen
             // Objekttyp:Gesamtanzahl der DBS um Anzahl der DBS des aktuellen Objekttyps erhöhen
             totalRedundanceTypeElemCount += size;
-
             // size auf die Anzahl der redundanten Elemente des aktuellen Elementes setzen
             size--;
             // Aufgaben: in den Containern die Anzahl ihrer redundanten Konfigs setzen
             // Objekttyp:in den Containern die Anzahl ihrer redundanten DBS setzen
-            leafs[i].setVariable(size);
+            NodeContainer nc = (NodeContainer) ec;
+            nc.setVariable(size);
             // Anzahl ihrer redundanten Elemente unten rechts neben den Container schreiben
-            leafs[i].setAdditionalTextRightDown(new Integer(size).toString());
+            nc.setAdditionalTextRightDown(new Integer(size).toString());
         }
-        if (show) {
-            Node knoten;
-            try {
-                knoten = elementClass.newInstance();
-            } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
-                return;
-            }
+        if (showFullSystemResults) {
             // Redundanzfaktor des Gesamtsystems berechen
-            redundanceFak = (float) totalRedundanceCount / (float) totalRedundanceTypeElemCount;
+            float redundanceFak = (float) totalRedundanceCount / (float) totalRedundanceTypeElemCount;
             // Untersättigungsfaktor des Gesamtsystems berechen
-            saturationFak = (float) targetTypesWithoutRedundanceType / (float) leafsSize;
-            String s = knoten.getRedundanceString(redundanceFak, saturationFak);
-            doc.getLayer(ModelConstants.DOMAIN_LAYER).setAdditionalTextAbove(Aufgabe.class, s);
+            float saturationFak = targetTypesWithoutRedundanceType / (float) allPartContainer.size();
+
+            //#################################
+            //das hier musste dekativiert werden, damit nach dem entfernen der Funktion aus Node keine Fehler entstehen. Bei Raktivierung -> Umschreiben
+            String s = getRedundanceString(redundanceFak, saturationFak);
+            //#################################
+            Class<? extends ModelElement> elementClass = metaPath.getStartClass();
+            int layer = ModelConstants.layerFor(elementClass);
+            LayerContainer lc = doc.getLayer(layer);
+            if (lc != null) {
+                lc.setAdditionalTextAbove(this, s);
+            }
         }
     }
 
     /**
-     * @return the redundanceFak
+     * Entfernt die Ausgaben dieser Analyse an den Elementen und am Layer.
      */
-    public float getRedundanceFak() {
-        return redundanceFak;
+    public void removeGraphTexts() {
+        Class<? extends ModelElement> elementClass = metaPath.getStartClass();
+        int layer = ModelConstants.layerFor(elementClass);
+        LayerContainer lc = doc.getLayer(layer);
+        if (lc != null) {
+            lc.removeAdditionalTextAbove(this);
+        }
+        for (ElementContainer ec : getAllAbsolutePartContainer()) {
+            NodeContainer nc = (NodeContainer) ec;
+            nc.setAdditionalTextRightDown(null);
+        }
     }
 
-    /**
-     * @return the saturationFak
-     */
-    public float getSaturationFak() {
-        return saturationFak;
+    private List<ElementContainer> getAllAbsolutePartContainer() {
+        Class<? extends ModelElement> startClass = metaPath.getStartClass();
+        List<ElementContainer> allElemCont = doc.getElementContainer(startClass, true);
+        for (int i = allElemCont.size() - 1; i >= 0; i--) {
+            ElementContainer ec = allElemCont.get(i);
+            ModelElement me = ec.getElement();
+            if (me.hasDirectPartContainer(doc)) {
+                allElemCont.remove(i);
+            }
+        }
+        return allElemCont;
+    }
+
+    private List<ElementContainer> getConnectedInDoc(final ElementContainer ec, final MetaPath metaPath) {
+        List<ElementContainer> connectedElements = new ArrayList<>();
+        ModelElement me = ec.getElement();
+        Set<ModelElement> allConnectedElements = PathFinder.getConnectedElements(me, metaPath);
+        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+        for (ModelElement connected : allConnectedElements) {
+            ElementContainer connectedEc = connected.getContainer(connected.isUnique() ? mainDoc : doc);
+            if (connectedEc != null) {
+                connectedElements.add(connectedEc);
+            }
+        }
+        return connectedElements;
+    }
+
+    private List<ElementContainer> getDifferentRedundanceElements(final ElementContainer ec) {
+        List<ElementContainer> redundantElements = getConnectedInDoc(ec, metaPath);
+        if (pathToDifferences != null) {
+            List<List<ElementContainer>> connectedDifferent = new ArrayList<>(redundantElements.size());
+            for (ElementContainer redundantElement : redundantElements) {
+                connectedDifferent.add(getConnectedInDoc(redundantElement, pathToDifferences));
+            }
+            for (int i = redundantElements.size() - 1; i > 0; i--) {
+                List<ElementContainer> list1 = connectedDifferent.get(i);
+                for (int j = i - 1; j >= 0; j--) {
+                    List<ElementContainer> list2 = connectedDifferent.get(j);
+                    if (isSameSet(list1, list2)) {
+                        redundantElements.remove(i);
+                        break;
+                    }
+                }
+            }
+        }
+        return redundantElements;
+    }
+
+    private boolean isSameSet(final List<?> list1, final List<?> list2) {
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+        return list1.containsAll(list2);
+    }
+
+    private String getRedundanceString(final float redundance, final float saturation) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getDisplayablePluralName(metaPath.getStartClass()));
+        sb.append(" -> ");
+        sb.append(getDisplayablePluralName(metaPath.getEndClass()));
+        sb.append(": ");
+        sb.append(getResString("SIMPLE_REDUNDNANCY_ANALYSIS_redundancy_factor"));
+        sb.append("=");
+        sb.append(new Float(redundance));
+        sb.append("   ");
+        sb.append(getResString("SIMPLE_REDUNDNANCY_ANALYSIS_saturation_factor"));
+        sb.append("=");
+        sb.append(new Float(saturation));
+        return sb.toString();
+    }
+
+    public boolean hasPaths(final MetaPath metaPath, final MetaPath pathToDifferences) {
+        return metaPath.equals(this.metaPath) && pathToDifferences.equals(this.pathToDifferences);
     }
 
 }

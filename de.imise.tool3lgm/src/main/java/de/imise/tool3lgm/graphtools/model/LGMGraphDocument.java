@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.elements.Edge;
 import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
 import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -35,9 +35,6 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
-import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
 
 /**
@@ -117,33 +114,34 @@ public class LGMGraphDocument extends GraphDocument {
         }
     }
 
-    /**
-     * Instanz des Analyzers für die ganz einfache Redundanzanalyse
-     */
-    private SimpleRedundancyAnalysis simpleRedAna = null;
+    private final List<SimpleRedundancyAnalysis> simpleRedundancyAnalysis = new ArrayList<>();
 
     /**
-     * @return Instanz des Analyzers für die ganz einfache Redundanzanalyse
+     * Wenn es bereits eine {@link SimpleRedundancyAnalysis} mit den übergebenen Pfaden gibt, wird diese
+     * entfernt. Ansonsten wird eine neue hinzugefügt. Sobald es sie gibt, wird sie auch ausgeführt.
+     *
+     * @param metaPath
+     * @param pathToDifferences
      */
-    public SimpleRedundancyAnalysis getSimpleRedundancyAnalysis() {
-        if (simpleRedAna == null) {
-            simpleRedAna = new SimpleRedundancyAnalysis(this);
+    public final void switchSimpleRedundancyAnalysisState(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemInfo) {
+        for (int i = simpleRedundancyAnalysis.size() - 1; i >= 0; i--) {
+            SimpleRedundancyAnalysis analyse = simpleRedundancyAnalysis.get(i);
+            if (analyse.hasPaths(metaPath, pathToDifferences)) {
+                analyse.removeGraphTexts();
+                simpleRedundancyAnalysis.remove(i);
+                return;
+            }
         }
-        return simpleRedAna;
+        SimpleRedundancyAnalysis analyse = new SimpleRedundancyAnalysis(metaPath, pathToDifferences, this, showFullSystemInfo);
+        simpleRedundancyAnalysis.add(analyse);
+        analyse.computeRedundancy();
     }
 
     @Override
     public final void distributeEventIntern(final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
         if (bitmask == DATA_CHANGED) {
-            if (UserProperties.isShowDataRedundance() || UserProperties.isShowABKonfigRedundance()) {
-                if (UserProperties.isShowABKonfigRedundance()) {
-                    getSimpleRedundancyAnalysis().computeRedundance(Aufgabe.class, true);
-                }
-                if (UserProperties.isShowDataRedundance()) {
-                    getSimpleRedundancyAnalysis().computeRedundance(Objekttyp.class, false);
-                }
-            } else {
-                simpleRedAna = null;
+            for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
+                redundancyAnalysis.computeRedundancy();
             }
         }
         super.distributeEventIntern(bitmask, last_elem, last_group, pid);
@@ -251,23 +249,6 @@ public class LGMGraphDocument extends GraphDocument {
 
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
-    }
-
-    /**
-     * @param elementClass
-     */
-    public void clearTextRightDown(final Class<? extends Node> elementClass) {
-        List<ElementContainer> elemContainer = getElementContainer(elementClass);
-        for (int i = 0; i < elemContainer.size(); i++) {
-            ((NodeContainer) elemContainer.get(i)).setAdditionalTextRightDown(null);
-        }
-    }
-
-    /**
-     * @param elementClass
-     */
-    public void clearLayerText(final Class<? extends ModelElement> elementClass) {
-        layer[ModelConstants.layerFor(elementClass)].removeAdditionalTextAbove(elementClass);
     }
 
     //	/**
