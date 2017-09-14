@@ -390,6 +390,16 @@ public class MetaPath {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Arrays.deepHashCode(associations);
+        result = prime * result + (endClass == null ? 0 : endClass.hashCode());
+        result = prime * result + (startClass == null ? 0 : startClass.hashCode());
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
