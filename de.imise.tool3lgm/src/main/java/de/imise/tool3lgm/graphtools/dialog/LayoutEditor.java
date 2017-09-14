@@ -22,13 +22,13 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import de.imise.tool3lgm.graphtools.elements.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.log.Log;
 
