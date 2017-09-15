@@ -1,7 +1,7 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.STANDARD_ERROR_INT_VALUE;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isAlwaysDoubleConnectedEdge;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isAlwaysDoubleConnectedEdge;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;

@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
 import de.imise.util.Pair;
 
 /**

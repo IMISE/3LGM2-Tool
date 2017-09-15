@@ -1,7 +1,7 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 
 import java.util.Collection;
 import java.util.HashMap;

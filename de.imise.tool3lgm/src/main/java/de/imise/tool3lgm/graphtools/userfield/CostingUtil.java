@@ -12,8 +12,8 @@ import javax.swing.JOptionPane;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
 

@@ -2,8 +2,8 @@ package de.imise.tool3lgm.graphtools.userfield;
 
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.Node;
 
 public class UserFieldDefinitionsAnalyzer {
 

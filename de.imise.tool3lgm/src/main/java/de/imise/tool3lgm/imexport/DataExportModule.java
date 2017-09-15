@@ -4,11 +4,11 @@
 package de.imise.tool3lgm.imexport;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_EDGES_SET;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES_SET;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isEdgeType;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_EDGES_SET;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isEdgeType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,8 +21,8 @@ import java.util.Set;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;

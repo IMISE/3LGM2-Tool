@@ -1,12 +1,12 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_ELEMENTS_SET;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MAX_LAYER_INDEX;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.MIN_LAYER_INDEX;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.NO_LAYER;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isEdgeType;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.isNodeType;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.layerFor;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_ELEMENTS_SET;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isEdgeType;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isNodeType;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.util.Alphabetical;

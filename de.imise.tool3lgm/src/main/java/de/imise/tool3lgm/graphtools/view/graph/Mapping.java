@@ -6,11 +6,11 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.TextfeldFach;
-import de.imise.tool3lgm.graphtools.elements.TextfeldLog;
-import de.imise.tool3lgm.graphtools.elements.TextfeldPhy;
+import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.TextfeldFach;
+import de.imise.tool3lgm.graphtools.metamodel.TextfeldLog;
+import de.imise.tool3lgm.graphtools.metamodel.TextfeldPhy;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;

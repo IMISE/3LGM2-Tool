@@ -5,7 +5,7 @@
  */
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getClassForName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
 
 import java.io.File;
@@ -21,10 +21,10 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;

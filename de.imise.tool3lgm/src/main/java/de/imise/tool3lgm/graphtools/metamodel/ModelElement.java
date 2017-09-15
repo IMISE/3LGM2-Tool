@@ -1,17 +1,17 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.ANY;
-import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMinStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.ANY;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 
 import java.util.ArrayList;

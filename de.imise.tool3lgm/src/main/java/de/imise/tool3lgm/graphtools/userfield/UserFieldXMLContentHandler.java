@@ -8,7 +8,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle

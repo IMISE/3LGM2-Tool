@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_BACKWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD_AND_BACKWARD;
@@ -14,9 +14,9 @@ import java.util.List;
 import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;

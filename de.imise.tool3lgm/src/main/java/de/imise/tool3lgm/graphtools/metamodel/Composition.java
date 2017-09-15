@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
 /**
  * Eine Komposition im Sinne der Objektortientierung. Das 2. Element bzw. Endelement gilt immer als Untergeordnetes Element (Slave) des 1. bzw.

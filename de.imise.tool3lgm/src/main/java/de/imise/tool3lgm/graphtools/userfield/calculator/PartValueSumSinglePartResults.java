@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**

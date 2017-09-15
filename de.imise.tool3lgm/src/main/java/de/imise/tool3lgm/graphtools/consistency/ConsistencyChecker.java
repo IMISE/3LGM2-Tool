@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getMinStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,10 +27,10 @@ import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;

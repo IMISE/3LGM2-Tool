@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
 import org.apache.commons.lang3.tuple.Triple;
 

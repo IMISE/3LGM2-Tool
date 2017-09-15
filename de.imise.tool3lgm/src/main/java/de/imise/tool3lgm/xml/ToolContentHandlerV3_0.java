@@ -3,8 +3,8 @@
  */
 package de.imise.tool3lgm.xml;
 
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.createElement;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getClassForName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.createElement;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -20,10 +20,10 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;

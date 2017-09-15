@@ -9,7 +9,7 @@ import mockit.MockUp;
 
 import org.testng.annotations.Test;
 
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 
 public class NodeLineTest {
 

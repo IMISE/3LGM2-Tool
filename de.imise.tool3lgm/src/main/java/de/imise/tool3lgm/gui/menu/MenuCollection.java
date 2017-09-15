@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.gui.menu;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.DOMAIN_LAYER;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.LOGICAL_LAYER;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.PHYSICAL_LAYER;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

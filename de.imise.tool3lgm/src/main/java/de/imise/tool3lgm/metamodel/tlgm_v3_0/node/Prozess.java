@@ -3,8 +3,8 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.process.LGMProzessStep;
 import de.imise.tool3lgm.graphtools.analyse.process.ProzessStructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;

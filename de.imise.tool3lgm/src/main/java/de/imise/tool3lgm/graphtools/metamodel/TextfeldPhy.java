@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
 public final class TextfeldPhy extends Textfeld {
 

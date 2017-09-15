@@ -3,16 +3,14 @@ package de.imise.tool3lgm.graphtools.view.container;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 /**
- * Von {@link NodeContainer} abgeleitete Klasse, die den Container für {@link Aufgabe}n
- * und {@link Anwendungsbaustein}e darstellt.
+ * Von {@link NodeContainer} abgeleitete Klasse, die der Container für Elemente ist,
+ * die in der Mehrebenenansicht Verbindungen zwischen den Ebenen anzeigen.
  * <p>
  * Im Unterschied zur Oberklasse kann hier das Anzeigen der Interebenenbeziehungen gesteurt werden.
  *

@@ -1,15 +1,15 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 
 import java.util.List;
 import java.util.Vector;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.NamedObjectContainer;

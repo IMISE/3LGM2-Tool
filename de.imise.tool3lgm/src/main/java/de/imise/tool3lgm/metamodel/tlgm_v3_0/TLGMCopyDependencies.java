@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
-import de.imise.tool3lgm.graphtools.elements.CopyDependencies;
+import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsprogramm;

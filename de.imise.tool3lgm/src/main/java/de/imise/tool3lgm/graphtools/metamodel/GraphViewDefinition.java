@@ -1,6 +1,6 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,6 +1,6 @@
-package de.imise.tool3lgm.graphtools.elements;
+package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 
 import java.util.Map;
 import java.util.Set;

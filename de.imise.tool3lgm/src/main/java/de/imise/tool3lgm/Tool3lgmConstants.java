@@ -22,8 +22,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.StaticAction;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;

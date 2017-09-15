@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.matrixview;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.NOTCONNECTED;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.NOTCONNECTED;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Node;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;

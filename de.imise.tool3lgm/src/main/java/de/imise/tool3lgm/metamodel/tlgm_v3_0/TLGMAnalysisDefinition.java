@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.elements.AnalysisDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;

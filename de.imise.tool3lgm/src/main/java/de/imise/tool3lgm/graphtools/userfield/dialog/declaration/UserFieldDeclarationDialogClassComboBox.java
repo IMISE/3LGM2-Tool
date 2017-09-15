@@ -1,16 +1,16 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_EDGES;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getFullForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_EDGES;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 

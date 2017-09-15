@@ -3,11 +3,11 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.elements.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.elements.Edge.NOTCONNECTED;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.NOTCONNECTED;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartOrEndClass;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -18,8 +18,8 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;

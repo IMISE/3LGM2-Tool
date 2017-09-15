@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getSlaveElementTypes;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getSortedEdgeClasses;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSlaveElementTypes;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSortedEdgeClasses;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
 
 import java.awt.Color;
@@ -20,9 +20,9 @@ import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.elements.Composition;
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;

@@ -5,7 +5,7 @@ import java.awt.event.FocusListener;
 
 import javax.swing.text.JTextComponent;
 
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.swing.component.text.NumberTextField;
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 
 /**
  * Speichert die Hashes aller Elemente während des Imports. Damit können Widersprüche bei der Verwendung der Hashes erkannt werden.

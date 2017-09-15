@@ -2,9 +2,9 @@ package de.imise.tool3lgm.graphtools.consistency;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_ELEMENTS_SET;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.ALL_NODES_SET;
-import static de.imise.tool3lgm.graphtools.elements.ModelConstants.getInitialSubtypes;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_ELEMENTS_SET;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.createTransactionId;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
@@ -23,11 +23,11 @@ import javax.swing.JOptionPane;
 
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;

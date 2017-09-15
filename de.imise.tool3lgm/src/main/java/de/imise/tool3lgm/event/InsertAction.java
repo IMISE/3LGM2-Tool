@@ -3,8 +3,8 @@ package de.imise.tool3lgm.event;
 import java.awt.event.ActionEvent;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.elements.ModelConstants;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 
 /**
  * Von {@link AbstractLGMAction} abgeleitete Klasse zum Einfügen von {@link ModelElement}en in die 3

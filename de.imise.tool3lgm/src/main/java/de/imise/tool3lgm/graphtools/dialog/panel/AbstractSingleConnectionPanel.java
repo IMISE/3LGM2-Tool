@@ -10,7 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
 
 /**
  * Abtsractes Panel für Verbindungen mit einer Maximalen Verbindungsanzahl von 1.

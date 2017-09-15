@@ -3,14 +3,14 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.elements.Edge.getOther;
-import static de.imise.tool3lgm.graphtools.elements.Edge.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartOrEndClass;
 
 import java.awt.Color;
 import java.util.Arrays;
 
-import de.imise.tool3lgm.graphtools.elements.Edge;
-import de.imise.tool3lgm.graphtools.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 
 /**
  * @author Thomas Rudert
