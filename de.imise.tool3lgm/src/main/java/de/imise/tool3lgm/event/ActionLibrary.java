@@ -30,10 +30,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
-import org.apache.commons.lang3.tuple.Triple;
-
-import com.google.common.collect.ImmutableList;
-
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -45,6 +41,8 @@ import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.process.DataAvailabilityFinder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyChecker;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.dialog.EinstellungDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
@@ -1552,28 +1550,26 @@ public class ActionLibrary {
             public static final Action[] create_SIMPLE_REDUNDANCIES_Actions() {
                 //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
                 AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
-                final ImmutableList<Triple<MetaPath, MetaPath, Boolean>> simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinition();
+                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinition();
                 //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
                 Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
-                    final Triple<MetaPath, MetaPath, Boolean> singleSimpleRedundancyAnalysisDefinition = simpleRedundancyAnalysisDefinition.get(i);
-                    MetaPath metaPath = singleSimpleRedundancyAnalysisDefinition.getLeft();
-                    MetaPath pathToDifferences = singleSimpleRedundancyAnalysisDefinition.getMiddle();
-                    boolean showFullSystemResult = singleSimpleRedundancyAnalysisDefinition.getRight();
+                    SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
                     StaticAction action = new StaticAction(ActionIdentifier.SIMPLE_REDUNDNANCY_ANALYSIS) {
                         @Override
                         public void actionPerformed(final ActionEvent e) {
                             for (GDCollection gdcoll : getTool().getCollections()) {
-                                gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(metaPath, pathToDifferences, showFullSystemResult);
+                                gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
                                 for (Szenario szenario : gdcoll.getSzenarios()) {
-                                    szenario.switchSimpleRedundancyAnalysisState(metaPath, pathToDifferences, showFullSystemResult);
+                                    szenario.switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
                                 }
                             }
                             distributeElementGraphicsChanged();
                         }
                     };
                     String resKey = ActionIdentifier.SIMPLE_REDUNDNANCY_ANALYSIS.name();
+                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
                     String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
                     String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
                     String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);

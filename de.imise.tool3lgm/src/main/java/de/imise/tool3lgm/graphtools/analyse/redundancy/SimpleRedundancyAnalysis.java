@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -30,18 +31,8 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
  */
 public class SimpleRedundancyAnalysis {
 
-    /**
-     * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
-     * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
-     * die potenziell redundanten Elemente.
-     */
-    private final MetaPath metaPath;
-
-    /**
-     * Wird hier ein gültiger Pfad angegeben, müssen sich die über den metaPath verbundenen Elemente in den über diesen
-     * Pfad verbundenen Elementen unterscheiden, um nicht als dasselbe Element zu gelten.
-     */
-    private final MetaPath pathToDifferences;
+    /** Die Definition dieser Analyse */
+    private final SingleSimpleRedundancyAnalysisDefinition definition;
 
     /**
      * Das Teilmodell, dessen Redundanz ausgerechnet werden soll
@@ -49,30 +40,12 @@ public class SimpleRedundancyAnalysis {
     private final GraphDocument doc;
 
     /**
-     * Wenn <code>true</code>, dann wird das Gesamtergebnis oben an den Layer geschrieben.
-     */
-    private final boolean showFullSystemResults;
-
-    /**
-     * @param metaPath
-     * @param pathToDifferences
+     * @param definition
      * @param doc
      */
-    public SimpleRedundancyAnalysis(final MetaPath metaPath, final MetaPath pathToDifferences, final GraphDocument doc) {
-        this(metaPath, pathToDifferences, doc, true);
-    }
-
-    /**
-     * @param metaPath
-     * @param pathToDifferences
-     * @param doc
-     * @param showFullSystemResults
-     */
-    public SimpleRedundancyAnalysis(final MetaPath metaPath, final MetaPath pathToDifferences, final GraphDocument doc, final boolean showFullSystemResults) {
-        this.metaPath = metaPath;
-        this.pathToDifferences = pathToDifferences;
+    public SimpleRedundancyAnalysis(final SingleSimpleRedundancyAnalysisDefinition definition, final GraphDocument doc) {
+        this.definition = definition;
         this.doc = doc;
-        this.showFullSystemResults = showFullSystemResults;
     }
 
     public void computeRedundancy() {
@@ -123,7 +96,7 @@ public class SimpleRedundancyAnalysis {
             // Anzahl ihrer redundanten Elemente unten rechts neben den Container schreiben
             nc.setAdditionalTextRightDown(new Integer(size).toString());
         }
-        if (showFullSystemResults) {
+        if (definition.isShowFullSystemResults()) {
             // Redundanzfaktor des Gesamtsystems berechen
             float redundanceFak = (float) totalRedundanceCount / (float) totalRedundanceTypeElemCount;
             // Untersättigungsfaktor des Gesamtsystems berechen
@@ -133,6 +106,7 @@ public class SimpleRedundancyAnalysis {
             //das hier musste dekativiert werden, damit nach dem entfernen der Funktion aus Node keine Fehler entstehen. Bei Raktivierung -> Umschreiben
             String s = getRedundanceString(redundanceFak, saturationFak);
             //#################################
+            MetaPath metaPath = definition.getMetaPath();
             Class<? extends ModelElement> elementClass = metaPath.getStartClass();
             int layer = ModelConstants.layerFor(elementClass);
             LayerContainer lc = doc.getLayer(layer);
@@ -146,6 +120,7 @@ public class SimpleRedundancyAnalysis {
      * Entfernt die Ausgaben dieser Analyse an den Elementen und am Layer.
      */
     public void removeGraphTexts() {
+        MetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> elementClass = metaPath.getStartClass();
         int layer = ModelConstants.layerFor(elementClass);
         LayerContainer lc = doc.getLayer(layer);
@@ -159,6 +134,7 @@ public class SimpleRedundancyAnalysis {
     }
 
     private List<ElementContainer> getAllAbsolutePartContainer() {
+        MetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> startClass = metaPath.getStartClass();
         List<ElementContainer> allElemCont = doc.getElementContainer(startClass, true);
         for (int i = allElemCont.size() - 1; i >= 0; i--) {
@@ -186,6 +162,8 @@ public class SimpleRedundancyAnalysis {
     }
 
     private List<ElementContainer> getDifferentRedundanceElements(final ElementContainer ec) {
+        MetaPath metaPath = definition.getMetaPath();
+        MetaPath pathToDifferences = definition.getPathToDifferences();
         List<ElementContainer> redundantElements = getConnectedInDoc(ec, metaPath);
         if (pathToDifferences != null) {
             List<List<ElementContainer>> connectedDifferent = new ArrayList<>(redundantElements.size());
@@ -214,6 +192,7 @@ public class SimpleRedundancyAnalysis {
     }
 
     private String getRedundanceString(final float redundance, final float saturation) {
+        MetaPath metaPath = definition.getMetaPath();
         StringBuilder sb = new StringBuilder();
         sb.append(getDisplayablePluralName(metaPath.getStartClass()));
         sb.append(" -> ");
@@ -229,8 +208,8 @@ public class SimpleRedundancyAnalysis {
         return sb.toString();
     }
 
-    public boolean hasPaths(final MetaPath metaPath, final MetaPath pathToDifferences) {
-        return metaPath.equals(this.metaPath) && pathToDifferences.equals(this.pathToDifferences);
+    public boolean hasDefinition(final SingleSimpleRedundancyAnalysisDefinition definition) {
+        return this.definition.equals(definition);
     }
 
 }

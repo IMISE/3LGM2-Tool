@@ -232,12 +232,9 @@ public class RedundancyChecker extends WindowAdapter {
                     Integer maxStartToEndCard = new Integer(getMaxStartToEndCardinality(edgeClass));
                     Integer minEndToStartCard = new Integer(getMinEndToStartCardinality(edgeClass));
                     Integer maxEndToStartCard = new Integer(getMaxEndToStartCardinality(edgeClass));
-                    // um korrekte Redundanzanalysen zu liefern, darf einer
-                    // Anwendungsbausteinkonfiguration immer nur ein
-                    // Anwendungsbaustein zugeordnet sein. Sind es mehr als einer, bedeutet das,
-                    // dass die alle in einer
-                    // KonfigurationAWB gleichzeitig gebraucht werden. Die Redundanzanalyse würde
-                    // aber davon ausgehen, dass
+                    // um korrekte Redundanzanalysen zu liefern, darf einer Anwendungsbausteinkonfiguration immer nur ein
+                    // Anwendungsbaustein zugeordnet sein. Sind es mehr als einer, bedeutet das, dass die alle in einer
+                    // KonfigurationAWB gleichzeitig gebraucht werden. Die Redundanzanalyse würde aber davon ausgehen, dass
                     // man jeweils nur einen in einer Konfiguration braucht.
                     if (edgeClass == AwbAwbkVerbindung.class) {
                         if (Anwendungsbaustein.class.isAssignableFrom(getStartClass(edgeClass))) {

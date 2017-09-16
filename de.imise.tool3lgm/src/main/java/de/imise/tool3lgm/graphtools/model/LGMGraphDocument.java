@@ -20,12 +20,12 @@ import javax.swing.JOptionPane;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -120,19 +120,18 @@ public class LGMGraphDocument extends GraphDocument {
      * Wenn es bereits eine {@link SimpleRedundancyAnalysis} mit den übergebenen Pfaden gibt, wird diese
      * entfernt. Ansonsten wird eine neue hinzugefügt. Sobald es sie gibt, wird sie auch ausgeführt.
      *
-     * @param metaPath
-     * @param pathToDifferences
+     * @param singleSimpleRedundancyDefinition
      */
-    public final void switchSimpleRedundancyAnalysisState(final MetaPath metaPath, final MetaPath pathToDifferences, final boolean showFullSystemInfo) {
+    public final void switchSimpleRedundancyAnalysisState(final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition) {
         for (int i = simpleRedundancyAnalysis.size() - 1; i >= 0; i--) {
             SimpleRedundancyAnalysis analyse = simpleRedundancyAnalysis.get(i);
-            if (analyse.hasPaths(metaPath, pathToDifferences)) {
+            if (analyse.hasDefinition(singleSimpleRedundancyDefinition)) {
                 analyse.removeGraphTexts();
                 simpleRedundancyAnalysis.remove(i);
                 return;
             }
         }
-        SimpleRedundancyAnalysis analyse = new SimpleRedundancyAnalysis(metaPath, pathToDifferences, this, showFullSystemInfo);
+        SimpleRedundancyAnalysis analyse = new SimpleRedundancyAnalysis(singleSimpleRedundancyDefinition, this);
         simpleRedundancyAnalysis.add(analyse);
         analyse.computeRedundancy();
     }
