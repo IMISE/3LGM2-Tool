@@ -58,7 +58,7 @@ import de.imise.util.swing.dialog.ProgressDialog;
  *
  * @author AXS
  */
-public class RedundancyChecker extends WindowAdapter {
+public class RedundancyAnalysis extends WindowAdapter {
 
     /**
      * Konstante für die Einstellung des Benutzers nur Anwendungssysteme zu analysieren
@@ -93,7 +93,7 @@ public class RedundancyChecker extends WindowAdapter {
     /**
      * Konstruktor, um eine Instanz des Checkers mit eigenem <code>RedundancyThread</code> zu haben.
      */
-    private RedundancyChecker() {
+    private RedundancyAnalysis() {
         super();
     }
 
@@ -107,7 +107,7 @@ public class RedundancyChecker extends WindowAdapter {
 
         // Instanz des Checkers anlegen, der einen eigenen RedundancyThread
         // besitzt
-        RedundancyChecker rc = new RedundancyChecker();
+        RedundancyAnalysis rc = new RedundancyAnalysis();
 
         // Liste in die alle zu füllenden RedundancyAnalysisResult kommen
         List<RedundancyAnalysisResult> resultList = new ArrayList<>();
@@ -571,7 +571,7 @@ public class RedundancyChecker extends WindowAdapter {
             // Originalwert wieder herstellen
             UserProperties.setSearchParents(searchParents);
 
-            RedundancyChecker.showResult(resultList);
+            RedundancyAnalysis.showResult(resultList);
         }
 
         @Override
