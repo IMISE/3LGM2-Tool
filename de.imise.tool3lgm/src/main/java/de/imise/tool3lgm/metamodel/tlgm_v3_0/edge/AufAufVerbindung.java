@@ -20,15 +20,4 @@ public final class AufAufVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
-    public AufAufVerbindung() {
-    }
-
-    public AufAufVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public AufAufVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

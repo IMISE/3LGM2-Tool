@@ -22,15 +22,4 @@ public final class PdvbStoVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Standort.class;
 
-    public PdvbStoVerbindung() {
-    }
-
-    public PdvbStoVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public PdvbStoVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

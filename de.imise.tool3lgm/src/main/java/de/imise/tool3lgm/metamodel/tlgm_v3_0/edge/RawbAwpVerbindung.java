@@ -19,15 +19,4 @@ public final class RawbAwpVerbindung extends Composition {
 
     public static final Class<? extends ModelElement> etcl = Anwendungsprogramm.class;
 
-    public RawbAwpVerbindung() {
-    }
-
-    public RawbAwpVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public RawbAwpVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

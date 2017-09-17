@@ -21,15 +21,4 @@ public final class AwbKawbVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> etcl = KonAnwendungsbaustein.class;
 
-    public AwbKawbVerbindung() {
-    }
-
-    public AwbKawbVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public AwbKawbVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

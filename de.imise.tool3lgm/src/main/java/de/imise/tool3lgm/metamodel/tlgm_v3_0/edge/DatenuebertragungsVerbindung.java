@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 
 public final class DatenuebertragungsVerbindung extends Edge {
@@ -17,12 +16,5 @@ public final class DatenuebertragungsVerbindung extends Edge {
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
     public static final Class<? extends ModelElement> etcl = PhysischerDVBaustein.class;
-
-    public DatenuebertragungsVerbindung() {
-    }
-
-    public DatenuebertragungsVerbindung(final Node k1, final Node k2) {
-        super(k1, k2);
-    }
 
 }

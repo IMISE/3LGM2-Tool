@@ -19,15 +19,4 @@ public final class AwbKommssVerbindung extends Composition {
 
     public static final Class<? extends ModelElement> etcl = Schnittstelle.class;
 
-    public AwbKommssVerbindung() {
-    }
-
-    public AwbKommssVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public AwbKommssVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

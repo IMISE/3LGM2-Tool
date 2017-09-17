@@ -21,15 +21,4 @@ public final class SubnNetzpVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Netzprotokoll.class;
 
-    public SubnNetzpVerbindung() {
-    }
-
-    public SubnNetzpVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public SubnNetzpVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

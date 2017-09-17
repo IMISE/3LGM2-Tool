@@ -21,15 +21,4 @@ public final class PdvbSubnVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Subnetz.class;
 
-    public PdvbSubnVerbindung() {
-    }
-
-    public PdvbSubnVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public PdvbSubnVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

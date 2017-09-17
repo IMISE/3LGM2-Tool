@@ -22,16 +22,4 @@ public final class PdvbBtypVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Bausteintyp.class;
 
-    public PdvbBtypVerbindung() {
-        super();
-    }
-
-    public PdvbBtypVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public PdvbBtypVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

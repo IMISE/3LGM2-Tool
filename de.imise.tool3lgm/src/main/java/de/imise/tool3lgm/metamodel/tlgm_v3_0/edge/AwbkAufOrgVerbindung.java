@@ -22,15 +22,4 @@ public final class AwbkAufOrgVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = ABKonfiguration.class;
 
-    public AwbkAufOrgVerbindung() {
-    }
-
-    public AwbkAufOrgVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public AwbkAufOrgVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

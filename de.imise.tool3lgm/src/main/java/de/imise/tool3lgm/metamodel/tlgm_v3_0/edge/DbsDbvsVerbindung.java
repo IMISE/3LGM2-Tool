@@ -22,15 +22,4 @@ public final class DbsDbvsVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = DBVerwaltungssystem.class;
 
-    public DbsDbvsVerbindung() {
-    }
-
-    public DbsDbvsVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public DbsDbvsVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

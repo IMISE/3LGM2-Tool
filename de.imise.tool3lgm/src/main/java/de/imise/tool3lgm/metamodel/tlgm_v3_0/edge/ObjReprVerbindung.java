@@ -21,15 +21,4 @@ public final class ObjReprVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Repraesentationsform.class;
 
-    public ObjReprVerbindung() {
-    }
-
-    public ObjReprVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public ObjReprVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

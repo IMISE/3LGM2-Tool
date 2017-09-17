@@ -22,15 +22,4 @@ public final class PdvbPdvbkVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = DBKonfiguration.class;
 
-    public PdvbPdvbkVerbindung() {
-    }
-
-    public PdvbPdvbkVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public PdvbPdvbkVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

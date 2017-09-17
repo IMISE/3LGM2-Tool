@@ -22,15 +22,4 @@ public final class EtntKommstVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Kommunikationsstandard.class;
 
-    public EtntKommstVerbindung() {
-    }
-
-    public EtntKommstVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public EtntKommstVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

@@ -20,15 +20,4 @@ public final class ObjObjVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> etcl = Objekttyp.class;
 
-    public ObjObjVerbindung() {
-    }
-
-    public ObjObjVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public ObjObjVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

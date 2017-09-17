@@ -20,15 +20,4 @@ public final class OrgOrgVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> etcl = Organisationseinheit.class;
 
-    public OrgOrgVerbindung() {
-    }
-
-    public OrgOrgVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public OrgOrgVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

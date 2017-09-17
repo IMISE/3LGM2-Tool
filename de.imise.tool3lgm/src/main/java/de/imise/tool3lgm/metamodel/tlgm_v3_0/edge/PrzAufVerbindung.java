@@ -23,15 +23,4 @@ public final class PrzAufVerbindung extends Edge implements SortedEdge, Multiple
 
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
-    public PrzAufVerbindung() {
-    }
-
-    public PrzAufVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public PrzAufVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

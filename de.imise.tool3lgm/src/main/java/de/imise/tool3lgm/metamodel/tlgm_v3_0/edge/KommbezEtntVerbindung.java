@@ -20,15 +20,4 @@ public final class KommbezEtntVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = EtntEtdtKombination.class;
 
-    public KommbezEtntVerbindung() {
-    }
-
-    public KommbezEtntVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public KommbezEtntVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

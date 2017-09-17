@@ -20,15 +20,4 @@ public final class RawbRawbVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> etcl = RechAnwendungsbaustein.class;
 
-    public RawbRawbVerbindung() {
-    }
-
-    public RawbRawbVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public RawbRawbVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

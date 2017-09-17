@@ -21,15 +21,4 @@ public final class EtAufVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Aufgabe.class;
 
-    public EtAufVerbindung() {
-    }
-
-    public EtAufVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public EtAufVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

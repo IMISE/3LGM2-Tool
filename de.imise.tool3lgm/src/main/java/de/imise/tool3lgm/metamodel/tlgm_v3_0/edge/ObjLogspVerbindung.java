@@ -22,15 +22,4 @@ public final class ObjLogspVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = LogischerSpeicher.class;
 
-    public ObjLogspVerbindung() {
-    }
-
-    public ObjLogspVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public ObjLogspVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

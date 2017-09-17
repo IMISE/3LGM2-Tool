@@ -22,15 +22,4 @@ public final class AufAufOrgVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = AufOrgKombination.class;
 
-    public AufAufOrgVerbindung() {
-    }
-
-    public AufAufOrgVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public AufAufOrgVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

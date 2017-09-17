@@ -21,13 +21,6 @@ public final class KommBeziehung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
 
-    public KommBeziehung() {
-    }
-
-    public KommBeziehung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

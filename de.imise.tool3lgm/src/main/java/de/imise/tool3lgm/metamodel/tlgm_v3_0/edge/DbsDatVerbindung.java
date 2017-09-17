@@ -21,15 +21,4 @@ public final class DbsDatVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Datensatztyp.class;
 
-    public DbsDatVerbindung() {
-    }
-
-    public DbsDatVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public DbsDatVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

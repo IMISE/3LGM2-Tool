@@ -9,18 +9,6 @@ import de.imise.tool3lgm.log.Log;
  */
 public abstract class PartOfBeziehung extends Edge {
 
-    public PartOfBeziehung() {
-        super();
-    }
-
-    public PartOfBeziehung(final ModelElement part, final ModelElement parent) {
-        super(part, parent);
-    }
-
-    public PartOfBeziehung(final ModelElement part, final ModelElement parent, final boolean registerInKnots) {
-        super(part, parent, registerInKnots);
-    }
-
     /**
      * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
      *

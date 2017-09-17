@@ -91,30 +91,6 @@ public abstract class Edge extends ModelElement {
             "BACKWARD"
     };
 
-    /**
-     *
-     */
-    public Edge() {
-    }
-
-    /**
-     * @param knot1
-     * @param knot2
-     */
-    public Edge(final ModelElement knot1, final ModelElement knot2) {
-        this(knot1, knot2, true);
-    }
-
-    /**
-     * @param knot1
-     * @param knot2
-     * @param registerInKnots
-     */
-    public Edge(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super();
-        setKnots(knot1, knot2, registerInKnots);
-    }
-
     @Override
     public final Edge clone() {
         Edge retVal = (Edge) super.clone();

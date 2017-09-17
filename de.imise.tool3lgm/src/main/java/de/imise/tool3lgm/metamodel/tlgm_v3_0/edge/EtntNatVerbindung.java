@@ -22,15 +22,4 @@ public final class EtntNatVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Nachrichtentyp.class;
 
-    public EtntNatVerbindung() {
-    }
-
-    public EtntNatVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public EtntNatVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

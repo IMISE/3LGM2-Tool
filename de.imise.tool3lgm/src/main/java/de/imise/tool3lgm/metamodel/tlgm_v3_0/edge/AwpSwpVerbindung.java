@@ -22,28 +22,4 @@ public final class AwpSwpVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Softwareprodukt.class;
 
-    /**
-     *
-     */
-    public AwpSwpVerbindung() {
-        super();
-    }
-
-    /**
-     * @param knot1
-     * @param knot2
-     */
-    public AwpSwpVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    /**
-     * @param knot1
-     * @param knot2
-     * @param registerInKnots
-     */
-    public AwpSwpVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

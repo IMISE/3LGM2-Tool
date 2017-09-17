@@ -21,15 +21,4 @@ public final class DoksDokVerbindung extends Edge {
 
     public static final Class<? extends ModelElement> etcl = Dokumententyp.class;
 
-    public DoksDokVerbindung() {
-    }
-
-    public DoksDokVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public DoksDokVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }

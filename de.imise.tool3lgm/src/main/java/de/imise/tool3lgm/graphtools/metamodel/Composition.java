@@ -22,29 +22,6 @@ public abstract class Composition extends Edge {
     public static final EdgeCardinality scard = ONE_ONE;
 
     /**
-     *
-     */
-    public Composition() {
-    }
-
-    /**
-     * @param knot1
-     * @param knot2
-     */
-    public Composition(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    /**
-     * @param knot1
-     * @param knot2
-     * @param registerInKnots
-     */
-    public Composition(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
-    /**
      * Liefert das ModelElement, von dem das andere abhängt.
      *
      * @return Masterelement der Komposition

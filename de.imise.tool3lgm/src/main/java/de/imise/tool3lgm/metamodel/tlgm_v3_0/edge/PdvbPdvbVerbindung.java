@@ -20,15 +20,4 @@ public class PdvbPdvbVerbindung extends PartOfBeziehung {
 
     public static final Class<? extends ModelElement> etcl = PhysischerDVBaustein.class;
 
-    public PdvbPdvbVerbindung() {
-    }
-
-    public PdvbPdvbVerbindung(final ModelElement k1, final ModelElement k2) {
-        super(k1, k2);
-    }
-
-    public PdvbPdvbVerbindung(final ModelElement k1, final ModelElement k2, final boolean registerInKnots) {
-        super(k1, k2, registerInKnots);
-    }
-
 }

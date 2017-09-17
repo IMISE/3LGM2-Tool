@@ -19,15 +19,4 @@ public final class RawbDbsVerbindung extends Composition {
 
     public static final Class<? extends ModelElement> etcl = Datenbanksystem.class;
 
-    public RawbDbsVerbindung() {
-    }
-
-    public RawbDbsVerbindung(final ModelElement knot1, final ModelElement knot2) {
-        super(knot1, knot2);
-    }
-
-    public RawbDbsVerbindung(final ModelElement knot1, final ModelElement knot2, final boolean registerInKnots) {
-        super(knot1, knot2, registerInKnots);
-    }
-
 }
