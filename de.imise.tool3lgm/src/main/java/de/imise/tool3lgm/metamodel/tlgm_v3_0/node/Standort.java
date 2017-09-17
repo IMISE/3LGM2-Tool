@@ -6,13 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbStoVerbindung;
 
 public final class Standort extends Node {
 
-    /**
-     *
-     */
-    public Standort() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

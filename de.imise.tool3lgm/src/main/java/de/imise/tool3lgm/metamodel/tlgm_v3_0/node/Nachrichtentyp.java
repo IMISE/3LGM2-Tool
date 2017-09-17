@@ -6,10 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
 
 public final class Nachrichtentyp extends Repraesentationsform {
 
-    public Nachrichtentyp() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

@@ -6,10 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
 
 public final class Dokumentensammlung extends LogischerSpeicher {
 
-    public Dokumentensammlung() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

@@ -6,10 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbBtypVerbindung;
 
 public final class Bausteintyp extends Node {
 
-    public Bausteintyp() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

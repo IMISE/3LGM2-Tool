@@ -12,13 +12,6 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 public abstract class Node extends ModelElement {
 
     /**
-     *
-     */
-    public Node() {
-        super();
-    }
-
-    /**
      * @param classesToShow
      * @return
      */

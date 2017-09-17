@@ -6,10 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbOrgpVerbindung;
 
 public final class Organisationsplan extends Node {
 
-    public Organisationsplan() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

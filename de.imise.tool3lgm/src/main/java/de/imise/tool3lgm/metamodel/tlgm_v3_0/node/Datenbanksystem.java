@@ -8,10 +8,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbDbsVerbindung;
 
 public final class Datenbanksystem extends LogischerSpeicher {
 
-    public Datenbanksystem() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

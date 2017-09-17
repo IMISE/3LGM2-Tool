@@ -12,10 +12,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SwpAufVerbindung;
  */
 public final class Softwareprodukt extends Node {
 
-    public Softwareprodukt() {
-        super();
-    }
-
     @Override
     public void setName(final String name) {
         super.setName(name);

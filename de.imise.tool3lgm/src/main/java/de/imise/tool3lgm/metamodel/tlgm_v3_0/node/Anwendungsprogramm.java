@@ -7,13 +7,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbAwpVerbindung;
 
 public final class Anwendungsprogramm extends Node {
 
-    /**
-     *
-     */
-    public Anwendungsprogramm() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

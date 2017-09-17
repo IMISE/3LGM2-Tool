@@ -14,10 +14,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbDbsVerbindung;
 
 public final class RechAnwendungsbaustein extends Anwendungsbaustein {
 
-    public RechAnwendungsbaustein() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

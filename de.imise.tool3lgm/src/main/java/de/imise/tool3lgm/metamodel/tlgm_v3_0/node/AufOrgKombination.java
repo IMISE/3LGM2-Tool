@@ -13,13 +13,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
  */
 public class AufOrgKombination extends Node {
 
-    /**
-     *
-     */
-    public AufOrgKombination() {
-        super();
-    }
-
     @Override
     public String toString() {
         StringBuilder retVal = new StringBuilder(Tool3lgmConstants.getResString("in_oes"));

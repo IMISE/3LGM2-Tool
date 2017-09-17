@@ -6,10 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SubnNetzpVerbindung;
 
 public final class Netzprotokoll extends Node {
 
-    public Netzprotokoll() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

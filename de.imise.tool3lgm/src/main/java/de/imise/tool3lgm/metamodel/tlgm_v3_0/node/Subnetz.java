@@ -8,10 +8,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SubnNetztVerbindung;
 
 public final class Subnetz extends Node {
 
-    public Subnetz() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

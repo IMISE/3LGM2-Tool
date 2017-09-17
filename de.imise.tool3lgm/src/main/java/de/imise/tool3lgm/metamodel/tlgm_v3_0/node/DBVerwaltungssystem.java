@@ -6,13 +6,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDbvsVerbindung;
 
 public final class DBVerwaltungssystem extends Node {
 
-    /**
-     *
-     */
-    public DBVerwaltungssystem() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

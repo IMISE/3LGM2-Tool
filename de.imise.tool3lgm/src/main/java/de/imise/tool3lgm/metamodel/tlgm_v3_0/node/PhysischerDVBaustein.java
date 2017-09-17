@@ -10,10 +10,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbkAwbVerbindung;
 
 public class PhysischerDVBaustein extends Node {
 
-    public PhysischerDVBaustein() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

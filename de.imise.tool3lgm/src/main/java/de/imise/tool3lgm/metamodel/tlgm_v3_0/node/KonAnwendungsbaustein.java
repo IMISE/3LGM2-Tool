@@ -12,10 +12,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbkAwbVerbindung;
 
 public final class KonAnwendungsbaustein extends Anwendungsbaustein {
 
-    public KonAnwendungsbaustein() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

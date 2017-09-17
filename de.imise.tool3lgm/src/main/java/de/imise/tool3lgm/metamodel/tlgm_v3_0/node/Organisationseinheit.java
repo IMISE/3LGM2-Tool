@@ -7,10 +7,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
 
 public final class Organisationseinheit extends Node {
 
-    public Organisationseinheit() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

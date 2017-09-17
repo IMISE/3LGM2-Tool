@@ -8,13 +8,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 
 public final class Bausteinschnittstelle extends Schnittstelle {
 
-    /**
-     *
-     */
-    public Bausteinschnittstelle() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

@@ -7,10 +7,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntEtVerbindung;
 
 public final class Ereignistyp extends Node {
 
-    public Ereignistyp() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

@@ -8,13 +8,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
 
 public class Objekttyp extends Node {
 
-    /**
-     *
-     */
-    public Objekttyp() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();

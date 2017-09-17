@@ -15,13 +15,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntKommstVerbindung;
  */
 public abstract class EtntEtdtKombination extends Node {
 
-    /**
-     *
-     */
-    public EtntEtdtKombination() {
-        super();
-    }
-
     @Override
     public String getName() {
         String name = "";

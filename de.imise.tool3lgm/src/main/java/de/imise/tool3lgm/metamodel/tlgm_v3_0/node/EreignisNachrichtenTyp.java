@@ -8,10 +8,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntNatVerbindung;
  */
 public final class EreignisNachrichtenTyp extends EtntEtdtKombination {
 
-    public EreignisNachrichtenTyp() {
-        super();
-    }
-
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
