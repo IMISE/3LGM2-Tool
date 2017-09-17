@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_ONE;
+
 /**
  * Eine Komposition im Sinne der Objektortientierung. Das 2. Element bzw. Endelement gilt immer als Untergeordnetes Element (Slave) des 1. bzw.
  * Startelementes (Master). Diese Tatsache kann aber weitestgehend unberücksichtigt bleiben, wenn man die
@@ -17,10 +19,7 @@ public abstract class Composition extends Edge {
     /**
      * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
      */
-    public static final int[] scard = {
-            ModelConstants.ONE,
-            ModelConstants.ONE
-    };
+    public static final EdgeCardinality scard = ONE_ONE;
 
     /**
      *

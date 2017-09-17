@@ -11,6 +11,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.UNLIMITED;
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -116,21 +118,6 @@ public final class ModelConstants {
      * Liste aller geöffneten Dialoge
      */
     public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<>();
-
-    /**
-     * Unendlich als maximaler Integer
-     */
-    public static final Integer UNLIMITED = new Integer(Integer.MAX_VALUE);
-
-    /**
-     * Null als Integer
-     */
-    public static final Integer ZERO = new Integer(0);
-
-    /**
-     * Eins als Integer
-     */
-    public static final Integer ONE = new Integer(1);
 
     /**
      * Standardrückgabewert bei Fehlern = -1 ;

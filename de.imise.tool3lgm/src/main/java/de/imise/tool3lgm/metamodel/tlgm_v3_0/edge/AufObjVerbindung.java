@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
+
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
@@ -9,28 +11,15 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 
 public final class AufObjVerbindung extends Edge {
 
-    // public static final Class[] stcl = {Aufgabe.class};
     public static final Class<? extends ModelElement> stcl = Aufgabe.class;
 
-    public static final int[] scard = {
-            ModelConstants.ZERO,
-            ModelConstants.UNLIMITED
-    };
+    public static final EdgeCardinality scard = ZERO_UNIMITED;
 
-    public static final int[] ecard = {
-            ModelConstants.ZERO,
-            ModelConstants.UNLIMITED
-    };
+    public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
     public static final Class<? extends ModelElement> etcl = Objekttyp.class;
 
-    // public static final Class[] etcl = {Objekttyp.class};
-
-    // private static Object[][] stcl = {{Aufgabe.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-    // private static Object[][] etcl = {{Objekttyp.class, ModelConstants.ZERO, ModelConstants.UNLIMITED}};
-
     public AufObjVerbindung() {
-        super();
     }
 
     public AufObjVerbindung(final Node k1, final Node k2) {
