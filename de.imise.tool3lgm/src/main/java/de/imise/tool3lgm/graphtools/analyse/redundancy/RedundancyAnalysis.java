@@ -106,9 +106,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         do {
             String message = "";
 
-            // wenn die Option
-            // "beim Suchen übergeordnete Elemente berücksichtigen"
-            // ausgeschaltet ist
+            // wenn die Option "beim Suchen übergeordnete Elemente berücksichtigen" ausgeschaltet ist
             if (!UserProperties.isSearchParents()) {
                 message += getResString("ana_fr_search_parents_option_message1");
                 message += getResString("itv-bezogene_Opt") + " -> " + getResString("consider_parents") + getResString("ana_fr_search_parents_option_message2") + "\n\n";
@@ -131,8 +129,13 @@ public class RedundancyAnalysis extends WindowAdapter {
             }
             options[analyseCount] = getResString("ana_fr_self_defined_analysis");
 
+            //immer die erste Analyse bereits vorauswählen (wenn für ein Metamodell mal gar keine eigenen Analysen definiert werden, dann
+            //ist die einzig verfügbare immer die selbsdefinierte Analyse. Und diese ist dann auf jeden Fall gelich ausgewählt.
+            boolean[] preseleced = new boolean[options.length];
+            preseleced[0] = true;
+
             // null wenn Abrechen gedrückt wurde, sonst ein gültiges Boolean-Array
-            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, null, true);
+            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, preseleced, true);
 
             // wenn abgebrochen werden soll
             if (selectedOptions == null) {
