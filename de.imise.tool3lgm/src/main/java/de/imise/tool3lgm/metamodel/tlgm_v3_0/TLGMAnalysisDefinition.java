@@ -37,11 +37,11 @@ public class TLGMAnalysisDefinition extends AnalysisDefinition {
 
     private void initRedundancyAnalysis() {
         SingleRedundancyAnalysisDefinition analyse = redundancyAnalysisDefinitions.add(new MetaPath(Anwendungsbaustein.class, Aufgabe.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
-        analyse.setNewStartToEndCardinality(AwbAwbkVerbindung.class, ONE_ONE);
+        analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
         analyse = redundancyAnalysisDefinitions.add(new MetaPath(RechAnwendungsbaustein.class, Aufgabe.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
-        analyse.setNewStartToEndCardinality(AwbAwbkVerbindung.class, ONE_ONE);
+        analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
         analyse = redundancyAnalysisDefinitions.add(new MetaPath(KonAnwendungsbaustein.class, Aufgabe.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
-        analyse.setNewStartToEndCardinality(AwbAwbkVerbindung.class, ONE_ONE);
+        analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
         redundancyAnalysisDefinitions.add(new MetaPath(Softwareprodukt.class, Aufgabe.class, SwpAufVerbindung.class));
         redundancyAnalysisDefinitions.add(new MetaPath(Datenbanksystem.class, Objekttyp.class, ObjLogspVerbindung.class));
     }

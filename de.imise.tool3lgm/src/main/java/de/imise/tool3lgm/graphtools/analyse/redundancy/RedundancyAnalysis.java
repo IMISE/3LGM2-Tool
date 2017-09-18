@@ -198,8 +198,8 @@ public class RedundancyAnalysis extends WindowAdapter {
             for (int j = 0; j < internalMetaPath.length; j++) {
                 Class<? extends Edge> edgeClass = internalMetaPath[j];
                 //jetzt die Kardinalitätsvorgaben der gewählten Analyse in die Kardinalitäten der Konsitenzprüfung übertragen
-                cardinalityDefinition.setNewStartToEndCardinality(edgeClass, definition.getNewStartToEndCardinality(edgeClass));
-                cardinalityDefinition.setNewEndToStartCardinality(edgeClass, definition.getNewEndToStartCardinality(edgeClass));
+                cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
+                cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
             }
         }
         List<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();

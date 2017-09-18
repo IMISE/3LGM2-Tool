@@ -1380,15 +1380,15 @@ public final class GDCollection extends UserFieldTarget {
                     boolean endElementIsEdgeStart = edge.isStartClass(endClass);
                     Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
                     Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
-                    int maxStartToEndCardinality = edge.getMaxStartToEndCardinality();
-                    int maxEndToStartCardinality = edge.getMaxEndToStartCardinality();
-                    int maxElemCardinality = startElementIsEdgeStart ? maxStartToEndCardinality : maxEndToStartCardinality;
+                    int maxForwardCardinality = edge.getMaxForwardCardinality();
+                    int maxBackwardCardinality = edge.getMaxBackwardCardinality();
+                    int maxElemCardinality = startElementIsEdgeStart ? maxForwardCardinality : maxBackwardCardinality;
                     List<Edge> edgeList = startElement.getEdgesWith(startElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
-                    maxElemCardinality = endElementIsEdgeStart ? maxStartToEndCardinality : maxEndToStartCardinality;
+                    maxElemCardinality = endElementIsEdgeStart ? maxForwardCardinality : maxBackwardCardinality;
                     edgeList = endElement.getEdgesWith(endElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
@@ -1406,121 +1406,6 @@ public final class GDCollection extends UserFieldTarget {
         return edge;
     }
 
-    //	public Edge link(String edgeClassName, String edgeHash, ModelElement me1, ModelElement me2, int direction, int edgeIndex, int pid) {
-    //		if ((me1 == null) || (me2 == null))
-    //			return null;
-    //		if (me1 == me2)
-    //			return null;
-    //
-    //		Edge edge = null;
-    //		EdgeContainer kac = null;
-    //
-    //		Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
-    //		Class<? extends Edge> edgeClass = edgeClassOrNull==null ? null : edgeClassOrNull.asSubclass(Edge.class);
-    //
-    //		if (edgeClass!=null && !isConnecting(edgeClass, me1.getClass(), me2.getClass()))
-    //			return null;
-    //
-    //		doc.start_transaction(pid);
-    //
-    //		try {
-    //			if (edgeClass==null) {
-    //				Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(me1.getClass(), me2.getClass());
-    //				if ((edgeClasses == null) || (edgeClasses.length == 0))
-    //				    return null;
-    //				edgeClass = edgeClasses[0];
-    //				if (edgeClasses.length > 1) {
-    //					JPanel messagePanel = new JPanel();
-    //					messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
-    //					ButtonGroup buttonGroup = new ButtonGroup();
-    //					for (int i = 0; i < edgeClasses.length; i++) {
-    //						JRadioButton b = new JRadioButton(ModelConstants.getForwardMetaAssociationName(edgeClasses[i]));
-    //						b.setActionCommand(edgeClasses[i].getName());
-    //						messagePanel.add(b);
-    //						buttonGroup.add(b);
-    //						if (i == 0)
-    //							b.setSelected(true);
-    //					}
-    //					JOptionPane optionPane = new JOptionPane(messagePanel, JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION);
-    //					JDialog dialog = optionPane.createDialog(Tool3lgm.tool, getResString("choose_trace"));
-    //					dialog.setVisible(true);
-    //					edgeClassName = buttonGroup.getSelection().getActionCommand();
-    //					edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class);
-    //				}
-    //			}
-    //
-    //			edge = me1.getEdgeTo(me2, edgeClass, edgeIndex);
-    //
-    //			if (edge!=null) {
-    //				doc.finish_transaction(pid);
-    //				return edge;
-    //			}
-    //
-    //			edge = me1.getEdgeFrom(me2, edgeClass, edgeIndex);
-    //			if (edge!=null) {
-    //				if (edge instanceof Doppelkante)
-    //					 ((Doppelkante) edge).setDirection(Doppelkante.DOUBLE);
-    //			}else {
-    //
-    //				try {
-    //					edge = (Edge) edgeClass.newInstance();
-    //				} catch (Exception e) {
-    //					Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-    //					doc.undo(pid);
-    //					return null;
-    //				}
-    //
-    //				if ((edgeHash != null) && (!edgeHash.equals("")))
-    //					edge.setHashString(edgeHash);
-    //
-    //				if (edgeIndex != GDCommands.INVALID_EDGE_INDEX)
-    //					edge.setKnotsAndInsert(me1, edgeIndex, me2);
-    //				else
-    //					edge.setKnots(me1, me2);
-    //
-    //				if ((edge.getStart() != null) && (edge.getEnd() != null)) {
-    //					kac = new EdgeContainer(edge, doc);
-    //					edge.setName(doc.getNextNewName(edge), false);
-    //
-    //					addEdge(kac, kac.layerFor(), pid);
-    //				} else {
-    //					if ((edge.getStart() == null) && (edge.getEnd() != null))
-    //						edge.getEnd().removeEdge(edge);
-    //					if ((edge.getEnd() == null) && (edge.getStart() != null))
-    //						edge.getStart().removeEdge(edge);
-    //				}
-    //
-    //				doc.addRedoCommand(GDCommands.LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + me1.getHashString() + " " + me2.getHashString() + " " + edgeIndex, pid);
-    //				doc.addUndoCommand(GDCommands.UNLINK + " " + me1.getHashString() + " " + me2.getHashString() + " " + edgeIndex, pid);
-    //
-    //				//Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
-    //				//verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
-    //				//Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolegn, sonst stimmt die Reihenfolge der Kommando nicht.
-    //				int maxElemCardinality = edge.isStartClass(me1.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
-    //				ArrayList<Edge> edgeList = me1.getEdgesWith(edge.isStartClass(me1.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
-    //				edgeList.remove(edge);
-    //				if (edgeList.size()>0 && edgeList.size() == maxElemCardinality)
-    //					deleteElement(edgeList.get(0), doc, pid);
-    //				maxElemCardinality = edge.isStartClass(me2.getClass()) ? edge.getMaxStartToEndCardinality() : edge.getMaxEndToStartCardinality();
-    //				edgeList = me2.getEdgesWith(edge.isStartClass(me2.getClass()) ? edge.getEndClass() : edge.getStartClass(), edgeClass);
-    //				edgeList.remove(edge);
-    //				edgeList.remove(edge);
-    //				if (edgeList.size()>0 && edgeList.size() == maxElemCardinality)
-    //					deleteElement(edgeList.get(0), doc, pid);
-    //
-    //
-    //			}
-    //		} catch (Exception e) {
-    //			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-    //			doc.undo(pid);
-    //			return null;
-    //		}
-    //
-    //
-    //		doc.finish_transaction(pid);
-    //		doc.distributeEvent(GraphDocument.DATA_CHANGED, pid);
-    //		return edge;
-    //	}
     /**
      * @param knothash1
      * @param knothash2

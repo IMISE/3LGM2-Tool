@@ -550,11 +550,11 @@ public abstract class Edge extends ModelElement {
 
     /**
      * @param edgeClass
-     * @param start
+     * @param backward
      * @return
      */
-    protected static final EdgeCardinality getStartOrEndCardinality(final Class<? extends Edge> edgeClass, final boolean start) {
-        String fieldName = start ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
+    private static final EdgeCardinality getCardinality(final Class<? extends Edge> edgeClass, final boolean backward) {
+        String fieldName = backward ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
         return (EdgeCardinality) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
     }
 
@@ -567,10 +567,10 @@ public abstract class Edge extends ModelElement {
      */
     public static final EdgeCardinality getCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         if (isStartClass(edgeClass, elementClass)) {
-            return getStartOrEndCardinality(edgeClass, false);
+            return getCardinality(edgeClass, false);
         }
         if (isEndClass(edgeClass, elementClass)) {
-            return getStartOrEndCardinality(edgeClass, true);
+            return getCardinality(edgeClass, true);
         }
         return null;
     }
@@ -603,76 +603,76 @@ public abstract class Edge extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static final EdgeCardinality getStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartOrEndCardinality(edgeClass, false);
+    public static final EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, false);
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public static final EdgeCardinality getEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartOrEndCardinality(edgeClass, true);
+    public static final EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, true);
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public static final int getMinStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartOrEndCardinality(edgeClass, false).min();
+    public static final int getMinForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, false).min();
     }
 
     /**
      * @return
      */
-    public final int getMinStartToEndCardinality() {
-        return getMinStartToEndCardinality(getClass());
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final int getMaxStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartOrEndCardinality(edgeClass, false).max();
-    }
-
-    /**
-     * @return
-     */
-    public final int getMaxStartToEndCardinality() {
-        return getMaxStartToEndCardinality(getClass());
+    public final int getMinForwardCardinality() {
+        return getMinForwardCardinality(getClass());
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public static final int getMinEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartOrEndCardinality(edgeClass, true).min();
+    public static final int getMaxForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, false).max();
     }
 
     /**
      * @return
      */
-    public final int getMinEndToStartCardinality() {
-        return getMinEndToStartCardinality(getClass());
+    public final int getMaxForwardCardinality() {
+        return getMaxForwardCardinality(getClass());
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public static final int getMaxEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartOrEndCardinality(edgeClass, true).max();
+    public static final int getMinBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, true).min();
     }
 
     /**
      * @return
      */
-    public final int getMaxEndToStartCardinality() {
-        return getMaxEndToStartCardinality(getClass());
+    public final int getMinBackwardCardinality() {
+        return getMinBackwardCardinality(getClass());
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public static final int getMaxBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, true).max();
+    }
+
+    /**
+     * @return
+     */
+    public final int getMaxBackwardCardinality() {
+        return getMaxBackwardCardinality(getClass());
     }
 
     /**

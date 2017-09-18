@@ -678,8 +678,8 @@ public class ActionLibrary {
              *            ModelElement connected = meIsEdgeStart ? edge.getEnd() : edge.getStart();
              *            //Mit wievielen Elementen von der Art des parts darf das umzuhängende
              *            Element maximal verbunden sein? int maxConnectedToOtherCardinality =
-             *            meIsEdgeStart ? edge.getMaxEndToStartCardinality() :
-             *            edge.getMaxStartToEndCardinality(); int actualConnectedToOtherCardinality
+             *            meIsEdgeStart ? edge.getMaxBackwardCardinality() :
+             *            edge.getMaxForwardCardinality(); int actualConnectedToOtherCardinality
              *            = meIsEdgeStart ? connected.countConnectionsToThis(edge.getClass()) :
              *            connected.countConnectionsFromThis(edge.getClass()); //das verbundene
              *            Element darf nicht mit einem weiteren Element verbunden if
@@ -722,7 +722,7 @@ public class ActionLibrary {
              * etwas anderes denkbar) if (edge instanceof PartOfBeziehung) continue; //Mit wievielen
              * Elementen von der Art des parts darf das umzuhängende Element maximal verbunden sein?
              * int maxConnectedToPartCardinality = edge.isStartClass(part.getClass()) ?
-             * edge.getMaxEndToStartCardinality() : edge.getMaxStartToEndCardinality(); for (int j =
+             * edge.getMaxBackwardCardinality() : edge.getMaxForwardCardinality(); for (int j =
              * partsParents.size() - 1; j > 0; j--) { ModelElement parent = partsParents.get(j);
              * //falls mehr Parents vorhanden sind, als mit dem umzuhängenden Element selbst
              * verbunden //sein dürfen, muss das umzuhängende Element dupliziert werden if
@@ -731,7 +731,7 @@ public class ActionLibrary {
              * parent : partsParents) { ModelElement start = edge.getStart() == part ? parent :
              * edge.getStart(); ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
              * int minElemCardinality = edge.isStartClass(start.getClass()) ?
-             * edge.getMinStartToEndCardinality() : edge.getMinEndToStartCardinality(); if
+             * edge.getMinForwardCardinality() : edge.getMinBackwardCardinality(); if
              * (minElemCardinality > 0) continue; int dir = edge.getDirection(); String edgeName =
              * edge.getName(); String edgeDescrip = edge.getDescription(); Edge newEdge = null; if
              * (dir == FORWARD) { newEdge = link(gdcoll, edge, start, end); } else if
@@ -763,7 +763,7 @@ public class ActionLibrary {
                         for (ModelElement parent : parentElements) {
                             ModelElement start = edge.getStart() == part ? parent : edge.getStart();
                             ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
-                            int minElemCardinality = edge.isStartClass(start.getClass()) ? edge.getMinStartToEndCardinality() : edge.getMinEndToStartCardinality();
+                            int minElemCardinality = edge.isStartClass(start.getClass()) ? edge.getMinForwardCardinality() : edge.getMinBackwardCardinality();
                             if (minElemCardinality > 0) {
                                 continue;
                             }

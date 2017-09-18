@@ -3,10 +3,10 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 
@@ -227,7 +227,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     private static boolean isSingleConnectionPath(final int[] directions, final Class<? extends Edge>[] edgeClasses) {
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends Edge> edgeClass = edgeClasses[i];
-            int maxCard = directions[i] == FORWARD ? getMaxStartToEndCardinality(edgeClass) : getMaxEndToStartCardinality(edgeClass);
+            int maxCard = directions[i] == FORWARD ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
             if (maxCard > 1) {
                 return false;
             }
@@ -293,7 +293,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected boolean isLastPathElementDependent() {
         Class<? extends Edge> edgeClass = edgeClasses[lastEdgeIndex];
         int direction = directions[lastEdgeIndex];
-        int minCardinality = direction == FORWARD ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
+        int minCardinality = direction == FORWARD ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
         return minCardinality > 0;
     }
 
@@ -307,7 +307,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected boolean isLastPathElementNeededForExistence() {
         Class<? extends Edge> edgeClass = edgeClasses[lastEdgeIndex];
         int direction = directions[lastEdgeIndex];
-        int minCardinality = direction == BACKWARD ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
+        int minCardinality = direction == BACKWARD ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
         return minCardinality > 0;
     }
 
@@ -322,7 +322,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //für alle Kanten außer der letzten
         for (int i = 0; i < lastEdgeIndex; i++) {
             //hole die maximale Verbindungsanzahl zum nächsten Element
-            int maxCardinality = directions[i] == FORWARD ? getMaxStartToEndCardinality(edgeClasses[i]) : getMaxEndToStartCardinality(edgeClasses[i]);
+            int maxCardinality = directions[i] == FORWARD ? getMaxForwardCardinality(edgeClasses[i]) : getMaxBackwardCardinality(edgeClasses[i]);
             //wenn dieses Zwischenelement mehrfach verbunden sein kann
             if (maxCardinality > 1) {
                 //nicht eindeutig
@@ -465,7 +465,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             //wenn das neu angelegte Element StartElement der Edge ist
             if (isStartClass(edgeType, elementClass2Create)) {
                 //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityForwardToOther = getMinStartToEndCardinality(edgeType);
+                int minCardinalityForwardToOther = getMinForwardCardinality(edgeType);
                 if (minCardinalityForwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Edge> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
@@ -486,7 +486,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 //wenn das neu angelegte Element EndElement der Edge ist
             } else {
                 //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityBackwardToOther = getMinEndToStartCardinality(edgeType);
+                int minCardinalityBackwardToOther = getMinBackwardCardinality(edgeType);
                 if (minCardinalityBackwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Edge> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);

@@ -93,8 +93,8 @@ public class ConsistencyDefinition {
      * @param edgeClass
      * @return
      */
-    public EdgeCardinality getStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        return cardinalityDefinition.getStartToEndCardinality(edgeClass);
+    public EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return cardinalityDefinition.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -103,8 +103,8 @@ public class ConsistencyDefinition {
      * @param edgeClass
      * @return
      */
-    public EdgeCardinality getEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        return cardinalityDefinition.getEndToStartCardinality(edgeClass);
+    public EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return cardinalityDefinition.getBackwardCardinality(edgeClass);
     }
 
 }

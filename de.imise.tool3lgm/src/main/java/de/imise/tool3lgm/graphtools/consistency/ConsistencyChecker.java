@@ -275,10 +275,10 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         // nur Elementarten beachten, die wenigstens eine Edge besitzen können
         if (edgeTypes != null) {
             for (Class<? extends Edge> edgeClass : edgeTypes) {
-                EdgeCardinality startToEndCardinality = consistencyDefinition.getStartToEndCardinality(edgeClass);
-                EdgeCardinality endToStartCardinality = consistencyDefinition.getEndToStartCardinality(edgeClass);
+                EdgeCardinality forwardCardinality = consistencyDefinition.getForwardCardinality(edgeClass);
+                EdgeCardinality backwardCardinality = consistencyDefinition.getBackwardCardinality(edgeClass);
                 //wenn es keine Min-Max-Fehler geben kann -> weiter
-                if (startToEndCardinality == ZERO_UNIMITED && endToStartCardinality == ZERO_UNIMITED) {
+                if (forwardCardinality == ZERO_UNIMITED && backwardCardinality == ZERO_UNIMITED) {
                     continue;
                 }
 
@@ -295,10 +295,10 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
                 // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
                 // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
-                int minStartCard = startToEndCardinality.min();
-                int maxStartCard = startToEndCardinality.max();
-                int minEndCard = endToStartCardinality.min();
-                int maxEndCard = endToStartCardinality.max();
+                int minStartCard = forwardCardinality.min();
+                int maxStartCard = forwardCardinality.max();
+                int minEndCard = backwardCardinality.min();
+                int maxEndCard = backwardCardinality.max();
                 boolean meHasStartClass = isStartClass(edgeClass, me.getClass());
                 boolean meHasEndClass = isEndClass(edgeClass, me.getClass());
 

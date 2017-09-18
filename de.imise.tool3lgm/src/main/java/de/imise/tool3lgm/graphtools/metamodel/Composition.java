@@ -86,7 +86,7 @@ public abstract class Composition extends Edge {
      * @return
      */
     public static final int getMinMasterToSlaveCardinality(final Class<? extends Edge> edgeClass) {
-        return getMinStartToEndCardinality(edgeClass);
+        return getMinForwardCardinality(edgeClass);
     }
 
     /**
@@ -94,7 +94,7 @@ public abstract class Composition extends Edge {
      * @return
      */
     public static final int getMaxMasterToSlaveCardinality(final Class<? extends Edge> edgeClass) {
-        return getMaxStartToEndCardinality(edgeClass);
+        return getMaxForwardCardinality(edgeClass);
     }
 
     /**
@@ -102,7 +102,7 @@ public abstract class Composition extends Edge {
      * @return
      */
     public static final int getMinSlaveToMasterCardinality(final Class<? extends Edge> edgeClass) {
-        return getMinEndToStartCardinality(edgeClass);
+        return getMinBackwardCardinality(edgeClass);
     }
 
     /**
@@ -110,7 +110,7 @@ public abstract class Composition extends Edge {
      * @return
      */
     public static final int getMaxSlaveToMasterCardinality(final Class<? extends Edge> edgeClass) {
-        return getMaxEndToStartCardinality(edgeClass);
+        return getMaxBackwardCardinality(edgeClass);
     }
 
     @Override

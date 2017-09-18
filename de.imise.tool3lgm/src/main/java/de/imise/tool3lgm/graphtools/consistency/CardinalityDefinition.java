@@ -27,17 +27,17 @@ public class CardinalityDefinition {
      */
     public boolean filterNewCardinalities = false;
 
-    private Map<Class<? extends Edge>, EdgeCardinality> edgeClassToNewStartToEndCardinality;
+    private Map<Class<? extends Edge>, EdgeCardinality> edgeClassToNewForwardCardinality;
 
-    private Map<Class<? extends Edge>, EdgeCardinality> edgeClassToNewEndToStartCardinality;
+    private Map<Class<? extends Edge>, EdgeCardinality> edgeClassToNewBackwardCardinality;
 
     /**
      * Löscht alle neuen Kardinalitäten und deaktiviert den Filter.
      */
     public void reset() {
         filterNewCardinalities = false;
-        edgeClassToNewStartToEndCardinality.clear();
-        edgeClassToNewEndToStartCardinality.clear();
+        edgeClassToNewForwardCardinality.clear();
+        edgeClassToNewBackwardCardinality.clear();
     }
 
     /**
@@ -53,11 +53,11 @@ public class CardinalityDefinition {
      * @param edgeCardinality
      *            neue Kardinalitäten für die übergebene Kantenklasse
      */
-    public void setNewStartToEndCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
-        if (edgeClassToNewStartToEndCardinality == null) {
-            edgeClassToNewStartToEndCardinality = new HashMap<>();
+    public void setNewForwardCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
+        if (edgeClassToNewForwardCardinality == null) {
+            edgeClassToNewForwardCardinality = new HashMap<>();
         }
-        edgeClassToNewStartToEndCardinality.put(edgeClass, edgeCardinality);
+        edgeClassToNewForwardCardinality.put(edgeClass, edgeCardinality);
     }
 
     /**
@@ -73,20 +73,20 @@ public class CardinalityDefinition {
      * @param edgeCardinality
      *            neue Kardinalitäten für die übergebene Kantenklasse
      */
-    public void setNewEndToStartCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
-        if (edgeClassToNewEndToStartCardinality == null) {
-            edgeClassToNewEndToStartCardinality = new HashMap<>();
+    public void setNewBackwardCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
+        if (edgeClassToNewBackwardCardinality == null) {
+            edgeClassToNewBackwardCardinality = new HashMap<>();
         }
-        edgeClassToNewEndToStartCardinality.put(edgeClass, edgeCardinality);
+        edgeClassToNewBackwardCardinality.put(edgeClass, edgeCardinality);
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    private final EdgeCardinality getNewStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        if (edgeClassToNewStartToEndCardinality != null) {
-            EdgeCardinality edgeCardinality = edgeClassToNewStartToEndCardinality.get(edgeClass);
+    private final EdgeCardinality getNewForwardCardinality(final Class<? extends Edge> edgeClass) {
+        if (edgeClassToNewForwardCardinality != null) {
+            EdgeCardinality edgeCardinality = edgeClassToNewForwardCardinality.get(edgeClass);
             if (edgeCardinality != null) {
                 return edgeCardinality;
             }
@@ -98,9 +98,9 @@ public class CardinalityDefinition {
      * @param edgeClass
      * @return
      */
-    private final EdgeCardinality getNewEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        if (edgeClassToNewEndToStartCardinality != null) {
-            EdgeCardinality edgeCardinality = edgeClassToNewEndToStartCardinality.get(edgeClass);
+    private final EdgeCardinality getNewBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        if (edgeClassToNewBackwardCardinality != null) {
+            EdgeCardinality edgeCardinality = edgeClassToNewBackwardCardinality.get(edgeClass);
             if (edgeCardinality != null) {
                 return edgeCardinality;
             }
@@ -112,21 +112,24 @@ public class CardinalityDefinition {
      * @param edgeClass
      * @return
      */
-    public final EdgeCardinality getStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        EdgeCardinality newStartToEndCardinality = getNewStartToEndCardinality(edgeClass);
+    public final EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
+        EdgeCardinality newForwardCardinality = getNewForwardCardinality(edgeClass);
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newStartToEndCardinality != null ? newStartToEndCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNIMITED : Edge.getStartToEndCardinality(edgeClass);
+        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNIMITED : Edge.getForwardCardinality(edgeClass);
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public final EdgeCardinality getEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        EdgeCardinality newEndToStartCardinality = getNewEndToStartCardinality(edgeClass);
-        return newEndToStartCardinality != null ? newEndToStartCardinality : Edge.getEndToStartCardinality(edgeClass);
+    public final EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        EdgeCardinality newBackwardCardinality = getNewBackwardCardinality(edgeClass);
+        //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
+        //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
+        //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
+        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNIMITED : Edge.getBackwardCardinality(edgeClass);
     }
 
 }

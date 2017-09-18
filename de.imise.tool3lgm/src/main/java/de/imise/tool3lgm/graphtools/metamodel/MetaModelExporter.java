@@ -1,10 +1,10 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getBackwardMetaAssociationName;
@@ -209,12 +209,12 @@ public class MetaModelExporter {
 
     private static String getEdgeString(final Class<? extends Edge> edgeClass, final boolean forward) {
         StringBuilder sb = new StringBuilder();
-        int minEndToStartCardinality = forward ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
-        int maxEndToStartCardinality = forward ? getMaxEndToStartCardinality(edgeClass) : getMaxStartToEndCardinality(edgeClass);
-        String maxEndToStartCardinalityString = maxEndToStartCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxEndToStartCardinality);
-        int minStartToEndCardinality = forward ? getMinStartToEndCardinality(edgeClass) : getMinEndToStartCardinality(edgeClass);
-        int maxStartToEndCardinality = forward ? getMaxStartToEndCardinality(edgeClass) : getMaxEndToStartCardinality(edgeClass);
-        String maxStartToEndCardinalityString = maxStartToEndCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxStartToEndCardinality);
+        int minBackwardCardinality = forward ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
+        int maxBackwardCardinality = forward ? getMaxBackwardCardinality(edgeClass) : getMaxForwardCardinality(edgeClass);
+        String maxBackwardCardinalityString = maxBackwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxBackwardCardinality);
+        int minForwardCardinality = forward ? getMinForwardCardinality(edgeClass) : getMinBackwardCardinality(edgeClass);
+        int maxForwardCardinality = forward ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
+        String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
 
         String startClassName = forward ? ModelConstants.getDisplayableName(getStartClass(edgeClass)) : ModelConstants.getDisplayableName(getEndClass(edgeClass));
         String endClassName = forward ? ModelConstants.getDisplayableName(getEndClass(edgeClass)) : ModelConstants.getDisplayableName(getStartClass(edgeClass));
@@ -223,7 +223,7 @@ public class MetaModelExporter {
         sb.append(startClassName);
         sb.append(" ");
         sb.append(metaAssociationName);
-        sb.append(" [").append(minStartToEndCardinality).append(", ").append(maxStartToEndCardinalityString).append("] ");
+        sb.append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("] ");
         sb.append(endClassName);
 
         return sb.toString();
@@ -233,30 +233,30 @@ public class MetaModelExporter {
         String edgeClassName = edgeClass.getSimpleName();
         StringBuilder sb = new StringBuilder();
         boolean forward = isStartClass(edgeClass, readingDirectionStartClass);
-        int minEndToStartCardinality = forward ? getMinEndToStartCardinality(edgeClass) : getMinStartToEndCardinality(edgeClass);
-        int maxEndToStartCardinality = forward ? getMaxEndToStartCardinality(edgeClass) : getMaxStartToEndCardinality(edgeClass);
-        String maxEndToStartCardinalityString = maxEndToStartCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxEndToStartCardinality);
-        int minStartToEndCardinality = forward ? getMinStartToEndCardinality(edgeClass) : getMinEndToStartCardinality(edgeClass);
-        int maxStartToEndCardinality = forward ? getMaxStartToEndCardinality(edgeClass) : getMaxEndToStartCardinality(edgeClass);
-        String maxStartToEndCardinalityString = maxStartToEndCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxStartToEndCardinality);
+        int minBackwardCardinality = forward ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
+        int maxBackwardCardinality = forward ? getMaxBackwardCardinality(edgeClass) : getMaxForwardCardinality(edgeClass);
+        String maxBackwardCardinalityString = maxBackwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxBackwardCardinality);
+        int minForwardCardinality = forward ? getMinForwardCardinality(edgeClass) : getMinBackwardCardinality(edgeClass);
+        int maxForwardCardinality = forward ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
+        String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
         String fulldMetaAssociationName = forward ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
-        sb.append(intention).append(edgeClassName).append(": [").append(minEndToStartCardinality).append(", ").append(maxEndToStartCardinalityString).append("] ");
-        sb.append(fulldMetaAssociationName).append(" [").append(minStartToEndCardinality).append(", ").append(maxStartToEndCardinalityString).append("]");
+        sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
+        sb.append(fulldMetaAssociationName).append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("]");
         return sb.toString();
     }
 
     private static String getEdgeStringOrg(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
-        int minEndToStartCardinality = getMinEndToStartCardinality(edgeClass);
-        int maxEndToStartCardinality = getMaxEndToStartCardinality(edgeClass);
-        String maxEndToStartCardinalityString = maxEndToStartCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxEndToStartCardinality);
-        int minStartToEndCardinality = getMinStartToEndCardinality(edgeClass);
-        int maxStartToEndCardinality = getMaxStartToEndCardinality(edgeClass);
-        String maxStartToEndCardinalityString = maxStartToEndCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxStartToEndCardinality);
+        int minBackwardCardinality = getMinBackwardCardinality(edgeClass);
+        int maxBackwardCardinality = getMaxBackwardCardinality(edgeClass);
+        String maxBackwardCardinalityString = maxBackwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxBackwardCardinality);
+        int minForwardCardinality = getMinForwardCardinality(edgeClass);
+        int maxForwardCardinality = getMaxForwardCardinality(edgeClass);
+        String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
         String fullForwardMetaAssociationName = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
         StringBuilder sb = new StringBuilder();
-        sb.append(intention).append(edgeClassName).append(": [").append(minEndToStartCardinality).append(", ").append(maxEndToStartCardinalityString).append("] ");
-        sb.append(fullForwardMetaAssociationName).append(" [").append(minStartToEndCardinality).append(", ").append(maxStartToEndCardinalityString).append("]");
+        sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
+        sb.append(fullForwardMetaAssociationName).append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("]");
 
         return sb.toString();
     }

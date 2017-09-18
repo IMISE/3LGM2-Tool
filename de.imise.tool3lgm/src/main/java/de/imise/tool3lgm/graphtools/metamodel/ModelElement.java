@@ -4,10 +4,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.Edge.ANY;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isEndClass;
@@ -1921,7 +1921,7 @@ public abstract class ModelElement extends UserFieldTarget {
             //wenn diese Elementart Startklasse der aktuellen Kantenart ist
             if (isStartClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Endklasse holen
-                minCardinality = getMinStartToEndCardinality(edgeType);
+                minCardinality = getMinForwardCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten zu anderen Elementen hat, als nötig
                 if (minCardinality > 0 && getEdgesTo(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -1931,7 +1931,7 @@ public abstract class ModelElement extends UserFieldTarget {
             //OHNE ELSE-IF! Wenn diese Elementart Endklasse der aktuellen Kantenart ist
             if (isEndClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Startklasse holen
-                minCardinality = getMinEndToStartCardinality(edgeType);
+                minCardinality = getMinBackwardCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten von anderen Elementen zu sich hat, als nötig
                 if (minCardinality > 0 && getEdgesFrom(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -2022,67 +2022,17 @@ public abstract class ModelElement extends UserFieldTarget {
         //wenn das Überschreiten der Kardinalität geprüft werden soll
         if (testCardinality) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (getMaxStartToEndCardinality(edgeClass) <= countConnections(edgeClass)) {
+            if (getMaxForwardCardinality(edgeClass) <= countConnections(edgeClass)) {
                 return false;
             }
             //für das Endelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (getMaxEndToStartCardinality(edgeClass) <= me.countConnections(edgeClass)) {
+            if (getMaxBackwardCardinality(edgeClass) <= me.countConnections(edgeClass)) {
                 return false;
             }
         }
         return true;
 
     }
-
-    //	/**
-    //	 * Testet, ob das Modelelement this in der Richtung direction zu dem
-    //	 * ModelElement eine Edge haben kann
-    //	 *
-    //     * @param me
-    //     * @param direction
-    //     * 		{@link .FORWARD, {@link .BACKWARD
-    //     * @return
-    //     */
-    //    public final boolean isLinkable(ModelElement me, int direction) {
-    //		Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(getClass(), me.getClass());
-    //
-    //		if (edgeClasses == null)
-    //			return false;
-    //
-    //		if (edgeClasses.length < 1)
-    //			return false;
-    //
-    //		if (edgeClasses.length > 1)
-    //			return true;
-    //
-    //		edge;
-    //		for (int i = 0; i < getEdgesCount(); i++) {
-    //			edge = ( getEdge(i);
-    //			if ((direction != BACKWARD) && edge.isDirecting(this, me))
-    //				return false;
-    //			if ((direction != FORWARD) && edge.isDirecting(me, this))
-    //				return false;
-    //		}
-    //
-    //		try {
-    //			edge = ( edgeClasses[0].newInstance();
-    //			if (edge instanceof PartOfBeziehung) {
-    //				if (direction == FORWARD && isParentOf(me))
-    //					return false;
-    //				if (direction == BACKWARD && isPartOf(me))
-    //					return false;
-    //
-    //				if (edge.isStartClass(getClass()) && edge.getMaxStartToEndCardinality()<=countConnections(edge.getClass()))
-    //					return false;
-    //				if (edge.isEndClass(me.getClass()) && edge.getMaxEndToStartCardinality()<=me.countConnections(edge.getClass()))
-    //					return false;
-    //			}
-    //		} catch (Exception exp) {
-    //			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
-    //			return false;
-    //		}
-    //		return true;
-    //	}
 
     /**
      * @return {@link HashMap} aller Container dieses Elementes

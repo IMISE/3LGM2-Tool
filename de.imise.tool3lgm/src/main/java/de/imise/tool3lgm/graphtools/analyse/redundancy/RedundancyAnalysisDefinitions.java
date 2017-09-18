@@ -67,8 +67,8 @@ public class RedundancyAnalysisDefinitions {
             cardinalityDefinition.filterNewCardinalities = true;
             //alle Standardkardinalitäten der Kanten des MetaPfades zur cardinalityDefinition hinzufügen
             for (Class<? extends Edge> edgeClass : metaPath.getEdgeClasses()) {
-                cardinalityDefinition.setNewStartToEndCardinality(edgeClass, Edge.getStartToEndCardinality(edgeClass));
-                cardinalityDefinition.setNewEndToStartCardinality(edgeClass, Edge.getEndToStartCardinality(edgeClass));
+                cardinalityDefinition.setNewForwardCardinality(edgeClass, Edge.getForwardCardinality(edgeClass));
+                cardinalityDefinition.setNewBackwardCardinality(edgeClass, Edge.getBackwardCardinality(edgeClass));
             }
         }
 
@@ -89,8 +89,8 @@ public class RedundancyAnalysisDefinitions {
          * @param edgeCardinality
          *            neue Kardinalitäten für die übergebene Kantenklasse
          */
-        public void setNewStartToEndCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
-            cardinalityDefinition.setNewStartToEndCardinality(edgeClass, edgeCardinality);
+        public void setNewForwardCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
+            cardinalityDefinition.setNewForwardCardinality(edgeClass, edgeCardinality);
         }
 
         /**
@@ -106,24 +106,24 @@ public class RedundancyAnalysisDefinitions {
          * @param edgeCardinality
          *            neue Kardinalitäten für die übergebene Kantenklasse
          */
-        public void setNewEndToStartCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
-            cardinalityDefinition.setNewEndToStartCardinality(edgeClass, edgeCardinality);
+        public void setNewBackwardCardinality(final Class<? extends Edge> edgeClass, final EdgeCardinality edgeCardinality) {
+            cardinalityDefinition.setNewBackwardCardinality(edgeClass, edgeCardinality);
         }
 
         /**
          * @param edgeClass
          * @return
          */
-        public final EdgeCardinality getNewStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-            return cardinalityDefinition.getStartToEndCardinality(edgeClass);
+        public final EdgeCardinality getNewForwardCardinality(final Class<? extends Edge> edgeClass) {
+            return cardinalityDefinition.getForwardCardinality(edgeClass);
         }
 
         /**
          * @param edgeClass
          * @return
          */
-        public final EdgeCardinality getNewEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-            return cardinalityDefinition.getEndToStartCardinality(edgeClass);
+        public final EdgeCardinality getNewBackwardCardinality(final Class<? extends Edge> edgeClass) {
+            return cardinalityDefinition.getBackwardCardinality(edgeClass);
         }
 
     }
