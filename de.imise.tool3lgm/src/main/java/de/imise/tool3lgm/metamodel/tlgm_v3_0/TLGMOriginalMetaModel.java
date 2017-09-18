@@ -511,4 +511,9 @@ public class TLGMOriginalMetaModel extends MetaModel {
         return GENERATE_NAME_CLASSES;
     }
 
+    @Override
+    public String getResourceBaseName() {
+        return "metamodel.tlgm_v3_0.MetamodelResources";
+    }
+
 }

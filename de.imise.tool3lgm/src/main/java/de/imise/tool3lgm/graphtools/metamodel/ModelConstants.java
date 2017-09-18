@@ -1553,4 +1553,8 @@ public final class ModelConstants {
         return metaModel.getAnalysisDefinition();
     }
 
+    public static final String getMetaModelResourceBaseName() {
+        return metaModel.getResourceBaseName();
+    }
+
 }

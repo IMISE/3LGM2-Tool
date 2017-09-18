@@ -22,6 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.StaticAction;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -224,7 +225,9 @@ public abstract class Tool3lgmConstants {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
+     * ResourceBundle mit den Metamodell-spezifischen Daten
      */
+    private static ResourceBundle metamodelBundle = ResourceBundle.getBundle(ModelConstants.getMetaModelResourceBaseName());
 
     /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse
@@ -525,10 +528,14 @@ public abstract class Tool3lgmConstants {
      * @return String with value of resource
      */
     public static String getResString(final String key) {
-        //das hier darf auf keinen Fall mit try-catch umrandet werden, da mehrere Funktionen auf die
+        //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
-        return resourceBundle.getString(key);
+        try {
+            return resourceBundle.getString(key);
+        } catch (Exception e) {
+            return metamodelBundle.getString(key);
+        }
     }
 
     /**
