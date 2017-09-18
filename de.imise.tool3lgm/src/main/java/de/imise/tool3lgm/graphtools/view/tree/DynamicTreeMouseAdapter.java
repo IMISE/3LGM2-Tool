@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -123,7 +125,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 }
             } else {
                 JPopupMenu menu = new JPopupMenu();
-                JMenuItem item = new JMenuItem(new AbstractAction(Tool3lgmConstants.getResString("expand_all")) {
+                JMenuItem item = new JMenuItem(new AbstractAction(getResString("expand_all")) {
 
                     @Override
                     public void actionPerformed(final ActionEvent arg0) {
@@ -215,7 +217,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
         JMenuItem item;
 
-        item = new JMenuItem(Tool3lgmConstants.getResString("neue_instanz"));
+        item = new JMenuItem(getResString("neue_instanz"));
         item.addActionListener(this);
         item.setActionCommand("newInstanze " + str);
         menu.add(item);

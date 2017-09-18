@@ -306,7 +306,7 @@ public class AnalyseRepository {
             raf.close();
             file = f;
         } catch (Exception e) {
-            Log.show(Log.INFO, Tool3lgmConstants.getResString("analyse_speicherfehler"), e);
+            Log.show(Log.INFO, getResString("analyse_speicherfehler"), e);
         }
     }
 

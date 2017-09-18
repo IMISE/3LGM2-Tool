@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
@@ -13,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -277,7 +277,7 @@ public class DataAvailabilityFinder {
         // System.err.println("*************************************************");
         // }
 
-        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("data_availability"));
+        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), getResString("data_availability"));
 
         outputDialog.appendln("##############################################################");
         outputDialog.appendln("#                        UnavailableET                       #");

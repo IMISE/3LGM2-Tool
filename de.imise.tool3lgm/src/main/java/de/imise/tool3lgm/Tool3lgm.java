@@ -276,7 +276,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
                             UserProperties.setRMIRegistryPort("" + regPort);
-                            JOptionPane.showMessageDialog(Static.tool, Tool3lgmConstants.getResString("rmiNewRegPortIs") + " " + regPort);
+                            JOptionPane.showMessageDialog(Static.tool, getResString("rmiNewRegPortIs") + " " + regPort);
                         }
 
                     } catch (RemoteException e) {
@@ -286,7 +286,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         RMIErrorPanel rmip = new RMIErrorPanel();
 
                         if (showErrorDialog) {
-                            if (JOptionPane.showOptionDialog(Static.tool, rmip, Tool3lgmConstants.getResString("rmiError"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+                            if (JOptionPane.showOptionDialog(Static.tool, rmip, getResString("rmiError"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
                                 if (rmip.isRmiAutoNextFreePortCheckBox()) {
                                     // Es wird ein neue Port bis 65500 gesucht, wenn bis dahin keiner frei ist, wird wieder beim standardPort begonnen
                                     if (regPort < 65500) {
@@ -374,7 +374,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //den Hauptframe in die Mitte setzen
         setLocationRelativeTo(null);
-        setTitle(Tool3lgmConstants.getResString("tool3lgm"));
+        setTitle(getResString("tool3lgm"));
         //den Hauptframe initialisieren, damit die JOption-Panes der Lizenzanfrage an der richtigen Stelle sind.
         setVisible(true);
         checkLicenses();
@@ -386,26 +386,26 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         /* table of defaults for Swing components */
         UIDefaults defaults = UIManager.getDefaults();
-        defaults.put("FileChooser.openButtonText", Tool3lgmConstants.getResString("open"));
-        defaults.put("FileChooser.cancelButtonText", Tool3lgmConstants.getResString("cancel"));
-        defaults.put("FileChooser.filesOfTypeLabelText", Tool3lgmConstants.getResString("filesOfTypeLabelText"));
-        defaults.put("FileChooser.fileNameLabelText", Tool3lgmConstants.getResString("fileNameLabelText"));
-        defaults.put("FileChooser.lookInLabelText", Tool3lgmConstants.getResString("lookInLabelText"));
+        defaults.put("FileChooser.openButtonText", getResString("open"));
+        defaults.put("FileChooser.cancelButtonText", getResString("cancel"));
+        defaults.put("FileChooser.filesOfTypeLabelText", getResString("filesOfTypeLabelText"));
+        defaults.put("FileChooser.fileNameLabelText", getResString("fileNameLabelText"));
+        defaults.put("FileChooser.lookInLabelText", getResString("lookInLabelText"));
 
-        defaults.put("ColorChooser.cancelText", Tool3lgmConstants.getResString("cancel"));
-        defaults.put("ColorChooser.sampleText", Tool3lgmConstants.getResString("sampleText"));
-        defaults.put("ColorChooser.rgbGreenText", Tool3lgmConstants.getResString("green"));
-        defaults.put("ColorChooser.previewText", Tool3lgmConstants.getResString("previewText"));
-        defaults.put("ColorChooser.rgbRedText", Tool3lgmConstants.getResString("red"));
-        defaults.put("ColorChooser.resetText", Tool3lgmConstants.getResString("resetText"));
-        defaults.put("ColorChooser.rgbBlueText", Tool3lgmConstants.getResString("blue"));
-        defaults.put("ColorChooser.swatchesNameText", Tool3lgmConstants.getResString("swatchesNameText"));
-        defaults.put("ColorChooser.swatchesRecentText", Tool3lgmConstants.getResString("swatchesRecentText"));
+        defaults.put("ColorChooser.cancelText", getResString("cancel"));
+        defaults.put("ColorChooser.sampleText", getResString("sampleText"));
+        defaults.put("ColorChooser.rgbGreenText", getResString("green"));
+        defaults.put("ColorChooser.previewText", getResString("previewText"));
+        defaults.put("ColorChooser.rgbRedText", getResString("red"));
+        defaults.put("ColorChooser.resetText", getResString("resetText"));
+        defaults.put("ColorChooser.rgbBlueText", getResString("blue"));
+        defaults.put("ColorChooser.swatchesNameText", getResString("swatchesNameText"));
+        defaults.put("ColorChooser.swatchesRecentText", getResString("swatchesRecentText"));
 
-        defaults.put("OptionPane.okButtonText", Tool3lgmConstants.getResString("ok"));
-        defaults.put("OptionPane.cancelButtonText", Tool3lgmConstants.getResString("cancel"));
-        defaults.put("OptionPane.noButtonText", Tool3lgmConstants.getResString("no"));
-        defaults.put("OptionPane.yesButtonText", Tool3lgmConstants.getResString("yes"));
+        defaults.put("OptionPane.okButtonText", getResString("ok"));
+        defaults.put("OptionPane.cancelButtonText", getResString("cancel"));
+        defaults.put("OptionPane.noButtonText", getResString("no"));
+        defaults.put("OptionPane.yesButtonText", getResString("yes"));
 
         //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
@@ -546,7 +546,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
             if (chooser.showOpenDialog(this, false, lgmFileFilter) == ExtendedFileChooser.APPROVE_OPTION) {
                 file = chooser.getSelectedFile();
-                progressDialog = new ProgressDialog(this, Tool3lgmConstants.getResString("load_model") + " " + file.getName(), true);
+                progressDialog = new ProgressDialog(this, getResString("load_model") + " " + file.getName(), true);
                 UserProperties.setWorkingDirectory(file);
                 chooser.setVisible(false);
                 if (!loadFile(file, gdcoll)) {
@@ -562,7 +562,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         }
 
         if (progressDialog != null) {
-            progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("finish_progress"));
+            progressDialog.setStatusLabelText(getResString("finish_progress"));
         }
 
         modelBrowserPanel.addCollection(gdcoll);
@@ -571,7 +571,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         gdcoll.addGraphDocumentListener(this);
 
         if (progressDialog != null) {
-            progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("create_frame") + gdcoll.getMainGraphDocument().getTitle());
+            progressDialog.setStatusLabelText(getResString("create_frame") + gdcoll.getMainGraphDocument().getTitle());
         }
 
         createMainFrame(gdcoll.getMainGraphDocument());
@@ -580,7 +580,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
             if (progressDialog != null) {
-                progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("create_frame") + szen.getTitle());
+                progressDialog.setStatusLabelText(getResString("create_frame") + szen.getTitle());
             }
             if (szen.getViewParameter() == null && i == 0) {
                 selectedDoc = szen;
@@ -785,7 +785,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return false;
         }
         TableInternalFrame matrixView = new TableInternalFrame(_graphDocument);
-        String title = _graphDocument.getCollection().getName() + " - " + _graphDocument.getTitle() + " - " + Tool3lgmConstants.getResString("matrix") + " #";
+        String title = _graphDocument.getCollection().getName() + " - " + _graphDocument.getTitle() + " - " + getResString("matrix") + " #";
 
         matrixView.setTitle(title.concat(String.valueOf(countFramesWithSameTitle(title) + 1)));
 
@@ -1180,9 +1180,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return true;
         }
         Object[] buttons = new Object[] {
-                Tool3lgmConstants.getResString("yes"),
-                Tool3lgmConstants.getResString("no"),
-                Tool3lgmConstants.getResString("cancel")
+                getResString("yes"),
+                getResString("no"),
+                getResString("cancel")
         };
         File file = gdcoll.getFile();
         int answer = JOptionPane.showOptionDialog(this, getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons,
@@ -1219,7 +1219,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //das Hauptdokument holen
         selDoc = gdcoll.getMainGraphDocument();
 
-        progressDialog = new ProgressDialog(this, Tool3lgmConstants.getResString("close_model") + " " + gdcoll.getName(), true);
+        progressDialog = new ProgressDialog(this, getResString("close_model") + " " + gdcoll.getName(), true);
 
         List<ElementPropertyDialog> dialogs = ModelConstants.getDialogs();
         for (int n = 0; n < dialogs.size(); n++) {
@@ -1795,11 +1795,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (frame != null) {
             if (hyperlink != null) {
                 Object[] buttons = new Object[] {
-                        Tool3lgmConstants.getResString("hyperlink"),
-                        Tool3lgmConstants.getResString("submodel"),
-                        Tool3lgmConstants.getResString("cancel")
+                        getResString("hyperlink"),
+                        getResString("submodel"),
+                        getResString("cancel")
                 };
-                int value = JOptionPane.showOptionDialog(null, Tool3lgmConstants.getResString("link_oder_szen_frage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
+                int value = JOptionPane.showOptionDialog(null, getResString("link_oder_szen_frage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
                 if (value == JOptionPane.YES_OPTION) {
                     BrowseUtils.browse(hyperlink);
                 } else if (value == JOptionPane.NO_OPTION) {
@@ -1841,11 +1841,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     private final String getLicenseError(final File licenseFile) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, SignatureException, IOException, SocketException {
         if (!TwatdLicenseLibrary.verifyLicenseFile(licenseFile, licenseItems)) {
-            return Tool3lgmConstants.getResString("invalidLicense");
+            return getResString("invalidLicense");
         }
         Properties licenseItems = TwatdLicenseLibrary.readLicenseItems(licenseFile);
         if (!TwatdLicenseLibrary.checkExpiryDate(new Date(Long.parseLong((String) licenseItems.get("expiryDate"))))) {
-            return Tool3lgmConstants.getResString("licenseExpired");
+            return getResString("licenseExpired");
         }
         String licenseHostName = licenseItems.get("hostName").toString();
         if (licenseHostName.length() > 0) {
@@ -1856,7 +1856,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 correctHostName = false;
             }
             if (!correctHostName) {
-                return Tool3lgmConstants.getResString("wrongHost_1") + licenseHostName + Tool3lgmConstants.getResString("wrongHost_2");
+                return getResString("wrongHost_1") + licenseHostName + getResString("wrongHost_2");
             }
         }
         return null;
@@ -1879,7 +1879,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             try {
                 String licenseError = getLicenseError(licenseFile);
                 if (licenseError != null) {
-                    JOptionPane.showMessageDialog(this, licenseError + "\n\n" + Tool3lgmConstants.getResString("licenseNotImported"), Tool3lgmConstants.getResString("invalidLicense"), JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(this, licenseError + "\n\n" + getResString("licenseNotImported"), getResString("invalidLicense"), JOptionPane.WARNING_MESSAGE);
                 } else {
                     // Lizenzdatei vom Quellort ins Installationsverzeichnis kopieren
                     // (nicht kopieren, wenn Quell und Ziel-Verzeichnis gleich sind. Das ist
@@ -1894,12 +1894,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         fis.close();
                         fos.close();
                     }
-                    JOptionPane.showMessageDialog(this, Tool3lgmConstants.getResString("licenseImported"), Tool3lgmConstants.getResString("validLicense"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, getResString("licenseImported"), getResString("validLicense"), JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (Exception ex) {
                 //Hier kann es eigentlich nur noch eine Zugriffsverweigerung geben
-                String error = Tool3lgmConstants.getResString("licenseWriteAccesDenied1") + Tool3lgmConstants.APPLICATION_DIR.getAbsoluteFile() + Tool3lgmConstants.getResString("licenseWriteAccesDenied2");
-                JOptionPane.showMessageDialog(this, error, Tool3lgmConstants.getResString("licenseWriteAccesDenied"), JOptionPane.ERROR_MESSAGE);
+                String error = getResString("licenseWriteAccesDenied1") + Tool3lgmConstants.APPLICATION_DIR.getAbsoluteFile() + getResString("licenseWriteAccesDenied2");
+                JOptionPane.showMessageDialog(this, error, getResString("licenseWriteAccesDenied"), JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -1936,13 +1936,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     errorMessages[i] = ex.getMessage();
                 }
             }
-            String errorMessage = errorMessages.length > 1 ? Tool3lgmConstants.getResString("multipleInvalidLicenses") + "\n\n" : "";
+            String errorMessage = errorMessages.length > 1 ? getResString("multipleInvalidLicenses") + "\n\n" : "";
             for (int i = 0; i < errorMessages.length; i++) {
                 errorMessage += licenseFiles.get(i).getName() + ": " + errorMessages[i] + "\n\n";
             }
-            JOptionPane.showMessageDialog(this, errorMessage, Tool3lgmConstants.getResString("invalidLicense"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, errorMessage, getResString("invalidLicense"), JOptionPane.ERROR_MESSAGE);
         }
-        int answer = JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("lizenzfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.YES_NO_OPTION);
+        int answer = JOptionPane.showConfirmDialog(this, getResString("lizenzfrage"), getResString("tool3lgm"), JOptionPane.YES_NO_OPTION);
         if (answer == JOptionPane.YES_OPTION) {
             importLicenseFile();
             return checkLicenses();

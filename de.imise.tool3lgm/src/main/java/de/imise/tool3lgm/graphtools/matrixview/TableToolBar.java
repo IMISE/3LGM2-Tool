@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.matrixview;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,7 +21,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
@@ -93,12 +94,12 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
         JPanel choicePanel = new JPanel();
         legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
 
-        legendPanel.setBorder(new TitledBorder(Tool3lgmConstants.getResString("legend")));
-        positionPanel.setBorder(new TitledBorder(Tool3lgmConstants.getResString("position")));
-        choicePanel.setBorder(new TitledBorder(Tool3lgmConstants.getResString("choice")));
+        legendPanel.setBorder(new TitledBorder(getResString("legend")));
+        positionPanel.setBorder(new TitledBorder(getResString("position")));
+        choicePanel.setBorder(new TitledBorder(getResString("choice")));
 
-        rowLabel = new JLabel(Tool3lgmConstants.getResString("zeilen") + ":");
-        colLabel = new JLabel(Tool3lgmConstants.getResString("spalten") + ":");
+        rowLabel = new JLabel(getResString("zeilen") + ":");
+        colLabel = new JLabel(getResString("spalten") + ":");
         rowElementLabel = new JLabel("");
         colElementLabel = new JLabel("");
 
@@ -107,7 +108,7 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
 
         legendPanel.setPreferredSize(((TitledBorder) legendPanel.getBorder()).getMinimumSize(legendPanel));
 
-        showPartsOnlyCheckBox = new JCheckBox(Tool3lgmConstants.getResString("showAbsolutePartsOnly"), lastShowPartsOnlyChoice);
+        showPartsOnlyCheckBox = new JCheckBox(getResString("showAbsolutePartsOnly"), lastShowPartsOnlyChoice);
         showPartsOnlyCheckBox.addActionListener(this);
 
         JComponent[] child1 = {
@@ -121,9 +122,9 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
         setGridBagLayout(choicePanel, child1, 2);
 
         JComponent[] child2 = {
-                new JLabel(Tool3lgmConstants.getResString("zeile") + ":"),
+                new JLabel(getResString("zeile") + ":"),
                 rowElementLabel,
-                new JLabel(Tool3lgmConstants.getResString("spalte") + ":"),
+                new JLabel(getResString("spalte") + ":"),
                 colElementLabel
         };
         setGridBagLayout(positionPanel, child2, 2);
@@ -222,12 +223,12 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
             //Dialog anzeigen, in dem man einen Pfad auswählen kann
             if (metaPathSelector.getSelectableMetaPathes() != null && metaPathSelector.getSelectableMetaPathes().length > 1) {
                 Object[] msg = {
-                        Tool3lgmConstants.getResString("text_path"),
+                        getResString("text_path"),
                         metaPathSelector.getMetaPathJList()
                 };
                 JOptionPane optionPane = new JOptionPane();
                 optionPane.setMessage(msg);
-                JDialog dialog = optionPane.createDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("choice"));
+                JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choice"));
                 dialog.setVisible(true);
             }
             update();

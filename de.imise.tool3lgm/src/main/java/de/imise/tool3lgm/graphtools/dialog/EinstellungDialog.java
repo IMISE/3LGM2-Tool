@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -24,7 +25,7 @@ import de.imise.tool3lgm.gui.Werkzeugleiste;
 
 /**
  * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche
- * 
+ *
  * @author N.N.
  */
 public class EinstellungDialog extends JDialog implements ChangeListener, ActionListener {
@@ -60,8 +61,8 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
     private JSlider zoom, winkel, abstand;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public EinstellungDialog() {
         super();
     }
@@ -77,7 +78,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
 
         frame = f;
         Werkzeugleiste leiste = (Werkzeugleiste) frame.getToolBar();
-        setTitle(Tool3lgmConstants.getResString("settings") + Tool3lgmConstants.getResString("3points"));
+        setTitle(getResString("settings") + getResString("3points"));
         setSize(340, 180);
 
         setModal(true);
@@ -95,7 +96,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
         JPanel eastPanel = new JPanel();
         eastPanel.setLayout(new GridLayout(4, 1));
 
-        JLabel text = new JLabel(Tool3lgmConstants.getResString("zoom"));
+        JLabel text = new JLabel(getResString("zoom"));
         zoom = new JSlider(leiste.zoom.getMinimum(), leiste.zoom.getMaximum());
         zoom.setValue(leiste.zoom.getValue());
         zoom.addChangeListener(this);
@@ -106,7 +107,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
         centerPanel.add(zoom);
         eastPanel.add(textzoom);
 
-        JLabel textz = new JLabel(Tool3lgmConstants.getResString("page_zoom"));
+        JLabel textz = new JLabel(getResString("page_zoom"));
         pageSizeFactorBackup = frame.getGraphDocument().getPageSizeFactor();
         pageSizeFactorSlider = new JSlider(100, 1000);
         pageSizeFactorSlider.setValue((int) (pageSizeFactorBackup * 100));
@@ -118,12 +119,12 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
         centerPanel.add(pageSizeFactorSlider);
         eastPanel.add(textPageSizeFactor);
 
-        JLabel textw = new JLabel(Tool3lgmConstants.getResString("winkel"));
+        JLabel textw = new JLabel(getResString("winkel"));
         winkel = new JSlider(leiste.winkel.getMinimum(), leiste.winkel.getMaximum());
         winkel.setValue(leiste.winkel.getValue());
         winkel.addChangeListener(this);
         textwinkel = new JTextField(4);
-        JLabel texta = new JLabel(Tool3lgmConstants.getResString("abstand"));
+        JLabel texta = new JLabel(getResString("abstand"));
         textwinkel.setText(new Integer(winkel.getValue()).toString());
         textwinkel.setEditable(false);
 
@@ -147,7 +148,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
         panel.add(eastPanel, BorderLayout.EAST);
 
         JPanel buttonpanel = new JPanel();
-        JButton b = new JButton(Tool3lgmConstants.getResString("close"));
+        JButton b = new JButton(getResString("close"));
         b.addActionListener(this);
         buttonpanel.add(b);
 
@@ -190,7 +191,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
     @Override
     public void actionPerformed(final ActionEvent e) {
         String str = e.getActionCommand();
-        if (str.equals(Tool3lgmConstants.getResString("close"))) {
+        if (str.equals(getResString("close"))) {
             frame.getGraphDocument().setPageSizeFactor(pageSizeFactorBackup, pageSizeFactorSlider.getValue() / 100d, true, TransactionManager.STANDARD_PID);
             dispose();
         }

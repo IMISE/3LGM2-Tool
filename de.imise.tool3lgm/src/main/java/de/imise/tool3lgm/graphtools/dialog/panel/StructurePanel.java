@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -60,7 +61,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
     private void internalInit() {
         // lotree
-        JLabel lolabel = new JLabel(Tool3lgmConstants.getResString("ueberg"));
+        JLabel lolabel = new JLabel(getResString("ueberg"));
         loroot = new LGMTreeNode(getModelElement().getName(), false);
         lomodel = new DefaultTreeModel(loroot);
         lotree = new LGMTree(lomodel, mainDoc);
@@ -72,7 +73,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         JScrollPane lotreeScrollPane = new JScrollPane(lotree);
 
         // lutree
-        JLabel lulabel = new JLabel(Tool3lgmConstants.getResString("unterg"));
+        JLabel lulabel = new JLabel(getResString("unterg"));
         luroot = new LGMTreeNode(getModelElement().getName(), false);
         lumodel = new DefaultTreeModel(luroot);
         lutree = new LGMTree(lumodel, mainDoc);
@@ -103,8 +104,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         add(this, lutreeScrollPane, constraints, 0, 3, 1, 1);
 
         // rtree
-        rlabel = new JLabel(Tool3lgmConstants.getResString("frei"));
-        rroot = new LGMTreeNode(Tool3lgmConstants.getResString("frei"), false);
+        rlabel = new JLabel(getResString("frei"));
+        rroot = new LGMTreeNode(getResString("frei"), false);
         rmodel = new DefaultTreeModel(rroot);
         rtree = new LGMTree(rmodel, mainDoc);
         rtree.setName("rtree");

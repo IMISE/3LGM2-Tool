@@ -1,15 +1,15 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -33,7 +33,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * <p>
  * Die Dateneingabe erfolgt für jede Klasse von ModelElementen und jede für sie definierte Kantenklasse separat - die Auswahl der ElementKlasse
  * erfolgt in der enthaltenen <code>elementClassBox</code>, die Auswahl der Kantenklasse in der <code>EdgeClassBox</code>.
- * 
+ *
  * @author AXS
  * @create 02.09.2015
  */
@@ -71,7 +71,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
     /**
      * Konstruktor
-     * 
+     *
      * @param dialog Dialog, der dieses Panel enthält
      * @param name
      */
@@ -94,7 +94,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         constraints.weightx = 1;
         constraints.weighty = 0;
 
-        elementClassBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_element_type"));
+        elementClassBox.addSeparator(getResString("userFieldEditor_element_type"));
         setElementClassBoxContent();
         setActionsForElementClassBox();
         add(elementClassBox, constraints);
@@ -128,7 +128,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
         final DistributionWeightReplacePanel finalPanel = this;
 
-        //Bei Änderung der Auswahl in elementClassBox, werden in der edgeClassBox die verfügbaren 
+        //Bei Änderung der Auswahl in elementClassBox, werden in der edgeClassBox die verfügbaren
         //Verteilungsgewichte angezeigt
         AbstractAction action = new AbstractAction() {
             @Override
@@ -161,7 +161,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         constraints.gridy = 2;
         constraints.weightx = 1;
         constraints.weighty = 0;
-        edgeClassBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_edge_type"));
+        edgeClassBox.addSeparator(getResString("userFieldEditor_edge_type"));
         setActionsForEdgeClassBox();
         add(edgeClassBox, constraints);
     }
@@ -173,29 +173,25 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
      */
     private void setActionsForEdgeClassBox() {
         final DistributionWeightReplacePanel finalPanel = this;
-        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und 
+        // Bei Änderung in der weightBox, wird der zum gewählten Verteilungsgewicht und
         // Kantentyp gehörige Table im Panel dargestellt.
-        ItemListener il = new ItemListener() {
-            @Override
-            public void itemStateChanged(final ItemEvent e) {
+        ItemListener il = e -> {
 
-                Object o = edgeClassBox.getSelectedObject();
-                if (o == null) {
-                    return;
-                }
-                if (!(o instanceof Class) || !Edge.class.isAssignableFrom((Class<?>) o)) {
-                    return;
-                }
-                stopEditing();
-                takeOver();
-
-                // Selektion für nächstes takeOver
-                finalPanel.edgeClassBoxSelection = o;
-
-                finalPanel.drawTable();
-                finalPanel.distributeSelectionChangedEvent();
+            Object o = edgeClassBox.getSelectedObject();
+            if (o == null) {
+                return;
             }
+            if (!(o instanceof Class) || !Edge.class.isAssignableFrom((Class<?>) o)) {
+                return;
+            }
+            stopEditing();
+            takeOver();
 
+            // Selektion für nächstes takeOver
+            finalPanel.edgeClassBoxSelection = o;
+
+            finalPanel.drawTable();
+            finalPanel.distributeSelectionChangedEvent();
         };
 
         edgeClassBox.addItemListener(il);
@@ -212,7 +208,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         edgeClassBox.removeAllItems();
 
-        edgeClassBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_edge_type"));
+        edgeClassBox.addSeparator(getResString("userFieldEditor_edge_type"));
 
         Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass);
         //mind. eine Kantenklase mit Kennzahlen oder Kennzahlformeln?
@@ -260,7 +256,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
 
     /**
      * Setzt über das GraphDocument im Replacer ein neues Replacement
-     * 
+     *
      * @param doc
      * @param rowElementHash
      * @param columnUserField
@@ -274,7 +270,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             String columnUserFieldHash = columnUserField.getHashCode();
             if (replaceUserField == null) { // es soll durch die Gleichverteilung ersetzt werden
                 doc.setUserFieldWeightReplacement(rowElementHash, columnUserFieldHash, null, pid);
-            } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden 
+            } else { //es soll durch ein anderes UserField ersetzt bzw. gelöscht werden
                 String userFieldHashReplacement = replaceUserField.getHashCode();
                 String oldReplacement = replacer.getReplacement(rowElementHash, columnUserFieldHash);
                 //wenn tatsächlich einer Wert übergeben wurde
@@ -352,7 +348,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         if (!hasSelectedItem()) {
             return;
         }
-        //selektierte Element- und Kantenklasse holen 
+        //selektierte Element- und Kantenklasse holen
         Class<? extends ModelElement> elementClass = ((Class<?>) elementClassBox.getSelectedObject()).asSubclass(ModelElement.class);
         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassBox.getSelectedObject()).asSubclass(Edge.class);
         //das Model damit initialisieren

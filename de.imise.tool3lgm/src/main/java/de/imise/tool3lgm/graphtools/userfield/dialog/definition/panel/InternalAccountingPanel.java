@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_SUM;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.ACCOUNTING_FUNCTION_TWSUM;
 
@@ -20,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
@@ -37,7 +37,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  */
 public class InternalAccountingPanel extends AbstractInputPanel implements ActionListener {
 
-    private final JRadioButton noAccountingBut = new JRadioButton(Tool3lgmConstants.getResString("non_accounting"));
+    private final JRadioButton noAccountingBut = new JRadioButton(getResString("non_accounting"));
 
     private final JRadioButton sumAccountingBut = new JRadioButton(UserField.getDisplayableFunctionName(ACCOUNTING_FUNCTION_SUM));
 
@@ -51,7 +51,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
      * "Gleichverteilt" in der gewählten Loacle. Wird angezeigt, wenn als Verteilungsgewicht bei einer Verrechnung über die Teilwertsumme kein
      * spezielles Verteilungsgewicht genutzt werden soll.
      */
-    private static final String UNIFORMLY_DISTRIBUTED = Tool3lgmConstants.getResString("uniformly_distributed");
+    private static final String UNIFORMLY_DISTRIBUTED = getResString("uniformly_distributed");
 
     /**
      * @param definitions
@@ -71,10 +71,10 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         functionButtonPanel.add(sumAccountingBut);
         functionButtonPanel.add(twsumAccountingBut);
 
-        dirComboBox.addItem(UserField.DIRECTION_FROM_PART_TO_WHOLE, Tool3lgmConstants.getResString("part_to_whole"));
-        dirComboBox.addItem(UserField.DIRECTION_FROM_WHOLE_TO_PART, Tool3lgmConstants.getResString("whole_to_part"));
+        dirComboBox.addItem(UserField.DIRECTION_FROM_PART_TO_WHOLE, getResString("part_to_whole"));
+        dirComboBox.addItem(UserField.DIRECTION_FROM_WHOLE_TO_PART, getResString("whole_to_part"));
 
-        HashSet<Class<? extends PartOfBeziehung>> poClasses = new HashSet<Class<? extends PartOfBeziehung>>();
+        HashSet<Class<? extends PartOfBeziehung>> poClasses = new HashSet<>();
         Class<? extends UserFieldTarget> userFieldTargetClass = userField.getTargetClass();
         if (ModelElement.class.isAssignableFrom(userFieldTargetClass)) {
             Class<? extends ModelElement> elementClass = userFieldTargetClass.asSubclass(ModelElement.class);
@@ -94,7 +94,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         twsumAccountingBut.addActionListener(this);
 
         //Das Panel zusammenbauen
-        setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("internal_accounting")));
+        setBorder(BorderFactory.createTitledBorder(getResString("internal_accounting")));
 
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 2, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(2, 0, 2, 0), 0, 0);
 
@@ -102,7 +102,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.gridwidth = 1;
-        add(new JLabel(Tool3lgmConstants.getResString("direction")), constraints);
+        add(new JLabel(getResString("direction")), constraints);
         constraints.insets.left = 10;
         constraints.gridx++;
         add(dirComboBox, constraints);
@@ -112,7 +112,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         constraints.gridx = 0;
         constraints.gridy++;
         constraints.insets.left = 0;
-        add(new JLabel(Tool3lgmConstants.getResString("weighting")), constraints);
+        add(new JLabel(getResString("weighting")), constraints);
         constraints.insets.left = 10;
         constraints.gridx++;
         add(vgComboBox, constraints);

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,19 +65,19 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         }
 
         button = new JToggleButton(Tool3lgmConstants.getIcon("fill.gif"));
-        button.setToolTipText(Tool3lgmConstants.getResString("el_mark_bearb"));
+        button.setToolTipText(getResString("el_mark_bearb"));
         button.setActionCommand("Maus");
         button.addActionListener(this);
         button.setSelected(true);
         button.setPreferredSize(new Dimension(30, 30));
         CSH.setHelpIDString(button, "wl_maus");
-        zoomlabel = new JLabel(Tool3lgmConstants.getResString("zoom"));
+        zoomlabel = new JLabel(getResString("zoom"));
         zoom = new JSlider(10, 200);
         zoom.setPreferredSize(new Dimension(150, 30));
-        winkellabel = new JLabel(Tool3lgmConstants.getResString("winkel"));
+        winkellabel = new JLabel(getResString("winkel"));
         winkel = new JSlider(0, 80);
         winkel.setPreferredSize(new Dimension(150, 30));
-        abstandlabel = new JLabel(Tool3lgmConstants.getResString("abstand"));
+        abstandlabel = new JLabel(getResString("abstand"));
         double pageSizeFactor = f.getSzenario().getPageSizeFactor();
         abstand = new JSlider(0, new Double(800 * pageSizeFactor).intValue());
         Szenario szen = (Szenario) f.getSzenario();

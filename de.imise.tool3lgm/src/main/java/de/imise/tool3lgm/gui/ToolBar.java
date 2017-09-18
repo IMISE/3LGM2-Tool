@@ -136,7 +136,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         JButton button = new JButton(action);
         button.setIcon(Tool3lgmConstants.getIcon(iconName));
         button.setText(null);
-        button.setToolTipText(Tool3lgmConstants.getResString(toolTipResKey));
+        button.setToolTipText(getResString(toolTipResKey));
         if (helpID != null) {
             CSH.setHelpIDString(button, helpID);
         }

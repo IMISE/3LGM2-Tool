@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_FORWARD_AND_BACKWARD;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_MODELELEMENT;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.NO;
@@ -20,7 +21,6 @@ import javax.swing.JPanel;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -49,7 +49,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  * i) alle Elemente anzeigen <br>
  * ii) nur toplevel Elemente anzeigen <br>
  * iii) nur Blatt-Elemente anzeigen
- * 
+ *
  * @see de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractUserFieldEditorPanel
  * @author fstephan, AXS
  */
@@ -60,12 +60,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     /**
      * Rückgabewerte für die Funktion, die prüft, ob eine Elementklasse
-     * 
+     *
      * @author Ich
      * @create 10.11.2015
      */
     protected static enum InsertType {
-        NO, AS_MODELELEMENT, AS_EDGE_FORWARD, AS_EDGE_BACKWARD, AS_EDGE_FORWARD_AND_BACKWARD
+        NO,
+        AS_MODELELEMENT,
+        AS_EDGE_FORWARD,
+        AS_EDGE_BACKWARD,
+        AS_EDGE_FORWARD_AND_BACKWARD
     }
 
     /**
@@ -83,7 +87,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /* ************************* Beginn: Initialisierungsteil *********************************** */
     /**
      * Konstruktor
-     * 
+     *
      * @param dialog Dialog, der dieses Panel enthält
      * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
      * @param visibleUserField Style der UserFields, die angezeigt werden sollen
@@ -95,7 +99,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     /**
      * Konstruktor
-     * 
+     *
      * @param dialog Dialog, der dieses Panel enthält
      * @param selectableElementClass Oberklasse aller instaziierbaren Elementklassen, die in der Auswahlbox stehen sollen
      * @param visibleUserFields Styles der UserFields, die angezeigt werden sollen
@@ -157,7 +161,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
         boolean isEdgeType = ModelConstants.isEdgeType(selectableElementsClass);
         String resKey = isEdgeType ? "userFieldEditor_edge_type" : "userFieldEditor_element_type";
-        elementTypeBox.addSeparator(Tool3lgmConstants.getResString(resKey));
+        elementTypeBox.addSeparator(getResString(resKey));
 
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
 
@@ -203,7 +207,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /**
      * Prüft, ob mindestens ein <code>UserField</code> der übergebenen <code>elementClass</code> vom Typ Kennzahl ist. Dann wird true zurückggegeben
      * ansonsten false.
-     * 
+     *
      * @param elementClass Die <code>ElementClass</code>e, deren <code>UserField</code>s geprüft werden sollen.
      * @param definitions Die <code>UserFieldDefinition</code>s
      * @return Wenn mindestens ein <code>UserField</code> vom Typ Kennzahl (<code>UserField.CLASSIFICATION_NUMBER_STYLE</code>) ist: true; ansonsten
@@ -343,7 +347,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     /**
      * Gibt die <code>elementTypeBox</code> zurück
-     * 
+     *
      * @return <code>elementTypeBox</code>
      */
     public AlphabeticalComboBox getElementTypeBox() {
@@ -355,7 +359,10 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     /* ************************* Beginn: Unterklassen *********************************** */
 
     /**
-     * Panel zur Auswahl der anzuzeigenden Element-Typen: <li>Top-Level <li>Innere <li>Blätter
+     * Panel zur Auswahl der anzuzeigenden Element-Typen:
+     * <li>Top-Level
+     * <li>Innere
+     * <li>Blätter
      */
     protected class ElementTypePane extends JPanel {
 
@@ -365,9 +372,9 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         private final JCheckBox leafs;
 
         public ElementTypePane() {
-            topLevel = new JCheckBox(getActionForButtons(Tool3lgmConstants.getResString("hierarchy_panel_show_toplevel")));
-            inner = new JCheckBox(getActionForButtons(Tool3lgmConstants.getResString("hierarchy_panel_show_inner")));
-            leafs = new JCheckBox(getActionForButtons(Tool3lgmConstants.getResString("hierarchy_panel_show_leafs")));
+            topLevel = new JCheckBox(getActionForButtons(getResString("hierarchy_panel_show_toplevel")));
+            inner = new JCheckBox(getActionForButtons(getResString("hierarchy_panel_show_inner")));
+            leafs = new JCheckBox(getActionForButtons(getResString("hierarchy_panel_show_leafs")));
             topLevel.setSelected(true);
             inner.setSelected(true);
             leafs.setSelected(true);
@@ -379,7 +386,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         /**
          * Gibt die auzuführenden Aktionen für die CheckBoxes wieder. Bei Änderung der Selektion werden Änderungen temporär übernommen und das
          * Neuzeichnen des Tables ausgelöst.
-         * 
+         *
          * @param panel
          * @param buttonLabel
          * @return

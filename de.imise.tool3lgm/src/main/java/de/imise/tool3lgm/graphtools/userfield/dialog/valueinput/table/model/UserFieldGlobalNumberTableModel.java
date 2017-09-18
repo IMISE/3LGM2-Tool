@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.ArrayList;
 import java.util.Vector;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -20,19 +21,20 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
      * Erstellt und setzt Modeldaten für Modelvariablen
      */
     @SuppressWarnings({
-            "rawtypes", "unchecked"
+            "rawtypes",
+            "unchecked"
     })
     public void setData() {
 
         GDCollection gdcoll = definitions.getCollection();
 
         // columIdentifiers erzeugen
-        String columnHeader = Tool3lgmConstants.getResString("value");
-        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<NamedObjectContainer<?>>(1);
+        String columnHeader = getResString("value");
+        Vector<NamedObjectContainer<?>> columnIdentifiers = new Vector<>(1);
         columnIdentifiers.add(new NamedObjectContainer(columnHeader, columnHeader));
 
         // Liste aller globalen UserFields erstellen
-        ArrayList<UserField> userFieldList = new ArrayList<UserField>();
+        ArrayList<UserField> userFieldList = new ArrayList<>();
         for (UserField uf : definitions.getGlobalUserFields()) {
             if (!uf.hasStyle(UserField.Style.FORMAT)) {
                 userFieldList.add(uf);
@@ -45,15 +47,15 @@ public class UserFieldGlobalNumberTableModel extends AbstractUserFieldTableModel
         }
 
         // rowIdentifiers und dataVector erzeugen
-        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<NamedObjectContainer<?>>();
+        Vector<NamedObjectContainer<?>> rowIdentifiers = new Vector<>();
 
         Object[][] data = new Object[userFieldList.size()][1];
         for (int i = 0; i < userFieldList.size(); i++) {
             UserField uf = userFieldList.get(i);
-            NamedObjectContainer<UserField> noc = new NamedObjectContainer<UserField>(uf, uf.getName());
+            NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(uf, uf.getName());
             rowIdentifiers.add(noc);
             String value = uf.getValue(gdcoll);
-            data[i][0] = new NamedObjectContainer<UserField>(uf, value);
+            data[i][0] = new NamedObjectContainer<>(uf, value);
         }
 
         // Daten setzen

@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 
@@ -14,7 +15,6 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.HashStringGenerator;
@@ -1303,7 +1303,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
 
     public static String getDisplayableFunctionName(final String functionName) {
         //falls mal die Funktionen tatsächlich auf enum umgestellt werden, muss das hier anders laufen
-        return Tool3lgmConstants.getResString(functionName);
+        return getResString(functionName);
     }
 
 }

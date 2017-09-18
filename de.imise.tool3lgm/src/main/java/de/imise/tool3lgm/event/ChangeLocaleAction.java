@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.event;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionEvent;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -20,7 +22,7 @@ import de.imise.util.Alphabetical;
  * {@link #selectedAction} abgespeichert und besitzt als einziges den Wert <code>true</code> für die {@link #SELECTED_KEY}-Property.
  * <p>
  * Das Umschalten erfolgt beim Aufruf von {@link #actionPerformed(ActionEvent)}.
- * 
+ *
  * @see AbstractAction
  * @see StateProviderAction
  * @author fstephan
@@ -54,7 +56,7 @@ class ChangeLocaleAction extends StaticAction {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param locale Sprache, die durch {@link #actionPerformed(ActionEvent)} aktiviert wird
      */
     private ChangeLocaleAction(final Locale locale) {
@@ -86,11 +88,11 @@ class ChangeLocaleAction extends StaticAction {
         ResourceBundle newLocaleBundle = ResourceBundle.getBundle(Tool3lgmConstants.RESOURCE_BASE_NAME);
         Locale.setDefault(oldLocale);
 
-        String info_oldLocale = Tool3lgmConstants.getResString("language_info");
+        String info_oldLocale = getResString("language_info");
         String info_newLocale = newLocaleBundle.getString("language_info");
         String info = info_oldLocale + "\n\n" + info_newLocale;
 
-        String info_title_oldLocale = Tool3lgmConstants.getResString("language_info_title");
+        String info_title_oldLocale = getResString("language_info_title");
         String info_title_newLocale = newLocaleBundle.getString("language_info_title");
         String info_title = info_title_oldLocale + " / " + info_title_newLocale;
 

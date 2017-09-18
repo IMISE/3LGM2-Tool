@@ -1,12 +1,13 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -119,7 +120,7 @@ public class WeightReplaceTableModel extends AbstractTableModel {
      * @return
      */
     public static NamedObjectContainer<UserField> getUniformlyDistributedValueContainer() {
-        return NamedObjectContainer.of(null, Tool3lgmConstants.getResString("uniformly_distributed"));
+        return NamedObjectContainer.of(null, getResString("uniformly_distributed"));
     }
 
     /**

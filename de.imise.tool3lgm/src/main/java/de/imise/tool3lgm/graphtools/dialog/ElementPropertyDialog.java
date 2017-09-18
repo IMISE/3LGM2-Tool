@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,7 +23,6 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
@@ -88,7 +89,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
         super(gdcoll);
 
-        setTitle(Tool3lgmConstants.getResString("eigensch_dial"));
+        setTitle(getResString("eigensch_dial"));
 
         getContentPane().setLayout(new BorderLayout());
 
@@ -103,12 +104,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         update();
 
         descripPanel = new DescripPanel(this);
-        addTab(Tool3lgmConstants.getResString("general"), descripPanel);
+        addTab(getResString("general"), descripPanel);
         addPartOfStructurePanel();
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
-            addTab(Tool3lgmConstants.getResString("userfields"), new PropertyDialogUserFieldPanel(this));
+            addTab(getResString("userfields"), new PropertyDialogUserFieldPanel(this));
         }
 
         JPanel buttonpanel = new JPanel();
@@ -207,7 +208,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         List<Class<? extends PartOfBeziehung>> realPartOfs = getRealPartOfs();
         if (realPartOfs.size() == 1) {
             StructurePanel structurePanel = new StructurePanel(this, realPartOfs.get(0));
-            structurePanel.setName(Tool3lgmConstants.getResString("strukt"));
+            structurePanel.setName(getResString("strukt"));
             addTab(structurePanel);
         } else if (realPartOfs.size() > 1) {
             //TODO: hier könnte müsste man ein ExtraPanel mit dem Namen Struktur mit den Teil-Von-Beziehungen als UnterPanels anlegen, die mit der jeweiligen Edge benamt sind
@@ -412,7 +413,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     public void addTabbedPanel(final String nameResKey) {
         lastCreatedTabbedPanel = new TabbedPanel(this);
-        lastCreatedTabbedPanel.setName(Tool3lgmConstants.getResString(nameResKey));
+        lastCreatedTabbedPanel.setName(getResString(nameResKey));
         addTab(lastCreatedTabbedPanel);
     }
 

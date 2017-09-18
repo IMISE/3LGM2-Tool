@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.io.File;
 import java.util.List;
@@ -18,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.util.Alphabetical;
 
 /**
@@ -137,10 +138,10 @@ public class AnalyseRepositoryFrame extends JFrame {
      * @param t die Tool3lgm Klasse, in der dieser Dialog angezeigt wird.
      */
     private AnalyseRepositoryFrame() {
-        super(Tool3lgmConstants.getResString("repository"));
+        super(getResString("repository"));
         setIconImage(Static.getMainFrame().getIconImage());
 
-        JMenu menuFile = new JMenu(Tool3lgmConstants.getResString("file"));
+        JMenu menuFile = new JMenu(getResString("file"));
         menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_LOAD_STANDARD_REPOSITORY));
         menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_SAVE_REPOSITORY));
         menuFile.add(new JSeparator());
@@ -148,7 +149,7 @@ public class AnalyseRepositoryFrame extends JFrame {
         menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_EXPORT_ANALYSIS));
         menuFile.add(new JSeparator());
         menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_CLOSE_DIALOG));
-        JMenu menuAnalysis = new JMenu(Tool3lgmConstants.getResString("analysis"));
+        JMenu menuAnalysis = new JMenu(getResString("analysis"));
         menuAnalysis.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_NEW_ANALYSIS));
         menuAnalysis.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_DELETE_ANALYSIS));
         menuAnalysis.add(new JSeparator());

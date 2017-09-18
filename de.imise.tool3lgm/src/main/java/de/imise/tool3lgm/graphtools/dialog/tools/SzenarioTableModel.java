@@ -4,13 +4,14 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.tools;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 
@@ -56,9 +57,9 @@ public class SzenarioTableModel extends AbstractTableModel {
         case 0:
             return selectionColName;
         case 1:
-            return Tool3lgmConstants.getResString("name");
+            return getResString("name");
         case 2:
-            return Tool3lgmConstants.getResString("description");
+            return getResString("description");
         default:
             return null;
         }

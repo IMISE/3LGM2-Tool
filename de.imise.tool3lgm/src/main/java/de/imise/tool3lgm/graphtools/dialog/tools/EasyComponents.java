@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.tools;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
@@ -21,7 +23,7 @@ public class EasyComponents {
         String buttonText = resKey;
         Icon icon = null;
         try {
-            buttonText = Tool3lgmConstants.getResString(resKey);
+            buttonText = getResString(resKey);
         } catch (Exception e) {
             icon = Tool3lgmConstants.getIcon(resKey);
         }

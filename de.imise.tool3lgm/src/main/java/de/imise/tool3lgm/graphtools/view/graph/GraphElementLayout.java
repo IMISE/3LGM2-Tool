@@ -1,13 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Stroke;
 
 import javax.swing.SwingConstants;
-
-import de.imise.tool3lgm.Tool3lgmConstants;
 
 // TODO: Konzept der Klasse GraphElementLayout überarbeiten und toXMLString-Methode verändern und nur GraphElementLayout-Informationen speichern die
 // nicht Standard aus Mapping entsprechen
@@ -84,16 +84,16 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
 
     public static final String[] COLOR_NAMES = new String[10];
     static {
-        COLOR_NAMES[WHITE] = Tool3lgmConstants.getResString("white");
-        COLOR_NAMES[YELLOW] = Tool3lgmConstants.getResString("yellow");
-        COLOR_NAMES[GREEN] = Tool3lgmConstants.getResString("green");
-        COLOR_NAMES[BLUE] = Tool3lgmConstants.getResString("blue");
-        COLOR_NAMES[GRAY] = Tool3lgmConstants.getResString("grey");
-        COLOR_NAMES[RED] = Tool3lgmConstants.getResString("red");
-        COLOR_NAMES[ORANGE] = Tool3lgmConstants.getResString("orange");
-        COLOR_NAMES[BLACK] = Tool3lgmConstants.getResString("black");
-        COLOR_NAMES[LIGHTRED] = Tool3lgmConstants.getResString("lightred");
-        COLOR_NAMES[LIGHTGREEN] = Tool3lgmConstants.getResString("lightgreen");
+        COLOR_NAMES[WHITE] = getResString("white");
+        COLOR_NAMES[YELLOW] = getResString("yellow");
+        COLOR_NAMES[GREEN] = getResString("green");
+        COLOR_NAMES[BLUE] = getResString("blue");
+        COLOR_NAMES[GRAY] = getResString("grey");
+        COLOR_NAMES[RED] = getResString("red");
+        COLOR_NAMES[ORANGE] = getResString("orange");
+        COLOR_NAMES[BLACK] = getResString("black");
+        COLOR_NAMES[LIGHTRED] = getResString("lightred");
+        COLOR_NAMES[LIGHTGREEN] = getResString("lightgreen");
     }
 
     public static final int NICHT_TRANSPARENT = 255;
@@ -101,12 +101,12 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public static final int VOLL_TRANSPARENT = 0;
 
     public static final String[] FONT_NAMES = {
-            Tool3lgmConstants.getResString("courier"),
-            Tool3lgmConstants.getResString("helvetica"),
-            Tool3lgmConstants.getResString("luc_sans"),
-            Tool3lgmConstants.getResString("serif"),
-            Tool3lgmConstants.getResString("icon"),
-            Tool3lgmConstants.getResString("times")
+            getResString("courier"),
+            getResString("helvetica"),
+            getResString("luc_sans"),
+            getResString("serif"),
+            getResString("icon"),
+            getResString("times")
     };
 
     public static final int[] FONT_SIZES = {
@@ -118,9 +118,9 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     };
 
     public static final String[] FONT_STYLE_NAMES = {
-            Tool3lgmConstants.getResString("font_plain"),
-            Tool3lgmConstants.getResString("font_bold"),
-            Tool3lgmConstants.getResString("font_italic")
+            getResString("font_plain"),
+            getResString("font_bold"),
+            getResString("font_italic")
     };
 
     public static final int[] FONT_STYLES = {

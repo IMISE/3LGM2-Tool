@@ -3,12 +3,13 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.swing.component.text.ExtendedTextField;
 
@@ -34,9 +35,9 @@ public class ListValuePanel extends AbstractInputPanel {
         super();
         this.userField = userField;
 
-        setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("userFieldEditor_values")));
+        setBorder(BorderFactory.createTitledBorder(getResString("userFieldEditor_values")));
         setLayout(new BorderLayout());
-        add(new JLabel(Tool3lgmConstants.getResString("userFieldEditor_values_hint")), BorderLayout.NORTH);
+        add(new JLabel(getResString("userFieldEditor_values_hint")), BorderLayout.NORTH);
 
         add(valueListTextField, BorderLayout.CENTER);
 

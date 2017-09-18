@@ -19,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Composition;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -353,7 +352,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      */
     @Override
     public String toString() {
-        return !me.isUnpaintable() && isVisible() && doc instanceof Szenario ? me.toString() : Tool3lgmConstants.getResString("ausgebl") + " " + me.toString();
+        return !me.isUnpaintable() && isVisible() && doc instanceof Szenario ? me.toString() : getResString("ausgebl") + " " + me.toString();
     }
 
     /* -------- GraphElementLayout - Funktionen aus dem ModelElement -------------- */

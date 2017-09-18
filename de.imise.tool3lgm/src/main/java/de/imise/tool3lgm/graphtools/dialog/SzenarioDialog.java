@@ -55,17 +55,15 @@ public class SzenarioDialog extends JDialog {
      * @throws java.awt.HeadlessException
      */
     public SzenarioDialog(final Frame owner, final GDCollection gdcoll, final boolean forImport) throws HeadlessException {
-        super(owner, forImport ? Tool3lgmConstants.getResString("importSzenario") : Tool3lgmConstants.getResString("exportSzenario"), true);
+        super(owner, forImport ? getResString("importSzenario") : getResString("exportSzenario"), true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.gdcoll = gdcoll;
 
         getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(new JLabel(Tool3lgmConstants.getResString("labelSource") + gdcoll.getName()), BorderLayout.NORTH);
-
+        getContentPane().add(new JLabel(getResString("labelSource") + gdcoll.getName()), BorderLayout.NORTH);
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
         if (forImport) {
-            ok = new JButton(new AbstractAction(Tool3lgmConstants.getResString("importSzenario")) {
+            ok = new JButton(new AbstractAction(getResString("importSzenario")) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     selectedSzenarios = ((SzenarioTableModel) table.getModel()).getSelectedSzenarios();
@@ -73,7 +71,7 @@ public class SzenarioDialog extends JDialog {
                 }
             });
         } else {
-            ok = new JButton(new AbstractAction(Tool3lgmConstants.getResString("exportSzenario")) {
+            ok = new JButton(new AbstractAction(getResString("exportSzenario")) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (commit()) {
@@ -86,7 +84,7 @@ public class SzenarioDialog extends JDialog {
         panel.add(ok);
 
         if (!forImport) {
-            panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("explore")) {
+            panel.add(new JButton(new AbstractAction(getResString("explore")) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     changeFile();

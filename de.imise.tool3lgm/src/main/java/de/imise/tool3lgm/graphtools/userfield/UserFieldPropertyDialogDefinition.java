@@ -1,10 +1,11 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -25,7 +26,7 @@ public class UserFieldPropertyDialogDefinition {
     public UserFieldPropertyDialogDefinitionTab insertUserFieldTab(final Class<? extends ModelElement> elementClass, final int index) {
         UserFieldTargetSpecificList<UserFieldPropertyDialogDefinitionTab> tabList = getOrCreateTabList(elementClass);
         UserFieldPropertyDialogDefinitionTab tab = new UserFieldPropertyDialogDefinitionTab();
-        String defaultName = Tool3lgmConstants.getResString("userfields") + " ";
+        String defaultName = getResString("userfields") + " ";
         String nextIndicatedName = CollectionUtils.getNextIndicatedName(defaultName, tabList, true, false);
         tab.setName(nextIndicatedName);
         int newIndex = index < 1 ? 1 : index >= tabList.size() ? tabList.size() : index;

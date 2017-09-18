@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -14,7 +16,6 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -98,13 +99,13 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
         this.gdcoll = gdcoll;
         addWindowListener(this);
         doc = gdcoll.getMainGraphDocument();
-        okButton = new JButton(Tool3lgmConstants.getResString("ok"));
-        cancelButton = new JButton(Tool3lgmConstants.getResString("cancel"));
-        applyButton = new JButton(Tool3lgmConstants.getResString("apply"));
+        okButton = new JButton(getResString("ok"));
+        cancelButton = new JButton(getResString("cancel"));
+        applyButton = new JButton(getResString("apply"));
         setSameButtonSize(okButton, cancelButton, applyButton);
         String helpID = Help.getHelp().getHelpID(this);
         if (helpID != null && helpID.length() > 0) {
-            helpButton = new JButton(Tool3lgmConstants.getResString("hilfeButtonText"));
+            helpButton = new JButton(getResString("hilfeButtonText"));
             helpButton.setMnemonic('H');
             Help.getHelp().enableHelpOnButton(helpButton, helpID);
         }

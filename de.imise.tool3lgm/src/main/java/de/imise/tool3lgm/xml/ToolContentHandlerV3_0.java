@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.createElement;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 
@@ -19,7 +20,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -485,7 +485,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         if (!value.equals("")) {
                             StringBuilder sb = new StringBuilder(element.getDescription());
                             sb.append("\n\n\n##### ");
-                            sb.append(Tool3lgmConstants.getResString(field));
+                            sb.append(getResString(field));
                             sb.append(" #####\n\n");
                             sb.append(value);
                             element.setDescription(sb.toString());

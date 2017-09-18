@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 
 import java.awt.Container;
@@ -18,7 +19,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -87,7 +87,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         this.userField = userField;
         definitions = gdcol.getUserFieldDefinitions();
         setModal(true);
-        setTitle(Tool3lgmConstants.getResString("userFieldEditor_title"));
+        setTitle(getResString("userFieldEditor_title"));
         setMinimumSize(DEFAULT_SIZE);
         init();
     }
@@ -112,10 +112,10 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
 
         //Label mit dem Namen und der Art des zu bearbeitenden Feldes
         StringBuilder sb = new StringBuilder();
-        sb.append(Tool3lgmConstants.getResString("attribute"));
+        sb.append(getResString("attribute"));
         sb.append(":  ");
         if (ModelConstants.isNodeType(userField.getTargetClass())) {
-            sb.append(Tool3lgmConstants.getResString(userField.getTargetClass().getSimpleName()));
+            sb.append(getResString(userField.getTargetClass().getSimpleName()));
         } else {
             if (ModelConstants.isEdgeType(userField.getTargetClass())) {
                 sb.append(ModelConstants.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), false, DOUBLE, true, true));
@@ -125,7 +125,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
 
         }
         sb.append("  ");
-        sb.append(Tool3lgmConstants.getResString("attribute_typ"));
+        sb.append(getResString("attribute_typ"));
         sb.append(":  ");
         sb.append(CostingUtil.getDisplayableStyleName(userField.getStyle()));
         JLabel topLabel = new JLabel(sb.toString());
@@ -225,7 +225,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
                 }
             }
             if (errorString != null) {
-                MultipleOptionPane.showInformationMessageDialog(this, Tool3lgmConstants.getResString("fehler"), errorString);
+                MultipleOptionPane.showInformationMessageDialog(this, getResString("fehler"), errorString);
             } else {
                 retVal = OK;
                 commit();

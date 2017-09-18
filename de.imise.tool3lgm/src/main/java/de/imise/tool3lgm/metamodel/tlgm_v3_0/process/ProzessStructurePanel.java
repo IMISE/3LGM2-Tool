@@ -4,6 +4,7 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
@@ -227,7 +228,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
         List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new LGMTreeNode(Tool3lgmConstants.getResString("AufObjVerbindung_f_b"), false);
+            LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_b"), false);
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
                 LGMTreeNode otNode = new LGMTreeNode(ot, false);
@@ -238,7 +239,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         }
         ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new LGMTreeNode(Tool3lgmConstants.getResString("AufObjVerbindung_f_f"), false);
+            LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_f"), false);
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
                 LGMTreeNode otNode = new LGMTreeNode(ot, false);
@@ -471,13 +472,13 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //        int size = aufgabenContainer.size();
     //        // der Prozess ist leer
     //        if (size == 0) {
-    //            errorTitle = Tool3lgmConstants.getResString("process_error_no_function");
-    //            errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_function_1"));
+    //            errorTitle = getResString("process_error_no_function");
+    //            errorBuffer.append(getResString("process_error_no_function_1"));
     //        }
     //        // der Prozess hat nur eine Aufgabe
     //        else if (size == 1) {
-    //            errorTitle = Tool3lgmConstants.getResString("process_error_single_function");
-    //            errorBuffer.append(Tool3lgmConstants.getResString("process_error_single_function_1"));
+    //            errorTitle = getResString("process_error_single_function");
+    //            errorBuffer.append(getResString("process_error_single_function_1"));
     //            ((LGMTreeNode) lroot.getChildAt(0)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
     //            // der Prozess hat mind. 2 Aufgaben
     //        } else {
@@ -492,12 +493,12 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            for (int i = 1; i < size; i++) {
     //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
     //                    if (errorBuffer.length() == 0) {
-    //                        errorTitle = Tool3lgmConstants.getResString("process_error_no_process_step");
-    //                        errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_process_step_1"));
+    //                        errorTitle = getResString("process_error_no_process_step");
+    //                        errorBuffer.append(getResString("process_error_no_process_step_1"));
     //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
-    //                        errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_process_step_2"));
+    //                        errorBuffer.append(getResString("process_error_no_process_step_2"));
     //                        errorBuffer.append(i + 1);
-    //                        errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_process_step_3"));
+    //                        errorBuffer.append(getResString("process_error_no_process_step_3"));
     //                    }
     //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
     //                }
@@ -1061,7 +1062,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(Tool3lgmConstants.getResString("verif")) {
+            return new LGMAction(getResString("verif")) {
 
                 @Override
                 public void execute(final EventObject e) {
@@ -1092,7 +1093,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private static final LGMAction getFehlerAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
         final ElementDialogPanel pane = edp;
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(Tool3lgmConstants.getResString("fehler")) {
+            return new LGMAction(getResString("fehler")) {
 
                 @Override
                 public void execute(final EventObject e) {

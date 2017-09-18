@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 
@@ -15,7 +16,6 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -178,7 +178,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         UserFieldDefinitions definitions = getUserFieldDefinitions();
 
         weightBox.removeAllItems();
-        weightBox.addSeparator(Tool3lgmConstants.getResString("weighting"));
+        weightBox.addSeparator(getResString("weighting"));
 
         for (UserField uf : definitions.getUserFields(elementTypeBoxSelection)) {
             if (uf.isClassificationUserField()) {
@@ -219,8 +219,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     private void setColumnFilterBoxContent() {
         Vector<?> columnIdentifiers = table.getColumnIdentifiers();
         columnFilterBox.removeAllItems();
-        columnFilterBox.addSeparator(Tool3lgmConstants.getResString("filter_column"));
-        columnFilterBox.addItem(new NamedObjectContainer<ModelElement>(null, Tool3lgmConstants.getResString("show_all_columns")));
+        columnFilterBox.addSeparator(getResString("filter_column"));
+        columnFilterBox.addItem(new NamedObjectContainer<ModelElement>(null, getResString("show_all_columns")));
         columnFilterBox.setSelectedIndex(1);
         columnFilterBox.addSeparator(false);
         if (columnIdentifiers != null) {

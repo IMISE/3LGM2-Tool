@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -8,7 +10,6 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -23,7 +24,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     private final ExtendedTextPane descriptionTextPane = new ExtendedTextPane();
 
-    private final JLabel descriptionWestLabel = new JLabel(Tool3lgmConstants.getResString("description"));
+    private final JLabel descriptionWestLabel = new JLabel(getResString("description"));
 
     /** Cache zur Speicherung, ob die Beschreibung des verbundenen Elementes geändert wurde */
     private String olddescrip = "";
@@ -101,7 +102,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
     public Component addSelf() {
         GridBagConstraints gbc = new GridBagConstraints();
         //wenn das Panel als alleine steht, dann soll vor dem Westlabel nur "Bezeichnung" stehen
-        westLabel.setText(Tool3lgmConstants.getResString("bez"));
+        westLabel.setText(getResString("bez"));
         setLayout(new GridBagLayout());
         addMe(this, gbc, 0);
         return this;

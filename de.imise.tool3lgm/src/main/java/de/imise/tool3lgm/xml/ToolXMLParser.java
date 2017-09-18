@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -354,7 +353,7 @@ public class ToolXMLParser {
             }
         }
         if (version[0] == -1) {
-            throw new XMLVersionException(Tool3lgmConstants.getResString("xmlversionsfehler"));
+            throw new XMLVersionException(getResString("xmlversionsfehler"));
         }
 
         line = dataStream.readLine();
@@ -368,7 +367,7 @@ public class ToolXMLParser {
             }
         }
         if (version[1] == -1) {
-            throw new LGMVersionException(Tool3lgmConstants.getResString("lgmversionsfehler"));
+            throw new LGMVersionException(getResString("lgmversionsfehler"));
         }
 
         return version;

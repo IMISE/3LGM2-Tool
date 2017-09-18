@@ -1,7 +1,9 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.consistency;
+
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -13,7 +15,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -30,16 +31,16 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
     private final JTable table;
 
     /**
-	 * 
-	 */
+     * 
+     */
     private final ConsistencyChecker checker;
 
     private ArrayList<AbstractError> errors;
-    private final ArrayList<ModelElement> selectedErrorElements = new ArrayList<ModelElement>();
+    private final ArrayList<ModelElement> selectedErrorElements = new ArrayList<>();
 
     /**
-	 * 
-	 */
+     * 
+     */
     ConsistencyErrorTableEvents(final ConsistencyChecker checker, final JTable errorTable) {
         super();
         this.checker = checker;
@@ -55,7 +56,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
             if (rows.length == 0) {
                 return;
             }
-            errors = new ArrayList<AbstractError>();
+            errors = new ArrayList<>();
             selectedErrorElements.clear();
             for (int r : rows) {
                 NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
@@ -81,7 +82,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
     private JPopupMenu getPopupMenu() {
         JPopupMenu menu = new JPopupMenu();
         // JMenuItem item = new JMenuItem(new
-        // AbstractAction(Tool3lgmConstants.getResString("error_element_properties")){
+        // AbstractAction(getResString("error_element_properties")){
         // @Override
         // public void actionPerformed(ActionEvent e) {
         // for (ModelElement me : selectedErrorElements)
@@ -90,7 +91,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
         // });
         // menu.add(item);
 
-        JMenuItem item = new JMenuItem(new AbstractAction(Tool3lgmConstants.getResString("error_element_solution_dialog")) {
+        JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_solution_dialog")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 for (AbstractError err : errors) {
@@ -99,7 +100,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
             }
         });
         menu.add(item);
-        item = new JMenuItem(new AbstractAction(Tool3lgmConstants.getResString("error_element_delete")) {
+        item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 checker.getGDCollection().deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);

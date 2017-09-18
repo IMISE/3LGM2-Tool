@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_FALSE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.CHECKBOX_TRUE;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
@@ -47,7 +48,6 @@ import javax.swing.text.JTextComponent;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -75,7 +75,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  */
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
-    private final ArrayList<UserFieldEditorComponent> fieldComponents = new ArrayList<UserFieldEditorComponent>();
+    private final ArrayList<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
 
     private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 
@@ -373,7 +373,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             StringBuilder einheit = new StringBuilder("");
             if (unit != null) {
                 einheit.append(" ");
-                einheit.append(Tool3lgmConstants.getResString("in"));
+                einheit.append(getResString("in"));
                 einheit.append(" ");
                 einheit.append(unit);
                 einheit.append(" ");

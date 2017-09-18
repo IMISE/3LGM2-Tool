@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.log;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 /**
  * Klasse zum Loggen von Fehlermeldungen. Die Initialisierung erfolgt durch das
  * Skript 'Logger.ini' im tool3lgm Pfad.
@@ -20,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 
 public class Log {
 
@@ -156,16 +157,16 @@ public class Log {
         int typ = JOptionPane.INFORMATION_MESSAGE;
         if (level == DEBUG || level == INFO) {
             log(level, meldung, t);
-            titel = Tool3lgmConstants.getResString("about");
+            titel = getResString("about");
             typ = JOptionPane.INFORMATION_MESSAGE;
         }
         if (level == WARN) {
             log(level, meldung, t);
-            titel = Tool3lgmConstants.getResString("warnung");
+            titel = getResString("warnung");
             typ = JOptionPane.WARNING_MESSAGE;
         }
         if (level == ERROR || level == FATAL) {
-            titel = Tool3lgmConstants.getResString("fehler");
+            titel = getResString("fehler");
             typ = JOptionPane.ERROR_MESSAGE;
         }
         if (showErrorDialog) {

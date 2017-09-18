@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -56,7 +57,7 @@ public class ErrorSolution {
         this.edgeClass = edgeClass;
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
         this.panelClass = panelClass;
-        panelName = Tool3lgmConstants.getResString(panelNameResKey);
+        panelName = getResString(panelNameResKey);
     }
 
     /**

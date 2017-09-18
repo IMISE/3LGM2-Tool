@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -63,8 +65,8 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel label = new JLabel(Tool3lgmConstants.getResString("verb"));
-        root = new LGMTreeNode(Tool3lgmConstants.getResString("verb"), false);
+        JLabel label = new JLabel(getResString("verb"));
+        root = new LGMTreeNode(getResString("verb"), false);
         model = new DefaultTreeModel(root);
         tree = new JTree(model);
         tree.setRootVisible(false);
@@ -135,7 +137,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      *
      */
     public final LGMAction getCreateNewElementAction() {
-        return new LGMAction(Tool3lgmConstants.getResString("addButtonText")) {
+        return new LGMAction(getResString("addButtonText")) {
             @Override
             public void execute(final EventObject eo) {
                 int pid = getTransactionID();
@@ -173,7 +175,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 }
             }
         };
-        returnAction.putValue("Name", Tool3lgmConstants.getResString("delete"));
+        returnAction.putValue("Name", getResString("delete"));
         returnAction.putValue("SmallIcon", null);
 
         return returnAction;

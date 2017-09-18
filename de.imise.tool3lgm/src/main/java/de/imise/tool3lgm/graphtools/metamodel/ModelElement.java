@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.ANY;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -2056,7 +2056,7 @@ public abstract class ModelElement extends UserFieldTarget {
             hashstring = other.getHashString();
         }
 
-        String joined = Tool3lgmConstants.getResString("joined");
+        String joined = getResString("joined");
         if (!name.trim().equals(other.name.trim())) {
             name = name.concat("\n-" + joined + "-\n" + other.name);
         }

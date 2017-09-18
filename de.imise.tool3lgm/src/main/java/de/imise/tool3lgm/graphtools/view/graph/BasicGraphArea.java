@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,7 +15,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -149,9 +150,9 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
         if (!(gdoc instanceof Szenario)) {
             setLayout(new GridLayout(5, 1));
-            add(new JLabel("<html><h1>&nbsp;" + Tool3lgmConstants.getResString("uebersicht_html") + "</h1></html>"));
+            add(new JLabel("<html><h1>&nbsp;" + getResString("uebersicht_html") + "</h1></html>"));
             add(new JSeparator());
-            add(new JLabel("<html>&nbsp;" + Tool3lgmConstants.getResString("uebersicht_descr") + "</html>"));
+            add(new JLabel("<html>&nbsp;" + getResString("uebersicht_descr") + "</html>"));
             add(new JSeparator());
             add(new JLabel(" "));
         }
@@ -209,7 +210,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Prueft, ob Einzel- oder Multi-Sicht eingestellt ist.
-     * 
+     *
      * @return <code>true</code>, wenn Mehrebenenansicht eingestellt ist, sonst <code>false</code>.
      */
     public final boolean isMultiViewEnabled() {
@@ -218,7 +219,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Setzt die Seitenbreite auf <code>width</code> Pixel
-     * 
+     *
      * @param width
      *            /
      *            public final void setPageWidth(int width) {
@@ -249,7 +250,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Schaltet die Sicht auf alle Ebenen ein oder aus.
-     * 
+     *
      * @param b <code>true</code> schaltet die Mehrebenenansicht ein, <code>false</code> aus.
      */
     public void setMultiViewEnabled(final boolean b) {
@@ -273,7 +274,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Setzt den aktuellen Zeichenwinkel
-     * 
+     *
      * @param degree
      */
     public void setDegree(final int degree) {
@@ -293,7 +294,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /**
      * Speichert den aktuellen Darstellungswinkel und die Höhenverschiebung und
      * setzt beide Werte auf den Standard (0).
-     * 
+     *
      * @see #recallSettings()
      */
     private final void storeSettings() {
@@ -305,7 +306,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Stellt die alten Werte des Darstellungswinkels und der Höhenverschiebung wieder her.
-     * 
+     *
      * @see #storeSettings()
      */
     private final void recallSettings() {
@@ -315,7 +316,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Setzt die Hoehenverschiebung der GraphPane auf shift Pixel.
-     * 
+     *
      * @param shift
      */
     public final void setInterLayerSpace(final int shift) {
@@ -333,7 +334,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Setzt den aktuellen Zoom-Faktor auf (factor * 100 %)
-     * 
+     *
      * @param factor
      */
     @Override
@@ -351,8 +352,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     protected final void adjustInterLayerSpace() {
         //Diese ausführliche Berechnung ist nur notwendig, wenn man auch die im Moment konstanten Faktoren X_X_FACTOR = 1.0
         //und X_Y_FACTOR = 0.0 berücksichtigen will (siehe Beschreibung der Werte oben)
@@ -368,8 +369,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private final void refreshTransformation() {
         //Diese ausführliche Berechnung ist nur notwendig, wenn man auch die im Moment konstanten Faktoren X_X_FACTOR = 1.0
         //und X_Y_FACTOR = 0.0 berücksichtigen will (siehe Beschreibung der Werte oben)
@@ -379,8 +380,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     protected final void check_size() {
         if (!(doc instanceof Szenario)) {
             return;
@@ -390,8 +391,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private final void getExtensionSize() {
         i.left = -page_width / 2;
         i.right = page_width / 2;
@@ -432,8 +433,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     protected void adjust_size() {
         Point p1, p2;
 
@@ -584,7 +585,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * Setzt den Export-Modus, in dem Selektionen und das Raster nicht mitgezeichnet werden sollen.
-     * 
+     *
      * @param exportMode the exportMode to set
      */
     public void setPaintState(final PaintState paintState) {
@@ -597,7 +598,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /**
      * set the Graphics2D to the current RenderingHints
-     * 
+     *
      * @param g2
      *            Graphics2D which RenderingHints are to set
      */
@@ -640,8 +641,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void dataChanged() {
         revalidate();
         repaint();
@@ -661,8 +662,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void layoutChanged() {
         setPageSize(doc.getPageWidth(), doc.getPageHeight());
     }
@@ -681,40 +682,40 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void elementDeleted() {
         revalidate();
         repaint();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void groupOrderChanged() {
         revalidate();
         repaint();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void activeLayerChanged() {
         revalidate();
         repaint();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void colorsChanged() {
         revalidate();
         repaint();
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void selectionChanged() {
         revalidate();
         repaint();

@@ -21,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -63,7 +62,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     protected AlphabeticalComboBox userFieldTypeComboBox;
 
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
-        super(owner, Tool3lgmConstants.getResString("userfields"), true);
+        super(owner, getResString("userfields"), true);
 
         classComboBox = new UserFieldDeclarationDialogClassComboBox(13);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);

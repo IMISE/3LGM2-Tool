@@ -281,7 +281,7 @@ public class Static {
         if (!label.isEmpty()) {
             try {
                 //versuche den resourceKey zu laden
-                label = Tool3lgmConstants.getResString(label);
+                label = getResString(label);
             } catch (Exception e) {
                 //tue nichts
             }

@@ -4,10 +4,10 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,7 +15,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -31,11 +30,18 @@ public class GraphicPropertyDialog extends JDialog {
 
     private final JCheckBox[] checkBoxArray = new JCheckBox[8];
     private final String[] checkBoxText = {
-            "Antialiasing", "Alpha-Interpolation", "Color-Rendering", "Rendering", "Dithering", "Fractionalmetrics", "Interpolation", "Text-Antialiasing"
+            "Antialiasing",
+            "Alpha-Interpolation",
+            "Color-Rendering",
+            "Rendering",
+            "Dithering",
+            "Fractionalmetrics",
+            "Interpolation",
+            "Text-Antialiasing"
     };
 
     public GraphicPropertyDialog(final Frame owner) {
-        super(owner, Tool3lgmConstants.getResString("graphicProperty"), true);
+        super(owner, getResString("graphicProperty"), true);
 
         setLocationRelativeTo(owner);
 
@@ -54,30 +60,17 @@ public class GraphicPropertyDialog extends JDialog {
 
         JPanel buttonPanel = new JPanel();
 
-        JButton okButton = new JButton(Tool3lgmConstants.getResString("ok"));
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent arg0) {
-                setProperties();
-                dispose();
-            }
+        JButton okButton = new JButton(getResString("ok"));
+        okButton.addActionListener(arg0 -> {
+            setProperties();
+            dispose();
         });
 
-        JButton applyButton = new JButton(Tool3lgmConstants.getResString("apply"));
-        applyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent arg0) {
-                setProperties();
-            }
-        });
+        JButton applyButton = new JButton(getResString("apply"));
+        applyButton.addActionListener(arg0 -> setProperties());
 
-        JButton cancelButton = new JButton(Tool3lgmConstants.getResString("cancel"));
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent arg0) {
-                dispose();
-            }
-        });
+        JButton cancelButton = new JButton(getResString("cancel"));
+        cancelButton.addActionListener(arg0 -> dispose());
         buttonPanel.add(okButton);
         buttonPanel.add(applyButton);
         buttonPanel.add(cancelButton);

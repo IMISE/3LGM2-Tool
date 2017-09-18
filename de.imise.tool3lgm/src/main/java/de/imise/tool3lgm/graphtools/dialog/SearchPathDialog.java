@@ -4,6 +4,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -45,17 +47,17 @@ public class SearchPathDialog extends JDialog implements ActionListener {
         }
     });
 
-    private final JCheckBox includeSubDir = new JCheckBox(Tool3lgmConstants.getResString("trans_subdir"));
+    private final JCheckBox includeSubDir = new JCheckBox(getResString("trans_subdir"));
 
     private DirectoryTreePane pathTree;
 
     public SearchPathDialog(final JDialog owner, final List<File> importPath) {
-        super(owner, Tool3lgmConstants.getResString("trans_path"), true);
+        super(owner, getResString("trans_path"), true);
         init(importPath);
     }
 
     public SearchPathDialog(final JFrame owner, final List<File> importPath) {
-        super(owner, Tool3lgmConstants.getResString("trans_path"), true);
+        super(owner, getResString("trans_path"), true);
         init(importPath);
     }
 
@@ -95,7 +97,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
     }
 
     private List<File> getSelectedPath() {
-        List<File> fileArray = new ArrayList<File>(searchList.getModel().getSize());
+        List<File> fileArray = new ArrayList<>(searchList.getModel().getSize());
         for (int i = 0; i < searchList.getModel().getSize(); i++) {
             fileArray.add((File) searchList.getModel().getElementAt(i));
         }
@@ -111,7 +113,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
         JPanel panel = new JPanel(new BorderLayout(0, 3));
         panel.add(pathTree = new DirectoryTreePane(), BorderLayout.CENTER);
-        panel.add(new JLabel(Tool3lgmConstants.getResString("trans_dir") + ":"), BorderLayout.NORTH);
+        panel.add(new JLabel(getResString("trans_dir") + ":"), BorderLayout.NORTH);
         panel.setPreferredSize(getPreferredSize());
         panel1.add(panel);
         panel1.add(Box.createHorizontalStrut(5));
@@ -131,7 +133,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
         panel = new JPanel(new BorderLayout(0, 3));
         panel.add(new JScrollPane(searchList), BorderLayout.CENTER);
-        panel.add(new JLabel(Tool3lgmConstants.getResString("trans_path") + ":"), BorderLayout.NORTH);
+        panel.add(new JLabel(getResString("trans_path") + ":"), BorderLayout.NORTH);
         panel.setPreferredSize(getPreferredSize());
         panel1.add(panel);
         getContentPane().add(panel1, BorderLayout.CENTER);
@@ -139,7 +141,7 @@ public class SearchPathDialog extends JDialog implements ActionListener {
         panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
 
         panel.add(includeSubDir);
-        button = new JButton(Tool3lgmConstants.getResString("trans_close"));
+        button = new JButton(getResString("trans_close"));
         button.addActionListener(this);
         button.setActionCommand("close");
         panel.add(button);
@@ -152,20 +154,14 @@ public class SearchPathDialog extends JDialog implements ActionListener {
 
     private List<File> rekAddSubDir(final Object[] path) {
         if (path == null || path.length == 0) {
-            return new ArrayList<File>(0);
+            return new ArrayList<>(0);
         }
 
-        List<File> temp = new ArrayList<File>();
+        List<File> temp = new ArrayList<>();
         for (int i = 0; i < path.length; i++) {
             File f = (File) path[i];
             temp.add(f);
-            temp.addAll(rekAddSubDir(f.listFiles(new FileFilter() {
-
-                @Override
-                public boolean accept(final File file) {
-                    return file.isDirectory() && !file.toString().equals(".") && !file.toString().equals("..");
-                }
-            })));
+            temp.addAll(rekAddSubDir(f.listFiles((FileFilter) file -> file.isDirectory() && !file.toString().equals(".") && !file.toString().equals(".."))));
         }
         return temp;
     }

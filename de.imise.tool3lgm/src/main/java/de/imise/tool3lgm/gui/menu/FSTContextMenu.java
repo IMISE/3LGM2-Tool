@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
@@ -9,7 +11,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.model.ElementSelectionContext;
 import de.imise.util.swing.menu.DynamicMenu;
@@ -24,7 +25,7 @@ import de.imise.util.swing.menu.MenuCreator;
  * <p>
  * Beinhaltet alle Einträge bzw. Untermenüs, die das Kontextmenu überhaupt anzeigen kann. Der Kontext wird aus {@link ElementSelectionContext}
  * ermittelt und das Menu entsprechend gebaut.
- * 
+ *
  * @author fstephan
  */
 @SuppressWarnings("unused")
@@ -32,7 +33,7 @@ public class FSTContextMenu extends JPopupMenu {
 
     /**
      * Das "Internes" - Menu * /
-     * private static final JMenu INTERNAL_MENU = MenuCreator.createMenu(Tool3lgmConstants.getResString("localeOptionsMenu"), false,
+     * private static final JMenu INTERNAL_MENU = MenuCreator.createMenu(ResString("localeOptionsMenu"), false,
      * ActionLibrary.ContextActions.VERIFICATION,
      * ActionLibrary.ContextActions.INTERACTIVE,
      * ActionLibrary.ContextActions.COMMANDLINE,
@@ -58,13 +59,13 @@ public class FSTContextMenu extends JPopupMenu {
     private static JPopupMenu elementMenu = new ElementMenu();
 
     /** Das Kontextmenu für Ebenen */
-    private static JPopupMenu layerMenu = MenuCreator.createPopupMenu(Tool3lgmConstants.getResString("localeOptionsMenu"), LAYER_MENU_ENTRIES, false);
+    private static JPopupMenu layerMenu = MenuCreator.createPopupMenu(getResString("localeOptionsMenu"), LAYER_MENU_ENTRIES, false);
 
     //	/*
     //	 * private static Component[] ELEMENT_MENU_ENTRIES =
     //	 * MenuCreator.createMenuEntries(false,
     //	 * ActionLibrary.ContextActions.OPEN_PROPERTY_DIALOG,
-    //	 * MenuCreator.createMenu(Tool3lgmConstants.getResString("hallo"),
+    //	 * MenuCreator.createMenu(getResString("hallo"),
     //	 * LAYER_MENU_ENTRIES, false),
     //	 * MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU );
     //	 */
@@ -111,7 +112,7 @@ public class FSTContextMenu extends JPopupMenu {
 
         //		/*
         //		 * private JMenu configsMenu = new
-        //		 * JMenu(Tool3lgmConstants.getResString("windowMenu")); private
+        //		 * JMenu(getResString("windowMenu")); private
         //		 * Component show =
         //		 * create(ActionLibrary.ContextActions.SET_ELEMENT_VISIBLE); private
         //		 * Component hide =
@@ -144,7 +145,7 @@ public class FSTContextMenu extends JPopupMenu {
             if (n > 0) { // Verbinden-Items dem Menu hinzufügen
                 itemSources = new Object[n + 1];
                 System.arraycopy(actions, 0, itemSources, 1, n);
-                itemSources[0] = Tool3lgmConstants.getResString("verbinden");
+                itemSources[0] = getResString("verbinden");
                 MenuCreator.addAll(this, MenuCreator.createMenuEntries(itemSources, false));
                 hasConnectionItems = true;
             }
@@ -153,7 +154,7 @@ public class FSTContextMenu extends JPopupMenu {
             if (n > 0) { // Trennen-Items dem Menu hinzufügen
                 itemSources = new Object[n + 1];
                 System.arraycopy(actions, 0, itemSources, 1, n);
-                itemSources[0] = Tool3lgmConstants.getResString("trennen");
+                itemSources[0] = getResString("trennen");
                 MenuCreator.addAll(this, MenuCreator.createMenuEntries(itemSources, false));
                 hasConnectionItems = true;
             }
@@ -169,7 +170,7 @@ public class FSTContextMenu extends JPopupMenu {
         /** Das "Untergeordnete Elemente"- Menü */
         private static class SubordinatedElementsMenu extends DynamicMenu {
 
-            public static final String title = Tool3lgmConstants.getResString("windowMenu");
+            public static final String title = getResString("windowMenu");
 
             protected SubordinatedElementsMenu() {
                 super(title);
@@ -185,7 +186,7 @@ public class FSTContextMenu extends JPopupMenu {
         /** Das "Übernehmen in Teilmodell"- Menü */
         private static class TakeOverInSubmodelMenu extends DynamicMenu {
 
-            public static final String title = Tool3lgmConstants.getResString("windowMenu");
+            public static final String title = getResString("windowMenu");
 
             protected TakeOverInSubmodelMenu() {
                 super(title);
@@ -202,7 +203,7 @@ public class FSTContextMenu extends JPopupMenu {
         /** Das "Verknüpfen mit Teilmodell"- Menü */
         private static class ConnectToSubmodelMenu extends DynamicMenu {
 
-            public static final String title = Tool3lgmConstants.getResString("windowMenu");
+            public static final String title = getResString("windowMenu");
 
             protected ConnectToSubmodelMenu() {
                 super(title);
@@ -219,7 +220,7 @@ public class FSTContextMenu extends JPopupMenu {
         /** Das "XMLAnalyse"- Menü */
         private static class AnalyseMenu extends DynamicMenu {
 
-            public static final String title = Tool3lgmConstants.getResString("windowMenu");
+            public static final String title = getResString("windowMenu");
 
             protected AnalyseMenu() {
                 super(title);

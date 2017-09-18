@@ -539,7 +539,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (ModelConstants.isSlaveType(searchElementClass)) {
             return null;
         }
-        return new LGMAction(Tool3lgmConstants.getResString("new")) {
+        return new LGMAction(getResString("new")) {
 
             @Override
             public void execute(final EventObject eo) {

@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;
@@ -16,7 +17,6 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
@@ -32,7 +32,6 @@ import javax.swing.border.EtchedBorder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -73,19 +72,19 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
     private final ImmutableList<AbstractUserFieldEditorPanel> tablePanels = ImmutableList.of(
             //Kennzahlen
-            new NodeTypeUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER")),
+            new NodeTypeUserFieldEditorPanel(this, CLASSIFICATION_NUMBER, getResString("CLASSIFICATION_NUMBER")),
             //Verteilungsgewichte
-            new DistributionWeightEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting")),
+            new DistributionWeightEditorPanel(this, getResString("userFieldEditor_classification_weighting")),
             //Verteilungsgewichtsersetzung
-            new DistributionWeightReplacePanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_weighting_replace")),
+            new DistributionWeightReplacePanel(this, getResString("userFieldEditor_classification_weighting_replace")),
             //Modellvariablen
-            new ModelVariableEditorPanel(this, Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable")),
+            new ModelVariableEditorPanel(this, getResString("userFieldEditor_classification_modelvariable")),
             //Kennzahlformeln
-            new ClassificationNumberFormulaPanel(this, Tool3lgmConstants.getResString("CLASSIFICATION_NUMBER_FORMULA")),
+            new ClassificationNumberFormulaPanel(this, getResString("CLASSIFICATION_NUMBER_FORMULA")),
             //Teilwertsummen
-            new FractionValueSumPanel(this, Tool3lgmConstants.getResString("userFieldDialog_partValueSum")),
+            new FractionValueSumPanel(this, getResString("userFieldDialog_partValueSum")),
             //Weitere...
-            new NodeTypeUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), Tool3lgmConstants.getResString("userFieldDialog_other")));
+            new NodeTypeUserFieldEditorPanel(this, ImmutableSet.of(HYPERLINK, ID, SINGLE_LINE, COMBO_BOX), getResString("userFieldDialog_other")));
 
     /**
      * Bei Abbruch, wird diese Aktion ausgelöst
@@ -110,7 +109,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
      */
     protected UserFieldEditorDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, gdcoll);
-        setTitle(Tool3lgmConstants.getResString("attribute_editor"));
+        setTitle(getResString("attribute_editor"));
         setModal(true);
 
         okButtonPressed = false;
@@ -138,7 +137,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         final UserFieldEditorDialog finalDialog = this;
 
         // Action, die beim Abbruch ausgeführt wird
-        cancelAction = new AbstractAction(Tool3lgmConstants.getResString("cancel")) {
+        cancelAction = new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
 
@@ -160,8 +159,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                  * Falls in einem Table Änderungen aufgetreten sind, wird eine Datenverlust-Verwarnung angezeigt
                  */
                 if (dataChanged == true) {
-                    if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(finalDialog, Tool3lgmConstants.getResString("userFieldDialog_warning_message"), Tool3lgmConstants.getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION,
-                            JOptionPane.WARNING_MESSAGE)) {
+                    if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(finalDialog, getResString("userFieldDialog_warning_message"), getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
                         finalDialog.shouldDispose = false;
                         return;
                     }
@@ -235,7 +233,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         constraints.gridy = 0;
         constraints.gridx = 0;
 
-        JLabel messageLabel = new JLabel(Tool3lgmConstants.getResString("userFieldEditor_no_content_message"));
+        JLabel messageLabel = new JLabel(getResString("userFieldEditor_no_content_message"));
         add(messageLabel, constraints);
         constraints.gridy++;
         constraints.weighty = 0;
@@ -256,7 +254,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
     private Action getCloseDialogAction() {
         final UserFieldEditorDialog dialog = this;
-        Action action = new AbstractAction(Tool3lgmConstants.getResString("ok")) {
+        Action action = new AbstractAction(getResString("ok")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 dialog.dispose();
@@ -288,7 +286,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         /*
          * Übernimmt die Werte aus den Tabellen der Panels ins Model, falls sich die Daten in einer der Tabellen geändert haben.
          */
-        final AbstractAction applyAction = new AbstractAction(Tool3lgmConstants.getResString("apply")) {
+        final AbstractAction applyAction = new AbstractAction(getResString("apply")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
 
@@ -331,7 +329,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         /*
          * Übernimmt die Werte in den Tabellen der Panels ins Model und schließt diesen Dialog anschließend.
          */
-        okButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("ok")) {
+        okButton.setAction(new AbstractAction(getResString("ok")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 finalDialog.okButtonPressed = true;
@@ -346,7 +344,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         /*
          * Macht Änderungen rückgängig und schließt diesen Dialog
          */
-        cancelButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("cancel")) {
+        cancelButton.setAction(new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 finalDialog.dispose();
@@ -360,11 +358,11 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
      */
     private JPanel createElementsAtPointPane() {
 
-        final String rowTitel = Tool3lgmConstants.getResString("userFieldDialog_elementsAtPointPane_rowTitle") + " ";
-        final String colTitel = Tool3lgmConstants.getResString("userFieldDialog_elementsAtPointPane_colTitle") + " ";
+        final String rowTitel = getResString("userFieldDialog_elementsAtPointPane_rowTitle") + " ";
+        final String colTitel = getResString("userFieldDialog_elementsAtPointPane_colTitle") + " ";
 
-        final String rowTitel2 = Tool3lgmConstants.getResString("zeilensumme") + ": ";
-        final String colTitel2 = Tool3lgmConstants.getResString("spaltensumme") + ": ";
+        final String rowTitel2 = getResString("zeilensumme") + ": ";
+        final String colTitel2 = getResString("spaltensumme") + ": ";
 
         JPanel panel = new JPanel(new GridBagLayout());
 
@@ -382,30 +380,27 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         colLabel2.setVisible(false);
 
         // Bekommt Änderungen der Selektion von den Panels übergeben
-        PropertyChangeListener l = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(final PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(PROPERTY_TABLE_SELECTION_CHANGED)) {
-                    String[] news = (String[]) evt.getNewValue();
-                    String rowIdentifierName = news[0];
-                    String columnIdentifierName = news[1];
-                    String rowSum = news[2];
-                    String columnSum = news[3];
-                    String rowIndex = news[4];
-                    String columnIndex = news[5];
-                    String rowCount = news[6];
-                    String columnCount = news[7];
-                    rowLabel.setText(rowTitel.concat("\t").concat(rowIndex).concat("/").concat(columnCount).concat(": \t").concat(rowIdentifierName));
-                    colLabel.setText(colTitel.concat("\t").concat(columnIndex).concat("/").concat(rowCount).concat(": \t").concat(columnIdentifierName));
-                    rowLabel2.setText(rowTitel2.concat(rowSum));
-                    colLabel2.setText(colTitel2.concat(columnSum));
+        PropertyChangeListener l = evt -> {
+            if (evt.getPropertyName().equals(PROPERTY_TABLE_SELECTION_CHANGED)) {
+                String[] news = (String[]) evt.getNewValue();
+                String rowIdentifierName = news[0];
+                String columnIdentifierName = news[1];
+                String rowSum = news[2];
+                String columnSum = news[3];
+                String rowIndex = news[4];
+                String columnIndex = news[5];
+                String rowCount = news[6];
+                String columnCount = news[7];
+                rowLabel.setText(rowTitel.concat("\t").concat(rowIndex).concat("/").concat(columnCount).concat(": \t").concat(rowIdentifierName));
+                colLabel.setText(colTitel.concat("\t").concat(columnIndex).concat("/").concat(rowCount).concat(": \t").concat(columnIdentifierName));
+                rowLabel2.setText(rowTitel2.concat(rowSum));
+                colLabel2.setText(colTitel2.concat(columnSum));
 
-                    rowLabel2.setVisible(news[2].length() > 0);
-                    colLabel2.setVisible(news[3].length() > 0);
+                rowLabel2.setVisible(news[2].length() > 0);
+                colLabel2.setVisible(news[3].length() > 0);
 
-                    rowLabel.revalidate();
-                    colLabel.revalidate();
-                }
+                rowLabel.revalidate();
+                colLabel.revalidate();
             }
         };
 

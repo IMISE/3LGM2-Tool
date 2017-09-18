@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
@@ -1108,6 +1108,6 @@ public final class PathFinder {
      * @return
      */
     private static final String s(final String resourceString) {
-        return Tool3lgmConstants.getResString(resourceString);
+        return getResString(resourceString);
     }
 }

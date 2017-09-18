@@ -183,7 +183,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         zahlenFormatPanel.setVisible(false);
         zahlenFormatPanel.setLayout(new GridBagLayout());
         GridBagConstraints constraintsFormat = new GridBagConstraints();
-        //		zahlenFormatPanel.setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("new_format")));
+        //		zahlenFormatPanel.setBorder(BorderFactory.createTitledBorder(getResString("new_format")));
         zahlenFormatPanel.setBorder(BorderFactory.createEtchedBorder());
         add(zahlenFormatPanel, constraints);
         constraintsFormat.anchor = GridBagConstraints.WEST;

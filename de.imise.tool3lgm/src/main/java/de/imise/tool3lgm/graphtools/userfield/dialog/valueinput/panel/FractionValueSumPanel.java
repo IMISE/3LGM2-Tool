@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.AbstractElementTypeUserFieldEditorPanel.InsertType.AS_EDGE_BACKWARD;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -163,7 +163,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
     private void setElementBoxContent() {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         elementBox.removeAllItems();
-        elementBox.addSeparator(Tool3lgmConstants.getResString("userFieldEditor_element"));
+        elementBox.addSeparator(getResString("userFieldEditor_element"));
         Class<? extends Edge> selectedEdgeClass = getSelectedEdgeClass();
         elementBox.setEnabled(selectedEdgeClass != null);
         if (elementBox.isEnabled()) {

@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -20,7 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -66,12 +67,12 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
         // / CheckBox und Hinweistext
 
         gbc.gridwidth = 2;
-        add(new JLabel(Tool3lgmConstants.getResString("rmiErrorDescription")), gbc);
+        add(new JLabel(getResString("rmiErrorDescription")), gbc);
         gbc.gridy++;
         gbc.gridwidth = 1;
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(new JLabel(Tool3lgmConstants.getResString("rmiSearchNextFreePort")), BorderLayout.WEST);
+        panel.add(new JLabel(getResString("rmiSearchNextFreePort")), BorderLayout.WEST);
         panel.add(rmiAutoNextFreePortCheckBox, BorderLayout.EAST);
         add(panel, gbc);
 
@@ -88,7 +89,7 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        panel2.add(new JLabel(Tool3lgmConstants.getResString("registryPort")), BorderLayout.WEST);
+        panel2.add(new JLabel(getResString("registryPort")), BorderLayout.WEST);
         panel2.add(rmiRegistryPortTextField, BorderLayout.CENTER);
 
         gbc.gridy++;
@@ -101,7 +102,7 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
         add(panel2, gbc);
         // Wenn der Button betätig wird, wird in das TextField der Standardport eingetragen, der für
         // RMI vorgesehen ist. Derzeit 1099.
-        rmiStdRegistryButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("standardPort")) {
+        rmiStdRegistryButton.setAction(new AbstractAction(getResString("standardPort")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 rmiRegistryPortTextField.setText("" + Registry.REGISTRY_PORT);

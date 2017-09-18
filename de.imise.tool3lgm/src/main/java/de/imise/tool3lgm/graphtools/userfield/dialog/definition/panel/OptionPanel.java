@@ -3,10 +3,11 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
@@ -23,7 +24,7 @@ public class OptionPanel extends AbstractInputPanel {
     /**
      * CheckBox zum Einstellen, ob ein Benutzerfeld im Baum angezeigt werden soll
      */
-    private final JCheckBox treeVisCheckBox = new JCheckBox(Tool3lgmConstants.getResString("userFieldEditor_treevis"));
+    private final JCheckBox treeVisCheckBox = new JCheckBox(getResString("userFieldEditor_treevis"));
 
     /**
      * CheckBox zum Unstellen der Option, ob Kennzahlformeln tatsächlich berechnet werden sollen
@@ -36,13 +37,13 @@ public class OptionPanel extends AbstractInputPanel {
     public OptionPanel(final UserField userField) {
         super();
         this.userField = userField;
-        setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("optionenButtonText")));
+        setBorder(BorderFactory.createTitledBorder(getResString("optionenButtonText")));
         treeVisCheckBox.setSelected(userField.isTreeVisibility());
         add(treeVisCheckBox);
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten
         if (userField.isClassificationUserField()) {
-            enableClassificationNumberCalculationCheckBox = new JCheckBox(Tool3lgmConstants.getResString("activate_calculation"));
+            enableClassificationNumberCalculationCheckBox = new JCheckBox(getResString("activate_calculation"));
             enableClassificationNumberCalculationCheckBox.setSelected(UserProperties.isEnableClassificationNumberCalculation());
             add(enableClassificationNumberCalculationCheckBox);
         }

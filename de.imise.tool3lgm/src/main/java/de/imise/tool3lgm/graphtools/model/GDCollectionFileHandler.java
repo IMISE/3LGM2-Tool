@@ -190,7 +190,7 @@ public class GDCollectionFileHandler {
             newName = createName(++counter);
         }
 
-        String name = newName + (isReadOnly ? " " + Tool3lgmConstants.getResString("text_readOnly") : "");
+        String name = newName + (isReadOnly ? " " + getResString("text_readOnly") : "");
         gdcoll.setName(name);
         for (AbstractInternalFrame f : Static.getAllFrames()) {
             if (f.getCollection().equals(gdcoll)) {
@@ -206,9 +206,9 @@ public class GDCollectionFileHandler {
      */
     private String createName(final int counter) {
         if (getFile() == null) {
-            return "<" + Tool3lgmConstants.getResString("unbenannt") + (counter > 0 ? " #" + counter : "") + ">";
+            return "<" + getResString("unbenannt") + (counter > 0 ? " #" + counter : "") + ">";
         }
-        return getFile().getName() + (isReadOnly ? " <" + Tool3lgmConstants.getResString("text_readOnly") + ">" : "") + (counter > 0 ? " #" + counter : "");
+        return getFile().getName() + (isReadOnly ? " <" + getResString("text_readOnly") + ">" : "") + (counter > 0 ? " #" + counter : "");
     }
 
     /**

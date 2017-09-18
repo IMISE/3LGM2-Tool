@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -13,7 +15,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -21,9 +22,10 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 
 /**
  * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein Benutzter einen speziellen Metapfad auswählen kann.<br>
- * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere Klasse und, falls es zw. diesen Klassen mehrere MetaPfade gibt, kann man aus einer Liste einen auswählen.<br>
+ * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere Klasse und, falls es zw. diesen Klassen mehrere
+ * MetaPfade gibt, kann man aus einer Liste einen auswählen.<br>
  * Dieser Mechanismus wird in der Matrix-Sicht verwendet.
- * 
+ *
  * @author AXS
  */
 public class MetaPathSelector implements ActionListener {
@@ -51,7 +53,7 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Listeners for change events
      */
-    private final ArrayList<ChangeListener> changeListenerList = new ArrayList<ChangeListener>();
+    private final ArrayList<ChangeListener> changeListenerList = new ArrayList<>();
 
     /**
      * Selektor der in allen Dialigen benutzt wird, die statisch von dieser Klasse angezeigt werden. Dadurch bleibt eine alte Auswahl immer erhalten.
@@ -59,8 +61,8 @@ public class MetaPathSelector implements ActionListener {
     private static MetaPathSelector dialogMetaPathSelecor;
 
     /**
-	 * 
-	 */
+     *
+     */
     private MetaPathSelector() {
         super();
 
@@ -85,7 +87,7 @@ public class MetaPathSelector implements ActionListener {
 
     /**
      * Gibt einen neuen <code>MetaPathSelector</code>, für den alle Komponenten initialisiert sind, zurück.
-     * 
+     *
      * @return einen neuen <code>MetaPathSelector</code>
      */
     public static final MetaPathSelector createComponents() {
@@ -131,19 +133,19 @@ public class MetaPathSelector implements ActionListener {
 
     /**
      * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen kann.
-     * 
+     *
      * @return einen <code>MetaPathSelector</code> der durch die Einträge aus einem angezeigten Dialog gefüllt wurde
      */
     public static final MetaPathSelector showDialog() {
-        String class1Name = Tool3lgmConstants.getResString("class1");
-        String class2Name = Tool3lgmConstants.getResString("class2");
-        String metaPathName = Tool3lgmConstants.getResString("metapath");
+        String class1Name = getResString("class1");
+        String class2Name = getResString("class2");
+        String metaPathName = getResString("metapath");
         return showDialog(class1Name, class2Name, metaPathName);
     }
 
     /**
      * Zeigt einen Dialog an, in dem man Klassen und einen MetaPfad auswählen kann.
-     * 
+     *
      * @param class1Label Label, das für die erste auszuwählende Klasse angezeigt werden soll
      * @param class2Label Label, das für die zweite auszuwählende Klasse angezeigt werden soll
      * @param metaPathListLabel Label, das über der MetaPathList angezeigt werden soll
@@ -154,11 +156,16 @@ public class MetaPathSelector implements ActionListener {
             dialogMetaPathSelecor = new MetaPathSelector();
         }
         Object[] metaPathSelectorMessage = {
-                class1Label, dialogMetaPathSelecor.getClass1ComboBox(), class2Label, dialogMetaPathSelecor.getClass2ComboBox(), metaPathListLabel, new JScrollPane(dialogMetaPathSelecor.getMetaPathJList())
+                class1Label,
+                dialogMetaPathSelecor.getClass1ComboBox(),
+                class2Label,
+                dialogMetaPathSelecor.getClass2ComboBox(),
+                metaPathListLabel,
+                new JScrollPane(dialogMetaPathSelecor.getMetaPathJList())
         };
         JOptionPane op = new JOptionPane();
         op.setMessage(metaPathSelectorMessage);
-        op.createDialog(null, Tool3lgmConstants.getResString("metapath_selection")).setVisible(true);
+        op.createDialog(null, getResString("metapath_selection")).setVisible(true);
         return dialogMetaPathSelecor;
     }
 
@@ -229,7 +236,7 @@ public class MetaPathSelector implements ActionListener {
 
     /**
      * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger MetaPfad (jeweils ungleich <code>null</code>) gesetzt sind.
-     * 
+     *
      * @return <code>true</code>, wenn gültige Klassen und ein gültiger Metapfad ausgewählt wurde, sonst <code>false</code>
      */
     public boolean isValid() {

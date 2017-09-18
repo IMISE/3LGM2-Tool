@@ -854,7 +854,7 @@ public class ActionLibrary {
                     return;
                 }
                 Static.showProgressDialog();
-                Static.setProgressDialogTitle(Tool3lgmConstants.getResString("select_all"));
+                Static.setProgressDialogTitle(getResString("select_all"));
                 getSelectedDoc().selectAll();
                 Static.closeProgressDialog();
             }
@@ -877,7 +877,7 @@ public class ActionLibrary {
                     return;
                 }
                 if (!ModelConstants.getDialogs().isEmpty()) {
-                    JOptionPane.showMessageDialog(getTool(), Tool3lgmConstants.getResString("message_close_all_dialogs"));
+                    JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
                     return;
                 }
                 if (getSelectedDoc() != null) {
@@ -895,7 +895,7 @@ public class ActionLibrary {
                     return;
                 }
                 if (!ModelConstants.getDialogs().isEmpty()) {
-                    JOptionPane.showMessageDialog(getTool(), Tool3lgmConstants.getResString("message_close_all_dialogs"));
+                    JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
                     return;
                 }
                 if (getSelectedDoc() != null) {
@@ -1845,11 +1845,11 @@ public class ActionLibrary {
                 RMIPropertyPanel rmip = new RMIPropertyPanel();
 
                 String oldRegPort = UserProperties.getRMIRegistryPort();
-                if (JOptionPane.showOptionDialog(null, rmip, Tool3lgmConstants.getResString("rmi_settings"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+                if (JOptionPane.showOptionDialog(null, rmip, getResString("rmi_settings"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
                     UserProperties.setRMIRegistryPort(rmip.getRmiRegistryPortTextFieldValue());
                 }
                 if (!oldRegPort.equals(UserProperties.getRMIRegistryPort())) {
-                    JOptionPane.showMessageDialog(getTool(), Tool3lgmConstants.getResString("settings_info"));
+                    JOptionPane.showMessageDialog(getTool(), getResString("settings_info"));
                 }
             }
         };
@@ -1885,7 +1885,7 @@ public class ActionLibrary {
                 if (!isEnabled()) {
                     return;
                 }
-                int answer = JOptionPane.showConfirmDialog(getTool(), Tool3lgmConstants.getResString("deleteSzenario"), Tool3lgmConstants.getResString("warnung"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int answer = JOptionPane.showConfirmDialog(getTool(), getResString("deleteSzenario"), getResString("warnung"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
                     getSelectedCollection().deleteSzenario(getSelectedDoc().getHashString(), TransactionManager.STANDARD_PID);
                 }
@@ -2158,7 +2158,7 @@ public class ActionLibrary {
     }
 
     /** "..."-Suffix Actions */
-    private static final String PPP = Tool3lgmConstants.getResString("3points");
+    private static final String PPP = getResString("3points");
 
     /*
      * ***************************************** Ende: Actions

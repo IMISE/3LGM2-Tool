@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -16,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -42,22 +43,22 @@ public class OverwriteDialog extends JDialog implements ActionListener {
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
         getContentPane().setLayout(new BorderLayout(5, 5));
-        getContentPane().add(new JLabel(Tool3lgmConstants.getResString("overwriteDialog_text")), BorderLayout.NORTH);
+        getContentPane().add(new JLabel(getResString("overwriteDialog_text")), BorderLayout.NORTH);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton button;
-        button = new JButton(Tool3lgmConstants.getResString("overwriteDialog_join"));
+        button = new JButton(getResString("overwriteDialog_join"));
         button.addActionListener(this);
         button.setActionCommand("join");
         panel.add(button);
-        button = new JButton(Tool3lgmConstants.getResString("overwriteDialog_ignore"));
+        button = new JButton(getResString("overwriteDialog_ignore"));
         button.addActionListener(this);
         button.setActionCommand("donothing");
         panel.add(button);
         getContentPane().add(panel, BorderLayout.SOUTH);
 
         panel = new JPanel(new BorderLayout());
-        rememberCheckBox = new JCheckBox(Tool3lgmConstants.getResString("overwriteDialog_remember"), false);
+        rememberCheckBox = new JCheckBox(getResString("overwriteDialog_remember"), false);
         panel.add(rememberCheckBox, BorderLayout.SOUTH);
 
         JPanel panel2 = new JPanel();
@@ -66,14 +67,14 @@ public class OverwriteDialog extends JDialog implements ActionListener {
         getContentPane().add(panel, BorderLayout.CENTER);
         ExtendedTextPane textPane = new ExtendedTextPane();
         textPane.setEditable(false);
-        String text = me1 instanceof Edge ? me1.getName() + "\n--------------------\n" + ((Edge) me1).getStart().getClearName() + "\n - \n" + ((Edge) me1).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me1.getDescription() : me1
-                .getName() + ":\n\n" + me1.getDescription();
+        String text = me1 instanceof Edge ? me1.getName() + "\n--------------------\n" + ((Edge) me1).getStart().getClearName() + "\n - \n" + ((Edge) me1).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me1.getDescription()
+                : me1.getName() + ":\n\n" + me1.getDescription();
         textPane.setText(text);
         panel2.add(new JScrollPane(textPane));
         textPane = new ExtendedTextPane();
         textPane.setEditable(false);
-        text = me2 instanceof Edge ? me2.getName() + "\n--------------------\n" + ((Edge) me2).getStart().getClearName() + "\n - \n" + ((Edge) me2).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me2.getDescription() : me2.getName()
-                + ":\n\n" + me2.getDescription();
+        text = me2 instanceof Edge ? me2.getName() + "\n--------------------\n" + ((Edge) me2).getStart().getClearName() + "\n - \n" + ((Edge) me2).getEnd().getClearName() + "\n--------------------\n" + ":\n\n" + me2.getDescription()
+                : me2.getName() + ":\n\n" + me2.getDescription();
         textPane.setText(text);
         panel2.add(new JScrollPane(textPane));
 

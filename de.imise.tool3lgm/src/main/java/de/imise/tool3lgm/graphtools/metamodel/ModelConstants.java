@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Composition.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Composition.getMinMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
@@ -806,7 +807,7 @@ public final class ModelConstants {
                 if (plural) {
                     resKey += PLURAL_NAME_RES_KEY_SUFFIX;
                 }
-                return Tool3lgmConstants.getResString(resKey);
+                return getResString(resKey);
             } catch (MissingResourceException mre) {
                 clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
             }
@@ -979,30 +980,30 @@ public final class ModelConstants {
         StringBuilder sb = new StringBuilder();
         if (!switchDefinedDirection) {
             try {
-                sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f"));
+                sb.append(getResString(edgeClass.getSimpleName() + "_f"));
             } catch (Exception e) {
                 if (connectionState == FORWARD) {
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_f_f"));
                 } else if (connectionState == BACKWARD) {
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_f_b"));
                 } else {
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_f"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_f_f"));
                     sb.append(" / ");
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_f_b"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_f_b"));
                 }
             }
         } else {
             try {
-                sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b"));
+                sb.append(getResString(edgeClass.getSimpleName() + "_b"));
             } catch (Exception e) {
                 if (connectionState == FORWARD) {
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_b_f"));
                 } else if (connectionState == BACKWARD) {
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_b_b"));
                 } else {
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_f"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_b_f"));
                     sb.append(" / ");
-                    sb.append(Tool3lgmConstants.getResString(edgeClass.getSimpleName() + "_b_b"));
+                    sb.append(getResString(edgeClass.getSimpleName() + "_b_b"));
                 }
             }
         }

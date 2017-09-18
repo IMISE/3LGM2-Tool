@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,7 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -54,7 +55,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.insets = new Insets(1, 0, 1, 3);
 
         // Bezeichung und Eingabefeld
-        JLabel label2 = new JLabel(Tool3lgmConstants.getResString("bez"));
+        JLabel label2 = new JLabel(getResString("bez"));
         add(this, label2, gbc, 0, gridy, 1, 1);
 
         nameTextPane = new LimitedSizeScrollTextPane(4);
@@ -64,7 +65,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.weightx = 0;
 
         // Beschreibung und TextPane
-        JLabel label = new JLabel(Tool3lgmConstants.getResString("description"));
+        JLabel label = new JLabel(getResString("description"));
         add(this, label, gbc, 0, gridy, 1, 1);
 
         gbc.weighty = 1;

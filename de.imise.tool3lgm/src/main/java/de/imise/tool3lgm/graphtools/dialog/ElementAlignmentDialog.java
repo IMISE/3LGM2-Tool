@@ -20,7 +20,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -147,7 +146,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
     }
 
     private static JButton initOkButton(final ElementAlignmentDialog dialog) {
-        JButton okButton = new JButton(new AbstractAction(Tool3lgmConstants.getResString("ok")) {
+        JButton okButton = new JButton(new AbstractAction(getResString("ok")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 dialog.saveValues();
@@ -159,7 +158,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
     }
 
     private static JButton initCancelButton(final ElementAlignmentDialog dialog) {
-        JButton cancelButton = new JButton(new AbstractAction(Tool3lgmConstants.getResString("cancel")) {
+        JButton cancelButton = new JButton(new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 dialog.dispose();

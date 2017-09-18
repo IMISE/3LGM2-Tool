@@ -314,16 +314,10 @@ public class AnalyseEditor extends JDialog implements ActionListener {
     private final ArrayList<PathStepComponent> pathPanels = new ArrayList<>();
 
     /** Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt werden kann */
-    private final JButton addPathStepPanelBut = new JButton("+"/*
-                                                                * Tool3lgmConstants.getResString("erw"
-                                                                * )
-                                                                */);
+    private final JButton addPathStepPanelBut = new JButton("+"/* getResString("erw") */);
 
     /** Button, mit dem ein weiteres Panel für einen Pfadschritt hinzugefügt werden kann */
-    private final JButton removePathStepPanelBut = new JButton("-"/*
-                                                                   * Tool3lgmConstants.getResString(
-                                                                   * "vereinfachen")
-                                                                   */);
+    private final JButton removePathStepPanelBut = new JButton("-"/* getResString("vereinfachen") */);
 
     /** Panel, das alle <code>PathStepComponent</code>s enthält */
     private JPanel pathStepMainPanel;

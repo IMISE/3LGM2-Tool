@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -51,7 +52,7 @@ public class RMIPropertyPanel extends JPanel {
         gbc.gridy = 0;
 
         gbc.gridx = 0;
-        add(new JLabel(Tool3lgmConstants.getResString("registryPort")), gbc);
+        add(new JLabel(getResString("registryPort")), gbc);
         gbc.gridx++;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -64,7 +65,7 @@ public class RMIPropertyPanel extends JPanel {
         add(stdRegistryButton, gbc);
         // Wenn der Button betätig wird, wird in das TextField der standardport eingetragen, der für
         // RMI vorgesehen ist. Derzeit 1099.
-        stdRegistryButton.setAction(new AbstractAction(Tool3lgmConstants.getResString("standardPort")) {
+        stdRegistryButton.setAction(new AbstractAction(getResString("standardPort")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 rmiRegistryPortTextField.setText("" + Registry.REGISTRY_PORT);

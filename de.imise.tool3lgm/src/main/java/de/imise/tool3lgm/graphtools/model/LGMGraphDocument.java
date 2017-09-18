@@ -49,7 +49,7 @@ public class LGMGraphDocument extends GraphDocument {
      */
     public LGMGraphDocument(final GDCollection _gdcoll) {
         super(_gdcoll);
-        setTitle(Tool3lgmConstants.getResString("uebersicht"));
+        setTitle(getResString("uebersicht"));
     }
 
     @Override
@@ -277,7 +277,7 @@ public class LGMGraphDocument extends GraphDocument {
     //
     //
     //		if (destGDColl.isChanged()) {
-    //			int value = JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("join_speicherfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+    //			int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
     //			if (value == JOptionPane.YES_OPTION) {
     //				try {
     //					if (!destGDColl.saveToFile())
@@ -450,7 +450,7 @@ public class LGMGraphDocument extends GraphDocument {
         GraphDocument destMainDoc = destGDColl.getMainGraphDocument();
 
         if (destGDColl.isChanged()) {
-            int value = JOptionPane.showConfirmDialog(null, Tool3lgmConstants.getResString("join_speicherfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+            int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
             if (value == JOptionPane.YES_OPTION) {
                 if (!destGDColl.getFileHandler().saveToFile()) {
                     return;

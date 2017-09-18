@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.matrixview;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -8,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -19,7 +20,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 
 /**
  * Klasse zur Darstellung von Verbindungen zwischen Objekten in einer Tabelle
- * 
+ *
  * @author Thomas Rudert, AXS
  */
 public final class TableInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
@@ -71,7 +72,7 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
 
     /**
      * Füllt das TableModel
-     * 
+     *
      * @param rowClass Zeilenelementklasse
      * @param colClass Spaltenelementklasse
      * @param metaPath Metapfad über den Elemente der Zeilen und Splaten miteinander verbunden sein können
@@ -87,8 +88,8 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     private void setComponents() {
         if (tableModel.isValid() && tableModel.getColHeaders().size() > 0 && tableModel.getRowHeaders().size() > 0) {
             scrollPane.setVisible(false);
@@ -100,7 +101,7 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
         } else {
             msgPanel.removeAll();
             StringBuilder sb = new StringBuilder();
-            sb.append(Tool3lgmConstants.getResString("empty_matrix_message"));
+            sb.append(getResString("empty_matrix_message"));
             msgPanel.add(new JLabel(sb.toString()));
             scrollPane.setVisible(false);
             scrollPane.setRowHeaderView(null);

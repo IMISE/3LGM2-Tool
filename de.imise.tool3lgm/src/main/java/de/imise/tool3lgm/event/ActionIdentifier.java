@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.event;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionEvent;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -354,7 +356,7 @@ public enum ActionIdentifier {
      */
     String getText() {
         try {
-            return Tool3lgmConstants.getResString(toString());
+            return getResString(toString());
         } catch (MissingResourceException e) {
             e.printStackTrace();
             return toString();

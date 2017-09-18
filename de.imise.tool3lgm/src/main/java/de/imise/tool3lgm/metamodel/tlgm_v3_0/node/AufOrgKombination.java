@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
@@ -15,7 +16,7 @@ public class AufOrgKombination extends Node {
 
     @Override
     public String toString() {
-        StringBuilder retVal = new StringBuilder(Tool3lgmConstants.getResString("in_oes"));
+        StringBuilder retVal = new StringBuilder(getResString("in_oes"));
         retVal.append(": ");
         boolean first = true;
         for (ModelElement oe : getConnectedElements(Organisationseinheit.class)) {
