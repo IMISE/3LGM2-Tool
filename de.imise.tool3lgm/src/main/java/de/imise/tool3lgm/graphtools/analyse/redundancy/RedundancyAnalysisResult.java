@@ -6,9 +6,9 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.util.collections.AlphabeticalSet;
 
 /**
@@ -23,7 +23,7 @@ import de.imise.util.collections.AlphabeticalSet;
  * </ol>
  * Ein solches 'Ergebnis' wird mit den zu analysierenden Klassen und dem MetaPfad initialisiert und
  * dann in den Redundanzalgorithmus geschickt, der das Ergebnis füllt.
- * 
+ *
  * @author AXS
  */
 public class RedundancyAnalysisResult {
@@ -77,20 +77,10 @@ public class RedundancyAnalysisResult {
     private final GDCollection gdcoll;
 
     /**
-     * Klasse für deren Elemente Redundanz aufgedeckt werden soll.
-     */
-    private final Class<? extends ModelElement> startClass;
-
-    /**
-     * Klasse bezüglich der Elemente der <code>startClass</code> redundant sein können.
-     */
-    private final Class<? extends ModelElement> endClass;
-
-    /**
      * MetaPfad über den Elemente der Art <code>startClass</code> und <code>endClass</code>
      * analysiert werden sollen.
      */
-    private final MetaPath metaPath;
+    private final SingleRedundancyAnalysisDefinition definition;
 
     /**
      * String der bei der Ausgabe des Ergebnisses als Analyseoption angezeigt werden soll
@@ -99,41 +89,18 @@ public class RedundancyAnalysisResult {
 
     /**
      * @param gdcoll Modell, das analysiert werden soll
-     * @param startClass Klasse für deren Elemente Redundanz aufgedeckt werden soll
-     * @param endClass Klasse bezüglich der Elemente der <code>endClass</code> redundant sein können
-     * @param metaPath MetaPfad über den Elemente der Art <code>startClass</code> und
-     *            <code>endClass</code> analysiert werden sollen.
-     * @param analyseOptionString String der bei der Ausgabe des Ergebnisses als Analyseoption
-     *            angezeigt werden soll
+     * @param definition
+     *            Die Definition mit dem MetaPfad, über den Elemente der Art <code>startClass</code> und <code>endClass</code> analysiert werden
+     *            sollen. Die startClass des Metapfades ist die Klasse, für deren Elemente Redundanz aufgedeckt werden soll und die endClass
+     *            ist die Klasse, bezüglich der Elemente der <code>endClass</code> redundant sein können.
+     * @param analyseOptionString
+     *            String der bei der Ausgabe des Ergebnisses als Analyseoption angezeigt werden soll
      */
-    public RedundancyAnalysisResult(final GDCollection gdcoll, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final MetaPath metaPath, final String analyseOptionString) {
+    public RedundancyAnalysisResult(final GDCollection gdcoll, final SingleRedundancyAnalysisDefinition definition, final String analyseOptionString) {
         super();
         this.gdcoll = gdcoll;
-        this.startClass = startClass;
-        this.endClass = endClass;
-        this.metaPath = metaPath;
+        this.definition = definition;
         this.analyseOptionString = analyseOptionString;
-    }
-
-    /**
-     * @return Returns the endClass.
-     */
-    public Class<? extends ModelElement> getEndClass() {
-        return endClass;
-    }
-
-    /**
-     * @return Returns metaPath.
-     */
-    public MetaPath getMetaPath() {
-        return metaPath;
-    }
-
-    /**
-     * @return Returns the startClass.
-     */
-    public Class<? extends ModelElement> getStartClass() {
-        return startClass;
     }
 
     /**
@@ -141,6 +108,13 @@ public class RedundancyAnalysisResult {
      */
     public GDCollection getGDCollection() {
         return gdcoll;
+    }
+
+    /**
+     * @return Returns the definition.
+     */
+    public SingleRedundancyAnalysisDefinition getDefinition() {
+        return definition;
     }
 
     /**

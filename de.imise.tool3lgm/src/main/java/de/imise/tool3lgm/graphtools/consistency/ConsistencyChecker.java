@@ -1,11 +1,8 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +25,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
@@ -63,7 +61,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * diese Variable <code>null</code> ist, werden alle Kanten mit ihren Originalen Kardinalitäten
      * geprüft.
      */
-    private ConsistencyDefinition consistencyDefinition = null;
+    private ConsistencyDefinition consistencyDefinition = new ConsistencyDefinition();
 
     private final UniqueIDChecker idChecker;
 
@@ -108,8 +106,15 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     /**
      * @param consistencyDefinition
      */
-    public void setConsistencyDefinition(final ConsistencyDefinition consistencyDefinition) {
-        this.consistencyDefinition = consistencyDefinition;
+    public void resetConsistencyDefinition() {
+        consistencyDefinition = new ConsistencyDefinition();
+    }
+
+    /**
+     * @return
+     */
+    public ConsistencyDefinition getConsistencyDefinition() {
+        return consistencyDefinition;
     }
 
     /**
@@ -270,17 +275,12 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         // nur Elementarten beachten, die wenigstens eine Edge besitzen können
         if (edgeTypes != null) {
             for (Class<? extends Edge> edgeClass : edgeTypes) {
-                if (consistencyDefinition != null && !consistencyDefinition.contains(edgeClass)) {
+                EdgeCardinality startToEndCardinality = consistencyDefinition.getStartToEndCardinality(edgeClass);
+                EdgeCardinality endToStartCardinality = consistencyDefinition.getEndToStartCardinality(edgeClass);
+                //wenn es keine Min-Max-Fehler geben kann -> weiter
+                if (startToEndCardinality == ZERO_UNIMITED && endToStartCardinality == ZERO_UNIMITED) {
                     continue;
                 }
-                // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
-                // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
-                int minStartCard = consistencyDefinition == null ? getMinStartToEndCardinality(edgeClass) : consistencyDefinition.getMinStartToEndCardinality(edgeClass);
-                int maxStartCard = consistencyDefinition == null ? getMaxStartToEndCardinality(edgeClass) : consistencyDefinition.getMaxStartToEndCardinality(edgeClass);
-                int minEndCard = consistencyDefinition == null ? getMinEndToStartCardinality(edgeClass) : consistencyDefinition.getMinEndToStartCardinality(edgeClass);
-                int maxEndCard = consistencyDefinition == null ? getMaxEndToStartCardinality(edgeClass) : consistencyDefinition.getMaxEndToStartCardinality(edgeClass);
-                boolean meHasStartClass = isStartClass(edgeClass, me.getClass());
-                boolean meHasEndClass = isEndClass(edgeClass, me.getClass());
 
                 List<Edge> connections = me.getEdges(edgeClass);
                 List<Edge> meIsStartConnections = new ArrayList<>();
@@ -292,6 +292,15 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                         meIsEndConnections.add(edge);
                     }
                 }
+
+                // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
+                // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
+                int minStartCard = startToEndCardinality.min();
+                int maxStartCard = startToEndCardinality.max();
+                int minEndCard = endToStartCardinality.min();
+                int maxEndCard = endToStartCardinality.max();
+                boolean meHasStartClass = isStartClass(edgeClass, me.getClass());
+                boolean meHasEndClass = isEndClass(edgeClass, me.getClass());
 
                 // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass
                 // sowohl Start- als auch Endklasse sein können

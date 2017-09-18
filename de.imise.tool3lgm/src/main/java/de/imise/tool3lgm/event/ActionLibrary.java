@@ -40,7 +40,7 @@ import de.imise.tool3lgm.event.LayoutAction.LayerLayoutAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.process.DataAvailabilityFinder;
-import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyChecker;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
@@ -142,7 +142,7 @@ public class ActionLibrary {
                 if (!isEnabled()) {
                     return;
                 }
-                RedundancyChecker.getReport(getSelectedCollection());
+                RedundancyAnalysis.getReport(getSelectedCollection());
             }
         };
 
@@ -171,7 +171,7 @@ public class ActionLibrary {
                 if (!isSelected) {
                     ConsistencyChecker checker = getTool().getConsistencyChecker();
                     if (checker != null) {
-                        checker.setConsistencyDefinition(null);
+                        checker.resetConsistencyDefinition();
                     }
                 }
                 getTool().setCheckConsistencyState(isSelected);
@@ -1550,7 +1550,7 @@ public class ActionLibrary {
             public static final Action[] create_SIMPLE_REDUNDANCIES_Actions() {
                 //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
                 AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
-                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinition();
+                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
                 //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
                 Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
                 for (int i = 0; i < returnActions.length; i++) {

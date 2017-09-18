@@ -6,7 +6,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 
 /**
- * Datenobjekt für alle {@link SimpleRedundancyAnalysis}
+ * Definition aller {@link SimpleRedundancyAnalysis}
  *
  * @author AXS (15.09.2017)
  */

@@ -5,12 +5,7 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinEndToStartCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinStartToEndCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ONE;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,7 +13,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -26,25 +20,24 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.StaticAction;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
+import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsprogramm;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -110,7 +103,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         RedundancyAnalysis rc = new RedundancyAnalysis();
 
         // Liste in die alle zu füllenden RedundancyAnalysisResult kommen
-        List<RedundancyAnalysisResult> resultList = new ArrayList<>();
+        RedundancyAnalysisResult result = null;
 
         do {
             String message = "";
@@ -127,15 +120,20 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             String con = " " + getResString("ana_fr_concerning") + " ";
 
-            String[] options = new String[5];
-            options[0] = getResString("RechAnwendungsbaustein_p") + con + getResString("Aufgabe_p");
-            options[1] = getResString("KonAnwendungsbaustein_p") + con + getResString("Aufgabe_p");
-            options[2] = getResString("Softwareprodukt_p") + con + getResString("Aufgabe_p");
-            options[3] = getResString("Datenbanksystem_p") + con + getResString("Objekttyp_p");
-            options[4] = getResString("ana_fr_self_defined_analysis");
+            AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
+            RedundancyAnalysisDefinitions redundancyAnalysisDefinitions = analysisDefinition.getRedundancyAnalysisDefinitions();
+            int analyseCount = redundancyAnalysisDefinitions.size();
+            String[] options = new String[analyseCount + 1];
+            for (int i = 0; i < analyseCount; i++) {
+                SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = redundancyAnalysisDefinitions.get(i);
+                MetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
+                Class<? extends ModelElement> startClass = metaPath.getStartClass();
+                Class<? extends ModelElement> endClass = metaPath.getEndClass();
+                options[i] = getDisplayablePluralName(startClass) + con + getDisplayablePluralName(endClass);
+            }
+            options[analyseCount] = getResString("ana_fr_self_defined_analysis");
 
-            // null wenn Abrechen gedrückt wurde, sonst ein gültiges
-            // Boolean-Array
+            // null wenn Abrechen gedrückt wurde, sonst ein gültiges Boolean-Array
             selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, null);
 
             // wenn abgebrochen werden soll
@@ -143,69 +141,31 @@ public class RedundancyAnalysis extends WindowAdapter {
                 return;
             }
 
-            // erstes Result für die Anwendungsbausteine bezüglich Aufgaben
-            RedundancyAnalysisResult result = null;
-            // alle Metapfade zwischen Aufgabe und AWB holen (momentan ist nur
-            // einer definiert; dieser ist der
-            // Pfad Aufgabe wird unterstützt durch AWB und in dem Array an
-            // Position 0)
-
-            MetaPath metaPath = PathFinder.getMetaPathes(Anwendungsbaustein.class, Aufgabe.class)[0];
-
-            // wenn beide Arten von AWB analysiert werden sollen
-            if (selectedOptions[0] != null && selectedOptions[1] != null) {
-                // AnalyseoptionenString für das Result zusammenbasteln
-                String analyzedSystemTypes = getResString("RechAnwendungsbaustein_p");
-                analyzedSystemTypes += " " + getResString("und") + " " + getResString("KonAnwendungsbaustein_p") + con + getResString("Aufgabe_p");
-                result = new RedundancyAnalysisResult(gdcoll, Anwendungsbaustein.class, Aufgabe.class, metaPath, analyzedSystemTypes);
-                // nur rechnerbasierte AWB
-            } else if (selectedOptions[0] != null) {
-                result = new RedundancyAnalysisResult(gdcoll, RechAnwendungsbaustein.class, Aufgabe.class, metaPath, options[0]);
-                // nur papierbasierte AWB
-            } else if (selectedOptions[1] != null) {
-                result = new RedundancyAnalysisResult(gdcoll, KonAnwendungsbaustein.class, Aufgabe.class, metaPath, options[1]);
-            }
-            if (result != null) {
-                resultList.add(result);
-            }
-
-            // Softwareprodukte bezüglich Aufgaben
-            if (selectedOptions[2] != null) {
-                // alle Metapfade zwischen Aufgabe und Softwareprodukten holen
-                // (momentan ist nur einer definiert; dieser ist der
-                // Pfad Aufgabe wird unterstützt durch SWP und in dem Array an
-                // Position 0)
-                metaPath = PathFinder.getMetaPathes(Softwareprodukt.class, Aufgabe.class)[0];
-                resultList.add(new RedundancyAnalysisResult(gdcoll, Softwareprodukt.class, Aufgabe.class, metaPath, options[2]));
-            }
-
-            // Datenbanksystemen bezüglich Objekttypen
-            if (selectedOptions[3] != null) {
-                // alle Metapfade zwischen Objekttypen und Datenbanksystemen
-                // holen (momentan sind 2 definiert
-                // Pfad Aufgabe wird unterstützt durch SWP und in dem Array an
-                // Position 1)
-                metaPath = PathFinder.getMetaPathes(Datenbanksystem.class, Objekttyp.class)[1];
-                resultList.add(new RedundancyAnalysisResult(gdcoll, Datenbanksystem.class, Objekttyp.class, metaPath, options[3]));
+            for (int i = 0; i < selectedOptions.length - 1; i++) {
+                if (selectedOptions[i] != null) {
+                    SingleRedundancyAnalysisDefinition definition = redundancyAnalysisDefinitions.get(i);
+                    result = new RedundancyAnalysisResult(gdcoll, definition, options[i]);
+                    break;
+                }
             }
 
             // selbst definierte XMLAnalyse
-            if (selectedOptions[4] != null) {
+            if (result == null && selectedOptions[4] != null) {
                 MetaPathSelector mps = MetaPathSelector.showDialog(getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"));
-                if (!mps.isValid()) {
-                    resultList.clear();
-                } else {
+                if (mps.isValid()) {
                     Class<? extends ModelElement> c1 = mps.getSelectedClass1();
                     Class<? extends ModelElement> c2 = mps.getSelectedClass2();
                     MetaPath mp = mps.getSelectedMetaPath();
+                    MetaPath metaPath = new MetaPath(c1, c2, mp.getEdgeClasses());
+                    SingleRedundancyAnalysisDefinition definition = new RedundancyAnalysisDefinitions().add(metaPath);
                     String resultName = c2.getSimpleName() + " " + mp.toString();
-                    resultList.add(new RedundancyAnalysisResult(gdcoll, c1, c2, mp, resultName));
+                    result = new RedundancyAnalysisResult(gdcoll, definition, resultName);
                 }
             }
 
             // wenn im Auswahl-Dialog gar nichts angekreuzt war -> Dialog
             // nochmal zeigen
-        } while (resultList.size() == 0);
+        } while (result == null);
 
         // Konsistenzvorraussetzungen prüfen, die für ein korrektes Ergebnis notwendig sind
         // 1.) Alle Inkonsistenzen, die die normale Konsistenzprüfung für Elemente liefert, die die
@@ -221,45 +181,27 @@ public class RedundancyAnalysis extends WindowAdapter {
 
         // alle allgemeinen Konsistenzfehler suchen, die bei Klassen auftreten, die für die
         // Redundanzanalyse relevant sind
-        ConsistencyDefinition consistencyDefinition = new ConsistencyDefinition(getResString("redundancy_analysis"));
-        for (RedundancyAnalysisResult result : resultList) {
-            MetaPath metaPath = result.getMetaPath();
-            for (int i = 0; i < metaPath.countPathes(); i++) {
-                Class<? extends Edge>[] internalMetaPath = metaPath.getEdgeClasses(i);
-                for (int j = 0; j < internalMetaPath.length; j++) {
-                    Class<? extends Edge> edgeClass = internalMetaPath[j];
-                    Integer minStartToEndCard = new Integer(getMinStartToEndCardinality(edgeClass));
-                    Integer maxStartToEndCard = new Integer(getMaxStartToEndCardinality(edgeClass));
-                    Integer minEndToStartCard = new Integer(getMinEndToStartCardinality(edgeClass));
-                    Integer maxEndToStartCard = new Integer(getMaxEndToStartCardinality(edgeClass));
-                    // um korrekte Redundanzanalysen zu liefern, darf einer Anwendungsbausteinkonfiguration immer nur ein
-                    // Anwendungsbaustein zugeordnet sein. Sind es mehr als einer, bedeutet das, dass die alle in einer
-                    // KonfigurationAWB gleichzeitig gebraucht werden. Die Redundanzanalyse würde aber davon ausgehen, dass
-                    // man jeweils nur einen in einer Konfiguration braucht.
-                    if (edgeClass == AwbAwbkVerbindung.class) {
-                        if (Anwendungsbaustein.class.isAssignableFrom(getStartClass(edgeClass))) {
-                            if (minEndToStartCard.intValue() > 0) {
-                                minEndToStartCard = ONE;
-                            }
-                            maxEndToStartCard = ONE;
-                        } else {
-                            if (minStartToEndCard.intValue() > 0) {
-                                minStartToEndCard = ONE;
-                            }
-                            maxStartToEndCard = ONE;
-                        }
-                    }
-                    consistencyDefinition.add(edgeClass, minStartToEndCard, maxStartToEndCard, minEndToStartCard, maxEndToStartCard);
-                }
-            }
-        }
         // eigentlich sollte hier immer schon dieselbe GDCollection selektiert sein, aber zur
         // Sicherheit wird mal dahin gewechselt
         if (Static.getSelectedGDCollection() != gdcoll) {
             Static.setSelectedDoc(gdcoll.getSelectedDoc(), true);
         }
         ConsistencyChecker consistencyChecker = getTool().getConsistencyChecker();
-        consistencyChecker.setConsistencyDefinition(consistencyDefinition);
+        consistencyChecker.resetConsistencyDefinition();
+        ConsistencyDefinition consistencyDefinition = consistencyChecker.getConsistencyDefinition();
+        CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();
+
+        SingleRedundancyAnalysisDefinition definition = result.getDefinition();
+        MetaPath metaPath = definition.getMetaPath();
+        for (int i = 0; i < metaPath.countPathes(); i++) {
+            Class<? extends Edge>[] internalMetaPath = metaPath.getEdgeClasses(i);
+            for (int j = 0; j < internalMetaPath.length; j++) {
+                Class<? extends Edge> edgeClass = internalMetaPath[j];
+                //jetzt die Kardinalitätsvorgaben der gewählten Analyse in die Kardinalitäten der Konsitenzprüfung übertragen
+                cardinalityDefinition.setNewStartToEndCardinality(edgeClass, definition.getNewStartToEndCardinality(edgeClass));
+                cardinalityDefinition.setNewEndToStartCardinality(edgeClass, definition.getNewEndToStartCardinality(edgeClass));
+            }
+        }
         List<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
@@ -278,19 +220,14 @@ public class RedundancyAnalysis extends WindowAdapter {
                 return;
             }
         }
-
         // Redundanzberechnung starten
-        rc.redundancyThread = new RedundancyThread(resultList);
-
+        rc.redundancyThread = new RedundancyThread(result);
         rc.redundancyThread.setPriority(Thread.MIN_PRIORITY);
-
         ProgressDialog pd = new ProgressDialog(Static.getMainFrame(), getResString("ana_fr_wait_message_title"), true, rc.redundancyThread);
         pd.addWindowListener(rc);
         pd.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pd.setStatusLabelText(getResString("message_wait"));
-
         rc.redundancyThread.start();
-
     }
 
     /**
@@ -300,21 +237,17 @@ public class RedundancyAnalysis extends WindowAdapter {
      * @param redundancyAnalysisResults
      */
     private static void showResult(final List<RedundancyAnalysisResult> redundancyAnalysisResults) {
-
         if (redundancyAnalysisResults == null || redundancyAnalysisResults.size() == 0) {
             return;
         }
-
         RedundancyAnalysisResult res = redundancyAnalysisResults.get(0);
 
         // Analysiertes Gesamtmodell
         GDCollection col = res.getGDCollection();
-
         OutputDialog outputDialog;
 
         // Titel des Dialoges
         String title = getResString("redundancy_analysis") + " - " + col.getName();
-
         outputDialog = new OutputDialog(Static.getMainFrame(), title);
 
         // Titel, Modell, Teilmodell
@@ -331,12 +264,10 @@ public class RedundancyAnalysis extends WindowAdapter {
         }
         DateFormat formater = new SimpleDateFormat();
         outputDialog.appendln(getResString("ana_fr_last_change") + "\t: " + formater.format(cal.getTime()));
-
         outputDialog.appendln("\n\n");
 
         // alle Results hintereinander ausgeben
         for (RedundancyAnalysisResult result : redundancyAnalysisResults) {
-
             outputDialog.appendln(getResString("ana_fr_option") + ": " + result.getAnalyseOptionString(), true);
             outputDialog.appendln();
 
@@ -552,6 +483,13 @@ public class RedundancyAnalysis extends WindowAdapter {
         public RedundancyThread(final List<RedundancyAnalysisResult> resultsToFill) {
             super();
             resultList = resultsToFill;
+        }
+
+        /**
+         * @param resultsToFill Liste mit RedundancyAnalysisResult, die gefüllt werden sollen
+         */
+        public RedundancyThread(final RedundancyAnalysisResult resultToFill) {
+            this(ImmutableList.of(resultToFill));
         }
 
         @Override

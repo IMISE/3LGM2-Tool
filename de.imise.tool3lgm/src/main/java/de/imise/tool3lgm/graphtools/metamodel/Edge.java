@@ -406,24 +406,18 @@ public abstract class Edge extends ModelElement {
         return new EdgeContainer(this, doc);
     }
 
-    /**
-     * @param edgeClass
-     * @param start
-     * @return
-     */
-    private static final Class<? extends ModelElement> getStartEndClass(final Class<? extends Edge> edgeClass, final boolean start) {
-        String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
-        return ((Class<?>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName)).asSubclass(ModelElement.class);
-    }
+    //////////////////////////
+    // Start- und Endklasse //
+    //////////////////////////
 
     /**
      * @param edgeClass
      * @param start
      * @return
      */
-    protected static final EdgeCardinality getStartEndCardinality(final Class<? extends Edge> edgeClass, final boolean start) {
-        String fieldName = start ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
-        return (EdgeCardinality) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+    private static final Class<? extends ModelElement> getStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean start) {
+        String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
+        return ((Class<?>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName)).asSubclass(ModelElement.class);
     }
 
     /**
@@ -431,7 +425,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final Class<? extends ModelElement> getStartClass(final Class<? extends Edge> edgeClass) {
-        return getStartEndClass(edgeClass, true);
+        return getStartOrEndClass(edgeClass, true);
     }
 
     /**
@@ -446,7 +440,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final static Class<? extends ModelElement> getEndClass(final Class<? extends Edge> edgeClass) {
-        return getStartEndClass(edgeClass, false);
+        return getStartOrEndClass(edgeClass, false);
     }
 
     /**
@@ -550,6 +544,37 @@ public abstract class Edge extends ModelElement {
         return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
     }
 
+    ////////////////////
+    // Kardinalitäten //
+    ////////////////////
+
+    /**
+     * @param edgeClass
+     * @param start
+     * @return
+     */
+    protected static final EdgeCardinality getStartOrEndCardinality(final Class<? extends Edge> edgeClass, final boolean start) {
+        String fieldName = start ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
+        return (EdgeCardinality) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+    }
+
+    /**
+     * Liefert die Kardinalität für Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen hat.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public static final EdgeCardinality getCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        if (isStartClass(edgeClass, elementClass)) {
+            return getStartOrEndCardinality(edgeClass, false);
+        }
+        if (isEndClass(edgeClass, elementClass)) {
+            return getStartOrEndCardinality(edgeClass, true);
+        }
+        return null;
+    }
+
     /**
      * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben muss.
      *
@@ -558,13 +583,8 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final int getMinCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        if (isStartClass(edgeClass, elementClass)) {
-            return getMinStartToEndCardinality(edgeClass);
-        }
-        if (isEndClass(edgeClass, elementClass)) {
-            return getMinEndToStartCardinality(edgeClass);
-        }
-        return STANDARD_ERROR_INT_VALUE;
+        EdgeCardinality cardinality = getCardinality(elementClass, edgeClass);
+        return cardinality != null ? cardinality.min() : STANDARD_ERROR_INT_VALUE;
     }
 
     /**
@@ -575,13 +595,24 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final int getMaxCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        if (isStartClass(edgeClass, elementClass)) {
-            return getMaxStartToEndCardinality(edgeClass);
-        }
-        if (isEndClass(edgeClass, elementClass)) {
-            return getMaxEndToStartCardinality(edgeClass);
-        }
-        return STANDARD_ERROR_INT_VALUE;
+        EdgeCardinality cardinality = getCardinality(elementClass, edgeClass);
+        return cardinality != null ? cardinality.max() : STANDARD_ERROR_INT_VALUE;
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public static final EdgeCardinality getStartToEndCardinality(final Class<? extends Edge> edgeClass) {
+        return getStartOrEndCardinality(edgeClass, false);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public static final EdgeCardinality getEndToStartCardinality(final Class<? extends Edge> edgeClass) {
+        return getStartOrEndCardinality(edgeClass, true);
     }
 
     /**
@@ -589,7 +620,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final int getMinStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartEndCardinality(edgeClass, false).min();
+        return getStartOrEndCardinality(edgeClass, false).min();
     }
 
     /**
@@ -604,7 +635,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final int getMaxStartToEndCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartEndCardinality(edgeClass, false).max();
+        return getStartOrEndCardinality(edgeClass, false).max();
     }
 
     /**
@@ -619,7 +650,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final int getMinEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartEndCardinality(edgeClass, true).min();
+        return getStartOrEndCardinality(edgeClass, true).min();
     }
 
     /**
@@ -634,7 +665,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public static final int getMaxEndToStartCardinality(final Class<? extends Edge> edgeClass) {
-        return getStartEndCardinality(edgeClass, true).max();
+        return getStartOrEndCardinality(edgeClass, true).max();
     }
 
     /**
