@@ -13,8 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.analyse.process.LGMProzessStep;
-import de.imise.tool3lgm.graphtools.analyse.process.ProzessStructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
@@ -22,6 +20,8 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.LGMProzessStep;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.ProzessStructurePanel;
 
 /**
  * @author AXS Ein Prozess ist ein Node der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt

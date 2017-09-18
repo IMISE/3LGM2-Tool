@@ -2,7 +2,7 @@
  * Created on 27.11.2003 To change this generated comment go to Window>Preferences>Java>Code
  * Generation>Code and Comments
  */
-package de.imise.tool3lgm.graphtools.analyse.process;
+package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;

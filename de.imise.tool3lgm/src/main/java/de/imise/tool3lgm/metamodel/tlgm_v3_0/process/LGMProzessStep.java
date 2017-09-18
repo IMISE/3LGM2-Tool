@@ -2,7 +2,7 @@
  * Created on 26.02.2004 To change this generated comment go to Window>Preferences>Java>Code
  * Generation>Code and Comments
  */
-package de.imise.tool3lgm.graphtools.analyse.process;
+package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
 import java.util.ArrayList;
 import java.util.List;
