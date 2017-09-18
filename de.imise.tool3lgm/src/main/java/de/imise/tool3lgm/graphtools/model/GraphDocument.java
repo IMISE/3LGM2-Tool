@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.metamodel.Composition.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
@@ -3518,7 +3518,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return null;
         }
         doc.start_transaction(pid);
-        if (master.countConnections(edgeClass) >= getMaxCardinality(master.getClass(), edgeClass)) {
+        if (master.countConnections(edgeClass) >= getMaxMasterToSlaveCardinality(edgeClass)) {
             return null;
         }
         String name = slaveName == null || slaveName.trim().equals("") ? doc.getNextNewName(master.getClearName() + "_", slaveClass) : slaveName;
