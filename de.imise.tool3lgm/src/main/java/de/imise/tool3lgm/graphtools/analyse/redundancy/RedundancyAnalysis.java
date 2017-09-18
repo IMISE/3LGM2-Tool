@@ -37,9 +37,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsprogramm;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
+import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -268,6 +266,7 @@ public class RedundancyAnalysis extends WindowAdapter {
 
         // alle Results hintereinander ausgeben
         for (RedundancyAnalysisResult result : redundancyAnalysisResults) {
+            SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = result.getDefinition();
             outputDialog.appendln(getResString("ana_fr_option") + ": " + result.getAnalyseOptionString(), true);
             outputDialog.appendln();
 
@@ -280,7 +279,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             } else {
                 int k = 1;
                 for (ModelElement me : al) {
-                    outputDialog.appendln(k++ + ".)\t" + getElementName(me));
+                    outputDialog.appendln(k++ + ".)\t" + getElementName(me, singleRedundancyAnalysisDefinition));
                 }
             }
 
@@ -298,7 +297,7 @@ public class RedundancyAnalysis extends WindowAdapter {
                     outputDialog.appendln(getResString("ana_fr_equivalence_class") + " " + (i + 1) + ":");
                     int j = 1;
                     for (ModelElement me : as) {
-                        outputDialog.appendln(j++ + ".)\t" + getElementName(me));
+                        outputDialog.appendln(j++ + ".)\t" + getElementName(me, singleRedundancyAnalysisDefinition));
                     }
                     outputDialog.appendln();
                 }
@@ -315,7 +314,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             } else {
                 int k = 1;
                 for (ModelElement me : al) {
-                    outputDialog.appendln(k++ + ".)\t" + getElementName(me) + " \n\t\t" + result.uselessToNeeded.get(me).toString().replace("-\n", "").replace('\n', ' '));
+                    outputDialog.appendln(k++ + ".)\t" + getElementName(me, singleRedundancyAnalysisDefinition) + " \n\t\t" + result.uselessToNeeded.get(me).toString().replace("-\n", "").replace('\n', ' '));
                 }
             }
 
@@ -357,7 +356,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             } else {
                 int k = 1;
                 for (ModelElement me : result.notSupportingAWB) {
-                    outputDialog.appendln(k++ + ".)\t" + getElementName(me));
+                    outputDialog.appendln(k++ + ".)\t" + getElementName(me, singleRedundancyAnalysisDefinition));
                 }
             }
 
@@ -376,19 +375,18 @@ public class RedundancyAnalysis extends WindowAdapter {
 
     /**
      * @param me
+     * @param analysisDefinition
      * @return
      */
-    private static String getElementName(final ModelElement me) {
+    private static String getElementName(final ModelElement me, final SingleRedundancyAnalysisDefinition analysisDefinition) {
         String retVal = me.toString().replace("-\n", "").replace('\n', ' ');
-        // Hänge an AWB ihre SWP
-        if (me instanceof RechAnwendungsbaustein) {
+        MetaPath expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
+        if (expandedNamePath != null) {
             StringBuilder sb = new StringBuilder(retVal);
             sb.append(" (");
-            for (ModelElement awp : me.getConnectedElements(Anwendungsprogramm.class)) {
-                for (ModelElement swp : awp.getConnectedElements(Softwareprodukt.class)) {
-                    sb.append(getElementName(swp));
-                    sb.append(", ");
-                }
+            for (ModelElement connected : PathFinder.getConnectedElements(me, expandedNamePath)) {
+                sb.append(getElementName(connected, analysisDefinition));
+                sb.append(", ");
             }
             int l = sb.length();
             if (sb.charAt(l - 2) == ',' && sb.charAt(l - 1) == ' ') {

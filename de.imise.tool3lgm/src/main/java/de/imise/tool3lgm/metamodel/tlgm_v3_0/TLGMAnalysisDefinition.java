@@ -8,7 +8,9 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbAwpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.SwpAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
@@ -36,13 +38,27 @@ public class TLGMAnalysisDefinition extends AnalysisDefinition {
     }
 
     private void initRedundancyAnalysis() {
+        //Analyse 1: Anwendungsbausteine bezüglich Aufgaben
         SingleRedundancyAnalysisDefinition analyse = redundancyAnalysisDefinitions.add(new MetaPath(Anwendungsbaustein.class, Aufgabe.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
+        //es darf immer nur ein Anwendungsbaustein an jeder Konfiguration hängen, damit die Analyse ein interpretierbares Ergebnis liefert -> Kardinalitäten einschränken
         analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
+        //Bei Anwenudngsbausteinen sollen in der Ausgabe der Analyse hinter dem Namen in Klammern alle verbundenen Softwareprodukte aufgelistet werden -> dieser Pfad muss als Namenserweiterungspfad angegeben werden
+        MetaPath awbExpandedNamePath = new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
+        analyse.addExpandedNamePath(awbExpandedNamePath);
+
+        //Analyse 2: Nur Rechnerbasierte Anwendungsbausteine bezüglich Aufgaben (analog zu oben)
         analyse = redundancyAnalysisDefinitions.add(new MetaPath(RechAnwendungsbaustein.class, Aufgabe.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
         analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
+        analyse.addExpandedNamePath(awbExpandedNamePath);
+
+        //Analyse 3: Nur Konventionelle Anwendungsbausteine bezüglich Aufgaben (analog zu oben, aber ohne Namenserweiterung, weil es ja keine verbundenen Softwareprodukte hier gibt)
         analyse = redundancyAnalysisDefinitions.add(new MetaPath(KonAnwendungsbaustein.class, Aufgabe.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
         analyse.setNewForwardCardinality(AwbAwbkVerbindung.class, ONE_ONE);
+
+        //Analyse 4: Softwareprodukte bezüglich Aufgaben
         redundancyAnalysisDefinitions.add(new MetaPath(Softwareprodukt.class, Aufgabe.class, SwpAufVerbindung.class));
+
+        //Analyse 5: Datenbanksysteme bezüglich Objekttypen
         redundancyAnalysisDefinitions.add(new MetaPath(Datenbanksystem.class, Objekttyp.class, ObjLogspVerbindung.class));
     }
 

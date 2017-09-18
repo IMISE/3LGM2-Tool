@@ -1,11 +1,15 @@
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 
 /**
@@ -53,6 +57,15 @@ public class RedundancyAnalysisDefinitions {
     public class SingleRedundancyAnalysisDefinition {
 
         private final CardinalityDefinition cardinalityDefinition;
+
+        /**
+         * Wenn hier für ein Element ein MetaPfad angegeben ist, dann wird der Anzeige-Name dieser Elementart bei der
+         * Ausgabe des Analysergebnisses um die über den angegebenen MetaPath verbundenen Elemente erweitert.
+         * Z.B. kann man für für Anwendungsbausteine einen MetaPfad definieren über das verbundene Anwendungsprogramm
+         * hin zu den Softwareprodukten. Wird das getan dann hat der Anzeigename des Anwendungsbausteins die Form
+         * "Name des Anwendungsbausteins (Softwareprodukt1, Softwareprodukt2, ...)"
+         */
+        private Map<Class<? extends ModelElement>, MetaPath> elementClassToExpandedNamePath;
 
         /**
          * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
@@ -124,6 +137,29 @@ public class RedundancyAnalysisDefinitions {
          */
         public final EdgeCardinality getNewBackwardCardinality(final Class<? extends Edge> edgeClass) {
             return cardinalityDefinition.getBackwardCardinality(edgeClass);
+        }
+
+        /**
+         * Wenn hier für ein Element ein MetaPfad angegeben ist, dann wird der Anzeige-Name dieser Elementart bei der
+         * Ausgabe des Analysergebnisses um die über den angegebenen MetaPath verbundenen Elemente erweitert.
+         * Z.B. kann man für für Anwendungsbausteine einen MetaPfad definieren über das verbundene Anwendungsprogramm
+         * hin zu den Softwareprodukten. Wird das getan dann hat der Anzeigename des Anwendungsbausteins die Form
+         * "Name des Anwendungsbausteins (Softwareprodukt1, Softwareprodukt2, ...)"
+         *
+         * @param metaPath
+         */
+        public void addExpandedNamePath(final MetaPath metaPath) {
+            if (elementClassToExpandedNamePath == null) {
+                elementClassToExpandedNamePath = new HashMap<>();
+            }
+            Class<? extends ModelElement> startClass = metaPath.getStartClass();
+            for (Class<? extends ModelElement> instanciableAssignableClass : ModelConstants.getInstanciableAssignableClasses(startClass)) {
+                elementClassToExpandedNamePath.put(instanciableAssignableClass, metaPath);
+            }
+        }
+
+        public MetaPath getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
+            return elementClassToExpandedNamePath != null ? elementClassToExpandedNamePath.get(elementClass) : null;
         }
 
     }
