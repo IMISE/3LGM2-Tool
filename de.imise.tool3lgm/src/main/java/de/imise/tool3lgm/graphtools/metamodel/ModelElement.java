@@ -1898,16 +1898,6 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Reicht die selbe Methode die von <code>Tool3lgmConstants</code> einfach nur durch.
-     *
-     * @param key
-     * @return
-     */
-    protected String getResString(final String key) {
-        return Tool3lgmConstants.getResString(key);
-    }
-
-    /**
      * @return <code>true</code>, wenn das Elemente alle Kanten in ausreichender Anzahl hat, die es haben muss
      *         (= Kanten, bei denen die minimale Kardinalität > 0 ist)
      */
