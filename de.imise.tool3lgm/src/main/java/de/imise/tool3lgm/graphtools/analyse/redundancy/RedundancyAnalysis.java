@@ -151,7 +151,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             }
 
             // selbst definierte XMLAnalyse
-            if (result == null && selectedOptions[4] != null) {
+            if (result == null && selectedOptions[selectedOptions.length - 1] != null) {
                 MetaPathSelector mps = MetaPathSelector.showDialog(getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"));
                 if (mps.isValid()) {
                     Class<? extends ModelElement> c1 = mps.getSelectedClass1();
