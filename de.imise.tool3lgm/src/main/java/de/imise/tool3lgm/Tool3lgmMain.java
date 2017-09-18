@@ -1,5 +1,7 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.File;
 
 import de.imise.tool3lgm.log.Log;
@@ -8,15 +10,17 @@ public class Tool3lgmMain {
 
     /**
      * Main-Routine
-     * 
+     *
      * @param args
      *            <table border="1">
      *            <th>Argument-Options</th>
-     *            <th>Usage</th></tr>
+     *            <th>Usage</th>
+     *            </tr>
      *            <td>Visibility of the Tool</td>
      *            <td>
      *            <li><tt>"visible true"</tt>: Tool is visible
-     *            <li><tt>"visible false</tt>: Tool is not visible</td></tr>
+     *            <li><tt>"visible false</tt>: Tool is not visible</td>
+     *            </tr>
      *            <td>Relative of the Tool</td>
      *            <td>
      *            <li><tt>"visible true"</tt>: Tool is visible
@@ -54,7 +58,7 @@ public class Tool3lgmMain {
                 javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
             }
         } catch (Exception ex) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("LookAndFeelLadenException"), ex);
+            Log.show(Log.FATAL, getResString("LookAndFeelLadenException"), ex);
             System.exit(-1);
         }
         Tool3lgm.activateRMI(args, visible);

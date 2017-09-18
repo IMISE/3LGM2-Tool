@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -16,7 +18,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -345,7 +346,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             e.printStackTrace();
         }
     }
@@ -602,7 +603,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 }
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             e.printStackTrace();
         }
     }

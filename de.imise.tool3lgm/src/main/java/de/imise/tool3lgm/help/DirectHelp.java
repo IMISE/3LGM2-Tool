@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.help;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Color;
 import java.awt.Point;
 import java.io.File;
@@ -8,7 +10,6 @@ import java.io.RandomAccessFile;
 import javax.swing.JWindow;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
@@ -59,7 +60,7 @@ public class DirectHelp extends JWindow {
                 }
             }
         } catch (Exception e) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
         }
         dispose();
     }

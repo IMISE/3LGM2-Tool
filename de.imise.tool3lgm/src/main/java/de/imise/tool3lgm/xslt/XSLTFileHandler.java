@@ -1,10 +1,11 @@
 package de.imise.tool3lgm.xslt;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.StringUtils;
 import de.imise.util.io.FileNameExtensionFilterAndFileFilter;
@@ -18,16 +19,15 @@ public class XSLTFileHandler {
     /**
      * {@link javax.swing.filechooser.FileFilter} für XSL-Dateien
      */
-    public static final FileNameExtensionFilterAndFileFilter XSLT_FILE_FILTER = new FileNameExtensionFilterAndFileFilter(Tool3lgmConstants.getResString("FILE_FILTER_XSL"), StringUtils.tokenize(Tool3lgmConstants.getResString("FILE_FILTER_XSL_EXT"), " ",
-            false));
+    public static final FileNameExtensionFilterAndFileFilter XSLT_FILE_FILTER = new FileNameExtensionFilterAndFileFilter(getResString("FILE_FILTER_XSL"), StringUtils.tokenize(getResString("FILE_FILTER_XSL_EXT"), " ", false));
 
     /**
      * fuegt alle XSLT-Files eines Verzeichnisses zur Tabelle hinzu
-     * 
+     *
      * @param path
      */
     public static ArrayList<XSLTScript> getXSLTScripts(final ArrayList<File> searchPath) {
-        ArrayList<XSLTScript> list = new ArrayList<XSLTScript>();
+        ArrayList<XSLTScript> list = new ArrayList<>();
         for (File f : searchPath) {
             if (!f.isDirectory()) {
                 continue;
@@ -49,7 +49,7 @@ public class XSLTFileHandler {
     /**
      * gibt UserField einer XSLT-Datei zurueck, wenn die angegebene Datei den
      * Spezifikationen entspricht, ansonsten null
-     * 
+     *
      * @param arg0 File, die zu ueberpruefende Datei
      * @return String[] mit den gefunden Eigenschaften, oder null
      *         String[] = { dateiname mit pfad, bezeichnung, beschreibung, autor }
@@ -70,7 +70,7 @@ public class XSLTFileHandler {
             }
             return attr;
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return null;
         }
     }
@@ -82,7 +82,11 @@ public class XSLTFileHandler {
     private static String[] check(final RandomAccessFile file) {
         try {
             String[] attr = {
-                    "", "", "", "", ""
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
             };
             String line;
             int endIndex;
@@ -150,7 +154,7 @@ public class XSLTFileHandler {
 
             return attr;
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return null;
         }
     }

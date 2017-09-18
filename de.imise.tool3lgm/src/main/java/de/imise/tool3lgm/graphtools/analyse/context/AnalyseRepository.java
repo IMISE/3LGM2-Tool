@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +50,7 @@ public class AnalyseRepository {
             return false;
         }
         if (xmlAnalysen == null) {
-            xmlAnalysen = new ArrayList<XMLAnalyse>();
+            xmlAnalysen = new ArrayList<>();
         }
         if (xmlAnalysen.contains(toadd)) {
             return false;
@@ -93,8 +95,8 @@ public class AnalyseRepository {
      */
     public static List<AbstractAnalyse> getAnalysenFuerKnoten(final String elementClassName) {
         Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(elementClassName);
-        List<AbstractAnalyse> analysenFuerKnoten = new ArrayList<AbstractAnalyse>();
-        List<AbstractAnalyse> allAnalysis = new ArrayList<AbstractAnalyse>(getXMLAnalysen());
+        List<AbstractAnalyse> analysenFuerKnoten = new ArrayList<>();
+        List<AbstractAnalyse> allAnalysis = new ArrayList<>(getXMLAnalysen());
         allAnalysis.addAll(getSpecialAnalysis());
         for (AbstractAnalyse ana : allAnalysis) {
             ArrayList<Class<? extends ModelElement>> startknoten = ana.getStartknoten();
@@ -178,7 +180,7 @@ public class AnalyseRepository {
      */
     public static List<AbstractAnalyse> getSpecialAnalysis() {
         if (specialAnalysis == null) {
-            specialAnalysis = new ArrayList<AbstractAnalyse>();
+            specialAnalysis = new ArrayList<>();
             specialAnalysis.add(new InterfaceCanSendOTAnalysis());
         }
         return specialAnalysis;
@@ -194,9 +196,9 @@ public class AnalyseRepository {
             xmlAnalysen = loadAnalyseFile(getRepositoryFile());
         }
         if (xmlAnalysen == null) {
-            return new ArrayList<XMLAnalyse>();
+            return new ArrayList<>();
         }
-        return new ArrayList<XMLAnalyse>(xmlAnalysen);
+        return new ArrayList<>(xmlAnalysen);
     }
 
     // ////////////////////////////////////////////////////
@@ -215,7 +217,7 @@ public class AnalyseRepository {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return new ArrayList<XMLAnalyse>();
+        return new ArrayList<>();
     }
 
     /**
@@ -238,7 +240,7 @@ public class AnalyseRepository {
             if (!line.equals("--multipart_3lgm_query_separator")) {
                 throw new DataFormatException();
             }
-            analysen = new ArrayList<XMLAnalyse>();
+            analysen = new ArrayList<>();
             while (true) {
                 line = dataStream.readLine();
                 if (line == null) {
@@ -257,13 +259,13 @@ public class AnalyseRepository {
                 try {
                     toadd = XMLAnalyse.createAnalyse(ananame, strbuf.toString());
                 } catch (SAXException ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                    Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
                 }
                 analysen.add(toadd);
             }
             dataStream.close();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("error"), e);
+            Log.show(Log.ERROR, getResString("fehler"), e);
         }
         return analysen;
 

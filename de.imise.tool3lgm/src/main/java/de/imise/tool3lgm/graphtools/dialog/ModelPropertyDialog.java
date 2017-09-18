@@ -3,11 +3,11 @@
  */
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -25,7 +24,7 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
  * Eigenschaftendialog für ein Modell
- * 
+ *
  * @author AXS
  */
 public final class ModelPropertyDialog extends AbstractPropertyDialog {
@@ -57,7 +56,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
         try {
             init();
         } catch (Exception e) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
         }
     }
 
@@ -77,16 +76,11 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
         }
 
         JPanel northPanel = new JPanel(new BorderLayout());
-        northPanel.add(new JLabel(Tool3lgmConstants.getResString("submodel")), BorderLayout.WEST);
+        northPanel.add(new JLabel(getResString("submodel")), BorderLayout.WEST);
         northPanel.add(docBox, BorderLayout.CENTER);
         getContentPane().add(northPanel, BorderLayout.NORTH);
 
-        docBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                selectedDocChanged();
-            }
-        });
+        docBox.addActionListener(e -> selectedDocChanged());
 
         docBox.setSelectedItem(gdcoll.getSelectedDoc());
     }
@@ -154,9 +148,9 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog {
     private void actualizeFrameTitle() {
         GraphDocument doc = (GraphDocument) docBox.getSelectedItem();
         if (doc != null) {
-            setTitle(Tool3lgmConstants.getResString("description") + " - " + gdcoll.getName() + " - " + doc.getTitle());
+            setTitle(getResString("description") + " - " + gdcoll.getName() + " - " + doc.getTitle());
         } else {
-            setTitle(Tool3lgmConstants.getResString("description") + " - " + gdcoll.getName() + " - " + Tool3lgmConstants.getResString("uebersicht"));
+            setTitle(getResString("description") + " - " + gdcoll.getName() + " - " + getResString("uebersicht"));
         }
     }
 

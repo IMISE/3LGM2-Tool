@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.help;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 /**
  * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte
  * Anwendung zur Verfügung.
@@ -21,7 +23,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -51,7 +52,7 @@ public class Help {
             URL url = HelpSet.findHelpSet(ClassLoader.getSystemClassLoader(), "doc/help.hs", UserProperties.getLocale());
             mainHS = new HelpSet(Tool3lgm.class.getClassLoader(), url);
         } catch (Exception ee) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("keinHelpSet"), ee);
+            Log.show(Log.ERROR, getResString("keinHelpSet"), ee);
         }
         mainHB = mainHS.createHelpBroker();
 

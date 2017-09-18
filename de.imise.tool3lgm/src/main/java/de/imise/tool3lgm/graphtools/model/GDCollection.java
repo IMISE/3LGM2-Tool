@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.model;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgm.getLastActionPosition;
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
@@ -1051,7 +1050,7 @@ public final class GDCollection extends UserFieldTarget {
             me = elementClass.newInstance();
             nc = (NodeContainer) me.createContainer(doc);
         } catch (Exception ex) {
-            Log.show(ERROR, getErrString("FehlerAllgemein"), ex);
+            Log.show(ERROR, getResString("FehlerAllgemein"), ex);
             return null;
         }
         if (StringUtils.isValid(hashString, "null")) {
@@ -1321,7 +1320,7 @@ public final class GDCollection extends UserFieldTarget {
                 try {
                     edge = edgeClass.newInstance();
                 } catch (Exception e) {
-                    Log.show(ERROR, getErrString("FehlerAllgemein"), e);
+                    Log.show(ERROR, getResString("FehlerAllgemein"), e);
                     doc.undo(pid);
                     return null;
                 }
@@ -1397,7 +1396,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
         } catch (Exception e) {
-            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getResString("FehlerAllgemein"), e);
             doc.undo(pid);
             return null;
         }
@@ -1603,7 +1602,7 @@ public final class GDCollection extends UserFieldTarget {
                 try {
                     testKante = kante.getClass().newInstance();
                 } catch (Exception e) {
-                    Log.show(ERROR, getErrString("FehlerAllgemein"), e);
+                    Log.show(ERROR, getResString("FehlerAllgemein"), e);
                     continue;
                 }
                 testKante.setKnots(startKnoten, endKnoten, false);
@@ -1775,7 +1774,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             imf.close();
         } catch (Exception e) {
-            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getResString("FehlerAllgemein"), e);
         }
         return iconKey;
     }
@@ -2050,7 +2049,7 @@ public final class GDCollection extends UserFieldTarget {
             clipStream.close();
             setBulkMode(false);
         } catch (Exception e) {
-            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getResString("FehlerAllgemein"), e);
         }
     }
 
@@ -2060,7 +2059,7 @@ public final class GDCollection extends UserFieldTarget {
             fileHandler.loadXMLFile(istream, true);
             setBulkMode(false);
         } catch (Exception e) {
-            Log.show(ERROR, getErrString("FehlerAllgemein"), e);
+            Log.show(ERROR, getResString("FehlerAllgemein"), e);
         }
     }
 

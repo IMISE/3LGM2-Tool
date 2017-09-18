@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
             clipboardWriter.writeClipboardContent();
             clipboardWriter.finish();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return false;
         }
         return true;

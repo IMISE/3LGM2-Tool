@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.xslt;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
@@ -74,11 +76,11 @@ public class WebExportDialog extends JDialog {
      * @throws java.awt.HeadlessException
      */
     public WebExportDialog(final JFrame owner, final GDCollection collection) throws HeadlessException {
-        super(owner, Tool3lgmConstants.getResString("webExport"), true);
+        super(owner, getResString("webExport"), true);
 
         // da evtl. viele Verzeichnisse nach Scripten durchsucht werden müssen, einen Fortschrittsdialog zeigen
         ProgressDialog progressDialog = new ProgressDialog(owner);
-        progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("trans_load_scripts"));
+        progressDialog.setStatusLabelText(getResString("trans_load_scripts"));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.collection = collection;
@@ -87,11 +89,11 @@ public class WebExportDialog extends JDialog {
 
         final XSLTResourceHandler xsltResourceHandler = new XSLTResourceHandler();
 
-        checkBoxShowResult = new JCheckBox(Tool3lgmConstants.getResString("trans_browser"), true);
+        checkBoxShowResult = new JCheckBox(getResString("trans_browser"), true);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panel.add(checkBoxShowResult);
-        panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("ok")) {
+        panel.add(new JButton(new AbstractAction(getResString("ok")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 commit();
@@ -99,7 +101,7 @@ public class WebExportDialog extends JDialog {
             }
         }));
 
-        panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("trans_path")) {
+        panel.add(new JButton(new AbstractAction(getResString("trans_path")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 new SearchPathDialog(owner, UserProperties.getXSLSearchDirs()).setVisible(true);
@@ -110,7 +112,7 @@ public class WebExportDialog extends JDialog {
             }
         }));
 
-        panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("cancel")) {
+        panel.add(new JButton(new AbstractAction(getResString("cancel")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 dispose();
@@ -120,7 +122,7 @@ public class WebExportDialog extends JDialog {
 
         panel = new JPanel(new BorderLayout(10, 0));
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panel.add(new JLabel(Tool3lgmConstants.getResString("labelDestination")), BorderLayout.WEST);
+        panel.add(new JLabel(getResString("labelDestination")), BorderLayout.WEST);
         panel.add(destination = new ExtendedTextField(), BorderLayout.CENTER);
 
         String modelName = collection.getName();
@@ -135,7 +137,7 @@ public class WebExportDialog extends JDialog {
 
         destination.setText(UserProperties.getWorkingDirectory().toString() + File.separator + "3LGM_export_" + modelName);
         destination.setEditable(false);
-        panel.add(new JButton(new AbstractAction(Tool3lgmConstants.getResString("explore")) {
+        panel.add(new JButton(new AbstractAction(getResString("explore")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 File path = DirectoryChooser.showDialog(WebExportDialog.this, "web");// den String braucht man nicht auslagern
@@ -186,7 +188,7 @@ public class WebExportDialog extends JDialog {
             try {
                 path = new File(UserProperties.getWorkingDirectory().getCanonicalPath() + File.separator + "_tool3lgm_webexport");
             } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
                 return;
             }
         }
@@ -234,13 +236,13 @@ public class WebExportDialog extends JDialog {
                 try {
                     XMLTransformer.transform(selected.get(i).openStream(), selected.get(i).getSource(), tempXMLFile, filesDir + "/xslt" + i + ".html");
                 } catch (IOException e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"));
+                    Log.show(Log.ERROR, getResString("FehlerAllgemein"));
                     return;
                 } catch (TransformerException e) {
                     if (hasInconsistencies()) {
-                        Log.show(Log.ERROR, Tool3lgmConstants.getErrString("webExportInconsistencyError"));
+                        Log.show(Log.ERROR, getResString("webExportInconsistencyError"));
                     } else {
-                        Log.show(Log.ERROR, Tool3lgmConstants.getErrString("webExportXSLError"));
+                        Log.show(Log.ERROR, getResString("webExportXSLError"));
                     }
                     return;
                 }
@@ -267,7 +269,7 @@ public class WebExportDialog extends JDialog {
                         String destinationName = filesDir + "/szen" + j + "_xslt" + i + ".html";
                         XMLTransformer.transform(openStream, sourceName, tempXMLFile, destinationName);
                     } catch (Error e) {
-                        Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                        Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
                     }
                 }
                 tempXMLFile.delete();
@@ -288,7 +290,7 @@ public class WebExportDialog extends JDialog {
             }
 
         } catch (Exception exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
         }
 
         Static.closeProgressDialog();
@@ -463,13 +465,13 @@ public class WebExportDialog extends JDialog {
         public String getColumnName(final int column) {
             switch (column) {
             case 0:
-                return Tool3lgmConstants.getResString("labelInclude");
+                return getResString("labelInclude");
             case 1:
-                return Tool3lgmConstants.getResString("trans_file");
+                return getResString("trans_file");
             case 2:
-                return Tool3lgmConstants.getResString("trans_name");
+                return getResString("trans_name");
             case 3:
-                return Tool3lgmConstants.getResString("trans_des");
+                return getResString("trans_des");
             default:
                 return null;
             }

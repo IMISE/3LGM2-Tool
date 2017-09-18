@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 
@@ -30,7 +31,6 @@ import javax.swing.event.ListSelectionListener;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -153,15 +153,15 @@ public class AnalyseEditor extends JDialog implements ActionListener {
          */
         private void config(final ActionListener listener) {
 
-            pathElementCaption = new JLabel(" " + Tool3lgmConstants.getResString("typeOfPathelement") + ":");
-            limitationCaption = new JLabel(" " + Tool3lgmConstants.getResString("restrictionForPathelement") + ":");
+            pathElementCaption = new JLabel(" " + getResString("typeOfPathelement") + ":");
+            limitationCaption = new JLabel(" " + getResString("restrictionForPathelement") + ":");
             pathStepElementTypeList = new AlphabeticalJList();
             conditionElementTypeList = new AlphabeticalJList();
             scrollPaneTyp = new JScrollPane(pathStepElementTypeList);
 
             scrollPaneverb = new JScrollPane(conditionElementTypeList);
-            connectedRadioBut = new JRadioButton(Tool3lgmConstants.getResString("connected_with"), true);
-            notConnectedRadioBut = new JRadioButton(Tool3lgmConstants.getResString("not_connected_with"), false);
+            connectedRadioBut = new JRadioButton(getResString("connected_with"), true);
+            notConnectedRadioBut = new JRadioButton(getResString("not_connected_with"), false);
 
             bgroup = new ButtonGroup();
             bgroup.add(connectedRadioBut);
@@ -225,7 +225,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             Class<? extends ModelElement>[] connectable = getConnectableElementClasses(selectedPathStepElements);
 
             for (int i = 0; i < connectable.length; i++) {
-                String resName = Tool3lgmConstants.getResString(connectable[i].getSimpleName());
+                String resName = getResString(connectable[i].getSimpleName());
                 if (!newList) {
                     conditionElementTypeList.addItem(connectable[i], resName);
                 }
@@ -354,9 +354,9 @@ public class AnalyseEditor extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
         String str = e.getActionCommand();
-        if (str.equals(Tool3lgmConstants.getResString("exit"))) {
+        if (str.equals(getResString("exit"))) {
             dispose();
-        } else if (str.equals(Tool3lgmConstants.getResString("ana_start"))) {
+        } else if (str.equals(getResString("ana_start"))) {
             GraphDocument doc = Static.getSelectedDoc();
             if (doc == null) {
                 return;
@@ -397,11 +397,11 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             } else {
                 pack();
             }
-        } else if (str.equals(Tool3lgmConstants.getResString("ana_insert_to_repository"))) {
+        } else if (str.equals(getResString("ana_insert_to_repository"))) {
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 NameAndColorInputDialog nd = new NameAndColorInputDialog(this);
-                nd.showDialog(Tool3lgmConstants.getResString("ana_name_title"), "");
+                nd.showDialog(getResString("ana_name_title"), "");
                 String val = nd.getInputString();
                 if (val == null) {
                     val = "(null)";
@@ -410,7 +410,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
                 try {
                     toadd = XMLAnalyse.createAnalyse(val, getAnalyseString());
                 } catch (SAXException ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                    Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
                 }
                 if (toadd != null) {
                     // wenn der AnalyseRepositoryFrame sichtbar ist, wird die neue XMLAnalyse nicht
@@ -519,7 +519,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
     /** Initialisiert die GUI-Kompnenten */
     private void init() {
-        setTitle(Tool3lgmConstants.getResString("analysis"));
+        setTitle(getResString("analysis"));
         mainPanel = new JPanel();
         /* Panel "Basis-XMLAnalyse" */
         pathStepMainPanel = new JPanel();
@@ -535,7 +535,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
         PathStepComponent pathComponent = new PathStepComponent(this);
         for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
-            String resName = Tool3lgmConstants.getResString(ModelConstants.ALL_NODES[i].getSimpleName());
+            String resName = getResString(ModelConstants.ALL_NODES[i].getSimpleName());
             pathComponent.pathStepElementTypeList.addItem(ModelConstants.ALL_NODES[i], resName);
         }
 
@@ -556,13 +556,13 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         buttons.setLayout(new FlowLayout());
         JButton but = new JButton(AnalyseRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT);
         buttons.add(but);
-        but = new JButton(Tool3lgmConstants.getResString("ana_start"));
+        but = new JButton(getResString("ana_start"));
         but.addActionListener(this);
         buttons.add(but);
-        but = new JButton(Tool3lgmConstants.getResString("ana_insert_to_repository"));
+        but = new JButton(getResString("ana_insert_to_repository"));
         but.addActionListener(this);
         buttons.add(but);
-        but = new JButton(Tool3lgmConstants.getResString("exit"));
+        but = new JButton(getResString("exit"));
         but.addActionListener(this);
         buttons.add(but);
         mainPanel.setLayout(new BorderLayout());

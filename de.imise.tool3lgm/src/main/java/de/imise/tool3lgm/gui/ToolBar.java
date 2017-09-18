@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -52,7 +54,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     int windowIndex = -1;
 
-    ArrayList<AbstractInternalFrame> windowList = new ArrayList<AbstractInternalFrame>();
+    ArrayList<AbstractInternalFrame> windowList = new ArrayList<>();
 
     boolean operatingWindowList = false;
 
@@ -68,17 +70,17 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         CSH.setHelpIDString(multi, "swl_multiview");
 
         fach = new JToggleButton(Tool3lgmConstants.getLocalizedIcon("domainLayer.gif"));
-        fach.setToolTipText(Tool3lgmConstants.getResString("domain_layer"));
+        fach.setToolTipText(getResString("domain_layer"));
         fach.setActionCommand("fachlich");
         fach.addActionListener(this);
         CSH.setHelpIDString(fach, "swl_fachlich");
         log = new JToggleButton(Tool3lgmConstants.getLocalizedIcon("logicalToolLayer.gif"));
-        log.setToolTipText(Tool3lgmConstants.getResString("logical_tool_layer"));
+        log.setToolTipText(getResString("logical_tool_layer"));
         log.setActionCommand("logisch");
         log.addActionListener(this);
         CSH.setHelpIDString(log, "swl_logisch");
         phy = new JToggleButton(Tool3lgmConstants.getLocalizedIcon("physicalToolLayer.gif"));
-        phy.setToolTipText(Tool3lgmConstants.getResString("physical_tool_layer"));
+        phy.setToolTipText(getResString("physical_tool_layer"));
         phy.setActionCommand("physisch");
         phy.addActionListener(this);
         CSH.setHelpIDString(phy, "swl_physisch");
@@ -88,19 +90,19 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         save = createToolBarButton(ActionLibrary.FileActions.SAVE, "save.gif", "modell_speichern", "swl_save");
 
         print = new JButton(Tool3lgmConstants.getIcon("print.gif"));
-        print.setToolTipText(Tool3lgmConstants.getResString("modell_drucken"));
+        print.setToolTipText(getResString("modell_drucken"));
         print.setActionCommand("print");
         print.addActionListener(this);
 
         undo = new JButton(Tool3lgmConstants.getIcon("undo.gif"));
-        undo.setToolTipText(Tool3lgmConstants.getResString("undo"));
+        undo.setToolTipText(getResString("undo"));
         undo.setActionCommand("undo");
         undo.addMouseListener(this);
         undo.addActionListener(this);
         CSH.setHelpIDString(undo, "swl_undo");
 
         redo = new JButton(Tool3lgmConstants.getIcon("redo.gif"));
-        redo.setToolTipText(Tool3lgmConstants.getResString("redo"));
+        redo.setToolTipText(getResString("redo"));
         redo.setActionCommand("redo");
         redo.addMouseListener(this);
         redo.addActionListener(this);
@@ -109,13 +111,13 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         addControlButtons();
 
         backward = new JButton(Tool3lgmConstants.getIcon("arrow_left.gif"));
-        backward.setToolTipText(Tool3lgmConstants.getResString("vf"));
+        backward.setToolTipText(getResString("vf"));
         backward.setActionCommand("backward");
         backward.addActionListener(this);
         backward.setEnabled(false);
 
         forward = new JButton(Tool3lgmConstants.getIcon("arrow_right.gif"));
-        forward.setToolTipText(Tool3lgmConstants.getResString("nf"));
+        forward.setToolTipText(getResString("nf"));
         forward.setActionCommand("forward");
         forward.addActionListener(this);
         forward.setEnabled(false);
@@ -248,7 +250,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
                 try {
                     f.setSelected(true);
                 } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
                 }
             }
             operatingWindowList = false;
@@ -261,7 +263,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
                 try {
                     f.setSelected(true);
                 } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
                 }
             }
             operatingWindowList = false;
@@ -454,14 +456,14 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         GraphDocument doc = Static.getSelectedDoc();
 
         if (doc == null || !doc.isVerificationMode()) {
-            undo.setToolTipText(Tool3lgmConstants.getResString("undo"));
-            redo.setToolTipText(Tool3lgmConstants.getResString("redo"));
+            undo.setToolTipText(getResString("undo"));
+            redo.setToolTipText(getResString("redo"));
             return;
         }
         TransactionManager tman = doc.getCollection().getTman();
         if (tman == null) {
-            undo.setToolTipText(Tool3lgmConstants.getResString("undo"));
-            redo.setToolTipText(Tool3lgmConstants.getResString("redo"));
+            undo.setToolTipText(getResString("undo"));
+            redo.setToolTipText(getResString("redo"));
             return;
         }
         String queue = tman.getQueue(10);

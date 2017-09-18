@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -89,7 +90,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
      * @return
      */
     public static String getDisplayableGlobalFieldIdentifierName() {
-        return Tool3lgmConstants.getResString("userFieldEditor_classification_modelvariable");
+        return getResString("userFieldEditor_classification_modelvariable");
     }
 
     /**
@@ -255,8 +256,8 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
                         tmpList.add(userFieldsToDelete.get(i));
                     }
                 }
-                int answer = MultipleOptionPane.showConfirmDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("warnung"),
-                        Tool3lgmConstants.getErrString("userfield_still_in_use") + "\n" + Tool3lgmConstants.getResString("insgesamt") + ": " + userFieldsToDelete.size() + "\n" + tmpList + " ... ", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int answer = MultipleOptionPane.showConfirmDialog(Static.getMainFrame(), getResString("warnung"), getResString("userfield_still_in_use") + "\n" + getResString("insgesamt") + ": " + userFieldsToDelete.size() + "\n" + tmpList + " ... ",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (answer != JOptionPane.YES_OPTION) {
                     return deleted;
                 }
@@ -579,12 +580,12 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
             //den Index des ersten nicht konsistenten UserFields in der Formel-UserField-Liste merken
             firstInconsistentUserFieldFormulaIndex = formulaUserFieldList.size() - inconsistentUserFields.size();
-            StringBuilder sb = new StringBuilder(Tool3lgmConstants.getErrString("circuit_reference"));
+            StringBuilder sb = new StringBuilder(getResString("circuit_reference"));
             for (int i = 0; i < inconsistentUserFields.size(); i++) {
                 sb.append("\n");
                 sb.append(inconsistentUserFields.get(i).getName());
             }
-            MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("fehler"), sb.toString());
+            MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), getResString("fehler"), sb.toString());
             return true;
             //die Globale Option die Kennzahlen zu berechnen erstam abschalten
             //          UserProperties.setEnableClassificationNumberCalculation(false);

@@ -399,7 +399,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             try {
                 re1 = new RE(name);
             } catch (REException error) {
-                Log.show(Log.FATAL, Tool3lgmConstants.getErrString("regexp_search") + "\n" + error, error);
+                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
         RE re2 = null;
@@ -407,7 +407,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             try {
                 re2 = new RE(bez);
             } catch (REException error) {
-                Log.show(Log.FATAL, Tool3lgmConstants.getErrString("regexp_search") + "\n" + error, error);
+                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
         RE re3 = null;
@@ -415,7 +415,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             try {
                 re3 = new RE(ud);
             } catch (REException error) {
-                Log.show(Log.FATAL, Tool3lgmConstants.getErrString("regexp_search") + "\n" + error, error);
+                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
 

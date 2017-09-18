@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -13,7 +15,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
@@ -36,8 +37,8 @@ public class AnalyseXMLParser extends DefaultHandler {
     public static final int END = 10;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public static List<ElementContainer> analyze(final String str, final GraphDocument _doc) {
         AnalyseXMLParser p = new AnalyseXMLParser();
         return p.process(new StringReader(str), _doc);
@@ -64,21 +65,21 @@ public class AnalyseXMLParser extends DefaultHandler {
     private GraphDocument doc;
 
     /**
-	 * 
-	 */
+     * 
+     */
     public AnalyseXMLParser() {
         unknown_depth = 0;
         file_state = START;
         state = START;
-        result = new ArrayList<ElementContainer>(100);
-        resulttmp = new ArrayList<ElementContainer>(100);
+        result = new ArrayList<>(100);
+        resulttmp = new ArrayList<>(100);
         parser = null;
         suchcnt = 0;
         SAXParserFactory factory = SAXParserFactory.newInstance();
         try {
             parser = factory.newSAXParser();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerParser"), e);
+            Log.show(Log.ERROR, getResString("FehlerParser"), e);
         }
     }
 
@@ -123,15 +124,15 @@ public class AnalyseXMLParser extends DefaultHandler {
             if (suchcnt == 0) {
                 if (doc.getSelectionSize() > 0) {
                     Collection<ElementContainer> selection = doc.getSelectedContainer();
-                    List<ElementContainer> connected = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<ElementContainer>(resulttmp), typ, verbundenstate, connectedNames, UserProperties.isSearchParts(), UserProperties.isSearchParents());
-                    resulttmp = new ArrayList<ElementContainer>(selection.size() + connected.size());
+                    List<ElementContainer> connected = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, UserProperties.isSearchParts(), UserProperties.isSearchParents());
+                    resulttmp = new ArrayList<>(selection.size() + connected.size());
                     resulttmp.addAll(selection);
                     resulttmp.addAll(connected);
                 } else {
                     resulttmp = GraphAnalyse.performSearch(doc, typ, verbundenstate, connectedNames);
                 }
             } else {
-                resulttmp = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<ElementContainer>(resulttmp), typ, verbundenstate, connectedNames, UserProperties.isSearchParts(), UserProperties.isSearchParents());
+                resulttmp = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, UserProperties.isSearchParts(), UserProperties.isSearchParents());
             }
             result.addAll(resulttmp);
             suchcnt++;
@@ -205,14 +206,14 @@ public class AnalyseXMLParser extends DefaultHandler {
      */
     public List<ElementContainer> process(final Reader input, final GraphDocument _doc) {
         if (input == null || _doc == null) {
-            return new ArrayList<ElementContainer>();
+            return new ArrayList<>();
         }
         doc = _doc;
 
         try {
             parser.parse(new InputSource(input), this);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
         }
 
         return result;
@@ -241,8 +242,8 @@ public class AnalyseXMLParser extends DefaultHandler {
                 System.out.println("XML Error: Not in analyse when suche begins.");
             }
             state = IN_SUCHE;
-            typ = new ArrayList<String>();
-            connectedNames = new ArrayList<String>();
+            typ = new ArrayList<>();
+            connectedNames = new ArrayList<>();
             verbundenstate = true;
             return;
         }

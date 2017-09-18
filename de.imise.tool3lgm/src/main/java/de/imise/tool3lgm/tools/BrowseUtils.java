@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.tools;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Desktop;
 import java.io.File;
 import java.net.URI;
@@ -20,12 +22,12 @@ public class BrowseUtils {
     }
 
     public static final void browseRelativeFileFromResource(final String resourceKey) {
-        String relativePath = Tool3lgmConstants.getResString(resourceKey);
+        String relativePath = getResString(resourceKey);
         browseRelativeFile(relativePath);
     }
 
     public static final void browseUrlFromResource(final String resourceKey) {
-        String resUrl = Tool3lgmConstants.getResString(resourceKey);
+        String resUrl = getResString(resourceKey);
         browse(resUrl);
     }
 
@@ -38,7 +40,7 @@ public class BrowseUtils {
                 File file = new File(urlOrPath);
                 Desktop.getDesktop().open(file);
             } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
             }
         }
     }
@@ -47,7 +49,7 @@ public class BrowseUtils {
         try {
             Desktop.getDesktop().browse(uri);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
         }
     }
 

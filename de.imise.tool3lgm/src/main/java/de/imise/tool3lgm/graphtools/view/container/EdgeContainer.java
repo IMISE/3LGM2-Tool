@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
@@ -224,7 +224,7 @@ public class EdgeContainer extends ElementContainer {
                 }
             }
         } catch (NullPointerException e) {
-            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
         }
         if (kc1 == null || kc2 == null) {
             return;

@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -17,7 +19,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -154,16 +155,14 @@ public class XMLAnalyse extends AbstractAnalyse {
         try {
             parser = factory.newSAXParser();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerParser") + "\n" + e.getMessage(), e);
+            Log.show(Log.ERROR, getResString("FehlerParser") + "\n" + e.getMessage(), e);
         }
 
         if (parser != null) {
             try {
                 parser.parse(new InputSource(new StringReader(analyseText)), new AnalyseParser());
-            } catch (IOException ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerParser") + "\n" + ex.getMessage(), ex);
-            } catch (IllegalArgumentException ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerParser") + "\n" + ex.getMessage(), ex);
+            } catch (IOException | IllegalArgumentException ex) {
+                Log.show(Log.ERROR, getResString("FehlerParser") + "\n" + ex.getMessage(), ex);
             }
         }
     }

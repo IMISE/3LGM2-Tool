@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.xml;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilter;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.LGM3_UNZIPPED;
 import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.LGM3_ZIP;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_LINE_STYLE;
@@ -24,7 +25,6 @@ import javax.xml.stream.XMLStreamException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -134,7 +134,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             toolXMLWriter.writeModel();
             toolXMLWriter.finish();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return false;
         }
         return true;

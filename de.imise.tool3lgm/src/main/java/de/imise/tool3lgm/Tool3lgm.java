@@ -1,6 +1,5 @@
 package de.imise.tool3lgm;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
@@ -501,7 +500,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             boolean retVal = fileHandler.loadFromRAF();
             return retVal;
         } catch (Exception e) {
-            Log.show(Log.FATAL, getErrString("FehlerAllgemein"), e);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
                     getResString("ok")
             };
@@ -809,7 +808,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     int temp = Integer.parseInt(frames[i].getTitle().substring(frames[i].getTitle().lastIndexOf("#") + 1));
                     max = temp > max ? temp : max;
                 } catch (Exception e) {
-                    Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
                 }
             }
         }
@@ -969,7 +968,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         try {
                             frame.setSelected(true);
                         } catch (Exception ex) {
-                            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                            Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
                         }
                     }
                 } else {
@@ -979,7 +978,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                             try {
                                 oldframe.setSelected(false);
                             } catch (Exception ex) {
-                                Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                                Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
                             }
                         }
                     }
@@ -1087,7 +1086,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         try {
             frames[frames.length - 1].setMaximum(false);
         } catch (java.beans.PropertyVetoException evt) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), evt);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
         }
     }
 
@@ -1097,7 +1096,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         try {
             frames[frames.length - 1].setMaximum(false);
         } catch (java.beans.PropertyVetoException evt) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), evt);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
         }
         Rectangle rect = desktop.getVisibleRect();
         double height = rect.getHeight();
@@ -1340,7 +1339,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 return false;
             }
         } catch (Exception exp) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp, exp);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein") + "\n" + exp, exp);
             return false;
         }
         gdcoll.setChanged(false);
@@ -1433,7 +1432,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         try {
             activeFrame.setSelected(true);
         } catch (Exception ex) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
         }
         toolbar.addWindow(activeFrame);
         toolbar.checkUndoandRedo();
@@ -1807,14 +1806,14 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     try {
                         frame.setSelected(true);
                     } catch (PropertyVetoException ex) {
-                        Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                        Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
                     }
                 }
             } else {
                 try {
                     frame.setSelected(true);
                 } catch (PropertyVetoException ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
                 }
             }
         } else if (hyperlink != null) {

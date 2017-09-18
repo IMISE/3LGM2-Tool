@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
@@ -48,20 +49,20 @@ public abstract class AbstractError extends Error {
 
     /**
      * Liefert einen {@link StringBuilder} mit der Fehlermeldung
-     * 
+     *
      * @return
      */
     protected StringBuilder getMessageBuilder() {
         StringBuilder sb = new StringBuilder();
         String errClassName = getClass().getSimpleName();
-        sb.append(Tool3lgmConstants.getErrString(errClassName + ERROR_DESCRIPTION_SUFFIX));
+        sb.append(getResString(errClassName + ERROR_DESCRIPTION_SUFFIX));
         replacePlaceHolder(sb);
         return sb;
     }
 
     /**
      * Liefert alle Replacements für die Message (muss in ggf. Unterklassen überschrieben werden)
-     * 
+     *
      * @return
      */
     protected String[] getMessageReplaceArguments() {
@@ -86,14 +87,14 @@ public abstract class AbstractError extends Error {
 
     /**
      * Liefert einen String, der im ErrorTable in der Spalte "Verbindungstyp / Feld" angezeigt wird.
-     * 
+     *
      * @return
      */
     public abstract String getErrorFieldString();
 
     /**
      * Liefert das ModelElement mit dem Fehler
-     * 
+     *
      * @return the me
      */
     public final ModelElement getModelElement() {
@@ -102,7 +103,7 @@ public abstract class AbstractError extends Error {
 
     /**
      * Liefert die {@link GDCollection} mit dem Fehler
-     * 
+     *
      * @return the gdcoll
      */
     public final GDCollection getGdcoll() {
@@ -112,7 +113,7 @@ public abstract class AbstractError extends Error {
     /**
      * Liefert einen String, der für jede Art von Fehler eindeutig sein sollte (z.B. "MIN", "MAX" oder "ID").
      * Wird in den Resourcen nichts gefunden, wird "ERROR" zurück gegeben.
-     * 
+     *
      * @return
      */
     public final String getTypeString() {
@@ -120,7 +121,7 @@ public abstract class AbstractError extends Error {
         String type = null;
         while (type == null && clazz != Object.class) {
             try {
-                type = Tool3lgmConstants.getErrString(clazz.getSimpleName());
+                type = getResString(clazz.getSimpleName());
             } catch (Exception e) {
                 clazz = clazz.getSuperclass();
             }

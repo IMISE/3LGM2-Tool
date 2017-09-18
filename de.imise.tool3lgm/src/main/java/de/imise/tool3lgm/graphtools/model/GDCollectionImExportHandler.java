@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,7 +12,6 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
@@ -54,7 +55,7 @@ public class GDCollectionImExportHandler {
         GDCollection sourceGDColl = new GDCollection();
 
         Static.showProgressDialog();
-        Static.setProgressDialogTitle(Tool3lgmConstants.getResString("load_model") + " " + file.getName());
+        Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
         Static.setProgressDialogStatusLabel("read_progress");
 
         try {
@@ -62,7 +63,7 @@ public class GDCollectionImExportHandler {
             fileHandler.setFile(file);
             fileHandler.loadFromRAF(file);
         } catch (Exception exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
         }
 
         Static.closeProgressDialog();

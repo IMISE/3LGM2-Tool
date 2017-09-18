@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
@@ -12,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.text.JTextComponent;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -44,7 +45,7 @@ public class FormulaPanel extends AbstractInputPanel {
         super();
         this.userField = userField;
 
-        setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("formula")));
+        setBorder(BorderFactory.createTitledBorder(getResString("formula")));
         setLayout(new BorderLayout());
 
         final ExtendedTextField formulaTextField = new ExtendedTextField();
@@ -54,7 +55,7 @@ public class FormulaPanel extends AbstractInputPanel {
 
         formulaTextField.setText(userField.getFormula());
 
-        buttonNewFormula.setAction(new AbstractAction(Tool3lgmConstants.getResString("editFormula")) {
+        buttonNewFormula.setAction(new AbstractAction(getResString("editFormula")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 userField.setName(userFieldNameSource.getText());
@@ -80,7 +81,7 @@ public class FormulaPanel extends AbstractInputPanel {
     @Override
     public String getError() {
         if (newFormulaInternalStyle == null || newFormulaInternalStyle.trim().equals("")) {
-            return Tool3lgmConstants.getErrString("missing_formula");
+            return getResString("missing_formula");
         }
         return super.getError();
     }

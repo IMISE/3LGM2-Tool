@@ -3,7 +3,6 @@
  */
 package de.imise.tool3lgm;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Component;
@@ -336,7 +335,7 @@ public class Static {
 
     public static final void showErrorOutputDialog(final Object mainMessage, final Object... message) {
         if (errorOutputDialog == null) {
-            errorOutputDialog = new OutputDialog(getMainFrame(), getErrString("FehlerAllgemein"));
+            errorOutputDialog = new OutputDialog(getMainFrame(), getResString("FehlerAllgemein"));
         }
         errorOutputDialog.setVisible(true);
         errorOutputDialog.appendln(mainMessage, message);

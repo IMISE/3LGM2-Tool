@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -22,10 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -124,7 +123,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         constraints.weightx = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTH;
-        JLabel actualValueLabel = new JLabel(Tool3lgmConstants.getResString("attributeIndicate"));
+        JLabel actualValueLabel = new JLabel(getResString("attributeIndicate"));
         panel1.add(actualValueLabel, constraints);
         userFieldComboBox = new AlphabeticalComboBox();
         if (userField != null) {
@@ -152,7 +151,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         constraints.weightx = 1;
         panel1.add(userFieldComboBox, constraints);
         grenzwertePanel = new JPanel(new GridBagLayout());
-        grenzwertePanel.setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("limitValue")));
+        grenzwertePanel.setBorder(BorderFactory.createTitledBorder(getResString("limitValue")));
         gwpanel = new JPanel(new GridBagLayout());
         GridBagConstraints cgw = new GridBagConstraints();
         cgw.insets = new Insets(3, 3, 3, 3);
@@ -161,17 +160,12 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         cgw.anchor = GridBagConstraints.NORTH;
         cgw.weightx = 0;
         cgw.weighty = 0;
-        grenzwertePanel.add(new JLabel(Tool3lgmConstants.getResString("numerOfValues")), cgw);
+        grenzwertePanel.add(new JLabel(getResString("numerOfValues")), cgw);
         SpinnerNumberModel spm = new SpinnerNumberModel(1, 1, 10, 1);
-        gwList = new ArrayList<GwInputPair>();
+        gwList = new ArrayList<>();
         spinner = new JSpinner(spm);
         cgw.gridx = 1;
-        spinner.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                createInputFields();
-            }
-        });
+        spinner.addChangeListener(e -> createInputFields());
         cgw.weightx = 1;
         cgw.fill = GridBagConstraints.HORIZONTAL;
         grenzwertePanel.add(spinner, cgw);
@@ -186,8 +180,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         constraints.fill = GridBagConstraints.BOTH;
         panel1.add(grenzwertePanel, constraints);
         JPanel buttonsPanel = new JPanel(new GridBagLayout());
-        JButton okButton = new JButton(Tool3lgmConstants.getResString("ok"));
-        JButton cancelButton = new JButton(Tool3lgmConstants.getResString("cancel"));
+        JButton okButton = new JButton(getResString("ok"));
+        JButton cancelButton = new JButton(getResString("cancel"));
         okButton.addActionListener(this);
         okButton.setActionCommand("okbutton");
         cancelButton.addActionListener(this);
@@ -361,7 +355,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
     private boolean validateInputs() {
         // Es muss genau ein userField aus der ComboBox ausgewählt sein
         if (userFieldComboBox.getSelectedIndex() == -1) {
-            JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("missing_userfield_reference"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, getResString("missing_userfield_reference"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -373,7 +367,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 tmp_string = tmp_string.replace(",", ".");
                 new BigDecimal(tmp_string);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("invalid_values"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, getResString("invalid_values"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                 return false;
             }
 
@@ -400,9 +394,9 @@ public class IndicatorDialog extends JDialog implements ActionListener {
             c.weightx = 0;
             c.fill = GridBagConstraints.HORIZONTAL;
             if (index == 0) {
-                label = new JLabel(Tool3lgmConstants.getResString("indicator_lowest_border") + ": ");
+                label = new JLabel(getResString("indicator_lowest_border") + ": ");
             } else {
-                label = new JLabel(Tool3lgmConstants.getResString("indicator_higher_border") + index + " :   ");
+                label = new JLabel(getResString("indicator_higher_border") + index + " :   ");
             }
             label.setSize(100, label.getHeight());
             add(label, c);

@@ -471,13 +471,13 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //        int size = aufgabenContainer.size();
     //        // der Prozess ist leer
     //        if (size == 0) {
-    //            errorTitle = Tool3lgmConstants.getErrString("keine_Aufabe");
-    //            errorBuffer.append(Tool3lgmConstants.getErrString("keine_Aufabe_1"));
+    //            errorTitle = Tool3lgmConstants.getResString("process_error_no_function");
+    //            errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_function_1"));
     //        }
     //        // der Prozess hat nur eine Aufgabe
     //        else if (size == 1) {
-    //            errorTitle = Tool3lgmConstants.getErrString("einzelne_Aufabe");
-    //            errorBuffer.append(Tool3lgmConstants.getErrString("einzelne_Aufabe_1"));
+    //            errorTitle = Tool3lgmConstants.getResString("process_error_single_function");
+    //            errorBuffer.append(Tool3lgmConstants.getResString("process_error_single_function_1"));
     //            ((LGMTreeNode) lroot.getChildAt(0)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
     //            // der Prozess hat mind. 2 Aufgaben
     //        } else {
@@ -492,12 +492,12 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            for (int i = 1; i < size; i++) {
     //                if (prozess.getProcessStepsForAufgabe(aufgaben, i, true).size() == 0) {
     //                    if (errorBuffer.length() == 0) {
-    //                        errorTitle = Tool3lgmConstants.getErrString("keine_OT-Kette");
-    //                        errorBuffer.append(Tool3lgmConstants.getErrString("keine_OT-Kette_1"));
+    //                        errorTitle = Tool3lgmConstants.getResString("process_error_no_process_step");
+    //                        errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_process_step_1"));
     //                        errorBuffer.append(((NodeContainer) aufgabenContainer.get(i)).getElement());
-    //                        errorBuffer.append(Tool3lgmConstants.getErrString("keine_OT-Kette_2"));
+    //                        errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_process_step_2"));
     //                        errorBuffer.append(i + 1);
-    //                        errorBuffer.append(Tool3lgmConstants.getErrString("keine_OT-Kette_3"));
+    //                        errorBuffer.append(Tool3lgmConstants.getResString("process_error_no_process_step_3"));
     //                    }
     //                    ((LGMTreeNode) lroot.getChildAt(i)).setIconState(LGMTreeNode.SHOW_ERROR_ICON);
     //                }

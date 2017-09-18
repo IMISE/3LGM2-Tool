@@ -70,7 +70,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         userFieldTypeComboBox = new AlphabeticalComboBox();
 
         newButton = createButton("new");
-        editButton = createDisabledButton("editButtonText");
+        editButton = createDisabledButton("userFieldDeclarationDialog_editButtonText");
         deleteButton = createDisabledButton("delete");
         downButton = createDisabledButton("runter2.gif");
         upButton = createDisabledButton("hoch2.gif");
@@ -83,7 +83,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         Container pane = getContentPane();
         pane.setLayout(new BorderLayout());
         JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        northPanel.add(createLabel("userFieldDialog_class"));
+        northPanel.add(createLabel("userFieldDeclarationDialog_elementClass"));
         northPanel.add(classComboBox);
         pane.add(northPanel, BorderLayout.NORTH);
 
@@ -91,7 +91,7 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
         JPanel centerPanel = new JPanel(new BorderLayout());
         Border border = new EmptyBorder(5, 5, 5, 5);
         centerPanel.setBorder(border);
-        centerPanel.add(createLabel("userFieldDialog_fields"), BorderLayout.NORTH);
+        centerPanel.add(createLabel("userFieldDeclarationDialog_fields"), BorderLayout.NORTH);
         centerPanel.add(createScrollPane(fieldList), BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new GridBagLayout());

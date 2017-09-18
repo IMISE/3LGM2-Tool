@@ -53,7 +53,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -396,7 +395,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             if (CostingUtil.isFormulaValid(retVal)) {
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("syntax_error_in_formula"));
+                JOptionPane.showMessageDialog(this, getResString("syntax_error_in_formula"));
             }
         } else if (source == cancelButton) {
             retVal = oldFormulaString;
@@ -419,7 +418,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                     termStack.push(newIndi);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("indicator_in_formula"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, getResString("indicator_in_formula"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
             }
         } else if (UserField.isAccountingFunction(cmd)) {
             VfDialog vfd = new VfDialog(this, cmd, userField);
@@ -479,7 +478,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         // werden.
         // die Liste wird verwendet, um die Formel in die korrekte Form zu ordnen
         // Diese Liste beinhaltet die Formel in der korrekten Leseweise.
-        ArrayList<String> termList = new ArrayList<String>();
+        ArrayList<String> termList = new ArrayList<>();
         caretPosInFormulaArea = 0;
         int insertIndex = 0;
         String partTerm = "";
@@ -619,7 +618,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
     private static final Border getPanelBorder(final String titleResKey) {
         Border border1 = BorderFactory.createEtchedBorder();
-        Border border2 = BorderFactory.createTitledBorder(border1, " " + Tool3lgmConstants.getResString(titleResKey) + " ");
+        Border border2 = BorderFactory.createTitledBorder(border1, " " + getResString(titleResKey) + " ");
         return border2;
     }
 

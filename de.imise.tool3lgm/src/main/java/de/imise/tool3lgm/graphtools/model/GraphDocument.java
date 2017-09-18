@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Composition.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
@@ -532,7 +533,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //				ArrayList<ModelElement> al = doc.getModelItems(meClass, false);
             //				if (al.size()==0)
             //					continue;
-            //				System.err.println(al.size() + "\t" + Tool3lgmConstants.getResString(meClass.getSimpleName()+"_p"));
+            //				System.err.println(al.size() + "\t" + getResString(meClass.getSimpleName()+"_p"));
             //			}
             //			System.err.println("#############################################\n");
 
@@ -577,13 +578,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
             if ((Boolean) ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING.getValue(Action.SELECTED_KEY)) {
-                JCheckBox cb = new JCheckBox(Tool3lgmConstants.getResString("dont_ask_again"));
+                JCheckBox cb = new JCheckBox(getResString("dont_ask_again"));
                 cb.setSelected(false);
                 Object[] cont = new Object[] {
-                        Tool3lgmConstants.getResString("remove_element_warning"),
+                        getResString("remove_element_warning"),
                         cb
                 };
-                int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, Tool3lgmConstants.getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
                     dispatch_command(GDCommands.DELETE, argv, pid);
                 }
@@ -595,11 +596,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // Auswahl in einem Teilmodell
         else {
             Object[] buttons = new Object[] {
-                    Tool3lgmConstants.getResString("submodel"),
-                    Tool3lgmConstants.getResString("whole_model"),
-                    Tool3lgmConstants.getResString("cancel")
+                    getResString("submodel"),
+                    getResString("whole_model"),
+                    getResString("cancel")
             };
-            int value = JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("loeschfrage"), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
+            int value = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("loeschfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
             if (value == JOptionPane.YES_OPTION) {
                 dispatch_command(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, argv, pid);
             } else if (value == JOptionPane.NO_OPTION) {
@@ -721,7 +722,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             try {
                 position = Integer.parseInt(argv[5]);
             } catch (Exception e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             }
             addict(argv[0], argv[1], argv[2], argv[3], argv[4], position, pid);
             break;
@@ -749,7 +750,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     try {
                         c = new Color(Integer.parseInt(argv[2]));
                     } catch (Exception e) {
-                        Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                        Log(e);
                     }
                 }
                 changeColor(argv[0], argv[1], c, pid);
@@ -773,7 +774,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         c = new Color(Integer.parseInt(argv[2]));
                     }
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
                 changeLayerColor(argv[0], layer_idx, c, pid);
                 break;
@@ -787,15 +788,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             case 1:
                 try {
                     changeAlpha(Integer.parseInt(argv[0]), pid);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                } catch (Exception e) {
+                    Log(e);
                 }
                 break;
             case 3:
                 try {
                     changeAlpha(argv[0], argv[1], Integer.parseInt(argv[2]), pid);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                } catch (Exception e) {
+                    Log(e);
                 }
                 break;
             default:
@@ -808,15 +809,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             case 1:
                 try {
                     changeLayerAlpha(Integer.parseInt(argv[0]), pid);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                } catch (Exception e) {
+                    Log(e);
                 }
                 break;
             case 3:
                 try {
                     changeLayerAlpha(argv[0], Integer.parseInt(argv[1]), Integer.parseInt(argv[2]), pid);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+                } catch (Exception e) {
+                    Log(e);
                 }
                 break;
             }
@@ -826,8 +827,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             try {
                 GraphDocument szen = gdcoll.getGraphDocumentCoded(argv[0]);
                 szen.setPageSizeFactor(Double.parseDouble(argv[1]), Double.parseDouble(argv[1]), true, TransactionManager.STANDARD_PID);
-            } catch (Exception ex) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+            } catch (Exception e) {
+                Log(e);
             }
             break;
 
@@ -869,7 +870,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 try {
                     normalizeLayer(argv[0], Integer.parseInt(argv[1]), pid);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
             }
             break;
@@ -913,7 +914,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     int height = Integer.parseInt(argv[5]);
                     coordinateKnot(gdcoll, szenHash, hashCode, x, y, width, height, pid);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                     break;
                 }
                 break;
@@ -995,7 +996,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 try {
                     label_valign(Integer.parseInt(argv[0]), pid);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
             }
             if (argc == 3) {
@@ -1006,7 +1007,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     int mode = Integer.parseInt(argv[2]);
                     szen.label_valign(mode, ec, pid);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
             }
             break;
@@ -1016,7 +1017,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 try {
                     label_halign(Integer.parseInt(argv[0]), pid);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
             }
             if (argc == 3) {
@@ -1027,7 +1028,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     int mode = Integer.parseInt(argv[2]);
                     szen.label_halign(mode, ec, pid);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
             }
             break;
@@ -1052,7 +1053,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             try {
                 z_move(argv[0], argv[1], Integer.parseInt(argv[2]), pid);
             } catch (Exception e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                Log(e);
             }
             break;
 
@@ -1088,8 +1089,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case CHOOSE_ICON:
             ImageChooser fc = new ImageChooser(GDCommands.CHOOSE_ICON);
             fc.setCurrentDirectory(UserProperties.getIconPath());
-            fc.setDialogTitle(Tool3lgmConstants.getResString("symb_ausw"));
-            int answer = fc.showDialog(null, Tool3lgmConstants.getResString("open"));
+            fc.setDialogTitle(getResString("symb_ausw"));
+            int answer = fc.showDialog(null, getResString("open"));
             UserProperties.setIconPath(fc.getCurrentDirectory());
             if (answer != ImageChooser.APPROVE_OPTION) {
                 break;
@@ -1135,7 +1136,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     size = Integer.parseInt(argv[3]);
                     style = Integer.parseInt(argv[4]);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
                 changeFont(argv[0], argv[1], name, size, style, pid);
             }
@@ -1152,7 +1153,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 try {
                     lineStyle = Integer.parseInt(style);
                 } catch (Exception e) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                    Log(e);
                 }
             }
             if (argc == 1) {
@@ -1361,8 +1362,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     //				argv[d] = commandBuffer.get(d);
     //			dispatch_command(command, argv, pid);
     //		} catch (Exception e) {
-    //			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-    //			JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+    //			Log(e);
+    //			JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
     //		}
     //		fullTime1 += System.currentTimeMillis() - start;
     //	}
@@ -1388,7 +1389,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     t = st.nextToken();
                 }
             } catch (IOException e) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+                Log(e);
             }
 
             //je nach globaler Option können die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
@@ -1419,9 +1420,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             dispatch_command(command, argv, pid);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+            Log(e);
+            JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private void Log(final Exception e) {
+        Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
     }
 
     /**
@@ -1900,7 +1905,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 break;
             }
         }
-        Color col = JColorChooser.showDialog(new JFrame(), Tool3lgmConstants.getResString("farbe_ausw"), oldcol);
+        Color col = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldcol);
         if (col == null) {
             return;
         }
@@ -1967,7 +1972,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 break;
             }
         }
-        Color col = JColorChooser.showDialog(null, Tool3lgmConstants.getResString("farbe_ausw"), oldcol);
+        Color col = JColorChooser.showDialog(null, getResString("farbe_ausw"), oldcol);
         if (col == null) {
             return;
         }
@@ -1985,7 +1990,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (!gdcoll.isInteractiveMode()) {
             return;
         }
-        Color col = JColorChooser.showDialog(null, Tool3lgmConstants.getResString("farbe_ausw"), layer[layer_idx].getColor());
+        Color col = JColorChooser.showDialog(null, getResString("farbe_ausw"), layer[layer_idx].getColor());
         if (col == null) {
             return;
         }
@@ -3885,7 +3890,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             pos1 = new Integer(edgeIndex1).intValue();
             pos2 = new Integer(edgeIndex2).intValue();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log(e);
             return;
         }
         swapEdgePositions(knot, pos1, pos2, pid);

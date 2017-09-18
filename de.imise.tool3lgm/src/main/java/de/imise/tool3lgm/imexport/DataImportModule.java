@@ -135,7 +135,7 @@ public class DataImportModule {
     //            }
     //            reader.close();
     //        } catch (Exception ex) {
-    //            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
+    //            Log.show(Log.ERROR, Tool3lgmConstants.getResString("FehlerAllgemein"), ex);
     //            return;
     //        } finally {
     //            if (reader != null) {

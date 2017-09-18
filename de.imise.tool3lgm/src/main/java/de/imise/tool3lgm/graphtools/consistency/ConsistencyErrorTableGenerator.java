@@ -8,7 +8,6 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 
 /**
@@ -40,12 +39,12 @@ class ConsistencyErrorTableGenerator {
         table.getTableHeader().setReorderingAllowed(false);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         updateTable();
-        table.getColumn(Tool3lgmConstants.getErrString(ConsistencyErrorTableModel.COL_NAMES.number.toString())).setMaxWidth(40);
-        table.getColumn(Tool3lgmConstants.getErrString(ConsistencyErrorTableModel.COL_NAMES.errorType.toString())).setMaxWidth(40);
+        table.getColumn(ConsistencyErrorTableModel.COL_NAMES.number.getDisplayableName()).setMaxWidth(40);
+        table.getColumn(ConsistencyErrorTableModel.COL_NAMES.errorType.getDisplayableName()).setMaxWidth(40);
     }
 
     /**
-     * 
+     *
      */
     void updateTable() {
         List<AbstractError> errors = checker.getAllInconsistencies();

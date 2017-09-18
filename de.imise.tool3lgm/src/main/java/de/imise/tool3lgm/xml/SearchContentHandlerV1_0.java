@@ -3,13 +3,14 @@
  */
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.xml.sax.Attributes;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -68,7 +69,7 @@ public class SearchContentHandlerV1_0 {
                 currentKnots.addAll(me.getConnectedElements(elementClass));
                 currentTraces.addAll(me.getEdgesWith(elementClass));
                 if (currentKnots.size() != currentTraces.size()) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("inkons_modelldaten_bei") + " " + me.getHashString() + " (" + me.getName() + ")");
+                    Log.show(Log.ERROR, getResString("fehler") + " " + me.getHashString() + " (" + me.getName() + ")");
                 }
             }
         } else if (qName.equals("backward")) {
@@ -81,7 +82,7 @@ public class SearchContentHandlerV1_0 {
                 currentKnots.addAll(me.getConnectedElements(elementClass));
                 currentTraces.addAll(me.getEdgesWith(elementClass));
                 if (currentKnots.size() != currentTraces.size()) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("inkons_modelldaten_bei") + " " + me.getHashString() + " (" + me.getName() + ")");
+                    Log.show(Log.ERROR, getResString("fehler") + " " + me.getHashString() + " (" + me.getName() + ")");
                 }
             }
         } else if (qName.equals("any")) {

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.xml;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -293,7 +295,7 @@ public class ToolXMLParser {
             fileStream.read(chars);
             line = new String(chars);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return false;
         }
         if (line.startsWith("<?xml") || line.startsWith("<graph>")) {

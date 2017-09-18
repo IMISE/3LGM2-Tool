@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.imexport;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_EDGES_SET;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
@@ -163,7 +163,7 @@ public class DataExportModule {
             writer.close();
         } catch (Exception ex) {
             ex.printStackTrace();
-            Log.show(Log.ERROR, getErrString("FehlerAllgemein"), ex);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
             return;
         }
 

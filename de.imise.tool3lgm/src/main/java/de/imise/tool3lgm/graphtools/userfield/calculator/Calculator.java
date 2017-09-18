@@ -4,6 +4,8 @@
 
 package de.imise.tool3lgm.graphtools.userfield.calculator;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Stack;
@@ -11,7 +13,6 @@ import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -134,7 +135,7 @@ public class Calculator {
         //Prüfen, ob die zu berechnende Formel korrekt ist.
         if (!CostingUtil.isFormulaValid(formula)) {
             // Hier müsste man noch eine Message bringen und dem User erklären, dass ein Fehler in einer Formel ist.
-            //JOptionPane.showMessageDialog(Tool3lgm.tool, Tool3lgmConstants.getErrString("syntax_error_in_formula"));
+            //JOptionPane.showMessageDialog(Tool3lgm.tool, getResString("syntax_error_in_formula"));
             return UserField.EMPTY_STRING;
         }
 
@@ -743,7 +744,7 @@ public class Calculator {
             return UserField.NUMBER_FORMAT_ERROR;
         }
         if (me.countConnections(edgeClass) == 0) {
-            JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("fehler") + Tool3lgmConstants.getErrString("divide_zero"));
+            JOptionPane.showMessageDialog(null, getResString("fehler") + getResString("divide_zero"));
         }
         BigDecimal erg = divide(sumNum, new BigDecimal(me.countConnections(edgeClass)));
         return erg.toString();

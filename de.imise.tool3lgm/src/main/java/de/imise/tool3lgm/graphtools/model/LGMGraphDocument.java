@@ -5,6 +5,8 @@
  */
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
 
@@ -211,12 +213,11 @@ public class LGMGraphDocument extends GraphDocument {
             deselectAll(true);
             getCollection().loadClipboard(file);
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                    Tool3lgmConstants.getResString("ok")
+                    getResString("ok")
             };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), Tool3lgmConstants.getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
-                    null, buttons, null);
+            JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -237,11 +238,11 @@ public class LGMGraphDocument extends GraphDocument {
             getCollection().loadFile(istream);
         } catch (Exception e) {
             undo(pid);
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
-                    Tool3lgmConstants.getResString("ok")
+                    getResString("ok")
             };
-            JOptionPane.showOptionDialog(Static.getMainFrame(), "", Tool3lgmConstants.getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
+            JOptionPane.showOptionDialog(getMainFrame(), "", getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             e.printStackTrace();
             return;
         }
@@ -282,7 +283,7 @@ public class LGMGraphDocument extends GraphDocument {
     //					if (!destGDColl.saveToFile())
     //						return;
     //				} catch (IOException exp) {
-    //					Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+    //					Log.show(Log.FATAL, getResString("FehlerAllgemein"), exp);
     //					return;
     //				}
     //			} else
@@ -393,7 +394,7 @@ public class LGMGraphDocument extends GraphDocument {
     //					if (!kante.isUnique() && (dest instanceof Szenario)) {
     //						EdgeContainer newC = (EdgeContainer)kante.getContainer(dest);
     //						if (newC == null) {
-    //							throw new Exception(Tool3lgmConstants.getErrString("error"));
+    //							throw new Exception(getResString("fehler"));
     //						}
     //						ArrayList<BendpointContainer> kpList = newC.getBendpointContainerList();
     //						for (int j = 0; j < kpList.size(); j++) {
@@ -426,7 +427,7 @@ public class LGMGraphDocument extends GraphDocument {
     //			destMainDoc.finish_transaction(pid);
     //		} catch (Exception ex) {
     //			destMainDoc.undo(pid);
-    //			Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
+    //			Log.show(Log.ERROR, getResString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
     //		}
     //		destGDColl.setChanged(true);
     //		start_transaction(TransactionManager.STANDARD_PID, false);
@@ -552,7 +553,7 @@ public class LGMGraphDocument extends GraphDocument {
                     if (!kante.isUnique() && dest instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) kante.getContainer(dest);
                         if (newC == null) {
-                            throw new Exception(Tool3lgmConstants.getErrString("error"));
+                            throw new Exception(getResString("fehler"));
                         }
                         dest.getLayer(edgeLayer).add(newC);
                         LayerContainer layerContainer = dest.getLayer(edgeLayer);
@@ -589,7 +590,7 @@ public class LGMGraphDocument extends GraphDocument {
             destMainDoc.finish_transaction(pid);
         } catch (Exception ex) {
             destMainDoc.undo(pid);
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
+            Log.show(Log.ERROR, getResString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
         }
         destGDColl.setChanged(true);
         start_transaction(TransactionManager.STANDARD_PID, false);

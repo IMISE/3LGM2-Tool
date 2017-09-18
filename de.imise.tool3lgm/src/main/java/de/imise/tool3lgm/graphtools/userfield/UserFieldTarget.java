@@ -51,7 +51,7 @@ public class UserFieldTarget implements Cloneable {
         try {
             retVal = (UserFieldTarget) super.clone();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
+            Log.show(Log.ERROR, Tool3lgmConstants.getResString("FehlerAllgemein"), e);
             return null;
         }
         retVal.userFieldToInputValuesMap = userFieldToInputValuesMap == null ? null : new HashMap<>(userFieldToInputValuesMap);

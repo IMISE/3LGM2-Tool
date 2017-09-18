@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.calculator.Calculator.isOperator;
 
 import java.util.StringTokenizer;
@@ -11,7 +12,6 @@ import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
@@ -59,12 +59,12 @@ public class CostingUtil {
                             tmpField = definitions.getUserField(s);
                             resultString.append(" " + tmpField.getName());
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, Tool3lgmConstants.getErrString("formula_integrity_err"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, getResString("formula_integrity_err"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                         }
                     } else if (s.contains(UserField.DIRECTION_FROM_PART_TO_WHOLE)) {
-                        resultString.append(" " + Tool3lgmConstants.getResString("part_to_whole"));
+                        resultString.append(" " + getResString("part_to_whole"));
                     } else if (s.contains(UserField.DIRECTION_FROM_WHOLE_TO_PART)) {
-                        resultString.append(" " + Tool3lgmConstants.getResString("whole_to_part"));
+                        resultString.append(" " + getResString("whole_to_part"));
                     } else {
                         resultString.append(" " + s);
                     }
@@ -265,7 +265,7 @@ public class CostingUtil {
      * @return Lokalisierten Anzeigenamen des Styles oder ""
      */
     public final static String getDisplayableStyleName(final UserField.Style style) {
-        return Tool3lgmConstants.getResString(style.toString());
+        return getResString(style.toString());
     }
 
 }

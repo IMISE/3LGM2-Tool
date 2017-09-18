@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -67,7 +68,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
         mydoc = new LGMGraphDocument(null);
         my_mapping = mydoc.getMapping();
         my_mapping.adapt(doc.getMapping());
-        setTitle(Tool3lgmConstants.getResString("layout_edit"));
+        setTitle(getResString("layout_edit"));
 
         GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
 
@@ -79,17 +80,17 @@ public class LayoutEditor extends JDialog implements ActionListener {
         farbe_trigger = new JButton[wieviele];
         font_trigger = new JButton[wieviele];
 
-        beenden = new JButton(Tool3lgmConstants.getResString("ok"));
+        beenden = new JButton(getResString("ok"));
         beenden.addActionListener(this);
         beenden.setMargin(insets);
         beenden.setPreferredSize(new Dimension(100, 30));
 
-        abbrechen = new JButton(Tool3lgmConstants.getResString("cancel"));
+        abbrechen = new JButton(getResString("cancel"));
         abbrechen.addActionListener(this);
         abbrechen.setMargin(insets);
         abbrechen.setPreferredSize(new Dimension(100, 30));
 
-        uebernehmen = new JButton(Tool3lgmConstants.getResString("apply"));
+        uebernehmen = new JButton(getResString("apply"));
         uebernehmen.addActionListener(this);
         uebernehmen.setMargin(insets);
         uebernehmen.setPreferredSize(new Dimension(100, 30));
@@ -102,9 +103,9 @@ public class LayoutEditor extends JDialog implements ActionListener {
             }
         };
 
-        farbe_menu = new JPopupMenu(Tool3lgmConstants.getResString("le_farbe"));
-        form_menu = new JPopupMenu(Tool3lgmConstants.getResString("le_form"));
-        font_menu = new JPopupMenu(Tool3lgmConstants.getResString("le_schriftart"));
+        farbe_menu = new JPopupMenu(getResString("le_farbe"));
+        form_menu = new JPopupMenu(getResString("le_form"));
+        font_menu = new JPopupMenu(getResString("le_schriftart"));
 
         farbe = new JMenuItem[GraphElementLayout.COLORS.length];
 
@@ -120,7 +121,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
         GraphElementLayout.SHAPE[] shapes = GraphElementLayout.SHAPE.values();
         form = new JMenuItem[shapes.length];
         for (c = 0; c < shapes.length; c++) {
-            form[c] = new JMenuItem(Tool3lgmConstants.getResString(shapes[c].toString()));
+            form[c] = new JMenuItem(getResString(shapes[c].toString()));
             form[c].setActionCommand("form " + shapes[c]);
             form[c].addActionListener(this);
             form_menu.add(form[c]);
@@ -151,21 +152,21 @@ public class LayoutEditor extends JDialog implements ActionListener {
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
             kc.setFont(mydoc.getMapping().getStandardFont(kc.getElement()));
 
-            form_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_form"));
+            form_trigger[counter + offset] = new JButton(getResString("le_form"));
             form_trigger[counter + offset].setMargin(insets);
             form_trigger[counter + offset].setSize(50, 20);
             form_trigger[counter + offset].addActionListener(this);
             form_trigger[counter + offset].setLocation(akt_x + 40, akt_y + 95);
             flaeche.add(form_trigger[counter + offset]);
 
-            farbe_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_farbe"));
+            farbe_trigger[counter + offset] = new JButton(getResString("le_farbe"));
             farbe_trigger[counter + offset].setMargin(insets);
             farbe_trigger[counter + offset].setSize(50, 20);
             farbe_trigger[counter + offset].addActionListener(this);
             farbe_trigger[counter + offset].setLocation(akt_x + 90, akt_y + 95);
             flaeche.add(farbe_trigger[counter + offset]);
 
-            font_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_schrift"));
+            font_trigger[counter + offset] = new JButton(getResString("le_schrift"));
             font_trigger[counter + offset].setMargin(insets);
             font_trigger[counter + offset].setSize(50, 20);
             font_trigger[counter + offset].addActionListener(this);
@@ -201,21 +202,21 @@ public class LayoutEditor extends JDialog implements ActionListener {
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_LOGICAL_LAYER_NODES[c]));
             kc.setFont(mydoc.getMapping().getStandardFont(kc.getElement()));
 
-            form_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_form"));
+            form_trigger[counter + offset] = new JButton(getResString("le_form"));
             form_trigger[counter + offset].setMargin(insets);
             form_trigger[counter + offset].setSize(50, 20);
             form_trigger[counter + offset].addActionListener(this);
             form_trigger[counter + offset].setLocation(akt_x + 40, akt_y + 95);
             flaeche.add(form_trigger[counter + offset]);
 
-            farbe_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_farbe"));
+            farbe_trigger[counter + offset] = new JButton(getResString("le_farbe"));
             farbe_trigger[counter + offset].setMargin(insets);
             farbe_trigger[counter + offset].setSize(50, 20);
             farbe_trigger[counter + offset].addActionListener(this);
             farbe_trigger[counter + offset].setLocation(akt_x + 90, akt_y + 95);
             flaeche.add(farbe_trigger[counter + offset]);
 
-            font_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_schrift"));
+            font_trigger[counter + offset] = new JButton(getResString("le_schrift"));
             font_trigger[counter + offset].setMargin(insets);
             font_trigger[counter + offset].setSize(50, 20);
             font_trigger[counter + offset].addActionListener(this);
@@ -248,21 +249,21 @@ public class LayoutEditor extends JDialog implements ActionListener {
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c]));
             kc.setFont(mydoc.getMapping().getStandardFont(kc.getElement()));
 
-            form_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_form"));
+            form_trigger[counter + offset] = new JButton(getResString("le_form"));
             form_trigger[counter + offset].setMargin(insets);
             form_trigger[counter + offset].setSize(50, 20);
             form_trigger[counter + offset].addActionListener(this);
             form_trigger[counter + offset].setLocation(akt_x + 40, akt_y + 95);
             flaeche.add(form_trigger[counter + offset]);
 
-            farbe_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_farbe"));
+            farbe_trigger[counter + offset] = new JButton(getResString("le_farbe"));
             farbe_trigger[counter + offset].setMargin(insets);
             farbe_trigger[counter + offset].setSize(50, 20);
             farbe_trigger[counter + offset].addActionListener(this);
             farbe_trigger[counter + offset].setLocation(akt_x + 90, akt_y + 95);
             flaeche.add(farbe_trigger[counter + offset]);
 
-            font_trigger[counter + offset] = new JButton(Tool3lgmConstants.getResString("le_schrift"));
+            font_trigger[counter + offset] = new JButton(getResString("le_schrift"));
             font_trigger[counter + offset].setMargin(insets);
             font_trigger[counter + offset].setSize(50, 20);
             font_trigger[counter + offset].addActionListener(this);
@@ -333,7 +334,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
                 setAktuelles(c);
 
                 Color oldColor = my_mapping.getStandardBackGroundColor(knoten[aktuelles].getKnoten());
-                Color newColor = JColorChooser.showDialog(new JFrame(), Tool3lgmConstants.getResString("farbe_ausw"), oldColor);
+                Color newColor = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldColor);
 
                 if (newColor == null) {
                     return;
@@ -360,7 +361,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
                 my_mapping.setStandardForm(knoten[aktuelles].getKnoten().getClass(), GraphElementLayout.SHAPE.valueOf(e.getActionCommand().substring("form ".length())));
                 flaeche.repaint();
             } catch (Exception ne) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("Fehler beim Form setzen."), ne);
+                Log.show(Log.ERROR, getResString("Fehler beim Form setzen."), ne);
             }
         }
     }

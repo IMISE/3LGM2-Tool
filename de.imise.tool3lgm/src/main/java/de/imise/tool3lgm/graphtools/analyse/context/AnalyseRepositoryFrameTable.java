@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Component;
 import java.awt.Window;
 
@@ -18,7 +20,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.text.ExtendedTextField;
 import de.imise.util.swing.dialog.SimpleXMLEditor;
@@ -26,14 +27,14 @@ import de.imise.util.swing.dialog.SimpleXMLEditor;
 /**
  * Tabelle zum Anzeigen aller Analysen im Repository-Dialog. Die Tabelle hat ihr TableModel als
  * innere Klasse Originalautoren: Sebastian Weber, Thomas
- * 
+ *
  * @author AXS created on 15.08.2007 aus inneren Klassen
  */
 public class AnalyseRepositoryFrameTable extends JTable {
 
     /**
      * Das TableModel der Tabelle.
-     * 
+     *
      * @author Sebastian Weber, Thomas
      */
     private class AnalyseTableModel extends AbstractTableModel {
@@ -47,13 +48,15 @@ public class AnalyseRepositoryFrameTable extends JTable {
          * Tabellen Kopfzeilenbeschriftungen
          */
         String[] colheads = {
-                Tool3lgmConstants.getResString("start_element_type"), Tool3lgmConstants.getResString("ana_name"), Tool3lgmConstants.getResString("definition")
+                getResString("start_element_type"),
+                getResString("ana_name"),
+                getResString("definition")
         };
 
         /**
          * Legt ein neues Model an. Die Parentkomponente wird gebraucht, wenn bei einem Fehler ein
          * Infodialog ausgegeben werden muss.
-         * 
+         *
          * @param parent Komponente, die als Parent für einen Fehlerdialog dienen kann.
          */
         private AnalyseTableModel(final Component parent) {
@@ -108,7 +111,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
                     ana.setName(neuerName);
                     AnalyseRepositoryFrame.analysisChanged = true;
                 } else {
-                    JOptionPane.showConfirmDialog(parent, Tool3lgmConstants.getErrString("AnalyseExistiert"), Tool3lgmConstants.getResString("fehler"), JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showConfirmDialog(parent, getResString("AnalyseExistiert"), getResString("fehler"), JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                 }
                 break;
             }
@@ -116,7 +119,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
                 try {
                     AnalyseRepositoryFrame.analysen.get(row).setXMLText(o != null ? o.toString() : "");
                 } catch (SAXException ex) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                    Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
                 }
                 break;
             }
@@ -166,9 +169,9 @@ public class AnalyseRepositoryFrameTable extends JTable {
             Window parent = JOptionPane.getFrameForComponent(table);
             SimpleXMLEditor dialog;
             if (parent instanceof JFrame) {
-                dialog = new SimpleXMLEditor((JFrame) parent, true, Tool3lgmConstants.getResString("xml_input"), analyseText);
+                dialog = new SimpleXMLEditor((JFrame) parent, true, getResString("xml_input"), analyseText);
             } else {
-                dialog = new SimpleXMLEditor((JDialog) parent, true, Tool3lgmConstants.getResString("xml_input"), analyseText);
+                dialog = new SimpleXMLEditor((JDialog) parent, true, getResString("xml_input"), analyseText);
             }
             switch (dialog.showDialog()) {
             case SimpleXMLEditor.OK: {
@@ -209,7 +212,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
 
     /**
      * Legt eine neue Tabelle mit den in der Liste enthaltenen Analysen an.<br>
-     * 
+     *
      * @param analysen
      */
     public AnalyseRepositoryFrameTable() {

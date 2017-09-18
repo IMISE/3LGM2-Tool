@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.xslt;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -80,23 +82,23 @@ public class XMLExportDialog extends JDialog implements ActionListener {
      */
     public XMLExportDialog(final Frame owner, final GDCollection collection) {
         /* Besitzer, Titel, modal anzeigen */
-        super(owner, Tool3lgmConstants.getResString("trans_title"), false);
+        super(owner, getResString("trans_title"), false);
         xsltResourceHandler = new XSLTResourceHandler();
 
         //da evtl. viele Verzeichnisse nach Scripten durchsucht werden müssen, einen Fortschrittsdialog zeigen
         ProgressDialog progressDialog = new ProgressDialog(owner);
-        progressDialog.setStatusLabelText(Tool3lgmConstants.getResString("trans_load_scripts"));
+        progressDialog.setStatusLabelText(getResString("trans_load_scripts"));
 
         this.collection = collection;
 
         getContentPane().setLayout(new BorderLayout(0, 10));
 
         String[] header = new String[5];
-        header[0] = Tool3lgmConstants.getResString("trans_file");
-        header[1] = Tool3lgmConstants.getResString("trans_name");
-        header[2] = Tool3lgmConstants.getResString("trans_type");
-        header[3] = Tool3lgmConstants.getResString("trans_des");
-        header[4] = Tool3lgmConstants.getResString("trans_author");
+        header[0] = getResString("trans_file");
+        header[1] = getResString("trans_name");
+        header[2] = getResString("trans_type");
+        header[3] = getResString("trans_des");
+        header[4] = getResString("trans_author");
 
         //Kopie der Standardscripte holen (die Kopie macht Tool3lgmConstants)
         ArrayList<XSLTScript> scripts = xsltResourceHandler.getStandardScripts();
@@ -115,7 +117,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         JPanel buttonPanel = new JPanel(new GridLayout(4, 2, 5, 5));
         buttonPanel.setPreferredSize(new Dimension(400, 100));
 
-        szenarioTable = new JTable(new SzenarioTableModel(collection, Tool3lgmConstants.getResString("labelInclude")));
+        szenarioTable = new JTable(new SzenarioTableModel(collection, getResString("labelInclude")));
         ((SzenarioTableModel) szenarioTable.getModel()).selectAll();
         szenarioTable.setSelectionBackground(table.getBackground());
         szenarioTable.setSelectionForeground(table.getForeground());
@@ -125,14 +127,14 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         szenarioTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         JPanel szenarioPanel = new JPanel(new BorderLayout());
         szenarioPanel.setPreferredSize(new Dimension(400, 120));
-        szenarioPanel.add(new JLabel(Tool3lgmConstants.getResString("labelSource") + collection.getName(), JLabel.CENTER), BorderLayout.NORTH);
-        szenarioPanel.add(new JLabel(Tool3lgmConstants.getResString("labelXSLTExportSzenario"), JLabel.CENTER), BorderLayout.SOUTH);
+        szenarioPanel.add(new JLabel(getResString("labelSource") + collection.getName(), JLabel.CENTER), BorderLayout.NORTH);
+        szenarioPanel.add(new JLabel(getResString("labelXSLTExportSzenario"), JLabel.CENTER), BorderLayout.SOUTH);
         szenarioPanel.add(new JScrollPane(szenarioTable), BorderLayout.CENTER);
         getContentPane().add(szenarioPanel, BorderLayout.NORTH);
 
         JPanel scriptPanel = new JPanel(new BorderLayout());
-        scriptPanel.add(new JLabel(Tool3lgmConstants.getResString("labelXSLScript"), JLabel.CENTER), BorderLayout.NORTH);
-        scriptPanel.add(new JLabel(Tool3lgmConstants.getResString("labelScriptSelection"), JLabel.CENTER), BorderLayout.SOUTH);
+        scriptPanel.add(new JLabel(getResString("labelXSLScript"), JLabel.CENTER), BorderLayout.NORTH);
+        scriptPanel.add(new JLabel(getResString("labelScriptSelection"), JLabel.CENTER), BorderLayout.SOUTH);
         scriptPanel.add(new JScrollPane(table), BorderLayout.CENTER);
         getContentPane().add(scriptPanel, BorderLayout.CENTER);
 
@@ -143,8 +145,8 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         buttonAction = newButton("trans_action");
         buttonChange = newButton("trans_change");
         buttonDelete = newButton("trans_delete");
-        checkBoxShowResult = new JCheckBox(Tool3lgmConstants.getResString("trans_browser"), true);
-        checkBoxSaveResult = new JCheckBox(Tool3lgmConstants.getResString("trans_save"), false);
+        checkBoxShowResult = new JCheckBox(getResString("trans_browser"), true);
+        checkBoxSaveResult = new JCheckBox(getResString("trans_save"), false);
         buttonPanel.add(buttonAction);
         buttonPanel.add(checkBoxShowResult);
         buttonPanel.add(newButton("trans_new"));
@@ -206,7 +208,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
      * @return JButton der erzeugte Button
      */
     private JButton newButton(final String text) {
-        JButton button = new JButton(Tool3lgmConstants.getResString(text));
+        JButton button = new JButton(getResString(text));
         button.addActionListener(this);
         button.setActionCommand(text);
         return button;
@@ -236,7 +238,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
                 try {
                     new XSLTEditor(this, tableModel.getScript(selectedRow).openStream()).setVisible(true);
                 } catch (IOException exp) {
-                    Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
                 }
             } else {
                 new XSLTEditor(this, tableModel.getScript(selectedRow).getFile()).setVisible(true);
@@ -244,7 +246,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         }
 
         if (e.getActionCommand().equals("trans_delete") && selectedRow >= 0) {
-            if (JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("quest_del") + "\n(" + tableModel.getValueAt(selectedRow, 0).toString() + ")", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, getResString("quest_del") + "\n(" + tableModel.getValueAt(selectedRow, 0).toString() + ")", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
                 tableModel.getScript(selectedRow).getFile().delete();
                 tableModel.removeRow(table.getSelectedRow());
             }
@@ -259,7 +261,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             String fileString = Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html";
             if (checkBoxSaveResult.isSelected()) {
                 String fileExtension = tableModel.getValueAt(selectedRow, 2).toString().trim();
-                String fileBaseName = Tool3lgmConstants.getResString("export");
+                String fileBaseName = getResString("export");
                 String scriptNumber = tableModel.getValueAt(selectedRow, 0).toString().trim();
                 int indexOfExtension = scriptNumber.indexOf(".xsl");
                 if (indexOfExtension >= 0) {
@@ -296,7 +298,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
                     BrowseUtils.browseAbsoluteFile(exportFile);
                 }
             } catch (Exception exp) {
-                Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
+                Log.show(Log.ERROR, getResString("FehlerAllgemein") + "\n" + exp.getMessage() + "\n" + exp.toString(), exp);
             }
 
             tempXMLFile.delete();
@@ -382,15 +384,15 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         public String getColumnName(final int column) {
             switch (column) {
             case 0:
-                return Tool3lgmConstants.getResString("trans_file");
+                return getResString("trans_file");
             case 1:
-                return Tool3lgmConstants.getResString("trans_name");
+                return getResString("trans_name");
             case 2:
-                return Tool3lgmConstants.getResString("trans_type");
+                return getResString("trans_type");
             case 3:
-                return Tool3lgmConstants.getResString("trans_des");
+                return getResString("trans_des");
             case 4:
-                return Tool3lgmConstants.getResString("trans_author");
+                return getResString("trans_author");
             default:
                 return null;
             }
@@ -460,7 +462,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         try {
             finalize();
         } catch (Throwable t) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), t);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), t);
         }
     }
 

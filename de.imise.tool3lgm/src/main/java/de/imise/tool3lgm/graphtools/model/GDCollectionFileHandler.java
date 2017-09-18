@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.xml.ToolXMLParser.isParseAbleFileVersion;
 import static de.imise.tool3lgm.xml.ToolXMLParser.isXMLFile;
@@ -163,7 +162,7 @@ public class GDCollectionFileHandler {
                 randomAccessFile.close();
             }
         } catch (Exception exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
         }
     }
 
@@ -271,7 +270,7 @@ public class GDCollectionFileHandler {
             if (file != null) {
                 randomAccessFile.close();
             }
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + e, e);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein") + e, e);
         }
 
         if (file != null) {
@@ -336,7 +335,7 @@ public class GDCollectionFileHandler {
             ToolXMLParser parser = new ToolXMLParser(gdcoll, inputStream, paste);
             parser.parseDocument();
         } catch (Exception exp) {
-            Log.show(Log.ERROR, getErrString("FehlerAllgemein") + exp, exp);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein") + exp, exp);
             return false;
         }
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
@@ -364,7 +363,7 @@ public class GDCollectionFileHandler {
         try {
             setFile(pfad);
         } catch (IOException exp) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), exp);
             exp.printStackTrace();
             return false;
         }
@@ -404,7 +403,7 @@ public class GDCollectionFileHandler {
             UserProperties.setWorkingDirectory(file);
             copyTempToDestinationFile(tempFile, randomAccessFile, lockSupported, lock);
         } catch (Exception e) {
-            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein") + "\n" + e, e);
+            Log.show(Log.FATAL, getResString("FehlerAllgemein") + "\n" + e, e);
             return false;
         }
         return true;

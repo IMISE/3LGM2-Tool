@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getErrString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSlaveElementTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSortedEdgeClasses;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
@@ -29,7 +29,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
-import de.imise.tool3lgm.log.Log;
 
 public abstract class ElementContainer extends JLabel implements Cloneable {
 
@@ -187,7 +186,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         try {
             retVal = getClass().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            Static.showErrorOutputDialog(getErrString("FehlerAllgemein"), e);
+            Static.showErrorOutputDialog(getResString("FehlerAllgemein"), e);
             return null;
         }
         retVal.doc = doc;

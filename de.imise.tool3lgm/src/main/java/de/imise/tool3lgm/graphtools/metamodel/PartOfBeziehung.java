@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
+
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -167,8 +170,7 @@ public abstract class PartOfBeziehung extends Edge {
         if (k1 != null && k2 != null) {
             boolean retVal = k2.isPartOf(k1);
             if (retVal) {
-                Log.show(Log.INFO, Tool3lgmConstants.getErrString("kreis") + "\n" + Tool3lgmConstants.getResString("ModelElement_p") + ":\n" + ModelConstants.getDisplayableName(k1) + ": " + k1.getName() + "\n" + ModelConstants.getDisplayableName(k2) + ": "
-                        + k2.getName());
+                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + getDisplayablePluralName(ModelElement.class) + ":\n" + getDisplayableName(k1) + ": " + k1.getName() + "\n" + getDisplayableName(k2) + ": " + k2.getName());
             }
             return retVal;
         }

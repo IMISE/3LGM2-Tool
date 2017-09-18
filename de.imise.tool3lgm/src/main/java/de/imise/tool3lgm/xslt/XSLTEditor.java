@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.xslt;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.swing.component.text.ExtendedTextArea;
@@ -61,7 +62,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
                 text.append("\n");
             }
         } catch (IOException exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
         } finally {
             if (reader != null) {
                 try {
@@ -81,7 +82,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
 
     /**
      * richtet alle Komponenten des Dialogs ein
-     * 
+     *
      * @param _textArea die TextArea die dargestellt werden soll
      */
     private void setComponents(final ExtendedTextArea _textArea) {
@@ -92,15 +93,15 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(new JScrollPane(textArea), BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
-        buttonSave = new JButton(Tool3lgmConstants.getResString("save"));
+        buttonSave = new JButton(getResString("save"));
         buttonSave.setActionCommand("action_save");
         buttonSave.addActionListener(this);
         buttonPanel.add(buttonSave);
-        JButton button = new JButton(Tool3lgmConstants.getResString("save_as"));
+        JButton button = new JButton(getResString("save_as"));
         button.setActionCommand("action_saveAs");
         button.addActionListener(this);
         buttonPanel.add(button);
-        button = new JButton(Tool3lgmConstants.getResString("exit"));
+        button = new JButton(getResString("exit"));
         button.setActionCommand("action_exit");
         button.addActionListener(this);
         buttonPanel.add(button);
@@ -126,7 +127,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
             }
         } else if (e.getActionCommand().equals("action_exit")) {
 
-            if ((result = JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("quest_saveBeforeExit"), "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
+            if ((result = JOptionPane.showConfirmDialog(this, getResString("quest_saveBeforeExit"), "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
                 if (readOnly) {
                     if (!saveAsFile()) {
                         return;
@@ -147,7 +148,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
 
     /**
      * laed den darzustellenden Text aus einer Datei
-     * 
+     *
      * @param f File
      * @return String mit dem Inhalt der Datei
      */
@@ -164,8 +165,8 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
                 text.deleteCharAt(text.length() - 1);
             }
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            JOptionPane.showMessageDialog(this, Tool3lgmConstants.getResString("err_file") + "\n(" + file + ")", e.toString(), JOptionPane.ERROR_MESSAGE);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+            JOptionPane.showMessageDialog(this, getResString("err_file") + "\n(" + file + ")", e.toString(), JOptionPane.ERROR_MESSAGE);
         }
         return text.toString();
     }
@@ -173,7 +174,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
     /**
      * speichert den Text in die Datei file, wenn file != null, ansonsten wird
      * die Methode saveAsFile aufgerufen
-     * 
+     *
      * @return boolean with true, if save was successful
      */
     private boolean saveToFile() {
@@ -188,8 +189,8 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
             output.writeBytes(textArea.getText());
             output.close();
         } catch (Exception e) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), e);
-            JOptionPane.showMessageDialog(this, e.getMessage(), Tool3lgmConstants.getResString("err_file"), JOptionPane.ERROR_MESSAGE);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+            JOptionPane.showMessageDialog(this, e.getMessage(), getResString("err_file"), JOptionPane.ERROR_MESSAGE);
             return false;
 
         }
@@ -199,7 +200,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
     /**
      * speichert den Text in einer Datei, wobei der Dateiname in einem Dialog
      * ausgewaehlt werden kann
-     * 
+     *
      * @return boolean with true, if save was successful
      */
     private boolean saveAsFile() {
@@ -234,7 +235,7 @@ public class XSLTEditor extends JDialog implements ActionListener, WindowListene
     @Override
     public void windowClosing(final WindowEvent e) {
         int result;
-        if ((result = JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("quest_saveBeforeExit"), "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
+        if ((result = JOptionPane.showConfirmDialog(this, getResString("quest_saveBeforeExit"), "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)) == JOptionPane.YES_OPTION) {
             if (readOnly) {
                 if (!saveAsFile()) {
                     return;

@@ -432,19 +432,19 @@ public class KommProzessPanel extends ElementDialogPanel {
                 table.setValueAt(null, i, END_COMPONENTS);// Endkonfigurationsbausteine
                 table.setValueAt(null, i, END_ORGUNIT);// Endorganisationseinheit
                 table.setValueAt(null, i, INTERFACES);// Schnittstellen
-                table.setValueAt(Tool3lgmConstants.getErrString("kein_OT"), i, COMMENTS);
+                table.setValueAt(getResString("kein_OT"), i, COMMENTS);
             } else if (!step.hasStartKonfiguration()) {
                 if (step.hasEndKonfiguration()) {
-                    table.setValueAt(Tool3lgmConstants.getErrString("keine_Start_Konf"), i, COMMENTS);
+                    table.setValueAt(getResString("keine_Start_Konf"), i, COMMENTS);
                 } else {
-                    table.setValueAt(Tool3lgmConstants.getErrString("keine_Konfigs"), i, COMMENTS);
+                    table.setValueAt(getResString("keine_Konfigs"), i, COMMENTS);
                 }
             } else if (!step.hasEndKonfiguration()) {
-                tmodel.setValueAt(Tool3lgmConstants.getErrString("keine_End_Konf"), i, COMMENTS);
+                tmodel.setValueAt(getResString("keine_End_Konf"), i, COMMENTS);
             } else if (step.getKommProzessLength() == ShortestCommunicationPathFinder.INFINITY) {
-                table.setValueAt(Tool3lgmConstants.getErrString("konfigs_passen_nicht"), i, COMMENTS);
+                table.setValueAt(getResString("konfigs_passen_nicht"), i, COMMENTS);
             } else if (step.getKommProzessLength() == 0) {
-                table.setValueAt(Tool3lgmConstants.getErrString("konfigs_teilw_gleich"), i, COMMENTS);
+                table.setValueAt(getResString("konfigs_teilw_gleich"), i, COMMENTS);
             } else {
                 // Bemerkungsspalte löschen
                 table.setValueAt(null, i, COMMENTS);

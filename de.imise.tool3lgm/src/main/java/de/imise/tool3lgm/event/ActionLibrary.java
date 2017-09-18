@@ -495,7 +495,7 @@ public class ActionLibrary {
                                 internalFrame.setSelected(true);
                             }
                         } catch (PropertyVetoException exp) {
-                            Log.show(Log.FATAL, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+                            Log.show(Log.FATAL, getResString("FehlerAllgemein"), exp);
                         }
                     }
                 };
@@ -1094,7 +1094,7 @@ public class ActionLibrary {
                 }
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(false)) {
-                    JOptionPane.showMessageDialog(tool3lgm, Tool3lgmConstants.getErrString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -1109,7 +1109,7 @@ public class ActionLibrary {
                 }
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(true)) {
-                    JOptionPane.showMessageDialog(tool3lgm, Tool3lgmConstants.getErrString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };

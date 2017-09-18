@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Dialog;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,7 +16,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.OperatorInputPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel.ReferencePanel;
@@ -66,7 +67,7 @@ public class VfDialog extends JDialog implements ActionListener {
         super(owner);
         this.userField = userField;
         vfOperator = operator;
-        String title = Tool3lgmConstants.getResString("accounting_function") + ": " + UserField.getDisplayableFunctionName(vfOperator);
+        String title = getResString("accounting_function") + ": " + UserField.getDisplayableFunctionName(vfOperator);
         setTitle(title);
         setModal(true);
         setLocationByPlatform(true);
@@ -100,10 +101,10 @@ public class VfDialog extends JDialog implements ActionListener {
         gbc.gridy++;
         gbc.weighty = 0;
         JPanel buttonPanel = new JPanel();
-        JButton okButton = new JButton(Tool3lgmConstants.getResString("ok"));
+        JButton okButton = new JButton(getResString("ok"));
         okButton.setActionCommand("ok");
         okButton.addActionListener(this);
-        JButton cancelButton = new JButton(Tool3lgmConstants.getResString("cancel"));
+        JButton cancelButton = new JButton(getResString("cancel"));
         cancelButton.setActionCommand("cancel");
         cancelButton.addActionListener(this);
         buttonPanel.add(okButton);
@@ -135,7 +136,7 @@ public class VfDialog extends JDialog implements ActionListener {
                 //JOptionPane.showMessageDialog(null, retVal);
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("empty_values"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, getResString("empty_values"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
 
             }
 

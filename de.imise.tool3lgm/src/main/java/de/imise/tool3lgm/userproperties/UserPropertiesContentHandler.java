@@ -5,6 +5,8 @@
  */
 package de.imise.tool3lgm.userproperties;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -289,7 +291,7 @@ public class UserPropertiesContentHandler implements ContentHandler {
 
             raf.close();
         } catch (IOException exp) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), exp);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
         }
     }
 

@@ -215,7 +215,6 @@ public abstract class Tool3lgmConstants {
      * BaseName der lokalisierten Haupt-Ressourcendateien
      */
     public static final String RESOURCE_BASE_NAME = "Tool3lgmResources";
-    public static final String RESOURCE_ERRORS_BASE_NAME = "Tool3lgmErrors";
 
     // die beiden ResourceBundles laden
     /**
@@ -225,9 +224,7 @@ public abstract class Tool3lgmConstants {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
-     * ResourceBundle für Fehlermeldungen
      */
-    private static ResourceBundle errorBundle = ResourceBundle.getBundle(RESOURCE_ERRORS_BASE_NAME);
 
     /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse
@@ -300,16 +297,6 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert eine kurze Beschreibung für die durch <code>key</code> identifizierte {@link StaticAction}. (Zur Verwendung als Tooltip)
-     *
-     * @param identifier
-     * @return
-     */
-    public static String getDescription(final String key) throws MissingResourceException {
-        return getResString(key);
-    }
-
-    /**
      * Gibt fuer eine ArrayList von {@link NodeContainer}n oder {@link ModelElement}s einen String des Inhalts zurück. Ist insertNewLines==false, wird
      * eine kommaseparierte Liste zurückgegeben.
      *
@@ -354,16 +341,6 @@ public abstract class Tool3lgmConstants {
             return serversBuf.deleteCharAt(serversBuf.length() - 2).toString();
         }
         return serversBuf.toString();
-    }
-
-    /**
-     * Gets a string for the given key from the error resource bundleor one of its parents.
-     *
-     * @param key
-     * @return String with value of resource
-     */
-    public static String getErrString(final String key) {
-        return errorBundle.getString(key);
     }
 
     /**
@@ -453,9 +430,9 @@ public abstract class Tool3lgmConstants {
 
     /**
      * Liefert alle <code>Locale</code>s, für die Resourcen hinterlegt wurden.<br>
-     * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt. Es wird davon
-     * ausgegangen, dass auf jeden Fall englische Ressourcen
-     * existieren, die in der Datei "Tool3lgmResources.properties" hinterlegt sind.<br>
+     * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt.
+     * Es wird davon ausgegangen, dass auf jeden Fall englische Ressourcen existieren, die in der Datei
+     * "Tool3lgmResources.properties" hinterlegt sind.<br>
      *
      * @return alle Locales, für die Ressourcen existieren
      */

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -260,8 +262,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         try {
             icon = new ImageIcon(ImageTable.get(name));
         } catch (Exception ex) {
-            Log.show(Log.ERROR, Tool3lgmConstants.getErrString("FehlerAllgemein"), ex);
-            JOptionPane.showMessageDialog(null, Tool3lgmConstants.getResString("icon_kaputt"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+            Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
+            JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
         }
         if (icon != null) {
             layout.icon = name;
@@ -538,7 +540,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     public String toString() {
         String nameWithSzens = me.getNameWithSzens();
         if (!me.isUnpaintable() && !isVisible() && doc instanceof Szenario) {
-            nameWithSzens = Tool3lgmConstants.getResString("ausgebl") + " " + nameWithSzens;
+            nameWithSzens = getResString("ausgebl") + " " + nameWithSzens;
         }
         if (additionalTextRightDownLines == null) {
             return nameWithSzens;

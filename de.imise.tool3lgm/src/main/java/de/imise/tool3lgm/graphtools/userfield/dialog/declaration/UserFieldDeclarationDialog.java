@@ -29,7 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -69,7 +68,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      * Liste mit allen UserFields, die gelöscht wurden. Wird der Dialog mit OK verlassen, werden bei allen <code>UserFieldTarget</code>s die Werte
      * dieser UserFields *unwiederbringlich* gelöscht.
      */
-    private final ArrayList<UserField> removedUserFields = new ArrayList<UserField>();
+    private final ArrayList<UserField> removedUserFields = new ArrayList<>();
 
     /**
      * ist true, wenn eine Warnung angezeigt werden soll, dass die Werte einer Kennzahl gelöscht werden - sonst false.
@@ -84,7 +83,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         super(owner, gdcoll.getUserFieldDefinitions());
         this.gdcoll = gdcoll;
         definitions = gdcoll.getUserFieldDefinitions();
-        oldUserFieldDefionitions = (UserFieldDefinitions) definitions.clone();
+        oldUserFieldDefionitions = definitions.clone();
         init();
     }
 
@@ -173,8 +172,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
         } else if (is(cancelButton)) {
             if (returnValue != 0) {
-                if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, Tool3lgmConstants.getResString("userFieldDialog_warning_message"), Tool3lgmConstants.getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE)) {
+                if (JOptionPane.YES_OPTION != JOptionPane.showConfirmDialog(this, getResString("userFieldDialog_warning_message"), getResString("userFieldDialog_warning"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) {
                     return;
                 }
             }
@@ -194,7 +192,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             //Definitionseditor für das neue userField anzeigen
             UserField.Style style = (UserField.Style) userFieldTypeComboBox.getSelectedObject();
             if (style == null) {
-                JOptionPane.showMessageDialog(this, Tool3lgmConstants.getErrString("choose_type_first"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, getResString("userFieldDeclarationDialog_chooseType"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             //jetzt kann nur noch ein Node- oder Kantentyp selektiert sein
@@ -271,9 +269,9 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         boolean delete = true;
         if (showWarningForDeletingUserFields) {
             String[] frage = {
-                    getResString("dontShowAgain")
+                    getResString("userFieldDeclarationDialog_dontShowAgain")
             };
-            Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, getResString("warnung"), getResString("allValuesWouldBeDeleted"), frage);
+            Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, getResString("warnung"), getResString("userFieldDeclarationDialog_allValuesWillBeDeleted"), frage);
             if (result == null) { //Cancel gedrückt
                 delete = false;
             } else if (result[0] != null) {

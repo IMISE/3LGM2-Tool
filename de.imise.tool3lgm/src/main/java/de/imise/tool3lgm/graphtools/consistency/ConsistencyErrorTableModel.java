@@ -3,13 +3,14 @@
  */
 package de.imise.tool3lgm.graphtools.consistency;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -29,7 +30,11 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         elementType,
         element,
         connectionType,
-        description
+        description;
+
+        public String getDisplayableName() {
+            return getResString("COL_NAMES_" + toString());
+        }
     }
 
     public ConsistencyErrorTableModel() {
@@ -37,7 +42,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         COL_NAMES[] colIdentifiers = COL_NAMES.values();
         Vector<String> colNames = new Vector<>(colIdentifiers.length);
         for (COL_NAMES cn : colIdentifiers) {
-            colNames.add(Tool3lgmConstants.getErrString(cn.toString()));
+            colNames.add(cn.getDisplayableName());
         }
         setColumnIdentifiers(colNames);
     }
@@ -48,7 +53,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     public void setErrors(List<AbstractError> dataVector) {
 
         if (dataVector == null) {
-            dataVector = new ArrayList<AbstractError>(0);
+            dataVector = new ArrayList<>(0);
         }
         // System.err.println(dataVector.size());
         // System.err.println(this.dataVector.size());

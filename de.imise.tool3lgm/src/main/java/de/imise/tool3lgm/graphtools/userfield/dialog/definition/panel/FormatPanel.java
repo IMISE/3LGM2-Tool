@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -29,7 +31,6 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -99,12 +100,12 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     private final JButton deleteButton;
 
     /**
-     * 
+     *
      */
     private final JButton refreshButton;
 
     /**
-     * 
+     *
      */
     private final HashSet<String> unitBoxElements = new HashSet<>();
     /**
@@ -131,7 +132,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         this.definitions = definitions;
         setLayout(new GridBagLayout());
         newFormatesList = new ArrayList<>();
-        setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("formatPaneBorder")));
+        setBorder(BorderFactory.createTitledBorder(getResString("formatPaneBorder")));
         GridBagConstraints constraints = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0);
         formatComboBox = new AlphabeticalComboBox();
         formatComboBox.addActionListener(this);
@@ -150,11 +151,11 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
         unitBox.setModel(dcbm);
 
-        refreshButton = new JButton(Tool3lgmConstants.getResString("refreshButtonText"));
+        refreshButton = new JButton(getResString("refreshButtonText"));
         refreshButton.addActionListener(this);
-        newButton = new JButton(Tool3lgmConstants.getResString("neuesFormatSpeichern"));
+        newButton = new JButton(getResString("neuesFormatSpeichern"));
         newButton.addActionListener(this);
-        deleteButton = new JButton(Tool3lgmConstants.getResString("delete"));
+        deleteButton = new JButton(getResString("delete"));
         deleteButton.addActionListener(this);
 
         initFormatComboBox();
@@ -195,7 +196,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         constraintsFormat.gridy = 0;
         constraintsFormat.fill = GridBagConstraints.NONE;
 
-        zahlenFormatPanel.add(new JLabel(Tool3lgmConstants.getResString("nachkommastelle")), constraintsFormat);
+        zahlenFormatPanel.add(new JLabel(getResString("nachkommastelle")), constraintsFormat);
 
         constraintsFormat.weightx = 1;
         constraintsFormat.gridx++;
@@ -206,7 +207,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         constraintsFormat.gridx = 0;
         constraintsFormat.gridy++;
         constraintsFormat.fill = GridBagConstraints.NONE;
-        zahlenFormatPanel.add(new JLabel(Tool3lgmConstants.getResString("einheit")), constraintsFormat);
+        zahlenFormatPanel.add(new JLabel(getResString("einheit")), constraintsFormat);
 
         constraintsFormat.weightx = 1;
         constraintsFormat.gridx++;
@@ -237,7 +238,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
         //ComboBox mit allen bisher defnierten Formaten zusammenbauen
         formatComboBox.removeAllItems();
-        formatComboBox.addItem(null, Tool3lgmConstants.getResString("standard_format"));
+        formatComboBox.addItem(null, getResString("standard_format"));
         formatComboBox.addSeparator(false);
 
         for (UserField uf : definitions.getFormatUserFields()) {
@@ -347,7 +348,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         UserField format = new UserField(UserField.Style.FORMAT, definitions);
         //Bei den Formaten ist der Name nicht relevant - daher ein generierter
         format.setName("FormatTemplate" + System.currentTimeMillis());
-        format.setDescription(Tool3lgmConstants.getResString("format_template"));
+        format.setDescription(getResString("format_template"));
         format.setTreeVisibility(false);
         format.setFormatFractionDigits(fractionDigits);
         format.setFormatUnit(unit);
@@ -365,7 +366,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         UserField format = new UserField(UserField.Style.FORMAT, definitions);
         //Bei den Formaten ist der Name nicht relevant - daher ein generierter
         format.setName("FormatTemplate" + System.currentTimeMillis());
-        format.setDescription(Tool3lgmConstants.getResString("format_template"));
+        format.setDescription(getResString("format_template"));
         format.setTreeVisibility(false);
         format.setFormatFractionDigits(new Integer(digitSpinner.getValue().toString()).intValue());
         Object selectedUnitItem = unitBox.getSelectedItem();
@@ -448,7 +449,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                 newFormatesList.add(formatUserField);
                 userField.setFormatUserField(getSelectedFormatUserField());
             } else {
-                JOptionPane.showMessageDialog(null, Tool3lgmConstants.getErrString("format_is_existing"), Tool3lgmConstants.getResString("fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, getResString("format_is_existing"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getSource() == deleteButton) {
             UserField formatToDelete = getSelectedFormatUserField();
@@ -458,7 +459,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
             //für cancel() merken, wer das Format alles benutzt hat
             boolean selfUser = formatUser.remove(userField);
             if (formatUser.size() > 0) {
-                int option = MultipleOptionPane.showConfirmDialog(owner, Tool3lgmConstants.getResString("warnung"), Tool3lgmConstants.getErrString("format_template_in_use"), MultipleOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                int option = MultipleOptionPane.showConfirmDialog(owner, getResString("warnung"), getResString("format_template_in_use"), MultipleOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (option != MultipleOptionPane.YES_OPTION) {
                     return;
                 }

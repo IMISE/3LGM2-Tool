@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -46,12 +47,12 @@ public class NameDescripPanel extends AbstractInputPanel {
         nameTextField.setText(userField.getName());
         descripArea.setText(userField.getDescription());
 
-        setBorder(BorderFactory.createTitledBorder(Tool3lgmConstants.getResString("general")));
+        setBorder(BorderFactory.createTitledBorder(getResString("general")));
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(3, 3, 3, 3), 0, 0);
         //die beiden Labels untereinander in der ersten Spalte einfügen
-        add(new JLabel(Tool3lgmConstants.getResString("bez")), gbc);
+        add(new JLabel(getResString("bez")), gbc);
         gbc.gridy = 1;
-        add(new JLabel(Tool3lgmConstants.getResString("description")), gbc);
+        add(new JLabel(getResString("description")), gbc);
 
         //jetzt das Namentextfeld in der zweiten Spalte und ersten Zeile einfügen
         gbc.gridx = 1;
@@ -86,7 +87,7 @@ public class NameDescripPanel extends AbstractInputPanel {
     @Override
     public String getError() {
         if (nameTextField.getText().trim().equals("")) {
-            return Tool3lgmConstants.getErrString("empty_name");
+            return getResString("empty_name");
         }
         return super.getError();
     }
