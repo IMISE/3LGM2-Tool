@@ -134,7 +134,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             options[analyseCount] = getResString("ana_fr_self_defined_analysis");
 
             // null wenn Abrechen gedrückt wurde, sonst ein gültiges Boolean-Array
-            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, null);
+            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, null, true);
 
             // wenn abgebrochen werden soll
             if (selectedOptions == null) {
