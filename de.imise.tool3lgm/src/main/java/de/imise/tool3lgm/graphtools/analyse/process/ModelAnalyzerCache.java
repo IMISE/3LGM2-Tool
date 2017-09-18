@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.analyse.context;
+package de.imise.tool3lgm.graphtools.analyse.process;
 
 import java.util.Collection;
 import java.util.HashMap;
