@@ -19,7 +19,7 @@ public class AufOrgKombination extends Node {
         StringBuilder retVal = new StringBuilder(getResString("in_oes"));
         retVal.append(": ");
         boolean first = true;
-        for (ModelElement oe : getConnectedElements(Organisationseinheit.class)) {
+        for (ModelElement oe : getConnectedElements(Organisationseinheit.class, OrgAufOrgVerbindung.class)) {
             if (!first) {
                 retVal.append(", ");
             } else {
