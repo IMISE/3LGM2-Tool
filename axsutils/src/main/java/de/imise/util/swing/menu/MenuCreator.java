@@ -306,12 +306,12 @@ public class MenuCreator {
      *
      * @param parent
      *            Menu, in das die Einträge eingefügt werden sollen
-     * @param children
-     *            Einträge, die in das Menu eingefügt werden sollen
      * @param pos
      *            Position, ab der eingefügt werden soll
+     * @param children
+     *            Einträge, die in das Menu eingefügt werden sollen
      */
-    public static void addAll(final JMenu parent, final Component[] children, int pos) {
+    public static void addAll(final JMenu parent, int pos, final Component... children) {
         for (Component child : children) {
             parent.add(child, pos++);
         }
@@ -325,7 +325,7 @@ public class MenuCreator {
      * @param children
      *            Einträge, die in das Menu eingefügt werden sollen
      */
-    public static void addAll(final JMenu parent, final Component[] children) {
+    public static void addAll(final JMenu parent, final Component... children) {
         for (Component child : children) {
             parent.add(child);
         }
