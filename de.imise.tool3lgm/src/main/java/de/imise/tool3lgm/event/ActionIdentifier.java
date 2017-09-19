@@ -35,7 +35,6 @@ public enum ActionIdentifier {
     ACTION_EXPORT_SUBMODEL,
     ACTION_EXPORT_HTML,
     ACTION_EXPORT_DATA,
-    print,
     exit,
 
     // edit

@@ -1144,22 +1144,11 @@ public class ActionLibrary {
         }
 
         /*
-         * Die Actions zum Öffnen der zuletzt verwendeten Dateien befinden sich in der Klasse {@link
-         * DynamicActions}
+         * Die Actions zum öffnen der zuletzt verwendeten Dateien befinden sich in der Klasse {@link DynamicActions}
          */
-
-        /** Drucken des Models (hat keine Wirkung, weil Drucken noch nicht implementiert ist) */
-        public static final Action PRINT = new StaticAction(ActionIdentifier.print) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                throw new UnsupportedOperationException("Drucken wird nicht unterstützt");
-            }
-        };
 
         /** Beenden des Programms */
         public static final Action EXIT = new StaticAction(ActionIdentifier.exit) {
-
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Tool3lgm tool3lgm = getTool();

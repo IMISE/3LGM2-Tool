@@ -28,7 +28,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
 // TODO: alles auf die Actions umstellen, die auch das Menü benutzt. Die Actions sollten aber auch gleich mit den Icons klarkommen
 public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener {
     //	private AbstractInternalFrame frame = null;
-    public JButton multi, redo, undo, print, backward, forward;
+    public JButton multi, redo, undo, backward, forward;
 
     private final JToggleButton fach, log, phy;
 
@@ -88,11 +88,6 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         neu = createToolBarButton(ActionLibrary.FileActions.ACTION_NEW_MODEL, "ICON_LARGE_ACTION_NEW_MODEL.gif", "TOOLTIP_ACTION_NEW_MODEL", "ACTION_NEW_MODEL");
         open = createToolBarButton(ActionLibrary.FileActions.ACTION_OPEN_MODEL, "ICON_LARGE_ACTION_OPEN_MODEL.gif", "TOOLTIP_ACTION_OPEN_MODEL", "ACTION_OPEN_MODEL");
         save = createToolBarButton(ActionLibrary.FileActions.ACTION_SAVE_MODEL, "ICON_LARGE_ACTION_SAVE_MODEL.gif", "TOOLTIP_ACTION_SAVE_MODEL", "ACTION_SAVE_MODEL");
-
-        print = new JButton(Tool3lgmConstants.getIcon("print.gif"));
-        print.setToolTipText(getResString("modell_drucken"));
-        print.setActionCommand("print");
-        print.addActionListener(this);
 
         undo = new JButton(Tool3lgmConstants.getIcon("undo.gif"));
         undo.setToolTipText(getResString("undo"));
@@ -165,7 +160,6 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         add(neu);
         add(open);
         add(save);
-        //add(print);
 
         addSeparator();
         undo.setEnabled(false);
