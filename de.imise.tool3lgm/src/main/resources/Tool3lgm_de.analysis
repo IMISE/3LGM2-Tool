@@ -1,4 +1,4 @@
-ï»¿Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;
+Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;
 --multipart_3lgm_query_separator
 Content-Type: text/xml
 Content-ID: Auf welchen phys. DV-Bausteinen ist er installiert?
@@ -26,7 +26,7 @@ Content-ID: Auf welchen phys. DV-Bausteinen ist er installiert?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Welche Aufgaben werden damit unterstÃ¼tzt?
+Content-ID: Welche Aufgaben werden damit unterstützt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Anwendungsbaustein"/>
@@ -90,7 +90,7 @@ Content-ID: Welche Objekttypen werden gespeichert?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Welche Objekttypen kÃ¶nnen gesendet oder empfangen werden?
+Content-ID: Welche Objekttypen können gesendet oder empfangen werden?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Anwendungsbaustein"/>
@@ -163,7 +163,7 @@ Content-ID: Welche Kommunikationsbeziehungen hat er?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur ErfÃ¼llung benÃ¶tigt?
+Content-ID: Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur Erfüllung benötigt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Aufgabe"/>
@@ -208,7 +208,7 @@ Content-ID: Welche Anwendungsbausteine und welche Phys. DV-Bausteine werden zur 
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Welche Anwendungsbausteine werden zur ErfÃ¼llung benÃ¶tigt?
+Content-ID: Welche Anwendungsbausteine werden zur Erfüllung benötigt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Aufgabe"/>
@@ -241,7 +241,7 @@ Content-ID: Welche Anwendungsbausteine werden zur ErfÃ¼llung benÃ¶tigt?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Wo werden Nachrichtentypen/Dokumententypen dazu Ã¼bermittelt und welche Objekttypen werden kommuniziert?
+Content-ID: Wo werden Nachrichtentypen/Dokumententypen dazu übermittelt und welche Objekttypen werden kommuniziert?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Ereignistyp"/>
@@ -275,7 +275,7 @@ Content-ID: Wo werden Nachrichtentypen/Dokumententypen dazu Ã¼bermittelt und wel
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Wo wird sie Ã¼bermittelt und welche Objekttypen werden kommuniziert?
+Content-ID: Wo wird sie übermittelt und welche Objekttypen werden kommuniziert?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="EreignisNachrichtenTyp"/>
@@ -302,7 +302,7 @@ Content-ID: Wo wird sie Ã¼bermittelt und welche Objekttypen werden kommuniziert?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Wo wird sie Ã¼bermittelt und welche Objekttypen werden kommuniziert?
+Content-ID: Wo wird sie übermittelt und welche Objekttypen werden kommuniziert?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="EreignisDokumentenTyp"/>
@@ -357,7 +357,7 @@ Content-ID: Wo wird er angewendet?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Wo wird er Ã¼bermittelt und welche Objekttypen werden kommuniziert?
+Content-ID: Wo wird er übermittelt und welche Objekttypen werden kommuniziert?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Nachrichtentyp"/>
@@ -419,7 +419,7 @@ Content-ID: Wo wird er kommuniziert?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Welche Bausteinschnittstellen kÃ¶nnen ihn kommunizieren?
+Content-ID: Welche Bausteinschnittstellen können ihn kommunizieren?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Objekttyp"/>
@@ -479,7 +479,7 @@ Content-ID: Wo wird er gespeichert?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: DatendomÃ¤ne zum Objekttyp X
+Content-ID: Datendomäne zum Objekttyp X
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="Objekttyp"/>
@@ -643,7 +643,7 @@ Content-ID: Welche Anwendungsbausteine sind darauf installiert?
 </analyse>
 --multipart_3lgm_query_separator
 Content-Type: text/xml
-Content-ID: Welche Anwendungsbausteine sind darauf installiert und welche Aufgaben werden damit unterstÃ¼tzt?
+Content-ID: Welche Anwendungsbausteine sind darauf installiert und welche Aufgaben werden damit unterstützt?
 <?xml version="1.0" encoding="ISO-8559-15"?>
 <analyse>
 	<startknoten name="PhysischerDVBaustein"/>
