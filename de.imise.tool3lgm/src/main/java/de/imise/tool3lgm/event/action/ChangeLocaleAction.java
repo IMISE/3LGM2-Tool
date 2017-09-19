@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.event;
+package de.imise.tool3lgm.event.action;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
@@ -9,9 +9,11 @@ import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
+import de.imise.util.swing.event.ExtendedAction;
 
 /**
  * Von {@link AbstractAction} abgeleitete Klasse für das Umschalten der Sprache im Programm.
@@ -25,31 +27,12 @@ import de.imise.util.Alphabetical;
  *
  * @see AbstractAction
  * @see StateProviderAction
- * @author fstephan
+ * @author fstephan, AXS
  */
-class ChangeLocaleAction extends StaticAction {
-
-    /** Schlüssel für die {@link Locale}, die durch diese Action aktiviert wird */
-    public static final String LOCALE_KEY = "LocaleKey";
+public class ChangeLocaleAction extends ExtendedAction {
 
     /** Aktuell ausgewählte Action */
     private static ChangeLocaleAction selectedAction;
-
-    /** Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten Sprache wieder */
-    public static final ChangeLocaleAction[] getAllActions() {
-        Locale[] locales = Tool3lgmConstants.getInstalledLanguages();
-        Alphabetical.sort(locales);
-        ChangeLocaleAction[] allActions = new ChangeLocaleAction[locales.length];
-        for (int i = 0; i < locales.length; i++) { // Wähle die Standard-Sprache aus den
-            // UserProperties
-            allActions[i] = new ChangeLocaleAction(locales[i]);
-            if (locales[i].getLanguage().equals(UserProperties.getLocale().getLanguage())) {
-                allActions[i].setSelected(true);
-            }
-        }
-        Alphabetical.sort(allActions);
-        return allActions;
-    }
 
     /** Locale, die bei Ausführen dieser Aktion in den UserProperties eingestellt wird. */
     private final Locale locale;
@@ -57,17 +40,16 @@ class ChangeLocaleAction extends StaticAction {
     /**
      * Konstruktor
      *
-     * @param locale Sprache, die durch {@link #actionPerformed(ActionEvent)} aktiviert wird
+     * @param locale
+     *            Sprache, die durch {@link #actionPerformed(ActionEvent)} aktiviert wird
      */
     private ChangeLocaleAction(final Locale locale) {
-        super(ActionIdentifier.getIdentifierFor(locale));
+        super(locale.getDisplayLanguage(locale));
         this.locale = locale;
-        putValue(LOCALE_KEY, locale);
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-
         if (locale.getLanguage().equals(UserProperties.getLocale().getLanguage())) {
             setSelected(true);
             return;
@@ -96,7 +78,7 @@ class ChangeLocaleAction extends StaticAction {
         String info_title_newLocale = newLocaleBundle.getString("language_info_title");
         String info_title = info_title_oldLocale + " / " + info_title_newLocale;
 
-        JOptionPane.showMessageDialog(getTool(), info, info_title, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(Static.getTool(), info, info_title, JOptionPane.INFORMATION_MESSAGE);
 
         setSelected(true);
     }
@@ -110,6 +92,21 @@ class ChangeLocaleAction extends StaticAction {
             selectedAction = this;
         }
         super.setSelected(b);
+    }
+
+    /** Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten Sprache wieder */
+    public static final ChangeLocaleAction[] getAllActions() {
+        Locale[] locales = Tool3lgmConstants.getInstalledLanguages();
+        Alphabetical.sort(locales);
+        ChangeLocaleAction[] allActions = new ChangeLocaleAction[locales.length];
+        for (int i = 0; i < locales.length; i++) { // Wähle die Standard-Sprache aus den UserProperties
+            allActions[i] = new ChangeLocaleAction(locales[i]);
+            if (locales[i].getLanguage().equals(UserProperties.getLocale().getLanguage())) {
+                allActions[i].setSelected(true);
+            }
+        }
+        Alphabetical.sort(allActions);
+        return allActions;
     }
 
     @Override
