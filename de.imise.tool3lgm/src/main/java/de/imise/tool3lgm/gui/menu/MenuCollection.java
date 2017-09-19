@@ -234,7 +234,7 @@ public class MenuCollection {
                 return;
             }
             removeItems(firstFileIndex, lastFileIndex);
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(a, false), firstFileIndex);
+            MenuCreator.addAll(this, firstFileIndex, MenuCreator.createMenuEntries(a, false));
             lastFileIndex = firstFileIndex + a.length - 1;
         }
     }
@@ -402,7 +402,7 @@ public class MenuCollection {
             for (int i = 1; i < a.length; i++) {
                 a[i] = noc[i - 1].getObject();
             }
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(a, false), firstFrameIndex);
+            MenuCreator.addAll(this, firstFrameIndex, MenuCreator.createMenuEntries(a, false));
             add(new JSeparator(), firstFrameIndex + 1);// Trenner zwischen aktivem Frame und aktivierbaren Frames
         }
     }
