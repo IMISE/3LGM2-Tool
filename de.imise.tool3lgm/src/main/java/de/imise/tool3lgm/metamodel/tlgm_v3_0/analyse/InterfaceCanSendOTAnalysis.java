@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.analyse.special;
+package de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse;
 
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;

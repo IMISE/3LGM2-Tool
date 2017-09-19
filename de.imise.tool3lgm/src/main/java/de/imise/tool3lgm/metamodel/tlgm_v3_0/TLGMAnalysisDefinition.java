@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_ONE;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse.InterfaceCanSendOTAnalysis;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
@@ -27,6 +28,7 @@ public class TLGMAnalysisDefinition extends AnalysisDefinition {
     public TLGMAnalysisDefinition() {
         initSimpleRedundancyAnalysis();
         initRedundancyAnalysis();
+        initNodeAnalysis();
     }
 
     private void initSimpleRedundancyAnalysis() {
@@ -60,6 +62,10 @@ public class TLGMAnalysisDefinition extends AnalysisDefinition {
 
         //Analyse 5: Datenbanksysteme bezüglich Objekttypen
         redundancyAnalysisDefinitions.add(new MetaPath(Datenbanksystem.class, Objekttyp.class, ObjLogspVerbindung.class));
+    }
+
+    private void initNodeAnalysis() {
+        nodeAnalysis.add(new InterfaceCanSendOTAnalysis());
     }
 
 }

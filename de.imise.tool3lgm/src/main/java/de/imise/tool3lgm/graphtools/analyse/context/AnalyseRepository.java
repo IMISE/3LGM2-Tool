@@ -16,7 +16,6 @@ import java.util.zip.DataFormatException;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.analyse.special.InterfaceCanSendOTAnalysis;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.log.Log;
@@ -97,7 +96,7 @@ public class AnalyseRepository {
         Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(elementClassName);
         List<AbstractAnalyse> analysenFuerKnoten = new ArrayList<>();
         List<AbstractAnalyse> allAnalysis = new ArrayList<>(getXMLAnalysen());
-        allAnalysis.addAll(getSpecialAnalysis());
+        allAnalysis.addAll(ModelConstants.getAnalysisDefinition().getNodeAnalysis());
         for (AbstractAnalyse ana : allAnalysis) {
             ArrayList<Class<? extends ModelElement>> startknoten = ana.getStartknoten();
             for (Class<? extends ModelElement> startKnotenClass : startknoten) {
@@ -173,17 +172,6 @@ public class AnalyseRepository {
             saveAnalyseFile(file, loadAnalyseFile(Tool3lgmConstants.DEFAULT_ANALYSEN_RESOURCE_URL));
         }
         return file;
-    }
-
-    /**
-     * @return
-     */
-    public static List<AbstractAnalyse> getSpecialAnalysis() {
-        if (specialAnalysis == null) {
-            specialAnalysis = new ArrayList<>();
-            specialAnalysis.add(new InterfaceCanSendOTAnalysis());
-        }
-        return specialAnalysis;
     }
 
     /**
