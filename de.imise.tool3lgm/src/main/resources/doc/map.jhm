@@ -120,9 +120,9 @@
 	<mapID target="swl_fachlich" url="baukasten/uebersicht.html#fachlich"/>
 	<mapID target="swl_logisch" url="baukasten/uebersicht.html#logisch"/>
 	<mapID target="swl_physisch" url="baukasten/uebersicht.html#physisch"/>
-	<mapID target="swl_neu" url="baukasten/uebersicht.html#neuesModell"/>
-	<mapID target="swl_open" url="baukasten/uebersicht.html#oeffnen"/>
-	<mapID target="swl_save" url="baukasten/uebersicht.html#speichern"/>
+	<mapID target="ACTION_NEW_MODEL" url="baukasten/uebersicht.html#neuesModell"/>
+	<mapID target="ACTION_OPEN_MODEL" url="baukasten/uebersicht.html#oeffnen"/>
+	<mapID target="ACTION_SAVE_MODEL" url="baukasten/uebersicht.html#speichern"/>
 	<mapID target="swl_undo" url="baukasten/uebersicht.html#undo"/>
 	<mapID target="swl_redo" url="baukasten/uebersicht.html#redo"/>
 	<mapID target="ansichtswerkzeuge" url="baukasten/uebersicht.html#ansichtswerkzeuge"/>

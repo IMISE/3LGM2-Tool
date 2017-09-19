@@ -115,11 +115,11 @@ public class MenuCollection {
     static class FileSubMenus {
 
         /** Das Import-Menu */
-        public static final JMenu IMPORT_MENU = createMenu(getResString("import"), ImportActions.IMPORT_SUBMODEL, ImportActions.IMPORT_MODEL, new JSeparator(), ImportActions.IMPORT_DATA);
+        public static final JMenu IMPORT_MENU = createMenu(getResString("import"), ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
 
         /** Das Export-Menu */
-        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.EXPORT_GRAPHIC, new JSeparator(), ExportActions.EXPORT_XSLT, ExportActions.EXPORT_SUBMODEL, new JSeparator(), ExportActions.EXPORT_WEB, new JSeparator(),
-                ExportActions.EXPORT_DATA);
+        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.ACTION_EXPORT_GRAPHIC, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT, ExportActions.ACTION_EXPORT_SUBMODEL, new JSeparator(),
+                ExportActions.ACTION_EXPORT_HTML, new JSeparator(), ExportActions.ACTION_EXPORT_DATA);
     }
 
     /** Sammlung der Unter-Menus des Ansicht-Menus */
@@ -133,16 +133,13 @@ public class MenuCollection {
     public static class LayoutSubMenus {
 
         /** Das Element-Layout-Menu */
-        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.CHOOSE_FONT, ElementLayout.CHANGE_COLOR,
-                createMenu( // Transparenz-Menu
-                        getResString("elementTransparencyMenu"), ElementLayout.Transparency.NO, ElementLayout.Transparency.SEMI, ElementLayout.Transparency.FULL),
+        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.CHOOSE_FONT, ElementLayout.CHANGE_COLOR, createMenu( // Transparenz-Menu
+                getResString("elementTransparencyMenu"), ElementLayout.Transparency.NO, ElementLayout.Transparency.SEMI, ElementLayout.Transparency.FULL),
                 createMenu( // Auf Standard setzen Menu
                         getResString("elementSetToStandardMenu"), ElementLayout.RESET_FONT, ElementLayout.RESET_COLOR, ElementLayout.RESET_TRANSPARENCY, ElementLayout.RESET_ALL),
-                new JSeparator(),
-                createMenu( // Icon-Menu
+                new JSeparator(), createMenu( // Icon-Menu
                         getResString("icon"), ElementLayout.Icon.NO_ICON, ElementLayout.Icon.CHOOSE_ICON),
-                new JSeparator(),
-                createMenu( // Textausrichtungs-Menu (horizontal)
+                new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)
                         getResString("textAlignmentMenu"), TextAlignment.Horizontal.LEFT, TextAlignment.Horizontal.CENTER, TextAlignment.Horizontal.RIGHT, new JSeparator(), TextAlignment.Vertical.TOP, TextAlignment.Vertical.CENTER,
                         TextAlignment.Vertical.BOTTOM));
 
@@ -221,8 +218,8 @@ public class MenuCollection {
         public FileMenu() {
             super(title);
             MenuCreator.addAll(this,
-                    MenuCreator.createMenuEntries(true, FileActions.ACTION_NEW_MODEL, FileActions.OPEN, FileActions.SAVE, FileActions.SAVEAS, FileActions.CLOSE, new JSeparator(), FileActions.DESCRIPTION, new JSeparator(), FileSubMenus.IMPORT_MENU,
-                            FileSubMenus.EXPORT_MENU, new JSeparator(),
+                    MenuCreator.createMenuEntries(true, FileActions.ACTION_NEW_MODEL, FileActions.ACTION_OPEN_MODEL, FileActions.ACTION_SAVE_MODEL, FileActions.ACTION_SAVE_MODEL_AS, FileActions.ACTION_CLOSE_MODEL, new JSeparator(),
+                            FileActions.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, new JSeparator(), FileSubMenus.IMPORT_MENU, FileSubMenus.EXPORT_MENU, new JSeparator(),
                             //hier werden später die zuletzt geladenen Modelle angezeigt
                             new JSeparator(), FileActions.EXIT));
         }

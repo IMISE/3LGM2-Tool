@@ -85,9 +85,9 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         phy.addActionListener(this);
         CSH.setHelpIDString(phy, "swl_physisch");
 
-        neu = createToolBarButton(ActionLibrary.FileActions.ACTION_NEW_MODEL, "ACTION_NEW_MODEL.gif", "TOOLTIP_ACTION_NEW_MODEL", "swl_neu");
-        open = createToolBarButton(ActionLibrary.FileActions.OPEN, "open.gif", "modell_oeffnen", "swl_open");
-        save = createToolBarButton(ActionLibrary.FileActions.SAVE, "save.gif", "modell_speichern", "swl_save");
+        neu = createToolBarButton(ActionLibrary.FileActions.ACTION_NEW_MODEL, "ICON_LARGE_ACTION_NEW_MODEL.gif", "TOOLTIP_ACTION_NEW_MODEL", "ACTION_NEW_MODEL");
+        open = createToolBarButton(ActionLibrary.FileActions.ACTION_OPEN_MODEL, "ICON_LARGE_ACTION_OPEN_MODEL.gif", "TOOLTIP_ACTION_OPEN_MODEL", "ACTION_OPEN_MODEL");
+        save = createToolBarButton(ActionLibrary.FileActions.ACTION_SAVE_MODEL, "ICON_LARGE_ACTION_SAVE_MODEL.gif", "TOOLTIP_ACTION_SAVE_MODEL", "ACTION_SAVE_MODEL");
 
         print = new JButton(Tool3lgmConstants.getIcon("print.gif"));
         print.setToolTipText(getResString("modell_drucken"));

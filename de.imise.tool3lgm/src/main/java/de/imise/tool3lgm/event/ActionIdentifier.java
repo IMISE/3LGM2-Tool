@@ -26,46 +26,15 @@ public enum ActionIdentifier {
     ACTION_CLOSE_MODEL,
     ACTION_SHOW_MODEL_DESCRIPTION_FRAME,
     // import
-    import_submodel {
-        @Override
-        public String toString() {
-            return SUBMODEL;
-        }
-    },
-    import_model {
-        @Override
-        public String toString() {
-            return WHOLE_MODEL;
-        }
-    },
-
-    import_data {
-        @Override
-        public String toString() {
-            return DATA;
-        }
-    },
+    ACTION_IMPORT_SUBMODEL,
+    ACTION_IMPORT_MODEL,
+    ACTION_IMPORT_DATA,
     // export
-    export_graphic,
-    export_xslt,
-    export_submodel {
-        @Override
-        public String toString() {
-            return SUBMODEL;
-        }
-    },
-    export_web {
-        @Override
-        public String toString() {
-            return WEB;
-        }
-    },
-    export_data {
-        @Override
-        public String toString() {
-            return DATA;
-        }
-    },
+    ACTION_EXPORT_GRAPHIC,
+    ACTION_EXPORT_XSLT,
+    ACTION_EXPORT_SUBMODEL,
+    ACTION_EXPORT_HTML,
+    ACTION_EXPORT_DATA,
     print,
     exit,
 
@@ -267,11 +236,6 @@ public enum ActionIdentifier {
     test
 
     ;
-    // KEYS
-    private static final String SUBMODEL = "submodel";
-    private static final String WHOLE_MODEL = "whole_model";
-    private static final String DATA = "data";
-    private static final String WEB = "web";
 
     /**
      * Liefert den zur {@link Locale} <code>l</code> gehörigen Identifier.

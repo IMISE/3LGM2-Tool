@@ -1,5 +1,9 @@
 package de.imise.tool3lgm.event;
 
+import static de.imise.tool3lgm.Static.getSelectedDoc;
+import static de.imise.tool3lgm.Static.getSelectedGDCollection;
+import static de.imise.tool3lgm.Static.getTool;
+import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilters;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
@@ -38,6 +42,8 @@ import de.imise.tool3lgm.event.LayoutAction.ElementAlignmentAction;
 import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
 import de.imise.tool3lgm.event.LayoutAction.LayerLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
+import de.imise.tool3lgm.event.action.GraphDocumentAction;
+import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
@@ -929,6 +935,129 @@ public class ActionLibrary {
      */
     public static class FileActions {
 
+        /** Öffnen eines neuen Models */
+        public static final Action ACTION_NEW_MODEL = new StaticActionNew(ActionIdentifier.ACTION_NEW_MODEL) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                getTool().openFile(false);
+            }
+        };
+
+        /** Öffnen eines bestehenden Models */
+        public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, true) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                getTool().openFile(true);
+            }
+        };
+
+        /** Speichern des Models an bekannter Stelle */
+        public static final Action ACTION_SAVE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!isEnabled()) {
+                    return;
+                }
+                Tool3lgm tool3lgm = getTool();
+                if (!tool3lgm.fileSave(false)) {
+                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+
+        /** Speichern des Models an neuer Stelle */
+        public static final Action ACTION_SAVE_MODEL_AS = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, true) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!isEnabled()) {
+                    return;
+                }
+                Tool3lgm tool3lgm = getTool();
+                if (!tool3lgm.fileSave(true)) {
+                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        };
+
+        /** Schließen des Models */
+        public static final Action ACTION_CLOSE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_CLOSE_MODEL) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!isEnabled()) {
+                    return;
+                }
+                getTool().fileClose();
+            }
+        };
+
+        /** Zeigt die Beschreibung des Tools an */
+        public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, true) {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!isEnabled()) {
+                    return;
+                }
+                getSelectedGDCollection().showDescriptionFrame(true);
+            }
+        };
+
+        /**
+         * Actions für den Daten-Import
+         *
+         * @author fstephan
+         */
+        public static class ImportActions {
+
+            /** Öffnet einen Dialog zum Import von Teilmodellen */
+            public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, true) {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    if (!isEnabled()) {
+                        return;
+                    }
+                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
+                    oeffnenDialog.setMultiSelectionEnabled(false);
+                    oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
+                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
+                        GDCollection selectedGDColl = getSelectedGDCollection();
+                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
+                        imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), true);
+                    }
+                }
+            };
+
+            /** Öffnet einen Dialog zum Import von Modellen */
+            public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, true) {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    if (!isEnabled()) {
+                        return;
+                    }
+                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
+                    oeffnenDialog.setMultiSelectionEnabled(false);
+                    oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
+                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
+                        GDCollection selectedGDColl = getSelectedGDCollection();
+                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
+                        imExportHandler.importModel(oeffnenDialog.getSelectedFile());
+                    }
+                }
+            };
+
+            /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
+            public static final Action ACTION_IMPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_DATA, true) {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    if (!isEnabled()) {
+                        return;
+                    }
+                    new DataImportModule(getSelectedGDCollection());
+                }
+            };
+        }
+
         /**
          * Actions für den Daten-Export
          *
@@ -936,12 +1065,12 @@ public class ActionLibrary {
          */
         public static class ExportActions {
 
-            /** Öffnet einen Dialog zum Export des Models als Grafik-Datei */
-            public static final Action EXPORT_GRAPHIC = new StaticAction(ActionIdentifier.export_graphic, PPP, true) {
+            /** öffnet einen Dialog zum Export des Models als Grafik-Datei */
+            public static final Action ACTION_EXPORT_GRAPHIC = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHIC, true) {
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    AbstractInternalFrame selframe = getTool().getActiveFrame();
+                    AbstractInternalFrame selframe = Static.getActiveFrame();
                     if (selframe instanceof ToolInternalFrame) {
                         InputGraphArea iga = ((ToolInternalFrame) selframe).getInputGraphArea();
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
@@ -957,47 +1086,52 @@ public class ActionLibrary {
                         sp.revalidate();
                     }
                 }
+
+                @Override
+                public boolean isEnabled() {
+                    //sowohl Grafiken als auch Matrizen kann man (grafisch) exportieren
+                    return super.isEnabled() && (Static.isActiveFrameGraphFrame() || Static.isActiveFrameMatrixFrame());
+                }
             };
 
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
-            public static final Action EXPORT_XSLT = new StaticAction(ActionIdentifier.export_xslt, PPP, true) {
-
+            public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, true) {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (!isEnabled()) {
                         return;
                     }
                     // der Dialog zeigt sich im Konstuktor selbst an
-                    new XMLExportDialog(getTool(), getSelectedDoc().getCollection());
+                    new XMLExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
 
             /** Öffnet einen Dialog zum Export eines Teilmodells */
-            public static final Action EXPORT_SUBMODEL = new StaticAction(ActionIdentifier.export_submodel, PPP, true) {
+            public static final Action ACTION_EXPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_SUBMODEL, true) {
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (!isEnabled()) {
                         return;
                     }
-                    SzenarioDialog.showExportDialog(getTool(), getSelectedCollection());
+                    SzenarioDialog.showExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
 
             /** Öffnet einen Dialog zum Export des gesamten Models als HTML-Site */
-            public static final Action EXPORT_WEB = new StaticAction(ActionIdentifier.export_web, PPP, true) {
+            public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, true) {
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     if (!isEnabled()) {
                         return;
                     }
-                    WebExportDialog.showWebExportDialog(getTool(), getSelectedCollection());
+                    WebExportDialog.showWebExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
 
             /** Öffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
-            public static final Action EXPORT_DATA = new StaticAction(ActionIdentifier.export_data, PPP, true) {
+            public static final Action ACTION_EXPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_DATA, true) {
 
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -1008,136 +1142,6 @@ public class ActionLibrary {
                 }
             };
         }
-
-        /**
-         * Actions für den Daten-Import
-         *
-         * @author fstephan
-         */
-        public static class ImportActions {
-
-            /** Öffnet einen Dialog zum Import von Teilmodellen */
-            public static final Action IMPORT_SUBMODEL = new StaticAction(ActionIdentifier.import_submodel, PPP, true) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
-                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
-                    oeffnenDialog.setMultiSelectionEnabled(false);
-                    oeffnenDialog.setFileFilters(false, Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
-                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        GDCollection selectedGDColl = getSelectedCollection();
-                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
-                        imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), true);
-                    }
-                }
-            };
-
-            /** Öffnet einen Dialog zum Import von Modellen */
-            public static final Action IMPORT_MODEL = new StaticAction(ActionIdentifier.import_model, PPP, true) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
-                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
-                    oeffnenDialog.setMultiSelectionEnabled(false);
-                    oeffnenDialog.setFileFilters(false, Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
-                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        GDCollection selectedGDColl = getSelectedCollection();
-                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
-                        imExportHandler.importModel(oeffnenDialog.getSelectedFile());
-                    }
-                }
-            };
-
-            /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
-            public static final Action IMPORT_DATA = new StaticAction(ActionIdentifier.import_data, PPP, true) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
-                    new DataImportModule(getSelectedCollection());
-                }
-            };
-        }
-
-        /** Öffnen eines neuen Models */
-        public static final Action ACTION_NEW_MODEL = new StaticAction(ActionIdentifier.ACTION_NEW_MODEL) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                getTool().openFile(false);
-            }
-        };
-
-        /** Öffnen eines bestehenden Models */
-        public static final Action OPEN = new StaticAction(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                getTool().openFile(true);
-            }
-        };
-
-        /** Speichern des Models an bekannter Stelle */
-        public static final Action SAVE = new StaticAction(ActionIdentifier.ACTION_SAVE_MODEL, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                Tool3lgm tool3lgm = getTool();
-                if (!tool3lgm.fileSave(false)) {
-                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
-
-        /** Speichern des Models an neuer Stelle */
-        public static final Action SAVEAS = new StaticAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, PPP, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                Tool3lgm tool3lgm = getTool();
-                if (!tool3lgm.fileSave(true)) {
-                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        };
-
-        /** Schließen des Models */
-        public static final Action CLOSE = new StaticAction(ActionIdentifier.ACTION_CLOSE_MODEL, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                getTool().fileClose();
-            }
-        };
-
-        /** Zeigt die Beschreibung des Tools an */
-        public static final Action DESCRIPTION = new StaticAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, PPP, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                getSelectedCollection().showDescriptionFrame(true);
-            }
-        };
 
         /*
          * Die Actions zum Öffnen der zuletzt verwendeten Dateien befinden sich in der Klasse {@link
