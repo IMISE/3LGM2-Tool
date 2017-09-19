@@ -43,7 +43,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
     public InterfaceCanSendOTAnalysis() {
         super();
         startknoten.add(Bausteinschnittstelle.class);
-        name = "Wohin kann Objekttyp X gesendet werden?";
+        SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
+        name = resHandler.getString("ANALYSIS_NAME");
     }
 
     @Override
