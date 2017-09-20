@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.event.action;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.event.ActionEvent;
 import java.util.MissingResourceException;
 
@@ -9,9 +11,12 @@ import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionIdentifier;
+import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -181,11 +186,12 @@ public abstract class StaticActionNew extends ExtendedAction {
         super(text == null ? identifier.toString() : text);
         putValue(IDENTIFIER_KEY, identifier);
 
-        if (arguments != null && !arguments.equals("")) {
+        String command = identifier.toString();
+        if (!Strings.isNullOrEmpty(arguments)) {
             putValue(ARGUMENT_KEY, arguments);
-            setActionCommand(identifier.toString() + " " + arguments);
+            setActionCommand(command + " " + arguments);
         } else {
-            setActionCommand(identifier.toString());
+            setActionCommand(command);
         }
 
         setSelected(initialSelectionState);
@@ -194,12 +200,15 @@ public abstract class StaticActionNew extends ExtendedAction {
         //ersten Zeile gesetzt wurde)
         if (text == null) {
             try {
-                setText(Tool3lgmConstants.getResString(identifier.toString()) + (appendThreePoints ? PPP : ""));
+                String resString = getResString(command);
+                setText(resString + (appendThreePoints ? PPP : ""));
             } catch (MissingResourceException e) {
                 try {
-                    setText(Tool3lgmConstants.getResString(((Class<?>) identifier).getSimpleName()) + (appendThreePoints ? PPP : ""));
+                    String simpleIdentifierClassName = ((Class<?>) identifier).getSimpleName();
+                    String resString = getResString(simpleIdentifierClassName);
+                    setText(resString + (appendThreePoints ? PPP : ""));
                 } catch (Exception ex) {
-                    setText(identifier.toString());
+                    setText(command);
                 }
             }
         }
