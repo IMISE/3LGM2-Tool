@@ -71,7 +71,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
-import de.imise.util.Sys;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 import gnu.regexp.RE;
@@ -173,7 +172,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         modelBox.addActionListener(this);
         subModelBox.addActionListener(this);
 
-        setTitle(getResString("suchd"));
+        setTitle(getResString("SEARCH_DIALOG_TITLE"));
 
         GridBagLayout gbl = new GridBagLayout();
 
