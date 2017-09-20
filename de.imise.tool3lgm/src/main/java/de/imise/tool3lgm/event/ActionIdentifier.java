@@ -237,19 +237,6 @@ public enum ActionIdentifier {
     ;
 
     /**
-     * Liefert den zur {@link Locale} <code>l</code> gehörigen Identifier.
-     * <p>
-     * Per Konvention wird hier der Identifier zurückgegeben, der dem Namen von <code>l</code> im Englischen in Kleinbuchstaben entspricht. Bsp.:
-     * {@link Locale#GERMAN} --> {@link #german}
-     *
-     * @param l
-     * @return
-     */
-    static ActionIdentifier getIdentifierFor(final Locale l) {
-        return valueOf(l.getDisplayName(Locale.ENGLISH).trim().toLowerCase());
-    }
-
-    /**
      * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen der
      * durch <code>identifier</code> identifizierten {@link StaticAction} entsteht.
      *
