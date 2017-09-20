@@ -56,7 +56,6 @@ import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -72,6 +71,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
+import de.imise.util.Sys;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 import gnu.regexp.RE;
@@ -609,17 +609,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                             JMenuItem jmi = (JMenuItem) component;
                             // Nur wenn nicht Eigenschaften: Suche starten
                             if (!jmi.getText().equals(getResString("eigenschaften"))) {
-                                jmi.addActionListener(new ActionListener() {
-                                    @Override
-                                    public void actionPerformed(final ActionEvent e) {
-                                        SwingUtilities.invokeLater(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                callSearch(new ActionEvent(searchButton, 0, ""));
-                                            }
-                                        });
-                                    }
-                                });
+                                jmi.addActionListener(e1 -> SwingUtilities.invokeLater(() -> callSearch(new ActionEvent(searchButton, 0, ""))));
                             }
                         }
 
@@ -637,7 +627,6 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             public int compare(final Integer int1, final Integer int2) {
                 return int1.compareTo(int2);
             }
-
         });
 
         trs.setSortable(0, false);
@@ -730,19 +719,18 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * an Button die Action hängen
      */
     private void addSearchButtonKeyListener() {
+        //Buttons reagieren nromalerweise immer nur auf Space. Hier wird das so ersetzt, dass es auf Space und Enter reagiert
+        String actionKeyStartSearch = "ACTION_KEY_START_SEARCH"; //beliebiger String! wird nur bebraucht, um zwischen der Keymap und der ActionMap zu mappen
         InputMap keyMap = new ComponentInputMap(searchButton);
-        keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "search");
-
+        keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), actionKeyStartSearch);
+        keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), actionKeyStartSearch);
         ActionMap actionMap = new ActionMapUIResource();
-        actionMap.put("search", new AbstractAction() {
-
+        actionMap.put(actionKeyStartSearch, new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 callSearch(new ActionEvent(searchButton, 0, ""));
-
             }
         });
-
         SwingUtilities.replaceUIActionMap(searchButton, actionMap);
         SwingUtilities.replaceUIInputMap(searchButton, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
     }
@@ -904,24 +892,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     private void addCBListeners() {
-        elementName_cb.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                ignoreCaseInName = elementName_cb.isSelected();
-            }
-        });
-        elementDescription_cb.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                ignoreCaseInDescription = elementDescription_cb.isSelected();
-            }
-        });
-        elementUserField_cb.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                ignoreCaseInUserField = elementUserField_cb.isSelected();
-            }
-        });
+        elementName_cb.addActionListener(e -> ignoreCaseInName = elementName_cb.isSelected());
+        elementDescription_cb.addActionListener(e -> ignoreCaseInDescription = elementDescription_cb.isSelected());
+        elementUserField_cb.addActionListener(e -> ignoreCaseInUserField = elementUserField_cb.isSelected());
 
     }
 
