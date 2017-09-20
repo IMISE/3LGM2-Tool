@@ -3,6 +3,7 @@ package de.imise.tool3lgm.event.action;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 
 /**
  * Eine Aktion, die enabled ist, wenn (außer evtl. auch selektierten Knickpunten) wenigstens
@@ -28,7 +29,12 @@ public class SelectedElementsAction extends GraphDocumentAction {
 
     @Override
     public boolean isEnabled() {
-        return super.isEnabled() && Static.getSelectedDoc() != null && (Static.getSelectedDoc().isSelectedAtLeastOneRealNode() || Static.getSelectedDoc().isSelectedAtLeastOneEdge());
+        if (!super.isEnabled()) {
+            return false;
+        }
+        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+        boolean enabled = selectedDoc.isSelectedAtLeastOneRealNode() || selectedDoc.isSelectedAtLeastOneEdge();
+        return enabled;
     }
 
 }

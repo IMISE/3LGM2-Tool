@@ -33,7 +33,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.DELETE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ELEMENT_PROPERTIES;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.HIDE_ALL_CONFIGS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
@@ -44,7 +43,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.NORMALIZE_LAYER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_ELEMENT_FROM_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
@@ -78,7 +76,6 @@ import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.metamodel.Composition;
@@ -298,9 +295,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         properties = getItem("eigenschaften", ELEMENT_PROPERTIES);
         unlinkToSzenario = getItem("unlinkToSzenario", LINK_SELECTED_TO_SZENARIO, GDCOMMAND_TEXT_SURROUNDER + "null" + GDCOMMAND_TEXT_SURROUNDER);
         selectLinkedSzenario = getItem("selectLinkedSzenario", SELECT_LINKED_SZENARIO);
-        delete_selected = getItem("remove_from_model", DELETE);
+        delete_selected = getItem(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
         // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
-        delete_selected_from_szenario = getItem("remove_from_submodel", REMOVE_ELEMENT_FROM_SZENARIO, "");
+        delete_selected_from_szenario = getItem(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL);
 
         join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
 
@@ -426,6 +423,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenuItem getItem(final String resKey, final GDCommands command) {
         return getItem(resKey, command, null);
+    }
+
+    /**
+     * @param command
+     * @return
+     */
+    private JMenuItem getItem(final GDCommands command) {
+        return getItem(command.toString(), command);
     }
 
     /**
@@ -632,9 +637,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             menu.addSeparator();
         }
 
-        if (ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS.isEnabled()) {
-            menu.add(ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS);
-        }
+        //        if (ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS.isEnabled()) {
+        //            menu.add(ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS);
+        //        }
 
         //bewirkt, dass "Aus Teilmodell löschen" nur angezeigt wird,
         //wenn das selektierte Element in mehr als einem Teilmodell vorkommt
@@ -2052,8 +2057,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     @Override
     public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
         // das Leerzeichen am Ende muss sein, da dahinter dann die Hashes der zulöschenden Elemnte kommen
-        delete_selected_from_szenario.setActionCommand(REMOVE_ELEMENT_FROM_SZENARIO + " ");
-        delete_selected.setActionCommand(DELETE + " ");
+        delete_selected_from_szenario.setActionCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " ");
+        delete_selected.setActionCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ");
         ((JPopupMenu) e.getSource()).removePopupMenuListener(this);
     }
 

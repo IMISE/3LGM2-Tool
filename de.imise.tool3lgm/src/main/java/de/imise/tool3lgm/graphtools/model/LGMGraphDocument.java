@@ -56,20 +56,16 @@ public class LGMGraphDocument extends GraphDocument {
     protected void dispatch_command(final GDCommands command, final String[] argv, final int pid) {
         int argc = argv.length;
         switch (command) {
-        case COPY:
+        case MODEL_ACTION_COPY:
             copyToClipboard();
             break;
 
-        case CUT:
+        case MODEL_ACTION_CUT:
             cutToClipboard();
             break;
 
-        case PASTE:
+        case MODEL_ACTION_PASTE:
             pasteClipboard();
-            break;
-
-        case CLEAR_CLIPBOARD:
-            clearClipboard();
             break;
 
         case HIDE_UNASSOCIATED: {
@@ -208,8 +204,8 @@ public class LGMGraphDocument extends GraphDocument {
         int pid = TransactionManager.STANDARD_PID;
         try {
             start_transaction(pid);
-            addRedoCommand(GDCommands.PASTE + " ", pid);
-            addUndoCommand(GDCommands.DELETE + " ", pid);
+            addRedoCommand(GDCommands.MODEL_ACTION_PASTE + " ", pid);
+            addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", pid);
             deselectAll(true);
             getCollection().loadClipboard(file);
         } catch (Exception e) {
@@ -232,7 +228,7 @@ public class LGMGraphDocument extends GraphDocument {
     public synchronized void pasteInputStream(final InputStream istream) {
         int pid = TransactionManager.STANDARD_PID;
         start_transaction(pid);
-        addUndoCommand(GDCommands.DELETE + " ", pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", pid);
         deselectAll(true);
         try {
             getCollection().loadFile(istream);

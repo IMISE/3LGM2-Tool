@@ -44,7 +44,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FA
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.DELETE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
@@ -56,7 +55,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_HALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_ELEMENT_FROM_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
@@ -685,7 +685,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             addLayoutUndoCommands(ec, pid);
             ModelElement me = ec.getElement();
-            ecDoc.addRedoCommand(REMOVE_ELEMENT_FROM_SZENARIO + " " + ecDoc.hashString + " " + me.getHashString(), pid);
+            ecDoc.addRedoCommand(MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + ecDoc.hashString + " " + me.getHashString(), pid);
             me.removeContainer(ecDoc);
             ecDoc.layer[layerFor(me.getClass())].remove(ec);
         }
@@ -865,7 +865,6 @@ public final class GDCollection extends UserFieldTarget {
                 ModelElement ke = edge.getEnd();
                 //bei inkonsistenten Kanten nicht loggen
                 if (ks != null && ke != null) {
-                    //alle Kanten sind Doppelkanten, deswegen hier keine Prüfung
                     String edgeClassName = edge.getClass().getName();
                     String edgeHash = edge.getHashString();
                     String startHash = ks.getHashString();
@@ -876,16 +875,16 @@ public final class GDCollection extends UserFieldTarget {
                     switch (direction) {
                     case FORWARD:
                         doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
-                        doc.addRedoCommand(DELETE + " " + edgeHash, pid);
+                        doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     case BACKWARD:
                         doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
-                        doc.addRedoCommand(DELETE + " " + edgeHash, pid);
+                        doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     case DOUBLE:
                         doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
                         doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
-                        doc.addRedoCommand(DELETE + " " + edgeHash, pid);
+                        doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     }
                     ks.removeEdge(edge);
@@ -911,7 +910,7 @@ public final class GDCollection extends UserFieldTarget {
             String meHash = me.getHashString();
             doc.addUndoCommand(CREATE_KNOT + " " + meClass.getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + meHash, pid);
             if (!dependentDeletedElements.contains(me)) {
-                doc.addRedoCommand(DELETE + " " + meHash, pid);
+                doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + meHash, pid);
             }
             //den Container des zu löschenden Elementes im Hauptmodell holen
             doc.layer[layerFor(meClass)].remove(me.getContainer(doc));
@@ -952,7 +951,7 @@ public final class GDCollection extends UserFieldTarget {
         szen.getLayer(layerIndex).remove(bendpointContainer);
         //den Knickpunkt im Hauptmodell löschen
         doc.getLayer(layerIndex).remove(bendpoint.getContainer(doc));
-        szen.addRedoCommand(DELETE + " " + bendpoint.getHashString(), pid);
+        szen.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + bendpoint.getHashString(), pid);
         szen.addUndoCommand(INSERT_BENDING_POINT + " " + szen.getHashString() + " " + edgeC.getHashString() + " " + bendpointContainer.getHashString() + " " + bendpointContainer.getX() + " " + bendpointContainer.getY() + " " + oldIndex, pid);
         szen.finish_transaction(pid);
         LayerContainer lc = doc.layer[bendpoint.layerFor()];
@@ -1008,7 +1007,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
         szen.addRedoCommand(INSERT_BENDING_POINT + " " + szenHashString + " " + edgeContainer.getHashString() + " " + bendpoint.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
-        szen.addUndoCommand(DELETE + " " + bendpoint.getHashString(), pid);
+        szen.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + bendpoint.getHashString(), pid);
         // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Edge)
         int layerNumber = edgeContainer.getElement().layerFor();
         if (szen.getLayer(layerNumber).add(bendpointContainer) == null) {
@@ -1071,7 +1070,7 @@ public final class GDCollection extends UserFieldTarget {
         if (nc.getColor() != null) {
             doc.addRedoCommand(CHANGE_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
         }
-        doc.addUndoCommand(DELETE + " " + me.getHashString(), pid);
+        doc.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + me.getHashString(), pid);
         // den Layer bestimmen auf dem das Element eingefügt werden soll
         int layerNumber = me.layerFor();
         LayerContainer lc = doc.getLayer(layerNumber);

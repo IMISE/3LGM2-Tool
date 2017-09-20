@@ -186,7 +186,11 @@ public abstract class StaticActionNew extends ExtendedAction {
         super(text == null ? identifier.toString() : text);
         putValue(IDENTIFIER_KEY, identifier);
 
-        String command = identifier.toString();
+        //GDCommands überschreiben die toString() so, dass sie ordinal()
+        //zurück liefern (damit die UNDO-REDO-Commands nicht so lang werden).
+        //Deshalb muss man hier explizit die name()-Methode abfragen.
+        String command = identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+
         if (!Strings.isNullOrEmpty(arguments)) {
             putValue(ARGUMENT_KEY, arguments);
             setActionCommand(command + " " + arguments);
@@ -196,7 +200,7 @@ public abstract class StaticActionNew extends ExtendedAction {
 
         setSelected(initialSelectionState);
 
-        //Text auf RessourcenString legen, wenn keiner übergeben wurde udn eine Ressource existiert (wenn keine da ist blebts bei dem, was in der
+        //Text auf RessourcenString lesen, wenn keiner übergeben wurde und eine Ressource existiert (wenn keine da ist, bleibts bei dem, was in der
         //ersten Zeile gesetzt wurde)
         if (text == null) {
             try {
@@ -235,7 +239,7 @@ public abstract class StaticActionNew extends ExtendedAction {
     }
 
     @Override
-    public void actionPerformed(final ActionEvent e) {
+    public final void actionPerformed(final ActionEvent e) {
         if (!isEnabled()) {
             return;
         }
@@ -244,6 +248,12 @@ public abstract class StaticActionNew extends ExtendedAction {
             Object arguments = getValue(ARGUMENT_KEY);
             Static.getSelectedDoc().exec(identifier.toString() + (arguments != null ? " " + arguments : ""), TransactionManager.STANDARD_PID);
         }
+        actionPerformed();
+    }
+
+    public void actionPerformed() {
+        //diese Funktion können Unterklassen überschreiben und müssen das enabled nie wieder testen.
+        //Da bei all diesen Action die ActionEvent-Souce egal ist, wird das Event auch nicht durchgereicht
     }
 
 }

@@ -17,8 +17,6 @@ public enum GDCommands {
 
     SET_VISIBLE,
 
-    DELETE,
-
     SET_NAME,
     //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
     CHANGE_FORM,
@@ -95,8 +93,9 @@ public enum GDCommands {
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
     SHOW_SZENARIO,
-    REMOVE_ELEMENT_FROM_SZENARIO,
-    REMOVE_ELEMENT,
+    MODEL_ACTION_DELETE,
+    MODEL_ACTION_DELETE_FROM_SUBMODEL,
+    MODEL_ACTION_DELETE_FROM_MODEL,
 
     JOIN_SELECTED,
 
@@ -108,10 +107,9 @@ public enum GDCommands {
     SELECT_LINKED_SZENARIO,
 
     //Die Kommandos ab hier werden in LGMGraphDocument ausgewertet
-    COPY,
-    CUT,
-    PASTE,
-    CLEAR_CLIPBOARD,
+    MODEL_ACTION_COPY,
+    MODEL_ACTION_CUT,
+    MODEL_ACTION_PASTE,
 
     SHOW_ALL_CONFIGS,
     HIDE_ALL_CONFIGS,

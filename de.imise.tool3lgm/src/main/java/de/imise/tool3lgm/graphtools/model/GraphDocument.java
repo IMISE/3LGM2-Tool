@@ -570,7 +570,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         // Textfeld und Knickpunkt löschen
         if (isSelectedOnlySubmodelElements()) {
-            dispatch_command(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, argv, pid);
+            dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, argv, pid);
         }
         // Elemente sind nicht aus einem Teilmodell sondern nur aus dem Gesamtmodell löschbar, wenn
         // - aktuelles Modell = Hauptdokument
@@ -586,11 +586,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 };
                 int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
-                    dispatch_command(GDCommands.DELETE, argv, pid);
+                    dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                 }
                 ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING.putValue(Action.SELECTED_KEY, !cb.isSelected());
             } else {
-                dispatch_command(GDCommands.DELETE, argv, pid);
+                dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
             }
         }
         // Auswahl in einem Teilmodell
@@ -602,9 +602,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             };
             int value = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("loeschfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
             if (value == JOptionPane.YES_OPTION) {
-                dispatch_command(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO, argv, pid);
+                dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, argv, pid);
             } else if (value == JOptionPane.NO_OPTION) {
-                dispatch_command(GDCommands.DELETE, argv, pid);
+                dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
             }
         }
     }
@@ -620,7 +620,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         int argc = argv.length;
         switch (command) {
 
-        case REMOVE_ELEMENT:
+        case MODEL_ACTION_DELETE:
             remove(argv, pid);
             break;
 
@@ -646,7 +646,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             createKnotenWithContainer(ModelConstants.getClassForName(classname), name, description, hashcode, pid);
             break;
 
-        case DELETE:
+        case MODEL_ACTION_DELETE_FROM_MODEL:
             switch (argc) {
             case 0:
                 gdcoll.deleteElements(getSelectedElements(), this, pid);
@@ -1245,7 +1245,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             linkElementsToNewSzenario(new ArrayList<>(selectedContainer), pid);
             break;
 
-        case REMOVE_ELEMENT_FROM_SZENARIO:
+        case MODEL_ACTION_DELETE_FROM_SUBMODEL:
             switch (argc) {
             case 0:
                 if (!(this instanceof Szenario)) {
@@ -4544,7 +4544,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         NodeContainer nc = (NodeContainer) szen.addContainerCopy(ec);
         if (nc != null) {
             if (nc != ec) {
-                szen.addUndoCommand(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO + " " + szenHash + " " + ec.getHashString(), pid);
+                szen.addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + szenHash + " " + ec.getHashString(), pid);
                 //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) Hash des Elementes
                 szen.addRedoCommand(GDCommands.ADD_ELEMENT_TO_SZENARIO + " " + ec.getGraphDocument().getHashString() + " " + szenHash + " " + ec.getHashString(), pid);
                 szen.createEdgeContainer(nc, ec.getGraphDocument(), true, pid);

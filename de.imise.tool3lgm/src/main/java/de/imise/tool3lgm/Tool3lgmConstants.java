@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DebugGraphics;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -21,6 +23,8 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
+import de.imise.tool3lgm.event.ActionLibrary;
+import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -54,24 +58,6 @@ public abstract class Tool3lgmConstants {
         LIC,
         XSL,
         CSV
-    }
-
-    /**
-     * Hilfsklasse zum Aufbau der {@link #KEYSTROKES}-<code>Map</code>
-     *
-     * @author fstephan
-     */
-    private static final class KeyStrokeMap extends HashMap<ActionIdentifier, KeyStroke> {
-
-        private static KeyStroke createKeyStroke(final int keyCode, final int modifiers) {
-            return KeyStroke.getKeyStroke(keyCode, modifiers);
-        }
-
-        public KeyStrokeMap(final Object... id_keyCode_modifiers) {
-            for (int i = 0; i < id_keyCode_modifiers.length; i += 3) {
-                put((ActionIdentifier) id_keyCode_modifiers[i], createKeyStroke((Integer) id_keyCode_modifiers[i + 1], (Integer) id_keyCode_modifiers[i + 2]));
-            }
-        }
     }
 
     /** String with the version-identifier for Tool3lgm */
@@ -187,13 +173,6 @@ public abstract class Tool3lgmConstants {
     /** Mappt von einem {@link FileFilterType} auf den dazugehörigen {@link FileNameExtensionFilter} */
     private static final HashMap<FileFilterType, FileNameExtensionFilter> FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER = new HashMap<>();
 
-    /** Map aller Global einsetzbarer {@link KeyStroke}s */
-    public static final Map<ActionIdentifier, KeyStroke> KEYSTROKES = new KeyStrokeMap(ActionIdentifier.ACTION_NEW_MODEL, KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_OPEN_MODEL, KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK,
-            ActionIdentifier.ACTION_SAVE_MODEL, KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.remove, KeyEvent.VK_DELETE, 0, ActionIdentifier.ACTION_REDO, KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_UNDO, KeyEvent.VK_Z,
-            KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.select_all, KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.copy, KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.cut, KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.paste,
-            KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_SEARCH, KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.repository, KeyEvent.VK_F7, 0, ActionIdentifier.analysis_editor, KeyEvent.VK_F9, 0, ActionIdentifier.reset_result,
-            KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
-
     // Ende FileFilter
 
     /**
@@ -252,6 +231,15 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
+
+    //Unbedingt erst nach dem Initialisieren der RessourcenBundles aufrufen, da diese beim Erzeugen der Actions in dieser Map gebraucht werden
+    /** Map aller Global einsetzbarer {@link KeyStroke}s */
+    public static final Map<Action, KeyStroke> KEYSTROKES = new KeyStrokeMap(FileActions.ACTION_NEW_MODEL, keyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.FileActions.ACTION_OPEN_MODEL, keyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK),
+            ActionLibrary.FileActions.ACTION_SAVE_MODEL, keyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.MODEL_ACTION_DELETE, keyStroke(KeyEvent.VK_DELETE, 0), ActionLibrary.EditActions.ACTION_REDO,
+            keyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.ACTION_UNDO, keyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.SELECT_ALL, keyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK),
+            ActionLibrary.EditActions.MODEL_ACTION_COPY, keyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.MODEL_ACTION_CUT, keyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.MODEL_ACTION_PASTE,
+            keyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.ACTION_SEARCH, keyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, keyStroke(KeyEvent.VK_F7, 0),
+            ActionLibrary.AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, keyStroke(KeyEvent.VK_F9, 0), ActionLibrary.AnalysisActions.ACTION_ANALYSIS_RESET_RESULT, keyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK));
 
     /**
      * Liefert den command-<code>String</code> für das {@link KeyEvent}, das durch die durch <code>key</code> identifizierte {@link StaticAction}
@@ -513,6 +501,10 @@ public abstract class Tool3lgmConstants {
         return KEYSTROKES.get(key);
     }
 
+    private static KeyStroke keyStroke(final int keyCode, final int modifiers) {
+        return KeyStroke.getKeyStroke(keyCode, modifiers);
+    }
+
     /**
      * wenn die Sanduhr abgelaufen ist...
      *
@@ -630,6 +622,26 @@ public abstract class Tool3lgmConstants {
         }
         if (BUFFERED) {
             debugGraphicsOption |= DebugGraphics.BUFFERED_OPTION;
+        }
+    }
+
+    /**
+     * Hilfsklasse zum Aufbau der {@link #KEYSTROKES}-<code>Map</code>
+     *
+     * @author fstephan
+     */
+    private static final class KeyStrokeMap extends HashMap<Action, KeyStroke> {
+        /**
+         * @param id_keyCode_modifiers
+         */
+        public KeyStrokeMap(final Object... id_keyCode_modifiers) {
+            for (int i = 0; i < id_keyCode_modifiers.length; i += 2) {
+                Action action = (Action) id_keyCode_modifiers[i];
+                KeyStroke keyStroke = (KeyStroke) id_keyCode_modifiers[i + 1];
+                put(action, keyStroke);
+                //den KeyStroke auch in der Action registrieren, so dass er in Menüs usw. angezeigt wird
+                action.putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
+            }
         }
     }
 

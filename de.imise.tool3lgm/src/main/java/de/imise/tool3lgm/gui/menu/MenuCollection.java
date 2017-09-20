@@ -4,12 +4,14 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
+import static de.imise.util.swing.menu.MenuCreator.createCheckBoxItem;
+import static de.imise.util.swing.menu.MenuCreator.createCheckBoxItems;
+import static de.imise.util.swing.menu.MenuCreator.createMenu;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
@@ -59,13 +61,12 @@ public class MenuCollection {
     public static final JMenu FILE_MENU = new FileMenu();
 
     /** Das Bearbeiten-Menu */
-    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.COPY,
-            EditActions.CUT, EditActions.PASTE, EditActions.CLEAR_CLIPBOARD, new JSeparator(), EditActions.REMOVE_FROM_SUBMODEL, EditActions.REMOVE_FROM_MODEL);
+    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(),
+            EditActions.MODEL_ACTION_COPY, EditActions.MODEL_ACTION_CUT, EditActions.MODEL_ACTION_PASTE, new JSeparator(), EditActions.MODEL_ACTION_DELETE_FROM_SUBMODEL, EditActions.MODEL_ACTION_REMOVE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = MenuCreator.createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, MenuCreator.createCheckBoxMenuItem(ViewActions.SWITCH_SHOW_BROWSER), new JSeparator(),
-            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, new JSeparator(),
-            ViewActions.OPEN_MATRIX);
+    public static final JMenu VIEW_MENU = createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, createCheckBoxItem(ViewActions.SWITCH_SHOW_BROWSER), new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
+            ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, new JSeparator(), ViewActions.OPEN_MATRIX);
 
     /** Das Einfügen-Menu */
     public static final JMenu INSERT_MENU = new InsertMenu();
@@ -77,8 +78,8 @@ public class MenuCollection {
     public static final JMenu SUBMODEL_MENU = createMenu(getResString("submodels"), SubmodelActions.NEW, SubmodelActions.REMOVE, new JSeparator(), SubmodelActions.RENAME);
 
     /** Das XMLAnalyse-Menu */
-    public static final JMenu ANALYSIS_MENU = createMenu(getResString("analysis"), AnalysisActions.OPEN_REPOSITORY, AnalysisActions.OPEN_EDITOR, AnalysisActions.RESET_RESULT, createCheckBoxItem(Analysis.NEW_SUBMODEL), new JSeparator(),
-            AnalysisActions.ACTIVATE_REDUNDANCY_ANALYSIS, AnalysisActions.ACTIVATE_DATA_AVAILABILITY, createCheckBoxItems(Analysis.SIMPLE_REDUNDANCIES));
+    public static final JMenu ANALYSIS_MENU = createMenu(getResString("analysis"), AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
+            createCheckBoxItem(Analysis.NEW_SUBMODEL), new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, AnalysisActions.ACTION_ANALYSIS_DATA_AVAILABILITY, createCheckBoxItems(Analysis.SIMPLE_REDUNDANCIES));
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu(getResString("options"), OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS,
@@ -86,32 +87,13 @@ public class MenuCollection {
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu(getResString("extras"), ExtrasActions.USERFIELD_DEFINITION_DIALOG, ExtrasActions.ATTRIBUTE_EDITOR, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION), new JSeparator(),
-            ExtrasActions.AUTOMATIC_ETMT_ASSIGNMENT, new JSeparator(), createCheckBoxItem(AnalysisActions.ACTIVATE_CONSISTENCY_CHECK), ExtrasSubMenus.PLUGIN_MENU);
+            ExtrasActions.AUTOMATIC_ETMT_ASSIGNMENT, new JSeparator(), createCheckBoxItem(AnalysisActions.OPTION_CHECK_CONSISTENCY), ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();
 
     /** Das Hilfe-Menu */
     public static final JMenu HELP_MENU = new HelpMenu();
-
-    /** Erzeugt {@link JMenu} mit spezifizierten Titel und Einträgen */
-    private static JMenu createMenu(final String title, final Object... entries) {
-        return MenuCreator.createMenu(title, entries, true);
-    }
-
-    /** Erzeugt ein {@link JCheckBoxMenuItem} mit der übergebenen {@link Action} */
-    private static JCheckBoxMenuItem createCheckBoxItem(final Action a) {
-        return MenuCreator.createCheckBoxMenuItem(a);
-    }
-
-    /** Erzeugt ein {@link JCheckBoxMenuItem} mit der übergebenen {@link Action} */
-    private static JCheckBoxMenuItem[] createCheckBoxItems(final Action... actions) {
-        JCheckBoxMenuItem[] items = new JCheckBoxMenuItem[actions.length];
-        for (int i = 0; i < items.length; i++) {
-            items[i] = createCheckBoxItem(actions[i]);
-        }
-        return items;
-    }
 
     /** Sammlung der Unter-Menus des Datei-Menus */
     static class FileSubMenus {

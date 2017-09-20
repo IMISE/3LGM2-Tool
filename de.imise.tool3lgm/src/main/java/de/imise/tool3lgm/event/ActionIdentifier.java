@@ -41,15 +41,7 @@ public enum ActionIdentifier {
     ACTION_UNDO,
     ACTION_REDO,
     ACTION_SEARCH,
-    select_all,
-    copy,
-    cut,
-    paste,
-    clear_clipboard,
-    MODEL_ACTION_REMOVE_CHILDS,
-    remove_from_submodel,
-    remove_from_model,
-    remove,
+    ACTION_SELECT_ALL,
 
     // view
     // toolbar
@@ -125,12 +117,12 @@ public enum ActionIdentifier {
     rename_submodel,
 
     // analysis
-    repository,
-    analysis_editor,
-    reset_result,
-    redundancy_analysis,
-    data_availability,
-    consistency_check,
+    ACTION_ANALYSIS_OPEN_REPOSITORY,
+    ACTION_ANALYSIS_OPEN_EDITOR,
+    ACTION_ANALYSIS_RESET_RESULT,
+    ACTION_ANALYSIS_REDUNDANCY,
+    ACTION_ANALYSIS_DATA_AVAILABILITY,
+    OPTION_CHECK_CONSISTENCY,
     create_submodel,
     SIMPLE_REDUNDNANCY_ANALYSIS,
 

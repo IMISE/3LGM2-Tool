@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
  * die Anwendung bei {@link JCheckBoxMenuItem}s bzw. {@link JRadioButtonMenuItem}s zu setzen.<br>
  * Der Zugriff auf diese Attribute wird durch die Schlüssel {@link StaticAction#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
  * {@link Action#SELECTED_KEY} über {@link #getValue(String)} ermöglicht.
- * 
+ *
  * @see ActionIdentifier
  * @see AbstractLGMAction
  * @author fstephan
@@ -33,7 +33,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * Konstruktor
      * <p>
      * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      */
     public StaticAction(final ActionIdentifier identifier) {
@@ -46,7 +46,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      * <p>
      * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param enabledWhenSelectedDocNotNull <br>
      *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein
@@ -66,7 +66,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * <p>
      * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
      * {@link JRadioButtonMenuItem}s genutzt werden.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param enabledWhenSelectedDocNotNull <br>
      *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein
@@ -85,7 +85,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * <p>
      * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
      * {@link JRadioButtonMenuItem}s genutzt werden.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param initialSelectionState initialer Selektionszustand
      */
@@ -97,7 +97,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * Konstruktor
      * <p>
      * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param textSuffix Suffix für die Text-Property
      */
@@ -111,7 +111,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      * <p>
      * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param textSuffix Suffix für die Text-Property
      * @param enabledWhenSelectedDocNotNull <br>
@@ -132,7 +132,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * <p>
      * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
      * {@link JRadioButtonMenuItem}s genutzt werden.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param textSuffix Suffix für die Text-Property
      * @param enabledWhenSelectedDocNotNull <br>
@@ -160,7 +160,7 @@ public abstract class StaticAction extends AbstractLGMAction {
      * <p>
      * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
      * {@link JRadioButtonMenuItem}s genutzt werden.
-     * 
+     *
      * @param identifier eindeutiger Identifier für diese Action
      * @param textSuffix Suffix für die Text-Property
      * @param initialSelectionState initialer Selektionszustand
@@ -171,7 +171,7 @@ public abstract class StaticAction extends AbstractLGMAction {
 
     /**
      * (De-)Aktiviert das Überwachen des selektierten {@link GraphDocument}s.
-     * 
+     *
      * @see {@link #enabledWhenSelectedDocNotNull}
      */
     public void checkDoc(final boolean enabledWhenSelectedDocNotNull) {

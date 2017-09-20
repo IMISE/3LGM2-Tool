@@ -6,7 +6,6 @@ import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilters;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
@@ -44,7 +43,9 @@ import de.imise.tool3lgm.event.LayoutAction.LayerLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
+import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
+import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
@@ -67,7 +68,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -117,7 +117,7 @@ public class ActionLibrary {
         /** Öffnen eines neuen Models */
         public static final Action ACTION_NEW_MODEL = new StaticActionNew(ActionIdentifier.ACTION_NEW_MODEL) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 getTool().openFile(false);
             }
         };
@@ -125,7 +125,7 @@ public class ActionLibrary {
         /** Öffnen eines bestehenden Models */
         public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 getTool().openFile(true);
             }
         };
@@ -133,10 +133,7 @@ public class ActionLibrary {
         /** Speichern des Models an bekannter Stelle */
         public static final Action ACTION_SAVE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(false)) {
                     JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
@@ -147,10 +144,7 @@ public class ActionLibrary {
         /** Speichern des Models an neuer Stelle */
         public static final Action ACTION_SAVE_MODEL_AS = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(true)) {
                     JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
@@ -161,22 +155,15 @@ public class ActionLibrary {
         /** Schließen des Models */
         public static final Action ACTION_CLOSE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_CLOSE_MODEL) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getTool().fileClose();
             }
         };
 
         /** Zeigt die Beschreibung des Tools an */
         public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, true) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedGDCollection().showDescriptionFrame(true);
             }
         };
@@ -190,12 +177,8 @@ public class ActionLibrary {
 
             /** Öffnet einen Dialog zum Import von Teilmodellen */
             public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, true) {
-
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
                     oeffnenDialog.setMultiSelectionEnabled(false);
                     oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
@@ -210,10 +193,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Import von Modellen */
             public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, true) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
                     oeffnenDialog.setMultiSelectionEnabled(false);
                     oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
@@ -228,10 +208,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
             public static final Action ACTION_IMPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_DATA, true) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     new DataImportModule(getSelectedGDCollection());
                 }
             };
@@ -248,7 +225,7 @@ public class ActionLibrary {
             public static final Action ACTION_EXPORT_GRAPHIC = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHIC, true) {
 
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void actionPerformed() {
                     AbstractInternalFrame selframe = Static.getActiveFrame();
                     if (selframe instanceof ToolInternalFrame) {
                         InputGraphArea iga = ((ToolInternalFrame) selframe).getInputGraphArea();
@@ -276,10 +253,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
             public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, true) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     // der Dialog zeigt sich im Konstuktor selbst an
                     new XMLExportDialog(getTool(), getSelectedGDCollection());
                 }
@@ -287,36 +261,24 @@ public class ActionLibrary {
 
             /** Öffnet einen Dialog zum Export eines Teilmodells */
             public static final Action ACTION_EXPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_SUBMODEL, true) {
-
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     SzenarioDialog.showExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
 
             /** Öffnet einen Dialog zum Export des gesamten Models als HTML-Site */
             public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, true) {
-
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     WebExportDialog.showWebExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
 
             /** Öffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
             public static final Action ACTION_EXPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_DATA, true) {
-
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     DataExportModule.exportData(getSelectedDoc());
                 }
             };
@@ -329,7 +291,7 @@ public class ActionLibrary {
         /** Beenden des Programms */
         public static final Action ACTION_EXIT = new StaticActionNew(ActionIdentifier.ACTION_EXIT) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 tool3lgm.windowClosing(new WindowEvent(tool3lgm, WindowEvent.WINDOW_CLOSING));
             }
@@ -344,68 +306,50 @@ public class ActionLibrary {
     public static class AnalysisActions {
 
         /** Zeigt das XMLAnalyse-Repository an */
-        public static final Action OPEN_REPOSITORY = new StaticAction(ActionIdentifier.repository, PPP) {
-
+        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 AnalyseRepositoryFrame.showDialog();
             }
         };
 
         /** Öffnet den XMLAnalyse-Editor */
-        public static final Action OPEN_EDITOR = new StaticAction(ActionIdentifier.analysis_editor, PPP) {
-
+        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 AnalyseEditor.showDialog(getTool());
             }
         };
 
         /** Setzt alle XMLAnalyse-Ergebnisse zurück */
-        public static final Action RESET_RESULT = new StaticAction(ActionIdentifier.reset_result, true) {
-
+        public static final Action ACTION_ANALYSIS_RESET_RESULT = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_RESET_RESULT) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedDoc().clearAnalysisResult();
             }
         };
 
         /** Aktiviert die Redundanz-XMLAnalyse */
-        public static final Action ACTIVATE_REDUNDANCY_ANALYSIS = new StaticAction(ActionIdentifier.redundancy_analysis, PPP, true) {
-
+        public static final Action ACTION_ANALYSIS_REDUNDANCY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_REDUNDANCY, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                RedundancyAnalysis.getReport(getSelectedCollection());
+            public void actionPerformed() {
+                RedundancyAnalysis.getReport(getSelectedGDCollection());
             }
         };
 
         /** TODO:AXS,FST: Wirft schon seit ToolMenu eine Exception */
-        public static final Action ACTIVATE_DATA_AVAILABILITY = new StaticAction(ActionIdentifier.data_availability, PPP, true) {
-
+        public static final Action ACTION_ANALYSIS_DATA_AVAILABILITY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_DATA_AVAILABILITY, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder
                 new DataAvailabilityFinder(getSelectedDoc());
             }
         };
 
         /** Aktiviert die Konsistenz-Prüfung */
-        public static final Action ACTIVATE_CONSISTENCY_CHECK = new StaticAction(ActionIdentifier.consistency_check, false, UserProperties.isCheckConsistency()) {
-
+        public static final ExtendedAction OPTION_CHECK_CONSISTENCY = new StaticActionNew(ActionIdentifier.OPTION_CHECK_CONSISTENCY, false, UserProperties.isCheckConsistency()) {
             @Override
-            public final void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public final void actionPerformed() {
                 boolean isSelected = isSelected();
                 if (!isSelected) {
                     ConsistencyChecker checker = getTool().getConsistencyChecker();
@@ -758,10 +702,7 @@ public class ActionLibrary {
         /** Macht letzte Änderung rückgängig */
         public static final Action ACTION_UNDO = new GraphDocumentAction(ActionIdentifier.ACTION_UNDO, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedDoc().undo();
             }
 
@@ -773,12 +714,8 @@ public class ActionLibrary {
 
         /** Macht letztes UNDO rückgängig */
         public static final Action ACTION_REDO = new GraphDocumentAction(ActionIdentifier.ACTION_REDO, true) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedDoc().redo();
             }
 
@@ -791,302 +728,204 @@ public class ActionLibrary {
         /** Öffnet ein Suchen-Fenster */
         public static final Action ACTION_SEARCH = new GraphDocumentAction(ActionIdentifier.ACTION_SEARCH, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 SearchDialog sd = new SearchDialog(Static.getTool());
                 sd.showDialog();
             }
         };
 
         /** Kopiert die aktuelle Selektion in die Zwischenablage */
-        public static final StaticAction COPY = new StaticAction(ActionIdentifier.copy, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.COPY);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && getSelectedDoc().isSelection();
-            }
-        };
+        public static final Action MODEL_ACTION_COPY = new SelectionAction(GDCommands.MODEL_ACTION_COPY);
 
         /** Schneidet die die aktuelle Selektion aus und kopiert sie in die Zwischenablage */
-        public static final StaticAction CUT = new StaticAction(ActionIdentifier.cut, true) {
+        public static final Action MODEL_ACTION_CUT = new SelectionAction(GDCommands.MODEL_ACTION_CUT);
 
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.CUT);
-            }
+        /** Fügt den Inhalt der Zwischenablage ein */
+        public static final Action MODEL_ACTION_PASTE = new SelectionAction(GDCommands.MODEL_ACTION_PASTE);
 
+        //        ACTION_REMOVE_CHILDS,
+        //
+        //        /**
+        //         * Löscht die Kindelemente der aktuell selektierten Elemente und hängt alle Eigenschaften
+        //         * der Kinder an das Oberelement
+        //         */
+        //        public static final Action MODEL_ACTION_REMOVE_CHILDS = new SelectionAction(ActionIdentifier.MODEL_ACTION_REMOVE_CHILDS) {
+        //
+        //            @Override
+        //            public void actionPerformed(final ActionEvent e) {
+        //                if (!isEnabled()) {
+        //                    return;
+        //                }
+        //                GraphDocument doc = getSelectedDoc();
+        //                doc.start_transaction(TransactionManager.STANDARD_PID);
+        //                List<ModelElement> selectedElements = doc.getSelectedElements();
+        //                for (int i = 0; i < selectedElements.size(); i++) {
+        //                    removeChilds(selectedElements.get(i), doc);
+        //                }
+        //                doc.finish_transaction(TransactionManager.STANDARD_PID);
+        //                doc.distributeEvent(GraphDocument.DATA_CHANGED);
+        //            }
+        //
+        //            @Override
+        //            public boolean isEnabled() {
+        //                if (!super.isEnabled()) {
+        //                    return false;
+        //                }
+        //                GraphDocument doc = getSelectedDoc();
+        //                return doc.isSingleSelection() && doc.getSelectedElements().get(0).hasPart();
+        //            }
+        //
+        //            /**
+        //             * Gibt eine Liste aller Elemente zurück, die dupliziert werden müssten, um die
+        //             * Konsistenz zu erhalten, wenn ein anderes Element die gleichen Verbindungen bekommen
+        //             * sollte wie das übergebene.
+        //             *
+        //             * @param elementsList Liste aller Elemente, die dupliziert werden sollen
+        //             * @param sourceIndex Index des Elementes, dessen Verbindungen darauf geprüft werden
+        //             *            sollen, ob die verbundenen Elemente dupliziert werden müssten, wenn es
+        //             *            selbst dupliziert werden würde / private void
+        //             *            fillElements2Duplicate(ArrayList<ModelElement> elementsList, int
+        //             *            sourceIndex) { ModelElement me = elementsList.get(sourceIndex); for (Edge
+        //             *            edge : me.getEdges()) { boolean meIsEdgeStart = edge.isStart(me);
+        //             *            ModelElement connected = meIsEdgeStart ? edge.getEnd() : edge.getStart();
+        //             *            //Mit wievielen Elementen von der Art des parts darf das umzuhängende
+        //             *            Element maximal verbunden sein? int maxConnectedToOtherCardinality =
+        //             *            meIsEdgeStart ? edge.getMaxBackwardCardinality() :
+        //             *            edge.getMaxForwardCardinality(); int actualConnectedToOtherCardinality
+        //             *            = meIsEdgeStart ? connected.countConnectionsToThis(edge.getClass()) :
+        //             *            connected.countConnectionsFromThis(edge.getClass()); //das verbundene
+        //             *            Element darf nicht mit einem weiteren Element verbunden if
+        //             *            (actualConnectedToOtherCardinality >= actualConnectedToOtherCardinality) {
+        //             *            } } } /** Dupliziert das übergebene Element und alle seine Verbindungen
+        //             *            außer die übergebene Edge. Wenn verbundene Elemente bereits mit der
+        //             *            maximalen Anzahl der
+        //             * @param me
+        //             * @param exceptionalEdge
+        //             * @param alreadyDuplicated Menge aller Elemente, die nicht dupliziert werden sollen, da
+        //             *            sie bereits dupliziert wurde. Damit kann man verhindern, dass Elemente im
+        //             *            Kreis dupliziert werden / public void duplicate(ModelElement me, Edge
+        //             *            exceptionalEdge, HashSet<ModelElement> alreadyDuplicated) { } /**
+        //             * @param gdcoll
+        //             * @param oldEdge
+        //             * @param start
+        //             * @param end
+        //             * @return
+        //             */
+        //            private Edge link(final GDCollection gdcoll, final Edge oldEdge, final ModelElement start, final ModelElement end) {
+        //                return gdcoll.link(oldEdge.getClass().getSimpleName(), GDCommands.INVALID_HASH_STRING, start, end, GDCommands.INVALID_EDGE_INDEX, GDCommands.INVALID_EDGE_INDEX, false, TransactionManager.STANDARD_PID);
+        //            }
+        //
+        //            /*
+        //             * private void removeChilds(ModelElement me, GraphDocument doc) { GDCollection gdcoll =
+        //             * doc.getCollection(); ArrayList<ModelElement> parts = me.getPartElements(false); while
+        //             * (parts.size() > 0) { ModelElement part = parts.get(0); ArrayList<ModelElement>
+        //             * partsParents = part.getDirectParentElements(); for (int i = 0; i <
+        //             * partsParents.size(); i++) { //in partsParents nur die Parents lassen, an die alle
+        //             * Verbindungen //des Parts umgehängt oder dupliziert werden muss (allen die auch
+        //             * //gleichzeitig Part von me sind braucht man die Informationen //ihrer Kinder nicht
+        //             * unterzuhängen, da sie ja auch weggelassen werden) if
+        //             * (parts.contains(partsParents.get(i))) partsParents.remove(i--); } //sicher ist sicher
+        //             * -> Kopie anlegen, falls durch irgendwelche Seiteneffekte sich die Kantenliste nochmal
+        //             * ändert ArrayList<Edge> partEdges = new ArrayList<Edge>(part.getEdges()); for (int i
+        //             * = 0; i < partEdges.size(); i++) { edge = (partEdges.get(i);
+        //             * //Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
+        //             * Eigenschaften des Teilelementes //Bekommen soll, werden nicht umgehängt (eigentlich
+        //             * kann das nur die Teil-Von-Edge selbst sein, aber in //neuen Metamodellen wäre auch
+        //             * etwas anderes denkbar) if (edge instanceof PartOfBeziehung) continue; //Mit wievielen
+        //             * Elementen von der Art des parts darf das umzuhängende Element maximal verbunden sein?
+        //             * int maxConnectedToPartCardinality = edge.isStartClass(part.getClass()) ?
+        //             * edge.getMaxBackwardCardinality() : edge.getMaxForwardCardinality(); for (int j =
+        //             * partsParents.size() - 1; j > 0; j--) { ModelElement parent = partsParents.get(j);
+        //             * //falls mehr Parents vorhanden sind, als mit dem umzuhängenden Element selbst
+        //             * verbunden //sein dürfen, muss das umzuhängende Element dupliziert werden if
+        //             * (maxConnectedToPartCardinality >= j) { ArrayList<ModelElement> elements2Duplicate =
+        //             * new ArrayList<ModelElement>(); //einfach umhängen } else { } } for (ModelElement
+        //             * parent : partsParents) { ModelElement start = edge.getStart() == part ? parent :
+        //             * edge.getStart(); ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
+        //             * int minElemCardinality = edge.isStartClass(start.getClass()) ?
+        //             * edge.getMinForwardCardinality() : edge.getMinBackwardCardinality(); if
+        //             * (minElemCardinality > 0) continue; int dir = edge.getDirection(); String edgeName =
+        //             * edge.getName(); String edgeDescrip = edge.getDescription(); Edge newEdge = null; if
+        //             * (dir == FORWARD) { newEdge = link(gdcoll, edge, start, end); } else if
+        //             * (dir == BACKWARD) { newEdge = link(gdcoll, edge, end, start); } else if
+        //             * (dir == DOUBLE) { newEdge = link(gdcoll, edge, start, end); link(gdcoll,
+        //             * edge, end, start); } doc.setName(newEdge, edgeName, TransactionManager.STANDARD_PID);
+        //             * doc.setDescription(newEdge.getHashString(), edgeDescrip,
+        //             * TransactionManager.STANDARD_PID); } } gdcoll.deleteElement(part, doc,
+        //             * TransactionManager.STANDARD_PID); parts = me.getDirectPartElements(); } }
+        //             */
+        //            private void removeChilds(final ModelElement me, final GraphDocument doc) {
+        //                GDCollection gdcoll = doc.getCollection();
+        //                List<ModelElement> parts = me.getDirectPartElements();
+        //                while (parts.size() > 0) {
+        //                    ModelElement part = parts.get(0);
+        //                    removeChilds(part, doc);
+        //                    // sicher ist sicher -> Kopie anlegen, falls durch irgendwelche Seiteneffekte
+        //                    // sich die Kantenliste nochmal ändert
+        //                    for (Edge edge : part.getEdges()) {
+        //                        // Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
+        //                        // Eigenschaften des Teilelementes
+        //                        // Bekommen soll, werden nicht umgehängt (eigentlich kann das nur die
+        //                        // Teil-Von-Edge selbst sein, aber in
+        //                        // neuen Metamodellen wäre auch etwas anderes denkbar)
+        //                        if (edge instanceof PartOfBeziehung) {
+        //                            continue;
+        //                        }
+        //                        List<ModelElement> parentElements = part.getDirectParentElements();
+        //                        for (ModelElement parent : parentElements) {
+        //                            ModelElement start = edge.getStart() == part ? parent : edge.getStart();
+        //                            ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
+        //                            int minElemCardinality = edge.isStartClass(start.getClass()) ? edge.getMinForwardCardinality() : edge.getMinBackwardCardinality();
+        //                            if (minElemCardinality > 0) {
+        //                                continue;
+        //                            }
+        //                            int dir = edge.getDirection();
+        //                            String edgeName = edge.getName();
+        //                            String edgeDescrip = edge.getDescription();
+        //                            Edge newEdge = null;
+        //                            if (dir == FORWARD) {
+        //                                newEdge = link(gdcoll, edge, start, end);
+        //                                gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);
+        //                            } else if (dir == BACKWARD) {
+        //                                newEdge = link(gdcoll, edge, end, start);
+        //                                gdcoll.unlink(edge.getEnd(), edge.getStart(), edge.getClass(), TransactionManager.STANDARD_PID);
+        //                            } else if (dir == DOUBLE) {
+        //                                newEdge = link(gdcoll, edge, start, end);
+        //                                link(gdcoll, edge, end, start);
+        //                                gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);
+        //                                gdcoll.unlink(edge.getEnd(), edge.getStart(), edge.getClass(), TransactionManager.STANDARD_PID);
+        //                            }
+        //                            doc.setName(newEdge, edgeName, TransactionManager.STANDARD_PID);
+        //                            doc.setDescription(newEdge, edgeDescrip, TransactionManager.STANDARD_PID);
+        //                        }
+        //                    }
+        //                    gdcoll.deleteElement(part, doc, TransactionManager.STANDARD_PID);
+        //                    parts = me.getDirectPartElements();
+        //                }
+        //            }
+        //        };
+
+        /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
+        public static final Action MODEL_ACTION_DELETE_FROM_SUBMODEL = new SubmodelAction(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL) {
             @Override
             public boolean isEnabled() {
                 return super.isEnabled() && getSelectedDoc().isSelection();
-            }
-        };
-
-        /** Fügt den Inhalt der Zwischenablage ein */
-        public static final StaticAction PASTE = new StaticAction(ActionIdentifier.paste, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.PASTE);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && LGMGraphDocument.isClipboardAvailable();
-            }
-        };
-
-        /** Leert die Zwischenablage */
-        public static final StaticAction CLEAR_CLIPBOARD = new StaticAction(ActionIdentifier.clear_clipboard, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.CLEAR_CLIPBOARD);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && LGMGraphDocument.isClipboardAvailable();
-            }
-        };
-
-        /**
-         * Löscht die Kindelemente der aktuell selektierten Elemente und hängt alle Eigenschaften
-         * der Kinder an das Oberelement
-         */
-        public static final Action MODEL_ACTION_REMOVE_CHILDS = new StaticAction(ActionIdentifier.MODEL_ACTION_REMOVE_CHILDS, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                GraphDocument doc = getSelectedDoc();
-                doc.start_transaction(TransactionManager.STANDARD_PID);
-                List<ModelElement> selectedElements = doc.getSelectedElements();
-                for (int i = 0; i < selectedElements.size(); i++) {
-                    removeChilds(selectedElements.get(i), doc);
-                }
-                doc.finish_transaction(TransactionManager.STANDARD_PID);
-                doc.distributeEvent(GraphDocument.DATA_CHANGED);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                GraphDocument doc = getSelectedDoc();
-                return super.isEnabled() && doc.isSingleSelection() && doc.getSelectedElements().get(0).hasPart();
-            }
-
-            /**
-             * Gibt eine Liste aller Elemente zurück, die dupliziert werden müssten, um die
-             * Konsistenz zu erhalten, wenn ein anderes Element die gleichen Verbindungen bekommen
-             * sollte wie das übergebene.
-             *
-             * @param elementsList Liste aller Elemente, die dupliziert werden sollen
-             * @param sourceIndex Index des Elementes, dessen Verbindungen darauf geprüft werden
-             *            sollen, ob die verbundenen Elemente dupliziert werden müssten, wenn es
-             *            selbst dupliziert werden würde / private void
-             *            fillElements2Duplicate(ArrayList<ModelElement> elementsList, int
-             *            sourceIndex) { ModelElement me = elementsList.get(sourceIndex); for (Edge
-             *            edge : me.getEdges()) { boolean meIsEdgeStart = edge.isStart(me);
-             *            ModelElement connected = meIsEdgeStart ? edge.getEnd() : edge.getStart();
-             *            //Mit wievielen Elementen von der Art des parts darf das umzuhängende
-             *            Element maximal verbunden sein? int maxConnectedToOtherCardinality =
-             *            meIsEdgeStart ? edge.getMaxBackwardCardinality() :
-             *            edge.getMaxForwardCardinality(); int actualConnectedToOtherCardinality
-             *            = meIsEdgeStart ? connected.countConnectionsToThis(edge.getClass()) :
-             *            connected.countConnectionsFromThis(edge.getClass()); //das verbundene
-             *            Element darf nicht mit einem weiteren Element verbunden if
-             *            (actualConnectedToOtherCardinality >= actualConnectedToOtherCardinality) {
-             *            } } } /** Dupliziert das übergebene Element und alle seine Verbindungen
-             *            außer die übergebene Edge. Wenn verbundene Elemente bereits mit der
-             *            maximalen Anzahl der
-             * @param me
-             * @param exceptionalEdge
-             * @param alreadyDuplicated Menge aller Elemente, die nicht dupliziert werden sollen, da
-             *            sie bereits dupliziert wurde. Damit kann man verhindern, dass Elemente im
-             *            Kreis dupliziert werden / public void duplicate(ModelElement me, Edge
-             *            exceptionalEdge, HashSet<ModelElement> alreadyDuplicated) { } /**
-             * @param gdcoll
-             * @param oldEdge
-             * @param start
-             * @param end
-             * @return
-             */
-            private Edge link(final GDCollection gdcoll, final Edge oldEdge, final ModelElement start, final ModelElement end) {
-                return gdcoll.link(oldEdge.getClass().getSimpleName(), GDCommands.INVALID_HASH_STRING, start, end, GDCommands.INVALID_EDGE_INDEX, GDCommands.INVALID_EDGE_INDEX, false, TransactionManager.STANDARD_PID);
-            }
-
-            /*
-             * private void removeChilds(ModelElement me, GraphDocument doc) { GDCollection gdcoll =
-             * doc.getCollection(); ArrayList<ModelElement> parts = me.getPartElements(false); while
-             * (parts.size() > 0) { ModelElement part = parts.get(0); ArrayList<ModelElement>
-             * partsParents = part.getDirectParentElements(); for (int i = 0; i <
-             * partsParents.size(); i++) { //in partsParents nur die Parents lassen, an die alle
-             * Verbindungen //des Parts umgehängt oder dupliziert werden muss (allen die auch
-             * //gleichzeitig Part von me sind braucht man die Informationen //ihrer Kinder nicht
-             * unterzuhängen, da sie ja auch weggelassen werden) if
-             * (parts.contains(partsParents.get(i))) partsParents.remove(i--); } //sicher ist sicher
-             * -> Kopie anlegen, falls durch irgendwelche Seiteneffekte sich die Kantenliste nochmal
-             * ändert ArrayList<Edge> partEdges = new ArrayList<Edge>(part.getEdges()); for (int i
-             * = 0; i < partEdges.size(); i++) { edge = (partEdges.get(i);
-             * //Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
-             * Eigenschaften des Teilelementes //Bekommen soll, werden nicht umgehängt (eigentlich
-             * kann das nur die Teil-Von-Edge selbst sein, aber in //neuen Metamodellen wäre auch
-             * etwas anderes denkbar) if (edge instanceof PartOfBeziehung) continue; //Mit wievielen
-             * Elementen von der Art des parts darf das umzuhängende Element maximal verbunden sein?
-             * int maxConnectedToPartCardinality = edge.isStartClass(part.getClass()) ?
-             * edge.getMaxBackwardCardinality() : edge.getMaxForwardCardinality(); for (int j =
-             * partsParents.size() - 1; j > 0; j--) { ModelElement parent = partsParents.get(j);
-             * //falls mehr Parents vorhanden sind, als mit dem umzuhängenden Element selbst
-             * verbunden //sein dürfen, muss das umzuhängende Element dupliziert werden if
-             * (maxConnectedToPartCardinality >= j) { ArrayList<ModelElement> elements2Duplicate =
-             * new ArrayList<ModelElement>(); //einfach umhängen } else { } } for (ModelElement
-             * parent : partsParents) { ModelElement start = edge.getStart() == part ? parent :
-             * edge.getStart(); ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
-             * int minElemCardinality = edge.isStartClass(start.getClass()) ?
-             * edge.getMinForwardCardinality() : edge.getMinBackwardCardinality(); if
-             * (minElemCardinality > 0) continue; int dir = edge.getDirection(); String edgeName =
-             * edge.getName(); String edgeDescrip = edge.getDescription(); Edge newEdge = null; if
-             * (dir == FORWARD) { newEdge = link(gdcoll, edge, start, end); } else if
-             * (dir == BACKWARD) { newEdge = link(gdcoll, edge, end, start); } else if
-             * (dir == DOUBLE) { newEdge = link(gdcoll, edge, start, end); link(gdcoll,
-             * edge, end, start); } doc.setName(newEdge, edgeName, TransactionManager.STANDARD_PID);
-             * doc.setDescription(newEdge.getHashString(), edgeDescrip,
-             * TransactionManager.STANDARD_PID); } } gdcoll.deleteElement(part, doc,
-             * TransactionManager.STANDARD_PID); parts = me.getDirectPartElements(); } }
-             */
-            private void removeChilds(final ModelElement me, final GraphDocument doc) {
-                GDCollection gdcoll = doc.getCollection();
-                List<ModelElement> parts = me.getDirectPartElements();
-                while (parts.size() > 0) {
-                    ModelElement part = parts.get(0);
-                    removeChilds(part, doc);
-                    // sicher ist sicher -> Kopie anlegen, falls durch irgendwelche Seiteneffekte
-                    // sich die Kantenliste nochmal ändert
-                    for (Edge edge : part.getEdges()) {
-                        // Alle Kanten zwischen dem zu löschenden Teil und dem Oberelement, das die
-                        // Eigenschaften des Teilelementes
-                        // Bekommen soll, werden nicht umgehängt (eigentlich kann das nur die
-                        // Teil-Von-Edge selbst sein, aber in
-                        // neuen Metamodellen wäre auch etwas anderes denkbar)
-                        if (edge instanceof PartOfBeziehung) {
-                            continue;
-                        }
-                        List<ModelElement> parentElements = part.getDirectParentElements();
-                        for (ModelElement parent : parentElements) {
-                            ModelElement start = edge.getStart() == part ? parent : edge.getStart();
-                            ModelElement end = edge.getEnd() == part ? parent : edge.getEnd();
-                            int minElemCardinality = edge.isStartClass(start.getClass()) ? edge.getMinForwardCardinality() : edge.getMinBackwardCardinality();
-                            if (minElemCardinality > 0) {
-                                continue;
-                            }
-                            int dir = edge.getDirection();
-                            String edgeName = edge.getName();
-                            String edgeDescrip = edge.getDescription();
-                            Edge newEdge = null;
-                            if (dir == FORWARD) {
-                                newEdge = link(gdcoll, edge, start, end);
-                                gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);
-                            } else if (dir == BACKWARD) {
-                                newEdge = link(gdcoll, edge, end, start);
-                                gdcoll.unlink(edge.getEnd(), edge.getStart(), edge.getClass(), TransactionManager.STANDARD_PID);
-                            } else if (dir == DOUBLE) {
-                                newEdge = link(gdcoll, edge, start, end);
-                                link(gdcoll, edge, end, start);
-                                gdcoll.unlink(edge.getStart(), edge.getEnd(), edge.getClass(), TransactionManager.STANDARD_PID);
-                                gdcoll.unlink(edge.getEnd(), edge.getStart(), edge.getClass(), TransactionManager.STANDARD_PID);
-                            }
-                            doc.setName(newEdge, edgeName, TransactionManager.STANDARD_PID);
-                            doc.setDescription(newEdge, edgeDescrip, TransactionManager.STANDARD_PID);
-                        }
-                    }
-                    gdcoll.deleteElement(part, doc, TransactionManager.STANDARD_PID);
-                    parts = me.getDirectPartElements();
-                }
-            }
-        };
-
-        /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
-        public static final Action REMOVE_FROM_SUBMODEL = new StaticAction(ActionIdentifier.remove_from_submodel, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.REMOVE_ELEMENT_FROM_SZENARIO);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                GraphDocument doc = getSelectedDoc();
-                return super.isEnabled() && doc.isSelection() && doc instanceof Szenario;
             }
         };
 
         /** Löscht das aktuell ausgewählte Element aus dem Gesamtmodell */
-        public static final Action REMOVE_FROM_MODEL = new StaticAction(ActionIdentifier.remove_from_model, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.DELETE);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && getSelectedDoc().isSelection();
-            }
-        };
+        public static final Action MODEL_ACTION_REMOVE_FROM_MODEL = new SelectionAction(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
 
         /** Öffnet ein Options-Fenster zum Löschen des aktuell ausgewählten Elements */
-        public static final Action REMOVE = new StaticAction(ActionIdentifier.remove, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                exec(GDCommands.REMOVE_ELEMENT);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && getSelectedDoc().isSelection();
-            }
-        };
+        public static final Action MODEL_ACTION_DELETE = new SelectionAction(GDCommands.MODEL_ACTION_DELETE);
 
         /** Wählt alle Elemente im Teilmodell aus */
-        public static final Action SELECT_ALL = new StaticAction(ActionIdentifier.select_all, true) {
+        public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL, true) {
 
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 Static.showProgressDialog();
-                Static.setProgressDialogTitle(getResString("select_all"));
+                Static.setProgressDialogTitle(getResString("PROGRESS_SELECT_ALL"));
                 getSelectedDoc().selectAll();
                 Static.closeProgressDialog();
             }
@@ -1985,12 +1824,8 @@ public class ActionLibrary {
          */
         /** Wechselt zur Ein-Ebenen-Ansicht */
         private static final ExtendedAction ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(false);
@@ -2005,12 +1840,8 @@ public class ActionLibrary {
 
         /** Wechselt zur Drei-Ebenen-Ansicht */
         private static final ExtendedAction ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(true);
@@ -2028,63 +1859,42 @@ public class ActionLibrary {
 
         /** Zeigt die Fachliche Ebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
         public static final Action ACTION_ACTIVATE_DOMAIN_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER, true) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.DOMAIN_LAYER);
             }
 
             @Override
             public boolean isEnabled() {
-                if (!super.isEnabled()) {
-                    return false;
-                }
-                return getSelectedGDCollection().getActiveLayer() != ModelConstants.DOMAIN_LAYER;
+                return super.isEnabled() && getSelectedGDCollection().getActiveLayer() != ModelConstants.DOMAIN_LAYER;
             }
 
         };
 
         /** Zeigt die Logische Werzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
         public static final Action ACTION_ACTIVATE_LOGICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, true) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.LOGICAL_LAYER);
             }
 
             @Override
             public boolean isEnabled() {
-                if (!super.isEnabled()) {
-                    return false;
-                }
-                return getSelectedGDCollection().getActiveLayer() != ModelConstants.LOGICAL_LAYER;
+                return super.isEnabled() && getSelectedGDCollection().getActiveLayer() != ModelConstants.LOGICAL_LAYER;
             }
 
         };
 
         /** Zeigt die physische Werkzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
         public static final Action ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, true) {
-
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.PHYSICAL_LAYER);
             }
 
             @Override
             public boolean isEnabled() {
-                if (!super.isEnabled()) {
-                    return false;
-                }
-                return getSelectedGDCollection().getActiveLayer() != ModelConstants.PHYSICAL_LAYER;
+                return super.isEnabled() && getSelectedGDCollection().getActiveLayer() != ModelConstants.PHYSICAL_LAYER;
             }
 
         };
