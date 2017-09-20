@@ -250,13 +250,10 @@ public final class GDCollection extends UserFieldTarget {
     public GDCollection() {
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
-        fileHandler = new GDCollectionFileHandler(this);
-        imExportHandler = new GDCollectionImExportHandler(this);
         doc.addGraphDocumentListener(userFieldDefinitions);
-        tman.addTransActionListener(Static.getTool());
+        imExportHandler = new GDCollectionImExportHandler(this);
+        fileHandler = new GDCollectionFileHandler(this);
         activeGraphDocumentsList.add(doc);
-        //		transStackTable.clear();
-        //		transStackTable.put(new Integer(0), new Integer(0));
     }
 
     public GDCollectionFileHandler getFileHandler() {

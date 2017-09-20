@@ -189,7 +189,7 @@ public abstract class Tool3lgmConstants {
 
     /** Map aller Global einsetzbarer {@link KeyStroke}s */
     public static final Map<ActionIdentifier, KeyStroke> KEYSTROKES = new KeyStrokeMap(ActionIdentifier.ACTION_NEW_MODEL, KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_OPEN_MODEL, KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK,
-            ActionIdentifier.ACTION_SAVE_MODEL, KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.remove, KeyEvent.VK_DELETE, 0, ActionIdentifier.redo, KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.undo, KeyEvent.VK_Z,
+            ActionIdentifier.ACTION_SAVE_MODEL, KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.remove, KeyEvent.VK_DELETE, 0, ActionIdentifier.ACTION_REDO, KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_UNDO, KeyEvent.VK_Z,
             KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.select_all, KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.copy, KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.cut, KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.paste,
             KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.search, KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.repository, KeyEvent.VK_F7, 0, ActionIdentifier.analysis_editor, KeyEvent.VK_F9, 0, ActionIdentifier.reset_result,
             KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
@@ -413,6 +413,24 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
+     * gibt das spezifiziert ImageIcon aus dem lokalisierten Iconpfad zurück
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getLocalizedIcon(final String name) {
+        ImageIcon retVal;
+        try {
+            retVal = getImageIcon(RESOURCE_LOCALIZED_ICON_PATH + name);
+            // wenn für die Locale aus der Userproperties-Datei das gesucht lokalisierte Bild nicht vorkommt
+        } catch (Exception e) {
+            // Standardressourcen sind englisch
+            retVal = getImageIcon(RESOURCE_ICON_DIR_NAME + "/en/");
+        }
+        return retVal;
+    }
+
+    /**
      * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu laden und es wiederzugeben
      *
      * @param dir
@@ -427,7 +445,9 @@ public abstract class Tool3lgmConstants {
         } else {
             icon = new ImageIcon(dir);
         }
-
+        if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
+            return null;
+        }
         return icon;
     }
 
@@ -491,24 +511,6 @@ public abstract class Tool3lgmConstants {
      */
     public static KeyStroke getKeyStroke(final ActionIdentifier key) {
         return KEYSTROKES.get(key);
-    }
-
-    /**
-     * gibt das spezifiziert ImageIcon aus dem lokalisierten Iconpfad zurück
-     *
-     * @param name
-     * @return ImageIcon
-     */
-    public static ImageIcon getLocalizedIcon(final String name) {
-        ImageIcon retVal;
-        try {
-            retVal = getImageIcon(RESOURCE_LOCALIZED_ICON_PATH + name);
-            // wenn für die Locale aus der Userproperties-Datei das gesucht lokalisierte Bild nicht vorkommt
-        } catch (Exception e) {
-            // Standardressourcen sind englisch
-            retVal = getImageIcon(RESOURCE_ICON_DIR_NAME + "/en/");
-        }
-        return retVal;
     }
 
     /**

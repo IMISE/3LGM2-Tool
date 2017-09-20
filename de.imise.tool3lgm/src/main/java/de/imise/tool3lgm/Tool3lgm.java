@@ -76,7 +76,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
@@ -104,7 +103,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.dialog.ProgressDialog;
 
 /** Hauptklasse der Anwendung 3lgm */
-public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener, TransactionListener {
+public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener {
 
     //Als allerstes muss aus der Main-Funktion ausßerhalb dieser Klasse diese init()-Funktion
     //aufgerufen werden, damit alle statischen Elemente einmal initialisert werden. Diese Funktion
@@ -262,6 +261,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         registerPublicKeyStrokes();
                         Static.tool.setJMenuBar(menuBar);
                         Static.tool.setVisible(visible);
+                        Static.tool.toolbar.selectedDocChanged();
                     }
 
                     // Hier ist die kritische Stelle. Das Rebind schlägt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.
@@ -342,6 +342,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 tool3lgmServer.processCommand(args[0], params);
             }
         } catch (Exception ex) {
+            System.err.println(ex);
             Log.show(Log.FATAL, "RMI registration failed", ex);
             return false;
         }
@@ -438,7 +439,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        toolbar.setSaveEnabled(false);
 
         // Direkthilfe einschalten
         Help.getHelp().enableHelpKey(rootPane, "willkommen");
@@ -931,9 +931,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
         //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
+        //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
             setCheckConsistencyState(UserProperties.isCheckConsistency());
-            toolbar.setSaveEnabled(false);
+            toolbar.selectedDocChanged();
             if (consistencyChecker != null && UserProperties.isCheckConsistency()) {
                 consistencyChecker.changeContext(null);
             }
@@ -1019,7 +1020,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         getContextGenerator().changeContext((LGMGraphDocument) doc);
 
-        toolbar.setSaveEnabled(true);
+        toolbar.selectedDocChanged();
     }
 
     /**
@@ -1274,9 +1275,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             } catch (PropertyVetoException ex) {
             }
         }
-
-        toolbar.checkUndoandRedo();
-
         return true;
     }
 
@@ -1434,16 +1432,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         } catch (Exception ex) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
         }
-        toolbar.addWindow(activeFrame);
-        toolbar.checkUndoandRedo();
-        toolbar.checkMulti();
-        toolbar.checkLayer();
         toolbar.revalidate();
         toolbar.repaint();
         workarea.revalidate();
         workarea.repaint();
         activeLayerChanged(activeFrame.getGraphDocument());
 
+        toolbar.addWindow(activeFrame);
     }
 
     @Override
@@ -1513,9 +1508,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        if (toolbar != null) {
-            toolbar.checkLayer();
-        }
+        source.getCollection().setChanged(true);
         if (werkzeugleiste instanceof Werkzeugleiste) {
             switch (source.getCollection().getActiveLayer()) {
             case 4:
@@ -1536,29 +1529,22 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void dataChanged(final GraphDocument source) {
-        if (Tool3lgm.DEBUG) {
-            System.err.println(getClass().getSimpleName() + "dataChanged() " + source);
-        }
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
     }
 
     @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
     }
 
     @Override
     public void layoutChanged(final GraphDocument source) {
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
 
     }
 
     @Override
     public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
         if (werkzeugleiste != null && werkzeugleiste instanceof Werkzeugleiste) {
             ((Werkzeugleiste) werkzeugleiste).setMausModus();
@@ -1567,35 +1553,21 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
     }
 
     @Override
     public void groupOrderChanged(final GraphDocument source) {
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
     }
 
     @Override
     public void colorsChanged(final GraphDocument source) {
-        toolbar.checkUndoandRedo();
         source.getCollection().setChanged(true);
     }
 
     @Override
     public void selectionChanged(final GraphDocument source) {
-        //		source.getCollection().setChanged(true);
-    }
-
-    @Override
-    public void transactionStarted() {
-        toolbar.checkUndoandRedo();
-    }
-
-    @Override
-    public void transactionStopped() {
-        toolbar.checkUndoandRedo();
     }
 
     /**

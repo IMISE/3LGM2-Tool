@@ -59,11 +59,13 @@ public class MenuCollection {
     public static final JMenu FILE_MENU = new FileMenu();
 
     /** Das Bearbeiten-Menu */
-    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.UNDO, EditActions.REDO, new JSeparator(), EditActions.SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.COPY, EditActions.CUT,
-            EditActions.PASTE, EditActions.CLEAR_CLIPBOARD, new JSeparator(), EditActions.REMOVE_FROM_SUBMODEL, EditActions.REMOVE_FROM_MODEL);
+    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.COPY,
+            EditActions.CUT, EditActions.PASTE, EditActions.CLEAR_CLIPBOARD, new JSeparator(), EditActions.REMOVE_FROM_SUBMODEL, EditActions.REMOVE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = new ViewMenu();
+    public static final JMenu VIEW_MENU = MenuCreator.createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, MenuCreator.createCheckBoxMenuItem(ViewActions.SWITCH_SHOW_BROWSER), new JSeparator(),
+            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, new JSeparator(),
+            ViewActions.OPEN_MATRIX);
 
     /** Das Einfügen-Menu */
     public static final JMenu INSERT_MENU = new InsertMenu();
@@ -221,7 +223,7 @@ public class MenuCollection {
                     MenuCreator.createMenuEntries(true, FileActions.ACTION_NEW_MODEL, FileActions.ACTION_OPEN_MODEL, FileActions.ACTION_SAVE_MODEL, FileActions.ACTION_SAVE_MODEL_AS, FileActions.ACTION_CLOSE_MODEL, new JSeparator(),
                             FileActions.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, new JSeparator(), FileSubMenus.IMPORT_MENU, FileSubMenus.EXPORT_MENU, new JSeparator(),
                             //hier werden später die zuletzt geladenen Modelle angezeigt
-                            new JSeparator(), FileActions.EXIT));
+                            new JSeparator(), FileActions.ACTION_EXIT));
         }
 
         @Override
@@ -233,40 +235,6 @@ public class MenuCollection {
             removeItems(firstFileIndex, lastFileIndex);
             MenuCreator.addAll(this, firstFileIndex, MenuCreator.createMenuEntries(a, false));
             lastFileIndex = firstFileIndex + a.length - 1;
-        }
-    }
-
-    /** Das Datei-Menu */
-    private static class ViewMenu extends DynamicMenu {
-
-        /** Name dieses Menus */
-        public static final String title = getResString("viewMenu");
-
-        /** Item für das Aktivieren der Ein-Ebenen-Ansicht */
-        private static final Component oneLayerPerspective = MenuCreator.createMenuEntry(ViewActions.ONE_LAYER_PERSPECTIVE);
-
-        /** Item für das Aktivieren der Drei-Ebenen-Ansicht */
-        private static final Component threeLayerPerspective = MenuCreator.createMenuEntry(ViewActions.THREE_LAYER_PERSPECTIVE);
-
-        /** Index der beiden Items im Menu */
-        private static final int switchPerspectiveIndex = 4;
-
-        public ViewMenu() {
-            super(title);
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(true, ViewSubMenus.TOOLBAR_MENU, createCheckBoxItem(ViewActions.SWITCH_SHOW_BROWSER), new JSeparator(), oneLayerPerspective, ActionLibrary.ViewActions.SHOW_DOMAIN_LAYER,
-                    ViewActions.SHOW_LOGICAL_TOOL_LAYER, ViewActions.SHOW_PHYSICAL_TOOL_LAYER, ViewActions.OPEN_LAYER_SETTINGS, new JSeparator(), ViewActions.OPEN_MATRIX));
-        }
-
-        @Override
-        protected void updateItems() {
-            remove(oneLayerPerspective);
-            remove(threeLayerPerspective);
-
-            if (ViewActions.ONE_LAYER_PERSPECTIVE.isEnabled()) {
-                add(oneLayerPerspective, switchPerspectiveIndex);
-            } else if (ViewActions.THREE_LAYER_PERSPECTIVE.isEnabled()) {
-                add(threeLayerPerspective, switchPerspectiveIndex);
-            }
         }
     }
 

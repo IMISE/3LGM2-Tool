@@ -35,11 +35,12 @@ public enum ActionIdentifier {
     ACTION_EXPORT_SUBMODEL,
     ACTION_EXPORT_HTML,
     ACTION_EXPORT_DATA,
-    exit,
+    //exit
+    ACTION_EXIT,
 
     // edit
-    undo,
-    redo,
+    ACTION_UNDO,
+    ACTION_REDO,
     search,
     select_all,
     copy,
@@ -58,11 +59,11 @@ public enum ActionIdentifier {
     browser,
     showSubModelsInBrowserSideBySide,
     switch_perspective,
-    one_layer_perspective,
-    three_layer_perspective,
-    domain_layer,
-    logical_tool_layer,
-    physical_tool_layer,
+    ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE,
+    ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE,
+    ACTION_ACTIVATE_DOMAIN_LAYER,
+    ACTION_ACTIVATE_LOGICAL_TOOL_LAYER,
+    ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER,
     settings,
     matrix,
 

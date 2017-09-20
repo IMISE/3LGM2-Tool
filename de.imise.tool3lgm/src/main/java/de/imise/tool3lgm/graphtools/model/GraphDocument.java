@@ -2888,7 +2888,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (GraphDocumentListener gdl : listener) {
                 gdl.activeLayerChanged(this);
             }
-            Static.getTool().getToolBar().setActiveLayer(gdcoll.getActiveLayer());
             break;
         case COLORS_CHANGED:
             for (GraphDocumentListener gdl : listener) {

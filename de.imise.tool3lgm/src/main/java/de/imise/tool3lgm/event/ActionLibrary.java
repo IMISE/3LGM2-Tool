@@ -43,6 +43,7 @@ import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
 import de.imise.tool3lgm.event.LayoutAction.LayerLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
+import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
@@ -96,6 +97,8 @@ import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
+import de.imise.util.swing.event.ExtendedAction;
+import de.imise.util.swing.event.ToggleAction;
 
 /**
  * Sammlung global einsetzbarer {@link Action}s.
@@ -324,7 +327,7 @@ public class ActionLibrary {
          */
 
         /** Beenden des Programms */
-        public static final Action EXIT = new StaticActionNew(ActionIdentifier.exit) {
+        public static final Action ACTION_EXIT = new StaticActionNew(ActionIdentifier.ACTION_EXIT) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Tool3lgm tool3lgm = getTool();
@@ -753,8 +756,7 @@ public class ActionLibrary {
     public static class EditActions {
 
         /** Macht letzte Änderung rückgängig */
-        public static final Action UNDO = new StaticAction(ActionIdentifier.undo, true) {
-
+        public static final Action ACTION_UNDO = new GraphDocumentAction(ActionIdentifier.ACTION_UNDO, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
@@ -765,12 +767,12 @@ public class ActionLibrary {
 
             @Override
             public boolean isEnabled() {
-                return super.isEnabled() && getSelectedCollection().getTman().isUndoAvailable();
+                return super.isEnabled() && getSelectedGDCollection().getTman().isUndoAvailable();
             }
         };
 
         /** Macht letztes UNDO rückgängig */
-        public static final Action REDO = new StaticAction(ActionIdentifier.redo, true) {
+        public static final Action ACTION_REDO = new GraphDocumentAction(ActionIdentifier.ACTION_REDO, true) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -782,7 +784,7 @@ public class ActionLibrary {
 
             @Override
             public boolean isEnabled() {
-                return super.isEnabled() && getSelectedCollection().getTman().isRedoAvailable();
+                return super.isEnabled() && getSelectedGDCollection().getTman().isRedoAvailable();
             }
         };
 
@@ -1987,48 +1989,58 @@ public class ActionLibrary {
          *           // ///////////////////////////////////////// /** Wechselt zur
          *           Ein-Ebenen-Ansicht
          */
-        public static final Action ONE_LAYER_PERSPECTIVE = new StaticAction(ActionIdentifier.one_layer_perspective, true) {
+        /** Wechselt zur Ein-Ebenen-Ansicht */
+        private static final ExtendedAction ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
                     return;
                 }
-                ToolInternalFrame frame = (ToolInternalFrame) getTool().getActiveFrame();
+                ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(false);
                 frame.getGraphDocument().deselectAll(false);
-                distributeViewChanged();
             }
 
             @Override
             public boolean isEnabled() {
-                if (!super.isEnabled()) {
-                    return false;
-                }
-                AbstractInternalFrame abstractFrame = getTool().getActiveFrame();
-                if (abstractFrame == null || !(abstractFrame instanceof ToolInternalFrame)) {
-                    return false;
-                }
-                ToolInternalFrame frame = (ToolInternalFrame) getTool().getActiveFrame();
-                InputGraphArea area = frame.getInputGraphArea();
-                return area.isMultiViewEnabled();
+                return super.isEnabled() && ((ToolInternalFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
             }
         };
 
         /** Wechselt zur Drei-Ebenen-Ansicht */
-        public static final Action THREE_LAYER_PERSPECTIVE = new StaticAction(ActionIdentifier.three_layer_perspective, true) {
+        private static final ExtendedAction ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
                     return;
                 }
-                ToolInternalFrame frame = (ToolInternalFrame) getTool().getActiveFrame();
+                ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(true);
                 frame.getGraphDocument().deselectAll(false);
-                distributeViewChanged();
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return super.isEnabled() && !((ToolInternalFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
+            }
+        };
+
+        /** Schaltet immer zischen den beiden Aktionen Einzellayer-Ansicht und Mehrlayer-Ansicht um */
+        public static final Action ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE = new ToggleAction(ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE, ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE);
+
+        /** Zeigt die Fachliche Ebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
+        public static final Action ACTION_ACTIVATE_DOMAIN_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER, true) {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (!isEnabled()) {
+                    return;
+                }
+                getSelectedGDCollection().setActiveLayer(ModelConstants.DOMAIN_LAYER);
             }
 
             @Override
@@ -2036,50 +2048,51 @@ public class ActionLibrary {
                 if (!super.isEnabled()) {
                     return false;
                 }
-                AbstractInternalFrame abstractFrame = getTool().getActiveFrame();
-                if (abstractFrame == null || !(abstractFrame instanceof ToolInternalFrame)) {
-                    return false;
-                }
-                ToolInternalFrame frame = (ToolInternalFrame) getTool().getActiveFrame();
-                InputGraphArea area = frame.getInputGraphArea();
-                return !area.isMultiViewEnabled();
+                return getSelectedGDCollection().getActiveLayer() != ModelConstants.DOMAIN_LAYER;
             }
-        };
 
-        /** Zeigt die Fachliche Ebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
-        public static final Action SHOW_DOMAIN_LAYER = new StaticAction(ActionIdentifier.domain_layer, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                getSelectedCollection().setActiveLayer(ModelConstants.DOMAIN_LAYER);
-            }
         };
 
         /** Zeigt die Logische Werzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
-        public static final Action SHOW_LOGICAL_TOOL_LAYER = new StaticAction(ActionIdentifier.logical_tool_layer, true) {
+        public static final Action ACTION_ACTIVATE_LOGICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, true) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
                     return;
                 }
-                getSelectedCollection().setActiveLayer(ModelConstants.LOGICAL_LAYER);
+                getSelectedGDCollection().setActiveLayer(ModelConstants.LOGICAL_LAYER);
             }
+
+            @Override
+            public boolean isEnabled() {
+                if (!super.isEnabled()) {
+                    return false;
+                }
+                return getSelectedGDCollection().getActiveLayer() != ModelConstants.LOGICAL_LAYER;
+            }
+
         };
 
         /** Zeigt die physische Werkzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
-        public static final Action SHOW_PHYSICAL_TOOL_LAYER = new StaticAction(ActionIdentifier.physical_tool_layer, true) {
+        public static final Action ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, true) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
                     return;
                 }
-                getSelectedCollection().setActiveLayer(ModelConstants.PHYSICAL_LAYER);
+                getSelectedGDCollection().setActiveLayer(ModelConstants.PHYSICAL_LAYER);
             }
+
+            @Override
+            public boolean isEnabled() {
+                if (!super.isEnabled()) {
+                    return false;
+                }
+                return getSelectedGDCollection().getActiveLayer() != ModelConstants.PHYSICAL_LAYER;
+            }
+
         };
 
         /** Öffnet einen Dialog für die Einstellung von Größe, Abstand, etc. der Ebenen */
