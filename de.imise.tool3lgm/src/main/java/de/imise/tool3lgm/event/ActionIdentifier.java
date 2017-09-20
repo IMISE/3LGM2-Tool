@@ -3,7 +3,6 @@ package de.imise.tool3lgm.event;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
-import java.util.Locale;
 import java.util.MissingResourceException;
 
 import javax.swing.Icon;
@@ -41,7 +40,7 @@ public enum ActionIdentifier {
     // edit
     ACTION_UNDO,
     ACTION_REDO,
-    search,
+    ACTION_SEARCH,
     select_all,
     copy,
     cut,

@@ -191,7 +191,7 @@ public abstract class Tool3lgmConstants {
     public static final Map<ActionIdentifier, KeyStroke> KEYSTROKES = new KeyStrokeMap(ActionIdentifier.ACTION_NEW_MODEL, KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_OPEN_MODEL, KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK,
             ActionIdentifier.ACTION_SAVE_MODEL, KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.remove, KeyEvent.VK_DELETE, 0, ActionIdentifier.ACTION_REDO, KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_UNDO, KeyEvent.VK_Z,
             KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.select_all, KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.copy, KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.cut, KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.paste,
-            KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.search, KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.repository, KeyEvent.VK_F7, 0, ActionIdentifier.analysis_editor, KeyEvent.VK_F9, 0, ActionIdentifier.reset_result,
+            KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.ACTION_SEARCH, KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK, ActionIdentifier.repository, KeyEvent.VK_F7, 0, ActionIdentifier.analysis_editor, KeyEvent.VK_F9, 0, ActionIdentifier.reset_result,
             KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 
     // Ende FileFilter

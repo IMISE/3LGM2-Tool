@@ -788,21 +788,15 @@ public class ActionLibrary {
             }
         };
 
-        // public static int COUNT = 0;
-
-        /** Öffnet ein Suche-Fenster */
-        public static final Action SEARCH = new StaticAction(ActionIdentifier.search, PPP, true) {
-
+        /** Öffnet ein Suchen-Fenster */
+        public static final Action ACTION_SEARCH = new GraphDocumentAction(ActionIdentifier.ACTION_SEARCH, true) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if (!isEnabled()) {
                     return;
                 }
-                // if (COUNT++ % 2 == 0) {
-                new SearchDialog(getTool()).showDialog();
-                // } else {
-                // new SearchDialogOld(getTool()).showDialog();
-                // }
+                SearchDialog sd = new SearchDialog(Static.getTool());
+                sd.showDialog();
             }
         };
 

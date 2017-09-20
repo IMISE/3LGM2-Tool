@@ -59,7 +59,7 @@ public class MenuCollection {
     public static final JMenu FILE_MENU = new FileMenu();
 
     /** Das Bearbeiten-Menu */
-    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.COPY,
+    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.COPY,
             EditActions.CUT, EditActions.PASTE, EditActions.CLEAR_CLIPBOARD, new JSeparator(), EditActions.REMOVE_FROM_SUBMODEL, EditActions.REMOVE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
