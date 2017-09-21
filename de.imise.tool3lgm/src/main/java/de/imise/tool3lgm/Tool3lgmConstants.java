@@ -1,6 +1,7 @@
 package de.imise.tool3lgm;
 
 import java.awt.Cursor;
+import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -16,14 +17,20 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.DebugGraphics;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.event.ActionLibrary;
+import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
+import de.imise.tool3lgm.event.ActionLibrary.EditActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -232,6 +239,10 @@ public abstract class Tool3lgmConstants {
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
 
+    ///////////////////////////////////////////////
+    // KeyStrokes + Actions (ShortCuts) ANFANG ////
+    ///////////////////////////////////////////////
+
     public static final int MENU_SHORTCUT_KEY_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
     //Unbedingt erst nach dem Initialisieren der RessourcenBundles aufrufen, da diese beim Erzeugen der Actions in dieser Map gebraucht werden
@@ -244,16 +255,61 @@ public abstract class Tool3lgmConstants {
             keyStroke(KeyEvent.VK_R, MENU_SHORTCUT_KEY_MASK));
 
     /**
-     * Liefert den command-<code>String</code> für das {@link KeyEvent}, das durch die durch <code>key</code> identifizierte {@link StaticAction}
-     * ausgelöst wird.<br>
-     * Im Moment wird hier <code>key</code> selbst zurückgegeben.
+     * Hilfsklasse zum Aufbau der {@link #KEYSTROKES}-<code>Map</code>
+     *
+     * @author fstephan
+     */
+    private static final class KeyStrokeMap extends HashMap<Action, KeyStroke> {
+        /**
+         * @param id_keyCode_modifiers
+         */
+        public KeyStrokeMap(final Object... id_keyCode_modifiers) {
+            for (int i = 0; i < id_keyCode_modifiers.length; i += 2) {
+                Action action = (Action) id_keyCode_modifiers[i];
+                KeyStroke keyStroke = (KeyStroke) id_keyCode_modifiers[i + 1];
+                put(action, keyStroke);
+                //den KeyStroke auch in der Action registrieren, so dass er in Menüs usw. angezeigt wird
+                action.putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
+            }
+        }
+    }
+
+    /**
+     * Liefert den auslösenden {@link KeyStroke} für die durch <code>key</code> identifizierte {@link StaticAction}.
      *
      * @param identifier
      * @return
      */
-    public static String getActionCommand(final String key) {
-        return key;
+    @Deprecated
+    public static KeyStroke getKeyStroke(final ActionIdentifier key) {
+        return KEYSTROKES.get(key);
     }
+
+    private static KeyStroke keyStroke(final int keyCode, final int modifiers) {
+        return KeyStroke.getKeyStroke(keyCode, modifiers);
+    }
+
+    /**
+     * Ermöglicht das Auslösen der in {@link Tool3lgmConstants} festgelegten Aktionen
+     * durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
+     */
+    public static final void registerPublicKeyStrokes(final JComponent component, final KeyStroke... ingnoreStrokes) {
+        InputMap im = component.getInputMap();
+        ActionMap am = component.getActionMap();
+        for (Action action : KEYSTROKES.keySet()) {
+            KeyStroke keyStroke = KEYSTROKES.get(action);
+            if (!ArrayUtils.contains(ingnoreStrokes, keyStroke)) {
+                im.put(KEYSTROKES.get(action), action);
+            }
+            am.put(action, action);
+        }
+        component.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
+        component.setActionMap(am);
+    }
+
+    ///////////////////////////////////////////////
+    // KeyStrokes + Actions (ShortCuts) ENDE /////
+    ///////////////////////////////////////////////
 
     /**
      * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
@@ -494,20 +550,6 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * Liefert den auslösenden {@link KeyStroke} für die durch <code>key</code> identifizierte {@link StaticAction}.
-     *
-     * @param identifier
-     * @return
-     */
-    public static KeyStroke getKeyStroke(final ActionIdentifier key) {
-        return KEYSTROKES.get(key);
-    }
-
-    private static KeyStroke keyStroke(final int keyCode, final int modifiers) {
-        return KeyStroke.getKeyStroke(keyCode, modifiers);
-    }
-
-    /**
      * wenn die Sanduhr abgelaufen ist...
      *
      * @return Default system cursor
@@ -624,26 +666,6 @@ public abstract class Tool3lgmConstants {
         }
         if (BUFFERED) {
             debugGraphicsOption |= DebugGraphics.BUFFERED_OPTION;
-        }
-    }
-
-    /**
-     * Hilfsklasse zum Aufbau der {@link #KEYSTROKES}-<code>Map</code>
-     *
-     * @author fstephan
-     */
-    private static final class KeyStrokeMap extends HashMap<Action, KeyStroke> {
-        /**
-         * @param id_keyCode_modifiers
-         */
-        public KeyStrokeMap(final Object... id_keyCode_modifiers) {
-            for (int i = 0; i < id_keyCode_modifiers.length; i += 2) {
-                Action action = (Action) id_keyCode_modifiers[i];
-                KeyStroke keyStroke = (KeyStroke) id_keyCode_modifiers[i + 1];
-                put(action, keyStroke);
-                //den KeyStroke auch in der Action registrieren, so dass er in Menüs usw. angezeigt wird
-                action.putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
-            }
         }
     }
 

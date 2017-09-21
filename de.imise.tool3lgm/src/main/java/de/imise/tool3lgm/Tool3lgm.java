@@ -1,6 +1,7 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmConstants.registerPublicKeyStrokes;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -35,20 +36,14 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.help.CSH;
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.KeyStroke;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -257,10 +252,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         Static.tool = new Tool3lgm();
                         menuBar = new MenuBar();
                         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
-                        registerPublicKeyStrokes();
                         Static.tool.setJMenuBar(menuBar);
                         Static.tool.setVisible(visible);
                         Static.tool.toolbar.selectedDocChanged();
+                        registerPublicKeyStrokes(tool.getRootPane());
                     }
 
                     // Hier ist die kritische Stelle. Das Rebind schlägt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.
@@ -443,23 +438,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         Help.getHelp().enableHelpKey(rootPane, "willkommen");
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
-    }
-
-    /**
-     * Ermöglicht das Auslösen der in {@link Tool3lgmConstants} festgelegten Aktionen
-     * durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
-     */
-    private static final void registerPublicKeyStrokes() {
-        InputMap im = new InputMap();
-        ActionMap am = new ActionMap();
-
-        for (Action action : Tool3lgmConstants.KEYSTROKES.keySet()) {
-            im.put(Tool3lgmConstants.KEYSTROKES.get(action), action);
-            am.put(action, action);
-        }
-        JRootPane pane = Static.tool.getRootPane();
-        pane.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
-        pane.setActionMap(am);
     }
 
     /**
