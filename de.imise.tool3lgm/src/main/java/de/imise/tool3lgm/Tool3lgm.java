@@ -1,5 +1,6 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Static.tool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.registerPublicKeyStrokes;
 
@@ -248,14 +249,14 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 if (remote == null || !(remote instanceof Tool3lgmServer)) {
 
                     // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
-                    if (Static.tool == null) {
-                        Static.tool = new Tool3lgm();
+                    if (tool == null) {
+                        tool = new Tool3lgm();
                         menuBar = new MenuBar();
                         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
-                        Static.tool.setJMenuBar(menuBar);
-                        Static.tool.setVisible(visible);
-                        Static.tool.toolbar.selectedDocChanged();
                         registerPublicKeyStrokes(tool.getRootPane());
+                        tool.setJMenuBar(menuBar);
+                        tool.setVisible(visible);
+                        tool.toolbar.selectedDocChanged();
                     }
 
                     // Hier ist die kritische Stelle. Das Rebind schlägt fehl, wenn ein fremder Service den Port belegt, auf dem der Baukasten lauschen soll.
