@@ -52,7 +52,7 @@ public class CopyDependencies {
     public final boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
-            return avoidDuplicates(getStartClass(edgeClass)) || avoidDuplicates(getEndClass(edgeClass));
+            return avoidDuplicates(getStartClass(edgeClass)) && avoidDuplicates(getEndClass(edgeClass));
         }
         return avoidDuplicatesClasses.contains(elementClass);
     }
