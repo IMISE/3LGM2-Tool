@@ -59,7 +59,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.twatd.licensing.TwatdLicenseLibrary;
 
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
-import de.imise.tool3lgm.event.AbstractLGMAction;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -447,14 +446,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * Ermöglicht das Auslösen der {@link AbstractLGMAction#getKeyStrokeActions()} durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
+     * Ermöglicht das Auslösen der in {@link Tool3lgmConstants} festgelegten Aktionen
+     * durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
      */
     private static final void registerPublicKeyStrokes() {
         InputMap im = new InputMap();
         ActionMap am = new ActionMap();
 
-        for (Action action : AbstractLGMAction.getKeyStrokeActions()) {
-            im.put((KeyStroke) action.getValue(Action.ACCELERATOR_KEY), action);
+        for (Action action : Tool3lgmConstants.KEYSTROKES.keySet()) {
+            im.put(Tool3lgmConstants.KEYSTROKES.get(action), action);
             am.put(action, action);
         }
         JRootPane pane = Static.tool.getRootPane();
