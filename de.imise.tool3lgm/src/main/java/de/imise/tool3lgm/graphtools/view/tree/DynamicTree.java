@@ -25,6 +25,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.metamodel.Textfeld;
@@ -117,6 +118,9 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         super(new DefaultTreeModel(new LGMTreeNode(getResString("browser"), false, false)));
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
         doc = d;
+        //alle KeyStrokes im Baum hinzufügen, die systemweit gelten sollen. Da der Baum schon eine eigene InputMap und ActionMap hat,
+        //werden die ShortCuts aus dem RootPane des Tools hier nicht auch beachtet und müssen explizit hinzugefügt werden
+        Tool3lgmConstants.registerPublicKeyStrokes(this);
         DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
         transactionListener = new DynamicTreeGraphDocumentAndInTransactionListener(this);
