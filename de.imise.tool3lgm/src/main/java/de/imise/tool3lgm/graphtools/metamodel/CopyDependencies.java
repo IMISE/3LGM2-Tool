@@ -22,18 +22,15 @@ public class CopyDependencies {
 
     private final Set<Class<? extends ModelElement>> avoidDuplicatesClasses = new HashSet<>();
 
-    public CopyDependencies() {
-    }
-
     //////////////////////
     // copyDependencies //
     //////////////////////
 
-    protected void set(final Class<? extends ModelElement> elementClass, @SuppressWarnings("unchecked") final Class<? extends ModelElement>... copyClasses) {
+    protected final void set(final Class<? extends ModelElement> elementClass, @SuppressWarnings("unchecked") final Class<? extends ModelElement>... copyClasses) {
         copyDependencies.put(elementClass, ImmutableSet.copyOf(copyClasses));
     }
 
-    public Collection<Class<? extends ModelElement>> get(final Class<? extends ModelElement> elementClass) {
+    public final Collection<Class<? extends ModelElement>> get(final Class<? extends ModelElement> elementClass) {
         Collection<Class<? extends ModelElement>> immutableCollection = copyDependencies.get(elementClass);
         return immutableCollection == null ? EMPTY_COLLECTION : immutableCollection;
     }
@@ -48,11 +45,11 @@ public class CopyDependencies {
      *         (Bsp: kopieren von PhyDvBausteinen soll der Standort nicht doppelt vorhanden sein)
      * @param elementClass
      */
-    protected void addToAvoidDuplicates(final Class<? extends ModelElement> elementClass) {
+    protected final void addToAvoidDuplicates(final Class<? extends ModelElement> elementClass) {
         avoidDuplicatesClasses.add(elementClass);
     }
 
-    public boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
+    public final boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
             return avoidDuplicates(getStartClass(edgeClass)) || avoidDuplicates(getEndClass(edgeClass));
