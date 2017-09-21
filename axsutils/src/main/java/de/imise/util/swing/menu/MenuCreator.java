@@ -152,8 +152,17 @@ public class MenuCreator {
      *
      * @param a
      */
-    public static final JCheckBoxMenuItem createCheckBoxMenuItem(final Action a) {
+    public static final JCheckBoxMenuItem createCheckBoxItem(final Action a) {
         return new JCheckBoxMenuItem(a);
+    }
+
+    /** Erzeugt ein Array von {@link JCheckBoxMenuItem} mit der übergebenen {@link Action} */
+    public static JCheckBoxMenuItem[] createCheckBoxItems(final Action... actions) {
+        JCheckBoxMenuItem[] items = new JCheckBoxMenuItem[actions.length];
+        for (int i = 0; i < items.length; i++) {
+            items[i] = createCheckBoxItem(actions[i]);
+        }
+        return items;
     }
 
     /**
