@@ -232,14 +232,16 @@ public abstract class Tool3lgmConstants {
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
 
+    public static final int MENU_SHORTCUT_KEY_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
     //Unbedingt erst nach dem Initialisieren der RessourcenBundles aufrufen, da diese beim Erzeugen der Actions in dieser Map gebraucht werden
     /** Map aller Global einsetzbarer {@link KeyStroke}s */
-    public static final Map<Action, KeyStroke> KEYSTROKES = new KeyStrokeMap(FileActions.ACTION_NEW_MODEL, keyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.FileActions.ACTION_OPEN_MODEL, keyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK),
-            ActionLibrary.FileActions.ACTION_SAVE_MODEL, keyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.MODEL_ACTION_DELETE, keyStroke(KeyEvent.VK_DELETE, 0), ActionLibrary.EditActions.ACTION_REDO,
-            keyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.ACTION_UNDO, keyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.SELECT_ALL, keyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK),
-            ActionLibrary.EditActions.MODEL_ACTION_COPY, keyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.MODEL_ACTION_CUT, keyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.MODEL_ACTION_PASTE,
-            keyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.EditActions.ACTION_SEARCH, keyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK), ActionLibrary.AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, keyStroke(KeyEvent.VK_F7, 0),
-            ActionLibrary.AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, keyStroke(KeyEvent.VK_F9, 0), ActionLibrary.AnalysisActions.ACTION_ANALYSIS_RESET_RESULT, keyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK));
+    public static final Map<Action, KeyStroke> KEYSTROKES = new KeyStrokeMap(FileActions.ACTION_NEW_MODEL, keyStroke(KeyEvent.VK_N, MENU_SHORTCUT_KEY_MASK), FileActions.ACTION_OPEN_MODEL, keyStroke(KeyEvent.VK_O, MENU_SHORTCUT_KEY_MASK),
+            FileActions.ACTION_SAVE_MODEL, keyStroke(KeyEvent.VK_S, MENU_SHORTCUT_KEY_MASK), EditActions.MODEL_ACTION_DELETE, keyStroke(KeyEvent.VK_DELETE, 0), EditActions.ACTION_REDO, keyStroke(KeyEvent.VK_Y, MENU_SHORTCUT_KEY_MASK),
+            EditActions.ACTION_UNDO, keyStroke(KeyEvent.VK_Z, MENU_SHORTCUT_KEY_MASK), EditActions.SELECT_ALL, keyStroke(KeyEvent.VK_A, MENU_SHORTCUT_KEY_MASK), EditActions.MODEL_ACTION_COPY, keyStroke(KeyEvent.VK_C, MENU_SHORTCUT_KEY_MASK),
+            EditActions.MODEL_ACTION_CUT, keyStroke(KeyEvent.VK_X, MENU_SHORTCUT_KEY_MASK), EditActions.MODEL_ACTION_PASTE, keyStroke(KeyEvent.VK_V, MENU_SHORTCUT_KEY_MASK), EditActions.ACTION_SEARCH, keyStroke(KeyEvent.VK_F, MENU_SHORTCUT_KEY_MASK),
+            AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, keyStroke(KeyEvent.VK_F7, 0), AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, keyStroke(KeyEvent.VK_F9, 0), AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
+            keyStroke(KeyEvent.VK_R, MENU_SHORTCUT_KEY_MASK));
 
     /**
      * Liefert den command-<code>String</code> für das {@link KeyEvent}, das durch die durch <code>key</code> identifizierte {@link StaticAction}
