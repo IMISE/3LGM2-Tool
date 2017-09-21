@@ -166,6 +166,7 @@ public class Log {
             typ = JOptionPane.WARNING_MESSAGE;
         }
         if (level == ERROR || level == FATAL) {
+            log(level, meldung, t);
             titel = getResString("fehler");
             typ = JOptionPane.ERROR_MESSAGE;
         }
