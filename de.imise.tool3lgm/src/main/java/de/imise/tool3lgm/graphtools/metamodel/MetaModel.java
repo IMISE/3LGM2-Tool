@@ -8,8 +8,6 @@ import java.util.Set;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -183,16 +181,6 @@ public abstract class MetaModel {
             }
         }
         return sortedEdges.build();
-    }
-
-    /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben.
-     */
-    public final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> getElementClassToSortedEdges(final int i) {
-        Set<Class<? extends Edge>> processSortedEdgeClasses = ImmutableSet.<Class<? extends Edge>> of(PrzAufVerbindung.class);
-        Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> elementClassToSortedEdges = ImmutableMap.<Class<? extends ModelElement>, Set<Class<? extends Edge>>> of(Prozess.class, processSortedEdgeClasses);
-        return elementClassToSortedEdges;
     }
 
     /**
