@@ -28,7 +28,7 @@ import de.imise.tool3lgm.gui.Werkzeugleiste;
  *
  * @author N.N.
  */
-public class EinstellungDialog extends JDialog implements ChangeListener, ActionListener {
+public class GraphViewOptionsDialog extends JDialog implements ChangeListener, ActionListener {
 
     /**
      * COMMENTME
@@ -61,9 +61,9 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
     private JSlider zoom, winkel, abstand;
 
     /**
-     * 
+     *
      */
-    public EinstellungDialog() {
+    public GraphViewOptionsDialog() {
         super();
     }
 
@@ -78,7 +78,7 @@ public class EinstellungDialog extends JDialog implements ChangeListener, Action
 
         frame = f;
         Werkzeugleiste leiste = (Werkzeugleiste) frame.getToolBar();
-        setTitle(getResString("settings") + getResString("3points"));
+        setTitle(getResString("OPTIONS_GRAPH_VIEW_DIALOG_TITLE"));
         setSize(340, 180);
 
         setModal(true);

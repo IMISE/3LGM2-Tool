@@ -54,7 +54,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
-import de.imise.tool3lgm.graphtools.dialog.EinstellungDialog;
+import de.imise.tool3lgm.graphtools.dialog.GraphViewOptionsDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
@@ -1682,7 +1682,7 @@ public class ActionLibrary {
                     UserProperties.setRMIRegistryPort(rmip.getRmiRegistryPortTextFieldValue());
                 }
                 if (!oldRegPort.equals(UserProperties.getRMIRegistryPort())) {
-                    JOptionPane.showMessageDialog(getTool(), getResString("settings_info"));
+                    JOptionPane.showMessageDialog(getTool(), getResString("RMI_SETTINGS_INFO"));
                 }
             }
         };
@@ -1885,7 +1885,7 @@ public class ActionLibrary {
             public void actionPerformed(final ActionEvent e) {
                 AbstractInternalFrame selframe = getTool().getActiveFrame();
                 if (selframe != null && selframe instanceof ToolInternalFrame) {
-                    EinstellungDialog dialog = new EinstellungDialog();
+                    GraphViewOptionsDialog dialog = new GraphViewOptionsDialog();
                     dialog.showDialog((ToolInternalFrame) selframe);
                 }
             }
