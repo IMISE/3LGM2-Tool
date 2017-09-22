@@ -1801,23 +1801,6 @@ public class ActionLibrary {
             }
         };
 
-        /**
-         * Wechselt das Layout des ModelBrowsers * / public static final Action
-         * SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE = new
-         * StaticAction(ActionIdentifier.showSubModelsInBrowserSideBySide, false,
-         * UserProperties.isShowSubModelsInBrowserSideBySide()) {
-         *
-         * @Override public void actionPerformed(ActionEvent e) {
-         *           UserProperties.setShowSubModelsInBrowserSideBySide(isSelected()); ModelBrowser
-         *           br = getTool().getModelBrowserPanel().getActiveBrowser(); if (br != null) {
-         *           LGMTabbedPane p = (LGMTabbedPane) br.getSelectedComponent(); if (p != null)
-         *           p.setTabsInOneLineLayout(isSelected()); } } }; //
-         *           ////////////////////////////////////// // Es ist immer nur eine der Actions //
-         *           // ONE_LAYER_PERSPECTIVE oder // // THREE_LAYER_PERSPECTIVE aktiviert. // //
-         *           Dies wird durch // // InputGraphArea.isMultiViewEnabled() // // sichergestellt.
-         *           // ///////////////////////////////////////// /** Wechselt zur
-         *           Ein-Ebenen-Ansicht
-         */
         /** Wechselt zur Ein-Ebenen-Ansicht */
         private static final ExtendedAction ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE) {
             @Override

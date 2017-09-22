@@ -293,32 +293,6 @@ public class UserProperties {
         }
     }
 
-    /////////////////////////////
-    // showSubModelsSideBySide //
-    /////////////////////////////
-    /** show SubModel sidy by side (with an slider) or always all */
-    private static boolean showSubModelsInBrowserSideBySide = false;
-
-    /**
-     * Wenn <code>true</code>, werden die Tabs der Teilmodelle im Modelbrowser nebeneinander angezeigt
-     * und nicht alle gleichzeitig untereinander.
-     *
-     * @return multipleModelBrowser from <code>ModelBrowserPanel</code>
-     */
-    public static boolean isShowSubModelsInBrowserSideBySide() {
-        return showSubModelsInBrowserSideBySide;
-    }
-
-    /**
-     * Wenn <code>true</code>, werden die Tabs der Teilmodelle im Modelbrowser nebeneinander angezeigt
-     * und nicht alle gleichzeitig untereinander.
-     *
-     * @param b
-     */
-    public static void setShowSubModelsInBrowserSideBySide(final boolean b) {
-        showSubModelsInBrowserSideBySide = b;
-    }
-
     /////////////////////////////////////////////
     // showUserDefinedPropertiesInModelBrowser //
     /////////////////////////////////////////////

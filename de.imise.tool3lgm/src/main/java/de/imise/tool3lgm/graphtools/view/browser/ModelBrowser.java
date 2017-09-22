@@ -33,21 +33,11 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     /** Der zuletzt aktive Browser */
     protected static ModelBrowser lastActiveBrowser = null;
 
-    /** Styles, die für die Anzeige der Teilmodelle einer {@link GDCollection} zur Verfügung stehen. */
-    public enum STYLE {
-        tab,
-        combobox
-    }
-
-    /** Aktueller Style dieses Browsers */
-    private final STYLE style;
-
     /**
      * Ein neuer Browser
      */
-    protected ModelBrowser(final STYLE style) {
+    protected ModelBrowser() {
         super(TabbedPane.TOP, TabbedPane.SCROLL_TAB_LAYOUT);
-        this.style = style;
         setMinimumSize(new Dimension(10, 10));
         addChangeListener(this);
         addFocusListener(this);
@@ -62,11 +52,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      */
     protected void addCollection(final GDCollection gdcoll) {
         JComponent panel;
-        if (style == STYLE.combobox) {
-            panel = new SubModelComboBoxPane(gdcoll);
-        } else {
-            panel = new SubModelsTabbedPane(gdcoll);
-        }
+        panel = new SubModelComboBoxPane(gdcoll);
         addTab(gdcoll.getName(), panel);
         setSelectedComponent(panel);
     }

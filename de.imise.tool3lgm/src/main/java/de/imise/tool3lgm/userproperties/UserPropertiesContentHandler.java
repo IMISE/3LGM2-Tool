@@ -110,9 +110,6 @@ public class UserPropertiesContentHandler implements ContentHandler {
         } else if (equals(qName, "showModelsInSeparateBrowser")) {
             UserProperties.setShowModelsInSeparateBrowser(Boolean.valueOf(value).booleanValue());
 
-        } else if (equals(qName, "showSubModelsInBrowserSideBySide")) {
-            UserProperties.setShowSubModelsInBrowserSideBySide(Boolean.valueOf(value).booleanValue());
-
         } else if (equals(qName, "showUserDefinedPropertiesInModelBrowser")) {
             UserProperties.setShowUserDefinedPropertiesInModelBrowser(Boolean.valueOf(value).booleanValue());
 
@@ -262,7 +259,6 @@ public class UserPropertiesContentHandler implements ContentHandler {
             raf.writeBytes("\t<moveSubelements>" + UserProperties.isMoveSubelements() + "</moveSubelements>\n");
             raf.writeBytes("\t<enableSubmodelBrowser>" + UserProperties.isEnableSubmodelBrowser() + "</enableSubmodelBrowser>\n");
             raf.writeBytes("\t<showModelsInSeparateBrowser>" + UserProperties.isShowModelsInSeparateBrowser() + "</showModelsInSeparateBrowser>\n");
-            raf.writeBytes("\t<showSubModelsInBrowserSideBySide>" + UserProperties.isShowSubModelsInBrowserSideBySide() + "</showSubModelsInBrowserSideBySide>\n");
             raf.writeBytes("\t<showUserDefinedPropertiesInModelBrowser>" + UserProperties.isShowUserDefinedPropertiesInModelBrowser() + "</showUserDefinedPropertiesInModelBrowser>\n");
             raf.writeBytes("\t<showPartOfHierarchy>" + UserProperties.isShowPartOfHierarchy() + "</showPartOfHierarchy>\n");
             raf.writeBytes("\t<paintEdgesOnlyForSelectedElements>" + UserProperties.isPaintEdgesOnlyForSelectedElements() + "</paintEdgesOnlyForSelectedElements>\n");

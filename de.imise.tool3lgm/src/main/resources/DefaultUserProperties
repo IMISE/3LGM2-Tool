@@ -6,7 +6,6 @@
 	<moveSubelements> true </moveSubelements>
 	<enableSubmodelBrowser> true </enableSubmodelBrowser>
 	<showModelsInSeparateBrowser> false </showModelsInSeparateBrowser>
-	<showSubModelsInBrowserSideBySide> false </showSubModelsInBrowserSideBySide>
 	<showUserDefinedPropertiesInModelBrowser> false </showUserDefinedPropertiesInModelBrowser>
 	<showPartOfHierarchy> true </showPartOfHierarchy>
 	<usePropertyColors> true </usePropertyColors>

@@ -15,17 +15,12 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.view.browser.ModelBrowser.STYLE;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * @author Rudi, AXS
  */
 public final class ModelBrowserPanel extends JPanel {
-
-    //TODO: durch ein UserPropertiy ersetzen
-    //	private STYLE style = STYLE.tab;
-    private final STYLE style = STYLE.combobox;
 
     /** show ModelBrowsers sidy by side or all models in one browser */
     protected boolean showModelsInSeparateBrowser = false;
@@ -46,7 +41,7 @@ public final class ModelBrowserPanel extends JPanel {
         super();
         setLayout(new GridLayout(1, 1, 0, 0));
         showModelsInSeparateBrowser = UserProperties.isShowModelsInSeparateBrowser();
-        inactiveColor = new ModelBrowser(style).getForeground();
+        inactiveColor = new ModelBrowser().getForeground();
     }
 
     /**
@@ -55,14 +50,14 @@ public final class ModelBrowserPanel extends JPanel {
      */
     public final void addCollection(final GDCollection gdcoll) {
         if (showModelsInSeparateBrowser) {
-            ModelBrowser modelBrowser = new ModelBrowser(style);
+            ModelBrowser modelBrowser = new ModelBrowser();
             modelBrowser.addCollection(gdcoll);
             ((GridLayout) getLayout()).setColumns(((GridLayout) getLayout()).getColumns() + 1);
             add(modelBrowser);
         } else {
             ModelBrowser firstBrowser = getFirstBrowser();
             if (firstBrowser == null) {
-                firstBrowser = new ModelBrowser(style);
+                firstBrowser = new ModelBrowser();
                 add(firstBrowser);
             }
             firstBrowser.addCollection(gdcoll);
@@ -182,7 +177,7 @@ public final class ModelBrowserPanel extends JPanel {
         if (showModelsInSeparateBrowser) {
             setLayout(new GridLayout(1, Math.max(firstBrowser.getTabCount(), 1), 0, 0));
             while (firstBrowser.getTabCount() > 1) {
-                ModelBrowser modelBrowser = new ModelBrowser(style);
+                ModelBrowser modelBrowser = new ModelBrowser();
                 Component tab = firstBrowser.getComponentAt(1);
                 String title = firstBrowser.getTitleAt(1);
                 firstBrowser.remove(1);
