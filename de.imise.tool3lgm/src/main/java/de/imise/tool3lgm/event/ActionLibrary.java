@@ -1779,6 +1779,7 @@ public class ActionLibrary {
             public static final Action OPTION_SHOW_STANDARD_TOOLBAR = new StaticActionNew(ActionIdentifier.OPTION_SHOW_STANDARD_TOOLBAR, true) {
                 @Override
                 public void actionPerformed() {
+                    //TODO: das hier müsste eigentlich ein Funktionaufruf in Tool3lgm sein. Die Action muss nicht das Tool revalidaten!
                     Tool3lgm tool = getTool();
                     Container contentPane = tool.getContentPane();
                     ToolBar toolBar = tool.getToolBar();
@@ -1793,13 +1794,9 @@ public class ActionLibrary {
         }
 
         /** (De-)Aktiviert das Anzeigen des ModelBrowsers */
-        public static final Action SWITCH_SHOW_BROWSER = new StaticAction(ActionIdentifier.browser, true, true) {
-
+        public static final Action OPTION_MODEL_BROWSER_SHOW = new StaticActionNew(ActionIdentifier.OPTION_MODEL_BROWSER_SHOW, true) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getTool().showModelBrowser(isSelected());
             }
         };

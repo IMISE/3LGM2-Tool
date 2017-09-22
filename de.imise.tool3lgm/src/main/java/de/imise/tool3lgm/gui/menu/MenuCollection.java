@@ -65,7 +65,7 @@ public class MenuCollection {
             EditActions.MODEL_ACTION_COPY, EditActions.MODEL_ACTION_CUT, EditActions.MODEL_ACTION_PASTE, new JSeparator(), EditActions.MODEL_ACTION_DELETE_FROM_SUBMODEL, EditActions.MODEL_ACTION_REMOVE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, createCheckBoxItem(ViewActions.SWITCH_SHOW_BROWSER), new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
+    public static final JMenu VIEW_MENU = createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, createCheckBoxItem(ViewActions.OPTION_MODEL_BROWSER_SHOW), new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
             ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, new JSeparator(), ViewActions.OPEN_MATRIX);
 
     /** Das Einfügen-Menu */
