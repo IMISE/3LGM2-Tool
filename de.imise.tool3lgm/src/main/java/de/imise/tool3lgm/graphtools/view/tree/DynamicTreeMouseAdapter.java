@@ -100,22 +100,17 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
     @SuppressWarnings("unchecked")
     @Override
     public void mousePressed(final MouseEvent e) {
-
         if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
             Tool3lgm.getContextGenerator().setControlled(true);
         }
-
         boolean right_button = false;
         int xin = e.getX();
         int yin = e.getY();
-
         final JTree sourceTree = (JTree) e.getComponent();
         TreePath path = sourceTree.getPathForLocation(xin, yin);
-
         //Wenn die rechte Maustaste gedrückt wurde, wird <code>right_button</code> true;
         if (Tool3lgmConstants.isPopupTrigger(e)) {
             right_button = true;
-
             if (path != null) {
                 LGMTreeNode lastNode = (LGMTreeNode) path.getLastPathComponent();
                 // Wenn eine ElementClass rechtsgeklickt wurde, wird schon ein anderes Kontextmenü geladen,
@@ -125,8 +120,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 }
             } else {
                 JPopupMenu menu = new JPopupMenu();
-                JMenuItem item = new JMenuItem(new AbstractAction(getResString("expand_all")) {
-
+                JMenuItem item = new JMenuItem(new AbstractAction(getResString("MODEL_BRWOSER_EXPAND_ALL")) {
                     @Override
                     public void actionPerformed(final ActionEvent arg0) {
                         for (int i = 0; i < sourceTree.getRowCount(); i++) {
@@ -138,11 +132,9 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 menu.show(tree, xin + 3, yin + 3);
             }
         }
-
         if (path != null) {
             Object knot = ((LGMTreeNode) path.getLastPathComponent()).getUserObject();
             tmpUserObject = knot;
-
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {

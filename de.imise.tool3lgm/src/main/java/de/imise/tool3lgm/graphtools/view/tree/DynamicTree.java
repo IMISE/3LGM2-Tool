@@ -115,7 +115,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      * @param d
      */
     public DynamicTree(final GraphDocument d) {
-        super(new DefaultTreeModel(new LGMTreeNode(getResString("browser"), false, false)));
+        super(new DefaultTreeModel(new LGMTreeNode(getResString("MODEL_BRWOSER_TITLE"), false, false)));
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
         doc = d;
         //alle KeyStrokes im Baum hinzufügen, die systemweit gelten sollen. Da der Baum schon eine eigene InputMap und ActionMap hat,
