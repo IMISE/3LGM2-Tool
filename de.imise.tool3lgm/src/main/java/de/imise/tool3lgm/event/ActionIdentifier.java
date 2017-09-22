@@ -46,7 +46,7 @@ public enum ActionIdentifier {
     // view
     // toolbar
     OPTION_SHOW_PAINTING_TOOLBAR,
-    standard,
+    OPTION_SHOW_STANDARD_TOOLBAR,
     browser,
     showSubModelsInBrowserSideBySide,
     switch_perspective,

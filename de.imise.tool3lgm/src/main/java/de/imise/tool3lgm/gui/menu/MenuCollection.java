@@ -110,7 +110,7 @@ public class MenuCollection {
     static class ViewSubMenus {
 
         /** Das Symbolleisten-Menu */
-        public static final JMenu TOOLBAR_MENU = createMenu(getResString("toolbarMenu"), createCheckBoxItem(ToolbarActions.OPTION_SHOW_PAINTING_TOOLBAR), createCheckBoxItem(ToolbarActions.SWITCH_SHOW_STANDARD_BAR));
+        public static final JMenu TOOLBAR_MENU = createMenu(getResString("toolbarMenu"), createCheckBoxItem(ToolbarActions.OPTION_SHOW_PAINTING_TOOLBAR), createCheckBoxItem(ToolbarActions.OPTION_SHOW_STANDARD_TOOLBAR));
     }
 
     /** Sammlung der Unter-Menus des Format-Menus */

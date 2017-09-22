@@ -16,6 +16,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getMetaAssoc
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -85,6 +86,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
+import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.imexport.DataExportModule;
@@ -1774,21 +1776,18 @@ public class ActionLibrary {
             };
 
             /** (De-)aktiviert die Standard-Toolbar */
-            public static final Action SWITCH_SHOW_STANDARD_BAR = new StaticAction(ActionIdentifier.standard, true, true) {
-
+            public static final Action OPTION_SHOW_STANDARD_TOOLBAR = new StaticActionNew(ActionIdentifier.OPTION_SHOW_STANDARD_TOOLBAR, true) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
                     Tool3lgm tool = getTool();
+                    Container contentPane = tool.getContentPane();
+                    ToolBar toolBar = tool.getToolBar();
                     if (isSelected()) {
-                        tool.getContentPane().add(tool.getToolBar(), BorderLayout.NORTH);
-                        tool.getWorkArea().revalidate();
+                        contentPane.add(toolBar, BorderLayout.NORTH);
                     } else {
-                        tool.getContentPane().remove(tool.getToolBar());
-                        tool.getWorkArea().revalidate();
+                        contentPane.remove(toolBar);
                     }
+                    tool.getWorkArea().revalidate();
                 }
             };
         }
