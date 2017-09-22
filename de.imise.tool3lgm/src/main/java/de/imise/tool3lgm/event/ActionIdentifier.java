@@ -234,6 +234,7 @@ public enum ActionIdentifier {
      *
      * @param actionCommand
      */
+    @Deprecated
     String getActionCommand() {
         return null;
         // return Tool3lgmConstants.getActionCommand(name());
@@ -244,6 +245,7 @@ public enum ActionIdentifier {
      *
      * @return
      */
+    @Deprecated
     KeyStroke getKeyStroke() {
         return Tool3lgmConstants.getKeyStroke(this);
     }
@@ -253,6 +255,7 @@ public enum ActionIdentifier {
      *
      * @return
      */
+    @Deprecated
     Icon getLargeIcon() {
         return null;
         // return Tool3lgmConstants.getIcon(name().concat(Tool3lgmConstants.LARGE_ICON_SUFFIX));
@@ -263,6 +266,7 @@ public enum ActionIdentifier {
      *
      * @param description
      */
+    @Deprecated
     String getLongDescription() {
         return null;
         // return
@@ -275,6 +279,7 @@ public enum ActionIdentifier {
      *
      * @param description
      */
+    @Deprecated
     String getShortDescription() {
         return null;
         // return
@@ -286,6 +291,7 @@ public enum ActionIdentifier {
      *
      * @return
      */
+    @Deprecated
     Icon getSmallIcon() {
         return null;
         // return Tool3lgmConstants.getIcon(name().concat(Tool3lgmConstants.SMALL_ICON_SUFFIX));
@@ -296,6 +302,7 @@ public enum ActionIdentifier {
      *
      * @param
      */
+    @Deprecated
     String getText() {
         try {
             return getResString(toString());

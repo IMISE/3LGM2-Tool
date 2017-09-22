@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
  * @see AbstractLGMAction
  * @author fstephan
  */
+@Deprecated
 public abstract class StaticAction extends AbstractLGMAction {
 
     /**
