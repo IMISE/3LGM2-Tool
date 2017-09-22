@@ -23,6 +23,7 @@ import de.imise.util.swing.event.ExtendedAction;
  *
  * @author fstephan
  */
+@Deprecated
 public abstract class AbstractLGMAction extends ExtendedAction {
 
     /** Schlüssel für das Attribut <em>Prüfen ob ein {@link GraphDocument} ausgewählt ist</em> */
