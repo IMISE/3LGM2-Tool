@@ -31,6 +31,7 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Static;
@@ -96,6 +97,7 @@ import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
+import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
@@ -922,7 +924,6 @@ public class ActionLibrary {
 
         /** Wählt alle Elemente im Teilmodell aus */
         public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL, true) {
-
             @Override
             public void actionPerformed() {
                 Static.showProgressDialog();
@@ -1757,20 +1758,18 @@ public class ActionLibrary {
         public static class ToolbarActions {
 
             /** (De-)aktiviert die Zeichnen-Toolbar */
-            public static final Action SWITCH_SHOW_PAINTING_BAR = new StaticAction(ActionIdentifier.painting, true, true) {
-
+            public static final Action OPTION_SHOW_PAINTING_TOOLBAR = new GraphFrameAction(ActionIdentifier.OPTION_SHOW_PAINTING_TOOLBAR, true) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
-                    if (!isEnabled()) {
-                        return;
-                    }
+                public void actionPerformed() {
+                    Tool3lgm tool = getTool();
+                    JPanel workArea = tool.getWorkArea();
+                    UnfloatableToolBar toolbar = tool.getWerkzeugleiste();
                     if (isSelected()) {
-                        getTool().getWorkArea().add(getTool().getWerkzeugleiste(), BorderLayout.SOUTH);
-                        getTool().getWorkArea().revalidate();
+                        workArea.add(toolbar, BorderLayout.SOUTH);
                     } else {
-                        getTool().getWorkArea().remove(getTool().getWerkzeugleiste());
-                        getTool().getWorkArea().revalidate();
+                        workArea.remove(toolbar);
                     }
+                    workArea.revalidate();
                 }
             };
 
