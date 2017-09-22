@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -64,7 +65,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
      *
      */
     public GraphViewOptionsDialog() {
-        super();
+        super(Static.getTool());
     }
 
     /**
