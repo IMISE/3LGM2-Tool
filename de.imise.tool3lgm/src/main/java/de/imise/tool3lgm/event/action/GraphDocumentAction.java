@@ -36,27 +36,26 @@ public class GraphDocumentAction extends StaticActionNew {
 
     /**
      * @param identifier
-     * @param appendThreePoints
+     * @param textSuffix
      */
-    public GraphDocumentAction(final ActionIdentifier identifier, final Boolean appendThreePoints) {
-        super(identifier, appendThreePoints);
+    public GraphDocumentAction(final ActionIdentifier identifier, final String textSuffix) {
+        super(identifier, textSuffix);
     }
 
     /**
      * @param identifier
-     * @param appendThreePoints
+     * @param textSuffix
      */
-    public GraphDocumentAction(final GDCommands identifier, final Boolean appendThreePoints) {
-        super(identifier, appendThreePoints);
+    public GraphDocumentAction(final GDCommands identifier, final String textSuffix) {
+        super(identifier, textSuffix);
     }
 
     /**
      * @param identifier
-     * @param appendThreePoints
      * @param initialSelectionState
      */
-    public GraphDocumentAction(final ActionIdentifier identifier, final Boolean appendThreePoints, final Boolean initialSelectionState) {
-        super(identifier, appendThreePoints, initialSelectionState);
+    public GraphDocumentAction(final ActionIdentifier identifier, final Boolean initialSelectionState) {
+        super(identifier, initialSelectionState);
     }
 
     @Override

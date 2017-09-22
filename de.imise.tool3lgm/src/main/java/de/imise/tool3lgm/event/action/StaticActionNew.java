@@ -16,7 +16,6 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -29,7 +28,7 @@ import de.imise.util.swing.event.ExtendedAction;
  * <p>
  * Außerdem ist es möglich, ein Überprüfen des gerade ausgewählten {@link GraphDocument}s zu aktivieren, sowie einen initialen Selektionszustand für
  * die Anwendung bei {@link JCheckBoxMenuItem}s bzw. {@link JRadioButtonMenuItem}s zu setzen.<br>
- * Der Zugriff auf diese Attribute wird durch die Schlüssel {@link StaticAction#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
+ * Der Zugriff auf diese Attribute wird durch die Schlüssel {@link StaticActionNew#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
  * {@link Action#SELECTED_KEY} über {@link #getValue(String)} ermöglicht.
  *
  * @see ActionIdentifier
@@ -39,7 +38,7 @@ import de.imise.util.swing.event.ExtendedAction;
 public abstract class StaticActionNew extends ExtendedAction {
 
     /** "..."-Suffix Actions */
-    private static final String PPP = "...";
+    public static final String PPP = "...";
 
     /** Schlüssel für den {@link ActionIdentifier} oder das {@link GDCommands} dieser Action */
     public static final String IDENTIFIER_KEY = "IdentifierKey";
@@ -60,128 +59,116 @@ public abstract class StaticActionNew extends ExtendedAction {
      *            eindeutiger Identifier für diese Action
      */
     public StaticActionNew(final ActionIdentifier identifier) {
-        this(identifier, false, true);
+        this(identifier, null, null, null, null);
     }
 
     /**
      * Konstruktor
      * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * Erzeugt eine durch den spezifiziertes {@link GDCommands} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
      *
      * @param identifier
      *            eindeutiger Identifier für diese Action
      */
     public StaticActionNew(final GDCommands identifier) {
-        this(identifier, null, null, false, true);
+        this(identifier, null, null, null, null);
     }
 
     /**
      * Konstruktor
      * <p>
      * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * <p>
+     * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
+     *
+     * @param identifier
+     *            eindeutiger Identifier für diese Action
+     * @param textSuffix
+     *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
+     */
+    public StaticActionNew(final ActionIdentifier identifier, final String textSuffix) {
+        this(identifier, null, null, textSuffix, null);
+    }
+
+    /**
+     * Konstruktor
+     * <p>
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * <p>
+     *
+     * @param identifier
+     *            eindeutiger Identifier für diese Action
+     * @param textSuffix
+     *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
+     */
+    public StaticActionNew(final GDCommands identifier, final String textSuffix) {
+        this(identifier, null, null, textSuffix, null);
+    }
+
+    /**
+     * Konstruktor
+     * <p>
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * <p>
+     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
+     * {@link JRadioButtonMenuItem}s genutzt werden.
+     *
+     * @param identifier
+     *            eindeutiger Identifier für diese Action
+     * @param textSuffix
+     *            Suffix für die Text-Property
+     * @param enabledWhenSelectedDocNotNull
+     *            <br>
+     *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein selektiertes {@link GraphDocument} existiert,
+     *            sonst <code>false</code> <br>
+     *            = <code>false</code>: {@link #isEnabled()} gibt Standardwert zurück (durch {@link AbstractAction} bestimmt)
+     * @param initialSelectionState
+     *            initialer Selektionszustand
+     */
+    public StaticActionNew(final ActionIdentifier identifier, final Boolean initialSelectionState) {
+        this(identifier, null, null, null, initialSelectionState);
+    }
+
+    /**
+     * Konstruktor
+     * <p>
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * <p>
+     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
+     * {@link JRadioButtonMenuItem}s genutzt werden. Die Action wird
      *
      * @param identifier
      *            eindeutiger Identifier für diese Action
      * @param arguments
-     *            Arguente für das Ausführen dieser Action
+     *            Argumente des Kommandos
+     * @param text
+     *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
      */
-    public StaticActionNew(final GDCommands identifier, final String arguments, final String text) {
-        this(identifier, arguments, text, false, true);
-    }
-
-    @Override
-    public boolean isEnabled() {
-        //Das müssen alle statischen Unter-Actions abfragen, da es sonst zu NullPointern beim Init des Tools kommt
-        return Static.getTool() != null;
+    public StaticActionNew(final Object identifier, final String arguments, final String text) {
+        this(identifier, arguments, text, null, null);
     }
 
     /**
      * Konstruktor
      * <p>
      * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param appendThreePoints
-     *            Suffix für die Text-Property <br>
-     *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein selektiertes {@link GraphDocument} existiert,
-     *            sonst <code>false</code> <br>
-     *            = <code>false</code>: {@link #isEnabled()} gibt Standardwert zurück (durch {@link AbstractAction} bestimmt)
-     */
-    public StaticActionNew(final ActionIdentifier identifier, final Boolean appendThreePoints) {
-        this(identifier, appendThreePoints, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param appendThreePoints
-     *            Suffix für die Text-Property <br>
-     *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein selektiertes {@link GraphDocument} existiert,
-     *            sonst <code>false</code> <br>
-     *            = <code>false</code>: {@link #isEnabled()} gibt Standardwert zurück (durch {@link AbstractAction} bestimmt)
-     */
-    public StaticActionNew(final GDCommands identifier, final Boolean appendThreePoints) {
-        this(identifier, null, null, appendThreePoints, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
      * <p>
      * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
-     * {@link JRadioButtonMenuItem}s genutzt werden.
+     * {@link JRadioButtonMenuItem}s genutzt werden. Die Action wird
      *
      * @param identifier
      *            eindeutiger Identifier für diese Action
+     * @param arguments
+     *            Argumente des Kommandos
+     * @param text
+     *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
      * @param textSuffix
      *            Suffix für die Text-Property
-     * @param enabledWhenSelectedDocNotNull
-     *            <br>
-     *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein selektiertes {@link GraphDocument} existiert,
-     *            sonst <code>false</code> <br>
-     *            = <code>false</code>: {@link #isEnabled()} gibt Standardwert zurück (durch {@link AbstractAction} bestimmt)
      * @param initialSelectionState
-     *            initialer Selektionszustand
+     *            initialer Selektionszustand. Wird hier ein Wert != <code>null</code> übergeben, dann wird die Action als optionAction angesehen.
+     * @see de.imise.util.swing.event.ExtendedAction#isOptionAction()
      */
-    public StaticActionNew(final ActionIdentifier identifier, final Boolean appendThreePoints, final Boolean initialSelectionState) {
-        this(identifier, null, null, appendThreePoints, initialSelectionState);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der Rückgabewert von {@link #isEnabled()} hängt von <code>enabledWhenSelectedDocNotNull</code>.
-     * <p>
-     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
-     * {@link JRadioButtonMenuItem}s genutzt werden.
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param textSuffix
-     *            Suffix für die Text-Property
-     * @param enabledWhenSelectedDocNotNull
-     *            <br>
-     *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein selektiertes {@link GraphDocument} existiert,
-     *            sonst <code>false</code> <br>
-     *            = <code>false</code>: {@link #isEnabled()} gibt Standardwert zurück (durch {@link AbstractAction} bestimmt)
-     * @param initialSelectionState
-     *            initialer Selektionszustand
-     */
-    private StaticActionNew(final Object identifier, final String arguments, final String text, final Boolean appendThreePoints, final Boolean initialSelectionState) {
+    private StaticActionNew(final Object identifier, final String arguments, final String text, final String textSuffix, final Boolean initialSelectionState) {
         //wenn darunter das try-catch schief geht, dann ist der Text = dem übergebenen identifier.toString()
         super(text == null ? identifier.toString() : text);
         putValue(IDENTIFIER_KEY, identifier);
@@ -205,12 +192,12 @@ public abstract class StaticActionNew extends ExtendedAction {
         if (text == null) {
             try {
                 String resString = getResString(command);
-                setText(resString + (appendThreePoints ? PPP : ""));
+                setText(resString + (textSuffix != null ? textSuffix : ""));
             } catch (MissingResourceException e) {
                 try {
                     String simpleIdentifierClassName = ((Class<?>) identifier).getSimpleName();
                     String resString = getResString(simpleIdentifierClassName);
-                    setText(resString + (appendThreePoints ? PPP : ""));
+                    setText(resString + (textSuffix != null ? textSuffix : ""));
                 } catch (Exception ex) {
                     setText(command);
                 }
@@ -236,6 +223,12 @@ public abstract class StaticActionNew extends ExtendedAction {
             setShortDescription(Tool3lgmConstants.getResString(TOOLTIP_RESSOURCE_PREFIX + identifier));
         } catch (MissingResourceException e) {
         }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        //Das müssen alle statischen Unter-Actions abfragen, da es sonst zu NullPointern beim Init des Tools kommt
+        return Static.getTool() != null;
     }
 
     @Override

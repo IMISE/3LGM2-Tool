@@ -123,7 +123,8 @@ public class ActionLibrary {
         };
 
         /** Öffnen eines bestehenden Models */
-        public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, true) {
+        public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
+
             @Override
             public void actionPerformed() {
                 getTool().openFile(true);
@@ -306,7 +307,7 @@ public class ActionLibrary {
     public static class AnalysisActions {
 
         /** Zeigt das XMLAnalyse-Repository an */
-        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, true) {
+        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, PPP) {
             @Override
             public void actionPerformed() {
                 AnalyseRepositoryFrame.showDialog();
@@ -314,7 +315,7 @@ public class ActionLibrary {
         };
 
         /** Öffnet den XMLAnalyse-Editor */
-        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, true) {
+        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
             @Override
             public void actionPerformed() {
                 AnalyseEditor.showDialog(getTool());
@@ -347,7 +348,7 @@ public class ActionLibrary {
         };
 
         /** Aktiviert die Konsistenz-Prüfung */
-        public static final ExtendedAction OPTION_CHECK_CONSISTENCY = new StaticActionNew(ActionIdentifier.OPTION_CHECK_CONSISTENCY, false, UserProperties.isCheckConsistency()) {
+        public static final ExtendedAction OPTION_CHECK_CONSISTENCY = new StaticActionNew(ActionIdentifier.OPTION_CHECK_CONSISTENCY, UserProperties.isCheckConsistency()) {
             @Override
             public final void actionPerformed() {
                 boolean isSelected = isSelected();

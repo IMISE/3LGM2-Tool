@@ -15,8 +15,8 @@ public class SubmodelAction extends GraphDocumentAction {
         super(identifier);
     }
 
-    public SubmodelAction(final GDCommands identifier, final Boolean appendThreePoints) {
-        super(identifier, appendThreePoints);
+    public SubmodelAction(final GDCommands identifier, final String textSuffix) {
+        super(identifier, textSuffix);
     }
 
     @Override

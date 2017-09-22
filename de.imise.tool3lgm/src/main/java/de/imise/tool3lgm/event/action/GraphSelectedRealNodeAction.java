@@ -21,10 +21,10 @@ public class GraphSelectedRealNodeAction extends GraphFrameAction {
 
     /**
      * @param identifier
-     * @param appendThreePoints
+     * @param textSuffix
      */
-    public GraphSelectedRealNodeAction(final GDCommands identifier, final Boolean appendThreePoints) {
-        super(identifier, appendThreePoints);
+    public GraphSelectedRealNodeAction(final GDCommands identifier, final String textSuffix) {
+        super(identifier, textSuffix);
     }
 
     @Override

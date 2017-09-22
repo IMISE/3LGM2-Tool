@@ -27,27 +27,26 @@ public class GraphFrameAction extends GraphDocumentAction {
 
     /**
      * @param identifier
-     * @param appendThreePoints
+     * @param textSuffix
      */
-    public GraphFrameAction(final ActionIdentifier identifier, final Boolean appendThreePoints) {
-        super(identifier, appendThreePoints);
+    public GraphFrameAction(final ActionIdentifier identifier, final String textSuffix) {
+        super(identifier, textSuffix);
     }
 
     /**
      * @param identifier
-     * @param appendThreePoints
+     * @param textSuffix
      */
-    public GraphFrameAction(final GDCommands identifier, final Boolean appendThreePoints) {
-        super(identifier, appendThreePoints);
+    public GraphFrameAction(final GDCommands identifier, final String textSuffix) {
+        super(identifier, textSuffix);
     }
 
     /**
      * @param identifier
-     * @param appendThreePoints
      * @param initialSelectionState
      */
-    public GraphFrameAction(final ActionIdentifier identifier, final Boolean appendThreePoints, final Boolean initialSelectionState) {
-        super(identifier, appendThreePoints, initialSelectionState);
+    public GraphFrameAction(final ActionIdentifier identifier, final Boolean initialSelectionState) {
+        super(identifier, initialSelectionState);
     }
 
     @Override
