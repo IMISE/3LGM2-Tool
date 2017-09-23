@@ -3907,18 +3907,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void swapEdgePositions(final ModelElement me, final int edgeIndex1, final int edgeIndex2, final int pid) {
+        if (!me.isValidEdgeIndex(edgeIndex1) || me.isValidEdgeIndex(edgeIndex2) || edgeIndex1 == edgeIndex2) {
+            return;
+        }
         start_transaction(pid);
-        addRedoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex1 + " " + edgeIndex2, pid);
-        addUndoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex2 + " " + edgeIndex1, pid);
-
-        Edge kante1 = me.getEdge(edgeIndex1);
-        Edge kante2 = me.getEdge(edgeIndex2);
-        me.setEdge(edgeIndex1, kante2);
-        me.setEdge(edgeIndex2, kante1);
-        String s = kante1.getName();
-        kante1.setName(kante2.getName());
-        kante2.setName(s);
-
+        if (me.swapEdges(edgeIndex2, edgeIndex2)) {
+            addRedoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex1 + " " + edgeIndex2, pid);
+            addUndoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex2 + " " + edgeIndex1, pid);
+        }
         /*
          * if (knot.isSpecialInfoKnot()){
          * ElementContainer kc = knot.getContainer(this);

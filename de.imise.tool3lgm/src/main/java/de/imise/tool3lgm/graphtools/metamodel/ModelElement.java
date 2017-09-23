@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -64,12 +66,14 @@ public abstract class ModelElement extends UserFieldTarget {
      * Table, der von einem <code>GraphDocument</code> auf den Container des Elemtentes in diesem <code>GraphDocument</code> mappt, wenn es darin
      * vorkommt.
      */
-    private Map<GraphDocument, ElementContainer> containerTable = new HashMap<>(3, 1);
+    private Map<GraphDocument, ElementContainer> containerTable = new HashMap<>(2, 1);
 
     /**
-     * Liste aller Assoziationen zu anderen Elementen
+     * Liste aller Assoziationen zu anderen Elementen. Solange keine Elemente in dieser Liste sind,
+     * wird sie <code>null</code> gehalten, so dass bei Elementen, die sowieso niemals Kanten
+     * haben (Kanten selbst und Knickpunkte), auch keine unnöige Liste angelegt wird.
      */
-    private List<Edge> edges = new ArrayList<>();
+    private List<Edge> edges = null;
 
     /**
      * Ein StringBuilder, der gebraucht wird, um die Namen der Elemente zusammen zu bauen. Er ist statisch, damit man ihn nicht ständig neu anlegen
@@ -103,8 +107,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public ModelElement clone() {
         ModelElement retVal = (ModelElement) super.clone();
         retVal.hashstring = getNewHashString(this);
-        retVal.containerTable = new HashMap<>(3, 1);
-        retVal.edges = new ArrayList<>(3);
+        retVal.containerTable = new HashMap<>(2, 1);
+        retVal.edges = null;
         return retVal;
     }
 
@@ -529,85 +533,78 @@ public abstract class ModelElement extends UserFieldTarget {
     /* --- Funktionen im Netzwerk --- Anfang --- */
 
     /** Fuegt diesem Node eine Edge zu. */
-    public boolean addEdge(final Edge kante) {
-        if (kante == null || edges.contains(kante)) {
-            return false;
-        }
-        edges.add(kante);
-        return true;
+    public boolean addEdge(final Edge edge) {
+        int pos = edges == null ? 0 : edges.size() - 1;
+        return insertEdge(edge, pos);
     }
 
     /**
-     * Fuegt diesem Node in der List connections an der Position pos die Edge kante hinzu.
+     * Fügt diesem Node in der List connections an der Position pos die Edge kante hinzu.
      */
     public boolean insertEdge(final Edge kante, int pos) {
-        if (kante == null || edges.contains(kante)) {
+        if (kante == null || edges != null && edges.contains(kante)) {
             return false;
+        }
+        if (edges == null) {
+            edges = new ArrayList<>(3); // die meisten Elemente, die überhaupt Kanten haben, haben fast nie mehr als 3
         }
         if (pos < edges.size() || pos > edges.size()) {
             pos = edges.size();
         }
-        edges.add(null);
-        for (int i = edges.size() - 1; i > pos; i--) {
-            edges.set(i, edges.get(i - 1));
-        }
-        edges.set(pos, kante);
+        edges.add(pos, kante);
         return true;
     }
 
-    public void setEdges(final List<Edge> associations) {
-        edges = associations;
-    }
-
-    /** Setzt in connections die Edge an Position pos auf kante. */
-    public boolean setEdge(final int pos, final Edge kante) {
-        if (pos < 0 || pos >= edges.size()) {
+    public boolean swapEdges(final int pos1, final int pos2) {
+        if (!isValidEdgeIndex(pos1) || !isValidEdgeIndex(pos2) || pos1 == pos2) {
             return false;
         }
-        edges.set(pos, kante);
+        Edge egde = edges.get(pos1);
+        edges.set(pos1, edges.get(pos2));
+        edges.set(pos2, egde);
         return true;
     }
 
     /** Entfernt die angegebene Edge vom Node. */
     public final void removeEdge(final Edge kante) {
-        edges.remove(kante);
-    }
-
-    /** Entfernt alle Kanten vom Node. */
-    public final void removeEdges() {
-        edges.clear();
+        if (edges != null) {
+            edges.remove(kante);
+            if (edges.size() == 0) {
+                edges = null;
+            }
+        }
     }
 
     /* --- Funktionen im Netzwerk --- Ende --- */
 
     /** Ermittelt, ob der Node an eine Edge gebunden ist oder nicht. */
     public final boolean hasEdges() {
-        if (edges.size() > 0) {
-            return true;
-        }
-        return false;
+        return getEdgesCount() > 0;
     }
 
     /** Gibt die Zahl der Kanten zurueck, an die der Node gebunden ist. */
     public final int getEdgesCount() {
-        return edges.size();
+        return edges == null ? 0 : edges.size();
     }
+
+    private static final Iterable<Edge> emtpyEdgeIterable = ImmutableList.of();
 
     /** Gibt den Vektor der Verbindungen zurueck */
     public final Iterable<Edge> getEdges() {
-        return edges;
+        return edges == null ? emtpyEdgeIterable : edges;
     }
 
     /** Gibt die Verbindung Nummer <i>index </i> zurueck */
     public final Edge getEdge(final int index) {
-        if (index >= edges.size() || index < 0) {
-            return null;
-        }
-        return edges.get(index);
+        return isValidEdgeIndex(index) ? edges.get(index) : null;
     }
 
     public int getEdgeIndex(final Edge edge) {
-        return edges.indexOf(edge);
+        return edges == null ? -1 : edges.indexOf(edge);
+    }
+
+    public boolean isValidEdgeIndex(final int index) {
+        return index >= 0 && edges != null && index < edges.size();
     }
 
     //###############################################################################
@@ -621,7 +618,8 @@ public abstract class ModelElement extends UserFieldTarget {
         if (k == null) {
             return null;
         }
-        if (this == k.getStart()) {
+        ModelElement start = k.getStart();
+        if (this == start) {
             return k.getEnd();
         }
         return k.getStart();
@@ -632,10 +630,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return <code>true</code>, wenn Edge <i>k</i> an diesem Node ansetzt, sonst <code>false</code>
      */
     public final boolean hasConnection(final Edge edge) {
-        if (edges.indexOf(edge) >= 0) {
-            return true;
-        }
-        return false;
+        return getEdgeIndex(edge) >= 0;
     }
 
     /**
@@ -643,8 +638,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return <code>true</code>, wenn eine Edge zwischen diesem und dem übergebenen Element besteht
      */
     public final boolean isConnectedWith(final ModelElement modelElement) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (getEdge(c).isConnecting(this, modelElement)) {
+        for (Edge edge : getEdges()) {
+            if (edge.isConnecting(this, modelElement)) {
                 return true;
             }
         }
@@ -656,8 +651,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return <code>true</code>, wenn eine Edge von diesem zu dem übergebenen Element besteht
      */
     public final boolean isConnectedTo(final ModelElement modelElement) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (getEdge(c).isDirecting(this, modelElement)) {
+        for (Edge edge : getEdges()) {
+            if (edge.isDirecting(this, modelElement)) {
                 return true;
             }
         }
@@ -666,11 +661,11 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * @param modelElement
-     * @return <code>true</code>, wenn eine Edge vom übergebenen yu diesem Element besteht
+     * @return <code>true</code>, wenn eine Edge vom übergebenen zu diesem Element besteht
      */
     public final boolean isConnectedFrom(final ModelElement modelElement) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (getEdge(c).isDirecting(modelElement, this)) {
+        for (Edge edge : getEdges()) {
+            if (edge.isDirecting(modelElement, this)) {
                 return true;
             }
         }
@@ -685,8 +680,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return <code>true</code>, wenn eine Edge zwischen diesem und dem übergebenen Element besteht
      */
     public final boolean isConnectedWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (edgeClass.isAssignableFrom(edges.get(c).getClass()) && getEdge(c).isConnecting(this, modelElement)) {
+        for (Edge edge : getEdges()) {
+            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isConnecting(this, modelElement)) {
                 return true;
             }
         }
@@ -694,8 +689,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     public final boolean isConnectedTo(final ModelElement k, final Class<? extends Edge> edgeClass) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (edgeClass.isAssignableFrom(edges.get(c).getClass()) && getEdge(c).isDirecting(this, k)) {
+        for (Edge edge : getEdges()) {
+            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isDirecting(this, k)) {
                 return true;
             }
         }
@@ -703,8 +698,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     public final boolean isConnectedFrom(final ModelElement k, final Class<? extends Edge> edgeClass) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (edgeClass.isAssignableFrom(edges.get(c).getClass()) && getEdge(c).isDirecting(k, this)) {
+        for (Edge edge : getEdges()) {
+            if (edgeClass.isAssignableFrom(edge.getClass()) && edge.isDirecting(k, this)) {
                 return true;
             }
         }
@@ -720,10 +715,21 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final Edge getEdgeTo(final ModelElement modelElement, final Class<? extends Edge> edgeClass) {
-        for (int i = 0; i < edges.size(); i++) {
-            Edge kante = getEdgeTo(modelElement, edgeClass, i);
-            if (kante != null) {
-                return kante;
+        return getEdgeTo(this, modelElement, edgeClass);
+    }
+
+    /**
+     * Gibt die erste Edge vom Typ <code>edgeClass</code> zurück, die von diesem <code>ModelElement</code> zum <code>ModelElement k</code> geht.
+     * Führt <code>getConnectionTo(ModelElement, Class, int)</code> für alle Positionen aus.
+     *
+     * @param modelElement
+     * @param edgeClasses
+     * @return
+     */
+    private static final Edge getEdgeTo(final ModelElement start, final ModelElement end, final Class<? extends Edge> edgeClass) {
+        for (Edge edge : start.getEdges()) {
+            if (isEdgeTo(edge, edgeClass, start, end)) {
+                return edge;
             }
         }
         return null;
@@ -736,17 +742,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final Edge getEdgeTo(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (position != GDCommands.INVALID_EDGE_INDEX && position != c) {
-                continue;
+        if (isValidEdgeIndex(position)) {
+            Edge edge = edges.get(position);
+            if (isEdgeTo(edge, edgeClass, this, modelElement)) {
+                return edge;
             }
-            Edge ka = getEdge(c);
-            if (edgeClass != null && edgeClass != ka.getClass()) {
-                continue;
-            }
-            if (ka.isDirecting(this, modelElement)) {
-                return ka;
-            }
+        } else if (position == GDCommands.INVALID_EDGE_INDEX) {
+            return getEdgeTo(this, modelElement, edgeClass);
         }
         return null;
     }
@@ -758,37 +760,42 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final Edge getEdgeFrom(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position) {
-        for (int c = 0; c < edges.size(); c++) {
-            if (position != GDCommands.INVALID_EDGE_INDEX && position != c) {
-                continue;
+        if (isValidEdgeIndex(position)) {
+            Edge edge = edges.get(position);
+            if (isEdgeTo(edge, edgeClass, modelElement, this)) {
+                return edge;
             }
-            Edge ka = getEdge(c);
-            if (edgeClass != null && edgeClass != ka.getClass()) {
-                continue;
-            }
-            if (ka.isDirecting(modelElement, this)) {
-                return ka;
-            }
+        } else if (position == GDCommands.INVALID_EDGE_INDEX) {
+            return getEdgeTo(modelElement, this, edgeClass);
         }
         return null;
     }
 
     /**
-     * @param elemClass
+     * Prüft, ob die übergebene Kante der übergebenen die zuweisungskompatibel zur übergebenen Kantenklasse ist (wenn die Kantenklasse
+     * <code>null</code> ist, dann ist sie egal bzw. ganauso als würde man ModelElement.class übergeben) und ob sie this mit dem
+     * übergebenen ModelElement in Richtung FORWAD verbindet.
+     *
+     * @param edge
      * @param edgeClass
-     * @param direction
+     * @param start
+     * @param end
      * @return
      */
-    public List<Edge> getEdge(final Class<? extends ModelElement> elemClass, final Class<? extends Edge> edgeClass, final int direction) {
-        List<Edge> kanten = null;
-        if (FORWARD == direction) {
-            kanten = getEdgesTo(elemClass, edgeClass);
-        } else if (BACKWARD == direction) {
-            kanten = getEdgesFrom(elemClass, edgeClass);
-        } else {
-            kanten = getEdgesWith(elemClass, edgeClass);
-        }
-        return kanten;
+    private static boolean isEdgeTo(final Edge edge, final Class<? extends Edge> edgeClass, final ModelElement start, final ModelElement end) {
+        return edgeHasClass(edge, edgeClass) && edge.isDirecting(start, end);
+    }
+
+    /**
+     * Prüft, ob die übergebene Kante der übergebenen die zuweisungskompatibel zur übergebenen Kantenklasse ist (wenn die Kantenklasse
+     * <code>null</code> ist, dann ist sie egal bzw. ganauso als würde man ModelElement.class übergeben).
+     *
+     * @param edge
+     * @param edgeClass
+     * @return
+     */
+    private static boolean edgeHasClass(final Edge edge, final Class<? extends Edge> edgeClass) {
+        return edgeClass == null || edgeClass.isAssignableFrom(edge.getClass());
     }
 
     /**
@@ -818,23 +825,6 @@ public abstract class ModelElement extends UserFieldTarget {
         return getEdgesWith(modelElement, edgeClass, position, ANY);
     }
 
-    ///*	public final List<Edge> getEdgesWith(ModelElement modelElement, Class<? extends Edge> edgeClass, int position) {
-    //		List<Edge> retVal = new ArrayList<Edge>();
-    //		if (modelElement == null)
-    //			return retVal;
-    //		for (int c = 0; c < edges.size(); c++) {
-    //			if ((position != GDCommands.INVALID_EDGE_INDEX) && (position != c))
-    //				continue;
-    //			Edge ka = getEdge(c);
-    //			if ((edgeClass != null) && (edgeClass != ka.getClass()))
-    //				continue;
-    //			if (ka.isConnecting(this, modelElement))
-    //				retVal.add(ka);
-    //		}
-    //		return retVal;
-    //	}
-    //*/
-
     /**
      * @param modelElement
      * @param edgeClass
@@ -857,33 +847,36 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * @param modelElement
      * @param edgeClass
-     * @param position
+     * @param edgeIndex
      * @param direction
      * @return
      */
-    public final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int position, final int direction) {
+    private final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int edgeIndex, final int direction) {
         List<Edge> retVal = new ArrayList<>();
-        if (modelElement == null) {
+        if (modelElement == null || edges == null) {
             return retVal;
         }
-        for (int c = 0; c < edges.size(); c++) {
-            if (position != GDCommands.INVALID_EDGE_INDEX && position != c) {
-                continue;
-            }
-            Edge ka = getEdge(c);
-            if (edgeClass != null && edgeClass != ka.getClass()) {
+        int startIndex = 0;
+        int endIndex = edges.size();
+        if (isValidEdgeIndex(edgeIndex)) {
+            startIndex = edgeIndex;
+            endIndex = edgeIndex + 1;
+        }
+        for (int i = startIndex; i < endIndex; i++) {
+            Edge edge = getEdge(i);
+            if (edgeClass != null && edgeClass != edge.getClass()) {
                 continue;
             }
             boolean add = false;
             if (direction == FORWARD) {
-                add = ka.isDirecting(this, modelElement);
+                add = edge.isDirecting(this, modelElement);
             } else if (direction == BACKWARD) {
-                add = ka.isDirecting(modelElement, this);
+                add = edge.isDirecting(modelElement, this);
             } else {
-                add = ka.isConnecting(this, modelElement);
+                add = edge.isConnecting(this, modelElement);
             }
             if (add) {
-                retVal.add(ka);
+                retVal.add(edge);
             }
         }
         return retVal;
@@ -947,7 +940,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public final List<Edge> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final int direction) {
         List<Edge> l_connections = new ArrayList<>();
-        for (Edge o_kante : edges) {
+        for (Edge o_kante : getEdges()) {
             if (edgeClass != null && !edgeClass.isAssignableFrom(o_kante.getClass())) {
                 continue;
             }
@@ -1319,7 +1312,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param result
      */
     private final void getParentElementsRecursive(final Set<ModelElement> result) {
-        for (Edge edge : edges) {
+        for (Edge edge : getEdges()) {
             if (!(edge instanceof PartOfBeziehung)) {
                 continue;
             }
@@ -1341,7 +1334,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param result
      */
     private final void getPartElementsRecursive(final Set<ModelElement> result) {
-        for (Edge edge : edges) {
+        for (Edge edge : getEdges()) {
             if (!(edge instanceof PartOfBeziehung)) {
                 continue;
             }
@@ -1473,7 +1466,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final boolean isDirectParentOf(final ModelElement me) {
-        for (Edge edge : edges) {
+        for (Edge edge : getEdges()) {
             if (!(edge instanceof PartOfBeziehung)) {
                 continue;
             }
@@ -1511,27 +1504,6 @@ public abstract class ModelElement extends UserFieldTarget {
     ////////////////////////
 
     /**
-     * Füllt die übergebene Liste <code>returnList</code> mit allen hierarschich verbundenen Elementen.
-     *
-     * @param returnList Liste mit <code>ElementContainer</code>n
-     * @param doc (Teil-)Modell in dem gesucht werden soll
-     * @param parts Wenn <code>true</code> wird nach allen Teilen gesucht, sonst nach allen Oberelementen
-     * @param testonly Wenn <code>true</code> wird beim ersten gefundenen Element abgerochen und <code>true</code> zurück gegeben
-     * @return <code>true</code>, wenn mind. ein Element gefunden wurde, das in die Rückgabeliste gehört / Braucht man vielleicht und sollte in
-     *         Analogie zu den Part-OfBeziehungen (oder irgendwie über dieselbe Funktion gemacht werden private final boolean
-     *         getCompositionMasterOrSlaveContainer(List<ElementContainer> returnList, GraphDocument doc, boolean slave, boolean testonly) { if
-     *         ((returnList == null) || (returnList.size() == 0) || (returnList.get(0) == null)) return false; doc =
-     *         (isUnique() ? doc.getCollection().getGraphDocument() : doc); List<ElementContainer> masterOrSlaves = null; if (slave)
-     *         masterOrSlaves = returnList.get(returnList.size()-1).getElement().getDirectCompositionSlaveContainer(doc); else
-     *         masterOrSlaves = returnList.get(returnList.size()-1).getElement().getDirectCompositionMasterContainer(doc); for (int i = 0; i <
-     *         masterOrSlaves.size(); i++) { boolean found = false; ElementContainer ms = masterOrSlaves.get(i); if
-     *         (returnList.contains(ms)){ found = true; if (testonly) return true; break; } if (!found) { returnList.add(ms);
-     *         getPartOrParentContainer(returnList, doc, parts, testonly); } } return false; }
-     */
-
-    /**
-     * COMMENTME
-     *
      * @return
      */
     public final List<? extends ModelElement> getDirectCompositionSlaveElements() {
@@ -1689,14 +1661,14 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
      */
     private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final int direction, final boolean container, final boolean alphabetical) {
-        List<Object> knoten = new ArrayList<>(edges.size());
+        List<Object> knoten = new ArrayList<>(getEdgesCount());
 
         if (doc == null && container) {
             System.err.println("Can't find ElementContainer with an null-GraphDocument");
             return knoten;
         }
 
-        for (Edge edge : edges) {
+        for (Edge edge : getEdges()) {
             if (edgeClass != null && !edgeClass.isAssignableFrom(edge.getClass())) {
                 continue;
             }
@@ -1787,8 +1759,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit den verbundenen ModelElementen
      */
     public List<ModelElement> getConnectedElementsByEdge(final Class<? extends ModelElement> targetElementClass, final Class<? extends Edge> edgeClass) {
-        List<ModelElement> retVal = new ArrayList<>(edges.size());
-        for (Edge edge : edges) {
+        List<ModelElement> retVal = new ArrayList<>(getEdgesCount());
+        for (Edge edge : getEdges()) {
             if (edgeClass.isAssignableFrom(edge.getClass())) {
                 ModelElement me = edge.getOther(this);
                 if (targetElementClass.isAssignableFrom(me.getClass())) {
@@ -1831,9 +1803,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<Edge> getEdges(final Class<? extends Edge> edgeClass) {
-        List<Edge> returnList = new ArrayList<>(edges.size());
-        for (Edge edge : edges) {
-            if (edgeClass.isAssignableFrom(edge.getClass())) {
+        List<Edge> returnList = new ArrayList<>(getEdgesCount());
+        for (Edge edge : getEdges()) {
+            if (edgeHasClass(edge, edgeClass)) {
                 returnList.add(edge);
             }
         }
@@ -1847,54 +1819,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Number of edges with the specified type
      */
     public final int countConnections(final Class<? extends Edge> edgeClass) {
-        return countConnections(edgeClass, ANY);
-    }
-
-    /**
-     * Counts the edges
-     *
-     * @param edgeClass Type of edges to count
-     * @param direction Direction of the edge in relation to this
-     * @return Number of edges with the specified type
-     */
-    private final int countConnections(final Class<? extends Edge> edgeClass, final int direction) {
         int retVal = 0;
-        for (Edge edge : edges) {
-            if (edgeClass.isAssignableFrom(edge.getClass())) {
-                if (direction == FORWARD) {
-                    if (edge.isStart(this)) {
-                        retVal++;
-                    }
-                } else if (direction == BACKWARD) {
-                    if (edge.isEnd(this)) {
-                        retVal++;
-                    }
-                } else {
-                    retVal++;
-                }
+        for (Edge edge : getEdges()) {
+            if (edgeHasClass(edge, edgeClass)) {
+                retVal++;
             }
         }
         return retVal;
-    }
-
-    /**
-     * Counts the edges starting by this
-     *
-     * @param edgeClass Type of edges to count
-     * @return Number of edges with the specified type
-     */
-    public final int countConnectionsFromThis(final Class<? extends Edge> edgeClass) {
-        return countConnections(edgeClass, FORWARD);
-    }
-
-    /**
-     * Counts the edges ending by this
-     *
-     * @param edgeClass Type of edges to count
-     * @return Number of edges with the specified type
-     */
-    public final int countConnectionsToThis(final Class<? extends Edge> edgeClass) {
-        return countConnections(edgeClass, BACKWARD);
     }
 
     /**
