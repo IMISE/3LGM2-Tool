@@ -35,8 +35,14 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         addSeparator(true);
         //alle Kantenklassen jeweils mit hin und Rückrichtung
         for (Class<? extends Edge> edgeClass : ALL_EDGES) {
-            addItem(edgeClass, getFullForwardMetaAssociationName(edgeClass));
-            addItem(edgeClass, getFullBackwardMetaAssociationName(edgeClass));
+            //Im Moment geht der ganze Mechanismus davon aus, dass es immer nur eine derselben Art Kante zwischen
+            //2 Elementen geben kann. D.h. bei MultipleEges würde immer nur die erste Kante beachtet werden.
+            //Da weder druchdacht ist noch ausprobiert wurde, was passiert, wenn man Kanten mehrfach verknüpft
+            //und dann mit Verteilungegewichten bestückt, sind diese Kanten hier erstmal ausßen vor.
+            if (!ModelConstants.isMultipleEdgeClass(edgeClass)) {
+                addItem(edgeClass, getFullForwardMetaAssociationName(edgeClass));
+                addItem(edgeClass, getFullBackwardMetaAssociationName(edgeClass));
+            }
         }
     }
 
