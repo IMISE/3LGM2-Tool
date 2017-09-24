@@ -14,6 +14,20 @@ import javax.swing.SwingConstants;
 
 public class GraphElementLayout implements SwingConstants, Cloneable {
 
+    public static Color[] STANDARD_COLORS = {
+            Color.black,
+            Color.blue,
+            Color.cyan,
+            Color.darkGray,
+            Color.gray,
+            Color.green,
+            Color.magenta,
+            Color.orange,
+            Color.pink,
+            Color.red,
+            Color.yellow
+    };
+
     /**
      * COMMENTME
      */
