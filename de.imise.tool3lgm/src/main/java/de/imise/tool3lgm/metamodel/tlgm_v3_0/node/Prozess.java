@@ -7,7 +7,6 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,34 +27,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.ProzessStructurePanel;
  *         den Prozessablauf fest.
  */
 public final class Prozess extends Node {
-
-    public static Color[] farben = {
-            Color.black,
-            Color.blue,
-            Color.cyan,
-            Color.darkGray,
-            Color.gray,
-            Color.green,
-            Color.magenta,
-            Color.orange,
-            Color.pink,
-            Color.red,
-            Color.yellow
-    };
-
-    public static int colorCounter = 0;
-
-    public int color;
-
-    public Prozess() {
-        super();
-        // das hier ist insofern problematisch, als dass beim Erstellen (nicht aus Datei) eines Prozeses immer der Konstruktor
-        // 2x ausgeführt wird. Das erste mal beim öffnen des NamenDialog und das 2. mal beim Klick auf OK. Bei Abbrechen ists nur
-        // 1x. Daher ist die Farbe momentan absolut nicht verhersagbar (nicht weiter schlimm, aber auch nicht wirklich gut!)
-
-        color = colorCounter;
-        colorCounter = (colorCounter + 1) % farben.length;
-    }
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
