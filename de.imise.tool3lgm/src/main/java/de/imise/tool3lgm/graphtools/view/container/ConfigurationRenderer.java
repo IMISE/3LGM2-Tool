@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.MEDUIM_STROKE;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -23,20 +24,6 @@ import de.imise.tool3lgm.gui.ToolInternalFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 public class ConfigurationRenderer {
-
-    public static Color[] farben = {
-            Color.black,
-            Color.blue,
-            Color.cyan,
-            Color.darkGray,
-            Color.gray,
-            Color.green,
-            Color.magenta,
-            Color.orange,
-            Color.pink,
-            Color.red,
-            Color.yellow
-    };
 
     public static int colorCounter = 0;
 
@@ -69,8 +56,8 @@ public class ConfigurationRenderer {
 
         for (int b = 0; b < configurationStartContainer.size(); b++) {
             if (configurationStart.getInterLayerConnectionColor() == null) {
-                colorCounter = (colorCounter + 1) % farben.length;
-                configurationStart.setInterLayerConnectionColor(farben[colorCounter]);
+                colorCounter = (colorCounter + 1) % STANDARD_COLORS.length;
+                configurationStart.setInterLayerConnectionColor(STANDARD_COLORS[colorCounter]);
             }
             Color elem_col = null;
             if (UserProperties.isAssignConfigurationColors()) {
