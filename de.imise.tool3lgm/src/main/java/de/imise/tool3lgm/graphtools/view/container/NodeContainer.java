@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 
 import java.awt.Font;
 import java.awt.Graphics;
@@ -132,7 +133,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
                 layout.setFont(new Font(GraphElementLayout.STANDARD_FONT_NAME, GraphElementLayout.STANDARD_FONT_STYLE, GraphElementLayout.STANDARD_FONT_SIZE));
             }
             if (layout.bg_color == null) {
-                lastColor = Prozess.farben[((Prozess) me).color];
+                lastColor = STANDARD_COLORS[0];
                 layout.bg_color = lastColor;
             }
             Image image = Static.getMainFrame().createImage(14, 14);
