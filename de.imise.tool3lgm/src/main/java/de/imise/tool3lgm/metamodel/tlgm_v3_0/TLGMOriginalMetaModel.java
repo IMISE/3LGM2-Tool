@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -443,20 +442,10 @@ public class TLGMOriginalMetaModel extends MetaModel {
             Subnetz.class,
     };
 
-    private final Set<Class<? extends Node>> UNIQUE_NODES = ImmutableSet.of(ABKonfiguration.class, Anwendungsprogramm.class, AufOrgKombination.class, Bausteintyp.class, Datensatztyp.class, DBKonfiguration.class, DBVerwaltungssystem.class,
-            Dokumententyp.class, EreignisDokumentenTyp.class, EreignisNachrichtenTyp.class, Ereignistyp.class, Kommunikationsstandard.class, Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Organisationseinheit.class, Organisationsplan.class,
-            Softwareprodukt.class, Standort.class, Subnetz.class);
-
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     @Override
     public final Class[] getImportableNodes() {
         return IMPORTABLE_NODES;
-    }
-
-    /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
-    @Override
-    public final Set<Class<? extends Node>> getUniqueNodes() {
-        return UNIQUE_NODES;
     }
 
     ///////////////////////////////////

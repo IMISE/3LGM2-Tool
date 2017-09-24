@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Set;
 
@@ -142,8 +143,27 @@ public abstract class MetaModel {
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     public abstract Class[] getImportableNodes();
 
-    /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
-    public abstract Set<Class<? extends Node>> getUniqueNodes();
+    /**
+     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen.
+     * Das sind alle nicht-abstrakten Knotenklassen (nicht Kante), die in der GraphViewDefinition nicht als paintable eingetragen sind.
+     */
+    public final Set<Class<? extends Node>> getUniqueNodes() {
+        ImmutableSet.Builder<Class<? extends Node>> uniqueNodes = new ImmutableSet.Builder<>();
+        GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
+        for (Class<? extends ModelElement> elementClass : getAllNodes()) {
+            //keine abstrakten Klassen zu diesem Set hinzufügen
+            if (!Modifier.isAbstract(elementClass.getModifiers())) {
+                //nur Knotenklassen nehmen (dort können auch Assoziationsklassen drin sein)
+                if (Node.class.isAssignableFrom(elementClass)) {
+                    //nicht paintable
+                    if (!graphViewDefinition.isPaintable(elementClass)) {
+                        uniqueNodes.add(elementClass.asSubclass(Node.class));
+                    }
+                }
+            }
+        }
+        return uniqueNodes.build();
+    }
 
     ///////////////////////////////////
     // spezielle Kanteneigenschaften //
