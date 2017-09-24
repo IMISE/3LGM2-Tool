@@ -19,6 +19,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Benutzungsschnittstelle;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Dokumentensammlung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
@@ -38,6 +39,7 @@ public class TLGMGraphViewDefinion extends GraphViewDefinition {
                 RechAnwendungsbaustein.class,
                 KonAnwendungsbaustein.class,
                 Datenbanksystem.class,
+                Dokumentensammlung.class,
                 Bausteinschnittstelle.class,
                 Benutzungsschnittstelle.class,
                 PhysischerDVBaustein.class
