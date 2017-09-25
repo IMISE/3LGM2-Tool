@@ -551,6 +551,10 @@ public final class ModelConstants {
      * einen eigenen Container besitzt.
      */
     public static final boolean isUnique(final Class<?> elementClass) {
+        if (Edge.class.isAssignableFrom(elementClass)) {
+            Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+            return isUnique(Edge.getStartClass(edgeClass)) || isUnique(Edge.getEndClass(edgeClass));
+        }
         return UNIQUE_NODES.contains(elementClass);
     }
 
