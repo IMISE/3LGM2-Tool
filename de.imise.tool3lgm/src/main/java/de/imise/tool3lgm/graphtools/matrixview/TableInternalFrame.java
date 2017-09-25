@@ -58,7 +58,7 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
         setClosable(true);
         tableModel = new TableModel(getGraphDocument());
 
-        setToolBar(new TableToolBar(this));
+        setToolBar(new MatrixViewPathSelectorToolBar(this));
 
         msgPanel = new JPanel();
 
@@ -118,7 +118,7 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
 
     @Override
     public final void mouseMoved(final MouseEvent e) {
-        ((TableToolBar) getToolBar()).positionChanged(colHeaderPanel.getCol(e.getX()), rowHeaderPanel.getRow(e.getY()));
+        ((MatrixViewPathSelectorToolBar) getToolBar()).positionChanged(colHeaderPanel.getCol(e.getX()), rowHeaderPanel.getRow(e.getY()));
     }
 
     @Override
@@ -173,7 +173,7 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
 
     @Override
     public final void mouseExited(final MouseEvent arg0) {
-        ((TableToolBar) getToolBar()).positionChanged(null, null);
+        ((MatrixViewPathSelectorToolBar) getToolBar()).positionChanged(null, null);
     }
 
     //	Methoden des Interfaces GraphDocumentListener --- Anfang ---

@@ -31,7 +31,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
-public class TableToolBar extends UnfloatableToolBar implements ChangeListener, ActionListener {
+public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements ChangeListener, ActionListener {
 
     /**
      * Label für die ComboBox zur Klassenauswahl der Matrixzeilen
@@ -84,7 +84,7 @@ public class TableToolBar extends UnfloatableToolBar implements ChangeListener, 
     /**
      * @param controlledFrame Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
      */
-    public TableToolBar(final TableInternalFrame controlledFrame) {
+    public MatrixViewPathSelectorToolBar(final TableInternalFrame controlledFrame) {
         super();
 
         this.controlledFrame = controlledFrame;
