@@ -32,4 +32,9 @@ public abstract class Node extends ModelElement {
         return super.putXMLFieldString(field, value);
     }
 
+    @Override
+    protected int getMaxContainerCount() {
+        return isUnique() ? 1 : Integer.MAX_VALUE;
+    }
+
 }

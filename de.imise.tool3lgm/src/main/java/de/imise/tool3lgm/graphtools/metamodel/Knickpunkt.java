@@ -109,4 +109,9 @@ public class Knickpunkt extends Node {
         return kc.layerFor();
     }
 
+    @Override
+    protected final int getMaxContainerCount() {
+        return 2;
+    }
+
 }

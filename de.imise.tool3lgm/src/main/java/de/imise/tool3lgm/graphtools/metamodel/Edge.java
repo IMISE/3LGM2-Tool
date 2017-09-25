@@ -165,7 +165,7 @@ public abstract class Edge extends ModelElement {
     public void setKnotsAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
         k1 = _k1;
         k2 = _k2;
-        //wenn PartOfBeziheungen im Kreis modelliert wurden, wird die falsche Beziehung glpeich wieder entfernt
+        //wenn PartOfBeziehungen im Kreis modelliert wurden, wird die falsche Beziehung gleich wieder entfernt
         //und ihre alten Start- und Endelemente gesetzt, die bei einer neuen Edge immer null waren -> null hier abfangen
         if (_k1 != null) {
             _k1.insertEdge(this, _k1EdgePos);
@@ -723,10 +723,14 @@ public abstract class Edge extends ModelElement {
 
     @Override
     public final boolean isUnique() {
+        //zuerst über die eventuelle schon gesetzten
+        //Start- und Endelemente gehen. Wenn die aber
+        //noch nicht gesetzt sind, dann über Reflection
+        //direkt über die ModelConstants.
         if (k1 != null && k2 != null) {
             return k1.isUnique() || k2.isUnique();
         }
-        return false;
+        return ModelConstants.isUnique(getClass());
     }
 
     @Override
@@ -769,6 +773,11 @@ public abstract class Edge extends ModelElement {
         default:
             return false;
         }
+    }
+
+    @Override
+    protected final int getMaxContainerCount() {
+        return isUnique() ? 1 : Integer.MAX_VALUE;
     }
 
 }

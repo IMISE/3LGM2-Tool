@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections4.map.Flat3Map;
+
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -66,7 +68,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Table, der von einem <code>GraphDocument</code> auf den Container des Elemtentes in diesem <code>GraphDocument</code> mappt, wenn es darin
      * vorkommt.
      */
-    private Map<GraphDocument, ElementContainer> containerTable = new HashMap<>(2, 1);
+    private Map<GraphDocument, ElementContainer> containerTable;
 
     /**
      * Liste aller Assoziationen zu anderen Elementen. Solange keine Elemente in dieser Liste sind,
@@ -101,13 +103,24 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public ModelElement() {
         hashstring = getNewHashString(this);
+        initContainerTable(this);
+    }
+
+    private static void initContainerTable(final ModelElement me) {
+        //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
+        //eine optimierte Map für die Container initialisiert
+        me.containerTable = me.getMaxContainerCount() > 3 ? new HashMap<>(3, 1) : new Flat3Map<>();
+    }
+
+    public void printContainer() {
+        System.err.println(containerTable.size() + " " + containerTable.getClass().getSimpleName() + " " + this.getClass().getSimpleName());
     }
 
     @Override
     public ModelElement clone() {
         ModelElement retVal = (ModelElement) super.clone();
         retVal.hashstring = getNewHashString(this);
-        retVal.containerTable = new HashMap<>(2, 1);
+        initContainerTable(retVal);
         retVal.edges = null;
         return retVal;
     }
@@ -156,6 +169,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public final Set<GraphDocument> getMySzenarios() {
         return new HashSet<>(containerTable.keySet());
     }
+
+    protected abstract int getMaxContainerCount();
 
     /**
      *
