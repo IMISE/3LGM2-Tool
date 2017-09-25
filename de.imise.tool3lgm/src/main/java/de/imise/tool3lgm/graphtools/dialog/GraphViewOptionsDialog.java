@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.Werkzeugleiste;
+import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
 
 /**
  * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche
@@ -78,7 +78,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         }
 
         frame = f;
-        Werkzeugleiste leiste = (Werkzeugleiste) frame.getToolBar();
+        InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
         setTitle(getResString("OPTIONS_GRAPH_VIEW_DIALOG_TITLE"));
         setSize(340, 180);
 
@@ -169,7 +169,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         InputGraphArea area = frame.getInputGraphArea();
         area.setZoom((double) Integer.parseInt(textzoom.getText()) / 100);
         zoom.setValue(Integer.parseInt(textzoom.getText()));
-        Werkzeugleiste leiste = (Werkzeugleiste) frame.getToolBar();
+        InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
         leiste.zoom.setValue(Integer.parseInt(textzoom.getText()));
         if (frame.getInputGraphArea().isMultiViewEnabled()) {
             area.setDegree(Integer.parseInt(textwinkel.getText()));

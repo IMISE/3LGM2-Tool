@@ -82,7 +82,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
-import de.imise.tool3lgm.gui.Werkzeugleiste;
+import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
@@ -1488,19 +1488,19 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void activeLayerChanged(final GraphDocument source) {
         source.getCollection().setChanged(true);
-        if (werkzeugleiste instanceof Werkzeugleiste) {
+        if (werkzeugleiste instanceof InternalGraphFrameToolBar) {
             switch (source.getCollection().getActiveLayer()) {
             case 4:
-                ((Werkzeugleiste) werkzeugleiste).addButtonsFachlich();
-                ((Werkzeugleiste) werkzeugleiste).setMausModus();
+                ((InternalGraphFrameToolBar) werkzeugleiste).addButtonsFachlich();
+                ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
                 return;
             case 2:
-                ((Werkzeugleiste) werkzeugleiste).addButtonsLogisch();
-                ((Werkzeugleiste) werkzeugleiste).setMausModus();
+                ((InternalGraphFrameToolBar) werkzeugleiste).addButtonsLogisch();
+                ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
                 return;
             case 0:
-                ((Werkzeugleiste) werkzeugleiste).addButtonsPhysisch();
-                ((Werkzeugleiste) werkzeugleiste).setMausModus();
+                ((InternalGraphFrameToolBar) werkzeugleiste).addButtonsPhysisch();
+                ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
                 return;
             }
         }
@@ -1525,8 +1525,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void elementAdded(final GraphDocument source, final ElementContainer element) {
         source.getCollection().setChanged(true);
-        if (werkzeugleiste != null && werkzeugleiste instanceof Werkzeugleiste) {
-            ((Werkzeugleiste) werkzeugleiste).setMausModus();
+        if (werkzeugleiste != null && werkzeugleiste instanceof InternalGraphFrameToolBar) {
+            ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
         }
     }
 

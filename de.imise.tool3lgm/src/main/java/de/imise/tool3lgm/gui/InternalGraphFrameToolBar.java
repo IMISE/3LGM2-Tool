@@ -28,7 +28,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener, ChangeListener {
+public class InternalGraphFrameToolBar extends UnfloatableToolBar implements ActionListener, ChangeListener {
 
     /**
      * COMMENTME
@@ -58,7 +58,7 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
     /**
      * @param f
      */
-    public Werkzeugleiste(final InternalGraphFrame f) {
+    public InternalGraphFrameToolBar(final InternalGraphFrame f) {
         super();
         if (!(f.getSzenario() instanceof Szenario)) {
             return;

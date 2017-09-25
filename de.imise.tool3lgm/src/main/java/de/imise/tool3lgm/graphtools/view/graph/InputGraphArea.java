@@ -42,7 +42,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.gui.Werkzeugleiste;
+import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -1105,10 +1105,10 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         UnfloatableToolBar utb = Static.getTool().getWerkzeugleiste();
         double zoomStep = zoom - 0.05 * e.getWheelRotation();
-        if (utb == null || !(utb instanceof Werkzeugleiste)) {
+        if (utb == null || !(utb instanceof InternalGraphFrameToolBar)) {
             setZoom(zoomStep);
         } else {
-            ((Werkzeugleiste) utb).setZoom(zoomStep);
+            ((InternalGraphFrameToolBar) utb).setZoom(zoomStep);
         }
     }
 

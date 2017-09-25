@@ -49,7 +49,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         // dargestellten Wert zu setzen
         doc.setFrame(this);
         area = inputGraphArea;
-        setToolBar(new Werkzeugleiste(this));
+        setToolBar(new InternalGraphFrameToolBar(this));
 
         if (!(doc instanceof Szenario)) {
             docCount++;
