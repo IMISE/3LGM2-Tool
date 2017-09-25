@@ -244,7 +244,7 @@ public abstract class StaticActionNew extends ExtendedAction {
         actionPerformed();
     }
 
-    public void actionPerformed() {
+    protected void actionPerformed() {
         //diese Funktion können Unterklassen überschreiben und müssen das enabled nie wieder testen.
         //Da bei all diesen Action die ActionEvent-Souce egal ist, wird das Event auch nicht durchgereicht
     }

@@ -121,7 +121,7 @@ public class ActionLibrary {
         /** Öffnen eines neuen Models */
         public static final Action ACTION_NEW_MODEL = new StaticActionNew(ActionIdentifier.ACTION_NEW_MODEL) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getTool().openFile(false);
             }
         };
@@ -130,7 +130,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
 
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getTool().openFile(true);
             }
         };
@@ -138,7 +138,7 @@ public class ActionLibrary {
         /** Speichern des Models an bekannter Stelle */
         public static final Action ACTION_SAVE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(false)) {
                     JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
@@ -149,7 +149,7 @@ public class ActionLibrary {
         /** Speichern des Models an neuer Stelle */
         public static final Action ACTION_SAVE_MODEL_AS = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(true)) {
                     JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
@@ -160,7 +160,7 @@ public class ActionLibrary {
         /** Schließen des Models */
         public static final Action ACTION_CLOSE_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_CLOSE_MODEL) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getTool().fileClose();
             }
         };
@@ -168,7 +168,7 @@ public class ActionLibrary {
         /** Zeigt die Beschreibung des Tools an */
         public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedGDCollection().showDescriptionFrame(true);
             }
         };
@@ -183,7 +183,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Import von Teilmodellen */
             public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
                     oeffnenDialog.setMultiSelectionEnabled(false);
                     oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
@@ -198,7 +198,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Import von Modellen */
             public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
                     oeffnenDialog.setMultiSelectionEnabled(false);
                     oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
@@ -213,7 +213,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
             public static final Action ACTION_IMPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_DATA, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     new DataImportModule(getSelectedGDCollection());
                 }
             };
@@ -230,7 +230,7 @@ public class ActionLibrary {
             public static final Action ACTION_EXPORT_GRAPHIC = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHIC, true) {
 
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     AbstractInternalFrame selframe = Static.getActiveFrame();
                     if (selframe instanceof ToolInternalFrame) {
                         InputGraphArea iga = ((ToolInternalFrame) selframe).getInputGraphArea();
@@ -258,7 +258,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
             public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     // der Dialog zeigt sich im Konstuktor selbst an
                     new XMLExportDialog(getTool(), getSelectedGDCollection());
                 }
@@ -267,7 +267,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Export eines Teilmodells */
             public static final Action ACTION_EXPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_SUBMODEL, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     SzenarioDialog.showExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
@@ -275,7 +275,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Export des gesamten Models als HTML-Site */
             public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     WebExportDialog.showWebExportDialog(getTool(), getSelectedGDCollection());
                 }
             };
@@ -283,7 +283,7 @@ public class ActionLibrary {
             /** Öffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
             public static final Action ACTION_EXPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_DATA, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     DataExportModule.exportData(getSelectedDoc());
                 }
             };
@@ -296,7 +296,7 @@ public class ActionLibrary {
         /** Beenden des Programms */
         public static final Action ACTION_EXIT = new StaticActionNew(ActionIdentifier.ACTION_EXIT) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 tool3lgm.windowClosing(new WindowEvent(tool3lgm, WindowEvent.WINDOW_CLOSING));
             }
@@ -313,7 +313,7 @@ public class ActionLibrary {
         /** Zeigt das XMLAnalyse-Repository an */
         public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, PPP) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 AnalyseRepositoryFrame.showDialog();
             }
         };
@@ -321,7 +321,7 @@ public class ActionLibrary {
         /** Öffnet den XMLAnalyse-Editor */
         public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 AnalyseEditor.showDialog(getTool());
             }
         };
@@ -329,7 +329,7 @@ public class ActionLibrary {
         /** Setzt alle XMLAnalyse-Ergebnisse zurück */
         public static final Action ACTION_ANALYSIS_RESET_RESULT = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_RESET_RESULT) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedDoc().clearAnalysisResult();
             }
         };
@@ -337,7 +337,7 @@ public class ActionLibrary {
         /** Aktiviert die Redundanz-XMLAnalyse */
         public static final Action ACTION_ANALYSIS_REDUNDANCY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_REDUNDANCY, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 RedundancyAnalysis.getReport(getSelectedGDCollection());
             }
         };
@@ -345,7 +345,7 @@ public class ActionLibrary {
         /** TODO:AXS,FST: Wirft schon seit ToolMenu eine Exception */
         public static final Action ACTION_ANALYSIS_DATA_AVAILABILITY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_DATA_AVAILABILITY, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder
                 new DataAvailabilityFinder(getSelectedDoc());
             }
@@ -707,7 +707,7 @@ public class ActionLibrary {
         /** Macht letzte Änderung rückgängig */
         public static final Action ACTION_UNDO = new GraphDocumentAction(ActionIdentifier.ACTION_UNDO, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedDoc().undo();
             }
 
@@ -720,7 +720,7 @@ public class ActionLibrary {
         /** Macht letztes UNDO rückgängig */
         public static final Action ACTION_REDO = new GraphDocumentAction(ActionIdentifier.ACTION_REDO, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedDoc().redo();
             }
 
@@ -733,7 +733,7 @@ public class ActionLibrary {
         /** Öffnet ein Suchen-Fenster */
         public static final Action ACTION_SEARCH = new GraphDocumentAction(ActionIdentifier.ACTION_SEARCH, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 SearchDialog sd = new SearchDialog(Static.getTool());
                 sd.showDialog();
             }
@@ -927,7 +927,7 @@ public class ActionLibrary {
         /** Wählt alle Elemente im Teilmodell aus */
         public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 Static.showProgressDialog();
                 Static.setProgressDialogTitle(getResString("PROGRESS_SELECT_ALL"));
                 getSelectedDoc().selectAll();
@@ -1762,7 +1762,7 @@ public class ActionLibrary {
             /** (De-)aktiviert die Zeichnen-Toolbar */
             public static final Action OPTION_SHOW_PAINTING_TOOLBAR = new GraphFrameAction(ActionIdentifier.OPTION_SHOW_PAINTING_TOOLBAR, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     Tool3lgm tool = getTool();
                     JPanel workArea = tool.getWorkArea();
                     UnfloatableToolBar toolbar = tool.getWerkzeugleiste();
@@ -1778,7 +1778,7 @@ public class ActionLibrary {
             /** (De-)aktiviert die Standard-Toolbar */
             public static final Action OPTION_SHOW_STANDARD_TOOLBAR = new StaticActionNew(ActionIdentifier.OPTION_SHOW_STANDARD_TOOLBAR, true) {
                 @Override
-                public void actionPerformed() {
+                protected void actionPerformed() {
                     //TODO: das hier müsste eigentlich ein Funktionaufruf in Tool3lgm sein. Die Action muss nicht das Tool revalidaten!
                     Tool3lgm tool = getTool();
                     Container contentPane = tool.getContentPane();
@@ -1796,7 +1796,7 @@ public class ActionLibrary {
         /** (De-)Aktiviert das Anzeigen des ModelBrowsers */
         public static final Action OPTION_MODEL_BROWSER_SHOW = new StaticActionNew(ActionIdentifier.OPTION_MODEL_BROWSER_SHOW, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getTool().showModelBrowser(isSelected());
             }
         };
@@ -1804,7 +1804,7 @@ public class ActionLibrary {
         /** Wechselt zur Ein-Ebenen-Ansicht */
         private static final ExtendedAction ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(false);
@@ -1820,7 +1820,7 @@ public class ActionLibrary {
         /** Wechselt zur Drei-Ebenen-Ansicht */
         private static final ExtendedAction ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(true);
@@ -1839,7 +1839,7 @@ public class ActionLibrary {
         /** Zeigt die Fachliche Ebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
         public static final Action ACTION_ACTIVATE_DOMAIN_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.DOMAIN_LAYER);
             }
 
@@ -1853,7 +1853,7 @@ public class ActionLibrary {
         /** Zeigt die Logische Werzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
         public static final Action ACTION_ACTIVATE_LOGICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.LOGICAL_LAYER);
             }
 
@@ -1867,7 +1867,7 @@ public class ActionLibrary {
         /** Zeigt die physische Werkzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
         public static final Action ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, true) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.PHYSICAL_LAYER);
             }
 
@@ -1881,7 +1881,7 @@ public class ActionLibrary {
         /** Öffnet einen Dialog für die Einstellung von Größe, Abstand, etc. der Ebenen */
         public static final Action ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG = new GraphFrameAction(ActionIdentifier.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, PPP) {
             @Override
-            public void actionPerformed() {
+            protected void actionPerformed() {
                 new GraphViewOptionsDialog().showDialog((ToolInternalFrame) Static.getActiveFrame());
             }
         };
