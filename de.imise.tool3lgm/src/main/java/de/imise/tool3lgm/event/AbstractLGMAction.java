@@ -8,7 +8,7 @@ import javax.swing.KeyStroke;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
-import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -133,7 +133,7 @@ public abstract class AbstractLGMAction extends ExtendedAction {
     /** Gibt zurück, ob ein gültiges aktives Frame existiert */
     boolean hasActiveFrame() {
         AbstractInternalFrame f = getTool().getActiveFrame();
-        return f != null && !(f instanceof TableInternalFrame);
+        return f != null && !(f instanceof MatrixViewInternalFrame);
     }
 
     /** Gibt zurück, ob interne Frames existieren */

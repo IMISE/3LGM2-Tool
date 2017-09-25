@@ -60,7 +60,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -237,7 +237,7 @@ public class ActionLibrary {
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
                         ComponentAsImageExportHandler.createFile(iga);
                         iga.setPaintState(PaintState.REGULAR);
-                    } else if (selframe instanceof TableInternalFrame) {
+                    } else if (selframe instanceof MatrixViewInternalFrame) {
                         JScrollPane sp = selframe.getScrollPane();
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());

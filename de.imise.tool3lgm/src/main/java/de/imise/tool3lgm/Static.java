@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.graphtools.matrixview.TableInternalFrame;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -156,7 +156,7 @@ public class Static {
     /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */
     public static boolean isActiveFrameMatrixFrame() {
         AbstractInternalFrame f = getActiveFrame();
-        return f != null && f instanceof TableInternalFrame && f.isVisible();
+        return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 
     private static boolean paintSimpleGraph = false;

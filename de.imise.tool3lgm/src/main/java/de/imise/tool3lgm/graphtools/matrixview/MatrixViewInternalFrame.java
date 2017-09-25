@@ -23,7 +23,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
  *
  * @author Thomas Rudert, AXS
  */
-public final class TableInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
+public final class MatrixViewInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
 
     /**
      * Panel für die Zeilenbeschriftungen (Elementnamen)
@@ -53,7 +53,7 @@ public final class TableInternalFrame extends AbstractInternalFrame implements M
     /**
      * @param graphDocument
      */
-    public TableInternalFrame(final LGMGraphDocument graphDocument) {
+    public MatrixViewInternalFrame(final LGMGraphDocument graphDocument) {
         super(graphDocument, "");
         setClosable(true);
         tableModel = new TableModel(getGraphDocument());
