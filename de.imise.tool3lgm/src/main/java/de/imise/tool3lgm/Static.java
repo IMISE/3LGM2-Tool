@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
@@ -150,7 +150,7 @@ public class Static {
     /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */
     public static boolean isActiveFrameGraphFrame() {
         AbstractInternalFrame f = getActiveFrame();
-        return f != null && f instanceof ToolInternalFrame && f.getGraphDocument() instanceof Szenario && f.isVisible();
+        return f != null && f instanceof InternalGraphFrame && f.getGraphDocument() instanceof Szenario && f.isVisible();
     }
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */

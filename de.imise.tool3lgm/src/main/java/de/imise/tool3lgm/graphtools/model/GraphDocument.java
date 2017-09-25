@@ -60,7 +60,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommbezEtntVerbindung;
@@ -201,7 +201,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    protected ToolInternalFrame frame = null;
+    protected InternalGraphFrame frame = null;
 
     /**
      * @param _gdcoll
@@ -5027,7 +5027,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param _frame
      */
-    public void setFrame(final ToolInternalFrame _frame) {
+    public void setFrame(final InternalGraphFrame _frame) {
         if (_frame == null) {
             frame = _frame;
         } else if (_frame.getGraphDocument().equals(this)) {
@@ -5038,7 +5038,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @return
      */
-    public ToolInternalFrame getFrame() {
+    public InternalGraphFrame getFrame() {
         return frame;
     }
 

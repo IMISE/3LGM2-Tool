@@ -58,7 +58,7 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
     /**
      * @param f
      */
-    public Werkzeugleiste(final ToolInternalFrame f) {
+    public Werkzeugleiste(final InternalGraphFrame f) {
         super();
         if (!(f.getSzenario() instanceof Szenario)) {
             return;
@@ -211,11 +211,11 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         if (frame == null) {
             return;
         }
-        if (!(frame instanceof ToolInternalFrame)) {
+        if (!(frame instanceof InternalGraphFrame)) {
             return;
         }
 
-        InputGraphArea area = ((ToolInternalFrame) frame).getInputGraphArea();
+        InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
         add(zoomlabel);
         add(zoom);
         if (area.isMultiViewEnabled()) {
@@ -246,11 +246,11 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         if (frame == null) {
             return;
         }
-        if (!(frame instanceof ToolInternalFrame)) {
+        if (!(frame instanceof InternalGraphFrame)) {
             return;
         }
 
-        InputGraphArea area = ((ToolInternalFrame) frame).getInputGraphArea();
+        InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
         button.setIcon(Tool3lgmConstants.getIcon("fill.gif"));
         button.setSelected(true);
         area.setMouseMakesKnot(null);
@@ -267,20 +267,20 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
         if (frame == null) {
             return;
         }
-        if (!(frame instanceof ToolInternalFrame)) {
+        if (!(frame instanceof InternalGraphFrame)) {
             return;
         }
 
         if (e.getSource() == winkel) {
-            InputGraphArea area = ((ToolInternalFrame) frame).getInputGraphArea();
+            InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
             area.setDegree(winkel.getValue());
         }
         if (e.getSource() == abstand) {
-            InputGraphArea area = ((ToolInternalFrame) frame).getInputGraphArea();
+            InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
             area.setInterLayerSpace(abstand.getValue());
         }
         if (e.getSource() == zoom) {
-            InputGraphArea area = ((ToolInternalFrame) frame).getInputGraphArea();
+            InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
             area.setZoom((double) zoom.getValue() / 100);
         }
     }
@@ -300,8 +300,8 @@ public class Werkzeugleiste extends UnfloatableToolBar implements ActionListener
 
         AbstractInternalFrame frame = Static.getActiveFrame();
         InputGraphArea area = null;
-        if (frame != null && frame instanceof ToolInternalFrame) {
-            area = ((ToolInternalFrame) frame).getInputGraphArea();
+        if (frame != null && frame instanceof InternalGraphFrame) {
+            area = ((InternalGraphFrame) frame).getInputGraphArea();
         }
         clearButtons();
         // String str = e.getActionCommand();

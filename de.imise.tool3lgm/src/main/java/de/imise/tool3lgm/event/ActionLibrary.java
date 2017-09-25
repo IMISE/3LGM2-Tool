@@ -87,7 +87,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolBar;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
@@ -232,8 +232,8 @@ public class ActionLibrary {
                 @Override
                 protected void actionPerformed() {
                     AbstractInternalFrame selframe = Static.getActiveFrame();
-                    if (selframe instanceof ToolInternalFrame) {
-                        InputGraphArea iga = ((ToolInternalFrame) selframe).getInputGraphArea();
+                    if (selframe instanceof InternalGraphFrame) {
+                        InputGraphArea iga = ((InternalGraphFrame) selframe).getInputGraphArea();
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
                         ComponentAsImageExportHandler.createFile(iga);
                         iga.setPaintState(PaintState.REGULAR);
@@ -1805,7 +1805,7 @@ public class ActionLibrary {
         private static final ExtendedAction ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE) {
             @Override
             protected void actionPerformed() {
-                ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
+                InternalGraphFrame frame = (InternalGraphFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(false);
                 frame.getGraphDocument().deselectAll(false);
@@ -1813,7 +1813,7 @@ public class ActionLibrary {
 
             @Override
             public boolean isEnabled() {
-                return super.isEnabled() && ((ToolInternalFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
+                return super.isEnabled() && ((InternalGraphFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
             }
         };
 
@@ -1821,7 +1821,7 @@ public class ActionLibrary {
         private static final ExtendedAction ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE) {
             @Override
             protected void actionPerformed() {
-                ToolInternalFrame frame = (ToolInternalFrame) Static.getActiveFrame();
+                InternalGraphFrame frame = (InternalGraphFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
                 area.setMultiViewEnabled(true);
                 frame.getGraphDocument().deselectAll(false);
@@ -1829,7 +1829,7 @@ public class ActionLibrary {
 
             @Override
             public boolean isEnabled() {
-                return super.isEnabled() && !((ToolInternalFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
+                return super.isEnabled() && !((InternalGraphFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
             }
         };
 
@@ -1882,7 +1882,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG = new GraphFrameAction(ActionIdentifier.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, PPP) {
             @Override
             protected void actionPerformed() {
-                new GraphViewOptionsDialog().showDialog((ToolInternalFrame) Static.getActiveFrame());
+                new GraphViewOptionsDialog().showDialog((InternalGraphFrame) Static.getActiveFrame());
             }
         };
 

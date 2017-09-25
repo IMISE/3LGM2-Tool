@@ -44,7 +44,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.IntendingXMLWriter;
@@ -438,7 +438,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeAttribute("titel", szen.getTitle());
             writeElement("description", szen.getDescription());
             // Informationen über Ansicht speichern
-            ToolInternalFrame frame = szen.getFrame();
+            InternalGraphFrame frame = szen.getFrame();
             if (frame != null) {
                 writeStartElement("view"); //<view>
                 writeElement("selected", frame.isSelected());

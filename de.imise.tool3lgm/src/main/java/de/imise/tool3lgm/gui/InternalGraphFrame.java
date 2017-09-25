@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
-public class ToolInternalFrame extends AbstractInternalFrame implements ActionListener {
+public class InternalGraphFrame extends AbstractInternalFrame implements ActionListener {
 
     /** Anzahl der jemals geöffneten Teilmodelle */
     static int docCount = 0;
@@ -41,7 +41,7 @@ public class ToolInternalFrame extends AbstractInternalFrame implements ActionLi
      * @param inputGraphArea
      * @param doc
      */
-    public ToolInternalFrame(final JDesktopPane pane, final InputGraphArea inputGraphArea, final LGMGraphDocument doc) {
+    public InternalGraphFrame(final JDesktopPane pane, final InputGraphArea inputGraphArea, final LGMGraphDocument doc) {
         super(doc, "");
 
         // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste

@@ -20,7 +20,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 public class ConfigurationRenderer {
@@ -39,7 +39,7 @@ public class ConfigurationRenderer {
             return;
         }
 
-        ToolInternalFrame frame = doc.getFrame();
+        InternalGraphFrame frame = doc.getFrame();
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
         boolean multiView = inputGraphArea.isMultiViewEnabled();
 

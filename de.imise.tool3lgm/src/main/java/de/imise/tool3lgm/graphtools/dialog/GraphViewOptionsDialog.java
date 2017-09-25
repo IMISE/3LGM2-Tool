@@ -21,7 +21,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.Werkzeugleiste;
 
 /**
@@ -54,7 +54,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
     /**
      * COMMENTME
      */
-    private ToolInternalFrame frame;
+    private InternalGraphFrame frame;
 
     /**
      * COMMENTME
@@ -71,7 +71,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
     /**
      * @param f
      */
-    public void showDialog(final ToolInternalFrame f) {
+    public void showDialog(final InternalGraphFrame f) {
         // Dialog nur für Teilmodelle anzeigen, da nur Teilmodelle einen Grafischen View besitzen
         if (!(f.getGraphDocument() instanceof Szenario)) {
             return;

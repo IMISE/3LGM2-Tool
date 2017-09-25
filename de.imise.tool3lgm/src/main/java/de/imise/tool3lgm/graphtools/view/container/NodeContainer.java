@@ -200,7 +200,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return 0;
             //		if (me instanceof AufOrgKombination) {
             //			AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
-            //			if (!(frame instanceof ToolInternalFrame))
+            //			if (!(frame instanceof InternalGraphFrame))
             //				return 0;
             //			GraphDocument doc = frame.getGraphDocument();
             //			if (doc != null) {
@@ -226,7 +226,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return 0;
             //		if (me instanceof AufOrgKombination) {
             //			AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
-            //			if (!(frame instanceof ToolInternalFrame))
+            //			if (!(frame instanceof InternalGraphFrame))
             //				return 0;
             //			GraphDocument doc = frame.getGraphDocument();
             //			if (doc != null) {

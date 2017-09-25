@@ -80,7 +80,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ToolBar;
-import de.imise.tool3lgm.gui.ToolInternalFrame;
+import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.Werkzeugleiste;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
@@ -711,7 +711,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     private AbstractInternalFrame createMainFrame(final LGMGraphDocument maindoc) {
         InputGraphArea area = new InputGraphArea(maindoc);
-        ToolInternalFrame frame = new ToolInternalFrame(desktop, area, maindoc);
+        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, maindoc);
         frame.setTitle(maindoc.getCollection().getName() + " - " + maindoc.getTitle());
         modelBrowserPanel.addGraphDocument(maindoc);
         frame.addInternalFrameListener(this);
@@ -732,7 +732,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public AbstractInternalFrame createSzenarioFrame(final Szenario szenario) {
         InputGraphArea area = new InputGraphArea(szenario);
-        ToolInternalFrame frame = new ToolInternalFrame(desktop, area, szenario);
+        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, szenario);
         frame.setTitle(szenario.getCollection().getName() + " - " + szenario.getTitle());
         modelBrowserPanel.addGraphDocument(szenario);
         frame.addInternalFrameListener(this);
@@ -801,7 +801,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      *
      * @param InputGraphArea to set
      */
-    public void setWorkArea(final ToolInternalFrame frame) {
+    public void setWorkArea(final InternalGraphFrame frame) {
         InputGraphArea bgp = frame.getInputGraphArea();
         bgp.setDegree(65);
         bgp.setInterLayerSpace(200);
@@ -815,7 +815,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @param InputGraphArea
      *            to set
      */
-    public void setWorkArea(final ToolInternalFrame frame, final ViewParameter view) {
+    public void setWorkArea(final InternalGraphFrame frame, final ViewParameter view) {
         InputGraphArea bgp = frame.getInputGraphArea();
         bgp.setMultiViewEnabled(view.multiView);
         frame.getGraphDocument().getCollection().setActiveLayer(view.layer);
@@ -942,7 +942,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             //Variable==false)
             if (Tool3lgm.activateGraphView) {
                 //den richtigen Frame nach vorne holen
-                ToolInternalFrame frame = doc.getFrame();
+                InternalGraphFrame frame = doc.getFrame();
                 if (frame != null) {
                     if (!frame.isSelected()) {
                         try {
@@ -1292,8 +1292,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         }
         JInternalFrame[] allFrames = desktop.getAllFrames();
         for (JInternalFrame frame : allFrames) {
-            if (frame instanceof ToolInternalFrame) {
-                ((ToolInternalFrame) frame).updateTitle();
+            if (frame instanceof InternalGraphFrame) {
+                ((InternalGraphFrame) frame).updateTitle();
             }
         }
         System.gc();
@@ -1335,7 +1335,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (!sz.getCollection().renameSzenario(sz)) {
             return;
         }
-        ToolInternalFrame frame = sz.getFrame();
+        InternalGraphFrame frame = sz.getFrame();
         if (frame != null) {
             frame.updateTitle();
         }
@@ -1396,7 +1396,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
-        setSelectedDoc(doc, activeFrame instanceof ToolInternalFrame);
+        setSelectedDoc(doc, activeFrame instanceof InternalGraphFrame);
 
         if (werkzeugleiste != null) {
             workarea.remove(werkzeugleiste);
@@ -1729,11 +1729,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (!(me instanceof Node)) {
             return;
         }
-        ToolInternalFrame frame = null;
+        InternalGraphFrame frame = null;
         JInternalFrame[] frames = getAllFrames();
         for (int i = 0; i < frames.length; i++) {
-            if (frames[i] instanceof ToolInternalFrame) {
-                ToolInternalFrame f = (ToolInternalFrame) frames[i];
+            if (frames[i] instanceof InternalGraphFrame) {
+                InternalGraphFrame f = (InternalGraphFrame) frames[i];
                 GraphDocument cd = f.getGraphDocument();
                 if (cd instanceof Szenario && ((Szenario) cd).getHashString().equals(me.getAssociatedDoc())) {
                     frame = f;
