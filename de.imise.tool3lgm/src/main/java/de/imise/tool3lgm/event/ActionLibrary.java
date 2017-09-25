@@ -1879,21 +1879,10 @@ public class ActionLibrary {
         };
 
         /** Öffnet einen Dialog für die Einstellung von Größe, Abstand, etc. der Ebenen */
-        public static final Action OPEN_LAYER_SETTINGS = new StaticAction(ActionIdentifier.settings, PPP, true) {
-
+        public static final Action ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG = new GraphFrameAction(ActionIdentifier.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                AbstractInternalFrame selframe = getTool().getActiveFrame();
-                if (selframe != null && selframe instanceof ToolInternalFrame) {
-                    GraphViewOptionsDialog dialog = new GraphViewOptionsDialog();
-                    dialog.showDialog((ToolInternalFrame) selframe);
-                }
-            }
-
-            @Override
-            public boolean isEnabled() {
-                AbstractInternalFrame f = getActiveFrame();
-                return super.isEnabled() && getSelectedDoc() instanceof Szenario && f != null && f instanceof ToolInternalFrame;
+            public void actionPerformed() {
+                new GraphViewOptionsDialog().showDialog((ToolInternalFrame) Static.getActiveFrame());
             }
         };
 

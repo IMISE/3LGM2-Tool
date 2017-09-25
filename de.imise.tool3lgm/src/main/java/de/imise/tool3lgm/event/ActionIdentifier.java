@@ -53,7 +53,7 @@ public enum ActionIdentifier {
     ACTION_ACTIVATE_DOMAIN_LAYER,
     ACTION_ACTIVATE_LOGICAL_TOOL_LAYER,
     ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER,
-    settings,
+    ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG,
     matrix,
 
     // layout
