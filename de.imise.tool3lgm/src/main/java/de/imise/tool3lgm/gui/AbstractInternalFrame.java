@@ -17,7 +17,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)
  * Modellen
- * 
+ *
  * @author Thomas Rudert
  */
 public abstract class AbstractInternalFrame extends JInternalFrame implements GraphDocumentListener, InTransactionListener {
@@ -32,7 +32,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     /**
      * Konstruktor
-     * 
+     *
      * @param _graphDocument darzustellendes (Teil-)Modell
      * @param _title Fensterüberschrift
      */
@@ -68,7 +68,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     /**
      * gibt das darzustellende (Teil-)Modell zurück
-     * 
+     *
      * @return GraphDocument
      */
     public LGMGraphDocument getGraphDocument() {
@@ -77,7 +77,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     /**
      * gibt den scrollbaren Bereich zurück
-     * 
+     *
      * @return JScrollPane
      */
     public JScrollPane getScrollPane() {
@@ -86,7 +86,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     /**
      * gibt die Werkzeugleise zu diesem Fenster zurück
-     * 
+     *
      * @return Werkzeugleiste des Fensters
      */
     public UnfloatableToolBar getToolBar() {
@@ -95,10 +95,10 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     /**
      * setzt die Werkzeugleiste des Fensters
-     * 
+     *
      * @param _toolBar die eigene Werkzeugleiste
      */
-    protected void setToolBar(final UnfloatableToolBar _toolBar) {
+    protected void _setToolBar(final UnfloatableToolBar _toolBar) {
         toolBar = _toolBar;
     }
 

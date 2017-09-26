@@ -43,6 +43,10 @@ public abstract class GraphViewDefinition {
      * @return
      */
     public final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
+        if (Edge.class.isAssignableFrom(elementClass)) {
+            Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+            return isPaintable(Edge.getStartClass(edgeClass)) || isPaintable(Edge.getEndClass(edgeClass));
+        }
         return allPaintableNodes.contains(elementClass);
     }
 

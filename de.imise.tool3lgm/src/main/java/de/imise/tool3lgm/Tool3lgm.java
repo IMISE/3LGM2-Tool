@@ -79,10 +79,10 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
+import de.imise.tool3lgm.gui.ToolBar;
+import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
@@ -122,7 +122,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private final JPanel workarea = new JPanel();
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance */
-    private UnfloatableToolBar werkzeugleiste;
+    private UnfloatableToolBar internalFrameToolBar;
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane verticalSplitPane;
@@ -1365,9 +1365,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         toolbar.removeWindow(frame);
 
         if (frames.length == 0) {
-            if (werkzeugleiste != null) {
-                workarea.remove(werkzeugleiste);
-                werkzeugleiste = null;
+            if (internalFrameToolBar != null) {
+                workarea.remove(internalFrameToolBar);
+                internalFrameToolBar = null;
             }
             toolbar.repaint();
 
@@ -1398,13 +1398,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
         setSelectedDoc(doc, activeFrame instanceof InternalGraphFrame);
 
-        if (werkzeugleiste != null) {
-            workarea.remove(werkzeugleiste);
-            werkzeugleiste = null;
+        if (internalFrameToolBar != null) {
+            workarea.remove(internalFrameToolBar);
+            internalFrameToolBar = null;
         }
 
-        werkzeugleiste = activeFrame.getToolBar();
-        workarea.add(werkzeugleiste, BorderLayout.SOUTH);
+        internalFrameToolBar = activeFrame.getToolBar();
+        workarea.add(internalFrameToolBar, BorderLayout.SOUTH);
 
         try {
             activeFrame.setSelected(true);
@@ -1423,9 +1423,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         activeFrame = null;
-        if (werkzeugleiste != null) {
-            workarea.remove(werkzeugleiste);
-            werkzeugleiste = null;
+        if (internalFrameToolBar != null) {
+            workarea.remove(internalFrameToolBar);
+            internalFrameToolBar = null;
             workarea.revalidate();
         }
     }
@@ -1488,19 +1488,19 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void activeLayerChanged(final GraphDocument source) {
         source.getCollection().setChanged(true);
-        if (werkzeugleiste instanceof InternalGraphFrameToolBar) {
+        if (internalFrameToolBar instanceof InternalGraphFrameToolBar) {
             switch (source.getCollection().getActiveLayer()) {
             case 4:
-                ((InternalGraphFrameToolBar) werkzeugleiste).addButtonsFachlich();
-                ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
+                ((InternalGraphFrameToolBar) internalFrameToolBar).addButtonsFachlich();
+                ((InternalGraphFrameToolBar) internalFrameToolBar).setMausModus();
                 return;
             case 2:
-                ((InternalGraphFrameToolBar) werkzeugleiste).addButtonsLogisch();
-                ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
+                ((InternalGraphFrameToolBar) internalFrameToolBar).addButtonsLogisch();
+                ((InternalGraphFrameToolBar) internalFrameToolBar).setMausModus();
                 return;
             case 0:
-                ((InternalGraphFrameToolBar) werkzeugleiste).addButtonsPhysisch();
-                ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
+                ((InternalGraphFrameToolBar) internalFrameToolBar).addButtonsPhysisch();
+                ((InternalGraphFrameToolBar) internalFrameToolBar).setMausModus();
                 return;
             }
         }
@@ -1525,8 +1525,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void elementAdded(final GraphDocument source, final ElementContainer element) {
         source.getCollection().setChanged(true);
-        if (werkzeugleiste != null && werkzeugleiste instanceof InternalGraphFrameToolBar) {
-            ((InternalGraphFrameToolBar) werkzeugleiste).setMausModus();
+        if (internalFrameToolBar != null && internalFrameToolBar instanceof InternalGraphFrameToolBar) {
+            ((InternalGraphFrameToolBar) internalFrameToolBar).setMausModus();
         }
     }
 
@@ -1598,12 +1598,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * return the werkzeugleiste of application
+     * return the internal frame toolbar
      *
      * @return UnfloatableToolBar
      */
-    public UnfloatableToolBar getWerkzeugleiste() {
-        return werkzeugleiste;
+    public UnfloatableToolBar getIntrnalFrameToolBar() {
+        return internalFrameToolBar;
     }
 
     /**

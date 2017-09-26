@@ -27,21 +27,21 @@ public class ToolButton extends JToggleButton {
 
     /**
      * @param k
-     * @param gd
+     * @param doc
      */
-    public ToolButton(final Node k, final GraphDocument gd) {
+    public ToolButton(final Node k, final GraphDocument doc, final int i) {
         super();
-        knot = new NodeContainer(k, gd);
+        knot = new NodeContainer(k, doc);
         knot.setSizeForButtons(18, 14);
     }
 
     /**
      * @param k
-     * @param gd
+     * @param doc
      */
-    public ToolButton(final Edge k, final GraphDocument gd) {
+    public ToolButton(final Edge k, final GraphDocument doc, final int i) {
         super();
-        knot = new NodeContainer(new Aufgabe(), gd);
+        knot = new NodeContainer(new Aufgabe(), doc);
         knot.setSizeForButtons(18, 2);
         knot.setForm(GraphElementLayout.SHAPE.rechteck);
         knot.setColor(Color.BLACK);
@@ -61,5 +61,9 @@ public class ToolButton extends JToggleButton {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(30, 30);
+    }
+
+    public void setGraphDocument(final GraphDocument doc) {
+
     }
 }

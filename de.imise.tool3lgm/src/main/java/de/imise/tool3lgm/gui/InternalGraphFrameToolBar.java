@@ -14,10 +14,15 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -38,7 +43,7 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar implements Act
     /**
      * COMMENTME
      */
-    private JLabel zoomlabel, winkellabel, abstandlabel;
+    private final JLabel zoomlabel, winkellabel, abstandlabel;
 
     /**
      * COMMENTME
@@ -48,22 +53,20 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar implements Act
     /**
      * COMMENTME
      */
-    private ToolButton aufgabe, objekttyp, rechAwbaustein, konAwbaustein, dvbaustein, kante;
+    private final ToolButton aufgabe, objekttyp, rechAwbaustein, konAwbaustein, dvbaustein, kante;
 
     /**
      * COMMENTME
      */
     private ButtonGroup bg;
 
-    /**
-     * @param f
-     */
-    public InternalGraphFrameToolBar(final InternalGraphFrame f) {
-        super();
-        if (!(f.getSzenario() instanceof Szenario)) {
-            return;
-        }
+    private static final Multimap<Integer, Class<? extends ModelElement>> layerGraphElementClasses = getLayerGraphElementClasses();
 
+    /**
+     * @param frame
+     */
+    public InternalGraphFrameToolBar() {
+        super();
         button = new JToggleButton(Tool3lgmConstants.getIcon("fill.gif"));
         button.setToolTipText(getResString("el_mark_bearb"));
         button.setActionCommand("Maus");
@@ -78,15 +81,15 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar implements Act
         winkel = new JSlider(0, 80);
         winkel.setPreferredSize(new Dimension(150, 30));
         abstandlabel = new JLabel(getResString("abstand"));
-        double pageSizeFactor = f.getSzenario().getPageSizeFactor();
+        double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
         abstand = new JSlider(0, new Double(800 * pageSizeFactor).intValue());
-        Szenario szen = (Szenario) f.getSzenario();
+        Szenario szen = (Szenario) frame.getSzenario();
         if (szen.getViewParameter() != null) {
             zoom.setValue((int) (szen.getViewParameter().zoom * 100));
             winkel.setValue(szen.getViewParameter().degree);
             abstand.setValue(szen.getViewParameter().shift);
         } else {
-            InputGraphArea area = f.getInputGraphArea();
+            InputGraphArea area = frame.getInputGraphArea();
             if (area != null) {
                 zoom.setValue(80);
                 winkel.setValue(area.getDegree());
@@ -103,43 +106,82 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar implements Act
         zoom.addChangeListener(this);
 
         // Aufgabe
-        aufgabe = new ToolButton(new Aufgabe(), f.getGraphDocument());
+        aufgabe = new ToolButton(new Aufgabe(), frame.getGraphDocument());
         aufgabe.setToolTipText(ModelConstants.getDisplayableName(Aufgabe.class));
         aufgabe.addActionListener(this);
         aufgabe.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
         aufgabe.setPreferredSize(new Dimension(30, 30));
         CSH.setHelpIDString(aufgabe, "wl_aufgabe");
         // Objekttyp
-        objekttyp = new ToolButton(new Objekttyp(), f.getGraphDocument());
+        objekttyp = new ToolButton(new Objekttyp(), frame.getGraphDocument());
         objekttyp.setToolTipText(ModelConstants.getDisplayableName(Objekttyp.class));
         objekttyp.addActionListener(this);
         objekttyp.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
         CSH.setHelpIDString(objekttyp, "wl_objekttyp");
         // RechAnwendungsbaustein
-        rechAwbaustein = new ToolButton(new RechAnwendungsbaustein(), f.getGraphDocument());
+        rechAwbaustein = new ToolButton(new RechAnwendungsbaustein(), frame.getGraphDocument());
         rechAwbaustein.setToolTipText(ModelConstants.getDisplayableName(RechAnwendungsbaustein.class));
         rechAwbaustein.addActionListener(this);
         rechAwbaustein.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
         CSH.setHelpIDString(rechAwbaustein, "wl_anwendungsbaustein");
         // KonAnwendungsbaustein
-        konAwbaustein = new ToolButton(new KonAnwendungsbaustein(), f.getGraphDocument());
+        konAwbaustein = new ToolButton(new KonAnwendungsbaustein(), frame.getGraphDocument());
         konAwbaustein.setToolTipText(ModelConstants.getDisplayableName(KonAnwendungsbaustein.class));
         konAwbaustein.addActionListener(this);
         konAwbaustein.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
         CSH.setHelpIDString(konAwbaustein, "wl_anwendungsbaustein");
         // PhysischerDVBaustein
-        dvbaustein = new ToolButton(new PhysischerDVBaustein(), f.getGraphDocument());
+        dvbaustein = new ToolButton(new PhysischerDVBaustein(), frame.getGraphDocument());
         dvbaustein.setToolTipText(ModelConstants.getDisplayableName(PhysischerDVBaustein.class));
         dvbaustein.addActionListener(this);
         dvbaustein.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
         CSH.setHelpIDString(dvbaustein, "wl_datenverarbeitungsbaustein");
         // Edge
-        kante = new ToolButton(new AufObjVerbindung(), f.getGraphDocument());
+        kante = new ToolButton(new AufObjVerbindung(), frame.getGraphDocument());
         kante.setToolTipText(ModelConstants.getDisplayableName(Edge.class));
         kante.addActionListener(this);
         kante.setIcon(Tool3lgmConstants.getIcon("dummy1.gif"));
 
         CSH.setHelpIDString(this, "ansichtswerkzeuge");
+    }
+
+    private static Multimap<Integer, Class<? extends ModelElement>> getLayerGraphElementClasses() {
+        Multimap<Integer, Class<? extends ModelElement>> layerGraphElementClasses = ArrayListMultimap.create();
+        GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
+        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS) {
+            int layer = ModelConstants.layerFor(elementClass);
+            if (graphViewDefinition.isPaintable(elementClass)) {
+                layerGraphElementClasses.put(layer, elementClass);
+            }
+        }
+        return layerGraphElementClasses;
+    }
+
+    public void setFrame(final InternalGraphFrame frame) {
+        if (!(frame.getSzenario() instanceof Szenario)) {
+            return;
+        }
+
+        double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
+        abstand.setMaximum(new Double(800 * pageSizeFactor).intValue());
+        Szenario szen = (Szenario) frame.getSzenario();
+        if (szen.getViewParameter() != null) {
+            zoom.setValue((int) (szen.getViewParameter().zoom * 100));
+            winkel.setValue(szen.getViewParameter().degree);
+            abstand.setValue(szen.getViewParameter().shift);
+        } else {
+            InputGraphArea area = frame.getInputGraphArea();
+            if (area != null) {
+                zoom.setValue(80);
+                winkel.setValue(area.getDegree());
+                abstand.setValue(area.getPitchShift());
+            } else {
+                zoom.setValue(80);
+                winkel.setValue(75);
+                abstand.setValue(new Double(200 * pageSizeFactor).intValue());
+            }
+        }
+
     }
 
     public void addButtonsFachlich() {

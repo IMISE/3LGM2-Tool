@@ -1765,7 +1765,7 @@ public class ActionLibrary {
                 protected void actionPerformed() {
                     Tool3lgm tool = getTool();
                     JPanel workArea = tool.getWorkArea();
-                    UnfloatableToolBar toolbar = tool.getWerkzeugleiste();
+                    UnfloatableToolBar toolbar = tool.getIntrnalFrameToolBar();
                     if (isSelected()) {
                         workArea.add(toolbar, BorderLayout.SOUTH);
                     } else {

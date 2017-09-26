@@ -1103,7 +1103,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             getParent().dispatchEvent(e);
             return;
         }
-        UnfloatableToolBar utb = Static.getTool().getWerkzeugleiste();
+        UnfloatableToolBar utb = Static.getTool().getIntrnalFrameToolBar();
         double zoomStep = zoom - 0.05 * e.getWheelRotation();
         if (utb == null || !(utb instanceof InternalGraphFrameToolBar)) {
             setZoom(zoomStep);
