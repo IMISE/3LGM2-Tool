@@ -126,12 +126,13 @@
 	<mapID target="ACTION_SAVE_MODEL" url="baukasten/uebersicht.html#speichern"/>
 	<mapID target="ACTION_UNDO" url="baukasten/uebersicht.html#undo"/>
 	<mapID target="ACTION_REDO" url="baukasten/uebersicht.html#redo"/>
-	<mapID target="ansichtswerkzeuge" url="baukasten/uebersicht.html#ansichtswerkzeuge"/>
-	<mapID target="wl_maus" url="baukasten/uebersicht.html#maus"/>
-	<mapID target="wl_aufgabe" url="baukasten/uebersicht.html#aufgabe"/>
-	<mapID target="wl_objekttyp" url="baukasten/uebersicht.html#objekttyp"/>
-	<mapID target="wl_anwendungsbaustein" url="baukasten/uebersicht.html#anwendungsbaustein"/>
-	<mapID target="wl_datenverarbeitungsbaustein" url="baukasten/uebersicht.html#datenverarbeitungsbaustein"/>
+	<mapID target="GRAPH_TOOLBAR_ansichtswerkzeuge" url="baukasten/uebersicht.html#ansichtswerkzeuge"/>
+	<mapID target="GRAPH_TOOLBAR_switchMouseMode" url="baukasten/uebersicht.html#maus"/>
+	<mapID target="GRAPH_TOOLBAR_Aufgabe" url="baukasten/uebersicht.html#aufgabe"/>
+	<mapID target="GRAPH_TOOLBAR_Objekttyp" url="baukasten/uebersicht.html#objekttyp"/>
+	<mapID target="GRAPH_TOOLBAR_KonAnwendungsbaustein" url="baukasten/uebersicht.html#anwendungsbaustein"/>
+	<mapID target="GRAPH_TOOLBAR_RechAnwendungsbaustein" url="baukasten/uebersicht.html#anwendungsbaustein"/>
+	<mapID target="GRAPH_TOOLBAR_PhysischerDVBaustein" url="baukasten/uebersicht.html#datenverarbeitungsbaustein"/>
 	
 	
 

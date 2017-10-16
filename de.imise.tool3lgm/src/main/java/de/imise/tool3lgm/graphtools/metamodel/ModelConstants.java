@@ -559,6 +559,16 @@ public final class ModelConstants {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse in der Grafik darstellbar ist.
+     * 
+     * @param elementClass
+     * @return
+     */
+    public static final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
+        return getGraphViewDefinition().isPaintable(elementClass);
+    }
+
+    /**
      * Prüft, ob die übergebene Klasse <code>abstract</code> ist.
      *
      * @param elementClass

@@ -42,10 +42,8 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
  * COMMENTME
@@ -216,6 +214,15 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
+
+    public final Class<? extends Node> getMouseMakesNodeClass() {
+        return mouse_makes_node;
+    }
+
+    public final boolean isMouseMakesEdge() {
+        return mouse_makes_edge;
+    }
+
     // --- Methoden zur Statusveraenderung --- Ende ---
 
     // --- Methoden der Rueckberechnung von Koordinaten --- Anfang ---
@@ -1103,13 +1110,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             getParent().dispatchEvent(e);
             return;
         }
-        UnfloatableToolBar utb = Static.getTool().getIntrnalFrameToolBar();
         double zoomStep = zoom - 0.05 * e.getWheelRotation();
-        if (utb == null || !(utb instanceof InternalGraphFrameToolBar)) {
-            setZoom(zoomStep);
-        } else {
-            ((InternalGraphFrameToolBar) utb).setZoom(zoomStep);
-        }
+        setZoom(zoomStep);
     }
 
     // --- Methoden des MouseMotionListener-Interfaces --- Ende ---

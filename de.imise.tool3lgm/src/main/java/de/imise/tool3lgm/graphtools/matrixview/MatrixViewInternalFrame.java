@@ -58,8 +58,6 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
         setClosable(true);
         tableModel = new TableModel(getGraphDocument());
 
-        setToolBar(new MatrixViewPathSelectorToolBar(this));
-
         msgPanel = new JPanel();
 
         rowHeaderPanel = new RowPanel(tableModel.getRowHeaders());
@@ -88,7 +86,7 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     }
 
     /**
-     * 
+     *
      */
     private void setComponents() {
         if (tableModel.isValid() && tableModel.getColHeaders().size() > 0 && tableModel.getRowHeaders().size() > 0) {
@@ -191,14 +189,6 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     }
 
     @Override
-    public final void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
-    public final void layoutChanged(final GraphDocument source) {
-    }
-
-    @Override
     public final void elementAdded(final GraphDocument source, final ElementContainer element) {
         dataChanged(source);
     }
@@ -206,22 +196,6 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     @Override
     public final void elementDeleted(final GraphDocument source, final ElementContainer element) {
         dataChanged(source);
-    }
-
-    @Override
-    public final void groupOrderChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public final void activeLayerChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public final void colorsChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public final void selectionChanged(final GraphDocument source) {
     }
 
     @Override

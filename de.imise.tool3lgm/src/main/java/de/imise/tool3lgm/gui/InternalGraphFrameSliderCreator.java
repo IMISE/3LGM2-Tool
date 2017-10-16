@@ -1,0 +1,148 @@
+package de.imise.tool3lgm.gui;
+
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
+import java.awt.Dimension;
+
+import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import com.google.common.base.Strings;
+
+import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.util.swing.component.MinMaxNumberTextField3;
+
+public class InternalGraphFrameSliderCreator implements ChangeListener {
+
+    private SliderWithTextField sliderDegree, sliderZoom, sliderGap, sliderPageSizeFactor;
+
+    private InternalGraphFrame frame;
+
+    public InternalGraphFrameSliderCreator(final InternalGraphFrame frame) {
+        this(frame, -1, -1);
+    }
+
+    public InternalGraphFrameSliderCreator(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
+        this.frame = frame;
+        init(preferredSizeWidth, preferredSizeHeight);
+    }
+
+    private void init(final int preferredSizeWidth, final int preferredSizeHeight) {
+        sliderDegree = new SliderWithTextField(0, 80, preferredSizeWidth, preferredSizeHeight, "winkel", this);
+        sliderZoom = new SliderWithTextField(10, 200, preferredSizeWidth, preferredSizeHeight, "zoom", this);
+        sliderGap = new SliderWithTextField(0, 1, preferredSizeWidth, preferredSizeHeight, "abstand", this);
+        sliderPageSizeFactor = new SliderWithTextField(100, 1000, preferredSizeWidth, preferredSizeHeight, "page_zoom", this);
+        updateValues();
+    }
+
+    private void updateSliderGapMaximum() {
+        //den maximalen Abstand in Anhängigkeit von der Ebenengröße berechnen
+        double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
+        int maxPageSizeFactor = new Double(800 * pageSizeFactor).intValue();
+        sliderGap.setMaximum(maxPageSizeFactor);
+    }
+
+    private void updateValues() {
+        if (frame == null) {
+            return;
+        }
+        updateSliderGapMaximum();
+        Szenario szen = (Szenario) frame.getSzenario();
+        double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
+        if (szen.getViewParameter() != null) {
+            sliderZoom.setValue((int) (szen.getViewParameter().zoom * 100));
+            sliderDegree.setValue(szen.getViewParameter().degree);
+            sliderGap.setValue(szen.getViewParameter().shift);
+            sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
+        } else {
+            InputGraphArea area = frame.getInputGraphArea();
+            if (area != null) {
+                sliderZoom.setValue(80);
+                sliderDegree.setValue(area.getDegree());
+                sliderGap.setValue(area.getPitchShift());
+                sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
+            } else {
+                sliderZoom.setValue(80);
+                sliderDegree.setValue(75);
+                sliderGap.setValue(new Double(200 * pageSizeFactor).intValue());
+            }
+        }
+    }
+
+    public SliderWithTextField getSliderDegree() {
+        return sliderDegree;
+    }
+
+    public SliderWithTextField getSliderZoom() {
+        return sliderZoom;
+    }
+
+    public SliderWithTextField getSliderGap() {
+        return sliderGap;
+    }
+
+    public SliderWithTextField getSliderPageSizeFactor() {
+        return sliderPageSizeFactor;
+    }
+
+    public void setFrame(final InternalGraphFrame frame) {
+        this.frame = frame;
+        updateValues();
+    }
+
+    @Override
+    public void stateChanged(final ChangeEvent e) {
+        if (frame == null) {
+            return;
+        }
+        if (e.getSource() == sliderDegree) {
+            InputGraphArea area = frame.getInputGraphArea();
+            area.setDegree(sliderDegree.getValue());
+        } else if (e.getSource() == sliderGap) {
+            InputGraphArea area = frame.getInputGraphArea();
+            area.setInterLayerSpace(sliderGap.getValue());
+        } else if (e.getSource() == sliderZoom) {
+            InputGraphArea area = frame.getInputGraphArea();
+            area.setZoom((double) sliderZoom.getValue() / 100);
+        } else if (e.getSource() == sliderPageSizeFactor) {
+            frame.getGraphDocument().setPageSizeFactor(sliderPageSizeFactor.getValue() / 100d);
+        }
+    }
+
+    public class SliderWithTextField extends JSlider {
+
+        private final JTextField valueTextField;
+
+        private final JLabel label;
+
+        public SliderWithTextField(final int min, final int max, final int preferredSizeWidth, final int preferredSizeHeight, final String labelResKey, final ChangeListener changeListener) {
+            super(min, max);
+            if (preferredSizeWidth != -1 && preferredSizeHeight != -1) {
+                setPreferredSize(new Dimension(preferredSizeWidth, preferredSizeHeight));
+            }
+            valueTextField = new MinMaxNumberTextField3(min, max, 0);
+            label = Strings.isNullOrEmpty(labelResKey) ? null : new JLabel(getResString(labelResKey));
+            addChangeListener(changeListener);
+        }
+
+        public JTextField getTextField() {
+            return valueTextField;
+        }
+
+        public JLabel getLabel() {
+            return label;
+        }
+
+        @Override
+        public void setValue(final int n) {
+            valueTextField.setText(String.valueOf(n));
+            super.setValue(n);
+        }
+
+    }
+
+}

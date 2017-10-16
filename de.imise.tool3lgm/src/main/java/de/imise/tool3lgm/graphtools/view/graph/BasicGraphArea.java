@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -120,6 +122,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /** Maximaler interner Zoom-Wert */
     private static final double ZOOM_FACTOR_MAXIMUM = 2d;
 
+    private final List<BasicGraphAreaChangeListener> changeListener = new ArrayList<>();
+
     /** Mögliche Statusse für das Zeichnen */
     public enum PaintState {
         /** Alles wird mit gezeichnet */
@@ -157,6 +161,50 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
             add(new JLabel(" "));
         }
     }
+
+    // --- ChangeListener --- Anfang ---
+
+    public void addChangeListener(final BasicGraphAreaChangeListener listener) {
+        if (!changeListener.contains(listener)) {
+            changeListener.add(listener);
+        }
+    }
+
+    public void removeChangeListener(final BasicGraphAreaChangeListener listener) {
+        changeListener.remove(listener);
+    }
+
+    private void fireZoomChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.zoomChanged(this);
+        }
+    }
+
+    private void fireDegreeChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.degreeChanged(this);
+        }
+    }
+
+    private void fireLayerViewChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.layerViewChanged(this);
+        }
+    }
+
+    private void fireLayerGapChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.layerGapChanged(this);
+        }
+    }
+
+    private void firePageSizeChangedChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.pageSizeChanged(this);
+        }
+    }
+
+    // --- ChangeListener --- Ende ---
 
     // --- Dokumentenverwaltung --- Anfang ---
 
@@ -246,6 +294,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         page_height = height;
         page_width = width;
         check_size();
+        firePageSizeChangedChanged();
     }
 
     /**
@@ -262,6 +311,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         }
         revalidate();
         repaint();
+        fireLayerViewChanged();
     }
 
     /**
@@ -288,6 +338,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
             refreshTransformation();
             adjustInterLayerSpace();
             adjust_size();
+            fireDegreeChanged();
         }
     }
 
@@ -323,6 +374,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         interLayerSpace = shift;
         adjustInterLayerSpace();
         adjust_size();
+        fireLayerGapChanged();
     }
 
     @Override
@@ -349,6 +401,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         refreshTransformation();
         adjustInterLayerSpace();
         adjust_size();
+        fireZoomChanged();
     }
 
     /**

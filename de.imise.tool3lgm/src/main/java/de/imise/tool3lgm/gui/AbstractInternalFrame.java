@@ -93,41 +93,41 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
         return toolBar;
     }
 
-    /**
-     * setzt die Werkzeugleiste des Fensters
-     *
-     * @param _toolBar die eigene Werkzeugleiste
-     */
-    protected void _setToolBar(final UnfloatableToolBar _toolBar) {
-        toolBar = _toolBar;
-    }
+    @Override
+    public void dataChanged(final GraphDocument source) {
+    };
 
     @Override
-    public abstract void dataChanged(GraphDocument source);
+    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    };
 
     @Override
-    public abstract void elementGraphicsChanged(GraphDocument source, ElementContainer element);
+    public void layoutChanged(final GraphDocument source) {
+    };
 
     @Override
-    public abstract void layoutChanged(GraphDocument source);
+    public void elementAdded(final GraphDocument source, final ElementContainer element) {
+    };
 
     @Override
-    public abstract void elementAdded(GraphDocument source, ElementContainer element);
+    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
+    };
 
     @Override
-    public abstract void elementDeleted(GraphDocument source, ElementContainer element);
+    public void groupOrderChanged(final GraphDocument source) {
+    };
 
     @Override
-    public abstract void groupOrderChanged(GraphDocument source);
+    public void activeLayerChanged(final GraphDocument source) {
+    };
 
     @Override
-    public abstract void activeLayerChanged(GraphDocument source);
+    public void colorsChanged(final GraphDocument source) {
+    };
 
     @Override
-    public abstract void colorsChanged(GraphDocument source);
-
-    @Override
-    public abstract void selectionChanged(GraphDocument source);
+    public void selectionChanged(final GraphDocument source) {
+    };
 
     @Override
     public void dataChanged(final GraphDocument source, final int pid) {

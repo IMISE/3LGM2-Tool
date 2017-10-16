@@ -21,6 +21,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
 
@@ -78,7 +79,6 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         }
 
         frame = f;
-        InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
         setTitle(getResString("OPTIONS_GRAPH_VIEW_DIALOG_TITLE"));
         setSize(340, 180);
 
@@ -96,10 +96,13 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         centerPanel.setLayout(new GridLayout(4, 1));
         JPanel eastPanel = new JPanel();
         eastPanel.setLayout(new GridLayout(4, 1));
+        InternalFrameToolbarManager internalFrameToolBarManager = Static.getTool().getInternalFrameToolBarManager();
+        //internalFrameToolBarManager
+        InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
 
         JLabel text = new JLabel(getResString("zoom"));
-        zoom = new JSlider(leiste.zoom.getMinimum(), leiste.zoom.getMaximum());
-        zoom.setValue(leiste.zoom.getValue());
+        zoom = new JSlider(leiste.sliderZoom.getMinimum(), leiste.sliderZoom.getMaximum());
+        zoom.setValue(leiste.sliderZoom.getValue());
         zoom.addChangeListener(this);
         textzoom = new JTextField(4);
         textzoom.setText(new Integer(zoom.getValue()).toString());
@@ -121,16 +124,16 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         eastPanel.add(textPageSizeFactor);
 
         JLabel textw = new JLabel(getResString("winkel"));
-        winkel = new JSlider(leiste.winkel.getMinimum(), leiste.winkel.getMaximum());
-        winkel.setValue(leiste.winkel.getValue());
+        winkel = new JSlider(leiste.sliderDegree.getMinimum(), leiste.sliderDegree.getMaximum());
+        winkel.setValue(leiste.sliderDegree.getValue());
         winkel.addChangeListener(this);
         textwinkel = new JTextField(4);
         JLabel texta = new JLabel(getResString("abstand"));
         textwinkel.setText(new Integer(winkel.getValue()).toString());
         textwinkel.setEditable(false);
 
-        abstand = new JSlider(leiste.abstand.getMinimum(), leiste.abstand.getMaximum());
-        abstand.setValue(leiste.abstand.getValue());
+        abstand = new JSlider(leiste.sliderGap.getMinimum(), leiste.sliderGap.getMaximum());
+        abstand.setValue(leiste.sliderGap.getValue());
         abstand.addChangeListener(this);
         textabstand = new JTextField(4);
         textabstand.setText(new Integer(abstand.getValue()).toString());
@@ -170,18 +173,18 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         area.setZoom((double) Integer.parseInt(textzoom.getText()) / 100);
         zoom.setValue(Integer.parseInt(textzoom.getText()));
         InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
-        leiste.zoom.setValue(Integer.parseInt(textzoom.getText()));
+        leiste.sliderZoom.setValue(Integer.parseInt(textzoom.getText()));
         if (frame.getInputGraphArea().isMultiViewEnabled()) {
             area.setDegree(Integer.parseInt(textwinkel.getText()));
             area.setInterLayerSpace(Integer.parseInt(textabstand.getText()));
             winkel.setValue(Integer.parseInt(textwinkel.getText()));
             abstand.setValue(Integer.parseInt(textabstand.getText()));
-            leiste.winkel.setValue(Integer.parseInt(textwinkel.getText()));
-            leiste.abstand.setValue(Integer.parseInt(textabstand.getText()));
+            leiste.sliderDegree.setValue(Integer.parseInt(textwinkel.getText()));
+            leiste.sliderGap.setValue(Integer.parseInt(textabstand.getText()));
         }
         textPageSizeFactor.setText(new Double(frame.getGraphDocument().getPageSizeFactor()).toString());
-        leiste.abstand.setMaximum(new Double(800 * frame.getGraphDocument().getPageSizeFactor()).intValue());
-        abstand.setMaximum(leiste.abstand.getMaximum());
+        leiste.sliderGap.setMaximum(new Double(800 * frame.getGraphDocument().getPageSizeFactor()).intValue());
+        abstand.setMaximum(leiste.sliderGap.getMaximum());
         // in der Einzelansicht den Viewpoint korrekt aktualisieren
         if (!area.isMultiViewEnabled()) {
             area.setInterLayerSpace(0);

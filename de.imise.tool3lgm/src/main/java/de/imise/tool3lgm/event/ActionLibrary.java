@@ -32,7 +32,6 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Static;
@@ -86,8 +85,9 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.ToolBar;
+import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
@@ -99,7 +99,6 @@ import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
-import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
@@ -1764,14 +1763,8 @@ public class ActionLibrary {
                 @Override
                 protected void actionPerformed() {
                     Tool3lgm tool = getTool();
-                    JPanel workArea = tool.getWorkArea();
-                    UnfloatableToolBar toolbar = tool.getIntrnalFrameToolBar();
-                    if (isSelected()) {
-                        workArea.add(toolbar, BorderLayout.SOUTH);
-                    } else {
-                        workArea.remove(toolbar);
-                    }
-                    workArea.revalidate();
+                    InternalFrameToolbarManager internalFrameToolBarManager = tool.getInternalFrameToolBarManager();
+                    internalFrameToolBarManager.setToolBarVisible(isSelected());
                 }
             };
 

@@ -49,7 +49,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         // dargestellten Wert zu setzen
         doc.setFrame(this);
         area = inputGraphArea;
-        setToolBar(new InternalGraphFrameToolBar(this));
 
         if (!(doc instanceof Szenario)) {
             docCount++;
@@ -82,7 +81,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
 
     /**
      * implementiert ActionListener zum selbständigen zentrieren der Frames
-     * 
+     *
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
      */
     @Override
@@ -94,8 +93,8 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void center() {
         JViewport view = getScrollPane().getViewport();
         Rectangle vp = view.getViewRect();
