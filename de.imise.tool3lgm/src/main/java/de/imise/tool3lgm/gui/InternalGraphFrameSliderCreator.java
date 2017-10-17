@@ -14,6 +14,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.util.swing.component.MinMaxNumberTextField3;
 
 public class InternalGraphFrameSliderCreator implements ChangeListener {
@@ -53,10 +54,11 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
         updateSliderGapMaximum();
         Szenario szen = (Szenario) frame.getSzenario();
         double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
-        if (szen.getViewParameter() != null) {
-            sliderZoom.setValue((int) (szen.getViewParameter().zoom * 100));
-            sliderDegree.setValue(szen.getViewParameter().degree);
-            sliderGap.setValue(szen.getViewParameter().shift);
+        ViewParameter viewParameter = szen.getViewParameter();
+        if (viewParameter != null) {
+            sliderZoom.setValue((int) (viewParameter.zoom * 100));
+            sliderDegree.setValue(viewParameter.degree);
+            sliderGap.setValue(viewParameter.shift);
             sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
         } else {
             InputGraphArea area = frame.getInputGraphArea();
