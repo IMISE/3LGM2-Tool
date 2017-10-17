@@ -545,7 +545,7 @@ public class LGMGraphDocument extends GraphDocument {
                     destGDColl.deleteElement(kante, pid);
                 } else {
                     int edgeLayer = kante.layerFor();
-                    destGDColl.addEdge((EdgeContainer) kante.getContainer(destMainDoc), edgeLayer, pid);
+                    destGDColl.addEdge((EdgeContainer) kante.getContainer(destMainDoc), pid);
                     if (!kante.isUnique() && dest instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) kante.getContainer(dest);
                         if (newC == null) {

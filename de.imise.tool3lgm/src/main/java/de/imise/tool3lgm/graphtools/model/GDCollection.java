@@ -1139,13 +1139,13 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * @param edgeContainer
-     * @param l
      * @param pid
      */
-    public void addEdge(final EdgeContainer edgeContainer, final int l, final int pid) {
+    public void addEdge(final EdgeContainer edgeContainer, final int pid) {
         Edge edge = edgeContainer.getEdge();
         EdgeContainer ec = new EdgeContainer(edgeContainer, doc);
-        doc.getLayer(l).add(ec);
+        int layer = edge.layerFor();
+        doc.getLayer(layer).add(ec);
         boolean bulkMode = isBulkMode();
         setBulkMode(true);
         for (Szenario szen : szenarios) {
@@ -1352,7 +1352,7 @@ public final class GDCollection extends UserFieldTarget {
                 if (edge.getStart() != null && edge.getEnd() != null) {
                     kac = new EdgeContainer(edge, doc);
                     edge.setName(doc.getNextNewName(edge.getClass()), false);
-                    addEdge(kac, kac.layerFor(), pid);
+                    addEdge(kac, pid);
                 } else {
                     if (edge.getStart() == null && edge.getEnd() != null) {
                         edge.getEnd().removeEdge(edge);
