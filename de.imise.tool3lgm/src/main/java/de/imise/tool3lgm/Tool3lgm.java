@@ -81,6 +81,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.StatusBar;
 import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
@@ -420,7 +421,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         getContentPane().add(toolbar, BorderLayout.NORTH);
         getContentPane().add(workarea, BorderLayout.CENTER);
-        //        getContentPane().add(new StatusBar(), BorderLayout.SOUTH);
+        getContentPane().add(new StatusBar(), BorderLayout.SOUTH);
 
         JScrollPane desktopscroll = new JScrollPane(desktop);
         verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
