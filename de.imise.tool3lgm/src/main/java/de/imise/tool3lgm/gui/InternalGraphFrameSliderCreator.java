@@ -35,23 +35,22 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
     private void init(final int preferredSizeWidth, final int preferredSizeHeight) {
         sliderDegree = new SliderWithTextField(0, 80, preferredSizeWidth, preferredSizeHeight, "winkel", this);
         sliderZoom = new SliderWithTextField(10, 200, preferredSizeWidth, preferredSizeHeight, "zoom", this);
-        sliderGap = new SliderWithTextField(0, 1, preferredSizeWidth, preferredSizeHeight, "abstand", this);
+        sliderGap = new SliderWithTextField(0, getSliderGapMaximum(), preferredSizeWidth, preferredSizeHeight, "abstand", this);
         sliderPageSizeFactor = new SliderWithTextField(100, 1000, preferredSizeWidth, preferredSizeHeight, "page_zoom", this);
         updateValues();
     }
 
-    private void updateSliderGapMaximum() {
+    private int getSliderGapMaximum() {
         //den maximalen Abstand in Anhängigkeit von der Ebenengröße berechnen
         double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
         int maxPageSizeFactor = new Double(800 * pageSizeFactor).intValue();
-        sliderGap.setMaximum(maxPageSizeFactor);
+        return maxPageSizeFactor;
     }
 
     private void updateValues() {
         if (frame == null) {
             return;
         }
-        updateSliderGapMaximum();
         Szenario szen = (Szenario) frame.getSzenario();
         double pageSizeFactor = szen.getPageSizeFactor();
         ViewParameter viewParameter = szen.getViewParameter();
@@ -71,8 +70,10 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
                 sliderZoom.setValue(80);
                 sliderDegree.setValue(75);
                 sliderGap.setValue(new Double(200 * pageSizeFactor).intValue());
+                sliderPageSizeFactor.setValue(100);
             }
         }
+        sliderGap.setMaximum(getSliderGapMaximum());
     }
 
     public SliderWithTextField getSliderDegree() {
