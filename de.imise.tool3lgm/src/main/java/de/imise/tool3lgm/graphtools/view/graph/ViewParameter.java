@@ -11,7 +11,6 @@ public class ViewParameter {
     public int degree;
     public boolean multiView;
     public double zoom;
-    public double pageSizeFactor = 1.0;
     public int layer;
     public boolean selected;
 }

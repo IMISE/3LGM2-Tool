@@ -53,7 +53,7 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
         }
         updateSliderGapMaximum();
         Szenario szen = (Szenario) frame.getSzenario();
-        double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
+        double pageSizeFactor = szen.getPageSizeFactor();
         ViewParameter viewParameter = szen.getViewParameter();
         if (viewParameter != null) {
             sliderZoom.setValue((int) (viewParameter.zoom * 100));

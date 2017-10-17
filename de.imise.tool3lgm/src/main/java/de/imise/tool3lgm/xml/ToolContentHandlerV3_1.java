@@ -86,9 +86,8 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
             } else if (qName.equals("degree")) {
                 viewParameter.degree = Integer.parseInt(elementValue.toString());
 
-                //ab Version 4 gibt es diesen Faktor nicht mehr, sondern getrennte viewParameter.layerHeight und viewParameter.layerWidth
             } else if (qName.equals("pageSizeFactor")) {
-                viewParameter.pageSizeFactor = Double.parseDouble(elementValue.toString());
+                szenario.setPageSizeFactor(Double.parseDouble(elementValue.toString()));
 
             } else if (qName.equals("activeLayer")) {
                 viewParameter.layer = Integer.parseInt(elementValue.toString());

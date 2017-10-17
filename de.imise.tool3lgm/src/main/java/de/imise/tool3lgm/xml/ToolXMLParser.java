@@ -123,22 +123,13 @@ public class ToolXMLParser {
             break;
 
         case 6:
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
-            break;
-
         case 7:
+        case 8:
+        case 9: //3.1 bis 3.5 haben denselben Parser, aber alte Baukastenversionen können neuere
+            //Modelldateien nicht lesen, weil Elementklassen umbeannt wurden (was aber den Parser
+            //nicht kümmert)
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
             break;
-
-        case 8:
-        case 9: //3.4 und 3.5 haben denselben Parser, aber die 8 kann die 9 nicht lesen, weil Elementklassen
-                    //umbeannt wurden, was aber den Parser nicht kümmert)
-            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_4(collection, paste));
-            break;
-
-        //        case 10:
-        //            parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_5(collection, paste));
-        //            break;
 
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");

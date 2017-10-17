@@ -317,9 +317,6 @@ public class Szenario extends LGMGraphDocument {
      */
     public void setViewParameter(final ViewParameter _view) {
         viewParam = _view;
-        if (_view.pageSizeFactor != 0) {
-            setPageSizeFactor(_view.pageSizeFactor);
-        }
     }
 
     /**
