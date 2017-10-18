@@ -56,15 +56,15 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
         ViewParameter viewParameter = szen.getViewParameter();
         if (viewParameter != null) {
             sliderZoom.setValue((int) (viewParameter.zoom * 100));
-            sliderDegree.setValue(viewParameter.degree);
-            sliderGap.setValue(viewParameter.shift);
+            sliderDegree.setValue(viewParameter.layerAngle);
+            sliderGap.setValue(viewParameter.layerGap);
             sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
         } else {
             InputGraphArea area = frame.getInputGraphArea();
             if (area != null) {
                 sliderZoom.setValue(80);
-                sliderDegree.setValue(area.getDegree());
-                sliderGap.setValue(area.getPitchShift());
+                sliderDegree.setValue(area.getLayerAngle());
+                sliderGap.setValue(area.getLayerGap());
                 sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
             } else {
                 sliderZoom.setValue(80);
@@ -104,7 +104,7 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
         }
         if (e.getSource() == sliderDegree) {
             InputGraphArea area = frame.getInputGraphArea();
-            area.setDegree(sliderDegree.getValue());
+            area.setLayerAngle(sliderDegree.getValue());
         } else if (e.getSource() == sliderGap) {
             InputGraphArea area = frame.getInputGraphArea();
             area.setInterLayerSpace(sliderGap.getValue());

@@ -41,7 +41,7 @@ public class ConfigurationRenderer {
 
         InternalGraphFrame frame = doc.getFrame();
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
-        boolean multiView = inputGraphArea.isMultiViewEnabled();
+        boolean multiView = inputGraphArea.isMultiView();
 
         List<ElementContainer> configurationStartContainer = null;
         List<ElementContainer> configurationEndContainer = null;

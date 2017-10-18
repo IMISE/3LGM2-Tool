@@ -802,10 +802,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public void setWorkArea(final InternalGraphFrame frame) {
         InputGraphArea bgp = frame.getInputGraphArea();
-        bgp.setDegree(65);
+        bgp.setLayerAngle(65);
         bgp.setInterLayerSpace(200);
-        frame.getScrollPane().getHorizontalScrollBar().setValue(200);
-        frame.getScrollPane().getVerticalScrollBar().setValue(150);
+        frame.getScrollPane().getViewport().setViewPosition(new Point(200, 150));
     }
 
     /**
@@ -816,10 +815,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public void setWorkArea(final InternalGraphFrame frame, final ViewParameter view) {
         InputGraphArea bgp = frame.getInputGraphArea();
-        bgp.setMultiViewEnabled(view.multiView);
+        bgp.setMultiView(view.multiView);
         frame.getGraphDocument().getCollection().setActiveLayer(view.layer);
-        bgp.setMultiViewDegree(view.degree);
-        bgp.setMultiViewPitchShift(view.shift);
+        bgp.setMultiViewLayerAngle(view.layerAngle);
+        bgp.setMultiViewLayerGap(view.layerGap);
         bgp.setZoom(view.zoom);
         frame.getScrollPane().getViewport().setViewPosition(new Point(view.x, view.y));
     }

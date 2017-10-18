@@ -446,12 +446,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 writeElement("x", viewPosition.x);
                 writeElement("y", viewPosition.y);
                 InputGraphArea inputGraphArea = frame.getInputGraphArea();
-                writeElement("zoom", inputGraphArea.getZoomFactor());
-                writeElement("degree", inputGraphArea.getDegree());
-                writeElement("shift", inputGraphArea.getMultiViewPitchShift());
+                writeElement("zoom", inputGraphArea.getZoom());
+                writeElement("degree", inputGraphArea.getLayerAngle());
+                writeElement("shift", inputGraphArea.getMultiViewLayerGap());
                 writeElement("pageSizeFactor", szen.getPageSizeFactor());
                 writeElement("activeLayer", gdcoll.getActiveLayer());
-                writeElement("multiView", inputGraphArea.isMultiViewEnabled());
+                writeElement("multiView", inputGraphArea.isMultiView());
                 writeEndElement(); //</view>
             }
             writeStartElement("mapping"); //"<mapping>"

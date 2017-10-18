@@ -81,10 +81,10 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
                 viewParameter.zoom = Double.parseDouble(elementValue.toString());
 
             } else if (qName.equals("shift")) {
-                viewParameter.shift = Integer.parseInt(elementValue.toString());
+                viewParameter.layerGap = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("degree")) {
-                viewParameter.degree = Integer.parseInt(elementValue.toString());
+                viewParameter.layerAngle = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("pageSizeFactor")) {
                 szenario.setPageSizeFactor(Double.parseDouble(elementValue.toString()));

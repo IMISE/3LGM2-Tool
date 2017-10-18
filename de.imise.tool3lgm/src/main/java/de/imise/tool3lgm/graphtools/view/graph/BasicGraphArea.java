@@ -43,13 +43,13 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach rechts verschoben werden (mit der
      * untersten Ebene beginnend).
      */
-    protected double effective_x_shift = 0;
+    private double effective_x_shift = 0;
 
     /**
      * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach oben verschoben werden (mit der
      * untersten Ebene beginnend).
      */
-    protected double effective_y_shift = 0;
+    private double effective_y_shift = 0;
 
     /**
      * Faktor, um die die Darstellung in Y-Richtung skaliert wird. Dieser Faktor wird für den aktuellen
@@ -80,33 +80,34 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected final double X_Y_FACTOR = 0.0;
 
     /**  */
-    protected int page_degree = 60;
+    protected int layerAngle = 60;
 
     /**  */
     private final AffineTransform transformation;
 
     /**  */
-    protected boolean multi_view = true;
+    protected boolean multiView = true;
 
     /**  */
-    protected int middle_x = 0, middle_y = 0;
+    protected int middleX = 0, middleY = 0;
 
     /**  */
     private final Insets i, c;
 
     /**  */
-    protected int page_width = 0, page_height = 0;
+    protected int layerWidth = 0, layerHeight = 0;
 
     /** Anzahl der Pixel des Abstandes zwischen den Ebenen in der Mehrebenenansicht */
-    protected int interLayerSpace = 200;
+    protected int layerGap = 200;
 
     /**  */
-    private final int frame_width = page_width, frame_height = page_height;
+    private final int frameWidth = layerWidth, frameHeight = layerHeight;
 
     /**  */
-    private int old_degree = 60, old_pitch_shift = 200;
+    private int oldLayerAngle = 60;
 
-    //	private BasicStroke dick, duenn, strichel;
+    /**  */
+    private int oldLayerGap = 200;
 
     /**  */
     protected int left_sel_x, left_sel_y, right_sel_x, right_sel_y;
@@ -143,12 +144,12 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     public BasicGraphArea(final GraphDocument gdoc) {
         setLayout(null);
         doc = gdoc;
-        page_width = doc.getPageWidth();
-        page_height = doc.getPageHeight();
+        layerWidth = doc.getPageWidth();
+        layerHeight = doc.getPageHeight();
         transformation = new AffineTransform(1, 0, -0.5, 0.4, 0, 0);
         i = new Insets(0, 0, 0, 0);
         c = new Insets(0, 0, 0, 0);
-        setMultiViewEnabled(true);
+        setMultiView(true);
         refreshTransformation();
         check_size();
 
@@ -161,50 +162,6 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
             add(new JLabel(" "));
         }
     }
-
-    // --- ChangeListener --- Anfang ---
-
-    public void addChangeListener(final BasicGraphAreaChangeListener listener) {
-        if (!changeListener.contains(listener)) {
-            changeListener.add(listener);
-        }
-    }
-
-    public void removeChangeListener(final BasicGraphAreaChangeListener listener) {
-        changeListener.remove(listener);
-    }
-
-    private void fireZoomChanged() {
-        for (BasicGraphAreaChangeListener listener : changeListener) {
-            listener.zoomChanged(this);
-        }
-    }
-
-    private void fireDegreeChanged() {
-        for (BasicGraphAreaChangeListener listener : changeListener) {
-            listener.degreeChanged(this);
-        }
-    }
-
-    private void fireLayerViewChanged() {
-        for (BasicGraphAreaChangeListener listener : changeListener) {
-            listener.layerViewChanged(this);
-        }
-    }
-
-    private void fireLayerGapChanged() {
-        for (BasicGraphAreaChangeListener listener : changeListener) {
-            listener.layerGapChanged(this);
-        }
-    }
-
-    private void firePageSizeChangedChanged() {
-        for (BasicGraphAreaChangeListener listener : changeListener) {
-            listener.pageSizeChanged(this);
-        }
-    }
-
-    // --- ChangeListener --- Ende ---
 
     // --- Dokumentenverwaltung --- Anfang ---
 
@@ -229,40 +186,29 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     // --- GraphElementLayout-Verwaltung --- Anfang ---
 
     /**
-     * @return aktuelle Seitenbreite
-     */
-    public final int getPageWidth() {
-        return page_width;
-    }
-
-    /**
-     * @return aktuelle Seitenhoehe
-     */
-    public final int getPageHeight() {
-        return page_height;
-    }
-
-    /**
-     * @return aktuelle Hoehenverschiebung in Pixeln
-     */
-    public final int getPitchShift() {
-        return interLayerSpace;
-    }
-
-    /**
-     * @return aktueller Zoom-Faktor
-     */
-    public final double getZoomFactor() {
-        return zoom;
-    }
-
-    /**
      * Prueft, ob Einzel- oder Multi-Sicht eingestellt ist.
      *
      * @return <code>true</code>, wenn Mehrebenenansicht eingestellt ist, sonst <code>false</code>.
      */
-    public final boolean isMultiViewEnabled() {
-        return multi_view;
+    public final boolean isMultiView() {
+        return multiView;
+    }
+
+    /**
+     * Schaltet die Sicht auf alle Ebenen ein oder aus.
+     *
+     * @param b <code>true</code> schaltet die Mehrebenenansicht ein, <code>false</code> aus.
+     */
+    public void setMultiView(final boolean b) {
+        multiView = b;
+        if (b) {
+            recallSettings();
+        } else {
+            storeSettings();
+        }
+        revalidate();
+        repaint();
+        fireLayerViewChanged();
     }
 
     /**
@@ -285,41 +231,31 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      *            /**
      *            Setzt die Seitengroesse auf width mal height Pixel
      */
-    public final void setPageSize(final int width, final int height) {
-        if (width == page_width && height == page_height) {
+    private final void setPageSize(final int width, final int height) {
+        if (width == layerWidth && height == layerHeight) {
             revalidate();
             repaint();
             return;
         }
-        page_height = height;
-        page_width = width;
+        layerHeight = height;
+        layerWidth = width;
         check_size();
         firePageSizeChangedChanged();
-    }
-
-    /**
-     * Schaltet die Sicht auf alle Ebenen ein oder aus.
-     *
-     * @param b <code>true</code> schaltet die Mehrebenenansicht ein, <code>false</code> aus.
-     */
-    public void setMultiViewEnabled(final boolean b) {
-        multi_view = b;
-        if (b) {
-            recallSettings();
-        } else {
-            storeSettings();
-        }
-        revalidate();
-        repaint();
-        fireLayerViewChanged();
     }
 
     /**
      * Gibt den aktuellen Zeichenwinkel zurueck. Dabei bedeutet 0 normal, und
      * 90° ist dann eine flache Scheibe von der Seite.
      */
-    public final int getDegree() {
-        return page_degree;
+    public final int getLayerAngle() {
+        return layerAngle;
+    }
+
+    /**
+     * Gibt den aktuellen Abstand zwischen den Ebenen zurück
+     */
+    public final int getLayerGap() {
+        return layerGap;
     }
 
     /**
@@ -327,9 +263,9 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      *
      * @param degree
      */
-    public void setDegree(final int degree) {
+    public void setLayerAngle(final int degree) {
         if (degree <= 80 && degree >= 0) {
-            page_degree = degree;
+            layerAngle = degree;
             y_x_factor = -degree / 360d;
             y_y_factor = (90d - degree) / 90d;
             if (y_y_factor == 0.0) {
@@ -343,38 +279,23 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-     * Speichert den aktuellen Darstellungswinkel und die Höhenverschiebung und
-     * setzt beide Werte auf den Standard (0).
-     *
-     * @see #recallSettings()
-     */
-    private final void storeSettings() {
-        old_degree = page_degree;
-        old_pitch_shift = interLayerSpace;
-        setDegree(0);
-        setInterLayerSpace(0);
-    }
-
-    /**
-     * Stellt die alten Werte des Darstellungswinkels und der Höhenverschiebung wieder her.
-     *
-     * @see #storeSettings()
-     */
-    private final void recallSettings() {
-        setInterLayerSpace(old_pitch_shift);
-        setDegree(old_degree);
-    }
-
-    /**
      * Setzt die Hoehenverschiebung der GraphPane auf shift Pixel.
      *
      * @param shift
      */
     public final void setInterLayerSpace(final int shift) {
-        interLayerSpace = shift;
+        layerGap = shift;
         adjustInterLayerSpace();
         adjust_size();
         fireLayerGapChanged();
+    }
+
+    /**
+     * @return aktueller Zoom-Faktor
+     */
+    @Override
+    public final double getZoom() {
+        return zoom;
     }
 
     @Override
@@ -405,6 +326,74 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
+     * @return
+     */
+    public int getMultiViewLayerGap() {
+        return isMultiView() ? layerGap : oldLayerGap;
+    }
+
+    /**
+     * @return
+     */
+    public int getMultiViewLayerAngle() {
+        return isMultiView() ? layerAngle : oldLayerAngle;
+    }
+
+    /**
+     * @param value
+     */
+    public void setMultiViewLayerGap(final int value) {
+        if (isMultiView()) {
+            setInterLayerSpace(value);
+        } else {
+            oldLayerGap = value;
+        }
+    }
+
+    /**
+     * @param value
+     */
+    public void setMultiViewLayerAngle(final int value) {
+        if (isMultiView()) {
+            setLayerAngle(value);
+        } else {
+            oldLayerAngle = value;
+        }
+    }
+
+    /**
+     * Speichert den aktuellen Darstellungswinkel und die Höhenverschiebung und
+     * setzt beide Werte auf den Standard (0).
+     *
+     * @see #recallSettings()
+     */
+    private final void storeSettings() {
+        oldLayerAngle = layerAngle;
+        oldLayerGap = layerGap;
+        setLayerAngle(0);
+        setInterLayerSpace(0);
+    }
+
+    /**
+     * Stellt die alten Werte des Darstellungswinkels und der Höhenverschiebung wieder her.
+     *
+     * @see #storeSettings()
+     */
+    private final void recallSettings() {
+        setInterLayerSpace(oldLayerGap);
+        setLayerAngle(oldLayerAngle);
+    }
+
+    public void adaptSettings(final BasicGraphArea source) {
+        setLayerAngle(source.layerAngle);
+        setMultiViewLayerAngle(source.getMultiViewLayerAngle());
+        setMultiView(source.multiView);
+        setMultiViewLayerGap(source.getMultiViewLayerGap());
+        setPageSize(source.layerWidth, source.layerHeight);
+        setZoom(source.getZoom());
+    }
+
+    /**
      *
      */
     protected final void adjustInterLayerSpace() {
@@ -417,7 +406,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         //		effective_y_shift = -pitch_shift / y_y_factor * X_X_FACTOR * (X_X_FACTOR - y_x_factor * X_Y_FACTOR);
 
         //Unter der Annahme, dass X_X_FACTOR = 1.0 und X_Y_FACTOR = 0.0 bleibt von der Berechnung das hier unten übrig
-        effective_y_shift = -interLayerSpace / y_y_factor;
+        effective_y_shift = -layerGap / y_y_factor;
         effective_x_shift = -effective_y_shift * y_x_factor;
     }
 
@@ -447,10 +436,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      *
      */
     private final void getExtensionSize() {
-        i.left = -page_width / 2;
-        i.right = page_width / 2;
-        i.top = -page_height / 2;
-        i.bottom = page_height / 2;
+        i.left = -layerWidth / 2;
+        i.right = layerWidth / 2;
+        i.top = -layerHeight / 2;
+        i.bottom = layerHeight / 2;
 
         NodeContainer knoten;
         LayerContainer lay;
@@ -459,7 +448,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         int lower_border = 0;
         int anzahl;
 
-        if (!multi_view) {
+        if (!multiView) {
             lower_border = doc.getCollection().getActiveLayer();
         }
         upper_border = lower_border + 1;
@@ -534,8 +523,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         }
 
         // Abstand der Ebenen mit einbringen
-        c.top -= (int) (zoom * interLayerSpace);
-        c.bottom += (int) (zoom * interLayerSpace);
+        c.top -= (int) (zoom * layerGap);
+        c.bottom += (int) (zoom * layerGap);
 
         // Rand addieren
         c.top -= graphBorder.top;
@@ -544,22 +533,22 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         c.right += graphBorder.right;
 
         // Wenn das dann noch kleiner ist als der Rahmen, dann
-        if (c.bottom < frame_height / 2) {
-            c.bottom = frame_height / 2;
+        if (c.bottom < frameHeight / 2) {
+            c.bottom = frameHeight / 2;
         }
-        if (c.top > -frame_height / 2) {
-            c.top = -frame_height / 2;
+        if (c.top > -frameHeight / 2) {
+            c.top = -frameHeight / 2;
         }
-        if (c.right < frame_width / 2) {
-            c.right = frame_width / 2;
+        if (c.right < frameWidth / 2) {
+            c.right = frameWidth / 2;
         }
-        if (c.left > -frame_width / 2) {
-            c.left = -frame_width / 2;
+        if (c.left > -frameWidth / 2) {
+            c.left = -frameWidth / 2;
         }
         setPreferredSize(new Dimension(c.right - c.left, c.bottom - c.top));
 
-        middle_x = -c.left;
-        middle_y = -c.top;
+        middleX = -c.left;
+        middleY = -c.top;
         revalidate();
         repaint();
     }
@@ -587,8 +576,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         setRenderingHints(gc);
 
         synchronized (getTreeLock()) {
-            if (!multi_view) {
-                gc.translate(middle_x + effective_x_shift, middle_y + zoom * interLayerSpace + effective_y_shift);
+            if (!multiView) {
+                gc.translate(middleX + effective_x_shift, middleY + zoom * layerGap + effective_y_shift);
                 gc.transform(transformation);
 
                 doc.getActiveLayer().setShift(effective_x_shift, effective_y_shift);
@@ -609,7 +598,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
                     gc.drawRect(minx, miny, maxx - minx, maxy - miny);
                 }
             } else {
-                gc.translate(middle_x, middle_y + zoom * interLayerSpace);
+                gc.translate(middleX, middleY + zoom * layerGap);
                 gc.transform(transformation);
 
                 for (int c = 0; c < ModelConstants.LAYERS.length; c++) {
@@ -684,130 +673,74 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     }
 
-    public void adaptSettings(final BasicGraphArea source) {
-        setDegree(source.page_degree);
-        setMultiViewDegree(source.getMultiViewDegree());
-        setMultiViewEnabled(source.multi_view);
-        setMultiViewPitchShift(source.getMultiViewPitchShift());
-        setPageSize(source.getPageWidth(), source.getPageHeight());
-        setZoom(source.getZoomFactor());
-    }
-
-    /**
-     *
-     */
-    public void dataChanged() {
-        revalidate();
-        repaint();
-    }
-
-    /**
-     * @param element
-     */
-    public void elementGraphicsChanged(final ElementContainer element) {
-        if (element != null) {
-            element.getParent().validate();
-            element.getParent().repaint();
-        } else {
-            revalidate();
-            repaint();
-        }
-    }
-
     /**
      *
      */
     public void layoutChanged() {
         setPageSize(doc.getPageWidth(), doc.getPageHeight());
     }
-
     /**
      * @param element
      */
-    public void elementAdded(final ElementContainer element) {
+    public void revalidateRepaint(final ElementContainer element) {
         if (element != null) {
             element.getParent().validate();
             element.getParent().repaint();
         } else {
-            revalidate();
-            repaint();
+            revalidateRepaint();
         }
     }
 
     /**
      *
      */
-    public void elementDeleted() {
+    public void revalidateRepaint() {
         revalidate();
         repaint();
     }
 
-    /**
-     *
-     */
-    public void groupOrderChanged() {
-        revalidate();
-        repaint();
-    }
+    // --- ChangeListener --- Anfang ---
 
-    /**
-     *
-     */
-    public void activeLayerChanged() {
-        revalidate();
-        repaint();
-    }
-
-    /**
-     *
-     */
-    public void colorsChanged() {
-        revalidate();
-        repaint();
-    }
-
-    /**
-     *
-     */
-    public void selectionChanged() {
-        revalidate();
-        repaint();
-    }
-
-    /**
-     * @return
-     */
-    public int getMultiViewPitchShift() {
-        return isMultiViewEnabled() ? getPitchShift() : old_pitch_shift;
-    }
-
-    /**
-     * @return
-     */
-    public int getMultiViewDegree() {
-        return isMultiViewEnabled() ? getDegree() : old_degree;
-    }
-
-    /**
-     * @param value
-     */
-    public void setMultiViewPitchShift(final int value) {
-        if (isMultiViewEnabled()) {
-            setInterLayerSpace(value);
-        } else {
-            old_pitch_shift = value;
+    public void addChangeListener(final BasicGraphAreaChangeListener listener) {
+        if (!changeListener.contains(listener)) {
+            changeListener.add(listener);
         }
     }
 
-    /**
-     * @param value
-     */
-    public void setMultiViewDegree(final int value) {
-        if (isMultiViewEnabled()) {
-            setDegree(value);
-        } else {
-            old_degree = value;
+    public void removeChangeListener(final BasicGraphAreaChangeListener listener) {
+        changeListener.remove(listener);
+    }
+
+    private void fireZoomChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.zoomChanged(this);
         }
     }
+
+    private void fireDegreeChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.degreeChanged(this);
+        }
+    }
+
+    private void fireLayerViewChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.layerViewChanged(this);
+        }
+    }
+
+    private void fireLayerGapChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.layerGapChanged(this);
+        }
+    }
+
+    private void firePageSizeChangedChanged() {
+        for (BasicGraphAreaChangeListener listener : changeListener) {
+            listener.pageSizeChanged(this);
+        }
+    }
+
+    // --- ChangeListener --- Ende ---
 
 }

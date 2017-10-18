@@ -7,8 +7,8 @@ package de.imise.tool3lgm.graphtools.view.graph;
 public class ViewParameter {
     public int x;
     public int y;
-    public int shift;
-    public int degree;
+    public int layerGap;
+    public int layerAngle;
     public boolean multiView;
     public double zoom;
     public int layer;

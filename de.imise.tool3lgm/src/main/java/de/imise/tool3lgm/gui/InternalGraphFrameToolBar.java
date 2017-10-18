@@ -127,7 +127,7 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar {
 
         InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
         addSlider(sliderCreator.getSliderZoom());
-        if (area.isMultiViewEnabled()) {
+        if (area.isMultiView()) {
             addSlider(sliderCreator.getSliderDegree());
             addSlider(sliderCreator.getSliderGap());
         }

@@ -93,7 +93,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     /**
-     * 
+     *
      */
     public void center() {
         JViewport view = getScrollPane().getViewport();
@@ -121,12 +121,12 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         if (Tool3lgm.DEBUG) {
             System.err.println(getClass().getSimpleName() + "dataChanged() " + source);
         }
-        area.dataChanged();
+        area.revalidateRepaint();
     }
 
     @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        area.elementGraphicsChanged(element);
+        area.revalidateRepaint(element);
     }
 
     @Override
@@ -136,22 +136,22 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
 
     @Override
     public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        area.elementAdded(element);
+        area.revalidateRepaint(element);
     }
 
     @Override
     public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        area.elementDeleted();
+        area.revalidateRepaint();
     }
 
     @Override
     public void groupOrderChanged(final GraphDocument source) {
-        area.groupOrderChanged();
+        area.revalidateRepaint();
     }
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        area.activeLayerChanged();
+        area.revalidateRepaint();
     }
 
     @Override

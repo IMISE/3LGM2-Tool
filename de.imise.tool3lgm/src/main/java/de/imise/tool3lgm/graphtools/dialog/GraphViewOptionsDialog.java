@@ -138,7 +138,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         textabstand = new JTextField(4);
         textabstand.setText(new Integer(abstand.getValue()).toString());
         textabstand.setEditable(false);
-        if (frame.getInputGraphArea().isMultiViewEnabled()) {
+        if (frame.getInputGraphArea().isMultiView()) {
             westPanel.add(textw);
             centerPanel.add(winkel);
             eastPanel.add(textwinkel);
@@ -174,8 +174,8 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         zoom.setValue(Integer.parseInt(textzoom.getText()));
         InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
         leiste.sliderZoom.setValue(Integer.parseInt(textzoom.getText()));
-        if (frame.getInputGraphArea().isMultiViewEnabled()) {
-            area.setDegree(Integer.parseInt(textwinkel.getText()));
+        if (frame.getInputGraphArea().isMultiView()) {
+            area.setLayerAngle(Integer.parseInt(textwinkel.getText()));
             area.setInterLayerSpace(Integer.parseInt(textabstand.getText()));
             winkel.setValue(Integer.parseInt(textwinkel.getText()));
             abstand.setValue(Integer.parseInt(textabstand.getText()));
@@ -186,7 +186,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         leiste.sliderGap.setMaximum(new Double(800 * frame.getGraphDocument().getPageSizeFactor()).intValue());
         abstand.setMaximum(leiste.sliderGap.getMaximum());
         // in der Einzelansicht den Viewpoint korrekt aktualisieren
-        if (!area.isMultiViewEnabled()) {
+        if (!area.isMultiView()) {
             area.setInterLayerSpace(0);
         }
         frame.layoutChanged(frame.getGraphDocument());

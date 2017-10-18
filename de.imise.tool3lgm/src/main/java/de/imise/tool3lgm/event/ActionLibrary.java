@@ -1800,13 +1800,13 @@ public class ActionLibrary {
             protected void actionPerformed() {
                 InternalGraphFrame frame = (InternalGraphFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
-                area.setMultiViewEnabled(false);
+                area.setMultiView(false);
                 frame.getGraphDocument().deselectAll(false);
             }
 
             @Override
             public boolean isEnabled() {
-                return super.isEnabled() && ((InternalGraphFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
+                return super.isEnabled() && ((InternalGraphFrame) Static.getActiveFrame()).getInputGraphArea().isMultiView();
             }
         };
 
@@ -1816,13 +1816,13 @@ public class ActionLibrary {
             protected void actionPerformed() {
                 InternalGraphFrame frame = (InternalGraphFrame) Static.getActiveFrame();
                 InputGraphArea area = frame.getInputGraphArea();
-                area.setMultiViewEnabled(true);
+                area.setMultiView(true);
                 frame.getGraphDocument().deselectAll(false);
             }
 
             @Override
             public boolean isEnabled() {
-                return super.isEnabled() && !((InternalGraphFrame) Static.getActiveFrame()).getInputGraphArea().isMultiViewEnabled();
+                return super.isEnabled() && !((InternalGraphFrame) Static.getActiveFrame()).getInputGraphArea().isMultiView();
             }
         };
 

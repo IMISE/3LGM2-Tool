@@ -174,10 +174,10 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     // --- kleine Hilfsmethoden --- Anfang ---
     @Override
-    public void setMultiViewEnabled(final boolean b) {
-        multi_view = b;
+    public void setMultiView(final boolean b) {
+        multiView = b;
         findIncludingRectangles();
-        super.setMultiViewEnabled(b);
+        super.setMultiView(b);
         doc.distributeEvent(GraphDocument.LAYOUT_CHANGED);
     }
     // --- kleine Hilfsmethoden --- Ende ---
@@ -245,11 +245,11 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             }
         }
         int indexOffset = -visibleLayerCount / 2;
-        double y = (yin - middle_y) / zoom;
-        double x = (xin - middle_x) / zoom;
+        double y = (yin - middleY) / zoom;
+        double x = (xin - middleX) / zoom;
         for (int layerIndex : LAYERS) {
             if (!isInterLayer(layerIndex)) {
-                yreal[layerIndex] = (int) ((y + indexOffset++ * interLayerSpace) / y_y_factor);
+                yreal[layerIndex] = (int) ((y + indexOffset++ * layerGap) / y_y_factor);
                 xreal[layerIndex] = (int) (x - yreal[layerIndex] * y_x_factor);
             }
         }
@@ -343,13 +343,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             grabbedElementsFullRect = null;
             int ebene = doc.getCollection().getActiveLayer();
             for (NodeContainer kc : doc.getSelectedRealElementContainerIterable()) {
-                if (!kc.isVisible() || !multi_view && kc.layerFor() != ebene) {
+                if (!kc.isVisible() || !multiView && kc.layerFor() != ebene) {
                     continue;
                 }
                 grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
                 if (UserProperties.isMoveSubelements()) {
                     for (ElementContainer ec : kc.getElement().getPartContainer(doc, true)) {
-                        if (!ec.isVisible() || !multi_view && kc.layerFor() != ebene) {
+                        if (!ec.isVisible() || !multiView && kc.layerFor() != ebene) {
                             continue;
                         }
                         if (grabbedElementsFullRect == null) {
@@ -368,7 +368,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
             }
             for (BendpointContainer kc : doc.getSelectedBendpointContainerIterable()) {
-                if (multi_view || !multi_view && kc.layerFor() == ebene) {
+                if (multiView || !multiView && kc.layerFor() == ebene) {
                     grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
                 }
             }
@@ -386,7 +386,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     private final ElementContainer getMouseOverElementContainer() {
         ElementContainer returnContainer = null;
-        if (multi_view) {
+        if (multiView) {
             for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
                 if (!ModelConstants.isInterLayer(c)) {
                     returnContainer = chooseObject(doc.getLayer(c), xreal[c], yreal[c]);
@@ -456,8 +456,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     }
 
     private final boolean isInPage(final int x, final int y) {
-        int halfPageWidth = page_width / 2;
-        int halfPageHeight = page_height / 2;
+        int halfPageWidth = layerWidth / 2;
+        int halfPageHeight = layerHeight / 2;
         return -halfPageWidth < x && x < halfPageWidth && -halfPageHeight < y && y < halfPageHeight;
     }
 
@@ -483,7 +483,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             final GDCollection gdcoll = doc.getCollection();
             final int activeLayerIndex = gdcoll.getActiveLayer();
             // Bei flacher Ansicht soll nur die aktive Schicht durchsucht werden.
-            if (!multi_view && layerIndex != activeLayerIndex) {
+            if (!multiView && layerIndex != activeLayerIndex) {
                 continue;
             }
             final LayerContainer layer = doc.getLayer(layerIndex);
@@ -552,7 +552,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 // 3. Ob man die Ebene selbst getroffen hat
                 {
                     contextGenerator.setEbeneGetroffen(true);
-                    if (isMultiViewEnabled()) {
+                    if (isMultiView()) {
                         for (int j = layerIndex; j >= MIN_LAYER_INDEX; j--) {
                             if (!isInterLayer(j)) {
                                 if (isInPage(xreal[j], yreal[j])) {
@@ -616,7 +616,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     continue;
                 }
                 final LayerContainer layer = doc.getLayer(layerIndex);
-                if (!multi_view && layer != doc.getActiveLayer()) {
+                if (!multiView && layer != doc.getActiveLayer()) {
                     continue;
                 }
                 ka = chooseObject(layer, xreal[layerIndex], yreal[layerIndex]);
@@ -637,7 +637,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
                 final LayerContainer layer = doc.getLayer(layerIndex);
                 // Bei flacher Ansicht soll nur die aktive Schicht durchsucht werden.
-                if (!multi_view && layer != doc.getActiveLayer()) {
+                if (!multiView && layer != doc.getActiveLayer()) {
                     continue;
                 }
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
@@ -874,15 +874,15 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 yreal[ebene] = (int) (Math.round(yreal[ebene] / rasterWidth) * rasterWidth);
             }
             // Die resize-Hände nicht aus der Zeichenfläche lassen
-            if (xreal[ebene] < -page_width / 2) {
-                xreal[ebene] = -page_width / 2;
-            } else if (xreal[ebene] > page_width / 2) {
-                xreal[ebene] = page_width / 2;
+            if (xreal[ebene] < -layerWidth / 2) {
+                xreal[ebene] = -layerWidth / 2;
+            } else if (xreal[ebene] > layerWidth / 2) {
+                xreal[ebene] = layerWidth / 2;
             }
-            if (yreal[ebene] < -page_height / 2) {
-                yreal[ebene] = -page_height / 2;
-            } else if (yreal[ebene] > page_height / 2) {
-                yreal[ebene] = page_height / 2;
+            if (yreal[ebene] < -layerHeight / 2) {
+                yreal[ebene] = -layerHeight / 2;
+            } else if (yreal[ebene] > layerHeight / 2) {
+                yreal[ebene] = layerHeight / 2;
             }
             boolean isMoveSubElements = UserProperties.isMoveSubelements();
             UserProperties.setMoveSubelements(false);
@@ -1043,23 +1043,23 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     }
                 }
                 if (deltaX > 0) {
-                    int max_xdiff = page_width / 2;
+                    int max_xdiff = layerWidth / 2;
                     if (grabbedElementsFullRect.x - deltaX < -max_xdiff) {
                         deltaX = grabbedElementsFullRect.x + max_xdiff;
                     }
                 } else if (deltaX < 0) {
-                    int max_xdiff = page_width / 2;
+                    int max_xdiff = layerWidth / 2;
                     if (grabbedElementsFullRect.width - deltaX > max_xdiff) {
                         deltaX = grabbedElementsFullRect.width - max_xdiff;
                     }
                 }
                 if (deltaY > 0) {
-                    int max_ydiff = page_height / 2;
+                    int max_ydiff = layerHeight / 2;
                     if (grabbedElementsFullRect.y - deltaY < -max_ydiff) {
                         deltaY = grabbedElementsFullRect.y + max_ydiff;
                     }
                 } else if (deltaY < 0) {
-                    int max_ydiff = page_height / 2;
+                    int max_ydiff = layerHeight / 2;
                     if (grabbedElementsFullRect.height - deltaY > max_ydiff) {
                         deltaY = grabbedElementsFullRect.height - max_ydiff;
                     }
@@ -1072,7 +1072,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 grabbedElementsFullRect.width -= deltaX;
                 grabbedElementsFullRect.y -= deltaY;
                 grabbedElementsFullRect.height -= deltaY;
-                if (multi_view) {
+                if (multiView) {
                     doc.moveSelectedNodeContainer(-deltaX, -deltaY, NO_LAYER, STANDARD_PID);
                 } else {
                     doc.moveSelectedNodeContainer(-deltaX, -deltaY, ebene, STANDARD_PID);

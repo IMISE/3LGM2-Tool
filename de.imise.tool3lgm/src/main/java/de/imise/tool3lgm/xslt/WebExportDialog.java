@@ -316,12 +316,12 @@ public class WebExportDialog extends JDialog {
     public static final void createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
         if (layer < 0) {
             area.setInterLayerSpace(new Double(400 * area.getDocument().getPageSizeFactor()).intValue());
-            area.setDegree(45);
-            area.setMultiViewEnabled(true);
+            area.setLayerAngle(45);
+            area.setMultiView(true);
         } else {
-            area.setDegree(0);
+            area.setLayerAngle(0);
             area.setInterLayerSpace(0);
-            area.setMultiViewEnabled(false);
+            area.setMultiView(false);
         }
         area.setZoom(zoomFactor);
         area.setSize(area.getPreferredSize());
