@@ -69,10 +69,10 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
         try {
             if (qName.equals("x") && viewParameter != null) {
-                viewParameter.x = Integer.parseInt(elementValue.toString());
+                viewParameter.viewPositionX = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("y") && viewParameter != null) {
-                viewParameter.y = Integer.parseInt(elementValue.toString());
+                viewParameter.viewPositionY = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("zoom")) {
                 if (viewParameter == null) {

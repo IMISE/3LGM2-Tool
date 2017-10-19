@@ -805,7 +805,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         bgp.setMultiViewLayerAngle(view.layerAngle);
         bgp.setMultiViewLayerGap(view.layerGap);
         bgp.setZoom(view.zoom);
-        frame.getScrollPane().getViewport().setViewPosition(new Point(view.x, view.y));
+        frame.getScrollPane().getViewport().setViewPosition(new Point(view.viewPositionX, view.viewPositionY));
     }
 
     /**

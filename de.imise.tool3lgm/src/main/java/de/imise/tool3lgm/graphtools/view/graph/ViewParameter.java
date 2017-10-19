@@ -8,9 +8,9 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
  */
 public class ViewParameter {
 
-    public static final int INITIAL_X = 200;
+    public static final int INITIAL_VIEW_POSITION_X = 200;
 
-    public static final int INITIAL_Y = 150;
+    public static final int INITIAL_VIEW_POSITION_Y = 150;
 
     public static final int INITIAL_LAYER_GAP = 200;
 
@@ -22,8 +22,8 @@ public class ViewParameter {
 
     public static final int INITILA_ACTIVE_LAYER = ModelConstants.DOMAIN_LAYER;
 
-    public int x = INITIAL_X;
-    public int y = INITIAL_Y;
+    public int viewPositionX = INITIAL_VIEW_POSITION_X;
+    public int viewPositionY = INITIAL_VIEW_POSITION_Y;
     public int layerGap = INITIAL_LAYER_GAP;
     public int layerAngle = INITIAL_LAYER_ANGLE;
     public boolean multiView = true;
