@@ -176,7 +176,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         leiste.sliderZoom.setValue(Integer.parseInt(textzoom.getText()));
         if (frame.getInputGraphArea().isMultiView()) {
             area.setLayerAngle(Integer.parseInt(textwinkel.getText()));
-            area.setInterLayerSpace(Integer.parseInt(textabstand.getText()));
+            area.setLayerGap(Integer.parseInt(textabstand.getText()));
             winkel.setValue(Integer.parseInt(textwinkel.getText()));
             abstand.setValue(Integer.parseInt(textabstand.getText()));
             leiste.sliderDegree.setValue(Integer.parseInt(textwinkel.getText()));
@@ -187,7 +187,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         abstand.setMaximum(leiste.sliderGap.getMaximum());
         // in der Einzelansicht den Viewpoint korrekt aktualisieren
         if (!area.isMultiView()) {
-            area.setInterLayerSpace(0);
+            area.setLayerGap(0);
         }
         frame.layoutChanged(frame.getGraphDocument());
     }

@@ -46,7 +46,6 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
         //
         //        } else if (qName.equals("degree")) {
         //
-        //            //ab Version 4 gibt es diesen Faktor nicht mehr, sondern getrennte viewParameter.pageHeight und viewParameter.pageWidth
         //        } else if (qName.equals("pageSizeFactor")) {
         //
         //        } else if (qName.equals("multiView")) {
@@ -56,12 +55,14 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
         //        } else if (qName.equals("activeLayer")) {
         //
         //        } else
+
         if (qName.equals("view")) {
-            viewParameter = new ViewParameter();
+            if (szenario instanceof Szenario) {
+                viewParameter = ((Szenario) szenario).getViewParameter();
+            }
+        } else {
+            super.startElement(namespaceURI, localName, qName, atts);
         }
-        //            else {
-        super.startElement(namespaceURI, localName, qName, atts);
-        //        }
     }
 
     @Override
@@ -77,7 +78,6 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
                 if (viewParameter == null) {
                     return;
                 }
-
                 viewParameter.zoom = Double.parseDouble(elementValue.toString());
 
             } else if (qName.equals("shift")) {
@@ -90,7 +90,7 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
                 szenario.setPageSizeFactor(Double.parseDouble(elementValue.toString()));
 
             } else if (qName.equals("activeLayer")) {
-                viewParameter.layer = Integer.parseInt(elementValue.toString());
+                viewParameter.activeLayer = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("multiView")) {
                 viewParameter.multiView = Boolean.valueOf(elementValue.toString()).booleanValue();
@@ -99,10 +99,6 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
                 viewParameter.selected = Boolean.valueOf(elementValue.toString()).booleanValue();
 
             } else if (qName.equals("view")) {
-                if (!(szenario instanceof Szenario)) {
-                    return;
-                }
-                ((Szenario) szenario).setViewParameter(viewParameter);
                 viewParameter = null;
 
             } else {

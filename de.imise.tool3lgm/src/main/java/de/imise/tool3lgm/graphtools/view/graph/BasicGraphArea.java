@@ -37,7 +37,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /**
      * Factor, mit dem die Zeichenfläche ausgehend von ihrer ursprünglichen Größe gestreckt wird
      */
-    protected double zoom = 1.0;
+    protected double zoom;
 
     /**
      * Anzahl der Pixel, um die die Ebenen jeweils zueinander nach rechts verschoben werden (mit der
@@ -80,7 +80,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected final double X_Y_FACTOR = 0.0;
 
     /**  */
-    protected int layerAngle = 60;
+    protected int layerAngle;
 
     /**  */
     private final AffineTransform transformation;
@@ -98,16 +98,16 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected int layerWidth = 0, layerHeight = 0;
 
     /** Anzahl der Pixel des Abstandes zwischen den Ebenen in der Mehrebenenansicht */
-    protected int layerGap = 200;
+    protected int layerGap;
 
     /**  */
     private final int frameWidth = layerWidth, frameHeight = layerHeight;
 
     /**  */
-    private int oldLayerAngle = 60;
+    private int oldLayerAngle = ViewParameter.INITIAL_LAYER_ANGLE;
 
     /**  */
-    private int oldLayerGap = 200;
+    private int oldLayerGap = ViewParameter.INITIAL_LAYER_GAP;
 
     /**  */
     protected int left_sel_x, left_sel_y, right_sel_x, right_sel_y;
@@ -281,10 +281,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /**
      * Setzt die Hoehenverschiebung der GraphPane auf shift Pixel.
      *
-     * @param shift
+     * @param gap
      */
-    public final void setInterLayerSpace(final int shift) {
-        layerGap = shift;
+    public final void setLayerGap(final int gap) {
+        layerGap = gap;
         adjustInterLayerSpace();
         adjust_size();
         fireLayerGapChanged();
@@ -344,7 +344,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      */
     public void setMultiViewLayerGap(final int value) {
         if (isMultiView()) {
-            setInterLayerSpace(value);
+            setLayerGap(value);
         } else {
             oldLayerGap = value;
         }
@@ -371,7 +371,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         oldLayerAngle = layerAngle;
         oldLayerGap = layerGap;
         setLayerAngle(0);
-        setInterLayerSpace(0);
+        setLayerGap(0);
     }
 
     /**
@@ -380,7 +380,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      * @see #storeSettings()
      */
     private final void recallSettings() {
-        setInterLayerSpace(oldLayerGap);
+        setLayerGap(oldLayerGap);
         setLayerAngle(oldLayerAngle);
     }
 

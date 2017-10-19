@@ -560,9 +560,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             if (progressDialog != null) {
                 progressDialog.setStatusLabelText(getResString("create_frame") + szen.getTitle());
             }
-            if (szen.getViewParameter() == null && i == 0) {
+            if (i == 0) {
                 selectedDoc = szen;
-            } else if (szen.getViewParameter() != null && szen.getViewParameter().selected) {
+            }
+            if (szen.getViewParameter().selected) {
                 selectedDoc = szen;
             }
             createSzenarioFrame(szen);
@@ -738,13 +739,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         Rectangle bounds = desktop.getBounds();
         bounds.height = bounds.height - 32;
         frame.setBounds(bounds);
-        if (szenario.getViewParameter() == null) {
-            setWorkArea(frame);
-            szenario.getCollection().setActiveLayer(4);
-        } else {
-            setWorkArea(frame, szenario.getViewParameter());
-        }
-
+        setWorkArea(frame);
         desktop.add(frame);
         frame.setVisible(true);
         return frame;
@@ -798,25 +793,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * set parameters of InputGraphArea to standard
      *
-     * @param InputGraphArea to set
-     */
-    public void setWorkArea(final InternalGraphFrame frame) {
-        InputGraphArea bgp = frame.getInputGraphArea();
-        bgp.setLayerAngle(65);
-        bgp.setInterLayerSpace(200);
-        frame.getScrollPane().getViewport().setViewPosition(new Point(200, 150));
-    }
-
-    /**
-     * set parameters of InputGraphArea to standard
-     *
      * @param InputGraphArea
      *            to set
      */
-    public void setWorkArea(final InternalGraphFrame frame, final ViewParameter view) {
+    private void setWorkArea(final InternalGraphFrame frame) {
+        Szenario szenario = (Szenario) frame.getGraphDocument();
+        ViewParameter view = szenario.getViewParameter();
         InputGraphArea bgp = frame.getInputGraphArea();
         bgp.setMultiView(view.multiView);
-        frame.getGraphDocument().getCollection().setActiveLayer(view.layer);
+        frame.getGraphDocument().getCollection().setActiveLayer(view.activeLayer);
         bgp.setMultiViewLayerAngle(view.layerAngle);
         bgp.setMultiViewLayerGap(view.layerGap);
         bgp.setZoom(view.zoom);

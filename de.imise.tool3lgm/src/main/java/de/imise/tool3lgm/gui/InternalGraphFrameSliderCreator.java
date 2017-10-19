@@ -14,7 +14,6 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.util.swing.component.MinMaxNumberTextField3;
 
 public class InternalGraphFrameSliderCreator implements ChangeListener {
@@ -51,27 +50,14 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
         if (frame == null) {
             return;
         }
-        Szenario szen = (Szenario) frame.getSzenario();
-        double pageSizeFactor = szen.getPageSizeFactor();
-        ViewParameter viewParameter = szen.getViewParameter();
-        if (viewParameter != null) {
-            sliderZoom.setValue((int) (viewParameter.zoom * 100));
-            sliderDegree.setValue(viewParameter.layerAngle);
-            sliderGap.setValue(viewParameter.layerGap);
-            sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
-        } else {
-            InputGraphArea area = frame.getInputGraphArea();
-            if (area != null) {
-                sliderZoom.setValue(80);
-                sliderDegree.setValue(area.getLayerAngle());
-                sliderGap.setValue(area.getLayerGap());
-                sliderPageSizeFactor.setValue(new Double(szen.getPageSizeFactor() * 100d).intValue());
-            } else {
-                sliderZoom.setValue(80);
-                sliderDegree.setValue(75);
-                sliderGap.setValue(new Double(200 * pageSizeFactor).intValue());
-                sliderPageSizeFactor.setValue(100);
-            }
+        InputGraphArea area = frame.getInputGraphArea();
+        if (area != null) {
+            sliderZoom.setValue(new Double(area.getZoom() * 100d).intValue());
+            sliderDegree.setValue(area.getLayerAngle());
+            sliderGap.setValue(area.getLayerGap());
+            Szenario szen = (Szenario) frame.getSzenario();
+            double pageSizeFactor = szen.getPageSizeFactor();
+            sliderPageSizeFactor.setValue(new Double(pageSizeFactor * 100d).intValue());
         }
         sliderGap.setMaximum(getSliderGapMaximum());
     }
@@ -107,7 +93,7 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
             area.setLayerAngle(sliderDegree.getValue());
         } else if (e.getSource() == sliderGap) {
             InputGraphArea area = frame.getInputGraphArea();
-            area.setInterLayerSpace(sliderGap.getValue());
+            area.setLayerGap(sliderGap.getValue());
         } else if (e.getSource() == sliderZoom) {
             InputGraphArea area = frame.getInputGraphArea();
             area.setZoom((double) sliderZoom.getValue() / 100);
