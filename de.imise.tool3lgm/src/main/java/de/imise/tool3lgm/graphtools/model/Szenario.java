@@ -25,7 +25,7 @@ public class Szenario extends LGMGraphDocument {
     /**
      * COMMENTME
      */
-    private final ViewParameter viewParam = new ViewParameter();
+    private ViewParameter viewParam = new ViewParameter();
 
     /**
      * @param _gdcoll
@@ -317,6 +317,10 @@ public class Szenario extends LGMGraphDocument {
      */
     public ViewParameter getViewParameter() {
         return viewParam;
+    }
+
+    public void deleteViewParameter() {
+        viewParam = null;
     }
 
 }
