@@ -806,6 +806,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         bgp.setMultiViewLayerGap(view.layerGap);
         bgp.setZoom(view.zoom);
         frame.getScrollPane().getViewport().setViewPosition(new Point(view.viewPositionX, view.viewPositionY));
+        szenario.deleteViewParameter(); // die ViewParameter werden nur für diesen Init gebraucht -> danach können sie gelöscht werden
     }
 
     /**
