@@ -4,7 +4,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 
 /**
  * @author Thomas Rudert
- *         modelElement to hold view-informations about InputGraphArea during loading xml-file
+ *         modelElement to hold view-informations about InputGraphArea during loading xml-file or init the GraphArea
  */
 public class ViewParameter {
 
