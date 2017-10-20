@@ -160,25 +160,33 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
 
     @Override
     public void zoomChanged(final BasicGraphArea source) {
-        if (currentToolBar instanceof InternalGraphFrameToolBar) {
-            //            ((InternalGraphFrameToolBar) currentToolBar).setZoom(value);
-        }
+        updateInternalGraphFrameToolBar();
     }
 
     @Override
     public void degreeChanged(final BasicGraphArea source) {
+        updateInternalGraphFrameToolBar();
     }
 
     @Override
     public void layerGapChanged(final BasicGraphArea source) {
+        updateInternalGraphFrameToolBar();
     }
 
     @Override
     public void layerViewChanged(final BasicGraphArea source) {
+        updateInternalGraphFrameToolBar();
     }
 
     @Override
     public void pageSizeChanged(final BasicGraphArea source) {
+        updateInternalGraphFrameToolBar();
+    }
+
+    public void updateInternalGraphFrameToolBar() {
+        if (currentToolBar instanceof InternalGraphFrameToolBar) {
+            ((InternalGraphFrameToolBar) currentToolBar).update();
+        }
     }
 
 }

@@ -139,4 +139,8 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar {
         add(slider);
     }
 
+    public void update() {
+        sliderCreator.updateValues();
+    }
+
 }

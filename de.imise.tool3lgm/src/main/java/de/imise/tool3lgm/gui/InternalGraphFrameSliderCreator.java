@@ -46,7 +46,7 @@ public class InternalGraphFrameSliderCreator implements ChangeListener {
         return maxPageSizeFactor;
     }
 
-    private void updateValues() {
+    public void updateValues() {
         if (frame == null) {
             return;
         }
