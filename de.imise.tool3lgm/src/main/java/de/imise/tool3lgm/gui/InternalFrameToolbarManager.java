@@ -10,7 +10,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -159,31 +158,7 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
     //////////////////////////////////
 
     @Override
-    public void zoomChanged(final BasicGraphArea source) {
-        updateInternalGraphFrameToolBar();
-    }
-
-    @Override
-    public void degreeChanged(final BasicGraphArea source) {
-        updateInternalGraphFrameToolBar();
-    }
-
-    @Override
-    public void layerGapChanged(final BasicGraphArea source) {
-        updateInternalGraphFrameToolBar();
-    }
-
-    @Override
-    public void layerViewChanged(final BasicGraphArea source) {
-        updateInternalGraphFrameToolBar();
-    }
-
-    @Override
-    public void pageSizeChanged(final BasicGraphArea source) {
-        updateInternalGraphFrameToolBar();
-    }
-
-    public void updateInternalGraphFrameToolBar() {
+    public void graphAreaChanged() {
         if (currentToolBar instanceof InternalGraphFrameToolBar) {
             ((InternalGraphFrameToolBar) currentToolBar).update();
         }
