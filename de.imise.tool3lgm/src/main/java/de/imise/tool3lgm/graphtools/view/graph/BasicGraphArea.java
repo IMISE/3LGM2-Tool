@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -32,7 +31,7 @@ import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
 public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     /** Teilmodell das dieses Area darstellt */
-    protected GraphDocument doc;
+    protected Szenario szenario;
 
     /**
      * Factor, mit dem die Zeichenfläche ausgehend von ihrer ursprünglichen Größe gestreckt wird
@@ -83,7 +82,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected int layerAngle;
 
     /**  */
-    private final AffineTransform transformation;
+    private AffineTransform transformation;
 
     /**  */
     protected boolean multiView = true;
@@ -95,7 +94,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected int middleY = 0;
 
     /**  */
-    private final Insets i, c;
+    private Insets i, c;
 
     /**  */
     protected int layerWidth = 0;
@@ -148,21 +147,21 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     private PaintState paintState = PaintState.REGULAR;
 
     /**
-     * @param gdoc
+     * @param szenario
      */
-    public BasicGraphArea(final GraphDocument gdoc) {
+    public BasicGraphArea(final Szenario szen) {
         setLayout(null);
-        doc = gdoc;
-        layerWidth = doc.getPageWidth();
-        layerHeight = doc.getPageHeight();
-        transformation = new AffineTransform(1, 0, -0.5, 0.4, 0, 0);
-        i = new Insets(0, 0, 0, 0);
-        c = new Insets(0, 0, 0, 0);
-        setMultiView(true);
-        refreshTransformation();
-        check_size();
-
-        if (!(gdoc instanceof Szenario)) {
+        szenario = szen;
+        if (szenario != null) {
+            layerWidth = szenario.getPageWidth();
+            layerHeight = szenario.getPageHeight();
+            transformation = new AffineTransform(1, 0, -0.5, 0.4, 0, 0);
+            i = new Insets(0, 0, 0, 0);
+            c = new Insets(0, 0, 0, 0);
+            setMultiView(true);
+            refreshTransformation();
+            check_size();
+        } else {
             setLayout(new GridLayout(5, 1));
             add(new JLabel("<html><h1>&nbsp;" + getResString("uebersicht_html") + "</h1></html>"));
             add(new JSeparator());
@@ -175,10 +174,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     // --- Dokumentenverwaltung --- Anfang ---
 
     /**
-     * @param gd
+     * @param szen
      */
-    public final void setDocument(final GraphDocument gd) {
-        doc = gd;
+    public final void setSzenario(final Szenario szen) {
+        szenario = szen;
         revalidate();
         repaint();
     }
@@ -186,8 +185,8 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     /**
      * @return
      */
-    public final GraphDocument getDocument() {
-        return doc;
+    public final Szenario getSzenario() {
+        return szenario;
     }
 
     // --- Dokumentenverwaltung --- Ende ---
@@ -434,9 +433,6 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      *
      */
     protected final void check_size() {
-        if (!(doc instanceof Szenario)) {
-            return;
-        }
         getExtensionSize();
         adjust_size();
     }
@@ -458,12 +454,11 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         int anzahl;
 
         if (!multiView) {
-            lower_border = doc.getCollection().getActiveLayer();
+            lower_border = szenario.getCollection().getActiveLayer();
         }
         upper_border = lower_border + 1;
-
         for (int b = lower_border; b < upper_border; b += 2) {
-            lay = doc.getLayer(b);
+            lay = szenario.getLayer(b);
             anzahl = lay.getKnotenCount();
             for (int co = 0; co < anzahl; co++) {
                 knoten = lay.getNodeContainer(co);
@@ -568,11 +563,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
     @Override
     protected void paintChildren(final Graphics g) {
-        if (doc == null) {
-            return;
-        }
-
-        if (!(doc instanceof Szenario)) {
+        if (szenario == null) {
             super.paintChildren(g);
             return;
         }
@@ -581,22 +572,17 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         if (gc == null) {
             return;
         }
-
         setRenderingHints(gc);
-
         synchronized (getTreeLock()) {
             if (!multiView) {
                 gc.translate(middleX + effective_x_shift, middleY + zoom * layerGap + effective_y_shift);
                 gc.transform(transformation);
-
-                doc.getActiveLayer().setShift(effective_x_shift, effective_y_shift);
-                doc.getActiveLayer().setMultiView(false);
-                doc.getActiveLayer().paint(gc);
-
-                if (doc.getCollection().getActiveLayer() < 4) {
-                    doc.getLayer(doc.getCollection().getActiveLayer() + 1).paint(gc);
+                szenario.getActiveLayer().setShift(effective_x_shift, effective_y_shift);
+                szenario.getActiveLayer().setMultiView(false);
+                szenario.getActiveLayer().paint(gc);
+                if (szenario.getCollection().getActiveLayer() < 4) {
+                    szenario.getLayer(szenario.getCollection().getActiveLayer() + 1).paint(gc);
                 }
-
                 //Selektion nicht darstellen, wenn das Ergebnisbild als Datei gepsiechert werden soll
                 if (paintState == PaintState.REGULAR && mouse_selection) {
                     int minx, miny, maxx, maxy;
@@ -609,16 +595,14 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
             } else {
                 gc.translate(middleX, middleY + zoom * layerGap);
                 gc.transform(transformation);
-
                 for (int c = 0; c < ModelConstants.LAYERS.length; c++) {
-                    LayerContainer active_graph = doc.getLayer(ModelConstants.LAYERS[c]);
+                    LayerContainer active_graph = szenario.getLayer(ModelConstants.LAYERS[c]);
                     active_graph.setShift(effective_x_shift, effective_y_shift);
                     active_graph.setMultiView(true);
                     active_graph.paint(gc);
-
                     if (c != 1 && c != 3) {
                         //Selektion nicht darstellen, wenn das Ergebnisbild als Datei gespeichert werden soll
-                        if (paintState == PaintState.REGULAR && active_graph == doc.getActiveLayer() && mouse_selection) {
+                        if (paintState == PaintState.REGULAR && active_graph == szenario.getActiveLayer() && mouse_selection) {
                             int minx, miny, maxx, maxy;
                             minx = Math.min(left_sel_x, right_sel_x);
                             miny = Math.min(left_sel_y, right_sel_y);
@@ -643,7 +627,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         this.paintState = paintState;
         //wenn die Selektion und das Raster nicht gemalt werden soll
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-            doc.getLayer(ModelConstants.LAYERS[i]).setPaintState(paintState);
+            szenario.getLayer(ModelConstants.LAYERS[i]).setPaintState(paintState);
         }
     }
 
@@ -686,7 +670,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      *
      */
     public void layoutChanged() {
-        setPageSize(doc.getPageWidth(), doc.getPageHeight());
+        setPageSize(szenario.getPageWidth(), szenario.getPageHeight());
         firePageSizeChangedChanged();
     }
     /**

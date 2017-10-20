@@ -315,7 +315,7 @@ public class WebExportDialog extends JDialog {
      */
     public static final void createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
         if (layer < 0) {
-            area.setLayerGap(new Double(400 * area.getDocument().getPageSizeFactor()).intValue());
+            area.setLayerGap(new Double(400 * area.getSzenario().getPageSizeFactor()).intValue());
             area.setLayerAngle(45);
             area.setMultiView(true);
         } else {

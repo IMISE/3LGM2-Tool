@@ -710,7 +710,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @return
      */
     private AbstractInternalFrame createMainFrame(final LGMGraphDocument maindoc) {
-        InputGraphArea area = new InputGraphArea(maindoc);
+        InputGraphArea area = new InputGraphArea();
         InternalGraphFrame frame = new InternalGraphFrame(desktop, area, maindoc);
         frame.setTitle(maindoc.getCollection().getName() + " - " + maindoc.getTitle());
         modelBrowserPanel.addGraphDocument(maindoc);

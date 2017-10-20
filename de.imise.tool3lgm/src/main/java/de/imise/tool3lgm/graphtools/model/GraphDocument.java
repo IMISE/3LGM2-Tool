@@ -2742,7 +2742,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void distributeEvent(final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
-
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
