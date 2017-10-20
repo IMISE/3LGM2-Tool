@@ -322,33 +322,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void redo(final int pid) {
-        Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = transStackTable.remove(pidInteger);
-        if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
-        }
-        int transStackInt = transStackInteger.intValue();
-        transStackInt++;
-        transStackInteger = new Integer(transStackInt);
-        transStackTable.put(pidInteger, transStackInteger);
-
-        //wenn Teilelemente mit verschoben wurden, so wurde dieses Verschieben auch mit geloggt
-        //-> beim Wiederholen der Verschiebungen dürfen die Unterelemente nicht durch das
-        //Setzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur, wenn sie
-        //beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
-        boolean isMoveSubElements = UserProperties.isMoveSubelements();
-        UserProperties.setMoveSubelements(false);
-        getCollection().getTman().redo(pid);
-        UserProperties.setMoveSubelements(isMoveSubElements);
-
-        transStackTable.remove(pidInteger);
-        transStackInt--;
-        if (transStackInt > 0) {
-            transStackInteger = new Integer(transStackInt);
-            transStackTable.put(pidInteger, transStackInteger);
-        }
-        distributeEvent(DATA_CHANGED, pid);
+        undoRedo(pid, false);
     }
 
     /**
@@ -364,6 +338,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void undo(final int pid) {
+        undoRedo(pid, true);
+    }
+
+    private void undoRedo(final int pid, final boolean undo) {
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = transStackTable.remove(pidInteger);
@@ -382,9 +360,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         boolean isMoveSubElements = UserProperties.isMoveSubelements();
         UserProperties.setMoveSubelements(false);
 
-        getCollection().getTman().undo(pid);
+        TransactionManager tman = getCollection().getTman();
+        if (undo) {
+            tman.undo(pid);
+        } else {
+            tman.redo(pid);
+        }
 
         UserProperties.setMoveSubelements(isMoveSubElements);
+
         transStackTable.remove(pidInteger);
         transStackInt--;
         if (transStackInt > 0) {
