@@ -89,19 +89,28 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected boolean multiView = true;
 
     /**  */
-    protected int middleX = 0, middleY = 0;
+    protected int middleX = 0;
+
+    /**  */
+    protected int middleY = 0;
 
     /**  */
     private final Insets i, c;
 
     /**  */
-    protected int layerWidth = 0, layerHeight = 0;
+    protected int layerWidth = 0;
+
+    /**  */
+    protected int layerHeight = 0;
 
     /** Anzahl der Pixel des Abstandes zwischen den Ebenen in der Mehrebenenansicht */
     protected int layerGap;
 
     /**  */
-    private final int frameWidth = layerWidth, frameHeight = layerHeight;
+    private final int frameWidth = layerWidth;
+
+    /**  */
+    private final int frameHeight = layerHeight;
 
     /**  */
     private int oldLayerAngle = ViewParameter.INITIAL_LAYER_ANGLE;
