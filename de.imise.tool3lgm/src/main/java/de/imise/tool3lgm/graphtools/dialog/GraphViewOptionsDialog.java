@@ -21,9 +21,9 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
+import de.imise.tool3lgm.gui.GraphAreaToolBar;
+import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.InternalGraphFrameToolBar;
 
 /**
  * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche
@@ -96,9 +96,9 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         centerPanel.setLayout(new GridLayout(4, 1));
         JPanel eastPanel = new JPanel();
         eastPanel.setLayout(new GridLayout(4, 1));
-        InternalFrameToolbarManager internalFrameToolBarManager = Static.getTool().getInternalFrameToolBarManager();
-        //internalFrameToolBarManager
-        InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
+        GraphAreaToolbarManager graphAreaToolBarManager = Static.getTool().getGraphAreaToolBarManager();
+        //graphAreaToolBarManager
+        GraphAreaToolBar leiste = (GraphAreaToolBar) frame.getToolBar();
 
         JLabel text = new JLabel(getResString("zoom"));
         zoom = new JSlider(leiste.sliderZoom.getMinimum(), leiste.sliderZoom.getMaximum());
@@ -172,7 +172,7 @@ public class GraphViewOptionsDialog extends JDialog implements ChangeListener, A
         InputGraphArea area = frame.getInputGraphArea();
         area.setZoom((double) Integer.parseInt(textzoom.getText()) / 100);
         zoom.setValue(Integer.parseInt(textzoom.getText()));
-        InternalGraphFrameToolBar leiste = (InternalGraphFrameToolBar) frame.getToolBar();
+        GraphAreaToolBar leiste = (GraphAreaToolBar) frame.getToolBar();
         leiste.sliderZoom.setValue(Integer.parseInt(textzoom.getText()));
         if (frame.getInputGraphArea().isMultiView()) {
             area.setLayerAngle(Integer.parseInt(textwinkel.getText()));

@@ -16,17 +16,17 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.MinMaxNumberTextField3;
 
-public class InternalGraphFrameSliderCreator implements ChangeListener {
+public class GraphAreaOptionsSlider implements ChangeListener {
 
     private SliderWithTextField sliderDegree, sliderZoom, sliderGap, sliderPageSizeFactor;
 
     private InternalGraphFrame frame;
 
-    public InternalGraphFrameSliderCreator(final InternalGraphFrame frame) {
+    public GraphAreaOptionsSlider(final InternalGraphFrame frame) {
         this(frame, -1, -1);
     }
 
-    public InternalGraphFrameSliderCreator(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
+    public GraphAreaOptionsSlider(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
         this.frame = frame;
         init(preferredSizeWidth, preferredSizeHeight);
     }

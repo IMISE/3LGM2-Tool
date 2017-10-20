@@ -79,7 +79,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
+import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.StatusBar;
 import de.imise.tool3lgm.gui.ToolBar;
@@ -136,7 +136,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** ToolBar with general tools */
     private final ToolBar toolbar;
 
-    private final InternalFrameToolbarManager internalFrameToolbarManager = new InternalFrameToolbarManager(workarea);
+    private final GraphAreaToolbarManager graphAreaToolbarManager = new GraphAreaToolbarManager(workarea);
 
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
     private final JDesktopPane desktop;
@@ -1350,7 +1350,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         if (frames.length == 0) {
             activeFrame = null;
-            internalFrameToolbarManager.updateToolBar();
+            graphAreaToolbarManager.updateToolBar();
             toolbar.repaint();
 
         }
@@ -1374,8 +1374,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
 
         LGMGraphDocument doc = activeFrame.getGraphDocument();
-        doc.addGraphDocumentListener(internalFrameToolbarManager);
-        internalFrameToolbarManager.updateToolBar();
+        doc.addGraphDocumentListener(graphAreaToolbarManager);
+        graphAreaToolbarManager.updateToolBar();
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
         setSelectedDoc(doc, activeFrame instanceof InternalGraphFrame);
@@ -1396,9 +1396,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         LGMGraphDocument graphDocument = activeFrame.getGraphDocument();
-        graphDocument.removeGraphDocumentListener(internalFrameToolbarManager);
+        graphDocument.removeGraphDocumentListener(graphAreaToolbarManager);
         activeFrame = null;
-        internalFrameToolbarManager.updateToolBar();
+        graphAreaToolbarManager.updateToolBar();
     }
 
     @Override
@@ -1554,8 +1554,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      *
      * @return UnfloatableToolBar
      */
-    public final InternalFrameToolbarManager getInternalFrameToolBarManager() {
-        return internalFrameToolbarManager;
+    public final GraphAreaToolbarManager getGraphAreaToolBarManager() {
+        return graphAreaToolbarManager;
     }
 
     /**

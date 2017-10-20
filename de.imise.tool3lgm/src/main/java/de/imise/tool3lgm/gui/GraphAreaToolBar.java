@@ -15,12 +15,12 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.InternalGraphFrameSliderCreator.SliderWithTextField;
+import de.imise.tool3lgm.gui.GraphAreaOptionsSlider.SliderWithTextField;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-public class InternalGraphFrameToolBar extends UnfloatableToolBar {
+public class GraphAreaToolBar extends UnfloatableToolBar {
 
-    private final InternalGraphFrameSliderCreator sliderCreator;
+    private final GraphAreaOptionsSlider sliderCreator;
 
     private final ToolButton buttonSwitchMouseMode;
 
@@ -41,13 +41,13 @@ public class InternalGraphFrameToolBar extends UnfloatableToolBar {
     /**
      * @param frame
      */
-    public InternalGraphFrameToolBar(final InternalGraphFrame frame) {
+    public GraphAreaToolBar(final InternalGraphFrame frame) {
         super();
         buttonSwitchMouseMode = ToolButton.createDisableMouseMakesElementsButton();
         buttonCreateEdge = ToolButton.createEdgeButton(dummyEdgeButtonNodeClass);
         buttonGroup.add(buttonSwitchMouseMode);
         buttonGroup.add(buttonCreateEdge);
-        sliderCreator = new InternalGraphFrameSliderCreator(frame, 150, 30);
+        sliderCreator = new GraphAreaOptionsSlider(frame, 150, 30);
         setFrame(frame);
         CSH.setHelpIDString(this, "GRAPH_TOOLBAR_ansichtswerkzeuge");
     }

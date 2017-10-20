@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-public class InternalFrameToolbarManager implements GraphDocumentListener, BasicGraphAreaChangeListener {
+public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGraphAreaChangeListener {
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
     private UnfloatableToolBar currentToolBar;
@@ -24,7 +24,7 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
 
     private AbstractInternalFrame currentFrame;
 
-    public InternalFrameToolbarManager(final Container toolbarParent) {
+    public GraphAreaToolbarManager(final Container toolbarParent) {
         this.toolbarParent = toolbarParent;
     }
 
@@ -36,12 +36,12 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
                 removeToolBar();
             } else if (activeFrame instanceof InternalGraphFrame && activeFrame.getGraphDocument() instanceof Szenario) {
                 InternalGraphFrame graphFrame = (InternalGraphFrame) activeFrame;
-                if (currentToolBar == null || !(currentToolBar instanceof InternalGraphFrameToolBar)) {
+                if (currentToolBar == null || !(currentToolBar instanceof GraphAreaToolBar)) {
                     removeToolBar();
-                    currentToolBar = new InternalGraphFrameToolBar(graphFrame);
+                    currentToolBar = new GraphAreaToolBar(graphFrame);
                     addToolBar();
                 } else {
-                    ((InternalGraphFrameToolBar) currentToolBar).setFrame(graphFrame);
+                    ((GraphAreaToolBar) currentToolBar).setFrame(graphFrame);
                     if (currentToolBar.getParent() == null) {
                         addToolBar();
                     }
@@ -79,8 +79,8 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
         }
     }
 
-    public InternalGraphFrameToolBar getInternalGraphFrameToolBar() {
-        return currentToolBar != null && currentToolBar instanceof InternalGraphFrameToolBar ? (InternalGraphFrameToolBar) currentToolBar : null;
+    public GraphAreaToolBar getGraphAreaToolBar() {
+        return currentToolBar != null && currentToolBar instanceof GraphAreaToolBar ? (GraphAreaToolBar) currentToolBar : null;
     }
 
     public void setToolBarVisible(final boolean visible) {
@@ -140,8 +140,8 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        if (currentToolBar instanceof InternalGraphFrameToolBar) {
-            ((InternalGraphFrameToolBar) currentToolBar).setLayer(source.getCollection().getActiveLayer());
+        if (currentToolBar instanceof GraphAreaToolBar) {
+            ((GraphAreaToolBar) currentToolBar).setLayer(source.getCollection().getActiveLayer());
         }
     }
 
@@ -159,8 +159,8 @@ public class InternalFrameToolbarManager implements GraphDocumentListener, Basic
 
     @Override
     public void graphAreaChanged() {
-        if (currentToolBar instanceof InternalGraphFrameToolBar) {
-            ((InternalGraphFrameToolBar) currentToolBar).update();
+        if (currentToolBar instanceof GraphAreaToolBar) {
+            ((GraphAreaToolBar) currentToolBar).update();
         }
     }
 

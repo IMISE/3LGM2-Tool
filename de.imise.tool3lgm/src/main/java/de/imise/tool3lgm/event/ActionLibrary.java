@@ -85,7 +85,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
+import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
@@ -1763,8 +1763,8 @@ public class ActionLibrary {
                 @Override
                 protected void actionPerformed() {
                     Tool3lgm tool = getTool();
-                    InternalFrameToolbarManager internalFrameToolBarManager = tool.getInternalFrameToolBarManager();
-                    internalFrameToolBarManager.setToolBarVisible(isSelected());
+                    GraphAreaToolbarManager graphAreaToolBarManager = tool.getGraphAreaToolBarManager();
+                    graphAreaToolBarManager.setToolBarVisible(isSelected());
                 }
             };
 
