@@ -1380,17 +1380,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
             //muss man testen, ob sich das Kommando auf int casten lässt.
             GDCommands command = null;
-            //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
-            if (Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
-                GDCommands.valueOf(tokens.get(0));
-                //wenn undo und redo mit den Komandoindizes geloggt werden
-            } else {
-                try {
+            //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
+            if (!Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
                     //versuche den Index zu parsen und das Kommando
                     command = GDCommands.values()[new Integer(tokens.get(0)).intValue()];
-                } catch (Exception e) {
-                    command = GDCommands.valueOf(tokens.get(0));
-                }
+            } else {
+                //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
+                command = tokens.size() > 0 ? GDCommands.valueOf(tokens.get(0)) : null;
             }
 
             if (command == null) {
