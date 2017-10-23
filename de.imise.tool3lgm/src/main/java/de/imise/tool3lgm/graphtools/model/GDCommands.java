@@ -146,7 +146,7 @@ public enum GDCommands {
         //den Index des Komandos als String zurück geben (der auch eindeutig, aber
         //viel kürzer ist als der Komandoname und somit nicht soviel Speicher verbraucht
         //beim Loggen der Undo-redo-Kommandos
-        return new Integer(ordinal()).toString();
+        return Integer.toString(ordinal());
     }
 
 }
