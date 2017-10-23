@@ -430,7 +430,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenuItem getItem(final GDCommands command) {
-        return getItem(command.toString(), command);
+        return getItem(command.name(), command);
     }
 
     /**
