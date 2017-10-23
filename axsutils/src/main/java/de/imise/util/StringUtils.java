@@ -288,12 +288,12 @@ public class StringUtils {
      * @return
      */
     public static final boolean isNullOrEmptyOrBlank(final String s) {
-        return s == null || !s.trim().isEmpty();
+        return s == null || s.trim().isEmpty();
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene String <code>null</code> ist, leer ist, nur aus WhiteSpaces besteht oder
-     * gleich einem der übergebenen invalidValues ist.
+     * Liefert <code>false</code>, wenn der übergebene String <code>null</code> ist, leer ist, nur aus WhiteSpaces besteht oder
+     * gleich einem der übergebenen invalidValues ist, sonst <code>true</code>.
      *
      * @param s
      * @param invalidValues
