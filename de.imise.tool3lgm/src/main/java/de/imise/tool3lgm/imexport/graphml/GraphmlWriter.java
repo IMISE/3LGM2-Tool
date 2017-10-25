@@ -5,28 +5,33 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 
 public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected final Szenario szenario;
 
+    protected final Mapping standardLayout;
+
     public GraphmlWriter(final File file, final Szenario szenario) throws XMLStreamException, IOException {
         super(file, null);
         this.szenario = szenario;
+        standardLayout = szenario.getMapping();
     }
 
     public void write(final int layer) throws XMLStreamException {
         writeStartDocument("UTF-8", "1.0");
-        writeComment(getCreatedByComment());
         writeStartElementGraphml(); //start graphml
         writeKeys();
         writeGraph(layer);
+        writeResources();
         writeEndElement(); //end graphml
     }
 
@@ -36,17 +41,12 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeKeys() throws XMLStreamException;
 
-    private void writeKey(final String attFor, final String attId, final Object... attributes) throws XMLStreamException {
-        writeEmptyElement("key", "for", attFor, "id", attId);
-        writeAttributes(attributes);
-    }
-
     protected void writeKeyYFilesType(final String attFor, final String attId, final String yFilesType) throws XMLStreamException {
-        writeKey(attFor, attId, "yfiles.type", yFilesType);
+        writeEmptyElement("key", "for", attFor, "id", attId, "yfiles.type", yFilesType);
     }
 
     protected void writeKeyGeneralType(final String attFor, final String attId, final String attName, final String attType) throws XMLStreamException {
-        writeKey(attFor, attId, "attr.name", attName, "attr.type", attType);
+        writeEmptyElement("key", "attr.name", attName, "attr.type", attType, "for", attFor, "id", attId);
     }
 
     private void writeGraph(final int layer) throws XMLStreamException {
@@ -69,11 +69,25 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         writeStartElement("data", "key", key);
     }
 
+    protected void writeEmptyElementDataKey(final String key) throws XMLStreamException {
+        writeEmptyElement("data", "key", key);
+    }
+
     protected abstract void writeNodeContent(NodeContainer nc) throws XMLStreamException;
 
     private void writeEdges(final int layer) throws XMLStreamException {
         LayerContainer lc = szenario.getLayer(layer);
+        for (EdgeContainer ec : lc.getKanten()) {
+            Edge edge = ec.getEdge();
+            writeStartElement("edge", "id", edge.getHashString(), "source", edge.getStart().getHashString(), "target", edge.getEnd().getHashString()); // start egde
+            writeEdgeContent(ec);
+            writeEndElement(); // end edge
+        }
     }
+
+    protected abstract void writeEdgeContent(EdgeContainer ec) throws XMLStreamException;
+
+    protected abstract void writeResources() throws XMLStreamException;
 
     public static final String getYGraphmlShapeName(final NodeContainer nc) {
         GraphElementLayout.SHAPE form = nc.getForm();
