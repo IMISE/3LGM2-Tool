@@ -1380,11 +1380,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
             //muss man testen, ob sich das Kommando auf int casten lässt.
             GDCommands command = null;
+            try {
             //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
-            if (!Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS) {
                     //versuche den Index zu parsen und das Kommando
                     command = GDCommands.values()[new Integer(tokens.get(0)).intValue()];
-            } else {
+            } catch (Exception e) {
                 //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
                 command = tokens.size() > 0 ? GDCommands.valueOf(tokens.get(0)) : null;
             }
@@ -3399,17 +3399,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (getCollection().getMainGraphDocument() != this) {
             return getCollection().getMainGraphDocument().findKnotenCoded(hashString);
         }
-
         if (hashString != null) {
             for (LayerContainer lc : layer) {
                 for (ElementContainer ec : lc.getKnoten()) {
-                    if (hashString.equals(ec.getHashString())) {
+                    String ecHash = ec.getHashString();
+                    if (hashString.equals(ecHash)) {
                         return ec.getElement();
                     }
                 }
             }
         }
-
         return null;
     }
 
@@ -3421,7 +3420,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (getCollection().getMainGraphDocument() != this) {
             return getCollection().getMainGraphDocument().findKanteCoded(hashString);
         }
-
         if (hashString != null) {
             for (LayerContainer lc : layer) {
                 for (EdgeContainer ec : lc.getKanten()) {
@@ -3431,7 +3429,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
         }
-
         return null;
     }
 
