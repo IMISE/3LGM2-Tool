@@ -560,7 +560,7 @@ public final class ModelConstants {
 
     /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse in der Grafik darstellbar ist.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -1121,6 +1121,10 @@ public final class ModelConstants {
 
     public static final boolean canHaveParents(final Class<? extends ModelElement> elementClass) {
         return getIsPartOfEdgeClasses(elementClass).length > 0;
+    }
+
+    public static final boolean isPartOfEdge(final Class<? extends Edge> edgeClass) {
+        return PartOfBeziehung.class.isAssignableFrom(edgeClass);
     }
 
     /**
