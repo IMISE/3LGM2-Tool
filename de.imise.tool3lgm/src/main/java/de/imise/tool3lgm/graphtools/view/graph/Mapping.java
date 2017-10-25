@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.TextfeldFach;
 import de.imise.tool3lgm.graphtools.metamodel.TextfeldLog;
 import de.imise.tool3lgm.graphtools.metamodel.TextfeldPhy;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
@@ -83,12 +84,12 @@ public class Mapping {
      * Will man das Layout für eine spezielle Elementart setzen, muss man das
      * Layout übder die Funktion <code>getElementClassSpecificLayout(Class)</code> holen.
      *
-     * @param me Element, für das das StandardLayout ermitelt werden soll
+     * @param ec Container, für dessen Element das StandardLayout ermittelt werden soll
      * @see #getElementClassSpecificLayout(Class)
      * @return StandardLayout für Elemente der übergebenen Art
      */
-    private GraphElementLayout getStandardElementLayout(final ModelElement me) {
-        return getStandardElementLayout(me.getClass());
+    private GraphElementLayout getStandardElementLayout(final ElementContainer ec) {
+        return getStandardElementLayout(ec.getElement().getClass());
     }
 
     /**
@@ -124,11 +125,11 @@ public class Mapping {
     }
 
     /**
-     * @param me
+     * @param ec
      * @return
      */
-    public final Color getStandardBackGroundColor(final ModelElement me) {
-        GraphElementLayout gel = getStandardElementLayout(me);
+    public final Color getStandardBackGroundColor(final ElementContainer ec) {
+        GraphElementLayout gel = getStandardElementLayout(ec);
         if (gel.bg_color == null) {
             return standardElementLayout.bg_color;
         }
@@ -195,11 +196,11 @@ public class Mapping {
     }
 
     /**
-     * @param me
+     * @param ec
      * @return
      */
-    public final GraphElementLayout.SHAPE getStandardForm(final ModelElement me) {
-        return getStandardElementLayout(me).form;
+    public final GraphElementLayout.SHAPE getStandardForm(final ElementContainer ec) {
+        return getStandardElementLayout(ec).form;
     }
 
     /**
@@ -211,11 +212,11 @@ public class Mapping {
     }
 
     /**
-     * @param me
+     * @param ec
      * @return
      */
-    public final Font getStandardFont(final ModelElement me) {
-        return getStandardElementLayout(me).getFont();
+    public final Font getStandardFont(final ElementContainer ec) {
+        return getStandardElementLayout(ec).getFont();
     }
 
     /**

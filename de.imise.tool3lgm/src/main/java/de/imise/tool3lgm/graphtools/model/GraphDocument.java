@@ -1876,7 +1876,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (ElementContainer ec : selectedContainer) {
             Color tmpcol = ec.getColor();
             if (tmpcol == null) {
-                tmpcol = mapping.getStandardBackGroundColor(ec.getElement());
+                tmpcol = mapping.getStandardBackGroundColor(ec);
             }
             if (oldcol == null) {
                 oldcol = tmpcol;
@@ -1943,7 +1943,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (int c = 1; c <= 3; c++) {
             Color tmpcol = layer[c].getColor();
             if (tmpcol == null) {
-                tmpcol = mapping.getStandardBackGroundColor(layer[c].getElement());
+                tmpcol = mapping.getStandardBackGroundColor(layer[c]);
             }
             if (oldcol == null) {
                 oldcol = tmpcol;
@@ -2058,7 +2058,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         ecDoc.start_transaction(pid);
         if (ec.getColor() == null) {
-            changeColor(ec, mapping.getStandardBackGroundColor(ec.getElement()), pid);
+            changeColor(ec, mapping.getStandardBackGroundColor(ec), pid);
         }
         addRedoCommandOrReplace(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + ec.getHashString(), alphaMode, pid);
         addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);

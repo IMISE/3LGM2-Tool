@@ -150,7 +150,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             knoten[counter + offset] = kc;
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_DOMAIN_LAYER_NODES[c]));
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
-            kc.setFont(mydoc.getMapping().getStandardFont(kc.getElement()));
+            kc.setFont(mydoc.getMapping().getStandardFont(kc));
 
             form_trigger[counter + offset] = new JButton(getResString("le_form"));
             form_trigger[counter + offset].setMargin(insets);
@@ -200,7 +200,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             knoten[counter + offset] = kc;
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_LOGICAL_LAYER_NODES[c]));
-            kc.setFont(mydoc.getMapping().getStandardFont(kc.getElement()));
+            kc.setFont(mydoc.getMapping().getStandardFont(kc));
 
             form_trigger[counter + offset] = new JButton(getResString("le_form"));
             form_trigger[counter + offset].setMargin(insets);
@@ -247,7 +247,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             knoten[counter + offset] = kc;
             kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
             kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c]));
-            kc.setFont(mydoc.getMapping().getStandardFont(kc.getElement()));
+            kc.setFont(mydoc.getMapping().getStandardFont(kc));
 
             form_trigger[counter + offset] = new JButton(getResString("le_form"));
             form_trigger[counter + offset].setMargin(insets);
@@ -333,7 +333,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (e.getSource() == farbe_trigger[c]) {
                 setAktuelles(c);
 
-                Color oldColor = my_mapping.getStandardBackGroundColor(knoten[aktuelles].getKnoten());
+                Color oldColor = my_mapping.getStandardBackGroundColor(knoten[aktuelles]);
                 Color newColor = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldColor);
 
                 if (newColor == null) {
@@ -374,7 +374,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (knoten[c] == null) {
                 continue;
             }
-            knoten[c].setFont(my_mapping.getStandardFont(knoten[c].getElement()));
+            knoten[c].setFont(my_mapping.getStandardFont(knoten[c]));
             knoten[c].refreshText();
             knoten[c].paint(g);
         }

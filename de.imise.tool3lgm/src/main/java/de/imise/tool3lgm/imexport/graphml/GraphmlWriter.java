@@ -78,8 +78,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     public static final String getYGraphmlShapeName(final NodeContainer nc) {
         GraphElementLayout.SHAPE form = nc.getForm();
         if (form == null) {
-            GraphDocument doc = nc.getGraphDocument();
-            form = doc.getMapping().getStandardForm(nc.getKnoten());
+            form = nc.getGraphDocument().getMapping().getStandardForm(nc);
         }
         switch (form) {
         case dreieck:

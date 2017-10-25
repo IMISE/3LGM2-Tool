@@ -59,7 +59,7 @@ public final class NodeRenderer {
         Color col = nc.getColor();
         if (col == null) {
             GraphDocument doc = nc.getGraphDocument();
-            col = doc.getMapping().getStandardBackGroundColor(nc.getKnoten());
+            col = doc.getMapping().getStandardBackGroundColor(nc);
         }
         return col;
     }
@@ -83,7 +83,7 @@ public final class NodeRenderer {
 
         Color col = kc.getColor();
         if (col == null) {
-            col = doc.getMapping().getStandardBackGroundColor(kc.getKnoten());
+            col = doc.getMapping().getStandardBackGroundColor(kc);
         }
 
         int x = kc.getX();
@@ -104,7 +104,7 @@ public final class NodeRenderer {
 
         GraphElementLayout.SHAPE form = kc.getForm();
         if (form == null) {
-            form = doc.getMapping().getStandardForm(kc.getKnoten());
+            form = doc.getMapping().getStandardForm(kc);
         }
 
         if (kc.getVerticalAlignment() != kc.getValign()) {
@@ -406,7 +406,7 @@ public final class NodeRenderer {
 
         GraphElementLayout.SHAPE form = k.getForm();
         if (form == null) {
-            form = k.getGraphDocument().getMapping().getStandardForm(k.getElement());
+            form = k.getGraphDocument().getMapping().getStandardForm(k);
         }
 
         switch (form) {

@@ -401,7 +401,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (font == null) {
             return true;
         }
-        return font.equals(doc.getMapping().getStandardFont(me));
+        return font.equals(doc.getMapping().getStandardFont(this));
     }
 
     /**
@@ -433,7 +433,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (doc != null) {
             Mapping mapping = doc.getMapping();
             if (mapping != null) {
-                font = mapping.getStandardFont(me);
+                font = mapping.getStandardFont(this);
             }
         }
         if (font == null) {
