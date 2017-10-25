@@ -9,7 +9,6 @@ import javax.swing.ButtonGroup;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
@@ -117,15 +116,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     }
 
     private void addSliders() {
-        AbstractInternalFrame frame = Static.getActiveFrame();
-        if (frame == null) {
-            return;
-        }
-        if (!(frame instanceof InternalGraphFrame)) {
-            return;
-        }
-
-        InputGraphArea area = ((InternalGraphFrame) frame).getInputGraphArea();
+        InputGraphArea area = frame.getInputGraphArea();
         addSlider(sliderCreator.getSliderZoom());
         if (area.isMultiView()) {
             addSlider(sliderCreator.getSliderDegree());
