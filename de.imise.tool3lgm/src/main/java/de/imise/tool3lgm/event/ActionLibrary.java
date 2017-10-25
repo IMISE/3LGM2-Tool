@@ -91,6 +91,7 @@ import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
+import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.DataAvailabilityFinder;
 import de.imise.tool3lgm.tools.BrowseUtils;
@@ -99,6 +100,7 @@ import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
+import de.imise.util.swing.dialog.DirectoryChooser;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
@@ -254,6 +256,17 @@ public class ActionLibrary {
                 }
             };
 
+            /** öffnet einen Dialog zum Export des Models als graphml-Datei */
+            public static final Action ACTION_EXPORT_GRAPHML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML, true) {
+                @Override
+                protected void actionPerformed() {
+                    File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
+                    if (path != null) {
+                        new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYEdGraphml();
+                    }
+                }
+
+            };
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
             public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, true) {
                 @Override

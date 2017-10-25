@@ -46,7 +46,7 @@ public final class NodeRenderer {
     protected static Stroke fatStroke = new BasicStroke(7);
     protected static Stroke meduimStroke = new BasicStroke(4);
     protected static Stroke neStroke = new BasicStroke(4, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 1, new float[] {
-        10
+            10
     }, 10);
 
     protected static int[] xs = new int[8];
@@ -54,6 +54,15 @@ public final class NodeRenderer {
     protected static int npoints = 0;
 
     public static Image linkIcon = Tool3lgmConstants.getIcon("link.gif").getImage();
+
+    public static final Color getColor(final NodeContainer nc) {
+        Color col = nc.getColor();
+        if (col == null) {
+            GraphDocument doc = nc.getGraphDocument();
+            col = doc.getMapping().getStandardBackGroundColor(nc.getKnoten());
+        }
+        return col;
+    }
 
     /////////////////////////////////////////
     //Funktionen zum Rendern eines Knotens //
@@ -248,7 +257,7 @@ public final class NodeRenderer {
                 g.setColor(isResult && analysisColor != null ? analysisColor : kc.getFrameColor());
                 g.drawRect(xm, ym, width, height);
             }
-        } else /* if (img != null) */{
+        } else /* if (img != null) */ {
             g.translate(xm, ym);
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
@@ -371,7 +380,7 @@ public final class NodeRenderer {
     /**
      * Gibt <code>true</code> zurück, wenn die übergebenen Koordinaten innerhalb
      * des Darstellungsbereiches des übergebenen Containers liegen, sonst <code>false</code>.
-     * 
+     *
      * @param ec <code>ElementContainer</code>, für den geprüft wird, ob die Koordinaten in ihm liegen
      * @param xi X-Koordinate
      * @param yi Y-Koordinate
@@ -482,7 +491,7 @@ public final class NodeRenderer {
      * <li><code>Cursor.NW_RESIZE_CURSOR</code>: Koordinaten sind im oberen linken Grenzbereich</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param container Container, für den Grenzbereich ermittelt werden soll
      * @param xi X-Koordinate
      * @param yi Y-Koordinate
@@ -522,12 +531,12 @@ public final class NodeRenderer {
     }
 
     //	private static final int INVALID_ADAPTED_BORDER_POSITION_VALUE = Integer.MAX_VALUE;
-    //	
+    //
     //	private int adaptedBorderPositionX = INVALID_ADAPTED_BORDER_POSITION_VALUE;
     //	private int adaptedBorderPositionY = INVALID_ADAPTED_BORDER_POSITION_VALUE;
-    //	
+    //
     //	private D
-    //	
+    //
     //	public ResizeBox
 
 }

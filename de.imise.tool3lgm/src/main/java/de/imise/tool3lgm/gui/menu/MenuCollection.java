@@ -102,8 +102,8 @@ public class MenuCollection {
         public static final JMenu IMPORT_MENU = createMenu(getResString("import"), ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
 
         /** Das Export-Menu */
-        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.ACTION_EXPORT_GRAPHIC, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT, ExportActions.ACTION_EXPORT_SUBMODEL, new JSeparator(),
-                ExportActions.ACTION_EXPORT_HTML, new JSeparator(), ExportActions.ACTION_EXPORT_DATA);
+        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.ACTION_EXPORT_GRAPHIC, ExportActions.ACTION_EXPORT_GRAPHML, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT, ExportActions.ACTION_EXPORT_SUBMODEL,
+                new JSeparator(), ExportActions.ACTION_EXPORT_HTML, new JSeparator(), ExportActions.ACTION_EXPORT_DATA);
     }
 
     /** Sammlung der Unter-Menus des Ansicht-Menus */
@@ -117,13 +117,16 @@ public class MenuCollection {
     public static class LayoutSubMenus {
 
         /** Das Element-Layout-Menu */
-        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.CHOOSE_FONT, ElementLayout.CHANGE_COLOR, createMenu( // Transparenz-Menu
-                getResString("elementTransparencyMenu"), ElementLayout.Transparency.NO, ElementLayout.Transparency.SEMI, ElementLayout.Transparency.FULL),
+        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.CHOOSE_FONT, ElementLayout.CHANGE_COLOR,
+                createMenu( // Transparenz-Menu
+                        getResString("elementTransparencyMenu"), ElementLayout.Transparency.NO, ElementLayout.Transparency.SEMI, ElementLayout.Transparency.FULL),
                 createMenu( // Auf Standard setzen Menu
                         getResString("elementSetToStandardMenu"), ElementLayout.RESET_FONT, ElementLayout.RESET_COLOR, ElementLayout.RESET_TRANSPARENCY, ElementLayout.RESET_ALL),
-                new JSeparator(), createMenu( // Icon-Menu
+                new JSeparator(),
+                createMenu( // Icon-Menu
                         getResString("icon"), ElementLayout.Icon.NO_ICON, ElementLayout.Icon.CHOOSE_ICON),
-                new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)
+                new JSeparator(),
+                createMenu( // Textausrichtungs-Menu (horizontal)
                         getResString("textAlignmentMenu"), TextAlignment.Horizontal.LEFT, TextAlignment.Horizontal.CENTER, TextAlignment.Horizontal.RIGHT, new JSeparator(), TextAlignment.Vertical.TOP, TextAlignment.Vertical.CENTER,
                         TextAlignment.Vertical.BOTTOM));
 
