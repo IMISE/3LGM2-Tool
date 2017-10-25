@@ -45,7 +45,6 @@ public class YEdGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected void writeKeys() throws XMLStreamException {
-        writeComment(getCreatedByComment());
         for (TypeKeys typeKey : TypeKeys.values()) {
             String[] nameParts = typeKey.nameParts();
             if (nameParts.length == 2) { // 2 Teile -> yEd Attribute

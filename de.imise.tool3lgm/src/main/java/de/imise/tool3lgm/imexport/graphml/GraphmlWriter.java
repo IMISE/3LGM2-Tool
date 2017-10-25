@@ -28,6 +28,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     public void write(final int layer) throws XMLStreamException {
         writeStartDocument("UTF-8", "1.0");
+        writeComment(getCreatedByComment());
         writeStartElementGraphml(); //start graphml
         writeKeys();
         writeGraph(layer);
