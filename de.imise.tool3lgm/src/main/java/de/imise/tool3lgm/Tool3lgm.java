@@ -1259,7 +1259,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return false;
         }
         GDCollection gdcoll = doc.getCollection();
-        new ModelCleaner(gdcoll).cleanModel();
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         saveAs = fileHandler.isReadOnly() || saveAs;
         if (saveAs) {
@@ -1271,6 +1270,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (datei == null) {
             return fileSave(true);
         }
+        new ModelCleaner(gdcoll).cleanModel();
         if (!saveToFile(gdcoll)) {
             return false;
         }
