@@ -194,7 +194,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("modelPosition", getModelPosition(nc)); //################################ c, t, b, l, r, tl, tr, bl, br
         writeAttribute("textColor", "#000000");
         writeAttribute("verticalTextPosition", "bottom");
-        writeAttribute("visible", "true");
+        writeAttribute("visible", !nc.hideText());
         writeAttribute("width", "0.0");
         writeAttribute("x", "0.0");
         writeAttribute("y", "0.0");
