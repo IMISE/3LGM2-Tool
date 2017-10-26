@@ -521,6 +521,10 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         }
     }
 
+    public boolean hideText() {
+        return layout.width < 35 && layout.height < 30;
+    }
+
     @Override
     public void refreshText() {
         if (me.isUnpaintable()) {
@@ -530,7 +534,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return;
         }
 
-        if (layout.width < 35 && layout.height < 30) {
+        if (hideText()) {
             setText(null);
         } else {
             setText(me.getHTMLName());
