@@ -102,8 +102,8 @@ public class MenuCollection {
         public static final JMenu IMPORT_MENU = createMenu(getResString("import"), ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
 
         /** Das Export-Menu */
-        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.ACTION_EXPORT_GRAPHIC, ExportActions.ACTION_EXPORT_GRAPHML, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT, ExportActions.ACTION_EXPORT_SUBMODEL,
-                new JSeparator(), ExportActions.ACTION_EXPORT_HTML, new JSeparator(), ExportActions.ACTION_EXPORT_DATA);
+        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.ACTION_EXPORT_GRAPHIC, ExportActions.ACTION_EXPORT_GRAPHML_YED, ExportActions.ACTION_EXPORT_GRAPHML_YFILES, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT,
+                ExportActions.ACTION_EXPORT_SUBMODEL, new JSeparator(), ExportActions.ACTION_EXPORT_HTML, new JSeparator(), ExportActions.ACTION_EXPORT_DATA);
     }
 
     /** Sammlung der Unter-Menus des Ansicht-Menus */

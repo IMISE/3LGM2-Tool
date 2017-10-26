@@ -257,7 +257,7 @@ public class ActionLibrary {
             };
 
             /** öffnet einen Dialog zum Export des Models als graphml-Datei */
-            public static final Action ACTION_EXPORT_GRAPHML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML, true) {
+            public static final Action ACTION_EXPORT_GRAPHML_YED = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YED, true) {
                 @Override
                 protected void actionPerformed() {
                     File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
@@ -265,8 +265,19 @@ public class ActionLibrary {
                         new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYEdGraphml();
                     }
                 }
-
             };
+
+            /** öffnet einen Dialog zum Export des Models als graphml-Datei */
+            public static final Action ACTION_EXPORT_GRAPHML_YFILES = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YFILES, true) {
+                @Override
+                protected void actionPerformed() {
+                    File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
+                    if (path != null) {
+                        new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYFilesGraphml();
+                    }
+                }
+            };
+
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
             public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, true) {
                 @Override
