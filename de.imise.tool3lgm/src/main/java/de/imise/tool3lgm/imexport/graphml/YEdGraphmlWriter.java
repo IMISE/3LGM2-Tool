@@ -198,7 +198,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("width", "0.0");
         writeAttribute("x", "0.0");
         writeAttribute("y", "0.0");
-        writeCharacters(nc.getElement().getClearName());
+        writeCharacters(getElementName(nc));
         writeEndElement(); // end y:NodeLabel
     }
 
