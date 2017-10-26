@@ -349,12 +349,12 @@ public abstract class ModelElement extends UserFieldTarget {
      * Diese Funktion darf nicht einfach refactored werden und wenn doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME
      * ebenfalls umbenannt werden.
      */
-    protected MetaPath getNameExtension() {
+    protected MetaPath getNameExtensionPath() {
         return null;
     }
 
     public void updateNameExtensions() {
-        if (getNameExtension() != null) {
+        if (getNameExtensionPath() != null) {
             setName(name);
         }
     }
@@ -392,9 +392,14 @@ public abstract class ModelElement extends UserFieldTarget {
         }
     }
 
+    public String getNameExtension() {
+        updateHTMLNameSuffixBuffer();
+        return suffixBuf.toString();
+    }
+
     private void updateHTMLNameSuffixBuffer() {
         suffixBuf.setLength(0);
-        MetaPath nameExtension = getNameExtension();
+        MetaPath nameExtension = getNameExtensionPath();
         if (nameExtension != null) {
             Collection<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(this, nameExtension);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
@@ -438,7 +443,6 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         textBuf.append("</CENTER></HTML>");
         htmlName = textBuf.toString();
-
     }
 
     /**

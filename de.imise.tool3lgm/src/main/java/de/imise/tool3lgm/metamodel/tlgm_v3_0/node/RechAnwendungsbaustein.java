@@ -28,7 +28,7 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
     }
 
     @Override
-    protected MetaPath getNameExtension() {
+    protected MetaPath getNameExtensionPath() {
         return new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
     }
 
