@@ -7,8 +7,10 @@ import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -163,6 +165,13 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         colorBuilder.setLength(1);
         HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color);
         return colorBuilder.toString();
+    }
+
+    protected String getElementName(final ElementContainer ec) {
+        ModelElement me = ec.getElement();
+        String nameExtension = me.getNameExtension();
+        String name = nameExtension.isEmpty() ? me.getClearName() : me.getClearName() + "\n" + nameExtension;
+        return name;
     }
 
 }
