@@ -72,16 +72,27 @@ public class IntendingXMLWriter {
         writer.writeStartDocument(encoding, version);
     }
 
-    protected final void writeStartElement(final String element) throws XMLStreamException {
+    protected final void writeStartElement(final String element, final String... attributes) throws XMLStreamException {
         writer.writeStartElement(element);
+        writeAttributes(attributes);
+    }
+
+    protected void writeAttributes(final String... attributes) throws XMLStreamException {
+        for (int i = 0; i < attributes.length; i += 2) {
+            //übergebene Attribute, bei denen der Value leer ist, werden nicht geschrieben
+            if (attributes[i + 1] != null && !attributes[i + 1].toString().isEmpty()) {
+                writeAttribute(attributes[i], attributes[i + 1]);
+            }
+        }
     }
 
     protected final void writeEndElement() throws XMLStreamException {
         writer.writeEndElement();
     }
 
-    protected final void writeEmptyElement(final String element) throws XMLStreamException {
+    protected final void writeEmptyElement(final String element, final String... attributes) throws XMLStreamException {
         writer.writeEmptyElement(element);
+        writeAttributes(attributes);
     }
 
     protected final void writeElement(final String element, final String text) throws XMLStreamException {
@@ -102,8 +113,8 @@ public class IntendingXMLWriter {
         writeElement(element, String.valueOf(doubleValue));
     }
 
-    protected final void writeAttribute(final String attribute, final String text) throws XMLStreamException {
-        writer.writeAttribute(attribute, text);
+    protected final void writeAttribute(final Object attribute, final Object text) throws XMLStreamException {
+        writer.writeAttribute(attribute.toString(), text.toString());
     }
 
     protected final void writeAttribute(final String attribute, final int intValue) throws XMLStreamException {
@@ -112,6 +123,10 @@ public class IntendingXMLWriter {
 
     protected final void writeCharacters(final String text) throws XMLStreamException {
         writer.writeCharacters(text);
+    }
+
+    protected final void writeCDATA(final String text) throws XMLStreamException {
+        writer.writeCData(text);
     }
 
     protected final void writeComment(final String comment) throws XMLStreamException {
