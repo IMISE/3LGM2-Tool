@@ -49,6 +49,13 @@ public class GraphmlExporter {
         return write(YEdGraphmlWriter.class);
     }
 
+    /**
+     * @return
+     */
+    public final boolean writeYFilesGraphml() {
+        return write(YFilesGraphmlWriter.class);
+    }
+
     private boolean write(final Class<? extends GraphmlWriter> writerClass) {
         int i = 1;
         boolean allOK = true;

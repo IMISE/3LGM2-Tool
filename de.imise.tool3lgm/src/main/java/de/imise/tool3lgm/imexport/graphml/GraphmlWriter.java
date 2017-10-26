@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.imexport.graphml;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +13,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
+import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 
 public abstract class GraphmlWriter extends IntendingXMLWriter {
@@ -42,13 +44,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeKeys() throws XMLStreamException;
 
-    protected void writeKeyYFilesType(final String attFor, final String attId, final String yFilesType) throws XMLStreamException {
-        writeEmptyElement("key", "for", attFor, "id", attId, "yfiles.type", yFilesType);
-    }
-
-    protected void writeKeyGeneralType(final String attFor, final String attId, final String attName, final String attType) throws XMLStreamException {
-        writeEmptyElement("key", "attr.name", attName, "attr.type", attType, "for", attFor, "id", attId);
-    }
+    protected abstract void writeGraphDescription() throws XMLStreamException;
 
     private void writeGraph(final int layer) throws XMLStreamException {
         writeStartElement("graph", "edgedefault", "directed", "id", "G"); // start graph
@@ -66,12 +62,44 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         }
     }
 
-    protected void writeStartElementDataKey(final String key) throws XMLStreamException {
-        writeStartElement("data", "key", key);
+    protected final void writeStartElementDataKey(final String key) throws XMLStreamException {
+        writeCDATAElementDataKey(key, null);
+
     }
 
-    protected void writeEmptyElementDataKey(final String key) throws XMLStreamException {
-        writeEmptyElement("data", "key", key);
+    protected final void writeEmptyElementDataKey(final String key) throws XMLStreamException {
+        writeCDATAElementDataKey(key, "");
+    }
+
+    protected final void writeCDATAElementDataKey(final String key, final String cdata) throws XMLStreamException {
+        writeElement("data", cdata, "key", key);
+    }
+
+    protected void writeCDATAElement(final String element, final String cdata, final String... attributes) throws XMLStreamException {
+        writeElement(element, cdata, attributes);
+    }
+
+    /**
+     * Schreibt das Tag element.
+     * Ist cdata <code>null</code>, dann wird nur ein StartElement, aber kein EndElement geschrieben.
+     * Ist cdata ein leerer String "", dann wird nur ein leeres Element geschrieben (EmptyElement).
+     * Ist cdata ein gültiger String, dann wird nur ein StartElement, dann cdata und zuletzt ein EndElement geschrieben.
+     *
+     * @param element
+     * @param cdata
+     * @param attributes
+     * @throws XMLStreamException
+     */
+    private void writeElement(final String element, final String cdata, final String... attributes) throws XMLStreamException {
+        if (cdata == null) {
+            writeStartElement(element, attributes);
+        } else if (cdata.isEmpty()) {
+            writeEmptyElement(element, attributes);
+        } else {
+            writeStartElement(element, attributes);
+            writeCDATA(cdata);
+            writeEndElement();
+        }
     }
 
     protected abstract void writeNodeContent(NodeContainer nc) throws XMLStreamException;
@@ -90,29 +118,50 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeResources() throws XMLStreamException;
 
-    public static final String getYGraphmlShapeName(final NodeContainer nc) {
+    public static enum YGraphShape {
+        rectangle,
+        triangle,
+        ellipse,
+        roundrectangle,
+        diamond,
+        hexagon;
+
+        public String upperCaseName() {
+            return name().toUpperCase();
+        }
+    }
+
+    public static final YGraphShape getYGraphmlShapeName(final NodeContainer nc) {
         GraphElementLayout.SHAPE form = nc.getForm();
         if (form == null) {
             form = nc.getGraphDocument().getMapping().getStandardForm(nc);
         }
         switch (form) {
         case dreieck:
-            return "triangle";
+            return YGraphShape.triangle;
         case oval:
-            return "ellipse";
+            return YGraphShape.ellipse;
         case rundeck:
-            return "roundrectangle";
+            return YGraphShape.roundrectangle;
         case rhombus:
-            return "diamond";
+            return YGraphShape.diamond;
         case wabe:
-            return "hexagon";
+            return YGraphShape.hexagon;
         case tonne:
-            return "hexagon";
+            return YGraphShape.hexagon;
         case ordner:
-            return "hexagon";
+            return YGraphShape.hexagon;
         default:
-            return "rectangle";
+            return YGraphShape.rectangle;
         }
+    }
+
+    private final StringBuilder colorBuilder = new StringBuilder("#");
+
+    protected String getColorString(final Color color) {
+        colorBuilder.setLength(1);
+        HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color);
+        return colorBuilder.toString();
     }
 
 }

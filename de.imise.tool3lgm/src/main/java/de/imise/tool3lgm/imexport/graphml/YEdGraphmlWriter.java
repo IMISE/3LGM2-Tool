@@ -17,7 +17,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
-import de.imise.util.htmlxml.HTMLConverter;
 
 public class YEdGraphmlWriter extends GraphmlWriter {
 
@@ -43,6 +42,14 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd");
     }
 
+    protected void writeKeyYFilesType(final String attFor, final String attId, final String yFilesType) throws XMLStreamException {
+        writeEmptyElement("key", "for", attFor, "id", attId, "yfiles.type", yFilesType);
+    }
+
+    protected void writeKeyGeneralType(final String attFor, final String attId, final String attName, final String attType) throws XMLStreamException {
+        writeEmptyElement("key", "attr.name", attName, "attr.type", attType, "for", attFor, "id", attId);
+    }
+
     @Override
     protected void writeKeys() throws XMLStreamException {
         for (TypeKeys typeKey : TypeKeys.values()) {
@@ -56,6 +63,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     public enum TypeKeys {
+        graph_Description_string,
         port_portgraphics,
         port_portgeometry,
         port_portuserdata,
@@ -82,11 +90,15 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     @Override
-    protected void writeNodeContent(final NodeContainer nc) throws XMLStreamException {
-        writeNodeGraphics(nc);
+    protected void writeGraphDescription() throws XMLStreamException {
+        String description = szenario.getDescription();
+        writeCDATAElementDataKey(TypeKeys.graph_Description_string.getKeyID(), description);
     }
 
-    protected void writeNodeGraphics(final NodeContainer nc) throws XMLStreamException {
+    @Override
+    protected void writeNodeContent(final NodeContainer nc) throws XMLStreamException {
+        //        <data key="d5"><![CDATA[Hallo]]></data>
+        writeCDATAElementDataKey(TypeKeys.node_description_string.getKeyID(), nc.getElement().getDescription());
         //        <data key="d6">
         //        <y:ShapeNode>
         //          <y:Geometry height="30.0" width="107.0" x="116.5" y="-345.0"/>
@@ -104,26 +116,24 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         //      </data>
         writeStartElementDataKey(TypeKeys.node_nodegraphics.getKeyID()); // start data
         writeStartElement("y:ShapeNode"); // start y:ShapeNode
-        writeGeometry(nc);
+        writeNodeGeometry(nc);
         writeEmptyElement("y:Fill", "color", getColorString(NodeRenderer.getColor(nc)), "transparent", "false");
         writeEmptyElement("y:BorderStyle", "color", "#000000", "raised", "false", "type", "line", "width", "1.0");
         writeNodeLabel(nc);
-        writeEmptyElement("y:Shape", "type", getYGraphmlShapeName(nc));
+        writeEmptyElement("y:Shape", "type", getYGraphmlShapeName(nc).name());
         writeEndElement(); // end y:ShapeNode
         writeEndElement(); // end data
     }
 
-    private final StringBuilder colorBuilder = new StringBuilder("#");
-
-    private void writeGeometry(final NodeContainer nc) throws XMLStreamException {
+    private void writeNodeGeometry(final NodeContainer nc) throws XMLStreamException {
         double width = nc.getWidth();
         double height = nc.getHeight();
-        double x = nc.getX() - width / 2;
-        double y = nc.getY() - height / 2;
-        writeEmptyElement("y:Geometry", "height", height, "width", width, "x", x, "y", y);
+        String x = String.valueOf(nc.getX() - width / 2);
+        String y = String.valueOf(nc.getY() - height / 2);
+        writeEmptyElement("y:Geometry", "height", String.valueOf(height), "width", String.valueOf(width), "x", x, "y", y);
     }
 
-    // oben -> unten, links -> rechts -------> modelPosition, alignment
+    // 3LGM oben -> unten, links -> rechts -------> yEd modelPosition, alignment
     // center, center -------> c, center
     // center, left   -------> c, left
     // center, right  -------> c, right
@@ -146,11 +156,11 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     private String getModelPosition(final NodeContainer nc) {
-        int halign = nc.getValign();
-        if (halign == SwingConstants.TOP) {
+        int valign = nc.getValign();
+        if (valign == SwingConstants.TOP) {
             return "t";
         }
-        if (halign == SwingConstants.BOTTOM) {
+        if (valign == SwingConstants.BOTTOM) {
             return "b";
         }
         return "c";
@@ -241,7 +251,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         } else {
             writeStartElement("y:Path", "sx", "0.0", "sy", "0.0", "tx", "0.0", "ty", "0.0"); // start y:Path
             for (BendpointContainer bc : ec.iterateBendpointContainers()) {
-                writeEmptyElement("y:Point", "x", bc.getX(), "y", bc.getY());
+                writeEmptyElement("y:Point", "x", String.valueOf(bc.getX()), "y", String.valueOf(bc.getY()));
             }
             writeEndElement(); // end y:Path
         }
@@ -272,12 +282,6 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeStartElementDataKey(TypeKeys.graphml_resources.getKeyID());
         writeEmptyElement("y:Resources");
         writeEndElement();
-    }
-
-    private String getColorString(final Color color) {
-        colorBuilder.setLength(1);
-        HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color);
-        return colorBuilder.toString();
     }
 
 }
