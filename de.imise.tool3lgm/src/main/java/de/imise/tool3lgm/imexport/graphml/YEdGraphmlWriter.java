@@ -30,8 +30,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     @Override
-    protected void writeStartElementGraphml() throws XMLStreamException {
-        writeStartElement("graphml");
+    protected void writeXMLSchemaAttributes() throws XMLStreamException {
         writeAttribute("xmlns", "http://graphml.graphdrawing.org/xmlns");
         writeAttribute("xmlns:java", "http://www.yworks.com/xml/yfiles-common/1.0/java");
         writeAttribute("xmlns:sys", "http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0");
@@ -42,11 +41,11 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd");
     }
 
-    protected void writeKeyYFilesType(final String attFor, final String attId, final String yFilesType) throws XMLStreamException {
+    private void writeKeyYFilesType(final String attFor, final String attId, final String yFilesType) throws XMLStreamException {
         writeEmptyElement("key", "for", attFor, "id", attId, "yfiles.type", yFilesType);
     }
 
-    protected void writeKeyGeneralType(final String attFor, final String attId, final String attName, final String attType) throws XMLStreamException {
+    private void writeKeyGeneralType(final String attFor, final String attId, final String attName, final String attType) throws XMLStreamException {
         writeEmptyElement("key", "attr.name", attName, "attr.type", attType, "for", attFor, "id", attId);
     }
 
@@ -62,7 +61,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         }
     }
 
-    public enum TypeKeys {
+    private enum TypeKeys {
         graph_Description_string,
         port_portgraphics,
         port_portgeometry,
@@ -166,15 +165,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         return "c";
     }
 
-    public int getFontSize(final NodeContainer nc) {
-        int fontSize = nc.getFontSize();
-        if (fontSize < 0) {
-            fontSize = standardLayout.getStandardFont(nc).getSize();
-        }
-        return fontSize;
-    }
-
-    public String getFontStyle(final NodeContainer nc) {
+    private String getFontStyle(final NodeContainer nc) {
         int fontStyle = nc.getFont().getStyle();
         if (fontStyle == Font.BOLD) {
             return "bold";
@@ -240,7 +231,6 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeEmptyElement("y:LineStyle", "color", getColorString(getEdgeColor(ec)), "type", getEdgeType(ec), "width", "1.0");
         writeEdgeArrows(ec);
         writeEmptyElement("y:BendStyle", "smoothed", "false");
-
         writeEndElement(); // end y:PolyLineEdge
         writeEndElement(); // end data
     }

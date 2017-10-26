@@ -31,8 +31,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     }
 
     @Override
-    protected void writeStartElementGraphml() throws XMLStreamException {
-        writeStartElement("graphml");
+    protected void writeXMLSchemaAttributes() throws XMLStreamException {
         writeAttribute("xsi:schemaLocation", "http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml.html/2.0/ygraphml.xsd ");
         writeAttribute("xmlns", "http://graphml.graphdrawing.org/xmlns");
         writeAttribute("xmlns:y", "http://www.yworks.com/xml/yfiles-common/3.0");
@@ -41,7 +40,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     }
 
-    public static class KeyAttributes {
+    private static class KeyAttributes {
         public String id;
         public String attFor;
         public String attName;
