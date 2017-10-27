@@ -143,9 +143,9 @@ public final class NodeRenderer {
                 xs[0] = xm;
                 xs[1] = x;
                 xs[2] = xp;
-                ys[0] = ym;
-                ys[1] = yp;
-                ys[2] = ym;
+                ys[0] = ym + height;
+                ys[1] = yp - height;
+                ys[2] = ym + height;
                 npoints = 3;
                 g.setColor(col);
                 g.fillPolygon(xs, ys, npoints);
@@ -421,7 +421,7 @@ public final class NodeRenderer {
 
         case dreieck:
             prozent = 1.00 - 2.0 * (xd / width); // 100% = Zentrum, 0% = am Rand
-            if (Math.abs(y - height / 2.0 - yi) > Math.round(prozent * height)) {
+            if (Math.abs(y + height / 2.0 - yi) > Math.round(prozent * height)) {
                 return false;
             }
             return true;
