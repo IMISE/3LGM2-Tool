@@ -212,9 +212,10 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     private final void writeNodeLabel(final NodeContainer nc) throws XMLStreamException {
+        boolean hideText = nc.hideText();
         writeStartElement("y:NodeLabel"); // start y:NodeLabel
         writeAttribute("alignment", getAlignment(nc)); //################################
-        writeAttribute("autoSizePolicy", "node_width");
+        writeAttribute("autoSizePolicy", hideText ? "node_size" : "node_width");
         writeAttribute("configuration", "CroppingLabel");
         writeAttribute("fontFamily", "Dialog");
         writeAttribute("fontSize", nc.getFont().getSize());
@@ -228,7 +229,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("modelPosition", getModelPosition(nc)); //################################ c, t, b, l, r, tl, tr, bl, br
         writeAttribute("textColor", "#000000");
         writeAttribute("verticalTextPosition", "bottom");
-        writeAttribute("visible", !nc.hideText());
+        writeAttribute("visible", !hideText);
         writeAttribute("width", "0.0");
         writeAttribute("x", "0.0");
         writeAttribute("y", "0.0");
