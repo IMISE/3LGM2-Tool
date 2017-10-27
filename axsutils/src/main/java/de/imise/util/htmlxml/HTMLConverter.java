@@ -130,15 +130,29 @@ public class HTMLConverter {
     /**
      * Hängt den HTML-Farbcode der uebergebenen Farbe in der Form "#rrggbb" an den übergebenen StringBuilder an.
      *
+     * @param sb
      * @param col
      * @return
      */
     public static final void appendHTMLColor(final StringBuilder sb, final Color col) {
+        appendHTMLColor(sb, col, false);
+    }
+
+    /**
+     * Hängt den HTML-Farbcode der uebergebenen Farbe in der Form "#rrggbb" an den übergebenen StringBuilder an.
+     *
+     * @param sb
+     * @param col
+     * @param alpha
+     * @return
+     */
+    public static final void appendHTMLColor(final StringBuilder sb, final Color col, final boolean alpha) {
         int rgb = col.getRGB();
+        //24 = alpha
         //16 = Red
         //8 = Green
         //0 = Blue
-        for (int offset = 16; offset >= 0; offset -= 8) {
+        for (int offset = alpha ? 24 : 16; offset >= 0; offset -= 8) {
             //siehe Color getRed(), getGreen(), getBlue()
             int val = rgb >> offset & 0xFF;
             for (int r = 0; r < 2; r++) {
