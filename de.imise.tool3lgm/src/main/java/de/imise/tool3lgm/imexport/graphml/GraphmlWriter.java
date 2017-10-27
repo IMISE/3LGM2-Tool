@@ -121,15 +121,15 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeResources() throws XMLStreamException;
 
-    protected final Enum<?> getYGraphmlShapeName(final NodeContainer nc) {
+    protected final Enum<?> getYGraphmlShape(final NodeContainer nc) {
         GraphElementLayout.SHAPE shape = nc.getForm();
         if (shape == null) {
             shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
         }
-        return getYGraphmlShapeName(shape);
+        return getYGraphmlShape(shape);
     }
 
-    protected abstract Enum<?> getYGraphmlShapeName(GraphElementLayout.SHAPE shape);
+    protected abstract Enum<?> getYGraphmlShape(GraphElementLayout.SHAPE shape);
 
     private final StringBuilder colorBuilder = new StringBuilder("#");
 

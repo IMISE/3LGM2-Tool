@@ -281,7 +281,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        <data key="d4">
         //            <yjs:ShapeNodeStyle fill="#FF6868FF" shape="ELLIPSE"/>
         //        </data>
-        Enum<?> shape = getYGraphmlShapeName(nc);
+        Enum<?> shape = getYGraphmlShape(nc);
         String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
         writeStartElementDataKey(TypeKeys.node_NodeStyle.getKeyID()); //start data
         writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(NodeRenderer.getColor(nc), true), "shape", shapeName);
@@ -360,7 +360,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     }
 
     @Override
-    protected Enum<?> getYGraphmlShapeName(final GraphElementLayout.SHAPE shape) {
+    protected Enum<?> getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
         switch (shape) {
         case dreieck:
             return YGraphShape.TRIANGLE;

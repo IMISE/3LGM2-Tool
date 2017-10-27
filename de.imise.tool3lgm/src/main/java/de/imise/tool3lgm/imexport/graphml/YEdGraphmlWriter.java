@@ -100,6 +100,20 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         //        <data key="d5"><![CDATA[Hallo]]></data>
         writeCDATAElementDataKey(TypeKeys.node_description_string.getKeyID(), nc.getElement().getDescription());
         //        <data key="d6">
+        //...
+        //      </data>
+        writeStartElementDataKey(TypeKeys.node_nodegraphics.getKeyID()); // start data
+        YGraphShape shape = (YGraphShape) getYGraphmlShape(nc);
+        String shapeName = shape.toString();
+        if (shape.isGenericNode()) {
+            writeGenericNode(nc, shapeName);
+        } else {
+            writeShapeNode(nc, shapeName);
+        }
+        writeEndElement(); // end data
+    }
+
+    private void writeShapeNode(final NodeContainer nc, final String shapeName) throws XMLStreamException {
         //        <y:ShapeNode>
         //          <y:Geometry height="30.0" width="107.0" x="116.5" y="-345.0"/>
         //          <y:Fill color="#CCCCFF" transparent="false"/>
@@ -113,16 +127,35 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         //          </y:NodeLabel>
         //          <y:Shape type="ellipse"/>
         //        </y:ShapeNode>
-        //      </data>
-        writeStartElementDataKey(TypeKeys.node_nodegraphics.getKeyID()); // start data
         writeStartElement("y:ShapeNode"); // start y:ShapeNode
         writeNodeGeometry(nc);
         writeEmptyElement("y:Fill", "color", getColorString(NodeRenderer.getColor(nc), false), "transparent", "false");
         writeEmptyElement("y:BorderStyle", "color", "#000000", "raised", "false", "type", "line", "width", "1.0");
         writeNodeLabel(nc);
-        writeEmptyElement("y:Shape", "type", getYGraphmlShapeName(nc).name());
+        writeEmptyElement("y:Shape", "type", shapeName);
         writeEndElement(); // end y:ShapeNode
-        writeEndElement(); // end data
+    }
+
+    private void writeGenericNode(final NodeContainer nc, final String shapeName) throws XMLStreamException {
+        //        <y:GenericNode configuration="com.yworks.flowchart.dataBase">
+        //            <y:Geometry height="40.0" width="60.0" x="120.0" y="-363.0"/>
+        //            <y:Fill color="#FFFF00" color2="#FFFF00" transparent="false"/>
+        //            <y:BorderStyle color="#000000" type="line" width="1.0"/>
+        //            <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.142578125" x="-29.5712890625" y="10.93359375">Datenbaknsystem 1<y:LabelModel>
+        //                <y:SmartNodeLabelModel distance="4.0"/>
+        //                </y:LabelModel>
+        //                <y:ModelParameter>
+        //                    <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+        //                </y:ModelParameter>
+        //             </y:NodeLabel>
+        //         </y:GenericNode>
+        writeStartElement("y:GenericNode", "configuration", shapeName); // start y:GenericNode
+        writeNodeGeometry(nc);
+        String colorString = getColorString(NodeRenderer.getColor(nc), false);
+        writeEmptyElement("y:Fill", "color", colorString, "color2", colorString, "transparent", "false");
+        writeEmptyElement("y:BorderStyle", "color", "#000000", "type", "line", "width", "1.0");
+        writeNodeLabel(nc);
+        writeEndElement(); // end y:GenericNode
     }
 
     private void writeNodeGeometry(final NodeContainer nc) throws XMLStreamException {
@@ -281,11 +314,22 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         ellipse,
         roundrectangle,
         diamond,
-        hexagon;
+        hexagon,
+        com_yworks_flowchart_dataBase,
+        com_yworks_flowchart_predefinedProcess;
+
+        @Override
+        public String toString() {
+            return isGenericNode() ? name().replaceAll("_", ".") : name();
+        }
+
+        public boolean isGenericNode() {
+            return ordinal() >= com_yworks_flowchart_dataBase.ordinal();
+        }
     }
 
     @Override
-    protected Enum<?> getYGraphmlShapeName(final GraphElementLayout.SHAPE shape) {
+    protected YGraphShape getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
         switch (shape) {
         case dreieck:
             return YGraphShape.triangle;
@@ -298,9 +342,9 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         case wabe:
             return YGraphShape.hexagon;
         case tonne:
-            return YGraphShape.hexagon;
+            return YGraphShape.com_yworks_flowchart_dataBase;
         case ordner:
-            return YGraphShape.hexagon;
+            return YGraphShape.com_yworks_flowchart_predefinedProcess;
         default:
             return YGraphShape.rectangle;
         }
