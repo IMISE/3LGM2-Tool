@@ -26,6 +26,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.metamodel.Textfeld;
@@ -50,17 +51,17 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     /**
      * Node für die Fachliche Ebene
      */
-    private final LGMTreeNode fachebene = new LGMTreeNode(getResString("domain_layer"), false, true);
+    private final LGMTreeNode fachebene = new LGMTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER), false, true);
 
     /**
      * Node für die Logische Werkzeugebene
      */
-    private final LGMTreeNode logebene = new LGMTreeNode(getResString("logical_tool_layer"), false, true);
+    private final LGMTreeNode logebene = new LGMTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.LOGICAL_LAYER), false, true);
 
     /**
      * Node für die physische Werkzeugebene
      */
-    private final LGMTreeNode phyebene = new LGMTreeNode(getResString("physical_tool_layer"), false, true);
+    private final LGMTreeNode phyebene = new LGMTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER), false, true);
 
     /**
      * COMMENTME
