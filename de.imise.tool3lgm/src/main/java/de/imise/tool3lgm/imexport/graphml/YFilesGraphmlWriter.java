@@ -355,7 +355,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         ELLIPSE,
         RECTANGLE,
         TRIANGLE,
-        ROUND_RECT,
+        RoundRectangle,
         HEXAGON;
     }
 
@@ -367,7 +367,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         case oval:
             return YGraphShape.ELLIPSE;
         case rundeck:
-            return YGraphShape.ROUND_RECT;
+            return YGraphShape.RoundRectangle; // aus irgendeinem dummen Grund will yFiles4HTML überall die deprecated Großschreibweise haben, ausser beim ROUND_RECT
         case rhombus:
             return YGraphShape.DIAMOND;
         case wabe:
