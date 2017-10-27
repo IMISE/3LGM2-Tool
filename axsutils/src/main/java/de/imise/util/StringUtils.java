@@ -31,6 +31,22 @@ public class StringUtils {
     }
 
     /**
+     * Gibt einen String zurück, der von jedem Wort in dem übergebenen String jeweils den ersten Buchstaben enthält
+     *
+     * @param str
+     *            String, von dessen Wörtern die Anfangsbuchstaben separiert werden sollen
+     */
+    public static String getFirstChars(final String str) {
+        StringTokenizer st = new StringTokenizer(str);
+        StringBuilder sb = new StringBuilder(st.countTokens());
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            sb.append(token.charAt(0));
+        }
+        return sb.toString();
+    }
+
+    /**
      * Führt {@link String#trim()} für jeden Eintrag in <code>source</code> aus und gibt das resultierende <code>Array</code> zurück;
      *
      * @param source
