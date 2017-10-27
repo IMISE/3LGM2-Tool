@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.util.StringUtils;
+import de.imise.util.io.FileHandler;
 
 public class GraphmlExporter {
 
@@ -57,34 +57,33 @@ public class GraphmlExporter {
     }
 
     private boolean write(final Class<? extends GraphmlWriter> writerClass) {
-        int i = 1;
         boolean allOK = true;
         for (Szenario szenario : szenarios) {
-            File targetFile = getValidFile(szenario, i++, dir);
-            GraphmlWriter writer = null;
-            try {
-                if (writerClass == YFilesGraphmlWriter.class) {
-                    writer = new YFilesGraphmlWriter(targetFile, szenario);
-                } else if (writerClass == YEdGraphmlWriter.class) {
-                    writer = new YEdGraphmlWriter(targetFile, szenario);
+            for (int layer : ModelConstants.VISIBLE_LAYERS) {
+                try {
+                    if (writerClass == YFilesGraphmlWriter.class) {
+                        File targetFile = getValidFile(szenario, layer, dir, "_yHTML");
+                        new YFilesGraphmlWriter(targetFile, szenario).write(layer);
+                    } else if (writerClass == YEdGraphmlWriter.class) {
+                        File targetFile = getValidFile(szenario, layer, dir, "_yEd");
+                        new YEdGraphmlWriter(targetFile, szenario).write(layer);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    allOK = false;
+                    continue;
                 }
-                writer.write(ModelConstants.DOMAIN_LAYER);
-            } catch (Exception e) {
-                e.printStackTrace();
-                allOK = false;
-                continue;
             }
         }
         return allOK;
     }
 
-    private static File getValidFile(final Szenario szenario, final int index, final File dir) {
-        String name = szenario.getTitle();
-        if (!StringUtils.isNullOrEmptyOrBlank(name)) {
-            name = Tool3lgmConstants.getResString("submodel") + "_" + index;
-        }
-        name += ".graphml";
-        return new File(dir, name);
+    private static File getValidFile(final Szenario szenario, final int layer, final File dir, final String fileNameEnd) {
+        String fileName = ModelConstants.getVisibleLayerName(layer);
+        fileName = StringUtils.getFirstChars(fileName);
+        fileName = szenario.getCollection().getName() + "_" + szenario.getTitle() + "_" + fileName + fileNameEnd + ".graphml";
+        fileName = FileHandler.removeInvalidFileNameCharacters(fileName);
+        return new File(dir, fileName);
     }
 
 }

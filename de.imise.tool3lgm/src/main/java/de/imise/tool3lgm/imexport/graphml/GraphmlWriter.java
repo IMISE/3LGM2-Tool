@@ -121,45 +121,21 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeResources() throws XMLStreamException;
 
-    public static enum YGraphShape {
-        rectangle,
-        triangle,
-        ellipse,
-        roundrectangle,
-        diamond,
-        hexagon;
+    protected final Enum<?> getYGraphmlShapeName(final NodeContainer nc) {
+        GraphElementLayout.SHAPE shape = nc.getForm();
+        if (shape == null) {
+            shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
+        }
+        return getYGraphmlShapeName(shape);
     }
 
-    public static final YGraphShape getYGraphmlShapeName(final NodeContainer nc) {
-        GraphElementLayout.SHAPE form = nc.getForm();
-        if (form == null) {
-            form = nc.getGraphDocument().getMapping().getStandardForm(nc);
-        }
-        switch (form) {
-        case dreieck:
-            return YGraphShape.triangle;
-        case oval:
-            return YGraphShape.ellipse;
-        case rundeck:
-            return YGraphShape.roundrectangle;
-        case rhombus:
-            return YGraphShape.diamond;
-        case wabe:
-            return YGraphShape.hexagon;
-        case tonne:
-            return YGraphShape.hexagon;
-        case ordner:
-            return YGraphShape.hexagon;
-        default:
-            return YGraphShape.rectangle;
-        }
-    }
+    protected abstract Enum<?> getYGraphmlShapeName(GraphElementLayout.SHAPE shape);
 
     private final StringBuilder colorBuilder = new StringBuilder("#");
 
-    protected String getColorString(final Color color) {
+    protected String getColorString(final Color color, final boolean alpha) {
         colorBuilder.setLength(1);
-        HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color);
+        HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color, alpha);
         return colorBuilder.toString();
     }
 

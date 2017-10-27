@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
@@ -280,10 +281,10 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        <data key="d4">
         //            <yjs:ShapeNodeStyle fill="#FF6868FF" shape="ELLIPSE"/>
         //        </data>
-        YGraphShape shape = getYGraphmlShapeName(nc);
-        String shapeName = shape == YGraphShape.rectangle ? null : shape.name();
+        Enum<?> shape = getYGraphmlShapeName(nc);
+        String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
         writeStartElementDataKey(TypeKeys.node_NodeStyle.getKeyID()); //start data
-        writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(NodeRenderer.getColor(nc)), "shape", shapeName);
+        writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(NodeRenderer.getColor(nc), true), "shape", shapeName);
         writeEndElement(); // end data
     }
 
@@ -347,6 +348,37 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected void writeResources() throws XMLStreamException {
+    }
+
+    private static enum YGraphShape { // in dieser Schreibweise braucht das yEd-Format die shapes. Diese hier gehen in yFiles zwar auch, aber dann wird die Zeichenfarbe (fill-Attribut) ignoriert
+        DIAMOND,
+        ELLIPSE,
+        RECTANGLE,
+        TRIANGLE,
+        ROUND_RECT,
+        HEXAGON;
+    }
+
+    @Override
+    protected Enum<?> getYGraphmlShapeName(final GraphElementLayout.SHAPE shape) {
+        switch (shape) {
+        case dreieck:
+            return YGraphShape.TRIANGLE;
+        case oval:
+            return YGraphShape.ELLIPSE;
+        case rundeck:
+            return YGraphShape.ROUND_RECT;
+        case rhombus:
+            return YGraphShape.DIAMOND;
+        case wabe:
+            return YGraphShape.HEXAGON;
+        case tonne:
+            return YGraphShape.HEXAGON;
+        case ordner:
+            return YGraphShape.HEXAGON;
+        default:
+            return YGraphShape.RECTANGLE;
+        }
     }
 
 }

@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 
 public class YEdGraphmlWriter extends GraphmlWriter {
@@ -116,7 +117,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeStartElementDataKey(TypeKeys.node_nodegraphics.getKeyID()); // start data
         writeStartElement("y:ShapeNode"); // start y:ShapeNode
         writeNodeGeometry(nc);
-        writeEmptyElement("y:Fill", "color", getColorString(NodeRenderer.getColor(nc)), "transparent", "false");
+        writeEmptyElement("y:Fill", "color", getColorString(NodeRenderer.getColor(nc), false), "transparent", "false");
         writeEmptyElement("y:BorderStyle", "color", "#000000", "raised", "false", "type", "line", "width", "1.0");
         writeNodeLabel(nc);
         writeEmptyElement("y:Shape", "type", getYGraphmlShapeName(nc).name());
@@ -228,7 +229,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeStartElementDataKey(TypeKeys.edge_edgegraphics.getKeyID()); // start data
         writeStartElement("y:PolyLineEdge"); // start y:PolyLineEdge
         writeEdgePath(ec);
-        writeEmptyElement("y:LineStyle", "color", getColorString(getEdgeColor(ec)), "type", getEdgeType(ec), "width", "1.0");
+        writeEmptyElement("y:LineStyle", "color", getColorString(getEdgeColor(ec), false), "type", getEdgeType(ec), "width", "1.0");
         writeEdgeArrows(ec);
         writeEmptyElement("y:BendStyle", "smoothed", "false");
         writeEndElement(); // end y:PolyLineEdge
@@ -272,6 +273,37 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeStartElementDataKey(TypeKeys.graphml_resources.getKeyID());
         writeEmptyElement("y:Resources");
         writeEndElement();
+    }
+
+    private static enum YGraphShape { // in dieser Schreibweise braucht das yEd-Format die shapes. Diese hier gehen in yFiles zwar auch, aber dann wird die Zeichenfarbe (fill-Attribut) ignoriert
+        rectangle,
+        triangle,
+        ellipse,
+        roundrectangle,
+        diamond,
+        hexagon;
+    }
+
+    @Override
+    protected Enum<?> getYGraphmlShapeName(final GraphElementLayout.SHAPE shape) {
+        switch (shape) {
+        case dreieck:
+            return YGraphShape.triangle;
+        case oval:
+            return YGraphShape.ellipse;
+        case rundeck:
+            return YGraphShape.roundrectangle;
+        case rhombus:
+            return YGraphShape.diamond;
+        case wabe:
+            return YGraphShape.hexagon;
+        case tonne:
+            return YGraphShape.hexagon;
+        case ordner:
+            return YGraphShape.hexagon;
+        default:
+            return YGraphShape.rectangle;
+        }
     }
 
 }
