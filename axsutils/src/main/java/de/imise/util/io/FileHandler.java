@@ -388,4 +388,16 @@ public class FileHandler {
         }
         return fileName.substring(withDot ? dotIndex : dotIndex + 1);
     }
+
+    /**
+     * Ersetzt alle für einen Dateinamen ungültigen Zeichen in dem übergebenen String durch Unterstriche "_".
+     *
+     * @param fileName Name einer Datei. Dies darf kein Pfad sein, da Pfadtrenner hier auch raus fliegen.
+     * @return
+     */
+    public static String removeInvalidFileNameCharacters(final String fileName) {
+        String newFileName = fileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        return newFileName;
+    }
+
 }
