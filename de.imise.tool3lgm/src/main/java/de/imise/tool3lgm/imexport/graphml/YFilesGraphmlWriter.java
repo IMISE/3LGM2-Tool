@@ -281,7 +281,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //            <yjs:ShapeNodeStyle fill="#FF6868FF" shape="ELLIPSE"/>
         //        </data>
         YGraphShape shape = getYGraphmlShapeName(nc);
-        String shapeName = shape == YGraphShape.rectangle ? null : shape.upperCaseName();
+        String shapeName = shape == YGraphShape.rectangle ? null : shape.name();
         writeStartElementDataKey(TypeKeys.node_NodeStyle.getKeyID()); //start data
         writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(NodeRenderer.getColor(nc)), "shape", shapeName);
         writeEndElement(); // end data
@@ -293,7 +293,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         for (int i = 0; i < me.getEdgesCount(); i++) {
             Edge edge = me.getEdge(i);
             ElementContainer ec = edge.getContainer(szenario);
-            if (ec != null /* && ec.isVisible() */) {
+            if (ec != null /* && ec.isVisible() */) { // das visible darf nicht abgefragt werden!
                 writeEmptyElement("port", "name", "p" + i);
             }
         }

@@ -128,10 +128,6 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         roundrectangle,
         diamond,
         hexagon;
-
-        public String upperCaseName() {
-            return name().toUpperCase();
-        }
     }
 
     public static final YGraphShape getYGraphmlShapeName(final NodeContainer nc) {
