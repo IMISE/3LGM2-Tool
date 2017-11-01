@@ -30,7 +30,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         standardLayout = szenario.getMapping();
     }
 
-    public void write(final int layer) throws XMLStreamException {
+    public void write(final int layer) throws XMLStreamException, IOException {
         writeStartDocument("UTF-8", "1.0");
         writeComment(getCreatedByComment());
         writeStartElement("graphml"); //start graphml
@@ -119,7 +119,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeEdgeContent(EdgeContainer ec) throws XMLStreamException;
 
-    protected abstract void writeResources() throws XMLStreamException;
+    protected abstract void writeResources() throws XMLStreamException, IOException;
 
     protected final Enum<?> getYGraphmlShape(final NodeContainer nc) {
         GraphElementLayout.SHAPE shape = nc.getForm();

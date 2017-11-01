@@ -2,22 +2,29 @@ package de.imise.tool3lgm.imexport.graphml;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
+import de.imise.util.image.ImageTools;
 
 public class YEdGraphmlWriter extends GraphmlWriter {
 
@@ -105,57 +112,38 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeStartElementDataKey(TypeKeys.node_nodegraphics.getKeyID()); // start data
         YGraphShape shape = (YGraphShape) getYGraphmlShape(nc);
         String shapeName = shape.toString();
-        if (shape.isGenericNode()) {
-            writeGenericNode(nc, shapeName);
-        } else {
-            writeShapeNode(nc, shapeName);
-        }
+        writeNode(nc, shapeName, shape.isGenericNode());
         writeEndElement(); // end data
     }
 
-    private void writeShapeNode(final NodeContainer nc, final String shapeName) throws XMLStreamException {
+    private void writeNode(final NodeContainer nc, final String shapeName, final boolean genericNode) throws XMLStreamException {
         //        <y:ShapeNode>
         //          <y:Geometry height="30.0" width="107.0" x="116.5" y="-345.0"/>
         //          <y:Fill color="#CCCCFF" transparent="false"/>
         //          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-        //          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="72.408203125" x="17.2958984375" y="5.93359375">Objekttyp 1<y:LabelModel>
-        //              <y:SmartNodeLabelModel distance="4.0"/>
-        //            </y:LabelModel>
-        //            <y:ModelParameter>
-        //              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
-        //            </y:ModelParameter>
-        //          </y:NodeLabel>
+        //          <y:NodeLabel alignment="right" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="62.1328125" horizontalTextPosition="center" iconData="1" iconTextGap="4" modelName="internal" modelPosition="c" textColor="#000000" verticalTextPosition="bottom" visible="true" width="187.9140625" x="2.04296875" y="-3.06640625">Physischer DV-Baustein 1 Label</y:NodeLabel>
         //          <y:Shape type="ellipse"/>
         //        </y:ShapeNode>
-        writeStartElement("y:ShapeNode"); // start y:ShapeNode
-        writeNodeGeometry(nc);
-        writeEmptyElement("y:Fill", "color", getColorString(NodeRenderer.getColor(nc), false), "transparent", "false");
-        writeEmptyElement("y:BorderStyle", "color", "#000000", "raised", "false", "type", "line", "width", "1.0");
-        writeNodeLabel(nc);
-        writeEmptyElement("y:Shape", "type", shapeName);
-        writeEndElement(); // end y:ShapeNode
-    }
-
-    private void writeGenericNode(final NodeContainer nc, final String shapeName) throws XMLStreamException {
+        //oder
         //        <y:GenericNode configuration="com.yworks.flowchart.dataBase">
         //            <y:Geometry height="40.0" width="60.0" x="120.0" y="-363.0"/>
         //            <y:Fill color="#FFFF00" color2="#FFFF00" transparent="false"/>
         //            <y:BorderStyle color="#000000" type="line" width="1.0"/>
-        //            <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="119.142578125" x="-29.5712890625" y="10.93359375">Datenbaknsystem 1<y:LabelModel>
-        //                <y:SmartNodeLabelModel distance="4.0"/>
-        //                </y:LabelModel>
-        //                <y:ModelParameter>
-        //                    <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
-        //                </y:ModelParameter>
-        //             </y:NodeLabel>
+        //          <y:NodeLabel alignment="right" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="62.1328125" horizontalTextPosition="center" iconData="1" iconTextGap="4" modelName="internal" modelPosition="c" textColor="#000000" verticalTextPosition="bottom" visible="true" width="187.9140625" x="2.04296875" y="-3.06640625">Physischer DV-Baustein 1 Label</y:NodeLabel>
         //         </y:GenericNode>
-        writeStartElement("y:GenericNode", "configuration", shapeName); // start y:GenericNode
+        if (genericNode) {
+            writeStartElement("y:GenericNode", "configuration", shapeName); // start y:GenericNode
+        } else {
+            writeStartElement("y:ShapeNode"); // start y:ShapeNode
+        }
         writeNodeGeometry(nc);
-        String colorString = getColorString(NodeRenderer.getColor(nc), false);
-        writeEmptyElement("y:Fill", "color", colorString, "color2", colorString, "transparent", "false");
-        writeEmptyElement("y:BorderStyle", "color", "#000000", "type", "line", "width", "1.0");
+        writeNodeColor(nc, genericNode);
+        writeNodeBorderStyle(nc, genericNode);
         writeNodeLabel(nc);
-        writeEndElement(); // end y:GenericNode
+        if (!genericNode) {
+            writeEmptyElement("y:Shape", "type", shapeName);
+        }
+        writeEndElement(); // end y:GenericNode oder end ShapeNode
     }
 
     private void writeNodeGeometry(final NodeContainer nc) throws XMLStreamException {
@@ -164,6 +152,36 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         String x = String.valueOf(nc.getX() - width / 2);
         String y = String.valueOf(nc.getY() - height / 2);
         writeEmptyElement("y:Geometry", "height", String.valueOf(height), "width", String.valueOf(width), "x", x, "y", y);
+    }
+
+    private void writeNodeColor(final NodeContainer nc, final boolean genericNode) throws XMLStreamException {
+        //          <y:Fill hasColor="false" transparent="false"/>
+        //oder
+        //          <y:Fill color="#FFFF00" transparent="false"/>
+        //oder
+        //          <y:Fill color="#FFFF00" color2="#FFFF00" transparent="false"/>
+        if (nc.getIcon() == null) {
+            String colorString = getColorString(NodeRenderer.getColor(nc), false);
+            writeEmptyElement("y:Fill", "color", colorString, "color2", genericNode ? colorString : null);
+        } else {
+            writeEmptyElement("y:Fill", "hasColor", "false");
+        }
+        writeAttribute("transparent", "false");
+    }
+
+    private void writeNodeBorderStyle(final NodeContainer nc, final boolean genericNode) throws XMLStreamException {
+        //          <y:BorderStyle hasColor="false" raised="false" type="line" width="1.0"/>
+        //oder
+        //          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+        //oder
+        //          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+        writeEmptyElement("y:BorderStyle");
+        if (nc.getIcon() != null) {
+            writeAttribute("hasColor", "false");
+        } else {
+            writeAttribute("color", "#000000");
+        }
+        writeAttributes("raised", genericNode ? null : "false", "type", "line", "width", "1.0");
     }
 
     // 3LGM oben -> unten, links -> rechts -------> yEd modelPosition, alignment
@@ -212,11 +230,13 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     private final void writeNodeLabel(final NodeContainer nc) throws XMLStreamException {
+        //          <y:NodeLabel alignment="right" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="62.1328125" horizontalTextPosition="center" iconData="1" iconTextGap="4" modelName="internal" modelPosition="c" textColor="#000000" verticalTextPosition="bottom" visible="true" width="187.9140625" x="2.04296875" y="-3.06640625">Physischer DV-Baustein 1 Label</y:NodeLabel>
         boolean hideText = nc.hideText();
+        boolean hasIcon = nc.getIcon() != null;
         writeStartElement("y:NodeLabel"); // start y:NodeLabel
         writeAttribute("alignment", getAlignment(nc)); //################################
-        writeAttribute("autoSizePolicy", hideText ? "node_size" : "node_width");
-        writeAttribute("configuration", "CroppingLabel");
+        writeAttribute("autoSizePolicy", hideText ? "node_size" : hasIcon ? "content" : "node_width");
+        writeAttribute("configuration", hasIcon ? null : "CroppingLabel");
         writeAttribute("fontFamily", "Dialog");
         writeAttribute("fontSize", nc.getFont().getSize());
         writeAttribute("fontStyle", getFontStyle(nc));
@@ -224,6 +244,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("hasLineColor", "false");
         writeAttribute("height", "0.0");
         writeAttribute("horizontalTextPosition", "center");
+        writeAttribute("iconData", getIconResourceID(nc)); // wenn hier null zurück kommt, wird das Attribut nicht geschrieben!
         writeAttribute("iconTextGap", "4");
         writeAttribute("modelName", "internal");
         writeAttribute("modelPosition", getModelPosition(nc)); //################################ c, t, b, l, r, tl, tr, bl, br
@@ -235,6 +256,21 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         writeAttribute("y", "0.0");
         writeCharacters(getElementName(nc));
         writeEndElement(); // end y:NodeLabel
+    }
+
+    private final List<String> usedIconResources = new ArrayList<>();
+
+    private String getIconResourceID(final NodeContainer nc) {
+        String iconId = nc.getIconString();
+        int resourceID = 0;
+        if (iconId != null) {
+            resourceID = usedIconResources.indexOf(iconId) + 1;
+            if (resourceID < 1) {
+                usedIconResources.add(iconId);
+                resourceID = usedIconResources.size();
+            }
+        }
+        return resourceID < 1 ? null : String.valueOf(resourceID);
     }
 
     @Override
@@ -303,10 +339,96 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     @Override
-    protected void writeResources() throws XMLStreamException {
+    protected void writeResources() throws XMLStreamException, IOException {
+        //      <data key="d7">
+        //        <y:Resources>
+        //          <y:Resource id="1">
+        //            <yed:ScaledIcon xScale="1.0" yScale="1.0">
+        //              <yed:ImageIcon image="3"/>
+        //            </yed:ScaledIcon>
+        //          </y:Resource>
+        //          <y:Resource id="2">
+        //            <yed:ScaledIcon xScale="1.0" yScale="1.0">
+        //              <yed:ImageIcon image="4"/>
+        //            </yed:ScaledIcon>
+        //          </y:Resource>
+        //          <y:Resource id="3" type="java.awt.image.BufferedImage">iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAABK0lEQVR42u2YwQ2DMAwAPQsrdIWs&#13;
+        //    wAqswCz58egWXSErdIf++0gxrZFJU5qIGIyUSCdBBPRksJ0U/GcAgBr4AJJzzqmBi1ZBEcG2bb0x&#13;
+        //    Zlf6vk8XxBu6znlrvTj4O4h/PvIE8ebxcCI2aJ6uSYGk+PEmwZhUCYpF8FSCpeRCySKCUnJqBYtF&#13;
+        //    UEKsaATVC9ZXrFWwRrC+4lRBvvrYKhNGjstlC+LicRiuMziHD5Ama8kPN5iRWtpbf5nJ3pOoF7yP&#13;
+        //    c8Thmyb1G3cuaMf0QjBROLjT+8W/HVvTNMl8CeIDNEWPM7mpF9T2r0IkWd6C9O1pICrIu0bJUpHD&#13;
+        //    agQ1jXMKhq0tVu/w++DnuybJka1tVZDqYE61l2ZRB6nN8TQP29yerY4LLlYz6gU1guMFR3t+FHQK&#13;
+        //    YwgAAAAASUVORK5CYII=</y:Resource>
+        //          <y:Resource id="4" type="java.awt.image.BufferedImage">iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAiklEQVR42u2WAQrAIAhF/+G69a7g&#13;
+        //    FTrLVhvBGBQmNldT+ARR+gwlsRsbHMABPgsAQFVdAPkCEamqBjEHQAhBJBWA7OhpaZul66wiADfw&#13;
+        //    EIDe4GsBSII7gAOsA0DFk8DW+Yz+B2A+Ed1NOgsUiWZC7exbr9CsAWw4ZVaEMa2RWZC1rOdtQ9Ma&#13;
+        //    eLMND3AwIsiX8uOAAAAAAElFTkSuQmCC</y:Resource>
+        //        </y:Resources>
+        //      </data>
         writeStartElementDataKey(TypeKeys.graphml_resources.getKeyID());
-        writeEmptyElement("y:Resources");
+        if (usedIconResources.isEmpty()) {
+            writeEmptyElement("y:Resources");
+        } else {
+            writeStartElement("y:Resources"); // start y:Resources
+            int imageCount = usedIconResources.size();
+            for (int i = 1; i <= imageCount; i++) {
+                writeImageScale(i, i + imageCount);
+            }
+            for (int i = 0; i < imageCount; i++) {
+                writeImageData(i, i + 1 + imageCount);
+            }
+            writeEndElement(); // end y:Resources
+        }
         writeEndElement();
+    }
+
+    private void writeImageScale(final int scaleID, final int dataID) throws XMLStreamException {
+        //          <y:Resource id="1">
+        //            <yed:ScaledIcon xScale="1.0" yScale="1.0">
+        //              <yed:ImageIcon image="3"/>
+        //            </yed:ScaledIcon>
+        //          </y:Resource>
+        writeStartElement("y:Resource", "id", String.valueOf(scaleID)); // start y:Resource
+        writeStartElement("yed:ScaledIcon", "xScale", "1.0", "yScale", "1.0"); // start yed:ScaledIcon
+        writeEmptyElement("yed:ImageIcon", "image", String.valueOf(dataID));
+        writeEndElement(); // end yed:ScaledIcon
+        writeEndElement(); // end y:Resource
+    }
+
+    private void writeImageData(final int usedIconResourceIndex, final int dataID) throws XMLStreamException, IOException {
+        //          <y:Resource id="4" type="java.awt.image.BufferedImage">iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAiklEQVR42u2WAQrAIAhF/+G69a7g&#13;
+        //    FTrLVhvBGBQmNldT+ARR+gwlsRsbHMABPgsAQFVdAPkCEamqBjEHQAhBJBWA7OhpaZul66wiADfw&#13;
+        //    EIDe4GsBSII7gAOsA0DFk8DW+Yz+B2A+Ed1NOgsUiWZC7exbr9CsAWw4ZVaEMa2RWZC1rOdtQ9Ma&#13;
+        //    eLMND3AwIsiX8uOAAAAAAElFTkSuQmCC</y:Resource>
+        writeStartElement("y:Resource", "id", String.valueOf(dataID), "type", "java.awt.image.BufferedImage"); // start y:Resource
+        writeImageDataLines(ImageTools.getBase64EncodedImage(getResourceIconAsImage(usedIconResourceIndex)));
+        writeEndElement(); // end y:Resource
+    }
+
+    private BufferedImage getResourceIconAsImage(final int usedIconResourceIndex) {
+        String iconHashID = usedIconResources.get(usedIconResourceIndex);
+        GDCollection gdcoll = szenario.getCollection();
+        Map<String, byte[]> iconTable = gdcoll.getIconTable();
+        byte[] iconData = iconTable.get(iconHashID);
+        ImageIcon icon = new ImageIcon(iconData);
+        return ImageTools.toBufferedImage(icon);
+    }
+
+    public static final int LINE_LENGTH = 76;
+
+    public static final String LINE_END = "&#13;\n";
+
+    private void writeImageDataLines(final String encodedImage) throws XMLStreamException, IOException {
+        for (int i = 0; i * LINE_LENGTH < encodedImage.length(); i++) {
+            int start = i * LINE_LENGTH;
+            int fullLength = encodedImage.length();
+            int end = start + LINE_LENGTH;
+            String line = encodedImage.substring(start, end < fullLength ? end : fullLength);
+            writeCharacters(line);
+            if (line.length() == LINE_LENGTH && (i + 1) * LINE_LENGTH < encodedImage.length()) {
+                writeCharactersUnescaped(LINE_END);
+            }
+        }
     }
 
     private static enum YGraphShape { // in dieser Schreibweise braucht das yEd-Format die shapes. Diese hier gehen in yFiles zwar auch, aber dann wird die Zeichenfarbe (fill-Attribut) ignoriert
