@@ -80,9 +80,7 @@ public class IntendingXMLWriter {
     protected void writeAttributes(final String... attributes) throws XMLStreamException {
         for (int i = 0; i < attributes.length; i += 2) {
             //übergebene Attribute, bei denen der Value leer ist, werden nicht geschrieben
-            if (attributes[i + 1] != null && !attributes[i + 1].toString().isEmpty()) {
-                writeAttribute(attributes[i], attributes[i + 1]);
-            }
+            writeAttribute(attributes[i], attributes[i + 1]);
         }
     }
 
@@ -114,7 +112,9 @@ public class IntendingXMLWriter {
     }
 
     protected final void writeAttribute(final Object attribute, final Object text) throws XMLStreamException {
-        writer.writeAttribute(attribute.toString(), text.toString());
+        if (text != null) {
+            writer.writeAttribute(attribute.toString(), text.toString());
+        }
     }
 
     protected final void writeAttribute(final String attribute, final int intValue) throws XMLStreamException {
