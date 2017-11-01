@@ -1,17 +1,22 @@
 package de.imise.util.image;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 
 import de.imise.util.robot.ScreenRobot;
 
@@ -708,6 +713,37 @@ public class ImageTools {
         } while (w != targetWidth || h != targetHeight);
 
         return ret;
+    }
+
+    public static BufferedImage toBufferedImage(final Icon icon) {
+        BufferedImage bi = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics g = bi.createGraphics();
+        // paint the Icon to the BufferedImage.
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+        return bi;
+    }
+
+    public static BufferedImage toBufferedImage(final Image img) {
+        BufferedImage bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        Graphics g = bi.getGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        return bi;
+    }
+
+    public static String getBase64EncodedImage(final BufferedImage image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        String encodedImage = "";
+        try {
+            ImageIO.write(image, "png", baos);
+            baos.flush();
+            encodedImage = java.util.Base64.getEncoder().encodeToString(baos.toByteArray());
+            baos.close(); // should be inside a finally block
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encodedImage;
     }
 
 }
