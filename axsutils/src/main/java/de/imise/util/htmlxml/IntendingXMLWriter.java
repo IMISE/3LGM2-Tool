@@ -125,6 +125,10 @@ public class IntendingXMLWriter {
         writer.writeCharacters(text);
     }
 
+    protected final void writeCharactersUnescaped(final String text) throws IOException {
+        outStream.write(text.getBytes());
+    }
+
     protected final void writeCDATA(final String text) throws XMLStreamException {
         writer.writeCData(text);
     }
