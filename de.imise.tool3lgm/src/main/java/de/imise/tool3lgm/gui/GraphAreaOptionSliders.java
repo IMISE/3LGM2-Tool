@@ -29,6 +29,7 @@ public class GraphAreaOptionSliders implements ChangeListener {
     public GraphAreaOptionSliders(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
         this.frame = frame;
         init(preferredSizeWidth, preferredSizeHeight);
+        addChangeListener();
     }
 
     private void init(final int preferredSizeWidth, final int preferredSizeHeight) {
