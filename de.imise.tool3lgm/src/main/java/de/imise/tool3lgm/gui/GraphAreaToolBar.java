@@ -14,12 +14,12 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.GraphAreaOptionsSlider.SliderWithTextField;
+import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 public class GraphAreaToolBar extends UnfloatableToolBar {
 
-    private final GraphAreaOptionsSlider sliderCreator;
+    private final GraphAreaOptionSliders sliders;
 
     private final ToolButton buttonSwitchMouseMode;
 
@@ -46,7 +46,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         buttonCreateEdge = ToolButton.createEdgeButton(dummyEdgeButtonNodeClass);
         buttonGroup.add(buttonSwitchMouseMode);
         buttonGroup.add(buttonCreateEdge);
-        sliderCreator = new GraphAreaOptionsSlider(frame, 150, 30);
+        sliders = new GraphAreaOptionSliders(frame, 150, 30);
         setFrame(frame);
         CSH.setHelpIDString(this, "GRAPH_TOOLBAR_ansichtswerkzeuge");
     }
@@ -72,7 +72,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
 
     public void setFrame(final InternalGraphFrame frame) {
         this.frame = frame;
-        sliderCreator.setFrame(frame);
+        sliders.setFrame(frame);
         Szenario szen = (Szenario) frame.getSzenario();
         setLayer(szen.getCollection().getActiveLayer());
     }
@@ -117,12 +117,12 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
 
     private void addSliders() {
         InputGraphArea area = frame.getInputGraphArea();
-        addSlider(sliderCreator.getSliderZoom());
+        addSlider(sliders.getSliderZoom());
         if (area.isMultiView()) {
-            addSlider(sliderCreator.getSliderDegree());
-            addSlider(sliderCreator.getSliderGap());
+            addSlider(sliders.getSliderDegree());
+            addSlider(sliders.getSliderGap());
         }
-        addSlider(sliderCreator.getSliderPageSizeFactor());
+        addSlider(sliders.getSliderPageSizeFactor());
     }
 
     private void addSlider(final SliderWithTextField slider) {
@@ -131,7 +131,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     }
 
     public void update() {
-        sliderCreator.updateValues();
+        sliders.updateValues();
     }
 
 }

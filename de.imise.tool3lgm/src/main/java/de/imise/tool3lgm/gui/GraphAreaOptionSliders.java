@@ -16,27 +16,41 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.MinMaxNumberTextField3;
 
-public class GraphAreaOptionsSlider implements ChangeListener {
+public class GraphAreaOptionSliders implements ChangeListener {
 
     private SliderWithTextField sliderDegree, sliderZoom, sliderGap, sliderPageSizeFactor;
 
     private InternalGraphFrame frame;
 
-    public GraphAreaOptionsSlider(final InternalGraphFrame frame) {
+    public GraphAreaOptionSliders(final InternalGraphFrame frame) {
         this(frame, -1, -1);
     }
 
-    public GraphAreaOptionsSlider(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
+    public GraphAreaOptionSliders(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
         this.frame = frame;
         init(preferredSizeWidth, preferredSizeHeight);
     }
 
     private void init(final int preferredSizeWidth, final int preferredSizeHeight) {
-        sliderDegree = new SliderWithTextField(0, 80, preferredSizeWidth, preferredSizeHeight, "winkel", this);
-        sliderZoom = new SliderWithTextField(10, 200, preferredSizeWidth, preferredSizeHeight, "zoom", this);
-        sliderGap = new SliderWithTextField(0, getSliderGapMaximum(), preferredSizeWidth, preferredSizeHeight, "abstand", this);
-        sliderPageSizeFactor = new SliderWithTextField(100, 1000, preferredSizeWidth, preferredSizeHeight, "page_zoom", this);
+        sliderDegree = new SliderWithTextField(0, 80, preferredSizeWidth, preferredSizeHeight, "winkel");
+        sliderZoom = new SliderWithTextField(10, 200, preferredSizeWidth, preferredSizeHeight, "zoom");
+        sliderGap = new SliderWithTextField(0, getSliderGapMaximum(), preferredSizeWidth, preferredSizeHeight, "abstand");
+        sliderPageSizeFactor = new SliderWithTextField(100, 1000, preferredSizeWidth, preferredSizeHeight, "page_zoom");
         updateValues();
+    }
+
+    private void addChangeListener() {
+        sliderDegree.addChangeListener(this);
+        sliderZoom.addChangeListener(this);
+        sliderGap.addChangeListener(this);
+        sliderPageSizeFactor.addChangeListener(this);
+    }
+
+    private void removeChangeListener() {
+        sliderDegree.removeChangeListener(this);
+        sliderZoom.removeChangeListener(this);
+        sliderGap.removeChangeListener(this);
+        sliderPageSizeFactor.removeChangeListener(this);
     }
 
     private int getSliderGapMaximum() {
@@ -54,12 +68,12 @@ public class GraphAreaOptionsSlider implements ChangeListener {
         if (area != null) {
             sliderZoom.setValue(new Double(area.getZoom() * 100d).intValue());
             sliderDegree.setValue(area.getLayerAngle());
-            sliderGap.setValue(area.getLayerGap());
             Szenario szen = (Szenario) frame.getSzenario();
             double pageSizeFactor = szen.getPageSizeFactor();
             sliderPageSizeFactor.setValue(new Double(pageSizeFactor * 100d).intValue());
+            sliderGap.setMaximum(getSliderGapMaximum());
+            sliderGap.setValue(area.getLayerGap());
         }
-        sliderGap.setMaximum(getSliderGapMaximum());
     }
 
     public SliderWithTextField getSliderDegree() {
@@ -79,8 +93,11 @@ public class GraphAreaOptionsSlider implements ChangeListener {
     }
 
     public void setFrame(final InternalGraphFrame frame) {
+        //die Listener müssen entfernt werden, weil in updateValues() sonst ein stateChanged() ausgelöst wird und der aktuelle Frame ein falsches Gap bekommt
+        removeChangeListener();
         this.frame = frame;
         updateValues();
+        addChangeListener();
     }
 
     @Override
@@ -108,14 +125,13 @@ public class GraphAreaOptionsSlider implements ChangeListener {
 
         private final JLabel label;
 
-        public SliderWithTextField(final int min, final int max, final int preferredSizeWidth, final int preferredSizeHeight, final String labelResKey, final ChangeListener changeListener) {
+        public SliderWithTextField(final int min, final int max, final int preferredSizeWidth, final int preferredSizeHeight, final String labelResKey) {
             super(min, max);
             if (preferredSizeWidth != -1 && preferredSizeHeight != -1) {
                 setPreferredSize(new Dimension(preferredSizeWidth, preferredSizeHeight));
             }
             valueTextField = new MinMaxNumberTextField3(min, max, 0);
             label = Strings.isNullOrEmpty(labelResKey) ? null : new JLabel(getResString(labelResKey));
-            addChangeListener(changeListener);
         }
 
         public JTextField getTextField() {
