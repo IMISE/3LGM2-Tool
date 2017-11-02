@@ -445,34 +445,28 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         i.right = layerWidth / 2;
         i.top = -layerHeight / 2;
         i.bottom = layerHeight / 2;
-
-        NodeContainer knoten;
-        LayerContainer lay;
-
-        int upper_border = 5;
-        int lower_border = 0;
-        int anzahl;
-
-        if (!multiView) {
-            lower_border = szenario.getCollection().getActiveLayer();
-        }
-        upper_border = lower_border + 1;
-        for (int b = lower_border; b < upper_border; b += 2) {
-            lay = szenario.getLayer(b);
-            anzahl = lay.getKnotenCount();
-            for (int co = 0; co < anzahl; co++) {
-                knoten = lay.getNodeContainer(co);
-                if (knoten.getX() - knoten.getWidth() / 2 < i.left) {
-                    i.left = knoten.getX() - knoten.getWidth() / 2;
+        for (int layer : ModelConstants.VISIBLE_LAYERS) {
+            LayerContainer lc = szenario.getLayer(layer);
+            for (NodeContainer nc : lc.getKnoten()) {
+                int x = nc.getX();
+                int wHalf = nc.getWidth() / 2;
+                int y = nc.getY();
+                int hHalf = nc.getHeight() / 2;
+                int value = x - wHalf;
+                if (value < i.left) {
+                    i.left = value;
                 }
-                if (knoten.getX() + knoten.getWidth() / 2 > i.right) {
-                    i.right = knoten.getX() + knoten.getWidth() / 2;
+                value = x + wHalf;
+                if (value > i.right) {
+                    i.right = value;
                 }
-                if (knoten.getY() - knoten.getHeight() / 2 < i.top) {
-                    i.top = knoten.getY() - knoten.getHeight() / 2;
+                value = y - hHalf;
+                if (value < i.top) {
+                    i.top = value;
                 }
-                if (knoten.getY() + knoten.getHeight() / 2 > i.bottom) {
-                    i.bottom = knoten.getY() + knoten.getHeight() / 2;
+                value = y + hHalf;
+                if (value > i.bottom) {
+                    i.bottom = value;
                 }
             }
         }
