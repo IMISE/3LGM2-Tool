@@ -40,6 +40,10 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
@@ -318,11 +322,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         internals.add(consistency);
 
         // weiter mit Grafik-Sachen
-        normalize_layer = getItem("layer_reset_color", GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
-        voll_trans_layer = getItem("layer_full_transparency", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
-        halb_trans_layer = getItem("layer_semi_transparency", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
-        nicht_trans_layer = getItem("layer_no_transparency", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
-        color_layer = getItem("layer_change_color", MODEL_ACTION_SET_LAYER_COLOR);
+        normalize_layer = getItem(MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
+        voll_trans_layer = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
+        halb_trans_layer = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
+        nicht_trans_layer = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
+        color_layer = getItem(MODEL_ACTION_SET_LAYER_COLOR);
 
         JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
         trans_layer.add(nicht_trans_layer);

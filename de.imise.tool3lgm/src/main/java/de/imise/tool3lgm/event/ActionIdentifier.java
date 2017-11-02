@@ -60,13 +60,6 @@ public enum ActionIdentifier {
 
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
-    // layerLayout
-    ACTION_LAYER_RESET_COLOR,
-    layer_change_color,
-    // layerTransparency
-    layer_no_transparency,
-    layer_semi_transparency,
-    layer_full_transparency,
     // elementLayout
     font,
     element_change_color,
