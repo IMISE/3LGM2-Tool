@@ -20,7 +20,7 @@ public enum GDCommands {
     SET_NAME,
     //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
     CHANGE_FORM,
-    CHANGE_COLOR,
+    MODEL_ACTION_SET_ELEMENT_COLOR,
     CHANGE_ALPHA,
     MODEL_ACTION_SET_LAYER_COLOR,
     MODEL_ACTION_SET_LAYER_ALPHA,

@@ -1265,6 +1265,9 @@ public class ActionLibrary {
             /** öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
             public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, PPP);
 
+            /** öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
+            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, PPP);
+
             /**
              * Actions für die Auswahl von Icons für Elemente
              *
@@ -1337,9 +1340,6 @@ public class ActionLibrary {
                 /** Macht das ausgewählte Element voll-transparent */
                 public static final Action FULL = new ElementLayoutAction(ActionIdentifier.element_full_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_FULL);
             }
-
-            /** Öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
-            public static final Action CHANGE_COLOR = new ElementLayoutAction(ActionIdentifier.element_change_color, PPP, GDCommands.CHANGE_COLOR);
 
             /** Setzt die Farbe des Elements zurück */
             public static final Action RESET_COLOR = new ElementLayoutAction(ActionIdentifier.element_reset_color, GDCommands.NORMALIZE_COLOR);

@@ -60,7 +60,6 @@ public enum ActionIdentifier {
 
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
-    element_change_color,
     // elementTransparency
     element_no_transparency,
     element_semi_transparency,

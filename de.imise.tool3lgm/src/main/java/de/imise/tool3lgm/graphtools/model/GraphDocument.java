@@ -706,7 +706,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             showPropertyDialog();
             break;
 
-        case CHANGE_COLOR:
+        case MODEL_ACTION_SET_ELEMENT_COLOR:
             switch (argc) {
             case 0:
                 changeColor(pid);
@@ -1648,7 +1648,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         String szenHash = ec.getGraphDocument().hashString;
         addRedoCommandOrReplace(GDCommands.NORMALIZE_COLOR + " " + szenHash + " " + ec.getHashString(), "", pid);
         if (ec.getColor() != null) {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
             ec.setColor(null);
         }
         finish_transaction(pid);
@@ -1775,10 +1775,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         NodeContainer mc = (NodeContainer) t;
         szen.start_transaction(pid);
         if (mc.getColor() != null) {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_COLOR + " " + szenHash + " " + mc.getHashString(), mc.getColor().getRGB(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + mc.getHashString(), mc.getColor().getRGB(), pid);
             addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + mc.getHashString(), mc.getAlpha(), pid);
         } else {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_COLOR + " " + szenHash + " " + mc.getHashString(), "null", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + mc.getHashString(), "null", pid);
             addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + mc.getHashString(), "255", pid);
         }
         if (mc.getIcon() != null) {
@@ -1903,14 +1903,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         ecDoc.start_transaction(pid);
         String szenHash = ecDoc.hashString;
         if (color == null) {
-            addRedoCommandOrReplace(GDCommands.CHANGE_COLOR + " " + szenHash + " " + ec.getHashString(), "null", pid);
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), "null", pid);
         } else {
-            addRedoCommandOrReplace(GDCommands.CHANGE_COLOR + " " + szenHash + " " + ec.getHashString(), color.getRGB(), pid);
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), color.getRGB(), pid);
         }
         if (ec.getColor() == null) {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_COLOR + " " + szenHash + " " + ec.getHashString(), "null", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), "null", pid);
         } else {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
         }
         ec.setColor(color);
         ecDoc.finish_transaction(pid);

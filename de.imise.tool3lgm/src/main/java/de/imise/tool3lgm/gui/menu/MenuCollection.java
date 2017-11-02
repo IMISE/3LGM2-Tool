@@ -118,7 +118,7 @@ public class MenuCollection {
     public static class LayoutSubMenus {
 
         /** Das Element-Layout-Menu */
-        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.MODEL_ACTION_SET_ELEMENT_FONT, ElementLayout.CHANGE_COLOR,
+        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.MODEL_ACTION_SET_ELEMENT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_COLOR,
                 createMenu( // Transparenz-Menu
                         getResString("elementTransparencyMenu"), ElementLayout.Transparency.NO, ElementLayout.Transparency.SEMI, ElementLayout.Transparency.FULL),
                 createMenu( // Auf Standard setzen Menu

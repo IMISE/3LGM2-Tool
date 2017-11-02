@@ -35,7 +35,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_ALPHA;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
@@ -54,6 +53,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
@@ -522,7 +522,7 @@ public final class GDCollection extends UserFieldTarget {
         String ecHash = ec.getHashString();
         String ecDocHash = ecDoc.hashString;
         if (ec.getColor() != null) {
-            ecDoc.addUndoCommand(CHANGE_COLOR + " " + ecDocHash + " " + ecHash + " " + ec.getColor().getRGB(), pid);
+            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + ecDocHash + " " + ecHash + " " + ec.getColor().getRGB(), pid);
             ecDoc.addUndoCommand(CHANGE_ALPHA + " " + ecDocHash + " " + ecHash + " " + ec.getAlpha(), pid);
         }
         if (ec.getForm() != null) {
@@ -1062,7 +1062,7 @@ public final class GDCollection extends UserFieldTarget {
         doc.start_transaction(pid);
         doc.addRedoCommand(CREATE_KNOT + " " + me.getClass().getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
         if (nc.getColor() != null) {
-            doc.addRedoCommand(CHANGE_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
+            doc.addRedoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
         }
         doc.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + me.getHashString(), pid);
         // den Layer bestimmen auf dem das Element eingefügt werden soll
