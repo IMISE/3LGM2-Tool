@@ -149,7 +149,7 @@ public class ActionLibrary {
         };
 
         /** Speichern des Models an neuer Stelle */
-        public static final Action ACTION_SAVE_MODEL_AS = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, true) {
+        public static final Action ACTION_SAVE_MODEL_AS = new GraphDocumentAction(ActionIdentifier.ACTION_SAVE_MODEL_AS, PPP) {
             @Override
             protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
@@ -168,7 +168,7 @@ public class ActionLibrary {
         };
 
         /** Zeigt die Beschreibung des Tools an */
-        public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, true) {
+        public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, PPP) {
             @Override
             protected void actionPerformed() {
                 getSelectedGDCollection().showDescriptionFrame(true);
@@ -183,7 +183,7 @@ public class ActionLibrary {
         public static class ImportActions {
 
             /** Öffnet einen Dialog zum Import von Teilmodellen */
-            public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, true) {
+            public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
                     ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
@@ -198,7 +198,7 @@ public class ActionLibrary {
             };
 
             /** Öffnet einen Dialog zum Import von Modellen */
-            public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, true) {
+            public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
                     ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
@@ -213,7 +213,7 @@ public class ActionLibrary {
             };
 
             /** Öffnet einen Dialog zum Import von Daten im tab-separierten Format */
-            public static final Action ACTION_IMPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_DATA, true) {
+            public static final Action ACTION_IMPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_DATA, PPP) {
                 @Override
                 protected void actionPerformed() {
                     new DataImportModule(getSelectedGDCollection());
@@ -229,7 +229,7 @@ public class ActionLibrary {
         public static class ExportActions {
 
             /** öffnet einen Dialog zum Export des Models als Grafik-Datei */
-            public static final Action ACTION_EXPORT_GRAPHIC = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHIC, true) {
+            public static final Action ACTION_EXPORT_GRAPHIC = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHIC, PPP) {
 
                 @Override
                 protected void actionPerformed() {
@@ -258,7 +258,7 @@ public class ActionLibrary {
             };
 
             /** öffnet einen Dialog zum Export des Models als graphml-Datei */
-            public static final Action ACTION_EXPORT_GRAPHML_YED = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YED, true) {
+            public static final Action ACTION_EXPORT_GRAPHML_YED = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YED, PPP) {
                 @Override
                 protected void actionPerformed() {
                     File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
@@ -269,7 +269,7 @@ public class ActionLibrary {
             };
 
             /** öffnet einen Dialog zum Export des Models als graphml-Datei */
-            public static final Action ACTION_EXPORT_GRAPHML_YFILES = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YFILES, true) {
+            public static final Action ACTION_EXPORT_GRAPHML_YFILES = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YFILES, PPP) {
                 @Override
                 protected void actionPerformed() {
                     File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
@@ -280,7 +280,7 @@ public class ActionLibrary {
             };
 
             /** Öffnet einen Dialog zur Anwendung von XSL-Scripts auf das Modell */
-            public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, true) {
+            public static final Action ACTION_EXPORT_XSLT = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_XSLT, PPP) {
                 @Override
                 protected void actionPerformed() {
                     // der Dialog zeigt sich im Konstuktor selbst an
@@ -289,7 +289,7 @@ public class ActionLibrary {
             };
 
             /** Öffnet einen Dialog zum Export eines Teilmodells */
-            public static final Action ACTION_EXPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_SUBMODEL, true) {
+            public static final Action ACTION_EXPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_SUBMODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
                     SzenarioDialog.showExportDialog(getTool(), getSelectedGDCollection());
@@ -297,7 +297,7 @@ public class ActionLibrary {
             };
 
             /** Öffnet einen Dialog zum Export des gesamten Models als HTML-Site */
-            public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, true) {
+            public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, PPP) {
                 @Override
                 protected void actionPerformed() {
                     WebExportDialog.showWebExportDialog(getTool(), getSelectedGDCollection());
@@ -305,7 +305,7 @@ public class ActionLibrary {
             };
 
             /** Öffnet einen Dialog zum Export einzelner Elemente in tab-separiertem Format */
-            public static final Action ACTION_EXPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_DATA, true) {
+            public static final Action ACTION_EXPORT_DATA = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_DATA, PPP) {
                 @Override
                 protected void actionPerformed() {
                     DataExportModule.exportData(getSelectedDoc());
@@ -729,7 +729,7 @@ public class ActionLibrary {
     public static class EditActions {
 
         /** Macht letzte Änderung rückgängig */
-        public static final Action ACTION_UNDO = new GraphDocumentAction(ActionIdentifier.ACTION_UNDO, true) {
+        public static final Action ACTION_UNDO = new GraphDocumentAction(ActionIdentifier.ACTION_UNDO) {
             @Override
             protected void actionPerformed() {
                 getSelectedDoc().undo();
@@ -742,7 +742,7 @@ public class ActionLibrary {
         };
 
         /** Macht letztes UNDO rückgängig */
-        public static final Action ACTION_REDO = new GraphDocumentAction(ActionIdentifier.ACTION_REDO, true) {
+        public static final Action ACTION_REDO = new GraphDocumentAction(ActionIdentifier.ACTION_REDO) {
             @Override
             protected void actionPerformed() {
                 getSelectedDoc().redo();
@@ -755,7 +755,7 @@ public class ActionLibrary {
         };
 
         /** Öffnet ein Suchen-Fenster */
-        public static final Action ACTION_SEARCH = new GraphDocumentAction(ActionIdentifier.ACTION_SEARCH, true) {
+        public static final Action ACTION_SEARCH = new GraphDocumentAction(ActionIdentifier.ACTION_SEARCH, PPP) {
             @Override
             protected void actionPerformed() {
                 SearchDialog sd = new SearchDialog(Static.getTool());
@@ -949,7 +949,7 @@ public class ActionLibrary {
         public static final Action MODEL_ACTION_DELETE = new SelectionAction(GDCommands.MODEL_ACTION_DELETE);
 
         /** Wählt alle Elemente im Teilmodell aus */
-        public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL, true) {
+        public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL) {
             @Override
             protected void actionPerformed() {
                 Static.showProgressDialog();
