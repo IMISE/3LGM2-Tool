@@ -1905,13 +1905,9 @@ public class ActionLibrary {
         };
 
         /** Öffnet die Matrix-Ansicht */
-        public static final Action OPEN_MATRIX = new StaticAction(ActionIdentifier.matrix, true) {
-
+        public static final Action ACTION_OPEN_MATRIX_VIEW = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_MATRIX_VIEW) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 getTool().createTableInternalFrame(getSelectedDoc());
             }
         };

@@ -66,7 +66,8 @@ public class MenuCollection {
 
     /** Das Ansicht-Menu */
     public static final JMenu VIEW_MENU = createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, createCheckBoxItem(ViewActions.OPTION_MODEL_BROWSER_SHOW), new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
-            ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(), ViewActions.OPEN_MATRIX);
+            ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(),
+            ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
     /** Das Einfügen-Menu */
     public static final JMenu INSERT_MENU = new InsertMenu();
