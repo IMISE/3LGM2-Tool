@@ -121,6 +121,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -144,14 +145,7 @@ public final class GDCollection extends UserFieldTarget {
     /** Undo- und Redomanager */
     protected TransactionManager tman = new TransactionManager();
 
-    /**
-     * Table, der von der ID einer Transaktion auf die Anzahl der gestarteten Untertransaktionen mit derselben ID mappt.
-     * Eine Aktion wie "Lösche Aufgabe X aus Gesamtmodell" hat zur Folge, dass in jedem Teilmodell eine Transaktion
-     * "Lösche Aufgabe X aus Teilmodell" gestartet wird. Über diese Map kann man für das Löschen aus dem Teilmodell
-     * festestellen, dass es als Unteraktion einer anderen Transaktion gestartet wurde und nicht selbst die äußerste
-     * Transaktion war.
-     */
-    private final Map<Integer, Integer> transStackTable = new HashMap<>();
+    private final TransactionStackTable transStackTable = new TransactionStackTable();
 
     //	/*{
     //
@@ -275,7 +269,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @return the transStackTable
      */
-    public final Map<Integer, Integer> getTransStackTable() {
+    public final TransactionStackTable getTransStackTable() {
         return transStackTable;
     }
 

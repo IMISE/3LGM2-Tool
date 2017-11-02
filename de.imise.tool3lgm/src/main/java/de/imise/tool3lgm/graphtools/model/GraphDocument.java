@@ -35,7 +35,6 @@ import javax.swing.SwingConstants;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
@@ -50,6 +49,7 @@ import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
@@ -342,39 +342,22 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     private void undoRedo(final int pid, final boolean undo) {
-        Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = transStackTable.remove(pidInteger);
-        if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
-        }
-        int transStackInt = transStackInteger.intValue();
-        transStackInt++;
-        transStackInteger = new Integer(transStackInt);
-        transStackTable.put(pidInteger, transStackInteger);
-
+        TransactionStackTable transStackTable = gdcoll.getTransStackTable();
+        transStackTable.increase(pid);
         //wenn Teilelemente mit verschoben wurden, so wurde dieses Verschieben auch mit geloggt
         //-> beim Rückgängigmachen der Verschiebungen dürfen die Unterelemente nicht durch das
         //Zürücksetzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur,
         //wenn sie beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
         boolean isMoveSubElements = UserProperties.isMoveSubelements();
         UserProperties.setMoveSubelements(false);
-
         TransactionManager tman = getCollection().getTman();
         if (undo) {
             tman.undo(pid);
         } else {
             tman.redo(pid);
         }
-
         UserProperties.setMoveSubelements(isMoveSubElements);
-
-        transStackTable.remove(pidInteger);
-        transStackInt--;
-        if (transStackInt > 0) {
-            transStackInteger = new Integer(transStackInt);
-            transStackTable.put(pidInteger, transStackInteger);
-        }
+        transStackTable.decrease(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
 
@@ -1381,9 +1364,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //muss man testen, ob sich das Kommando auf int casten lässt.
             GDCommands command = null;
             try {
-            //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
-                    //versuche den Index zu parsen und das Kommando
-                    command = GDCommands.values()[new Integer(tokens.get(0)).intValue()];
+                //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
+                //versuche den Index zu parsen und das Kommando
+                command = GDCommands.values()[new Integer(tokens.get(0)).intValue()];
             } catch (Exception e) {
                 //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
                 command = tokens.size() > 0 ? GDCommands.valueOf(tokens.get(0)) : null;
