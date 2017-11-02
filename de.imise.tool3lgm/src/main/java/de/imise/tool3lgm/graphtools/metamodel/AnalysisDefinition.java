@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Action;
+
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
@@ -30,6 +32,15 @@ public abstract class AnalysisDefinition {
 
     public List<AbstractAnalyse> getNodeAnalysis() {
         return nodeAnalysis;
+    }
+
+    /**
+     * Liste von Actions, die ins AnalyseMenü eingefügt werden
+     * 
+     * @return
+     */
+    public Action[] getAnalysisActions() {
+        return new Action[0];
     }
 
 }

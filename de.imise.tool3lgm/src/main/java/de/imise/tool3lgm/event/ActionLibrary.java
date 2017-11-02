@@ -94,7 +94,6 @@ import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.DataAvailabilityFinder;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xslt.WebExportDialog;
@@ -363,15 +362,6 @@ public class ActionLibrary {
             @Override
             protected void actionPerformed() {
                 RedundancyAnalysis.getReport(getSelectedGDCollection());
-            }
-        };
-
-        /** TODO:AXS,FST: Wirft schon seit ToolMenu eine Exception */
-        public static final Action ACTION_ANALYSIS_DATA_AVAILABILITY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_DATA_AVAILABILITY, true) {
-            @Override
-            protected void actionPerformed() {
-                // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder
-                new DataAvailabilityFinder(getSelectedDoc());
             }
         };
 

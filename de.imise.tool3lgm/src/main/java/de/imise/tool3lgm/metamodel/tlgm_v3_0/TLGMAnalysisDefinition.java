@@ -2,9 +2,12 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_ONE;
 
+import javax.swing.Action;
+
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse.DataAvailabilityFinder;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse.InterfaceCanSendOTAnalysis;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
@@ -66,6 +69,13 @@ public class TLGMAnalysisDefinition extends AnalysisDefinition {
 
     private void initNodeAnalysis() {
         nodeAnalysis.add(new InterfaceCanSendOTAnalysis());
+    }
+
+    @Override
+    public Action[] getAnalysisActions() {
+        return new Action[] {
+                DataAvailabilityFinder.getAction()
+        };
     }
 
 }

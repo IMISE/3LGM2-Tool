@@ -1,9 +1,9 @@
 /*
  * Created on 22.06.2008
  */
-package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
+package de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
@@ -13,7 +13,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.Action;
+
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -23,8 +26,11 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.ModelAnalyzerCache;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.ShortestCommunicationPathFinder;
 import de.imise.util.Alphabetical;
 import de.imise.util.SameTypePair;
+import de.imise.util.SimpleResourceHandler;
 import de.imise.util.swing.dialog.OutputDialog;
 
 /**
@@ -50,7 +56,7 @@ public class DataAvailabilityFinder {
     /**
      * @param doc
      */
-    public DataAvailabilityFinder(final GraphDocument doc) {
+    private DataAvailabilityFinder(final GraphDocument doc) {
         super();
         this.doc = doc;
         mainDoc = doc.getCollection().getMainGraphDocument();
@@ -219,6 +225,7 @@ public class DataAvailabilityFinder {
      *
      */
     private void showReport() {
+        SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
 
         ModelAnalyzerCache mac = commPathFinder.getAnalyzerCache();
 
@@ -277,7 +284,7 @@ public class DataAvailabilityFinder {
         // System.err.println("*************************************************");
         // }
 
-        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), getResString("data_availability"));
+        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), resHandler.getString("data_availability"));
 
         outputDialog.appendln("##############################################################");
         outputDialog.appendln("#                        UnavailableET                       #");
@@ -448,5 +455,15 @@ public class DataAvailabilityFinder {
         outputDialog.setVisible(true);
         outputDialog.setLocationRelativeTo(Static.getMainFrame());
 
+    }
+
+    public static final Action getAction() {
+        return new GraphDocumentAction(DataAvailabilityFinder.class, "", new SimpleResourceHandler(DataAvailabilityFinder.class).getString("data_availability")) {
+            @Override
+            protected void actionPerformed() {
+                // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder
+                new DataAvailabilityFinder(getSelectedDoc());
+            }
+        };
     }
 }

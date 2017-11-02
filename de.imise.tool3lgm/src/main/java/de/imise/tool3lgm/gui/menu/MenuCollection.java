@@ -40,6 +40,7 @@ import de.imise.tool3lgm.event.ActionLibrary.SubmodelActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.plugin.B1ExportPlugin;
@@ -80,7 +81,7 @@ public class MenuCollection {
 
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu(getResString("analysis"), AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
-            createCheckBoxItem(Analysis.NEW_SUBMODEL), new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, AnalysisActions.ACTION_ANALYSIS_DATA_AVAILABILITY, createCheckBoxItems(Analysis.SIMPLE_REDUNDANCIES));
+            createCheckBoxItem(Analysis.NEW_SUBMODEL), new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(), createCheckBoxItems(Analysis.SIMPLE_REDUNDANCIES));
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu(getResString("options"), OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS,
