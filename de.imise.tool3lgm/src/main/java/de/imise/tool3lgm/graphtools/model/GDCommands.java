@@ -86,7 +86,7 @@ public enum GDCommands {
 
     SET_ICON,
     UNSET_ICON,
-    CHANGE_FONT,
+    MODEL_ACTION_SET_ELEMENT_FONT,
     CHOOSE_ICON,
 
     CHANGE_LINE_STYLE,

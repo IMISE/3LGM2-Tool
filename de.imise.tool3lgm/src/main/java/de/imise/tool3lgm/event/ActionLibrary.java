@@ -44,6 +44,7 @@ import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
+import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.event.action.SubmodelAction;
@@ -1261,6 +1262,9 @@ public class ActionLibrary {
              * Klasse eine separate Klasse mit den Actions für die Kanten erstellt werden.
              */
 
+            /** öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
+            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, PPP);
+
             /**
              * Actions für die Auswahl von Icons für Elemente
              *
@@ -1333,9 +1337,6 @@ public class ActionLibrary {
                 /** Macht das ausgewählte Element voll-transparent */
                 public static final Action FULL = new ElementLayoutAction(ActionIdentifier.element_full_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_FULL);
             }
-
-            /** Öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
-            public static final Action CHOOSE_FONT = new ElementLayoutAction(ActionIdentifier.font, PPP, GDCommands.CHANGE_FONT);
 
             /** Öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
             public static final Action CHANGE_COLOR = new ElementLayoutAction(ActionIdentifier.element_change_color, PPP, GDCommands.CHANGE_COLOR);

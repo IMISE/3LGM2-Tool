@@ -1096,7 +1096,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case CHANGE_FONT:
+        case MODEL_ACTION_SET_ELEMENT_FONT:
             name = "";
             switch (argc) {
             case 0:
@@ -1621,7 +1621,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommandOrReplace(GDCommands.NORMALIZE_FONT + " " + szenHash + " " + ec.getHashString(), "", pid);
 
         if (ec.getFontName() != null) {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString(), GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString(), GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
             ec.setFont(null);
         }
         finish_transaction(pid);
@@ -2135,7 +2135,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         ecDoc.start_transaction(pid);
         String szenHash = ecDoc.hashString;
 
-        String commandPrefix = GDCommands.CHANGE_FONT + " " + szenHash + " " + ec.getHashString();
+        String commandPrefix = GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString();
         String undoCommandArguments = ec.hasStandardFont() ? "" : GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle();
         String redoCommandArguments = ec.isStandardFont(font) ? "" : GDCOMMAND_TEXT_SURROUNDER + font.getName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + font.getSize() + " " + font.getStyle();
         addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
