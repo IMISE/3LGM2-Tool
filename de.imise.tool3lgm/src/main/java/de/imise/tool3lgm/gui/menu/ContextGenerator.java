@@ -26,8 +26,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.AUFKLAPPEN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_GLOBAL_MAPPING;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_ALPHA;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
@@ -41,7 +39,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.NORMALIZE_LAYER;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
@@ -52,9 +50,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ZUKLAPPEN;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HALB_TRANSPARENT;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.NICHT_TRANSPARENT;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VOLL_TRANSPARENT;
 import static de.imise.tool3lgm.userproperties.UserProperties.isEnableSubmodelBrowser;
 
 import java.awt.Component;
@@ -323,11 +318,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         internals.add(consistency);
 
         // weiter mit Grafik-Sachen
-        normalize_layer = getItem("layer_reset_color", NORMALIZE_LAYER);
-        voll_trans_layer = getItem("layer_full_transparency", CHANGE_LAYER_ALPHA, "" + VOLL_TRANSPARENT);
-        halb_trans_layer = getItem("layer_semi_transparency", CHANGE_LAYER_ALPHA, "" + HALB_TRANSPARENT);
-        nicht_trans_layer = getItem("layer_no_transparency", CHANGE_LAYER_ALPHA, "" + NICHT_TRANSPARENT);
-        color_layer = getItem("layer_change_color", CHANGE_LAYER_COLOR);
+        normalize_layer = getItem("layer_reset_color", GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
+        voll_trans_layer = getItem("layer_full_transparency", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
+        halb_trans_layer = getItem("layer_semi_transparency", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
+        nicht_trans_layer = getItem("layer_no_transparency", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
+        color_layer = getItem("layer_change_color", MODEL_ACTION_SET_LAYER_COLOR);
 
         JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
         trans_layer.add(nicht_trans_layer);

@@ -67,7 +67,7 @@ public class Szenario extends LGMGraphDocument {
         }
         if (!(ec.getGraphDocument() instanceof Szenario)) {
             retVal.setFont(null);
-            retVal.setAlpha(GraphElementLayout.NICHT_TRANSPARENT);
+            retVal.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
             retVal.setForm(null);
             retVal.setSize(mapping.getStandardWidth(retVal.getElement().getClass()), mapping.getStandardHeight(retVal.getElement().getClass()));
         }

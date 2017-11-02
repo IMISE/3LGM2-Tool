@@ -61,7 +61,7 @@ public enum ActionIdentifier {
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
     // layerLayout
-    layer_reset_color,
+    ACTION_LAYER_RESET_COLOR,
     layer_change_color,
     // layerTransparency
     layer_no_transparency,

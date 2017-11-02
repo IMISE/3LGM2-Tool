@@ -50,10 +50,10 @@ public class FSTContextMenu extends JPopupMenu {
             new JSeparator(),
             // ActionLibrary.ContextActions.CONFIGURATIONS_VISIBILITY,
             // ActionLibrary.ContextActions.CONFIGURATIONS_INVISIBLE,
-            new JSeparator(), MenuCollection.LayoutSubMenus.LAYER_LAYOUT_MENU, new JMenuItem(ActionLibrary.LayoutActions.GLOBAL_LAYOUT), new JSeparator()/*
-                                                                                                                                                          * ,
-                                                                                                                                                          * INTERNAL_MENU
-                                                                                                                                                          */);
+            new JSeparator(), MenuCollection.LayoutSubMenus.LAYER_LAYOUT_MENU, new JMenuItem(ActionLibrary.LayoutActions.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR), new JSeparator()/*
+                                                                                                                                                                             * ,
+                                                                                                                                                                             * INTERNAL_MENU
+                                                                                                                                                                             */);
 
     /** Das Kontextmenu für Elemente */
     private static JPopupMenu elementMenu = new ElementMenu();

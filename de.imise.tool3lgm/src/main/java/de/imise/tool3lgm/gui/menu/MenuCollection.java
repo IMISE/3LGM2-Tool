@@ -132,8 +132,10 @@ public class MenuCollection {
                         TextAlignment.Vertical.BOTTOM));
 
         /** Das Ebenen-Layout-Menu */
-        public static final JMenu LAYER_LAYOUT_MENU = createMenu(getResString("layerLayoutMenu"), LayerLayout.RESET, LayerLayout.CHANGE_COLOR, createMenu( // Transparenz-Menu
-                getResString("layerTransparencyMenu"), LayerLayout.Transparency.NO, LayerLayout.Transparency.SEMI, LayerLayout.Transparency.FULL));
+        public static final JMenu LAYER_LAYOUT_MENU = createMenu(getResString("layerLayoutMenu"), LayerLayout.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, LayerLayout.MODEL_ACTION_SET_LAYER_COLOR,
+                createMenu( // Transparenz-Menu
+                        getResString("layerTransparencyMenu"), LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF,
+                        LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
 
         /** Das Level-Menu */
         public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge

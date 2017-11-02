@@ -38,8 +38,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_ALPHA;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
@@ -57,6 +55,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
@@ -387,8 +387,8 @@ public final class GDCollection extends UserFieldTarget {
         szenarios.remove(szen);
         activeGraphDocumentsList.remove(szen);
         for (int layerIndex : LAYERS) {
-            doc.addUndoCommand(CHANGE_LAYER_COLOR + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getColor().getRGB(), pid);
-            doc.addUndoCommand(CHANGE_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getColor().getRGB(), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
             doc.addUndoCommand(CHANGE_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
         }
         doc.addUndoCommand(CREATE_SZENARIO + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);

@@ -110,9 +110,14 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         COLOR_NAMES[LIGHTGREEN] = getResString("lightgreen");
     }
 
-    public static final int NICHT_TRANSPARENT = 255;
-    public static final int HALB_TRANSPARENT = 128;
-    public static final int VOLL_TRANSPARENT = 0;
+    /** Transparenzwert für nicht transparent (Alpha = 255) */
+    public static final int TRANSPARENCY_NONE = 255;
+
+    /** Transparenzwert für halb transparent (Alpha = 128) */
+    public static final int TRANSPARENCY_HALF = 128;
+
+    /** Transparenzwert für voll transparent (Alpha = 0) */
+    public static final int TRANSPARENCY_FULL = 0;
 
     public static final String[] FONT_NAMES = {
             getResString("courier"),

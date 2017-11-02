@@ -41,7 +41,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.event.LayoutAction.ElementAlignmentAction;
 import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
-import de.imise.tool3lgm.event.LayoutAction.LayerLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
@@ -1140,6 +1139,45 @@ public class ActionLibrary {
      */
     public static class LayoutActions {
 
+        public static final Action ACTION_OPEN_GLOBAL_LAYOUT_EDITOR = new SubmodelAction(ActionIdentifier.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR, PPP) {
+            @Override
+            public void actionPerformed() {
+                // der Diolog zeigt sich im Konstruktor selbst an
+                new LayoutEditor(new javax.swing.JFrame(), getSelectedDoc());
+            }
+        };
+
+        /**
+         * Actions für die grafische Darstellung der Ebenen
+         *
+         * @author fstephan
+         */
+        public static class LayerLayout {
+
+            /** Setzt Farbe und Transparenz der ausgewählten Ebene zurück */
+            public static final ExtendedAction MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
+
+            /** öffnet ein Fenster zur Auswahl der Ebenen-Farbe */
+            public static final ExtendedAction MODEL_ACTION_SET_LAYER_COLOR = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_COLOR, PPP);
+
+            /**
+             * Actions für die Transparenz der Ebenen
+             *
+             * @author fstephan
+             */
+            public static class Transparency {
+
+                /** Macht die momentan ausgewählte Ebene nicht-transparent */
+                public static final ExtendedAction MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
+
+                /** Macht die momentan ausgewählte Ebene halb-transparent */
+                public static final ExtendedAction MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
+
+                /** Macht die momentan ausgewählte Ebene voll-transparent */
+                public static final ExtendedAction MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
+            }
+        }
+
         /**
          * Actions für die relative Ausrichtung der Elemente zueinander<br>
          * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend
@@ -1287,13 +1325,13 @@ public class ActionLibrary {
             public static class Transparency {
 
                 /** Macht das ausgewählte Element nicht-transparent */
-                public static final Action NO = new ElementLayoutAction(ActionIdentifier.element_no_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.NICHT_TRANSPARENT);
+                public static final Action NO = new ElementLayoutAction(ActionIdentifier.element_no_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_NONE);
 
                 /** Macht das ausgewählte Element halb-transparent */
-                public static final Action SEMI = new ElementLayoutAction(ActionIdentifier.element_semi_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.HALB_TRANSPARENT);
+                public static final Action SEMI = new ElementLayoutAction(ActionIdentifier.element_semi_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_HALF);
 
                 /** Macht das ausgewählte Element voll-transparent */
-                public static final Action FULL = new ElementLayoutAction(ActionIdentifier.element_full_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.VOLL_TRANSPARENT);
+                public static final Action FULL = new ElementLayoutAction(ActionIdentifier.element_full_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_FULL);
             }
 
             /** Öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
@@ -1313,37 +1351,6 @@ public class ActionLibrary {
 
             /** Setzt alle Layout-Eigenschaften des Elements zurück */
             public static final Action RESET_ALL = new ElementLayoutAction(ActionIdentifier.reset_all, GDCommands.NORMALIZE);
-        }
-
-        /**
-         * Actions für die grafische Darstellung der Ebenen
-         *
-         * @author fstephan
-         */
-        public static class LayerLayout {
-
-            /**
-             * Actions für die Transparenz der Ebenen
-             *
-             * @author fstephan
-             */
-            public static class Transparency {
-
-                /** Macht die momentan ausgewählte Ebene nicht-transparent */
-                public static final Action NO = new LayerLayoutAction(ActionIdentifier.layer_no_transparency, GDCommands.CHANGE_LAYER_ALPHA, GraphElementLayout.NICHT_TRANSPARENT);
-
-                /** Macht die momentan ausgewählte Ebene halb-transparent */
-                public static final Action SEMI = new LayerLayoutAction(ActionIdentifier.layer_semi_transparency, GDCommands.CHANGE_LAYER_ALPHA, GraphElementLayout.HALB_TRANSPARENT);
-
-                /** Macht die momentan ausgewählte Ebene voll-transparent */
-                public static final Action FULL = new LayerLayoutAction(ActionIdentifier.layer_full_transparency, GDCommands.CHANGE_LAYER_ALPHA, GraphElementLayout.VOLL_TRANSPARENT);
-            }
-
-            /** Setzt Farbe und Transparenz der ausgewählten Ebene zurück */
-            public static final Action RESET = new LayerLayoutAction(ActionIdentifier.layer_reset_color, GDCommands.NORMALIZE_LAYER);
-
-            /** Öffnet ein Fenster zur Auswahl der Ebenen-Farbe */
-            public static final Action CHANGE_COLOR = new LayerLayoutAction(ActionIdentifier.layer_change_color, PPP, GDCommands.CHANGE_LAYER_COLOR);
         }
 
         /**
@@ -1367,13 +1374,6 @@ public class ActionLibrary {
             public static final StaticAction LOWEST = new ElementLayoutAction(ActionIdentifier.lowest, GDCommands.Z_MOVE_DOWN);
         }
 
-        public static final Action ACTION_OPEN_GLOBAL_LAYOUT_EDITOR = new SubmodelAction(ActionIdentifier.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR, PPP) {
-            @Override
-            public void actionPerformed() {
-                // der Diolog zeigt sich im Konstruktor selbst an
-                new LayoutEditor(new javax.swing.JFrame(), getSelectedDoc());
-            }
-        };
     }
 
     /**

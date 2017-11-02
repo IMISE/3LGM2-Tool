@@ -727,7 +727,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case CHANGE_LAYER_COLOR:
+        case MODEL_ACTION_SET_LAYER_COLOR:
             int layer_idx = -1;
             switch (argc) {
             case 0:
@@ -771,7 +771,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case CHANGE_LAYER_ALPHA:
+        case MODEL_ACTION_SET_LAYER_ALPHA:
             switch (argc) {
             case 1:
                 try {
@@ -788,6 +788,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
                 break;
             }
+            break;
+
+        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL:
+            changeLayerAlpha(GraphElementLayout.TRANSPARENCY_FULL, pid);
+            break;
+        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF:
+            changeLayerAlpha(GraphElementLayout.TRANSPARENCY_HALF, pid);
+            break;
+        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE:
+            changeLayerAlpha(GraphElementLayout.TRANSPARENCY_NONE, pid);
             break;
 
         case CHANGE_LAYER_SIZE_FACTOR:
@@ -829,7 +839,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case NORMALIZE_LAYER:
+        case MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY:
             if (argc == 0) {
                 normalizeLayer(gdcoll.getSelectedDoc().hashString, gdcoll.getActiveLayer(), pid);
             }
@@ -1667,7 +1677,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         String szenHash = ec.getGraphDocument().hashString;
         addRedoCommandOrReplace(GDCommands.NORMALIZE_TRANSPARENCY + " " + szenHash + " " + ec.getHashString(), "", pid);
         addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
-        ec.setAlpha(GraphElementLayout.NICHT_TRANSPARENT);
+        ec.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         finish_transaction(pid);
     }
 
@@ -1975,14 +1985,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         szen.start_transaction(pid);
         if (col == null) {
-            addRedoCommandOrReplace(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
         } else {
-            addRedoCommandOrReplace(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx, col.getRGB(), pid);
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, col.getRGB(), pid);
         }
         if (szen.layer[layer_idx].getColor() == null) {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
         } else {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getColor().getRGB(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getColor().getRGB(), pid);
         }
         szen.layer[layer_idx].setColor(col);
         szen.finish_transaction(pid);
@@ -1997,9 +2007,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void changeAlpha(int alphaMode, final int pid) {
         if (alphaMode < 0) {
-            alphaMode = GraphElementLayout.VOLL_TRANSPARENT;
+            alphaMode = GraphElementLayout.TRANSPARENCY_FULL;
         } else if (alphaMode > 255) {
-            alphaMode = GraphElementLayout.NICHT_TRANSPARENT;
+            alphaMode = GraphElementLayout.TRANSPARENCY_NONE;
         }
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
@@ -2031,9 +2041,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         if (alphaMode < 0) {
-            alphaMode = GraphElementLayout.VOLL_TRANSPARENT;
+            alphaMode = GraphElementLayout.TRANSPARENCY_FULL;
         } else if (alphaMode > 255) {
-            alphaMode = GraphElementLayout.NICHT_TRANSPARENT;
+            alphaMode = GraphElementLayout.TRANSPARENCY_NONE;
         }
 
         GraphDocument ecDoc = ec.getGraphDocument();
@@ -2064,13 +2074,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         if (alphaMode < 0) {
-            alphaMode = GraphElementLayout.VOLL_TRANSPARENT;
+            alphaMode = GraphElementLayout.TRANSPARENCY_FULL;
         } else if (alphaMode > 255) {
-            alphaMode = GraphElementLayout.NICHT_TRANSPARENT;
+            alphaMode = GraphElementLayout.TRANSPARENCY_NONE;
         }
         szen.start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.CHANGE_LAYER_ALPHA + " " + szenHash + " " + layer_idx, alphaMode, pid);
-        addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, alphaMode, pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
         szen.layer[layer_idx].setAlpha(alphaMode);
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, null, szen.layer[layer_idx], pid);
@@ -2098,15 +2108,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         szen.start_transaction(pid);
 
-        addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
-        addRedoCommandOrReplace(GDCommands.NORMALIZE_LAYER + " " + szenHash + " " + layer_idx, "", pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY + " " + szenHash + " " + layer_idx, "", pid);
         if (szen.layer[layer_idx].getColor() == null) {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
         } else {
-            addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_COLOR + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getColor().getRGB(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getColor().getRGB(), pid);
         }
         szen.layer[layer_idx].setColor(Color.white);
-        szen.layer[layer_idx].setAlpha(GraphElementLayout.NICHT_TRANSPARENT);
+        szen.layer[layer_idx].setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, null, szen.layer[layer_idx], pid);
     }
