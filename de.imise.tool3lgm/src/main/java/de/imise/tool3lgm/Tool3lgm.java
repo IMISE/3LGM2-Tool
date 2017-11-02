@@ -83,7 +83,6 @@ import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.StatusBar;
 import de.imise.tool3lgm.gui.ToolBar;
-import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
@@ -104,13 +103,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     //aufgerufen werden, damit alle statischen Elemente einmal initialisert werden. Diese Funktion
     //muss unbedingt ganz oben stehen!
     public static final void init() {
-    }
-
-    /**
-     * In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
-     */
-    static {
-        ToolSplashScreen.update();
     }
 
     /**

@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.File;
 
+import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
 
 public class Tool3lgmMain {
@@ -27,6 +28,9 @@ public class Tool3lgmMain {
      *            </table>
      */
     public static void main(final String args[]) {
+
+        //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
+        ToolSplashScreen.update();
 
         //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
         //die Ressourcen gefunden werden
