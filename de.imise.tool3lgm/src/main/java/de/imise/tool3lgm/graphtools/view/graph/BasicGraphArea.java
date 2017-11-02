@@ -571,10 +571,11 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
             if (!multiView) {
                 gc.translate(middleX + effective_x_shift, middleY + zoom * layerGap + effective_y_shift);
                 gc.transform(transformation);
-                szenario.getActiveLayer().setShift(effective_x_shift, effective_y_shift);
-                szenario.getActiveLayer().setMultiView(false);
-                szenario.getActiveLayer().paint(gc);
-                //Selektion nicht darstellen, wenn das Ergebnisbild als Datei gepsiechert werden soll
+                LayerContainer activeLayer = szenario.getActiveLayer();
+                activeLayer.setShift(effective_x_shift, effective_y_shift);
+                activeLayer.setMultiView(false);
+                activeLayer.paint(gc);
+                //Selektion nicht darstellen, wenn das Ergebnisbild als Datei gepspeichert werden soll
                 if (paintState == PaintState.REGULAR && mouse_selection) {
                     int minx, miny, maxx, maxy;
                     minx = Math.min(left_sel_x, right_sel_x);
