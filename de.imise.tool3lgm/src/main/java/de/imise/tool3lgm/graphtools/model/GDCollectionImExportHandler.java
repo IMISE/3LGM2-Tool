@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Static.getSelectedGDCollection;
+import static de.imise.tool3lgm.Static.getTool;
+import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilters;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.File;
@@ -13,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.LicenseHandler;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
@@ -28,8 +32,9 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
+import de.imise.util.swing.dialog.ExtendedFileChooser;
 
-public class GDCollectionImExportHandler {
+public final class GDCollectionImExportHandler {
 
     private final GDCollection gdcoll;
 
@@ -37,11 +42,23 @@ public class GDCollectionImExportHandler {
         this.gdcoll = gdcoll;
     }
 
-    /**
-     * @param file
-     */
-    public void importModel(final File file) {
-        importSzenarios(file, false);
+    public static final void importSzenarios() {
+        importModel(true);
+    }
+
+    public static final void importModel() {
+        importModel(false);
+    }
+
+    private static final void importModel(final boolean chooseSubmodels) {
+        ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
+        oeffnenDialog.setMultiSelectionEnabled(false);
+        oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
+        if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
+            GDCollection selectedGDColl = getSelectedGDCollection();
+            GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
+            imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), chooseSubmodels);
+        }
     }
 
     /**
@@ -52,7 +69,7 @@ public class GDCollectionImExportHandler {
      * @param chooseSzenarioDialog
      *            wenn <code>true</code> kann der
      */
-    public void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
+    private void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
         GDCollection sourceGDColl = new GDCollection();
 
         Static.showProgressDialog();

@@ -3,7 +3,6 @@ package de.imise.tool3lgm.event;
 import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
-import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilters;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
@@ -38,7 +37,6 @@ import de.imise.tool3lgm.LicenseHandler;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.event.LayoutAction.ElementAlignmentAction;
 import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
@@ -101,7 +99,6 @@ import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.swing.dialog.DirectoryChooser;
-import de.imise.util.swing.dialog.ExtendedFileChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
 
@@ -185,14 +182,7 @@ public class ActionLibrary {
             public static final Action ACTION_IMPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_SUBMODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
-                    oeffnenDialog.setMultiSelectionEnabled(false);
-                    oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
-                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        GDCollection selectedGDColl = getSelectedGDCollection();
-                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
-                        imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), true);
-                    }
+                    GDCollectionImExportHandler.importSzenarios();
                 }
             };
 
@@ -200,14 +190,7 @@ public class ActionLibrary {
             public static final Action ACTION_IMPORT_MODEL = new GraphDocumentAction(ActionIdentifier.ACTION_IMPORT_MODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
-                    oeffnenDialog.setMultiSelectionEnabled(false);
-                    oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
-                    if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
-                        GDCollection selectedGDColl = getSelectedGDCollection();
-                        GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
-                        imExportHandler.importModel(oeffnenDialog.getSelectedFile());
-                    }
+                    GDCollectionImExportHandler.importModel();
                 }
             };
 
