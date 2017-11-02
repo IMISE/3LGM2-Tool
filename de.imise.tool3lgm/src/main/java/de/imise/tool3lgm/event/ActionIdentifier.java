@@ -59,7 +59,7 @@ public enum ActionIdentifier {
     ACTION_OPEN_MATRIX_VIEW,
 
     // layout
-    global_layout,
+    ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
     // layerLayout
     layer_reset_color,
     layer_change_color,

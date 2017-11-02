@@ -1367,13 +1367,9 @@ public class ActionLibrary {
             public static final StaticAction LOWEST = new ElementLayoutAction(ActionIdentifier.lowest, GDCommands.Z_MOVE_DOWN);
         }
 
-        public static final Action GLOBAL_LAYOUT = new StaticAction(ActionIdentifier.global_layout, PPP, true) {
-
+        public static final Action ACTION_OPEN_GLOBAL_LAYOUT_EDITOR = new SubmodelAction(ActionIdentifier.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 // der Diolog zeigt sich im Konstruktor selbst an
                 new LayoutEditor(new javax.swing.JFrame(), getSelectedDoc());
             }

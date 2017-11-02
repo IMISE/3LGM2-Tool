@@ -271,7 +271,7 @@ public class MenuCollection {
         public static final String title = getResString("layoutMenu");
 
         /** Item für das Teilmodell-Layout */
-        private final JMenuItem globalLayout = new JMenuItem(ActionLibrary.LayoutActions.GLOBAL_LAYOUT);
+        private final JMenuItem globalLayout = new JMenuItem(ActionLibrary.LayoutActions.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR);
 
         /** Menu für das Ebenen Layout */
         private final JMenu layerLayoutMenu = LayoutSubMenus.LAYER_LAYOUT_MENU;
