@@ -34,6 +34,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.LicenseHandler;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -1105,7 +1106,7 @@ public class ActionLibrary {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                Static.getTool().importLicenseFile();
+                LicenseHandler.importLicenseFile();
             }
         };
     }

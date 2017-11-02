@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.LicenseHandler;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
@@ -187,7 +188,7 @@ public class GDCollectionImExportHandler {
      * @param file Datei in die exportiert werden soll
      */
     public void exportSzenarios(final List<Szenario> szenarios, final File file) {
-        if (!Static.getTool().checkLicenses()) {
+        if (!LicenseHandler.checkLicenses()) {
             return;
         }
         if (szenarios.size() == gdcoll.getSzenarioCount()) {
@@ -219,7 +220,7 @@ public class GDCollectionImExportHandler {
      *            Ziel-Datei beim Speichern
      */
     public void exportModel(final File f) {
-        if (!Static.getTool().checkLicenses()) {
+        if (!LicenseHandler.checkLicenses()) {
             return;
         }
         if (f.exists()) {
