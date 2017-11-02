@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 
 /**
  * Eine Aktion, die enabled ist, wenn irgendein Teilmodell oder ein Gesamtmodell aktiv (also geöffnet) ist.
@@ -14,14 +12,7 @@ public class GraphDocumentAction extends StaticActionNew {
     /**
      * @param identifier
      */
-    public GraphDocumentAction(final ActionIdentifier identifier) {
-        super(identifier);
-    }
-
-    /**
-     * @param identifier
-     */
-    public GraphDocumentAction(final GDCommands identifier) {
+    public GraphDocumentAction(final Object identifier) {
         super(identifier);
     }
 
@@ -30,7 +21,7 @@ public class GraphDocumentAction extends StaticActionNew {
      * @param arguments
      * @param text
      */
-    public GraphDocumentAction(final GDCommands identifier, final String arguments, final String text) {
+    public GraphDocumentAction(final Object identifier, final String arguments, final String text) {
         super(identifier, arguments, text);
     }
 
@@ -38,15 +29,7 @@ public class GraphDocumentAction extends StaticActionNew {
      * @param identifier
      * @param textSuffix
      */
-    public GraphDocumentAction(final ActionIdentifier identifier, final String textSuffix) {
-        super(identifier, textSuffix);
-    }
-
-    /**
-     * @param identifier
-     * @param textSuffix
-     */
-    public GraphDocumentAction(final GDCommands identifier, final String textSuffix) {
+    public GraphDocumentAction(final Object identifier, final String textSuffix) {
         super(identifier, textSuffix);
     }
 
@@ -54,7 +37,7 @@ public class GraphDocumentAction extends StaticActionNew {
      * @param identifier
      * @param initialSelectionState
      */
-    public GraphDocumentAction(final ActionIdentifier identifier, final Boolean initialSelectionState) {
+    public GraphDocumentAction(final Object identifier, final Boolean initialSelectionState) {
         super(identifier, initialSelectionState);
     }
 

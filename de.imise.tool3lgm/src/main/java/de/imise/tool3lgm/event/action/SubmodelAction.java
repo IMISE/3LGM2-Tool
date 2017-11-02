@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 
 /**
@@ -12,19 +10,11 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
  */
 public class SubmodelAction extends GraphDocumentAction {
 
-    public SubmodelAction(final GDCommands identifier) {
+    public SubmodelAction(final Object identifier) {
         super(identifier);
     }
 
-    public SubmodelAction(final GDCommands identifier, final String textSuffix) {
-        super(identifier, textSuffix);
-    }
-
-    public SubmodelAction(final ActionIdentifier identifier) {
-        super(identifier);
-    }
-
-    public SubmodelAction(final ActionIdentifier identifier, final String textSuffix) {
+    public SubmodelAction(final Object identifier, final String textSuffix) {
         super(identifier, textSuffix);
     }
 

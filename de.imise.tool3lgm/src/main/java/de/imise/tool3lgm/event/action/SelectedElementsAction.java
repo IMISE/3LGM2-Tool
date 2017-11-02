@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 
 /**
@@ -16,14 +14,7 @@ public class SelectedElementsAction extends GraphDocumentAction {
     /**
      * @param identifier
      */
-    public SelectedElementsAction(final GDCommands identifier) {
-        super(identifier);
-    }
-
-    /**
-     * @param identifier
-     */
-    public SelectedElementsAction(final ActionIdentifier identifier) {
+    public SelectedElementsAction(final Object identifier) {
         super(identifier);
     }
 

@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 
 /**
  * Eine Aktion, die enabled ist, wenn der grafische Frame des aktiven Teilmodells sichtbar ist.
@@ -14,14 +12,7 @@ public class GraphFrameAction extends GraphDocumentAction {
     /**
      * @param identifier
      */
-    public GraphFrameAction(final ActionIdentifier identifier) {
-        super(identifier);
-    }
-
-    /**
-     * @param identifier
-     */
-    public GraphFrameAction(final GDCommands identifier) {
+    public GraphFrameAction(final Object identifier) {
         super(identifier);
     }
 
@@ -29,15 +20,7 @@ public class GraphFrameAction extends GraphDocumentAction {
      * @param identifier
      * @param textSuffix
      */
-    public GraphFrameAction(final ActionIdentifier identifier, final String textSuffix) {
-        super(identifier, textSuffix);
-    }
-
-    /**
-     * @param identifier
-     * @param textSuffix
-     */
-    public GraphFrameAction(final GDCommands identifier, final String textSuffix) {
+    public GraphFrameAction(final Object identifier, final String textSuffix) {
         super(identifier, textSuffix);
     }
 
@@ -45,7 +28,7 @@ public class GraphFrameAction extends GraphDocumentAction {
      * @param identifier
      * @param initialSelectionState
      */
-    public GraphFrameAction(final ActionIdentifier identifier, final Boolean initialSelectionState) {
+    public GraphFrameAction(final Object identifier, final Boolean initialSelectionState) {
         super(identifier, initialSelectionState);
     }
 

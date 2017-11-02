@@ -58,19 +58,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param identifier
      *            eindeutiger Identifier für diese Action
      */
-    public StaticActionNew(final ActionIdentifier identifier) {
-        this(identifier, null, null, null, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifiziertes {@link GDCommands} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     */
-    public StaticActionNew(final GDCommands identifier) {
+    public StaticActionNew(final Object identifier) {
         this(identifier, null, null, null, null);
     }
 
@@ -86,22 +74,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param textSuffix
      *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
      */
-    public StaticActionNew(final ActionIdentifier identifier, final String textSuffix) {
-        this(identifier, null, null, textSuffix, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param textSuffix
-     *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
-     */
-    public StaticActionNew(final GDCommands identifier, final String textSuffix) {
+    public StaticActionNew(final Object identifier, final String textSuffix) {
         this(identifier, null, null, textSuffix, null);
     }
 
@@ -125,7 +98,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param initialSelectionState
      *            initialer Selektionszustand
      */
-    public StaticActionNew(final ActionIdentifier identifier, final Boolean initialSelectionState) {
+    public StaticActionNew(final Object identifier, final Boolean initialSelectionState) {
         this(identifier, null, null, null, initialSelectionState);
     }
 
@@ -173,10 +146,12 @@ public abstract class StaticActionNew extends ExtendedAction {
         super(text == null ? identifier.toString() : text);
         putValue(IDENTIFIER_KEY, identifier);
 
+        String identifierName = identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+
         //GDCommands überschreiben die toString() so, dass sie ordinal()
         //zurück liefern (damit die UNDO-REDO-Commands nicht so lang werden).
         //Deshalb muss man hier explizit die name()-Methode abfragen.
-        String command = identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+        String command = identifierName;
 
         if (!Strings.isNullOrEmpty(arguments)) {
             putValue(ARGUMENT_KEY, arguments);
@@ -205,18 +180,18 @@ public abstract class StaticActionNew extends ExtendedAction {
         }
 
         //LargeIcon laden (wenn vorhanden)
-        Icon icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_LARGE_PREFIX + identifier + ".gif");
+        Icon icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_LARGE_PREFIX + identifierName + ".gif");
         if (icon != null) {
             setLargeIcon(icon);
         } else {
-            setLargeIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_LARGE_PREFIX + identifier + ".gif"));
+            setLargeIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_LARGE_PREFIX + identifierName + ".gif"));
         }
         //SmallIcon laden (wenn vorhanden)
-        icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_SMALL_PREFIX + identifier + ".gif");
+        icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_SMALL_PREFIX + identifierName + ".gif");
         if (icon != null) {
             setSmallIcon(icon);
         } else {
-            setSmallIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_SMALL_PREFIX + identifier + ".gif"));
+            setSmallIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_SMALL_PREFIX + identifierName + ".gif"));
         }
         //ToolTip laden (wenn vorhanden)
         try {
