@@ -189,7 +189,7 @@ public class Static {
     }
 
     /**
-     * erstellt einen neuen ProgressDialog mit dem Hauotfenster als owner
+     * erstellt einen neuen ProgressDialog mit dem Hauptfenster als owner
      */
     public static void showProgressDialog(final boolean showStatusLabel) {
         //ist null, wenn der Baukasten extern z.B. über den Reporter geladen wird
@@ -321,13 +321,13 @@ public class Static {
      * Unter OS-X reagieren modale Dialoge, die aus Drag&Drop-Ereignissen heraus gestartet werden nicht mehr auf die
      * Maus. Sie tun es erst wieder, wenn sie in einem eigenen Thread gestartet werden. Daher das hier.
      *
-     * @param parenComponent
+     * @param parentComponent
      * @param messageResKey
      */
-    public static final void showMessgae(final Component parenComponent, final String messageResKey) {
+    public static final void showMessage(final Component parentComponent, final String messageResKey) {
         SwingUtilities.invokeLater(() -> {
             String message = getResString(messageResKey);
-            JOptionPane.showMessageDialog(parenComponent, message);
+            JOptionPane.showMessageDialog(parentComponent, message);
         });
     }
 

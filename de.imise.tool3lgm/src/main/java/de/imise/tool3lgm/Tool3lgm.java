@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.help.CSH;
 import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -80,7 +79,6 @@ import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
-import de.imise.util.swing.dialog.ProgressDialog;
 
 /** Hauptklasse der Anwendung 3lgm */
 public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener {
@@ -127,9 +125,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
     int dividerLocation = 200;
-
-    /** Progress-Dialog */
-    private ProgressDialog progressDialog;
 
     /** Holds the actual context and generates context menus */
     public static ContextGenerator contextGenerator;
@@ -429,12 +424,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     return false;
                 }
             }
-            if (progressDialog == null) {
-                progressDialog = new ProgressDialog(this, getResString("load_model") + " " + file.getName(), true);
-            }
-            if (progressDialog != null) {
-                progressDialog.setStatusLabelText(getResString("read_progress"));
-            }
+            Static.showProgressDialog(true);
+            Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
+            Static.setProgressDialogStatusLabel("read_progress");
             update(getGraphics());
             boolean retVal = fileHandler.loadFromRAF();
             return retVal;
@@ -444,7 +436,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                     getResString("ok")
             };
             JOptionPane.showOptionDialog(this, getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
-            closeProgressDialog();
+            Static.closeProgressDialog();
             return false;
         }
     }
@@ -476,7 +468,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             gdcoll.createSzenario();
         } else if (file != null) {
             if (!loadFile(file, gdcoll)) {
-                closeProgressDialog();
+                Static.closeProgressDialog();
                 return false;
             }
         } else if (open == true) {
@@ -485,14 +477,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
             if (chooser.showOpenDialog(this, false, lgmFileFilter) == ExtendedFileChooser.APPROVE_OPTION) {
                 file = chooser.getSelectedFile();
-                progressDialog = new ProgressDialog(this, getResString("load_model") + " " + file.getName(), true);
+                Static.showProgressDialog(true);
                 UserProperties.setWorkingDirectory(file);
                 chooser.setVisible(false);
                 if (!loadFile(file, gdcoll)) {
-                    if (progressDialog != null) {
-                        progressDialog.dispose();
-                        progressDialog = null;
-                    }
+                    Static.closeProgressDialog();
                     return false;
                 }
             } else {
@@ -500,27 +489,19 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
         }
 
-        if (progressDialog != null) {
-            progressDialog.setStatusLabelText(getResString("finish_progress"));
-        }
-
+        Static.setProgressDialogStatusLabel("finish_progress");
         modelBrowserPanel.addCollection(gdcoll);
 
         collections.add(gdcoll);
         gdcoll.addGraphDocumentListener(this);
 
-        if (progressDialog != null) {
-            progressDialog.setStatusLabelText(getResString("create_frame") + gdcoll.getMainGraphDocument().getTitle());
-        }
-
+        Static.setProgressDialogStatusLabel("create_frame", gdcoll.getMainGraphDocument().getTitle());
         createMainFrame(gdcoll.getMainGraphDocument());
 
         LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
-            if (progressDialog != null) {
-                progressDialog.setStatusLabelText(getResString("create_frame") + szen.getTitle());
-            }
+            Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
             if (i == 0) {
                 selectedDoc = szen;
             }
@@ -535,7 +516,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         setSelectedDoc(selectedDoc, true);
         gdcoll.setChanged(false);
         System.gc();
-        closeProgressDialog();
+        Static.closeProgressDialog();
 
         //		System.err.println();
         //		System.err.println("###########################################################################");
@@ -1144,7 +1125,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //das Hauptdokument holen
         selDoc = gdcoll.getMainGraphDocument();
 
-        progressDialog = new ProgressDialog(this, getResString("close_model") + " " + gdcoll.getName(), true);
+        Static.showProgressDialog(true);
+        Static.setProgressDialogTitle(getResString("close_model") + " " + gdcoll.getName());
 
         List<ElementPropertyDialog> dialogs = ModelConstants.getDialogs();
         for (int n = 0; n < dialogs.size(); n++) {
@@ -1159,7 +1141,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         }
 
         if (!askUserCloseModel(gdcoll)) {
-            closeProgressDialog();
+            Static.closeProgressDialog();
             return false;
         }
 
@@ -1187,7 +1169,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         System.gc();
 
-        closeProgressDialog();
+        Static.closeProgressDialog();
 
         AbstractInternalFrame lastFrame = toolbar.getNextWindow();
         if (lastFrame == null) {
@@ -1517,67 +1499,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public final GraphAreaToolbarManager getGraphAreaToolBarManager() {
         return graphAreaToolbarManager;
-    }
-
-    /**
-     * erstellt einen neuen ProgressDialog mit dem Hauotfenster als owner
-     */
-    public void showProgressDialog() {
-        showProgressDialog(this);
-    }
-
-    /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Fenster als owner
-     */
-    public void showProgressDialog(final JFrame owner) {
-        closeProgressDialog();
-        progressDialog = new ProgressDialog(owner, true);
-    }
-
-    /**
-     * erstellt einen neuen ProgressDialog mit dem übergebenen Dialog als owner
-     */
-    public void showProgressDialog(final JDialog owner) {
-        closeProgressDialog();
-        progressDialog = new ProgressDialog(owner, true);
-    }
-
-    /**
-     * setzt einen neuen Titel des ProgressDialog, sofern dieser überhaupt existiert;
-     * ansonsten passiert nichts
-     *
-     * @param xmlText String mit dem neuen Titel
-     */
-    public void setProgressDialogTitle(final String text) {
-        if (progressDialog == null) {
-            return;
-        }
-        progressDialog.setTitle(text);
-    }
-
-    /**
-     * schließt den ProgressDialog, sofern dieser überhaupt existiert;
-     * ansonsten passiert nichts
-     */
-    public void closeProgressDialog() {
-        if (progressDialog == null) {
-            return;
-        }
-        progressDialog.dispose();
-        progressDialog = null;
-    }
-
-    /**
-     * setzt einen neuen Stautstext des ProgressDialog, sofern dieser überhaupt existiert;
-     * ansonsten passiert nichts
-     *
-     * @param xmlText String mit neuen Statustext
-     */
-    public void setProgressDialogStatusLabel(final String text) {
-        if (progressDialog == null) {
-            return;
-        }
-        progressDialog.setStatusLabelText(text);
     }
 
     /** (De-)Aktiviert den ModelBrowser */
