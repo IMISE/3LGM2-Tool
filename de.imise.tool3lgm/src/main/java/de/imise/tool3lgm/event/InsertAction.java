@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
  *
  * @author fstephan
  */
+@Deprecated
 class InsertAction extends AbstractLGMAction {
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */

@@ -12,14 +12,15 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
  * <p>
  * Das im Konstruktor spezifizierte Kommando wird inklusive eventueller Argumente beim Auslösen dieser {@link Action} im aktuellen
  * {@link GraphDocument} ausgeführt.
- * 
+ *
  * @author fstephan
  */
+@Deprecated
 class LayoutAction extends StaticAction {
 
     /**
      * Von {@link LayoutAction} abgeleitet Klasse speziell für das Ändern der Element-Ausrichtung
-     * 
+     *
      * @author fstephan
      */
     public static class ElementAlignmentAction extends LayoutAction {
@@ -37,7 +38,7 @@ class LayoutAction extends StaticAction {
 
     /**
      * Von {@link LayoutAction} abgeleitet Klasse speziell für das Ändern des Element-Layouts
-     * 
+     *
      * @author fstephan
      */
     public static class ElementLayoutAction extends LayoutAction {
@@ -67,7 +68,7 @@ class LayoutAction extends StaticAction {
 
     /**
      * Von {@link LayoutAction} abgeleitet Klasse speziell für das Ändern des Ebenen-Layouts
-     * 
+     *
      * @author fstephan
      */
     public static class LayerLayoutAction extends LayoutAction {
@@ -102,7 +103,7 @@ class LayoutAction extends StaticAction {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param identifier eindeutiger {@link ActionIdentifier} für diese Action
      * @param command das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte
      *            Kommando
@@ -124,7 +125,7 @@ class LayoutAction extends StaticAction {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param identifier eindeutiger {@link ActionIdentifier} für diese Action
      * @param command das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte
      *            Kommando
@@ -136,7 +137,7 @@ class LayoutAction extends StaticAction {
 
     /**
      * Konstruktor
-     * 
+     *
      * @param identifier eindeutiger {@link ActionIdentifier} für diese Action
      * @param command das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte
      *            Kommando
