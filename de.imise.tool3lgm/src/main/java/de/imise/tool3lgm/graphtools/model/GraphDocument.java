@@ -932,15 +932,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
             break;
 
-        case VALIGN_TOP:
-        case VALIGN_CENTER:
-        case VALIGN_BOTTOM:
-        case HALIGN_LEFT:
-        case HALIGN_CENTER:
-        case HALIGN_RIGHT:
-        case ALIGN_WIDTH:
-        case ALIGN_HEIGHT:
-        case ALIGN_WIDTH_AND_HEIGTH:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH:
             align(command, pid);
             break;
 
@@ -2379,31 +2379,31 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             int w = nc.getWidth();
             int h = nc.getHeight();
             switch (mode) {
-            case VALIGN_TOP:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP:
                 y = lastSelected.getY() - lastSelected.getHeight() / 2 + h / 2;
                 break;
-            case VALIGN_CENTER:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER:
                 y = lastSelected.getY();
                 break;
-            case VALIGN_BOTTOM:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM:
                 y = lastSelected.getY() + lastSelected.getHeight() / 2 - h / 2;
                 break;
-            case HALIGN_LEFT:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT:
                 x = lastSelected.getX() - lastSelected.getWidth() / 2 + w / 2;
                 break;
-            case HALIGN_CENTER:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER:
                 x = lastSelected.getX();
                 break;
-            case HALIGN_RIGHT:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT:
                 x = lastSelected.getX() + lastSelected.getWidth() / 2 - w / 2;
                 break;
-            case ALIGN_WIDTH:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH:
                 w = lastSelected.getWidth();
                 break;
-            case ALIGN_HEIGHT:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH:
                 h = lastSelected.getHeight();
                 break;
-            case ALIGN_WIDTH_AND_HEIGTH:
+            case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH:
                 w = lastSelected.getWidth();
                 h = lastSelected.getHeight();
                 break;

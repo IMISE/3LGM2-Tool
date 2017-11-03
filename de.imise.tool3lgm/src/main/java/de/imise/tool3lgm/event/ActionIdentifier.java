@@ -88,19 +88,6 @@ public enum ActionIdentifier {
     decrease,
     lowest,
 
-    // elementAlignment
-    // elementAlignmentHorizontal
-    element_left,
-    element_center_horizontal,
-    element_right,
-    // elementAlignmentVertical
-    element_top,
-    element_center_vertical,
-    element_bottom,
-    element_width,
-    element_height,
-    element_width_and_height,
-
     // submodels
     new_submodel,
     remove_submodel,

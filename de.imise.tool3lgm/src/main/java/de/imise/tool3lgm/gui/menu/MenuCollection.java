@@ -144,8 +144,11 @@ public class MenuCollection {
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten
-                getResString("elementAlignmentMenu"), ElementAlignment.Horizontal.LEFT, ElementAlignment.Horizontal.CENTER, ElementAlignment.Horizontal.RIGHT, new JSeparator(), ElementAlignment.Vertical.TOP, ElementAlignment.Vertical.CENTER,
-                ElementAlignment.Vertical.BOTTOM, new JSeparator(), ElementAlignment.Size.WIDTH, ElementAlignment.Size.HEIGTH, ElementAlignment.Size.WIDTH_AND_HEIGTH, new JSeparator(), ElementAlignmentDialog.getElementAlignmentAction());
+                getResString("elementAlignmentMenu"), ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT, ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER,
+                ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT, new JSeparator(), ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP,
+                ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER, ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM, new JSeparator(),
+                ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, new JSeparator(),
+                ElementAlignmentDialog.getElementAlignmentAction());
     }
 
     /** Sammlung der Unter-Menus des Optionen-Menus */

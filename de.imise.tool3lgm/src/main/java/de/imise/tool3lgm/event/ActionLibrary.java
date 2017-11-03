@@ -37,11 +37,11 @@ import de.imise.tool3lgm.LicenseHandler;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.event.LayoutAction.ElementAlignmentAction;
 import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
+import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
@@ -1129,10 +1129,10 @@ public class ActionLibrary {
         public static class LayerLayout {
 
             /** Setzt Farbe und Transparenz der ausgewählten Ebene zurück */
-            public static final ExtendedAction MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
+            public static final Action MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
 
             /** öffnet ein Fenster zur Auswahl der Ebenen-Farbe */
-            public static final ExtendedAction MODEL_ACTION_SET_LAYER_COLOR = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_COLOR, PPP);
+            public static final Action MODEL_ACTION_SET_LAYER_COLOR = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_COLOR, PPP);
 
             /**
              * Actions für die Transparenz der Ebenen
@@ -1142,20 +1142,19 @@ public class ActionLibrary {
             public static class Transparency {
 
                 /** Macht die momentan ausgewählte Ebene nicht-transparent */
-                public static final ExtendedAction MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
+                public static final Action MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
 
                 /** Macht die momentan ausgewählte Ebene halb-transparent */
-                public static final ExtendedAction MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
+                public static final Action MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
 
                 /** Macht die momentan ausgewählte Ebene voll-transparent */
-                public static final ExtendedAction MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
+                public static final Action MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
             }
         }
 
         /**
          * Actions für die relative Ausrichtung der Elemente zueinander<br>
-         * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend
-         * ausgerichtet.
+         * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend ausgerichtet.
          *
          * @author fstephan
          */
@@ -1169,31 +1168,13 @@ public class ActionLibrary {
             public static class Horizontal {
 
                 /** Linksbündige Ausrichtung am zuletzt ausgewählten Element */
-                public static final StaticAction LEFT = new ElementAlignmentAction(ActionIdentifier.element_left, GDCommands.HALIGN_LEFT);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT);
 
                 /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (horizontal) */
-                public static final StaticAction CENTER = new ElementAlignmentAction(ActionIdentifier.element_center_horizontal, GDCommands.HALIGN_CENTER);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER);
 
                 /** Rechtsbündige Ausrichtung am zuletzt ausgewählten Element */
-                public static final StaticAction RIGHT = new ElementAlignmentAction(ActionIdentifier.element_right, GDCommands.HALIGN_RIGHT);
-            }
-
-            /**
-             * Größenanpassung
-             *
-             * @author astruebi
-             * @create 13.02.2013
-             */
-            public static class Size {
-
-                /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
-                public static final StaticAction WIDTH = new ElementAlignmentAction(ActionIdentifier.element_width, GDCommands.ALIGN_WIDTH);
-
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
-                public static final StaticAction HEIGTH = new ElementAlignmentAction(ActionIdentifier.element_height, GDCommands.ALIGN_HEIGHT);
-
-                /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
-                public static final StaticAction WIDTH_AND_HEIGTH = new ElementAlignmentAction(ActionIdentifier.element_width_and_height, GDCommands.ALIGN_WIDTH_AND_HEIGTH);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT);
 
             }
 
@@ -1205,13 +1186,33 @@ public class ActionLibrary {
             public static class Vertical {
 
                 /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
-                public static final StaticAction TOP = new ElementAlignmentAction(ActionIdentifier.element_top, GDCommands.VALIGN_TOP);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP);
 
                 /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
-                public static final StaticAction CENTER = new ElementAlignmentAction(ActionIdentifier.element_center_vertical, GDCommands.VALIGN_CENTER);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER);
 
                 /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
-                public static final StaticAction BOTTOM = new ElementAlignmentAction(ActionIdentifier.element_bottom, GDCommands.VALIGN_BOTTOM);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM);
+
+            }
+
+            /**
+             * Größenanpassung
+             *
+             * @author astruebi
+             * @create 13.02.2013
+             */
+            public static class Size {
+
+                /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
+
+                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
+
+                /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
+                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
+
             }
 
         }
@@ -1236,10 +1237,10 @@ public class ActionLibrary {
              */
 
             /** öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
-            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, PPP);
+            public static final Action MODEL_ACTION_SET_ELEMENT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, PPP);
 
             /** öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
-            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, PPP);
+            public static final Action MODEL_ACTION_SET_ELEMENT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, PPP);
 
             /**
              * Actions für die Auswahl von Icons für Elemente
