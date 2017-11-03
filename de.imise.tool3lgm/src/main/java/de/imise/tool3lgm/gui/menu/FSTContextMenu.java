@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 
 import javax.swing.Action;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
@@ -108,7 +107,7 @@ public class FSTContextMenu extends JPopupMenu {
         private final Component takeOverInSubmodelMenu = new TakeOverInSubmodelMenu();
         private final Component connectToSubmodelMenu = new ConnectToSubmodelMenu();
         private final Component analyseMenu = new AnalyseMenu();
-        private final Component configsVisibility = new JCheckBoxMenuItem(ActionLibrary.ContextActions.CONFIGURATIONS_VISIBILITY);
+        private final Component configsVisibility = null;// new JCheckBoxMenuItem(ActionLibrary.ContextActions.CONFIGURATIONS_VISIBILITY);
 
         //		/*
         //		 * private JMenu configsMenu = new

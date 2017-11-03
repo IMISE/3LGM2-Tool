@@ -8,7 +8,6 @@ package de.imise.tool3lgm.graphtools.model;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
 
 import java.io.File;
 import java.io.InputStream;
@@ -33,7 +32,6 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
@@ -54,7 +52,6 @@ public class LGMGraphDocument extends GraphDocument {
 
     @Override
     protected void dispatch_command(final GDCommands command, final String[] argv, final int pid) {
-        int argc = argv.length;
         switch (command) {
         case MODEL_ACTION_COPY:
             copyToClipboard();
@@ -89,24 +86,6 @@ public class LGMGraphDocument extends GraphDocument {
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
-        case SHOW_ALL_CONFIGS:
-        case HIDE_ALL_CONFIGS:
-            boolean visible = command == SHOW_ALL_CONFIGS;
-            if (argc == 0) {
-                if (!isSelection()) {
-                    layer[gdcoll.getActiveLayer()].setShowAllInterLayerConnections(visible);
-                    distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-                } else {
-                    for (ElementContainer ec : selectedContainer) {
-                        if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
-                            ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(visible);
-                        }
-                    }
-                    distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-                }
-                break;
-            }
-            break;
         default:
             super.dispatch_command(command, argv, pid);
         }

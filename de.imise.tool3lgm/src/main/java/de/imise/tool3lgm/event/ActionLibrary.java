@@ -367,78 +367,61 @@ public class ActionLibrary {
 
     public static class ContextActions {
 
-        public static final ExtendedAction ACTION_SHOW_ELEMENT_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG) {
+        public static final Action ACTION_SHOW_ELEMENT_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG) {
             @Override
             public void actionPerformed() {
                 Static.getSelectedDoc().showPropertyDialog();
             }
         };
 
-        /*
-         * public static final Action TAKE_OVER_IN_SUBMODEL = new
-         * CommandAction(GDCommands.SELECT_LINKED_SZENARIO); public static final Action
-         * LINK_WITH_SUBMODEL = new
-         * CommandAction(ActionIdentifier.link_with_submodel,GDCommands.LINK_SELECTED_TO_SZENARIO,
-         * "'null'"); public static final Action SET_ELEMENT_VISIBLE = new
-         * CommandAction(ActionIdentifier.set_element_visible,GDCommands.UNLINK); public static
-         * final Action SET_ELEMENT_INVISIBLE = new
-         * CommandAction(ActionIdentifier.set_element_invisible,GDCommands.UNLINK); public static
-         * final Action EXPAND_ELEMENT = new
-         * CommandAction(ActionIdentifier.expand_element,GDCommands.UNLINK); public static final
-         * Action COLLAPSE_ELEMENT = new
-         * CommandAction(ActionIdentifier.collapse_element,GDCommands.UNLINK); public static final
-         * Action ELEMENT_ANALYSIS = new
-         * CommandAction(ActionIdentifier.element_analysis,GDCommands.UNLINK); public static final
-         * Action JOIN_ELEMENTS = new CommandAction(ActionIdentifier.join,GDCommands.UNLINK); public
-         * static final Action CREATE_TEXTFIELD = new
-         * CommandAction(ActionIdentifier.create_textfield,GDCommands.LINK);
-         */
-        /**
-         * Action, die das Anzeigen von Interebenenbeziehungen für die ausgewählten Elemente/ die
-         * ausgewählte Ebene (de-)aktiviert.
-         */
-        public static final Action CONFIGURATIONS_VISIBILITY = new CommandAction(GDCommands.SHOW_ALL_CONFIGS) {
+        public static final Action MODEL_ACTION_HIDE_ELEMENT_CONFIGS = createMODEL_ACTION_SHOW_HIDE_ELEMENT_CONFIGS(false);
 
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (isSelected()) {
-                    exec(GDCommands.HIDE_ALL_CONFIGS);
-                } else {
-                    exec(GDCommands.SHOW_ALL_CONFIGS);
-                }
+        public static final Action MODEL_ACTION_SHOW_ELEMENT_CONFIGS = createMODEL_ACTION_SHOW_HIDE_ELEMENT_CONFIGS(true);
 
-            }
-
-            @Override
-            public boolean isEnabled() {
-                GraphDocument doc = getSelectedDoc();
-                for (ElementContainer ec : doc.getSelectedRealElementContainerIterable()) {
-                    if (ec instanceof InterLayerConnectedNodeContainer) {
-                        return true;
+        public static final Action createMODEL_ACTION_SHOW_HIDE_ELEMENT_CONFIGS(final boolean show) {
+            return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SHOW_ELEMENT_CONFIGS : GDCommands.MODEL_ACTION_HIDE_ELEMENT_CONFIGS) {
+                @Override
+                public boolean isEnabled() {
+                    if (!super.isEnabled()) {
+                        return false;
                     }
-                }
-                LayerContainer activeLayer = doc.getActiveLayer();
-                if (activeLayer.isSelected() && activeLayer.getLayerNumber() != ModelConstants.LAYERS[0]) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public boolean isSelected() {
-                GraphDocument doc = getSelectedDoc();
-                for (ElementContainer ec : doc.getSelectedRealElementContainerIterable()) {
-                    if (ec instanceof InterLayerConnectedNodeContainer && ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections() && ec.isSelected()) {
-                        return true;
+                    for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
+                        if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
+                            boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
+                            if (show != hasVisibleConfigs) {
+                                return true;
+                            }
+                        }
                     }
+                    return false;
                 }
-                LayerContainer activeLayer = doc.getActiveLayer();
-                if (activeLayer.isSelected()) {
-                    return activeLayer.isShowInterLayerConnections();
+            };
+        }
+
+        public static final Action MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS = createMODEL_ACTION_SHOW_HIDE_LAYER_CONFIGS(false);
+
+        public static final Action MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS = createMODEL_ACTION_SHOW_HIDE_LAYER_CONFIGS(true);
+
+        public static final Action createMODEL_ACTION_SHOW_HIDE_LAYER_CONFIGS(final boolean show) {
+            return new GraphFrameAction(show ? GDCommands.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS : GDCommands.MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS) {
+                @Override
+                public boolean isEnabled() {
+                    if (!super.isEnabled()) {
+                        return false;
+                    }
+                    LayerContainer lc = Static.getSelectedDoc().getActiveLayer();
+                    for (ElementContainer ec : lc.getKnoten()) {
+                        if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
+                            boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
+                            if (show != hasVisibleConfigs) {
+                                return true;
+                            }
+                        }
+                    }
+                    return show != lc.isShowInterLayerConnections();
                 }
-                return false;
-            }
-        };
+            };
+        }
 
         /*
          * public static final Action VERIFICATION = new

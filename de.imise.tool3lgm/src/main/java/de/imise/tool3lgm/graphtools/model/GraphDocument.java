@@ -56,6 +56,7 @@ import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -1258,6 +1259,22 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case JOIN_SELECTED:
             joinSelected(pid);
             break;
+
+        case MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS:
+        case MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS:
+            layer[gdcoll.getActiveLayer()].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
+            distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+            break;
+        case MODEL_ACTION_SHOW_ELEMENT_CONFIGS:
+        case MODEL_ACTION_HIDE_ELEMENT_CONFIGS:
+            for (ElementContainer ec : selectedContainer) {
+                if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
+                    ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SHOW_ELEMENT_CONFIGS);
+                }
+            }
+            distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+            break;
+
         default:
             break;
         }

@@ -769,7 +769,7 @@ public class LayerContainer extends ElementContainer {
      * @param doc
      *            aktives GraphDocument
      */
-    public void setShowAllInterLayerConnections(final boolean showInterLayerConnections) {
+    public void setShowInterLayerConnections(final boolean showInterLayerConnections) {
         this.showInterLayerConnections = showInterLayerConnections;
         for (NodeContainer ec : nodeContainer) {
             setShowInterLayerConnections(showInterLayerConnections, ec);

@@ -30,7 +30,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_ADDICTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.HIDE_ALL_CONFIGS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
@@ -46,7 +45,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.SHOW_ALL_CONFIGS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
@@ -185,11 +183,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * COMMENTME
      */
     private static JMenuItem undo, redo, queue, consistency;
-
-    /**
-     * COMMENTME
-     */
-    private static JMenu configuration_sub_menu;
 
     /**
      * COMMENTME
@@ -339,17 +332,13 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         layout_layer.add(color_layer);
         layout_layer.add(trans_layer);
 
-        show_configs = getItem("konf_einbl", SHOW_ALL_CONFIGS);
-        hide_configs = getItem("konf_ausbl", HIDE_ALL_CONFIGS);
+        show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ELEMENT_CONFIGS);
+        hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ELEMENT_CONFIGS);
         set_visible = getItem("einbl", SET_VISIBLE, "true");
         set_invisible = getItem("ausbl", SET_VISIBLE, "false");
 
-        configuration_sub_menu = new JMenu(getResString("konf"));
-        configuration_sub_menu.add(show_configs);
-        configuration_sub_menu.add(hide_configs);
-
-        layer_show_configs = getItem("konf_einbl", SHOW_ALL_CONFIGS);
-        layer_hide_configs = getItem("konf_ausbl", HIDE_ALL_CONFIGS);
+        layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
+        layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS);
         aufklappen = getItem("aufklappen", AUFKLAPPEN);
         zuklappen = getItem("zuklappen", ZUKLAPPEN);
 
@@ -439,21 +428,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenuItem getItem(final Action action) {
         return new JMenuItem(action);
-    }
-
-    /**
-     *
-     */
-    private static void checkConfigurationSubMenu() {
-        boolean b = false;
-        for (ElementContainer selectedEC : doc.getSelectedRealElementContainerIterable()) {
-            b = ModelConstants.isInterLayerStartClass(selectedEC.getElement().getClass());
-            if (b) {
-                break;
-            }
-        }
-        show_configs.setEnabled(b);
-        hide_configs.setEnabled(b);
     }
 
     /**
@@ -602,9 +576,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             if (doc instanceof Szenario) {
                 if (ec instanceof InterLayerConnectedNodeContainer && contextSource instanceof InputGraphArea) {
                     menu.addSeparator();
-                    checkConfigurationSubMenu();
-                    menu.add(show_configs);
-                    menu.add(hide_configs);
+                    addMenuItem(menu, show_configs);
+                    addMenuItem(menu, hide_configs);
                 }
                 if (me.isPaintable() || me instanceof Prozess) {
                     menu.addSeparator();
@@ -885,9 +858,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 if (menu.getComponentCount() > 0) {
                     menu.addSeparator();
                 }
-                checkConfigurationSubMenu();
-                menu.add(show_configs);
-                menu.add(hide_configs);
+                addMenuItem(menu, show_configs);
+                addMenuItem(menu, hide_configs);
             }
             if (menu.getComponentCount() > 0) {
                 menu.addSeparator();
@@ -1132,8 +1104,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         }
         menu.addSeparator();
 
-        menu.add(layer_show_configs);
-        menu.add(layer_hide_configs);
+        addMenuItem(menu, layer_show_configs);
+        addMenuItem(menu, layer_hide_configs);
 
         menu.addSeparator();
         menu.add(layout_layer);
@@ -1725,7 +1697,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         doc.addToSelection(mc, 0);
         menu = getKnotContextMenu(gdl);
         //TODO: FST: showMenu
-        FSTContextMenu.showMenu(gdl, xin, yin);
+        //FSTContextMenu.showMenu(gdl, xin, yin);
         menu.show(gdl, xin, yin);
     }
 
