@@ -34,7 +34,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateNa
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
@@ -53,6 +52,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
@@ -523,7 +523,7 @@ public final class GDCollection extends UserFieldTarget {
         String ecDocHash = ecDoc.hashString;
         if (ec.getColor() != null) {
             ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + ecDocHash + " " + ecHash + " " + ec.getColor().getRGB(), pid);
-            ecDoc.addUndoCommand(CHANGE_ALPHA + " " + ecDocHash + " " + ecHash + " " + ec.getAlpha(), pid);
+            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_ALPHA + " " + ecDocHash + " " + ecHash + " " + ec.getAlpha(), pid);
         }
         if (ec.getForm() != null) {
             ecDoc.addUndoCommand(CHANGE_FORM + " " + ecDocHash + " " + ecHash + " " + ec.getForm(), pid);
