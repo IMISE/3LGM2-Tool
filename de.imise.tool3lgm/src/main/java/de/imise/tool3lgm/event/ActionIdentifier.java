@@ -58,6 +58,9 @@ public enum ActionIdentifier {
     ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG,
     ACTION_OPEN_MATRIX_VIEW,
 
+    //context
+    ACTION_SHOW_ELEMENT_PROPERTY_DIALOG,
+
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
     element_reset_color,

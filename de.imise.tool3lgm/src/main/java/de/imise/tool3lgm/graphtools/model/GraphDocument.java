@@ -702,10 +702,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             createAddicted(doc, master, edgeClass.asSubclass(Composition.class), slaveClass, pid);
             break;
 
-        case ELEMENT_PROPERTIES:
-            showPropertyDialog();
-            break;
-
         case MODEL_ACTION_SET_ELEMENT_COLOR:
             switch (argc) {
             case 0:

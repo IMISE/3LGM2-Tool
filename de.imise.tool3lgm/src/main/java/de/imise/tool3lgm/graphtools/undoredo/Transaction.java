@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.util.StringUtils;
 
 /**
  * @author N.N.
@@ -13,22 +14,22 @@ public class Transaction {
     /**
      * COMMENTME
      */
-    private final ArrayList<String> undo;
+    private final List<String> undo;
 
     /**
      * COMMENTME
      */
-    private final ArrayList<String> redo;
+    private final List<String> redo;
 
     /**
      * COMMENTME
      */
-    private final ArrayList<String> pre_selection;
+    private final List<String> pre_selection;
 
     /**
      * COMMENTME
      */
-    private final ArrayList<String> post_selection;
+    private final List<String> post_selection;
 
     /**
      * COMMENTME
@@ -51,10 +52,10 @@ public class Transaction {
      */
     public Transaction(final int pid, final GraphDocument doc) {
         this.doc = doc;
-        undo = new ArrayList<String>(50);
-        pre_selection = new ArrayList<String>();
-        post_selection = new ArrayList<String>();
-        redo = new ArrayList<String>(50);
+        undo = new ArrayList<>(50);
+        pre_selection = new ArrayList<>();
+        post_selection = new ArrayList<>();
+        redo = new ArrayList<>(50);
         this.pid = pid;
         open = 0;
     }
@@ -68,7 +69,7 @@ public class Transaction {
 
     /**
      * Liefert <code>true</code>, wenn das ausführen des Undo- oder Redokommandos nichts sinnvolles bewirkt.
-     * 
+     *
      * @return
      */
     boolean isUseless() {
@@ -90,13 +91,7 @@ public class Transaction {
      * @return
      */
     private final static boolean isProcessable(final String command) {
-        if (command == null || command.equals("")) {
-            return false;
-        }
-        if (command.startsWith(GDCommands.ELEMENT_PROPERTIES.toString())) {
-            return false;
-        }
-        return true;
+        return !StringUtils.isNullOrEmptyOrBlank(command);
     }
 
     /**
@@ -110,14 +105,14 @@ public class Transaction {
      * @param command
      */
     final void addRedoCommand(final String command) {
-        if (command != null && !command.trim().equals("")) {
+        if (isProcessable(command)) {
             redo.add(command);
         }
     }
 
     /**
      * Liefert das Redo-Kommando am Index <code>index</code>.
-     * 
+     *
      * @param index
      * @return
      */
@@ -130,12 +125,12 @@ public class Transaction {
      * <code>commadPrefix</code> und den <code>commandArguments</code> am Ende an. <br />
      * Diese Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das Redo benötigt man immer nur
      * die letzte Verschiebeoperation, da sie den endgültigen Ort und Größe eines Elementes eindeutig bestimmt.
-     * 
+     *
      * @param commandPrefix
      * @param commandArguments
      */
     final void addOrReplaceRedoCommand(final String commandPrefix, final String commandArguments) {
-        if (commandPrefix != null && !commandPrefix.trim().isEmpty()) {
+        if (isProcessable(commandPrefix)) {
             for (int i = redo.size() - 1; i >= 0; i--) {
                 if (redo.get(i).startsWith(commandPrefix)) {
                     redo.remove(i);
@@ -151,12 +146,12 @@ public class Transaction {
      * Logt ein Undo-Kommando nur, wenn nicht schon ein Undo-Kommando mit demselben <code>commandpre</code> in dieser Trasaktion vorkommt. Diese
      * Funktion ist gedacht, um z. B. bei Verschiebeoperationen nicht jeden Zwischenschritt zu speichern. Für das
      * Undo benötigt man immer nur das erste Undo-Kommando, da sie den Ausgangs-Ort und -Größe eines Elementes eindeutig bestimmt.
-     * 
+     *
      * @param commandPrefix
      * @param commandArguments
      */
     final void addUndoCommandIfNotExist(final String commandPrefix, final String commandArguments) {
-        if (commandPrefix != null && !commandPrefix.trim().isEmpty()) {
+        if (isProcessable(commandPrefix)) {
             for (int i = undo.size() - 1; i >= 0; i--) {
                 if (undo.get(i).startsWith(commandPrefix)) {
                     return;
@@ -183,11 +178,11 @@ public class Transaction {
     }
 
     /**
-     * @param string
+     * @param command
      */
-    final void addUndoCommand(final String string) {
-        if (string != null && !string.equals("")) {
-            undo.add(string);
+    final void addUndoCommand(final String command) {
+        if (isProcessable(command)) {
+            undo.add(command);
         }
     }
 
@@ -240,8 +235,8 @@ public class Transaction {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public final void print() {
         for (int i = 0; i < redo.size(); i++) {
             System.out.println("Action (" + (i + 1) + ")\t" + redo.get(i));
@@ -253,15 +248,15 @@ public class Transaction {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void open() {
         open++;
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     public void close() {
         open--;
     }
@@ -276,7 +271,7 @@ public class Transaction {
     /**
      * @param transactionString
      */
-    private final static String getFullTransactionString(final ArrayList<String> transactionString) {
+    private final static String getFullTransactionString(final List<String> transactionString) {
         //Alle Zwischenschritte von Verschiebungen ein und desselben Containers werden ausgeblendet
         StringBuilder sb = new StringBuilder();
         for (String next : transactionString) {

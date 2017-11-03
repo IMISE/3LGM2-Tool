@@ -30,8 +30,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_ADDICTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.ELEMENT_PROPERTIES;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.HIDE_ALL_CONFIGS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
@@ -39,6 +37,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL;
@@ -63,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLabel;
@@ -75,6 +75,7 @@ import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.metamodel.Composition;
@@ -291,7 +292,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         new_log_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldLog.class.getName());
         new_phy_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldPhy.class.getName());
 
-        properties = getItem("eigenschaften", ELEMENT_PROPERTIES);
+        properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG);
         unlinkToSzenario = getItem("unlinkToSzenario", LINK_SELECTED_TO_SZENARIO, GDCOMMAND_TEXT_SURROUNDER + "null" + GDCOMMAND_TEXT_SURROUNDER);
         selectLinkedSzenario = getItem("selectLinkedSzenario", SELECT_LINKED_SZENARIO);
         delete_selected = getItem(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
@@ -433,6 +434,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
+     * @param command
+     * @return
+     */
+    private JMenuItem getItem(final Action action) {
+        return new JMenuItem(action);
+    }
+
+    /**
      *
      */
     private static void checkConfigurationSubMenu() {
@@ -548,6 +557,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         return link_to_szenario_menu;
     }
 
+    private static void addMenuItem(final JPopupMenu menu, final JMenuItem item) {
+        menu.add(item);
+        Action action = item.getAction();
+        item.setEnabled(action == null || action.isEnabled());
+    }
+
     /**
      * Kontextmenü eines Einzelknotens
      *
@@ -561,7 +576,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         mc = ec;
         ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
-            menu.add(properties);
+            addMenuItem(menu, properties);
             menu.addSeparator();
             JMenu subElems = getSubElemMenu();
             if (subElems.getItemCount() > 0) {
@@ -930,7 +945,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     public JPopupMenu getSearchDialogContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         if (doc.isSingleSelection()) {
-            menu.add(properties);
+            addMenuItem(menu, properties);
             menu.addSeparator();
         }
         if (!doc.isSelectedOnlyUnique() && !doc.isSelectedOnlySubmodelElements() && doc instanceof Szenario) {
@@ -967,7 +982,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
         JPopupMenu menu = new JPopupMenu();
         if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
-            menu.add(properties);
+            addMenuItem(menu, properties);
         }
 
         JMenuItem addToModelMenu = getAddToModelMenu();
@@ -1983,7 +1998,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public JPopupMenu getTreeKnotContextMenu() {
         JPopupMenu menu = new JPopupMenu();
-        menu.add(properties);
+        addMenuItem(menu, properties);
         menu.addSeparator();
         boolean do_join = doc.isJoinableElementsSelected();
         if (do_join) {
@@ -2007,7 +2022,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     public JPopupMenu getTreeKnotContextMenu(final ElementContainer ec) {
         JPopupMenu menu = new JPopupMenu();
         doc.addSimpleToSelection(ec);
-        menu.add(properties);
+        addMenuItem(menu, properties);
         menu.addPopupMenuListener(this);
         return menu;
     }

@@ -43,6 +43,7 @@ import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
+import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.event.action.SubmodelAction;
@@ -366,7 +367,12 @@ public class ActionLibrary {
 
     public static class ContextActions {
 
-        public static final Action OPEN_PROPERTY_DIALOG = new CommandAction(GDCommands.ELEMENT_PROPERTIES);
+        public static final ExtendedAction ACTION_SHOW_ELEMENT_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG) {
+            @Override
+            public void actionPerformed() {
+                Static.getSelectedDoc().showPropertyDialog();
+            }
+        };
 
         /*
          * public static final Action TAKE_OVER_IN_SUBMODEL = new
