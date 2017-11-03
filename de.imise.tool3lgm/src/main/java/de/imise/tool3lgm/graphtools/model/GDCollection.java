@@ -37,7 +37,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENA
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
@@ -902,7 +902,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             Class<? extends ModelElement> meClass = me.getClass();
             String meHash = me.getHashString();
-            doc.addUndoCommand(CREATE_KNOT + " " + meClass.getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + meHash, pid);
+            doc.addUndoCommand(MODEL_ACTION_CREATE_NODE + " " + meClass.getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + meHash, pid);
             if (!dependentDeletedElements.contains(me)) {
                 doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + meHash, pid);
             }
@@ -1060,7 +1060,7 @@ public final class GDCollection extends UserFieldTarget {
             me.setDescription(getDecodedParseSaveString(description));
         }
         doc.start_transaction(pid);
-        doc.addRedoCommand(CREATE_KNOT + " " + me.getClass().getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
+        doc.addRedoCommand(MODEL_ACTION_CREATE_NODE + " " + me.getClass().getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
         if (nc.getColor() != null) {
             doc.addRedoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
         }

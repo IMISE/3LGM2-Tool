@@ -6,7 +6,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 
 public enum GDCommands {
 
-    CREATE_KNOT,
+    MODEL_ACTION_CREATE_NODE,
     LINK,
     //	LINK_REVERSE,
     ADDICT,

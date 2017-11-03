@@ -30,7 +30,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_ADDICTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ELEMENT_PROPERTIES;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.HIDE_ALL_CONFIGS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
@@ -268,14 +268,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         for (c = 0; c < TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
             item = new JMenuItem(getDisplayableName(TREE_CREATABLE_DOMAIN_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(CREATE_KNOT + " " + TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
             new_domain_tree.add(item);
         }
         new_logical_tree = new JMenu(getResString("el_neu"));
         for (c = 0; c < TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
             item = new JMenuItem(getDisplayableName(TREE_CREATABLE_LOGICAL_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(CREATE_KNOT + " " + TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
             new_logical_tree.add(item);
         }
 
@@ -283,13 +283,13 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         for (c = 0; c < TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
             item = new JMenuItem(getDisplayableName(TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(CREATE_KNOT + " " + TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
             new_physical_tree.add(item);
         }
 
-        new_fach_text = getItem("text_neu", CREATE_KNOT, TextfeldFach.class.getName());
-        new_log_text = getItem("text_neu", CREATE_KNOT, TextfeldLog.class.getName());
-        new_phy_text = getItem("text_neu", CREATE_KNOT, TextfeldPhy.class.getName());
+        new_fach_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldFach.class.getName());
+        new_log_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldLog.class.getName());
+        new_phy_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldPhy.class.getName());
 
         properties = getItem("eigenschaften", ELEMENT_PROPERTIES);
         unlinkToSzenario = getItem("unlinkToSzenario", LINK_SELECTED_TO_SZENARIO, GDCOMMAND_TEXT_SURROUNDER + "null" + GDCOMMAND_TEXT_SURROUNDER);

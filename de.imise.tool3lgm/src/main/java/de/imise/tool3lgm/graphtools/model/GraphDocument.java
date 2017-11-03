@@ -598,7 +598,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             setVisible(argv, pid);
             break;
 
-        case CREATE_KNOT:
+        case MODEL_ACTION_CREATE_NODE:
             String classname = argv[0];
             String name = GDCommands.INVALID_NAME;
             String description = GDCommands.INVALID_DESCRIPTION;
