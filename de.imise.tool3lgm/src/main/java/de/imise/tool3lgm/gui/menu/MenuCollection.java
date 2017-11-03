@@ -121,7 +121,8 @@ public class MenuCollection {
         /** Das Element-Layout-Menu */
         public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.MODEL_ACTION_SET_ELEMENT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_COLOR,
                 createMenu( // Transparenz-Menu
-                        getResString("elementTransparencyMenu"), ElementLayout.Transparency.NO, ElementLayout.Transparency.SEMI, ElementLayout.Transparency.FULL),
+                        getResString("elementTransparencyMenu"), ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF,
+                        ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
                 createMenu( // Auf Standard setzen Menu
                         getResString("elementSetToStandardMenu"), ElementLayout.RESET_FONT, ElementLayout.RESET_COLOR, ElementLayout.RESET_TRANSPARENCY, ElementLayout.RESET_ALL),
                 new JSeparator(),

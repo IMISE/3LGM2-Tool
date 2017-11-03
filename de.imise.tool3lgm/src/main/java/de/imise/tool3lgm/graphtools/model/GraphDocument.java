@@ -750,7 +750,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case CHANGE_ALPHA:
+        case MODEL_ACTION_SET_ELEMENT_ALPHA:
             switch (argc) {
             case 1:
                 try {
@@ -769,6 +769,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             default:
                 break;
             }
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL:
+            changeAlpha(GraphElementLayout.TRANSPARENCY_FULL, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF:
+            changeAlpha(GraphElementLayout.TRANSPARENCY_HALF, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE:
+            changeAlpha(GraphElementLayout.TRANSPARENCY_NONE, pid);
             break;
 
         case MODEL_ACTION_SET_LAYER_ALPHA:
@@ -1676,7 +1685,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(pid);
         String szenHash = ec.getGraphDocument().hashString;
         addRedoCommandOrReplace(GDCommands.NORMALIZE_TRANSPARENCY + " " + szenHash + " " + ec.getHashString(), "", pid);
-        addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
         ec.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         finish_transaction(pid);
     }
@@ -1776,10 +1785,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         szen.start_transaction(pid);
         if (mc.getColor() != null) {
             addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + mc.getHashString(), mc.getColor().getRGB(), pid);
-            addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + mc.getHashString(), mc.getAlpha(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + mc.getHashString(), mc.getAlpha(), pid);
         } else {
             addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + mc.getHashString(), "null", pid);
-            addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + mc.getHashString(), "255", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + mc.getHashString(), "255", pid);
         }
         if (mc.getIcon() != null) {
             addUndoCommandIfNotExist(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
@@ -2053,8 +2062,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (ec.getColor() == null) {
             changeColor(ec, mapping.getStandardBackGroundColor(ec), pid);
         }
-        addRedoCommandOrReplace(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + ec.getHashString(), alphaMode, pid);
-        addUndoCommandIfNotExist(GDCommands.CHANGE_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), alphaMode, pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
         ec.setAlpha(alphaMode);
         ecDoc.finish_transaction(pid);
         ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, null, pid);

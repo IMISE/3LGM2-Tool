@@ -80,7 +80,6 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
@@ -1257,6 +1256,24 @@ public class ActionLibrary {
             }
 
             /**
+             * Actions für die Transparenz der Elemente
+             *
+             * @author fstephan
+             */
+            public static class Transparency {
+
+                /** Macht das ausgewählte Element nicht-transparent */
+                public static final Action MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
+
+                /** Macht das ausgewählte Element halb-transparent */
+                public static final Action MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
+
+                /** Macht das ausgewählte Element voll-transparent */
+                public static final Action MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
+
+            }
+
+            /**
              * Actions für die Auswahl der Ausrichtung der Elementbeschriftungen
              *
              * @author fstephan
@@ -1296,23 +1313,6 @@ public class ActionLibrary {
                     /** Richtet die Beschrfitung nach unten aus */
                     public static final Action BOTTOM = new ElementLayoutAction(ActionIdentifier.text_bottom, GDCommands.LABEL_VALIGN_BOTTOM);
                 }
-            }
-
-            /**
-             * Actions für die Transparenz der Elemente
-             *
-             * @author fstephan
-             */
-            public static class Transparency {
-
-                /** Macht das ausgewählte Element nicht-transparent */
-                public static final Action NO = new ElementLayoutAction(ActionIdentifier.element_no_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_NONE);
-
-                /** Macht das ausgewählte Element halb-transparent */
-                public static final Action SEMI = new ElementLayoutAction(ActionIdentifier.element_semi_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_HALF);
-
-                /** Macht das ausgewählte Element voll-transparent */
-                public static final Action FULL = new ElementLayoutAction(ActionIdentifier.element_full_transparency, GDCommands.CHANGE_ALPHA, GraphElementLayout.TRANSPARENCY_FULL);
             }
 
             /** Setzt die Farbe des Elements zurück */
