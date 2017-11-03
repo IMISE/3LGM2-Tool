@@ -95,6 +95,7 @@ import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
+import de.imise.util.Alphabetical;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.swing.dialog.DirectoryChooser;
@@ -1088,21 +1089,27 @@ public class ActionLibrary {
      *
      * @author fstephan
      */
-    public static class InsertActions {
+    public static class CreateElementActions {
 
         /** Array aller Insert-Actions für die Fachliche Ebene */
-        public static final Action[] DOMAIN_LAYER_ACTIONS = InsertAction.getDomainLayerActions();
+        public static final Action[] DOMAIN_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Logische Werkzeugebene */
-        public static final Action[] LOGICAL_TOOLLAYER_ACTIONS = InsertAction.getLogicalToolLayerActions();
+        public static final Action[] LOGICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Physische Werkzeugebene */
-        public static final Action[] PHYSICAL_TOOLLAYER_ACTIONS = InsertAction.getPhysicalToolLayerActions();
+        public static final Action[] PHYSICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES);
 
-        /** Gibt wieder, ob der aktuelle Kontext ein Einfügen von Elementen erlaubt, oder nicht */
-        public static boolean isInsertAvailable() {
-            return InsertAction.isInsertAvailable();
+        /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
+        private static Action[] getActions(final Class<ModelElement>[] treeCreatableLayerNodes) {
+            GraphDocumentAction[] actions = new GraphDocumentAction[treeCreatableLayerNodes.length];
+            for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
+                actions[c] = new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, treeCreatableLayerNodes[c].getName(), Tool3lgmConstants.getResString(treeCreatableLayerNodes[c].getSimpleName()));
+            }
+            Alphabetical.sort(actions);
+            return actions;
         }
+
     }
 
     /**
