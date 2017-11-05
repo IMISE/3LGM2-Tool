@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
  * @author fstephan
  */
 @Deprecated
-class CommandAction extends AbstractLGMAction {
+public class CommandAction extends AbstractLGMAction {
 
     /** Das beim Auslösen dieser {@link Action} im {@link GraphDocument} ausgeführte Kommando */
     private final GDCommands command;
