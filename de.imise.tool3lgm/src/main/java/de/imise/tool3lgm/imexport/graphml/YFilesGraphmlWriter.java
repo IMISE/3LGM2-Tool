@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -342,7 +343,24 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         int direction = edge.getDirection();
         String sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "TRIANGLE" : null;
         String targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "TRIANGLE" : null;
-        writeEmptyElement("yjs:PolylineEdgeStyle", "smoothingLength", "0", "sourceArrow", sourceArrow, "targetArrow", targetArrow);
+        Class<? extends Edge> edgeClass = edge.getClass();
+        boolean isDashed = ModelConstants.isComposition(edgeClass) || ModelConstants.isPartOfEdge(edgeClass);
+        String startTag = "yjs:PolylineEdgeStyle";
+        if (isDashed) {
+            writeStartElement(startTag); // start yjs:PolylineEdgeStyle
+        } else {
+            writeEmptyElement(startTag);
+        }
+        writeAttributes("smoothingLength", "0", "sourceArrow", sourceArrow, "targetArrow", targetArrow);
+        if (isDashed) {
+            //          <yjs:PolylineEdgeStyle.stroke>
+            //            <yjs:Stroke fill="BLACK" dashStyle="Dash" thickness="1"/>
+            //          </yjs:PolylineEdgeStyle.stroke>
+            writeStartElement("yjs:PolylineEdgeStyle.stroke"); // start yjs:PolylineEdgeStyle.stroke
+            writeEmptyElement("yjs:Stroke", "fill", "BLACK", "dashStyle", "Dash", "thickness", "1");
+            writeEndElement(); // end yjs:PolylineEdgeStyle.stroke
+            writeEndElement(); // end yjs:PolylineEdgeStyle
+        }
         writeEndElement(); // end data
     }
 
