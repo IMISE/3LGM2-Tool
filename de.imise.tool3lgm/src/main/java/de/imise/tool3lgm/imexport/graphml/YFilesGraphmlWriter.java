@@ -228,7 +228,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        </data>
         writeStartElementDataKey(TypeKeys.node_NodeLabels.getKeyID()); // start data
         writeStartElement("x:List"); // start x:List
-        writeStartElement("y:Label", "LayoutParameter", "{x:Static y:InteriorLabelModel." + getLabelPosition(nc) + "}", "Style", "{y:GraphMLReference 1}");// , "PreferredSize", "0.0,0"); // start y:Label
+        String labelStyle = nc.hideText() ? "{x:Static y:VoidLabelStyle.Instance}" : "{y:GraphMLReference 1}";
+        String labelPosition = nc.hideText() ? "Center" : getLabelPosition(nc);
+        writeStartElement("y:Label", "LayoutParameter", "{x:Static y:InteriorLabelModel." + labelPosition + "}", "Style", labelStyle);// , "PreferredSize", "0.0,0"); // start y:Label
         writeCDATAElement("y:Label.Text", getElementName(nc));
         writeEndElement(); // end y:Label
         writeEndElement(); // end x:List
