@@ -19,7 +19,6 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
 
@@ -237,7 +236,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         Enum<?> shape = getYGraphmlShape(nc);
         String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); //start data
-        writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(NodeRenderer.getColor(nc), true), "shape", shapeName);
+        writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(getColor(nc), true), "shape", shapeName);
         writeEndElement(); // end data
     }
 

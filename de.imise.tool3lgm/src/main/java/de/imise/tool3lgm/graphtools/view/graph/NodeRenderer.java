@@ -55,15 +55,6 @@ public final class NodeRenderer {
 
     public static Image linkIcon = Tool3lgmConstants.getIcon("link.gif").getImage();
 
-    public static final Color getColor(final NodeContainer nc) {
-        Color col = nc.getColor();
-        if (col == null) {
-            GraphDocument doc = nc.getGraphDocument();
-            col = doc.getMapping().getStandardBackGroundColor(nc);
-        }
-        return col;
-    }
-
     /////////////////////////////////////////
     //Funktionen zum Rendern eines Knotens //
     /////////////////////////////////////////

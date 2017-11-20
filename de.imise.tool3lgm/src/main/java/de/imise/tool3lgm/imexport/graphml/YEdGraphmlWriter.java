@@ -23,7 +23,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.util.image.ImageTools;
 
 public class YEdGraphmlWriter extends GraphmlWriter {
@@ -161,7 +160,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         //oder
         //          <y:Fill color="#FFFF00" color2="#FFFF00" transparent="false"/>
         if (nc.getIcon() == null) {
-            String colorString = getColorString(NodeRenderer.getColor(nc), false);
+            String colorString = getColorString(getColor(nc), false);
             writeEmptyElement("y:Fill", "color", colorString, "color2", genericNode ? colorString : null);
         } else {
             writeEmptyElement("y:Fill", "hasColor", "false");

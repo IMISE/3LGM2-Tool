@@ -8,6 +8,7 @@ import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -144,6 +145,15 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         String nameExtension = me.getNameExtension();
         String name = nameExtension.isEmpty() ? me.getClearName() : me.getClearName() + "\n" + nameExtension;
         return name;
+    }
+
+    protected static final Color getColor(final NodeContainer nc) {
+        Color col = nc.getColor();
+        if (col == null) {
+            GraphDocument doc = nc.getGraphDocument();
+            col = doc.getMapping().getStandardBackGroundColor(nc);
+        }
+        return col;
     }
 
 }
