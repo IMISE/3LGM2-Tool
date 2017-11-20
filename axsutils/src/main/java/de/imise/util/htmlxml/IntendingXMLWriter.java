@@ -72,6 +72,11 @@ public class IntendingXMLWriter {
         writer.writeStartDocument(encoding, version);
     }
 
+    protected final void writeStartDocument(final String encoding, final String version, final boolean standalone) throws XMLStreamException, IOException {
+        String standAlone = standalone ? "yes" : "no";
+        writeCharactersUnescaped("<?xml version=\"" + version + "\" encoding=\"" + encoding + "\" standalone=\"" + standAlone + "\"?>\n");
+    }
+
     protected final void writeStartElement(final String element, final String... attributes) throws XMLStreamException {
         writer.writeStartElement(element);
         writeAttributes(attributes);
