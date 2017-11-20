@@ -31,7 +31,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     }
 
     public void write(final int layer) throws XMLStreamException, IOException {
-        writeStartDocument("UTF-8", "1.0");
+        writeStartDocument("UTF-8", "1.0", false);
         writeComment(getCreatedByComment());
         writeStartElement("graphml"); //start graphml
         writeXMLSchemaAttributes();
@@ -50,7 +50,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     protected abstract void writeGraphDescription() throws XMLStreamException;
 
     private void writeGraph(final int layer) throws XMLStreamException {
-        writeStartElement("graph", "edgedefault", "directed", "id", "G"); // start graph
+        writeStartElement("graph", "id", "G", "edgedefault", "directed"); // start graph
         writeNodes(layer);
         writeEdges(layer);
         writeEndElement(); // end graph
