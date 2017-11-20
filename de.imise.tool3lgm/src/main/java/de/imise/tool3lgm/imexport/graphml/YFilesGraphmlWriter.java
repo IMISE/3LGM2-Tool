@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.imexport.graphml;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
@@ -42,125 +42,58 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     }
 
-    private static class KeyAttributes {
-        public String id;
-        public String attFor;
-        public String attName;
-        public String attUri;
-        public String attType;
-        public String staticMember;
+    private String[] getAttributes(final String... strings) {
+        return strings;
     }
 
-    protected void writeKey(final String attFor, final String attId, final String attName, final String attUri, final String attType, final String staticMember) throws XMLStreamException {
-        if (Strings.isNullOrEmpty(staticMember)) {
-            writeEmptyElement("key", "id", attId, "for", attFor, "attr.name", attName, "y:attr.uri", attUri, "attr.type", attType);
+    private void writeKey(final YFilesGraphmlWriterDataKeys key) throws XMLStreamException {
+        YFilesGraphmlWriterDataKeys.KeyAttributes atts = key.keyAttributes();
+        boolean isBoolean = "boolean".equals(atts.attType);
+        String[] attributes = getAttributes("id", key.getKeyID(), "for", atts.attFor, "attr.type", atts.attType, "attr.name", atts.attName, "y:attr.uri", atts.attUri);
+        if (Strings.isNullOrEmpty(atts.staticMember) && !isBoolean) {
+            writeEmptyElement("key", attributes);
         } else {
-            writeStartElement("key", "id", attId, "for", attFor, "attr.name", attName, "y:attr.uri", attUri);
-            writeStartElement("default");
-            writeEmptyElement("x:Static", "Member", staticMember);
-            writeEndElement();
-            writeEndElement();
-        }
-    }
-
-    private void writeKey(final KeyAttributes atts) throws XMLStreamException {
-        writeKey(atts.attFor, atts.id, atts.attName, atts.attUri, atts.attType, atts.staticMember);
-    }
-
-    public enum TypeKeys {
-        //        <key id="d0" for="node" attr.type="string" attr.name="descrMapper"/>
-        node_description_string,
-        //        <key id="d1" for="node" attr.name="NodeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeLabels"/>
-        node_NodeLabels,
-        //        <key id="d2" for="node" attr.name="NodeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeGeometry"/>
-        node_NodeGeometry,
-        //        <key id="d3" for="all" attr.name="UserTags" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/UserTags"/>
-        all_UserTags,
-        //        <key id="d4" for="node" attr.name="NodeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeStyle"/>
-        node_NodeStyle,
-        edge_description_string,
-        //        <key id="d5" for="edge" attr.name="EdgeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeLabels"/>
-        edge_EdgeLabels,
-        //        <key id="d6" for="edge" attr.name="EdgeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeGeometry"/>
-        edge_EdgeGeometry,
-        //        <key id="d7" for="edge" attr.name="EdgeStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeStyle"/>
-        edge_EdgeStyle,
-        //        <key id="d8" for="port" attr.name="PortLocationParameter" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortLocationParameter">
-        //            <default>
-        //                <x:Static Member="y:FreeNodePortLocationModel.NodeCenterAnchored"/>
-        //            </default>
-        //        </key>
-        port_PortLocationParameter {
-            @Override
-            public String getStaticMember() {
-                return "y:FreeNodePortLocationModel.NodeCenterAnchored";
-            }
-        },
-        //        <key id="d9" for="port" attr.name="PortStyle" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/PortStyle">
-        //            <default>
-        //                <x:Static Member="y:VoidPortStyle.Instance"/>
-        //            </default>
-        //        </key>
-        port_PortStyle {
-            @Override
-            public String getStaticMember() {
-                return "y:VoidPortStyle.Instance";
-            }
-        },
-        //        <key id="d10" attr.name="SharedData" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/SharedData"/>
-        SharedData;
-
-        public KeyAttributes keyAttributes() {
-            StringTokenizer st = new StringTokenizer(name(), "_");
-            int tokenCount = st.countTokens();
-            KeyAttributes atts = new KeyAttributes();
-            atts.id = getKeyID();
-            if (tokenCount != 1) {
-                atts.attFor = st.nextToken();
-            }
-            atts.attName = st.nextToken();
-            if (tokenCount < 3) {
-                atts.attUri = getUri(atts.attName);
+            writeStartElement("key", attributes); // start key
+            writeStartElement("default"); // start default
+            if (isBoolean) {
+                writeCharacters("true");
             } else {
-                atts.attType = st.nextToken();
+                writeEmptyElement("x:Static", "Member", atts.staticMember);
             }
-            atts.staticMember = getStaticMember();
-            return atts;
+            writeEndElement(); // end default
+            writeEndElement(); // end key
         }
-
-        public String getStaticMember() {
-            return null;
-        }
-
-        public static final String getUri(final String uriLastPart) {
-            return "http://www.yworks.com/xml/yfiles-common/2.0/" + uriLastPart;
-        }
-
-        public String getKeyID() {
-            return "d" + ordinal();
-        }
-
     }
 
     private void writeSharedData() throws XMLStreamException {
-        //        <data key="d9">
-        //            <y:SharedData>
-        //                <yjs:DefaultLabelStyle x:Key="1" textFill="BLACK">
-        //                    <yjs:DefaultLabelStyle.font>
-        //                        <yjs:Font fontSize="12"/>
-        //                    </yjs:DefaultLabelStyle.font>
-        //                </yjs:DefaultLabelStyle>
-        //            </y:SharedData>
-        //        </data>
-        writeStartElement("data", "key", TypeKeys.SharedData.getKeyID()); // start data
-        writeStartElement("y:SharedData"); // start y:SharedData
-        writeStartElement("yjs:DefaultLabelStyle", "x:Key", "1", "textFill", "BLACK"); // start yjs:DefaultLabelStyle
-        writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
-        writeEmptyElement("yjs:Font", "fontSize", "12");
-        writeEndElement(); // end yjs:DefaultLabelStyle.font
-        writeEndElement(); // end yjs:DefaultLabelStyle
-        writeEndElement(); // end y:SharedData
-        writeEndElement(); // end data
+        //    <data key="d14">
+        //        <y:SharedData>
+        //            <yjs:Font x:Key="1" fontSize="12"/>
+        //            <yjs:ShapeNodeStyle x:Key="2" fill="#FFFF5E5E"/>
+        //        </y:SharedData>
+        //    </data>
+
+        //    <data key="d14">
+        //        <y:SharedData>
+        //            <yjs:DefaultLabelStyle x:Key="1" textFill="BLACK">
+        //                <yjs:DefaultLabelStyle.font>
+        //                    <yjs:Font fontSize="12"/>
+        //                </yjs:DefaultLabelStyle.font>
+        //            </yjs:DefaultLabelStyle>
+        //        </y:SharedData>
+        //    </data>
+        //        writeStartElement("data", "key", YFilesGraphmlWriterDataKeys.SharedData.getKeyID()); // start data
+        //        writeStartElement("y:SharedData"); // start y:SharedData
+        //        writeStartElement("yjs:DefaultLabelStyle", "x:Key", "1", "textFill", "BLACK"); // start yjs:DefaultLabelStyle
+        //        writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
+        //        writeEmptyElement("yjs:Font", "fontSize", "12");
+        //        writeEndElement(); // end yjs:DefaultLabelStyle.font
+        //        writeEndElement(); // end yjs:DefaultLabelStyle
+        //        writeEndElement(); // end y:SharedData
+        //        writeEndElement(); // end data
+
+        writeEmptyElement("y:SharedData");
+
     }
 
     @Override
@@ -193,8 +126,8 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //                </yjs:DefaultLabelStyle>
         //            </y:SharedData>
         //        </data>
-        for (TypeKeys typeKey : TypeKeys.values()) {
-            writeKey(typeKey.keyAttributes());
+        for (YFilesGraphmlWriterDataKeys typeKey : YFilesGraphmlWriterDataKeys.values()) {
+            writeKey(typeKey);
         }
         writeSharedData();
     }
@@ -215,56 +148,73 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     protected void writeNodeDescription(final NodeContainer nc) throws XMLStreamException {
         ModelElement me = nc.getElement();
         String description = me.getDescription();
-        writeCDATAElementDataKey(TypeKeys.node_description_string.getKeyID(), description);
+        writeCDATAElementDataKey(YFilesGraphmlWriterDataKeys.node_description_string.getKeyID(), description);
     }
 
     protected void writeNodeLabel(final NodeContainer nc) throws XMLStreamException {
+        //unsichtbares Label
         //        <data key="d1">
         //            <x:List>
-        //                <y:Label LayoutParameter="{x:Static y:InteriorLabelModel.Center}" Style="{y:GraphMLReference 1}" PreferredSize="54.73342969096785,14">
+        //                <y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.Center}" Style="{x:Static y:VoidLabelStyle.Instance}">
         //                    <y:Label.Text><![CDATA[Aufgabe 1]]></y:Label.Text>
         //                </y:Label>
         //            </x:List>
         //        </data>
-        writeStartElementDataKey(TypeKeys.node_NodeLabels.getKeyID()); // start data
+        //oder sichtbares Label
+        //    <data key="d1">
+        //        <x:List>
+        //            <y:Label LayoutParameter="{x:Static y:InteriorStretchLabelModel.Center}">
+        //                <y:Label.Text><![CDATA[Aufgabe 1]]></y:Label.Text>
+        //                <y:Label.Style>
+        //                    <yjs:DefaultLabelStyle verticalTextAlignment="TOP" horizontalTextAlignment="LEFT" wrapping="WORD" textFill="BLACK"/>
+        //                        <yjs:DefaultLabelStyle.font>
+        //                            <yjs:Font fontSize="12" fontStyle="ITALIC" fontWeight="BOLD"/>
+        //                        </yjs:DefaultLabelStyle.font>
+        //                    </yjs:DefaultLabelStyle>
+        //                </y:Label.Style>
+        //            </y:Label>
+        //        </x:List>
+        //    </data>
+        writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeLabels.getKeyID()); // start data
         writeStartElement("x:List"); // start x:List
-        String labelStyle = nc.hideText() ? "{x:Static y:VoidLabelStyle.Instance}" : "{y:GraphMLReference 1}";
-        String labelPosition = nc.hideText() ? "Center" : getLabelPosition(nc);
-        writeStartElement("y:Label", "LayoutParameter", "{x:Static y:InteriorLabelModel." + labelPosition + "}", "Style", labelStyle);// , "PreferredSize", "0.0,0"); // start y:Label
+        boolean hideText = nc.hideText();
+        String mainLabelStyle = hideText ? "{x:Static y:VoidLabelStyle.Instance}" : null;
+        writeStartElement("y:Label", "LayoutParameter", "{x:Static y:InteriorStretchLabelModel.Center}", "Style", mainLabelStyle); // start y:Label
         writeCDATAElement("y:Label.Text", getElementName(nc));
+        if (!hideText) {
+            writeStartElement("y:Label.Style"); //start y:LabelStyle
+            String valign = getSwingConstantsAsGraphMLString(nc.getValign());
+            String halign = getSwingConstantsAsGraphMLString(nc.getHalign());
+            writeStartElement("yjs:DefaultLabelStyle", "verticalTextAlignment", valign, "horizontalTextAlignment", halign, "wrapping", "WORD", "textFill", "BLACK"); // start yjs:DefaultLabelStyle
+            writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
+            Font font = nc.getFont();
+            String fontSize = String.valueOf(font.getSize());
+            String fontStyle = font.isItalic() ? "ITALIC" : null;
+            String fontWeight = font.isBold() ? "BOLD" : null;
+            writeEmptyElement("yjs:Font", "fontSize", fontSize, "fontStyle", fontStyle, "fontWeight", fontWeight);
+            writeEndElement(); // end yjs:DefaultLabelStyle.font
+            writeEndElement(); // end yjs:DefaultLabelStyle
+            writeEndElement();// end y:LabelStyle
+        }
         writeEndElement(); // end y:Label
         writeEndElement(); // end x:List
         writeEndElement(); // end data
     }
 
-    private String getLabelPosition(final NodeContainer nc) {
-        int halign = nc.getHalign();
-        int valign = nc.getValign();
-        if (halign == SwingConstants.LEFT) {
-            if (valign == SwingConstants.TOP) {
-                return "NorthWest";
-            } else if (valign == SwingConstants.BOTTOM) {
-                return "SouthWest";
-            } else {
-                return "West";
-            }
-        } else if (halign == SwingConstants.RIGHT) {
-            if (valign == SwingConstants.TOP) {
-                return "NorthEast";
-            } else if (valign == SwingConstants.BOTTOM) {
-                return "SouthEast";
-            } else {
-                return "East";
-            }
-        } else {
-            if (valign == SwingConstants.TOP) {
-                return "North";
-            } else if (valign == SwingConstants.BOTTOM) {
-                return "South";
-            } else {
-                return "Center";
-            }
+    private String getSwingConstantsAsGraphMLString(final int position) {
+        if (position == SwingConstants.TOP) {
+            return "TOP";
         }
+        if (position == SwingConstants.RIGHT) {
+            return "RIGHT";
+        }
+        if (position == SwingConstants.BOTTOM) {
+            return "BOTTOM";
+        }
+        if (position == SwingConstants.LEFT) {
+            return "LEFT";
+        }
+        return "CENTER";
     }
 
     private void writeNodeGeometry(final NodeContainer nc) throws XMLStreamException {
@@ -275,7 +225,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         double height = nc.getHeight();
         String x = String.valueOf(nc.getX() - width / 2);
         String y = String.valueOf(nc.getY() - height / 2);
-        writeStartElementDataKey(TypeKeys.node_NodeGeometry.getKeyID()); //start data
+        writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeGeometry.getKeyID()); //start data
         writeEmptyElement("y:RectD", "X", x, "Y", y, "Width", String.valueOf(width), "Height", String.valueOf(height));
         writeEndElement(); // end data
     }
@@ -286,7 +236,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        </data>
         Enum<?> shape = getYGraphmlShape(nc);
         String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
-        writeStartElementDataKey(TypeKeys.node_NodeStyle.getKeyID()); //start data
+        writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); //start data
         writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(NodeRenderer.getColor(nc), true), "shape", shapeName);
         writeEndElement(); // end data
     }
@@ -327,7 +277,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //            </x:List>
         //        </data>
         if (ec.getBendpointContainerCount() > 0) {
-            writeStartElementDataKey(TypeKeys.edge_EdgeGeometry.getKeyID()); // start data
+            writeStartElementDataKey(YFilesGraphmlWriterDataKeys.edge_EdgeGeometry.getKeyID()); // start data
             writeStartElement("x:List"); // start x:List
             for (BendpointContainer bc : ec.iterateBendpointContainers()) {
                 writeEmptyElement("y:Bend", "Location", bc.getX() + "," + bc.getY());
@@ -341,7 +291,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        <data key="d7">
         //            <yjs:PolylineEdgeStyle smoothingLength="0" targetArrow="TRIANGLE"/>
         //        </data>
-        writeStartElementDataKey(TypeKeys.edge_EdgeStyle.getKeyID()); // start data
+        writeStartElementDataKey(YFilesGraphmlWriterDataKeys.edge_EdgeStyle.getKeyID()); // start data
         int direction = edge.getDirection();
         String sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "TRIANGLE" : null;
         String targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "TRIANGLE" : null;
