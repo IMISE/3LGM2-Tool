@@ -8,8 +8,9 @@ package de.imise.tool3lgm.graphtools.metamodel;
  */
 public class LayerKnoten extends Node {
 
-    public LayerKnoten() {
-        super();
+    public LayerKnoten(final int layer) {
+        this.layer = layer;
+        setName(ModelConstants.getVisibleLayerName(layer));
     }
 
 }
