@@ -1,9 +1,11 @@
 package de.imise.tool3lgm.imexport.graphml;
 
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.Icon;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
@@ -19,6 +21,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.util.image.ImageTools;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
 
@@ -91,8 +94,11 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        writeEndElement(); // end y:SharedData
         //        writeEndElement(); // end data
 
-        writeEmptyElement("y:SharedData");
+        writeStartElement("data", "key", YFilesGraphmlWriterDataKeys.SharedData.getKeyID()); // start data
+        writeStartElement("y:SharedData"); // start y:SharedData
 
+        writeEndElement(); // end y:SharedData
+        writeEndElement(); // end data
     }
 
     @Override
@@ -174,11 +180,20 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //            </y:Label>
         //        </x:List>
         //    </data>
+        //oder Label mit Icon
+        //        <data key="d1">
+        //            <x:List>
+        //                <y:Label LayoutParameter="{x:Static y:ExteriorLabelModel.South}">
+        //                  ... alles wie oben ...
+        //                </y:Label>
+        //            </x:List>
+        //        </data>
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeLabels.getKeyID()); // start data
         writeStartElement("x:List"); // start x:List
         boolean hideText = nc.hideText();
         String mainLabelStyle = hideText ? "{x:Static y:VoidLabelStyle.Instance}" : null;
-        writeStartElement("y:Label", "LayoutParameter", "{x:Static y:InteriorStretchLabelModel.Center}", "Style", mainLabelStyle); // start y:Label
+        String labelLayout = nc.getIconString() == null ? "{x:Static y:InteriorStretchLabelModel.Center}" : "{x:Static y:ExteriorLabelModel.South}";
+        writeStartElement("y:Label", "LayoutParameter", labelLayout, "Style", mainLabelStyle); // start y:Label
         writeCDATAElement("y:Label.Text", getElementName(nc));
         if (!hideText) {
             writeStartElement("y:Label.Style"); //start y:LabelStyle
@@ -220,12 +235,15 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        <data key="d2">
         //            <y:RectD X="0" Y="0" Width="70" Height="50"/>
         //        </data>
-        double width = nc.getWidth();
-        double height = nc.getHeight();
+        Icon icon = nc.getIcon();
+        double width = icon == null ? nc.getWidth() : icon.getIconWidth();
+        double height = icon == null ? nc.getHeight() : icon.getIconHeight();
         String x = String.valueOf(nc.getX() - width / 2);
         String y = String.valueOf(nc.getY() - height / 2);
+        String w = String.valueOf(width);
+        String h = String.valueOf(height);
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeGeometry.getKeyID()); //start data
-        writeEmptyElement("y:RectD", "X", x, "Y", y, "Width", String.valueOf(width), "Height", String.valueOf(height));
+        writeEmptyElement("y:RectD", "X", x, "Y", y, "Width", w, "Height", h);
         writeEndElement(); // end data
     }
 
@@ -236,7 +254,15 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         Enum<?> shape = getYGraphmlShape(nc);
         String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); //start data
-        writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(getColor(nc), true), "shape", shapeName);
+        String iconID = nc.getIconString();
+        if (iconID == null) {
+            writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(getColor(nc), true), "shape", shapeName);
+        } else {
+            Icon icon = nc.getIcon();
+            BufferedImage bufferedImage = ImageTools.toBufferedImage(icon);
+            String imageData = "data:image/png;base64," + ImageTools.getBase64EncodedImage(bufferedImage);
+            writeEmptyElement("yjs:ImageNodeStyle", "image", imageData);
+        }
         writeEndElement(); // end data
     }
 
