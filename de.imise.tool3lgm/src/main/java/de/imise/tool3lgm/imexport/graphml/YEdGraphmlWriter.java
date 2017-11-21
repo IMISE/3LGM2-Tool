@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.help.UnsupportedOperationException;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
@@ -27,8 +28,8 @@ import de.imise.util.image.ImageTools;
 
 public class YEdGraphmlWriter extends GraphmlWriter {
 
-    public YEdGraphmlWriter(final File file, final Szenario szenario) throws XMLStreamException, IOException {
-        super(file, szenario);
+    public YEdGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
+        super(file, szenario, layer);
     }
 
     @Override
@@ -99,6 +100,11 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     protected void writeGraphDescription() throws XMLStreamException {
         String description = szenario.getDescription();
         writeCDATAElementDataKey(TypeKeys.graph_Description_string.getKeyID(), description);
+    }
+
+    @Override
+    protected void writeLayerNodeData(final int layer) throws XMLStreamException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -364,7 +370,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         //    eLMND3AwIsiX8uOAAAAAAElFTkSuQmCC</y:Resource>
         //        </y:Resources>
         //      </data>
-        writeStartElementDataKey(TypeKeys.graphml_resources.getKeyID());
+        writeStartElementDataKey(TypeKeys.graphml_resources.getKeyID()); // start data
         if (usedIconResources.isEmpty()) {
             writeEmptyElement("y:Resources");
         } else {
@@ -378,7 +384,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
             }
             writeEndElement(); // end y:Resources
         }
-        writeEndElement();
+        writeEndElement(); // end data
     }
 
     private void writeImageScale(final int scaleID, final int dataID) throws XMLStreamException {

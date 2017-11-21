@@ -46,32 +46,47 @@ public class GraphmlExporter {
      * @return
      */
     public final boolean writeYEdGraphml() {
-        return write(YEdGraphmlWriter.class);
+        //im Moment ist der boolean egal, weil der YedGrapgmlWriter immer nur eine einzelne Ebene rausschreiben kann
+        return write(YEdGraphmlWriter.class, true);
     }
 
     /**
      * @return
      */
     public final boolean writeYFilesGraphml() {
-        return write(YFilesGraphmlWriter.class);
+        return write(YFilesGraphmlWriter.class, true);
     }
 
-    private boolean write(final Class<? extends GraphmlWriter> writerClass) {
+    private boolean write(final Class<? extends GraphmlWriter> writerClass, final boolean oneModelFile) {
         boolean allOK = true;
         for (Szenario szenario : szenarios) {
-            for (int layer : ModelConstants.VISIBLE_LAYERS) {
+            if (oneModelFile && writerClass == YFilesGraphmlWriter.class) {
                 try {
-                    if (writerClass == YFilesGraphmlWriter.class) {
-                        File targetFile = getValidFile(szenario, layer, dir, "_yHTML");
-                        new YFilesGraphmlWriter(targetFile, szenario).write(layer);
-                    } else if (writerClass == YEdGraphmlWriter.class) {
-                        File targetFile = getValidFile(szenario, layer, dir, "_yEd");
-                        new YEdGraphmlWriter(targetFile, szenario).write(layer);
-                    }
+                    File targetFile = getValidFile(szenario, -1, dir, "yHTML");
+                    //Aufruf der Funktion, mit der alle Ebenen in ein Modell geschrieben werden
+                    new YFilesGraphmlWriter(targetFile, szenario, -1).write();
                 } catch (Exception e) {
                     e.printStackTrace();
                     allOK = false;
                     continue;
+                }
+            } else {
+                for (int layer : ModelConstants.VISIBLE_LAYERS) {
+                    try {
+                        if (writerClass == YFilesGraphmlWriter.class) {
+                            File targetFile = getValidFile(szenario, layer, dir, "yHTML");
+                            //Aufruf der Funktion, mit der eine Ebenen in ein Modell geschrieben wird
+                            new YFilesGraphmlWriter(targetFile, szenario, layer).write();
+                        } else if (writerClass == YEdGraphmlWriter.class) {
+                            //Aufruf der Funktion, mit der eine Ebenen in ein Modell geschrieben wird
+                            File targetFile = getValidFile(szenario, layer, dir, "yEd");
+                            new YEdGraphmlWriter(targetFile, szenario, layer).write();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        allOK = false;
+                        continue;
+                    }
                 }
             }
         }
@@ -79,9 +94,8 @@ public class GraphmlExporter {
     }
 
     private static File getValidFile(final Szenario szenario, final int layer, final File dir, final String fileNameEnd) {
-        String fileName = ModelConstants.getVisibleLayerName(layer);
-        fileName = StringUtils.getFirstChars(fileName);
-        fileName = szenario.getCollection().getName() + "_" + szenario.getTitle() + "_" + fileName + fileNameEnd + ".graphml";
+        String layerName = layer < 0 ? "" : StringUtils.getFirstChars(ModelConstants.getVisibleLayerName(layer)) + "_";
+        String fileName = szenario.getCollection().getName() + "_" + szenario.getTitle() + "_" + layerName + fileNameEnd + ".graphml";
         fileName = FileHandler.removeInvalidFileNameCharacters(fileName);
         return new File(dir, fileName);
     }

@@ -9,6 +9,8 @@ import javax.swing.Icon;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -19,14 +21,15 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.util.image.ImageTools;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
 
-    public YFilesGraphmlWriter(final File file, final Szenario szenario) throws XMLStreamException, IOException {
-        super(file, szenario);
+    public YFilesGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
+        super(file, szenario, layer);
     }
 
     @Override
@@ -65,6 +68,46 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
             writeEndElement(); // end default
             writeEndElement(); // end key
         }
+    }
+
+    @Override
+    protected void writeLayerNodeData(final int layer) throws XMLStreamException {
+        //        <data key="d0">true</data>
+        //        <data key="d3">
+        //          <x:List>
+        //            <y:Label LayoutParameter="{x:Static y:InteriorLabelModel.North}">
+        //              <y:Label.Text><![CDATA[Fachliche Ebene]]></y:Label.Text>
+        //              <y:Label.Style>
+        //                <yjs:DefaultLabelStyle textFill="BLACK" textSize="20">
+        //                  <yjs:DefaultLabelStyle.font>
+        //                    <yjs:Font fontSize="20"/>
+        //                  </yjs:DefaultLabelStyle.font>
+        //                </yjs:DefaultLabelStyle>
+        //              </y:Label.Style>
+        //            </y:Label>
+        //          </x:List>
+        //        </data>
+        //        <data key="d4">
+        //          <y:RectD X="0" Y="0" Width="1024" Height="768"/>
+        //        </data>
+        //        <data key="d6">
+        //          <yjs:CollapsibleNodeStyleDecorator>
+        //            <yjs:ShapeNodeStyle fill="#FFF0F0F0"/>
+        //          </yjs:CollapsibleNodeStyleDecorator>
+        //        </data>
+        writeElementDataKey(YFilesGraphmlWriterDataKeys.node_Expanded_boolean.getKeyID(), "true"); // start data - end data
+        writeNodeLabel(szenario.getLayer(layer));
+        int layerIndex = ArrayUtils.indexOf(ModelConstants.VISIBLE_LAYERS, layer); //layer ist 4, 2 oder 0 -> layer Index ist 0, 1 oder 2
+        int pageWidth = szenario.getPageWidth();
+        int pageHeight = szenario.getPageHeight();
+        int x = pageWidth * layerIndex + layerIndex * pageWidth / 10;
+        int y = 0;
+        writeNodeGeometry(String.valueOf(x), String.valueOf(y), String.valueOf(pageWidth), String.valueOf(pageHeight));
+        writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); // start data
+        writeStartElement("yjs:CollapsibleNodeStyleDecorator"); // start yjs:CollapsibleNodeStyleDecorator
+        writeEmptyElement("yjs:ShapeNodeStyle", "fill", "#FFF0F0F0");
+        writeEndElement(); // end yjs:CollapsibleNodeStyleDecorator
+        writeEndElement(); // end data
     }
 
     private void writeSharedData() throws XMLStreamException {
@@ -162,12 +205,10 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     protected final void writeElementTlgmId(final ElementContainer ec) throws XMLStreamException {
         YFilesGraphmlWriterDataKeys key = ec instanceof EdgeContainer ? YFilesGraphmlWriterDataKeys.edge_tlgmid_string : YFilesGraphmlWriterDataKeys.node_tlgmid_string;
-        writeStartElementDataKey(key.getKeyID());
-        writeCharacters(ec.getHashString());
-        writeEndElement();
+        writeElementDataKey(key.getKeyID(), ec.getHashString());
     }
 
-    protected void writeNodeLabel(final NodeContainer nc) throws XMLStreamException {
+    private void writeNodeLabel(final ElementContainer ec) throws XMLStreamException {
         //unsichtbares Label
         //        <data key="d1">
         //            <x:List>
@@ -199,23 +240,59 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //                </y:Label>
         //            </x:List>
         //        </data>
+        //oder beim Label des LayerKnotens
+        //      <data key="d2">
+        //          <x:List>
+        //              <y:Label LayoutParameter="{x:Static y:InteriorLabelModel.North}" Style="{y:GraphMLReference 4}" PreferredSize="148.9838161374421,22">
+        //                  <y:Label.Text><![CDATA[Fachliche Ebene]]></y:Label.Text>
+        //                  <y:Label.Style>
+        //                      <yjs:DefaultLabelStyle textFill="BLACK" textSize="20">
+        //                          <yjs:DefaultLabelStyle.font>
+        //                              <yjs:Font fontSize="20"/>
+        //                          </yjs:DefaultLabelStyle.font>
+        //                      </yjs:DefaultLabelStyle>
+        //                   </y:Label.Style>
+        //                </y:Label>
+        //            </x:List>
+        //        </data>
+        boolean isLayerNode = ec instanceof LayerContainer;
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeLabels.getKeyID()); // start data
         writeStartElement("x:List"); // start x:List
-        boolean hideText = nc.hideText();
+        boolean hideText = ec instanceof NodeContainer ? ((NodeContainer) ec).hideText() : false;
+        String labelLayout = "{x:Static y:InteriorStretchLabelModel.Center}";
+        if (ec instanceof NodeContainer) {
+            NodeContainer nc = (NodeContainer) ec;
+            hideText = nc.hideText();
+            if (nc.getIconString() != null) {
+                labelLayout = "{x:Static y:ExteriorLabelModel.South}";
+            }
+        } else if (isLayerNode) {
+            labelLayout = "{x:Static y:InteriorLabelModel.North}";
+        }
         String mainLabelStyle = hideText ? "{x:Static y:VoidLabelStyle.Instance}" : null;
-        String labelLayout = nc.getIconString() == null ? "{x:Static y:InteriorStretchLabelModel.Center}" : "{x:Static y:ExteriorLabelModel.South}";
         writeStartElement("y:Label", "LayoutParameter", labelLayout, "Style", mainLabelStyle); // start y:Label
-        writeCDATAElement("y:Label.Text", getElementName(nc));
+        writeCDATAElement("y:Label.Text", getElementName(ec));
         if (!hideText) {
             writeStartElement("y:Label.Style"); //start y:LabelStyle
-            String valign = getSwingConstantsAsGraphMLString(nc.getValign());
-            String halign = getSwingConstantsAsGraphMLString(nc.getHalign());
-            writeStartElement("yjs:DefaultLabelStyle", "verticalTextAlignment", valign, "horizontalTextAlignment", halign, "wrapping", "WORD", "textFill", "BLACK"); // start yjs:DefaultLabelStyle
+            String valign = null;
+            String halign = null;
+            String wrapping = null;
+            String textSize = "20";
+            String fontSize = textSize;
+            String fontStyle = null;
+            String fontWeight = null;
+            if (!isLayerNode) {
+                valign = getSwingConstantsAsGraphMLString(ec.getValign());
+                halign = getSwingConstantsAsGraphMLString(ec.getHalign());
+                wrapping = "WORD";
+                textSize = null;
+                Font font = ec.getFont();
+                fontSize = String.valueOf(font.getSize());
+                fontStyle = font.isItalic() ? "ITALIC" : null;
+                fontWeight = font.isBold() ? "BOLD" : null;
+            }
+            writeStartElement("yjs:DefaultLabelStyle", "verticalTextAlignment", valign, "horizontalTextAlignment", halign, "wrapping", wrapping, "textFill", "BLACK", "textSize", textSize); // start yjs:DefaultLabelStyle
             writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
-            Font font = nc.getFont();
-            String fontSize = String.valueOf(font.getSize());
-            String fontStyle = font.isItalic() ? "ITALIC" : null;
-            String fontWeight = font.isBold() ? "BOLD" : null;
             writeEmptyElement("yjs:Font", "fontSize", fontSize, "fontStyle", fontStyle, "fontWeight", fontWeight);
             writeEndElement(); // end yjs:DefaultLabelStyle.font
             writeEndElement(); // end yjs:DefaultLabelStyle
@@ -253,6 +330,10 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         String y = String.valueOf(nc.getY() - height / 2);
         String w = String.valueOf(width);
         String h = String.valueOf(height);
+        writeNodeGeometry(x, y, w, h);
+    }
+
+    private void writeNodeGeometry(final String x, final String y, final String w, final String h) throws XMLStreamException {
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeGeometry.getKeyID()); //start data
         writeEmptyElement("y:RectD", "X", x, "Y", y, "Width", w, "Height", h);
         writeEndElement(); // end data

@@ -6,7 +6,10 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -25,19 +28,22 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected final Mapping standardLayout;
 
-    public GraphmlWriter(final File file, final Szenario szenario) throws XMLStreamException, IOException {
+    protected final int layer;
+
+    public GraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, null);
         this.szenario = szenario;
+        this.layer = layer;
         standardLayout = szenario.getMapping();
     }
 
-    public void write(final int layer) throws XMLStreamException, IOException {
+    public void write() throws XMLStreamException, IOException {
         writeStartDocument("UTF-8", "1.0", false);
         writeComment(getCreatedByComment());
         writeStartElement("graphml"); //start graphml
         writeXMLSchemaAttributes();
         writeKeys();
-        writeGraph(layer);
+        writeGraph(layer, "G");
         writeResources();
         writeEndElement(); //end graphml
     }
@@ -50,25 +56,63 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeGraphDescription() throws XMLStreamException;
 
-    private void writeGraph(final int layer) throws XMLStreamException {
-        writeStartElement("graph", "id", "G", "edgedefault", "directed"); // start graph
-        writeNodes(layer);
-        writeEdges(layer);
+    private void writeGraph(final int layer, final String graphID) throws XMLStreamException {
+        writeStartElementGraph(graphID); // start graph
+        writeLayer(layer, graphID);
         writeEndElement(); // end graph
     }
 
-    private void writeNodes(final int layer) throws XMLStreamException {
-        LayerContainer lc = szenario.getLayer(layer);
-        for (NodeContainer nc : lc.getKnoten()) {
-            writeStartElement("node", "id", nc.getHashString()); // start node
-            writeNodeContent(nc);
-            writeEndElement(); // end node
+    private void writeStartElementGraph(final String id) throws XMLStreamException {
+        writeStartElement("graph", "id", id, "edgedefault", "directed"); // start graph
+    }
+
+    private void writeStartElementNode(final String id) throws XMLStreamException {
+        writeStartElement("node", "id", id); // start node
+    }
+
+    private final void writeLayer(final int layer, final String graphID) throws XMLStreamException {
+        if (layer >= 0) {
+            String subGraphIdPrefix = "G".equals(graphID) ? null : graphID;
+            writeNodes(layer, subGraphIdPrefix);
+            writeEdges(layer, subGraphIdPrefix);
+        } else {
+            for (int l = 0; l < ModelConstants.VISIBLE_LAYERS.length; l++) {
+                String layerId = "n" + l;
+                writeStartElementNode(layerId); // start node
+                int layerIndex = ModelConstants.VISIBLE_LAYERS[l];
+                writeLayerNodeData(layerIndex);
+                writeGraph(layerIndex, layerId + ":");
+                writeEndElement(); // end node
+            }
         }
     }
 
-    protected final void writeStartElementDataKey(final String key) throws XMLStreamException {
-        writeCDATAElementDataKey(key, null);
+    /** Schreibt die Data-Tags für den Layer-Knoten */
+    protected abstract void writeLayerNodeData(final int layer) throws XMLStreamException;
 
+    private void writeNodes(final int layer, final String idPrefix) throws XMLStreamException {
+        String fullIdPrefix = Strings.isNullOrEmpty(idPrefix) ? null : idPrefix + ":";
+        LayerContainer lc = szenario.getLayer(layer);
+        for (NodeContainer nc : lc.getKnoten()) {
+            writeNode(nc, fullIdPrefix);
+        }
+    }
+
+    protected void writeNode(final NodeContainer nc, final String idPrefix) throws XMLStreamException {
+        String id = Strings.isNullOrEmpty(idPrefix) ? nc.getHashString() : idPrefix + nc.getHashString();
+        writeStartElementNode(id); // start node
+        writeNodeContent(nc);
+        writeEndElement(); // end node
+    }
+
+    protected final void writeElementDataKey(final String key, final String text) throws XMLStreamException {
+        writeStartElementDataKey(key); //start data
+        writeCharacters(text);
+        writeEndElement(); // end data
+    }
+
+    protected final void writeStartElementDataKey(final String key) throws XMLStreamException {
+        writeCDATAElementDataKey(key, null); // start data
     }
 
     protected final void writeEmptyElementDataKey(final String key) throws XMLStreamException {
@@ -108,11 +152,20 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeNodeContent(NodeContainer nc) throws XMLStreamException;
 
-    private void writeEdges(final int layer) throws XMLStreamException {
+    private void writeEdges(final int layer, final String idPrefix) throws XMLStreamException {
+        String fullIdPrefix = Strings.isNullOrEmpty(idPrefix) ? null : idPrefix + ":";
         LayerContainer lc = szenario.getLayer(layer);
         for (EdgeContainer ec : lc.getKanten()) {
             Edge edge = ec.getEdge();
-            writeStartElement("edge", "id", edge.getHashString(), "source", edge.getStart().getHashString(), "target", edge.getEnd().getHashString()); // start egde
+            String id = edge.getHashString();
+            String startId = edge.getStart().getHashString();
+            String endId = edge.getEnd().getHashString();
+            if (!Strings.isNullOrEmpty(idPrefix)) {
+                id = fullIdPrefix + id;
+                startId = fullIdPrefix + startId;
+                endId = fullIdPrefix + endId;
+            }
+            writeStartElement("edge", "id", id, "source", startId, "target", endId); // start egde
             writeEdgeContent(ec);
             writeEndElement(); // end edge
         }
