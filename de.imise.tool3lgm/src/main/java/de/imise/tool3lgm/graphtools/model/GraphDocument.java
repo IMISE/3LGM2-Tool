@@ -228,7 +228,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
-            layer[c] = new LayerContainer(new LayerKnoten(), this, c);
+            layer[c] = new LayerContainer(new LayerKnoten(c), this, c);
             layer[c].setColor(Color.white);
         }
         setPageSizeFactor(getPageSizeFactor());
