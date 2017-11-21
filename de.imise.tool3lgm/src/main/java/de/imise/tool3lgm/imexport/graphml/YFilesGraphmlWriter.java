@@ -143,17 +143,28 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     @Override
     protected void writeNodeContent(final NodeContainer nc) throws XMLStreamException {
-        writeNodeDescription(nc);
+        writeElementDescription(nc);
+        writeElementTlgmId(nc);
         writeNodeLabel(nc);
         writeNodeGeometry(nc);
         writeNodeStyle(nc);
         writeNodePorts(nc);
     }
 
-    protected void writeNodeDescription(final NodeContainer nc) throws XMLStreamException {
-        ModelElement me = nc.getElement();
+    protected void writeElementDescription(final ElementContainer ec) throws XMLStreamException {
+        ModelElement me = ec.getElement();
         String description = me.getDescription();
-        writeCDATAElementDataKey(YFilesGraphmlWriterDataKeys.node_description_string.getKeyID(), description);
+        if (!Strings.isNullOrEmpty(description)) {
+            YFilesGraphmlWriterDataKeys key = ec instanceof EdgeContainer ? YFilesGraphmlWriterDataKeys.edge_description_string : YFilesGraphmlWriterDataKeys.node_description_string;
+            writeCDATAElementDataKey(key.getKeyID(), me.getDescription());
+        }
+    }
+
+    protected final void writeElementTlgmId(final ElementContainer ec) throws XMLStreamException {
+        YFilesGraphmlWriterDataKeys key = ec instanceof EdgeContainer ? YFilesGraphmlWriterDataKeys.edge_tlgmid_string : YFilesGraphmlWriterDataKeys.node_tlgmid_string;
+        writeStartElementDataKey(key.getKeyID());
+        writeCharacters(ec.getHashString());
+        writeEndElement();
     }
 
     protected void writeNodeLabel(final NodeContainer nc) throws XMLStreamException {
@@ -282,6 +293,8 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     protected void writeEdgeContent(final EdgeContainer ec) throws XMLStreamException {
         Edge edge = ec.getEdge();
         writeEdgePorts(edge);
+        writeElementDescription(ec);
+        writeElementTlgmId(ec);
         writeEdgeBendpoints(ec);
         writeEdgeStyle(edge);
     }

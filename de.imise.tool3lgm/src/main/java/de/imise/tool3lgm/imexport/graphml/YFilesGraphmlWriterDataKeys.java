@@ -15,6 +15,7 @@ enum YFilesGraphmlWriterDataKeys {
     },
     //        <key id="d1" for="node" attr.type="string" attr.name="description"/>
     node_description_string,
+    node_tlgmid_string,
     //        <key id="d2" for="node" attr.name="NodeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeLabels"/>
     node_NodeLabels,
     //        <key id="d3" for="node" attr.name="NodeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/NodeGeometry"/>
@@ -31,6 +32,7 @@ enum YFilesGraphmlWriterDataKeys {
         }
     },
     edge_description_string,
+    edge_tlgmid_string,
     //        <key id="d7" for="edge" attr.name="EdgeLabels" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeLabels"/>
     edge_EdgeLabels,
     //        <key id="d8" for="edge" attr.name="EdgeGeometry" y:attr.uri="http://www.yworks.com/xml/yfiles-common/2.0/EdgeGeometry"/>
