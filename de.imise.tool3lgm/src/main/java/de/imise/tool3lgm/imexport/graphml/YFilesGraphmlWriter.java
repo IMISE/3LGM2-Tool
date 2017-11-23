@@ -31,6 +31,8 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     private final Map<String, String> labelStyleKeyToSharedDataLabelStyleKey = new HashMap<>();
 
+    private final Map<String, String> edgeStyleKeyToSharedDataEdgeStyleKey = new HashMap<>();
+
     public YFilesGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, szenario, layer);
     }
@@ -135,15 +137,18 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     private void writeSharedDataEntries() throws XMLStreamException {
         for (int layer : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = szenario.getLayer(layer);
-            writeUsedLabelStylesAsSharedData(lc);
+            writeLabelStyleAsSharedData(lc);
             for (NodeContainer nc : lc.getKnoten()) {
-                writeUsedLabelStylesAsSharedData(nc);
-                writeUsedIconsAsSharedData(nc);
+                writeLabelStyleAsSharedData(nc);
+                writeIconAsSharedData(nc);
+            }
+            for (EdgeContainer ec : lc.getKanten()) {
+                writeEdgeStyleAsSharedData(ec);
             }
         }
     }
 
-    private void writeUsedLabelStylesAsSharedData(final ElementContainer ec) throws XMLStreamException {
+    private void writeLabelStyleAsSharedData(final ElementContainer ec) throws XMLStreamException {
         //            <yjs:DefaultLabelStyle x:Key="1" verticalTextAlignment="TOP" horizontalTextAlignment="LEFT" wrapping="WORD" textFill="BLACK"/>
         //                <yjs:DefaultLabelStyle.font>
         //                    <yjs:Font fontSize="12" fontStyle="ITALIC" fontWeight="BOLD"/>
@@ -171,7 +176,38 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeEndElement(); // end yjs:DefaultLabelStyle
     }
 
-    private void writeUsedIconsAsSharedData(final NodeContainer nc) throws XMLStreamException {
+    private void writeEdgeStyleAsSharedData(final EdgeContainer ec) throws XMLStreamException {
+        //        <data key="d7">
+        //            <yjs:PolylineEdgeStyle smoothingLength="0" targetArrow="TRIANGLE"/>
+        //        </data>
+        YFilesGraphmlEdgeStyle edgeStyle = new YFilesGraphmlEdgeStyle(ec);
+        String edgeStyleKey = edgeStyle.getEdgeStyleKey();
+        String sharedDataEdgeStyleKey = edgeStyleKeyToSharedDataEdgeStyleKey.get(edgeStyleKey);
+        //dieses Layout wurde schon in die SharedData Section geschrieben
+        if (sharedDataEdgeStyleKey != null) {
+            return;
+        }
+        sharedDataEdgeStyleKey = String.valueOf(sharedDataCurrentKeyIndex++);
+        edgeStyleKeyToSharedDataEdgeStyleKey.put(edgeStyleKey, sharedDataEdgeStyleKey);
+        String startTag = "yjs:PolylineEdgeStyle";
+        if (edgeStyle.isDashed) {
+            writeStartElement(startTag); // start yjs:PolylineEdgeStyle
+        } else {
+            writeEmptyElement(startTag);
+        }
+        writeAttributes("x:Key", sharedDataEdgeStyleKey, "smoothingLength", edgeStyle.smoothingLength, "sourceArrow", edgeStyle.sourceArrow, "targetArrow", edgeStyle.targetArrow);
+        if (edgeStyle.isDashed) {
+            //          <yjs:PolylineEdgeStyle.stroke>
+            //            <yjs:Stroke fill="BLACK" dashStyle="Dash" thickness="1"/>
+            //          </yjs:PolylineEdgeStyle.stroke>
+            writeStartElement("yjs:PolylineEdgeStyle.stroke"); // start yjs:PolylineEdgeStyle.stroke
+            writeEmptyElement("yjs:Stroke", "fill", edgeStyle.strokeFill, "dashStyle", edgeStyle.strokeDashStyle, "thickness", edgeStyle.strokeThickness);
+            writeEndElement(); // end yjs:PolylineEdgeStyle.stroke
+            writeEndElement(); // end yjs:PolylineEdgeStyle
+        }
+    }
+
+    private void writeIconAsSharedData(final NodeContainer nc) throws XMLStreamException {
         String iconHash = nc.getIconString();
         //das Element hat kein Icon
         if (iconHash == null) {
@@ -372,7 +408,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeElementDescription(ec);
         writeElementTlgmId(ec);
         writeEdgeBendpoints(ec);
-        writeEdgeStyle(edge);
+        writeEdgeStyle(ec);
     }
 
     private void writeEdgePorts(final Edge edge) throws XMLStreamException {
@@ -403,32 +439,14 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         }
     }
 
-    private void writeEdgeStyle(final Edge edge) throws XMLStreamException {
+    private void writeEdgeStyle(final EdgeContainer ec) throws XMLStreamException {
         //        <data key="d7">
         //            <yjs:PolylineEdgeStyle smoothingLength="0" targetArrow="TRIANGLE"/>
         //        </data>
+        YFilesGraphmlEdgeStyle edgeStyle = new YFilesGraphmlEdgeStyle(ec);
+        String sharedDataEdgeStyleKey = edgeStyleKeyToSharedDataEdgeStyleKey.get(edgeStyle.getEdgeStyleKey());
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.edge_EdgeStyle.getKeyID()); // start data
-        int direction = edge.getDirection();
-        String sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "TRIANGLE" : null;
-        String targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "TRIANGLE" : null;
-        Class<? extends Edge> edgeClass = edge.getClass();
-        boolean isDashed = ModelConstants.isPartOfEdge(edgeClass);
-        String startTag = "yjs:PolylineEdgeStyle";
-        if (isDashed) {
-            writeStartElement(startTag); // start yjs:PolylineEdgeStyle
-        } else {
-            writeEmptyElement(startTag);
-        }
-        writeAttributes("smoothingLength", "0", "sourceArrow", sourceArrow, "targetArrow", targetArrow);
-        if (isDashed) {
-            //          <yjs:PolylineEdgeStyle.stroke>
-            //            <yjs:Stroke fill="BLACK" dashStyle="Dash" thickness="1"/>
-            //          </yjs:PolylineEdgeStyle.stroke>
-            writeStartElement("yjs:PolylineEdgeStyle.stroke"); // start yjs:PolylineEdgeStyle.stroke
-            writeEmptyElement("yjs:Stroke", "fill", "BLACK", "dashStyle", "Dash", "thickness", "1");
-            writeEndElement(); // end yjs:PolylineEdgeStyle.stroke
-            writeEndElement(); // end yjs:PolylineEdgeStyle
-        }
+        writeEmptyElement("y:GraphMLReference", "ResourceKey", sharedDataEdgeStyleKey);
         writeEndElement(); // end data
     }
 
