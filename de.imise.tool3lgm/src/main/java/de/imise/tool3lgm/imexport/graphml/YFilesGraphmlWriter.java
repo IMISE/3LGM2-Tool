@@ -1,13 +1,11 @@
 package de.imise.tool3lgm.imexport.graphml;
 
-import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.Icon;
-import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
 import com.google.common.base.Strings;
@@ -30,6 +28,8 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     private int sharedDataCurrentKeyIndex;
 
     private final Map<String, String> tlgmIconIdToSharedDataIconKey = new HashMap<>();
+
+    private final Map<String, String> layoutKeyToSharedDataLayoutKey = new HashMap<>();
 
     public YFilesGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, szenario, layer);
@@ -144,31 +144,40 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
         writeStartElement("data", "key", YFilesGraphmlWriterDataKeys.SharedData.getKeyID()); // start data
         writeStartElement("y:SharedData"); // start y:SharedData
-        writeUsedIconsAsSharedData();
+        writeSharedDataEntries();
         writeEndElement(); // end y:SharedData
         writeEndElement(); // end data
     }
 
-    private void writeUsedIconsAsSharedData() throws XMLStreamException {
-        Map<String, byte[]> iconTable = szenario.getCollection().getIconTable();
+    private void writeSharedDataEntries() throws XMLStreamException {
         for (int layer : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = szenario.getLayer(layer);
             for (NodeContainer nc : lc.getKnoten()) {
-                String iconHash = nc.getIconString();
-                //das Element hat kein Icon
-                if (iconHash == null) {
-                    continue;
-                }
-                String sharedDataIconKey = tlgmIconIdToSharedDataIconKey.get(iconHash);
-                //das Icon wurde schon in die SharedData Sction geschrieben
-                if (sharedDataIconKey != null) {
-                    continue;
-                }
-                sharedDataIconKey = String.valueOf(sharedDataCurrentKeyIndex++);
-                tlgmIconIdToSharedDataIconKey.put(iconHash, sharedDataIconKey);
-                writeEmptyElement("yjs:ImageNodeStyle", "x:Key", sharedDataIconKey, "image", "data:image/png;base64," + Base64.encode(iconTable.get(iconHash)));
+                writeUsedLabelStylesAsSharedData(nc);
+                writeUsedIconsAsSharedData(nc);
             }
         }
+    }
+
+    private void writeUsedLabelStylesAsSharedData(final ElementContainer ec) throws XMLStreamException {
+    }
+
+    private void writeUsedIconsAsSharedData(final NodeContainer nc) throws XMLStreamException {
+        String iconHash = nc.getIconString();
+        //das Element hat kein Icon
+        if (iconHash == null) {
+            return;
+        }
+        String sharedDataIconKey = tlgmIconIdToSharedDataIconKey.get(iconHash);
+        //das Icon wurde schon in die SharedData Sction geschrieben
+        if (sharedDataIconKey != null) {
+            return;
+        }
+        sharedDataIconKey = String.valueOf(sharedDataCurrentKeyIndex++);
+        tlgmIconIdToSharedDataIconKey.put(iconHash, sharedDataIconKey);
+        Map<String, byte[]> iconTable = szenario.getCollection().getIconTable();
+        byte[] icon = iconTable.get(iconHash);
+        writeEmptyElement("yjs:ImageNodeStyle", "x:Key", sharedDataIconKey, "image", "data:image/png;base64," + Base64.encode(icon));
     }
 
     @Override
@@ -282,45 +291,25 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //                </y:Label>
         //            </x:List>
         //        </data>
-        boolean isLayerNode = ec instanceof LayerContainer;
+
+        //        <y:Label.Style>
+        //            <yjs:DefaultLabelStyle verticalTextAlignment="CENTER" horizontalTextAlignment="CENTER" wrapping="WORD" textFill="BLACK">
+        //                <yjs:DefaultLabelStyle.font>
+        //                    <yjs:Font fontSize="12" fontWeight="BOLD"/>
+        //                </yjs:DefaultLabelStyle.font>
+        //            </yjs:DefaultLabelStyle>
+        //        </y:Label.Style>
+
+        YFilesGraphmlLabelStyle labelStyle = YFilesGraphmlLabelStyle.createLabelStyle(ec);
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeLabels.getKeyID()); // start data
         writeStartElement("x:List"); // start x:List
-        boolean hideText = ec instanceof NodeContainer ? ((NodeContainer) ec).hideText() : false;
-        String labelLayout = "{x:Static y:InteriorStretchLabelModel.Center}";
-        if (ec instanceof NodeContainer) {
-            NodeContainer nc = (NodeContainer) ec;
-            hideText = nc.hideText();
-            if (nc.getIconString() != null) {
-                labelLayout = "{x:Static y:ExteriorLabelModel.South}";
-            }
-        } else if (isLayerNode) {
-            labelLayout = "{x:Static y:InteriorLabelModel.North}";
-        }
-        String mainLabelStyle = hideText ? "{x:Static y:VoidLabelStyle.Instance}" : null;
-        writeStartElement("y:Label", "LayoutParameter", labelLayout, "Style", mainLabelStyle); // start y:Label
+        writeStartElement("y:Label", "LayoutParameter", labelStyle.labelLayout, "Style", labelStyle.mainLabelStyle); // start y:Label
         writeCDATAElement("y:Label.Text", getElementName(ec));
-        if (!hideText) {
+        if (labelStyle.mainLabelStyle == null) {
             writeStartElement("y:Label.Style"); //start y:LabelStyle
-            String valign = null;
-            String halign = null;
-            String wrapping = null;
-            String textSize = "20";
-            String fontSize = textSize;
-            String fontStyle = null;
-            String fontWeight = null;
-            if (!isLayerNode) {
-                valign = getSwingConstantsAsGraphMLString(ec.getValign());
-                halign = getSwingConstantsAsGraphMLString(ec.getHalign());
-                wrapping = "WORD";
-                textSize = null;
-                Font font = ec.getFont();
-                fontSize = String.valueOf(font.getSize());
-                fontStyle = font.isItalic() ? "ITALIC" : null;
-                fontWeight = font.isBold() ? "BOLD" : null;
-            }
-            writeStartElement("yjs:DefaultLabelStyle", "verticalTextAlignment", valign, "horizontalTextAlignment", halign, "wrapping", wrapping, "textFill", "BLACK", "textSize", textSize); // start yjs:DefaultLabelStyle
+            writeStartElement("yjs:DefaultLabelStyle", "verticalTextAlignment", labelStyle.valign, "horizontalTextAlignment", labelStyle.halign, "wrapping", labelStyle.wrapping, "textFill", "BLACK", "textSize", labelStyle.textSize); // start yjs:DefaultLabelStyle
             writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
-            writeEmptyElement("yjs:Font", "fontSize", fontSize, "fontStyle", fontStyle, "fontWeight", fontWeight);
+            writeEmptyElement("yjs:Font", "fontSize", labelStyle.fontSize, "fontStyle", labelStyle.fontStyle, "fontWeight", labelStyle.fontWeight);
             writeEndElement(); // end yjs:DefaultLabelStyle.font
             writeEndElement(); // end yjs:DefaultLabelStyle
             writeEndElement();// end y:LabelStyle
@@ -328,22 +317,6 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeEndElement(); // end y:Label
         writeEndElement(); // end x:List
         writeEndElement(); // end data
-    }
-
-    private String getSwingConstantsAsGraphMLString(final int position) {
-        if (position == SwingConstants.TOP) {
-            return "TOP";
-        }
-        if (position == SwingConstants.RIGHT) {
-            return "RIGHT";
-        }
-        if (position == SwingConstants.BOTTOM) {
-            return "BOTTOM";
-        }
-        if (position == SwingConstants.LEFT) {
-            return "LEFT";
-        }
-        return "CENTER";
     }
 
     private void writeNodeGeometry(final NodeContainer nc) throws XMLStreamException {
@@ -442,7 +415,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         String sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "TRIANGLE" : null;
         String targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "TRIANGLE" : null;
         Class<? extends Edge> edgeClass = edge.getClass();
-        boolean isDashed = ModelConstants.isComposition(edgeClass) || ModelConstants.isPartOfEdge(edgeClass);
+        boolean isDashed = ModelConstants.isPartOfEdge(edgeClass);
         String startTag = "yjs:PolylineEdgeStyle";
         if (isDashed) {
             writeStartElement(startTag); // start yjs:PolylineEdgeStyle
