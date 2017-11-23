@@ -9,8 +9,6 @@ import javax.swing.Icon;
 import javax.swing.SwingConstants;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -97,12 +95,11 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        </data>
         writeElementDataKey(YFilesGraphmlWriterDataKeys.node_Expanded_boolean.getKeyID(), "true"); // start data - end data
         writeNodeLabel(szenario.getLayer(layer));
-        int layerIndex = ArrayUtils.indexOf(ModelConstants.VISIBLE_LAYERS, layer); //layer ist 4, 2 oder 0 -> layer Index ist 0, 1 oder 2
-        int pageWidth = szenario.getPageWidth();
-        int pageHeight = szenario.getPageHeight();
-        int x = pageWidth * layerIndex + layerIndex * pageWidth / 10;
-        int y = 0;
-        writeNodeGeometry(String.valueOf(x), String.valueOf(y), String.valueOf(pageWidth), String.valueOf(pageHeight));
+        String x = String.valueOf(currentSzenarioLayerOffsetX);
+        String y = String.valueOf(currentSzenarioLayerOffsetY);
+        String w = String.valueOf(szenario.getPageWidth());
+        String h = String.valueOf(szenario.getPageHeight());
+        writeNodeGeometry(x, y, w, h);
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); // start data
         writeStartElement("yjs:CollapsibleNodeStyleDecorator"); // start yjs:CollapsibleNodeStyleDecorator
         writeEmptyElement("yjs:ShapeNodeStyle", "fill", "#FFF0F0F0");
@@ -326,8 +323,8 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         Icon icon = nc.getIcon();
         double width = icon == null ? nc.getWidth() : icon.getIconWidth();
         double height = icon == null ? nc.getHeight() : icon.getIconHeight();
-        String x = String.valueOf(nc.getX() - width / 2);
-        String y = String.valueOf(nc.getY() - height / 2);
+        String x = String.valueOf(nc.getX() - width / 2 + currentSzenarioLayerElementsOffsetX);
+        String y = String.valueOf(nc.getY() - height / 2 + currentSzenarioLayerElementsOffsetY);
         String w = String.valueOf(width);
         String h = String.valueOf(height);
         writeNodeGeometry(x, y, w, h);
@@ -399,7 +396,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
             writeStartElementDataKey(YFilesGraphmlWriterDataKeys.edge_EdgeGeometry.getKeyID()); // start data
             writeStartElement("x:List"); // start x:List
             for (BendpointContainer bc : ec.iterateBendpointContainers()) {
-                writeEmptyElement("y:Bend", "Location", bc.getX() + "," + bc.getY());
+                String x = String.valueOf(bc.getX() + currentSzenarioLayerElementsOffsetX);
+                String y = String.valueOf(bc.getY() + currentSzenarioLayerElementsOffsetY);
+                writeEmptyElement("y:Bend", "Location", x + "," + y);
             }
             writeEndElement(); // end x:List
             writeEndElement(); // end data

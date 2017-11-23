@@ -30,6 +30,15 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected final int layer;
 
+    /** Abstand zwischen den Ebenen */
+    protected int LAYER_OFFSET_X = GraphDocument.INITIAL_PAGE_WIDTH / 10, LAYER_OFFSET_Y = GraphDocument.INITIAL_PAGE_HEIGHT / 10;
+
+    /** Offset der 0-Punkte der auktuellen Ebene ausgehend von der ersten Ebene */
+    protected int currentSzenarioLayerOffsetX = 0, currentSzenarioLayerOffsetY = 0;
+
+    /** Offset der 0 Punkte der Elemente der aktuellen Ebene ausgehend von der ersten Ebene */
+    protected int currentSzenarioLayerElementsOffsetX = 0, currentSzenarioLayerElementsOffsetY = 0;
+
     public GraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, null);
         this.szenario = szenario;
@@ -77,6 +86,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
             writeEdges(layer, subGraphIdPrefix);
         } else {
             for (int l = 0; l < ModelConstants.VISIBLE_LAYERS.length; l++) {
+                updateCurrentSzenarioLayerOffset(l);
                 String layerId = "n" + l;
                 writeStartElementNode(layerId); // start node
                 int layerIndex = ModelConstants.VISIBLE_LAYERS[l];
@@ -85,6 +95,15 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
                 writeEndElement(); // end node
             }
         }
+    }
+
+    private void updateCurrentSzenarioLayerOffset(final int layerOffsetIndex) {
+        int layerWidth = szenario.getPageWidth();
+        int layerHeight = szenario.getPageHeight();
+        currentSzenarioLayerOffsetX = layerOffsetIndex * layerWidth + layerOffsetIndex * LAYER_OFFSET_X;
+        currentSzenarioLayerOffsetY = 0;
+        currentSzenarioLayerElementsOffsetX = currentSzenarioLayerOffsetX + layerWidth / 2;
+        currentSzenarioLayerElementsOffsetY = currentSzenarioLayerOffsetY + layerHeight / 2;
     }
 
     /** Schreibt die Data-Tags für den Layer-Knoten */
