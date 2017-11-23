@@ -29,7 +29,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
     private final Map<String, String> tlgmIconIdToSharedDataIconKey = new HashMap<>();
 
-    private final Map<String, String> layoutKeyToSharedDataLayoutKey = new HashMap<>();
+    private final Map<String, String> labelStyleKeyToSharedDataLabelStyleKey = new HashMap<>();
 
     public YFilesGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, szenario, layer);
@@ -118,30 +118,13 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     private void writeSharedData() throws XMLStreamException {
         //    <data key="d14">
         //        <y:SharedData>
-        //            <yjs:Font x:Key="1" fontSize="12"/>
-        //            <yjs:ShapeNodeStyle x:Key="2" fill="#FFFF5E5E"/>
-        //        </y:SharedData>
-        //    </data>
-
-        //    <data key="d14">
-        //        <y:SharedData>
-        //            <yjs:DefaultLabelStyle x:Key="1" textFill="BLACK">
+        //            <yjs:DefaultLabelStyle x:Key="1" verticalTextAlignment="TOP" horizontalTextAlignment="LEFT" wrapping="WORD" textFill="BLACK"/>
         //                <yjs:DefaultLabelStyle.font>
-        //                    <yjs:Font fontSize="12"/>
+        //                    <yjs:Font fontSize="12" fontStyle="ITALIC" fontWeight="BOLD"/>
         //                </yjs:DefaultLabelStyle.font>
         //            </yjs:DefaultLabelStyle>
         //        </y:SharedData>
         //    </data>
-        //        writeStartElement("data", "key", YFilesGraphmlWriterDataKeys.SharedData.getKeyID()); // start data
-        //        writeStartElement("y:SharedData"); // start y:SharedData
-        //        writeStartElement("yjs:DefaultLabelStyle", "x:Key", "1", "textFill", "BLACK"); // start yjs:DefaultLabelStyle
-        //        writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
-        //        writeEmptyElement("yjs:Font", "fontSize", "12");
-        //        writeEndElement(); // end yjs:DefaultLabelStyle.font
-        //        writeEndElement(); // end yjs:DefaultLabelStyle
-        //        writeEndElement(); // end y:SharedData
-        //        writeEndElement(); // end data
-
         writeStartElement("data", "key", YFilesGraphmlWriterDataKeys.SharedData.getKeyID()); // start data
         writeStartElement("y:SharedData"); // start y:SharedData
         writeSharedDataEntries();
@@ -152,6 +135,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     private void writeSharedDataEntries() throws XMLStreamException {
         for (int layer : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = szenario.getLayer(layer);
+            writeUsedLabelStylesAsSharedData(lc);
             for (NodeContainer nc : lc.getKnoten()) {
                 writeUsedLabelStylesAsSharedData(nc);
                 writeUsedIconsAsSharedData(nc);
@@ -160,6 +144,31 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     }
 
     private void writeUsedLabelStylesAsSharedData(final ElementContainer ec) throws XMLStreamException {
+        //            <yjs:DefaultLabelStyle x:Key="1" verticalTextAlignment="TOP" horizontalTextAlignment="LEFT" wrapping="WORD" textFill="BLACK"/>
+        //                <yjs:DefaultLabelStyle.font>
+        //                    <yjs:Font fontSize="12" fontStyle="ITALIC" fontWeight="BOLD"/>
+        //                </yjs:DefaultLabelStyle.font>
+        //            </yjs:DefaultLabelStyle>
+        YFilesGraphmlLabelStyle labelStyle = YFilesGraphmlLabelStyle.createLabelStyle(ec);
+        //nur bei den ausgeblendeten Labels ist dieser mainLabelStyle != null -> diese brauchen nicht in sharedData geschrieben
+        // werden, da sie keine Referenz sein können, da diese Refrenz auch immer über den mainLabelStyle abgebildet wird
+        if (labelStyle.mainLabelStyle != null) {
+            return;
+        }
+        String labelStyleKey = labelStyle.getLabelStyleKey();
+        String sharedDataLabelStyleKey = labelStyleKeyToSharedDataLabelStyleKey.get(labelStyleKey);
+        //dieses Layout wurde schon in die SharedData Section geschrieben
+        if (sharedDataLabelStyleKey != null) {
+            return;
+        }
+        sharedDataLabelStyleKey = String.valueOf(sharedDataCurrentKeyIndex++);
+        labelStyleKeyToSharedDataLabelStyleKey.put(labelStyleKey, sharedDataLabelStyleKey);
+        writeStartElement("yjs:DefaultLabelStyle", "x:Key", sharedDataLabelStyleKey, "verticalTextAlignment", labelStyle.valign, "horizontalTextAlignment", labelStyle.halign, "wrapping", labelStyle.wrapping, "textFill", "BLACK", "textSize",
+                labelStyle.textSize); // start yjs:DefaultLabelStyle
+        writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
+        writeEmptyElement("yjs:Font", "fontSize", labelStyle.fontSize, "fontStyle", labelStyle.fontStyle, "fontWeight", labelStyle.fontWeight);
+        writeEndElement(); // end yjs:DefaultLabelStyle.font
+        writeEndElement(); // end yjs:DefaultLabelStyle
     }
 
     private void writeUsedIconsAsSharedData(final NodeContainer nc) throws XMLStreamException {
@@ -169,7 +178,7 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
             return;
         }
         String sharedDataIconKey = tlgmIconIdToSharedDataIconKey.get(iconHash);
-        //das Icon wurde schon in die SharedData Sction geschrieben
+        //das Icon wurde schon in die SharedData Section geschrieben
         if (sharedDataIconKey != null) {
             return;
         }
@@ -291,29 +300,17 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //                </y:Label>
         //            </x:List>
         //        </data>
-
-        //        <y:Label.Style>
-        //            <yjs:DefaultLabelStyle verticalTextAlignment="CENTER" horizontalTextAlignment="CENTER" wrapping="WORD" textFill="BLACK">
-        //                <yjs:DefaultLabelStyle.font>
-        //                    <yjs:Font fontSize="12" fontWeight="BOLD"/>
-        //                </yjs:DefaultLabelStyle.font>
-        //            </yjs:DefaultLabelStyle>
-        //        </y:Label.Style>
-
         YFilesGraphmlLabelStyle labelStyle = YFilesGraphmlLabelStyle.createLabelStyle(ec);
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeLabels.getKeyID()); // start data
         writeStartElement("x:List"); // start x:List
+        //wenn der labelStyle selbst kein MainLabelStyle hatte -> Referenz auf die SharedData eintragen
+        if (labelStyle.mainLabelStyle == null) {
+            String labelStyleKey = labelStyle.getLabelStyleKey();
+            String sharedDataLabelStyleKey = labelStyleKeyToSharedDataLabelStyleKey.get(labelStyleKey);
+            labelStyle.mainLabelStyle = "{y:GraphMLReference " + sharedDataLabelStyleKey + "}";
+        }
         writeStartElement("y:Label", "LayoutParameter", labelStyle.labelLayout, "Style", labelStyle.mainLabelStyle); // start y:Label
         writeCDATAElement("y:Label.Text", getElementName(ec));
-        if (labelStyle.mainLabelStyle == null) {
-            writeStartElement("y:Label.Style"); //start y:LabelStyle
-            writeStartElement("yjs:DefaultLabelStyle", "verticalTextAlignment", labelStyle.valign, "horizontalTextAlignment", labelStyle.halign, "wrapping", labelStyle.wrapping, "textFill", "BLACK", "textSize", labelStyle.textSize); // start yjs:DefaultLabelStyle
-            writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
-            writeEmptyElement("yjs:Font", "fontSize", labelStyle.fontSize, "fontStyle", labelStyle.fontStyle, "fontWeight", labelStyle.fontWeight);
-            writeEndElement(); // end yjs:DefaultLabelStyle.font
-            writeEndElement(); // end yjs:DefaultLabelStyle
-            writeEndElement();// end y:LabelStyle
-        }
         writeEndElement(); // end y:Label
         writeEndElement(); // end x:List
         writeEndElement(); // end data

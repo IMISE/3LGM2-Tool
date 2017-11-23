@@ -84,7 +84,7 @@ public class YFilesGraphmlLabelStyle {
 
     private static final StringBuilder sb = new StringBuilder();
 
-    private static final String getLabelStyleKey(final String valign, final String halign, final String wrapping, final String textFill, final String textSize, final String fontSize, final String fontStyle, final String fontWeight) {
+    public final String getLabelStyleKey() {
         sb.setLength(0);
         if (valign != null) {
             sb.append(valign);
