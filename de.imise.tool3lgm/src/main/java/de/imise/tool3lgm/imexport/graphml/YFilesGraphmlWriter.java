@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.imexport.graphml;
 
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.SwingConstants;
@@ -22,9 +23,13 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.util.image.ImageTools;
+import de.imise.tool3lgm.xml.Base64;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
+
+    private int sharedDataCurrentKeyIndex;
+
+    private final Map<String, String> tlgmIconIdToSharedDataIconKey = new HashMap<>();
 
     public YFilesGraphmlWriter(final File file, final Szenario szenario, final int layer) throws XMLStreamException, IOException {
         super(file, szenario, layer);
@@ -43,6 +48,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         writeAttribute("xmlns:x", "http://www.yworks.com/xml/yfiles-common/markup/3.0");
         writeAttribute("xmlns:yjs", "http://www.yworks.com/xml/yfiles-for-html/2.0/xaml");
         writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+        //diese Funktion hier wird garantiert genau 1x pro Schreibvorgang aufgerufen -> sharedDataEntryCount hier zurücksetzen
+        sharedDataCurrentKeyIndex = 1;
     }
 
     private String[] getAttributes(final String... strings) {
@@ -136,9 +144,31 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
 
         writeStartElement("data", "key", YFilesGraphmlWriterDataKeys.SharedData.getKeyID()); // start data
         writeStartElement("y:SharedData"); // start y:SharedData
-
+        writeUsedIconsAsSharedData();
         writeEndElement(); // end y:SharedData
         writeEndElement(); // end data
+    }
+
+    private void writeUsedIconsAsSharedData() throws XMLStreamException {
+        Map<String, byte[]> iconTable = szenario.getCollection().getIconTable();
+        for (int layer : ModelConstants.VISIBLE_LAYERS) {
+            LayerContainer lc = szenario.getLayer(layer);
+            for (NodeContainer nc : lc.getKnoten()) {
+                String iconHash = nc.getIconString();
+                //das Element hat kein Icon
+                if (iconHash == null) {
+                    continue;
+                }
+                String sharedDataIconKey = tlgmIconIdToSharedDataIconKey.get(iconHash);
+                //das Icon wurde schon in die SharedData Sction geschrieben
+                if (sharedDataIconKey != null) {
+                    continue;
+                }
+                sharedDataIconKey = String.valueOf(sharedDataCurrentKeyIndex++);
+                tlgmIconIdToSharedDataIconKey.put(iconHash, sharedDataIconKey);
+                writeEmptyElement("yjs:ImageNodeStyle", "x:Key", sharedDataIconKey, "image", "data:image/png;base64," + Base64.encode(iconTable.get(iconHash)));
+            }
+        }
     }
 
     @Override
@@ -343,14 +373,12 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         Enum<?> shape = getYGraphmlShape(nc);
         String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); //start data
-        String iconID = nc.getIconString();
-        if (iconID == null) {
+        String iconHash = nc.getIconString();
+        if (iconHash == null) {
             writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(getColor(nc), true), "shape", shapeName);
         } else {
-            Icon icon = nc.getIcon();
-            BufferedImage bufferedImage = ImageTools.toBufferedImage(icon);
-            String imageData = "data:image/png;base64," + ImageTools.getBase64EncodedImage(bufferedImage);
-            writeEmptyElement("yjs:ImageNodeStyle", "image", imageData);
+            String sharedDataIconKey = tlgmIconIdToSharedDataIconKey.get(iconHash);
+            writeEmptyElement("y:GraphMLReference", "ResourceKey", sharedDataIconKey);
         }
         writeEndElement(); // end data
     }
