@@ -51,12 +51,8 @@ public class YFilesGraphmlEdgeStyle {
         if (smoothingLength != null) {
             sb.append(smoothingLength);
         }
-        if (sourceArrow != null) {
-            sb.append(sourceArrow);
-        }
-        if (targetArrow != null) {
-            sb.append(targetArrow);
-        }
+        sb.append(sourceArrow);
+        sb.append(targetArrow);
         if (strokeFill != null) {
             sb.append(strokeFill);
         }
