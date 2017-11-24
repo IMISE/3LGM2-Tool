@@ -385,8 +385,10 @@ public class MenuCollection {
             };
             directHelp.addActionListener(Help.getHelp().getDisplayHelpAfterTracking());
             add(directHelp);
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(false, new JSeparator(), ActionLibrary.HelpActions.EVALUATION, new JSeparator(), ActionLibrary.HelpActions.ONLINE_HELP, ActionLibrary.HelpActions.LGM_ONLINE, new JSeparator(),
-                    ActionLibrary.HelpActions.EXAMPLE, ActionLibrary.HelpActions.MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.INFO, new JSeparator(), ActionLibrary.HelpActions.IMPORT_LICENSE));
+            MenuCreator.addAll(this,
+                    MenuCreator.createMenuEntries(false, new JSeparator(), ActionLibrary.HelpActions.EVALUATION, new JSeparator(), ActionLibrary.HelpActions.ONLINE_HELP, ActionLibrary.HelpActions.LGM_ONLINE, new JSeparator(),
+                            ActionLibrary.HelpActions.EXAMPLE, ActionLibrary.HelpActions.MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.INFO,
+                            new JSeparator()/* , ActionLibrary.HelpActions.IMPORT_LICENSE */));
         }
     }
 

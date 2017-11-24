@@ -318,13 +318,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
 
         //den Hauptframe in die Mitte setzen
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
         setTitle(getResString("tool3lgm"));
         //den Hauptframe initialisieren, damit die JOption-Panes der Lizenzanfrage an der richtigen Stelle sind.
-        setVisible(true);
-        LicenseHandler.checkLicenses();
-        setVisible(false);
-        setLocation(0, 0);
+        //        setVisible(true);
+        //        LicenseHandler.checkLicenses();
+        //        setVisible(false);
+        //        setLocation(0, 0);
 
         contextGenerator = new ContextGenerator();
         modelBrowserPanel = new ModelBrowserPanel();
@@ -1072,9 +1072,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public boolean fileSave(boolean saveAs) {
         //	   long start = System.currentTimeMillis();
-        if (!LicenseHandler.checkLicenses()) {
-            return false;
-        }
+        //        if (!LicenseHandler.checkLicenses()) {
+        //            return false;
+        //        }
         /* GDCollection zum ausgewähtlen Frame */
         GraphDocument doc = getSelectedDoc();
         if (doc == null) {

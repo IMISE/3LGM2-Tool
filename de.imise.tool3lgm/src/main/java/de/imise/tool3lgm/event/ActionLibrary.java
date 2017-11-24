@@ -25,7 +25,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.LicenseHandler;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -710,14 +709,14 @@ public class ActionLibrary {
             }
         };
 
-        /** Öffnet ein Fenster zum Import von Lizenzdateien */
-        public static final Action IMPORT_LICENSE = new StaticAction(ActionIdentifier.import_license) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                LicenseHandler.importLicenseFile();
-            }
-        };
+        //        /** Öffnet ein Fenster zum Import von Lizenzdateien */
+        //        public static final Action IMPORT_LICENSE = new StaticAction(ActionIdentifier.import_license) {
+        //
+        //            @Override
+        //            public void actionPerformed(final ActionEvent e) {
+        //                LicenseHandler.importLicenseFile();
+        //            }
+        //        };
     }
 
     /**
