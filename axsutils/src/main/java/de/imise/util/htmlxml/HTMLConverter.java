@@ -166,4 +166,10 @@ public class HTMLConverter {
         }
     }
 
+    public static final String getHTMLColor(final Color col, final boolean alpha, final String prefix) {
+        StringBuilder sb = new StringBuilder(prefix == null ? "" : prefix);
+        appendHTMLColor(sb, col, alpha);
+        return sb.toString();
+    }
+
 }
