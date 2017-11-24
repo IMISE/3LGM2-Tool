@@ -5,12 +5,11 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JComboBox;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * Abtsractes Panel für Verbindungen mit einer Maximalen Verbindungsanzahl von 1.
@@ -51,7 +50,7 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
             for (int i = 0; i < c.length; i++) {
                 // add event listener to all of the child components
                 MouseListener[] mouseListeners = c[i].getMouseListeners();
-                if (!ArrayUtils.contains(mouseListeners, mouseListener)) {
+                if (!CollectionUtils.arrayContains(mouseListeners, mouseListener)) {
                     c[i].addMouseListener(mouseListener);
                 }
             }

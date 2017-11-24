@@ -26,8 +26,6 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
 import de.imise.tool3lgm.event.ActionLibrary.EditActions;
@@ -298,7 +296,7 @@ public abstract class Tool3lgmConstants {
         ActionMap am = component.getActionMap();
         for (Action action : KEYSTROKES.keySet()) {
             KeyStroke keyStroke = KEYSTROKES.get(action);
-            if (!ArrayUtils.contains(ingnoreStrokes, keyStroke)) {
+            if (!CollectionUtils.arrayContains(ingnoreStrokes, keyStroke)) {
                 im.put(KEYSTROKES.get(action), action);
             }
             am.put(action, action);
