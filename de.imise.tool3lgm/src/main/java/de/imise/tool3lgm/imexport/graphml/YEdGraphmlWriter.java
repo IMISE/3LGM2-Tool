@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.image.ImageTools;
 
 public class YEdGraphmlWriter extends GraphmlWriter {
@@ -436,6 +437,14 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         }
     }
 
+    private final StringBuilder colorBuilder = new StringBuilder("#");
+
+    protected String getColorString(final Color color, final boolean alpha) {
+        colorBuilder.setLength(1);
+        HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color, alpha);
+        return colorBuilder.toString();
+    }
+
     private static enum YGraphShape { // in dieser Schreibweise braucht das yEd-Format die shapes. Diese hier gehen in yFiles zwar auch, aber dann wird die Zeichenfarbe (fill-Attribut) ignoriert
         rectangle,
         triangle,
@@ -456,8 +465,15 @@ public class YEdGraphmlWriter extends GraphmlWriter {
         }
     }
 
-    @Override
-    protected YGraphShape getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
+    private final Enum<?> getYGraphmlShape(final NodeContainer nc) {
+        GraphElementLayout.SHAPE shape = nc.getForm();
+        if (shape == null) {
+            shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
+        }
+        return getYGraphmlShape(shape);
+    }
+
+    private Enum<?> getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
         switch (shape) {
         case dreieck:
             return YGraphShape.triangle;

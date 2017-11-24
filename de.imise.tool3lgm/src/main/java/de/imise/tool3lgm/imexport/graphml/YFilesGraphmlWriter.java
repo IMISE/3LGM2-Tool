@@ -20,7 +20,6 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.xml.Base64;
 
 public class YFilesGraphmlWriter extends GraphmlWriter {
@@ -134,7 +133,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
             writeLabelStyleAsSharedData(lc);
             for (NodeContainer nc : lc.getKnoten()) {
                 writeLabelStyleAsSharedData(nc);
-                writeIconAsSharedData(nc);
+                if (!writeIconAsSharedData(nc)) {
+                    writeNodeStyleAsSharedData(nc);
+                }
             }
             for (EdgeContainer ec : lc.getKanten()) {
                 writeEdgeStyleAsSharedData(ec);
@@ -148,75 +149,83 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //                    <yjs:Font fontSize="12" fontStyle="ITALIC" fontWeight="BOLD"/>
         //                </yjs:DefaultLabelStyle.font>
         //            </yjs:DefaultLabelStyle>
-        YFilesGraphmlLabelStyle labelStyle = YFilesGraphmlLabelStyle.createLabelStyle(ec);
+        YFilesGraphmlLabelStyle style = YFilesGraphmlLabelStyle.createLabelStyle(ec);
         //nur bei den ausgeblendeten Labels ist dieser mainLabelStyle != null -> diese brauchen nicht in sharedData geschrieben
         // werden, da sie keine Referenz sein können, da diese Refrenz auch immer über den mainLabelStyle abgebildet wird
-        if (labelStyle.mainLabelStyle != null) {
+        if (style.mainLabelStyle != null) {
             return;
         }
-        String labelStyleKey = labelStyle.getLabelStyleKey();
-        String sharedDataLabelStyleKey = hashIdToSharedDataKey.get(labelStyleKey);
-        //dieses Layout wurde schon in die SharedData Section geschrieben
-        if (sharedDataLabelStyleKey != null) {
-            return;
+        String styleKey = style.getLabelStyleKey();
+        String sharedDataStyleKey = getNewSharedDataStyleKey(styleKey);
+        if (sharedDataStyleKey != null) {
+            writeStartElement("yjs:DefaultLabelStyle", "x:Key", sharedDataStyleKey, "verticalTextAlignment", style.valign, "horizontalTextAlignment", style.halign, "wrapping", style.wrapping, "textFill", "BLACK", "textSize", style.textSize); // start yjs:DefaultLabelStyle
+            writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
+            writeEmptyElement("yjs:Font", "fontSize", style.fontSize, "fontStyle", style.fontStyle, "fontWeight", style.fontWeight);
+            writeEndElement(); // end yjs:DefaultLabelStyle.font
+            writeEndElement(); // end yjs:DefaultLabelStyle
         }
-        sharedDataLabelStyleKey = String.valueOf(hashIdToSharedDataKey.size());
-        hashIdToSharedDataKey.put(labelStyleKey, sharedDataLabelStyleKey);
-        writeStartElement("yjs:DefaultLabelStyle", "x:Key", sharedDataLabelStyleKey, "verticalTextAlignment", labelStyle.valign, "horizontalTextAlignment", labelStyle.halign, "wrapping", labelStyle.wrapping, "textFill", "BLACK", "textSize",
-                labelStyle.textSize); // start yjs:DefaultLabelStyle
-        writeStartElement("yjs:DefaultLabelStyle.font"); // start yjs:DefaultLabelStyle.font
-        writeEmptyElement("yjs:Font", "fontSize", labelStyle.fontSize, "fontStyle", labelStyle.fontStyle, "fontWeight", labelStyle.fontWeight);
-        writeEndElement(); // end yjs:DefaultLabelStyle.font
-        writeEndElement(); // end yjs:DefaultLabelStyle
+    }
+
+    private void writeNodeStyleAsSharedData(final NodeContainer nc) throws XMLStreamException {
+        YFilesGraphmlNodeStyle style = new YFilesGraphmlNodeStyle(nc);
+        String styleKey = style.getNodeStyleKey();
+        String sharedDataStyleKey = getNewSharedDataStyleKey(styleKey);
+        if (sharedDataStyleKey != null) {
+            writeEmptyElement("yjs:ShapeNodeStyle", "x:Key", sharedDataStyleKey, "fill", style.fill, "shape", style.shape);
+        }
     }
 
     private void writeEdgeStyleAsSharedData(final EdgeContainer ec) throws XMLStreamException {
         //        <data key="d7">
         //            <yjs:PolylineEdgeStyle smoothingLength="0" targetArrow="TRIANGLE"/>
         //        </data>
-        YFilesGraphmlEdgeStyle edgeStyle = new YFilesGraphmlEdgeStyle(ec);
-        String edgeStyleKey = edgeStyle.getEdgeStyleKey();
-        String sharedDataEdgeStyleKey = hashIdToSharedDataKey.get(edgeStyleKey);
-        //dieses Layout wurde schon in die SharedData Section geschrieben
-        if (sharedDataEdgeStyleKey != null) {
-            return;
-        }
-        sharedDataEdgeStyleKey = String.valueOf(hashIdToSharedDataKey.size());
-        hashIdToSharedDataKey.put(edgeStyleKey, sharedDataEdgeStyleKey);
-        String startTag = "yjs:PolylineEdgeStyle";
-        if (edgeStyle.isDashed) {
-            writeStartElement(startTag); // start yjs:PolylineEdgeStyle
-        } else {
-            writeEmptyElement(startTag);
-        }
-        writeAttributes("x:Key", sharedDataEdgeStyleKey, "smoothingLength", edgeStyle.smoothingLength, "sourceArrow", edgeStyle.sourceArrow, "targetArrow", edgeStyle.targetArrow);
-        if (edgeStyle.isDashed) {
-            //          <yjs:PolylineEdgeStyle.stroke>
-            //            <yjs:Stroke fill="BLACK" dashStyle="Dash" thickness="1"/>
-            //          </yjs:PolylineEdgeStyle.stroke>
-            writeStartElement("yjs:PolylineEdgeStyle.stroke"); // start yjs:PolylineEdgeStyle.stroke
-            writeEmptyElement("yjs:Stroke", "fill", edgeStyle.strokeFill, "dashStyle", edgeStyle.strokeDashStyle, "thickness", edgeStyle.strokeThickness);
-            writeEndElement(); // end yjs:PolylineEdgeStyle.stroke
-            writeEndElement(); // end yjs:PolylineEdgeStyle
+        YFilesGraphmlEdgeStyle style = new YFilesGraphmlEdgeStyle(ec);
+        String styleKey = style.getEdgeStyleKey();
+        String sharedDataStyleKey = getNewSharedDataStyleKey(styleKey);
+        if (sharedDataStyleKey != null) {
+            String startTag = "yjs:PolylineEdgeStyle";
+            if (style.isDashed) {
+                writeStartElement(startTag); // start yjs:PolylineEdgeStyle
+            } else {
+                writeEmptyElement(startTag);
+            }
+            writeAttributes("x:Key", sharedDataStyleKey, "smoothingLength", style.smoothingLength, "sourceArrow", style.sourceArrow, "targetArrow", style.targetArrow);
+            if (style.isDashed) {
+                //          <yjs:PolylineEdgeStyle.stroke>
+                //            <yjs:Stroke fill="BLACK" dashStyle="Dash" thickness="1"/>
+                //          </yjs:PolylineEdgeStyle.stroke>
+                writeStartElement("yjs:PolylineEdgeStyle.stroke"); // start yjs:PolylineEdgeStyle.stroke
+                writeEmptyElement("yjs:Stroke", "fill", style.strokeFill, "dashStyle", style.strokeDashStyle, "thickness", style.strokeThickness);
+                writeEndElement(); // end yjs:PolylineEdgeStyle.stroke
+                writeEndElement(); // end yjs:PolylineEdgeStyle
+            }
         }
     }
 
-    private void writeIconAsSharedData(final NodeContainer nc) throws XMLStreamException {
-        String iconHash = nc.getIconString();
+    private boolean writeIconAsSharedData(final NodeContainer nc) throws XMLStreamException {
+        String styleKey = nc.getIconString();
         //das Element hat kein Icon
-        if (iconHash == null) {
-            return;
+        if (styleKey == null) {
+            return false;
         }
-        String sharedDataIconKey = hashIdToSharedDataKey.get(iconHash);
-        //das Icon wurde schon in die SharedData Section geschrieben
-        if (sharedDataIconKey != null) {
-            return;
+        String sharedDataKey = getNewSharedDataStyleKey(styleKey);
+        if (sharedDataKey != null) {
+            Map<String, byte[]> iconTable = szenario.getCollection().getIconTable();
+            byte[] icon = iconTable.get(styleKey);
+            writeEmptyElement("yjs:ImageNodeStyle", "x:Key", sharedDataKey, "image", "data:image/png;base64," + Base64.encode(icon));
         }
-        sharedDataIconKey = String.valueOf(hashIdToSharedDataKey.size());
-        hashIdToSharedDataKey.put(iconHash, sharedDataIconKey);
-        Map<String, byte[]> iconTable = szenario.getCollection().getIconTable();
-        byte[] icon = iconTable.get(iconHash);
-        writeEmptyElement("yjs:ImageNodeStyle", "x:Key", sharedDataIconKey, "image", "data:image/png;base64," + Base64.encode(icon));
+        return true;
+    }
+
+    public String getNewSharedDataStyleKey(final String styleKey) {
+        String sharedDataStyleKey = hashIdToSharedDataKey.get(styleKey);
+        //dieses Layout wurde schon in die SharedData Section geschrieben
+        if (sharedDataStyleKey != null) {
+            return null;
+        }
+        sharedDataStyleKey = String.valueOf(hashIdToSharedDataKey.size());
+        hashIdToSharedDataKey.put(styleKey, sharedDataStyleKey);
+        return sharedDataStyleKey;
     }
 
     @Override
@@ -370,16 +379,10 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        <data key="d4">
         //            <yjs:ShapeNodeStyle fill="#FF6868FF" shape="ELLIPSE"/>
         //        </data>
-        Enum<?> shape = getYGraphmlShape(nc);
-        String shapeName = shape == YGraphShape.RECTANGLE ? null : shape.name();
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.node_NodeStyle.getKeyID()); //start data
         String iconHash = nc.getIconString();
-        if (iconHash == null) {
-            writeEmptyElement("yjs:ShapeNodeStyle", "fill", getColorString(getColor(nc), true), "shape", shapeName);
-        } else {
-            String sharedDataIconKey = hashIdToSharedDataKey.get(iconHash);
-            writeEmptyElement("y:GraphMLReference", "ResourceKey", sharedDataIconKey);
-        }
+        String styleKey = iconHash != null ? iconHash : new YFilesGraphmlNodeStyle(nc).getNodeStyleKey();
+        writeSharedDataReference(styleKey);
         writeEndElement(); // end data
     }
 
@@ -437,10 +440,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         //        <data key="d7">
         //            <yjs:PolylineEdgeStyle smoothingLength="0" targetArrow="TRIANGLE"/>
         //        </data>
-        YFilesGraphmlEdgeStyle edgeStyle = new YFilesGraphmlEdgeStyle(ec);
-        String sharedDataEdgeStyleKey = hashIdToSharedDataKey.get(edgeStyle.getEdgeStyleKey());
+        YFilesGraphmlEdgeStyle style = new YFilesGraphmlEdgeStyle(ec);
         writeStartElementDataKey(YFilesGraphmlWriterDataKeys.edge_EdgeStyle.getKeyID()); // start data
-        writeEmptyElement("y:GraphMLReference", "ResourceKey", sharedDataEdgeStyleKey);
+        writeSharedDataReference(style.getEdgeStyleKey());
         writeEndElement(); // end data
     }
 
@@ -448,35 +450,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
     protected void writeResources() throws XMLStreamException {
     }
 
-    private static enum YGraphShape { // in dieser Schreibweise braucht das yEd-Format die shapes. Diese hier gehen in yFiles zwar auch, aber dann wird die Zeichenfarbe (fill-Attribut) ignoriert
-        DIAMOND,
-        ELLIPSE,
-        RECTANGLE,
-        TRIANGLE,
-        ROUND_RECTANGLE,
-        HEXAGON;
-    }
-
-    @Override
-    protected Enum<?> getYGraphmlShape(final GraphElementLayout.SHAPE shape) {
-        switch (shape) {
-        case dreieck:
-            return YGraphShape.TRIANGLE;
-        case oval:
-            return YGraphShape.ELLIPSE;
-        case rundeck:
-            return YGraphShape.ROUND_RECTANGLE;
-        case rhombus:
-            return YGraphShape.DIAMOND;
-        case wabe:
-            return YGraphShape.HEXAGON;
-        case tonne:
-            return YGraphShape.HEXAGON;
-        case ordner:
-            return YGraphShape.HEXAGON;
-        default:
-            return YGraphShape.RECTANGLE;
-        }
+    protected void writeSharedDataReference(final String styleKey) throws XMLStreamException {
+        String sharedDataKey = hashIdToSharedDataKey.get(styleKey);
+        writeEmptyElement("y:GraphMLReference", "ResourceKey", sharedDataKey);
     }
 
 }

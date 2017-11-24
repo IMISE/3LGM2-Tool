@@ -17,9 +17,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
-import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 
 public abstract class GraphmlWriter extends IntendingXMLWriter {
@@ -194,24 +192,6 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected abstract void writeResources() throws XMLStreamException, IOException;
 
-    protected final Enum<?> getYGraphmlShape(final NodeContainer nc) {
-        GraphElementLayout.SHAPE shape = nc.getForm();
-        if (shape == null) {
-            shape = nc.getGraphDocument().getMapping().getStandardForm(nc);
-        }
-        return getYGraphmlShape(shape);
-    }
-
-    protected abstract Enum<?> getYGraphmlShape(GraphElementLayout.SHAPE shape);
-
-    private final StringBuilder colorBuilder = new StringBuilder("#");
-
-    protected String getColorString(final Color color, final boolean alpha) {
-        colorBuilder.setLength(1);
-        HTMLConverter.appendHTMLColor(colorBuilder, color == null ? Color.black : color, alpha);
-        return colorBuilder.toString();
-    }
-
     protected String getElementName(final ElementContainer ec) {
         ModelElement me = ec.getElement();
         String nameExtension = me.getNameExtension();
@@ -219,7 +199,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         return name;
     }
 
-    protected static final Color getColor(final NodeContainer nc) {
+    public static final Color getColor(final NodeContainer nc) {
         Color col = nc.getColor();
         if (col == null) {
             GraphDocument doc = nc.getGraphDocument();
