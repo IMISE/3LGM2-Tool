@@ -58,6 +58,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -235,6 +236,9 @@ public class ActionLibrary {
                 protected void actionPerformed() {
                     File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
                     if (path != null) {
+                        //                    File path = new File("/Users/astruebi/Projekte/eclipse/IMISE/graphml-export");
+                        //                    File path = new File("/Users/astruebi/Dropbox/2017_Bachelorarbeit_MBraungardt/Mapping/test_exports");
+                        //                    new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYFilesGraphml();
                         new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYEdGraphml();
                     }
                 }
@@ -246,7 +250,10 @@ public class ActionLibrary {
                 protected void actionPerformed() {
                     File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
                     if (path != null) {
+                        //                  File path = new File("/Users/astruebi/Projekte/eclipse/IMISE/graphml-export");
+                        //                  File path = new File("/Users/astruebi/Dropbox/2017_Bachelorarbeit_MBraungardt/Mapping/test_exports");
                         new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYFilesGraphml();
+                        //                    new GraphmlExporter(path, Static.getSelectedGDCollection()).writeYEdGraphml();
                     }
                 }
             };
@@ -1008,37 +1015,38 @@ public class ActionLibrary {
         public static class Analysis {
 
             /** (De-)Aktiviert das Erzeugen eines Teilmodells für die Analyse */
-            public static final ExtendedAction OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT = new StaticActionNew(ActionIdentifier.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, UserProperties.isNewSubmodelForAnalysis()) {
+            public static final Action OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT = new StaticActionNew(ActionIdentifier.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, UserProperties.isNewSubmodelForAnalysis()) {
                 @Override
                 public void actionPerformed() {
                     UserProperties.setNewSubmodelForAnalysis(isSelected());
                 }
             };
 
-            public static final Action[] SIMPLE_REDUNDANCIES = create_SIMPLE_REDUNDANCIES_Actions();
+            public static final Action[] OPTION_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTION_GRAPH_SHOW_SIMPLE_REDUNDANCY_Actions();
 
-            public static final Action[] create_SIMPLE_REDUNDANCIES_Actions() {
+            private static final Action[] create_OPTION_GRAPH_SHOW_SIMPLE_REDUNDANCY_Actions() {
                 //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
                 AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
                 SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
                 //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
-                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
+                Action[] returnActions = new StaticActionNew[simpleRedundancyAnalysisDefinition.size()];
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
                     SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
-                    StaticAction action = new StaticAction(ActionIdentifier.SIMPLE_REDUNDNANCY_ANALYSIS) {
+                    StaticActionNew action = new StaticActionNew(ActionIdentifier.OPTION_SIMPLE_REDUNDANCY_ANALYSIS, false) {
                         @Override
-                        public void actionPerformed(final ActionEvent e) {
+                        public void actionPerformed() {
                             for (GDCollection gdcoll : getTool().getCollections()) {
                                 gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
                                 for (Szenario szenario : gdcoll.getSzenarios()) {
                                     szenario.switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
                                 }
                             }
-                            distributeElementGraphicsChanged();
+                            // Benachrichtigt das Tool über eine Ändeung der grafischen Darstellung der Elemente
+                            getTool().distributeOptionChange(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
                         }
                     };
-                    String resKey = ActionIdentifier.SIMPLE_REDUNDNANCY_ANALYSIS.name();
+                    String resKey = ActionIdentifier.OPTION_SIMPLE_REDUNDANCY_ANALYSIS.name();
                     MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
                     String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
                     String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
