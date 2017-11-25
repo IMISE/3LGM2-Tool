@@ -965,16 +965,17 @@ public class ActionLibrary {
             }
 
             /** Setzt die Farbe des Elements zurück */
-            public static final Action RESET_COLOR = new ElementLayoutAction(ActionIdentifier.element_reset_color, GDCommands.NORMALIZE_COLOR);
+            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
 
-            /** Setzt die Farbe des Elements zurück */
-            public static final Action RESET_TRANSPARENCY = new ElementLayoutAction(ActionIdentifier.element_reset_transparency, GDCommands.NORMALIZE_TRANSPARENCY);
+            /** Setzt die Transparenz des Elements zurück */
+            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
 
             /** Setzt die Schriftart des Elements zurück */
-            public static final Action RESET_FONT = new ElementLayoutAction(ActionIdentifier.reset_font, GDCommands.NORMALIZE_FONT);
+            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
 
             /** Setzt alle Layout-Eigenschaften des Elements zurück */
-            public static final Action RESET_ALL = new ElementLayoutAction(ActionIdentifier.reset_all, GDCommands.NORMALIZE);
+            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
+
         }
 
         /**

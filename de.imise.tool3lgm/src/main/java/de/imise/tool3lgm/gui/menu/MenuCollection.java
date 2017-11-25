@@ -125,7 +125,8 @@ public class MenuCollection {
                         getResString("elementTransparencyMenu"), ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF,
                         ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
                 createMenu( // Auf Standard setzen Menu
-                        getResString("elementSetToStandardMenu"), ElementLayout.RESET_FONT, ElementLayout.RESET_COLOR, ElementLayout.RESET_TRANSPARENCY, ElementLayout.RESET_ALL),
+                        getResString("elementSetToStandardMenu"), ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
+                        ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
                 new JSeparator(),
                 createMenu( // Icon-Menu
                         getResString("icon"), ElementLayout.Icon.NO_ICON, ElementLayout.Icon.CHOOSE_ICON),

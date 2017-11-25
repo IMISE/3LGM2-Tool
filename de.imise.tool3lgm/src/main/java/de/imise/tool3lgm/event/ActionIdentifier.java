@@ -72,12 +72,7 @@ public enum ActionIdentifier {
 
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
-    element_reset_color,
-    element_reset_transparency,
-    reset_font,
-    // reset_shape,
-    // reset_size,
-    reset_all,
+
     // icon
     no_icon,
     choose_icon,

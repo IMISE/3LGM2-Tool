@@ -815,7 +815,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case NORMALIZE_FONT:
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT:
             if (argc == 0) {
                 normalizeFontSelected(pid);
             } else if (argc == 2) {
@@ -823,7 +823,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case NORMALIZE_COLOR:
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR:
             if (argc == 0) {
                 normalizeColorSelected(pid);
             } else if (argc == 2) {
@@ -831,7 +831,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case NORMALIZE_TRANSPARENCY:
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY:
             if (argc == 0) {
                 normalizeTransparencySelected(pid);
             } else if (argc == 2) {
@@ -839,7 +839,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case NORMALIZE:
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT:
             if (argc == 0) {
                 normalizeSelected(pid);
             }
@@ -1640,7 +1640,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected final void normalizeFontElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         String szenHash = ec.getGraphDocument().hashString;
-        addRedoCommandOrReplace(GDCommands.NORMALIZE_FONT + " " + szenHash + " " + ec.getHashString(), "", pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT + " " + szenHash + " " + ec.getHashString(), "", pid);
 
         if (ec.getFontName() != null) {
             addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString(), GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
@@ -1668,7 +1668,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected final void normalizeColorElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         String szenHash = ec.getGraphDocument().hashString;
-        addRedoCommandOrReplace(GDCommands.NORMALIZE_COLOR + " " + szenHash + " " + ec.getHashString(), "", pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR + " " + szenHash + " " + ec.getHashString(), "", pid);
         if (ec.getColor() != null) {
             addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
             ec.setColor(null);
@@ -1697,7 +1697,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected final void normalizeTransparencyElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         String szenHash = ec.getGraphDocument().hashString;
-        addRedoCommandOrReplace(GDCommands.NORMALIZE_TRANSPARENCY + " " + szenHash + " " + ec.getHashString(), "", pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY + " " + szenHash + " " + ec.getHashString(), "", pid);
         addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
         ec.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         finish_transaction(pid);
