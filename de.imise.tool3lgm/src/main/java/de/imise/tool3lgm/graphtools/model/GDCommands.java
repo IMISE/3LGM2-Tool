@@ -20,11 +20,13 @@ public enum GDCommands {
     SET_NAME,
     //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
     CHANGE_FORM,
+    MODEL_ACTION_SET_ELEMENT_FONT,
     MODEL_ACTION_SET_ELEMENT_COLOR,
     MODEL_ACTION_SET_ELEMENT_ALPHA, //Für diesen Identifier gibt es keine Action, weil das über SetColor läuft. Man braucht ihn nur für das UNDO von MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_XXX
     MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE,
     MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF,
     MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL,
+    MODEL_ACTION_SET_ELEMENT_ICON_NONE,
     MODEL_ACTION_SET_LAYER_COLOR,
     MODEL_ACTION_SET_LAYER_ALPHA, //Für diesen Identifier gibt es keine Action, weil das über SetColor läuft. Man braucht ihn nur für das UNDO von MODEL_ACTION_SET_LAYER_TRANSPARENCY_XXX
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE,
@@ -87,8 +89,6 @@ public enum GDCommands {
     REDO,
 
     SET_ICON,
-    UNSET_ICON,
-    MODEL_ACTION_SET_ELEMENT_FONT,
     CHOOSE_ICON,
 
     CHANGE_LINE_STYLE,

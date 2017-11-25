@@ -898,7 +898,7 @@ public class ActionLibrary {
             public static class Icon {
 
                 /** Entfernt das Icon des Elements */
-                public static final Action NO_ICON = new ElementLayoutAction(ActionIdentifier.no_icon, GDCommands.UNSET_ICON);
+                public static final Action NO_ICON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
 
                 /** Öffnet ein Fenster zur Auswahl eines Icons */
                 public static final Action CHOOSE_ICON = new ElementLayoutAction(ActionIdentifier.choose_icon, PPP, GDCommands.CHOOSE_ICON);

@@ -1089,7 +1089,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             exec_command(GDCommands.SET_ICON + " " + iconKey, pid);
             break;
 
-        case UNSET_ICON:
+        case MODEL_ACTION_SET_ELEMENT_ICON_NONE:
             switch (argc) {
             case 0:
                 unsetIcon(pid);
@@ -1806,7 +1806,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (mc.getIcon() != null) {
             addUndoCommandIfNotExist(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
         } else {
-            addUndoCommandIfNotExist(GDCommands.UNSET_ICON + " " + szenHash + " " + mc.getElement().getHashString(), "", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getElement().getHashString(), "", pid);
         }
         addRedoCommandOrReplace(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), iconKey, pid);
         mc.setIcon(iconKey, gdcoll.getIconTable());
@@ -1845,7 +1845,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (mc.getIcon() != null) {
             addUndoCommandIfNotExist(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
         }
-        addRedoCommandOrReplace(GDCommands.UNSET_ICON + " " + szenHash + " " + mc.getHashString(), "", pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getHashString(), "", pid);
         mc.setIcon(null, gdcoll.getIconTable());
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
