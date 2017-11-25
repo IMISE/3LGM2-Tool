@@ -946,13 +946,13 @@ public class ActionLibrary {
                 public static class Horizontal {
 
                     /** Richtet die Beschrfitung linksbündig aus */
-                    public static final Action LEFT = new ElementLayoutAction(ActionIdentifier.text_left, GDCommands.LABEL_HALIGN_LEFT);
+                    public static final Action LEFT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT);
 
                     /** Richtet die Beschrfitung horizontal mittig aus */
-                    public static final Action CENTER = new ElementLayoutAction(ActionIdentifier.text_center_horizontal, GDCommands.LABEL_HALIGN_CENTER);
+                    public static final Action CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER);
 
                     /** Richtet die Beschrfitung rechtsbündig aus */
-                    public static final Action RIGHT = new ElementLayoutAction(ActionIdentifier.text_right, GDCommands.LABEL_HALIGN_RIGHT);
+                    public static final Action RIGHT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT);
                 }
 
                 /**
@@ -963,13 +963,13 @@ public class ActionLibrary {
                 public static class Vertical {
 
                     /** Richtet die Beschrfitung horizontal mittig aus */
-                    public static final Action TOP = new ElementLayoutAction(ActionIdentifier.text_top, GDCommands.LABEL_VALIGN_TOP);
+                    public static final Action TOP = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP);
 
                     /** Richtet die Beschrfitung vertikal mittig aus */
-                    public static final Action CENTER = new ElementLayoutAction(ActionIdentifier.text_center_vertical, GDCommands.LABEL_VALIGN_CENTER);
+                    public static final Action CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER);
 
                     /** Richtet die Beschrfitung nach unten aus */
-                    public static final Action BOTTOM = new ElementLayoutAction(ActionIdentifier.text_bottom, GDCommands.LABEL_VALIGN_BOTTOM);
+                    public static final Action BOTTOM = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM);
                 }
             }
 

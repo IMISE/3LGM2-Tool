@@ -950,27 +950,27 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             align(command, pid);
             break;
 
-        case LABEL_VALIGN_TOP:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP:
             label_valign(TOP, pid);
             break;
 
-        case LABEL_VALIGN_CENTER:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER:
             label_valign(CENTER, pid);
             break;
 
-        case LABEL_VALIGN_BOTTOM:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM:
             label_valign(BOTTOM, pid);
             break;
 
-        case LABEL_HALIGN_LEFT:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT:
             label_halign(LEFT, pid);
             break;
 
-        case LABEL_HALIGN_CENTER:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER:
             label_halign(CENTER, pid);
             break;
 
-        case LABEL_HALIGN_RIGHT:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT:
             label_halign(RIGHT, pid);
             break;
 

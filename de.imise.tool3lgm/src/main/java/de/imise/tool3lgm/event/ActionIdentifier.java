@@ -75,15 +75,6 @@ public enum ActionIdentifier {
 
     // icon
     ACTION_CHOOSE_ELEMENT_ICON,
-    // textAlignment
-    // textAlignmentHorizontal
-    text_left,
-    text_center_horizontal,
-    text_right,
-    // textAlignmentVertical
-    text_top,
-    text_center_vertical,
-    text_bottom,
     // level
     highest,
     increase,
