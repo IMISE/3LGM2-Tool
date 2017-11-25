@@ -81,7 +81,8 @@ public class MenuCollection {
 
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu(getResString("analysis"), AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
-            createCheckBoxItem(Analysis.NEW_SUBMODEL), new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(), createCheckBoxItems(Analysis.SIMPLE_REDUNDANCIES));
+            createCheckBoxItem(Analysis.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT), new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(),
+            createCheckBoxItems(Analysis.SIMPLE_REDUNDANCIES));
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu(getResString("options"), OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS,

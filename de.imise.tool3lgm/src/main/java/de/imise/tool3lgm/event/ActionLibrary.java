@@ -1007,10 +1007,10 @@ public class ActionLibrary {
          */
         public static class Analysis {
 
-            /** (De-)Aktiviert das Erzeugen eines Teilmodells für die XMLAnalyse */
-            public static final Action NEW_SUBMODEL = new StaticAction(ActionIdentifier.create_submodel, (Boolean) UserProperties.isNewSubmodelForAnalysis()) {
+            /** (De-)Aktiviert das Erzeugen eines Teilmodells für die Analyse */
+            public static final ExtendedAction OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT = new StaticActionNew(ActionIdentifier.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, UserProperties.isNewSubmodelForAnalysis()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void actionPerformed() {
                     UserProperties.setNewSubmodelForAnalysis(isSelected());
                 }
             };
