@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -15,7 +14,7 @@ public class GraphSelectedRealNodeAction extends GraphFrameAction {
     /**
      * @param identifier
      */
-    public GraphSelectedRealNodeAction(final GDCommands identifier) {
+    public GraphSelectedRealNodeAction(final Object identifier) {
         super(identifier);
     }
 
@@ -23,7 +22,7 @@ public class GraphSelectedRealNodeAction extends GraphFrameAction {
      * @param identifier
      * @param textSuffix
      */
-    public GraphSelectedRealNodeAction(final GDCommands identifier, final String textSuffix) {
+    public GraphSelectedRealNodeAction(final Object identifier, final String textSuffix) {
         super(identifier, textSuffix);
     }
 
