@@ -10,6 +10,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -70,7 +71,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.swing.dialog.ImageChooser;
 
 public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
 
@@ -1069,26 +1069,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case CHOOSE_ICON:
-            ImageChooser fc = new ImageChooser(GDCommands.CHOOSE_ICON);
-            fc.setCurrentDirectory(UserProperties.getIconPath());
-            fc.setDialogTitle(getResString("symb_ausw"));
-            int answer = fc.showDialog(null, getResString("open"));
-            UserProperties.setIconPath(fc.getCurrentDirectory());
-            if (answer != ImageChooser.APPROVE_OPTION) {
-                break;
-            }
-            File f = fc.getSelectedFile();
-            if (f == null) {
-                break;
-            }
-            String iconKey = gdcoll.loadIcon(f);
-            if (iconKey == null) {
-                break;
-            }
-            exec_command(GDCommands.SET_ICON + " " + iconKey, pid);
-            break;
-
         case MODEL_ACTION_SET_ELEMENT_ICON_NONE:
             switch (argc) {
             case 0:
@@ -1825,6 +1805,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
+     * @param iconFile
+     */
+    public final void setIcon(final File iconFile) {
+        String iconKey = gdcoll.loadIcon(iconFile);
+        if (iconKey == null) {
+            return;
+        }
+        setIcon(iconKey, STANDARD_PID);
     }
 
     /**

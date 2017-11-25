@@ -129,7 +129,7 @@ public class MenuCollection {
                         ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
                 new JSeparator(),
                 createMenu( // Icon-Menu
-                        getResString("icon"), ElementLayout.Icon.NO_ICON, ElementLayout.Icon.CHOOSE_ICON),
+                        getResString("icon"), ElementLayout.Icon.NO_ICON, ElementLayout.Icon.ACTION_CHOOSE_ELEMENT_ICON),
                 new JSeparator(),
                 createMenu( // Textausrichtungs-Menu (horizontal)
                         getResString("textAlignmentMenu"), TextAlignment.Horizontal.LEFT, TextAlignment.Horizontal.CENTER, TextAlignment.Horizontal.RIGHT, new JSeparator(), TextAlignment.Vertical.TOP, TextAlignment.Vertical.CENTER,

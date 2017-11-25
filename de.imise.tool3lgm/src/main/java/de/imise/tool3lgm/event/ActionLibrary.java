@@ -90,6 +90,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.swing.dialog.DirectoryChooser;
+import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
 
@@ -901,7 +902,15 @@ public class ActionLibrary {
                 public static final Action NO_ICON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
 
                 /** Öffnet ein Fenster zur Auswahl eines Icons */
-                public static final Action CHOOSE_ICON = new ElementLayoutAction(ActionIdentifier.choose_icon, PPP, GDCommands.CHOOSE_ICON);
+                public static final Action ACTION_CHOOSE_ELEMENT_ICON = new GraphSelectedRealNodeAction(ActionIdentifier.ACTION_CHOOSE_ELEMENT_ICON, PPP) {
+                    @Override
+                    protected void actionPerformed() {
+                        File iconFile = ImageChooser.getImageFile(getTool(), UserProperties.getIconPath());
+                        if (iconFile != null) {
+                            getSelectedDoc().setIcon(iconFile);
+                        }
+                    }
+                };
             }
 
             /**

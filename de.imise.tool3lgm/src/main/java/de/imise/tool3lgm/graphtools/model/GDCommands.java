@@ -89,7 +89,6 @@ public enum GDCommands {
     REDO,
 
     SET_ICON,
-    CHOOSE_ICON,
 
     CHANGE_LINE_STYLE,
 

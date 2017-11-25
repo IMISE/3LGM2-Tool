@@ -74,7 +74,7 @@ public enum ActionIdentifier {
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
 
     // icon
-    choose_icon,
+    ACTION_CHOOSE_ELEMENT_ICON,
     // textAlignment
     // textAlignmentHorizontal
     text_left,
