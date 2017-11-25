@@ -36,7 +36,7 @@ public class ExtendedFileChooser extends JFileChooser {
      * dieser Klasse gestartet wurde, wird sich der zuletzt gewählte Pfad in dieser Map gemerkt.
      * Default ist das Key-Object <code>null</code>
      */
-    private static final HashMap<Object, File> KEY_TO_PATH_MAP = new HashMap<Object, File>();
+    private static final HashMap<Object, File> KEY_TO_PATH_MAP = new HashMap<>();
 
     /** Default Key für den letzten Pfad dieses Dialoges, wenn kein anderes Key-Object gesetzt wurde. */
     private Object pathKey = null;
@@ -131,10 +131,6 @@ public class ExtendedFileChooser extends JFileChooser {
         setPath(pathKey, path);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JFileChooser#showDialog(java.awt.Component, java.lang.String)
-     */
     @Override
     public int showDialog(final Component parent, final String approveButtonText) throws HeadlessException {
         if (fileName != null && !fileName.trim().isEmpty()) {
@@ -147,7 +143,7 @@ public class ExtendedFileChooser extends JFileChooser {
 
     /**
      * Setzt die FileFilter dieses Dialoges. Der erste FileFilter aus dem Array wird als aktiv gesetzt.
-     * 
+     *
      * @param showAllFileFilter
      * @param fileFilters
      */
@@ -274,10 +270,6 @@ public class ExtendedFileChooser extends JFileChooser {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JFileChooser#showSaveDialog(java.awt.Component)
-     */
     @Override
     public int showSaveDialog(final Component parent) throws HeadlessException {
         return showSaveDialog(parent, (String) null, isAcceptAllFileFilterUsed(), (FileNameExtensionFilter[]) null);
@@ -285,7 +277,7 @@ public class ExtendedFileChooser extends JFileChooser {
 
     /**
      * Zeigt einen Hinweisdialog an, dass die Datei nicht gespiechert werden konnte.
-     * 
+     *
      * @param parent
      */
     public static final void showSaveErrorMessage(final Component parent) {
