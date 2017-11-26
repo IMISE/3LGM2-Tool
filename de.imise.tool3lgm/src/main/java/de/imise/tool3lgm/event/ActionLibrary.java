@@ -899,7 +899,7 @@ public class ActionLibrary {
             public static class Icon {
 
                 /** Entfernt das Icon des Elements */
-                public static final Action NO_ICON = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
+                public static final Action MODEL_ACTION_SET_ELEMENT_ICON_NONE = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
 
                 /** Öffnet ein Fenster zur Auswahl eines Icons */
                 public static final Action ACTION_CHOOSE_ELEMENT_ICON = new GraphSelectedRealNodeAction(ActionIdentifier.ACTION_CHOOSE_ELEMENT_ICON, PPP) {
@@ -946,13 +946,13 @@ public class ActionLibrary {
                 public static class Horizontal {
 
                     /** Richtet die Beschrfitung linksbündig aus */
-                    public static final Action LEFT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT);
+                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT);
 
                     /** Richtet die Beschrfitung horizontal mittig aus */
-                    public static final Action CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER);
+                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER);
 
                     /** Richtet die Beschrfitung rechtsbündig aus */
-                    public static final Action RIGHT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT);
+                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT);
                 }
 
                 /**
@@ -963,13 +963,13 @@ public class ActionLibrary {
                 public static class Vertical {
 
                     /** Richtet die Beschrfitung horizontal mittig aus */
-                    public static final Action TOP = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP);
+                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP);
 
                     /** Richtet die Beschrfitung vertikal mittig aus */
-                    public static final Action CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER);
+                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER);
 
                     /** Richtet die Beschrfitung nach unten aus */
-                    public static final Action BOTTOM = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM);
+                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM);
                 }
             }
 

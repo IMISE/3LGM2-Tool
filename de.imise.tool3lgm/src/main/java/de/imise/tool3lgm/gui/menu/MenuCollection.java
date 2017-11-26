@@ -129,11 +129,12 @@ public class MenuCollection {
                         ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
                 new JSeparator(),
                 createMenu( // Icon-Menu
-                        getResString("icon"), ElementLayout.Icon.NO_ICON, ElementLayout.Icon.ACTION_CHOOSE_ELEMENT_ICON),
+                        getResString("icon"), ElementLayout.Icon.MODEL_ACTION_SET_ELEMENT_ICON_NONE, ElementLayout.Icon.ACTION_CHOOSE_ELEMENT_ICON),
                 new JSeparator(),
                 createMenu( // Textausrichtungs-Menu (horizontal)
-                        getResString("textAlignmentMenu"), TextAlignment.Horizontal.LEFT, TextAlignment.Horizontal.CENTER, TextAlignment.Horizontal.RIGHT, new JSeparator(), TextAlignment.Vertical.TOP, TextAlignment.Vertical.CENTER,
-                        TextAlignment.Vertical.BOTTOM));
+                        getResString("textAlignmentMenu"), TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT, TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER,
+                        TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT, new JSeparator(), TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER,
+                        TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
 
         /** Das Ebenen-Layout-Menu */
         public static final JMenu LAYER_LAYOUT_MENU = createMenu(getResString("layerLayoutMenu"), LayerLayout.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, LayerLayout.MODEL_ACTION_SET_LAYER_COLOR,
