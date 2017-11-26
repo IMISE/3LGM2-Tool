@@ -73,8 +73,8 @@ public enum GDCommands {
     MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER,
     MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT,
     MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
-    LABEL_VALIGN,
-    LABEL_HALIGN,
+    MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
+    MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
 
     SET_USER_FIELD_VALUE,
     SET_USER_FIELD_WEIGHT_REPLACEMENT,

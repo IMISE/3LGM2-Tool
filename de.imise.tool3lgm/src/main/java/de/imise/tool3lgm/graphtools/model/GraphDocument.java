@@ -974,7 +974,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             label_halign(RIGHT, pid);
             break;
 
-        case LABEL_VALIGN:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN:
             if (argc == 1) {
                 try {
                     label_valign(Integer.parseInt(argv[0]), pid);
@@ -995,7 +995,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case LABEL_HALIGN:
+        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN:
             if (argc == 1) {
                 try {
                     label_halign(Integer.parseInt(argv[0]), pid);
@@ -4169,8 +4169,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         start_transaction(pid);
-        addUndoCommand(GDCommands.LABEL_VALIGN + " " + kc.get3LGMLayout().valign, pid);
-        addRedoCommand(GDCommands.LABEL_VALIGN + " " + mode, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + kc.get3LGMLayout().valign, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + mode, pid);
         kc.get3LGMLayout().valign = mode;
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, null, pid);
@@ -4203,8 +4203,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         start_transaction(pid);
-        addUndoCommand(GDCommands.LABEL_HALIGN + " " + kc.get3LGMLayout().halign, pid);
-        addRedoCommand(GDCommands.LABEL_HALIGN + " " + mode, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + kc.get3LGMLayout().halign, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + mode, pid);
         kc.get3LGMLayout().halign = mode;
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, null, pid);

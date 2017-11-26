@@ -37,7 +37,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENA
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
@@ -47,9 +46,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_HALIGN;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
@@ -57,6 +55,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
@@ -543,10 +543,10 @@ public final class GDCollection extends UserFieldTarget {
                 ecDoc.addUndoCommand(SET_VISIBLE + " " + false + " " + ecDocHash + " " + ecHash, pid);
             }
             if (ec.getValign() != STANDARD_ELEMENT_LAYOUT.valign) {
-                ecDoc.addUndoCommand(LABEL_VALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().valign, pid);
+                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().valign, pid);
             }
             if (ec.getHalign() != STANDARD_ELEMENT_LAYOUT.halign) {
-                ecDoc.addUndoCommand(LABEL_HALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().halign, pid);
+                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().halign, pid);
             }
         }
     }
