@@ -114,7 +114,7 @@ public enum ActionIdentifier {
     english,
 
     // extras
-    userfields,
+    ACTION_OPEN_USERFIELD_DEFINITION_DIALOG,
     attribute_editor,
     activate_calculation,
     automatic_etmt_assignment,
