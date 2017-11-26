@@ -596,19 +596,15 @@ public class ActionLibrary {
         };
 
         /** Öffnet einen Editor zur Eingabe von Kennzahlen */
-        public static final Action ATTRIBUTE_EDITOR = new StaticAction(ActionIdentifier.attribute_editor, PPP, true) {
-
+        public static final Action ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 if (!ModelConstants.getDialogs().isEmpty()) {
                     JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
                     return;
                 }
                 if (getSelectedDoc() != null) {
-                    UserFieldEditorDialog.getDialog(getTool(), getSelectedCollection()).setVisible(true);
+                    UserFieldEditorDialog.getDialog(getTool(), getSelectedGDCollection()).setVisible(true);
                 }
                 return;
             }

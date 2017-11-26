@@ -115,7 +115,7 @@ public enum ActionIdentifier {
 
     // extras
     ACTION_OPEN_USERFIELD_DEFINITION_DIALOG,
-    attribute_editor,
+    ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,
     activate_calculation,
     automatic_etmt_assignment,
 
