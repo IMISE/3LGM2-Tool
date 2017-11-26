@@ -584,20 +584,14 @@ public class ActionLibrary {
     public static class ExtrasActions {
 
         /** Öffnet einen Dialog zum Anlegen benutzerdefinierter Eigenschaftsfelder */
-        public static final Action USERFIELD_DEFINITION_DIALOG = new StaticAction(ActionIdentifier.userfields, PPP, true) {
-
+        public static final Action ACTION_OPEN_USERFIELD_DEFINITION_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
+            public void actionPerformed() {
                 if (!ModelConstants.getDialogs().isEmpty()) {
                     JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
                     return;
                 }
-                if (getSelectedDoc() != null) {
-                    UserFieldDeclarationDialog.showDialog(getTool(), getSelectedCollection());
-                }
+                UserFieldDeclarationDialog.showDialog(getTool(), getSelectedGDCollection());
             }
         };
 

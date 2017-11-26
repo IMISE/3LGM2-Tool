@@ -89,7 +89,7 @@ public class MenuCollection {
             OptionsSubMenus.LOCALE_MENU);
 
     /** Das Extras-Menu */
-    public static final JMenu EXTRAS_MENU = createMenu(getResString("extras"), ExtrasActions.USERFIELD_DEFINITION_DIALOG, ExtrasActions.ATTRIBUTE_EDITOR, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION), new JSeparator(),
+    public static final JMenu EXTRAS_MENU = createMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ATTRIBUTE_EDITOR, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION), new JSeparator(),
             ExtrasActions.AUTOMATIC_ETMT_ASSIGNMENT, new JSeparator(), createCheckBoxItem(AnalysisActions.OPTION_CHECK_CONSISTENCY), ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
