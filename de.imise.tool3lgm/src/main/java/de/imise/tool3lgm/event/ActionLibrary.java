@@ -747,7 +747,8 @@ public class ActionLibrary {
         private static Action[] getActions(final Class<ModelElement>[] treeCreatableLayerNodes) {
             GraphDocumentAction[] actions = new GraphDocumentAction[treeCreatableLayerNodes.length];
             for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
-                actions[c] = new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, treeCreatableLayerNodes[c].getName(), Tool3lgmConstants.getResString(treeCreatableLayerNodes[c].getSimpleName()));
+                String actionName = ModelConstants.getDisplayableName(treeCreatableLayerNodes[c]);
+                actions[c] = new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, treeCreatableLayerNodes[c].getName(), actionName);
             }
             Alphabetical.sort(actions);
             return actions;
