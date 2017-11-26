@@ -90,7 +90,7 @@ public class MenuCollection {
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION),
-            new JSeparator(), ExtrasActions.AUTOMATIC_ETMT_ASSIGNMENT, new JSeparator(), createCheckBoxItem(AnalysisActions.OPTION_CHECK_CONSISTENCY), ExtrasSubMenus.PLUGIN_MENU);
+            new JSeparator(), ModelConstants.getExtrasActions(), new JSeparator(), createCheckBoxItem(AnalysisActions.OPTION_CHECK_CONSISTENCY), ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();

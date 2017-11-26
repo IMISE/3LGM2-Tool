@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import javax.swing.Action;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -1549,6 +1551,32 @@ public final class ModelConstants {
         return false;
     }
 
+    public static final String getMetaModelResourceBaseName() {
+        return metaModel.getResourceBaseName();
+    }
+
+    public static final String getVisibleLayerName(final int layer) {
+        String resKey = "layer";
+        int reskeyLayerNumber = -1;
+        for (int i = 0; i < VISIBLE_LAYERS.length; i++) {
+            if (layer == VISIBLE_LAYERS[i]) {
+                reskeyLayerNumber = i + 1;
+                break;
+            }
+        }
+        //das auskommentierte geht eigentlich genausogut, aber das hier ist lesbarer
+        //        int visibleLayers = LAYER_COUNT / 2 + 1; // = 3
+        //        // 4 = 1 -> 4 / 2 = 2 - visibleLayers = -1 * -1 = 1
+        //        // 2 = 2 -> 2 / 2 = 1 - visibleLayers = -2 * -1 = 2
+        //        // 0 = 3 -> 0 / 2 = 0 - visibleLayers = -3 * -1 = 3
+        //        int reskeyLayerNumber = -(layer / 2 - visibleLayers);
+        try {
+            return getResString(resKey + reskeyLayerNumber);
+        } catch (Exception e) {
+            return getResString(resKey) + reskeyLayerNumber;
+        }
+    }
+
     /**
      * Liefert die {@link GraphViewDefinition} des Metamodells
      *
@@ -1577,30 +1605,13 @@ public final class ModelConstants {
         return metaModel.getAnalysisDefinition();
     }
 
-    public static final String getMetaModelResourceBaseName() {
-        return metaModel.getResourceBaseName();
-    }
-
-    public static final String getVisibleLayerName(final int layer) {
-        String resKey = "layer";
-        int reskeyLayerNumber = -1;
-        for (int i = 0; i < VISIBLE_LAYERS.length; i++) {
-            if (layer == VISIBLE_LAYERS[i]) {
-                reskeyLayerNumber = i + 1;
-                break;
-            }
-        }
-        //das auskommentierte geht eigentlich genausogut, aber das hier ist lesbarer
-        //        int visibleLayers = LAYER_COUNT / 2 + 1; // = 3
-        //        // 4 = 1 -> 4 / 2 = 2 - visibleLayers = -1 * -1 = 1
-        //        // 2 = 2 -> 2 / 2 = 1 - visibleLayers = -2 * -1 = 2
-        //        // 0 = 3 -> 0 / 2 = 0 - visibleLayers = -3 * -1 = 3
-        //        int reskeyLayerNumber = -(layer / 2 - visibleLayers);
-        try {
-            return getResString(resKey + reskeyLayerNumber);
-        } catch (Exception e) {
-            return getResString(resKey) + reskeyLayerNumber;
-        }
+    /**
+     * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen
+     * 
+     * @return
+     */
+    public static final Action[] getExtrasActions() {
+        return metaModel.getExtrasActions();
     }
 
 }

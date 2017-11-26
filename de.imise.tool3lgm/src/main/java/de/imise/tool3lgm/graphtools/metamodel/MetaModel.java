@@ -6,6 +6,8 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.Action;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -54,12 +56,29 @@ public abstract class MetaModel {
         if (analysisDefinition == null) {
             try {
                 analysisDefinition = getAnalysisDefinitionClass().newInstance();
-            } catch (NullPointerException | InstantiationException | IllegalAccessException e) {
+            } catch (Exception e) {
                 analysisDefinition = new AnalysisDefinition() {
                 };
             }
         }
         return analysisDefinition;
+    }
+
+    /////////////////////////////
+    // ExtrasActionsDefinition //
+    /////////////////////////////
+
+    protected Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
+        return null;
+    }
+
+    public final Action[] getExtrasActions() {
+        try {
+            ExtrasActionsDefinition extrasActionsDefinition = getExtrasActionsDefinitionClass().newInstance();
+            return extrasActionsDefinition.getActions();
+        } catch (Exception e) {
+        }
+        return new Action[0];
     }
 
     ////////////

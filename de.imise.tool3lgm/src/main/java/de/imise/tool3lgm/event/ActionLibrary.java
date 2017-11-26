@@ -610,20 +610,6 @@ public class ActionLibrary {
             }
         };
 
-        /**
-         * (De-)Aktiviert das automatische Zuweisen von ETNT-Verbindungen zu
-         * Kommunikationsbeziehnungen
-         */
-        public static final Action AUTOMATIC_ETMT_ASSIGNMENT = new StaticAction(ActionIdentifier.automatic_etmt_assignment, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                getSelectedDoc().relinkETNT();
-            }
-        };
     }
 
     /**

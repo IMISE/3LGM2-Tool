@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.model;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.Composition.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
@@ -64,10 +63,6 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommbezEtntVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
@@ -4639,36 +4634,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public UserFieldDefinitions getUserFieldDefinitions() {
         return gdcoll.getUserFieldDefinitions();
-    }
-
-    /**
-     *
-     */
-    public void relinkETNT() {
-        start_transaction(TransactionManager.STANDARD_PID);
-
-        List<ModelElement> all = getModelItems(KommBeziehung.class);
-        for (int i = 0; i < all.size(); i++) {
-            KommBeziehung kz = (KommBeziehung) all.get(i);
-            Bausteinschnittstelle bs1 = (Bausteinschnittstelle) kz.getStart();
-            Bausteinschnittstelle bs2 = (Bausteinschnittstelle) kz.getEnd();
-            //hin
-            List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, FORWARD);
-            for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, BACKWARD)) {
-                if (empf.contains(kc)) {
-                    gdcoll.link(KommbezEtntVerbindung.class, kc.getElement(), kz, TransactionManager.STANDARD_PID);
-                }
-            }
-            //zurück
-            empf = bs1.getConnectedContainer(EtntEtdtKombination.class, this, null, FORWARD);
-            for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, this, null, BACKWARD)) {
-                if (empf.contains(kc)) {
-                    gdcoll.link(KommbezEtntVerbindung.class, kz, kc.getElement(), TransactionManager.STANDARD_PID);
-                }
-            }
-        }
-        finish_transaction(TransactionManager.STANDARD_PID);
-        distributeEvent(GraphDocument.DATA_CHANGED);
     }
 
     /**

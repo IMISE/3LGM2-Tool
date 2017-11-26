@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -132,6 +133,15 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     protected Class<? extends AnalysisDefinition> getAnalysisDefinitionClass() {
         return TLGMAnalysisDefinition.class;
+    }
+
+    /////////////////////////////
+    // ExtrasActionsDefinition //
+    /////////////////////////////
+
+    @Override
+    protected Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
+        return TLGMExtrasActionsDefinition.class;
     }
 
     ////////////
