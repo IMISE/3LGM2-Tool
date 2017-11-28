@@ -39,7 +39,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     private static JDialog infoDialog;
 
     /**
-     * 
+     *
      */
     private static Rectangle2D linkPosition = null;
 
@@ -122,7 +122,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
      * @return
      */
     public static final void getInfoDialog() {
-        infoDialog = new JDialog(Static.getMainFrame(), getResString("about"), true);
+        infoDialog = new JDialog(Static.getMainFrame(), getResString("SPLASH_SCRREN_TITLE"), true);
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 
