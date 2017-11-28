@@ -157,7 +157,7 @@ public class Log {
         int typ = JOptionPane.INFORMATION_MESSAGE;
         if (level == DEBUG || level == INFO) {
             log(level, meldung, t);
-            titel = getResString("about");
+            titel = getResString("information");
             typ = JOptionPane.INFORMATION_MESSAGE;
         }
         if (level == WARN) {
