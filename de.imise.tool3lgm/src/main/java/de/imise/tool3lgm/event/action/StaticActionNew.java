@@ -217,11 +217,17 @@ public abstract class StaticActionNew extends ExtendedAction {
             Static.getSelectedDoc().exec(identifier.toString() + (arguments != null ? " " + arguments : ""), TransactionManager.STANDARD_PID);
         }
         actionPerformed();
+        actionPerformedWithEvent(e);
     }
 
     protected void actionPerformed() {
         //diese Funktion können Unterklassen überschreiben und müssen das enabled nie wieder testen.
         //Da bei all diesen Action die ActionEvent-Souce egal ist, wird das Event auch nicht durchgereicht
+    }
+
+    protected void actionPerformedWithEvent(final ActionEvent e) {
+        //diese Funktion können Unterklassen überschreiben und müssen das enabled nie wieder testen.
+        //Diese Funktion sollte von allen Unterklassen überschrieben werden, die das Event brauchen
     }
 
 }
