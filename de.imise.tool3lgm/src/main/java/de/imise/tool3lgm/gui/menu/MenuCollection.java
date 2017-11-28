@@ -9,7 +9,6 @@ import static de.imise.util.swing.menu.MenuCreator.createCheckBoxItems;
 import static de.imise.util.swing.menu.MenuCreator.createMenu;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
@@ -17,6 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
 import de.imise.tool3lgm.event.ActionLibrary.EditActions;
@@ -42,7 +42,6 @@ import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.plugin.B1ExportPlugin;
 import de.imise.tool3lgm.plugin.ExportPdvb4AwbPlugin;
 import de.imise.util.Alphabetical;
@@ -371,27 +370,16 @@ public class MenuCollection {
     public static class HelpMenu extends JMenu {
 
         /** Name dieses Menus */
-        public static final String title = getResString("help_icon");
+        public static final String title = Tool3lgmConstants.getResString("help");
 
         public HelpMenu() {
             super(title);
-            JMenuItem help = new JMenuItem(getResString("help"));
-            Help.getHelp().enableHelpOnButton(help, "willkommen");
-            add(help);
-            JMenuItem directHelp = new JMenuItem(getResString("direct_help")) {
-                @Override
-                protected void fireActionPerformed(final ActionEvent e) {
-                    super.fireActionPerformed(e);
-                    //Tool3lgm.tool.getGlassPane().addMouseListener(this);
-                    //Tool3lgm.tool.getGlassPane().setVisible(true);
-                }
-            };
-            directHelp.addActionListener(Help.getHelp().getDisplayHelpAfterTracking());
-            add(directHelp);
+
             MenuCreator.addAll(this,
-                    MenuCreator.createMenuEntries(false, new JSeparator(), ActionLibrary.HelpActions.EVALUATION, new JSeparator(), ActionLibrary.HelpActions.ONLINE_HELP, ActionLibrary.HelpActions.LGM_ONLINE, new JSeparator(),
-                            ActionLibrary.HelpActions.EXAMPLE, ActionLibrary.HelpActions.MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.INFO,
-                            new JSeparator()/* , ActionLibrary.HelpActions.IMPORT_LICENSE */));
+                    MenuCreator.createMenuEntries(false, ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
+                            ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_SHOW_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_SHOW_3LGM_WEB_SITE, new JSeparator(),
+                            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG,
+                            new JSeparator()/* , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */));
         }
     }
 

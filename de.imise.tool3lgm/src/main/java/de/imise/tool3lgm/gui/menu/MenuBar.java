@@ -9,7 +9,7 @@ import de.imise.util.swing.menu.MenuCreator;
 
 /**
  * Die Menu-Leiste des Tools.
- * 
+ *
  * @author fstephan
  */
 public class MenuBar extends JMenuBar {
@@ -24,7 +24,7 @@ public class MenuBar extends JMenuBar {
      */
     public MenuBar() {
         super();
-        allMenus = new ArrayList<JMenu>(11);
+        allMenus = new ArrayList<>(11);
 
         add(MenuCollection.FILE_MENU);
         add(MenuCollection.EDIT_MENU);

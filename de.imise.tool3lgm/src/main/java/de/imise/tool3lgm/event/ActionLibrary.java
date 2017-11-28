@@ -78,6 +78,7 @@ import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
+import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
@@ -619,86 +620,76 @@ public class ActionLibrary {
      */
     public static class HelpActions {
 
-        // TODO:AXS,FST: testen warum hier vieles nicht geht
-
         /** Funktioniert nicht */
-        public static final Action HELP = new StaticAction(ActionIdentifier.help) {
-
+        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticActionNew(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                throw new UnsupportedOperationException("Hilfe wird nicht unterstützt");
+            public void actionPerformed() {
+                Help.showHelp();
             }
         };
 
-        /** Funktioniert nicht */
-        public static final Action DIRECT_HELP = new StaticAction(ActionIdentifier.direct_help) {
-
+        /** Aktiviert die Direkthilfe */
+        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticActionNew(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
-                throw new UnsupportedOperationException("Direkthilfe wird nicht unterstützt");
+            public void actionPerformedWithEvent(final ActionEvent e) {
+                Help.getHelp().getDisplayHelpAfterTracking().actionPerformed(e);
             }
         };
 
-        /** Funktioniert nicht */
-        public static final Action EVALUATION = new StaticAction(ActionIdentifier.evaluation) {
-
+        /** Zeigt eine lokale Webseite mit Themen zur weiteren Modellnutzung an */
+        public static final ExtendedAction ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL = new StaticActionNew(ActionIdentifier.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 BrowseUtils.browseRelativeFileFromResource("auswhilfe_datei");
             }
         };
 
-        /** Öffnet die Online-Hilfe-Seite */
-        public static final Action ONLINE_HELP = new StaticAction(ActionIdentifier.online_help) {
-
+        /** öffnet die Online-Hilfe-Seite */
+        public static final ExtendedAction ACTION_SHOW_ONLINE_HELP = new StaticActionNew(ActionIdentifier.ACTION_SHOW_ONLINE_HELP, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 BrowseUtils.browseUrlFromResource("3lgm2tool_support_website");
             }
         };
 
-        /** Öffnet die 3lgm-Homepage */
-        public static final Action LGM_ONLINE = new StaticAction(ActionIdentifier.lgm_online) {
-
+        /** öffnet die 3lgm-Homepage */
+        public static final ExtendedAction ACTION_SHOW_3LGM_WEB_SITE = new StaticActionNew(ActionIdentifier.ACTION_SHOW_3LGM_WEB_SITE, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 BrowseUtils.browseUrlFromResource("3lgm2_website");
             }
         };
 
-        /** Öffnet das Beispielmodell */
-        public static final Action EXAMPLE = new StaticAction(ActionIdentifier.example) {
-
+        /** öffnet das Beispielmodell */
+        public static final ExtendedAction ACTION_OPEN_EXAMPLE_MODEL_FILE = new StaticActionNew(ActionIdentifier.ACTION_OPEN_EXAMPLE_MODEL_FILE) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 Static.getTool().openFile(false, Tool3lgmConstants.EXAMPLE_MODEL_FILE);
             }
         };
 
-        /** Funktioniert nicht */
-        public static final Action MODEL_LIBRARY = new StaticAction(ActionIdentifier.model_library) {
-
+        /** Öffnet den Ordner mit dem Beispielmodellen bzw die sog. Modellbibliothek mit Modellen von Standards */
+        public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticActionNew(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 BrowseUtils.browseRelativeFileFromResource("modlib_verz");
             }
         };
 
         /** Zeigt die Programm-Info an */
-        public static final Action INFO = new StaticAction(ActionIdentifier.about) {
-
+        public static final ExtendedAction ACTION_OPEN_ABOUT_DIALOG = new StaticActionNew(ActionIdentifier.ACTION_OPEN_ABOUT_DIALOG, PPP) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 ToolSplashScreen.getInfoDialog();
             }
         };
 
-        //        /** Öffnet ein Fenster zum Import von Lizenzdateien */
-        //        public static final Action IMPORT_LICENSE = new StaticAction(ActionIdentifier.import_license) {
+        //        /** öffnet ein Fenster zum Import von Lizenzdateien */
+        //        public static final ExtendedAction ACTION_IMPORT_LICENSE_FILE = new StaticAction(ActionIdentifier.ACTION_IMPORT_LICENSE_FILE) {
         //
         //            @Override
         //            public void actionPerformed(final ActionEvent e) {
-        //                LicenseHandler.importLicenseFile();
+        //                Static.getTool().importLicenseFile();
         //            }
         //        };
     }

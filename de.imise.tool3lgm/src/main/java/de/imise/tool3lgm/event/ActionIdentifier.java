@@ -124,15 +124,15 @@ public enum ActionIdentifier {
     overlapping_arrangement,
 
     // help
-    help,
-    direct_help,
-    evaluation,
-    online_help,
-    lgm_online,
-    example,
-    model_library,
-    about,
-    import_license,
+    ACTION_OPEN_HELP_DIALOG,
+    ACTION_ACTIVATE_DIRECT_HELP,
+    ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL,
+    ACTION_SHOW_ONLINE_HELP,
+    ACTION_SHOW_3LGM_WEB_SITE,
+    ACTION_OPEN_EXAMPLE_MODEL_FILE,
+    ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY,
+    ACTION_OPEN_ABOUT_DIALOG,
+    ACTION_IMPORT_LICENSE_FILE,
 
     // context
     property_dialog,

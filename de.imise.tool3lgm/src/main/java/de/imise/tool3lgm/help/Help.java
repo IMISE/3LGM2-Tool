@@ -27,6 +27,12 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
+/**
+ * Diese Klasse stellt den HelpBroker und das HelpSet für die gesamte
+ * Anwendung zur Verfügung.
+ *
+ * @author Sebp
+ */
 public class Help {
 
     /** intern verwendete Instanz dieser Klasse */
@@ -68,6 +74,13 @@ public class Help {
             help = new Help();
         }
         return help;
+    }
+
+    /**
+     * Öffnet die Hilfe
+     */
+    public static void showHelp() {
+        getHelp().mainHB.setDisplayed(true);
     }
 
     /**
