@@ -143,7 +143,7 @@ public class MenuCollection {
 
         /** Das Level-Menu */
         public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge
-                getResString("levelMenu"), Level.HIGHEST, Level.INCREASE, Level.DECREASE, Level.LOWEST);
+                getResString("levelMenu"), Level.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, Level.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten

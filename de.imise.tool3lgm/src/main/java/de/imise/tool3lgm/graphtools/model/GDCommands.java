@@ -40,11 +40,11 @@ public enum GDCommands {
     HIDE_ELEM,
     //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
     UNHIDE_ELEM,
-    Z_STEP_UP,
-    Z_STEP_DOWN,
-    Z_MOVE_UP,
-    Z_MOVE_DOWN,
-    Z_MOVE,
+    MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP,
+    MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN,
+    MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION,
+    MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION,
+    MODEL_ACTION_MOVE_ORDER, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
 
     MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR,
     MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,

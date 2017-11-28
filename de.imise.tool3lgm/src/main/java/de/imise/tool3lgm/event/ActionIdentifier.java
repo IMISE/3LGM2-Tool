@@ -75,11 +75,6 @@ public enum ActionIdentifier {
 
     // icon
     ACTION_CHOOSE_ELEMENT_ICON,
-    // level
-    highest,
-    increase,
-    decrease,
-    lowest,
 
     // submodels
     new_submodel,

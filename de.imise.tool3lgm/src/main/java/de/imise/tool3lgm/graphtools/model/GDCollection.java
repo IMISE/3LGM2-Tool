@@ -50,18 +50,18 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.Z_MOVE;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.COLORS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.DATA_CHANGED;
@@ -537,7 +537,7 @@ public final class GDCollection extends UserFieldTarget {
             if (iconName != null) {
                 ecDoc.addUndoCommand(SET_ICON + " " + ecDocHash + " " + ecHash + " " + iconName, pid);
             }
-            ecDoc.addUndoCommand(Z_MOVE + " " + ecDocHash + " " + ecHash + " " + ecDoc.layer[ec.layerFor()].indexOf(ec), pid);
+            ecDoc.addUndoCommand(MODEL_ACTION_MOVE_ORDER + " " + ecDocHash + " " + ecHash + " " + ecDoc.layer[ec.layerFor()].indexOf(ec), pid);
             ecDoc.addUndoCommand(COORDINATE_KNOT + " " + ecDocHash + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
             if (!kc.isVisible()) {
                 ecDoc.addUndoCommand(SET_VISIBLE + " " + false + " " + ecDocHash + " " + ecHash, pid);

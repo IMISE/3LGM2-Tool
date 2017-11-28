@@ -1011,7 +1011,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case Z_MOVE_UP:
+        case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION:
             if (argc == 0) {
                 z_move_up(pid);
             } else {
@@ -1019,7 +1019,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case Z_MOVE_DOWN:
+        case MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION:
             if (argc == 0) {
                 z_move_down(pid);
             } else {
@@ -1027,15 +1027,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case Z_MOVE:
+        case MODEL_ACTION_MOVE_ORDER:
             try {
                 z_move(argv[0], argv[1], Integer.parseInt(argv[2]), pid);
             } catch (Exception e) {
-                Log(e);
+                Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             }
             break;
 
-        case Z_STEP_UP:
+        case MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP:
             if (argc == 0) {
                 z_step_up(pid);
             } else {
@@ -1043,7 +1043,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case Z_STEP_DOWN:
+        case MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN:
             if (argc == 0) {
                 z_step_down(pid);
             } else {
@@ -3913,8 +3913,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         GraphDocument doc = mc.getGraphDocument();
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.Z_MOVE_UP + " " + mc.getGraphDocument().hashString + " " + mc.getHashString(), pid);
-        addUndoCommand(GDCommands.Z_MOVE + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + mc.getGraphDocument().hashString + " " + mc.getHashString(), pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
         doc.layer[ebene].z_move_up(mc);
         doc.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);
@@ -3959,8 +3959,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         GraphDocument doc = mc.getGraphDocument();
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.Z_MOVE_DOWN + " " + mc.getGraphDocument().hashString + " " + mc.getHashString(), pid);
-        addUndoCommand(GDCommands.Z_MOVE + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + mc.getGraphDocument().hashString + " " + mc.getHashString(), pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
         doc.layer[ebene].z_move_down(mc);
         doc.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);
@@ -4010,8 +4010,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         szen.start_transaction(pid);
-        addRedoCommand(GDCommands.Z_MOVE + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + position, pid);
-        addUndoCommand(GDCommands.Z_MOVE + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + szen.layer[ebene].indexOf(ec), pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + position, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + szen.layer[ebene].indexOf(ec), pid);
         szen.layer[ebene].z_move(ec, position);
         szen.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, null, szen.layer[ebene], pid);
@@ -4050,8 +4050,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         GraphDocument doc = ec.getGraphDocument();
         doc.start_transaction(pid, log);
         if (log) {
-            addRedoCommand(GDCommands.Z_STEP_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
-            addUndoCommand(GDCommands.Z_STEP_DOWN + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
+            addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
+            addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
         }
         doc.layer[ebene].z_step_up(ec);
         doc.finish_transaction(pid, log);
@@ -4085,8 +4085,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         GraphDocument doc = ec.getGraphDocument();
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.Z_STEP_DOWN + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
-        addUndoCommand(GDCommands.Z_STEP_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
         doc.layer[ebene].z_step_down(ec);
         doc.finish_transaction(pid);
         distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);

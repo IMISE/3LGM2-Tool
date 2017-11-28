@@ -28,7 +28,6 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.event.LayoutAction.ElementLayoutAction;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
@@ -964,16 +963,17 @@ public class ActionLibrary {
         public static class Level {
 
             /** Element steht über allen anderen */
-            public static final StaticAction HIGHEST = new ElementLayoutAction(ActionIdentifier.highest, GDCommands.Z_MOVE_UP);
+            public static final Action MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
 
             /** Element wird um eine (interne) Ebene nach oben bewegt */
-            public static final StaticAction INCREASE = new ElementLayoutAction(ActionIdentifier.increase, GDCommands.Z_STEP_UP);
+            public static final Action MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
 
             /** Element wird um eine (interne) Ebene nach unten bewegt */
-            public static final StaticAction DECREASE = new ElementLayoutAction(ActionIdentifier.decrease, GDCommands.Z_STEP_DOWN);
+            public static final Action MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
 
             /** Element steht unter allen anderen */
-            public static final StaticAction LOWEST = new ElementLayoutAction(ActionIdentifier.lowest, GDCommands.Z_MOVE_DOWN);
+            public static final Action MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+
         }
 
     }
