@@ -1000,9 +1000,9 @@ public class ActionLibrary {
                 }
             };
 
-            public static final Action[] OPTION_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTION_GRAPH_SHOW_SIMPLE_REDUNDANCY_Actions();
+            public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
 
-            private static final Action[] create_OPTION_GRAPH_SHOW_SIMPLE_REDUNDANCY_Actions() {
+            private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {
                 //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
                 AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
                 SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
@@ -1011,7 +1011,7 @@ public class ActionLibrary {
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
                     SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
-                    StaticActionNew action = new StaticActionNew(ActionIdentifier.OPTION_SIMPLE_REDUNDANCY_ANALYSIS, false) {
+                    StaticActionNew action = new StaticActionNew(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, false) {
                         @Override
                         public void actionPerformed() {
                             for (GDCollection gdcoll : getTool().getCollections()) {
@@ -1024,7 +1024,7 @@ public class ActionLibrary {
                             getTool().distributeOptionChange(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
                         }
                     };
-                    String resKey = ActionIdentifier.OPTION_SIMPLE_REDUNDANCY_ANALYSIS.name();
+                    String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
                     MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
                     String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
                     String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());

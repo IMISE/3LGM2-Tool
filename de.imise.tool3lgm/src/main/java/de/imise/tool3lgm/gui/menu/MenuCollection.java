@@ -5,8 +5,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 import static de.imise.util.swing.menu.MenuCreator.createCheckBoxItem;
-import static de.imise.util.swing.menu.MenuCreator.createCheckBoxItems;
-import static de.imise.util.swing.menu.MenuCreator.createMenu;
 
 import java.awt.Component;
 
@@ -57,15 +55,19 @@ import de.imise.util.swing.menu.MenuScroller;
  */
 public class MenuCollection {
 
+    private static JMenu createMenu(final String titleResKey, final Object... menuEntries) {
+        return MenuCreator.createMenu(getResString(titleResKey), menuEntries);
+    }
+
     /** Das Datei-Menu */
     public static final JMenu FILE_MENU = new FileMenu();
 
     /** Das Bearbeiten-Menu */
-    public static final JMenu EDIT_MENU = createMenu(getResString("edit"), EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(),
-            EditActions.MODEL_ACTION_COPY, EditActions.MODEL_ACTION_CUT, EditActions.MODEL_ACTION_PASTE, new JSeparator(), EditActions.MODEL_ACTION_DELETE_FROM_SUBMODEL, EditActions.MODEL_ACTION_REMOVE_FROM_MODEL);
+    public static final JMenu EDIT_MENU = createMenu("edit", EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.MODEL_ACTION_COPY,
+            EditActions.MODEL_ACTION_CUT, EditActions.MODEL_ACTION_PASTE, new JSeparator(), EditActions.MODEL_ACTION_DELETE_FROM_SUBMODEL, EditActions.MODEL_ACTION_REMOVE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = createMenu(getResString("viewMenu"), ViewSubMenus.TOOLBAR_MENU, createCheckBoxItem(ViewActions.OPTION_MODEL_BROWSER_SHOW), new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
+    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, ViewActions.OPTION_MODEL_BROWSER_SHOW, new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
             ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(),
             ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
@@ -76,20 +78,18 @@ public class MenuCollection {
     public static final JMenu LAYOUT_MENU = new LayoutMenu();
 
     /** Das Teilmodell-Menu */
-    public static final JMenu SUBMODEL_MENU = createMenu(getResString("submodels"), SubmodelActions.NEW, SubmodelActions.REMOVE, new JSeparator(), SubmodelActions.RENAME);
+    public static final JMenu SUBMODEL_MENU = createMenu("submodels", SubmodelActions.NEW, SubmodelActions.REMOVE, new JSeparator(), SubmodelActions.RENAME);
 
     /** Das XMLAnalyse-Menu */
-    public static final JMenu ANALYSIS_MENU = createMenu(getResString("analysis"), AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
-            createCheckBoxItem(Analysis.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT), new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(),
-            createCheckBoxItems(Analysis.OPTION_SIMPLE_REDUNDANCY_ANALYSIS));
+    public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
+            Analysis.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
 
     /** Das Optionen-Menu */
-    public static final JMenu OPTIONS_MENU = createMenu(getResString("options"), OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS,
-            OptionsSubMenus.LOCALE_MENU);
+    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS, OptionsSubMenus.LOCALE_MENU);
 
     /** Das Extras-Menu */
-    public static final JMenu EXTRAS_MENU = createMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION),
-            new JSeparator(), ModelConstants.getExtrasActions(), new JSeparator(), createCheckBoxItem(AnalysisActions.OPTION_CHECK_CONSISTENCY), ExtrasSubMenus.PLUGIN_MENU);
+    public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION), new JSeparator(),
+            ModelConstants.getExtrasActions(), new JSeparator(), AnalysisActions.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();
@@ -101,10 +101,10 @@ public class MenuCollection {
     static class FileSubMenus {
 
         /** Das Import-Menu */
-        public static final JMenu IMPORT_MENU = createMenu(getResString("import"), ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
+        public static final JMenu IMPORT_MENU = createMenu("import", ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
 
         /** Das Export-Menu */
-        public static final JMenu EXPORT_MENU = createMenu(getResString("export"), ExportActions.ACTION_EXPORT_GRAPHIC, ExportActions.ACTION_EXPORT_GRAPHML_YED, ExportActions.ACTION_EXPORT_GRAPHML_YFILES, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT,
+        public static final JMenu EXPORT_MENU = createMenu("export", ExportActions.ACTION_EXPORT_GRAPHIC, ExportActions.ACTION_EXPORT_GRAPHML_YED, ExportActions.ACTION_EXPORT_GRAPHML_YFILES, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT,
                 ExportActions.ACTION_EXPORT_SUBMODEL, new JSeparator(), ExportActions.ACTION_EXPORT_HTML, new JSeparator(), ExportActions.ACTION_EXPORT_DATA);
     }
 
@@ -112,42 +112,35 @@ public class MenuCollection {
     static class ViewSubMenus {
 
         /** Das Symbolleisten-Menu */
-        public static final JMenu TOOLBAR_MENU = createMenu(getResString("toolbarMenu"), createCheckBoxItem(ToolbarActions.OPTION_SHOW_PAINTING_TOOLBAR), createCheckBoxItem(ToolbarActions.OPTION_SHOW_STANDARD_TOOLBAR));
+        public static final JMenu TOOLBAR_MENU = createMenu("toolbarMenu", ToolbarActions.OPTION_SHOW_PAINTING_TOOLBAR, ToolbarActions.OPTION_SHOW_STANDARD_TOOLBAR);
     }
 
     /** Sammlung der Unter-Menus des Format-Menus */
     public static class LayoutSubMenus {
 
         /** Das Element-Layout-Menu */
-        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu(getResString("elementLayoutMenu"), ElementLayout.MODEL_ACTION_SET_ELEMENT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_COLOR,
-                createMenu( // Transparenz-Menu
-                        getResString("elementTransparencyMenu"), ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF,
-                        ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
+        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu("elementLayoutMenu", ElementLayout.MODEL_ACTION_SET_ELEMENT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_COLOR, createMenu( // Transparenz-Menu
+                "elementTransparencyMenu", ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
                 createMenu( // Auf Standard setzen Menu
-                        getResString("elementSetToStandardMenu"), ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
+                        "elementSetToStandardMenu", ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
                         ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
-                new JSeparator(),
-                createMenu( // Icon-Menu
-                        getResString("icon"), ElementLayout.Icon.MODEL_ACTION_SET_ELEMENT_ICON_NONE, ElementLayout.Icon.ACTION_CHOOSE_ELEMENT_ICON),
-                new JSeparator(),
-                createMenu( // Textausrichtungs-Menu (horizontal)
-                        getResString("textAlignmentMenu"), TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT, TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER,
-                        TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT, new JSeparator(), TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER,
-                        TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
+                new JSeparator(), createMenu( // Icon-Menu
+                        "icon", ElementLayout.Icon.MODEL_ACTION_SET_ELEMENT_ICON_NONE, ElementLayout.Icon.ACTION_CHOOSE_ELEMENT_ICON),
+                new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)
+                        "textAlignmentMenu", TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT, TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER, TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
+                        new JSeparator(), TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
 
         /** Das Ebenen-Layout-Menu */
-        public static final JMenu LAYER_LAYOUT_MENU = createMenu(getResString("layerLayoutMenu"), LayerLayout.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, LayerLayout.MODEL_ACTION_SET_LAYER_COLOR,
-                createMenu( // Transparenz-Menu
-                        getResString("layerTransparencyMenu"), LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF,
-                        LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
+        public static final JMenu LAYER_LAYOUT_MENU = createMenu("layerLayoutMenu", LayerLayout.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, LayerLayout.MODEL_ACTION_SET_LAYER_COLOR, createMenu( // Transparenz-Menu
+                "layerTransparencyMenu", LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF, LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
 
         /** Das Level-Menu */
         public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge
-                getResString("levelMenu"), Level.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, Level.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+                "levelMenu", Level.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, Level.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten
-                getResString("elementAlignmentMenu"), ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT, ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER,
+                "elementAlignmentMenu", ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT, ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER,
                 ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT, new JSeparator(), ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP,
                 ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER, ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM, new JSeparator(),
                 ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, new JSeparator(),
@@ -158,15 +151,15 @@ public class MenuCollection {
     static class OptionsSubMenus {
 
         /** Menu für allgemeine Optionen */
-        public static final JMenu GENERAL_OPTIONS_MENU = createMenu(getResString("general"), createCheckBoxItem(Gerneral.SHOW_REMOVE_WARNING), createCheckBoxItem(PartOf.CONSIDER_PARENTS), createCheckBoxItem(PartOf.HIERARCHICAL));
+        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", createCheckBoxItem(Gerneral.SHOW_REMOVE_WARNING), createCheckBoxItem(PartOf.CONSIDER_PARENTS), createCheckBoxItem(PartOf.HIERARCHICAL));
 
         /** Das Browser-Optionen-Menu */
-        public static final JMenu BROWSER_OPTIONS_MENU = createMenu(getResString("browserOptionsMenu"), createCheckBoxItem(ModelBrowser.SUBMODEL_SPECIFIC), createCheckBoxItem(ModelBrowser.SHOW_MULTIPLE_BROSERS),
+        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", createCheckBoxItem(ModelBrowser.SUBMODEL_SPECIFIC), createCheckBoxItem(ModelBrowser.SHOW_MULTIPLE_BROSERS),
                 //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
                 new JSeparator(), createCheckBoxItem(ModelBrowser.USERDEFINED_PROPERTIES));
 
         /** Das Grafik-Optionen-Menu */
-        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu(getResString("graphicOptionsMenu"), createCheckBoxItem(Graphics.USE_RASTER), createCheckBoxItem(Graphics.SHOW_RASTER), createCheckBoxItem(Graphics.PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS),
+        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", createCheckBoxItem(Graphics.USE_RASTER), createCheckBoxItem(Graphics.SHOW_RASTER), createCheckBoxItem(Graphics.PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS),
                 createCheckBoxItem(Graphics.SIGNIFY_LINKED_ELEMENTS), Graphics.HIDE_UNHIDE_UNASSOCIATED, createCheckBoxItem(Graphics.AUTOMATIC_COLORING), createCheckBoxItem(PartOf.AUTO_MOVE_CHILDREN), createCheckBoxItem(PartOf.SIGNIFY_COARSEMENT),
                 Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
@@ -194,7 +187,7 @@ public class MenuCollection {
     /** Sammlung der Unter-Menus des Extras-Menus */
     static class ExtrasSubMenus {
 
-        public static final JMenu PLUGIN_MENU = createMenu(getResString("plugin"), new B1ExportPlugin().getAction(), new ExportPdvb4AwbPlugin().getAction());
+        public static final JMenu PLUGIN_MENU = createMenu("plugin", new B1ExportPlugin().getAction(), new ExportPdvb4AwbPlugin().getAction());
 
     }
 
