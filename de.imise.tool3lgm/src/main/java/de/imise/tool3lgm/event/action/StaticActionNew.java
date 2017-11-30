@@ -143,7 +143,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      */
     private StaticActionNew(final Object identifier, final String arguments, final String text, final String textSuffix, final Boolean initialSelectionState) {
         //wenn darunter das try-catch schief geht, dann ist der Text = dem übergebenen identifier.toString()
-        super(text == null ? identifier.toString() : text);
+        super(text == null ? identifier.toString() : text, initialSelectionState);
         putValue(IDENTIFIER_KEY, identifier);
 
         String identifierName = identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
@@ -159,8 +159,6 @@ public abstract class StaticActionNew extends ExtendedAction {
         } else {
             setActionCommand(command);
         }
-
-        setSelected(initialSelectionState);
 
         //Text auf RessourcenString lesen, wenn keiner übergeben wurde und eine Ressource existiert (wenn keine da ist, bleibts bei dem, was in der
         //ersten Zeile gesetzt wurde)
