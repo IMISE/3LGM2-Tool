@@ -15,6 +15,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.swing.event.ExtendedAction;
 
 /**
  * Util-Klasse zur Erzeugung von {@link JMenu}s.
@@ -120,12 +121,19 @@ public class MenuCreator {
      *            siehe Klassen-Doku
      */
     public static final Component createMenuEntry(final Object entry) {
-
         Component item = null;
         if (entry == null) {
             throw new IllegalArgumentException("null ist kein gültiges Argument");
         } else if (entry instanceof Action) {
-            item = new JMenuItem((Action) entry);
+            if (entry instanceof ExtendedAction) {
+                ExtendedAction action = (ExtendedAction) entry;
+                if (action.isOptionAction()) {
+                    item = createCheckBoxItem(action);
+                }
+            }
+            if (item == null) {
+                item = new JMenuItem((Action) entry);
+            }
         } else if (entry instanceof Class<?>) {
             try {
                 Class<?> menuItemClass = (Class<?>) entry;
