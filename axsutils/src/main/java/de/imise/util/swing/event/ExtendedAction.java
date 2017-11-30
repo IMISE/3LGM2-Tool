@@ -17,13 +17,15 @@ import de.imise.util.Pair;
  * Erweiterungsklasse zu {@link AbstractAction}
  * <p>
  * Ermöglich den Zugriff auf bzw. das Setzen der durch {@link Action} gegebenen Properties über get- bzw. set-Methoden. <br>
- * 
+ *
  * @author fstephan, AXS
  */
 public abstract class ExtendedAction extends AbstractAction {
 
     /** Source für das Ausführen der Aktion über ein neu generiertes {@link ActionEvent} */
     private static JButton button = new JButton();
+
+    private boolean isOptionAction = false;
 
     /**
      * Konstruktor
@@ -32,7 +34,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * Die Mnemonic-Property wird hier ausgeschlossen, da sie üblicherweise innerhalb von {@link AbstractButton}-Gruppen gemeinsam gesetzt wird und
      * beim Erzeugen der Action noch nicht bekannt ist.
      * </p>
-     * 
+     *
      * @param text
      * @param smallIcon
      * @param largeIcon
@@ -41,16 +43,24 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param longDescription
      * @param actionCommand
      * @param initialSelectionState
-     *            Initialer Selektionszustand für die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s
+     *            Initialer Selektionszustand für die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s. Wenn hier ein
+     *            nicht-null-Boolean übergeben wird, dann wird isOptionAction auf true gesetzt, um zu markieren, dass es sich um eine Option zum
+     *            Umschalten handelt.
      */
     public ExtendedAction(final String text, final Icon smallIcon, final Icon largeIcon, final KeyStroke keyStroke, final String shortDescription, final String longDescription, final String actionCommand, final Boolean initialSelectionState) {
-        this(text, smallIcon);
+        super(text, smallIcon);
         setLargeIcon(largeIcon);
         setKeyStroke(keyStroke);
         setShortDescription(shortDescription);
         setLongDescription(longDescription);
         setActionCommand(actionCommand);
-        setSelected(initialSelectionState != null ? initialSelectionState : false);
+        if (initialSelectionState != null) {
+            isOptionAction = true;
+            setSelected(initialSelectionState);
+        } else {
+            isOptionAction = false;
+            setSelected(false);
+        }
     }
 
     /**
@@ -58,12 +68,12 @@ public abstract class ExtendedAction extends AbstractAction {
      * <p>
      * Erzeugt eine Instanz dieser Klasse mit den spezifizierten Property-Werten ({@link Action}).
      * </p>
-     * 
+     *
      * @param text
      * @param smallIcon
      */
     public ExtendedAction(final String text, final Icon smallIcon) {
-        super(text, smallIcon);
+        this(text, smallIcon, null, null, null, null, null, null);
     }
 
     /**
@@ -71,23 +81,39 @@ public abstract class ExtendedAction extends AbstractAction {
      * <p>
      * Erzeugt eine Instanz dieser Klasse mit dem spezifizierten Property-Wert ({@link Action}).
      * </p>
-     * 
+     *
      * @param text
      */
     public ExtendedAction(final String text) {
-        super(text);
+        this(text, null, null, null, null, null, null, null);
+    }
+
+    /**
+     * Konstruktor
+     * <p>
+     * Erzeugt eine Instanz dieser Klasse mit dem spezifizierten Property-Wert ({@link Action}).
+     * </p>
+     *
+     * @param text
+     * @param initialSelectionState
+     *            Initialer Selektionszustand für die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s. Wenn hier ein
+     *            nicht-null-Boolean übergeben wird, dann wird isOptionAction auf true gesetzt, um zu markieren, dass es sich um eine Option zum
+     *            Umschalten handelt.
+     */
+    public ExtendedAction(final String text, final Boolean initialSelectionState) {
+        this(text, null, null, null, null, null, null, initialSelectionState);
     }
 
     /**
      * Konstruktor
      */
     public ExtendedAction() {
-        super();
+        this(null, null, null, null, null, null, null, null);
     }
 
     /**
      * Setzt den anzuzeigenden Text
-     * 
+     *
      * @param
      */
     public void setText(final String text) {
@@ -98,7 +124,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt das kleine Icon
-     * 
+     *
      * @param smallIcon
      */
     public void setSmallIcon(final Icon smallIcon) {
@@ -109,7 +135,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt das große Icon
-     * 
+     *
      * @param largeIcon
      */
     public void setLargeIcon(final Icon largeIcon) {
@@ -120,7 +146,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt den {@link KeyStroke}, der diese Action auslöst
-     * 
+     *
      * @param keyStroke
      */
     public void setKeyStroke(final KeyStroke keyStroke) {
@@ -131,7 +157,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt den Index des Mnemonic im Text
-     * 
+     *
      * @see #setText(String)
      * @param mnemonicIndex
      */
@@ -141,7 +167,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt kurze Beschreibung der Action. (Zur Verwendung als Tooltip)
-     * 
+     *
      * @param description
      */
     public void setShortDescription(final String description) {
@@ -152,7 +178,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt ausführliche Beschreibung der Action. (Zur Verwendung bei Hilfe)
-     * 
+     *
      * @param description
      */
     public void setLongDescription(final String description) {
@@ -163,7 +189,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt den command-<code>String</code> für das {@link ActionEvent}, das beim Auslösen dieser Action entsteht.
-     * 
+     *
      * @param actionCommand
      */
     public void setActionCommand(final String actionCommand) {
@@ -172,7 +198,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Setzt den Selektionszustand dieser Action. (Zur Verwendung bei {@link JRadioButtonMenuItem} und {@link JCheckBoxMenuItem})
-     * 
+     *
      * @param b
      */
     public void setSelected(final boolean b) {
@@ -182,20 +208,26 @@ public abstract class ExtendedAction extends AbstractAction {
     /**
      * Setzt den Selektionszustand dieser Action. (Zur Verwendung bei {@link JRadioButtonMenuItem} und {@link JCheckBoxMenuItem}). Bei
      * <code>null</code> wird <code>false</code> gesetzt.
-     * 
+     *
      * @param b
      */
     public void setSelected(final Boolean b) {
         setSelected(b != null ? b : false);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.AbstractAction#putValue(java.lang.String, java.lang.Object)
-     */
     @Override
     public void putValue(final String key, final Object value) {
         super.putValue(key, value);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die Action mit einem initialSelectionState initialisiert wurde und
+     * als Option gilt.
+     *
+     * @return
+     */
+    public boolean isOptionAction() {
+        return isOptionAction;
     }
 
     /**
@@ -203,7 +235,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * sich sonst aber wie {@link AbstractAction#getValue(String)}. <br>
      * Durch Überschreiben von {@link ExtendedAction#isSelected()} kann der Selektionzustand dynamisch festgelegt
      * werden, sodass ein manuelles Setzen mittels {@link ExtendedAction#putValue(String, Object)} entfällt.
-     * 
+     *
      * @see javax.swing.AbstractAction#getValue(java.lang.String)
      */
     @Override
@@ -222,7 +254,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt den anzuzeigenden Text wieder
-     * 
+     *
      * @param
      */
     public String getText() {
@@ -231,7 +263,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt das kleine Icon wieder
-     * 
+     *
      * @return
      */
     public Icon getSmallIcon() {
@@ -240,7 +272,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt das große Icon wieder
-     * 
+     *
      * @return
      */
     public Icon getLargeIcon() {
@@ -249,7 +281,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt den {@link KeyStroke} zurück, der diese Action auslöst
-     * 
+     *
      * @return
      */
     public KeyStroke getKeyStroke() {
@@ -258,7 +290,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt den Index des Mnemonics im Text wieder, falls er gesetz wurde. Sonst wird <code>-1</code> zurückgegeben.
-     * 
+     *
      * @see #getText()
      * @return
      */
@@ -269,7 +301,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt kurze Beschreibung der Action zurück. (Zur Verwendung als Tooltip)
-     * 
+     *
      * @param description
      */
     public String getShortDescription() {
@@ -278,7 +310,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt ausführliche Beschreibung der Action zurück. (Zur Verwendung bei Hilfe)
-     * 
+     *
      * @param description
      */
     public String getLongDescription() {
@@ -287,7 +319,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen dieser Action entsteht.
-     * 
+     *
      * @param actionCommand
      */
     public String getActionCommand() {
@@ -300,7 +332,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * <p>
      * Durch Überschreiben dieser Methode kann der Selektionszustand dynamisch festgelegt werden. Allerdings ist dann eine Beeinflussung durch
      * {@link #putValue(String, Object)} nicht mehr möglich.
-     * 
+     *
      * @param b
      */
     public boolean isSelected() {
@@ -310,7 +342,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Legt die spezifizierten {@link Pair}s auf die Attribute-Map von {@link AbstractAction}. <br>
-     * 
+     *
      * @see AbstractAction#putValue(String, Object)
      * @param keysAndValues
      *            - erstes Item: key - zweites Item: value
@@ -323,7 +355,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /**
      * Legt das spezifiziert {@link Pair} auf die Attribute-Map von {@link AbstractAction}. <br>
-     * 
+     *
      * @see AbstractAction#putValue(String, Object)
      * @param keysAndValues
      *            - erstes Item: key - zweites Item: value
