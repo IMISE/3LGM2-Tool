@@ -95,39 +95,39 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     @Override
     public void dataChanged(final GraphDocument source) {
-    };
+    }
 
     @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-    };
+    }
 
     @Override
     public void layoutChanged(final GraphDocument source) {
-    };
+    }
 
     @Override
     public void elementAdded(final GraphDocument source, final ElementContainer element) {
-    };
+    }
 
     @Override
     public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-    };
+    }
 
     @Override
     public void groupOrderChanged(final GraphDocument source) {
-    };
+    }
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-    };
+    }
 
     @Override
     public void colorsChanged(final GraphDocument source) {
-    };
+    }
 
     @Override
     public void selectionChanged(final GraphDocument source) {
-    };
+    }
 
     @Override
     public void dataChanged(final GraphDocument source, final int pid) {
