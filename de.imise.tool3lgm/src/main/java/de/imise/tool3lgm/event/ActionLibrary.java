@@ -339,7 +339,7 @@ public class ActionLibrary {
         };
 
         /** Aktiviert die Redundanz-XMLAnalyse */
-        public static final Action ACTION_ANALYSIS_REDUNDANCY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_REDUNDANCY, true) {
+        public static final Action ACTION_ANALYSIS_REDUNDANCY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_REDUNDANCY, PPP) {
             @Override
             protected void actionPerformed() {
                 RedundancyAnalysis.getReport(getSelectedGDCollection());
