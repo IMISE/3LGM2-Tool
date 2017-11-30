@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 
 import com.google.common.base.Strings;
@@ -46,6 +47,7 @@ public abstract class StaticActionNew extends ExtendedAction {
     /** Key, für das Argument des auszuführenden Kommandos */
     public static final String ARGUMENT_KEY = "ArgumentKey";
 
+    public static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
     public static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
     public static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
     public static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
@@ -146,7 +148,7 @@ public abstract class StaticActionNew extends ExtendedAction {
         super(text == null ? identifier.toString() : text, initialSelectionState);
         putValue(IDENTIFIER_KEY, identifier);
 
-        String identifierName = identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+        String identifierName = getIdentifierName(identifier);
 
         //GDCommands überschreiben die toString() so, dass sie ordinal()
         //zurück liefern (damit die UNDO-REDO-Commands nicht so lang werden).
@@ -198,6 +200,10 @@ public abstract class StaticActionNew extends ExtendedAction {
         }
     }
 
+    private static String getIdentifierName(final Object identifier) {
+        return identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+    }
+
     @Override
     public boolean isEnabled() {
         //Das müssen alle statischen Unter-Actions abfragen, da es sonst zu NullPointern beim Init des Tools kommt
@@ -210,12 +216,28 @@ public abstract class StaticActionNew extends ExtendedAction {
             return;
         }
         Object identifier = getValue(IDENTIFIER_KEY);
-        if (identifier instanceof GDCommands) {
-            Object arguments = getValue(ARGUMENT_KEY);
-            Static.getSelectedDoc().exec(identifier.toString() + (arguments != null ? " " + arguments : ""), TransactionManager.STANDARD_PID);
+        String confirmQuestionResKey = CONFIRM_QUESTION_RESSOURCE_PREFIX + getIdentifierName(identifier);
+        boolean perform = false;
+        try {
+            String confirmQuestion = getResString(confirmQuestionResKey);
+            //wenn es eine confirm-Question in den Resourcen gibt -> Confirm-Frage stellen
+            int answer = JOptionPane.showConfirmDialog(Static.getTool(), confirmQuestion, getResString("confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (answer == JOptionPane.YES_OPTION) {
+                //wenn ja gedrückt wurde -> Action ausführen
+                perform = true;
+            }
+        } catch (MissingResourceException ex) {
+            //wenn es keine confirm-Question in den Resourcen gibt -> Action immer ausführen
+            perform = true;
         }
-        actionPerformed();
-        actionPerformedWithEvent(e);
+        if (perform) {
+            if (identifier instanceof GDCommands) {
+                Object arguments = getValue(ARGUMENT_KEY);
+                Static.getSelectedDoc().exec(identifier.toString() + (arguments != null ? " " + arguments : ""), TransactionManager.STANDARD_PID);
+            }
+            actionPerformed();
+            actionPerformedWithEvent(e);
+        }
     }
 
     protected void actionPerformed() {
