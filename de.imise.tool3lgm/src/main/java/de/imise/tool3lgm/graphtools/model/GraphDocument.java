@@ -102,17 +102,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    public List<GraphDocumentListener> listener;
+    private List<GraphDocumentListener> listener;
 
     /**
      * COMMENTME
      */
-    public List<InTransactionListener> inlistener;
+    private List<InTransactionListener> inlistener;
 
     /**
      * COMMENTME
      */
-    public List<ElementContainer> analysisResult;
+    private final List<ElementContainer> analysisResult;
 
     /**
      * COMMENTME
