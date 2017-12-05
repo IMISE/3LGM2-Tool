@@ -29,6 +29,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
+import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
@@ -55,9 +56,9 @@ import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -1011,17 +1012,15 @@ public class ActionLibrary {
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
                     SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
-                    StaticActionNew action = new StaticActionNew(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, false) {
+                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, false, GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED) {
                         @Override
-                        public void actionPerformed() {
+                        public void changeOption() {
                             for (GDCollection gdcoll : getTool().getCollections()) {
                                 gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
                                 for (Szenario szenario : gdcoll.getSzenarios()) {
                                     szenario.switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
                                 }
                             }
-                            // Benachrichtigt das Tool über eine Ändeung der grafischen Darstellung der Elemente
-                            getTool().distributeOptionChange(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
                         }
                     };
                     String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
@@ -1036,11 +1035,10 @@ public class ActionLibrary {
             }
 
             /** (De-)Aktiviert die Kennzahlberechnung */
-            public static final Action ACTIVATE_CALCULATION = new StaticAction(ActionIdentifier.activate_calculation, (Boolean) UserProperties.isEnableClassificationNumberCalculation()) {
+            public static final Action ACTIVATE_CALCULATION = new GlobalOptionAction(ActionIdentifier.activate_calculation, UserProperties.isEnableClassificationNumberCalculation()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setEnableClassificationNumberCalculation(isSelected());
-                    distributeDataChanged();
                 }
             };
         }
@@ -1053,11 +1051,10 @@ public class ActionLibrary {
         public static class Gerneral {
 
             /** (De-)Aktiviert das Anzeigen einer Warnung vor dem Löschen eines Elements */
-            public static final Action SHOW_REMOVE_WARNING = new StaticAction(ActionIdentifier.removeWarning, (Boolean) UserProperties.isShowRemoveWarning()) {
+            public static final Action SHOW_REMOVE_WARNING = new GlobalOptionAction(ActionIdentifier.removeWarning, UserProperties.isShowRemoveWarning()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                protected final void changeOption() {
                     UserProperties.setShowRemoveWarning(isSelected());
-                    distributeDataChanged();
                 }
             };
         }
@@ -1102,28 +1099,23 @@ public class ActionLibrary {
             };
 
             /** (De-)Aktiviert die Verwendung eines Rasters */
-            public static final Action USE_RASTER = new StaticAction(ActionIdentifier.useRaster, (Boolean) UserProperties.isUseRaster()) {
-
+            public static final Action USE_RASTER = new GlobalOptionAction(ActionIdentifier.useRaster, UserProperties.isUseRaster()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setUseRaster(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das Zeichnen eines Rasters */
-            public static final Action SHOW_RASTER = new StaticAction(ActionIdentifier.showRaster, (Boolean) UserProperties.isShowRaster()) {
-
+            public static final Action SHOW_RASTER = new GlobalOptionAction(ActionIdentifier.showRaster, UserProperties.isShowRaster()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setShowRaster(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das Kennzeichnen von Modelelementen mit verknüpften Teilmodellen */
             public static final Action SIGNIFY_LINKED_ELEMENTS = new StaticAction(ActionIdentifier.signify_linked_elements, (Boolean) UserProperties.isShowLinks()) {
-
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     UserProperties.setShowLinks(isSelected());
@@ -1212,32 +1204,26 @@ public class ActionLibrary {
         public static class ModelBrowser {
 
             /** (De-)Aktiviert das Teilmodell-spezifische Layout des ModelBrowsers */
-            public static final Action SUBMODEL_SPECIFIC = new StaticAction(ActionIdentifier.submodel_specific, (Boolean) UserProperties.isEnableSubmodelBrowser()) {
-
+            public static final Action SUBMODEL_SPECIFIC = new GlobalOptionAction(ActionIdentifier.submodel_specific, UserProperties.isEnableSubmodelBrowser()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setEnableSubmodelBrowser(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das parallele Anzeigen aller ModelBrowser */
-            public static final Action SHOW_MULTIPLE_BROSERS = new StaticAction(ActionIdentifier.show_multiple_browsers, (Boolean) UserProperties.isShowModelsInSeparateBrowser()) {
-
+            public static final Action SHOW_MULTIPLE_BROSERS = new GlobalOptionAction(ActionIdentifier.show_multiple_browsers, UserProperties.isShowModelsInSeparateBrowser()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setShowModelsInSeparateBrowser(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das Anzeigen der benutzdefinierten Eigenschaften im ModelBrowser */
-            public static final Action USERDEFINED_PROPERTIES = new StaticAction(ActionIdentifier.show_userdefinded_properties, (Boolean) UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
-
+            public static final Action USERDEFINED_PROPERTIES = new GlobalOptionAction(ActionIdentifier.show_userdefinded_properties, UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setShowUserDefinedPropertiesInModelBrowser(isSelected());
-                    distributeDataChanged();
                 }
             };
         }
@@ -1250,42 +1236,34 @@ public class ActionLibrary {
         public static class PartOf {
 
             /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Suche */
-            public static final Action CONSIDER_PARENTS = new StaticAction(ActionIdentifier.consider_parents, (Boolean) UserProperties.isSearchParents()) {
-
+            public static final Action CONSIDER_PARENTS = new GlobalOptionAction(ActionIdentifier.consider_parents, UserProperties.isSearchParents()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setSearchParents(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das hierarchische Anzeigen der Part-Of-Beziehnung im ModelBrowser */
-            public static final Action HIERARCHICAL = new StaticAction(ActionIdentifier.show_hierarchical, (Boolean) UserProperties.isShowPartOfHierarchy()) {
-
+            public static final Action HIERARCHICAL = new GlobalOptionAction(ActionIdentifier.show_hierarchical, UserProperties.isShowPartOfHierarchy()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setShowPartOfHierarchy(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das Anzeigen der Vergröberung */
-            public static final Action SIGNIFY_COARSEMENT = new StaticAction(ActionIdentifier.signify_coarsement, (Boolean) UserProperties.isShowExpansionSign()) {
-
+            public static final Action SIGNIFY_COARSEMENT = new GlobalOptionAction(ActionIdentifier.signify_coarsement, UserProperties.isShowExpansionSign()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setShowExpansionSign(isSelected());
-                    distributeDataChanged();
                 }
             };
 
             /** (De-)Aktiviert das automatische Verschieben untergeordneter Elemente */
-            public static final Action AUTO_MOVE_CHILDREN = new StaticAction(ActionIdentifier.auto_move_children, (Boolean) UserProperties.isMoveSubelements()) {
-
+            public static final Action AUTO_MOVE_CHILDREN = new GlobalOptionAction(ActionIdentifier.auto_move_children, UserProperties.isMoveSubelements()) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void changeOption() {
                     UserProperties.setMoveSubelements(isSelected());
-                    distributeDataChanged();
                 }
             };
         }
