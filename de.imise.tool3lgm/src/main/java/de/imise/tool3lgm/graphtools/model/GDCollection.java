@@ -33,6 +33,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMean
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_DELETED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
@@ -62,16 +66,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.ACTIVE_LAYER_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.COLORS_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.ELEMENT_ADDED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.ELEMENT_DELETED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.GROUP_ORDER_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.LAYOUT_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.getDecodedParseSaveString;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.getParseSaveString;
 import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelItems;
@@ -632,8 +627,8 @@ public final class GDCollection extends UserFieldTarget {
         }
         simpleRemoveContainerFromSzenario(reallyContainerToRemove, false, pid);
         szen.finish_transaction(pid);
-        szen.distributeEvent(GraphDocument.DATA_CHANGED, pid);
-        szen.distributeEvent(GraphDocument.SELECTION_CHANGED, pid);
+        szen.distributeEvent(DATA_CHANGED, pid);
+        szen.distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
@@ -1647,7 +1642,7 @@ public final class GDCollection extends UserFieldTarget {
         //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig
         tman.clearTransactionQueue();
         doc.finish_transaction(pid);
-        distribute(GraphDocument.DATA_CHANGED, null, null, source, pid);
+        distribute(DATA_CHANGED, null, null, source, pid);
         return true;
     }
 
@@ -1709,33 +1704,33 @@ public final class GDCollection extends UserFieldTarget {
      * Wenn die anderen Parameter aus der Methode <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code> nicht angegeben
      * werden können, kann man hiermit ein allgemeines Ereignis feuern.
      *
-     * @param bitmask
+     * @param changeType
      */
-    public final void distribute(final int bitmask) {
-        distribute(bitmask, null, null, null, STANDARD_PID);
+    public final void distribute(final GDCollectionChangeType changeType) {
+        distribute(changeType, null, null, null, STANDARD_PID);
     }
 
     /**
-     * @param bitmask
+     * @param changeType
      * @param last_elem
      * @param last_group
      * @param source
      * @param pid
      */
-    public final void distribute(final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final GraphDocument source, final int pid) {
+    public final void distribute(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final GraphDocument source, final int pid) {
         if (isBulkMode()) {
             return;
         }
         if (source != null) {
-            source.distributeEventIntern(bitmask, last_elem, last_group, pid);
+            source.distributeEventIntern(changeType, last_elem, last_group, pid);
         }
-        distributeEventIntern(source, bitmask, last_elem, last_group, pid);
+        distributeEventIntern(source, changeType, last_elem, last_group, pid);
         if (doc != source) {
-            doc.distributeEventIntern(bitmask, last_elem, last_group, pid);
+            doc.distributeEventIntern(changeType, last_elem, last_group, pid);
         }
         for (Szenario s : szenarios) {
             if (s != source) {
-                s.distributeEventIntern(bitmask, last_elem, last_group, pid);
+                s.distributeEventIntern(changeType, last_elem, last_group, pid);
             }
         }
     }
@@ -2081,19 +2076,19 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * @param source
-     * @param bitmask
+     * @param changeType
      * @param last_elem
      * @param last_group
      * @param pid
      */
-    public final void distributeEventIntern(GraphDocument source, final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    public final void distributeEventIntern(GraphDocument source, final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
         if (isBulkMode()) {
             return;
         }
         if (source == null) {
             source = doc;
         }
-        switch (bitmask) {
+        switch (changeType) {
         case DATA_CHANGED:
             for (GraphDocumentListener l : listener) {
                 l.dataChanged(source);

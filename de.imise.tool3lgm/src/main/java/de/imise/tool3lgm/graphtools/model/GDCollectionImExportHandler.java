@@ -194,7 +194,7 @@ public final class GDCollectionImExportHandler {
         }
         Static.closeProgressDialog();
         gdcoll.getUserFieldDefinitions().hasCrossReferences();
-        gdcoll.distribute(GraphDocument.DATA_CHANGED);
+        gdcoll.distribute(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /**

@@ -5,6 +5,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -60,9 +61,9 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es komtm true zurück
         boolean layerChanged = tree.setActiveLayer(selectedLayerNode);
         doc.finish_transaction(DynamicTree.PID, false);
-        doc.distributeEvent(GraphDocument.SELECTION_CHANGED);
+        doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED);
         if (layerChanged) {
-            doc.distributeEvent(GraphDocument.ACTIVE_LAYER_CHANGED);
+            doc.distributeEvent(GDCollectionChangeType.ACTIVE_LAYER_CHANGED);
         }
         tree.setTransactionListenerActive(true);
     }
@@ -71,7 +72,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
      * Wenn der übergebene Node selbst ein Layer-Node ist, dann kommt dieser Node zurück. Wenn nicht,
      * wird solange in den Parents des Knotens gesucht bis ein Layer-Node gefunden wurde (der dann zurück
      * kommt) oder <code>null</code> zurück gegeben, wenn kein Layer-Node gefunden wurde.
-     * 
+     *
      * @param node
      * @return
      */

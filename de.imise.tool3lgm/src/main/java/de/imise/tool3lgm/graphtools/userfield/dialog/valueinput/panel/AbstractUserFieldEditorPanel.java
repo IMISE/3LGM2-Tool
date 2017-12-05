@@ -18,7 +18,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
@@ -247,7 +247,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
      * @param panel
      */
     protected void distributeSelectionChangedEvent() {
-        dialog.getGraphDocument().distributeEvent(GraphDocument.SELECTION_CHANGED, getDialog().getTransactionID());
+        dialog.getGraphDocument().distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, getDialog().getTransactionID());
     }
 
     /**

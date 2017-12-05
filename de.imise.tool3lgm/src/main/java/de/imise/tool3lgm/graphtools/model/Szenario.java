@@ -289,7 +289,7 @@ public class Szenario extends LGMGraphDocument {
         //		}
 
         finish_transaction(pid, false);
-        distributeEvent(DATA_CHANGED);
+        distributeEvent(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /**

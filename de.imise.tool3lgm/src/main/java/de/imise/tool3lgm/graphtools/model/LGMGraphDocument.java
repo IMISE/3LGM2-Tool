@@ -75,7 +75,7 @@ public class LGMGraphDocument extends GraphDocument {
                     ec.setVisible(false);
                 }
             }
-            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
         case UNHIDE_ALL: {
@@ -83,7 +83,7 @@ public class LGMGraphDocument extends GraphDocument {
             for (ElementContainer ec : getElementContainer(elementClass, true)) {
                 ec.setVisible(true);
             }
-            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
         default:
@@ -114,13 +114,13 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     @Override
-    public final void distributeEventIntern(final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
-        if (bitmask == DATA_CHANGED) {
+    public final void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+        if (changeType == GDCollectionChangeType.DATA_CHANGED) {
             for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
                 redundancyAnalysis.computeRedundancy();
             }
         }
-        super.distributeEventIntern(bitmask, last_elem, last_group, pid);
+        super.distributeEventIntern(changeType, last_elem, last_group, pid);
     }
 
     /**
@@ -142,7 +142,7 @@ public class LGMGraphDocument extends GraphDocument {
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
         gdcoll.deleteElements(getSelectedElements(), this, TransactionManager.STANDARD_PID);
         finish_transaction(TransactionManager.STANDARD_PID);
-        distributeEvent(DATA_CHANGED);
+        distributeEvent(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /**
@@ -153,7 +153,7 @@ public class LGMGraphDocument extends GraphDocument {
         if (f.exists()) {
             f.delete();
         }
-        distributeEventIntern(SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
+        distributeEventIntern(GDCollectionChangeType.SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
     }
 
     /**
@@ -198,7 +198,7 @@ public class LGMGraphDocument extends GraphDocument {
         }
 
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        distributeEvent(GDCollectionChangeType.DATA_CHANGED, pid);
     }
 
     /**
@@ -223,7 +223,7 @@ public class LGMGraphDocument extends GraphDocument {
         }
 
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        distributeEvent(GDCollectionChangeType.DATA_CHANGED, pid);
     }
 
     //	/**
@@ -476,7 +476,7 @@ public class LGMGraphDocument extends GraphDocument {
                 if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
                     if ((overwriteJoinNothing & 1) == 0) {
                         select(insertC, pid);
-                        distributeEvent(SELECTION_CHANGED, insertC, null, pid);
+                        distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, insertC, null, pid);
                         overwriteJoinNothing = OverwriteDialog.showDialog(Static.getMainFrame(), newE, insert);
                     }
 
@@ -574,8 +574,8 @@ public class LGMGraphDocument extends GraphDocument {
             addToSelection(tmpActive.get(j), TransactionManager.STANDARD_PID);
         }
         finish_transaction(TransactionManager.STANDARD_PID, false);
-        distributeEvent(SELECTION_CHANGED);
-        dest.distributeEvent(DATA_CHANGED);
+        distributeEvent(GDCollectionChangeType.SELECTION_CHANGED);
+        dest.distributeEvent(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /**
@@ -594,7 +594,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         joinElements(me1, me2, doc2, saveInBoth);
 
-        distributeEvent(DATA_CHANGED);
+        distributeEvent(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /**

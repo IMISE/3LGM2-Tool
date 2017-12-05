@@ -1,0 +1,17 @@
+package de.imise.tool3lgm.graphtools.model;
+
+public enum GDCollectionChangeType {
+
+    DATA_CHANGED,
+    ELEMENT_GRAPHICS_CHANGED,
+    LAYOUT_CHANGED,
+    ELEMENT_ADDED,
+    ELEMENT_DELETED,
+    USER_FIELD_VALUE_CHANGED,
+    GROUP_ORDER_CHANGED,
+    ACTIVE_LAYER_CHANGED,
+    COLORS_CHANGED,
+    SELECTION_CHANGED,
+    ELEMENT_NAME_CHANGED
+
+}

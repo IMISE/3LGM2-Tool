@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -86,7 +86,7 @@ public class LGMActionLibrary {
                         }
                     }
                 }
-                panel.getGraphDocument().distributeEvent(GraphDocument.SELECTION_CHANGED, panel.getDialog().getTransactionID());
+                panel.getGraphDocument().distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, panel.getDialog().getTransactionID());
             }
         };
     }

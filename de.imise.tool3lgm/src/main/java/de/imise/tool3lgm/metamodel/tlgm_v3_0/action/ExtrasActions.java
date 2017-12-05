@@ -11,7 +11,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -59,7 +59,7 @@ public class ExtrasActions {
                     }
                 }
                 doc.finish_transaction(TransactionManager.STANDARD_PID);
-                doc.distributeEvent(GraphDocument.DATA_CHANGED);
+                doc.distributeEvent(GDCollectionChangeType.DATA_CHANGED);
             }
         };
         relinkETNT.setShortDescription(resHandler.getString("ACTION_TOOLTIP_RELINK_ETNT"));

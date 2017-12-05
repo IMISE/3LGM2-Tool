@@ -39,6 +39,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
@@ -271,7 +272,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         doc.finish_transaction(getTransactionID());
-        doc.distributeEvent(GraphDocument.DATA_CHANGED, getTransactionID());
+        doc.distributeEvent(GDCollectionChangeType.DATA_CHANGED, getTransactionID());
         doc.start_transaction(createNewTransactionID());
     }
 
@@ -301,7 +302,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             commit(true);
         }
         doc.select(modelElement.getContainer(doc), getTransactionID());
-        doc.distributeEvent(GraphDocument.SELECTION_CHANGED, getTransactionID());
+        doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, getTransactionID());
     }
 
     @Override

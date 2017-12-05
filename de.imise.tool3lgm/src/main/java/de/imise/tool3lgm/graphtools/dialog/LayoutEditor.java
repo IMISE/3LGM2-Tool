@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -318,12 +319,12 @@ public class LayoutEditor extends JDialog implements ActionListener {
         }
         if (e.getSource() == uebernehmen) {
             doc.adaptMapping(my_mapping);
-            doc.distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
+            doc.distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED);
             return;
         }
         if (e.getSource() == beenden) {
             doc.adaptMapping(my_mapping);
-            doc.distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
+            doc.distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED);
             dispose();
             // setVisible(false);
             return;

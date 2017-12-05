@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.AdditionalLabelTextGenerator;
@@ -621,8 +622,8 @@ public class KommProzessPanel extends ElementDialogPanel {
                 }
             }
             doc.select(getModelElement().getContainer(doc), dialog.getTransactionID());
-            doc.distributeEvent(GraphDocument.SELECTION_CHANGED);
-            doc.distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, dialog.getTransactionID());
+            doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED);
+            doc.distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, dialog.getTransactionID());
         }
     }
 

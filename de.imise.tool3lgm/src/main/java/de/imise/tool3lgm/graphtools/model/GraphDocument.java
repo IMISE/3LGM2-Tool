@@ -8,6 +8,12 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.GROUP_ORDER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -72,28 +78,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
 
-    public static final int DATA_CHANGED = 0 << 0;
-
-    public static final int ELEMENT_GRAPHICS_CHANGED = 1 << 0;
-
-    public static final int LAYOUT_CHANGED = 1 << 1;
-
-    public static final int ELEMENT_ADDED = 1 << 2;
-
-    public static final int ELEMENT_DELETED = 1 << 3;
-
-    public static final int USER_FIELD_VALUE_CHANGED = 1 << 4;
-
-    public static final int GROUP_ORDER_CHANGED = 1 << 5;
-
-    public static final int ACTIVE_LAYER_CHANGED = 1 << 6;
-
-    public static final int COLORS_CHANGED = 1 << 8;
-
-    public static final int SELECTION_CHANGED = 1 << 9;
-
-    public static final int ELEMENT_NAME_CHANGED = 1 << 10;
-
     /**
      * COMMENTME
      */
@@ -102,12 +86,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    private List<GraphDocumentListener> listener;
+    private final List<GraphDocumentListener> listener;
 
     /**
      * COMMENTME
      */
-    private List<InTransactionListener> inlistener;
+    private final List<InTransactionListener> inlistener;
 
     /**
      * COMMENTME
@@ -211,15 +195,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         hashString = "DOC" + "_" + new Date().getTime();
 
         analysisResult = new ArrayList<>();
-        if (listener == null) {
-            listener = new ArrayList<>();
-        }
-        if (inlistener == null) {
-            inlistener = new ArrayList<>();
-        }
-        if (mapping == null) {
-            mapping = new Mapping();
-        }
+        listener = new ArrayList<>();
+        inlistener = new ArrayList<>();
+        mapping = new Mapping();
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
@@ -1238,7 +1216,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS:
         case MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS:
             layer[gdcoll.getActiveLayer()].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
-            distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         case MODEL_ACTION_SHOW_ELEMENT_CONFIGS:
         case MODEL_ACTION_HIDE_ELEMENT_CONFIGS:
@@ -1247,7 +1225,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SHOW_ELEMENT_CONFIGS);
                 }
             }
-            distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
 
         default:
@@ -2152,7 +2130,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         ec.setFont(font);
         ec.refreshText();
         ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, ec, null, pid);
+        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, null, pid);
     }
 
     /**
@@ -2226,7 +2204,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommandOrReplace(commandPrefix, lineStyle, pid);
         mc.setLineStyle(lineStyle);
         szen.finish_transaction(pid);
-        szen.distributeEvent(GraphDocument.ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
     }
 
     /**
@@ -2689,40 +2667,33 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @return
+     * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
+     * können, kann man hiermit ein allgemeines Ereignis feuern.
+     *
+     * @param changeType
      */
-    public final List<GraphDocumentListener> getGraphDocumentListeners() {
-        return listener;
+    public final void distributeEvent(final GDCollectionChangeType changeType) {
+        distributeEvent(changeType, TransactionManager.STANDARD_PID);
     }
 
     /**
      * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
      * können, kann man hiermit ein allgemeines Ereignis feuern.
      *
-     * @param bitmask
-     */
-    public final void distributeEvent(final int bitmask) {
-        distributeEvent(bitmask, TransactionManager.STANDARD_PID);
-    }
-
-    /**
-     * Wenn die anderen Parameter aus der Methode <code>distributeEvent(int, ElementContainer, LayerContainer, int)</code> nicht angegeben werden
-     * können, kann man hiermit ein allgemeines Ereignis feuern.
-     *
-     * @param bitmask
+     * @param changeType
      * @param pid
      */
-    public final void distributeEvent(final int bitmask, final int pid) {
-        distributeEvent(bitmask, null, null, pid);
+    public final void distributeEvent(final GDCollectionChangeType changeType, final int pid) {
+        distributeEvent(changeType, null, null, pid);
     }
 
     /**
-     * @param bitmask
+     * @param changeType
      * @param last_elem
      * @param last_group
      * @param pid
      */
-    public final void distributeEvent(final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    public final void distributeEvent(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
@@ -2730,7 +2701,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         if (transStackInteger.intValue() > 0) {
             if (transStackInteger.intValue() == 1) {
-                switch (bitmask) {
+                switch (changeType) {
                 case DATA_CHANGED:
                     for (InTransactionListener itl : inlistener) {
                         itl.dataChanged(this, pid);
@@ -2766,17 +2737,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
         } else {
-            gdcoll.distribute(bitmask, last_elem, last_group, this, pid);
+            gdcoll.distribute(changeType, last_elem, last_group, this, pid);
         }
     }
 
     /**
-     * @param bitmask
+     * @param changeType
      * @param last_elem
      * @param last_group
      * @param pid
      */
-    public void distributeEventIntern(final int bitmask, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    public void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -2788,7 +2759,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         if (transStackInteger.intValue() > 0) {
             if (transStackInteger.intValue() == 1) {
-                switch (bitmask) {
+                switch (changeType) {
                 case DATA_CHANGED:
                     for (InTransactionListener itl : inlistener) {
                         itl.dataChanged(this, pid);
@@ -2827,10 +2798,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         if (isVerificationMode()) {
-            System.out.println("distributeEvent: " + bitmask);
+            System.out.println("distributeEvent: " + changeType);
         }
 
-        switch (bitmask) {
+        switch (changeType) {
         case DATA_CHANGED:
             for (GraphDocumentListener gdl : listener) {
                 gdl.dataChanged(this);

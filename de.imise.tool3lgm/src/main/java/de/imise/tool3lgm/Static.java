@@ -18,6 +18,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -175,7 +176,7 @@ public class Static {
         //nichts ändert immer noch die volle Grafik in der Anzeige erhalten
         GraphDocument doc = getSelectedDoc();
         if (doc != null) {
-            doc.distributeEvent(GraphDocument.LAYOUT_CHANGED);
+            doc.distributeEvent(GDCollectionChangeType.LAYOUT_CHANGED);
         }
     }
 

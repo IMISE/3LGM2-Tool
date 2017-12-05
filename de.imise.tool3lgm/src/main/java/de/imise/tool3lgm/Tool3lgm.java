@@ -48,6 +48,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
@@ -1418,16 +1419,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * @param eventCode
-     */
-    public void distributeOptionChange(final int eventCode) {
-        for (int i = 0; i < collections.size(); i++) {
-            GDCollection col = collections.get(i);
-            col.distribute(eventCode);
-        }
-    }
-
-    /**
      * @return
      */
     public ModelBrowserPanel getModelBrowserPanel() {
@@ -1558,7 +1549,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 }
             }
             doc.finish_transaction(PID, false);
-            doc.distributeEvent(GraphDocument.SELECTION_CHANGED, PID);
+            doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, PID);
         } else if (command.equalsIgnoreCase("selectByUserField")) {
             if (params == null || params.length < 2) {
                 return;
@@ -1577,7 +1568,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 }
             }
             doc.finish_transaction(PID, false);
-            doc.distributeEvent(GraphDocument.SELECTION_CHANGED, PID);
+            doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, PID);
         } else {
             String[] newParams = new String[params.length + 1];
             newParams[0] = command;

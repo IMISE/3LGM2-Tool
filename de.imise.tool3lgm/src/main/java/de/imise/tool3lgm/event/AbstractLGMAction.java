@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.event;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -11,6 +12,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -42,7 +44,7 @@ public abstract class AbstractLGMAction extends ExtendedAction {
     public static final String ELEMENT_CLASS_KEY = "ElementClassKey";
 
     /** Liste aller {@link Action}s, die einen {@link KeyStroke} besitzen */
-    protected static final ArrayList<StaticAction> KEYSTROKE_ACTIONS = new ArrayList<StaticAction>();
+    protected static final ArrayList<StaticAction> KEYSTROKE_ACTIONS = new ArrayList<>();
 
     /** Gibt die Liste aller {@link Action}s wieder, die einen {@link KeyStroke} besitzen */
     public static ArrayList<StaticAction> getKeyStrokeActions() {
@@ -71,22 +73,16 @@ public abstract class AbstractLGMAction extends ExtendedAction {
 
     /** Benachrichtigt das Tool über eine Ändeung der Daten */
     void distributeDataChanged() {
-        distributeOptionChange(GraphDocument.DATA_CHANGED);
-    }
-
-    /** Benachrichtigt das Tool über eine Ändeung der grafischen Darstellung der Elemente */
-    void distributeElementGraphicsChanged() {
-        distributeOptionChange(GraphDocument.ELEMENT_GRAPHICS_CHANGED);
+        distributeOptionChange(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /** Benachrichtigt das Tool über das Eintreten des spezifizierten Ereignisses */
-    private void distributeOptionChange(final int eventCode) {
-        getTool().distributeOptionChange(eventCode);
-    }
-
-    /** Teilt dem Tool einen Wechsel der Ebenenansicht mit */
-    void distributeViewChanged() {
-        getTool().activeLayerChanged(getSelectedDoc());
+    private void distributeOptionChange(final GDCollectionChangeType eventCode) {
+        List<GDCollection> collections = getTool().getCollections();
+        for (int i = 0; i < collections.size(); i++) {
+            GDCollection col = collections.get(i);
+            col.distribute(eventCode);
+        }
     }
 
     /** Führt das spezifizierte Kommando im momentan selektierten {@link GraphDocument} aus */

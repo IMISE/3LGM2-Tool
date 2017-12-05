@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.metamodel.Composition;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -213,7 +214,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
                 }
                 modelElement.getContainer(mainDoc).refreshText();
                 mainDoc.finish_transaction(dialog.getTransactionID());
-                mainDoc.distributeEvent(GraphDocument.DATA_CHANGED, dialog.getTransactionID());
+                mainDoc.distributeEvent(GDCollectionChangeType.DATA_CHANGED, dialog.getTransactionID());
             }
         };
     }
