@@ -181,17 +181,6 @@ public abstract class Tool3lgmConstants {
     // Ende FileFilter
 
     /**
-     * Alle Benutzereinstelllungen und damit auch die Locale initialisieren
-     */
-    static {
-        // IMMER ZUERST!
-        UserProperties.init();
-
-        // vor allem was jetzt kommt muss einmal unbedingt die UserProperties.init() aufgerufen werden (wegen der Locale)
-
-    }
-
-    /**
      * Name des Verzeichnisses in dem alle lokalisierten Icons liegen, die das Tool braucht.<br>
      * Diese können über die statische Methode <code>getLocalizedIcon(String name)</code> geladen werden.
      */

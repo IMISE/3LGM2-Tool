@@ -6,6 +6,7 @@ import java.io.File;
 
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties;
 
 public class Tool3lgmMain {
 
@@ -31,6 +32,7 @@ public class Tool3lgmMain {
 
         //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
         ToolSplashScreen.update();
+        UserProperties.init();
 
         //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
         //die Ressourcen gefunden werden
