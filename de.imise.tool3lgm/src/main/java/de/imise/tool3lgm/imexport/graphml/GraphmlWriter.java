@@ -176,7 +176,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         LayerContainer lc = szenario.getLayer(layer);
         for (EdgeContainer ec : lc.getKanten()) {
             Edge edge = ec.getEdge();
-            if (ec.isVisible()) {
+            if (ec.isVisible(false, true)) {
                 String id = edge.getHashString();
                 String startId = edge.getStart().getHashString();
                 String endId = edge.getEnd().getHashString();

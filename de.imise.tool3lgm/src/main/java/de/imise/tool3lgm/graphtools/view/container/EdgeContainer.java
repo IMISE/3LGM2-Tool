@@ -557,6 +557,14 @@ public class EdgeContainer extends ElementContainer {
      * @return
      */
     public boolean isVisible(final boolean createSurrogates) {
+        return isVisible(createSurrogates, false);
+    }
+
+    /**
+     * @param createSurrogates
+     * @return
+     */
+    public boolean isVisible(final boolean createSurrogates, final boolean ignoreOverlapping) {
         ModelElement me1 = getEdge().getStart();
         ModelElement me2 = getEdge().getEnd();
         if (me1 == null || me2 == null) {
@@ -575,7 +583,7 @@ public class EdgeContainer extends ElementContainer {
             return false;
         }
 
-        if (isOverLapping()) {
+        if (!ignoreOverlapping && isOverLapping()) {
             return false;
         }
 
