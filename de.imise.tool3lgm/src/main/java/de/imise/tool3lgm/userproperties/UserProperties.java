@@ -1,86 +1,335 @@
 package de.imise.tool3lgm.userproperties;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.filechooser.FileSystemView;
+
+import org.apache.commons.collections4.map.Flat3Map;
+
+import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
+import de.imise.util.io.FileHandler;
 
 /**
  * @author AXS
  *         created on 16.08.2007
  */
 public class UserProperties {
-    //TODO:AXS: die UserProperties sollten in zukunft über Properties.class gemanaged werden.
 
-    //ACHTUNG: alles was hier auskommentiert ist, war nur mal zum Test, wie es über Properties laufen könnte
+    static Properties properties = new Properties();
 
-    //	static Properties properties = new Properties();
-
-    //	static final File USER_PROPERTIES_FILE = new File(System.getProperty("user.home") + "/" + ".too3lgmUserInfo.xml");
-
-    //	/**
-    //	 * Stellt Property-Change-Funktionalität zur Verfügung. <br>
-    //	 * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-    //	 * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
-    //	 * /
-    //	private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
+    //    /**
+    //     * Stellt Property-Change-Funktionalität zur Verfügung. <br>
+    //     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
+    //     * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
+    //     */
+    //    private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
     //
-    //	///////////////////////////////////////////////////
-    //	// Listener hinzufügen/entfernen/benachrichtigen //
-    //	///////////////////////////////////////////////////
+    //    ///////////////////////////////////////////////////
+    //    // Listener hinzufügen/entfernen/benachrichtigen //
+    //    ///////////////////////////////////////////////////
     //
-    //	/**
-    //	 * Fügt einen <code>PropertyChangeListener</code> hinzu
-    //	 * @param listener
-    //	 * /
-    //	public static final void addPropertyChangeListener(PropertyChangeListener listener) {
-    //		changeSupport.addPropertyChangeListener(listener);
-    //	}
+    //    /**
+    //     * Fügt einen <code>PropertyChangeListener</code> hinzu
+    //     *
+    //     * @param listener
+    //     */
+    //    public static final void addPropertyChangeListener(final PropertyChangeListener listener) {
+    //        changeSupport.addPropertyChangeListener(listener);
+    //    }
     //
-    //	/**
-    //	 * Entfernt einen <code>PropertyChangeListener</code>
-    //	 * @param listener
-    //	 * /
-    //	public static final void removePropertyChangeListener(PropertyChangeListener listener) {
-    //		changeSupport.removePropertyChangeListener(listener);
-    //	}
-
+    //    /**
+    //     * Entfernt einen <code>PropertyChangeListener</code>
+    //     *
+    //     * @param listener
+    //     */
+    //    public static final void removePropertyChangeListener(final PropertyChangeListener listener) {
+    //        changeSupport.removePropertyChangeListener(listener);
+    //    }
+    //
     /**
      * Liest die Benutzeroptionen ein.<br>
      * Je nachdem, ob bereits eine Datei mit Optionen im Home-Pfad des Benutzers existiert, wird diese geladen,
      * ansonsten werden die Standardeinstellungen aus den Ressourcen geladen.
      */
     public static final void init() {
-        UserPropertiesContentHandler.readUserInfo();
+        initDefaults();
+        readUserInfo();
+    }
 
-        //		properties.put("locale", getLocale().getLanguage());
-        //		properties.put("rendering_hints", renderingHints.toString());
-        //		properties.put("show_links", showL.toString());
-        //
-        //		FileOutputStream out;
-        //		try {
-        //			if (!USER_PROPERTIES_FILE.exists())
-        //				USER_PROPERTIES_FILE.createNewFile();
-        //			out = new FileOutputStream(USER_PROPERTIES_FILE);
-        //			properties.storeToXML(out, "Kommentar von AXS");
-        //		} catch (Exception e) {
-        //			e.printStackTrace();
-        //		}
+    private static void initDefaults() {
+        for (BooleanProperty property : BooleanProperty.values()) {
+            put(property, property.getDefault());
+        }
+        for (IntProperty property : IntProperty.values()) {
+            put(property, property.getDefault());
+        }
+    }
 
+    private static Object put(final Object key, final Object value) {
+        return properties.put(key.toString(), String.valueOf(value));
+    }
+
+    public static boolean is(final BooleanProperty property) {
+        String value = properties.getProperty(property.toString());
+        return value == null ? property.getDefault() : Boolean.parseBoolean(value);
+    }
+
+    public static boolean set(final BooleanProperty property, final boolean value) {
+        Object oldValue = put(property, value);
+        return oldValue == null ? false : Boolean.valueOf(oldValue.toString());
+    }
+
+    //Da es nur 2 Listenschlüssel gibt, kann man hier eine Flat3Map nehmen
+    private static final Map<StringProperty, Integer> listKeyToListSize = new Flat3Map<>();
+
+    /**
+     * Fügt den ListValue in die bestehende Liste ganz am Anfang ein. Wenn der Wert schon in der Liste vorkommt,
+     * wird er an den Anfang verschoben.
+     *
+     * @param property
+     * @param value
+     */
+    public static void addListValue(final StringProperty property, final String value) {
+        //wenn das gar kein Listenwert ist -> einfach den einzigen Wert für den Key setzen
+        int maxSize = property.getMaxListSize();
+        if (maxSize == 1) {
+            put(property, value);
+        } else {
+            String propertyName = property.toString();
+            Integer sizeI = listKeyToListSize.get(property);
+            int size = sizeI == null ? 0 : sizeI;
+            int currentIndex = -1;
+            for (int i = 0; i < size; i++) {
+                String existingValue = properties.getProperty(propertyName + i);
+                if (value.equals(existingValue)) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            if (size < maxSize) {
+                size++;
+                listKeyToListSize.put(property, size);
+            }
+            String currentValue = value;
+            int maxIndexToSwap = currentIndex < 0 ? size : currentIndex + 1;
+            for (int i = 0; i < maxIndexToSwap; i++) {
+                Object oldValue = put(propertyName + i, currentValue);
+                currentValue = String.valueOf(oldValue);
+            }
+        }
+    }
+
+    public static void setListValues(final StringProperty property, final List<String> values) {
+        remove(property);
+        for (int i = values.size() - 1; i >= 0; i--) {
+            addListValue(property, values.get(i));
+        }
+    }
+
+    private static void remove(final StringProperty property) {
+        String propertyName = property.toString();
+        Integer sizeI = listKeyToListSize.get(propertyName);
+        if (sizeI == null) {
+            properties.remove(propertyName);
+            return;
+        }
+        int size = sizeI == null ? 0 : sizeI;
+        for (int i = 0; i < size; i++) {
+            properties.remove(propertyName + i);
+        }
+        listKeyToListSize.remove(property.toString());
+    }
+
+    public static List<String> getListValues(final StringProperty property) {
+        String propertyName = property.toString();
+        Integer sizeI = listKeyToListSize.get(property);
+        int size = sizeI == null ? 0 : sizeI;
+        List<String> listValues = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            listValues.add(properties.getProperty(propertyName + i));
+        }
+        return listValues;
     }
 
     /**
-     * Speichert die aktuell eingestellten Benutzeroptionen in einer Datei im User-Home-Pfad.
+     * Ließt die benutzerspezifischen Informationen aus dem Benutzer-Home-Verzeichnis
+     * oder die Defaultdatei aus den Ressourcen.
      */
-    public static final void save() {
-        UserPropertiesContentHandler.writeUserInfo();
+    private static void readUserInfo() {
+        File userInfoFile = Tool3lgmConstants.USER_INFO_FILE;
+        //wird true, wenn die Default-Benutzereinstellungen aus den Ressourcen geladen wurden
+        boolean isDefault = false;
+        if (!userInfoFile.canRead()) {
+            FileHandler.copyFile(Tool3lgmConstants.DEFAULT_USER_INFO_FILE, userInfoFile);
+            isDefault = true;
+        }
+
+        try {
+            properties.load(new FileInputStream(userInfoFile));
+        } catch (Exception exp) {
+            //wenn die Datei nicht gelesen werden konnte und es sich nicht um die Standardeinstellungsdatei
+            //handelt (dann hat irgendwer was in die Porperties-Datei des Benutzers geschrieben, was da nicht
+            //reingehört -> Standarddatei laden)
+            if (!isDefault) {
+                userInfoFile.delete();
+                readUserInfo();
+            }
+            //nicht loggen, da ToollgmConstants noch nicht da ist!
+            //Log.show(Log.ERROR, "Exception while initilising user properties", exp);
+            //exp.printStackTrace();
+        }
+        for (StringProperty stringProperty : StringProperty.values()) {
+            if (stringProperty.getMaxListSize() > 1) {
+                int entries = 0;
+                String propertyName = stringProperty.toString();
+                for (; entries < properties.size(); entries++) {
+                    if (!properties.containsKey(propertyName + entries)) {
+                        break;
+                    }
+                }
+                if (entries > 0) {
+                    listKeyToListSize.put(stringProperty, entries);
+                }
+            }
+        }
+    }
+
+    public static void save() {
+        try {
+            if (!Tool3lgmConstants.USER_INFO_FILE.exists()) {
+                Tool3lgmConstants.USER_INFO_FILE.createNewFile();
+            }
+            FileOutputStream out = new FileOutputStream(Tool3lgmConstants.USER_INFO_FILE);
+            properties.store(out, "Tool3lgm-Version " + Tool3lgmConstants.TOOL_VERSION);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static enum BooleanProperty {
+        /** Kennzeichne ModelElemente mit verknüpftem Teilmodell */
+        OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
+        /** Elemente erben Eigenschaften ihrer Teile (diese Option ist nur in Ausnahmefällen sinnvoll) */
+        OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS,
+        /** Elemente erben Eigenschaften ihrer Oberelemente */
+        OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS,
+        /** Unterelemente werden in der Grafik mit den Oberelementen verschoben (beim Draggen) */
+        OPTION_GRAPH_MOVE_SUBELEMENTS,
+        /** Der Modelbrowser eines Teilmodells zeigt nur die Elemente im Teilmodell an und nicht immer alle Elemente des Gesamtmodells */
+        OPTION_ENABLE_SUBMODEL_BROWSER,
+        /** Jedes geöffnete Modell hat einen eigenen ModelBrowser, die alle nebeneinander angeordnet werden */
+        OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
+        /** Zeige Benutzerdefnierte Eigenschaften im ModellBrowser */
+        OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER,
+        /** Hänge alle Teilelemente in Bäumen unter ihre Oberelemente (true) oder ordne alle Elemente in einer flachen Liste an (false) */
+        OPTION_SHOW_PART_OF_HIERARCHY,
+        /** Kanten werden nur für selektierte Elemente in der Grafik gemalt (true) oder alle Kanten werde gezeichnet (false) */
+        OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
+        /** Wenn man den UserProperties Farben gibt, werden sie im Baum Farbig geschrieben. Das ist aktuell nicht komplett implementiert. */
+        OPTION_USE_PROPERTY_COLORS,
+        /** Raster in der Grafik an/aus */
+        OPTION_USE_RASTER,
+        /** Raster in der Grafik anzeigen */
+        OPTION_SHOW_RASTER,
+        /** Konfigurationen bunt oder alle schwarz */
+        OPTION_ASSIGN_CONFIGURATION_COLORS,
+        /** Tooltips an/aus */
+        OPTION_SHOW_TOOL_TIPS,
+        /** Analyseergebnisse werden automatisch in einem neuen Teilmodell eingefügt (true) oder nur in der Grafik hervorgehoben */
+        OPTION_NEW_SUBMODEL_FOR_ANALYSIS,
+        /** Medienbrüche werden in der Grafik angezeigt */
+        OPTION_SHOW_MEDIUM_BREAKS,
+        /** Kennzahlberechnung an/aus */
+        OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
+        /** Konsistenzcheck an/aus */
+        OPTION_CHECK_CONSISTENCY,
+        /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
+        OPTION_SHOW_REMOVE_WARNING;
+
+        private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_ENABLE_SUBMODEL_BROWSER,
+                OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_TOOL_TIPS, OPTION_SHOW_REMOVE_WARNING);
+
+        private boolean getDefault() {
+            return DEFAULT_TRUE_PROERTIES.contains(this);
+        }
+
+    }
+
+    public static enum IntProperty {
+        RASTER_WIDTH {
+            @Override
+            public int getDefault() {
+                return 5;
+            }
+        },
+        /**
+         * Bitpattern for Rendering-Hints (standard value: all bits are set to zero
+         * bit0: ANTIALIASING
+         * bit1: ALPHA_INTERPOLATION
+         * bit2: COLOR_RENDERING
+         * bit3: RENDERING
+         * bit4: DITHERING
+         * bit5: FRACTIONALMETRICS
+         * bit6: INTERPOLATION
+         * bit7: TEXT_ANTIALIASING
+         */
+        RENDERING_HINTS {
+            @Override
+            public int getDefault() {
+                return 137;
+            }
+        },
+        RMI_REGISTRY_PORT {
+            @Override
+            public int getDefault() {
+                return 1099;
+            }
+        };
+        public int getDefault() {
+            return -1;
+        }
+    }
+
+    public static enum StringProperty {
+        LOCALE,
+        WORKING_DIRECTORY,
+        ICON_PATH,
+        /** Liste der zuletzt benutzten ModellDateien */
+        LAST_USED_MODEL_FILES {
+            @Override
+            public int getMaxListSize() {
+                return Tool3lgmConstants.LAST_USED_MODEL_FILES_IN_MENU;
+            }
+        },
+        /** Liste der zuletzt benutzten Verzeichnisse mit XSLT-Scripten */
+        XSL_SEARCH_DIRS {
+            @Override
+            public int getMaxListSize() {
+                return Integer.MAX_VALUE;
+            }
+        };
+        /**
+         * Wenn die Property eine Liste sein soll, dann muss sie eine ListSize > 1 haben.
+         *
+         * @return Größe der Liste dieser Property
+         */
+        public int getMaxListSize() {
+            return 1;
+        }
     }
 
     ////////////
@@ -88,7 +337,7 @@ public class UserProperties {
     ////////////
 
     /** Locale, die der Benutzer gewählt hat */
-    private static Locale locale = setLocale(Locale.getDefault());
+    private static Locale locale = setLocale(Locale.getDefault().getLanguage());
 
     /**
      * Liefert die eingestellte Locale. Hat der Benutzer sie nicht geändert, entspricht sie der des Systems.
@@ -107,16 +356,16 @@ public class UserProperties {
      * und das Hauptfenster nicht zur Laufzeit neu initialisiert werden kann, wird das Umstellen der
      * locale dort erst nach einem Neustart sichtbar.
      *
-     * @param locale
+     * @param laguage
      */
-    public static final Locale setLocale(final Locale locale) {
-        if (locale == null) {
+    public static final Locale setLocale(final String language) {
+        if (language == null) {
             return UserProperties.locale;
         }
         Locale[] locales = Tool3lgmConstants.getInstalledLanguages();
         Locale l = Locale.ENGLISH;
         for (int i = 0; i < locales.length; i++) {
-            if (locales[i].getLanguage().equals(locale.getLanguage())) {
+            if (locales[i].getLanguage().equals(language)) {
                 l = locales[i];
                 break;
             }
@@ -175,74 +424,6 @@ public class UserProperties {
      */
     public static void setRenderingHints(final int renderingHints) {
         UserProperties.renderingHints = Integer.valueOf(renderingHints);
-    }
-
-    ///////////////
-    // showLinks //
-    ///////////////
-
-    /** kennzeichne ModelElement mit verknuepften Teilmodell */
-    private static boolean showLinks = true;
-
-    /** @return showLinks */
-    public static boolean isShowLinks() {
-        return showLinks;
-    }
-
-    /** @param b */
-    public static void setShowLinks(final boolean b) {
-        showLinks = b;
-    }
-
-    /////////////////
-    // searchParts //
-    /////////////////
-
-    /** Beim Suchen untergeordnete Elemente berücksichtigen */
-    private static boolean searchParts;
-
-    /** @return searchParts */
-    public static boolean isSearchParts() {
-        return searchParts;
-    }
-
-    /** @param b */
-    public static void setSearchParts(final boolean b) {
-        searchParts = b;
-    }
-
-    ///////////////////
-    // searchParents //
-    ///////////////////
-
-    /** Beim Suchen übergeordnete Elemente berücksichtigen */
-    private static boolean searchParents;
-
-    /** @return searchParts */
-    public static boolean isSearchParents() {
-        return searchParents;
-    }
-
-    /** @param b */
-    public static void setSearchParents(final boolean b) {
-        searchParents = b;
-    }
-
-    /////////////////////
-    // moveSubElements //
-    /////////////////////
-
-    /** Unterelemene werden beim verschieben mitbewegt */
-    private static boolean moveSubelements;
-
-    /** @return moveSubelements */
-    public static boolean isMoveSubelements() {
-        return moveSubelements;
-    }
-
-    /** @param b */
-    public static void setMoveSubelements(final boolean b) {
-        moveSubelements = b;
     }
 
     ///////////////////////////
@@ -310,40 +491,6 @@ public class UserProperties {
         showUserDefinedPropertiesInModelBrowser = b;
     }
 
-    /////////////////////////
-    // showPartOfHierarchy //
-    /////////////////////////
-
-    /** Modellbrwoser zeigen die Teil-Von-Hierarchie an */
-    private static boolean showPartOfHierarchy;
-
-    /** @return showPartOfHierarchy */
-    public static boolean isShowPartOfHierarchy() {
-        return showPartOfHierarchy;
-    }
-
-    /** @param b */
-    public static void setShowPartOfHierarchy(final boolean b) {
-        showPartOfHierarchy = b;
-    }
-
-    ///////////////////////////////////////
-    // paintEdgesOnlyForSelectedElements //
-    ///////////////////////////////////////
-
-    /** Kanten werden nur für selektierte Elemente gespeichert */
-    private static boolean paintEdgesOnlyForSelectedElements = false;
-
-    /** @return paintEdgesOnlyForSelectedElements */
-    public static boolean isPaintEdgesOnlyForSelectedElements() {
-        return paintEdgesOnlyForSelectedElements;
-    }
-
-    /** @param b */
-    public static void setPaintEdgesOnlyForSelectedElements(final boolean b) {
-        paintEdgesOnlyForSelectedElements = b;
-    }
-
     ///////////////////////
     // usePropertyColors //
     ///////////////////////
@@ -365,23 +512,6 @@ public class UserProperties {
     /** @param usePropertyColors The usePropertyColors to set. */
     public static void setUsePropertyColors(final boolean b) {
         usePropertyColors = b;
-    }
-
-    ///////////////
-    // useRaster //
-    ///////////////
-
-    /** Wenn <code>true</code> werden alle Verschiebungen in der Grafik auf einem Raster ausgeführt. */
-    private static boolean useRaster;
-
-    /** @return useRaster */
-    public static boolean isUseRaster() {
-        return useRaster;
-    }
-
-    /** @param b */
-    public static void setUseRaster(final boolean b) {
-        useRaster = b;
     }
 
     /** Wenn <code>true</code> wird in der Grafik das Raster gezeichnet. */
@@ -504,44 +634,6 @@ public class UserProperties {
         showMediumBreaks = b;
     }
 
-    ////////////////////////
-    // lastUsedModelFiles //
-    ////////////////////////
-
-    /** die zu letzt benutzen Dateien */
-    private static final ArrayList<File> lastUsedModelFiles = new ArrayList<File>(Tool3lgmConstants.LAST_USED_MODEL_FILES_IN_MENU) {
-        @Override
-        public boolean add(final File o) {
-            if (o == null) {
-                return false;
-            }
-            remove(o);
-            if (size() == Tool3lgmConstants.LAST_USED_MODEL_FILES_IN_MENU) {
-                this.remove(Tool3lgmConstants.LAST_USED_MODEL_FILES_IN_MENU - 1);
-            }
-            add(0, o);
-            return true;
-        }
-    };
-
-    /**
-     * gibt die zuletzt benutzen Datei zurück
-     *
-     * @return ArrayList mit File-Objekten
-     */
-    public static ArrayList<File> getLastUsedFiles() {
-        return lastUsedModelFiles;
-    }
-
-    /**
-     * fügt eine Datei zu der List mit den zuletzt geöffenten Datei hinzu
-     *
-     * @param file Datei, die benutzt wurde
-     */
-    public static void addUsedFile(final File file) {
-        lastUsedModelFiles.add(file);
-    }
-
     ///////////////////
     // xslSearchDirs //
     ///////////////////
@@ -654,16 +746,16 @@ public class UserProperties {
     // RMI - Funktion, aktivierung und Ports //
     ///////////////////////////////////////////
 
-    private static String RMIRegistryPort = "";
+    private static int rmiRegistryPort = -1;
 
     /** @param b */
-    public static void setRMIRegistryPort(final String b) {
-        RMIRegistryPort = b;
+    public static void setRMIRegistryPort(final int port) {
+        rmiRegistryPort = port;
     }
 
     /** @return RMIRegitryPort */
-    public static String getRMIRegistryPort() {
-        return RMIRegistryPort;
+    public static int getRMIRegistryPort() {
+        return rmiRegistryPort;
     }
 
     //////////////////////////////////////////////

@@ -124,9 +124,11 @@ public class MenuCollection {
                 createMenu( // Auf Standard setzen Menu
                         "elementSetToStandardMenu", ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
                         ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
-                new JSeparator(), createMenu( // Icon-Menu
+                new JSeparator(),
+                createMenu( // Icon-Menu
                         "icon", ElementLayout.Icon.MODEL_ACTION_SET_ELEMENT_ICON_NONE, ElementLayout.Icon.ACTION_CHOOSE_ELEMENT_ICON),
-                new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)
+                new JSeparator(),
+                createMenu( // Textausrichtungs-Menu (horizontal)
                         "textAlignmentMenu", TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT, TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER, TextAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
                         new JSeparator(), TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
 
@@ -151,7 +153,8 @@ public class MenuCollection {
     static class OptionsSubMenus {
 
         /** Menu für allgemeine Optionen */
-        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", createCheckBoxItem(Gerneral.SHOW_REMOVE_WARNING), createCheckBoxItem(PartOf.CONSIDER_PARENTS), createCheckBoxItem(PartOf.HIERARCHICAL));
+        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", createCheckBoxItem(Gerneral.SHOW_REMOVE_WARNING), createCheckBoxItem(PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS),
+                createCheckBoxItem(PartOf.OPTION_SHOW_PART_OF_HIERARCHY));
 
         /** Das Browser-Optionen-Menu */
         public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", createCheckBoxItem(ModelBrowser.SUBMODEL_SPECIFIC), createCheckBoxItem(ModelBrowser.SHOW_MULTIPLE_BROSERS),
@@ -159,9 +162,9 @@ public class MenuCollection {
                 new JSeparator(), createCheckBoxItem(ModelBrowser.USERDEFINED_PROPERTIES));
 
         /** Das Grafik-Optionen-Menu */
-        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", createCheckBoxItem(Graphics.USE_RASTER), createCheckBoxItem(Graphics.SHOW_RASTER), createCheckBoxItem(Graphics.PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS),
-                createCheckBoxItem(Graphics.SIGNIFY_LINKED_ELEMENTS), Graphics.HIDE_UNHIDE_UNASSOCIATED, createCheckBoxItem(Graphics.AUTOMATIC_COLORING), createCheckBoxItem(PartOf.AUTO_MOVE_CHILDREN), createCheckBoxItem(PartOf.SIGNIFY_COARSEMENT),
-                Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
+        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", createCheckBoxItem(Graphics.OPTION_USE_RASTER), createCheckBoxItem(Graphics.SHOW_RASTER), createCheckBoxItem(Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS),
+                createCheckBoxItem(Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS), Graphics.HIDE_UNHIDE_UNASSOCIATED, createCheckBoxItem(Graphics.AUTOMATIC_COLORING), createCheckBoxItem(PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS),
+                createCheckBoxItem(PartOf.SIGNIFY_COARSEMENT), Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
 

@@ -84,25 +84,19 @@ public enum ActionIdentifier {
     // options
     // General
     removeWarning,
-    consider_parents,
-    show_hierarchical,
     // browserOptions
     submodel_specific,
     show_multiple_browsers,
     show_userdefinded_properties,
     // graphicOptions
-    paintEdgesOnlyForSelectedElements,
     analysis_color,
     rendering_options,
-    useRaster,
     showRaster,
-    signify_linked_elements,
     HIDE_UNASSOCIATED,
     UNHIDE_ALL,
     automatic_coloring,
     show_tooltips,
     signify_coarsement,
-    auto_move_children,
     rmi_settings,
     // localeOptions
     german,

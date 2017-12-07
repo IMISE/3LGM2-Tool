@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 import de.imise.util.swing.dialog.OutputDialog;
@@ -106,7 +107,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             String message = "";
 
             // wenn die Option "beim Suchen übergeordnete Elemente berücksichtigen" ausgeschaltet ist
-            if (!UserProperties.isSearchParents()) {
+            if (!UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
                 message += getResString("ana_fr_search_parents_option_message1");
                 message += getResString("itv-bezogene_Opt") + " -> " + getResString("consider_parents") + getResString("ana_fr_search_parents_option_message2") + "\n\n";
             }
@@ -494,21 +495,17 @@ public class RedundancyAnalysis extends WindowAdapter {
 
         @Override
         public void run() {
-
             // Originalwert von searchParents merken
-            searchParents = UserProperties.isSearchParents();
+            searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
             // übergeordnete Elemente auf jeden Fall mit berücksichtigen
-            UserProperties.setSearchParents(true);
-
+            UserProperties.set(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, true);
             // füllt alle results
             for (int i = 0; i < resultList.size(); i++) {
                 // der Konstruktoraufruf füllt die übergebene Liste
                 new DecisionTree(resultList.get(i));
             }
-
             // Originalwert wieder herstellen
-            UserProperties.setSearchParents(searchParents);
-
+            UserProperties.set(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, searchParents);
             RedundancyAnalysis.showResult(resultList);
         }
 
@@ -519,7 +516,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             }
             super.interrupt();
             // Originalwert wieder herstellen
-            UserProperties.setSearchParents(searchParents);
+            UserProperties.set(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, searchParents);
         }
     }
 

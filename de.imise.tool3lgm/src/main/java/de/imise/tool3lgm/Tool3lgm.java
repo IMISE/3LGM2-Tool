@@ -73,6 +73,7 @@ import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Hauptklasse der Anwendung 3lgm */
@@ -169,7 +170,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1");
             // hole den vom User eingestellen RegistryPort
-            String regValue = UserProperties.getRMIRegistryPort().trim();
+            String regValue = String.valueOf(UserProperties.getRMIRegistryPort());
 
             // hier wird geprüft, ob der Wert ungleich "" ist und mittels regulären Ausdruck, ob nur Ziffern enthalten sind.
             if (!regValue.equals("") && regValue.matches("\\d*")) {
@@ -232,7 +233,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
                         // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
-                            UserProperties.setRMIRegistryPort("" + regPort);
+                            UserProperties.setRMIRegistryPort(regPort);
                             JOptionPane.showMessageDialog(Static.tool, getResString("rmiNewRegPortIs") + " " + regPort);
                         }
 
@@ -257,7 +258,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                                 // Sollte en fehler auftreten, wir dder Errordialog wieder angezeigt.
                                 else {
                                     regPort = Integer.parseInt(rmip.getRmiRegistryPortTextFieldValue());
-                                    UserProperties.setRMIRegistryPort("" + regPort);
+                                    UserProperties.setRMIRegistryPort(regPort);
                                 }
                             }
                         }
@@ -1043,7 +1044,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         fileHandler.close();
-        UserProperties.addUsedFile(fileHandler.getFile());
+        try {
+            UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, fileHandler.getFile().getCanonicalPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         collections.remove(gdcoll);
 
@@ -1240,9 +1245,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //Liste der zuletzt geöffneten Dateien merken
         for (int i = collections.size() - 1; i >= 0; i--) {
             GDCollection gdcoll = collections.get(i);
-            UserProperties.addUsedFile(gdcoll.getFile());
+            try {
+                UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, gdcoll.getFile().getCanonicalPath());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-
         new File(Tool3lgmConstants.getClipboardPath()).delete();
 
         File temp = new File(Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html");
@@ -1292,12 +1300,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
         source.getCollection().setChanged(true);
+        repaint();
     }
 
     @Override
     public void layoutChanged(final GraphDocument source) {
         source.getCollection().setChanged(true);
-
+        repaint();
     }
 
     @Override

@@ -13,7 +13,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayab
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.isEnableSubmodelBrowser;
-import static de.imise.tool3lgm.userproperties.UserProperties.isShowPartOfHierarchy;
 import static de.imise.tool3lgm.userproperties.UserProperties.isShowUserDefinedPropertiesInModelBrowser;
 
 import java.util.Enumeration;
@@ -42,6 +41,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author N.N.
@@ -467,7 +467,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         selectionListener.setActive(false);
         createTree();
         saveExpansionState();
-        showPartOfHierarchy = isShowPartOfHierarchy();
+        showPartOfHierarchy = UserProperties.is(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
         showUserDefinedProperties = isShowUserDefinedPropertiesInModelBrowser();
         for (int ebene = MAX_LAYER_INDEX; ebene >= MIN_LAYER_INDEX; ebene--) {
             if (isInterLayer(ebene)) {

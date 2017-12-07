@@ -75,17 +75,21 @@ public class RMIPropertyPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy++;
 
-        if (UserProperties.getRMIRegistryPort() == null) {
+        if (UserProperties.getRMIRegistryPort() < 0) {
             rmiRegistryPortTextField.setText("");
         } else {
-            rmiRegistryPortTextField.setText(UserProperties.getRMIRegistryPort());
+            rmiRegistryPortTextField.setText(String.valueOf(UserProperties.getRMIRegistryPort()));
         }
     }
 
     /**
      * @return Returns the the value of rmiRegistryPortTextField.
      */
-    public String getRmiRegistryPortTextFieldValue() {
-        return rmiRegistryPortTextField.getText();
+    public int getRmiRegistryPortTextFieldValue() {
+        try {
+            return Integer.valueOf(rmiRegistryPortTextField.getText());
+        } catch (Exception e) {
+            return -1;
+        }
     }
 }

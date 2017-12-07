@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 
@@ -448,9 +449,9 @@ public class LayerContainer extends ElementContainer {
         for (NodeContainer ec : nodeContainer) {
             ec.paint(g);
         }
-
+        boolean isPaintEdgesOnlyForSelectedElements = UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
         for (EdgeContainer ec : edgeContainer) {
-            if (UserProperties.isPaintEdgesOnlyForSelectedElements()) {
+            if (isPaintEdgesOnlyForSelectedElements) {
                 Edge edge = (Edge) ec.getElement();
                 ModelElement start = edge.getStart();
                 ElementContainer startContainer = start.getContainer(doc);
@@ -468,7 +469,7 @@ public class LayerContainer extends ElementContainer {
             }
         }
 
-        if (!UserProperties.isPaintEdgesOnlyForSelectedElements()) {
+        if (!isPaintEdgesOnlyForSelectedElements) {
             for (BendpointContainer ec : bendpointContainer) {
                 ec.paint(g);
             }

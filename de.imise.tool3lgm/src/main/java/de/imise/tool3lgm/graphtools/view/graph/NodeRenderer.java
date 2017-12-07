@@ -21,6 +21,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu entscheiden, ob er sich
@@ -255,7 +256,7 @@ public final class NodeRenderer {
         }
 
         // Symbol für Verlinkung mit Teilmodell
-        if (UserProperties.isShowLinks() && kc.getKnoten().getAssociatedDoc() != null) {
+        if (kc.getKnoten().getAssociatedDoc() != null && UserProperties.is(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS)) {
             g.drawImage(linkIcon, xm + 2, yp - 13, kc);
         }
 

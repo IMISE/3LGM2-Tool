@@ -58,12 +58,12 @@ public class ChangeLocaleAction extends ExtendedAction {
         // wenn die Locale wieder zurückgestellt wurde auf die Locale mit der der Baukasten
         // grade läuft)
         if (locale.getLanguage().equals(Tool3lgmConstants.START_LOCALE.getLanguage())) {
-            UserProperties.setLocale(locale);
+            UserProperties.setLocale(locale.getLanguage());
             setSelected(true);
             return;
         }
 
-        UserProperties.setLocale(locale);
+        UserProperties.setLocale(locale.getLanguage());
         // Meldung mit neuer und alter Locale anzeigen
         Locale oldLocale = Locale.getDefault();
         Locale.setDefault(locale);

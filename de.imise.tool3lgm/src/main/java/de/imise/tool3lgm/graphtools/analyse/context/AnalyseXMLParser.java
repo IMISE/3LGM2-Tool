@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public class AnalyseXMLParser extends DefaultHandler {
 
@@ -37,7 +38,7 @@ public class AnalyseXMLParser extends DefaultHandler {
     public static final int END = 10;
 
     /**
-     * 
+     *
      */
     public static List<ElementContainer> analyze(final String str, final GraphDocument _doc) {
         AnalyseXMLParser p = new AnalyseXMLParser();
@@ -65,7 +66,7 @@ public class AnalyseXMLParser extends DefaultHandler {
     private GraphDocument doc;
 
     /**
-     * 
+     *
      */
     public AnalyseXMLParser() {
         unknown_depth = 0;
@@ -121,10 +122,12 @@ public class AnalyseXMLParser extends DefaultHandler {
                 return;
             }
             state = IN_ANALYSE;
+            boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
+            boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
             if (suchcnt == 0) {
                 if (doc.getSelectionSize() > 0) {
                     Collection<ElementContainer> selection = doc.getSelectedContainer();
-                    List<ElementContainer> connected = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, UserProperties.isSearchParts(), UserProperties.isSearchParents());
+                    List<ElementContainer> connected = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
                     resulttmp = new ArrayList<>(selection.size() + connected.size());
                     resulttmp.addAll(selection);
                     resulttmp.addAll(connected);
@@ -132,7 +135,7 @@ public class AnalyseXMLParser extends DefaultHandler {
                     resulttmp = GraphAnalyse.performSearch(doc, typ, verbundenstate, connectedNames);
                 }
             } else {
-                resulttmp = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, UserProperties.isSearchParts(), UserProperties.isSearchParents());
+                resulttmp = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
             }
             result.addAll(resulttmp);
             suchcnt++;

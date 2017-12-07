@@ -80,6 +80,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Stellt Funktionen bereit, mit denen konkrete Pfade zu definierten Metapfaden ermittelt werden können.
@@ -171,7 +172,9 @@ public final class PathFinder {
      *         NOTCONNECTED / DOUBLE
      */
     public static final int isConnected(ModelElement element1, ModelElement element2, final MetaPath metaPath) {
-        if (!UserProperties.isSearchParts() && !UserProperties.isSearchParents()) {
+        boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
+        boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
+        if (!searchParts && !searchParents) {
             return isConnected(element1, element2, metaPath, false);
         }
         int retVal = NOTCONNECTED;
@@ -179,11 +182,11 @@ public final class PathFinder {
         Set<ModelElement> list2 = new HashSet<>();
         list1.add(element1);
         list2.add(element2);
-        if (UserProperties.isSearchParts()) {
+        if (searchParts) {
             list1.addAll(element1.getPartElements());
             list2.addAll(element2.getPartElements());
         }
-        if (UserProperties.isSearchParents()) {
+        if (searchParents) {
             list1.addAll(element1.getParentElements());
             list2.addAll(element2.getParentElements());
         }

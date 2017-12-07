@@ -70,6 +70,7 @@ import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
 
@@ -322,15 +323,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //-> beim Rückgängigmachen der Verschiebungen dürfen die Unterelemente nicht durch das
         //Zürücksetzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur,
         //wenn sie beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
-        boolean isMoveSubElements = UserProperties.isMoveSubelements();
-        UserProperties.setMoveSubelements(false);
+        boolean isMoveSubElements = UserProperties.set(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, false);
         TransactionManager tman = getCollection().getTman();
         if (undo) {
             tman.undo(pid);
         } else {
             tman.redo(pid);
         }
-        UserProperties.setMoveSubelements(isMoveSubElements);
+        UserProperties.set(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, isMoveSubElements);
         transStackTable.decrease(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
@@ -2293,7 +2293,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
-        List<ElementContainer> selection = expandSelection(UserProperties.isMoveSubelements(), true);
+        boolean moveSubelements = UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);
+        List<ElementContainer> selection = expandSelection(moveSubelements, true);
         for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
                 coordinateKnot(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);

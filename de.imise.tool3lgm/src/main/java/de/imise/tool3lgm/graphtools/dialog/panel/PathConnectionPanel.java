@@ -45,6 +45,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
 
 /**
@@ -309,10 +310,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
-        if (UserProperties.isSearchParts()) {
+        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
             all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
-        if (UserProperties.isSearchParents()) {
+        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
             all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();

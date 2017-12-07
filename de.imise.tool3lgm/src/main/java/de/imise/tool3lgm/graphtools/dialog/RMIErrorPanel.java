@@ -112,10 +112,10 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
         gbc.gridx++;
         add(new JLabel(""), gbc);
 
-        if (UserProperties.getRMIRegistryPort() == null) {
+        if (UserProperties.getRMIRegistryPort() < 0) {
             rmiRegistryPortTextField.setText("");
         } else {
-            rmiRegistryPortTextField.setText(UserProperties.getRMIRegistryPort());
+            rmiRegistryPortTextField.setText(String.valueOf(UserProperties.getRMIRegistryPort()));
         }
 
         rmiAutoNextFreePortCheckBox.setSelected(true);

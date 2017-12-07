@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Panel für {@link Composition}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
@@ -111,7 +112,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             LGMTreeNode node = new LGMTreeNode(all.get(m), false);
             root.add(node);
         }
-        if (UserProperties.isSearchParts()) {
+        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
             all = ((Node) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new LGMTreeNode(all.get(m), false);
@@ -119,7 +120,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 root.add(node);
             }
         }
-        if (UserProperties.isSearchParents()) {
+        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
             all = ((Node) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new LGMTreeNode(all.get(m), false);

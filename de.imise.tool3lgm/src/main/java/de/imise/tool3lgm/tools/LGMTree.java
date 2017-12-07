@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
 public class LGMTree extends CorrectSelectionTree {
@@ -46,8 +47,8 @@ public class LGMTree extends CorrectSelectionTree {
             if (checkAlreadyAdded && elementsAdded.contains(kc)) {
                 return null;
             }
-
-            if (UserProperties.isShowPartOfHierarchy() && !force && !kc.getElement().getParentElements().isEmpty()) {
+            boolean showPartOfHierarchy = UserProperties.is(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
+            if (showPartOfHierarchy && !force && !kc.getElement().getParentElements().isEmpty()) {
                 return null;
             }
             LGMTreeNode elementNode = new LGMTreeNode(kc, false, true);
@@ -57,7 +58,7 @@ public class LGMTree extends CorrectSelectionTree {
 
             parent.add(elementNode);
             elementsAdded.add(kc);
-            if (UserProperties.isShowPartOfHierarchy()) {
+            if (showPartOfHierarchy) {
                 addChildren(elementNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);
             }
 

@@ -38,6 +38,7 @@ import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.event.action.SubmodelAction;
+import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
@@ -85,6 +86,8 @@ import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
@@ -119,7 +122,6 @@ public class ActionLibrary {
 
         /** Öffnen eines bestehenden Models */
         public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
-
             @Override
             protected void actionPerformed() {
                 getTool().openFile(true);
@@ -447,9 +449,19 @@ public class ActionLibrary {
          * sind
          */
         public static final Action[] getLastUsedFilesOpenActions() {
-            List<File> files = UserProperties.getLastUsedFiles();
+            List<String> fileNames = UserProperties.getListValues(StringProperty.LAST_USED_MODEL_FILES);
+            List<File> files = new ArrayList<>();
+            for (String fileName : fileNames) {
+                File file = new File(fileName);
+                try {
+                    if (file.canRead()) {
+                        files.add(file);
+                    }
+                } catch (Exception e) {
+                    //nichts machen
+                }
+            }
             Action[] actions = new Action[files.size()];
-
             for (int i = 0; i < actions.length; i++) {
                 final File file = files.get(i);
                 actions[i] = new AbstractAction(file.getName()) {
@@ -1067,14 +1079,7 @@ public class ActionLibrary {
         public static class Graphics {
 
             /** (De-)Aktiviert das Zeichnen von Kanten nur für selektierte Elemente */
-            public static final Action PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS = new StaticAction(ActionIdentifier.paintEdgesOnlyForSelectedElements, (Boolean) UserProperties.isPaintEdgesOnlyForSelectedElements()) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    UserProperties.setPaintEdgesOnlyForSelectedElements(isSelected());
-                    repaintTool();
-                }
-            };
+            public static final Action OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
 
             /**
              * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
@@ -1099,12 +1104,7 @@ public class ActionLibrary {
             };
 
             /** (De-)Aktiviert die Verwendung eines Rasters */
-            public static final Action USE_RASTER = new GlobalOptionAction(ActionIdentifier.useRaster, UserProperties.isUseRaster()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setUseRaster(isSelected());
-                }
-            };
+            public static final Action OPTION_USE_RASTER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_USE_RASTER);
 
             /** (De-)Aktiviert das Zeichnen eines Rasters */
             public static final Action SHOW_RASTER = new GlobalOptionAction(ActionIdentifier.showRaster, UserProperties.isShowRaster()) {
@@ -1115,13 +1115,7 @@ public class ActionLibrary {
             };
 
             /** (De-)Aktiviert das Kennzeichnen von Modelelementen mit verknüpften Teilmodellen */
-            public static final Action SIGNIFY_LINKED_ELEMENTS = new StaticAction(ActionIdentifier.signify_linked_elements, (Boolean) UserProperties.isShowLinks()) {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    UserProperties.setShowLinks(isSelected());
-                    repaintTool();
-                }
-            };
+            public static final Action OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS);
 
             /** Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde. */
             public static final StaticAction HIDE_UNHIDE_UNASSOCIATED[] = create_HIDE_UNHIDE_UNASSOCIATED_Actions();
@@ -1235,21 +1229,14 @@ public class ActionLibrary {
          */
         public static class PartOf {
 
-            /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Suche */
-            public static final Action CONSIDER_PARENTS = new GlobalOptionAction(ActionIdentifier.consider_parents, UserProperties.isSearchParents()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setSearchParents(isSelected());
-                }
-            };
+            /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Vererbung von Eigenschaften */
+            public static final Action OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
+
+            /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Vererbung von Eigenschaften */
+            public static final Action OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
 
             /** (De-)Aktiviert das hierarchische Anzeigen der Part-Of-Beziehnung im ModelBrowser */
-            public static final Action HIERARCHICAL = new GlobalOptionAction(ActionIdentifier.show_hierarchical, UserProperties.isShowPartOfHierarchy()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setShowPartOfHierarchy(isSelected());
-                }
-            };
+            public static final Action OPTION_SHOW_PART_OF_HIERARCHY = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
 
             /** (De-)Aktiviert das Anzeigen der Vergröberung */
             public static final Action SIGNIFY_COARSEMENT = new GlobalOptionAction(ActionIdentifier.signify_coarsement, UserProperties.isShowExpansionSign()) {
@@ -1260,12 +1247,7 @@ public class ActionLibrary {
             };
 
             /** (De-)Aktiviert das automatische Verschieben untergeordneter Elemente */
-            public static final Action AUTO_MOVE_CHILDREN = new GlobalOptionAction(ActionIdentifier.auto_move_children, UserProperties.isMoveSubelements()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setMoveSubelements(isSelected());
-                }
-            };
+            public static final Action OPTION_GRAPH_MOVE_SUBELEMENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);
         }
 
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
@@ -1278,11 +1260,11 @@ public class ActionLibrary {
                 // Nach dem OK, werden die Values des Panels abgefragt.
                 RMIPropertyPanel rmip = new RMIPropertyPanel();
 
-                String oldRegPort = UserProperties.getRMIRegistryPort();
+                int oldRegPort = UserProperties.getRMIRegistryPort();
                 if (JOptionPane.showOptionDialog(null, rmip, getResString("rmi_settings"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
                     UserProperties.setRMIRegistryPort(rmip.getRmiRegistryPortTextFieldValue());
                 }
-                if (!oldRegPort.equals(UserProperties.getRMIRegistryPort())) {
+                if (oldRegPort != UserProperties.getRMIRegistryPort()) {
                     JOptionPane.showMessageDialog(getTool(), getResString("RMI_SETTINGS_INFO"));
                 }
             }
