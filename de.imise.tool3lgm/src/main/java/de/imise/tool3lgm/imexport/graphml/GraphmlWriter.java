@@ -111,7 +111,9 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         String fullIdPrefix = Strings.isNullOrEmpty(idPrefix) ? null : idPrefix + ":";
         LayerContainer lc = szenario.getLayer(layer);
         for (NodeContainer nc : lc.getKnoten()) {
-            writeNode(nc, fullIdPrefix);
+            if (nc.isVisible()) {
+                writeNode(nc, fullIdPrefix);
+            }
         }
     }
 
@@ -174,17 +176,19 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
         LayerContainer lc = szenario.getLayer(layer);
         for (EdgeContainer ec : lc.getKanten()) {
             Edge edge = ec.getEdge();
-            String id = edge.getHashString();
-            String startId = edge.getStart().getHashString();
-            String endId = edge.getEnd().getHashString();
-            if (!Strings.isNullOrEmpty(idPrefix)) {
-                id = fullIdPrefix + id;
-                startId = fullIdPrefix + startId;
-                endId = fullIdPrefix + endId;
+            if (ec.isVisible()) {
+                String id = edge.getHashString();
+                String startId = edge.getStart().getHashString();
+                String endId = edge.getEnd().getHashString();
+                if (!Strings.isNullOrEmpty(idPrefix)) {
+                    id = fullIdPrefix + id;
+                    startId = fullIdPrefix + startId;
+                    endId = fullIdPrefix + endId;
+                }
+                writeStartElement("edge", "id", id, "source", startId, "target", endId); // start egde
+                writeEdgeContent(ec);
+                writeEndElement(); // end edge
             }
-            writeStartElement("edge", "id", id, "source", startId, "target", endId); // start egde
-            writeEdgeContent(ec);
-            writeEndElement(); // end edge
         }
     }
 
