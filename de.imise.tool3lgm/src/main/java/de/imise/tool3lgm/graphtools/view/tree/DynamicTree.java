@@ -12,7 +12,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.TREE_PHYSICA
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.userproperties.UserProperties.isEnableSubmodelBrowser;
 import static de.imise.tool3lgm.userproperties.UserProperties.isShowUserDefinedPropertiesInModelBrowser;
 
 import java.util.Enumeration;
@@ -282,14 +281,15 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         ElementContainer kc = (ElementContainer) elementNode.getUserObject();
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-        List<ElementContainer> all = kc.getElement().getDirectPartContainer(isEnableSubmodelBrowser() ? selDoc : maindoc);
+        boolean isEnableSubmodelBrowser = UserProperties.is(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
+        List<ElementContainer> all = kc.getElement().getDirectPartContainer(isEnableSubmodelBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer pc : all) {
             ModelElement me = pc.getElement();
             ElementContainer ecSelDoc = me.getContainer(selDoc);
             if (ecSelDoc != null) {
                 pc = ecSelDoc;
             }
-            if (isEnableSubmodelBrowser()) {
+            if (isEnableSubmodelBrowser) {
                 if (!me.isUnique() && ecSelDoc == null) {
                     continue;
                 }
@@ -304,7 +304,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             LGMTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                List<ElementContainer> directParentElements = me.getDirectParentContainer(isEnableSubmodelBrowser() ? selDoc : maindoc);
+                List<ElementContainer> directParentElements = me.getDirectParentContainer(isEnableSubmodelBrowser ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
@@ -469,13 +469,14 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         saveExpansionState();
         showPartOfHierarchy = UserProperties.is(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
         showUserDefinedProperties = isShowUserDefinedPropertiesInModelBrowser();
+        boolean isEnableSubmodelBrowser = UserProperties.is(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
         for (int ebene = MAX_LAYER_INDEX; ebene >= MIN_LAYER_INDEX; ebene--) {
             if (isInterLayer(ebene)) {
                 continue;
             }
             for (NodeContainer nc : maindoc.getLayer(ebene).getKnotenAlphabetical()) {
                 ModelElement me = nc.getElement();
-                if (UserProperties.isEnableSubmodelBrowser()) {
+                if (isEnableSubmodelBrowser) {
                     if (me.isUnique()) {
                         if (showPartOfHierarchy && nc.hasParent(maindoc)) {
                             continue;

@@ -51,7 +51,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ZUKLAPPEN;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.userproperties.UserProperties.isEnableSubmodelBrowser;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -99,6 +98,8 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
@@ -484,7 +485,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             szenario_menu.add(item);
 
-            if (isEnableSubmodelBrowser() && szen == Static.getSelectedDoc()) {
+            if (UserProperties.is(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER) && szen == Static.getSelectedDoc()) {
                 item.setEnabled(false);
                 continue;
             }

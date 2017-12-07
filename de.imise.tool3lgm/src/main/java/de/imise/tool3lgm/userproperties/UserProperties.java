@@ -426,23 +426,6 @@ public class UserProperties {
         UserProperties.renderingHints = Integer.valueOf(renderingHints);
     }
 
-    ///////////////////////////
-    // enableSubmodelBrowser //
-    ///////////////////////////
-
-    /** Modellbrowser für Teilmodelle zeigen nur Elemente des Teilmodells an. (bei <code>false</code> werden alle angezeigt) */
-    private static boolean enableSubmodelBrowser;
-
-    /** @return enableSubmodelBrowser */
-    public static boolean isEnableSubmodelBrowser() {
-        return enableSubmodelBrowser;
-    }
-
-    /** @param b */
-    public static void setEnableSubmodelBrowser(final boolean b) {
-        enableSubmodelBrowser = b;
-    }
-
     /////////////////////////////////
     // showModelsInSeparateBrowser //
     /////////////////////////////////

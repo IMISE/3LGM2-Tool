@@ -1198,12 +1198,7 @@ public class ActionLibrary {
         public static class ModelBrowser {
 
             /** (De-)Aktiviert das Teilmodell-spezifische Layout des ModelBrowsers */
-            public static final Action SUBMODEL_SPECIFIC = new GlobalOptionAction(ActionIdentifier.submodel_specific, UserProperties.isEnableSubmodelBrowser()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setEnableSubmodelBrowser(isSelected());
-                }
-            };
+            public static final Action SUBMODEL_SPECIFIC = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
 
             /** (De-)Aktiviert das parallele Anzeigen aller ModelBrowser */
             public static final Action SHOW_MULTIPLE_BROSERS = new GlobalOptionAction(ActionIdentifier.show_multiple_browsers, UserProperties.isShowModelsInSeparateBrowser()) {
