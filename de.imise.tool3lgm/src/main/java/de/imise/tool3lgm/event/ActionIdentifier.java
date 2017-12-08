@@ -90,11 +90,8 @@ public enum ActionIdentifier {
     // graphicOptions
     analysis_color,
     rendering_options,
-    showRaster,
     HIDE_UNASSOCIATED,
     UNHIDE_ALL,
-    automatic_coloring,
-    show_tooltips,
     signify_coarsement,
     rmi_settings,
     // localeOptions
