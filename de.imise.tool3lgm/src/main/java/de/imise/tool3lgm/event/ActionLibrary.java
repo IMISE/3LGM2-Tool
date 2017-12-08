@@ -1107,12 +1107,7 @@ public class ActionLibrary {
             public static final Action OPTION_USE_RASTER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_USE_RASTER);
 
             /** (De-)Aktiviert das Zeichnen eines Rasters */
-            public static final Action SHOW_RASTER = new GlobalOptionAction(ActionIdentifier.showRaster, UserProperties.isShowRaster()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setShowRaster(isSelected());
-                }
-            };
+            public static final Action OPTION_SHOW_RASTER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_RASTER);
 
             /** (De-)Aktiviert das Kennzeichnen von Modelelementen mit verknüpften Teilmodellen */
             public static final Action OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS);

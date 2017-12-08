@@ -1246,9 +1246,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         for (int i = collections.size() - 1; i >= 0; i--) {
             GDCollection gdcoll = collections.get(i);
             try {
-                UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, gdcoll.getFile().getCanonicalPath());
+                File file = gdcoll.getFile();
+                String path = file.getCanonicalPath();
+                UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, path);
             } catch (Exception ex) {
-                ex.printStackTrace();
             }
         }
         new File(Tool3lgmConstants.getClipboardPath()).delete();

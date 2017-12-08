@@ -451,21 +451,8 @@ public class UserProperties {
         UserProperties.renderingHints = Integer.valueOf(renderingHints);
     }
 
-    /** Wenn <code>true</code> wird in der Grafik das Raster gezeichnet. */
-    private static boolean showRaster;
-
-    /** @return showRaster */
-    public static boolean isShowRaster() {
-        return showRaster;
-    }
-
-    /** @param b */
-    public static void setShowRaster(final boolean b) {
-        showRaster = b;
-    }
-
     /** Rasterweite */
-    private static int rasterWidth = 5;
+    private static int rasterWidth = 7;
 
     /** @param b */
     public static void setRasterWidth(final int i) {

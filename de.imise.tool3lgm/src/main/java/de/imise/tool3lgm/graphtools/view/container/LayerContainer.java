@@ -361,7 +361,7 @@ public class LayerContainer extends ElementContainer {
                 gc.setStroke(duenn);
             }
 
-            if (UserProperties.isShowRaster() && paintState != PaintState.WEBEXPORT) {
+            if (UserProperties.is(BooleanProperty.OPTION_SHOW_RASTER) && paintState != PaintState.WEBEXPORT) {
                 Stroke stk = gc.getStroke();
                 g.setColor(Color.darkGray);
                 int maxX = page_width / 2 + 1;
