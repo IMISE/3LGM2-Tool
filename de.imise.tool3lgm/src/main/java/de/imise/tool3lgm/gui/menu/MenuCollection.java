@@ -163,8 +163,8 @@ public class MenuCollection {
 
         /** Das Grafik-Optionen-Menu */
         public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", createCheckBoxItem(Graphics.OPTION_USE_RASTER), createCheckBoxItem(Graphics.OPTION_SHOW_RASTER),
-                createCheckBoxItem(Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS), createCheckBoxItem(Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS), Graphics.HIDE_UNHIDE_UNASSOCIATED, createCheckBoxItem(Graphics.AUTOMATIC_COLORING),
-                createCheckBoxItem(PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS), createCheckBoxItem(PartOf.SIGNIFY_COARSEMENT), Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
+                createCheckBoxItem(Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS), createCheckBoxItem(Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS), Graphics.HIDE_UNHIDE_UNASSOCIATED,
+                createCheckBoxItem(Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS), createCheckBoxItem(PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS), createCheckBoxItem(PartOf.SIGNIFY_COARSEMENT), Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
 

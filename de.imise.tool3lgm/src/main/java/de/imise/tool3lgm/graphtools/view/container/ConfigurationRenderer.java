@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public class ConfigurationRenderer {
 
@@ -60,7 +61,7 @@ public class ConfigurationRenderer {
                 configurationStart.setInterLayerConnectionColor(STANDARD_COLORS[colorCounter]);
             }
             Color elem_col = null;
-            if (UserProperties.isAssignConfigurationColors()) {
+            if (UserProperties.is(BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS)) {
                 elem_col = configurationStart.getInterLayerConnectionColor();
             } else {
                 elem_col = Color.black;

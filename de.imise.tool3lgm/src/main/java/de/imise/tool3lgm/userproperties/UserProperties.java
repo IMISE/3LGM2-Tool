@@ -464,23 +464,6 @@ public class UserProperties {
         return rasterWidth;
     }
 
-    ///////////////////////////////
-    // assignConfigurationColors //
-    ///////////////////////////////
-
-    /** Jede Konfigutarion bekommt eine eigene Farbe und ist nicht nur schwarz */
-    private static boolean assignConfigurationColors;
-
-    /** @return assignConfigurationColors */
-    public static boolean isAssignConfigurationColors() {
-        return assignConfigurationColors;
-    }
-
-    /** @param b */
-    public static void setAssignConfigurationColors(final boolean b) {
-        assignConfigurationColors = b;
-    }
-
     //////////////////
     // showToolTips //
     //////////////////
