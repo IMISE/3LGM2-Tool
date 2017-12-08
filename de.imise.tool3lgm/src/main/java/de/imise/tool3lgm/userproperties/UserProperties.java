@@ -451,46 +451,6 @@ public class UserProperties {
         UserProperties.renderingHints = Integer.valueOf(renderingHints);
     }
 
-    /////////////////////////////////////////////
-    // showUserDefinedPropertiesInModelBrowser //
-    /////////////////////////////////////////////
-
-    /** Benutzerdefinierte Eigenschaften im Modellbrowser darstellen */
-    private static boolean showUserDefinedPropertiesInModelBrowser;
-
-    /** @return showUserDefinedProperties */
-    public static boolean isShowUserDefinedPropertiesInModelBrowser() {
-        return showUserDefinedPropertiesInModelBrowser;
-    }
-
-    /** @param b */
-    public static void setShowUserDefinedPropertiesInModelBrowser(final boolean b) {
-        showUserDefinedPropertiesInModelBrowser = b;
-    }
-
-    ///////////////////////
-    // usePropertyColors //
-    ///////////////////////
-
-    /**
-     * AXS: Das hier hat irgendwas mit der Farbe von benutzerdef. Eigenschaften im Baum zu tun.
-     * Wenn die im Baum angezeigt werden, dann soll wohl ihre Farbe auf das dazugehörige ModelElement
-     * im Baum übertragen werden. Wer auch immer das implementiert hat, hat es nicht zuende programmiert.
-     * Mir ist nicht klar, wozu das gut sein könnte, da man für benutzerdef. Eigenschaften gar keine
-     * Farbe setzen kann.
-     */
-    private static boolean usePropertyColors;
-
-    /** @return usePropertyColors */
-    public static boolean isUsePropertyColors() {
-        return usePropertyColors;
-    }
-
-    /** @param usePropertyColors The usePropertyColors to set. */
-    public static void setUsePropertyColors(final boolean b) {
-        usePropertyColors = b;
-    }
-
     /** Wenn <code>true</code> wird in der Grafik das Raster gezeichnet. */
     private static boolean showRaster;
 

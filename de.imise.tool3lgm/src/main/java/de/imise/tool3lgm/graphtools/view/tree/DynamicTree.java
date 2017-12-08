@@ -12,7 +12,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.TREE_PHYSICA
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.userproperties.UserProperties.isShowUserDefinedPropertiesInModelBrowser;
 
 import java.util.Enumeration;
 import java.util.List;
@@ -612,6 +611,10 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
                 expandPath(path);
             }
         }
+    }
+
+    private boolean isShowUserDefinedPropertiesInModelBrowser() {
+        return UserProperties.is(BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
     }
 
     ///////////////////////

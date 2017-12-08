@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
@@ -163,7 +164,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         if (is(okButton)) {
             dispose();
             gdcoll.removeUserFieldValues(removedUserFields);
-            if (!UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {
+            if (!UserProperties.is(BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER)) {
                 return;
             }
             GDCollection gdcoll = definitions.getCollection();

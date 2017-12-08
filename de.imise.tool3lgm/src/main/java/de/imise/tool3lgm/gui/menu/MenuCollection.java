@@ -159,7 +159,7 @@ public class MenuCollection {
         /** Das Browser-Optionen-Menu */
         public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", createCheckBoxItem(ModelBrowser.SUBMODEL_SPECIFIC), createCheckBoxItem(ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER),
                 //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
-                new JSeparator(), createCheckBoxItem(ModelBrowser.USERDEFINED_PROPERTIES));
+                new JSeparator(), createCheckBoxItem(ModelBrowser.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER));
 
         /** Das Grafik-Optionen-Menu */
         public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", createCheckBoxItem(Graphics.OPTION_USE_RASTER), createCheckBoxItem(Graphics.SHOW_RASTER), createCheckBoxItem(Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS),

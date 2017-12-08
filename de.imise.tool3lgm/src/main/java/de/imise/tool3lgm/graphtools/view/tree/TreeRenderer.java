@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
@@ -49,7 +50,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 
         if (!node.isSelectable()) {
             setTextNonSelectionColor(Color.gray);
-        } else if (UserProperties.isUsePropertyColors()) {
+        } else if (UserProperties.is(BooleanProperty.OPTION_USE_PROPERTY_COLORS)) {
             setTextNonSelectionColor(node.getSignalColor());
         } else {
             setTextNonSelectionColor(Color.black);
