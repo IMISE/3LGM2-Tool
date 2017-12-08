@@ -464,23 +464,6 @@ public class UserProperties {
         return rasterWidth;
     }
 
-    //////////////////
-    // showToolTips //
-    //////////////////
-
-    /** zeige ToolTip mit Beschreibung der ModelElemente */
-    private static boolean showToolTips;
-
-    /** @return showToolTips */
-    public static boolean isShowToolTips() {
-        return showToolTips;
-    }
-
-    /** @param b */
-    public static void setShowToolTips(final boolean value) {
-        showToolTips = value;
-    }
-
     ////////////////////////////
     // newSubmodelForAnalysis //
     ////////////////////////////

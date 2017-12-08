@@ -1157,14 +1157,6 @@ public class ActionLibrary {
             /** (De-)Aktiviert die automatische Farbzuweisung zu Konfigurationslinien */
             public static final Action OPTION_ASSIGN_CONFIGURATION_COLORS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS);
 
-            /** (De-)Aktiviert das Anzeigen von Tooltips im 3lgm */
-            public static final Action TOOLTIPS = new StaticAction(ActionIdentifier.show_tooltips, UserProperties.isShowToolTips()) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    throw new UnsupportedOperationException("Tooltips werden nicht unterstützt");
-                }
-            };
         }
 
         /**
