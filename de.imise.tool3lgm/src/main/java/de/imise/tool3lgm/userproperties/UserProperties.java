@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.userproperties;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,10 +20,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.util.io.FileHandler;
 
 /**
@@ -31,35 +31,57 @@ public class UserProperties {
 
     static Properties properties = new Properties();
 
-    //    /**
-    //     * Stellt Property-Change-Funktionalität zur Verfügung. <br>
-    //     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-    //     * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
-    //     */
-    //    private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
-    //
-    //    ///////////////////////////////////////////////////
-    //    // Listener hinzufügen/entfernen/benachrichtigen //
-    //    ///////////////////////////////////////////////////
-    //
-    //    /**
-    //     * Fügt einen <code>PropertyChangeListener</code> hinzu
-    //     *
-    //     * @param listener
-    //     */
-    //    public static final void addPropertyChangeListener(final PropertyChangeListener listener) {
-    //        changeSupport.addPropertyChangeListener(listener);
-    //    }
-    //
-    //    /**
-    //     * Entfernt einen <code>PropertyChangeListener</code>
-    //     *
-    //     * @param listener
-    //     */
-    //    public static final void removePropertyChangeListener(final PropertyChangeListener listener) {
-    //        changeSupport.removePropertyChangeListener(listener);
-    //    }
-    //
+    /**
+     * Stellt Property-Change-Funktionalität zur Verfügung. <br>
+     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
+     * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
+     */
+    private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
+
+    ///////////////////////////////////////////////////
+    // Listener hinzufügen/entfernen/benachrichtigen //
+    ///////////////////////////////////////////////////
+
+    /**
+     * Fügt einen <code>PropertyChangeListener</code> hinzu
+     *
+     * @param listener
+     */
+    public static final void addPropertyChangeListener(final PropertyChangeListener listener) {
+        changeSupport.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Entfernt einen <code>PropertyChangeListener</code>
+     *
+     * @param listener
+     */
+    public static final void removePropertyChangeListener(final PropertyChangeListener listener) {
+        changeSupport.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Sendet an alle PropertyChangeListener das Ereignis, dass sich etwas geändert hat
+     *
+     * @param property
+     * @param oldValue
+     * @param newValue
+     */
+    public static final void firePropertyChange(final Object property, final String oldValue, final String newValue) {
+        changeSupport.firePropertyChange(property.toString(), oldValue, newValue);
+    }
+
+    /**
+     * Prüft, ob das ChangeEvent für das übergebene Property-Objekt ausgelöst wurde
+     *
+     * @param property
+     * @param event
+     * @return
+     */
+    public static final boolean isPropertyChange(final Object property, final PropertyChangeEvent event) {
+        return property.toString().equals(event.getPropertyName());
+    }
+
     /**
      * Liest die Benutzeroptionen ein.<br>
      * Je nachdem, ob bereits eine Datei mit Optionen im Home-Pfad des Benutzers existiert, wird diese geladen,
@@ -80,7 +102,10 @@ public class UserProperties {
     }
 
     private static Object put(final Object key, final Object value) {
-        return properties.put(key.toString(), String.valueOf(value));
+        String newValue = String.valueOf(value);
+        Object oldValue = properties.put(key.toString(), newValue);
+        firePropertyChange(key, oldValue == null ? null : oldValue.toString(), newValue);
+        return oldValue;
     }
 
     public static boolean is(final BooleanProperty property) {
