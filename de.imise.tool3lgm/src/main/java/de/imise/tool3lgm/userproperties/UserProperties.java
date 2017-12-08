@@ -451,37 +451,6 @@ public class UserProperties {
         UserProperties.renderingHints = Integer.valueOf(renderingHints);
     }
 
-    /////////////////////////////////
-    // showModelsInSeparateBrowser //
-    /////////////////////////////////
-
-    /** show ModelBrowsers sidy by side or all models in one browser */
-    private static boolean showModelsInSeparateBrowser;
-
-    /**
-     * Wenn <code>true</code>, werden alle Modelbrowser nebeneinander angezeigt, bei <code>false</code> werden alle in einem TabPanel untergebracht.
-     *
-     * @return multipleModelBrowser from <code>ModelBrowserPanel</code>
-     */
-    public static boolean isShowModelsInSeparateBrowser() {
-        return showModelsInSeparateBrowser;
-    }
-
-    /**
-     * Wenn <code>true</code>, werden alle Modelbrowser nebeneinander angezeigt, bei <code>false</code> werden alle in einem TabPanel untergebracht.
-     */
-    public static void setShowModelsInSeparateBrowser(final boolean b) {
-        showModelsInSeparateBrowser = b;
-        Tool3lgm tool = Static.getTool();
-        if (tool == null) {
-            return;
-        }
-        ModelBrowserPanel mbp = tool.getModelBrowserPanel();
-        if (mbp != null) {
-            mbp.updateShowModelsInSeparateBrowser();
-        }
-    }
-
     /////////////////////////////////////////////
     // showUserDefinedPropertiesInModelBrowser //
     /////////////////////////////////////////////

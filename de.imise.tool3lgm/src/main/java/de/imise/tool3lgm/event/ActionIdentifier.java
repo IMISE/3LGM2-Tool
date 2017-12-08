@@ -86,7 +86,6 @@ public enum ActionIdentifier {
     removeWarning,
     // browserOptions
     submodel_specific,
-    show_multiple_browsers,
     show_userdefinded_properties,
     // graphicOptions
     analysis_color,

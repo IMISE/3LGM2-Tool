@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -16,11 +18,12 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author Rudi, AXS
  */
-public final class ModelBrowserPanel extends JPanel {
+public final class ModelBrowserPanel extends JPanel implements PropertyChangeListener {
 
     /** show ModelBrowsers sidy by side or all models in one browser */
     protected boolean showModelsInSeparateBrowser = false;
@@ -40,8 +43,9 @@ public final class ModelBrowserPanel extends JPanel {
     public ModelBrowserPanel() {
         super();
         setLayout(new GridLayout(1, 1, 0, 0));
-        showModelsInSeparateBrowser = UserProperties.isShowModelsInSeparateBrowser();
+        showModelsInSeparateBrowser = UserProperties.is(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
         inactiveColor = new ModelBrowser().getForeground();
+        UserProperties.addPropertyChangeListener(this);
     }
 
     /**
@@ -158,22 +162,19 @@ public final class ModelBrowserPanel extends JPanel {
     /**
      * @param value
      */
-    public void updateShowModelsInSeparateBrowser() {
-
+    private void updateShowModelsInSeparateBrowser() {
         //wenn nichts zu tun ist -> raus
-        if (showModelsInSeparateBrowser == UserProperties.isShowModelsInSeparateBrowser()) {
+        boolean showModelsInSeparateBrowser = UserProperties.is(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
+        if (this.showModelsInSeparateBrowser == showModelsInSeparateBrowser) {
             return;
         }
         //Zuerst das aktuell selektierte GraphDocument holen. Das muss noch mit dem alten globalen Wert
         //von showModelsInSeparateBrowser passieren, sonst kommt hier null zurück
         GraphDocument activeDoc = getSelectedDoc();
-
         //erst jetzt den neuen Wert setzen, weil getSelectedDoc() nur das Richtige tut, wenn
         //noch der alte Wert gesetzt ist
-        showModelsInSeparateBrowser = UserProperties.isShowModelsInSeparateBrowser();
-
+        this.showModelsInSeparateBrowser = showModelsInSeparateBrowser;
         ModelBrowser firstBrowser = getFirstBrowser();
-
         if (showModelsInSeparateBrowser) {
             setLayout(new GridLayout(1, Math.max(firstBrowser.getTabCount(), 1), 0, 0));
             while (firstBrowser.getTabCount() > 1) {
@@ -192,9 +193,15 @@ public final class ModelBrowserPanel extends JPanel {
             }
             setLayout(new GridLayout(1, 1, 0, 0));
         }
-
         Static.setSelectedDoc(activeDoc, true);
-
         revalidate();
     }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER, evt)) {
+            updateShowModelsInSeparateBrowser();
+        }
+    }
+
 }

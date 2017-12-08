@@ -1201,12 +1201,7 @@ public class ActionLibrary {
             public static final Action SUBMODEL_SPECIFIC = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
 
             /** (De-)Aktiviert das parallele Anzeigen aller ModelBrowser */
-            public static final Action SHOW_MULTIPLE_BROSERS = new GlobalOptionAction(ActionIdentifier.show_multiple_browsers, UserProperties.isShowModelsInSeparateBrowser()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setShowModelsInSeparateBrowser(isSelected());
-                }
-            };
+            public static final Action OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
 
             /** (De-)Aktiviert das Anzeigen der benutzdefinierten Eigenschaften im ModelBrowser */
             public static final Action USERDEFINED_PROPERTIES = new GlobalOptionAction(ActionIdentifier.show_userdefinded_properties, UserProperties.isShowUserDefinedPropertiesInModelBrowser()) {

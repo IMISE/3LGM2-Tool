@@ -16,6 +16,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.TabbedPane;
 
 /** Erzeugt ModelBrowser für 3lgm */
@@ -174,12 +175,13 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * Hebt den aktiven Tab hervor und löscht die Hervorhebung beim letzten aktiven Tab.
      */
     private void updateActiveBrowserTab() {
-        if (UserProperties.isShowModelsInSeparateBrowser() && lastActiveBrowser == this) {
+        boolean isShowModelsInSeparateBrowser = UserProperties.is(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
+        if (isShowModelsInSeparateBrowser && lastActiveBrowser == this) {
             return;
         }
         int index = -1;
         if (lastActiveBrowser != null) {
-            if (UserProperties.isShowModelsInSeparateBrowser()) {
+            if (isShowModelsInSeparateBrowser) {
                 index = lastActiveBrowser.getSelectedIndex();
             } else {
                 for (int i = 0; i < lastActiveBrowser.getTabCount(); i++) {
