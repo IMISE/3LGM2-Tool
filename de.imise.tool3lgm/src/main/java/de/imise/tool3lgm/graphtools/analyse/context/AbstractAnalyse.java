@@ -9,6 +9,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public abstract class AbstractAnalyse {
 
@@ -16,7 +17,7 @@ public abstract class AbstractAnalyse {
     protected String name;
 
     /** der Node, bei dem die Analyse beginnt. */
-    protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<Class<? extends ModelElement>>();
+    protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<>();
 
     /**
      * Gibt den Namen der XMLAnalyse zurück.
@@ -70,7 +71,7 @@ public abstract class AbstractAnalyse {
     public final void setAnalysisResult(final GraphDocument doc) {
         List<ElementContainer> result = getResult(doc);
         if (result != null) {
-            if (UserProperties.isNewSubmodelForAnalysis()) {
+            if (UserProperties.is(BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT)) {
                 doc.addContainerToNewSzenario(result, TransactionManager.STANDARD_PID);
             } else {
                 doc.setAnalysisResult(result);

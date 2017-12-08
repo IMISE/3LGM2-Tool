@@ -275,7 +275,7 @@ public class UserProperties {
         /** Tooltips an/aus */
         OPTION_SHOW_TOOL_TIPS,
         /** Analyseergebnisse werden automatisch in einem neuen Teilmodell eingefügt (true) oder nur in der Grafik hervorgehoben */
-        OPTION_NEW_SUBMODEL_FOR_ANALYSIS,
+        OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT,
         /** Medienbrüche werden in der Grafik angezeigt */
         OPTION_SHOW_MEDIUM_BREAKS,
         /** Kennzahlberechnung an/aus */
@@ -462,23 +462,6 @@ public class UserProperties {
     /** @return rasterWidth */
     public static int getRasterWidth() {
         return rasterWidth;
-    }
-
-    ////////////////////////////
-    // newSubmodelForAnalysis //
-    ////////////////////////////
-
-    /** Ergebniselemente einer XMLAnalyse werden in ein neues Teilmodell übernommen */
-    private static boolean newSubmodelForAnalysis;
-
-    /** @return newSubmodelForAnalysis */
-    public static boolean isNewSubmodelForAnalysis() {
-        return newSubmodelForAnalysis;
-    }
-
-    /** @param b */
-    public static void setNewSubmodelForAnalysis(final boolean b) {
-        newSubmodelForAnalysis = b;
     }
 
     ///////////////////////
