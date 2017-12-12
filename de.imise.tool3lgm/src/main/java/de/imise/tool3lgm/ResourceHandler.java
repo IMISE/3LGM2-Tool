@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -27,7 +28,6 @@ public class ResourceHandler {
      * @return Liste aller Dateien mit der angegebenen Endung im angegebenen Resourcenverzeichnis
      */
     protected final String[] getFileNames(final String fileExtension, final String devTimeResourceBaseDirName, final String jarResourceBaseDirName) {
-
         // Zur Entwicklungszeit liegen die Dateien in einem Ordner -> Dateien von dort laden, ABER
         // bei Herausgabe des Tools liegen die Dateien in der jar-Datei im Resourcenpfad -> catch-Fall
         try {
@@ -55,46 +55,47 @@ public class ResourceHandler {
             // wenn der Ordner mit den Dateien nicht gefunden wurde, weil er sich sicherlich in der
             // herausgegebenen Jar-Datei versteckt -> lies die Dateien aus der Jar-Datei
         } catch (Exception e) {
-
             Enumeration<JarEntry> entries = null;
-
+            JarFile jarFile = null;
             try {
-                JarFile jarFile = new JarFile(ABSOLUTE_TOOL_JAR_PATH);
+                jarFile = new JarFile(ABSOLUTE_TOOL_JAR_PATH);
                 entries = jarFile.entries();
-                jarFile.close();
             } catch (IOException e1) {
                 // e1.printStackTrace();
             }
-
             String packagePattern = jarResourceBaseDirName + UserProperties.getLocale().getLanguage() + "/[^/]+\\." + fileExtension;
-            ArrayList<JarEntry> jarEntries = new ArrayList<>();
+            List<JarEntry> jarEntries = new ArrayList<>();
 
-            if (entries == null) {
-                return new String[0];
-            }
+            String[] fileNames = new String[0];
 
-            while (entries.hasMoreElements()) {
-                JarEntry jarEntry = entries.nextElement();
-                if (jarEntry.getName().matches(packagePattern)) {
-                    jarEntries.add(jarEntry);
-                }
-            }
-            // wenn für die aktuelle Locale-Sprache keine Dateien gefunden wurden -> lade die Englischen
-            if (jarEntries.size() == 0) {
-                packagePattern = jarResourceBaseDirName + "en/[^/]+\\." + fileExtension;
+            if (entries != null) {
                 while (entries.hasMoreElements()) {
                     JarEntry jarEntry = entries.nextElement();
                     if (jarEntry.getName().matches(packagePattern)) {
                         jarEntries.add(jarEntry);
                     }
                 }
-            }
-            String[] fileNames = new String[jarEntries.size()];
+                // wenn für die aktuelle Locale-Sprache keine Dateien gefunden wurden -> lade die Englischen
+                if (jarEntries.size() == 0) {
+                    packagePattern = jarResourceBaseDirName + "en/[^/]+\\." + fileExtension;
+                    while (entries.hasMoreElements()) {
+                        JarEntry jarEntry = entries.nextElement();
+                        if (jarEntry.getName().matches(packagePattern)) {
+                            jarEntries.add(jarEntry);
+                        }
+                    }
+                }
+                fileNames = new String[jarEntries.size()];
 
-            for (int i = 0; i < fileNames.length; i++) {
-                fileNames[i] = jarEntries.get(i).toString();
+                for (int i = 0; i < fileNames.length; i++) {
+                    fileNames[i] = jarEntries.get(i).toString();
+                }
             }
-
+            try {
+                jarFile.close();
+            } catch (Exception ex) {
+                //mache nichts, egal ob NullPointer oder IOException
+            }
             return fileNames;
         }
     }
