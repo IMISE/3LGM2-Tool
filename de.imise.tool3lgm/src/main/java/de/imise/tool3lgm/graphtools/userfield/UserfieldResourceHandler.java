@@ -3,10 +3,11 @@ package de.imise.tool3lgm.graphtools.userfield;
 import static de.imise.tool3lgm.Tool3lgmConstants.JAR_RESOURCE_DIR_NAME;
 import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
 
-import java.io.File;
+import java.net.URL;
 
 import de.imise.tool3lgm.ResourceHandler;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.log.Log;
 
 public class UserfieldResourceHandler extends ResourceHandler {
 
@@ -20,9 +21,11 @@ public class UserfieldResourceHandler extends ResourceHandler {
         for (String ufdFileName : defaultUserpropertiesFileNames) {
             try {
                 //man muss über den ClassLoader gehen, um die vollständige URI zu erhalten
-                File ufdFile = new File(ClassLoader.getSystemClassLoader().getResource(ufdFileName).toURI());
-                UserFieldXMLParser.importDefinitions(ufdFile, definitions);
+                ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+                URL resourceUrl = systemClassLoader.getResource(ufdFileName);
+                UserFieldXMLParser.importDefinitions(resourceUrl, definitions);
             } catch (Exception e) {
+                Log.show(Log.ERROR, "Exception #######################################################", e);
                 // kann man ruhig ausgeben, denn wenn hier was schief geht, hat jemand Mist in die Resourcen eingefügt
                 // und solte das sofort ändern
                 e.printStackTrace();
