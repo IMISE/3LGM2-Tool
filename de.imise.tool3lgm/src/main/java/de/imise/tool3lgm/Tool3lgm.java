@@ -2,7 +2,6 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Static.tool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.Tool3lgmConstants.registerPublicKeyStrokes;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -216,7 +215,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                         tool = new Tool3lgm();
                         menuBar = new MenuBar();
                         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
-                        registerPublicKeyStrokes(tool.getRootPane());
+                        KeyStrokes.registerPublicKeyStrokes(tool.getRootPane());
                         tool.setJMenuBar(menuBar);
                         tool.setVisible(visible);
                         tool.toolbar.selectedDocChanged();

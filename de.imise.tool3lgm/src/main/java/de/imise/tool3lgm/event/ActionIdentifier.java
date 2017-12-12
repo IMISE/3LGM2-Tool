@@ -8,7 +8,7 @@ import java.util.MissingResourceException;
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.KeyStrokes;
 
 /**
  * Identifiers für {@link StaticAction}s
@@ -191,7 +191,7 @@ public enum ActionIdentifier {
      */
     @Deprecated
     KeyStroke getKeyStroke() {
-        return Tool3lgmConstants.getKeyStroke(this);
+        return KeyStrokes.getKeyStroke(this);
     }
 
     /**

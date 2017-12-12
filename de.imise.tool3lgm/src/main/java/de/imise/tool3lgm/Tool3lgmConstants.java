@@ -1,9 +1,7 @@
 package de.imise.tool3lgm;
 
 import java.awt.Cursor;
-import java.awt.Toolkit;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -11,26 +9,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.DebugGraphics;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.imise.tool3lgm.event.ActionIdentifier;
-import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
-import de.imise.tool3lgm.event.ActionLibrary.EditActions;
-import de.imise.tool3lgm.event.ActionLibrary.FileActions;
-import de.imise.tool3lgm.event.StaticAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
@@ -225,78 +211,6 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
-
-    ///////////////////////////////////////////////
-    // KeyStrokes + Actions (ShortCuts) ANFANG ////
-    ///////////////////////////////////////////////
-
-    public static final int MENU_SHORTCUT_KEY_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
-    //Unbedingt erst nach dem Initialisieren der RessourcenBundles aufrufen, da diese beim Erzeugen der Actions in dieser Map gebraucht werden
-    /** Map aller Global einsetzbarer {@link KeyStroke}s */
-    public static final Map<Action, KeyStroke> KEYSTROKES = new KeyStrokeMap(FileActions.ACTION_NEW_MODEL, keyStroke(KeyEvent.VK_N, MENU_SHORTCUT_KEY_MASK), FileActions.ACTION_OPEN_MODEL, keyStroke(KeyEvent.VK_O, MENU_SHORTCUT_KEY_MASK),
-            FileActions.ACTION_SAVE_MODEL, keyStroke(KeyEvent.VK_S, MENU_SHORTCUT_KEY_MASK), EditActions.MODEL_ACTION_DELETE, keyStroke(KeyEvent.VK_DELETE, 0), EditActions.ACTION_REDO, keyStroke(KeyEvent.VK_Y, MENU_SHORTCUT_KEY_MASK),
-            EditActions.ACTION_UNDO, keyStroke(KeyEvent.VK_Z, MENU_SHORTCUT_KEY_MASK), EditActions.SELECT_ALL, keyStroke(KeyEvent.VK_A, MENU_SHORTCUT_KEY_MASK), EditActions.MODEL_ACTION_COPY, keyStroke(KeyEvent.VK_C, MENU_SHORTCUT_KEY_MASK),
-            EditActions.MODEL_ACTION_CUT, keyStroke(KeyEvent.VK_X, MENU_SHORTCUT_KEY_MASK), EditActions.MODEL_ACTION_PASTE, keyStroke(KeyEvent.VK_V, MENU_SHORTCUT_KEY_MASK), EditActions.ACTION_SEARCH, keyStroke(KeyEvent.VK_F, MENU_SHORTCUT_KEY_MASK),
-            AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, keyStroke(KeyEvent.VK_F7, 0), AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, keyStroke(KeyEvent.VK_F9, 0), AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
-            keyStroke(KeyEvent.VK_R, MENU_SHORTCUT_KEY_MASK));
-
-    /**
-     * Hilfsklasse zum Aufbau der {@link #KEYSTROKES}-<code>Map</code>
-     *
-     * @author fstephan
-     */
-    private static final class KeyStrokeMap extends HashMap<Action, KeyStroke> {
-        /**
-         * @param id_keyCode_modifiers
-         */
-        public KeyStrokeMap(final Object... id_keyCode_modifiers) {
-            for (int i = 0; i < id_keyCode_modifiers.length; i += 2) {
-                Action action = (Action) id_keyCode_modifiers[i];
-                KeyStroke keyStroke = (KeyStroke) id_keyCode_modifiers[i + 1];
-                put(action, keyStroke);
-                //den KeyStroke auch in der Action registrieren, so dass er in Menüs usw. angezeigt wird
-                action.putValue(AbstractAction.ACCELERATOR_KEY, keyStroke);
-            }
-        }
-    }
-
-    /**
-     * Liefert den auslösenden {@link KeyStroke} für die durch <code>key</code> identifizierte {@link StaticAction}.
-     *
-     * @param identifier
-     * @return
-     */
-    @Deprecated
-    public static KeyStroke getKeyStroke(final ActionIdentifier key) {
-        return KEYSTROKES.get(key);
-    }
-
-    private static KeyStroke keyStroke(final int keyCode, final int modifiers) {
-        return KeyStroke.getKeyStroke(keyCode, modifiers);
-    }
-
-    /**
-     * Ermöglicht das Auslösen der in {@link Tool3lgmConstants} festgelegten Aktionen
-     * durch die jeweiligen {@link KeyStroke}s im gesamten Tool.
-     */
-    public static final void registerPublicKeyStrokes(final JComponent component, final KeyStroke... ingnoreStrokes) {
-        InputMap im = component.getInputMap();
-        ActionMap am = component.getActionMap();
-        for (Action action : KEYSTROKES.keySet()) {
-            KeyStroke keyStroke = KEYSTROKES.get(action);
-            if (!CollectionUtils.arrayContains(ingnoreStrokes, keyStroke)) {
-                im.put(KEYSTROKES.get(action), action);
-            }
-            am.put(action, action);
-        }
-        component.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, im);
-        component.setActionMap(am);
-    }
-
-    ///////////////////////////////////////////////
-    // KeyStrokes + Actions (ShortCuts) ENDE /////
-    ///////////////////////////////////////////////
 
     /**
      * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
