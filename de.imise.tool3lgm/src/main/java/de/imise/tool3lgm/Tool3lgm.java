@@ -12,6 +12,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.rmi.Naming;
@@ -72,11 +74,12 @@ import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Hauptklasse der Anwendung 3lgm */
-public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener {
+public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener, PropertyChangeListener {
 
     //Als allerstes muss aus der Main-Funktion ausßerhalb dieser Klasse diese init()-Funktion
     //aufgerufen werden, damit alle statischen Elemente einmal initialisert werden. Diese Funktion
@@ -380,7 +383,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         verticalSplitPane.setDividerSize(10);
         verticalSplitPane.setDividerLocation(dividerLocation);
 
-        setCheckConsistencyState(UserProperties.isCheckConsistency());
+        setCheckConsistencyState(UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY));
+        UserProperties.addPropertyChangeListener(this);
 
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -712,15 +716,16 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (ignoreDocSelection) {
             return;
         }
+        boolean isCheckConsistency = isCheckConsistency();
 
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
         //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
-            setCheckConsistencyState(UserProperties.isCheckConsistency());
+            setCheckConsistencyState(isCheckConsistency);
             toolbar.selectedDocChanged();
-            if (consistencyChecker != null && UserProperties.isCheckConsistency()) {
+            if (consistencyChecker != null && isCheckConsistency) {
                 consistencyChecker.changeContext(null);
             }
             return;
@@ -794,17 +799,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             Tool3lgm.activateGraphView = true;
         }
 
-        if (UserProperties.isCheckConsistency()) {
+        if (isCheckConsistency) {
             if (consistencyChecker == null) {
                 consistencyChecker = new ConsistencyChecker(gdcoll);
             } else {
                 consistencyChecker.changeContext(gdcoll);
             }
         }
-        setCheckConsistencyState(UserProperties.isCheckConsistency());
-
+        setCheckConsistencyState(isCheckConsistency);
         getContextGenerator().changeContext((LGMGraphDocument) doc);
-
         toolbar.selectedDocChanged();
     }
 
@@ -816,8 +819,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      *            wenn <code>true</code> wird die Konsistenzprüfung eingeschaltet, sonst wird sie abgeschaltet
      */
     public void setCheckConsistencyState(boolean state) {
-        //als erstes diese Option setzen, da sie in den folgenden Funktionen abgefragt wird
-        UserProperties.setCheckConsistency(state);
         GDCollection gdcoll = getSelectedGDCollection();
         if (gdcoll == null) {
             state = false;
@@ -1584,6 +1585,24 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             System.arraycopy(params, 0, newParams, 1, params.length);
             processCommand("open", newParams);
         }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (UserProperties.isPropertyChange(BooleanProperty.OPTION_CHECK_CONSISTENCY, evt)) {
+            boolean checkConsistency = isCheckConsistency();
+            if (!checkConsistency) {
+                ConsistencyChecker checker = getConsistencyChecker();
+                if (checker != null) {
+                    checker.resetConsistencyDefinition();
+                }
+            }
+            setCheckConsistencyState(checkConsistency);
+        }
+    }
+
+    private boolean isCheckConsistency() {
+        return UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY);
     }
 
 }

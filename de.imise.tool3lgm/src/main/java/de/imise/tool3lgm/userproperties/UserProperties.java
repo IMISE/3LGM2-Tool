@@ -631,23 +631,6 @@ public class UserProperties {
         return rmiRegistryPort;
     }
 
-    //////////////////////////////////////////////
-    // Consistenzprüfung ein oder ausgeschaltet //
-    //////////////////////////////////////////////
-
-    /** Wenn <code>true</code>, wird die Konsitenz des aktuellen Modells überprüft. */
-    private static boolean checkConsistency;
-
-    /** @return checkConsistency */
-    public static boolean isCheckConsistency() {
-        return checkConsistency;
-    }
-
-    /** @param b */
-    public static void setCheckConsistency(final boolean b) {
-        checkConsistency = b;
-    }
-
     /**
      * Wenn <code>true</code>, wird vor dem Löschen von Elementen aus dem Hauptmodell
      * und allen Teilmodellen, eine Warnung angezeigt.

@@ -21,5 +21,4 @@ public class UserPropertyBooleanChangeAction extends GlobalOptionAction {
     protected void changeOption() {
         UserProperties.set(booleanProperty, isSelected());
     }
-
 }

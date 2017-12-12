@@ -44,7 +44,6 @@ import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
-import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.dialog.GraphViewOptionsDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
@@ -350,19 +349,8 @@ public class ActionLibrary {
         };
 
         /** Aktiviert die Konsistenz-Prüfung */
-        public static final ExtendedAction OPTION_CHECK_CONSISTENCY = new StaticActionNew(ActionIdentifier.OPTION_CHECK_CONSISTENCY, UserProperties.isCheckConsistency()) {
-            @Override
-            public final void actionPerformed() {
-                boolean isSelected = isSelected();
-                if (!isSelected) {
-                    ConsistencyChecker checker = getTool().getConsistencyChecker();
-                    if (checker != null) {
-                        checker.resetConsistencyDefinition();
-                    }
-                }
-                getTool().setCheckConsistencyState(isSelected);
-            }
-        };
+        public static final Action OPTION_CHECK_CONSISTENCY = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_CHECK_CONSISTENCY);
+
     }
 
     public static class ContextActions {

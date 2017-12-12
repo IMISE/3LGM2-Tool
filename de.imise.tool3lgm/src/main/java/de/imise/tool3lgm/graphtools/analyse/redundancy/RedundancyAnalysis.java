@@ -23,7 +23,6 @@ import javax.swing.WindowConstants;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
@@ -214,7 +213,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             };
             int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
-                ActionLibrary.AnalysisActions.OPTION_CHECK_CONSISTENCY.setSelected(true);
+                UserProperties.set(BooleanProperty.OPTION_CHECK_CONSISTENCY, true);
                 Static.getTool().setCheckConsistencyState(true);
                 return;
             } else if (answer == JOptionPane.CANCEL_OPTION) {
