@@ -16,10 +16,6 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
  */
 public class ToolContentHandlerV3_0_DeprecatedValuesHandler {
 
-    public ToolContentHandlerV3_0_DeprecatedValuesHandler() {
-        // TODO Auto-generated constructor stub
-    }
-
     public static boolean putDeprecatedXMLFieldString(final GDCollection gdcoll, final ModelElement me, final String fieldName, final String value) {
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         UserField userField = null;
