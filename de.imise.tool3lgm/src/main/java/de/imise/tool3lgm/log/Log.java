@@ -69,26 +69,6 @@ public class Log {
     }
 
     /**
-     * Gibt den Logger zurück mit Klassennahmen. Initialisiert den Logger, falls dieser noch nicht initialisiert ist.
-     *
-     * @return der Logger den diese Klasse verwendet.
-     */
-    public static Logger getLogger(final String classname) {
-        if (logger == null) {
-            try {
-                // logger namens 3lgm erzeugen
-                logger = Logger.getLogger(classname);
-                // geladenen Logger mit Hilfe der Datei Logger.ini initialisieren
-                URL url = Log.class.getResource("Logger.ini");
-                PropertyConfigurator.configure(url);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return logger;
-    }
-
-    /**
      * Logt eine Meldung in die Log-Datei.
      *
      * @param level Level der Fehlermeldung (siehe Fehlerlevel)
