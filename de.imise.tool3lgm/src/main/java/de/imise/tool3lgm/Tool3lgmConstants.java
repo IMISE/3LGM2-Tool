@@ -177,6 +177,11 @@ public abstract class Tool3lgmConstants {
     public static final String RESOURCE_BASE_NAME = "Tool3lgmResources";
 
     // die beiden ResourceBundles laden
+
+    static {
+        UserProperties.init();
+    }
+
     /**
      * Haupt-<code>ResoruceBundle</code> mit allen Resourcen außer ein paar speziellen Fehlermeldungen.<br>
      * Fehlermeldungen sollten in errorBundle abgelegt werden.
