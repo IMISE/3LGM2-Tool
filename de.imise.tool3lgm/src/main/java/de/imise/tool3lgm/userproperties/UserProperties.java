@@ -22,7 +22,6 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.util.Sys;
 import de.imise.util.io.FileHandler;
 
 /**
@@ -412,7 +411,6 @@ public class UserProperties {
         UserProperties.locale = l;
         Locale.setDefault(l);
         put(StringProperty.LOCALE, l.getLanguage());
-        Sys.err(l);
         return l;
     }
 
