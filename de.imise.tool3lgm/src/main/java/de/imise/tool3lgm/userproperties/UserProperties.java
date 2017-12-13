@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.util.Sys;
 import de.imise.util.io.FileHandler;
 
 /**
@@ -231,6 +233,18 @@ public class UserProperties {
                 }
             }
         }
+        Enumeration<Object> keys = properties.keys();
+        while (keys.hasMoreElements()) {
+            Object propertyKey = keys.nextElement();
+            Object value = properties.get(propertyKey);
+            if (value == null || value.toString().isEmpty() || propertyKey.toString().startsWith("<?")) {
+                properties.remove(propertyKey);
+            }
+        }
+        Object localeLanguage = properties.get(StringProperty.LOCALE.toString());
+        if (localeLanguage != null) {
+            setLocale(localeLanguage.toString());
+        }
     }
 
     public static void save() {
@@ -397,6 +411,8 @@ public class UserProperties {
         }
         UserProperties.locale = l;
         Locale.setDefault(l);
+        put(StringProperty.LOCALE, l.getLanguage());
+        Sys.err(l);
         return l;
     }
 
