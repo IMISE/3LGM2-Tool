@@ -88,7 +88,7 @@ public abstract class Tool3lgmConstants {
     public static final String TEMP_PATH = USER_HOME_DIR_NAME + "/";
 
     /** Pfad zur Datei mit den Optionen eines Benutzers */
-    public static final File USER_INFO_FILE = new File(USER_HOME_DIR_NAME, ".tool3lgmUserInfo");
+    public static final File USER_INFO_FILE = new File(USER_HOME_DIR_NAME, ".tool3lgm2UserInfo");
 
     /**
      * Datei-Endung für große Icons.
