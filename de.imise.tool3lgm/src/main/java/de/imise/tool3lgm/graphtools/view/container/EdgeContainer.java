@@ -18,6 +18,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
@@ -26,7 +27,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 
 /**
  * @author N.N
@@ -577,7 +577,10 @@ public class EdgeContainer extends ElementContainer {
             return false;
         }
         if (!kc1.isVisible() || !kc2.isVisible()) {
-            if (!(me instanceof KommBeziehung) && createSurrogates) {
+            Class<? extends ModelElement> startClass = me1.getClass();
+            Class<? extends ModelElement> endClass = me1.getClass();
+            //bei Bausteinschnittsellen sollen keine surrogates gemalt werden. Vorher stand hier bei der 2. Bedingung: !(me instanceof KommBeziehung)
+            if (createSurrogates && !(ModelConstants.isSlaveType(startClass) && ModelConstants.isSlaveType(endClass))) {
                 createSurrogateContainers(kc1, kc2);
             }
             return false;
