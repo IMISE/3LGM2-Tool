@@ -77,7 +77,7 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    private boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
+    public boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
         Set<Class<? extends Edge>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(elementClass);
         if (sortedEdgeClasses == null) {
             return false;

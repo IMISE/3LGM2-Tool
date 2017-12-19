@@ -111,6 +111,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.Composition;
 import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
@@ -127,7 +128,6 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
@@ -481,7 +481,8 @@ public final class GDCollection extends UserFieldTarget {
             if (dialogPosition == null) {
                 dialogPosition = new Point(100, 100);
             }
-            boolean showColorChooser = me instanceof Prozess;
+            GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
+            boolean showColorChooser = graphViewDefinition.hasSortedEdgeClassesToPaintable(me.getClass());
             d.showDialog(getResString("name_eing"), me.toString(), dialogPosition.x, dialogPosition.y, showColorChooser);
             String inputString = d.getInputString();
             if (inputString == null) {

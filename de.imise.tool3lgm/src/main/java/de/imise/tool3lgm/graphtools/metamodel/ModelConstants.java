@@ -315,7 +315,7 @@ public final class ModelConstants {
     public static final Set<Class<? extends ModelElement>> ELEMENTS_WITH_NAME_EXTENSIONS = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, ALL_ELEMENTS);
 
     public static final boolean hasSortedEdges(final Class<? extends ModelElement> elementClass) {
-        return getSortedEdgeClasses(elementClass) != null; // nur bei Elementklasse mit wenigstens einer SortedEdge komzm nich null zurück
+        return getSortedEdgeClasses(elementClass) != null; // nur bei Elementklasse mit wenigstens einer SortedEdge kommt nich null zurück
     }
 
     ///////////////////////////////////
@@ -1607,7 +1607,7 @@ public final class ModelConstants {
 
     /**
      * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen
-     * 
+     *
      * @return
      */
     public static final Action[] getExtrasActions() {
