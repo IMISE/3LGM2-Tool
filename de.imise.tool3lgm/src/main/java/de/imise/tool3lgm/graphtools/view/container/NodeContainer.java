@@ -18,13 +18,13 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
@@ -124,7 +124,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         if (doc == null) {
             return;
         }
-        if (me instanceof Prozess) {
+        if (ModelConstants.getGraphViewDefinition().hasSortedEdgeClassesToPaintable(me.getClass())) {
             //			registerAsGraphDocumentListener();
             if (layout == null) {
                 layout = new GraphElementLayout();
