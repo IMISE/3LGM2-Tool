@@ -137,20 +137,12 @@ public final class ModelConstants {
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
 
-    /** Alle im Baum sichtbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_DOMAIN_LAYER_NODES = metaModel.getTreeDomainLayerNodes();
-
     /** Alle Node der FE als HashSet */
     @SuppressWarnings({
             "unchecked",
             "rawtypes"
     })
     public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
-
-    /** Alle im Baum auf der FE anlegbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = metaModel.getTreeCreatableDomainLayerNodes();
 
     /** Alle Node zw. FE und LWE als Array */
     @SuppressWarnings("rawtypes")
@@ -174,12 +166,6 @@ public final class ModelConstants {
     })
     public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
 
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_LOGICAL_LAYER_NODES = metaModel.getTreeLogicalLayerNodes();
-
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = metaModel.getTreeCreatableLogicalLayerNodes();
-
     /** Alle Node zw. LWE und PWE als Array */
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
@@ -201,13 +187,6 @@ public final class ModelConstants {
             "rawtypes"
     })
     public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
-
-    /** Alle Node der PWE im Baum als Array */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_PHYSICAL_LAYER_NODES = metaModel.getTreePhysicalLayerNodes();
-
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = metaModel.getTreeCreatablePhysicalLayerNodes();
 
     /** Set aller Knotenklassen */
     public static final Set<Class<? extends ModelElement>> ALL_NODES_SET = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(ALL_DOMAIN_LAYER_NODES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET).addAll(ALL_LOGICAL_LAYER_NODES_SET)
@@ -316,6 +295,25 @@ public final class ModelConstants {
 
     public static final boolean hasSortedEdges(final Class<? extends ModelElement> elementClass) {
         return getSortedEdgeClasses(elementClass) != null; // nur bei Elementklasse mit wenigstens einer SortedEdge kommt nich null zurück
+    }
+
+    private static Class[] getTreeVisibleNodes(final Class<? extends ModelElement>[] elementClasses, final boolean creatableOnly) {
+        ImmutableSet.Builder<Class<? extends ModelElement>> creatableNodes = new ImmutableSet.Builder<>();
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            if (!ModelConstants.isEdgeType(elementClass)) {
+                if (!creatableOnly || creatableOnly && !ModelConstants.isSlaveType(elementClass)) {
+                    if (!ModelConstants.isAbstract(elementClass)) {
+                        if (!ModelConstants.isExistenceDependent(elementClass, true)) {
+                            creatableNodes.add(elementClass);
+                        }
+                    }
+                }
+            }
+        }
+        ImmutableSet<Class<? extends ModelElement>> treeVisibleClassesSet = creatableNodes.build();
+        Class[] treeVisibleClasses = new Class[treeVisibleClassesSet.size()];
+        System.arraycopy(treeVisibleClassesSet.toArray(), 0, treeVisibleClasses, 0, treeVisibleClasses.length);
+        return treeVisibleClasses;
     }
 
     ///////////////////////////////////
@@ -529,6 +527,32 @@ public final class ModelConstants {
         elementClassToEdgeClass.put(elementClass1, returnClasses);
         return returnClasses;
     }
+
+    // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
+
+    /** Alle im Baum auf der FE sichtbaren Node */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(ALL_DOMAIN_LAYER_NODES, false);
+
+    /** Alle im Baum auf der FE anlegbaren Node */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
+
+    /** Alle im Baum auf der LWE sichtbaren Node */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(ALL_LOGICAL_LAYER_NODES, false);
+
+    /** Alle im Baum auf der FE anlegbaren Node */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
+
+    /** Alle im Baum auf der PWE sichtbaren Node */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(ALL_PHYSICAL_LAYER_NODES, false);
+
+    /** Alle im Baum auf der PWE anlegbaren Node */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
 
     //	static {
     //		HashSet<Class<? extends ModelElement>> allElements= new HashSet<Class<? extends ModelElement>>(ALL_NODES_SET.size() + ALL_EDGES_SET.size());
@@ -1479,6 +1503,27 @@ public final class ModelConstants {
         for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
             if (isComposition(edgeClass) && isEndClass(edgeClass, elementClass)) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert true, wenn die übergebenen Klasse wenigstens eine Kante beseitzt, bei der die minimale Kardinalität zu der
+     * verbundenen Klasse > 0 ist. Die Existenz des übergebenen Elementes ist also abhängig von dem anderen Element.
+     * Das tifft automatisch bei allen {@link Composition}s zu, bei denen das übergebene Element der Slave ist, aber kann
+     * auch bei allen anderen Kanten zutreffen.
+     *
+     * @param elementClass
+     * @param ignoreCompositions wenn true, werden Kanten nicht beachtet, bei denen die übergebene Elementklasse Master einer Composition ist
+     * @return
+     */
+    public static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass, final boolean ignoreCompositions) {
+        for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
+            if (!ignoreCompositions || ignoreCompositions && !isComposition(edgeClass)) {
+                if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
+                    return true;
+                }
             }
         }
         return false;

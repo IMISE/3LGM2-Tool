@@ -88,20 +88,16 @@ public abstract class MetaModel {
     /** Alle Node der FE als Array */
     public abstract Class[] getAllDomainLayerNodes();
 
-    /** Alle Node, die im Baum sichtbar auf der FE sichtbar sind */
-    public abstract Class[] getTreeDomainLayerNodes();
-
-    /** Alle Knotenklassen der FE, die man im Baum neu erzeugen kann */
-    public abstract Class[] getTreeCreatableDomainLayerNodes();
+    /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
+    public abstract Class[] getTreeDomainLayerVisibleAbstractNodes();
 
     /** Alle Node zw. FE und LWE als Array */
     public abstract Class[] getAllInterDomainLogicalLayerNodes();
 
     public abstract Class[] getAllLogicalLayerNodes();
 
-    public abstract Class[] getTreeLogicalLayerNodes();
-
-    public abstract Class[] getTreeCreatableLogicalLayerNodes();
+    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    public abstract Class[] getTreeLogicalLayerVisibleAbstractNodes();
 
     /** Alle Node zw. LWE und PWE als Array */
     public abstract Class[] getAllInterLogicalPhysicalLayerNodes();
@@ -109,10 +105,8 @@ public abstract class MetaModel {
     /** Alle Node der PWE als Array */
     public abstract Class[] getAllPhysicalLayerNodes();
 
-    /** Alle Node der PWE im Baum als Array */
-    public abstract Class[] getTreePhysicalLayerNodes();
-
-    public abstract Class[] getTreeCreatablePhysicalLayerNodes();
+    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    public abstract Class[] getTreePhsicalLayerVisibleAbstractNodes();
 
     private Class[] allNodes = null;
 

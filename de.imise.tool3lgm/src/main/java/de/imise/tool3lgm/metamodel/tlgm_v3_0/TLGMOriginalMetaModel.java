@@ -154,27 +154,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
             AufOrgKombination.class,
             Objekttyp.class,
             Organisationseinheit.class,
-            //      Rolle.class,
             Prozess.class,
-    };
-
-    /** Alle Node, die im Baum sichtbar auf der FE sichtbar sind */
-    private static final Class[] TREE_DOMAIN_LAYER_NODES = {
-            Aufgabe.class,
-            //          AufOrgKombination.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            //          Rolle.class,
-            Prozess.class,
-    };
-
-    /** Alle Knotenklassen der FE, die man im Baum neu erzeugen kann */
-    private final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = {
-            Aufgabe.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            Prozess.class,
-            //          Rolle.class,
     };
 
     /** Alle Node zw. FE und LWE als Array */
@@ -213,39 +193,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
             LogischerSpeicher.class,
     };
 
-    private final Class[] TREE_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class,
-            KonAnwendungsbaustein.class,
-            //      Anwendungsprogramm.class,
-            Bausteinschnittstelle.class,
-            Benutzungsschnittstelle.class,
-            Datenbanksystem.class,
-            Datensatztyp.class,
-            DBVerwaltungssystem.class,
-            Dokumentensammlung.class,
-            Dokumententyp.class,
-            Ereignistyp.class,
-            Kommunikationsstandard.class,
-            Nachrichtentyp.class,
-            Organisationsplan.class,
-            Softwareprodukt.class,
-            EreignisNachrichtenTyp.class,
-            EreignisDokumentenTyp.class,
-    };
-
-    private final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = {
-            RechAnwendungsbaustein.class,
-            KonAnwendungsbaustein.class,
-            Softwareprodukt.class,
-            Kommunikationsstandard.class,
-            DBVerwaltungssystem.class,
-            Ereignistyp.class,
-            Nachrichtentyp.class,
-            Dokumententyp.class,
-            EreignisNachrichtenTyp.class,
-            EreignisDokumentenTyp.class,
-    };
-
     /** Alle Node zw. LWE und PWE als Array */
     private final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = {
             DBKonfiguration.class,
@@ -261,38 +208,9 @@ public class TLGMOriginalMetaModel extends MetaModel {
             Netzprotokoll.class,
     };
 
-    /** Alle Node der PWE im Baum als Array */
-    private final Class[] TREE_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class,
-            Standort.class,
-            Bausteintyp.class,
-            Netztyp.class,
-            Subnetz.class,
-            Netzprotokoll.class,
-    };
-
-    private final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class,
-            Standort.class,
-            Bausteintyp.class,
-            Netztyp.class,
-            Subnetz.class,
-            Netzprotokoll.class,
-    };
-
     @Override
     public final Class[] getAllDomainLayerNodes() {
         return ALL_DOMAIN_LAYER_NODES;
-    }
-
-    @Override
-    public final Class[] getTreeDomainLayerNodes() {
-        return TREE_DOMAIN_LAYER_NODES;
-    }
-
-    @Override
-    public final Class[] getTreeCreatableDomainLayerNodes() {
-        return TREE_CREATABLE_DOMAIN_LAYER_NODES;
     }
 
     @Override
@@ -306,16 +224,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     @Override
-    public final Class[] getTreeLogicalLayerNodes() {
-        return TREE_LOGICAL_LAYER_NODES;
-    }
-
-    @Override
-    public final Class[] getTreeCreatableLogicalLayerNodes() {
-        return TREE_CREATABLE_LOGICAL_LAYER_NODES;
-    }
-
-    @Override
     public final Class[] getAllInterLogicalPhysicalLayerNodes() {
         return ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES;
     }
@@ -326,13 +234,21 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     @Override
-    public final Class[] getTreePhysicalLayerNodes() {
-        return TREE_PHYSICAL_LAYER_NODES;
+    public Class[] getTreeDomainLayerVisibleAbstractNodes() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
-    public final Class[] getTreeCreatablePhysicalLayerNodes() {
-        return TREE_CREATABLE_PHYSICAL_LAYER_NODES;
+    public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Class[] getTreePhsicalLayerVisibleAbstractNodes() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     ////////////
