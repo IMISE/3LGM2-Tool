@@ -536,7 +536,7 @@ public final class ModelConstants {
 
     /** Alle im Baum auf der FE anlegbaren Node */
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
+    public static final Class[] CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
 
     /** Alle im Baum auf der LWE sichtbaren Node */
     @SuppressWarnings("rawtypes")
@@ -544,7 +544,7 @@ public final class ModelConstants {
 
     /** Alle im Baum auf der FE anlegbaren Node */
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
+    public static final Class[] CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
 
     /** Alle im Baum auf der PWE sichtbaren Node */
     @SuppressWarnings("rawtypes")
@@ -552,7 +552,7 @@ public final class ModelConstants {
 
     /** Alle im Baum auf der PWE anlegbaren Node */
     @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
+    public static final Class[] CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
 
     //	static {
     //		HashSet<Class<? extends ModelElement>> allElements= new HashSet<Class<? extends ModelElement>>(ALL_NODES_SET.size() + ALL_EDGES_SET.size());

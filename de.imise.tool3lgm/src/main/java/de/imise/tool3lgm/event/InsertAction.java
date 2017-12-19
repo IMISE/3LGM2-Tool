@@ -30,19 +30,19 @@ class InsertAction extends AbstractLGMAction {
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Fachlichen Ebene wieder */
     @SuppressWarnings("unchecked")
     public static InsertAction[] getDomainLayerActions() {
-        return getActions(ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES);
+        return getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
     }
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Logischen Ebene wieder */
     @SuppressWarnings("unchecked")
     public static InsertAction[] getLogicalToolLayerActions() {
-        return getActions(ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES);
+        return getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
     }
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Physischen Ebene wieder */
     @SuppressWarnings("unchecked")
     public static InsertAction[] getPhysicalToolLayerActions() {
-        return getActions(ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES);
+        return getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
     }
 
     /** Gibt wieder, ob der aktuelle Kontext ein Einfügen von Elementen erlaubt, oder nicht */

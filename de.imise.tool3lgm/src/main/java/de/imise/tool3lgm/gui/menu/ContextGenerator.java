@@ -10,9 +10,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.TREE_CREATABLE_DOMAIN_LAYER_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.TREE_CREATABLE_LOGICAL_LAYER_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.TREE_CREATABLE_PHYSICAL_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_DOMAIN_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_LOGICAL_LAYER_NODES;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getBackwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
@@ -260,25 +260,25 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         JMenuItem item;
 
         new_domain_tree = new JMenu(getResString("el_neu"));
-        for (c = 0; c < TREE_CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
-            item = new JMenuItem(getDisplayableName(TREE_CREATABLE_DOMAIN_LAYER_NODES[c]));
+        for (c = 0; c < CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
+            item = new JMenuItem(getDisplayableName(CREATABLE_DOMAIN_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + TREE_CREATABLE_DOMAIN_LAYER_NODES[c].getName());
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + CREATABLE_DOMAIN_LAYER_NODES[c].getName());
             new_domain_tree.add(item);
         }
         new_logical_tree = new JMenu(getResString("el_neu"));
-        for (c = 0; c < TREE_CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
-            item = new JMenuItem(getDisplayableName(TREE_CREATABLE_LOGICAL_LAYER_NODES[c]));
+        for (c = 0; c < CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
+            item = new JMenuItem(getDisplayableName(CREATABLE_LOGICAL_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + TREE_CREATABLE_LOGICAL_LAYER_NODES[c].getName());
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + CREATABLE_LOGICAL_LAYER_NODES[c].getName());
             new_logical_tree.add(item);
         }
 
         new_physical_tree = new JMenu(getResString("el_neu"));
-        for (c = 0; c < TREE_CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
-            item = new JMenuItem(getDisplayableName(TREE_CREATABLE_PHYSICAL_LAYER_NODES[c]));
+        for (c = 0; c < CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
+            item = new JMenuItem(getDisplayableName(CREATABLE_PHYSICAL_LAYER_NODES[c]));
             item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + TREE_CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
             new_physical_tree.add(item);
         }
 
