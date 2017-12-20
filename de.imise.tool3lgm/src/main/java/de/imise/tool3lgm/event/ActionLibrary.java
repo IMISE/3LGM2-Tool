@@ -711,7 +711,7 @@ public class ActionLibrary {
         public static final Action[] PHYSICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
 
         /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
-        private static Action[] getActions(final Class<ModelElement>[] treeCreatableLayerNodes) {
+        private static Action[] getActions(final Class<? extends ModelElement>[] treeCreatableLayerNodes) {
             GraphDocumentAction[] actions = new GraphDocumentAction[treeCreatableLayerNodes.length];
             for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
                 String actionName = ModelConstants.getDisplayableName(treeCreatableLayerNodes[c]);

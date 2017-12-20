@@ -234,21 +234,11 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     @Override
-    public Class[] getTreeDomainLayerVisibleAbstractNodes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Class[] getTreePhsicalLayerVisibleAbstractNodes() {
-        // TODO Auto-generated method stub
-        return null;
+        return new Class[] {
+                //nur bei Anwendungsbausteinen soll die abstrakte Oberklasse im Baum angezeigt werden
+                Anwendungsbaustein.class
+        };
     }
 
     ////////////

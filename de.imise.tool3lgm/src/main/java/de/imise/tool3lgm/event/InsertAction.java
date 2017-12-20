@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 class InsertAction extends AbstractLGMAction {
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
-    private static InsertAction[] getActions(final Class<ModelElement>[] treeCreatableLayerNodes) {
+    private static InsertAction[] getActions(final Class<? extends ModelElement>[] treeCreatableLayerNodes) {
         InsertAction[] actions = new InsertAction[treeCreatableLayerNodes.length];
         for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
             actions[c] = new InsertAction(treeCreatableLayerNodes[c]);
@@ -28,19 +28,16 @@ class InsertAction extends AbstractLGMAction {
     }
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Fachlichen Ebene wieder */
-    @SuppressWarnings("unchecked")
     public static InsertAction[] getDomainLayerActions() {
         return getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
     }
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Logischen Ebene wieder */
-    @SuppressWarnings("unchecked")
     public static InsertAction[] getLogicalToolLayerActions() {
         return getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
     }
 
     /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der Physischen Ebene wieder */
-    @SuppressWarnings("unchecked")
     public static InsertAction[] getPhysicalToolLayerActions() {
         return getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
     }
@@ -51,7 +48,7 @@ class InsertAction extends AbstractLGMAction {
     }
 
     /** Die {@link ModelElement}-Klasse die, durch diese Action erzeugt wird */
-    private final Class<ModelElement> elementClass;
+    private final Class<? extends ModelElement> elementClass;
 
     /**
      * Konstruktor
@@ -60,7 +57,7 @@ class InsertAction extends AbstractLGMAction {
      *
      * @param elementClass {@link ModelElement}-Klasse die, durch diese Action erzeugt wird
      */
-    private InsertAction(final Class<ModelElement> elementClass) {
+    private InsertAction(final Class<? extends ModelElement> elementClass) {
         super(ModelConstants.getDisplayableName(elementClass));
         this.elementClass = elementClass;
         putValue(ELEMENT_CLASS_KEY, elementClass);

@@ -86,27 +86,33 @@ public abstract class MetaModel {
     ////////////
 
     /** Alle Node der FE als Array */
-    public abstract Class[] getAllDomainLayerNodes();
+    public abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
 
     /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
-    public abstract Class[] getTreeDomainLayerVisibleAbstractNodes();
+    public Class<? extends ModelElement>[] getTreeDomainLayerVisibleAbstractNodes() {
+        return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
+    }
 
     /** Alle Node zw. FE und LWE als Array */
-    public abstract Class[] getAllInterDomainLogicalLayerNodes();
+    public abstract Class<? extends ModelElement>[] getAllInterDomainLogicalLayerNodes();
 
-    public abstract Class[] getAllLogicalLayerNodes();
+    public abstract Class<? extends ModelElement>[] getAllLogicalLayerNodes();
 
     /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
-    public abstract Class[] getTreeLogicalLayerVisibleAbstractNodes();
+    public Class<? extends ModelElement>[] getTreeLogicalLayerVisibleAbstractNodes() {
+        return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
+    }
 
     /** Alle Node zw. LWE und PWE als Array */
-    public abstract Class[] getAllInterLogicalPhysicalLayerNodes();
+    public abstract Class<? extends ModelElement>[] getAllInterLogicalPhysicalLayerNodes();
 
     /** Alle Node der PWE als Array */
-    public abstract Class[] getAllPhysicalLayerNodes();
+    public abstract Class<? extends ModelElement>[] getAllPhysicalLayerNodes();
 
     /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
-    public abstract Class[] getTreePhsicalLayerVisibleAbstractNodes();
+    public Class<? extends ModelElement>[] getTreePhsicalLayerVisibleAbstractNodes() {
+        return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
+    }
 
     private Class[] allNodes = null;
 

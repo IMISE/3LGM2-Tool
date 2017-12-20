@@ -134,8 +134,7 @@ public final class ModelConstants {
     public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
 
     /** Alle Node der FE als Array */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
+    public static final Class<? extends ModelElement>[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
 
     /** Alle Node der FE als HashSet */
     @SuppressWarnings({
@@ -145,8 +144,7 @@ public final class ModelConstants {
     public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
 
     /** Alle Node zw. FE und LWE als Array */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = metaModel.getAllInterDomainLogicalLayerNodes();
+    public static final Class<? extends ModelElement>[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = metaModel.getAllInterDomainLogicalLayerNodes();
 
     /** Alle Node zw. FE und LWE als HashSet */
     @SuppressWarnings({
@@ -156,8 +154,7 @@ public final class ModelConstants {
     public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
 
     /** Alle Node der LWE als Array */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_LOGICAL_LAYER_NODES = metaModel.getAllLogicalLayerNodes();
+    public static final Class<? extends ModelElement>[] ALL_LOGICAL_LAYER_NODES = metaModel.getAllLogicalLayerNodes();
 
     /** Alle Node der LWE als HashSet */
     @SuppressWarnings({
@@ -167,8 +164,7 @@ public final class ModelConstants {
     public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
 
     /** Alle Node zw. LWE und PWE als Array */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
+    public static final Class<? extends ModelElement>[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
 
     /** Alle Node zw. LWE und PWE als HashSet */
     @SuppressWarnings({
@@ -178,8 +174,7 @@ public final class ModelConstants {
     public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
 
     /** Alle Node der PWE als Array */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_PHYSICAL_LAYER_NODES = metaModel.getAllPhysicalLayerNodes();
+    public static final Class<? extends ModelElement>[] ALL_PHYSICAL_LAYER_NODES = metaModel.getAllPhysicalLayerNodes();
 
     /** Alle Node der PWE als HashSet */
     @SuppressWarnings({
@@ -284,9 +279,10 @@ public final class ModelConstants {
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     @SuppressWarnings({
-            "rawtypes"
+            "rawtypes",
+            "unchecked"
     })
-    public static final Class[] IMPORTABLE_NODES = metaModel.getImportableNodes();
+    public static final Class<? extends ModelElement>[] IMPORTABLE_NODES = metaModel.getImportableNodes();
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
     public static final Set<Class<? extends Node>> UNIQUE_NODES = metaModel.getUniqueNodes();
@@ -297,7 +293,15 @@ public final class ModelConstants {
         return getSortedEdgeClasses(elementClass) != null; // nur bei Elementklasse mit wenigstens einer SortedEdge kommt nich null zurück
     }
 
-    private static Class[] getTreeVisibleNodes(final Class<? extends ModelElement>[] elementClasses, final boolean creatableOnly) {
+    /**
+     * Extrahiert aus den übergebenen Knoten alle, die im Baum angezeigt werden.
+     *
+     * @param elementClasses Elementklassen, die gefiltert werden sollen
+     * @param creatableOnly wenn <code>true</code>, werden von den anzuzeigenden Knoten nur die übrig gelassen, die man auch ohne ein anderes Element
+     *            anlegen kann
+     * @return
+     */
+    private static Class<? extends ModelElement>[] getTreeVisibleNodes(final Class<? extends ModelElement>[] elementClasses, final boolean creatableOnly) {
         ImmutableSet.Builder<Class<? extends ModelElement>> creatableNodes = new ImmutableSet.Builder<>();
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (!ModelConstants.isEdgeType(elementClass)) {
@@ -311,9 +315,25 @@ public final class ModelConstants {
             }
         }
         ImmutableSet<Class<? extends ModelElement>> treeVisibleClassesSet = creatableNodes.build();
-        Class[] treeVisibleClasses = new Class[treeVisibleClassesSet.size()];
+        @SuppressWarnings("unchecked")
+        Class<? extends ModelElement>[] treeVisibleClasses = new Class[treeVisibleClassesSet.size()];
         System.arraycopy(treeVisibleClassesSet.toArray(), 0, treeVisibleClasses, 0, treeVisibleClasses.length);
         return treeVisibleClasses;
+    }
+
+    /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
+    public static Class<? extends ModelElement>[] getTreeDomainLayerVisibleAbstractNodes() {
+        return metaModel.getTreeDomainLayerVisibleAbstractNodes();
+    }
+
+    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    public static Class<? extends ModelElement>[] getTreeLogicalLayerVisibleAbstractNodes() {
+        return metaModel.getTreeLogicalLayerVisibleAbstractNodes();
+    }
+
+    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    public static Class<? extends ModelElement>[] getTreePhsicalLayerVisibleAbstractNodes() {
+        return metaModel.getTreePhsicalLayerVisibleAbstractNodes();
     }
 
     ///////////////////////////////////
@@ -531,28 +551,22 @@ public final class ModelConstants {
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
 
     /** Alle im Baum auf der FE sichtbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(ALL_DOMAIN_LAYER_NODES, false);
+    public static final Class<? extends ModelElement>[] TREE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(ALL_DOMAIN_LAYER_NODES, false);
 
     /** Alle im Baum auf der FE anlegbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
+    public static final Class<? extends ModelElement>[] CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
 
     /** Alle im Baum auf der LWE sichtbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(ALL_LOGICAL_LAYER_NODES, false);
+    public static final Class<? extends ModelElement>[] TREE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(ALL_LOGICAL_LAYER_NODES, false);
 
     /** Alle im Baum auf der FE anlegbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
+    public static final Class<? extends ModelElement>[] CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
 
     /** Alle im Baum auf der PWE sichtbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] TREE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(ALL_PHYSICAL_LAYER_NODES, false);
+    public static final Class<? extends ModelElement>[] TREE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(ALL_PHYSICAL_LAYER_NODES, false);
 
     /** Alle im Baum auf der PWE anlegbaren Node */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
+    public static final Class<? extends ModelElement>[] CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
 
     //	static {
     //		HashSet<Class<? extends ModelElement>> allElements= new HashSet<Class<? extends ModelElement>>(ALL_NODES_SET.size() + ALL_EDGES_SET.size());
