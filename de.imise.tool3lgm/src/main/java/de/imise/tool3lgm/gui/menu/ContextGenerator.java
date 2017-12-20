@@ -97,7 +97,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
@@ -580,7 +579,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     addMenuItem(menu, show_configs);
                     addMenuItem(menu, hide_configs);
                 }
-                if (me.isPaintable() || me instanceof Prozess) {
+                if (me.isPaintable() || ModelConstants.hasSortedEdgesToPaintable(me.getClass())) {
                     menu.addSeparator();
                     if (!ec.isVisible()) {
                         menu.add(set_visible);
