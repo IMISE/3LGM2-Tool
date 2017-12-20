@@ -476,7 +476,6 @@ public final class GDCollection extends UserFieldTarget {
         ModelElement me = ec.getElement();
         while (true) {
             NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
-            //TODO:Prozess gegen etwas allg. ersetzen (z. B. coloredElement als Eigenschaft von Element-Klassen)
             Point dialogPosition = getLastActionPosition();
             if (dialogPosition == null) {
                 dialogPosition = new Point(100, 100);

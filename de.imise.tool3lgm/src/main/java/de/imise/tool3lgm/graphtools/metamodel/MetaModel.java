@@ -190,7 +190,7 @@ public abstract class MetaModel {
                 //nur Knotenklassen nehmen (dort können auch Assoziationsklassen drin sein)
                 if (Node.class.isAssignableFrom(elementClass)) {
                     //nicht paintable
-                    if (!graphViewDefinition.isPaintable(elementClass)) {
+                    if (!graphViewDefinition.isPaintable(elementClass) && !ModelConstants.hasSortedEdgesToPaintable(elementClass)) {
                         uniqueNodes.add(elementClass.asSubclass(Node.class));
                     }
                 }

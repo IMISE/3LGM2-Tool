@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -35,7 +36,7 @@ public class GraphSelectedRealNodeAction extends GraphFrameAction {
         }
         for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
             //TODO: testen, ob visible hier reicht
-            if (!ec.isUnpaintable() && ec.isVisible()) {
+            if (!ec.isUnpaintable() && ec.isVisible() || ModelConstants.hasSortedEdgesToPaintable(ec.getElement().getClass())) {
                 return true;
             }
         }
