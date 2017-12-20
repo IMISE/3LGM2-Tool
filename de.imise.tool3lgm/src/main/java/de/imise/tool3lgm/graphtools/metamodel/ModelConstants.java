@@ -237,6 +237,35 @@ public final class ModelConstants {
     // spezielle Knoteneigenschaften //
     ///////////////////////////////////
 
+    /**
+     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Bedeutung haben.
+     */
+    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> ELEMENT_CLASS_TO_SORTED_EDGES = metaModel.getElementClassToSortedEdges();
+
+    /**
+     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
+     * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
+     * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
+     *
+     * @param elementClass
+     */
+    public static final Set<Class<? extends Edge>> getSortedEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        return ELEMENT_CLASS_TO_SORTED_EDGES.get(elementClass);
+    }
+
+    /**
+     * Prüft, ob für die übergebene Elementklasse Reihenfolge der Kanten der übergebenen Kantenklasse relevant ist.
+     *
+     * @param elementClass Elementklasse, für die Kanten der edgeClass in einer bestimmten Reihenfolge sein müssen
+     * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
+     * @return
+     */
+    public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        return SortedEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
+        //return getSortedEdgeClasses(elementClass).contains(edgeClass); //das kommt auf dasselbe raus wie das oben. Ich konnte mich nicht entscheiden, was besser ist -> daher nur auskommentiert
+    }
+
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     public static final Class<? extends ModelElement>[] IMPORTABLE_NODES = metaModel.getImportableNodes();
 
@@ -245,8 +274,8 @@ public final class ModelConstants {
 
     public static final Set<Class<? extends ModelElement>> ELEMENTS_WITH_NAME_EXTENSIONS = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, ALL_ELEMENTS);
 
-    public static final boolean hasSortedEdges(final Class<? extends ModelElement> elementClass) {
-        return getSortedEdgeClasses(elementClass) != null; // nur bei Elementklasse mit wenigstens einer SortedEdge kommt nich null zurück
+    public static final boolean hasSortedEdgesToPaintable(final Class<? extends ModelElement> elementClass) {
+        return getGraphViewDefinition().hasSortedEdgeClassesToPaintable(elementClass);
     }
 
     /**
@@ -295,35 +324,6 @@ public final class ModelConstants {
     ///////////////////////////////////
     // spezielle Kanteneigenschaften //
     ///////////////////////////////////
-
-    /**
-     * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben.
-     */
-    private static final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> ELEMENT_CLASS_TO_SORTED_EDGES = metaModel.getElementClassToSortedEdges();
-
-    /**
-     * Liefert ein Set aller Kantenklassen, die für die übergebene Elementklasse "geordnet sind", d. h. dass für Elemente der übergebenen Klasse die
-     * Reihenfolge der Instanzen der zurück gelieferten Kantenklassen in ihrem Kantenvektor eine Bedeutung hat
-     * (z. B. Reihenfolge von Aufgaben in einem Prozess -> Verbindung zwischen Prozessen und Aufgaben sind für den Prozess geordnet).
-     *
-     * @param elementClass
-     */
-    public static final Set<Class<? extends Edge>> getSortedEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        return ELEMENT_CLASS_TO_SORTED_EDGES.get(elementClass);
-    }
-
-    /**
-     * Prüft, ob für die übergebene Elementklasse Reihenfolge der Kanten der übergebenen Kantenklasse relevant ist.
-     *
-     * @param elementClass Elementklasse, für die Kanten der edgeClass in einer bestimmten Reihenfolge sein müssen
-     * @param edgeClass Kantenklasse, die für Elemente der elementClass in der richtigen Reihenfolge sein müssen
-     * @return
-     */
-    public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return SortedEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
-        //return getSortedEdgeClasses(elementClass).contains(edgeClass); //das kommt auf dasselbe raus wie das oben. Ich konnte mich nicht entscheiden, was besser ist -> daher nur auskommentiert
-    }
 
     public static final boolean isMultipleEdgeClass(final Class<? extends Edge> edgeClass) {
         return MultipleEdge.class.isAssignableFrom(edgeClass);
