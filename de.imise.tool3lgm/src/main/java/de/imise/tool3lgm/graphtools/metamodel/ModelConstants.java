@@ -1623,10 +1623,11 @@ public final class ModelConstants {
     /**
      * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen
      *
+     * @param plugins
      * @return
      */
-    public static final Action[] getExtrasActions() {
-        return metaModel.getExtrasActions();
+    public static final Action[] getExtrasActions(final boolean plugins) {
+        return metaModel.getExtrasActions(plugins);
     }
 
 }

@@ -72,10 +72,10 @@ public abstract class MetaModel {
         return null;
     }
 
-    public final Action[] getExtrasActions() {
+    public final Action[] getExtrasActions(final boolean plugins) {
         try {
             ExtrasActionsDefinition extrasActionsDefinition = getExtrasActionsDefinitionClass().newInstance();
-            return extrasActionsDefinition.getActions();
+            return plugins ? extrasActionsDefinition.getPluginActions() : extrasActionsDefinition.getActions();
         } catch (Exception e) {
         }
         return new Action[0];

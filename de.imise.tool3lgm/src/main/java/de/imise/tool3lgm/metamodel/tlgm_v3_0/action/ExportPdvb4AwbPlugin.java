@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.plugin;
+package de.imise.tool3lgm.metamodel.tlgm_v3_0.action;
 
 import static de.imise.tool3lgm.graphtools.metamodel.Edge.ANY;
 
@@ -42,7 +42,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  * @author AXS
  * @create 07.09.2012
  */
-public class ExportPdvb4AwbPlugin implements Plugin {
+public class ExportPdvb4AwbPlugin {
 
     /** Datei, in die als letztes exportiert wurde */
     private File lastSelectedFile = null;
@@ -52,7 +52,6 @@ public class ExportPdvb4AwbPlugin implements Plugin {
      */
     private final boolean german = Locale.getDefault().getCountry() == Locale.GERMAN.getCountry();
 
-    @Override
     public Action getAction() {
         return new AbstractAction(german ? "CSV-Export Anwendungssysteme -> Phys. Datenverabeitungsbausteine" : "CSV Export Application Systems -> Phys. Data Processing Components") {
 

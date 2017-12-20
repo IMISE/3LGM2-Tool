@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.plugin;
+package de.imise.tool3lgm.metamodel.tlgm_v3_0.action;
 
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
@@ -38,12 +38,11 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
  * @author AXS
  * @create 02.07.2012
  */
-public class B1ExportPlugin implements Plugin {
+public class B1ExportPlugin {
 
     /** Datei, in die als letztes exportiert wurde */
     private File lastSelectedFile = null;
 
-    @Override
     public Action getAction() {
         return new AbstractAction("Bereich 1 Tabellenexport") {
             @Override

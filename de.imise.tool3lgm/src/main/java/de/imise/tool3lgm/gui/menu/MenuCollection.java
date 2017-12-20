@@ -40,8 +40,6 @@ import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.plugin.B1ExportPlugin;
-import de.imise.tool3lgm.plugin.ExportPdvb4AwbPlugin;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.menu.DynamicMenu;
@@ -89,7 +87,7 @@ public class MenuCollection {
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION), new JSeparator(),
-            ModelConstants.getExtrasActions(), new JSeparator(), AnalysisActions.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
+            ModelConstants.getExtrasActions(false), new JSeparator(), AnalysisActions.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();
@@ -190,7 +188,7 @@ public class MenuCollection {
     /** Sammlung der Unter-Menus des Extras-Menus */
     static class ExtrasSubMenus {
 
-        public static final JMenu PLUGIN_MENU = createMenu("plugin", new B1ExportPlugin().getAction(), new ExportPdvb4AwbPlugin().getAction());
+        public static final JMenu PLUGIN_MENU = createMenu("plugin", ModelConstants.getExtrasActions(true));
 
     }
 
