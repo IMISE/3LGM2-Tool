@@ -39,7 +39,6 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.Mapping;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen
@@ -715,7 +714,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("layout")) {
                 if (container != null) {
-                    if (container.getElement() instanceof Prozess) {
+                    Class<? extends ModelElement> elementClass = container.getElement().getClass();
+                    if (ModelConstants.hasSortedEdgesToPaintable(elementClass)) {
                         container.checkTreeIcon();
                     }
                 }
