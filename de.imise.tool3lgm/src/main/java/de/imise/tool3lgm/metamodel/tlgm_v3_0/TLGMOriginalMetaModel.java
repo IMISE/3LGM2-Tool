@@ -360,7 +360,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     @Override
-    public final Class[] getImportableNodes() {
+    public final Class<? extends ModelElement>[] getImportableNodes() {
         return IMPORTABLE_NODES;
     }
 

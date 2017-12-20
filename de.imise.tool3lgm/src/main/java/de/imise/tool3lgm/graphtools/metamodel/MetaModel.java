@@ -160,7 +160,7 @@ public abstract class MetaModel {
     ///////////////////////////////////
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
-    public abstract Class[] getImportableNodes();
+    public abstract Class<? extends ModelElement>[] getImportableNodes();
 
     /**
      * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen.

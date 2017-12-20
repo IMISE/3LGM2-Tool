@@ -137,51 +137,31 @@ public final class ModelConstants {
     public static final Class<? extends ModelElement>[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
 
     /** Alle Node der FE als HashSet */
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
 
     /** Alle Node zw. FE und LWE als Array */
     public static final Class<? extends ModelElement>[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = metaModel.getAllInterDomainLogicalLayerNodes();
 
     /** Alle Node zw. FE und LWE als HashSet */
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
 
     /** Alle Node der LWE als Array */
     public static final Class<? extends ModelElement>[] ALL_LOGICAL_LAYER_NODES = metaModel.getAllLogicalLayerNodes();
 
     /** Alle Node der LWE als HashSet */
-    @SuppressWarnings({
-            "rawtypes",
-            "unchecked"
-    })
-    public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
 
     /** Alle Node zw. LWE und PWE als Array */
     public static final Class<? extends ModelElement>[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
 
     /** Alle Node zw. LWE und PWE als HashSet */
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
 
     /** Alle Node der PWE als Array */
     public static final Class<? extends ModelElement>[] ALL_PHYSICAL_LAYER_NODES = metaModel.getAllPhysicalLayerNodes();
 
     /** Alle Node der PWE als HashSet */
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
 
     /** Set aller Knotenklassen */
     public static final Set<Class<? extends ModelElement>> ALL_NODES_SET = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(ALL_DOMAIN_LAYER_NODES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET).addAll(ALL_LOGICAL_LAYER_NODES_SET)
@@ -218,35 +198,15 @@ public final class ModelConstants {
     @SuppressWarnings("rawtypes")
     public static final Class[] ALL_PHYSICAL_LAYER_EDGES = metaModel.getAllPhysicalLayerEdges();
 
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends Edge>> ALL_DOMAIN_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_DOMAIN_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
 
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends Edge>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
 
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends Edge>> ALL_LOGICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
 
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends Edge>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
 
-    @SuppressWarnings({
-            "unchecked",
-            "rawtypes"
-    })
-    public static final Set<Class<? extends Edge>> ALL_PHYSICAL_LAYER_EDGES_SET = new HashSet(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
 
     /** Set aller Kantenklassen */
     public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(ALL_DOMAIN_LAYER_EDGES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET).addAll(ALL_LOGICAL_LAYER_EDGES_SET)
@@ -278,10 +238,6 @@ public final class ModelConstants {
     ///////////////////////////////////
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
-    @SuppressWarnings({
-            "rawtypes",
-            "unchecked"
-    })
     public static final Class<? extends ModelElement>[] IMPORTABLE_NODES = metaModel.getImportableNodes();
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
