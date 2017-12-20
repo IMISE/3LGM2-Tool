@@ -149,7 +149,8 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             // TODO:FST: Actions für Item aus GlobalActionLibrary holen und setzen
             TreePath parent = path.getParentPath();
             if (parent != null) {
-                if (tree.isLayerNode(parent.getLastPathComponent()) || tree.isAbstractElementNode(parent.getLastPathComponent())) {
+                lastPathComponent = parent.getLastPathComponent();
+                if (!(knot instanceof ElementContainer)) {
                     if (right_button) {
                         String label = path.getLastPathComponent().toString();
                         Class<? extends ModelElement> elementClass = null;

@@ -88,7 +88,12 @@ public abstract class MetaModel {
     /** Alle Node der FE als Array */
     public abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
 
-    /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
+    /**
+     * Alle abstracten Klassen, die im Baum auf der FE auftauchen sollen. Werden hier irgendwelche
+     * Unterklassen von ModelElement angegeben, die Oberklassen von einer instanziierbaren Klasse
+     * der Ebene sind, dann wird der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt
+     * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
+     */
     public Class<? extends ModelElement>[] getTreeDomainLayerVisibleAbstractNodes() {
         return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
     }
@@ -98,7 +103,12 @@ public abstract class MetaModel {
 
     public abstract Class<? extends ModelElement>[] getAllLogicalLayerNodes();
 
-    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    /**
+     * Alle abstracten Klassen, die im Baum auf der LWE auftauchen sollen. Werden hier irgendwelche
+     * Unterklassen von ModelElement angegeben, die Oberklassen von einer instanziierbaren Klasse
+     * der Ebene sind, dann wird der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt
+     * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
+     */
     public Class<? extends ModelElement>[] getTreeLogicalLayerVisibleAbstractNodes() {
         return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
     }
@@ -109,7 +119,12 @@ public abstract class MetaModel {
     /** Alle Node der PWE als Array */
     public abstract Class<? extends ModelElement>[] getAllPhysicalLayerNodes();
 
-    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    /**
+     * Alle abstracten Klassen, die im Baum auf der LWE auftauchen sollen. Werden hier irgendwelche
+     * Unterklassen von ModelElement angegeben, die Oberklassen von einer instanziierbaren Klasse
+     * der Ebene sind, dann wird der Klassenknoten der instanziierbaren Klasse im Baum nicht direkt
+     * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
+     */
     public Class<? extends ModelElement>[] getTreePhsicalLayerVisibleAbstractNodes() {
         return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
     }

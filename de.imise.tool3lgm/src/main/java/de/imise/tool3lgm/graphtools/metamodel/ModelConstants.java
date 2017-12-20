@@ -288,7 +288,7 @@ public final class ModelConstants {
     }
 
     /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
-    public static Class<? extends ModelElement>[] getTreePhsicalLayerVisibleAbstractNodes() {
+    public static Class<? extends ModelElement>[] getTreePhysicalLayerVisibleAbstractNodes() {
         return metaModel.getTreePhsicalLayerVisibleAbstractNodes();
     }
 
@@ -817,7 +817,7 @@ public final class ModelConstants {
         if (clazz == null) {
             return null;
         }
-        while (clazz != ModelElement.class) {
+        while (ModelElement.class.isAssignableFrom(clazz)) {
             try {
                 String resKey = clazz.getSimpleName();
                 if (plural) {
