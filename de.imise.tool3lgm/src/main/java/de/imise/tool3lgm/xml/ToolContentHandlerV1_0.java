@@ -27,8 +27,8 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
 /**
  * @author Thomas Rudert
@@ -234,7 +234,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("description")) {
 
         } else if (qName.equals("mapping")) {
-            szenario.setMapping(new ElementsLayoutDefinition());
+            szenario.setMapping(new ElementsLayoutDefinition(true));
 
         } else if (qName.equals("bitmap")) {
             if (atts.getValue("type").equals("gif/base64")) {

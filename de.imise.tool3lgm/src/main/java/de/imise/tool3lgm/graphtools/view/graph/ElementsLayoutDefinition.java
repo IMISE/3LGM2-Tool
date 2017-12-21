@@ -6,23 +6,9 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.TextfeldFach;
-import de.imise.tool3lgm.graphtools.metamodel.TextfeldLog;
-import de.imise.tool3lgm.graphtools.metamodel.TextfeldPhy;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Benutzungsschnittstelle;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Dokumentensammlung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationsplan;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 
 public class ElementsLayoutDefinition {
 
@@ -39,9 +25,11 @@ public class ElementsLayoutDefinition {
     /**
      *
      */
-    public ElementsLayoutDefinition() {
+    public ElementsLayoutDefinition(final boolean loadDefaults) {
         super();
-        loadDefaults();
+        if (loadDefaults) {
+            loadDefaults();
+        }
     }
 
     /**
@@ -227,153 +215,9 @@ public class ElementsLayoutDefinition {
         getElementClassSpecificLayout(elementClass).setFont(font);
     }
 
-    //TODO: die Defaults müssten der Klasse irgendwie von außen übergeben werden
-
     public void loadDefaults() {
-        elementClassToStandardLayoutMap.clear();
-
-        setStandardBackGroundColor(Aufgabe.class, GraphElementLayout.COLORS[GraphElementLayout.RED]);
-        setStandardForm(Aufgabe.class, GraphElementLayout.SHAPE.rechteck);
-
-        setStandardBackGroundColor(Objekttyp.class, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setStandardForm(Objekttyp.class, GraphElementLayout.SHAPE.oval);
-
-        setStandardBackGroundColor(Anwendungsbaustein.class, GraphElementLayout.COLORS[GraphElementLayout.GRAY]);
-        setStandardForm(Anwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck);
-
-        setStandardBackGroundColor(RechAnwendungsbaustein.class, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
-        setStandardForm(RechAnwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck);
-
-        setStandardBackGroundColor(KonAnwendungsbaustein.class, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
-        setStandardForm(KonAnwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck);
-
-        setStandardBackGroundColor(Datenbanksystem.class, GraphElementLayout.COLORS[GraphElementLayout.YELLOW]);
-        setStandardForm(Datenbanksystem.class, GraphElementLayout.SHAPE.tonne);
-        setStandardSize(Datenbanksystem.class, 20, 20);
-
-        setStandardBackGroundColor(Dokumentensammlung.class, GraphElementLayout.COLORS[GraphElementLayout.WHITE]);
-        setStandardForm(Dokumentensammlung.class, GraphElementLayout.SHAPE.ordner);
-        setStandardSize(Dokumentensammlung.class, 20, 20);
-
-        setStandardBackGroundColor(Organisationsplan.class, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setStandardForm(Organisationsplan.class, GraphElementLayout.SHAPE.wabe);
-
-        setStandardBackGroundColor(TextfeldFach.class, new Color(0, 0, 0, 0));
-        setStandardForm(TextfeldFach.class, GraphElementLayout.SHAPE.rechteck);
-        setStandardBackGroundColor(TextfeldLog.class, new Color(0, 0, 0, 0));
-        setStandardForm(TextfeldLog.class, GraphElementLayout.SHAPE.rechteck);
-        setStandardBackGroundColor(TextfeldPhy.class, new Color(0, 0, 0, 0));
-        setStandardForm(TextfeldPhy.class, GraphElementLayout.SHAPE.rechteck);
-
-        setStandardBackGroundColor(Bausteinschnittstelle.class, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN]);
-        setStandardForm(Bausteinschnittstelle.class, GraphElementLayout.SHAPE.oval);
-        setStandardSize(Bausteinschnittstelle.class, 15, 15);
-
-        setStandardBackGroundColor(Benutzungsschnittstelle.class, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setStandardForm(Benutzungsschnittstelle.class, GraphElementLayout.SHAPE.oval);
-        setStandardSize(Benutzungsschnittstelle.class, 15, 15);
-
-        setStandardBackGroundColor(PhysischerDVBaustein.class, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setStandardForm(PhysischerDVBaustein.class, GraphElementLayout.SHAPE.rechteck);
-
-        //		layout_new[ModelConstants.KANTE].bg_color = Color.black;
-        //		layout_new[ModelConstants.DOPPELKANTE].bg_color = Color.black;
-        //		layout_new[ModelConstants.AUF_OBJ_VERBINDUNG].bg_color = Color.black;
-
-        setStandardSize(Knickpunkt.class, 10, 10);
-
-        //		Alte Darstellung (entfernen, wenn das oben läuft)
-        //		for (int c=0;c<ModelConstants.HIGHEST_CLASS_TYPE;c++) {
-        //			layout_new[c].reset();
-        //			layout_new[c].font = STANDARD_FONT;
-        //		}
-        //		layout_new[ModelConstants.AUFGABE].bg_color = COLORS[RED];
-        //		layout_new[ModelConstants.AUFGABE].form = RECHTECK;
-        //
-        //		layout_new[ModelConstants.OBJEKTTYP].bg_color = COLORS[BLUE];
-        //		layout_new[ModelConstants.OBJEKTTYP].form = OVAL;
-        //
-        //		layout_new[ModelConstants.ANWENDUNGSBAUSTEIN].bg_color = COLORS[GRAY];
-        //		layout_new[ModelConstants.ANWENDUNGSBAUSTEIN].form = RUNDECK;
-        //
-        //		layout_new[ModelConstants.RECHANWENDUNGSBAUSTEIN].bg_color = COLORS[LIGHTRED];
-        //		layout_new[ModelConstants.RECHANWENDUNGSBAUSTEIN].form = RUNDECK;
-        //
-        //		layout_new[ModelConstants.KONANWENDUNGSBAUSTEIN].bg_color = COLORS[BLUE];
-        //		layout_new[ModelConstants.KONANWENDUNGSBAUSTEIN].form = RUNDECK;
-        //
-        //		layout_new[ModelConstants.DATENBANKSYSTEM].bg_color = COLORS[YELLOW];
-        //		layout_new[ModelConstants.DATENBANKSYSTEM].form = TONNE;
-        //		layout_new[ModelConstants.DATENBANKSYSTEM].width = 20;
-        //		layout_new[ModelConstants.DATENBANKSYSTEM].height = 20;
-        //
-        //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].bg_color = COLORS[WHITE];
-        //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].form = ORDNER;
-        //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].width = 20;
-        //		layout_new[ModelConstants.DOKUMENTENSAMMLUNG].height = 20;
-        //
-        //		layout_new[ModelConstants.ORGANISATIONSPLAN].bg_color = COLORS[GREEN];
-        //		layout_new[ModelConstants.ORGANISATIONSPLAN].form = RHOMBUS;
-        //
-        //		layout_new[ModelConstants.ANWENDUNGSPROGRAMM].bg_color = COLORS[ORANGE];
-        //		layout_new[ModelConstants.ANWENDUNGSPROGRAMM].form = WABE;
-        //
-        //		layout_new[ModelConstants.SOFTWAREPRODUKT].bg_color = COLORS[WHITE];
-        //		layout_new[ModelConstants.SOFTWAREPRODUKT].form = RHOMBUS;
-        //
-        //		layout_new[ModelConstants.TEXTFELDFACH].bg_color = new Color(0,0,0,0);
-        //		layout_new[ModelConstants.TEXTFELDFACH].form = RECHTECK;
-        //
-        //		layout_new[ModelConstants.TEXTFELDLOG].bg_color = new Color(0,0,0,0);
-        //		layout_new[ModelConstants.TEXTFELDLOG].form = RECHTECK;
-        //
-        //		layout_new[ModelConstants.TEXTFELDPHY].bg_color = new Color(0,0,0,0);
-        //		layout_new[ModelConstants.TEXTFELDPHY].form = RECHTECK;
-        //
-        //		layout_new[ModelConstants.BAUSTEINSCHNITTSTELLE].bg_color = COLORS[LIGHTGREEN];
-        //		layout_new[ModelConstants.BAUSTEINSCHNITTSTELLE].form = OVAL;
-        //		layout_new[ModelConstants.BAUSTEINSCHNITTSTELLE].width = 15;
-        //		layout_new[ModelConstants.BAUSTEINSCHNITTSTELLE].height = 15;
-        //
-        //		layout_new[ModelConstants.BENUTZUNGSSCHNITTSTELLE].bg_color = COLORS[ORANGE];
-        //		layout_new[ModelConstants.BENUTZUNGSSCHNITTSTELLE].form = OVAL;
-        //		layout_new[ModelConstants.BENUTZUNGSSCHNITTSTELLE].width = 15;
-        //		layout_new[ModelConstants.BENUTZUNGSSCHNITTSTELLE].height = 15;
-        //
-        //		layout_new[ModelConstants.NACHRICHTENTYP].bg_color = COLORS[YELLOW];
-        //		layout_new[ModelConstants.NACHRICHTENTYP].form = RHOMBUS;
-        //
-        //		layout_new[ModelConstants.KOMMUNIKATIONSSTANDARD].bg_color = COLORS[GREEN];
-        //		layout_new[ModelConstants.KOMMUNIKATIONSSTANDARD].form = DREIECK;
-        //
-        //		layout_new[ModelConstants.DBVERWALTUNGSSYSTEM].bg_color = COLORS[GRAY];
-        //		layout_new[ModelConstants.DBVERWALTUNGSSYSTEM].form = TONNE;
-        //
-        //		layout_new[ModelConstants.PHYSISCHER_DV_BAUSTEIN].bg_color = COLORS[ORANGE];
-        //		layout_new[ModelConstants.PHYSISCHER_DV_BAUSTEIN].form = RECHTECK;
-        //
-        //		layout_new[ModelConstants.NETZTYP].bg_color = COLORS[BLUE];
-        //		layout_new[ModelConstants.NETZTYP].form = RHOMBUS;
-        //
-        //		layout_new[ModelConstants.SUBNETZ].bg_color = COLORS[YELLOW];
-        //		layout_new[ModelConstants.SUBNETZ].form = RUNDECK;
-        //
-        //		layout_new[ModelConstants.NETZPROTOKOLL].bg_color = COLORS[WHITE];
-        //		layout_new[ModelConstants.NETZPROTOKOLL].form = OVAL;
-        //
-        //		layout_new[ModelConstants.STANDORT].bg_color = COLORS[GRAY];
-        //		layout_new[ModelConstants.STANDORT].form = RECHTECK;
-        //
-        //		layout_new[ModelConstants.BAUSTEINTYP].bg_color = COLORS[RED];
-        //		layout_new[ModelConstants.BAUSTEINTYP].form = OVAL;
-        //
-        //		layout_new[ModelConstants.KANTE].bg_color = Color.black;
-        //		layout_new[ModelConstants.DOPPELKANTE].bg_color = Color.black;
-        //		layout_new[ModelConstants.AUF_OBJ_VERBINDUNG].bg_color = Color.black;
-        //
-        //		layout_new[ModelConstants.KNICKPUNKTKNOTEN].width = 10;
-        //		layout_new[ModelConstants.KNICKPUNKTKNOTEN].height = 10;
-
+        ElementsLayoutDefinition defaultElementsLayout = ModelConstants.getGraphViewDefinition().getDefaultElementsLayout();
+        adapt(defaultElementsLayout);
     }
 
 }

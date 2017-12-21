@@ -8,6 +8,8 @@ import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
@@ -22,6 +24,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Dokumentensammlung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationsplan;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.util.Pair;
@@ -61,6 +64,21 @@ public class TLGMGraphViewDefinion extends GraphViewDefinition {
     @Override
     public List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> getHidableIfNotConnected() {
         return ImmutableList.of(new Pair<>(Bausteinschnittstelle.class, KommBeziehung.class));
+    }
+
+    @Override
+    protected void initDefaultElementLayout() {
+        setDefaultLayout(Aufgabe.class, SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
+        setDefaultLayout(Objekttyp.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
+        setDefaultLayout(Anwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.GRAY]);
+        setDefaultLayout(RechAnwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
+        setDefaultLayout(KonAnwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
+        setDefaultLayout(Datenbanksystem.class, GraphElementLayout.SHAPE.tonne, GraphElementLayout.COLORS[GraphElementLayout.YELLOW], 20, 20);
+        setDefaultLayout(Dokumentensammlung.class, GraphElementLayout.SHAPE.ordner, GraphElementLayout.COLORS[GraphElementLayout.WHITE], 20, 20);
+        setDefaultLayout(Organisationsplan.class, GraphElementLayout.SHAPE.wabe, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
+        setDefaultLayout(Bausteinschnittstelle.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
+        setDefaultLayout(Benutzungsschnittstelle.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 15, 15);
+        setDefaultLayout(PhysischerDVBaustein.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
     }
 
 }
