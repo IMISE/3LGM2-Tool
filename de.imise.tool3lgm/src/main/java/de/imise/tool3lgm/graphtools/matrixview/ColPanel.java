@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * @author Thomas Rudert

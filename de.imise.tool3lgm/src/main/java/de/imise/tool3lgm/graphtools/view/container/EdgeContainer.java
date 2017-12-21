@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
@@ -16,12 +16,12 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;

@@ -6,7 +6,7 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.ProzessStructurePanel;

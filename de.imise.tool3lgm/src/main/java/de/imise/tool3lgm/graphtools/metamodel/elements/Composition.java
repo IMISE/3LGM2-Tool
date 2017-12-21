@@ -1,9 +1,11 @@
 /**
  *
  */
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_ONE;
+
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 
 /**
  * Eine Komposition im Sinne der Objektortientierung. Das 2. Element bzw. Endelement gilt immer als Untergeordnetes Element (Slave) des 1. bzw.

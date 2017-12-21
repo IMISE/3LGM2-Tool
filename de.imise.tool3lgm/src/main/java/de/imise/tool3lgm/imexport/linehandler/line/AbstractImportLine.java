@@ -2,7 +2,7 @@ package de.imise.tool3lgm.imexport.linehandler.line;
 
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * An abstract representation of one line of an import

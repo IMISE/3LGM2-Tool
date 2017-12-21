@@ -3,8 +3,8 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 /**

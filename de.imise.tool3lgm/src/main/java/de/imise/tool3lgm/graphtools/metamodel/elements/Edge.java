@@ -1,8 +1,10 @@
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isAlwaysDoubleConnectedEdge;
 
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;

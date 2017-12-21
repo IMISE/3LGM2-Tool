@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.Textfeld;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;

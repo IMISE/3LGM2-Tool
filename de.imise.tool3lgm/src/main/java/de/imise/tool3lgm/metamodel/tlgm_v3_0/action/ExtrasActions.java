@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.action;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import javax.swing.Action;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;

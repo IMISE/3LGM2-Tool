@@ -12,8 +12,8 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**

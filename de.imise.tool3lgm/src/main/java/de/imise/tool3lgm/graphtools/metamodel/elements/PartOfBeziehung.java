@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;

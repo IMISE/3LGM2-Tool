@@ -8,8 +8,8 @@ import java.util.Vector;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;

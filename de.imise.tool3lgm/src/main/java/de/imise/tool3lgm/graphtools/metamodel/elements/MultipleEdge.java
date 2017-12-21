@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 /**
  * Dieses Interface dient dazu, Kanten zu markieren, die mehrfach zwischen denselben Elementen vorkommen können.

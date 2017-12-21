@@ -1,18 +1,18 @@
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.ANY;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.ANY;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;

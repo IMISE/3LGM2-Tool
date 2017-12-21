@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -20,8 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;

@@ -1,13 +1,13 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -16,6 +16,8 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;

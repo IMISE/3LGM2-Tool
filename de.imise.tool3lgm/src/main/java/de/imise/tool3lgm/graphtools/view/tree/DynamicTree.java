@@ -26,9 +26,9 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.KeyStrokes;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
-import de.imise.tool3lgm.graphtools.metamodel.Textfeld;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;

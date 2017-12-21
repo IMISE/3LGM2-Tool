@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;

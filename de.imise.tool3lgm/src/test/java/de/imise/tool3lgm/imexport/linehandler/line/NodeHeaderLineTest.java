@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 
 public class NodeHeaderLineTest {

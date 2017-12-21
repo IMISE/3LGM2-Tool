@@ -2,11 +2,11 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.MultipleEdge;
-import de.imise.tool3lgm.graphtools.metamodel.SortedEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SortedEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Prozess;
 

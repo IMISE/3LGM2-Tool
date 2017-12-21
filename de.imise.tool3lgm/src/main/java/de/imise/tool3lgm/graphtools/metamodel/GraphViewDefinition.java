@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -10,6 +10,13 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
+import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
+import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;

@@ -1,13 +1,13 @@
 package de.imise.tool3lgm.gui.menu;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -24,10 +24,10 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.CommandAction;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.ElementSelectionContext;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;

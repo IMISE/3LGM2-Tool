@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.Vector;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;

@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMaxForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getMinForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
@@ -23,10 +23,10 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.metamodel.Composition;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;

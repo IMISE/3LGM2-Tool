@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.imexport.graphml;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 
 public class YFilesGraphmlEdgeStyle {

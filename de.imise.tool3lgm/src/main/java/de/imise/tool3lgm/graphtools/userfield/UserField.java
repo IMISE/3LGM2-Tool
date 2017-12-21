@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.HashStringGenerator;
 

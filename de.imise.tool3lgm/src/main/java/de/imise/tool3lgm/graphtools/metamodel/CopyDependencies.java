@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * @author AXS (15.08.2017)

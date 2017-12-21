@@ -6,7 +6,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * Wird zur Zeit nicht genutzt. Wenn dann bei der Eingabe von IDs als benutzerdefinierte Eigenschaften.

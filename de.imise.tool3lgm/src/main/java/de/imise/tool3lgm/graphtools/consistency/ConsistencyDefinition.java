@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 
 /**
  * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden können, was bei der

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 /**
  * Dieses Interface dient dazu, Kanten zu markieren, bei denen die Reihenfolge dieser Kanten für das Startelement eine Rolle spielt.

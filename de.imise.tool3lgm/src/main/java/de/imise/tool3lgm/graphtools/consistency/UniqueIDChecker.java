@@ -10,7 +10,7 @@ import com.google.common.collect.Multimap;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.IDEmptyError;
 import de.imise.tool3lgm.graphtools.consistency.error.IDNotUniqueError;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;

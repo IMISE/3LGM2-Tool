@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -11,6 +11,10 @@ import javax.swing.Action;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SortedEdge;
 import de.imise.util.collections.CollectionUtils;
 
 /**

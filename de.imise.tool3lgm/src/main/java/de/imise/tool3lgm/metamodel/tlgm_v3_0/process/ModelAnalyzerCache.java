@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;

@@ -3,8 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;

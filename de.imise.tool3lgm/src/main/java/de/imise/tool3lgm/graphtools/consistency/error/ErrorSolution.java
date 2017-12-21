@@ -3,8 +3,8 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 
 public class ErrorSolution {

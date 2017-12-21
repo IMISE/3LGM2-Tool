@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.metamodel;
+package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 public abstract class Textfeld extends Node {
 

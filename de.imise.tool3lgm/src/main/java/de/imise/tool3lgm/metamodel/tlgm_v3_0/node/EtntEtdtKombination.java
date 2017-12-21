@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntEtVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntKommstVerbindung;
 

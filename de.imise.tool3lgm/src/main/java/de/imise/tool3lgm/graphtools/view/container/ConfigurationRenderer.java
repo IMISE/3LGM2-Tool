@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;

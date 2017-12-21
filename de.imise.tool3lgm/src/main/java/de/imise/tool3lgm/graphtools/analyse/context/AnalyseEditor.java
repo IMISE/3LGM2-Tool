@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -31,9 +31,9 @@ import javax.swing.event.ListSelectionListener;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.list.AlphabeticalJList;

@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 public abstract class AbstractError extends Error {

@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 
 /**
  * Klasse zum Zeichnen der Zeilenköpfe für die Analysetabelle

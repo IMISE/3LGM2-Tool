@@ -3,8 +3,8 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 
 /**
  * Klasse, über die man von den originalen Kardinalitäten der Kanten abweichende Kardinalitäten definieren kann,

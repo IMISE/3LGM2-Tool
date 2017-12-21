@@ -3,9 +3,9 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_ONE;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteintyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 

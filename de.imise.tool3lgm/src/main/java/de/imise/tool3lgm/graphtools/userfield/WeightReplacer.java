@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 
 public class WeightReplacer {
 

@@ -1,12 +1,12 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.isConnectingSameElementClasses;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingSameElementClasses;
 import static de.imise.util.HashStringGenerator.getCreationTimeMedium;
 
 import java.awt.GridBagConstraints;
@@ -16,10 +16,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**

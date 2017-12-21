@@ -25,7 +25,7 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;

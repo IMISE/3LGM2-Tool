@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.util.collections.CollectionUtils;
 
 /**

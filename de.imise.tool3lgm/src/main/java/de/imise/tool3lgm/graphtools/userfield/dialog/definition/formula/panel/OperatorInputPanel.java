@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullBackwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,10 +17,10 @@ import java.util.HashSet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;

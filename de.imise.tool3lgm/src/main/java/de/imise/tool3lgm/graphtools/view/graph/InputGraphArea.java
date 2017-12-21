@@ -1,13 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import static de.imise.tool3lgm.Tool3lgm.getContextGenerator;
-import static de.imise.tool3lgm.graphtools.metamodel.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
@@ -29,10 +29,10 @@ import java.awt.event.MouseWheelListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
