@@ -1320,7 +1320,7 @@ public final class GDCollection extends UserFieldTarget {
                 //                Class<? extends ModelElement> endClass = endElement.getClass();
                 //                boolean doubleDir = edgeStartClass.isAssignableFrom(startClass) && edgeStartClass.isAssignableFrom(endClass);
                 //                doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
-                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(PartOfBeziehung.class);
+                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(IsPartOfEdge.class);
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
                 if (isAlwaysDoubleConnectedEdge(edgeClass)) {

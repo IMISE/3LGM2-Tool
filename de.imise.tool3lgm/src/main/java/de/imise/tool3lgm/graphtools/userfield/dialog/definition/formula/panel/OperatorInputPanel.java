@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -244,7 +244,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //prüfen, ob die Start- und Endklassen gleich ist ->
             //wenn ja, darf diese Edge nur für Verrechnungen genutzt werden, wenn sie
             //in Vorwärts- und Rückwartsrichtung unterschiedliche Bedeutungen (also eine
-            //unterscheidliche Bezeichnung) hat. Bei PartOfBeziehungen sind die Start und
+            //unterscheidliche Bezeichnung) hat. Bei IsPartOfEdgeen sind die Start und
             //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
             //sind unterscheidlich. Bei der Beziehung "Phys.-DV-Baustein ist verbunden mit
             //Phys.-DV-Baustein" kann man keine eindeutige Richtung zuordnen.
@@ -254,7 +254,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 continue;
             }
             if (startClass.isAssignableFrom(userField.getTargetClass())) {
-                if (PartOfBeziehung.class.isAssignableFrom(tmpEdgeClass)) {
+                if (IsPartOfEdge.class.isAssignableFrom(tmpEdgeClass)) {
                     associationBox.addItem(tmpEdgeClass, getResString("part_to_whole") + " (" + forwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, forwardName);
@@ -262,7 +262,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             }
             //das hier darf nicht als else-if geschrieben werden!
             if (endClass.isAssignableFrom(userField.getTargetClass())) {
-                if (PartOfBeziehung.class.isAssignableFrom(tmpEdgeClass)) {
+                if (IsPartOfEdge.class.isAssignableFrom(tmpEdgeClass)) {
                     associationBox.addItem(tmpEdgeClass, getResString("whole_to_part") + " (" + backwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, backwardName);
@@ -309,7 +309,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         //wenn eine Part-Of-beziehung ausgewählt wurde, dann die Richtung
         // merken
-        if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+        if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
             sb.append(" | ");
             if (associationBox.getSelectedItem().toString().equals(getResString("part_to_whole") + " (" + getFullForwardMetaAssociationName(edgeClass) + ")")) {
                 sb.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);

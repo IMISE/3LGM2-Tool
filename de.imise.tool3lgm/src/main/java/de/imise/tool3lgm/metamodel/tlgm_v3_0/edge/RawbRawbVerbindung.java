@@ -4,13 +4,13 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class RawbRawbVerbindung extends PartOfBeziehung {
+public final class RawbRawbVerbindung extends IsPartOfEdge {
 
     public static final Class<? extends ModelElement> stcl = RechAnwendungsbaustein.class;
 

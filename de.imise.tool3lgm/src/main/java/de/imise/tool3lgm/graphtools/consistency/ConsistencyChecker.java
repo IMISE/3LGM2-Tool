@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
@@ -304,7 +304,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
 
                 // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass
                 // sowohl Start- als auch Endklasse sein können
-                if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+                if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
                     if (meHasStartClass && meIsStartConnections.size() < minStartCard) {
                         returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minEndCard));
                     }

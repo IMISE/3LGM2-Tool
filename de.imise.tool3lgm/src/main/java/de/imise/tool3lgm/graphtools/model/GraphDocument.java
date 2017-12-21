@@ -52,7 +52,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -2409,7 +2409,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * der Selektion waren.
      *
      * @param addAllParts
-     *            Wenn <code>true</code> werden alle über {@link PartOfBeziehung}en verbunden Elemente
+     *            Wenn <code>true</code> werden alle über {@link IsPartOfEdge}en verbunden Elemente
      *            in die Selektion mit aufgenommen.
      * @param addAllSlaves
      *            Wenn <code>true</code> werden alle über {@link Composition}s verbunden Elemente

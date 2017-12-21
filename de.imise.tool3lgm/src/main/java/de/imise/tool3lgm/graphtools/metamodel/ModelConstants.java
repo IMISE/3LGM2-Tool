@@ -39,7 +39,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SortedEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
@@ -373,12 +373,12 @@ public final class ModelConstants {
     /**
      * Prüft, ob bei der Edge die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
      * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die keine DoubleMeaningEdges,
-     * keine PartOfBeziehungen und keine Compositions sind.
+     * keine IsPartOfEdgeen und keine Compositions sind.
      *
      * @return
      */
     public static final boolean isAlwaysDoubleConnectedEdge(final Class<?> edgeClass) {
-        return !(isDoubleMeaningEdge(edgeClass) || PartOfBeziehung.class.isAssignableFrom(edgeClass) || Composition.class.isAssignableFrom(edgeClass));
+        return !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || Composition.class.isAssignableFrom(edgeClass));
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -1073,14 +1073,14 @@ public final class ModelConstants {
     }
 
     /**
-     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die der Elementart Teilemente untergeordnet werden kann.
+     * Mappt von einer Elementart auf die Klassen der {@link IsPartOfEdge}en, über die der Elementart Teilemente untergeordnet werden kann.
      */
-    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<>(5);
+    private static final Map<Class<? extends ModelElement>, Class<? extends IsPartOfEdge>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<>(5);
 
     /**
-     * Mappt von einer Elementart auf die Klassen der {@link PartOfBeziehung}en, über die die Elementart als Teilement untergeordnet werden kann.
+     * Mappt von einer Elementart auf die Klassen der {@link IsPartOfEdge}en, über die die Elementart als Teilement untergeordnet werden kann.
      */
-    private static final Map<Class<? extends ModelElement>, Class<? extends PartOfBeziehung>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<>(5);
+    private static final Map<Class<? extends ModelElement>, Class<? extends IsPartOfEdge>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<>(5);
     //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
     //gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
     //kann man die Warnungen nur für die ganze Datei unterdrücken
@@ -1091,32 +1091,32 @@ public final class ModelConstants {
     @SuppressWarnings("unchecked")
     private static final void fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES() {
         for (int i = 0; i < ALL_NODES.length; i++) {
-            //Hole alle Kantenklassen der Zielklasse und suche alle PartOfBeziehungen
+            //Hole alle Kantenklassen der Zielklasse und suche alle IsPartOfEdgeen
             for (Class<? extends Edge> c : getEdgeTypes(ALL_NODES[i])) {
-                if (PartOfBeziehung.class.isAssignableFrom(c)) {
-                    Class<? extends PartOfBeziehung>[] edgeClasses = null;
-                    Class<? extends PartOfBeziehung> poClass = c.asSubclass(PartOfBeziehung.class);
-                    if (PartOfBeziehung.isParentClass(poClass, ALL_NODES[i])) {
+                if (IsPartOfEdge.class.isAssignableFrom(c)) {
+                    Class<? extends IsPartOfEdge>[] edgeClasses = null;
+                    Class<? extends IsPartOfEdge> poClass = c.asSubclass(IsPartOfEdge.class);
+                    if (IsPartOfEdge.isParentClass(poClass, ALL_NODES[i])) {
                         edgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(ALL_NODES[i]);
                         if (edgeClasses == null) {
                             edgeClasses = new Class[1];
                             edgeClasses[0] = poClass;
                             ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
                         } else {
-                            Class<? extends PartOfBeziehung>[] newEdgeClasses = new Class[edgeClasses.length + 1];
+                            Class<? extends IsPartOfEdge>[] newEdgeClasses = new Class[edgeClasses.length + 1];
                             System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
                             newEdgeClasses[edgeClasses.length] = poClass;
                             ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
                         }
                     }
-                    if (PartOfBeziehung.isPartClass(poClass, ALL_NODES[i])) {
+                    if (IsPartOfEdge.isPartClass(poClass, ALL_NODES[i])) {
                         edgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(ALL_NODES[i]);
                         if (edgeClasses == null) {
                             edgeClasses = new Class[1];
                             edgeClasses[0] = poClass;
                             ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
                         } else {
-                            Class<? extends PartOfBeziehung>[] newEdgeClasses = new Class[edgeClasses.length + 1];
+                            Class<? extends IsPartOfEdge>[] newEdgeClasses = new Class[edgeClasses.length + 1];
                             System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
                             newEdgeClasses[edgeClasses.length] = poClass;
                             ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
@@ -1146,30 +1146,30 @@ public final class ModelConstants {
     }
 
     public static final boolean isPartOfEdge(final Class<? extends Edge> edgeClass) {
-        return PartOfBeziehung.class.isAssignableFrom(edgeClass);
+        return IsPartOfEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**
-     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
+     * Liefert die Klassen von <code>IsPartOfEdge</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
      * können.
      *
-     * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
+     * @return Leeres Array, wenn es keine {@link IsPartOfEdge} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
     @SuppressWarnings("unchecked")
-    public static Class<? extends PartOfBeziehung>[] getHasPartsEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        Class<? extends PartOfBeziehung>[] hasPartEdgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass);
+    public static Class<? extends IsPartOfEdge>[] getHasPartsEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        Class<? extends IsPartOfEdge>[] hasPartEdgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass);
         return hasPartEdgeClasses == null ? new Class[0] : hasPartEdgeClasses;
     }
 
     /**
-     * Liefert die Klassen von <code>PartOfBeziehung</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
+     * Liefert die Klassen von <code>IsPartOfEdge</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
      * werden kann.
      *
-     * @return Leeres Array, wenn es keine {@link PartOfBeziehung} gibt, aosnsten ein Array aller dieser Kantenklassen
+     * @return Leeres Array, wenn es keine {@link IsPartOfEdge} gibt, aosnsten ein Array aller dieser Kantenklassen
      */
     @SuppressWarnings("unchecked")
-    public static Class<? extends PartOfBeziehung>[] getIsPartOfEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        Class<? extends PartOfBeziehung>[] isPartOfEdgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass);
+    public static Class<? extends IsPartOfEdge>[] getIsPartOfEdgeClasses(final Class<? extends ModelElement> elementClass) {
+        Class<? extends IsPartOfEdge>[] isPartOfEdgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass);
         return isPartOfEdgeClasses == null ? new Class[0] : isPartOfEdgeClasses;
     }
 

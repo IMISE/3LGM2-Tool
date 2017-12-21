@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 
 /**
  * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden können, was bei der
@@ -58,12 +58,12 @@ public class ConsistencyDefinition {
      */
     public void addOnlyLeafAllowedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         // Teil-Von-Beziehungen dürfen hier nicht enthalten sein, da das ein Widerspruch wäre
-        if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+        if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
             return;
         }
         // nur bei Elementen, die auch Teil-Von-Beziehungen haben können, ist es sinnvoll, sie sich
         // zu merken
-        Class<? extends PartOfBeziehung>[] edges2parts = ModelConstants.getHasPartsEdgeClasses(elementClass);
+        Class<? extends IsPartOfEdge>[] edges2parts = ModelConstants.getHasPartsEdgeClasses(elementClass);
         if (edges2parts.length == 0) {
             return;
         }

@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -54,7 +54,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     /**
      * @param dialog
      */
-    public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends PartOfBeziehung> partOfEdgeClass) {
+    public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends IsPartOfEdge> partOfEdgeClass) {
         super(dialog, true, dialog.getModelElement().getClass(), partOfEdgeClass);
         internalInit();
     }

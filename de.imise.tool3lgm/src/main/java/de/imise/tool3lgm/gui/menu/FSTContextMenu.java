@@ -27,7 +27,7 @@ import de.imise.tool3lgm.event.CommandAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.model.ElementSelectionContext;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -283,7 +283,7 @@ public class FSTContextMenu extends JPopupMenu {
 
                 for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                     for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(me1Class, me2Class)) {
-                        if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+                        if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
                             if (isConnectingForward(edgeClass, me1Class, me2Class)) {
                                 String label = ModelConstants.getBackwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;

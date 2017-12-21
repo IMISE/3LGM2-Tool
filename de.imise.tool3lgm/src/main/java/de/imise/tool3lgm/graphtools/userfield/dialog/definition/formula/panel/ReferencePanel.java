@@ -29,7 +29,7 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.list.AlphabeticalJList;
@@ -137,7 +137,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        if (PartOfBeziehung.class.isAssignableFrom(edgeClass) || getEdgeTypes(edgeClass).length != 0) {
+        if (IsPartOfEdge.class.isAssignableFrom(edgeClass) || getEdgeTypes(edgeClass).length != 0) {
             add(directionPanel, gbc);
         } else {
             directionPanel.setVisible(false);

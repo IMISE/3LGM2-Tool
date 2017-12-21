@@ -10,7 +10,7 @@ import de.imise.tool3lgm.log.Log;
  * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Edge ist immer das Kindelement,
  * das Ende der Edge ist immer das Elternelement. Dir Richtung der Edge ist immer forward.
  */
-public abstract class PartOfBeziehung extends Edge {
+public abstract class IsPartOfEdge extends Edge {
 
     /**
      * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
@@ -36,7 +36,7 @@ public abstract class PartOfBeziehung extends Edge {
      * @param poClass
      * @return
      */
-    public static final Class<? extends ModelElement> getPartClass(final Class<? extends PartOfBeziehung> poClass) {
+    public static final Class<? extends ModelElement> getPartClass(final Class<? extends IsPartOfEdge> poClass) {
         return getStartClass(poClass);
     }
 
@@ -46,7 +46,7 @@ public abstract class PartOfBeziehung extends Edge {
      * @param poClass
      * @return
      */
-    public static final Class<? extends ModelElement> getParentClass(final Class<? extends PartOfBeziehung> poClass) {
+    public static final Class<? extends ModelElement> getParentClass(final Class<? extends IsPartOfEdge> poClass) {
         return getEndClass(poClass);
     }
 
@@ -57,7 +57,7 @@ public abstract class PartOfBeziehung extends Edge {
      * @param meClass
      * @return
      */
-    public static final boolean isPartClass(final Class<? extends PartOfBeziehung> poClass, final Class<? extends ModelElement> meClass) {
+    public static final boolean isPartClass(final Class<? extends IsPartOfEdge> poClass, final Class<? extends ModelElement> meClass) {
         return getPartClass(poClass).isAssignableFrom(meClass);
     }
 
@@ -69,7 +69,7 @@ public abstract class PartOfBeziehung extends Edge {
      * @param meClass
      * @return
      */
-    public static final boolean isParentClass(final Class<? extends PartOfBeziehung> poClass, final Class<? extends ModelElement> meClass) {
+    public static final boolean isParentClass(final Class<? extends IsPartOfEdge> poClass, final Class<? extends ModelElement> meClass) {
         return getParentClass(poClass).isAssignableFrom(meClass);
     }
 

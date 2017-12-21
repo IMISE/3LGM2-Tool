@@ -18,7 +18,7 @@ public class PartValueSumFunction {
      * Errechnet das Ergebnis der Verrechnungsfunktion TEILWERTSUMME. Die Funktion hat 2, 3 oder 4 Argumente. Das erste Argument ist in jedem Fall der
      * Name der Assoziation über den verrechnet wird, das 2. ist immer das <code>UserField</code> der verbundenen Klasse, dessen Wert verrechnet
      * werden soll. Bei 3 Argumenten kann das 3. Argument entweder ein Verteilungsgewicht sein oder, wenn die Edge über die verrechent wird eine
-     * <code>PartOfBeziehung</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
+     * <code>IsPartOfEdge</code> ist, die Richtung der Verrechnung. Bei 4 Argumenten ist das 3. Argument immer das Verteilungsgewicht und das 4
      * immer die Richtung.
      *
      * @param definitions

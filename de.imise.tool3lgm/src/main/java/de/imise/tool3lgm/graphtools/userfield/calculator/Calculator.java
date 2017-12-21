@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -479,7 +479,7 @@ public class Calculator {
         BigDecimal refVg = BigDecimal.ZERO;
         ModelElement elementWithUserField = null;
         // Wenn es sich um eine Teil-von-Beziehung handelt
-        if (PartOfBeziehung.class.isAssignableFrom(kante.getClass()) && direction != null) {
+        if (IsPartOfEdge.class.isAssignableFrom(kante.getClass()) && direction != null) {
             if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
                 elementWithUserField = kante.getEnd();
             } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {

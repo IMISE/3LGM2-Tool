@@ -81,7 +81,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.PartOfBeziehung;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
@@ -665,7 +665,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 for (Class<? extends Edge> edgeClass : getEdgeTypes(lastSelectedClass, me2Class)) {
-                    if (PartOfBeziehung.class.isAssignableFrom(edgeClass)) {
+                    if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                             String label = getForwardMetaAssociationName(edgeClass, false, true);
                             String toolTip = getFullForwardMetaAssociationName(edgeClass);
