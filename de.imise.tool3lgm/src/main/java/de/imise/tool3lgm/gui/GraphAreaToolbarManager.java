@@ -52,9 +52,14 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                     removeToolBar();
                     currentToolBar = new MatrixViewPathSelectorToolBar(matrixFrame);
                     addToolBar();
-                } else {
-                    //                    ((MatrixViewPathSelectorToolBar) currentToolBar).setFrame(matrixFrame);
                 }
+                MatrixViewPathSelectorToolBar matrixViewToolBar = (MatrixViewPathSelectorToolBar) currentToolBar;
+                matrixViewToolBar.setFrame(matrixFrame);
+                matrixFrame.setMatrixViewToolBar(matrixViewToolBar);
+                if (matrixViewToolBar.getParent() == null) {
+                    addToolBar();
+                }
+
             } else {
                 removeToolBar();
             }

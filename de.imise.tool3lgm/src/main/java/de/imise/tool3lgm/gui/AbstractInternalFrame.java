@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)
@@ -26,9 +25,6 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
 
     /** die JScrollFläche für den Inhalt */
     protected JScrollPane scrollPane;
-
-    /** Werkzeugleiste zu diesem Fenster */
-    protected UnfloatableToolBar toolBar = null;
 
     /**
      * Konstruktor
@@ -82,15 +78,6 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
      */
     public JScrollPane getScrollPane() {
         return scrollPane;
-    }
-
-    /**
-     * gibt die Werkzeugleise zu diesem Fenster zurück
-     *
-     * @return Werkzeugleiste des Fensters
-     */
-    public UnfloatableToolBar getToolBar() {
-        return toolBar;
     }
 
     @Override

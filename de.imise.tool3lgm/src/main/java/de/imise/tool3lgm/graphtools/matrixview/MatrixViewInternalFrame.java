@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
+import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
  * Klasse zur Darstellung von Verbindungen zwischen Objekten in einer Tabelle
@@ -114,9 +115,29 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     public final void mouseDragged(final MouseEvent e) {
     }
 
+    /** Werkzeugleiste zu diesem Fenster */
+    private MatrixViewPathSelectorToolBar matrixViewToolBar = null;
+
+    /**
+     * gibt die Werkzeugleise zu diesem Fenster zurück
+     *
+     * @return Werkzeugleiste des Fensters
+     */
+    public UnfloatableToolBar getMatrixViewToolBar() {
+        return matrixViewToolBar;
+    }
+
+    public void setMatrixViewToolBar(final MatrixViewPathSelectorToolBar matrixViewToolBar) {
+        this.matrixViewToolBar = matrixViewToolBar;
+    }
+
     @Override
     public final void mouseMoved(final MouseEvent e) {
-        ((MatrixViewPathSelectorToolBar) getToolBar()).positionChanged(colHeaderPanel.getCol(e.getX()), rowHeaderPanel.getRow(e.getY()));
+        int x = e.getX();
+        int y = e.getY();
+        ModelElement col = colHeaderPanel.getCol(x);
+        Node row = rowHeaderPanel.getRow(y);
+        matrixViewToolBar.positionChanged(col, row);
     }
 
     @Override
@@ -171,7 +192,7 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
 
     @Override
     public final void mouseExited(final MouseEvent arg0) {
-        ((MatrixViewPathSelectorToolBar) getToolBar()).positionChanged(null, null);
+        matrixViewToolBar.positionChanged(null, null);
     }
 
     //	Methoden des Interfaces GraphDocumentListener --- Anfang ---

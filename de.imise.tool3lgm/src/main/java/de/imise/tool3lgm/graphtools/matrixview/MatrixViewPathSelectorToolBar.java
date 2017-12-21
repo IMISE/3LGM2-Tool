@@ -79,7 +79,7 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
     /**
      * Frame dessen Darstellung durch diese Toolbar beeinfluss wird
      */
-    private final MatrixViewInternalFrame controlledFrame;
+    private MatrixViewInternalFrame controlledFrame;
 
     /**
      * @param controlledFrame Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
@@ -133,7 +133,10 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
         add(choicePanel, BorderLayout.WEST);
         add(legendPanel, BorderLayout.CENTER);
         add(positionPanel, BorderLayout.EAST);
+    }
 
+    public void setFrame(final MatrixViewInternalFrame frame) {
+        controlledFrame = frame;
     }
 
     /**
