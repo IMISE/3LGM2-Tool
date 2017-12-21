@@ -24,7 +24,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationsplan;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 
-public class Mapping {
+public class ElementsLayoutDefinition {
 
     /**
      * Mappt von der Elementklasse auf das zugehörige Standard-<code>GraphElementLayout</code>
@@ -39,7 +39,7 @@ public class Mapping {
     /**
      *
      */
-    public Mapping() {
+    public ElementsLayoutDefinition() {
         super();
         loadDefaults();
     }
@@ -50,7 +50,7 @@ public class Mapping {
      *
      * @param map
      */
-    public final void adapt(final Mapping map) {
+    public final void adapt(final ElementsLayoutDefinition map) {
         standardElementLayout = (GraphElementLayout) map.standardElementLayout.clone();
         Set<Class<? extends ModelElement>> keySet = map.elementClassToStandardLayoutMap.keySet();
         elementClassToStandardLayoutMap = new HashMap<>(keySet.size());

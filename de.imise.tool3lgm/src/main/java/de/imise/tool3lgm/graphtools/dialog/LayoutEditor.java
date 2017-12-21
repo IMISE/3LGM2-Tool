@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.Mapping;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -48,7 +48,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
     private JMenuItem[] farbe;
     private final JMenuItem[] form;
     private final JMenuItem[] name;
-    private final Mapping my_mapping;
+    private final ElementsLayoutDefinition my_mapping;
     private final Insets insets;
     private int wieviele = 0, offset, c, counter, akt_x, akt_y, aktuelles = -1;
     private final JButton uebernehmen, abbrechen, beenden;

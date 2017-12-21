@@ -17,14 +17,14 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.Mapping;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 
 public abstract class GraphmlWriter extends IntendingXMLWriter {
 
     protected final Szenario szenario;
 
-    protected final Mapping standardLayout;
+    protected final ElementsLayoutDefinition standardLayout;
 
     protected final int layer;
 

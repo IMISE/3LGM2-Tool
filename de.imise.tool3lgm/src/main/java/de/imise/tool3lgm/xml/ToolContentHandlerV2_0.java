@@ -30,7 +30,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.Mapping;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -312,7 +312,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
             } else if (qName.equals("description")) {
 
             } else if (qName.equals("mapping")) {
-                szenario.setMapping(new Mapping());
+                szenario.setMapping(new ElementsLayoutDefinition());
 
             } else if (qName.equals("bitmap")) {
                 if (atts.getValue("type").equals("gif/base64")) {

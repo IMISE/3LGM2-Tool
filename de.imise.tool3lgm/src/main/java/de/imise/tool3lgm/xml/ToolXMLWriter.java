@@ -43,7 +43,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.Mapping;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.collections.CollectionUtils;
@@ -455,7 +455,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 writeEndElement(); //</view>
             }
             writeStartElement("mapping"); //"<mapping>"
-            Mapping mapping = szen.getMapping();
+            ElementsLayoutDefinition mapping = szen.getMapping();
             for (Class<? extends ModelElement> elementClass : mapping.getElementClassesWithStandardLayout()) {
                 GraphElementLayout standardElementLayout = mapping.getStandardElementLayout(elementClass);
                 writeGraphElementLayout(elementClass, standardElementLayout, true);

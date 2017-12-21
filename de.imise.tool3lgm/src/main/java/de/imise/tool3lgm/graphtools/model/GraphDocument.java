@@ -66,7 +66,7 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.Mapping;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -107,7 +107,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    protected Mapping mapping;
+    protected ElementsLayoutDefinition mapping;
 
     /**
      * COMMENTME
@@ -198,7 +198,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         analysisResult = new ArrayList<>();
         listener = new ArrayList<>();
         inlistener = new ArrayList<>();
-        mapping = new Mapping();
+        mapping = new ElementsLayoutDefinition();
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
@@ -1547,7 +1547,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param map
      */
-    public final void setMapping(final Mapping map) {
+    public final void setMapping(final ElementsLayoutDefinition map) {
         if (map != null) {
             mapping = map;
         }
@@ -1556,14 +1556,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @return
      */
-    public final Mapping getMapping() {
+    public final ElementsLayoutDefinition getMapping() {
         return mapping;
     }
 
     /**
      * @param map
      */
-    public final void adaptMapping(final Mapping map) {
+    public final void adaptMapping(final ElementsLayoutDefinition map) {
         mapping.adapt(map);
         for (LayerContainer lc : layer) {
             List<NodeContainer> elementContainers = lc.getKnoten();
