@@ -4,10 +4,14 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.File;
 
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 
 public class Tool3lgmMain {
+
+    public static final Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class;
 
     /**
      * Main-Routine

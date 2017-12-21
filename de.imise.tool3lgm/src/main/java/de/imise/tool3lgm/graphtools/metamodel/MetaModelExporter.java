@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 
@@ -29,7 +28,7 @@ public class MetaModelExporter {
     private static final String INDENTION = "    ";
 
     public static void main(final String[] args) {
-        MetaModel metaModel = new TLGMOriginalMetaModel();
+        MetaModel metaModel = ModelConstants.initMetaModel();
         print(metaModel);
     }
 

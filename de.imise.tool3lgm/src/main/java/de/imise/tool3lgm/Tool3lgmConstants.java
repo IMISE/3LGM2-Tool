@@ -17,7 +17,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -171,12 +170,14 @@ public abstract class Tool3lgmConstants {
      * Diese können über die statische Methode <code>getLocalizedIcon(String name)</code> geladen werden.
      */
     private static final String RESOURCE_LOCALIZED_ICON_PATH = RESOURCE_ICON_DIR_NAME + UserProperties.getLocale().getLanguage() + "/";
-    /**
-     * BaseName der lokalisierten Haupt-Ressourcendateien
-     */
+
+    /** BaseName der lokalisierten Haupt-Ressourcendateien */
     public static final String RESOURCE_BASE_NAME = "Tool3lgmResources";
 
-    // die beiden ResourceBundles laden
+    /** BaseName der lokalisierten Ressourcendateien eines Metamodells. Gesamtname ist dann z.B. "metamodel.tlgm_v3_0.MetamodelResources" */
+    public static final String METAMODEL_RESOURCE_BASE_NAME = "MetamodelResources";
+
+    // die beiden ResourceBundles laden. Davor unbedingt die UserProperties initialisieren, damit die richige Locale gesetzt ist
 
     static {
         UserProperties.init();
@@ -191,7 +192,20 @@ public abstract class Tool3lgmConstants {
     /**
      * ResourceBundle mit den Metamodell-spezifischen Daten
      */
-    private static ResourceBundle metamodelBundle = ResourceBundle.getBundle(ModelConstants.getMetaModelResourceBaseName());
+    private static ResourceBundle metamodelBundle = ResourceBundle.getBundle(getMetamodelBundleName());
+
+    private static String getMetamodelBundleName() {
+        //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
+        //der ClassLoader, der das package lädt, erwartet relative Pfade ab dem Pfa dieser Klasse hier, die das Bundle lädt.
+        //z.B. liegt das speziele Metamodel im package "de.imise.tool3lgm.metamodel.tlgm_v3_0". Diese Klasse Tool3lgmConstants
+        //liegt im Hauptpackage "de.imise.tool3lgm". Das Resource-Bundle kann mit dem BundleName "metamodel.tlgm_v3_0.MetamodelResources"
+        //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
+        //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
+        String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
+        String metaModelPackageName = Tool3lgmMain.metaModelClass.getPackage().getName();
+        String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
+        return bundleName;
+    }
 
     /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse

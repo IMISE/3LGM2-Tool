@@ -33,6 +33,12 @@ public abstract class MetaModel {
      */
     protected abstract Map<String, String> getOldToNewClassName();
 
+    /////////////////////
+    // PathsDefinition //
+    /////////////////////
+
+    public abstract PathsDefinition getPathsDefintion();
+
     /////////////////////////
     // GraphViewDefinition //
     /////////////////////////
@@ -276,7 +282,5 @@ public abstract class MetaModel {
 
     /** Liefert ein Set aller Elementklassen, bei denen der Name nicht vom Nutzer eingegeben sondern generiert wird. */
     public abstract Set<Class<? extends ModelElement>> getGenerateNameClasses();
-
-    public abstract String getResourceBaseName();
 
 }

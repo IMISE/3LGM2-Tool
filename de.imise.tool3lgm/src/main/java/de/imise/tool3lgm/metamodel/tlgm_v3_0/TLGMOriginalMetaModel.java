@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
@@ -102,6 +103,17 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     protected final Map<String, String> getOldToNewClassName() {
         return oldToNewName;
+    }
+
+    /////////////////////
+    // PathsDefinition //
+    /////////////////////
+
+    private final PathsDefinition pathsDefinition = new TLGMPathsDefinition();
+
+    @Override
+    public PathsDefinition getPathsDefintion() {
+        return pathsDefinition;
     }
 
     /////////////////////////
@@ -414,11 +426,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
-    }
-
-    @Override
-    public String getResourceBaseName() {
-        return "metamodel.tlgm_v3_0.MetamodelResources";
     }
 
 }

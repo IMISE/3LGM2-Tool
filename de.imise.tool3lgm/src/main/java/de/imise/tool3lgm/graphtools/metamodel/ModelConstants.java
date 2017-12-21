@@ -31,6 +31,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmMain;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -47,7 +48,6 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -56,7 +56,16 @@ import de.imise.util.collections.CollectionUtils;
  */
 public final class ModelConstants {
 
-    private static MetaModel metaModel = new TLGMOriginalMetaModel();
+    private static MetaModel metaModel = initMetaModel();
+
+    public static MetaModel initMetaModel() {
+        try {
+            return Tool3lgmMain.metaModelClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
@@ -1577,10 +1586,6 @@ public final class ModelConstants {
         return false;
     }
 
-    public static final String getMetaModelResourceBaseName() {
-        return metaModel.getResourceBaseName();
-    }
-
     public static final String getVisibleLayerName(final int layer) {
         String resKey = "layer";
         int reskeyLayerNumber = -1;
@@ -1601,6 +1606,15 @@ public final class ModelConstants {
         } catch (Exception e) {
             return getResString(resKey) + reskeyLayerNumber;
         }
+    }
+
+    /**
+     * Liefert die {@link PathsDefinition} des Metamodells
+     *
+     * @return
+     */
+    public static final PathsDefinition getPathsDefinition() {
+        return metaModel.getPathsDefintion();
     }
 
     /**
