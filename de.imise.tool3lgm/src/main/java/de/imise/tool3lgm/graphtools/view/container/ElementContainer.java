@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -677,8 +677,8 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             return retVal;
         }
         for (Edge edge : me.getEdges()) {
-            if (edge instanceof Composition) {
-                Composition comp = (Composition) edge;
+            if (edge instanceof CompositionEdge) {
+                CompositionEdge comp = (CompositionEdge) edge;
                 if (comp.getSlave() == me) {
                     ElementContainer ec = comp.getMaster().getContainer(initialContainer.getGraphDocument());
                     if (ec != null) {

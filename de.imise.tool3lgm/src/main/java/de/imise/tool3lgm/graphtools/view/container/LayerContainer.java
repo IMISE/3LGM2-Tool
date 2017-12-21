@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -270,10 +270,10 @@ public class LayerContainer extends ElementContainer {
         }
         ModelElement me = kc.getElement();
         for (Edge edge : me.getEdges()) {
-            if (!(edge instanceof Composition)) {
+            if (!(edge instanceof CompositionEdge)) {
                 continue;
             }
-            Composition co = (Composition) edge;
+            CompositionEdge co = (CompositionEdge) edge;
             ModelElement slave = co.getSlave();
             if (slave != me && indexOf(slave) >= 0) {
                 // Umsortieren

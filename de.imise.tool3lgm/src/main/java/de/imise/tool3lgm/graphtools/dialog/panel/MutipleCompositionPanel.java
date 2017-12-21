@@ -20,7 +20,7 @@ import javax.swing.tree.TreeSelectionModel;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -31,7 +31,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
- * Panel für {@link Composition}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
+ * Panel für {@link CompositionEdge}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
  * Also für alle Compositions, bei denen die maximale Kardinalität zu dem untergeordneten Element > 1 ist.
  */
 public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
@@ -59,7 +59,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      * @param edgeClass
      */
     @SuppressWarnings("unchecked")
-    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Composition> edgeClass) {
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
 
         GridBagLayout gbl = new GridBagLayout();
@@ -146,7 +146,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 ModelElement me = getModelElement();
                 ElementContainer ec = me.getContainer(mainDoc);
                 doc.select(ec, pid);
-                GraphDocument.createAddicted(selectedDoc, me, edgeClasses[0].asSubclass(Composition.class), searchElementClass, pid);
+                GraphDocument.createAddicted(selectedDoc, me, edgeClasses[0].asSubclass(CompositionEdge.class), searchElementClass, pid);
                 doc.select(ec, pid);
             }
         };

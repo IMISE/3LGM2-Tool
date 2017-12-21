@@ -24,7 +24,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -436,7 +436,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //wenn ein gültiges startElement übergeben wurde und die Kantenart eine Composition ist
         if (startElement != null && isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
             //erzeuge ein untergeordnetes Element
-            createdDependent = GraphDocument.createAddicted(doc, startElement, edgeClassToNewElement.asSubclass(Composition.class), elementClass2Create, pid);
+            createdDependent = GraphDocument.createAddicted(doc, startElement, edgeClassToNewElement.asSubclass(CompositionEdge.class), elementClass2Create, pid);
         } else {
             //das neue Element gleich mit Container im doc anlegen
             ElementContainer createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);

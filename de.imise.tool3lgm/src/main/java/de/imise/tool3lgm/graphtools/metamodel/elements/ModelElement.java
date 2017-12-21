@@ -1529,8 +1529,8 @@ public abstract class ModelElement extends UserFieldTarget {
     public final List<? extends ModelElement> getDirectCompositionSlaveElements() {
         List<ModelElement> retVal = new ArrayList<>();
         for (Edge edge : getEdges()) {
-            if (edge instanceof Composition) {
-                Composition comp = (Composition) edge;
+            if (edge instanceof CompositionEdge) {
+                CompositionEdge comp = (CompositionEdge) edge;
                 if (comp.getMaster() == this) {
                     retVal.add(comp.getSlave());
                 }
@@ -1540,7 +1540,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Liefert eine Liste aller Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine {@link Composition} verbunden
+     * Liefert eine Liste aller Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine {@link CompositionEdge}
+     * verbunden
      * sind, wobei das verbundene Element diesem Element übergeordnet ist.
      *
      * @return
@@ -1549,8 +1550,8 @@ public abstract class ModelElement extends UserFieldTarget {
         //meistens ist es genau ein Master
         List<ModelElement> retVal = new ArrayList<>(1);
         for (Edge edge : getEdges()) {
-            if (edge instanceof Composition) {
-                Composition comp = (Composition) edge;
+            if (edge instanceof CompositionEdge) {
+                CompositionEdge comp = (CompositionEdge) edge;
                 if (comp.getSlave() == this) {
                     retVal.add(comp.getMaster());
                 }
@@ -1561,7 +1562,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert eine Liste aller Container der Slaveelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
-     * {@link Composition} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
+     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
      *
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return
@@ -1572,7 +1573,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert eine Liste aller Container der Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
-     * {@link Composition} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
+     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
      *
      * @param doc {@link GraphDocument} in dem die Container liegen sollen
      * @return

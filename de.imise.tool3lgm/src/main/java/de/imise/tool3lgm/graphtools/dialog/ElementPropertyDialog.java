@@ -34,7 +34,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
@@ -492,7 +492,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         if (ModelConstants.isComposition(edgeClass)) {
-            addTab(new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(Composition.class)));
+            addTab(new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class)));
         } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
             addTab(new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass));
         } else {

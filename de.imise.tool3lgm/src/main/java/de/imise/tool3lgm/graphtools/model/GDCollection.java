@@ -111,7 +111,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -608,10 +608,10 @@ public final class GDCollection extends UserFieldTarget {
                     continue;
                 }
                 //alle untergeordneten ElementContainer ebenfalls löschen
-                if (!(edge instanceof Composition)) {
+                if (!(edge instanceof CompositionEdge)) {
                     continue;
                 }
-                Composition comp = (Composition) edge;
+                CompositionEdge comp = (CompositionEdge) edge;
                 if (comp.getMaster() != me) {
                     continue;
                 }

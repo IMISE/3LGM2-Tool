@@ -76,7 +76,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -438,11 +438,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private JMenu getSubElemMenu() {
         ModelElement selected = doc.getLastSelected().getElement();
         JMenu sub_elem = new JMenu(getResString("unterg_el"));
-        HashSet<Pair<Class<? extends Composition>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
-        for (Class<? extends Composition> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
-            Class<? extends ModelElement> abstractSlaves = Composition.getSlaveType(compositionClass);
+        HashSet<Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
+        for (Class<? extends CompositionEdge> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
+            Class<? extends ModelElement> abstractSlaves = CompositionEdge.getSlaveType(compositionClass);
             for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves)) {
-                slavePairs.add(new Pair<Class<? extends Composition>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
+                slavePairs.add(new Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
             }
         }
 
@@ -452,10 +452,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         ArrayList<JMenuItem> items = new ArrayList<>(slavePairs.size());
 
-        for (Pair<Class<? extends Composition>, Class<? extends ModelElement>> slavePair : slavePairs) {
-            Class<? extends Composition> compositionClass = slavePair.getFirstItem();
+        for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
+            Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), CREATE_ADDICTED, doc.getHashString() + " " + selected.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-            item.setEnabled(selected.countConnections(compositionClass) < Composition.getMaxMasterToSlaveCardinality(compositionClass));
+            item.setEnabled(selected.countConnections(compositionClass) < CompositionEdge.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
         Alphabetical.sort(items);

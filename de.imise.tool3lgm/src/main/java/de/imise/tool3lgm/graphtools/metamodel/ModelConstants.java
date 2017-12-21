@@ -3,8 +3,8 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Composition.getMaxMasterToSlaveCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Composition.getMinMasterToSlaveCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.getMaxMasterToSlaveCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.getMinMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
@@ -33,7 +33,7 @@ import com.google.common.collect.ImmutableSet;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMain;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -85,7 +85,7 @@ public final class ModelConstants {
     public static final Class<? extends Edge>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
 
     @SuppressWarnings("unchecked")
-    public static final Class<? extends Composition>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
+    public static final Class<? extends CompositionEdge>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
 
     //Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
     //public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
@@ -378,7 +378,7 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isAlwaysDoubleConnectedEdge(final Class<?> edgeClass) {
-        return !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || Composition.class.isAssignableFrom(edgeClass));
+        return !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -1387,7 +1387,7 @@ public final class ModelConstants {
     }
 
     public static final boolean isComposition(final Class<? extends Edge> edgeClass) {
-        return Composition.class.isAssignableFrom(edgeClass);
+        return CompositionEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**
@@ -1401,7 +1401,7 @@ public final class ModelConstants {
      * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
      */
     @SuppressWarnings("unchecked")
-    private static Class<? extends Composition>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
+    private static Class<? extends CompositionEdge>[] getCompositionEdgeTypes(final Class<? extends ModelElement> elementClass, final boolean isMaster) {
         Class<? extends Edge>[] elementClassEdges = getEdgeTypes(elementClass);
         ArrayList<Class<? extends Edge>> subEdgeTypes = new ArrayList<>(elementClassEdges.length);
         for (Class<? extends Edge> edgeClass : elementClassEdges) {
@@ -1421,7 +1421,7 @@ public final class ModelConstants {
         if (size == 0) {
             return EMPTY_COMPOSITION_CLASS_ARRAY;
         }
-        Class<? extends Composition>[] returnClasses = new Class[size];
+        Class<? extends CompositionEdge>[] returnClasses = new Class[size];
         System.arraycopy(subEdgeTypes.toArray(), 0, returnClasses, 0, size);
         return returnClasses;
     }
@@ -1440,7 +1440,7 @@ public final class ModelConstants {
      * @param elementClass
      * @return Array von Kantenklassen, die die übergebene Elementart überordnen
      */
-    public static Class<? extends Composition>[] getCompositionEdgeTypesForMaster(final Class<? extends ModelElement> elementClass) {
+    public static Class<? extends CompositionEdge>[] getCompositionEdgeTypesForMaster(final Class<? extends ModelElement> elementClass) {
         return getCompositionEdgeTypes(elementClass, true);
     }
 
@@ -1452,7 +1452,7 @@ public final class ModelConstants {
      * @param elementClass
      * @return Array von Kantenklassen, die die übergebene Elementart unterordnen
      */
-    public static Class<? extends Composition>[] getCompositionEdgeTypesForSlave(final Class<? extends ModelElement> elementClass) {
+    public static Class<? extends CompositionEdge>[] getCompositionEdgeTypesForSlave(final Class<? extends ModelElement> elementClass) {
         return getCompositionEdgeTypes(elementClass, false);
     }
 
@@ -1465,13 +1465,13 @@ public final class ModelConstants {
      */
     @SuppressWarnings("unchecked")
     public static final Class<? extends ModelElement>[] getSlaveElementTypes(final Class<? extends ModelElement> masterElementClass) {
-        Class<? extends Composition>[] compositions = getCompositionEdgeTypesForMaster(masterElementClass);
+        Class<? extends CompositionEdge>[] compositions = getCompositionEdgeTypesForMaster(masterElementClass);
         if (compositions.length == 0) {
             return EMPTY_ELEMENT_CLASS_ARRAY;
         }
         ArrayList<Class<? extends ModelElement>> slaveElementClasses = new ArrayList<>(compositions.length);
-        for (Class<? extends Composition> compClass : compositions) {
-            Class<? extends ModelElement> slaveType = Composition.getSlaveType(compClass);
+        for (Class<? extends CompositionEdge> compClass : compositions) {
+            Class<? extends ModelElement> slaveType = CompositionEdge.getSlaveType(compClass);
             if (!slaveElementClasses.contains(slaveType)) {
                 slaveElementClasses.add(slaveType);
             }
@@ -1501,7 +1501,7 @@ public final class ModelConstants {
     /**
      * Liefert true, wenn die übergebenen Klasse wenigstens eine Kante beseitzt, bei der die minimale Kardinalität zu der
      * verbundenen Klasse > 0 ist. Die Existenz des übergebenen Elementes ist also abhängig von dem anderen Element.
-     * Das tifft automatisch bei allen {@link Composition}s zu, bei denen das übergebene Element der Slave ist, aber kann
+     * Das tifft automatisch bei allen {@link CompositionEdge}s zu, bei denen das übergebene Element der Slave ist, aber kann
      * auch bei allen anderen Kanten zutreffen.
      *
      * @param elementClass
@@ -1530,10 +1530,10 @@ public final class ModelConstants {
      */
     public static final Set<Class<? extends ModelElement>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
         ImmutableSet.Builder<Class<? extends ModelElement>> subordinatedJoinbleTypes = ImmutableSet.<Class<? extends ModelElement>> builder();
-        Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
-        for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
+        Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
+        for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
             if (getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
-                Class<? extends ModelElement> slaveType = Composition.getSlaveType(compositionEdgeType);
+                Class<? extends ModelElement> slaveType = CompositionEdge.getSlaveType(compositionEdgeType);
                 Class<? extends ModelElement>[] instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
                 for (Class<? extends ModelElement> instanciableAssignableClass : instanciableAssignableClasses) {
                     subordinatedJoinbleTypes.add(instanciableAssignableClass);
@@ -1556,8 +1556,8 @@ public final class ModelConstants {
         Set<Class<? extends Edge>> initialSubtypes = INITIAL_SUBTYPES.get(elementClass);
         if (initialSubtypes == null) {
             ImmutableSet.Builder<Class<? extends Edge>> initialSubtypesBuilder = ImmutableSet.<Class<? extends Edge>> builder();
-            Class<? extends Composition>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
-            for (Class<? extends Composition> compositionEdgeType : compositionEdgeTypes) {
+            Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
+            for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
                 if (getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
                     initialSubtypesBuilder.add(compositionEdgeType);
                 }

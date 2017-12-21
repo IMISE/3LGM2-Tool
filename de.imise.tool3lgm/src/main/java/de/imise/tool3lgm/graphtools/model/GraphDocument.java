@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Composition.getMaxMasterToSlaveCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
@@ -46,7 +46,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
@@ -673,7 +673,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ModelElement master = doc.findElementCoded(argv[1]);
             edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
             Class<? extends ModelElement> slaveClass = ModelConstants.getClassForName(argv[3]);
-            createAddicted(doc, master, edgeClass.asSubclass(Composition.class), slaveClass, pid);
+            createAddicted(doc, master, edgeClass.asSubclass(CompositionEdge.class), slaveClass, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_COLOR:
@@ -2412,7 +2412,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *            Wenn <code>true</code> werden alle über {@link IsPartOfEdge}en verbunden Elemente
      *            in die Selektion mit aufgenommen.
      * @param addAllSlaves
-     *            Wenn <code>true</code> werden alle über {@link Composition}s verbunden Elemente
+     *            Wenn <code>true</code> werden alle über {@link CompositionEdge}s verbunden Elemente
      *            in die Selektion mit aufgenommen.
      * @return <code>null</code>, wenn keine Erweiterung der bestehenden Selektion nötig war, sonst
      *         die alte Selektion
@@ -3462,7 +3462,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Composition> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final String slaveHashString,
+    private static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final String slaveHashString,
             final int pid) {
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
@@ -3513,7 +3513,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Composition> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final int pid) {
+    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final String slaveName, final int pid) {
         return createAddicted(doc, master, edgeClass, slaveClass, slaveName, GDCommands.INVALID_HASH_STRING, pid);
     }
 
@@ -3525,7 +3525,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends Composition> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
+    public static final ModelElement createAddicted(final GraphDocument doc, final ModelElement master, final Class<? extends CompositionEdge> edgeClass, final Class<? extends ModelElement> slaveClass, final int pid) {
         return createAddicted(doc, master, edgeClass, slaveClass, GDCommands.INVALID_NAME, pid);
     }
 
@@ -3536,7 +3536,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Edge addict(final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
+    public final Edge addict(final ModelElement me1, final ModelElement me2, final Class<? extends CompositionEdge> edgeClass, final int pid) {
         return addict(hashString, me1, me2, edgeClass, pid);
     }
 
@@ -3548,7 +3548,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends Composition> edgeClass, final int pid) {
+    public final Edge addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends CompositionEdge> edgeClass, final int pid) {
         return addict(szenHash, edgeClass.getSimpleName(), null, me1, me2, -1, pid);
     }
 
@@ -3635,8 +3635,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         int wieviele = -1;
         ModelElement me = kc.getElement();
         for (Edge edge : me.getEdges()) {
-            if (edge instanceof Composition) {
-                ModelElement slave = ((Composition) edge).getSlave();
+            if (edge instanceof CompositionEdge) {
+                ModelElement slave = ((CompositionEdge) edge).getSlave();
                 if (slave != me && !slave.isUnpaintable()) {
                     wieviele++;
                 }

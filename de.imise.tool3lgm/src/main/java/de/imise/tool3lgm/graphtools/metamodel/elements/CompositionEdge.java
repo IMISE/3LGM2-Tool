@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
  *
  * @author AXS
  */
-public abstract class Composition extends Edge {
+public abstract class CompositionEdge extends Edge {
 
     /**
      * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
@@ -47,7 +47,7 @@ public abstract class Composition extends Edge {
      * @param compositionClass
      * @return
      */
-    public static final Class<? extends ModelElement> getMasterType(final Class<? extends Composition> compositionClass) {
+    public static final Class<? extends ModelElement> getMasterType(final Class<? extends CompositionEdge> compositionClass) {
         return getStartClass(compositionClass);
     }
 
@@ -57,7 +57,7 @@ public abstract class Composition extends Edge {
      * @param compositionClass
      * @return
      */
-    public static final Class<? extends ModelElement> getSlaveType(final Class<? extends Composition> compositionClass) {
+    public static final Class<? extends ModelElement> getSlaveType(final Class<? extends CompositionEdge> compositionClass) {
         return getEndClass(compositionClass);
     }
 
@@ -68,7 +68,7 @@ public abstract class Composition extends Edge {
      * @param elementClass
      * @return
      */
-    public static final boolean isSlaveType(final Class<? extends Composition> compositionClass, final Class<? extends ModelElement> elementClass) {
+    public static final boolean isSlaveType(final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> elementClass) {
         return isEndClass(compositionClass, elementClass);
     }
 
@@ -79,7 +79,7 @@ public abstract class Composition extends Edge {
      * @param elementClass
      * @return
      */
-    public static final boolean isMasterType(final Class<? extends Composition> compositionClass, final Class<? extends ModelElement> elementClass) {
+    public static final boolean isMasterType(final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> elementClass) {
         return isStartClass(compositionClass, elementClass);
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -31,8 +31,8 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
  * @author AXS
  *         Dieses Panel stellt in einer Combobox ein einzelne Element zur direkten Verknüpfung mit dem
  *         ModelElement des Dialoges zur Auswahl. Je nachdem ob die Verknüpfung über eine normale
- *         {@link Edge} oder eine {@link Composition} läuft, werden andere im Modell befindliche
- *         Elemente zur Verknüpfung angeboten {@link Edge}) oder nicht ({@link Composition}).
+ *         {@link Edge} oder eine {@link CompositionEdge} läuft, werden andere im Modell befindliche
+ *         Elemente zur Verknüpfung angeboten {@link Edge}) oder nicht ({@link CompositionEdge}).
  *         Die Verknüpfung kann über einen Pfad erfolgen, d.h. es gehen nicht nur direkte Verbindungen.
  *         ABER: Dieses Panel beachtet keine Vererbung. Das heißt es werden immer nur direkt mit
  *         dem Ausgangselement verbundene Elemente angezeigt. Im PathConnectionPanel hingegen werden

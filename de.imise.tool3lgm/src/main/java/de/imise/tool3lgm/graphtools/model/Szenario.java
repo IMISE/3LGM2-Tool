@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import java.util.Date;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.Composition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -94,7 +94,7 @@ public class Szenario extends LGMGraphDocument {
      * @param k
      * @param sourceDoc
      */
-    private final void updateSlaveContainers(final Composition com, final GraphDocument sourceDoc) {
+    private final void updateSlaveContainers(final CompositionEdge com, final GraphDocument sourceDoc) {
         ModelElement master = com.getMaster();
         if (master == null || master.isUnique()) {
             return;
@@ -192,8 +192,8 @@ public class Szenario extends LGMGraphDocument {
                 boolean b = !isMyElement(ka);
                 if (b) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
-                    if (ka instanceof Composition) {
-                        updateSlaveContainers((Composition) ka, sourceDoc);
+                    if (ka instanceof CompositionEdge) {
+                        updateSlaveContainers((CompositionEdge) ka, sourceDoc);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
 
