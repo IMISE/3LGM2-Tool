@@ -381,12 +381,10 @@ public class TLGMOriginalMetaModel extends MetaModel {
     ///////////////////////////////////
 
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
-     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Edge
-     * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
-     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt werden, die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
-     * zusammenzufassen.
+     * Liste aller Kantenklassen, die auch 2 gerichtete Assoziationen im Metamodell sein könnten, aber in eine Assoziation verpackt wurden,
+     * bei denen die Richtung der Edge (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Wegen dieser
+     * Kanten braucht man den ganzen Kanten-Richtungsmechanismus. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt,die
+     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt.
      */
     @Override
     public final Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses() {
