@@ -1,16 +1,10 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
-
-import de.imise.tool3lgm.log.Log;
-
 /**
  * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Edge ist immer das Kindelement,
  * das Ende der Edge ist immer das Elternelement. Dir Richtung der Edge ist immer forward.
  */
-public abstract class IsPartOfEdge extends Edge {
+public abstract class IsPartOfEdge extends HierarchyEdge {
 
     /**
      * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
@@ -18,7 +12,7 @@ public abstract class IsPartOfEdge extends Edge {
      * @return Partelement der Edge
      */
     public final ModelElement getPart() {
-        return getStart();
+        return getSubElement();
     }
 
     /**
@@ -27,7 +21,7 @@ public abstract class IsPartOfEdge extends Edge {
      * @return Parentelement der Edge
      */
     public final ModelElement getParent() {
-        return getEnd();
+        return getSuperElement();
     }
 
     /**
@@ -82,99 +76,5 @@ public abstract class IsPartOfEdge extends Edge {
      * Richtung, in der die Edge vom Prent auf den Part zeigt.
      */
     public static final int PARENT_TO_PART_DIRECTION = BACKWARD;
-
-    @Override
-    public final int getDirection() {
-        return PART_TO_PARENT_DIRECTION;
-    }
-
-    @Override
-    public final void setDirection(final int _state) {
-        ModelElement start = k1;
-        ModelElement end = k2;
-        switch (_state) {
-        case DOUBLE:
-            break;
-        case FORWARD:
-            super.setDirection(FORWARD);
-            break;
-        case BACKWARD:
-            ModelElement temp = k1;
-            k1 = k2;
-            k2 = temp;
-            super.setDirection(FORWARD);
-            break;
-        }
-        if (isInCircle()) {
-            k1 = start;
-            k2 = end;
-        }
-        return;
-    }
-
-    @Override
-    public final void setKnots(final ModelElement part, final ModelElement parent, final boolean registerInKnots) {
-        ModelElement start = k1;
-        ModelElement end = k2;
-        super.setKnots(part, parent, registerInKnots);
-        if (isInCircle()) {
-            part.removeEdge(this);
-            parent.removeEdge(this);
-            super.setKnots(start, end, registerInKnots);
-        }
-    }
-
-    @Override
-    public final void setKnotsAndInsert(final ModelElement part, final int partEdgePos, final ModelElement parent, final int parentEdgePos) {
-        ModelElement start = k1;
-        ModelElement end = k2;
-        k1 = part;
-        k2 = parent;
-        part.insertEdge(this, partEdgePos);
-        parent.insertEdge(this, parentEdgePos);
-        if (isInCircle()) {
-            part.removeEdge(this);
-            parent.removeEdge(this);
-            super.setKnotsAndInsert(start, partEdgePos, end, parentEdgePos);
-        }
-    }
-
-    @Override
-    public final void setStartAndInsert(final ModelElement part) {
-        ModelElement start = k1;
-        k1 = part;
-        k1.addEdge(this);
-        if (isInCircle()) {
-            part.removeEdge(this);
-            super.setStartAndInsert(start);
-        }
-    }
-
-    @Override
-    public final void setEndAndInsert(final ModelElement parent) {
-        ModelElement end = k2;
-
-        k2 = parent;
-        k2.addEdge(this);
-
-        if (isInCircle()) {
-            parent.removeEdge(this);
-            super.setEndAndInsert(end);
-        }
-    }
-
-    /**
-     * @return
-     */
-    public final boolean isInCircle() {
-        if (k1 != null && k2 != null) {
-            boolean retVal = k2.isPartOf(k1);
-            if (retVal) {
-                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + getDisplayablePluralName(ModelElement.class) + ":\n" + getDisplayableName(k1) + ": " + k1.getName() + "\n" + getDisplayableName(k2) + ": " + k2.getName());
-            }
-            return retVal;
-        }
-        return false;
-    }
 
 }
