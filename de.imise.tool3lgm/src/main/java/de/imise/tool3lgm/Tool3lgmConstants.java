@@ -520,6 +520,21 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
+     * Wenn der Key nicht in den Resoucen gefunden wird, kommt einfach der key selsbt zurück und es wird keine MissingResourceException
+     * ausgelöst.
+     * 
+     * @param key
+     * @return
+     */
+    public static final String getResStringWithoutError(final String key) {
+        try {
+            return getResString(key);
+        } catch (Exception e) {
+            return key;
+        }
+    }
+
+    /**
      * für die Sanduhr...
      *
      * @return Cursor that indicates a running process
