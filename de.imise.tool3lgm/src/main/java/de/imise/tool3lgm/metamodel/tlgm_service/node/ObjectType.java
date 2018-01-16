@@ -2,12 +2,9 @@ package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datensatztyp;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Dokumententyp;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Nachrichtentyp;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.Service_ObjectType_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.StorageLink_Edge;
 
 /**
  * @author AXS (26.12.2017)
@@ -17,12 +14,9 @@ public class ObjectType extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(true, ObjLogspVerbindung.class);
-        dialog.addEdgePanel(AufObjVerbindung.class);
-        dialog.addTabbedPanel("Repraesentationsform_p");
-        dialog.addTabbedPanelPathConnectionPanel(Nachrichtentyp.class, ObjReprVerbindung.class);
-        dialog.addTabbedPanelPathConnectionPanel(Dokumententyp.class, ObjReprVerbindung.class);
-        dialog.addTabbedPanelPathConnectionPanel(Datensatztyp.class, ObjReprVerbindung.class);
+        dialog.addEdgePanel(Function_ObjectType_Edge.class);
+        dialog.addEdgePanel(Service_ObjectType_Edge.class);
+        dialog.addEdgePanel(StorageLink_Edge.class);
         return dialog;
     }
 

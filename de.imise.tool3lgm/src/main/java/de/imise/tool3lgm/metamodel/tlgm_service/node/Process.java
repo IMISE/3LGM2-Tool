@@ -3,13 +3,9 @@
  */
 package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.process.ProzessStructurePanel;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.Process_Funtion_Edge;
 
 /**
  * @author AXS Ein Prozess ist ein Node der Kanten zu Aufgaben haelt. Die Reihenfolge der Kanten zu den Aufgaben in der ArrayList connections legt
@@ -20,7 +16,8 @@ public final class Process extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Aufgabe_p"), new ProzessStructurePanel(dialog, PrzAufVerbindung.class, AufObjVerbindung.class));
+        dialog.addEdgePanel(Process_Funtion_Edge.class);
+        //dialog.addTab(ModelConstants.getDisplayablePluralName(Function.class), new ProzessStructurePanel(dialog, Process_Funtion_Edge.class, Function_ObjectType_Edge.class));
         //		dialog.addTab(getResString("Kommunikationsprozess_p"),new KommProzessPanel(dialog));
         return dialog;
     }
