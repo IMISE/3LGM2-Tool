@@ -37,7 +37,7 @@ public abstract class MetaModel {
     // PathsDefinition //
     /////////////////////
 
-    public abstract PathsDefinition getPathsDefintion();
+    public abstract PathsDefinition getPathsDefinition();
 
     /////////////////////////
     // GraphViewDefinition //

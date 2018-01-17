@@ -112,7 +112,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     private final PathsDefinition pathsDefinition = new TLGMPathsDefinition();
 
     @Override
-    public PathsDefinition getPathsDefintion() {
+    public PathsDefinition getPathsDefinition() {
         return pathsDefinition;
     }
 

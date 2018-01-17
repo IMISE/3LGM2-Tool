@@ -1614,7 +1614,7 @@ public final class ModelConstants {
      * @return
      */
     public static final PathsDefinition getPathsDefinition() {
-        return metaModel.getPathsDefintion();
+        return metaModel.getPathsDefinition();
     }
 
     /**
