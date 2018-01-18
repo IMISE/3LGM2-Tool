@@ -58,9 +58,15 @@ public abstract class PathsDefinition {
             String pathsKey = calculateKey(metaPaths[i].getStartClass(), metaPaths[i].getEndClass());
             //            System.err.println(metaPathes.get(pathsKey));
             metaPathes.put(pathsKey, metaPaths[i]);
-            //            System.err.println(metaPathes.get(pathsKey));
-            //            System.err.println();
         }
+    }
+
+    public final void put(final MetaPath metaPath) {
+        String pathsKey = calculateKey(metaPath.getStartClass(), metaPath.getEndClass());
+        //            System.err.println(metaPathes.get(pathsKey));
+        metaPathes.put(pathsKey, metaPath);
+        //            System.err.println(metaPathes.get(pathsKey));
+        //            System.err.println();
     }
 
     /**
