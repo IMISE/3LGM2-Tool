@@ -224,7 +224,7 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
     public void stateChanged(final ChangeEvent e) {
         if (e.getSource() == metaPathSelector.getClass2ComboBox()) {
             //Dialog anzeigen, in dem man einen Pfad auswählen kann
-            if (metaPathSelector.getSelectableMetaPathes() != null && metaPathSelector.getSelectableMetaPathes().length > 1) {
+            if (metaPathSelector.getSelectableMetaPathes() != null && metaPathSelector.getSelectableMetaPathes().size() > 1) {
                 Object[] msg = {
                         getResString("text_path"),
                         metaPathSelector.getMetaPathJList()

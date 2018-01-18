@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -48,7 +49,7 @@ public class MetaPathSelector implements ActionListener {
     /**
      * <code>MetaPath</code>es that can be choosed in the <code>metaPathJList</code>
      */
-    private MetaPath[] selectableMetaPathes;
+    private Collection<MetaPath> selectableMetaPathes;
 
     /**
      * Listeners for change events
@@ -105,8 +106,7 @@ public class MetaPathSelector implements ActionListener {
             class2ComboBox.setEnabled(true);
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : PathFinder.getElementClassesInPathes()) {
-                MetaPath[] metaPathes = PathFinder.getMetaPathes(elementClass, class1BoxSelection);
-                if (metaPathes != null && metaPathes.length > 0) {
+                if (!PathFinder.getMetaPathes(elementClass, class1BoxSelection).isEmpty()) {
                     class2ComboBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
                 }
             }
@@ -121,9 +121,9 @@ public class MetaPathSelector implements ActionListener {
             Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             metaPathJList.removeAllElements();
             selectableMetaPathes = PathFinder.getMetaPathes(class1BoxSelection, class2BoxSelection);
-            if (selectableMetaPathes != null && selectableMetaPathes.length > 0) {
-                for (int i = 0; i < selectableMetaPathes.length; i++) {
-                    metaPathJList.addItem(selectableMetaPathes[i]);
+            if (!selectableMetaPathes.isEmpty()) {
+                for (MetaPath selectableMetaPath : selectableMetaPathes) {
+                    metaPathJList.addItem(selectableMetaPath);
                 }
                 metaPathJList.setSelectedIndex(0);
             }
@@ -230,7 +230,7 @@ public class MetaPathSelector implements ActionListener {
     /**
      * @return Returns the selectableMetaPathes.
      */
-    public MetaPath[] getSelectableMetaPathes() {
+    public Collection<MetaPath> getSelectableMetaPathes() {
         return selectableMetaPathes;
     }
 

@@ -9,6 +9,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.NOTCONNECTED;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +37,7 @@ public final class PathFinder {
      * @param endClass
      * @return
      */
-    public static final MetaPath[] getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+    public static final Collection<MetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
         PathsDefinition pathsDefinition = ModelConstants.getPathsDefinition();
         return pathsDefinition.getMetaPathes(startClass, endClass);
     }

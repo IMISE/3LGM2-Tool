@@ -2,21 +2,26 @@ package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.util.HashMap;
+import java.awt.Color;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.util.ReflectionUtils;
 
 public abstract class PathsDefinition {
 
     /**
      * COMMENTME
      */
-    private final Map<String, MetaPath[]> metaPathes = new HashMap<>();
+    private final Multimap<String, MetaPath> metaPathes = HashMultimap.create();
 
     /**
      * Liste der Elementtypen, für die ein Pfad in init() definiert wurde (wird z.B. für die Comboboxen in der Matrixsicht gebraucht)
@@ -39,13 +44,23 @@ public abstract class PathsDefinition {
     private void initInternal() {
     }
 
+    static int metaPathCount = 1;
+
     /**
      * Setzt den übergenen Metapfad in die HashMap aller Metapfade
      *
-     * @param metaPath
+     * @param metaPaths
      */
-    public final void put(final MetaPath[] metaPath) {
-        metaPathes.put(calculateKey(metaPath[0].getStartClass(), metaPath[0].getEndClass()), metaPath);
+    public final void put(final MetaPath[] metaPaths) {
+        for (int i = 0; i < metaPaths.length; i++) {
+            //            Sys.errn(2, metaPathCount++ + " " + metaPaths[i] + "(" + metaPaths[0].getStartClass().getSimpleName() + " -> " + metaPaths[0].getEndClass().getSimpleName() + " ### " + metaPaths[i].getEdgeClasses()[0].getSimpleName() + ")");
+            //            System.err.println(metaPathCount++ + " " + metaPaths[i] + "(" + metaPaths[i].getStartClass().getSimpleName() + " -> " + metaPaths[i].getEndClass().getSimpleName() + " ### " + metaPaths[i].getEdgeClasses()[0].getSimpleName() + ")");
+            String pathsKey = calculateKey(metaPaths[i].getStartClass(), metaPaths[i].getEndClass());
+            //            System.err.println(metaPathes.get(pathsKey));
+            metaPathes.put(pathsKey, metaPaths[i]);
+            //            System.err.println(metaPathes.get(pathsKey));
+            //            System.err.println();
+        }
     }
 
     /**
@@ -73,8 +88,7 @@ public abstract class PathsDefinition {
      * Bildet das Set aller Klassen, für die Pfade definiert wurden.
      */
     private void initElementTypesInPathes() {
-        for (MetaPath[] mps : metaPathes.values()) {
-            MetaPath path = mps[0];
+        for (MetaPath path : metaPathes.values()) {
             elementClassesInPathes.add(path.getStartClass());
             elementClassesInPathes.add(path.getEndClass());
         }
@@ -103,9 +117,60 @@ public abstract class PathsDefinition {
      * @param endClass
      * @return
      */
-    public final MetaPath[] getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+    public final Collection<MetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
         initInternal();
         return metaPathes.get(calculateKey(startClass, endClass));
+    }
+
+    public static final MetaPath[] createSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
+        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+        Class<? extends ModelElement>[] startClasses = ModelConstants.getInstanciableAssignableClasses(edgeStartClass);
+        Class<? extends ModelElement>[] endClasses = ModelConstants.getInstanciableAssignableClasses(edgeEndClass);
+        Set<Class<?>> allStartClasses = ReflectionUtils.getClassesWithSuperClasses(startClasses, edgeStartClass.getSuperclass());
+        Set<Class<?>> allEndClasses = ReflectionUtils.getClassesWithSuperClasses(endClasses, edgeEndClass.getSuperclass());
+        MetaPath[] returnPaths = new MetaPath[allStartClasses.size() * allEndClasses.size()];
+        int currentPathIndex = 0;
+        for (Class<?> start : allStartClasses) {
+            Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
+            for (Class<?> end : allEndClasses) {
+                Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
+                MetaPath metaPath = null;
+                if (ModelConstants.isPartOfEdge(edgeClass)) {
+                    metaPath = new MetaPath(startClass, endClass, new Class[][] {
+                            {
+                                    edgeClass
+                            }
+                    }, s("zeile") + " " + ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD) + " " + s("spalte"), true);
+
+                } else {
+                    String forwardName = ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD, true, true);
+                    if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                        metaPath = new MetaPath(startClass, endClass, new Class[][] {
+                                {
+                                        edgeClass
+                                }
+                        }, new Color[] {
+                                Color.ORANGE,
+                                Color.BLUE,
+                                Color.GREEN
+                        }, new String[] {
+                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, true, true, " " + s("text_und") + " "),
+                                forwardName,
+                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD, true, true),
+                        });
+                    } else {
+                        metaPath = new MetaPath(startClass, endClass, new Class[][] {
+                                {
+                                        edgeClass
+                                }
+                        }, forwardName);
+                    }
+                }
+                returnPaths[currentPathIndex++] = metaPath;
+            }
+        }
+        return returnPaths;
     }
 
 }
