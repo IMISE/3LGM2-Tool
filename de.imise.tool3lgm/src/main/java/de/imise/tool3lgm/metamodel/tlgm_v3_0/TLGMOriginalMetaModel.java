@@ -109,33 +109,27 @@ public class TLGMOriginalMetaModel extends MetaModel {
     // PathsDefinition //
     /////////////////////
 
-    private final PathsDefinition pathsDefinition = new TLGMPathsDefinition();
-
     @Override
-    public PathsDefinition getPathsDefinition() {
-        return pathsDefinition;
+    public PathsDefinition createPathsDefinition() {
+        return new TLGMPathsDefinition();
     }
 
     /////////////////////////
     // GraphViewDefinition //
     /////////////////////////
 
-    private final GraphViewDefinition graphViewDefinition = new TLGMGraphViewDefinion();
-
     @Override
-    public final GraphViewDefinition getGraphViewDefinition() {
-        return graphViewDefinition;
+    public final GraphViewDefinition createGraphViewDefinition() {
+        return new TLGMGraphViewDefinion();
     }
 
     //////////////////////
     // CopyDependencies //
     //////////////////////
 
-    private final CopyDependencies copyDependencies = new TLGMCopyDependencies();
-
     @Override
-    public final CopyDependencies getCopyDependencies() {
-        return copyDependencies;
+    public final CopyDependencies createCopyDependencies() {
+        return new TLGMCopyDependencies();
     }
 
     ////////////////////////

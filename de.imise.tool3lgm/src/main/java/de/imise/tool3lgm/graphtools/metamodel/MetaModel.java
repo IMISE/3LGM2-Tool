@@ -37,19 +37,48 @@ public abstract class MetaModel {
     // PathsDefinition //
     /////////////////////
 
-    public abstract PathsDefinition getPathsDefinition();
+    private PathsDefinition pathsDefinition;
+
+    public final PathsDefinition getPathsDefinition() {
+        //immer lazy initialisieren, weil die PathsDefinition die kompeltten ModelConstants braucht, um sich selbst
+        //zu initialisieren und die ModelConstants aber dieses Metamodel initialisieren -> wenn nicht lazy => InitializationException
+        if (pathsDefinition == null) {
+            pathsDefinition = createPathsDefinition();
+        }
+        return pathsDefinition;
+    }
+
+    protected abstract PathsDefinition createPathsDefinition();
 
     /////////////////////////
     // GraphViewDefinition //
     /////////////////////////
 
-    public abstract GraphViewDefinition getGraphViewDefinition();
+    private GraphViewDefinition graphViewDefinition;
+
+    public final GraphViewDefinition getGraphViewDefinition() {
+        if (graphViewDefinition == null) {
+            graphViewDefinition = createGraphViewDefinition();
+        }
+        return graphViewDefinition;
+    }
+
+    protected abstract GraphViewDefinition createGraphViewDefinition();
 
     //////////////////////
     // CopyDependencies //
     //////////////////////
 
-    public abstract CopyDependencies getCopyDependencies();
+    private CopyDependencies copyDependencies;
+
+    public final CopyDependencies getCopyDependencies() {
+        if (copyDependencies == null) {
+            copyDependencies = createCopyDependencies();
+        }
+        return copyDependencies;
+    }
+
+    protected abstract CopyDependencies createCopyDependencies();
 
     ////////////////////////
     // AnalysisDefinition //
