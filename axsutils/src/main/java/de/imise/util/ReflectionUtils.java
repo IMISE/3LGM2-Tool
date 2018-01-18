@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -196,6 +197,46 @@ public class ReflectionUtils {
                 }
             }
         }
+    }
+
+    /**
+     * Liefert für die übergebenen Klassen diese Klassen selbst und bis hin zur übergebenen excludeSuperClass
+     * auch alle Superklassen. Die excludeSuperClass selbst ist nicht mehr mit dabei. Wird als excludeSuperClass
+     * null übergeben, dann geht die Hierarchie hoch bis zu Object.class.
+     * ACHTUNG: Das hier funktionier nicht für Interfaces sondern nur für direkte Sub- und Superklassen.
+     *
+     * @param class
+     * @param excludeSuperClass
+     * @see ReflectionUtils#getClassWithSuperClasses(Class, Class)
+     */
+    public static Set<Class<?>> getClassesWithSuperClasses(final Class<?>[] classes, final Class<?> excludeSuperClass) {
+        if (classes.length == 1) {
+            return getClassWithSuperClasses(classes[0], excludeSuperClass);
+        }
+        Set<Class<?>> classedWithSuperClasses = new HashSet<>();
+        for (Class<?> clazz : classes) {
+            classedWithSuperClasses.addAll(getClassWithSuperClasses(clazz, excludeSuperClass));
+        }
+        return classedWithSuperClasses;
+    }
+
+    /**
+     * Liefert für die übergebene Klasse diese Klasse selbst und bis hin zur übergebenen excludeSuperClass
+     * auch alle Superklassen. Die excludeSuperClass selbst ist nicht mehr mit dabei. Wird als excludeSuperClass
+     * null übergeben, dann geht die Hierarchie hoch bis zu Object.class.
+     * ACHTUNG: Das hier funktionier nicht für Interfaces sondern nur für direkte Sub- und Superklassen.
+     *
+     * @param class
+     * @param excludeSuperClass
+     */
+    public static Set<Class<?>> getClassWithSuperClasses(final Class<?> clazz, final Class<?> excludeSuperClass) {
+        Set<Class<?>> classWithSuperClasses = new HashSet<>();
+        Class<?> superClass = clazz;
+        while (superClass != null && superClass != excludeSuperClass) {
+            classWithSuperClasses.add(superClass);
+            superClass = superClass.getSuperclass();
+        }
+        return classWithSuperClasses;
     }
 
     /**
