@@ -57,190 +57,67 @@ public class TLGMPathsDefinition extends PathsDefinition {
         }
 
         /* Aufgabe - Organisationseinheit */
-        put(new MetaPath(Aufgabe.class, Organisationseinheit.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class,
-                        OrgAufOrgVerbindung.class
-                }
-        }, s("Aufgabe") + " " + s("text_wird_erledigt_in") + " " + s("Organisationseinheit")));
+        put(new MetaPath(Aufgabe.class, Organisationseinheit.class, "text_wird_erledigt_in", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class));
 
         /* Aufgabe - Anwendungsbaustein */
-        put(new MetaPath(Aufgabe.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class
-                }
-        }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Aufgabe.class, Anwendungsbaustein.class, "text_unterstuetzt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
 
         /* Aufgabe - RechAnwendungsbaustein */
-        put(new MetaPath(Aufgabe.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class
-                }
-        }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Aufgabe.class, RechAnwendungsbaustein.class, "text_unterstuetzt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
 
         /* Aufgabe - KonAnwendungsbaustein */
-        put(new MetaPath(Aufgabe.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class
-                }
-        }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Aufgabe.class, KonAnwendungsbaustein.class, "text_unterstuetzt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
 
         /* Aufgabe - PhyDVBaustein */
-        put(new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class,
-                        PdvbkAwbVerbindung.class,
-                        PdvbPdvbkVerbindung.class
-                }
-        }, s("Aufgabe") + " " + s("text_unterstuetzt") + " " + s("PhysischerDVBaustein")));
+        put(new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, "text_unterstuetzt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class));
 
         /* Aufgabe - Standort */
-        put(new MetaPath(Aufgabe.class, Standort.class, new Class[][] {
-                {
-                        AufAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class,
-                        PdvbkAwbVerbindung.class,
-                        PdvbPdvbkVerbindung.class,
-                        PdvbStoVerbindung.class
-                }
-        }, s("Aufgabe") + " " + s("text_erledigt") + " " + s("Standort")));
+        put(new MetaPath(Aufgabe.class, Standort.class, "text_erledigt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class, PdvbStoVerbindung.class));
 
         /* Objekttyp - Datenbanksystem */
-        put(new MetaPath(Objekttyp.class, Datenbanksystem.class, new Class[][] {
-                {
-                        ObjReprVerbindung.class,
-                        DbsDatVerbindung.class,
-                }
-        }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Datenbanksystem")));
+        put(new MetaPath(Objekttyp.class, Datenbanksystem.class, "text_speichert", ObjReprVerbindung.class, DbsDatVerbindung.class));
 
         /* Anwendungsbaustein - PhyDVBaustein */
-        put(new MetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        PdvbkAwbVerbindung.class,
-                        PdvbPdvbkVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein")));
+        put(new MetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, "text_installiert", PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class));
 
         /* RechAnwendungsbaustein - PhyDVBaustein */
-        put(new MetaPath(RechAnwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        PdvbkAwbVerbindung.class,
-                        PdvbPdvbkVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein")));
+        put(new MetaPath(RechAnwendungsbaustein.class, PhysischerDVBaustein.class, "text_installiert", PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class));
 
         /* KonAnwendungsbaustein - PhyDVBaustein */
-        put(new MetaPath(KonAnwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        PdvbkAwbVerbindung.class,
-                        PdvbPdvbkVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein")));
+        put(new MetaPath(KonAnwendungsbaustein.class, PhysischerDVBaustein.class, "text_installiert", PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class));
 
         /* Organisationseinheit - PhyDVBaustein */
-        put(new MetaPath(Organisationseinheit.class, PhysischerDVBaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class,
-                        PdvbkAwbVerbindung.class,
-                        PdvbPdvbkVerbindung.class
-                }
-        }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("PhysischerDVBaustein")));
+        put(new MetaPath(Organisationseinheit.class, PhysischerDVBaustein.class, "text_nutzt", OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class));
 
         /* Organisationseinheit - Anwendungsbaustein */
-        put(new MetaPath(Organisationseinheit.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class
-                }
-        }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Organisationseinheit.class, Anwendungsbaustein.class, "text_nutzt", OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
 
         /* Organisationseinheit - RechAnwendungsbaustein */
-        put(new MetaPath(Organisationseinheit.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class
-                }
-        }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Organisationseinheit.class, RechAnwendungsbaustein.class, "text_nutzt", OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
 
         /* Organisationseinheit - KonAnwendungsbaustein */
-        put(new MetaPath(Organisationseinheit.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class
-                }
-        }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Organisationseinheit.class, KonAnwendungsbaustein.class, "text_nutzt", OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class));
 
         /* Organisationseinheit - Softwareprodukt */
-        put(new MetaPath(Organisationseinheit.class, Softwareprodukt.class, new Class[][] {
-                {
-                        OrgAufOrgVerbindung.class,
-                        AwbkAufOrgVerbindung.class,
-                        AwbAwbkVerbindung.class,
-                        RawbAwpVerbindung.class,
-                        AwpSwpVerbindung.class
-                }
-        }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Softwareprodukt")));
+        put(new MetaPath(Organisationseinheit.class, Softwareprodukt.class, "text_nutzt", OrgAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class));
 
         /* Anwendungsbaustein - Kommunikationsstandard */
-        put(new MetaPath(Anwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        BssKommstVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard")));
+        put(new MetaPath(Anwendungsbaustein.class, Kommunikationsstandard.class, "text_nutzt", AwbKommssVerbindung.class, BssKommstVerbindung.class));
 
         /* RechAnwendungsbaustein - Kommunikationsstandard */
-        put(new MetaPath(RechAnwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        BssKommstVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard")));
+        put(new MetaPath(RechAnwendungsbaustein.class, Kommunikationsstandard.class, "text_nutzt", AwbKommssVerbindung.class, BssKommstVerbindung.class));
 
         /* KonAnwendungsbaustein - Kommunikationsstandard */
-        put(new MetaPath(KonAnwendungsbaustein.class, Kommunikationsstandard.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        BssKommstVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_nutzt") + " " + s("Kommunikationsstandard")));
+        put(new MetaPath(KonAnwendungsbaustein.class, Kommunikationsstandard.class, "text_nutzt", AwbKommssVerbindung.class, BssKommstVerbindung.class));
 
         /* RechAnwendungsbaustein - Softwareprodukt */
-        put(new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, new Class[][] {
-                {
-                        RawbAwpVerbindung.class,
-                        AwpSwpVerbindung.class
-                }
-        }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Softwareprodukt")));
+        put(new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, "text_gesteuert", RawbAwpVerbindung.class, AwpSwpVerbindung.class));
 
         /* Objekttyp - RechAnwendungsbaustein */
-        put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        ObjLogspVerbindung.class,
-                        RawbDbsVerbindung.class
-                }
-        }, s("Objekttyp") + " " + s("text_fuehrenden") + " " + s("Anwendungsbaustein")));
-        put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        ObjReprVerbindung.class,
-                        DbsDatVerbindung.class,
-                        RawbDbsVerbindung.class
-                }
-        }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, "text_fuehrenden", ObjLogspVerbindung.class, RawbDbsVerbindung.class));
+
+        put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, "text_speichert", ObjReprVerbindung.class, DbsDatVerbindung.class, RawbDbsVerbindung.class));
+
         put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
                 {
                         ObjReprVerbindung.class,
@@ -256,19 +133,10 @@ public class TLGMPathsDefinition extends PathsDefinition {
         }, s("Objekttyp") + " " + s("text_kommuniziert") + " " + s("Anwendungsbaustein")));
 
         /* Objekttyp - KonAnwendungsbaustein */
-        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        ObjLogspVerbindung.class,
-                        KawbDoksVerbindung.class
-                }
-        }, s("Objekttyp") + " " + s("text_fuehrenden") + " " + s("Anwendungsbaustein")));
-        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        ObjReprVerbindung.class,
-                        DoksDokVerbindung.class,
-                        KawbDoksVerbindung.class
-                }
-        }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Anwendungsbaustein")));
+        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, "text_fuehrenden", ObjLogspVerbindung.class, KawbDoksVerbindung.class));
+
+        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, "text_speichert", ObjReprVerbindung.class, DoksDokVerbindung.class, KawbDoksVerbindung.class));
+
         put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
                 {
                         ObjReprVerbindung.class,

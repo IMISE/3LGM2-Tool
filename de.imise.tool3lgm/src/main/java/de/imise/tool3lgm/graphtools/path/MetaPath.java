@@ -9,6 +9,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndC
 import java.awt.Color;
 import java.util.Arrays;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
@@ -64,6 +66,16 @@ public class MetaPath {
     private static final String[] defaultDescritpion = {
             ""
     };
+
+    /**
+     * @param startClass ModelElement class where associations starts
+     * @param endClass ModelElement class where associations ends
+     * @param associations EdgeClasses for this path
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
+        this(startClass, endClass, getPathForAssociations(associations), defaultColor, getPathDescription(startClass, endClass, resourceKeyOrPathName));
+    }
 
     /**
      * @param startClass ModelElement class where associations starts
@@ -432,6 +444,12 @@ public class MetaPath {
             }
         }
         return true;
+    }
+
+    private static String[] getPathDescription(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName) {
+        return new String[] {
+                ModelConstants.getDisplayableName(startClass) + " " + Tool3lgmConstants.getResStringWithoutError(resourceKeyOrPathName) + " " + ModelConstants.getDisplayableName(endClass)
+        };
     }
 
 }
