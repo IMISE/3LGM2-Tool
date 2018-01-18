@@ -57,32 +57,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
             put(simpleMetaPaths);
         }
 
-        //        /* Aufgabe - Objekttyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Aufgabe.class, Objekttyp.class, new Class[][] {
-        //                        {
-        //                                AufObjVerbindung.class
-        //                        }
-        //                }, new Color[] {
-        //                        Color.ORANGE,
-        //                        Color.BLUE,
-        //                        Color.GREEN
-        //                }, new String[] {
-        //                        s("Aufgabe") + " " + s("text_bearb") + " " + s("text_und") + " " + s("text_inter") + " " + s("Objekttyp"),
-        //                        s("Aufgabe") + " " + s("text_bearb") + " " + s("Objekttyp"),
-        //                        s("Aufgabe") + " " + s("text_inter") + " " + s("Objekttyp")
-        //                })
-        //        });
-        //
-        //        /* Aufgabe - Aufgabe */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Aufgabe.class, Aufgabe.class, new Class[][] {
-        //                        {
-        //                                AufAufVerbindung.class
-        //                        }
-        //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
-        //        });
-        //
         /* Aufgabe - Organisationseinheit */
         put(new MetaPath[] {
                 new MetaPath(Aufgabe.class, Organisationseinheit.class, new Class[][] {
@@ -153,42 +127,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                 }, s("Aufgabe") + " " + s("text_erledigt") + " " + s("Standort"))
         });
 
-        /* Objekttyp - Datensatztyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Objekttyp.class, Datensatztyp.class, new Class[][] {
-        //                        {
-        //                                ObjReprVerbindung.class
-        //                        }
-        //                }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Datensatztyp"))
-        //        });
-        //
-        //        /* Objekttyp - Dokumententyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Objekttyp.class, Dokumententyp.class, new Class[][] {
-        //                        {
-        //                                ObjReprVerbindung.class
-        //                        }
-        //                }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Dokumententyp"))
-        //        });
-        //
-        //        /* Objekttyp - Nachrichtentyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Objekttyp.class, Nachrichtentyp.class, new Class[][] {
-        //                        {
-        //                                ObjReprVerbindung.class
-        //                        }
-        //                }, s("Objekttyp") + " " + s("text_repraesentiert") + " " + s("Nachrichtentyp"))
-        //        });
-        //
-        //        /* Objekttyp - Dokumentensammlung */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Objekttyp.class, Dokumentensammlung.class, new Class[][] {
-        //                        {
-        //                                ObjLogspVerbindung.class
-        //                        }
-        //                }, s("Objekttyp") + " " + s("text_fuehrend") + " " + s("Dokumentensammlung"))
-        //        });
-
         /* Objekttyp - Datenbanksystem */
         put(new MetaPath[] {
                 //                new MetaPath(Objekttyp.class, Datenbanksystem.class, new Class[][] {
@@ -204,96 +142,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                 }, s("Objekttyp") + " " + s("text_speichert") + " " + s("Datenbanksystem")),
         });
 
-        //        /* Aufgabe - Softwareprodukt */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Aufgabe.class, Softwareprodukt.class, new Class[][] {
-        //                        {
-        //                                SwpAufVerbindung.class
-        //                        }
-        //                }, s("Aufgabe") + " " + s("text_kann_unterstuetzt") + " " + s("Softwareprodukt"))
-        //        });
-        //
-        //        /* Aufgabe - Ereignistyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Aufgabe.class, Ereignistyp.class, new Class[][] {
-        //                        {
-        //                                EtAufVerbindung.class
-        //                        }
-        //                }, s("Ereignistyp") + " " + s("text_ausloesen") + " " + s("Aufgabe"))
-        //        });
-        //
-        //        /* Anwendungsbaustein - Bausteinschnittstelle */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Anwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
-        //                        {
-        //                                AwbKommssVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
-        //        });
-        //
-        //        /* RechAnwendungsbaustein - Bausteinschnittstelle */
-        //        put(new MetaPath[] {
-        //                new MetaPath(RechAnwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
-        //                        {
-        //                                AwbKommssVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
-        //        });
-        //
-        //        /* KonAnwendungsbaustein - Bausteinschnittstelle */
-        //        put(new MetaPath[] {
-        //                new MetaPath(KonAnwendungsbaustein.class, Bausteinschnittstelle.class, new Class[][] {
-        //                        {
-        //                                AwbKommssVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
-        //        });
-        //
-        //        /* Anwendungsbaustein - Benutzungsschnittstelle */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Anwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
-        //                        {
-        //                                AwbKommssVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
-        //        });
-        //
-        //        /* RechAnwendungsbaustein - Benutzungsschnittstelle */
-        //        put(new MetaPath[] {
-        //                new MetaPath(RechAnwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
-        //                        {
-        //                                AwbKommssVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
-        //        });
-        //
-        //        /* KonAnwendungsbaustein - Benutzungsschnittstelle */
-        //        put(new MetaPath[] {
-        //                new MetaPath(KonAnwendungsbaustein.class, Benutzungsschnittstelle.class, new Class[][] {
-        //                        {
-        //                                AwbKommssVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_besitzt") + " " + s("Bausteinschnittstelle"))
-        //        });
-        //
-        //        /* RechAnwendungsbaustein - Datenbanksystem */
-        //        put(new MetaPath[] {
-        //                new MetaPath(RechAnwendungsbaustein.class, Datenbanksystem.class, new Class[][] {
-        //                        {
-        //                                RawbDbsVerbindung.class
-        //                        }
-        //                }, s("RechAnwendungsbaustein") + " " + s("text_besitzt") + " " + s("Datenbanksystem"))
-        //        });
-        //
-        //        /* KonAnwendungsbaustein - Dokumentensammlung */
-        //        put(new MetaPath[] {
-        //                new MetaPath(KonAnwendungsbaustein.class, Dokumentensammlung.class, new Class[][] {
-        //                        {
-        //                                KawbDoksVerbindung.class
-        //                        }
-        //                }, s("KonAnwendungsbaustein") + " " + s("text_besitzt") + " " + s("Dokumentensammlung"))
-        //        });
-        //
         /* Anwendungsbaustein - PhyDVBaustein */
         put(new MetaPath[] {
                 new MetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, new Class[][] {
@@ -324,15 +172,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                 }, s("Anwendungsbaustein") + " " + s("text_installiert") + " " + s("PhysischerDVBaustein"))
         });
 
-        //        /* Organisationseinheit - Organisationseinheit */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Organisationseinheit.class, Organisationseinheit.class, new Class[][] {
-        //                        {
-        //                                OrgOrgVerbindung.class
-        //                        }
-        //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
-        //        });
-        //
         /* Organisationseinheit - PhyDVBaustein */
         put(new MetaPath[] {
                 new MetaPath(Organisationseinheit.class, PhysischerDVBaustein.class, new Class[][] {
@@ -379,73 +218,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                 }, s("Organisationseinheit") + " " + s("text_nutzt") + " " + s("Anwendungsbaustein"))
         });
 
-        //        /* Objekttyp - Objekttyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Objekttyp.class, Objekttyp.class, new Class[][] {
-        //                        {
-        //                                ObjObjVerbindung.class
-        //                        }
-        //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true)
-        //        });
-        //
-        //        /* Subnetz - Netzprotokoll */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Subnetz.class, Netzprotokoll.class, new Class[][] {
-        //                        {
-        //                                SubnNetzpVerbindung.class
-        //                        }
-        //                }, s("Subnetz") + " " + s("text_basiert") + " " + s("Netzprotokoll"))
-        //        });
-        //
-        //        /* Subnetz - Netztyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(Subnetz.class, Netztyp.class, new Class[][] {
-        //                        {
-        //                                SubnNetztVerbindung.class
-        //                        }
-        //                }, s("Subnetz") + " " + s("text_basiert") + " " + s("Netztyp"))
-        //        });
-        //
-        //        /* PhyDVBaustein - Subnetz */
-        //        put(new MetaPath[] {
-        //                new MetaPath(PhysischerDVBaustein.class, Subnetz.class, new Class[][] {
-        //                        {
-        //                                PdvbSubnVerbindung.class
-        //                        }
-        //                }, s("PhysischerDVBaustein") + " " + s("text_gehoert") + " " + s("Subnetz"))
-        //        });
-        //
-        //        /* PhyDVBaustein - Standort */
-        //        put(new MetaPath[] {
-        //                new MetaPath(PhysischerDVBaustein.class, Standort.class, new Class[][] {
-        //                        {
-        //                                PdvbStoVerbindung.class
-        //                        }
-        //                }, s("PhysischerDVBaustein") + " " + s("text_hat") + " " + s("Standort"))
-        //        });
-        //
-        //        /* PhyDVBaustein - Bausteintyp */
-        //        put(new MetaPath[] {
-        //                new MetaPath(PhysischerDVBaustein.class, Bausteintyp.class, new Class[][] {
-        //                        {
-        //                                PdvbBtypVerbindung.class
-        //                        }
-        //                }, s("PhysischerDVBaustein") + " " + s("text_ist") + " " + s("Bausteintyp"))
-        //        });
-        //
-        //        /* PhyDVBaustein - PhyDVBaustein */
-        //        put(new MetaPath[] {
-        //                new MetaPath(PhysischerDVBaustein.class, PhysischerDVBaustein.class, new Class[][] {
-        //                        {
-        //                                PdvbPdvbVerbindung.class
-        //                        }
-        //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true), new MetaPath(PhysischerDVBaustein.class, PhysischerDVBaustein.class, new Class[][] {
-        //                        {
-        //                                DatenuebertragungsVerbindung.class
-        //                        }
-        //                }, s("PhysischerDVBaustein") + " " + s("text_verbunden") + " " + s("PhysischerDVBaustein"))
-        //        });
-        //
         /* Organisationseinheit - Softwareprodukt */
         put(new MetaPath[] {
                 new MetaPath(Organisationseinheit.class, Softwareprodukt.class, new Class[][] {
@@ -499,15 +271,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                 }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Softwareprodukt"))
         });
 
-        //        /* KonAnwendungsbaustein - Organisationsplan */
-        //        put(new MetaPath[] {
-        //                new MetaPath(KonAnwendungsbaustein.class, Organisationsplan.class, new Class[][] {
-        //                        {
-        //                                KawbOrgpVerbindung.class
-        //                        }
-        //                }, s("Anwendungsbaustein") + " " + s("text_gesteuert") + " " + s("Organisationsplan"))
-        //        });
-        //
         /* Objekttyp - RechAnwendungsbaustein */
         put(new MetaPath[] {
                 new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
@@ -591,11 +354,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
 
         /* RechAnwendungsbaustein - RechAnwendungsbaustein */
         put(new MetaPath[] {
-                //                new MetaPath(RechAnwendungsbaustein.class, RechAnwendungsbaustein.class, new Class[][] {
-                //                        {
-                //                                RawbRawbVerbindung.class
-                //                        }
-                //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true),
                 new MetaPath(RechAnwendungsbaustein.class, RechAnwendungsbaustein.class, new Class[][] {
                         {
                                 AwbKommssVerbindung.class,
@@ -615,11 +373,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
 
         /* KonAnwendungsbaustein - Anwendungsbaustein */
         put(new MetaPath[] {
-                //                new MetaPath(KonAnwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                //                        {
-                //                                AwbKawbVerbindung.class
-                //                        }
-                //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true),
                 new MetaPath(KonAnwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
                         {
                                 AwbKommssVerbindung.class,
@@ -639,11 +392,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
 
         /* KonAnwendungsbaustein - KonAnwendungsbaustein */
         put(new MetaPath[] {
-                //                new MetaPath(KonAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
-                //                        {
-                //                                AwbKawbVerbindung.class
-                //                        }
-                //                }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true),
                 new MetaPath(KonAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
                         {
                                 AwbKommssVerbindung.class,
