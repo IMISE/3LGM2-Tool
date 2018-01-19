@@ -17,6 +17,7 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -165,12 +166,13 @@ public final class PathFinder {
         for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
             // direkt vebunden?
             if (metaPath.isImmediate(pathIndex)) {
-                if (element1.isConnectedTo(element2, metaPath.getEdgeClasses(pathIndex)[0]) && element1.isConnectedFrom(element2)) {
+                Class<? extends Edge> edgeClass = metaPath.getEdgeClasses(pathIndex)[0];
+                if (element1.isConnectedTo(element2, edgeClass) && element1.isConnectedFrom(element2, edgeClass)) {
                     return DOUBLE;
-                } else if (element1.isConnectedTo(element2, metaPath.getEdgeClasses(pathIndex)[0])) {
+                } else if (element1.isConnectedTo(element2, edgeClass)) {
                     return reverse && metaPath.isDirectional() ? BACKWARD : FORWARD;
-                } else if (element1.isConnectedFrom(element2, metaPath.getEdgeClasses(pathIndex)[0])) {
-                    return reverse && metaPath.isDirectional() ? FORWARD : IsPartOfEdge.class.isAssignableFrom(metaPath.getEdgeClasses(pathIndex)[0]) ? NOTCONNECTED : BACKWARD;
+                } else if (element1.isConnectedFrom(element2, edgeClass)) {
+                    return reverse && metaPath.isDirectional() ? FORWARD : IsPartOfEdge.class.isAssignableFrom(edgeClass) ? NOTCONNECTED : BACKWARD;
                 }
             } else {
                 switch (isConnected(element1, element2, metaPath, 0, pathIndex)) {
