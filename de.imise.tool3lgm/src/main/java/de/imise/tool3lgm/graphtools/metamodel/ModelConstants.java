@@ -1048,37 +1048,46 @@ public final class ModelConstants {
      * @return
      */
     public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int connectionState, final String doubleMeaningEdgeDelimiter) {
-        StringBuilder sb = new StringBuilder();
-        if (!switchDefinedDirection) {
-            try {
-                sb.append(getResString(edgeClass.getSimpleName() + "_f"));
-            } catch (Exception e) {
-                if (connectionState == FORWARD) {
-                    sb.append(getResString(edgeClass.getSimpleName() + "_f_f"));
-                } else if (connectionState == BACKWARD) {
-                    sb.append(getResString(edgeClass.getSimpleName() + "_f_b"));
-                } else {
-                    sb.append(getResString(edgeClass.getSimpleName() + "_f_f"));
-                    sb.append(doubleMeaningEdgeDelimiter);
-                    sb.append(getResString(edgeClass.getSimpleName() + "_f_b"));
+        //alle Kantenamen müssen mit SimplerKantenklassenName_f oder SimplerKantenklassenName_b angegeben sein oder bei Kanten mit doppelter Bedeutung SimplerKantenklassenName_f_f,
+        //SimplerKantenklassenName_f_b, SimplerKantenklassenName_b_f und SimplerKantenklassenName_b_b
+        String edgeClassName = edgeClass.getSimpleName();
+        final String mainEdgeDirection = !switchDefinedDirection ? "_f" : "_b";
+        String edgeName = getEdgeName(edgeClassName, mainEdgeDirection);
+        if (edgeName != null) {
+            return edgeName;
+        }
+        if (edgeName == null) {
+            String interpretedDirection = connectionState == FORWARD ? "_f" : connectionState == BACKWARD ? "_b" : null;
+            if (interpretedDirection != null) {
+                edgeName = getEdgeName(edgeClassName, mainEdgeDirection, interpretedDirection);
+                if (edgeName != null) {
+                    return edgeName;
                 }
-            }
-        } else {
-            try {
-                sb.append(getResString(edgeClass.getSimpleName() + "_b"));
-            } catch (Exception e) {
-                if (connectionState == FORWARD) {
-                    sb.append(getResString(edgeClass.getSimpleName() + "_b_f"));
-                } else if (connectionState == BACKWARD) {
-                    sb.append(getResString(edgeClass.getSimpleName() + "_b_b"));
-                } else {
-                    sb.append(getResString(edgeClass.getSimpleName() + "_b_f"));
-                    sb.append(doubleMeaningEdgeDelimiter);
-                    sb.append(getResString(edgeClass.getSimpleName() + "_b_b"));
+            } else {
+                edgeName = getEdgeName(edgeClassName, mainEdgeDirection, "_f");
+                if (edgeName != null) {
+                    //wenn es einen Vorwärtsnamen gibt, dann muss auch ein Rückwärtsname angegeben sein!
+                    return edgeName + doubleMeaningEdgeDelimiter + getEdgeName(edgeClassName, mainEdgeDirection, "_b");
                 }
             }
         }
-        return sb.toString();
+        //wenn für den aktuellen Klassennamen kein Name gefunden wurde -> nimm die Oberklasse -> irgendwann kommt man bei Edge.class an, für die auf jeden Fall ein Namen ex.
+        return getMetaAssociationName(edgeClass.getSuperclass().asSubclass(Edge.class), switchDefinedDirection, connectionState, doubleMeaningEdgeDelimiter);
+    }
+
+    private static final String getEdgeName(final String simpleEdgeClassName, final String mainEdgeDirection) {
+        return getEdgeName(simpleEdgeClassName, mainEdgeDirection, null);
+    }
+
+    private static final String getEdgeName(final String simpleEdgeClassName, final String mainEdgeDirection, final String interpretedDirection) {
+        try {
+            if (interpretedDirection == null) {
+                return getResString(simpleEdgeClassName + mainEdgeDirection);
+            }
+            return getResString(simpleEdgeClassName + mainEdgeDirection + interpretedDirection);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
