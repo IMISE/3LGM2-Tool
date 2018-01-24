@@ -68,7 +68,7 @@ public class TLGMGraphViewDefinion extends GraphViewDefinition {
 
     @Override
     protected void initDefaultElementLayout() {
-        setDefaultLayout(Aufgabe.class, SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
+        setDefaultLayout(Aufgabe.class, SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.RED]);
         setDefaultLayout(Objekttyp.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.BLUE]);
         setDefaultLayout(Anwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.GRAY]);
         setDefaultLayout(RechAnwendungsbaustein.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTRED]);
