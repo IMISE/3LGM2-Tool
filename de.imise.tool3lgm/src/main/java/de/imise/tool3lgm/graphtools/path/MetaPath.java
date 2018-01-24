@@ -36,11 +36,6 @@ public class MetaPath {
     /**
      * COMMENTME
      */
-    private final Color[] color;
-
-    /**
-     * COMMENTME
-     */
     private final String[] description;
 
     /**
@@ -56,13 +51,6 @@ public class MetaPath {
     /**
      * COMMENTME
      */
-    private static final Color[] defaultColor = {
-            Color.BLUE
-    };
-
-    /**
-     * COMMENTME
-     */
     private static final String[] defaultDescritpion = {
             ""
     };
@@ -74,7 +62,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
-        this(startClass, endClass, getPathForAssociations(associations), defaultColor, getPathDescription(startClass, endClass, resourceKeyOrPathName));
+        this(startClass, endClass, getPathForAssociations(associations), getPathDescription(startClass, endClass, resourceKeyOrPathName));
     }
 
     /**
@@ -84,7 +72,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
-        this(startClass, endClass, getPathForAssociations(associations), defaultColor, defaultDescritpion);
+        this(startClass, endClass, getPathForAssociations(associations), defaultDescritpion);
     }
 
     /**
@@ -95,7 +83,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path) {
-        this(startClass, endClass, path, defaultColor, defaultDescritpion);
+        this(startClass, endClass, path, defaultDescritpion);
     }
 
     /**
@@ -121,7 +109,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String description, final boolean directional) {
-        this(startClass, endClass, path, defaultColor, new String[1], -1, directional);
+        this(startClass, endClass, path, new String[1], -1, directional);
         this.description[0] = description;
     }
 
@@ -130,14 +118,12 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param color Color for item in legend and cell
      * @param description String with description for associations (in legend)
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String description) {
-        this(startClass, endClass, path, new Color[1], new String[1]);
+        this(startClass, endClass, path, new String[1]);
         this.description[0] = description;
-        this.color[0] = color;
     }
 
     /**
@@ -145,12 +131,11 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param color Color[] for items in legend and cell (one color for DOUBLE / FORWARD / BACKWARD)
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color[] color, final String[] description) {
-        this(startClass, endClass, path, color, description, -1, false);
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] description) {
+        this(startClass, endClass, path, description, -1, false);
     }
 
     /**
@@ -158,21 +143,19 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param color Color[] for items in legend and cell (one color for DOUBLE / FORWARD / BACKWARD)
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
      * @parma int control index of connections in associations, which control direction of associations
      * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for
      *            function reads objecttype )
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color[] color, final String[] description, final int control, final boolean directional) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] description, final int control, final boolean directional) {
         this.directional = directional;
         this.startClass = startClass;
         this.endClass = endClass;
         this.control = path[0].length - (control + 1);
         associations = path;
         ensureAssociationOrder();
-        this.color = color;
         this.description = description;
 
         for (int i = 0; i < countPathes(); i++) {
@@ -368,14 +351,6 @@ public class MetaPath {
      * @param direction
      * @return
      */
-    public final Color getColor(final int direction) {
-        return direction < 0 || direction > 2 ? null : color[direction < color.length ? direction : 0];
-    }
-
-    /**
-     * @param direction
-     * @return
-     */
     public final String getDescription(final int direction) {
         return direction < 0 || direction > 2 ? null : description[direction < description.length ? direction : 0];
     }
@@ -384,7 +359,7 @@ public class MetaPath {
      * @return
      */
     public int countOptions() {
-        return Math.min(color.length, description.length);
+        return description.length;
     }
 
     /**

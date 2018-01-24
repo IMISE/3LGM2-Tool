@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.awt.Color;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -156,10 +155,6 @@ public abstract class PathsDefinition {
                                 {
                                         edgeClass
                                 }
-                        }, new Color[] {
-                                Color.ORANGE,
-                                Color.BLUE,
-                                Color.GREEN
                         }, new String[] {
                                 ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, true, true, " " + s("text_und") + " "),
                                 forwardName,

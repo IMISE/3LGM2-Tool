@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.matrixview;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.NOTCONNECTED;
 
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -182,15 +183,13 @@ public class TableModel implements Iterable<TableCell> {
 
         //die Verbindungen in der Matrixsicht werden immer im Gesamtmodell gesucht
         //GraphDocument doc = graphDocument.getCollection().getGraphDocument();
-
         int connected;
         for (int i = 0; i < rowHeader.size(); i++) {
             for (int j = 0; j < colHeader.size(); j++) {
                 try {
-                    // connected = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath, doc);
                     connected = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath);
                     if (connected != NOTCONNECTED) {
-                        cellsSet.add(new TableCell(i, j, metaPath.getColor(connected)));
+                        cellsSet.add(new TableCell(i, j, getColor(metaPath, connected)));
                     }
                 } catch (StackOverflowError err) {
                     Log.show(Log.ERROR, getResString("FehlerAllgemein"), err);
@@ -198,7 +197,29 @@ public class TableModel implements Iterable<TableCell> {
 
             }
         }
+    }
 
+    public static final Color SINGLE_METAPATH_CONNECTION_STATE_COLOR = Color.BLUE;
+
+    /**
+     * COMMENTME
+     */
+    private static final Color[] ALL_METAPATH_CONNETION_STATE_COLORS = {
+            Color.ORANGE,
+            Color.BLUE,
+            Color.GREEN
+    };
+
+    /**
+     * @param metaPath
+     * @param direction
+     * @return
+     */
+    public static final Color getColor(final MetaPath metaPath, final int direction) {
+        if (direction < 0 || direction > 2) {
+            return null;
+        }
+        return metaPath.countOptions() == 1 ? SINGLE_METAPATH_CONNECTION_STATE_COLOR : ALL_METAPATH_CONNETION_STATE_COLORS[direction < ALL_METAPATH_CONNETION_STATE_COLORS.length ? direction : 0];
     }
 
     /**

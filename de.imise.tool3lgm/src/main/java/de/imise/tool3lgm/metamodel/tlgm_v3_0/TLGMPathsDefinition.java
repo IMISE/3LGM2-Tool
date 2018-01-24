@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
-import java.awt.Color;
-
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -165,10 +163,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         KommBeziehung.class,
                         AwbKommssVerbindung.class
                 }
-        }, new Color[] {
-                Color.ORANGE,
-                Color.BLUE,
-                Color.GREEN
         }, new String[] {
                 s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
                 s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
@@ -182,10 +176,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         KommBeziehung.class,
                         AwbKommssVerbindung.class
                 }
-        }, new Color[] {
-                Color.ORANGE,
-                Color.BLUE,
-                Color.GREEN
         }, new String[] {
                 s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
                 s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
@@ -199,10 +189,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         KommBeziehung.class,
                         AwbKommssVerbindung.class
                 }
-        }, new Color[] {
-                Color.ORANGE,
-                Color.BLUE,
-                Color.GREEN
         }, new String[] {
                 s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
                 s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
@@ -216,10 +202,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         KommBeziehung.class,
                         AwbKommssVerbindung.class
                 }
-        }, new Color[] {
-                Color.ORANGE,
-                Color.BLUE,
-                Color.GREEN
         }, new String[] {
                 s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
                 s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
@@ -233,10 +215,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         KommBeziehung.class,
                         AwbKommssVerbindung.class
                 }
-        }, new Color[] {
-                Color.ORANGE,
-                Color.BLUE,
-                Color.GREEN
         }, new String[] {
                 s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
                 s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
