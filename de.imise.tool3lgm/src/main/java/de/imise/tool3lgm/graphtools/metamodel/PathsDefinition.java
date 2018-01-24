@@ -32,8 +32,7 @@ public abstract class PathsDefinition {
             try {
                 //Alle simplen Pfade für die Kante zu jeder Pfaddefinition hinzufügen
                 for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
-                    MetaPath[] simpleMetaPaths = createSimpleMetaPaths(edgeClass);
-                    put(simpleMetaPaths);
+                    putSimpleMetaPaths(edgeClass);
                 }
                 init();
             } catch (InvalidPathException exp) {
@@ -45,7 +44,7 @@ public abstract class PathsDefinition {
 
     /**
      * Unterklassen können hier weitere Pfade hinzufügen, die über die Kante hinausgehen
-     * 
+     *
      * @throws InvalidPathException
      */
     protected abstract void init() throws InvalidPathException;
@@ -55,27 +54,9 @@ public abstract class PathsDefinition {
 
     static int metaPathCount = 1;
 
-    /**
-     * Setzt den übergenen Metapfad in die HashMap aller Metapfade
-     *
-     * @param metaPaths
-     */
-    public final void put(final MetaPath[] metaPaths) {
-        for (int i = 0; i < metaPaths.length; i++) {
-            //            Sys.errn(2, metaPathCount++ + " " + metaPaths[i] + "(" + metaPaths[0].getStartClass().getSimpleName() + " -> " + metaPaths[0].getEndClass().getSimpleName() + " ### " + metaPaths[i].getEdgeClasses()[0].getSimpleName() + ")");
-            //            System.err.println(metaPathCount++ + " " + metaPaths[i] + "(" + metaPaths[i].getStartClass().getSimpleName() + " -> " + metaPaths[i].getEndClass().getSimpleName() + " ### " + metaPaths[i].getEdgeClasses()[0].getSimpleName() + ")");
-            String pathsKey = calculateKey(metaPaths[i].getStartClass(), metaPaths[i].getEndClass());
-            //            System.err.println(metaPathes.get(pathsKey));
-            metaPathes.put(pathsKey, metaPaths[i]);
-        }
-    }
-
     public final void put(final MetaPath metaPath) {
         String pathsKey = calculateKey(metaPath.getStartClass(), metaPath.getEndClass());
-        //            System.err.println(metaPathes.get(pathsKey));
         metaPathes.put(pathsKey, metaPath);
-        //            System.err.println(metaPathes.get(pathsKey));
-        //            System.err.println();
     }
 
     /**
@@ -137,15 +118,13 @@ public abstract class PathsDefinition {
         return metaPathes.get(calculateKey(startClass, endClass));
     }
 
-    public static final MetaPath[] createSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
+    private final void putSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
         Class<? extends ModelElement>[] startClasses = ModelConstants.getInstanciableAssignableClasses(edgeStartClass);
         Class<? extends ModelElement>[] endClasses = ModelConstants.getInstanciableAssignableClasses(edgeEndClass);
         Set<Class<?>> allStartClasses = ReflectionUtils.getClassesWithSuperClasses(startClasses, edgeStartClass.getSuperclass());
         Set<Class<?>> allEndClasses = ReflectionUtils.getClassesWithSuperClasses(endClasses, edgeEndClass.getSuperclass());
-        MetaPath[] returnPaths = new MetaPath[allStartClasses.size() * allEndClasses.size()];
-        int currentPathIndex = 0;
         for (Class<?> start : allStartClasses) {
             Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
             for (Class<?> end : allEndClasses) {
@@ -178,10 +157,9 @@ public abstract class PathsDefinition {
                         }, forwardName);
                     }
                 }
-                returnPaths[currentPathIndex++] = metaPath;
+                put(metaPath);
             }
         }
-        return returnPaths;
     }
 
 }
