@@ -30,6 +30,11 @@ public abstract class PathsDefinition {
     public PathsDefinition() {
         if (metaPathes.isEmpty()) {
             try {
+                //Alle simplen Pfade für die Kante zu jeder Pfaddefinition hinzufügen
+                for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
+                    MetaPath[] simpleMetaPaths = createSimpleMetaPaths(edgeClass);
+                    put(simpleMetaPaths);
+                }
                 init();
             } catch (InvalidPathException exp) {
                 exp.printStackTrace();
@@ -38,6 +43,11 @@ public abstract class PathsDefinition {
         }
     }
 
+    /**
+     * Unterklassen können hier weitere Pfade hinzufügen, die über die Kante hinausgehen
+     * 
+     * @throws InvalidPathException
+     */
     protected abstract void init() throws InvalidPathException;
 
     private void initInternal() {

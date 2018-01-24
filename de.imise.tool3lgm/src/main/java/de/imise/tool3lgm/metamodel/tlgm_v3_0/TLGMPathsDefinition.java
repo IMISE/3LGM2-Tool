@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
@@ -48,11 +46,6 @@ public class TLGMPathsDefinition extends PathsDefinition {
     @Override
     @SuppressWarnings("unchecked")
     protected final void init() throws InvalidPathException {
-
-        for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
-            MetaPath[] simpleMetaPaths = createSimpleMetaPaths(edgeClass);
-            put(simpleMetaPaths);
-        }
 
         /* Aufgabe - Organisationseinheit */
         put(new MetaPath(Aufgabe.class, Organisationseinheit.class, "text_wird_erledigt_in", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class));
