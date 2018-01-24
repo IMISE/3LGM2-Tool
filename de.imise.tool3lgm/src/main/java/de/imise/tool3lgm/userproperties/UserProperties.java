@@ -146,7 +146,7 @@ public class UserProperties {
                     break;
                 }
             }
-            if (size < maxSize) {
+            if (currentIndex < 0 && size < maxSize) {
                 size++;
                 listKeyToListSize.put(property, size);
             }
