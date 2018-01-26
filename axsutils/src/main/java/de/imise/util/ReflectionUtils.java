@@ -298,6 +298,17 @@ public class ReflectionUtils {
     }
 
     /**
+     * Liefert true, wenn die Klassen gleich sind oder eine die Oberklasse der anderen ist.
+     *
+     * @param class1
+     * @param class2
+     * @return
+     */
+    public static final boolean isAssingable(final Class<?> class1, final Class<?> class2) {
+        return class1.isAssignableFrom(class2) || class2.isAssignableFrom(class1);
+    }
+
+    /**
      * Gibt wieder, ob die übergebene Klasse <code>abstract</code> ist.
      *
      * @param clazz
