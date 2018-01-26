@@ -546,7 +546,7 @@ public abstract class CollectionUtils {
      * @param objectArray
      * @return
      */
-    public static String[] toStringArray(final Object[] objectArray) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
+    public static String[] toStringArray(final Object... objectArray) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
 
         if (objectArray == null) {
             throw new IllegalArgumentException("Das übergebene Array ist null");
