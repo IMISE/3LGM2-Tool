@@ -106,7 +106,7 @@ public final class PathFinder {
     public static final int isConnected(ModelElement element1, ModelElement element2, final MetaPath metaPath) {
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
-        if (!searchParts && !searchParents) {
+        if (!searchParts && !searchParents || element1 == element2 || metaPath.isHierarchyPath()) {
             return isConnected(element1, element2, metaPath, false);
         }
         int retVal = NOTCONNECTED;
