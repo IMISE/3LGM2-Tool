@@ -16,9 +16,11 @@ public final class ApplicationSystem extends ApplicationComponent {
         return dialog;
     }
 
+    private static final MetaPath NAME_EXTENSION_PATH = new MetaPath(ApplicationComponent.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
+
     @Override
     protected MetaPath getNameExtensionPath() {
-        return new MetaPath(ApplicationComponent.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
+        return NAME_EXTENSION_PATH;
     }
 
 }
