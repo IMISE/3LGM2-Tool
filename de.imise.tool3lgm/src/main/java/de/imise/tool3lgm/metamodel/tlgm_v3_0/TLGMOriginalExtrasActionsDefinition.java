@@ -7,7 +7,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.action.B1ExportPlugin;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.action.ExportPdvb4AwbPlugin;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.action.ExtrasActions;
 
-public class TLGMExtrasActionsDefinition extends ExtrasActionsDefinition {
+public class TLGMOriginalExtrasActionsDefinition extends ExtrasActionsDefinition {
 
     @Override
     public Action[] getActions() {

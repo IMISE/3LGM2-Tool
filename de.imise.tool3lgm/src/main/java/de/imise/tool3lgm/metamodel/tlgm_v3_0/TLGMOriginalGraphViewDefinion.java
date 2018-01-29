@@ -29,7 +29,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.util.Pair;
 
-public class TLGMGraphViewDefinion extends GraphViewDefinition {
+public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
 
     @SuppressWarnings("unchecked")
     @Override

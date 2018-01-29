@@ -38,9 +38,9 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
  *
  * @author AXS (15.08.2017)
  */
-public class TLGMCopyDependencies extends CopyDependencies {
+public class TLGMOriginalCopyDependencies extends CopyDependencies {
 
-    public TLGMCopyDependencies() {
+    public TLGMOriginalCopyDependencies() {
         initCopyDepenencies();
         initAvoidDuplicates();
     }

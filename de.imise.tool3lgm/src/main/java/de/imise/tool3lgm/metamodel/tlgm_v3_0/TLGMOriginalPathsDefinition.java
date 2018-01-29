@@ -36,7 +36,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
 
-public class TLGMPathsDefinition extends PathsDefinition {
+public class TLGMOriginalPathsDefinition extends PathsDefinition {
 
     /**
      * @throws InvalidPathException

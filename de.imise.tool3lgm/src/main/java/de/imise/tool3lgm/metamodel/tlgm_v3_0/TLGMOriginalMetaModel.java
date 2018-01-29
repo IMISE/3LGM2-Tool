@@ -111,7 +111,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     public PathsDefinition createPathsDefinition() {
-        return new TLGMPathsDefinition();
+        return new TLGMOriginalPathsDefinition();
     }
 
     /////////////////////////
@@ -120,7 +120,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     public final GraphViewDefinition createGraphViewDefinition() {
-        return new TLGMGraphViewDefinion();
+        return new TLGMOriginalGraphViewDefinion();
     }
 
     //////////////////////
@@ -129,7 +129,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     public final CopyDependencies createCopyDependencies() {
-        return new TLGMCopyDependencies();
+        return new TLGMOriginalCopyDependencies();
     }
 
     ////////////////////////
@@ -138,7 +138,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     protected Class<? extends AnalysisDefinition> getAnalysisDefinitionClass() {
-        return TLGMAnalysisDefinition.class;
+        return TLGMOriginalAnalysisDefinition.class;
     }
 
     /////////////////////////////
@@ -147,7 +147,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     protected Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
-        return TLGMExtrasActionsDefinition.class;
+        return TLGMOriginalExtrasActionsDefinition.class;
     }
 
     ////////////

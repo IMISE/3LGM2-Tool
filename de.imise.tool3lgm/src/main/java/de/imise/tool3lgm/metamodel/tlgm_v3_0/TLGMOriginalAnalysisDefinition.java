@@ -26,9 +26,9 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
 
-public class TLGMAnalysisDefinition extends AnalysisDefinition {
+public class TLGMOriginalAnalysisDefinition extends AnalysisDefinition {
 
-    public TLGMAnalysisDefinition() {
+    public TLGMOriginalAnalysisDefinition() {
         initSimpleRedundancyAnalysis();
         initRedundancyAnalysis();
         initNodeAnalysis();
