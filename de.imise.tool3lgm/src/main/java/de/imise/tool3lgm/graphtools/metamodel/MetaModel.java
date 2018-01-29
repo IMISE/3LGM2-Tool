@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SortedEdge;
+import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -48,7 +49,18 @@ public abstract class MetaModel {
         return pathsDefinition;
     }
 
-    protected abstract PathsDefinition createPathsDefinition();
+    /**
+     * Unterklassen können diese Funktion überschreiben und damit eine eigene Definition anlegen.
+     *
+     * @return
+     */
+    protected PathsDefinition createPathsDefinition() {
+        return new PathsDefinition() {
+            @Override
+            protected void init() throws InvalidPathException {
+            }
+        };
+    }
 
     /////////////////////////
     // GraphViewDefinition //
