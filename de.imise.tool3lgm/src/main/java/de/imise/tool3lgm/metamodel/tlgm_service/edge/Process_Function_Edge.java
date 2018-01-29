@@ -13,7 +13,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Process;
 /**
  * @author AXS (31.12.2017)
  */
-public final class Process_Funtion_Edge extends Edge implements SortedEdge, MultipleEdge {
+public final class Process_Function_Edge extends Edge implements SortedEdge, MultipleEdge {
 
     public static final Class<? extends ModelElement> stcl = Process.class;
 
