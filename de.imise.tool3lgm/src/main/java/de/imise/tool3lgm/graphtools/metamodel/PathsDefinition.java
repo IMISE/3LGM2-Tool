@@ -54,8 +54,50 @@ public abstract class PathsDefinition {
 
     static int metaPathCount = 1;
 
+    /**
+     * Legt den übergebenen Metapfad zur Sammlung aller Metapfade hinzu. Ist registerPathForSubClasses == <code>true</code>, wird
+     * für jede Kombination aus Unterklassen der Start- und Endklasse des übergebenen Pfades ebenfalls dieser Pfad hinzugefügt.
+     *
+     * @param metaPath
+     * @param registerPathForSubClasses wenn true, dann wird der Pfad auch für alle Unterklassen der übergebenen Start- und
+     *            Zielklassen angelegt. Wenn <code>false</code>, dann nur für die übergebenen Klassen.
+     */
+    public final void put(final MetaPath metaPath, final boolean registerPathForSubClasses) {
+        if (!registerPathForSubClasses) {
+            registerPath(metaPath);
+        } else {
+            Class<? extends ModelElement> pathStartClass = metaPath.getStartClass();
+            Class<? extends ModelElement> pathEndClass = metaPath.getEndClass();
+            Class<? extends ModelElement>[] startClasses = ModelConstants.getInstanciableAssignableClasses(pathStartClass);
+            Class<? extends ModelElement>[] endClasses = ModelConstants.getInstanciableAssignableClasses(pathEndClass);
+            Set<Class<?>> allStartClasses = ReflectionUtils.getClassesWithSuperClasses(startClasses, pathStartClass.getSuperclass());
+            Set<Class<?>> allEndClasses = ReflectionUtils.getClassesWithSuperClasses(endClasses, pathEndClass.getSuperclass());
+            for (Class<?> start : allStartClasses) {
+                Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
+                for (Class<?> end : allEndClasses) {
+                    Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
+                    //wenn die Start- und Endklassen die vom übergebenen Pfad sind, muss man keinen neuen Pfad anlegen
+                    MetaPath newMetaPath = pathStartClass == startClass && pathEndClass == endClass ? metaPath : new MetaPath(startClass, endClass, metaPath);
+                    registerPath(newMetaPath);
+                }
+            }
+        }
+    }
+
+    /**
+     * Legt den übergebenen Metapfad zur Sammlung aller Metapfade hinzu. Außerdem wird für jede Kombination aus Unterklassen
+     * der Start- und Endklasse des übergebenen Pfades ebenfalls dieser Pfad hinzugefügt.
+     *
+     * @param metaPath
+     */
     public final void put(final MetaPath metaPath) {
-        String pathsKey = calculateKey(metaPath.getStartClass(), metaPath.getEndClass());
+        put(metaPath, true);
+    }
+
+    private void registerPath(final MetaPath metaPath) {
+        Class<? extends ModelElement> startClass = metaPath.getStartClass();
+        Class<? extends ModelElement> endClass = metaPath.getEndClass();
+        String pathsKey = calculateKey(startClass, endClass);
         metaPathes.put(pathsKey, metaPath);
     }
 
@@ -135,19 +177,19 @@ public abstract class PathsDefinition {
                             {
                                     edgeClass
                             }
-                    }, s("zeile") + " " + ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD) + " " + s("spalte"), true);
+                    }, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD), true);
 
                 } else {
-                    String forwardName = ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD, true, true);
+                    String forwardName = ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD);
                     if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         metaPath = new MetaPath(startClass, endClass, new Class[][] {
                                 {
                                         edgeClass
                                 }
                         }, new String[] {
-                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, true, true, " " + s("text_und") + " "),
+                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("text_und") + " "),
                                 forwardName,
-                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD, true, true),
+                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
                         });
                     } else {
                         metaPath = new MetaPath(startClass, endClass, new Class[][] {

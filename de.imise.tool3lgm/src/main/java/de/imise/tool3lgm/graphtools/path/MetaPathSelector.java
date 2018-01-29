@@ -123,7 +123,7 @@ public class MetaPathSelector implements ActionListener {
             selectableMetaPathes = PathFinder.getMetaPathes(class1BoxSelection, class2BoxSelection);
             if (!selectableMetaPathes.isEmpty()) {
                 for (MetaPath selectableMetaPath : selectableMetaPathes) {
-                    metaPathJList.addItem(selectableMetaPath);
+                    metaPathJList.addItem(selectableMetaPath, selectableMetaPath.getFullDescription());
                 }
                 metaPathJList.setSelectedIndex(0);
             }
@@ -220,7 +220,7 @@ public class MetaPathSelector implements ActionListener {
      * @return Selected <code>MetaPath</code> in <code>metaPathJList</code>
      */
     public MetaPath getSelectedMetaPath() {
-        Object o = metaPathJList.getSelectedValue();
+        Object o = metaPathJList.getSelectedObject();
         if (o != null) {
             return (MetaPath) o;
         }

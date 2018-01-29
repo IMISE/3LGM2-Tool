@@ -196,7 +196,6 @@ public final class PathFinder {
      * @param pathIndex
      * @return
      */
-
     private static final int isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
         if (position == metaPath.getLength(pathIndex)) {
             if (current.equals(end)) {

@@ -194,7 +194,8 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
         MetaPath metaPath = metaPathSelector.getSelectedMetaPath();
         if (metaPath != null) {
             for (int i = 0; i < metaPath.countOptions(); i++) {
-                legendPanel.add(new TableToolBarLegendItem(metaPath.getDescription(i), TableModel.getColor(metaPath, i)));
+                String description = metaPath.hasAssignableStartEndClass() ? metaPath.getDescription(i, getResString("zeile"), getResString("spalte")) : metaPath.getFullDescription(i);
+                legendPanel.add(new TableToolBarLegendItem(description, TableModel.getColor(metaPath, i)));
             }
         }
         legendPanel.revalidate();

@@ -12,7 +12,10 @@ import java.util.Arrays;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HierarchyEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.ReflectionUtils;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author Thomas Rudert
@@ -36,7 +39,7 @@ public class MetaPath {
     /**
      * COMMENTME
      */
-    private final String[] description;
+    private final String[] pathNames;
 
     /**
      * COMMENTME
@@ -51,18 +54,31 @@ public class MetaPath {
     /**
      * COMMENTME
      */
-    private static final String[] defaultDescritpion = {
-            ""
+    private static final String[] defaultPathName = {
+            ModelConstants.getForwardMetaAssociationName(Edge.class)
     };
+
+    /**
+     * Erzeugt einen MetaPath, der zu dem übergebenen MetaPath identisch ist, nur mit der neuen übergebenen Start- und Endklasse.
+     *
+     * @param newStartClass ModelElement class where associations starts
+     * @param newEndClass ModelElement class where associations ends
+     * @param originalMetaPath
+     * @throws InvalidPathException
+     */
+    public MetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
+        this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.control, originalMetaPath.directional);
+    }
 
     /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
+     * @param description of the path or the resource key of the desciption
      * @param associations EdgeClasses for this path
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
-        this(startClass, endClass, getPathForAssociations(associations), getPathDescription(startClass, endClass, resourceKeyOrPathName));
+        this(startClass, endClass, getPathForAssociations(associations), Tool3lgmConstants.getResStringWithoutError(resourceKeyOrPathName));
     }
 
     /**
@@ -72,7 +88,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
-        this(startClass, endClass, getPathForAssociations(associations), defaultDescritpion);
+        this(startClass, endClass, getPathForAssociations(associations), defaultPathName);
     }
 
     /**
@@ -83,7 +99,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path) {
-        this(startClass, endClass, path, defaultDescritpion);
+        this(startClass, endClass, path, defaultPathName);
     }
 
     /**
@@ -91,11 +107,11 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param description String with description for associations (in legend)
+     * @param resourceKeyOrPathName String with description for associations or the resource key for this
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String description) {
-        this(startClass, endClass, path, description, false);
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName) {
+        this(startClass, endClass, path, resourceKeyOrPathName, false);
     }
 
     /**
@@ -103,14 +119,13 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param description String with description for associations (in legend)
+     * @param resourceKeyOrPathName String with description for associations or the resource key for this description
      * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for
      *            function reads objecttype )
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String description, final boolean directional) {
-        this(startClass, endClass, path, new String[1], -1, directional);
-        this.description[0] = description;
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName, final boolean directional) {
+        this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName), 0, directional);
     }
 
     /**
@@ -118,12 +133,11 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param description String with description for associations (in legend)
+     * @param resourceKeyOrPathName String with description for associations or the resource key for this description
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String description) {
-        this(startClass, endClass, path, new String[1]);
-        this.description[0] = description;
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String resourceKeyOrPathName) {
+        this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName));
     }
 
     /**
@@ -131,11 +145,12 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
+     * @param resourceKeyOrPathNames String[] with descriptions for associations (one description for DOUBLE / FORWARD / BACKWARD) or the resource
+     *            keys for this strings
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] description) {
-        this(startClass, endClass, path, description, -1, false);
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames) {
+        this(startClass, endClass, path, resourceKeyOrPathNames, 0, false);
     }
 
     /**
@@ -149,15 +164,18 @@ public class MetaPath {
      *            function reads objecttype )
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] description, final int control, final boolean directional) {
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int control, final boolean directional) {
         this.directional = directional;
         this.startClass = startClass;
         this.endClass = endClass;
-        this.control = path[0].length - (control + 1);
+        //        this.control = path[0].length - (control + 1);
+        this.control = control;
         associations = path;
         ensureAssociationOrder();
-        this.description = description;
-
+        pathNames = resourceKeyOrPathNames;
+        for (int i = 0; i < pathNames.length; i++) {
+            pathNames[i] = Tool3lgmConstants.getResStringWithoutError(pathNames[i]);
+        }
         for (int i = 0; i < countPathes(); i++) {
             if (control >= getLength(i)) {
                 throw new Error("MetaPath: controlIndex is out of range!");
@@ -252,12 +270,12 @@ public class MetaPath {
     @Override
     public final String toString() {
         StringBuilder sb = new StringBuilder();
-        boolean useDescrip = !"".equals(description[0].trim());
+        boolean useDescrip = !"".equals(pathNames[0].trim());
         if (useDescrip) {
-            sb.append(description[0]);
-            for (int i = 1; i < description.length; i++) {
+            sb.append(pathNames[0]);
+            for (int i = 1; i < pathNames.length; i++) {
                 sb.append(", ");
-                sb.append(description[i]);
+                sb.append(pathNames[i]);
             }
         } else {
             sb.append(Arrays.asList(associations[0]));
@@ -348,18 +366,10 @@ public class MetaPath {
     }
 
     /**
-     * @param direction
-     * @return
-     */
-    public final String getDescription(final int direction) {
-        return direction < 0 || direction > 2 ? null : description[direction < description.length ? direction : 0];
-    }
-
-    /**
      * @return
      */
     public int countOptions() {
-        return description.length;
+        return pathNames.length;
     }
 
     /**
@@ -421,10 +431,89 @@ public class MetaPath {
         return true;
     }
 
-    private static String[] getPathDescription(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName) {
-        return new String[] {
-                ModelConstants.getDisplayableName(startClass) + " " + Tool3lgmConstants.getResStringWithoutError(resourceKeyOrPathName) + " " + ModelConstants.getDisplayableName(endClass)
-        };
+    /**
+     * Liefer den Namen des Pfades ohne Start- und Endklasse, d.h einfach nur die erste Beschreibung des Pfades aus der Lsute der Beschreibungen.
+     *
+     * @param direction
+     * @return
+     */
+    public final String getDescription(final int direction) {
+        return direction < 0 || direction > 2 ? null : pathNames[direction < pathNames.length ? direction : 0];
+    }
+
+    /**
+     * Liefer die erste Beschreibung des Pfades. Dabei wird der übergebene Prefix vorangestellt und der übergebene Postfix angehängt.
+     *
+     * @param prefix
+     * @param postfix
+     * @return
+     */
+    public final String getDescription(final String prefix, final String postfix) {
+        return getDescription(0, prefix, postfix);
+    }
+
+    /**
+     * Liefert aus der Liste der Beschrebungen des Pfades diejenige mit dem übergebenen Index.
+     * Dabei wird der übergebene Prefix vorangestellt und der übergebene Postfix angehängt.
+     *
+     * @param descriptionIndex
+     * @param prefix
+     * @param postfix
+     * @return
+     */
+    public final String getDescription(final int descriptionIndex, final String prefix, final String postfix) {
+        return prefix + " " + getDescription(descriptionIndex) + " " + postfix;
+    }
+
+    /**
+     * Liefer den Namen des Pfades mit Start- und Endklasse. Es wird immer die Beschreibung aus der Liste der
+     * Beschreibungen zurück gegeben, die den Index descriptionIndex hat.
+     *
+     * @param descriptionIndex
+     * @return
+     */
+    public final String getFullDescription(final int descriptionIndex) {
+        return getDescription(descriptionIndex, ModelConstants.getDisplayableName(startClass), ModelConstants.getDisplayableName(endClass));
+    }
+
+    /**
+     * Liefer den Namen des Pfades mit Start- und Endklasse. Es wird immer nur die erste Beschreibung aus der Liste der
+     * Beschreibungen zurück gegeben. Bei Pfaden mit doppelter Bedeutung ist das imemr die Beschreibung der Richtung DOUBLE.
+     *
+     * @return
+     */
+    public final String getFullDescription() {
+        return getFullDescription(0);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die Start- und Endklasse des Pfades gleich oder die eine eine Oberklasse der anderen ist.
+     *
+     * @return
+     */
+    public boolean hasAssignableStartEndClass() {
+        return ReflectionUtils.isAssingable(startClass, endClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn jeder Einzelpfad dieses Pfades mind. eine {@link HierarchyEdge} enthält.
+     *
+     * @return
+     */
+    public boolean isHierarchyPath() {
+        for (Class<? extends Edge>[] singlePath : associations) {
+            boolean singlePathHasHierarchyEdge = false;
+            for (Class<? extends Edge> association : singlePath) {
+                if (HierarchyEdge.class.isAssignableFrom(association)) {
+                    singlePathHasHierarchyEdge = true;
+                    break;
+                }
+            }
+            if (!singlePathHasHierarchyEdge) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

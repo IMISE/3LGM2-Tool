@@ -12,10 +12,8 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.BssEtntVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.BssKommstVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DoksDokVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntDotVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntNatVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
@@ -109,7 +107,7 @@ public class TLGMPathsDefinition extends PathsDefinition {
 
         put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, "text_speichert", ObjReprVerbindung.class, DbsDatVerbindung.class, RawbDbsVerbindung.class));
 
-        put(new MetaPath(Objekttyp.class, RechAnwendungsbaustein.class, new Class[][] {
+        put(new MetaPath(Objekttyp.class, Anwendungsbaustein.class, new Class[][] {
                 {
                         ObjReprVerbindung.class,
                         EtntNatVerbindung.class,
@@ -121,26 +119,7 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         BssEtntVerbindung.class,
                         AwbKommssVerbindung.class
                 }
-        }, s("Objekttyp") + " " + s("text_kommuniziert") + " " + s("Anwendungsbaustein")));
-
-        /* Objekttyp - KonAnwendungsbaustein */
-        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, "text_fuehrenden", ObjLogspVerbindung.class, KawbDoksVerbindung.class));
-
-        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, "text_speichert", ObjReprVerbindung.class, DoksDokVerbindung.class, KawbDoksVerbindung.class));
-
-        put(new MetaPath(Objekttyp.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        ObjReprVerbindung.class,
-                        EtntNatVerbindung.class,
-                        BssEtntVerbindung.class,
-                        AwbKommssVerbindung.class
-                }, {
-                        ObjReprVerbindung.class,
-                        EtntDotVerbindung.class,
-                        BssEtntVerbindung.class,
-                        AwbKommssVerbindung.class
-                }
-        }, s("Objekttyp") + " " + s("text_kommuniziert") + " " + s("Anwendungsbaustein")));
+        }, "text_kommuniziert"));
 
         /* Anwendungsbaustein - Anwendungsbaustein */
         put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
@@ -149,7 +128,8 @@ public class TLGMPathsDefinition extends PathsDefinition {
                 }, {
                         AwbKawbVerbindung.class
                 }
-        }, s("zeile") + " " + s("text_teil_von") + " " + s("spalte"), true));
+        }, "text_teil_von", true));
+
         put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
                 {
                         AwbKommssVerbindung.class,
@@ -157,61 +137,9 @@ public class TLGMPathsDefinition extends PathsDefinition {
                         AwbKommssVerbindung.class
                 }
         }, new String[] {
-                s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
-        }, 1, true));
-
-        /* RechAnwendungsbaustein - RechAnwendungsbaustein */
-        put(new MetaPath(RechAnwendungsbaustein.class, RechAnwendungsbaustein.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        KommBeziehung.class,
-                        AwbKommssVerbindung.class
-                }
-        }, new String[] {
-                s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
-        }, 1, true));
-
-        /* KonAnwendungsbaustein - Anwendungsbaustein */
-        put(new MetaPath(KonAnwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        KommBeziehung.class,
-                        AwbKommssVerbindung.class
-                }
-        }, new String[] {
-                s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
-        }, 1, true));
-
-        /* KonAnwendungsbaustein - KonAnwendungsbaustein */
-        put(new MetaPath(KonAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        KommBeziehung.class,
-                        AwbKommssVerbindung.class
-                }
-        }, new String[] {
-                s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
-        }, 1, true));
-
-        /* RechAnwendungsbaustein - KonAnwendungsbaustein */
-        put(new MetaPath(RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class,
-                        KommBeziehung.class,
-                        AwbKommssVerbindung.class
-                }
-        }, new String[] {
-                s("zeile") + " " + s("text_empfaengt_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_sendet") + " " + s("spalte"),
-                s("zeile") + " " + s("text_empfaengt") + " " + s("spalte"),
+                "text_empfaengt_sendet",
+                "text_sendet",
+                "text_empfaengt"
         }, 1, true));
 
     }
