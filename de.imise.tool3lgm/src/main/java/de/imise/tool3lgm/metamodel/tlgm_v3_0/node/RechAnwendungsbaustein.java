@@ -27,9 +27,11 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
         return dialog;
     }
 
+    private static final MetaPath NAME_EXTENSION_PATH = new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
+
     @Override
     protected MetaPath getNameExtensionPath() {
-        return new MetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class);
+        return NAME_EXTENSION_PATH;
     }
 
 }
