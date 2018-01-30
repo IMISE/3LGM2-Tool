@@ -350,15 +350,6 @@ public class TLGMServiceMetaModel extends MetaModel {
                 Service_ObjectType_Edge.class);
     }
 
-    /**
-     * Menge aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
-     * der Grafik dargestelt werden.
-     */
-    @Override
-    public final Set<Class<? extends Edge>> getForwardConnectedEdgeClasses() {
-        return ImmutableSet.of(); //im Moment keine eingetragen
-    }
-
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////

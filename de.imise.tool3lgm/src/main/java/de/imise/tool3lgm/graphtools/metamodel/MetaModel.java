@@ -298,12 +298,6 @@ public abstract class MetaModel {
      */
     public abstract Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses();
 
-    /**
-     * Menge aller Kantenklassen, die nur in Vorwärtsrichtung verbunden werden und somit immer nur in dieser Richtung in
-     * der Grafik dargestelt werden.
-     */
-    public abstract Set<Class<? extends Edge>> getForwardConnectedEdgeClasses();
-
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
