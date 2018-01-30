@@ -424,7 +424,11 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     public void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, searchElementClass, edgeClasses));
+        if (edgeClasses.length == 1) {
+            addEdgePanel(searchElementClass, edgeClasses[0], true);
+        } else {
+            lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, searchElementClass, edgeClasses));
+        }
     }
 
     public void addDescripSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
@@ -492,12 +496,22 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(searchElementClass, edgeClass, false);
+    }
+
+    private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
+        ElementDialogPanel panel2Add = null;
         if (ModelConstants.isComposition(edgeClass)) {
-            addTab(new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class)));
+            panel2Add = new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
         } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-            addTab(new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass));
+            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
         } else {
-            addPathConnectionPanel(searchElementClass, edgeClass);
+            panel2Add = new PathConnectionPanel(this, true, searchElementClass, edgeClass);
+        }
+        if (add2SubTab) {
+            lastCreatedTabbedPanel.addTab(panel2Add);
+        } else {
+            addTab(panel2Add);
         }
     }
 
