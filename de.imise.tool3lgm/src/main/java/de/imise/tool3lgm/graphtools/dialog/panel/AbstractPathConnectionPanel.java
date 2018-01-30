@@ -152,6 +152,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             westLabelText = directions[labelEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
         } else {
             Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex);
+            //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
+            if (searchElementClass != null && labelPathStepEndClass.isAssignableFrom(this.searchElementClass)) {
+                labelPathStepEndClass = searchElementClass;
+            }
             westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(labelPathStepEndClass) : ModelConstants.getDisplayablePluralName(labelPathStepEndClass);
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
