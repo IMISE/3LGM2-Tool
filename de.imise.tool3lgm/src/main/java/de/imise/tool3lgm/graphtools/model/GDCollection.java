@@ -1323,6 +1323,8 @@ public final class GDCollection extends UserFieldTarget {
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(IsPartOfEdge.class);
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
+                //AXS: nochmal geändert am 30.01.2018: jetzt sind nur alle einfachen Kanten, die im Moment absolut dieselbe Elementart verbinden
+                //(Zuweisungskompatibilität wird nicht geprüft) immer Soppelkanten und alle anderen nicht (siehe ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass))
                 if (isAlwaysDoubleConnectedEdge(edgeClass)) {
                     edge.setDirection(DOUBLE);
                 } else {
@@ -1333,7 +1335,10 @@ public final class GDCollection extends UserFieldTarget {
                         ModelElement dummy = startElement;
                         startElement = endElement;
                         endElement = dummy;
-                        dir = BACKWARD;
+                        //AXS:auch am 30.01.2018: alle Kanten, die keine doppelte Bedeutung haben sind immer vorwärts
+                        if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                            dir = BACKWARD;
+                        }
                     }
                     edge.setDirection(dir);
                 }

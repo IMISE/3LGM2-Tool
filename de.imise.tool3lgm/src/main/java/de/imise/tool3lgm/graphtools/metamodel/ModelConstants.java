@@ -372,13 +372,13 @@ public final class ModelConstants {
 
     /**
      * Prüft, ob bei der Edge die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
-     * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die keine DoubleMeaningEdges,
-     * keine IsPartOfEdgeen und keine Compositions sind.
+     * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die dieselben
+     * Elementarten verbinden sowie keine DoubleMeaningEdges, keine IsPartOfEdgeen und keine Compositions sind.
      *
      * @return
      */
-    public static final boolean isAlwaysDoubleConnectedEdge(final Class<?> edgeClass) {
-        return !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
+    public static final boolean isAlwaysDoubleConnectedEdge(final Class<? extends Edge> edgeClass) {
+        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
     }
 
     ///////////////////////////////////////////////////////////////////
