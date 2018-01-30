@@ -11,6 +11,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,16 +23,19 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -61,7 +65,6 @@ public class LayoutEditor extends JDialog implements ActionListener {
      * @param f
      * @param document
      */
-    @SuppressWarnings("unchecked")
     public LayoutEditor(final JFrame f, final GraphDocument document) {
         super(f);
         setLocationByPlatform(true);
@@ -138,148 +141,67 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
         flaeche.setLayout(null);
 
+        List<Class<? extends ModelElement>[]> layerClasses = ImmutableList.of(ModelConstants.ALL_DOMAIN_LAYER_NODES, ModelConstants.ALL_LOGICAL_LAYER_NODES, ModelConstants.ALL_PHYSICAL_LAYER_NODES);
+
         offset = 0;
         counter = 0;
-        for (c = 0; c < ModelConstants.ALL_DOMAIN_LAYER_NODES.length; c++) {
-            if (ModelConstants.isAbstract(ModelConstants.ALL_DOMAIN_LAYER_NODES[c])) {
-                continue;
+        int maxInRow = 0;
+        for (int i = 0; i < layerClasses.size(); i++) {
+            Class<? extends ModelElement>[] classes = layerClasses.get(i);
+            for (c = 0; c < classes.length; c++) {
+                if (ModelConstants.isAbstract(classes[c])) {
+                    continue;
+                }
+                if (!graphViewDefinition.isPaintable(classes[c])) {
+                    continue;
+                }
+                // nur für Node kann man das Layout im Moment festlegen -> Kanten auslassen
+                if (!Node.class.isAssignableFrom(classes[c])) {
+                    continue;
+                }
+                if (c > maxInRow) {
+                    maxInRow = c;
+                }
+                int index = counter + offset;
+                NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(classes[c], true), mydoc);
+                knoten[index] = kc;
+                kc.getKnoten().setName(ModelConstants.getDisplayableName(classes[c]));
+                kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
+                kc.setFont(mydoc.getMapping().getStandardFont(kc));
+
+                form_trigger[index] = new JButton(getResString("le_form"));
+                form_trigger[index].setMargin(insets);
+                form_trigger[index].setSize(50, 20);
+                form_trigger[index].addActionListener(this);
+                form_trigger[index].setLocation(akt_x + 40, akt_y + 95);
+                flaeche.add(form_trigger[index]);
+
+                farbe_trigger[index] = new JButton(getResString("le_farbe"));
+                farbe_trigger[index].setMargin(insets);
+                farbe_trigger[index].setSize(50, 20);
+                farbe_trigger[index].addActionListener(this);
+                farbe_trigger[index].setLocation(akt_x + 90, akt_y + 95);
+                flaeche.add(farbe_trigger[index]);
+
+                font_trigger[index] = new JButton(getResString("le_schrift"));
+                font_trigger[index].setMargin(insets);
+                font_trigger[index].setSize(50, 20);
+                font_trigger[index].addActionListener(this);
+                font_trigger[index].setLocation(akt_x + 140, akt_y + 95);
+                flaeche.add(font_trigger[index]);
+
+                akt_x += x_abstand;
+                counter++;
             }
-            if (!graphViewDefinition.isPaintable(ModelConstants.ALL_DOMAIN_LAYER_NODES[c])) {
-                continue;
-            }
-            NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(ModelConstants.ALL_DOMAIN_LAYER_NODES[c], true), mydoc);
-            knoten[counter + offset] = kc;
-            kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_DOMAIN_LAYER_NODES[c]));
-            kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
-            kc.setFont(mydoc.getMapping().getStandardFont(kc));
 
-            form_trigger[counter + offset] = new JButton(getResString("le_form"));
-            form_trigger[counter + offset].setMargin(insets);
-            form_trigger[counter + offset].setSize(50, 20);
-            form_trigger[counter + offset].addActionListener(this);
-            form_trigger[counter + offset].setLocation(akt_x + 40, akt_y + 95);
-            flaeche.add(form_trigger[counter + offset]);
-
-            farbe_trigger[counter + offset] = new JButton(getResString("le_farbe"));
-            farbe_trigger[counter + offset].setMargin(insets);
-            farbe_trigger[counter + offset].setSize(50, 20);
-            farbe_trigger[counter + offset].addActionListener(this);
-            farbe_trigger[counter + offset].setLocation(akt_x + 90, akt_y + 95);
-            flaeche.add(farbe_trigger[counter + offset]);
-
-            font_trigger[counter + offset] = new JButton(getResString("le_schrift"));
-            font_trigger[counter + offset].setMargin(insets);
-            font_trigger[counter + offset].setSize(50, 20);
-            font_trigger[counter + offset].addActionListener(this);
-            font_trigger[counter + offset].setLocation(akt_x + 140, akt_y + 95);
-            flaeche.add(font_trigger[counter + offset]);
-
-            akt_x += x_abstand;
-            if (counter % 8 == 7) {
-                akt_y += y_abstand;
-            }
-            counter++;
-        }
-
-        offset += counter;
-        counter = 0;
-        akt_x = 0;
-        akt_y += y_abstand;
-        for (c = 0; c < ModelConstants.ALL_LOGICAL_LAYER_NODES.length; c++) {
-            if (ModelConstants.isAbstract(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
-                continue;
-            }
-            if (!graphViewDefinition.isPaintable(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
-                continue;
-            }
-            // nur für Node kann man das Layout im Moment festlegen -> Kanten
-            // auslassen
-            if (!Node.class.isAssignableFrom(ModelConstants.ALL_LOGICAL_LAYER_NODES[c])) {
-                continue;
-            }
-            NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(ModelConstants.ALL_LOGICAL_LAYER_NODES[c], true), mydoc);
-            knoten[counter + offset] = kc;
-            kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
-            kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_LOGICAL_LAYER_NODES[c]));
-            kc.setFont(mydoc.getMapping().getStandardFont(kc));
-
-            form_trigger[counter + offset] = new JButton(getResString("le_form"));
-            form_trigger[counter + offset].setMargin(insets);
-            form_trigger[counter + offset].setSize(50, 20);
-            form_trigger[counter + offset].addActionListener(this);
-            form_trigger[counter + offset].setLocation(akt_x + 40, akt_y + 95);
-            flaeche.add(form_trigger[counter + offset]);
-
-            farbe_trigger[counter + offset] = new JButton(getResString("le_farbe"));
-            farbe_trigger[counter + offset].setMargin(insets);
-            farbe_trigger[counter + offset].setSize(50, 20);
-            farbe_trigger[counter + offset].addActionListener(this);
-            farbe_trigger[counter + offset].setLocation(akt_x + 90, akt_y + 95);
-            flaeche.add(farbe_trigger[counter + offset]);
-
-            font_trigger[counter + offset] = new JButton(getResString("le_schrift"));
-            font_trigger[counter + offset].setMargin(insets);
-            font_trigger[counter + offset].setSize(50, 20);
-            font_trigger[counter + offset].addActionListener(this);
-            font_trigger[counter + offset].setLocation(akt_x + 140, akt_y + 95);
-            flaeche.add(font_trigger[counter + offset]);
-
-            akt_x += x_abstand;
-            if (counter % 8 == 7) {
-                akt_y += y_abstand;
-            }
-            counter++;
-        }
-
-        if (counter % 8 != 0) {
+            offset += counter;
+            counter = 0;
+            akt_x = 0;
             akt_y += y_abstand;
         }
-        offset += counter;
-        counter = 0;
-        akt_x = 0;
-        for (c = 0; c < ModelConstants.ALL_PHYSICAL_LAYER_NODES.length; c++) {
-            if (ModelConstants.isAbstract(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c])) {
-                continue;
-            }
-            if (!graphViewDefinition.isPaintable(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c])) {
-                continue;
-            }
-            NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c], true), mydoc);
-            knoten[counter + offset] = kc;
-            kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
-            kc.getKnoten().setName(ModelConstants.getDisplayableName(ModelConstants.ALL_PHYSICAL_LAYER_NODES[c]));
-            kc.setFont(mydoc.getMapping().getStandardFont(kc));
+        akt_y -= y_abstand;
 
-            form_trigger[counter + offset] = new JButton(getResString("le_form"));
-            form_trigger[counter + offset].setMargin(insets);
-            form_trigger[counter + offset].setSize(50, 20);
-            form_trigger[counter + offset].addActionListener(this);
-            form_trigger[counter + offset].setLocation(akt_x + 40, akt_y + 95);
-            flaeche.add(form_trigger[counter + offset]);
-
-            farbe_trigger[counter + offset] = new JButton(getResString("le_farbe"));
-            farbe_trigger[counter + offset].setMargin(insets);
-            farbe_trigger[counter + offset].setSize(50, 20);
-            farbe_trigger[counter + offset].addActionListener(this);
-            farbe_trigger[counter + offset].setLocation(akt_x + 90, akt_y + 95);
-            flaeche.add(farbe_trigger[counter + offset]);
-
-            font_trigger[counter + offset] = new JButton(getResString("le_schrift"));
-            font_trigger[counter + offset].setMargin(insets);
-            font_trigger[counter + offset].setSize(50, 20);
-            font_trigger[counter + offset].addActionListener(this);
-            font_trigger[counter + offset].setLocation(akt_x + 140, akt_y + 95);
-            flaeche.add(font_trigger[counter + offset]);
-
-            akt_x += x_abstand;
-            if (counter % 8 == 7) {
-                akt_y += y_abstand;
-            }
-            counter++;
-        }
-        offset += counter;
-
-        flaeche.setPreferredSize(new Dimension(8 * x_abstand + 30, akt_y + 90));
+        flaeche.setPreferredSize(new Dimension(maxInRow * x_abstand + 30, akt_y + 90));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(350, 30));
