@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
@@ -13,7 +14,7 @@ public class Objekttyp extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(true, ObjLogspVerbindung.class);
         dialog.addEdgePanel(AufObjVerbindung.class);
-        dialog.addTabbedPanel("Repraesentationsform_p");
+        dialog.addTabbedPanel(ModelConstants.getDisplayablePluralName(Repraesentationsform.class));
         dialog.addTabbedPanelPathConnectionPanel(Nachrichtentyp.class, ObjReprVerbindung.class);
         dialog.addTabbedPanelPathConnectionPanel(Dokumententyp.class, ObjReprVerbindung.class);
         dialog.addTabbedPanelPathConnectionPanel(Datensatztyp.class, ObjReprVerbindung.class);
