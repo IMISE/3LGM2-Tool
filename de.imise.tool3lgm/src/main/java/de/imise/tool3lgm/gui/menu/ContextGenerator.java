@@ -78,10 +78,10 @@ import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
@@ -804,6 +804,39 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                         }
+                        //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
+                    } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && !ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass)) {
+                        String labelForward = getForwardMetaAssociationName(edgeClass, false, true);
+                        String toolTipForward = getFullForwardMetaAssociationName(edgeClass);
+                        String labelBackward = getBackwardMetaAssociationName(edgeClass, false, true);
+                        String toolTipBackward = getFullBackwardMetaAssociationName(edgeClass);
+                        boolean connectableForward = false;
+                        boolean disconnectableForward = false;
+                        boolean connectableBackward = false;
+                        boolean disconnectableBackward = false;
+                        for (ModelElement me2 : selectedElements) {
+                            if (lastSelected == me2) {
+                                continue;
+                            }
+                            if (!lastSelected.isConnectedTo(me2, edgeClass)) {
+                                connectableForward = true;
+                            } else {
+                                disconnectableForward = true;
+                            }
+                            if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
+                                connectableBackward = true;
+                            } else {
+                                disconnectableBackward = true;
+                            }
+                            if (connectableForward && disconnectableForward && connectableBackward && disconnectableBackward) {
+                                break;
+                            }
+                        }
+                        connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectableForward, toolTipForward), labelForward));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectableForward, toolTipForward), labelForward));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectableBackward, toolTipBackward), labelBackward));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectableBackward, toolTipBackward), labelBackward));
+
                     } else /* if (Edge.isConnecting(edgeClass, me1Class, me2Class)) */ {
                         String label = isStartClass(edgeClass, lastSelectedClass) ? getForwardMetaAssociationName(edgeClass, false, true) : getBackwardMetaAssociationName(edgeClass, false, true);
                         String toolTip = isStartClass(edgeClass, lastSelectedClass) ? getFullForwardMetaAssociationName(edgeClass) : getFullBackwardMetaAssociationName(edgeClass);
