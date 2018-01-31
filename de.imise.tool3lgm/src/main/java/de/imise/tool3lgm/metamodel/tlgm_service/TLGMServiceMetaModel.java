@@ -29,6 +29,13 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_IsPartOfEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorOfIntegrationProfile_ApplicationSystem_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActorOfIntegrationProfile_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransaction_Service_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Location_IsPartOfEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ObjectType_IsPartOfEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_IsPartOfEdge;
@@ -54,6 +61,11 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheConcept;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheDomain;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheIntegrationProfile;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheTransaction;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.InvokingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Location;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
@@ -164,6 +176,15 @@ public class TLGMServiceMetaModel extends MetaModel {
             //abstracte Node müssen hier auch eingetragen werden
             ApplicationComponent.class,
             CommunicationInterface.class,
+
+            //IHE-Konzepte
+            IheActorOfIntegrationProfile.class,
+            IheConcept.class,
+            IheDomain.class,
+            IheIntegrationProfile.class,
+            IheTransaction.class,
+            //IHE-Assoziationsklassen
+            IheTransactionLink_Edge.class,
     };
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -207,7 +228,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
         return new Class[] {
                 //nur bei Anwendungsbausteinen soll die abstrakte Oberklasse im Baum angezeigt werden
-                ApplicationComponent.class
+                ApplicationComponent.class, IheConcept.class,
         };
     }
 
@@ -250,6 +271,14 @@ public class TLGMServiceMetaModel extends MetaModel {
             Service_ProvidingInterface_Edge.class,
             Service_ServiceClass_Edge.class,
             ServiceUses_Edge.class,
+            //IHE-Kanten
+            IheActorOfIntegrationProfile_ApplicationSystem_Edge.class,
+            IheConcept_IheDomain_Edge.class,
+            IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class,
+            IheIntegrationProfile_IheTransaction_Edge.class,
+            IheTransaction_Service_Edge.class,
+            IheTransactionLink_Edge.class,
+            IheTransactionLink_IheTransaction_Edge.class,
     };
 
     /** Kanten Inter LWE - PWE */
