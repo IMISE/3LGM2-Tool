@@ -7,6 +7,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationalUnit;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.Use;
 
 /**
  * @author AXS (31.12.2017)
@@ -19,6 +20,6 @@ public final class OrganisationalUnit_Use_Edge extends Edge {
 
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
-    public static final Class<? extends ModelElement> etcl = OrganisationalUnit.class;
+    public static final Class<? extends ModelElement> etcl = Use.class;
 
 }
