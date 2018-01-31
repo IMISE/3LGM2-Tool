@@ -171,7 +171,11 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     }
 
     protected String getEdgeDisplayName(final int connectionState) {
-        return edgeIsForward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
+        boolean isDoubleMeaningEdge = ModelConstants.isDoubleMeaningEdge(edgeClass);
+        //dieses Panel war urspünglich nur für Kanten mit doppelter Bedeutung. Danach hat AXS das auch für Kanten zwischen denselben Elementen, die aber eine Richtung haben, angepasst.
+        //Kanten ohne doppelte Bedeutung haben immer die Richtung FORWARD, aber der connectionState muss hier als Lesrichtung der Kante interpretiert werden, damit über den beiden Bäumen jeweils eine Richtung steht
+        boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && connectionState == FORWARD;
+        return forward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
     ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<>();
