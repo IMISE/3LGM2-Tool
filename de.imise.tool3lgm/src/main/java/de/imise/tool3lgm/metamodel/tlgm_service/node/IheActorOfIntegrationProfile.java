@@ -14,8 +14,8 @@ public class IheActorOfIntegrationProfile extends IheConcept {
     public ElementPropertyDialog getPropertyDialog() {
         ElementPropertyDialog dialog = super.getPropertyDialog();
         dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class);
-        dialog.addEdgePanel(IheActorOfIntegrationProfile_ApplicationSystem_Edge.class);
         dialog.addEdgePanel(IheTransactionLink_Edge.class);
+        dialog.addEdgePanel(IheActorOfIntegrationProfile_ApplicationSystem_Edge.class);
         return dialog;
     }
 
