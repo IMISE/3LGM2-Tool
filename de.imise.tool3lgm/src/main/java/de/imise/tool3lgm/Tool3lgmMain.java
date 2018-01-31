@@ -7,11 +7,12 @@ import java.io.File;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
+import de.imise.tool3lgm.metamodel.tlgm_service.TLGMServiceMetaModel;
 
 public class Tool3lgmMain {
 
-    public static final Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class;
+    //public static final Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class;
+    public static final Class<? extends MetaModel> metaModelClass = TLGMServiceMetaModel.class;
 
     /**
      * Main-Routine
