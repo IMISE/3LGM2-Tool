@@ -499,7 +499,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                     //wenn weitere Kanten angelegt werden müssen
                     while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
                         //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                        //geht, ist die edgeCLassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Edge null ist -> einfach FORWARD übergeben.
+                        //geht, ist die edgeClassFromNewElement null. Der zweite directions-Parameter ist egal, da die zugehörige Edge null ist -> einfach FORWARD übergeben.
                         ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, FORWARD, pid);
                         if (created == null) {
                             interrupted = true;
