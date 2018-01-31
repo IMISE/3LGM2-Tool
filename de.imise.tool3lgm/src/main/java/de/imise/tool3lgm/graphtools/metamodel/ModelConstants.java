@@ -378,7 +378,9 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isAlwaysDoubleConnectedEdge(final Class<? extends Edge> edgeClass) {
-        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
+        //        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
+        //nochmal geändert: wenn die Kante dieselbe Elementart verbindet und in beide Richtungen gleich heißt -> immer doppelt
+        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
     }
 
     ///////////////////////////////////////////////////////////////////
