@@ -1295,7 +1295,8 @@ public final class GDCollection extends UserFieldTarget {
                 return edge;
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
-            if (edge != null) {
+            //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
+            if (ModelConstants.isDoubleMeaningEdge(edgeClass) && edge != null) {
                 edge.setDirection(DOUBLE);
                 String startHash = startElement.getHashString();
                 String endHash = endElement.getHashString();
