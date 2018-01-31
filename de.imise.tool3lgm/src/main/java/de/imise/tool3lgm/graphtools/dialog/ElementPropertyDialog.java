@@ -505,6 +505,9 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             panel2Add = new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
         } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
             panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
+        } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass)) {
+            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
         } else {
             panel2Add = new PathConnectionPanel(this, true, searchElementClass, edgeClass);
         }
