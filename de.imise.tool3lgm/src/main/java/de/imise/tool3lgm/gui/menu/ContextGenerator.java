@@ -805,7 +805,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
                         }
                         //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-                    } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && !ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass)) {
+                    } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && ModelConstants.isDirectedEdge(edgeClass)) {
                         String labelForward = getForwardMetaAssociationName(edgeClass, false, true);
                         String toolTipForward = getFullForwardMetaAssociationName(edgeClass);
                         String labelBackward = getBackwardMetaAssociationName(edgeClass, false, true);

@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isAlwaysDoubleConnectedEdge;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -384,7 +383,7 @@ public abstract class Edge extends ModelElement {
             switchClasses = true;
         }
         //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
-        if (isAlwaysDoubleConnectedEdge(getClass())) {
+        if (!ModelConstants.isDirectedEdge(getClass())) {
             direction = DOUBLE;
         }
         if (switchClasses) {

@@ -19,7 +19,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getForwardMe
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSubordinatedJoinbleTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDialog;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isAlwaysDoubleConnectedEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
@@ -1326,7 +1325,7 @@ public final class GDCollection extends UserFieldTarget {
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
                 //AXS: nochmal geändert am 30.01.2018: jetzt sind nur alle einfachen Kanten, die im Moment absolut dieselbe Elementart verbinden
                 //(Zuweisungskompatibilität wird nicht geprüft) immer Soppelkanten und alle anderen nicht (siehe ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass))
-                if (isAlwaysDoubleConnectedEdge(edgeClass)) {
+                if (ModelConstants.isDirectedEdge(edgeClass)) {
                     edge.setDirection(DOUBLE);
                 } else {
                     int dir = FORWARD;
@@ -1460,6 +1459,8 @@ public final class GDCollection extends UserFieldTarget {
             return;
         }
         Edge edge = null;
+        //        boolean directedEdgeBetweenSameElementClass = false;
+        //        if (Kante.) {}
         List<Edge> edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
         if (edges.isEmpty()) {
             return;
