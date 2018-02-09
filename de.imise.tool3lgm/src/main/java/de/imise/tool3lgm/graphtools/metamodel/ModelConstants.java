@@ -40,7 +40,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.SortedEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
@@ -282,7 +281,8 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isSortedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return SortedEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
+        return MultipleEdge.class.isAssignableFrom(edgeClass);
+        //        return SortedEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
         //return getSortedEdgeClasses(elementClass).contains(edgeClass); //das kommt auf dasselbe raus wie das oben. Ich konnte mich nicht entscheiden, was besser ist -> daher nur auskommentiert
     }
 

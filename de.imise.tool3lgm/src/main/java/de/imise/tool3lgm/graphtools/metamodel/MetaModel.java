@@ -13,8 +13,8 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.SortedEdge;
 import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.util.collections.CollectionUtils;
 
@@ -281,7 +281,7 @@ public abstract class MetaModel {
     private Set<Class<? extends Edge>> getSortedEdges() {
         ImmutableSet.Builder<Class<? extends Edge>> sortedEdges = new ImmutableSet.Builder<>();
         for (Class<? extends Edge> edgeClass : getAllEdges()) {
-            if (SortedEdge.class.isAssignableFrom(edgeClass)) {
+            if (MultipleEdge.class.isAssignableFrom(edgeClass)) {
                 sortedEdges.add(edgeClass);
             }
         }
