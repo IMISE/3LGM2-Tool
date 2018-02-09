@@ -4,15 +4,15 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_ONE;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.PhysicalDataProcessingComponent;
 
 /**
  * @author AXS (26.12.2017)
  */
-public final class PhysicalDataProcessingComponent_DeviceClass_Edge extends Edge {
+public final class PhysicalDataProcessingComponent_DeviceClass_Edge extends SimpleEdge {
 
     public static final Class<? extends ModelElement> stcl = PhysicalDataProcessingComponent.class;
 

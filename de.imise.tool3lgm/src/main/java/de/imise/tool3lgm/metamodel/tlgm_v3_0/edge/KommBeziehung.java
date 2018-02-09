@@ -4,14 +4,14 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Bausteinschnittstelle;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class KommBeziehung extends Edge {
+public final class KommBeziehung extends DoubleMeaningEdge {
 
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
 

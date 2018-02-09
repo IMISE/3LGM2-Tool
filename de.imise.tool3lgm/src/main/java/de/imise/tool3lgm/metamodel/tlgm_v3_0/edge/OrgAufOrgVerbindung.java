@@ -4,15 +4,15 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_UNIMITE
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class OrgAufOrgVerbindung extends Edge {
+public final class OrgAufOrgVerbindung extends SimpleEdge {
 
     public static final Class<? extends ModelElement> stcl = AufOrgKombination.class;
 

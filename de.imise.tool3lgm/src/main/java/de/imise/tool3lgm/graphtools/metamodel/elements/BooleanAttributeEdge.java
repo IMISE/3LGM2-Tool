@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
  *
  * @author AXS (11.01.2018)
  */
-public abstract class BooleanAttributeEdge extends Edge {
+public abstract class BooleanAttributeEdge extends SimpleEdge {
 
     private final String attributeNameResKey;
 

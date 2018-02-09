@@ -3,15 +3,15 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Repraesentationsform;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class ObjReprVerbindung extends Edge {
+public final class ObjReprVerbindung extends SimpleEdge {
 
     public static final Class<? extends ModelElement> stcl = Objekttyp.class;
 
