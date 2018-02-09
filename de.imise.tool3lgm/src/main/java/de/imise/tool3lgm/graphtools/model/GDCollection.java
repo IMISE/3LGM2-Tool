@@ -1459,9 +1459,12 @@ public final class GDCollection extends UserFieldTarget {
             return;
         }
         Edge edge = null;
-        //        boolean directedEdgeBetweenSameElementClass = false;
-        //        if (Kante.) {}
-        List<Edge> edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
+        List<Edge> edges = null;
+        if (ModelConstants.isDirectedEdge(edgeClass)) {
+            edges = me1.getEdgesTo(me2, edgeClass, edgeIndex);
+        } else {
+            edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
+        }
         if (edges.isEmpty()) {
             return;
         } else if (edges.size() == 1) {
