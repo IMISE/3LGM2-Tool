@@ -1325,7 +1325,7 @@ public final class GDCollection extends UserFieldTarget {
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
                 //AXS: nochmal geändert am 30.01.2018: jetzt sind nur alle einfachen Kanten, die im Moment absolut dieselbe Elementart verbinden
                 //(Zuweisungskompatibilität wird nicht geprüft) immer Soppelkanten und alle anderen nicht (siehe ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass))
-                if (ModelConstants.isDirectedEdge(edgeClass)) {
+                if (!ModelConstants.isDirectedEdge(edgeClass)) {
                     edge.setDirection(DOUBLE);
                 } else {
                     int dir = FORWARD;
