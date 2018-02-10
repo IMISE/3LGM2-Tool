@@ -40,9 +40,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -752,7 +750,7 @@ public final class ModelConstants {
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<>();
 
     /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
-    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, TextfeldFach.class, TextfeldLog.class, TextfeldPhy.class);
+    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, Textfeld.class);
 
     /** Klassennamen aller Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPE_NAMES = CollectionUtils.getSimpleClassNames(META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES);
@@ -1403,10 +1401,6 @@ public final class ModelConstants {
         for (Class<? extends ModelElement> elementClass : ALL_PHYSICAL_LAYER_EDGES_SET) {
             map.put(elementClass, PHYSICAL_LAYER);
         }
-        map.put(TextfeldFach.class, DOMAIN_LAYER);
-        map.put(TextfeldLog.class, LOGICAL_LAYER);
-        map.put(TextfeldPhy.class, PHYSICAL_LAYER);
-        //        return map.build();
         //nicht über den Builder gehen, weil die key-Klassen mehrfach in den Sets vorkommen können. Der Builder beendet dann mit einem Error.
         ImmutableMap<Class<? extends ModelElement>, Integer> returnMap = ImmutableMap.copyOf(map);
         return returnMap;

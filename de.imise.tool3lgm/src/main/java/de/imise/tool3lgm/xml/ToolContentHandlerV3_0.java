@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -61,7 +62,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     /** Alle über Copy&Paste eingefügten Elemente. Diese werden am Ende selected(true) gesetzt */
     private List<ElementContainer> pastedElements;
 
-    private final Map<String, BendpointContainer> hashToMainDocBendpointContainer = new HashMap<>();
+    /**
+     * Hier kommen beim Anlegen der Elemente alle Elemente rein, die keinen feststehenden Layer haben. Im
+     * Moment sind das Bendpoints und TextFields
+     */
+    private final Map<String, ElementContainer> hashToMainDocContainer = new HashMap<>();
 
     private Map<String, BendpointContainer> hashToSzenarioBendpointContainer;
 
@@ -269,15 +274,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     element = doc.findElementCoded(hashString);
                 }
                 if (element == null) {
-                    BendpointContainer bendpointContainer = hashToMainDocBendpointContainer.get(isCopyAndPaste() ? oldToNewHashString.get(hashString) : hashString);
-                    if (bendpointContainer != null) {
-                        element = bendpointContainer.getElement();
+                    ElementContainer bendpointContainerOrTexField = hashToMainDocContainer.get(isCopyAndPaste() ? oldToNewHashString.get(hashString) : hashString);
+                    if (bendpointContainerOrTexField != null) {
+                        element = bendpointContainerOrTexField.getElement();
                     }
                 }
-
-                //				if (element == null)
-                //					throw new SAXException("ModelObject für Container nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
-
                 if (element != null) {
                     container = element.getContainer(szenario);
                     if (container == null) {
@@ -529,12 +530,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             container = element.createContainer(doc);
                             int layer = ModelConstants.NO_LAYER;
                             try {
-                                layer = element.layerFor(); //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Daher try-catch
+                                layer = element.layerFor();
                                 LayerContainer layerContainer = doc.getLayer(layer);
-                                layerContainer.add(container);
+                                layerContainer.add(container); //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Textfelder auch, wenn sie noch keinen Container auf einem Layer haben. Daher try-catch
                             } catch (Exception e) {
-                                if (container instanceof BendpointContainer) {
-                                    hashToMainDocBendpointContainer.put(element.getHashString(), (BendpointContainer) container);
+                                if (container instanceof BendpointContainer || element instanceof Textfeld) {
+                                    //merke die Container, die am Ende noch im Hauptdokument hinzugefügt werden müssen
+                                    hashToMainDocContainer.put(element.getHashString(), container);
                                 } else {
                                     throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
                                 }
@@ -555,14 +557,20 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     container = tmp_container;
                     tmp_container = null;
                 } else if (container != null) {
+                    ModelElement me = container.getElement();
                     if (isCopyAndPaste() || !szenario.equals(doc)) {
-                        ModelElement me = container.getElement();
-                        try {
-                            int layer = me.layerFor();
-                            LayerContainer layerContainer = szenario.getLayer(layer);
-                            layerContainer.add(container);
-                        } catch (Exception e) {
-                            //mache nichts. Knickpunkte werfen bei layerFor() eine Exception. Sie werden später dem Layer ihrer Kante hinzugefügt
+                        //Knickpunkte werden erst zum Layer hinzugefügt, wenn die Kante zu dem sie gehören auch
+                        //hinzugefügt wurde. Das passiert beim Ende des szenaro-Tags
+                        if (!(me instanceof Knickpunkt)) {
+                            layer.add(container);
+                            //bei Textfeldern steht jetzt erst der Layer fest -> jetzt kann man den mainDocContainer
+                            //auch zum mainDoc hinzufügen
+                            if (me instanceof Textfeld) {
+                                LayerContainer mainDocLayer = doc.getLayer(layer.getLayerNumber());
+                                ElementContainer mainDocContainer = hashToMainDocContainer.get(me.getHashString());
+                                //an welcher Stelle der Container im MainDoc steht ist völlig egal, da das MainDoc nicht gezeichnet wird
+                                mainDocLayer.add(mainDocContainer);
+                            }
                         }
                     }
                     if (container instanceof BendpointContainer) {
@@ -747,7 +755,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         bendpoint.setOwner(kc);
                         kc.setKnickpunkt(benpointContainer, bendpoint.getIndex());
                         int layer = bendpoint.layerFor();
-                        BendpointContainer mainDocBendpointContainer = hashToMainDocBendpointContainer.get(bendpoint.getHashString());
+                        ElementContainer mainDocBendpointContainer = hashToMainDocContainer.get(bendpoint.getHashString());
                         doc.getLayer(layer).add(mainDocBendpointContainer);
                         szenario.getLayer(layer).add(benpointContainer);
                     }
@@ -821,9 +829,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //die HashStrings für das Start- bzw. End-Objekt einer Edge
                 // auflösen und die wirklichen Node setzten
                 if (isCopyAndPaste()) {
-                    for (BendpointContainer bendpointContainer : hashToMainDocBendpointContainer.values()) {
-                        Knickpunkt bendpoint = bendpointContainer.getKnickpunktKnoten();
-                        bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getKantenHash()));
+                    for (ElementContainer ec : hashToMainDocContainer.values()) {
+                        if (ec instanceof BendpointContainer) {
+                            Knickpunkt bendpoint = ((BendpointContainer) ec).getKnickpunktKnoten();
+                            bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getKantenHash()));
+                        }
                     }
                 }
                 for (Edge edge : edges) {

@@ -1061,6 +1061,11 @@ public final class GDCollection extends UserFieldTarget {
         doc.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + me.getHashString(), pid);
         // den Layer bestimmen auf dem das Element eingefügt werden soll
         int layerNumber = me.layerFor();
+        //das hier darf eigentlich nur bei Textfeldern passieren, da diese keinen festen Layer haben. Wahrscheinlich
+        //würde dieser Weg auch bei allen anderen Elementen funktionieren, was aber nicht getestet ist.
+        if (layerNumber == ModelConstants.NO_LAYER) {
+            layerNumber = doc.getActiveLayer().getLayerNumber();
+        }
         LayerContainer lc = doc.getLayer(layerNumber);
         if (lc.add(nc) == null) {
             doc.undo(pid);

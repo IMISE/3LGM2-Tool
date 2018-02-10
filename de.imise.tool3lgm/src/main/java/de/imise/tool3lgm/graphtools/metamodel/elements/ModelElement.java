@@ -15,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -134,7 +135,17 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public int layerFor() {
-        return ModelConstants.layerFor(getClass());
+        int layer = ModelConstants.layerFor(getClass());
+        if (layer == ModelConstants.NO_LAYER) {
+            for (ElementContainer ec : containerTable.values()) {
+                Container parent = ec.getParent();
+                if (parent instanceof LayerContainer) {
+                    layer = ((LayerContainer) parent).getLayerNumber();
+                    break;
+                }
+            }
+        }
+        return layer;
     }
 
     /**

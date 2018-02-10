@@ -14,9 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -40,9 +38,7 @@ public abstract class GraphViewDefinition {
         }
         //Diese Klassen müssen noch hinzugefügt werden, da sie auch dargestellt werden
         allPaintableNodesSetBuilder.add(Knickpunkt.class);
-        allPaintableNodesSetBuilder.add(TextfeldFach.class);
-        allPaintableNodesSetBuilder.add(TextfeldLog.class);
-        allPaintableNodesSetBuilder.add(TextfeldPhy.class);
+        allPaintableNodesSetBuilder.add(Textfeld.class);
         allPaintableNodes = allPaintableNodesSetBuilder.build();
     }
 
@@ -129,9 +125,7 @@ public abstract class GraphViewDefinition {
     }
 
     private final void initDefaultElementLayoutInternal() {
-        setDefaultLayout(TextfeldFach.class, GraphElementLayout.SHAPE.rechteck, new Color(0, 0, 0, 0));
-        setDefaultLayout(TextfeldLog.class, GraphElementLayout.SHAPE.rechteck, new Color(0, 0, 0, 0));
-        setDefaultLayout(TextfeldPhy.class, GraphElementLayout.SHAPE.rechteck, new Color(0, 0, 0, 0));
+        setDefaultLayout(Textfeld.class, GraphElementLayout.SHAPE.rechteck, new Color(0, 0, 0, 0));
         defaultElementsLayoutDefinition.setStandardSize(Knickpunkt.class, 10, 10);
     }
 

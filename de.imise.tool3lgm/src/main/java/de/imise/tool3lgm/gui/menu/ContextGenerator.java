@@ -82,9 +82,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldFach;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldLog;
-import de.imise.tool3lgm.graphtools.metamodel.elements.TextfeldPhy;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -132,7 +130,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private static JMenuItem new_fach_text, new_log_text, new_phy_text;
+    private static JMenuItem new_text;
 
     /**
      * COMMENTME
@@ -281,9 +279,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             new_physical_tree.add(item);
         }
 
-        new_fach_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldFach.class.getName());
-        new_log_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldLog.class.getName());
-        new_phy_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, TextfeldPhy.class.getName());
+        new_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, Textfeld.class.getName());
 
         properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG);
         unlinkToSzenario = getItem("unlinkToSzenario", LINK_SELECTED_TO_SZENARIO, GDCOMMAND_TEXT_SURROUNDER + "null" + GDCOMMAND_TEXT_SURROUNDER);
@@ -1124,17 +1120,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     public static final JPopupMenu getLayerContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         menu.add(getNewKnotMenu());
-        switch (doc.getCollection().getActiveLayer()) {
-        case 4:
-            menu.add(new_fach_text);
-            break;
-        case 2:
-            menu.add(new_log_text);
-            break;
-        case 0:
-            menu.add(new_phy_text);
-            break;
-        }
+        menu.add(new_text);
         menu.addSeparator();
 
         addMenuItem(menu, layer_show_configs);
