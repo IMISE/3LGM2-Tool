@@ -198,45 +198,23 @@ public final class ModelConstants {
     ////////////
 
     /** Kanten FE */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_DOMAIN_LAYER_EDGES = metaModel.getAllDomainLayerEdges();
+    public static final Set<Class<? extends Edge>> ALL_DOMAIN_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllDomainLayerEdges()));
 
     /** Kanten Inter FE -LWE */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = metaModel.getAllInterDomainLogicalLayerEdges();
+    public static final Set<Class<? extends Edge>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterDomainLogicalLayerEdges()));
 
     /** Kanten LWE */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_LOGICAL_LAYER_EDGES = metaModel.getAllLogicalLayerEdges();
+    public static final Set<Class<? extends Edge>> ALL_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllLogicalLayerEdges()));
 
     /** Kanten Inter LWE - PWE */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = metaModel.getAllInterLogicalPhysicalLayerEdges();
+    public static final Set<Class<? extends Edge>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterLogicalPhysicalLayerEdges()));
 
     /** Kanten PWE */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] ALL_PHYSICAL_LAYER_EDGES = metaModel.getAllPhysicalLayerEdges();
-
-    public static final Set<Class<? extends Edge>> ALL_DOMAIN_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_DOMAIN_LAYER_EDGES));
-
-    public static final Set<Class<? extends Edge>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES));
-
-    public static final Set<Class<? extends Edge>> ALL_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_LOGICAL_LAYER_EDGES));
-
-    public static final Set<Class<? extends Edge>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES));
-
-    public static final Set<Class<? extends Edge>> ALL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_PHYSICAL_LAYER_EDGES));
+    public static final Set<Class<? extends Edge>> ALL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllPhysicalLayerEdges()));
 
     /** Set aller Kantenklassen */
     public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(ALL_DOMAIN_LAYER_EDGES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET).addAll(ALL_LOGICAL_LAYER_EDGES_SET)
             .addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET).addAll(ALL_PHYSICAL_LAYER_EDGES_SET).build();
-
-    /** Array aller Kantenklassen */
-    @SuppressWarnings("unchecked")
-    public static final Class<? extends Edge>[] ALL_EDGES = new Class[ALL_EDGES_SET.size()];
-    static {
-        System.arraycopy(ALL_EDGES_SET.toArray(), 0, ALL_EDGES, 0, ALL_EDGES.length);
-    }
 
     /////////////////////////
     // alle Elementklassen //
@@ -423,7 +401,7 @@ public final class ModelConstants {
                 al.add(clazz);
             }
         }
-        for (Class<? extends ModelElement> clazz : ALL_EDGES) {
+        for (Class<? extends ModelElement> clazz : ALL_EDGES_SET) {
             if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
                 al.add(clazz);
             }
@@ -456,7 +434,7 @@ public final class ModelConstants {
             return edgeClasses;
         }
         ArrayList<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
-        for (Class<? extends Edge> edgeClass : ALL_EDGES) {
+        for (Class<? extends Edge> edgeClass : ALL_EDGES_SET) {
             if (isStartOrEndClass(edgeClass, elementClass)) {
                 elementClassEdgeClasses.add(edgeClass);
             }
@@ -772,9 +750,9 @@ public final class ModelConstants {
         return firstPoint < secondPoint;
     }
 
-    public static final String NODE_PACKAGE_NAME = ALL_NODES.length > 0 ? ALL_NODES[0].getPackage().getName() + "." : "";
+    public static final String NODE_PACKAGE_NAME = ALL_NODES_SET.size() > 0 ? ALL_NODES_SET.iterator().next().getPackage().getName() + "." : "";
 
-    public static final String EDGE_PACKAGE_NAME = ALL_EDGES.length > 0 ? ALL_EDGES[0].getPackage().getName() + "." : "";
+    public static final String EDGE_PACKAGE_NAME = ALL_EDGES_SET.size() > 0 ? ALL_EDGES_SET.iterator().next().getPackage().getName() + "." : "";
 
     /**
      * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
