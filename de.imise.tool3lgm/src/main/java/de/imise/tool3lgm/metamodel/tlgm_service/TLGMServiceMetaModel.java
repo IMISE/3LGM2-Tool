@@ -236,94 +236,59 @@ public class TLGMServiceMetaModel extends MetaModel {
     // Kanten //
     ////////////
 
-    /** Kanten FE */
-    private final Class[] ALL_DOMAIN_LAYER_EDGES = {
-            Function_IsPartOfEdge.class,
-            Function_ObjectType_Edge.class,
-            Function_Use_Edge.class,
-            ObjectType_IsPartOfEdge.class,
-            OrganisationalUnit_IsPartOfEdge.class,
-            OrganisationalUnit_Use_Edge.class,
-            Process_Function_Edge.class,
-
-    };
-
-    /** Kanten Inter FE -LWE */
-    private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = {
-            ApplicationComponent_SupportLink_Edge.class,
-            Function_SoftwareProduct_Edge.class,
-            OrganisationalUnit_SupportLink_Edge.class,
-            Service_Function_Edge.class,
-            Service_ObjectType_Edge.class,
-            StorageLink_Edge.class,
-            SupportLink_Edge.class
-    };
-
-    /** Kanten LWE */
-    private final Class[] ALL_LOGICAL_LAYER_EDGES = {
-            ApplicationComponent_CommunicationInterface_Edge.class,
-            ApplicationComponent_CommunicationLink_Edge.class,
-            ApplicationComponent_IsPartOfEdge.class,
-            ApplicationSystem_SoftwareProduct_Edge.class,
-            CommunicationLink_Edge.class,
-            Service_CommunicationLink_Edge.class,
-            Service_InvokingInterface_Edge.class,
-            Service_ProvidingInterface_Edge.class,
-            Service_ServiceClass_Edge.class,
-            ServiceUses_Edge.class,
-            //IHE-Kanten
-            IheActorOfIntegrationProfile_ApplicationSystem_Edge.class,
-            IheConcept_IheDomain_Edge.class,
-            IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class,
-            IheIntegrationProfile_IheTransaction_Edge.class,
-            IheTransaction_Service_Edge.class,
-            IheTransactionLink_Edge.class,
-            IheTransactionLink_IheTransaction_Edge.class,
-    };
-
-    /** Kanten Inter LWE - PWE */
-    private final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = {
-            ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
-            ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,
-            ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class,
-    };
-
-    /** Kanten PWE */
-    private final Class[] ALL_PHYSICAL_LAYER_EDGES = {
-            DataTransmissionLink_Edge.class,
-            DeviceClass_IsPartOfEdge.class,
-            Location_IsPartOfEdge.class,
-            PhysicalDataProcessingComponent_DeviceClass_Edge.class,
-            PhysicalDataProcessingComponent_IsPartOfEdge.class,
-            PdvbVirtualPdvbVerbindung.class,
-            PhysicalDataProcessingComponent_Location_Edge.class,
-            PhysicalDataProcessingComponentVirtualises_Edge.class,
-            TransmissionMedium_DataTransmissionLink_Edge.class,
-    };
-
     @Override
-    public Class[] getAllDomainLayerEdges() {
-        return ALL_DOMAIN_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllInterDomainLogicalLayerEdges() {
-        return ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllLogicalLayerEdges() {
-        return ALL_LOGICAL_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllInterLogicalPhysicalLayerEdges() {
-        return ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllPhysicalLayerEdges() {
-        return ALL_PHYSICAL_LAYER_EDGES;
+    public Class[] getAllEdges() {
+        return new Class[] {
+                //FE
+                Function_IsPartOfEdge.class,
+                Function_ObjectType_Edge.class,
+                Function_Use_Edge.class,
+                ObjectType_IsPartOfEdge.class,
+                OrganisationalUnit_IsPartOfEdge.class,
+                OrganisationalUnit_Use_Edge.class,
+                Process_Function_Edge.class,
+                //FE - LWE
+                ApplicationComponent_SupportLink_Edge.class,
+                Function_SoftwareProduct_Edge.class,
+                OrganisationalUnit_SupportLink_Edge.class,
+                Service_Function_Edge.class,
+                Service_ObjectType_Edge.class,
+                StorageLink_Edge.class,
+                SupportLink_Edge.class,
+                //LWE
+                ApplicationComponent_CommunicationInterface_Edge.class,
+                ApplicationComponent_CommunicationLink_Edge.class,
+                ApplicationComponent_IsPartOfEdge.class,
+                ApplicationSystem_SoftwareProduct_Edge.class,
+                CommunicationLink_Edge.class,
+                Service_CommunicationLink_Edge.class,
+                Service_InvokingInterface_Edge.class,
+                Service_ProvidingInterface_Edge.class,
+                Service_ServiceClass_Edge.class,
+                ServiceUses_Edge.class,
+                //IHE-Kanten
+                IheActorOfIntegrationProfile_ApplicationSystem_Edge.class,
+                IheConcept_IheDomain_Edge.class,
+                IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class,
+                IheIntegrationProfile_IheTransaction_Edge.class,
+                IheTransaction_Service_Edge.class,
+                IheTransactionLink_Edge.class,
+                IheTransactionLink_IheTransaction_Edge.class,
+                //LWE - PWE
+                ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
+                ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,
+                ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class,
+                //PWE
+                DataTransmissionLink_Edge.class,
+                DeviceClass_IsPartOfEdge.class,
+                Location_IsPartOfEdge.class,
+                PhysicalDataProcessingComponent_DeviceClass_Edge.class,
+                PhysicalDataProcessingComponent_IsPartOfEdge.class,
+                PdvbVirtualPdvbVerbindung.class,
+                PhysicalDataProcessingComponent_Location_Edge.class,
+                PhysicalDataProcessingComponentVirtualises_Edge.class,
+                TransmissionMedium_DataTransmissionLink_Edge.class,
+        };
     }
 
     ///////////////////////////////////

@@ -251,91 +251,57 @@ public class TLGMOriginalMetaModel extends MetaModel {
     // Kanten //
     ////////////
 
-    /** Kanten FE */
-    private final Class[] ALL_DOMAIN_LAYER_EDGES = {
-            AufAufOrgVerbindung.class,
-            AufAufVerbindung.class,
-            AufObjVerbindung.class,
-            ObjObjVerbindung.class,
-            OrgAufOrgVerbindung.class,
-            OrgOrgVerbindung.class,
-            PrzAufVerbindung.class
-    };
-
-    /** Kanten Inter FE -LWE */
-    private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES = {
-            AwbAwbkVerbindung.class,
-            AwbkAufOrgVerbindung.class,
-            EtAufVerbindung.class,
-            ObjLogspVerbindung.class,
-            ObjReprVerbindung.class,
-            SwpAufVerbindung.class
-    };
-
-    /** Kanten LWE */
-    private final Class[] ALL_LOGICAL_LAYER_EDGES = {
-            AwbKawbVerbindung.class,
-            AwbKommssVerbindung.class,
-            AwpSwpVerbindung.class,
-            BssEtntVerbindung.class,
-            BssKommstVerbindung.class,
-            DbsDatVerbindung.class,
-            DbsDbvsVerbindung.class,
-            DoksDokVerbindung.class,
-            EtntDotVerbindung.class,
-            EtntEtVerbindung.class,
-            EtntKommstVerbindung.class,
-            EtntNatVerbindung.class,
-            KawbDoksVerbindung.class,
-            KawbOrgpVerbindung.class,
-            KommbezEtntVerbindung.class,
-            KommBeziehung.class,
-            RawbRawbVerbindung.class,
-            RawbAwpVerbindung.class,
-            RawbDbsVerbindung.class
-    };
-
-    /** Kanten Inter LWE - PWE */
-    private final Class[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES = {
-            PdvbkAwbVerbindung.class,
-            PdvbPdvbkVerbindung.class,
-    };
-
-    /** Kanten PWE */
-    private final Class[] ALL_PHYSICAL_LAYER_EDGES = {
-            DatenuebertragungsVerbindung.class,
-            PdvbBtypVerbindung.class,
-            PdvbPdvbVerbindung.class,
-            PdvbStoVerbindung.class,
-            PdvbSubnVerbindung.class,
-            //          PdvbVirtualPdvbVerbindung.class,
-            SubnNetzpVerbindung.class,
-            SubnNetztVerbindung.class
-    };
-
     @Override
-    public Class[] getAllDomainLayerEdges() {
-        return ALL_DOMAIN_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllInterDomainLogicalLayerEdges() {
-        return ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllLogicalLayerEdges() {
-        return ALL_LOGICAL_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllInterLogicalPhysicalLayerEdges() {
-        return ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES;
-    }
-
-    @Override
-    public Class[] getAllPhysicalLayerEdges() {
-        return ALL_PHYSICAL_LAYER_EDGES;
+    public Class[] getAllEdges() {
+        return new Class[] {
+                //FE
+                AufAufOrgVerbindung.class,
+                AufAufVerbindung.class,
+                AufObjVerbindung.class,
+                ObjObjVerbindung.class,
+                OrgAufOrgVerbindung.class,
+                OrgOrgVerbindung.class,
+                PrzAufVerbindung.class,
+                //FE - LWE
+                AwbAwbkVerbindung.class,
+                AwbkAufOrgVerbindung.class,
+                EtAufVerbindung.class,
+                ObjLogspVerbindung.class,
+                ObjReprVerbindung.class,
+                SwpAufVerbindung.class,
+                //LWE
+                AwbKawbVerbindung.class,
+                AwbKommssVerbindung.class,
+                AwpSwpVerbindung.class,
+                BssEtntVerbindung.class,
+                BssKommstVerbindung.class,
+                DbsDatVerbindung.class,
+                DbsDbvsVerbindung.class,
+                DoksDokVerbindung.class,
+                EtntDotVerbindung.class,
+                EtntEtVerbindung.class,
+                EtntKommstVerbindung.class,
+                EtntNatVerbindung.class,
+                KawbDoksVerbindung.class,
+                KawbOrgpVerbindung.class,
+                KommbezEtntVerbindung.class,
+                KommBeziehung.class,
+                RawbRawbVerbindung.class,
+                RawbAwpVerbindung.class,
+                RawbDbsVerbindung.class,
+                //LWE - PWE
+                PdvbkAwbVerbindung.class,
+                PdvbPdvbkVerbindung.class,
+                //PWE
+                DatenuebertragungsVerbindung.class,
+                PdvbBtypVerbindung.class,
+                PdvbPdvbVerbindung.class,
+                PdvbStoVerbindung.class,
+                PdvbSubnVerbindung.class,
+                //          PdvbVirtualPdvbVerbindung.class,
+                SubnNetzpVerbindung.class,
+                SubnNetztVerbindung.class
+        };
     }
 
     ///////////////////////////////////

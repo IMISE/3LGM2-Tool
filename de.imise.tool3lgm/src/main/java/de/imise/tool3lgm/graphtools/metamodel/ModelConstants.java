@@ -197,24 +197,8 @@ public final class ModelConstants {
     // Kanten //
     ////////////
 
-    /** Kanten FE */
-    public static final Set<Class<? extends Edge>> ALL_DOMAIN_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllDomainLayerEdges()));
-
-    /** Kanten Inter FE -LWE */
-    public static final Set<Class<? extends Edge>> ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterDomainLogicalLayerEdges()));
-
-    /** Kanten LWE */
-    public static final Set<Class<? extends Edge>> ALL_LOGICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllLogicalLayerEdges()));
-
-    /** Kanten Inter LWE - PWE */
-    public static final Set<Class<? extends Edge>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterLogicalPhysicalLayerEdges()));
-
-    /** Kanten PWE */
-    public static final Set<Class<? extends Edge>> ALL_PHYSICAL_LAYER_EDGES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllPhysicalLayerEdges()));
-
     /** Set aller Kantenklassen */
-    public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(ALL_DOMAIN_LAYER_EDGES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET).addAll(ALL_LOGICAL_LAYER_EDGES_SET)
-            .addAll(ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET).addAll(ALL_PHYSICAL_LAYER_EDGES_SET).build();
+    public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(Arrays.asList(metaModel.getAllEdges())).build();
 
     /////////////////////////
     // alle Elementklassen //
@@ -1366,20 +1350,24 @@ public final class ModelConstants {
         for (Class<? extends ModelElement> elementClass : ALL_PHYSICAL_LAYER_NODES_SET) {
             map.put(elementClass, PHYSICAL_LAYER);
         }
-        for (Class<? extends ModelElement> elementClass : ALL_DOMAIN_LAYER_EDGES_SET) {
-            map.put(elementClass, DOMAIN_LAYER);
-        }
-        for (Class<? extends ModelElement> elementClass : ALL_INTER_DOMAIN_LOGICAL_LAYER_EDGES_SET) {
-            map.put(elementClass, INTER_DOMAIN_LOGICAL_LAYER);
-        }
-        for (Class<? extends ModelElement> elementClass : ALL_LOGICAL_LAYER_EDGES_SET) {
-            map.put(elementClass, LOGICAL_LAYER);
-        }
-        for (Class<? extends ModelElement> elementClass : ALL_INTER_LOGICAL_PHYSICAL_LAYER_EDGES_SET) {
-            map.put(elementClass, INTER_LOGICAL_PHYSICAL_LAYER);
-        }
-        for (Class<? extends ModelElement> elementClass : ALL_PHYSICAL_LAYER_EDGES_SET) {
-            map.put(elementClass, PHYSICAL_LAYER);
+        for (Class<? extends Edge> edgeClass : ALL_EDGES_SET) {
+            if (map.get(edgeClass) == null) {
+                int startElementLayer = map.get(Edge.getStartClass(edgeClass));
+                int endElementLayer = map.get(Edge.getEndClass(edgeClass));
+                int layer = startElementLayer;
+                //eine Kante gehört immer zu einem Zwischenlayer, wenn das Start- oder Endelement zu einem Zwischenlayer gehören
+                //wenn beide zu Zwischeenlayer oder beide zu normalen Ebenen gehören, dann gehört die Kante immer zur jeweils höhreren Ebene
+                if (startElementLayer % 2 == 1) {
+                    if (endElementLayer % 2 == 1 && startElementLayer < endElementLayer) {
+                        layer = endElementLayer;
+                    }
+                } else if (endElementLayer % 2 == 1) {
+                    layer = endElementLayer;
+                } else if (startElementLayer < endElementLayer) {
+                    layer = endElementLayer;
+                }
+                map.put(edgeClass, layer);
+            }
         }
         map.put(TextfeldFach.class, DOMAIN_LAYER);
         map.put(TextfeldLog.class, LOGICAL_LAYER);
