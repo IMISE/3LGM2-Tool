@@ -682,9 +682,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
         elementClassBox.addSeparator(true);
 
-        for (int i = 0; i < ModelConstants.ALL_EDGES.length; i++) {
-            elementClassBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullForwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
-            elementClassBox.addItem(ModelConstants.ALL_EDGES[i], ModelConstants.getFullBackwardMetaAssociationName(ModelConstants.ALL_EDGES[i]));
+        for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
+            elementClassBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
+            elementClassBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }
