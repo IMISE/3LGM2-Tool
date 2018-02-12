@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_EDGES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullBackwardMetaAssociationName;
@@ -34,7 +33,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         }
         addSeparator(true);
         //alle Kantenklassen jeweils mit hin und Rückrichtung
-        for (Class<? extends Edge> edgeClass : ALL_EDGES) {
+        for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
             //Im Moment geht der ganze Mechanismus davon aus, dass es immer nur eine derselben Art Kante zwischen
             //2 Elementen geben kann. D.h. bei MultipleEges würde immer nur die erste Kante beachtet werden.
             //Da weder druchdacht ist noch ausprobiert wurde, was passiert, wenn man Kanten mehrfach verknüpft
