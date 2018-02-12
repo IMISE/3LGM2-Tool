@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement_Textfield_Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
@@ -750,7 +751,7 @@ public final class ModelConstants {
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<>();
 
     /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
-    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, Textfeld.class);
+    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, Textfeld.class, ModelElement_Textfield_Edge.class);
 
     /** Klassennamen aller Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPE_NAMES = CollectionUtils.getSimpleClassNames(META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES);
