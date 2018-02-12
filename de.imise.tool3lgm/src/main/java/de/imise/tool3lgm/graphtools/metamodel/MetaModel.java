@@ -195,31 +195,8 @@ public abstract class MetaModel {
     // Kanten //
     ////////////
 
-    /** Alle Kanten der FE als Array */
-    public abstract Class<? extends Edge>[] getAllDomainLayerEdges();
-
-    /** Alle Kanten zw. FE und LWE als Array */
-    public abstract Class<? extends Edge>[] getAllInterDomainLogicalLayerEdges();
-
-    /** Alle Kanten der LWE als Array */
-    public abstract Class<? extends Edge>[] getAllLogicalLayerEdges();
-
-    /** Alle Kanten zw. LWE und PWE als Array */
-    public abstract Class<? extends Edge>[] getAllInterLogicalPhysicalLayerEdges();
-
-    /** Alle Kanten der PWE als Array */
-    public abstract Class<? extends Edge>[] getAllPhysicalLayerEdges();
-
-    private Class<? extends Edge>[] allEdges = null;
-
-    @SuppressWarnings("unchecked")
-    public Class<? extends Edge>[] getAllEdges() {
-        //muss lazy initialisiert werden, um ExceptionInInitializerError zu verhindern
-        if (allEdges == null) {
-            allEdges = CollectionUtils.joinArrays(getAllDomainLayerEdges(), getAllInterDomainLogicalLayerEdges(), getAllLogicalLayerEdges(), getAllInterLogicalPhysicalLayerEdges(), getAllPhysicalLayerEdges());
-        }
-        return allEdges;
-    }
+    /** Alle Kanten als Array */
+    public abstract Class<? extends Edge>[] getAllEdges();
 
     ///////////////////////////////////
     // spezielle Knoteneigenschaften //
