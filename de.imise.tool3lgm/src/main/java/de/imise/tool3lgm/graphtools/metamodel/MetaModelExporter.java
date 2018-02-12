@@ -12,6 +12,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -33,7 +34,7 @@ public class MetaModelExporter {
     }
 
     public static void print(final MetaModel metaModel) {
-        List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies = getElementsHierarchies(ModelConstants.ALL_NODES);
+        List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies = getElementsHierarchies(ModelConstants.ALL_NODES_SET);
 
         System.out.println("###  ALL NODES (compact)");
         for (NamedObjectContainer<List<Class<?>>> o : elementsHierarchies) {
@@ -49,7 +50,7 @@ public class MetaModelExporter {
         printElementsWithEdges(elementsHierarchies);
         System.out.println();
 
-        List<NamedObjectContainer<List<Class<?>>>> edgesHierarchies = getElementsHierarchies(ModelConstants.ALL_EDGES);
+        List<NamedObjectContainer<List<Class<?>>>> edgesHierarchies = getElementsHierarchies(ModelConstants.ALL_EDGES_SET);
 
         System.out.println("###  ALL EDGES (compact)");
         for (NamedObjectContainer<List<Class<?>>> o : edgesHierarchies) {
@@ -85,10 +86,9 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static List<NamedObjectContainer<List<Class<?>>>> getElementsHierarchies(final Class<? extends ModelElement>[] classes) {
-        List<Class<? extends ModelElement>> allClasses = Arrays.asList(classes);
+    private static <T extends ModelElement> List<NamedObjectContainer<List<Class<?>>>> getElementsHierarchies(final Collection<Class<? extends T>> classes) {
         List<NamedObjectContainer<List<Class<?>>>> elementHierarchies = new ArrayList<>();
-        for (Class<? extends ModelElement> elementClass : allClasses) {
+        for (Class<? extends T> elementClass : classes) {
             NamedObjectContainer<List<Class<?>>> noc = getSingleElementHierarchy(elementClass, false);
             elementHierarchies.add(noc);
         }
