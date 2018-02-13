@@ -100,6 +100,15 @@ public abstract class Edge extends ModelElement {
         return retVal;
     }
 
+    @Override
+    public int layerFor() {
+        int layer = super.layerFor();
+        if (layer == ModelConstants.NO_LAYER) {
+            layer = ModelConstants.getEdgeLayer(k1.getClass(), k2.getClass());
+        }
+        return layer;
+    }
+
     /**
      * liefert true, wenn beide Node, die die Edge verbindet identisch sind und die Edge von derselben Art ist (Richtung ist egal)
      *

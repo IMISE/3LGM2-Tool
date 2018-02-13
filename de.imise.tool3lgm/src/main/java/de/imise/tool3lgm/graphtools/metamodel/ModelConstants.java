@@ -197,7 +197,7 @@ public final class ModelConstants {
     ////////////
 
     /** Set aller Kantenklassen */
-    public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(Arrays.asList(metaModel.getAllEdges())).build();
+    public static final Set<Class<? extends Edge>> ALL_EDGES_SET = ImmutableSet.<Class<? extends Edge>> builder().addAll(Arrays.asList(metaModel.getAllEdges())).add(ModelElement_Textfield_Edge.class).build();
 
     /////////////////////////
     // alle Elementklassen //
@@ -1332,7 +1332,6 @@ public final class ModelConstants {
     private static Map<Class<? extends ModelElement>, Integer> ELEMENT_CLASS_TO_LAYER = createELEMENT_CLASS_TO_LAYER_MAP();
 
     private static Map<Class<? extends ModelElement>, Integer> createELEMENT_CLASS_TO_LAYER_MAP() {
-        //        ImmutableMap.Builder<Class<? extends ModelElement>, Integer> map = new ImmutableMap.Builder<>();
         Map<Class<? extends ModelElement>, Integer> map = new HashMap<>();
         for (Class<? extends ModelElement> elementClass : ALL_DOMAIN_LAYER_NODES_SET) {
             map.put(elementClass, DOMAIN_LAYER);
@@ -1351,26 +1350,59 @@ public final class ModelConstants {
         }
         for (Class<? extends Edge> edgeClass : ALL_EDGES_SET) {
             if (map.get(edgeClass) == null) {
-                int startElementLayer = map.get(Edge.getStartClass(edgeClass));
-                int endElementLayer = map.get(Edge.getEndClass(edgeClass));
-                int layer = startElementLayer;
-                //eine Kante gehört immer zu einem Zwischenlayer, wenn das Start- oder Endelement zu einem Zwischenlayer gehören
-                //wenn beide zu Zwischeenlayer oder beide zu normalen Ebenen gehören, dann gehört die Kante immer zur jeweils höhreren Ebene
-                if (startElementLayer % 2 == 1) {
-                    if (endElementLayer % 2 == 1 && startElementLayer < endElementLayer) {
-                        layer = endElementLayer;
-                    }
-                } else if (endElementLayer % 2 == 1) {
-                    layer = endElementLayer;
-                } else if (startElementLayer < endElementLayer) {
-                    layer = endElementLayer;
+                int layer = getEdgeLayer(map, Edge.getStartClass(edgeClass), Edge.getEndClass(edgeClass));
+                if (layer != NO_LAYER) {
+                    map.put(edgeClass, layer);
                 }
-                map.put(edgeClass, layer);
             }
         }
         //nicht über den Builder gehen, weil die key-Klassen mehrfach in den Sets vorkommen können. Der Builder beendet dann mit einem Error.
         ImmutableMap<Class<? extends ModelElement>, Integer> returnMap = ImmutableMap.copyOf(map);
         return returnMap;
+    }
+
+    /**
+     * Liefert den Layer der Kante, wenn die Kante die übergebenen Klassen verbindet
+     *
+     * @param edgeStartClass
+     * @param edgeEndClass
+     * @return
+     */
+    public static final int getEdgeLayer(final Class<? extends ModelElement> edgeStartClass, final Class<? extends ModelElement> edgeEndClass) {
+        return getEdgeLayer(ELEMENT_CLASS_TO_LAYER, edgeStartClass, edgeEndClass);
+    }
+
+    /**
+     * Liefert den Layer der Kante, wenn die Kante die übergebenen Klassen verbindet
+     *
+     * @param map Map mit den Einträgen der Layerwerte alle Elementklassen, die keine Kante sind
+     * @param edgeStartClass
+     * @param edgeEndClass
+     * @return
+     */
+    private static final int getEdgeLayer(final Map<Class<? extends ModelElement>, Integer> map, final Class<? extends ModelElement> edgeStartClass, final Class<? extends ModelElement> edgeEndClass) {
+        Integer startLayer = map.get(edgeStartClass);
+        Integer endLayer = map.get(edgeEndClass);
+        int startElementLayer = startLayer == null ? NO_LAYER : startLayer;
+        int endElementLayer = endLayer == null ? NO_LAYER : endLayer;
+        int layer = startElementLayer;
+        //eine Kante gehört immer zu einem Zwischenlayer, wenn das Start- oder Endelement zu einem Zwischenlayer gehören
+        //wenn beide zu Zwischeenlayer oder beide zu normalen Ebenen gehören, dann gehört die Kante immer zur jeweils höhreren Ebene
+        //wenn einer der Layer NO_LAYER ist, dann liegt die Kante auf dem anderen. Wenn beide Layer NO_LAYER sind, ist auch die Kanze NO_LAYER
+        if (layer == NO_LAYER) {
+            layer = endElementLayer;
+        } else if (endElementLayer != NO_LAYER && startElementLayer != endElementLayer) {
+            if (startElementLayer % 2 == 1) {
+                if (endElementLayer % 2 == 1 && startElementLayer < endElementLayer) {
+                    layer = endElementLayer;
+                }
+            } else if (endElementLayer % 2 == 1) {
+                layer = endElementLayer;
+            } else if (startElementLayer < endElementLayer) {
+                layer = endElementLayer;
+            }
+        }
+        return layer;
     }
 
     /**
