@@ -262,7 +262,7 @@ public class ModelCleaner {
                 for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
                     EdgeContainer kc = lc.getEdgeContainer(j);
                     Edge edge = kc.getEdge();
-                    if (edge == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
+                    if (edge == null || edge.getStart() == null || edge.getEnd() == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {
                         gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
                         continue;
                     }
