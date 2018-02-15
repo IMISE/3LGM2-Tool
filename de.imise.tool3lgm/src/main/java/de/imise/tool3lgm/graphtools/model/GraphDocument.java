@@ -600,10 +600,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case LINK:
             switch (argc) {
-            case 0:
-                System.err.println("GraphDocument.dispatchCommand() -> LINK mit 0 Argumenten aufgerufen (veraltet)");
-                //linkSelected(pid);
-                break;
             case 2:
                 linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
                 break;
@@ -619,36 +615,22 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        //			case LINK_REVERSE :
-        //				linkSelectedReverse(pid);
-        //				break;
-
         case UNLINK:
             int position = -1;
             Class<? extends Edge> edgeClass = null;
             switch (argc) {
-            case 0:
-                System.err.println("GraphDocument.dispatchCommand() -> LINK mit 0 Argumenten aufgerufen (veraltet)");
-                //						unlinkSelected(pid);
-                break;
             case 2:
                 unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
                 break;
-            default:
-                try {
-                    position = Integer.parseInt(argv[2]);
-                    edgeClass = ModelConstants.getClassForName(argv[3]).asSubclass(Edge.class);
-                } catch (Exception e) {
-                    //							Log.log(Log.ERROR, Tool3lgmConstants.getErrorString("FehlerAllgemein"), e);
-                }
+            case 4:
+                edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
+                position = Integer.parseInt(argv[3]);
                 gdcoll.unlink(argv[0], argv[1], edgeClass, position, pid);
+                break;
+            default:
                 break;
             }
             break;
-
-        //			case UNLINK_REVERSE :
-        //				unlinkSelectedReverse(pid);
-        //				break;
 
         case MODEL_ACTION_CREATE_TEXTFIELD:
             switch (argc) {

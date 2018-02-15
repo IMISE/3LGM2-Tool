@@ -22,7 +22,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDia
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
@@ -651,7 +650,7 @@ public final class GDCollection extends UserFieldTarget {
         GraphDocument doc = edgeContainer.getGraphDocument();
         //jetzt den KantenContainer einfach löschen
         edge.removeContainer(doc);
-        doc.layer[layerFor(edge.getClass())].remove(edgeContainer);
+        doc.layer[edgeContainer.layerFor()].remove(edgeContainer);
         return true;
     }
 
@@ -675,7 +674,7 @@ public final class GDCollection extends UserFieldTarget {
             ModelElement me = ec.getElement();
             ecDoc.addRedoCommand(MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + ecDoc.hashString + " " + me.getHashString(), pid);
             me.removeContainer(ecDoc);
-            ecDoc.layer[layerFor(me.getClass())].remove(ec);
+            ecDoc.layer[ec.layerFor()].remove(ec);
         }
         //das Undo das die Container wieder einfügt muss als letztes kommen, weil es als erstes beim
         //Rückgängig machen wieder ausgeführt wird
@@ -883,7 +882,7 @@ public final class GDCollection extends UserFieldTarget {
                 //				int layer = ModelConstants.layerFor(edge.getClass());
                 //				this.doc.layer[layer].remove(edgeCont);
                 //				System.err.println("GDCollection.deleteElements() line 848");
-                doc.layer[layerFor(edge.getClass())].remove(edge.getContainer(doc));
+                doc.layer[edge.layerFor()].remove(edge.getContainer(doc));
                 //jetzt den Container selbst löschen (kann man sich sparen, weil die Edge seobst nicht mehr gepsüeichert wird)
                 edge.removeContainer(doc);
                 edgesToDelete.remove(i--);
@@ -901,7 +900,7 @@ public final class GDCollection extends UserFieldTarget {
                 doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + meHash, pid);
             }
             //den Container des zu löschenden Elementes im Hauptmodell holen
-            doc.layer[layerFor(meClass)].remove(me.getContainer(doc));
+            doc.layer[me.layerFor()].remove(me.getContainer(doc));
             //und danach erst im Table des Elements
             //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nirgends mehr gespeichert werden sollte
             //me.removeContainer(this.doc);
@@ -1304,8 +1303,8 @@ public final class GDCollection extends UserFieldTarget {
                 edge.setDirection(DOUBLE);
                 String startHash = startElement.getHashString();
                 String endHash = endElement.getHashString();
-                doc.addRedoCommand(LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + startElementEdgeIndex, pid);
+                doc.addRedoCommand(LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
             } else {
                 try {
                     edge = edgeClass.newInstance();
@@ -1362,8 +1361,8 @@ public final class GDCollection extends UserFieldTarget {
                 }
                 String startHash = startElement.getHashString();
                 String endHash = endElement.getHashString();
-                doc.addRedoCommand(LINK + " " + edgeClass.getName() + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + startElementEdgeIndex, pid);
+                doc.addRedoCommand(LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
@@ -1456,19 +1455,19 @@ public final class GDCollection extends UserFieldTarget {
      * @param me1
      * @param me2
      * @param edgeClass
-     * @param edgeIndex
+     * @param me1EdgeIndex
      * @param pid
      */
-    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int edgeIndex, final int pid) {
+    public final void unlink(final ModelElement me1, ModelElement me2, final Class<? extends Edge> edgeClass, final int me1EdgeIndex, final int pid) {
         if (me1 == null || me2 == null) {
             return;
         }
         Edge edge = null;
         List<Edge> edges = null;
         if (ModelConstants.isDirectedEdge(edgeClass)) {
-            edges = me1.getEdgesTo(me2, edgeClass, edgeIndex);
+            edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
-            edges = me1.getEdgesWith(me2, edgeClass, edgeIndex);
+            edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
         }
         if (edges.isEmpty()) {
             return;
@@ -1500,7 +1499,7 @@ public final class GDCollection extends UserFieldTarget {
         String me2Hash = me2.getHashString();
         String edgeClassName = edgeClass == null ? "null" : edgeClass.getName();
         doc.start_transaction(pid);
-        doc.addRedoCommand(UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + edgeIndex, pid);
+        doc.addRedoCommand(UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + me1EdgeIndex, pid);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
