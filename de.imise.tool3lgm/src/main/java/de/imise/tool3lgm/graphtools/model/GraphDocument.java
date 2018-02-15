@@ -632,23 +632,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case MODEL_ACTION_CREATE_TEXTFIELD:
-            switch (argc) {
-            case 0:
-                //Argumente: nichts = verknüpfe mit selektiertem Element oder dem aktiven Layer, wenn nichts selektiert ist
-                //createTextField(argv[0], argv[1], argv[2], pid);
-                break;
-            case 3:
-                //Argumente: 0=parentContainer, 1=Name, 2=Beschreibung
-                //createTextField(argv[0], argv[1], argv[2], pid);
-                break;
-            case 6:
-                //Argumente: 0=parentContainer, 1=Name, 2=Beschreibung
-                //createTextField(argv[0], argv[1], argv[2], pid);
-                break;
-            }
-            break;
-
         case SWAP_EDGE_POSITIONS:
             switch (argc) {
             case 3:

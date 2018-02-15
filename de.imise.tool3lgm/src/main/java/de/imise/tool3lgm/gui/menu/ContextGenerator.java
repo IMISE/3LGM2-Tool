@@ -251,7 +251,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    @SuppressWarnings("unchecked")
     private void init() {
         int c;
         JMenuItem item;
