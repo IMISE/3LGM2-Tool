@@ -8,10 +8,8 @@ public enum GDCommands {
 
     MODEL_ACTION_CREATE_NODE,
     LINK,
-    //	LINK_REVERSE,
     ADDICT,
     UNLINK,
-    //	UNLINK_REVERSE,
     SWAP_EDGE_POSITIONS,
     CREATE_ADDICTED,
 
