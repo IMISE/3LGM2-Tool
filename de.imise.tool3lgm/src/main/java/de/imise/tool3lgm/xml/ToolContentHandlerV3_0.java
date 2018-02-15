@@ -532,7 +532,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                                 layer = element.layerFor();
                                 LayerContainer layerContainer = doc.getLayer(layer);
                                 //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Textfelder auch, wenn sie noch keinen Container auf einem Layer haben.
-                                //Auch die Kante ModelElement_Textfield_Edge wirft eine Exception, da ihr Layer noch nicht feststeht. Das tut er erst, wenn die Hashes der verbundenen
+                                //Auch die Kante Textfield_ModelElement_Edge wirft eine Exception, da ihr Layer noch nicht feststeht. Das tut er erst, wenn die Hashes der verbundenen
                                 //Elemente aufgelöst wurden. Das kann erst ganz am Schluss passieren.
                                 layerContainer.add(container);
                             } catch (Exception e) {
