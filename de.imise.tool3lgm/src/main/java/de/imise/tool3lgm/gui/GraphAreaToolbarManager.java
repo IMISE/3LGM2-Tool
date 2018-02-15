@@ -10,6 +10,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -167,6 +168,11 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
         if (currentToolBar instanceof GraphAreaToolBar) {
             ((GraphAreaToolBar) currentToolBar).update();
         }
+    }
+
+    @Override
+    public void layerViewChanged(final BasicGraphArea source) {
+        activeLayerChanged(source.getSzenario());
     }
 
 }
