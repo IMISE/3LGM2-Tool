@@ -24,7 +24,6 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -532,14 +531,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             try {
                                 layer = element.layerFor();
                                 LayerContainer layerContainer = doc.getLayer(layer);
-                                layerContainer.add(container); //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Textfelder auch, wenn sie noch keinen Container auf einem Layer haben. Daher try-catch
+                                //Knickpunkte werfen hier eine Exception, wenn sie noch keine Kante zugewiesen haben. Textfelder auch, wenn sie noch keinen Container auf einem Layer haben.
+                                //Auch die Kante ModelElement_Textfield_Edge wirft eine Exception, da ihr Layer noch nicht feststeht. Das tut er erst, wenn die Hashes der verbundenen
+                                //Elemente aufgelöst wurden. Das kann erst ganz am Schluss passieren.
+                                layerContainer.add(container);
                             } catch (Exception e) {
-                                if (container instanceof BendpointContainer || element instanceof Textfeld) {
-                                    //merke die Container, die am Ende noch im Hauptdokument hinzugefügt werden müssen
-                                    hashToMainDocContainer.put(element.getHashString(), container);
-                                } else {
-                                    throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
-                                }
+                                //merke die Container, die am Ende noch im Hauptdokument hinzugefügt werden müssen
+                                hashToMainDocContainer.put(element.getHashString(), container);
                             }
                         }
                         if (paste) {
@@ -563,11 +561,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         //hinzugefügt wurde. Das passiert beim Ende des szenaro-Tags
                         if (!(me instanceof Knickpunkt)) {
                             layer.add(container);
-                            //bei Textfeldern steht jetzt erst der Layer fest -> jetzt kann man den mainDocContainer
-                            //auch zum mainDoc hinzufügen
-                            if (me instanceof Textfeld) {
+                            //alle Elemente, bei denen beim Einlesen der Layer noch nicht feststand, können jetzt, da die verbundenen Elemente und der
+                            //Layer nun bekannt sind, auch ins Hauptmodell eingetragen werden -> jetzt mainDocContainer zum mainDoc hinzufügen
+                            ElementContainer mainDocContainer = hashToMainDocContainer.get(me.getHashString());
+                            if (mainDocContainer != null) {
                                 LayerContainer mainDocLayer = doc.getLayer(layer.getLayerNumber());
-                                ElementContainer mainDocContainer = hashToMainDocContainer.get(me.getHashString());
                                 //an welcher Stelle der Container im MainDoc steht ist völlig egal, da das MainDoc nicht gezeichnet wird
                                 mainDocLayer.add(mainDocContainer);
                             }
@@ -809,13 +807,20 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     throw new SAXException("Error while parsing definition of userFields: userFiel shouldn't not be equals to null");
                 }
                 userField.putXMLFieldString(qName, elementValue.toString());
+
             } else if (qName.equals("modell_3lgm_2")) {
-                Static.setProgressDialogStatusLabel("labelReferenceIcons");
+                //jetzt erst ganz zum Schluss die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten
+                Static.setProgressDialogStatusLabel("labelConnectTraces2");
+                for (Edge edge : edges) {
+                    edge.decodeHashStrings(doc);
+                }
 
                 /* Icons in den Container einlesen */
+                Static.setProgressDialogStatusLabel("labelReferenceIcons");
                 for (NodeContainer kc : containerWithIcon) {
                     kc.setIcon();
                 }
+
             } else if (qName.equals("tool3lgm_clipboard")) {
                 /* Icons in den Container einlesen */
                 for (NodeContainer kc : containerWithIcon) {
@@ -823,12 +828,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
             } else if (qName.equals("objects")) {
-
-                Static.setProgressDialogStatusLabel("labelConnectTraces");
-
-                //die HashStrings für das Start- bzw. End-Objekt einer Edge
-                // auflösen und die wirklichen Node setzten
                 if (isCopyAndPaste()) {
+                    Static.setProgressDialogStatusLabel("labelAddBendpoints");
                     for (ElementContainer ec : hashToMainDocContainer.values()) {
                         if (ec instanceof BendpointContainer) {
                             Knickpunkt bendpoint = ((BendpointContainer) ec).getKnickpunktKnoten();
@@ -836,12 +837,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         }
                     }
                 }
+                //die HashStrings für das Start- bzw. End-Objekt einer Edge setzten
+                Static.setProgressDialogStatusLabel("labelConnectTraces");
                 for (Edge edge : edges) {
                     if (isCopyAndPaste()) {
                         edge.putXMLFieldString("start", oldToNewHashString.get(edge.getStartHash()));
                         edge.putXMLFieldString("end", oldToNewHashString.get(edge.getEndHash()));
                     }
-                    edge.decodeHashStrings(doc);
                 }
             }
         } catch (Exception e) {
