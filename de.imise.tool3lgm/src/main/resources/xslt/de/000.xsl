@@ -587,7 +587,7 @@
 
 		<!-- sonstige Modellobjekte -->
 		<xsl:variable name="Textfelder"
-			select="count(key('anzahlObjekte', 'TextfeldFach')) + count(key('anzahlObjekte', 'TextfeldLog')) + count(key('anzahlObjekte', 'TextfeldPhy'))" />
+			select="count(key('anzahlObjekte', 'Textfield'))" />
 
 		<!-- Zusammenfassung -->
 		<xsl:variable name="sumKnoten"

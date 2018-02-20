@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
  */
 public class Textfield_ModelElement_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Textfeld.class;
+    public static final Class<? extends ModelElement> stcl = Textfield.class;
 
     public static final EdgeCardinality scard = ZERO_ONE;
 

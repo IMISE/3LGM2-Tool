@@ -12,7 +12,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -593,13 +593,13 @@ public class ModelSelection implements Set<ElementContainer> {
     }
 
     /**
-     * Gibt wieder, ob ausschließlich {@link ElementContainer} von {@link Textfeld} und {@link Knickpunkt} selektiert sind.
+     * Gibt wieder, ob ausschließlich {@link ElementContainer} von {@link Textfield} und {@link Knickpunkt} selektiert sind.
      *
      * @return
      */
     public boolean isSelectedOnlyBendpointsAndTextfields() {
         Collection<?> elements = GDCollection.getModelElements(selectedRealNodeContainer);
-        return CollectionUtils.containsOnlyInstancesOf(elements, true, Textfeld.class, Knickpunkt.class);
+        return CollectionUtils.containsOnlyInstancesOf(elements, true, Textfield.class, Knickpunkt.class);
     }
 
     /**

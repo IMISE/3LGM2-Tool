@@ -28,7 +28,7 @@ import de.imise.tool3lgm.KeyStrokes;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Textfeld;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
@@ -431,7 +431,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
     private LGMTreeNode getOrCreateTextFieldNode(final LGMTreeNode layerNode, LGMTreeNode textFieldNode) {
         if (textFieldNode == null) {
-            textFieldNode = new LGMTreeNode(getDisplayableName(Textfeld.class), false, false);
+            textFieldNode = new LGMTreeNode(getDisplayableName(Textfield.class), false, false);
         }
         if (textFieldNode.getParent() == null) {
             textFieldNode.removeAllChildren();
@@ -447,7 +447,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      */
     private LGMTreeNode getParentNodeOfType(final NodeContainer obj, final int layer) {
         Node me = (Node) obj.getElement();
-        if (me instanceof Textfeld) {
+        if (me instanceof Textfield) {
             if (layer == DOMAIN_LAYER) {
                 textFieldDomainLayer = getOrCreateTextFieldNode(fachebene, textFieldDomainLayer);
                 return textFieldDomainLayer;
