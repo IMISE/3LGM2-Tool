@@ -1,9 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
-import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
@@ -86,13 +84,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbVirtualPdvbVerbindung;
         "rawtypes"
 })
 public class TLGMServiceMetaModel extends MetaModel {
-
-    private final ImmutableMap<String, String> oldToNewName = ImmutableMap.of();
-
-    @Override
-    protected final Map<String, String> getOldToNewClassName() {
-        return oldToNewName;
-    }
 
     /////////////////////
     // PathsDefinition //

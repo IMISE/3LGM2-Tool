@@ -66,14 +66,6 @@ public final class ModelConstants {
     }
 
     /**
-     * Mappt von alten Elementklassen auf die neuen. <br>
-     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
-     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
-     * eingelesen werden können.
-     */
-    private static Map<String, String> OLD_TO_NEW_CLASS_NAME = metaModel.getOldToNewClassName();
-
-    /**
      * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
      */
     @SuppressWarnings("unchecked")
@@ -682,33 +674,6 @@ public final class ModelConstants {
         return createElement(me.getClass(), log);
     }
 
-    /**
-     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
-     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
-     * aktuelle ist.
-     *
-     * @param oldName
-     * @return
-     */
-    private static final String getActualClassName(String oldName) {
-        String newName = OLD_TO_NEW_CLASS_NAME.get(oldName);
-        //wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
-        // Namen der aktuelle
-        if (newName == null) {
-            return oldName;
-        }
-        //solange immer nach neuen Ersetzungen suchen, bis es keine mehr gibt
-        // -> den letzten
-        //gefundenen Namen zurückgeben
-        while (true) {
-            oldName = newName;
-            newName = OLD_TO_NEW_CLASS_NAME.get(oldName);
-            if (newName == null) {
-                return oldName;
-            }
-        }
-    }
-
     /** Mappt vom Klassennamen auf die Klasse. Ist der Cache für die Funktion {@link #getClassForName(String)} */
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<>();
 
@@ -782,7 +747,7 @@ public final class ModelConstants {
                     clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
                 } catch (Exception exc) {
                     String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-                    String actualClassName = getActualClassName(simpleClassName);
+                    String actualClassName = metaModel.getCurrentClassName(simpleClassName);
                     if (!actualClassName.equals(simpleClassName)) {
                         clazz = getClassForName(actualClassName);
                         CLASS_NAME_TO_CLASS_MAP.put(simpleClassName, clazz);

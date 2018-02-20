@@ -1,9 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
-import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
@@ -97,12 +95,14 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
 })
 public class TLGMOriginalMetaModel extends MetaModel {
 
-    private final ImmutableMap<String, String> oldToNewName = ImmutableMap.<String, String> builder().put("KnickpunktKnoten", "Knickpunkt").put("RawbAwbVerbindung", "RawbRawbVerbindung").put("AwbKawbVerbindung", "AwbKawbVerbindung")
-            .put("EtntKombination", "EreignisNachrichtenTyp").put("EtdtKombination", "EreignisDokumentenTyp").put("ETNTKombination", "EreignisNachrichtenTyp").put("ETDTKombination", "EreignisDokumentenTyp").build();
-
     @Override
-    protected final Map<String, String> getOldToNewClassName() {
-        return oldToNewName;
+    protected final void putOldToNewClassNames() {
+        putOldToNewClassName("KnickpunktKnoten", "Knickpunkt");
+        putOldToNewClassName("RawbAwbVerbindung", "RawbRawbVerbindung");
+        putOldToNewClassName("EtntKombination", "EreignisNachrichtenTyp");
+        putOldToNewClassName("EtdtKombination", "EreignisDokumentenTyp");
+        putOldToNewClassName("ETNTKombination", "EreignisNachrichtenTyp");
+        putOldToNewClassName("ETDTKombination", "EreignisDokumentenTyp");
     }
 
     /////////////////////

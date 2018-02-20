@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,13 +27,66 @@ import de.imise.util.collections.CollectionUtils;
 })
 public abstract class MetaModel {
 
+    public MetaModel() {
+        putOldToNewClassNames();
+    }
+
     /**
      * Mappt von alten Elementklassen auf die neuen. <br>
      * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
      * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
      * eingelesen werden können.
      */
-    protected abstract Map<String, String> getOldToNewClassName();
+    private final Map<String, String> oldToNewClassName = new HashMap<>();
+
+    /**
+     * Mappt von alten Elementklassen auf die neuen. <br>
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
+     * eingelesen werden können.
+     */
+    protected void putOldToNewClassNames() {
+    }
+
+    /**
+     * Mappt von alten Elementklassen auf die neuen. <br>
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
+     * eingelesen werden können.
+     *
+     * @param oldName
+     * @param newName
+     */
+    protected final void putOldToNewClassName(final String oldName, final String newName) {
+        oldToNewClassName.put(oldName, newName);
+    }
+
+    /**
+     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
+     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
+     * aktuelle ist.
+     *
+     * @param oldName
+     * @return
+     */
+    public final String getCurrentClassName(String oldName) {
+        String newName = oldToNewClassName.get(oldName);
+        //wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
+        // Namen der aktuelle
+        if (newName == null) {
+            return oldName;
+        }
+        //solange immer nach neuen Ersetzungen suchen, bis es keine mehr gibt
+        // -> den letzten
+        //gefundenen Namen zurückgeben
+        while (true) {
+            oldName = newName;
+            newName = oldToNewClassName.get(oldName);
+            if (newName == null) {
+                return oldName;
+            }
+        }
+    }
 
     /////////////////////
     // PathsDefinition //
