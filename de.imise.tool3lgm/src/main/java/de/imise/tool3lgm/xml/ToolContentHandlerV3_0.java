@@ -264,6 +264,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     if (element instanceof Edge) {
                         edges.add((Edge) element);
                     }
+                } else {
+                    System.err.println("Could not proceed element!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }
             } else if (qName.equals("container")) {
                 String hashString = atts.getValue("hash");
