@@ -3,8 +3,6 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.getMaxMasterToSlaveCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.getMinMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
@@ -1564,7 +1562,7 @@ public final class ModelConstants {
         ImmutableSet.Builder<Class<? extends ModelElement>> subordinatedJoinbleTypes = ImmutableSet.<Class<? extends ModelElement>> builder();
         Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
         for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
-            if (getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
+            if (CompositionEdge.getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
                 Class<? extends ModelElement> slaveType = CompositionEdge.getSlaveType(compositionEdgeType);
                 Class<? extends ModelElement>[] instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
                 for (Class<? extends ModelElement> instanciableAssignableClass : instanciableAssignableClasses) {
@@ -1590,7 +1588,7 @@ public final class ModelConstants {
             ImmutableSet.Builder<Class<? extends Edge>> initialSubtypesBuilder = ImmutableSet.<Class<? extends Edge>> builder();
             Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
             for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
-                if (getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
+                if (CompositionEdge.getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
                     initialSubtypesBuilder.add(compositionEdgeType);
                 }
             }
