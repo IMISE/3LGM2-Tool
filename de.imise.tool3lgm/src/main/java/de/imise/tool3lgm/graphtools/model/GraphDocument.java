@@ -5,9 +5,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.getMaxMasterToSlaveCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
@@ -3449,11 +3447,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
         }
-        if (!isConnecting(edgeClass, master.getClass(), slaveClass)) {
+        if (!Edge.isConnecting(edgeClass, master.getClass(), slaveClass)) {
             return null;
         }
         doc.start_transaction(pid);
-        if (master.countConnections(edgeClass) >= getMaxMasterToSlaveCardinality(edgeClass)) {
+        if (master.countConnections(edgeClass) >= CompositionEdge.getMaxMasterToSlaveCardinality(edgeClass)) {
             return null;
         }
         String name = slaveName == null || slaveName.trim().equals("") ? doc.getNextNewName(master.getClearName() + "_", slaveClass) : slaveName;

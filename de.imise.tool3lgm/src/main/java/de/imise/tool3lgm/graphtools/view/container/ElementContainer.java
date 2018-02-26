@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSlaveElementTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSortedEdgeClasses;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
 
@@ -19,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -325,7 +325,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         } else if (additionalLabelTextGenerator != null) {
             additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
         }
-        for (Class<? extends ModelElement> c : getSlaveElementTypes(me.getClass())) {
+        for (Class<? extends ModelElement> c : ModelConstants.getSlaveElementTypes(me.getClass())) {
             for (ElementContainer sC : me.getConnectedContainer(c, doc)) {
                 sC.setVisible(visible);
             }
@@ -662,7 +662,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param initialContainer
      * @return
      */
-    public List<ElementContainer> getSurrogateContainer() {
+    public final List<ElementContainer> getSurrogateContainer() {
         return getSurrogateContainer(this);
     }
 
