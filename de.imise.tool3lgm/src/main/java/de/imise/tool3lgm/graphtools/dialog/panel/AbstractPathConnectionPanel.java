@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForward
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.awt.dnd.DropTarget;
@@ -191,7 +192,19 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends ModelElement> clazz = i == 0 ? startClass : null;
             clazz = clazz == null ? returnValue[i - 1] == FORWARD ? getEndClass(edgeClasses[i - 1]) : getStartClass(edgeClasses[i - 1]) : clazz;
-            returnValue[i] = isStartClass(edgeClasses[i], clazz) ? FORWARD : BACKWARD;
+            boolean isStartClass = isStartClass(edgeClasses[i], clazz);
+            boolean isEndClass = isEndClass(edgeClasses[i], clazz);
+            //für den außergewöhnlichen Fall, dass die übergebene Startklasse sowohl Start- als auch Endelement der aktuellen Kante sein könnte, wird
+            //die Richtung so bestimmt, dass dann die speziellere der beiden Klassen als Startklasse der Kante angesehen wird. Sind beide gleich, wird
+            //die Richtung der Kante auf FORWARD gesetzt.
+            if (isStartClass && isEndClass) {
+                Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClasses[i]);
+                Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClasses[i]);
+                Class<?> startOrEndClass = ReflectionUtils.getMostSpecialElementClass(edgeStartClass, edgeEndClass);
+                returnValue[i] = startOrEndClass == edgeStartClass ? FORWARD : BACKWARD;
+            } else {
+                returnValue[i] = isStartClass ? FORWARD : BACKWARD;
+            }
         }
         return returnValue;
     }
