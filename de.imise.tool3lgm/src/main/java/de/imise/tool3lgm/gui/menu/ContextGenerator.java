@@ -115,77 +115,77 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private static JMenu internals;
+    private JMenu internals;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem delete_selected, delete_selected_from_szenario, join_selected;
+    private JMenuItem delete_selected, delete_selected_from_szenario, join_selected;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem properties, change_layout;
+    private JMenuItem properties, change_layout;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem new_text;
+    private JMenuItem layer_new_textfield, element_new_textfield;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem unlinkToSzenario, selectLinkedSzenario;
+    private JMenuItem unlinkToSzenario, selectLinkedSzenario;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem command_line;
+    private JMenuItem command_line;
 
     /**
      * COMMENTME
      */
-    private static JCheckBoxMenuItem verify, interactive;
+    private JCheckBoxMenuItem verify, interactive;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
+    private JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem color_layer, normalize_layer, layout_layer;
+    private JMenuItem color_layer, normalize_layer, layout_layer;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem show_configs, hide_configs, set_visible, set_invisible;
+    private JMenuItem show_configs, hide_configs, set_visible, set_invisible;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem layer_show_configs, layer_hide_configs;
+    private JMenuItem layer_show_configs, layer_hide_configs;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem aufklappen, zuklappen;
+    private JMenuItem aufklappen, zuklappen;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem cb_copy, cb_cut, cb_paste, cb_clear;
+    private JMenuItem cb_copy, cb_cut, cb_paste, cb_clear;
 
     /**
      * COMMENTME
      */
-    private static JMenuItem undo, redo, queue, consistency;
+    private JMenuItem undo, redo, queue, consistency;
 
     /**
      * COMMENTME
      */
-    private static LGMGraphDocument doc;
+    private LGMGraphDocument doc;
 
     /**
      * COMMENTME
@@ -978,7 +978,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static final JPopupMenu getSingleTraceContextMenu() {
+    private final JPopupMenu getSingleTraceContextMenu() {
         //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
         JPopupMenu menu = new JPopupMenu();
         if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
@@ -1000,7 +1000,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static final JPopupMenu getMultiTraceContextMenu() {
+    private final JPopupMenu getMultiTraceContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         if (menu.getComponentCount() > 0) {
             menu.addSeparator();
@@ -1021,7 +1021,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static final JPopupMenu getTraceContextMenu() {
+    private final JPopupMenu getTraceContextMenu() {
         if (doc.isSingleSelection()) {
             return getSingleTraceContextMenu();
         }
@@ -1054,7 +1054,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static JMenu getNewKnotMenu() {
+    private JMenu getNewKnotMenu() {
         int i;
         switch (doc.getCollection().getActiveLayer()) {
         case 4:
@@ -1098,7 +1098,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static JMenu getLayerMenu() {
+    private JMenu getLayerMenu() {
         JMenu menu = new JMenu(getResString("layer"));
         JPopupMenu popup = getLayerContextMenu();
         for (Component c : popup.getComponents()) {
@@ -1116,7 +1116,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    public static final JPopupMenu getLayerContextMenu() {
+    public final JPopupMenu getLayerContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         menu.add(getNewKnotMenu());
         menu.add(new_text);
@@ -1136,7 +1136,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static JMenu getInternalsMenu() {
+    private JMenu getInternalsMenu() {
         if (!doc.isVerificationMode()) {
             verify.setState(false);
             verify.setActionCommand(VERIFY_ON.toString());
@@ -1194,7 +1194,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private static void check_undo_redo() {
+    private void check_undo_redo() {
         if (doc == null) {
             undo.setEnabled(false);
             redo.setEnabled(false);
@@ -1591,35 +1591,35 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private static void left_noshift_outside() {
+    private void left_noshift_outside() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private static void left_layer_noshift_none() {
+    private void left_layer_noshift_none() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private static void left_layer_noshift_knots() {
+    private void left_layer_noshift_knots() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private static void left_layer_noshift_traces() {
+    private void left_layer_noshift_traces() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private static void left_layer_noshift_multi() {
+    private void left_layer_noshift_multi() {
         doc.deselectAll(false);
     }
 
@@ -1632,14 +1632,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private static void left_layer_shift_knots() {
+    private void left_layer_shift_knots() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private static void left_layer_shift_traces() {
+    private void left_layer_shift_traces() {
         doc.deselectAll(false);
     }
 
@@ -2023,7 +2023,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      * @return Analysemenü
      */
-    private static JMenu getAnalyseMenu() {
+    private JMenu getAnalyseMenu() {
         JMenu menu = new JMenu(getResString("analysis"));
         ElementContainer ec = doc.getLastSelected();
         if (ec != null && ec.getElement() instanceof Node) {
@@ -2075,7 +2075,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private static JMenuItem getAddToModelMenu() {
+    private JMenuItem getAddToModelMenu() {
         if (Static.getCollectionCount() < 2) {
             return null;
         }
@@ -2092,7 +2092,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param gdcoll
      * @return
      */
-    private static final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
+    private final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
         JMenu menu = new JMenu(gdcoll.getName());
         JMenuItem item = new JMenuItem(getResString("main_model"));
         item.addActionListener(e -> doc.copySelectedToModel(gdcoll.getMainGraphDocument()));
