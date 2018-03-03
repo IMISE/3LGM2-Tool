@@ -1304,7 +1304,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      *
      */
-    private void exec_command(final String line, final int pid) {
+    private void exec_command_old(final String line, final int pid) {
         try {
             if (isVerificationMode()) {
                 System.out.println(line);
@@ -1351,6 +1351,61 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             Log(e);
             JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private void exec_command(final String line, final int pid) {
+        try {
+            if (isVerificationMode()) {
+                System.out.println(line);
+            }
+            if (Strings.isNullOrEmpty(line)) {
+                return;
+            }
+            int wordStart = 0;
+            int nextWhitespace = line.indexOf(' ');
+            String commandName;
+            List<String> args = null;
+            //kein weiteres Leerzeichen gefunden
+            if (nextWhitespace < 0) {
+                commandName = line;
+            } else {
+                commandName = line.substring(wordStart, nextWhitespace);
+                args = new ArrayList<>();
+                wordStart = nextWhitespace + 1;
+                while (wordStart < line.length()) {
+                    nextWhitespace = line.indexOf(' ', wordStart);
+                    if (nextWhitespace < 0) {
+                        nextWhitespace = line.length();
+                    }
+                    String arg = line.substring(wordStart, nextWhitespace);
+                    args.add(arg);
+                    wordStart = nextWhitespace + 1;
+                }
+            }
+            GDCommands command = getCommand(commandName);
+            String[] argv = args == null ? new String[0] : args.toArray(new String[0]);
+
+            dispatch_command(command, argv, pid);
+        } catch (Exception e) {
+            Log(e);
+            JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private static GDCommands getCommand(final String commandName) {
+        //je nach globaler Option können die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
+        //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
+        //muss man testen, ob sich das Kommando auf int casten lässt.
+        GDCommands command = null;
+        try {
+            //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
+            //versuche den Index zu parsen und das Kommando
+            command = GDCommands.values()[new Integer(commandName).intValue()];
+        } catch (Exception e) {
+            //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
+            command = GDCommands.valueOf(commandName);
+        }
+        return command;
     }
 
     private void Log(final Exception e) {
