@@ -187,7 +187,7 @@ public abstract class PathsDefinition {
                                         edgeClass
                                 }
                         }, new String[] {
-                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("text_und") + " "),
+                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("und") + " "),
                                 forwardName,
                                 ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
                         });
