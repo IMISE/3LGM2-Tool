@@ -130,7 +130,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JMenuItem layer_new_textfield, element_new_textfield;
+    private JMenuItem new_text;
 
     /**
      * COMMENTME
