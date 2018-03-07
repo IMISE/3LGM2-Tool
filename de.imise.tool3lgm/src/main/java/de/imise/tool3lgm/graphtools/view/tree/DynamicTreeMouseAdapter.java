@@ -24,7 +24,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
@@ -97,7 +96,6 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
     public void mouseExited(final MouseEvent e) {
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void mousePressed(final MouseEvent e) {
         if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
@@ -138,7 +136,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {
-                    JPopupMenu pm = ContextGenerator.getLayerContextMenu();
+                    JPopupMenu pm = Tool3lgm.getContextGenerator().getLayerContextMenu();
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
                     }
