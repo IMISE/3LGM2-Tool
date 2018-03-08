@@ -160,9 +160,9 @@ public class MenuCollection {
                 new JSeparator(), createCheckBoxItem(ModelBrowser.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER));
 
         /** Das Grafik-Optionen-Menu */
-        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", createCheckBoxItem(Graphics.OPTION_USE_RASTER), createCheckBoxItem(Graphics.OPTION_SHOW_RASTER),
-                createCheckBoxItem(Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS), createCheckBoxItem(Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS), Graphics.HIDE_UNHIDE_UNASSOCIATED,
-                createCheckBoxItem(Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS), createCheckBoxItem(PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS), createCheckBoxItem(PartOf.SIGNIFY_COARSEMENT), Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
+        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", Graphics.OPTION_USE_RASTER, Graphics.OPTION_SHOW_RASTER, Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
+                createCheckBoxItem(Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS), Graphics.HIDE_UNHIDE_UNASSOCIATED, Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS, PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS, PartOf.SIGNIFY_COARSEMENT, Graphics.ANALYSIS_COLOR,
+                Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
 
