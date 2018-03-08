@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.HashStringGenerator;
 
 /**
@@ -1002,7 +1003,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
         //wenn es eine Kennzahlformel ist, deren Wert ermittelt werden soll
         if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
             //wenn die globale Option der Berechnung eingeschaltet ist
-            if (UserProperties.isEnableClassificationNumberCalculation()) {
+            if (UserProperties.is(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION)) {
                 //alle berechneten Kennzahl Werte löschen
                 definitions.reset();
                 //falls das reset nicht ausgeführt wurde, da sich nichts geändert

@@ -8,8 +8,8 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 
+import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
-import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * @author AXS
@@ -43,8 +43,7 @@ public class OptionPanel extends AbstractInputPanel {
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten
         if (userField.isClassificationUserField()) {
-            enableClassificationNumberCalculationCheckBox = new JCheckBox(getResString("activate_calculation"));
-            enableClassificationNumberCalculationCheckBox.setSelected(UserProperties.isEnableClassificationNumberCalculation());
+            enableClassificationNumberCalculationCheckBox = new JCheckBox(OptionsActions.Analysis.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION);
             add(enableClassificationNumberCalculationCheckBox);
         }
     }
@@ -52,10 +51,6 @@ public class OptionPanel extends AbstractInputPanel {
     @Override
     public void commit() {
         userField.setTreeVisibility(treeVisCheckBox.isSelected());
-
-        if (enableClassificationNumberCalculationCheckBox != null) {
-            UserProperties.setEnableClassificationNumberCalculation(enableClassificationNumberCalculationCheckBox.isSelected());
-        }
     }
 
     @Override

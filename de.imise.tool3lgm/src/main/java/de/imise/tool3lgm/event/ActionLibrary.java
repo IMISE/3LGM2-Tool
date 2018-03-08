@@ -1030,12 +1030,7 @@ public class ActionLibrary {
             }
 
             /** (De-)Aktiviert die Kennzahlberechnung */
-            public static final Action ACTIVATE_CALCULATION = new GlobalOptionAction(ActionIdentifier.activate_calculation, UserProperties.isEnableClassificationNumberCalculation()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setEnableClassificationNumberCalculation(isSelected());
-                }
-            };
+            public static final Action OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION);
         }
 
         /**

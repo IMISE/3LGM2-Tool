@@ -86,7 +86,7 @@ public class MenuCollection {
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS, OptionsSubMenus.LOCALE_MENU);
 
     /** Das Extras-Menu */
-    public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, createCheckBoxItem(Analysis.ACTIVATE_CALCULATION), new JSeparator(),
+    public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, Analysis.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(),
             ModelConstants.getExtrasActions(false), new JSeparator(), AnalysisActions.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */

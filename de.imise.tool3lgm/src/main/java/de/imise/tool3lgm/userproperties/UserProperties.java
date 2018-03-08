@@ -590,23 +590,6 @@ public class UserProperties {
     }
 
     ///////////////////////////////////////////
-    // enableClassificationNumberCalculation //
-    ///////////////////////////////////////////
-
-    /** Wenn <code>true</code>, werden die Werte von Kennzahlformeln neu berechnet, wenn Änderungen am Modell vorgenommen wurden. */
-    private static boolean enableClassificationNumberCalculation;
-
-    /** @return enableClassificationNumberCalculation */
-    public static boolean isEnableClassificationNumberCalculation() {
-        return enableClassificationNumberCalculation;
-    }
-
-    /** @param b */
-    public static void setEnableClassificationNumberCalculation(final boolean b) {
-        enableClassificationNumberCalculation = b;
-    }
-
-    ///////////////////////////////////////////
     // RMI - Funktion, aktivierung und Ports //
     ///////////////////////////////////////////
 
