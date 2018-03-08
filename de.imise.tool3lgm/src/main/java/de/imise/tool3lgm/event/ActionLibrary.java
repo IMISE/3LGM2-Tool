@@ -1161,7 +1161,7 @@ public class ActionLibrary {
         public static class ModelBrowser {
 
             /** (De-)Aktiviert das Teilmodell-spezifische Layout des ModelBrowsers */
-            public static final Action SUBMODEL_SPECIFIC = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
+            public static final Action OPTION_ENABLE_SUBMODEL_BROWSER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
 
             /** (De-)Aktiviert das parallele Anzeigen aller ModelBrowser */
             public static final Action OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);

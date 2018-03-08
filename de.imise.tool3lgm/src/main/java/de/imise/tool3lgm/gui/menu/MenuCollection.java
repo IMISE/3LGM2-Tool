@@ -155,7 +155,7 @@ public class MenuCollection {
                 createCheckBoxItem(PartOf.OPTION_SHOW_PART_OF_HIERARCHY));
 
         /** Das Browser-Optionen-Menu */
-        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", createCheckBoxItem(ModelBrowser.SUBMODEL_SPECIFIC), createCheckBoxItem(ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER),
+        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", createCheckBoxItem(ModelBrowser.OPTION_ENABLE_SUBMODEL_BROWSER), createCheckBoxItem(ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER),
                 //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
                 new JSeparator(), createCheckBoxItem(ModelBrowser.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER));
 
