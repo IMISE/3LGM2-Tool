@@ -277,7 +277,10 @@ public class UserProperties {
         OPTION_SHOW_PART_OF_HIERARCHY,
         /** Kanten werden nur für selektierte Elemente in der Grafik gemalt (true) oder alle Kanten werde gezeichnet (false) */
         OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
-        /** Wenn man den UserProperties Farben gibt, werden sie im Baum Farbig geschrieben. Das ist aktuell nicht komplett implementiert. */
+        /**
+         * Wenn man den UserProperties Farben gibt, werden sie im Baum Farbig geschrieben. Das ist aktuell nicht komplett implementiert.D.h. hierfür
+         * gibt es keine ins Menü eingebundene Umschalt-Action und der Wert ist immer true
+         */
         OPTION_USE_PROPERTY_COLORS,
         /** Raster in der Grafik an/aus */
         OPTION_USE_RASTER,
@@ -285,8 +288,6 @@ public class UserProperties {
         OPTION_SHOW_RASTER,
         /** Konfigurationen bunt oder alle schwarz */
         OPTION_ASSIGN_CONFIGURATION_COLORS,
-        /** Tooltips an/aus */
-        OPTION_SHOW_TOOL_TIPS,
         /** Analyseergebnisse werden automatisch in einem neuen Teilmodell eingefügt (true) oder nur in der Grafik hervorgehoben */
         OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT,
         /** Medienbrüche werden in der Grafik angezeigt */
@@ -299,7 +300,7 @@ public class UserProperties {
         OPTION_SHOW_REMOVE_WARNING;
 
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_ENABLE_SUBMODEL_BROWSER,
-                OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_TOOL_TIPS, OPTION_SHOW_REMOVE_WARNING);
+                OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING);
 
         private boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);
