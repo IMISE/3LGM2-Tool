@@ -290,8 +290,6 @@ public class UserProperties {
         OPTION_ASSIGN_CONFIGURATION_COLORS,
         /** Analyseergebnisse werden automatisch in einem neuen Teilmodell eingefügt (true) oder nur in der Grafik hervorgehoben */
         OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT,
-        /** Medienbrüche werden in der Grafik angezeigt */
-        OPTION_SHOW_MEDIUM_BREAKS,
         /** Kennzahlberechnung an/aus */
         OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
         /** Konsistenzcheck an/aus */
@@ -498,28 +496,6 @@ public class UserProperties {
     /** @param b */
     public static void setShowExpansionSign(final boolean b) {
         showExpansionSign = b;
-    }
-
-    //////////////////////
-    // showMediumBreaks //
-    //////////////////////
-
-    /**
-     * Medienbrüche anzeigen.<br>
-     * Diese Option wird nicht gespeichert, weil es vertretbar ist, dass der Benutzer die Option wieder
-     * einschaltet, wenn ihn der Wert interessiert. Außerdem ist diese Option eher modellspezifisch
-     * als eine globale Benutzeroption.
-     */
-    private static boolean showMediumBreaks;
-
-    /** @return showMediumBreaks */
-    public static boolean isShowMediumBreaks() {
-        return showMediumBreaks;
-    }
-
-    /** @param b */
-    public static void setShowMediumBreaks(final boolean b) {
-        showMediumBreaks = b;
     }
 
     ///////////////////
