@@ -19,6 +19,6 @@ public class UserPropertyBooleanChangeAction extends GlobalOptionAction {
 
     @Override
     protected void changeOption() {
-        UserProperties.set(booleanProperty, isSelected());
+        UserProperties.set(booleanProperty, !isSelected());
     }
 }
