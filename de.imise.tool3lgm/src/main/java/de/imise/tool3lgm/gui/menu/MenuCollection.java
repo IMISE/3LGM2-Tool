@@ -92,8 +92,8 @@ public class MenuCollection {
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS, OptionsSubMenus.LOCALE_MENU);
 
     /** Das Extras-Menu */
-    public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, Analysis.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(),
-            ModelConstants.getExtrasActions(false), new JSeparator(), BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
+    public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
+            new JSeparator(), ModelConstants.getExtrasActions(false), new JSeparator(), BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();

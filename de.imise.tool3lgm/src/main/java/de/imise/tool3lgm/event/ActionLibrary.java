@@ -1023,8 +1023,6 @@ public class ActionLibrary {
                 return returnActions;
             }
 
-            /** (De-)Aktiviert die Kennzahlberechnung */
-            public static final Action OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION);
         }
 
         /**
