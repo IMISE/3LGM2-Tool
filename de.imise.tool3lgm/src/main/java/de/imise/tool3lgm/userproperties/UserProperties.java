@@ -30,6 +30,12 @@ import de.imise.util.io.FileHandler;
  */
 public class UserProperties {
 
+    private static final String TRANSIENT_PROPERTY_NAME_PREFIX = "TRANSIENT_";
+
+    private static final boolean isTransient(final Object propertyName) {
+        return propertyName.toString().startsWith(TRANSIENT_PROPERTY_NAME_PREFIX);
+    }
+
     static Properties properties = new Properties();
 
     /**
@@ -252,7 +258,18 @@ public class UserProperties {
                 Tool3lgmConstants.USER_INFO_FILE.createNewFile();
             }
             FileOutputStream out = new FileOutputStream(Tool3lgmConstants.USER_INFO_FILE);
+            //vor dem Speichern alle transienten Properties entfernen und danach wieder hinzufügen
+            Properties transientProperties = new Properties();
+            for (Object key : properties.keySet()) {
+                if (isTransient(key)) {
+                    transientProperties.put(key, properties.get(key));
+                }
+            }
+            for (Object key : transientProperties.keySet()) {
+                properties.remove(key);
+            }
             properties.store(out, "Tool3lgm-Version " + Tool3lgmConstants.TOOL_VERSION);
+            properties.putAll(transientProperties);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -295,10 +312,15 @@ public class UserProperties {
         /** Konsistenzcheck an/aus */
         OPTION_CHECK_CONSISTENCY,
         /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
-        OPTION_SHOW_REMOVE_WARNING;
+        OPTION_SHOW_REMOVE_WARNING,
+        /**
+         * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
+         * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer eingeschaltet.
+         */
+        TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
 
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_ENABLE_SUBMODEL_BROWSER,
-                OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING);
+                OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
 
         private boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);
