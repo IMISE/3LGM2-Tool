@@ -81,7 +81,6 @@ public enum ActionIdentifier {
 
     // options
     // General
-    removeWarning,
     // browserOptions
     submodel_specific,
     show_userdefinded_properties,

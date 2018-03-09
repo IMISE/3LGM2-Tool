@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Action;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
@@ -516,18 +515,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // - alle selektierten Elemente sind unique (= ohne grafische Repräsentation sind sie immer in allen Teilmodellen)
         // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
-            if ((Boolean) ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING.getValue(Action.SELECTED_KEY)) {
-                JCheckBox cb = new JCheckBox(getResString("dont_ask_again"));
-                cb.setSelected(false);
+            if (UserProperties.is(BooleanProperty.OPTION_SHOW_REMOVE_WARNING)) {
+                JCheckBox dontAskAgain = new JCheckBox(getResString("dont_ask_again"));
+                dontAskAgain.setSelected(false);
                 Object[] cont = new Object[] {
                         getResString("remove_element_warning"),
-                        cb
+                        dontAskAgain
                 };
                 int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                 }
-                ActionLibrary.OptionsActions.Gerneral.SHOW_REMOVE_WARNING.putValue(Action.SELECTED_KEY, !cb.isSelected());
+                if (dontAskAgain.isSelected()) {
+                    ActionLibrary.OptionsActions.Gerneral.OPTION_SHOW_REMOVE_WARNING.perform();
+                }
             } else {
                 dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
             }

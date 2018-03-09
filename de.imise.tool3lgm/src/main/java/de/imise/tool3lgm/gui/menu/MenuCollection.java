@@ -4,7 +4,6 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
-import static de.imise.util.swing.menu.MenuCreator.createCheckBoxItem;
 
 import java.awt.Component;
 
@@ -151,18 +150,16 @@ public class MenuCollection {
     static class OptionsSubMenus {
 
         /** Menu für allgemeine Optionen */
-        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", createCheckBoxItem(Gerneral.SHOW_REMOVE_WARNING), createCheckBoxItem(PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS),
-                createCheckBoxItem(PartOf.OPTION_SHOW_PART_OF_HIERARCHY));
+        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", Gerneral.OPTION_SHOW_REMOVE_WARNING, PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, PartOf.OPTION_SHOW_PART_OF_HIERARCHY);
 
         /** Das Browser-Optionen-Menu */
-        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", createCheckBoxItem(ModelBrowser.OPTION_ENABLE_SUBMODEL_BROWSER), createCheckBoxItem(ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER),
+        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", ModelBrowser.OPTION_ENABLE_SUBMODEL_BROWSER, ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
                 //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
-                new JSeparator(), createCheckBoxItem(ModelBrowser.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER));
+                new JSeparator(), ModelBrowser.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
 
         /** Das Grafik-Optionen-Menu */
-        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", Graphics.OPTION_USE_RASTER, Graphics.OPTION_SHOW_RASTER, Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
-                createCheckBoxItem(Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS), Graphics.HIDE_UNHIDE_UNASSOCIATED, Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS, PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS, PartOf.SIGNIFY_COARSEMENT, Graphics.ANALYSIS_COLOR,
-                Graphics.RENDERING_OPTIONS
+        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", Graphics.OPTION_USE_RASTER, Graphics.OPTION_SHOW_RASTER, Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS, Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
+                Graphics.HIDE_UNHIDE_UNASSOCIATED, Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS, PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS, PartOf.SIGNIFY_COARSEMENT, Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
 

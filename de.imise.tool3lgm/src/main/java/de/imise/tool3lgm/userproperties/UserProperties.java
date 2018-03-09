@@ -605,20 +605,4 @@ public class UserProperties {
         return rmiRegistryPort;
     }
 
-    /**
-     * Wenn <code>true</code>, wird vor dem Löschen von Elementen aus dem Hauptmodell
-     * und allen Teilmodellen, eine Warnung angezeigt.
-     */
-    private static boolean showRemoveWarning = true;
-
-    /** @return {@link #showRemoveWarning} */
-    public static boolean isShowRemoveWarning() {
-        return showRemoveWarning;
-    }
-
-    /** @param b */
-    public static void setShowRemoveWarning(final boolean b) {
-        showRemoveWarning = b;
-    }
-
 }

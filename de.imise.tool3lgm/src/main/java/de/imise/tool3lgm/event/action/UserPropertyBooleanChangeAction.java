@@ -44,7 +44,7 @@ public class UserPropertyBooleanChangeAction extends GlobalOptionAction {
             @Override
             public void ancestorAdded(final AncestorEvent event) {
                 //diese Funktion wird beim Anzeigen des MenuItems ausgelöst. Dabei muss der Selektionszustand
-                //des Items noch einma geprüft werden, falls die zu grunde liegende Property woanders als über
+                //des Items noch einmal geprüft werden, falls die zu grunde liegende Property woanders als über
                 //dieses Item geändert wurde
                 updateSelection();
             }
