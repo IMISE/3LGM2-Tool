@@ -162,9 +162,9 @@ public class MenuCollection {
                 new JSeparator(), BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
 
         /** Das Grafik-Optionen-Menu */
-        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", Graphics.OPTION_USE_RASTER, Graphics.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
-                Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.HIDE_UNHIDE_UNASSOCIATED, Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN,
-                Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
+        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", BooleanProperty.OPTION_USE_RASTER, BooleanProperty.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
+                BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.HIDE_UNHIDE_UNASSOCIATED, BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS,
+                BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
 

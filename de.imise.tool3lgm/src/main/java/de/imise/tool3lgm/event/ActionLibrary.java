@@ -38,7 +38,6 @@ import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.event.action.SubmodelAction;
-import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
@@ -85,7 +84,6 @@ import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
@@ -1054,15 +1052,6 @@ public class ActionLibrary {
                 }
             };
 
-            /** (De-)Aktiviert die Verwendung eines Rasters */
-            public static final Action OPTION_USE_RASTER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_USE_RASTER);
-
-            /** (De-)Aktiviert das Zeichnen eines Rasters */
-            public static final Action OPTION_SHOW_RASTER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_RASTER);
-
-            /** (De-)Aktiviert das Kennzeichnen von Modelelementen mit verknüpften Teilmodellen */
-            public static final Action OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS);
-
             /** Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde. */
             public static final StaticAction HIDE_UNHIDE_UNASSOCIATED[] = create_HIDE_UNHIDE_UNASSOCIATED_Actions();
 
@@ -1104,9 +1093,6 @@ public class ActionLibrary {
                 }
                 return actions;
             }
-
-            /** (De-)Aktiviert die automatische Farbzuweisung zu Konfigurationslinien */
-            public static final Action OPTION_ASSIGN_CONFIGURATION_COLORS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS);
 
         }
 
