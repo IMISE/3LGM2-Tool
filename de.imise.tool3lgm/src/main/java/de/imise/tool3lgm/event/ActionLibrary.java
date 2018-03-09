@@ -1121,29 +1121,6 @@ public class ActionLibrary {
             public static final Action[] CHANGE_LOCALE_ACTIONS = ChangeLocaleAction.getAllActions();
         }
 
-        /**
-         * Teil-Von-Beziehnung-Optionen
-         *
-         * @author fstephan
-         */
-        public static class PartOf {
-
-            /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Vererbung von Eigenschaften */
-            public static final Action OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
-
-            /** (De-)Aktiviert das Berücksichtigen übergeordneter Elemente bei der Vererbung von Eigenschaften */
-            public static final Action OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
-
-            /** (De-)Aktiviert das hierarchische Anzeigen der Part-Of-Beziehnung im ModelBrowser */
-            public static final Action OPTION_SHOW_PART_OF_HIERARCHY = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
-
-            /** (De-)Aktiviert das Anzeigen der Vergröberung */
-            public static final Action TRANSIENT_OPTION_SHOW_EXPANSION_SIGN = new UserPropertyBooleanChangeAction(BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
-
-            /** (De-)Aktiviert das automatische Verschieben untergeordneter Elemente */
-            public static final Action OPTION_GRAPH_MOVE_SUBELEMENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);
-        }
-
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
         public static final Action OPEN_RMI_SETTINGS = new StaticAction(ActionIdentifier.rmi_settings, PPP) {
 

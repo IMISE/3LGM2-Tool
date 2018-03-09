@@ -30,7 +30,6 @@ import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Locale;
-import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.PartOf;
 import de.imise.tool3lgm.event.ActionLibrary.SubmodelActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
@@ -155,7 +154,7 @@ public class MenuCollection {
     static class OptionsSubMenus {
 
         /** Menu für allgemeine Optionen */
-        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", BooleanProperty.OPTION_SHOW_REMOVE_WARNING, PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, PartOf.OPTION_SHOW_PART_OF_HIERARCHY);
+        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", BooleanProperty.OPTION_SHOW_REMOVE_WARNING, BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
 
         /** Das Browser-Optionen-Menu */
         public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER, BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
@@ -164,8 +163,8 @@ public class MenuCollection {
 
         /** Das Grafik-Optionen-Menu */
         public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", Graphics.OPTION_USE_RASTER, Graphics.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
-                Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.HIDE_UNHIDE_UNASSOCIATED, Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS, PartOf.OPTION_GRAPH_MOVE_SUBELEMENTS, PartOf.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, Graphics.ANALYSIS_COLOR,
-                Graphics.RENDERING_OPTIONS
+                Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.HIDE_UNHIDE_UNASSOCIATED, Graphics.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN,
+                Graphics.ANALYSIS_COLOR, Graphics.RENDERING_OPTIONS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
 
