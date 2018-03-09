@@ -28,7 +28,6 @@ import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.LayerLayout;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.Level;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
-import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Gerneral;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Locale;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.ModelBrowser;
@@ -157,7 +156,7 @@ public class MenuCollection {
     static class OptionsSubMenus {
 
         /** Menu für allgemeine Optionen */
-        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", Gerneral.OPTION_SHOW_REMOVE_WARNING, PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, PartOf.OPTION_SHOW_PART_OF_HIERARCHY);
+        public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", BooleanProperty.OPTION_SHOW_REMOVE_WARNING, PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, PartOf.OPTION_SHOW_PART_OF_HIERARCHY);
 
         /** Das Browser-Optionen-Menu */
         public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", ModelBrowser.OPTION_ENABLE_SUBMODEL_BROWSER, ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,

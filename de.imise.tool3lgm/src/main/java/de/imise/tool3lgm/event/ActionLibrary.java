@@ -1026,17 +1026,6 @@ public class ActionLibrary {
         }
 
         /**
-         * Allgemeine Optionen
-         *
-         * @author fstephan
-         */
-        public static class Gerneral {
-
-            /** (De-)Aktiviert das Anzeigen einer Warnung vor dem Löschen eines Elements */
-            public static final Action OPTION_SHOW_REMOVE_WARNING = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_REMOVE_WARNING);
-        }
-
-        /**
          * Graphik-Optionen
          *
          * @author fstephan
