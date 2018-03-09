@@ -1177,12 +1177,7 @@ public class ActionLibrary {
             public static final Action OPTION_SHOW_PART_OF_HIERARCHY = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
 
             /** (De-)Aktiviert das Anzeigen der Vergröberung */
-            public static final Action SIGNIFY_COARSEMENT = new GlobalOptionAction(ActionIdentifier.signify_coarsement, UserProperties.isShowExpansionSign()) {
-                @Override
-                public void changeOption() {
-                    UserProperties.setShowExpansionSign(isSelected());
-                }
-            };
+            public static final Action TRANSIENT_OPTION_SHOW_EXPANSION_SIGN = new UserPropertyBooleanChangeAction(BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
 
             /** (De-)Aktiviert das automatische Verschieben untergeordneter Elemente */
             public static final Action OPTION_GRAPH_MOVE_SUBELEMENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);

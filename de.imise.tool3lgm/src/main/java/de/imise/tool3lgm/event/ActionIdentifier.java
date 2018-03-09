@@ -89,7 +89,6 @@ public enum ActionIdentifier {
     rendering_options,
     HIDE_UNASSOCIATED,
     UNHIDE_ALL,
-    signify_coarsement,
     rmi_settings,
     // localeOptions
     german,

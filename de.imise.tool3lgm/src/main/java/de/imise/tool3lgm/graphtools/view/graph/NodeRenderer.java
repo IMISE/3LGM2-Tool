@@ -107,7 +107,7 @@ public final class NodeRenderer {
         }
 
         Stroke str = gc.getStroke();
-        if (UserProperties.isShowExpansionSign() && !kc.isExpanded()) {
+        if (UserProperties.is(BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN) && !kc.isExpanded()) {
             gc.setStroke(neStroke);
         }
         boolean isResult = doc.isAnalysisResult(kc);

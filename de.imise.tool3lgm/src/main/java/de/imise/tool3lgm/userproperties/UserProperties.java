@@ -499,27 +499,6 @@ public class UserProperties {
         return rasterWidth;
     }
 
-    ///////////////////////
-    // showExpansionSign //
-    ///////////////////////
-
-    /**
-     * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
-     * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer
-     * eingeschaltet.
-     */
-    private static transient boolean showExpansionSign = true;
-
-    /** @return showExpansionSign */
-    public static boolean isShowExpansionSign() {
-        return showExpansionSign;
-    }
-
-    /** @param b */
-    public static void setShowExpansionSign(final boolean b) {
-        showExpansionSign = b;
-    }
-
     ///////////////////
     // xslSearchDirs //
     ///////////////////
