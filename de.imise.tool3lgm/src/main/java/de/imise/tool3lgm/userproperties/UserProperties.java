@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.Action;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.collections4.map.Flat3Map;
@@ -330,7 +329,7 @@ public class UserProperties {
         }
 
         @Override
-        public Action getAction() {
+        public UserPropertyBooleanChangeAction getAction() {
             return new UserPropertyBooleanChangeAction(this);
         }
 

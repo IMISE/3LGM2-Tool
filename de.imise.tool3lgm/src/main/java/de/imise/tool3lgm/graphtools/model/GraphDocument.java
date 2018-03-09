@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
@@ -39,7 +38,6 @@ import javax.swing.SwingConstants;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
@@ -528,7 +526,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                 }
                 if (dontAskAgain.isSelected()) {
-                    new JButton(ActionLibrary.OptionsActions.Gerneral.OPTION_SHOW_REMOVE_WARNING).doClick();
+                    BooleanProperty.OPTION_SHOW_REMOVE_WARNING.getAction().perform();
                 }
             } else {
                 dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
