@@ -990,9 +990,6 @@ public class ActionLibrary {
          */
         public static class Analysis {
 
-            /** (De-)Aktiviert das Erzeugen eines Teilmodells für die Analyse */
-            public static final Action OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT);
-
             public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
 
             private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {

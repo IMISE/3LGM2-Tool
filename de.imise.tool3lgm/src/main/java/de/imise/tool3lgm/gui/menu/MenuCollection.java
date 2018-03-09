@@ -39,7 +39,7 @@ import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.event.ActionSource;
@@ -86,14 +86,14 @@ public class MenuCollection {
 
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
-            Analysis.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
+            BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, ModelConstants.getAnalysisDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.OPEN_RMI_SETTINGS, OptionsSubMenus.LOCALE_MENU);
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, Analysis.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(),
-            ModelConstants.getExtrasActions(false), new JSeparator(), UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
+            ModelConstants.getExtrasActions(false), new JSeparator(), BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();
