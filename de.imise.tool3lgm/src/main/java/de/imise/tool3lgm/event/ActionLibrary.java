@@ -1032,9 +1032,6 @@ public class ActionLibrary {
          */
         public static class Graphics {
 
-            /** (De-)Aktiviert das Zeichnen von Kanten nur für selektierte Elemente */
-            public static final Action OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
-
             /**
              * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
              * Grafik hervorgehovben werden
