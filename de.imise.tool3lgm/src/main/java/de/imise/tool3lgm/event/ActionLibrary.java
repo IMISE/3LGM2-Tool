@@ -348,9 +348,6 @@ public class ActionLibrary {
             }
         };
 
-        /** Aktiviert die Konsistenz-Prüfung */
-        public static final Action OPTION_CHECK_CONSISTENCY = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_CHECK_CONSISTENCY);
-
     }
 
     public static class ContextActions {

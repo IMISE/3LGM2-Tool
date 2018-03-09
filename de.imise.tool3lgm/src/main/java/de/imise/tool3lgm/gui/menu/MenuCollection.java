@@ -39,8 +39,10 @@ import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.menu.DynamicMenu;
 import de.imise.util.swing.menu.MenuCreator;
 import de.imise.util.swing.menu.MenuScroller;
@@ -53,6 +55,11 @@ import de.imise.util.swing.menu.MenuScroller;
 public class MenuCollection {
 
     private static JMenu createMenu(final String titleResKey, final Object... menuEntries) {
+        for (int i = 0; i < menuEntries.length; i++) {
+            if (menuEntries[i] instanceof ActionSource) {
+                menuEntries[i] = ((ActionSource) menuEntries[i]).getAction();
+            }
+        }
         return MenuCreator.createMenu(getResString(titleResKey), menuEntries);
     }
 
@@ -86,7 +93,7 @@ public class MenuCollection {
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, Analysis.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(),
-            ModelConstants.getExtrasActions(false), new JSeparator(), AnalysisActions.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
+            ModelConstants.getExtrasActions(false), new JSeparator(), UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();
