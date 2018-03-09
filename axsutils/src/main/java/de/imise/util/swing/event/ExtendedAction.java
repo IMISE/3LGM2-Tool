@@ -8,6 +8,7 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
@@ -413,4 +414,13 @@ public abstract class ExtendedAction extends AbstractAction {
         sb.append("\n" + super.toString());
         return sb.toString();
     }
+
+    /** Unterklassen können diese Funktion überschreiben und gleich ein passendes MenuItem erzeugen */
+    public JMenuItem createMenuItem() {
+        if (isOptionAction) {
+            return new JCheckBoxMenuItem(this);
+        }
+        return new JMenuItem(this);
+    };
+
 }
