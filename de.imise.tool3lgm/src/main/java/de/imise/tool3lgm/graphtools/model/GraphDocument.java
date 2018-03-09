@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
@@ -527,7 +528,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                 }
                 if (dontAskAgain.isSelected()) {
-                    ActionLibrary.OptionsActions.Gerneral.OPTION_SHOW_REMOVE_WARNING.perform();
+                    new JButton(ActionLibrary.OptionsActions.Gerneral.OPTION_SHOW_REMOVE_WARNING).doClick();
                 }
             } else {
                 dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
