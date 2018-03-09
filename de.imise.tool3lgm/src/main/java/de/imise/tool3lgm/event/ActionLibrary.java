@@ -1125,23 +1125,6 @@ public class ActionLibrary {
         }
 
         /**
-         * Browser-Optionen
-         *
-         * @author fstephan
-         */
-        public static class ModelBrowser {
-
-            /** (De-)Aktiviert das Teilmodell-spezifische Layout des ModelBrowsers */
-            public static final Action OPTION_ENABLE_SUBMODEL_BROWSER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
-
-            /** (De-)Aktiviert das parallele Anzeigen aller ModelBrowser */
-            public static final Action OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
-
-            /** (De-)Aktiviert das Anzeigen der benutzdefinierten Eigenschaften im ModelBrowser */
-            public static final Action OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER = new UserPropertyBooleanChangeAction(BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
-        }
-
-        /**
          * Teil-Von-Beziehnung-Optionen
          *
          * @author fstephan

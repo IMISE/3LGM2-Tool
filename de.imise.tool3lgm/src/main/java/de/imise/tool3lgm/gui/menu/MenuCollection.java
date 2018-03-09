@@ -30,7 +30,6 @@ import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Locale;
-import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.ModelBrowser;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.PartOf;
 import de.imise.tool3lgm.event.ActionLibrary.SubmodelActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
@@ -159,9 +158,9 @@ public class MenuCollection {
         public static final JMenu GENERAL_OPTIONS_MENU = createMenu("general", BooleanProperty.OPTION_SHOW_REMOVE_WARNING, PartOf.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, PartOf.OPTION_SHOW_PART_OF_HIERARCHY);
 
         /** Das Browser-Optionen-Menu */
-        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", ModelBrowser.OPTION_ENABLE_SUBMODEL_BROWSER, ModelBrowser.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
+        public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER, BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
                 //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
-                new JSeparator(), ModelBrowser.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
+                new JSeparator(), BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
 
         /** Das Grafik-Optionen-Menu */
         public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", Graphics.OPTION_USE_RASTER, Graphics.OPTION_SHOW_RASTER, Graphics.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS, Graphics.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
