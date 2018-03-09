@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.Action;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.collections4.map.Flat3Map;
@@ -22,7 +23,9 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.util.io.FileHandler;
+import de.imise.util.swing.event.ActionSource;
 
 /**
  * @author AXS
@@ -275,7 +278,7 @@ public class UserProperties {
         }
     }
 
-    public static enum BooleanProperty {
+    public static enum BooleanProperty implements ActionSource {
         /** Kennzeichne ModelElemente mit verknüpftem Teilmodell */
         OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
         /** Elemente erben Eigenschaften ihrer Teile (diese Option ist nur in Ausnahmefällen sinnvoll) */
@@ -324,6 +327,11 @@ public class UserProperties {
 
         private boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);
+        }
+
+        @Override
+        public Action getAction() {
+            return new UserPropertyBooleanChangeAction(this);
         }
 
     }
