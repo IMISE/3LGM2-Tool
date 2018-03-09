@@ -127,9 +127,7 @@ public class MenuCreator {
         } else if (entry instanceof Action) {
             if (entry instanceof ExtendedAction) {
                 ExtendedAction action = (ExtendedAction) entry;
-                if (action.isOptionAction()) {
-                    item = createCheckBoxItem(action);
-                }
+                item = action.createMenuItem();
             }
             if (item == null) {
                 item = new JMenuItem((Action) entry);
