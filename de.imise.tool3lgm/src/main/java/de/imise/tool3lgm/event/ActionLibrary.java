@@ -784,7 +784,7 @@ public class ActionLibrary {
             };
 
             /** Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde. */
-            public static final StaticAction HIDE_UNHIDE_UNASSOCIATED[] = create_HIDE_UNHIDE_UNASSOCIATED_Actions();
+            public static final GraphFrameAction HIDE_UNHIDE_UNASSOCIATED[] = create_HIDE_UNHIDE_UNASSOCIATED_Actions();
 
             /**
              * Erzeugt das Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde.
@@ -792,27 +792,29 @@ public class ActionLibrary {
              * @param hide
              * @return
              */
-            private static final StaticAction[] create_HIDE_UNHIDE_UNASSOCIATED_Actions() {
+            private static final GraphFrameAction[] create_HIDE_UNHIDE_UNASSOCIATED_Actions() {
                 List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = getGraphViewDefinition().getHidableIfNotConnected();
                 if (hidableIfNotConnected == null || hidableIfNotConnected.isEmpty()) {
                     return null;
                 }
-                StaticAction[] actions = new StaticAction[hidableIfNotConnected.size() * 2];
+                GraphFrameAction[] actions = new GraphFrameAction[hidableIfNotConnected.size() * 2];
                 for (int i = 0; i < actions.length; i++) {
                     Pair<Class<? extends ModelElement>, Class<? extends Edge>> hidable = hidableIfNotConnected.get(i / 2);
                     Class<? extends ModelElement> elementClass = hidable.getFirstItem();
                     final boolean hide = i % 2 == 0;
-                    StaticAction hideAction = new StaticAction(hide ? ActionIdentifier.HIDE_UNASSOCIATED : ActionIdentifier.UNHIDE_ALL) {
+                    GraphFrameAction hideAction = new GraphFrameAction(hide ? ActionIdentifier.HIDE_UNASSOCIATED : ActionIdentifier.UNHIDE_ALL) {
                         @Override
-                        public void actionPerformed(final ActionEvent e) {
+                        public void actionPerformed() {
                             if (!isEnabled()) {
                                 return;
                             }
+                            String commandString;
                             if (hide) {
-                                exec(GDCommands.HIDE_UNASSOCIATED, elementClass.getSimpleName() + " " + hidable.getSecondItem().getSimpleName());
+                                commandString = GDCommands.HIDE_UNASSOCIATED.name() + " " + elementClass.getSimpleName() + " " + hidable.getSecondItem().getSimpleName();
                             } else {
-                                exec(GDCommands.UNHIDE_ALL, elementClass.getSimpleName());
+                                commandString = GDCommands.UNHIDE_ALL.name() + " " + elementClass.getSimpleName();
                             }
+                            Static.getSelectedDoc().exec(commandString, TransactionManager.STANDARD_PID);
                         }
                     };
                     //das hier auf keine Fall mit static import ersetzen, weil er dann statt der GDCommands die Action nimmt, die genauso heißen und null sind
