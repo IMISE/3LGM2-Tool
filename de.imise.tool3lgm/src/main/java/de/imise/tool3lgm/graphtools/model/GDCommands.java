@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
+import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -170,6 +171,15 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
     }
 
 }

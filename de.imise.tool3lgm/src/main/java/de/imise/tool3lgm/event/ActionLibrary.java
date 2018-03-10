@@ -32,7 +32,6 @@ import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
-import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
@@ -708,71 +707,6 @@ public class ActionLibrary {
                 new LayoutEditor(new javax.swing.JFrame(), getSelectedDoc());
             }
         };
-
-        /**
-         * Actions für die relative Ausrichtung der Elemente zueinander<br>
-         * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend ausgerichtet.
-         *
-         * @author fstephan
-         */
-        public static class ElementAlignment {
-
-            /**
-             * Horizonzale Ausrichtung
-             *
-             * @author fstephan
-             */
-            public static class Horizontal {
-
-                /** Linksbündige Ausrichtung am zuletzt ausgewählten Element */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT);
-
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (horizontal) */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER);
-
-                /** Rechtsbündige Ausrichtung am zuletzt ausgewählten Element */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT);
-
-            }
-
-            /**
-             * Vertikale Ausrichtung
-             *
-             * @author fstephan
-             */
-            public static class Vertical {
-
-                /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP);
-
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER);
-
-                /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM);
-
-            }
-
-            /**
-             * Größenanpassung
-             *
-             * @author astruebi
-             * @create 13.02.2013
-             */
-            public static class Size {
-
-                /** Ausrichtung am oberen Rand des zuletzt ausgewählten Elements */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
-
-                /** Ausrichtung in der Mitte des zuletzt ausgewählten Elements (vertikal) */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
-
-                /** Ausrichtung am unteren Rand des zuletzt ausgewählten Elements */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH = new GraphMultipleSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
-
-            }
-
-        }
 
         /**
          * Actions für die grafische Darstellung von Elementen. <br>

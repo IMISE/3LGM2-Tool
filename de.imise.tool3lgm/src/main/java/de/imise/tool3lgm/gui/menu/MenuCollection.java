@@ -21,7 +21,6 @@ import de.imise.tool3lgm.event.ActionLibrary.ExtrasActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ExportActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ImportActions;
-import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementAlignment;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementLayout;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementLayout.TextAlignment;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.Level;
@@ -137,10 +136,9 @@ public class MenuCollection {
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten
-                "elementAlignmentMenu", ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT, ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER,
-                ElementAlignment.Horizontal.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT, new JSeparator(), ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP,
-                ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER, ElementAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM, new JSeparator(),
-                ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, ElementAlignment.Size.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, new JSeparator(),
+                "elementAlignmentMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT, new JSeparator(),
+                GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM, new JSeparator(),
+                GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH, new JSeparator(),
                 ElementAlignmentDialog.getElementAlignmentAction());
     }
 
