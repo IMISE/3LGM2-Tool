@@ -340,6 +340,17 @@ public class ActionLibrary {
             }
         };
 
+        /**
+         * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
+         * Grafik hervorgehovben werden
+         */
+        public static final Action ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, PPP) {
+            @Override
+            public void actionPerformed() {
+                NodeRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), NodeRenderer.analysisColor);
+            }
+        };
+
     }
 
     public static class ContextActions {
@@ -761,18 +772,6 @@ public class ActionLibrary {
          * @author fstephan
          */
         public static class Graphics {
-
-            /**
-             * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
-             * Grafik hervorgehovben werden
-             */
-            public static final Action ANALYSIS_COLOR = new StaticAction(ActionIdentifier.analysis_color, PPP) {
-
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    NodeRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), NodeRenderer.analysisColor);
-                }
-            };
 
             /** Öffnet ein Fenster für allgemeine Grafik-Einstellungen */
             public static final Action RENDERING_OPTIONS = new StaticAction(ActionIdentifier.rendering_options, PPP) {

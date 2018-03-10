@@ -82,7 +82,7 @@ public enum ActionIdentifier {
     submodel_specific,
     show_userdefinded_properties,
     // graphicOptions
-    analysis_color,
+    ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR,
     rendering_options,
     HIDE_UNASSOCIATED,
     UNHIDE_ALL,
