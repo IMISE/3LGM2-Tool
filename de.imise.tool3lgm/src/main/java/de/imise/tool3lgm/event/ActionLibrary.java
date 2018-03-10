@@ -89,7 +89,6 @@ import de.imise.util.Alphabetical;
 import de.imise.util.Pair;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.swing.dialog.DirectoryChooser;
-import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
 
@@ -732,28 +731,6 @@ public class ActionLibrary {
 
             /** öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
             public static final Action MODEL_ACTION_SET_ELEMENT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, PPP);
-
-            /**
-             * Actions für die Auswahl von Icons für Elemente
-             *
-             * @author fstephan
-             */
-            public static class Icon {
-
-                /** Entfernt das Icon des Elements */
-                public static final Action MODEL_ACTION_SET_ELEMENT_ICON_NONE = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
-
-                /** Öffnet ein Fenster zur Auswahl eines Icons */
-                public static final Action ACTION_CHOOSE_ELEMENT_ICON = new GraphSelectedRealNodeAction(ActionIdentifier.ACTION_CHOOSE_ELEMENT_ICON, PPP) {
-                    @Override
-                    protected void actionPerformed() {
-                        File iconFile = ImageChooser.getImageFile(getTool(), UserProperties.getIconPath());
-                        if (iconFile != null) {
-                            getSelectedDoc().setIcon(iconFile);
-                        }
-                    }
-                };
-            }
 
             /**
              * Actions für die Transparenz der Elemente

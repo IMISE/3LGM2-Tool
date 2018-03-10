@@ -36,6 +36,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF,
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL,
     MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY,
+    MODEL_ACTION_SET_ELEMENT_ICON,
     CHANGE_LAYER_SIZE_FACTOR,
     CHANGE_GLOBAL_NAME,
     CHANGE_GLOBAL_MAPPING,
@@ -90,8 +91,6 @@ public enum GDCommands implements ActionSource {
 
     UNDO,
     REDO,
-
-    SET_ICON,
 
     CHANGE_LINE_STYLE,
 
@@ -180,6 +179,8 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
+        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
+        ActionSource.putInteractive(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON);
     }
 
 }

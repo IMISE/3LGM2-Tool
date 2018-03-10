@@ -71,9 +71,6 @@ public enum ActionIdentifier {
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
 
-    // icon
-    ACTION_CHOOSE_ELEMENT_ICON,
-
     // submodels
     new_submodel,
     remove_submodel,

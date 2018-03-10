@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
@@ -13,7 +14,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.GROUP_OR
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
-import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -69,6 +69,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.swing.dialog.ImageChooser;
 
 public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
 
@@ -1009,8 +1010,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case SET_ICON:
+        case MODEL_ACTION_SET_ELEMENT_ICON:
             switch (argc) {
+            case 0:
+                chooseIcon(pid);
+                break;
             case 1:
                 setIcon(argv[0], pid);
                 break;
@@ -1792,14 +1796,24 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + mc.getHashString(), "255", pid);
         }
         if (mc.getIcon() != null) {
-            addUndoCommandIfNotExist(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
         } else {
             addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getElement().getHashString(), "", pid);
         }
-        addRedoCommandOrReplace(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), iconKey, pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), iconKey, pid);
         mc.setIcon(iconKey, gdcoll.getIconTable());
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+    }
+
+    /**
+     * @param pid
+     */
+    public final void chooseIcon(final int pid) {
+        File iconFile = ImageChooser.getImageFile(getTool(), UserProperties.getIconPath());
+        if (iconFile != null) {
+            setIcon(iconFile, pid);
+        }
     }
 
     /**
@@ -1818,12 +1832,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param iconFile
      */
-    public final void setIcon(final File iconFile) {
+    public final void setIcon(final File iconFile, final int pid) {
         String iconKey = gdcoll.loadIcon(iconFile);
         if (iconKey == null) {
             return;
         }
-        setIcon(iconKey, STANDARD_PID);
+        setIcon(iconKey, pid);
     }
 
     /**
@@ -1842,7 +1856,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         NodeContainer mc = (NodeContainer) t;
         szen.start_transaction(pid);
         if (mc.getIcon() != null) {
-            addUndoCommandIfNotExist(GDCommands.SET_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
         }
         addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getHashString(), "", pid);
         mc.setIcon(null, gdcoll.getIconTable());
