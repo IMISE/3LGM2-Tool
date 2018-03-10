@@ -197,6 +197,10 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
     }
 
 }

@@ -21,7 +21,6 @@ import de.imise.tool3lgm.event.ActionLibrary.ExtrasActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ExportActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ImportActions;
-import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.Level;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
@@ -131,7 +130,7 @@ public class MenuCollection {
 
         /** Das Level-Menu */
         public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge
-                "levelMenu", Level.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, Level.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, Level.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+                "levelMenu", GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten

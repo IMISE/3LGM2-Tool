@@ -704,28 +704,6 @@ public class ActionLibrary {
             }
         };
 
-        /**
-         * Actions für die "Höhe" von Elementen innerhalb einer Ebene <br>
-         * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewählte(n) Element(e).
-         *
-         * @author fstephan
-         */
-        public static class Level {
-
-            /** Element steht über allen anderen */
-            public static final Action MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
-
-            /** Element wird um eine (interne) Ebene nach oben bewegt */
-            public static final Action MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
-
-            /** Element wird um eine (interne) Ebene nach unten bewegt */
-            public static final Action MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
-
-            /** Element steht unter allen anderen */
-            public static final Action MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
-
-        }
-
     }
 
     /**
