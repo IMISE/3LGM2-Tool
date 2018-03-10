@@ -127,6 +127,16 @@ public class UserProperties {
         return oldValue == null ? false : Boolean.valueOf(oldValue.toString());
     }
 
+    public static int set(final IntProperty property, final int value) {
+        Object oldValue = put(property, value);
+        return oldValue == null ? -1 : Integer.valueOf(oldValue.toString());
+    }
+
+    public static final int get(final IntProperty property) {
+        String value = properties.getProperty(property.toString());
+        return value == null ? property.getDefault() : Integer.parseInt(value);
+    }
+
     //Da es nur 2 Listenschlüssel gibt, kann man hier eine Flat3Map nehmen
     private static final Map<StringProperty, Integer> listKeyToListSize = new Flat3Map<>();
 
@@ -359,7 +369,7 @@ public class UserProperties {
          * bit6: INTERPOLATION
          * bit7: TEXT_ANTIALIASING
          */
-        RENDERING_HINTS {
+        PROPERTY_INT_RENDER_SETTINGS {
             @Override
             public int getDefault() {
                 return 137;
@@ -446,57 +456,6 @@ public class UserProperties {
         Locale.setDefault(l);
         put(StringProperty.LOCALE, l.getLanguage());
         return l;
-    }
-
-    ////////////////////
-    // renderingHints //
-    ////////////////////
-
-    /**
-     * Bitpattern for Rendering-Hints (standard value: all bits are set to zero
-     * bit0: ANTIALIASING
-     * bit1: ALPHA_INTERPOLATION
-     * bit2: COLOR_RENDERING
-     * bit3: RENDERING
-     * bit4: DITHERING
-     * bit5: FRACTIONALMETRICS
-     * bit6: INTERPOLATION
-     * bit7: TEXT_ANTIALIASING
-     */
-    private static Integer renderingHints = Integer.valueOf(137);
-
-    /**
-     * return the current Bitpattern for Rendering-Hints
-     * bit0: ANTIALIASING
-     * bit1: ALPHA_INTERPOLATION
-     * bit2: COLOR_RENDERING
-     * bit3: RENDERING
-     * bit4: DITHERING
-     * bit5: FRACTIONALMETRICS
-     * bit6: INTERPOLATION
-     * bit7: TEXT_ANTIALIASING
-     *
-     * @return int with bit-pattern
-     */
-    public static int getRenderingHints() {
-        return renderingHints.intValue();
-    }
-
-    /**
-     * set new Bitpattern for Rendering-Hints
-     * bit0: ANTIALIASING
-     * bit1: ALPHA_INTERPOLATION
-     * bit2: COLOR_RENDERING
-     * bit3: RENDERING
-     * bit4: DITHERING
-     * bit5: FRACTIONALMETRICS
-     * bit6: INTERPOLATION
-     * bit7: TEXT_ANTIALIASING
-     *
-     * @param int with bit-pattern
-     */
-    public static void setRenderingHints(final int renderingHints) {
-        UserProperties.renderingHints = Integer.valueOf(renderingHints);
     }
 
     /** Rasterweite */
