@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -98,11 +99,8 @@ public enum GDCommands implements ActionSource {
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
     SHOW_SZENARIO,
-    /** Öffnet ein Options-Fenster zum Löschen des aktuell ausgewählten Elements */
     MODEL_ACTION_DELETE,
-    /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
     MODEL_ACTION_DELETE_FROM_SUBMODEL,
-    /** Löscht das aktuell ausgewählte Element aus dem Gesamtmodell */
     MODEL_ACTION_DELETE_FROM_MODEL,
 
     JOIN_SELECTED,
@@ -165,8 +163,13 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(SelectionAction.class, MODEL_ACTION_CUT);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_PASTE);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_DELETE_FROM_MODEL);
-        ActionSource.put(SelectionAction.class, MODEL_ACTION_DELETE);
+        ActionSource.putInteractive(SelectionAction.class, MODEL_ACTION_DELETE); //Dialog mit Frage, ob im Teilmodell oder Modell gelöscht werden soll
         ActionSource.put(SubmodelSelectionAction.class, MODEL_ACTION_DELETE_FROM_SUBMODEL);
+        ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
+        ActionSource.putInteractive(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_COLOR); // Dialog mit Farbwauswahl
+        ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
+        ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
+        ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
     }
 
 }

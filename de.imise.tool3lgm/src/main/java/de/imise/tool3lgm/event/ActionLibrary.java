@@ -710,37 +710,6 @@ public class ActionLibrary {
         };
 
         /**
-         * Actions für die grafische Darstellung der Ebenen
-         *
-         * @author fstephan
-         */
-        public static class LayerLayout {
-
-            /** Setzt Farbe und Transparenz der ausgewählten Ebene zurück */
-            public static final Action MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
-
-            /** öffnet ein Fenster zur Auswahl der Ebenen-Farbe */
-            public static final Action MODEL_ACTION_SET_LAYER_COLOR = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_COLOR, PPP);
-
-            /**
-             * Actions für die Transparenz der Ebenen
-             *
-             * @author fstephan
-             */
-            public static class Transparency {
-
-                /** Macht die momentan ausgewählte Ebene nicht-transparent */
-                public static final Action MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
-
-                /** Macht die momentan ausgewählte Ebene halb-transparent */
-                public static final Action MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
-
-                /** Macht die momentan ausgewählte Ebene voll-transparent */
-                public static final Action MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL = new GraphFrameAction(GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
-            }
-        }
-
-        /**
          * Actions für die relative Ausrichtung der Elemente zueinander<br>
          * Dabei werden alle markierten Elemente am zuletzt ausgewählten Element entsprechend ausgerichtet.
          *

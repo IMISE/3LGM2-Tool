@@ -24,7 +24,6 @@ import de.imise.tool3lgm.event.ActionLibrary.FileActions.ImportActions;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementAlignment;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementLayout;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementLayout.TextAlignment;
-import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.LayerLayout;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.Level;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
@@ -129,8 +128,8 @@ public class MenuCollection {
                         new JSeparator(), TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER, TextAlignment.Vertical.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
 
         /** Das Ebenen-Layout-Menu */
-        public static final JMenu LAYER_LAYOUT_MENU = createMenu("layerLayoutMenu", LayerLayout.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, LayerLayout.MODEL_ACTION_SET_LAYER_COLOR, createMenu( // Transparenz-Menu
-                "layerTransparencyMenu", LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF, LayerLayout.Transparency.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
+        public static final JMenu LAYER_LAYOUT_MENU = createMenu("layerLayoutMenu", GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, GDCommands.MODEL_ACTION_SET_LAYER_COLOR, createMenu( // Transparenz-Menu
+                "layerTransparencyMenu", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
 
         /** Das Level-Menu */
         public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge
