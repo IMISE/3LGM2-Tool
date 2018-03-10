@@ -720,24 +720,6 @@ public class ActionLibrary {
         public static class ElementLayout {
 
             /**
-             * Actions für die Transparenz der Elemente
-             *
-             * @author fstephan
-             */
-            public static class Transparency {
-
-                /** Macht das ausgewählte Element nicht-transparent */
-                public static final Action MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
-
-                /** Macht das ausgewählte Element halb-transparent */
-                public static final Action MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
-
-                /** Macht das ausgewählte Element voll-transparent */
-                public static final Action MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
-
-            }
-
-            /**
              * Actions für die Auswahl der Ausrichtung der Elementbeschriftungen
              *
              * @author fstephan

@@ -113,8 +113,9 @@ public class MenuCollection {
     public static class LayoutSubMenus {
 
         /** Das Element-Layout-Menu */
-        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu("elementLayoutMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, createMenu( // Transparenz-Menu
-                "elementTransparencyMenu", ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, ElementLayout.Transparency.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
+        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu("elementLayoutMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR,
+                createMenu( // Transparenz-Menu
+                        "elementTransparencyMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
                 createMenu( // Auf Standard setzen Menu
                         "elementSetToStandardMenu", ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
                         ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
