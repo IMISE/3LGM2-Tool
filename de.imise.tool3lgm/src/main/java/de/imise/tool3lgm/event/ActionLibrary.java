@@ -79,6 +79,7 @@ import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
@@ -774,10 +775,9 @@ public class ActionLibrary {
         public static class Graphics {
 
             /** Öffnet ein Fenster für allgemeine Grafik-Einstellungen */
-            public static final Action RENDERING_OPTIONS = new StaticAction(ActionIdentifier.rendering_options, PPP) {
-
+            public static final Action ACTION_PROPERTY_INT_RENDER_SETTINGS = new StaticActionNew(IntProperty.PROPERTY_INT_RENDER_SETTINGS, PPP) {
                 @Override
-                public void actionPerformed(final ActionEvent e) {
+                public void actionPerformed() {
                     GraphicPropertyDialog dialog = new GraphicPropertyDialog(getTool());
                     dialog.setVisible(true);
                 }
