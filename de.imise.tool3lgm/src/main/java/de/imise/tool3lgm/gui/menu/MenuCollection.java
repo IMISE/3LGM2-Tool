@@ -39,7 +39,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
-import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.menu.DynamicMenu;
 import de.imise.util.swing.menu.MenuCreator;
 import de.imise.util.swing.menu.MenuScroller;
@@ -52,11 +51,6 @@ import de.imise.util.swing.menu.MenuScroller;
 public class MenuCollection {
 
     private static JMenu createMenu(final String titleResKey, final Object... menuEntries) {
-        for (int i = 0; i < menuEntries.length; i++) {
-            if (menuEntries[i] instanceof ActionSource) {
-                menuEntries[i] = ((ActionSource) menuEntries[i]).getAction();
-            }
-        }
         return MenuCreator.createMenu(getResString(titleResKey), menuEntries);
     }
 
