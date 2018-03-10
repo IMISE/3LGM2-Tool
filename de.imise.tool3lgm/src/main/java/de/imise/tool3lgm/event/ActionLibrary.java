@@ -719,19 +719,6 @@ public class ActionLibrary {
          */
         public static class ElementLayout {
 
-            /*
-             * Im Folgenden werden unter "Elemente" nur {@link NodeContainer} verstanden, die keine
-             * {@link BendpointContainer} sind. Das schließt demnach auch {@link EdgeContainer} aus.
-             * <br> Im Falle des Einführens eines Kanten-Layouts sollte hier parallel zu dieser
-             * Klasse eine separate Klasse mit den Actions für die Kanten erstellt werden.
-             */
-
-            /** öffnet ein Fenster zur Änderung der Schriftart des ausgewählten Elements */
-            public static final Action MODEL_ACTION_SET_ELEMENT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, PPP);
-
-            /** öffnet ein Fenster zur Änderung der Farbe des ausgewählten Elements */
-            public static final Action MODEL_ACTION_SET_ELEMENT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, PPP);
-
             /**
              * Actions für die Transparenz der Elemente
              *

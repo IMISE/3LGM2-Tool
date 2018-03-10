@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.model;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
+import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -181,6 +182,8 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE);
         ActionSource.putInteractive(GraphMultipleSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON);
+        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_FONT);
+        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR);
     }
 
 }
