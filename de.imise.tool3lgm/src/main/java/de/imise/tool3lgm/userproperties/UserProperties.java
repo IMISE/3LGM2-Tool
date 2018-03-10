@@ -330,6 +330,12 @@ public class UserProperties {
 
         @Override
         public UserPropertyBooleanChangeAction getAction() {
+            //Keine der Options hat eine InteractiveAction. Also kann man hier einfach direkt
+            //die Action instanziieren und muss nicht über die default-Implementierung gehen.
+            //Will man über die default-Implementierung gehen, muss man die Funktion getActionClass()
+            //überscheiben und die UserPropertyBooleanChangeAction.class zurück geben. Das funktioniert
+            //ganz genauso, wie das hier, außer dass hier der Konstuktor direkt und nicht über Reflection
+            //aufgerufen wird und Eclipse und der Compiler diesen Aufruf als direkt Code-Referenz erkennen.
             return new UserPropertyBooleanChangeAction(this);
         }
 
