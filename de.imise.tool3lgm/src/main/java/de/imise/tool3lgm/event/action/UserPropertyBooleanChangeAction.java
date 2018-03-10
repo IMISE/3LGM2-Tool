@@ -4,7 +4,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 public class UserPropertyBooleanChangeAction extends GlobalOptionAction {
@@ -13,11 +12,6 @@ public class UserPropertyBooleanChangeAction extends GlobalOptionAction {
 
     public UserPropertyBooleanChangeAction(final UserProperties.BooleanProperty booleanProperty) {
         super(booleanProperty, UserProperties.is(booleanProperty));
-        this.booleanProperty = booleanProperty;
-    }
-
-    public UserPropertyBooleanChangeAction(final UserProperties.BooleanProperty booleanProperty, final GDCollectionChangeType changeType) {
-        super(booleanProperty, UserProperties.is(booleanProperty), changeType);
         this.booleanProperty = booleanProperty;
     }
 
