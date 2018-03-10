@@ -187,6 +187,12 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM);
     }
 
 }

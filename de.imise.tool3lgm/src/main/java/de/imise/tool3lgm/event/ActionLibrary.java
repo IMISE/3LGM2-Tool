@@ -719,48 +719,6 @@ public class ActionLibrary {
          */
         public static class ElementLayout {
 
-            /**
-             * Actions für die Auswahl der Ausrichtung der Elementbeschriftungen
-             *
-             * @author fstephan
-             */
-            public static class TextAlignment {
-
-                /**
-                 * Horizonzale Ausrichtung
-                 *
-                 * @author fstephan
-                 */
-                public static class Horizontal {
-
-                    /** Richtet die Beschrfitung linksbündig aus */
-                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT);
-
-                    /** Richtet die Beschrfitung horizontal mittig aus */
-                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER);
-
-                    /** Richtet die Beschrfitung rechtsbündig aus */
-                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT);
-                }
-
-                /**
-                 * Vertikale Ausrichtung
-                 *
-                 * @author fstephan
-                 */
-                public static class Vertical {
-
-                    /** Richtet die Beschrfitung horizontal mittig aus */
-                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP);
-
-                    /** Richtet die Beschrfitung vertikal mittig aus */
-                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER);
-
-                    /** Richtet die Beschrfitung nach unten aus */
-                    public static final Action MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM);
-                }
-            }
-
             /** Setzt die Farbe des Elements zurück */
             public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
 
