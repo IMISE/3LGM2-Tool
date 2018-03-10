@@ -21,7 +21,6 @@ import de.imise.tool3lgm.event.ActionLibrary.ExtrasActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ExportActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ImportActions;
-import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.ElementLayout;
 import de.imise.tool3lgm.event.ActionLibrary.LayoutActions.Level;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
@@ -116,8 +115,8 @@ public class MenuCollection {
                 createMenu( // Transparenz-Menu
                         "elementTransparencyMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
                 createMenu( // Auf Standard setzen Menu
-                        "elementSetToStandardMenu", ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
-                        ElementLayout.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
+                        "elementSetToStandardMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
                 new JSeparator(),
                 createMenu( // Icon-Menu
                         "icon", GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON),

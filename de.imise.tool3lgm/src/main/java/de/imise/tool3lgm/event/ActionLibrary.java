@@ -61,12 +61,9 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
-import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
@@ -706,32 +703,6 @@ public class ActionLibrary {
                 new LayoutEditor(new javax.swing.JFrame(), getSelectedDoc());
             }
         };
-
-        /**
-         * Actions für die grafische Darstellung von Elementen. <br>
-         * Diese Actions beziehen sich dabei auf das(die) vom Nutzer ausgewählte(n) Element(e). Im
-         * Folgenden werden unter "Elemente" nur {@link NodeContainer} verstanden, die keine {@link BendpointContainer} sind. Das schließt demnach
-         * auch {@link EdgeContainer} aus. <br>
-         * Im Falle des Einführens eines Kanten-Layouts sollte hier paralle zu dieser Klasse eine
-         * separate Klasse mit den jeweiligen Actions erstellt werden
-         *
-         * @author fstephan
-         */
-        public static class ElementLayout {
-
-            /** Setzt die Farbe des Elements zurück */
-            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
-
-            /** Setzt die Transparenz des Elements zurück */
-            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
-
-            /** Setzt die Schriftart des Elements zurück */
-            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
-
-            /** Setzt alle Layout-Eigenschaften des Elements zurück */
-            public static final ExtendedAction MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT = new GraphSelectedRealNodeAction(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
-
-        }
 
         /**
          * Actions für die "Höhe" von Elementen innerhalb einer Ebene <br>
