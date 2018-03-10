@@ -1,10 +1,12 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
+import de.imise.util.swing.event.ActionSource;
 
-public enum GDCommands {
+public enum GDCommands implements ActionSource {
 
     MODEL_ACTION_CREATE_NODE,
     LINK,
@@ -152,6 +154,10 @@ public enum GDCommands {
         //viel kürzer ist als der Komandoname und somit nicht soviel Speicher verbraucht
         //beim Loggen der Undo-redo-Kommandos
         return Integer.toString(ordinal());
+    }
+
+    static {
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_COPY, MODEL_ACTION_CUT, MODEL_ACTION_PASTE);
     }
 
 }

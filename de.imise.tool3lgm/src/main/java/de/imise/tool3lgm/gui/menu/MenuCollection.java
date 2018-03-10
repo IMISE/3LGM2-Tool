@@ -35,6 +35,7 @@ import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
@@ -58,8 +59,8 @@ public class MenuCollection {
     public static final JMenu FILE_MENU = new FileMenu();
 
     /** Das Bearbeiten-Menu */
-    public static final JMenu EDIT_MENU = createMenu("edit", EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), EditActions.MODEL_ACTION_COPY,
-            EditActions.MODEL_ACTION_CUT, EditActions.MODEL_ACTION_PASTE, new JSeparator(), EditActions.MODEL_ACTION_DELETE_FROM_SUBMODEL, EditActions.MODEL_ACTION_REMOVE_FROM_MODEL);
+    public static final JMenu EDIT_MENU = createMenu("edit", EditActions.ACTION_UNDO, EditActions.ACTION_REDO, new JSeparator(), EditActions.ACTION_SEARCH, new JSeparator(), EditActions.SELECT_ALL, new JSeparator(), GDCommands.MODEL_ACTION_COPY,
+            GDCommands.MODEL_ACTION_CUT, GDCommands.MODEL_ACTION_PASTE, new JSeparator(), EditActions.MODEL_ACTION_DELETE_FROM_SUBMODEL, EditActions.MODEL_ACTION_REMOVE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
     public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, ViewActions.OPTION_MODEL_BROWSER_SHOW, new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,

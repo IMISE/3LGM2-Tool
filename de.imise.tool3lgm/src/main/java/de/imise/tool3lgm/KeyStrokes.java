@@ -15,6 +15,7 @@ import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
 import de.imise.tool3lgm.event.ActionLibrary.EditActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.util.collections.CollectionUtils;
 
 public class KeyStrokes {
@@ -31,14 +32,18 @@ public class KeyStrokes {
         put(EditActions.ACTION_REDO, KeyEvent.VK_Y, MENU_SHORTCUT_KEY_MASK);
         put(EditActions.ACTION_UNDO, KeyEvent.VK_Z, MENU_SHORTCUT_KEY_MASK);
         put(EditActions.SELECT_ALL, KeyEvent.VK_A, MENU_SHORTCUT_KEY_MASK);
-        put(EditActions.MODEL_ACTION_COPY, KeyEvent.VK_C, MENU_SHORTCUT_KEY_MASK);
-        put(EditActions.MODEL_ACTION_CUT, KeyEvent.VK_X, MENU_SHORTCUT_KEY_MASK);
-        put(EditActions.MODEL_ACTION_PASTE, KeyEvent.VK_V, MENU_SHORTCUT_KEY_MASK);
+        put(GDCommands.MODEL_ACTION_COPY, KeyEvent.VK_C, MENU_SHORTCUT_KEY_MASK);
+        put(GDCommands.MODEL_ACTION_CUT, KeyEvent.VK_X, MENU_SHORTCUT_KEY_MASK);
+        put(GDCommands.MODEL_ACTION_PASTE, KeyEvent.VK_V, MENU_SHORTCUT_KEY_MASK);
         put(EditActions.ACTION_SEARCH, KeyEvent.VK_F, MENU_SHORTCUT_KEY_MASK);
         put(AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, KeyEvent.VK_F7, 0);
         put(AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, KeyEvent.VK_F9, 0);
         put(AnalysisActions.ACTION_ANALYSIS_RESET_RESULT, KeyEvent.VK_R, MENU_SHORTCUT_KEY_MASK);
 
+    }
+
+    private static void put(final GDCommands command, final int keyCode, final int modifiers) {
+        KEYSTROKES.put(command.getAction(), KeyStroke.getKeyStroke(keyCode, modifiers));
     }
 
     private static void put(final Action action, final int keyCode, final int modifiers) {

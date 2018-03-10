@@ -537,15 +537,6 @@ public class ActionLibrary {
             }
         };
 
-        /** Kopiert die aktuelle Selektion in die Zwischenablage */
-        public static final Action MODEL_ACTION_COPY = new SelectionAction(GDCommands.MODEL_ACTION_COPY);
-
-        /** Schneidet die die aktuelle Selektion aus und kopiert sie in die Zwischenablage */
-        public static final Action MODEL_ACTION_CUT = new SelectionAction(GDCommands.MODEL_ACTION_CUT);
-
-        /** Fügt den Inhalt der Zwischenablage ein */
-        public static final Action MODEL_ACTION_PASTE = new SelectionAction(GDCommands.MODEL_ACTION_PASTE);
-
         /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
         public static final Action MODEL_ACTION_DELETE_FROM_SUBMODEL = new SubmodelAction(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL) {
             @Override
