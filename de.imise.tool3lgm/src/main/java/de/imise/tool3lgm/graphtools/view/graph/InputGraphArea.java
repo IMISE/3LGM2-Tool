@@ -12,7 +12,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
-import static de.imise.tool3lgm.userproperties.UserProperties.getRasterWidth;
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
 import java.awt.Cursor;
@@ -44,6 +43,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * COMMENTME
@@ -490,7 +490,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             final LayerContainer layer = szenario.getLayer(layerIndex);
             final int x = xreal[layerIndex];
             final int y = yreal[layerIndex];
-            final int rasterWidth = getRasterWidth();
+            final int rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
             final int insertPositionX = Math.round(x / rasterWidth) * rasterWidth;
             final int insertPositionY = Math.round(y / rasterWidth) * rasterWidth;
             szenario.setKnotInsertPosition(insertPositionX, insertPositionY);
@@ -870,7 +870,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             int u_bound, d_bound, r_bound, l_bound, xd, yd;
             // Beim Resizen rastern
             if (UserProperties.is(BooleanProperty.OPTION_USE_RASTER)) {
-                float rasterWidth = UserProperties.getRasterWidth();
+                float rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
                 xreal[ebene] = (int) (Math.round(xreal[ebene] / rasterWidth) * rasterWidth);
                 yreal[ebene] = (int) (Math.round(yreal[ebene] / rasterWidth) * rasterWidth);
             }
@@ -974,7 +974,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     // X - Richtung
                     grabbedElementsRealRect.x -= deltaX;
                     grabbedElementsRealRect.width -= deltaX;
-                    float rasterWidth = UserProperties.getRasterWidth();
+                    float rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
                     //einzelne Knickpunkte nicht nur direkt auf dem Raster docken, sondern auch auf Höhe und Weite ihrer Nachbarknickpunkte
                     boolean rasterElement = true;
                     if (ka instanceof BendpointContainer && szenario.isSingleSelection()) {

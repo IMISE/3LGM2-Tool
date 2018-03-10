@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 
@@ -366,7 +367,7 @@ public class LayerContainer extends ElementContainer {
                 g.setColor(Color.darkGray);
                 int maxX = page_width / 2 + 1;
                 int maxY = page_height / 2 + 1;
-                int rasterWidth = UserProperties.getRasterWidth();
+                int rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
 
                 //				malt das Raster mit durchgezogenen Linien -> kann man für Kontrollzwecke wieder einblenden
                 //				g.setColor(Color.lightGray);

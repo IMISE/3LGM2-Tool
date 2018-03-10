@@ -352,7 +352,7 @@ public class UserProperties {
     }
 
     public static enum IntProperty {
-        RASTER_WIDTH {
+        PROPERTY_INT_RASTER_WIDTH {
             @Override
             public int getDefault() {
                 return 5;
@@ -456,19 +456,6 @@ public class UserProperties {
         Locale.setDefault(l);
         put(StringProperty.LOCALE, l.getLanguage());
         return l;
-    }
-
-    /** Rasterweite */
-    private static int rasterWidth = 7;
-
-    /** @param b */
-    public static void setRasterWidth(final int i) {
-        rasterWidth = i;
-    }
-
-    /** @return rasterWidth */
-    public static int getRasterWidth() {
-        return rasterWidth;
     }
 
     ///////////////////
