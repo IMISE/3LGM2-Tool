@@ -1,7 +1,12 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Static.getSelectedDoc;
+
+import javax.swing.Action;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.SelectionAction;
+import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.swing.event.ActionSource;
@@ -97,8 +102,21 @@ public enum GDCommands implements ActionSource {
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
     SHOW_SZENARIO,
+    /** Öffnet ein Options-Fenster zum Löschen des aktuell ausgewählten Elements */
     MODEL_ACTION_DELETE,
-    MODEL_ACTION_DELETE_FROM_SUBMODEL,
+    /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
+    MODEL_ACTION_DELETE_FROM_SUBMODEL {
+        @Override
+        public Action getAction() {
+            return new SubmodelAction(this) {
+                @Override
+                public boolean isEnabled() {
+                    return super.isEnabled() && getSelectedDoc().isSelection();
+                }
+            };
+        }
+    },
+    /** Löscht das aktuell ausgewählte Element aus dem Gesamtmodell */
     MODEL_ACTION_DELETE_FROM_MODEL,
 
     JOIN_SELECTED,
@@ -157,7 +175,11 @@ public enum GDCommands implements ActionSource {
     }
 
     static {
-        ActionSource.put(SelectionAction.class, MODEL_ACTION_COPY, MODEL_ACTION_CUT, MODEL_ACTION_PASTE);
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_COPY);
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_CUT);
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_PASTE);
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_DELETE_FROM_MODEL);
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_DELETE);
     }
 
 }

@@ -35,7 +35,6 @@ import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
-import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.StaticActionNew;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
@@ -536,20 +535,6 @@ public class ActionLibrary {
                 sd.showDialog();
             }
         };
-
-        /** Löscht das aktuell ausgewählte Element aus dem Teilmodell */
-        public static final Action MODEL_ACTION_DELETE_FROM_SUBMODEL = new SubmodelAction(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL) {
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && getSelectedDoc().isSelection();
-            }
-        };
-
-        /** Löscht das aktuell ausgewählte Element aus dem Gesamtmodell */
-        public static final Action MODEL_ACTION_REMOVE_FROM_MODEL = new SelectionAction(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
-
-        /** Öffnet ein Options-Fenster zum Löschen des aktuell ausgewählten Elements */
-        public static final Action MODEL_ACTION_DELETE = new SelectionAction(GDCommands.MODEL_ACTION_DELETE);
 
         /** Wählt alle Elemente im Teilmodell aus */
         public static final Action SELECT_ALL = new GraphDocumentAction(ActionIdentifier.ACTION_SELECT_ALL) {
