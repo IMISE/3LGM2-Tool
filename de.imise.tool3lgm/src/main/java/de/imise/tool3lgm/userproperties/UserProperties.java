@@ -375,7 +375,7 @@ public class UserProperties {
                 return 137;
             }
         },
-        RMI_REGISTRY_PORT {
+        PROPERTY_INT_RMI_PORT {
             @Override
             public int getDefault() {
                 return 1099;
@@ -560,22 +560,6 @@ public class UserProperties {
      */
     public static File getIconPath() {
         return iconPath;
-    }
-
-    ///////////////////////////////////////////
-    // RMI - Funktion, aktivierung und Ports //
-    ///////////////////////////////////////////
-
-    private static int rmiRegistryPort = -1;
-
-    /** @param b */
-    public static void setRMIRegistryPort(final int port) {
-        rmiRegistryPort = port;
-    }
-
-    /** @return RMIRegitryPort */
-    public static int getRMIRegistryPort() {
-        return rmiRegistryPort;
     }
 
 }

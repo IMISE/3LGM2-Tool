@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * @author hboehme Eigenschaftenpanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
@@ -75,10 +76,11 @@ public class RMIPropertyPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy++;
 
-        if (UserProperties.getRMIRegistryPort() < 0) {
+        int rmiPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
+        if (rmiPort < 0) {
             rmiRegistryPortTextField.setText("");
         } else {
-            rmiRegistryPortTextField.setText(String.valueOf(UserProperties.getRMIRegistryPort()));
+            rmiRegistryPortTextField.setText(String.valueOf(rmiPort));
         }
     }
 

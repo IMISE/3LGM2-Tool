@@ -85,7 +85,6 @@ public enum ActionIdentifier {
     ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR,
     HIDE_UNASSOCIATED,
     UNHIDE_ALL,
-    rmi_settings,
     // localeOptions
     german,
     english,

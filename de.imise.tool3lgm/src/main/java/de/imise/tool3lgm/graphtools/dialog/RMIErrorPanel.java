@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * @author hboehme RMI-fehlerPanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
@@ -112,10 +113,11 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
         gbc.gridx++;
         add(new JLabel(""), gbc);
 
-        if (UserProperties.getRMIRegistryPort() < 0) {
+        int rmiPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
+        if (rmiPort < 0) {
             rmiRegistryPortTextField.setText("");
         } else {
-            rmiRegistryPortTextField.setText(String.valueOf(UserProperties.getRMIRegistryPort()));
+            rmiRegistryPortTextField.setText(String.valueOf(rmiPort));
         }
 
         rmiAutoNextFreePortCheckBox.setSelected(true);

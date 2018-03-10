@@ -841,20 +841,20 @@ public class ActionLibrary {
         }
 
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
-        public static final Action OPEN_RMI_SETTINGS = new StaticAction(ActionIdentifier.rmi_settings, PPP) {
+        public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticActionNew(IntProperty.PROPERTY_INT_RMI_PORT, PPP) {
 
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 // Für die Konfiguration des RMI, wir das RMIPropertyPanel einem
                 // JOptionPane übergeben.
                 // Nach dem OK, werden die Values des Panels abgefragt.
                 RMIPropertyPanel rmip = new RMIPropertyPanel();
 
-                int oldRegPort = UserProperties.getRMIRegistryPort();
-                if (JOptionPane.showOptionDialog(null, rmip, getResString("rmi_settings"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
-                    UserProperties.setRMIRegistryPort(rmip.getRmiRegistryPortTextFieldValue());
+                int oldRegPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
+                if (JOptionPane.showOptionDialog(null, rmip, getResString(IntProperty.PROPERTY_INT_RMI_PORT.name()), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+                    UserProperties.set(IntProperty.PROPERTY_INT_RMI_PORT, rmip.getRmiRegistryPortTextFieldValue());
                 }
-                if (oldRegPort != UserProperties.getRMIRegistryPort()) {
+                if (oldRegPort != UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT)) {
                     JOptionPane.showMessageDialog(getTool(), getResString("RMI_SETTINGS_INFO"));
                 }
             }

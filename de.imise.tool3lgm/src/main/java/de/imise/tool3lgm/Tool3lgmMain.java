@@ -19,6 +19,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 public class Tool3lgmMain {
 
@@ -103,7 +104,8 @@ public class Tool3lgmMain {
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1");
             // hole den vom User eingestellen RegistryPort
-            String regValue = String.valueOf(UserProperties.getRMIRegistryPort());
+            int rmiPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_REGISTRY_PORT);
+            String regValue = String.valueOf(rmiPort);
 
             // hier wird geprüft, ob der Wert ungleich "" ist und mittels regulären Ausdruck, ob nur Ziffern enthalten sind.
             if (!regValue.equals("") && regValue.matches("\\d*")) {
@@ -161,7 +163,7 @@ public class Tool3lgmMain {
 
                         // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
-                            UserProperties.setRMIRegistryPort(regPort);
+                            UserProperties.set(IntProperty.PROPERTY_INT_RMI_REGISTRY_PORT, regPort);
                             JOptionPane.showMessageDialog(Static.tool, getResString("rmiNewRegPortIs") + " " + regPort);
                         }
 
@@ -186,7 +188,7 @@ public class Tool3lgmMain {
                                 // Sollte en fehler auftreten, wir dder Errordialog wieder angezeigt.
                                 else {
                                     regPort = Integer.parseInt(rmip.getRmiRegistryPortTextFieldValue());
-                                    UserProperties.setRMIRegistryPort(regPort);
+                                    UserProperties.set(IntProperty.PROPERTY_INT_RMI_REGISTRY_PORT, regPort);
                                 }
                             }
                         }
