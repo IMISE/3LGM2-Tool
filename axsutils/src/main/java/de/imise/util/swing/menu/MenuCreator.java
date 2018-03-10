@@ -15,6 +15,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
 
 /**
@@ -97,7 +98,7 @@ public class MenuCreator {
                     allMenuEntries.add(subEntry);
                 }
             } else {
-                allMenuEntries.add(entry);
+                allMenuEntries.add(entry instanceof ActionSource ? ((ActionSource) entry).getAction() : entry);
             }
         }
 
