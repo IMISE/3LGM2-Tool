@@ -39,7 +39,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENA
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CREATE_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
@@ -336,7 +336,7 @@ public final class GDCollection extends UserFieldTarget {
         if (log) {
             doc.start_transaction(pid);
             doc.addUndoCommand(REMOVE_SZENARIO + " " + szenario.getHashString(), pid);
-            doc.addRedoCommand(CREATE_SZENARIO + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
+            doc.addRedoCommand(MODEL_ACTION_CREATE_SZENARIO + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
         szenario.addGraphDocumentListener(userFieldDefinitions);
@@ -384,7 +384,7 @@ public final class GDCollection extends UserFieldTarget {
             doc.addUndoCommand(MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
             doc.addUndoCommand(CHANGE_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
         }
-        doc.addUndoCommand(CREATE_SZENARIO + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
+        doc.addUndoCommand(MODEL_ACTION_CREATE_SZENARIO + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
         doc.addRedoCommand(REMOVE_SZENARIO + " " + szen.hashString, pid);
         //wenn das Beschreibungsfenster offen ist -> den Tab des zu löschenden Teimodells löschen
         if (descriptionFrame != null) {

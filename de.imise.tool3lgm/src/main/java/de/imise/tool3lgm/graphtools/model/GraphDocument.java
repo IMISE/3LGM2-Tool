@@ -1088,11 +1088,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             new LayoutEditor(new javax.swing.JFrame(), this);
             break;
 
-        case CREATE_SZENARIO:
-
-            //				in Teilmodell übernehmen dann rückgangig dann redo -> Fehler
-
-            Szenario szen = gdcoll.createSzenario(argv[0], false, getDecodedParseSaveString(argv[1]), argv[2], pid);
+        case MODEL_ACTION_CREATE_SZENARIO:
+            Szenario szen;
+            if (argc == 0) {
+                szen = gdcoll.createSzenario(true);
+            } else {
+                szen = gdcoll.createSzenario(argv[0], false, getDecodedParseSaveString(argv[1]), argv[2], pid);
+            }
             if (szen == null) {
                 finish_transaction(pid);
                 return;

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
@@ -95,7 +96,7 @@ public enum GDCommands implements ActionSource {
 
     CHANGE_LINE_STYLE,
 
-    CREATE_SZENARIO,
+    MODEL_ACTION_CREATE_SZENARIO,
     REMOVE_SZENARIO,
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
@@ -201,6 +202,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SZENARIO);
     }
 
 }

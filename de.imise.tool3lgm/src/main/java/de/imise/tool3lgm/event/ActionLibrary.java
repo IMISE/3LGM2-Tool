@@ -859,21 +859,6 @@ public class ActionLibrary {
      */
     public static class SubmodelActions {
 
-        /** Erstellt ein neues Teilmodell */
-        public static final Action NEW = new StaticAction(ActionIdentifier.new_submodel, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                Szenario szenario = getSelectedCollection().createSzenario(true);
-                if (szenario != null) {
-                    getTool().createSzenarioFrame(szenario);
-                }
-            }
-        };
-
         /** Entfernt das aktuell ausgewählte Teilmodell */
         public static final Action REMOVE = new StaticAction(ActionIdentifier.remove_submodel, true) {
 

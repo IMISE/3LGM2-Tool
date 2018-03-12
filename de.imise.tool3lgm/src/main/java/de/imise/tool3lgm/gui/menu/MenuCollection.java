@@ -69,7 +69,7 @@ public class MenuCollection {
     public static final JMenu LAYOUT_MENU = new LayoutMenu();
 
     /** Das Teilmodell-Menu */
-    public static final JMenu SUBMODEL_MENU = createMenu("submodels", SubmodelActions.NEW, SubmodelActions.REMOVE, new JSeparator(), SubmodelActions.RENAME);
+    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SZENARIO, SubmodelActions.REMOVE, new JSeparator(), SubmodelActions.RENAME);
 
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
@@ -77,8 +77,7 @@ public class MenuCollection {
             ModelConstants.getAnalysisDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
 
     /** Das Optionen-Menu */
-    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
-            OptionsSubMenus.LOCALE_MENU);
+    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.ACTION_PROPERTY_INT_RMI_PORT, OptionsSubMenus.LOCALE_MENU);
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
