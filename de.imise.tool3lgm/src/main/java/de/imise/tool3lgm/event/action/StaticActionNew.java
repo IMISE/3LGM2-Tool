@@ -169,12 +169,10 @@ public abstract class StaticActionNew extends ExtendedAction {
         super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""), initialSelectionState);
         putValue(IDENTIFIER_KEY, identifier);
 
-        String identifierName = getIdentifierName(identifier);
-
         //GDCommands überschreiben die toString() so, dass sie ordinal()
         //zurück liefern (damit die UNDO-REDO-Commands nicht so lang werden).
         //Deshalb muss man hier explizit die name()-Methode abfragen.
-        String command = identifierName;
+        String command = getIdentifierName(identifier);
 
         if (!Strings.isNullOrEmpty(arguments)) {
             putValue(ARGUMENT_KEY, arguments);
@@ -201,18 +199,18 @@ public abstract class StaticActionNew extends ExtendedAction {
         }
 
         //LargeIcon laden (wenn vorhanden)
-        Icon icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_LARGE_PREFIX + identifierName + ".gif");
+        Icon icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_LARGE_PREFIX + command + ".gif");
         if (icon != null) {
             setLargeIcon(icon);
         } else {
-            setLargeIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_LARGE_PREFIX + identifierName + ".gif"));
+            setLargeIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_LARGE_PREFIX + command + ".gif"));
         }
         //SmallIcon laden (wenn vorhanden)
-        icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_SMALL_PREFIX + identifierName + ".gif");
+        icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_SMALL_PREFIX + command + ".gif");
         if (icon != null) {
             setSmallIcon(icon);
         } else {
-            setSmallIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_SMALL_PREFIX + identifierName + ".gif"));
+            setSmallIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_SMALL_PREFIX + command + ".gif"));
         }
         //ToolTip laden (wenn vorhanden)
         try {
