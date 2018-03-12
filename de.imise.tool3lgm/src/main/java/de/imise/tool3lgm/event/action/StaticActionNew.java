@@ -169,58 +169,75 @@ public abstract class StaticActionNew extends ExtendedAction {
         super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""), initialSelectionState);
         putValue(IDENTIFIER_KEY, identifier);
 
+        String command = setActionCommand(identifier, arguments);
+        setText(identifier, command, text, textSuffix);
+        setIcons(command);
+        setToolTip(command);
+    }
+
+    private static String getIdentifierName(final Object identifier) {
+        return identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+    }
+
+    private String setActionCommand(final Object identifier, final String arguments) {
         //GDCommands überschreiben die toString() so, dass sie ordinal()
         //zurück liefern (damit die UNDO-REDO-Commands nicht so lang werden).
         //Deshalb muss man hier explizit die name()-Methode abfragen.
         String command = getIdentifierName(identifier);
-
         if (!Strings.isNullOrEmpty(arguments)) {
             putValue(ARGUMENT_KEY, arguments);
             setActionCommand(command + " " + arguments);
         } else {
             setActionCommand(command);
         }
+        return command;
+    }
 
-        //Text auf RessourcenString lesen, wenn keiner übergeben wurde und eine Ressource existiert (wenn keine da ist, bleibts bei dem, was in der
-        //ersten Zeile gesetzt wurde)
+    private void setText(final Object identifier, final String command, final String text, final String textSuffix) {
+        //Text auf RessourcenString lesen, wenn keiner übergeben wurde und eine Ressource existiert (wenn keine da ist, bleibts
+        //bei dem, was im super-Constructor gesetzt wurde)
         if (text == null) {
+            String actionText;
             try {
-                String resString = getResString(command);
-                setText(resString + (textSuffix != null ? textSuffix : ""));
+                actionText = getResString(command);
             } catch (MissingResourceException e) {
                 try {
                     String simpleIdentifierClassName = ((Class<?>) identifier).getSimpleName();
-                    String resString = getResString(simpleIdentifierClassName);
-                    setText(resString + (textSuffix != null ? textSuffix : ""));
+                    actionText = getResString(simpleIdentifierClassName);
                 } catch (Exception ex) {
-                    setText(command);
+                    actionText = command;
                 }
             }
-        }
-
-        //LargeIcon laden (wenn vorhanden)
-        Icon icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_LARGE_PREFIX + command + ".gif");
-        if (icon != null) {
-            setLargeIcon(icon);
-        } else {
-            setLargeIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_LARGE_PREFIX + command + ".gif"));
-        }
-        //SmallIcon laden (wenn vorhanden)
-        icon = Tool3lgmConstants.getLocalizedIcon(StaticActionNew.ICON_SMALL_PREFIX + command + ".gif");
-        if (icon != null) {
-            setSmallIcon(icon);
-        } else {
-            setSmallIcon(Tool3lgmConstants.getIcon(StaticActionNew.ICON_SMALL_PREFIX + command + ".gif"));
-        }
-        //ToolTip laden (wenn vorhanden)
-        try {
-            setShortDescription(Tool3lgmConstants.getResString(TOOLTIP_RESSOURCE_PREFIX + identifier));
-        } catch (MissingResourceException e) {
+            setText(actionText + (textSuffix != null ? textSuffix : ""));
         }
     }
 
-    private static String getIdentifierName(final Object identifier) {
-        return identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
+    private void setIcons(final String command) {
+        //LargeIcon laden (wenn vorhanden)
+        String iconName = StaticActionNew.ICON_LARGE_PREFIX + command + ".gif";
+        //erst localized suchen
+        Icon icon = Tool3lgmConstants.getLocalizedIcon(iconName);
+        if (icon != null) {
+            setLargeIcon(icon);
+        } else {
+            setLargeIcon(Tool3lgmConstants.getIcon(iconName));
+        }
+        //SmallIcon laden (wenn vorhanden)
+        iconName = StaticActionNew.ICON_SMALL_PREFIX + command + ".gif";
+        icon = Tool3lgmConstants.getLocalizedIcon(iconName);
+        if (icon != null) {
+            setSmallIcon(icon);
+        } else {
+            setSmallIcon(Tool3lgmConstants.getIcon(iconName));
+        }
+    }
+
+    private void setToolTip(final String command) {
+        //ToolTip laden (wenn vorhanden)
+        try {
+            setShortDescription(Tool3lgmConstants.getResString(TOOLTIP_RESSOURCE_PREFIX + command));
+        } catch (MissingResourceException e) {
+        }
     }
 
     @Override
