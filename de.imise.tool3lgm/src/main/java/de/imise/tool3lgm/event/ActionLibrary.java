@@ -812,11 +812,7 @@ public class ActionLibrary {
                         arguments = elementClass.getSimpleName();
                     }
                     GraphFrameAction hideAction = new GraphFrameAction(command, arguments, null);
-                    //das hier auf keine Fall mit static import ersetzen, weil er dann statt der GDCommands die Action nimmt, die genauso heißen und null sind
-                    String resKey = hide ? GDCommands.HIDE_UNASSOCIATED.name() : GDCommands.UNHIDE_ALL.name();
-                    String elementClassPluralName = getDisplayablePluralName(elementClass);
-                    String fullActionDisplayName = getResString(resKey, elementClassPluralName);
-                    hideAction.setText(fullActionDisplayName);
+                    hideAction.setReplacedText(getDisplayablePluralName(elementClass));
                     actions[i] = hideAction;
                 }
                 return actions;

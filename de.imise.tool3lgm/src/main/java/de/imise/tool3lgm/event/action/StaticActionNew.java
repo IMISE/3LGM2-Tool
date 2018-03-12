@@ -232,6 +232,18 @@ public abstract class StaticActionNew extends ExtendedAction {
         }
     }
 
+    /**
+     * Ersetzt den originalText der Action mit Replacement-Markern durch die übergebenen Replacements.
+     *
+     * @param replacements
+     * @see Tool3lgmConstants#getReplacedString(String, String...)
+     */
+    public final void setReplacedText(final String... replacements) {
+        String text = getText();
+        text = Tool3lgmConstants.getReplacedString(text, replacements);
+        setText(text);
+    }
+
     private void setToolTip(final String command) {
         //ToolTip laden (wenn vorhanden)
         try {
