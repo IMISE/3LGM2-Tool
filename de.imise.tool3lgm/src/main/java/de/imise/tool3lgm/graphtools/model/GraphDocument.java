@@ -1104,8 +1104,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addElementsToSzenario(szen.getHashString(), new ArrayList<>(selectedContainer), pid);
             break;
 
-        case REMOVE_SZENARIO:
-            gdcoll.deleteSzenario(argv[0], pid);
+        case MODEL_ACTION_DELETE_SZENARIO:
+            String szenHash = null;
+            if (argc == 0) {
+                LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                szenHash = selectedDoc != null ? selectedDoc.hashString : null;
+            } else {
+                szenHash = argv[0];
+            }
+            gdcoll.deleteSzenario(szenHash, pid);
             break;
 
         case ADD_ELEMENT_TO_SZENARIO:

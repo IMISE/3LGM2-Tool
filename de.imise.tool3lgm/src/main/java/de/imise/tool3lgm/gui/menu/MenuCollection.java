@@ -69,7 +69,7 @@ public class MenuCollection {
     public static final JMenu LAYOUT_MENU = new LayoutMenu();
 
     /** Das Teilmodell-Menu */
-    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SZENARIO, SubmodelActions.REMOVE, new JSeparator(), SubmodelActions.RENAME);
+    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SZENARIO, GDCommands.MODEL_ACTION_DELETE_SZENARIO, new JSeparator(), SubmodelActions.RENAME);
 
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,

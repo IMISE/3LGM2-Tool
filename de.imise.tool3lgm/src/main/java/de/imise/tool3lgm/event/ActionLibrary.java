@@ -58,7 +58,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -858,26 +857,6 @@ public class ActionLibrary {
      * @author fstephan
      */
     public static class SubmodelActions {
-
-        /** Entfernt das aktuell ausgewählte Teilmodell */
-        public static final Action REMOVE = new StaticAction(ActionIdentifier.remove_submodel, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!isEnabled()) {
-                    return;
-                }
-                int answer = JOptionPane.showConfirmDialog(getTool(), getResString("deleteSzenario"), getResString("warnung"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (answer == JOptionPane.YES_OPTION) {
-                    getSelectedCollection().deleteSzenario(getSelectedDoc().getHashString(), TransactionManager.STANDARD_PID);
-                }
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return super.isEnabled() && getSelectedDoc() instanceof Szenario;
-            }
-        };
 
         /** Öffnet ein Fenster zum Umbenennen des aktuell ausgewählten Teilmodells */
         public static final Action RENAME = new StaticAction(ActionIdentifier.rename_submodel, true) {

@@ -61,7 +61,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.REMOVE_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
@@ -335,7 +335,7 @@ public final class GDCollection extends UserFieldTarget {
         activeGraphDocumentsList.add(szenario);
         if (log) {
             doc.start_transaction(pid);
-            doc.addUndoCommand(REMOVE_SZENARIO + " " + szenario.getHashString(), pid);
+            doc.addUndoCommand(MODEL_ACTION_DELETE_SZENARIO + " " + szenario.getHashString(), pid);
             doc.addRedoCommand(MODEL_ACTION_CREATE_SZENARIO + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
@@ -385,7 +385,7 @@ public final class GDCollection extends UserFieldTarget {
             doc.addUndoCommand(CHANGE_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
         }
         doc.addUndoCommand(MODEL_ACTION_CREATE_SZENARIO + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
-        doc.addRedoCommand(REMOVE_SZENARIO + " " + szen.hashString, pid);
+        doc.addRedoCommand(MODEL_ACTION_DELETE_SZENARIO + " " + szen.hashString, pid);
         //wenn das Beschreibungsfenster offen ist -> den Tab des zu löschenden Teimodells löschen
         if (descriptionFrame != null) {
             descriptionFrame.update();

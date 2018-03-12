@@ -97,7 +97,7 @@ public enum GDCommands implements ActionSource {
     CHANGE_LINE_STYLE,
 
     MODEL_ACTION_CREATE_SZENARIO,
-    REMOVE_SZENARIO,
+    MODEL_ACTION_DELETE_SZENARIO,
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
     SHOW_SZENARIO,
@@ -203,6 +203,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SZENARIO);
+        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_DELETE_SZENARIO);
     }
 
 }

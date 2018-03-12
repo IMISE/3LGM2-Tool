@@ -72,7 +72,6 @@ public enum ActionIdentifier {
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
 
     // submodels
-    remove_submodel,
     rename_submodel,
 
     // options
