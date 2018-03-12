@@ -693,7 +693,7 @@ public class ActionLibrary {
             GraphDocumentAction[] actions = new GraphDocumentAction[treeCreatableLayerNodes.length];
             for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
                 String actionName = ModelConstants.getDisplayableName(treeCreatableLayerNodes[c]);
-                actions[c] = new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, treeCreatableLayerNodes[c].getName(), actionName);
+                actions[c] = new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, treeCreatableLayerNodes[c].getName(), actionName, null);
             }
             Alphabetical.sort(actions);
             return actions;
@@ -802,21 +802,16 @@ public class ActionLibrary {
                     Pair<Class<? extends ModelElement>, Class<? extends Edge>> hidable = hidableIfNotConnected.get(i / 2);
                     Class<? extends ModelElement> elementClass = hidable.getFirstItem();
                     final boolean hide = i % 2 == 0;
-                    GraphFrameAction hideAction = new GraphFrameAction(hide ? ActionIdentifier.HIDE_UNASSOCIATED : ActionIdentifier.UNHIDE_ALL) {
-                        @Override
-                        public void actionPerformed() {
-                            if (!isEnabled()) {
-                                return;
-                            }
-                            String commandString;
-                            if (hide) {
-                                commandString = GDCommands.HIDE_UNASSOCIATED.name() + " " + elementClass.getSimpleName() + " " + hidable.getSecondItem().getSimpleName();
-                            } else {
-                                commandString = GDCommands.UNHIDE_ALL.name() + " " + elementClass.getSimpleName();
-                            }
-                            Static.getSelectedDoc().exec(commandString, TransactionManager.STANDARD_PID);
-                        }
-                    };
+                    GDCommands command;
+                    String arguments;
+                    if (hide) {
+                        command = GDCommands.HIDE_UNASSOCIATED;
+                        arguments = elementClass.getSimpleName() + " " + hidable.getSecondItem().getSimpleName();
+                    } else {
+                        command = GDCommands.UNHIDE_ALL;
+                        arguments = elementClass.getSimpleName();
+                    }
+                    GraphFrameAction hideAction = new GraphFrameAction(command, arguments, null);
                     //das hier auf keine Fall mit static import ersetzen, weil er dann statt der GDCommands die Action nimmt, die genauso heißen und null sind
                     String resKey = hide ? GDCommands.HIDE_UNASSOCIATED.name() : GDCommands.UNHIDE_ALL.name();
                     String elementClassPluralName = getDisplayablePluralName(elementClass);

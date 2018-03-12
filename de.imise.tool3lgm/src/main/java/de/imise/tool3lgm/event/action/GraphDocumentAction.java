@@ -20,9 +20,10 @@ public class GraphDocumentAction extends StaticActionNew {
      * @param identifier
      * @param arguments
      * @param text
+     * @param textSuffix
      */
-    public GraphDocumentAction(final Object identifier, final String arguments, final String text) {
-        super(identifier, arguments, text);
+    public GraphDocumentAction(final Object identifier, final String arguments, final String text, final String textSuffix) {
+        super(identifier, arguments, text, textSuffix);
     }
 
     /**

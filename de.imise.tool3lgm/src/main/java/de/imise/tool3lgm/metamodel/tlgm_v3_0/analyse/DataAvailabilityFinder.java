@@ -458,7 +458,7 @@ public class DataAvailabilityFinder {
     }
 
     public static final Action getAction() {
-        return new GraphDocumentAction(DataAvailabilityFinder.class, "", new SimpleResourceHandler(DataAvailabilityFinder.class).getString("data_availability")) {
+        return new GraphDocumentAction(DataAvailabilityFinder.class, null, new SimpleResourceHandler(DataAvailabilityFinder.class).getString("data_availability"), null) {
             @Override
             protected void actionPerformed() {
                 // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder

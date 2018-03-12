@@ -18,10 +18,19 @@ public class GraphFrameAction extends GraphDocumentAction {
 
     /**
      * @param identifier
+     * @param arguments
+     * @param textSuffix
+     */
+    public GraphFrameAction(final Object identifier, final String arguments, final String textSuffix) {
+        super(identifier, arguments, null, textSuffix);
+    }
+
+    /**
+     * @param identifier
      * @param textSuffix
      */
     public GraphFrameAction(final Object identifier, final String textSuffix) {
-        super(identifier, textSuffix);
+        super(identifier, null, null, textSuffix);
     }
 
     /**

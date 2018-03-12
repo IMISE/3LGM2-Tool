@@ -21,10 +21,11 @@ public class GraphSelectedRealNodeAction extends GraphFrameAction {
 
     /**
      * @param identifier
+     * @param arguments
      * @param textSuffix
      */
-    public GraphSelectedRealNodeAction(final Object identifier, final String textSuffix) {
-        super(identifier, textSuffix);
+    public GraphSelectedRealNodeAction(final Object identifier, final String arguments, final String textSuffix) {
+        super(identifier, arguments, textSuffix);
     }
 
     @Override

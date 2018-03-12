@@ -32,7 +32,7 @@ public class ExtrasActions {
     }
 
     private Action getRelinkETNTAction() {
-        GraphDocumentAction relinkETNT = new GraphDocumentAction(getClass(), null, resHandler.getString("ACTION_NAME_RELINK_ETNT")) {
+        GraphDocumentAction relinkETNT = new GraphDocumentAction(getClass(), null, resHandler.getString("ACTION_NAME_RELINK_ETNT"), null) {
             @Override
             public void actionPerformed() {
                 LGMGraphDocument doc = Static.getSelectedDoc();

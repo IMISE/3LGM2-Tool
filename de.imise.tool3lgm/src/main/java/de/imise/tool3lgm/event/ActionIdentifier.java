@@ -83,8 +83,6 @@ public enum ActionIdentifier {
     show_userdefinded_properties,
     // graphicOptions
     ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR,
-    HIDE_UNASSOCIATED,
-    UNHIDE_ALL,
     // localeOptions
     german,
     english,

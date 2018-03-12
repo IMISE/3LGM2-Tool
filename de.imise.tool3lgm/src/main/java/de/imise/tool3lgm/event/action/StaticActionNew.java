@@ -139,13 +139,34 @@ public abstract class StaticActionNew extends ExtendedAction {
      *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
      * @param textSuffix
      *            Suffix für die Text-Property
+     */
+    public StaticActionNew(final Object identifier, final String arguments, final String text, final String textSuffix) {
+        this(identifier, arguments, text, textSuffix, null);
+    }
+
+    /**
+     * Konstruktor
+     * <p>
+     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
+     * <p>
+     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
+     * {@link JRadioButtonMenuItem}s genutzt werden. Die Action wird
+     *
+     * @param identifier
+     *            eindeutiger Identifier für diese Action
+     * @param arguments
+     *            Argumente des Kommandos
+     * @param text
+     *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
+     * @param textSuffix
+     *            Suffix für die Text-Property
      * @param initialSelectionState
      *            initialer Selektionszustand. Wird hier ein Wert != <code>null</code> übergeben, dann wird die Action als optionAction angesehen.
      * @see de.imise.util.swing.event.ExtendedAction#isOptionAction()
      */
     private StaticActionNew(final Object identifier, final String arguments, final String text, final String textSuffix, final Boolean initialSelectionState) {
         //wenn darunter das try-catch schief geht, dann ist der Text = dem übergebenen identifier.toString()
-        super(text == null ? identifier.toString() : text, initialSelectionState);
+        super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""), initialSelectionState);
         putValue(IDENTIFIER_KEY, identifier);
 
         String identifierName = getIdentifierName(identifier);
