@@ -511,7 +511,22 @@ public abstract class Tool3lgmConstants {
      * @return String with value of resource
      */
     public static String getResString(final Object key, final String... replacements) {
-        String s = getResString(key.toString());
+        return getReplacedString(key.toString(), replacements);
+    }
+
+    /**
+     * Wenn replacements übergeben werden, dann werden diese in den Originalstring eingesetzt.
+     * Wo ersetzt werden soll wird durch den in geschweifte Klammern gesetzten Index des
+     * einzusetztenden Replacements festgelegt.
+     * Beispiel: der Res-String liefert "Alle {0} ersetzen" und als replacement wird ein
+     * Parameter "Aufgaben" übergeben. Der Ergebnisstring ist dann "Alle Aufgaben ersetzen".
+     * 
+     * @param org
+     * @param replacements
+     * @return
+     */
+    public static String getReplacedString(final String org, final String... replacements) {
+        String s = org;
         for (int i = 0; i < replacements.length; i++) {
             String currentReplacementMarker = "{" + i + "}";
             s = s.replace(currentReplacementMarker, replacements[i]);
@@ -522,7 +537,7 @@ public abstract class Tool3lgmConstants {
     /**
      * Wenn der Key nicht in den Resoucen gefunden wird, kommt einfach der key selsbt zurück und es wird keine MissingResourceException
      * ausgelöst.
-     * 
+     *
      * @param key
      * @return
      */
