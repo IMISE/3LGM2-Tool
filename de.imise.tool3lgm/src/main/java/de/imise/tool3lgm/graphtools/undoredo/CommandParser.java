@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -15,14 +14,22 @@ public class CommandParser {
      *
      * @param line
      *            Die zu parsende Kommandozeile
-     * @param firstArgumentBeginIndex
-     *            Index, an dem das erste Argument in der Zeile beginnt. Das Sollte normalerweise der Index hinter dem Leerzeichen nach dem Kommando
-     *            sein.
+     * @param args
+     *            Liste, in die die eventuell in der Zeile stehenden Kommandoargumente gelegt werden
      * @return
+     *         Name des Kommandos der übergebenen Zeile (das ist das erste Wort am Anfang)
      */
-    public static final List<String> getArguments(final String line, final int firstArgumentBeginIndex) {
-        List<String> args = new ArrayList<>();
-        int wordStart = firstArgumentBeginIndex;
+    public static final String parseCommandLine(final String line, final List<String> args) {
+        int nextWhitespace = line.indexOf(' ');
+        String commandName;
+        args.clear();
+        //kein weiteres Leerzeichen gefunden
+        if (nextWhitespace < 0) {
+            return line;
+
+        }
+        commandName = line.substring(0, nextWhitespace);
+        int wordStart = nextWhitespace + 1;
         int lineLength = line.length();
         //für alle Zeichen ab dem Index des Beginns des ersten Argumentes
         for (int i = wordStart; i < lineLength; i++) {
@@ -102,14 +109,14 @@ public class CommandParser {
                         //leeres Argument hinzufügen
                         args.add("");
                     }
-                    //hier geht das nächste Wort los
-                    wordStart = w + 1;
-                    //i wird beim nächsten Schleifendurchlauf auf denselben Wert gesetzt und alles steht wie auf Anfang
-                    i = w;
                 }
+                //hier geht das nächste Wort los
+                wordStart = w + 1;
+                //i wird beim nächsten Schleifendurchlauf auf denselben Wert gesetzt und alles steht wie auf Anfang
+                i = w;
             }
         }
-        return args;
+        return commandName;
     }
 
 }

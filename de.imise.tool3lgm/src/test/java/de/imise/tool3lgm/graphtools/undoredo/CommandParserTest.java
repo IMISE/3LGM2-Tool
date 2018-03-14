@@ -1,12 +1,12 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
+import static org.testng.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 public class CommandParserTest {
@@ -34,18 +34,8 @@ public class CommandParserTest {
             ret0, ret1, ret2, ret3, ret4, ret5
     };
 
-    final int cLength = cmd.length() + 1;
-
     private static final String removeFirstAndLast(final String s) {
         return s.substring(1, s.length() - 1);
-    }
-
-    @BeforeTest
-    public void beforeTest() {
-    }
-
-    @AfterTest
-    public void afterTest() {
     }
 
     @Test
@@ -59,73 +49,60 @@ public class CommandParserTest {
     }
 
     @Test
-    public void getArgumentsNoArg() {
-        realTest();
+    public void parseCommandLineNoArg() {
+        runTest();
     }
 
     @Test
-    public void getArgumentsSimple() {
+    public void parseCommandLineSimple() {
         for (int i = 0; i < args.length; i++) {
-            realTest(i);
+            runTest(i);
         }
     }
 
     @Test
-    public void getArgumentsTwoArgs() {
+    public void parseCommandLineTwoArgs() {
         for (int i = 0; i < args.length - 1; i++) {
-            realTest(i, i + 1);
+            runTest(i, i + 1);
         }
     }
 
     @Test
-    public void getArgumentsMultipleWhitespaces() {
-        //2 Whitespaces zwischen cmd und erstem arg
-        String command = cmd + "  a";
-        List<String> arguments = CommandParser.getArguments(command, cLength);
-        List<String> expected = Arrays.asList("", "a");
-        Assert.assertEquals(arguments, expected);
+    public void parseCommandLineTwoArgsBackward() {
+        for (int i = 0; i < args.length - 1; i++) {
+            runTest(i + 1, i);
+        }
     }
 
     @Test
-    public void getArgumentsMultipleWhitespaces2() {
-        //3 Whitespaces -> = 3 leere Parameter
-        String command = cmd + "   ";
-        List<String> arguments = CommandParser.getArguments(command, cLength);
-        List<String> expected = Arrays.asList("", "", "");
-        Assert.assertEquals(arguments, expected);
+    public void parseCommandLineTwoArgsSameArg() {
+        for (int i = 0; i < args.length; i++) {
+            runTest(i, i);
+        }
     }
 
     @Test
-    public void getArgumentsMultipleWhitespaces3() {
-        //3 Whitespaces und 1 x leere Quotes -> = 3 leere Parameter
-        String command = cmd + "   ''";
-        List<String> arguments = CommandParser.getArguments(command, cLength);
-        List<String> expected = Arrays.asList("", "", "");
-        Assert.assertEquals(arguments, expected);
-        //1 x leere Quotes und 3 Whitespaces-> = 3 leere Parameter
-        command = cmd + " '' ";
-        arguments = CommandParser.getArguments(command, cLength);
-        expected = Arrays.asList("", "");
-        Assert.assertEquals(arguments, expected);
-        command = cmd + " 'aaa' 'bbb'";
-        arguments = CommandParser.getArguments(command, cLength);
-        expected = Arrays.asList("aaa", "bbb");
-        Assert.assertEquals(arguments, expected);
-        command = cmd + " aaa bbb ";
-        arguments = CommandParser.getArguments(command, cLength);
-        expected = Arrays.asList("aaa", "bbb", "");
-        Assert.assertEquals(arguments, expected);
-        command = cmd + " '' aaa bbb ''";
-        arguments = CommandParser.getArguments(command, cLength);
-        expected = Arrays.asList("", "aaa", "bbb", "");
-        Assert.assertEquals(arguments, expected);
+    public void parseCommandLineMultipleWhitespaces() {
+        realTest(cmd + "  a", "", "a");
+        realTest(cmd + "   ", "", "", "");
+        realTest(cmd + "   ''", "", "", "");
+        realTest(cmd + " '' ", "", "");
+        realTest(cmd + " 'aaa' 'bbb'", "aaa", "bbb");
+        realTest(cmd + " aaa bbb ", "aaa", "bbb", "");
+        realTest(cmd + " '' aaa bbb ''", "", "aaa", "bbb", "");
     }
 
-    private void realTest(final int... argumentIndex) {
+    private void realTest(final String commandLine, final String... expectedArgs) {
+        List<String> args = new ArrayList<>();
+        String commandName = CommandParser.parseCommandLine(commandLine, args);
+        assertTrue(commandLine.startsWith(commandName));
+        assertTrue(commandLine.equals(commandName) || commandLine.charAt(commandName.length()) == ' ');
+        Assert.assertEquals(args, Arrays.asList(expectedArgs));
+    }
+
+    private void runTest(final int... argumentIndex) {
         String command = getCmd(argumentIndex);
-        List<String> arguments = CommandParser.getArguments(command, cLength);
-        List<String> expected = getRet(argumentIndex);
-        Assert.assertEquals(arguments, expected);
+        realTest(command, getRet(argumentIndex));
     }
 
     private String getCmd(final int... argumentIndex) {
@@ -137,10 +114,10 @@ public class CommandParserTest {
         return sb.toString();
     }
 
-    private List<String> getRet(final int... returnIndex) {
-        List<String> returnList = new ArrayList<>();
+    private String[] getRet(final int... returnIndex) {
+        String[] returnList = new String[returnIndex.length];
         for (int i = 0; i < returnIndex.length; i++) {
-            returnList.add(rets[i]);
+            returnList[i] = rets[i];
         }
         return returnList;
     }

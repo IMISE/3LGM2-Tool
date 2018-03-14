@@ -35,6 +35,7 @@ import javax.swing.SwingConstants;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
@@ -1229,17 +1230,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (Strings.isNullOrEmpty(line)) {
                 return;
             }
-            int wordStart = 0;
-            int nextWhitespace = line.indexOf(' ');
-            String commandName;
-            List<String> args = null;
-            //kein weiteres Leerzeichen gefunden
-            if (nextWhitespace < 0) {
-                commandName = line;
-            } else {
-                commandName = line.substring(wordStart, nextWhitespace);
-                args = CommandParser.getArguments(line, commandName.length() + 1);
-            }
+            List<String> args = new ArrayList<>();
+            String commandName = CommandParser.parseCommandLine(line, args);
             GDCommands command = getCommand(commandName);
             String[] argv = args == null ? new String[0] : args.toArray(new String[0]);
 
