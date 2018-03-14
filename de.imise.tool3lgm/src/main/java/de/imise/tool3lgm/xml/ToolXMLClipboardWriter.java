@@ -73,6 +73,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeEndElement(); //</objects>
         writeStartElement("szenario"); //<szenario>
         HashSet<String> icons = new HashSet<>();
+        int lastLayer = -1;
         for (ModelElement me : copyElements) {
             if (me.isUnique()) {
                 continue;
@@ -81,11 +82,23 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
             if (ec == null) {
                 continue;
             }
+            int layer = me.layerFor();
+            if (layer != lastLayer) {
+                if (lastLayer >= 0) {
+                    writeEndElement(); //</layer>
+                }
+                writeStartElement("layer"); //<layer>
+                writeAttribute("number", layer);
+                lastLayer = layer;
+            }
             writeElementContainer(ec);
             GraphElementLayout layout = ec.get3LGMLayout();
             if (layout != null && layout.icon != null) {
                 icons.add(layout.icon);
             }
+        }
+        if (lastLayer >= 0) {
+            writeEndElement(); //</layer>
         }
         writeEndElement(); //</szenario>
         writeStartElement("images"); //<images>
