@@ -1233,8 +1233,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             List<String> args = new ArrayList<>();
             String commandName = CommandParser.parseCommandLine(line, args);
             GDCommands command = getCommand(commandName);
-            String[] argv = args == null ? new String[0] : args.toArray(new String[0]);
-
+            String[] argv = args.toArray(new String[0]);
             dispatch_command(command, argv, pid);
         } catch (Exception e) {
             Log(e);
