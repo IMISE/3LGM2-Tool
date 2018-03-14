@@ -1392,7 +1392,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     public boolean isVerificationMode() {
-        return verify_mode;
+        return verify_mode || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
     }
 
     // --- Transaktions-Verwaltung --- Ende ---
