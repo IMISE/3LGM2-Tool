@@ -36,7 +36,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     private final JButton forward, backward, undo, redo;
 
-    private final ArrayList<AbstractInternalFrame> windowList = new ArrayList<AbstractInternalFrame>();
+    private final ArrayList<AbstractInternalFrame> windowList = new ArrayList<>();
 
     private boolean operatingWindowList = false;
 
@@ -275,23 +275,22 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
      */
     private void updateUndoRedoToolTips() {
         GraphDocument doc = Static.getSelectedDoc();
-
-        if (doc == null || !doc.isVerificationMode() || doc.getCollection().getTman() == null) {
+        //die Tooltips auf den Undo-Redo-Buttons sollen den Queue anzeigen, wenn das aktuelle doc auf verfificationMode gestellt wurde oder der globale Code-Schalter an ist
+        boolean showQueueAsToolTip = doc != null && doc.getCollection().getTman() != null && (doc.isVerificationMode() || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS);
+        if (showQueueAsToolTip) {
+            TransactionManager tman = doc.getCollection().getTman();
+            String queue = tman.getQueue(10);
+            queue = queue.replaceAll("\n", "<br>");
+            queue = "<html><body>" + queue + "</html></body>";
+            undo.setToolTipText(queue);
+            redo.setToolTipText(queue);
+        } else {
             String identifier = undo.getAction().getValue(StaticActionNew.IDENTIFIER_KEY).toString();
             undo.setToolTipText(getResString(StaticActionNew.TOOLTIP_RESSOURCE_PREFIX + identifier));
 
             identifier = redo.getAction().getValue(StaticActionNew.IDENTIFIER_KEY).toString();
             redo.setToolTipText(getResString(StaticActionNew.TOOLTIP_RESSOURCE_PREFIX + identifier));
-            return;
         }
-        TransactionManager tman = doc.getCollection().getTman();
-        String queue = tman.getQueue(10);
-        queue = queue.replaceAll("\n", "<br>");
-        queue = "<html><body>" + queue + "</html></body>";
-
-        undo.setToolTipText(queue);
-        redo.setToolTipText(queue);
-
     }
 
     @Override
