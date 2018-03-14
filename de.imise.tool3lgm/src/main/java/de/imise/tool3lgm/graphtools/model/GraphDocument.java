@@ -19,9 +19,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
-import java.io.IOException;
-import java.io.StreamTokenizer;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,6 +46,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -519,8 +517,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 JCheckBox dontAskAgain = new JCheckBox(getResString("dont_ask_again"));
                 dontAskAgain.setSelected(false);
                 Object[] cont = new Object[] {
-                        getResString("remove_element_warning"),
-                        dontAskAgain
+                        getResString("remove_element_warning"), dontAskAgain
                 };
                 int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (value == JOptionPane.YES_OPTION) {
@@ -536,9 +533,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // Auswahl in einem Teilmodell
         else {
             Object[] buttons = new Object[] {
-                    getResString("submodel"),
-                    getResString("whole_model"),
-                    getResString("cancel")
+                    getResString("submodel"), getResString("whole_model"), getResString("cancel")
             };
             int value = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("loeschfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
             if (value == JOptionPane.YES_OPTION) {
@@ -1226,146 +1221,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
     }
 
-    //	/** Puffer für Kommandoargumente. Mehr als 100 Argumente sind absolut unwahrscheinlich * /
-    //	private static final ArrayList<String> commandBuffer = new ArrayList<String>();
-    //
-    //	/**
-    //	 * AXS dachte mal, dass die Lange Zeit beim Undo ganz vieler Aktionen vielleicht mit dem aufwendigen Parsen der
-    //	 * Undo-Kommandos zusammenhängt. Dabei ist diese Funktion entstanden, die dasselbe macht wie die darunter, aber
-    //	 * auf ganz andere Weise.
-    //	 *
-    //	 * @param line
-    //	 * 		Eine gültiges Kommando in <code>line</code> besteht immer aus einem GDCommand an Position 0 und dann duch Leerzeichen
-    //	 * 		getrennte Argumente. Die Argumente können auch Leerzeichen enthalten. Solche Argumente sollten durch
-    //	 * 		{@link GraphDocument#GDCOMMAND_TEXT_SURROUNDER} umschlossen sein, damit sie als zusammenghörig erkannt werden.
-    //	 * @param pid
-    //	 * /
-    //	private void exec_command(String line, int pid) {
-    //		long start = System.currentTimeMillis();
-    //		try {
-    //			if (isVerificationMode())
-    //				System.out.println(line);
-    //
-    //			StringTokenizer st1 = new StringTokenizer(line);
-    //
-    //			//als erstes das Kommado ganz vorne parsen
-    //			int l = line.length();
-    //			String commandString = null;
-    //			int i1 = 0;
-    //			//Alle Leerzeichen am Anfang überspringen
-    //			while (i1 < l && line.charAt(i1) <= 32)
-    //				i1++;
-    //			//es stand nichts in der line -> raus
-    //			if (i1 == l) {
-    //				System.err.println("GraphDocument.exec_command(String line, int pid): Empty line argument");
-    //				return;
-    //			}
-    //			int i2 = i1 + 1;
-    //			//Bis zum Lineend oder dem nächsten char <= 32 suchen -> zwischen i1 und i2 steht das Kommando
-    //			while (i2 < l && line.charAt(i2) > 32)
-    //				i2++;
-    //			commandString = line.substring(i1, i2);
-    //			GDCommands command = GDCommands.valueOf(commandString);
-    //			if (command == null) {
-    //				System.err.println("GraphDocument.exec_command(String line, int pid): wrong line command: " + line);
-    //				return;
-    //			}
-    //
-    //			commandBuffer.clear();
-    //			i1 = i2;
-    //			while(i1 < l) {
-    //				char c = ' ';
-    //				//Alle Leerzeichen vor einem Argument überspringen
-    //				while (i1 < l && (c = line.charAt(i1)) <= 32)
-    //					i1++;
-    //				//es stand nichts mehr in der line
-    //				if (i1 == l)
-    //					break;
-    //				//wenn das Argument von Hochkommata eingeschlossen ist
-    //				if (c == GDCOMMAND_TEXT_SURROUNDER) {
-    //					i1++;
-    //					i2 = i1;
-    //					//nächstes Hochkomma = Argumentende suchen
-    //					while (i2 < l && line.charAt(i2) != GDCOMMAND_TEXT_SURROUNDER)
-    //						i2++;
-    //					//kein schließendes Hochkomma gefunden -> Fehler
-    //					if (i2 == l) {
-    //						System.err.println("GraphDocument.exec_command(String line, int pid): wrong line argument: " + line);
-    //						return;
-    //					}
-    //				//keine Hochkommata um das Argument -> LineEnd oder nächstes char <= 32 suchen
-    //				} else {
-    //					i2 = i1;
-    //					//LineEnd oder nächstes Leerzeichen suchen
-    //					while (++i2 < l && line.charAt(i2) > 32);
-    //				}
-    //				commandBuffer.add(line.substring(i1, i2));
-    //				i1 = i2 + 1;
-    //			}
-    //			String argv[] = new String[commandBuffer.size()];
-    //			for (int d = 0; d < argv.length; d++)
-    //				argv[d] = commandBuffer.get(d);
-    //			dispatch_command(command, argv, pid);
-    //		} catch (Exception e) {
-    //			Log(e);
-    //			JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
-    //		}
-    //		fullTime1 += System.currentTimeMillis() - start;
-    //	}
-    //*/
-
-    /**
-     *
-     */
-    private void exec_command_old(final String line, final int pid) {
-        try {
-            if (isVerificationMode()) {
-                System.out.println(line);
-            }
-
-            StreamTokenizer st = new StreamTokenizer(new StringReader(line));
-            st.wordChars('\\', '\\');
-            st.wordChars('_', '_');
-            List<String> tokens = new ArrayList<>();
-            try {
-                int t = st.nextToken();
-                while (t != StreamTokenizer.TT_EOF) {
-                    tokens.add(t == StreamTokenizer.TT_NUMBER ? new Integer(new Double(st.nval).intValue()).toString() : st.sval);
-                    t = st.nextToken();
-                }
-            } catch (IOException e) {
-                Log(e);
-            }
-
-            //je nach globaler Option können die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
-            //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
-            //muss man testen, ob sich das Kommando auf int casten lässt.
-            GDCommands command = null;
-            try {
-                //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
-                //versuche den Index zu parsen und das Kommando
-                command = GDCommands.values()[new Integer(tokens.get(0)).intValue()];
-            } catch (Exception e) {
-                //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
-                command = tokens.size() > 0 ? GDCommands.valueOf(tokens.get(0)) : null;
-            }
-
-            if (command == null) {
-                return;
-            }
-
-            int argc = tokens.size() - 1;
-            String argv[] = new String[argc];
-            for (int d = 0; d < argc; d++) {
-                argv[d] = tokens.get(d + 1);
-            }
-            dispatch_command(command, argv, pid);
-        } catch (Exception e) {
-            Log(e);
-            JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-
     private void exec_command(final String line, final int pid) {
         try {
             if (isVerificationMode()) {
@@ -1383,17 +1238,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 commandName = line;
             } else {
                 commandName = line.substring(wordStart, nextWhitespace);
-                args = new ArrayList<>();
-                wordStart = nextWhitespace + 1;
-                while (wordStart < line.length()) {
-                    nextWhitespace = line.indexOf(' ', wordStart);
-                    if (nextWhitespace < 0) {
-                        nextWhitespace = line.length();
-                    }
-                    String arg = line.substring(wordStart, nextWhitespace);
-                    args.add(arg);
-                    wordStart = nextWhitespace + 1;
-                }
+                args = CommandParser.getArguments(line, commandName.length() + 1);
             }
             GDCommands command = getCommand(commandName);
             String[] argv = args == null ? new String[0] : args.toArray(new String[0]);
