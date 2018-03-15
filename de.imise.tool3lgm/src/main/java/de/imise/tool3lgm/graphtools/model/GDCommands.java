@@ -26,6 +26,7 @@ public enum GDCommands implements ActionSource {
     SET_NAME,
     //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
     CHANGE_FORM,
+    MODEL_ACTION_SET_ELEMENT_POSITION,
     MODEL_ACTION_SET_ELEMENT_FONT,
     MODEL_ACTION_SET_ELEMENT_COLOR,
     MODEL_ACTION_SET_ELEMENT_ALPHA, //Für diesen Identifier gibt es keine Action, weil das über SetColor läuft. Man braucht ihn nur für das UNDO von MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_XXX
@@ -58,7 +59,6 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT,
     MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT,
 
-    COORDINATE_KNOT,
     AUFKLAPPEN,
     ZUKLAPPEN,
 

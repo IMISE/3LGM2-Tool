@@ -13,7 +13,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.GROUP_ORDER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.USER_FIELD_VALUE_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.ADDICT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -832,7 +833,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case COORDINATE_KNOT:
+        case MODEL_ACTION_SET_ELEMENT_POSITION:
             if (argc == 6) {
                 try {
                     String szenHash = argv[0];
@@ -2144,7 +2145,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         String undoCommandArguments = nc.getX() + " " + nc.getY() + " " + nc.getWidth() + " " + nc.getHeight();
         String redoCommandArguments = x + " " + y + " " + width + " " + height;
-        String commandPrefix = COORDINATE_KNOT + " " + szenHash + " " + nc.getHashString();
+        String commandPrefix = MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + nc.getHashString();
         addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
         addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
         nc.setCoordinates(x, y, width, height);
@@ -3508,8 +3509,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (slaveContainer != null) {
             Dimension pos = calculateAddictPosition(masterContainer);
 
-            addRedoCommand(GDCommands.ADDICT + " " + szenHash + " " + edgeClassName + " " + k.getHashString() + " " + masterElement.getHashString() + " " + slaveElement.getHashString() + " " + position, pid);
-            addUndoCommand(GDCommands.COORDINATE_KNOT + " " + szenHash + " " + slaveElement.getHashString() + " " + slaveContainer.getX() + " " + slaveContainer.getY() + " " + slaveContainer.getWidth() + " " + slaveContainer.getHeight(), pid);
+            addRedoCommand(ADDICT + " " + szenHash + " " + edgeClassName + " " + k.getHashString() + " " + masterElement.getHashString() + " " + slaveElement.getHashString() + " " + position, pid);
+            addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveElement.getHashString() + " " + slaveContainer.getX() + " " + slaveContainer.getY() + " " + slaveContainer.getWidth() + " " + slaveContainer.getHeight(), pid);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveContainer.getWidth(), slaveContainer.getHeight());
 
             for (Szenario szenario : gdcoll.getSzenarios()) {

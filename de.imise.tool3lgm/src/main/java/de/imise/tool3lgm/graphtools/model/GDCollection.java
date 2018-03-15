@@ -38,7 +38,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTIO
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
@@ -61,6 +60,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
@@ -541,7 +541,7 @@ public final class GDCollection extends UserFieldTarget {
                 ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_ICON + " " + ecDocHash + " " + ecHash + " " + iconName, pid);
             }
             ecDoc.addUndoCommand(MODEL_ACTION_MOVE_ORDER + " " + ecDocHash + " " + ecHash + " " + ecDoc.layer[ec.layerFor()].indexOf(ec), pid);
-            ecDoc.addUndoCommand(COORDINATE_KNOT + " " + ecDocHash + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
+            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + ecDocHash + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
             if (!kc.isVisible()) {
                 ecDoc.addUndoCommand(SET_VISIBLE + " " + false + " " + ecDocHash + " " + ecHash, pid);
             }
