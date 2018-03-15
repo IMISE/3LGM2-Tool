@@ -25,7 +25,6 @@ import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Locale;
-import de.imise.tool3lgm.event.ActionLibrary.SubmodelActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
@@ -69,7 +68,7 @@ public class MenuCollection {
     public static final JMenu LAYOUT_MENU = new LayoutMenu();
 
     /** Das Teilmodell-Menu */
-    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SZENARIO, GDCommands.MODEL_ACTION_DELETE_SZENARIO, new JSeparator(), SubmodelActions.RENAME);
+    public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SZENARIO, GDCommands.MODEL_ACTION_DELETE_SZENARIO, new JSeparator(), GDCommands.MODEL_ACTION_RENAME_SZENARIO);
 
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
@@ -111,17 +110,14 @@ public class MenuCollection {
     public static class LayoutSubMenus {
 
         /** Das Element-Layout-Menu */
-        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu("elementLayoutMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR,
-                createMenu( // Transparenz-Menu
-                        "elementTransparencyMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
+        public static final JMenu ELEMENT_LAYOUT_MENU = createMenu("elementLayoutMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR, createMenu( // Transparenz-Menu
+                "elementTransparencyMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL),
                 createMenu( // Auf Standard setzen Menu
                         "elementSetToStandardMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
-                new JSeparator(),
-                createMenu( // Icon-Menu
+                new JSeparator(), createMenu( // Icon-Menu
                         "icon", GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON),
-                new JSeparator(),
-                createMenu( // Textausrichtungs-Menu (horizontal)
+                new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)
                         "textAlignmentMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT, new JSeparator(),
                         GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
 

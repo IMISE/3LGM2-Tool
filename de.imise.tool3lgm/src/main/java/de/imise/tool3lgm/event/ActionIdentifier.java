@@ -71,9 +71,6 @@ public enum ActionIdentifier {
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
 
-    // submodels
-    rename_submodel,
-
     // options
     // General
     // browserOptions

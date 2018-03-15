@@ -6,6 +6,7 @@ import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
+import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
@@ -98,6 +99,8 @@ public enum GDCommands implements ActionSource {
 
     MODEL_ACTION_CREATE_SZENARIO,
     MODEL_ACTION_DELETE_SZENARIO,
+    MODEL_ACTION_RENAME_SZENARIO,
+
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
     SHOW_SZENARIO,
@@ -203,7 +206,8 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SZENARIO);
-        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_DELETE_SZENARIO);
+        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SZENARIO);
+        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SZENARIO);
     }
 
 }

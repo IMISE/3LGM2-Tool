@@ -39,7 +39,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_ELEMENT_TO_SZENA
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_FORM;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COORDINATE_KNOT;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
@@ -50,9 +49,12 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_RENAME_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
@@ -61,7 +63,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
@@ -396,24 +397,33 @@ public final class GDCollection extends UserFieldTarget {
         changed = true;
     }
 
-    /**
-     * @param szen
-     * @return
-     */
-    public boolean renameSzenario(final Szenario szen) {
-        String szenTitle = askName(szen.getTitle());
-        if (szenTitle == null) {
-            return false;
+    public void renameSzenario(final String szenHash, final String title, final int pid) {
+        GraphDocument szen = getGraphDocumentCoded(szenHash);
+        if (!(szen instanceof Szenario)) {
+            return;
         }
-        szen.getCollection().setChanged(true);
+        String szenTitle = title;
+        if (Strings.isNullOrEmpty(title)) {
+            szenTitle = askName(szen.getTitle());
+        }
+        String oldTitle = szen.getTitle();
+        if (szenTitle == null || szenTitle.equals(oldTitle)) {
+            return;
+        }
+        doc.start_transaction(pid);
         szen.setTitle(szenTitle);
+        doc.addUndoCommand(MODEL_ACTION_RENAME_SZENARIO + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
+        doc.addRedoCommand(MODEL_ACTION_RENAME_SZENARIO + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
+
+        //sowas hier müsste eigentlich über Liestener laufen!
+        Static.getTool().szenarioRenamed((Szenario) szen);
         if (descriptionFrame != null) {
             descriptionFrame.update();
         }
-        //			descriptionFrame.renameTab(szen);
-        Static.getTool().getModelBrowserPanel().updateTitle(szen);
+
+        doc.finish_transaction(pid);
         distribute(DATA_CHANGED, null, null, doc, STANDARD_PID);
-        return true;
+        changed = true;
     }
 
     /**
@@ -799,8 +809,7 @@ public final class GDCollection extends UserFieldTarget {
                 //wenn durch das Löschen der Edge auch die Kardinalität für eins oder beide der durch die Edge verbundenen
                 //Elemente unterschritten wurde -> die Elemente auch löschen
                 ModelElement[] startEnd = {
-                        edge.getStart(),
-                        edge.getEnd()
+                        edge.getStart(), edge.getEnd()
                 };
                 for (ModelElement elem : startEnd) {
                     //wenn die Anzahl der bestehenden Kanten der zu löschenden Art für das verbundene Element gleich

@@ -852,28 +852,6 @@ public class ActionLibrary {
     }
 
     /**
-     * Actions für das Erstellen, Löschen, ... von Teilmodellen
-     *
-     * @author fstephan
-     */
-    public static class SubmodelActions {
-
-        /** Öffnet ein Fenster zum Umbenennen des aktuell ausgewählten Teilmodells */
-        public static final Action RENAME = new StaticAction(ActionIdentifier.rename_submodel, true) {
-
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                getTool().renameSzenario();
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return getSelectedDoc() instanceof Szenario && super.isEnabled();
-            }
-        };
-    }
-
-    /**
      * Actions für das Wechseln der Ebenen-Ansicht, Anzeigen der Toolbars, etc.
      *
      * @author fstephan

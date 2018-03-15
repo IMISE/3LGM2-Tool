@@ -1100,7 +1100,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addElementsToSzenario(szen.getHashString(), new ArrayList<>(selectedContainer), pid);
             break;
 
-        case MODEL_ACTION_DELETE_SZENARIO:
+        case MODEL_ACTION_DELETE_SZENARIO: {
             String szenHash = null;
             if (argc == 0) {
                 LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
@@ -1110,7 +1110,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             gdcoll.deleteSzenario(szenHash, pid);
             break;
-
+        }
+        case MODEL_ACTION_RENAME_SZENARIO: {
+            String szenHash = null;
+            String newName = null;
+            if (argc == 0) {
+                LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                szenHash = selectedDoc != null ? selectedDoc.hashString : null;
+            } else {
+                szenHash = argv[0];
+                newName = argv[1];
+            }
+            gdcoll.renameSzenario(szenHash, newName, pid);
+            break;
+        }
         case ADD_ELEMENT_TO_SZENARIO:
             //argv[0] = Quell-GraphDocument-Hash (kann auch das Hauptdokument sein)
             //argv[1] = Ziel-Szenario-Hash

@@ -817,9 +817,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return true;
         }
         Object[] buttons = new Object[] {
-                getResString("yes"),
-                getResString("no"),
-                getResString("cancel")
+                getResString("yes"), getResString("no"), getResString("cancel")
         };
         File file = gdcoll.getFile();
         int answer = JOptionPane.showOptionDialog(this, getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons,
@@ -985,24 +983,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * Benennt selektiertes Szenario um
+     * reagiert auf ein umbenanntes Szenario
      */
-    public void renameSzenario() {
-        GraphDocument doc = getSelectedDoc();
-        if (doc == null || !(doc instanceof Szenario)) {
-            return;
-        }
-        Szenario sz = (Szenario) doc;
-        if (!sz.getCollection().renameSzenario(sz)) {
-            return;
-        }
-        InternalGraphFrame frame = sz.getFrame();
+    public void szenarioRenamed(final Szenario szen) {
+        InternalGraphFrame frame = szen.getFrame();
         if (frame != null) {
             frame.updateTitle();
         }
-
-        GraphDocument mainDoc = sz.getCollection().getMainGraphDocument();
-
+        getModelBrowserPanel().updateTitle(szen);
+        GraphDocument mainDoc = szen.getCollection().getMainGraphDocument();
         //Alt = in allen Szenarions allen Elementen (und eben nicht allen Containern) den neuen Namen verpassen
         // for (ModelElement me : sz.getModelItems(ModelElement.class, true))
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
@@ -1309,9 +1298,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (frame != null) {
             if (hyperlink != null) {
                 Object[] buttons = new Object[] {
-                        getResString("hyperlink"),
-                        getResString("submodel"),
-                        getResString("cancel")
+                        getResString("hyperlink"), getResString("submodel"), getResString("cancel")
                 };
                 int value = JOptionPane.showOptionDialog(null, getResString("link_oder_szen_frage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
                 if (value == JOptionPane.YES_OPTION) {
