@@ -1,19 +1,11 @@
 package de.imise.tool3lgm.event;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
-import java.awt.event.ActionEvent;
-import java.util.MissingResourceException;
-
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
-
-import de.imise.tool3lgm.KeyStrokes;
+import de.imise.tool3lgm.event.action.StaticActionNew;
 
 /**
- * Identifiers für {@link StaticAction}s
+ * Identifiers für {@link StaticActionNew}
  * <p>
- * Über diese Identifier, können {@link StaticAction}s ihre Attribute bekommen.
+ * Über diese Identifier, können {@link StaticActionNew} ihre Attribute bekommen.
  */
 public enum ActionIdentifier {
 
@@ -94,87 +86,4 @@ public enum ActionIdentifier {
 
     ;
 
-    /**
-     * Gibt den command-<code>String</code> des {@link ActionEvent}s wieder, das beim Auslösen der
-     * durch <code>identifier</code> identifizierten {@link StaticAction} entsteht.
-     *
-     * @param actionCommand
-     */
-    @Deprecated
-    String getActionCommand() {
-        return null;
-        // return Tool3lgmConstants.getActionCommand(name());
-    }
-
-    /**
-     * Gibt den {@link KeyStroke} zurück, der die durch diesen Identifier identifizierte {@link StaticAction} auslöst.
-     *
-     * @return
-     */
-    @Deprecated
-    KeyStroke getKeyStroke() {
-        return KeyStrokes.getKeyStroke(this);
-    }
-
-    /**
-     * Gibt das große Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
-     *
-     * @return
-     */
-    @Deprecated
-    Icon getLargeIcon() {
-        return null;
-        // return Tool3lgmConstants.getIcon(name().concat(Tool3lgmConstants.LARGE_ICON_SUFFIX));
-    }
-
-    /**
-     * Gibt ausführliche Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung bei Hilfe)
-     *
-     * @param description
-     */
-    @Deprecated
-    String getLongDescription() {
-        return null;
-        // return
-        // Tool3lgmConstants.getDescription(name().concat(Tool3lgmConstants.LONG_DESCRIPTION_SUFFIX));
-
-    }
-
-    /**
-     * Gibt kurze Beschreibung der durch diesen Identifier identifizierten {@link StaticAction} zurück. (Zur Verwendung als Tooltip)
-     *
-     * @param description
-     */
-    @Deprecated
-    String getShortDescription() {
-        return null;
-        // return
-        // Tool3lgmConstants.getDescription(name().concat(Tool3lgmConstants.SHORT_DESCRIPTION_SUFFIX));
-    }
-
-    /**
-     * Gibt das kleine Icon für die durch diesen Identifier identifizierte {@link StaticAction} wieder
-     *
-     * @return
-     */
-    @Deprecated
-    Icon getSmallIcon() {
-        return null;
-        // return Tool3lgmConstants.getIcon(name().concat(Tool3lgmConstants.SMALL_ICON_SUFFIX));
-    }
-
-    /**
-     * Gibt den anzuzeigenden Text für die durch diesen Identifier identifizierte {@link StaticAction} wieder.
-     *
-     * @param
-     */
-    @Deprecated
-    String getText() {
-        try {
-            return getResString(toString());
-        } catch (MissingResourceException e) {
-            e.printStackTrace();
-            return toString();
-        }
-    }
 }
