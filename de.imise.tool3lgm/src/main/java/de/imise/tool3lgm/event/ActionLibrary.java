@@ -14,9 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -95,6 +93,13 @@ import de.imise.util.swing.event.ToggleAction;
  * @author fstephan
  */
 public class ActionLibrary {
+
+    /** "..."-Suffix Actions */
+    private static final String PPP = getResString("3points");
+
+    /** Konstruktor - Verhindert Instanziierung */
+    private ActionLibrary() {
+    }
 
     /**
      * Actions für das Erstellen, Laden, Speichern, ... von Dateien.
@@ -1032,39 +1037,4 @@ public class ActionLibrary {
         };
     }
 
-    /** "..."-Suffix Actions */
-    private static final String PPP = getResString("3points");
-
-    /*
-     * ***************************************** Ende: Actions
-     * ********************************************************
-     */
-
-    /**
-     * Wandelt Unterklassen dieser Library in ActionArrays um, sodass alle Actions der
-     * spezifizierten Klasse im Array enthalten sind.<br>
-     * Unterklassen dieser Klassen werden dabei ignoriert.
-     * <p>
-     * Diese Methode stellt eine potentielle Vermischung von View und Controller da und sollte deshalb nur zu Testzwecken verwendet werden.
-     */
-    @Deprecated
-    public static Action[] toActionArray(final Class<?> clazz) throws IllegalArgumentException, IllegalAccessException {
-        Field[] fields = clazz.getFields();
-        Collection<Action> tmp = new ArrayList<>(fields.length);
-        Object o;
-        for (int i = 0; i < fields.length; i++) {
-            o = new Object();
-            fields[i].get(o);
-            if (o instanceof Action) {
-                tmp.add((Action) o);
-            }
-        }
-        Action[] actions = new Action[tmp.size()];
-        tmp.toArray(actions);
-        return actions;
-    }
-
-    /** Konstruktor - Verhindert Instanziierung */
-    private ActionLibrary() {
-    }
 }
