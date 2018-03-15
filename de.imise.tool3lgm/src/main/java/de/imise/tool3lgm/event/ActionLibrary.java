@@ -416,16 +416,6 @@ public class ActionLibrary {
             };
         }
 
-        /*
-         * public static final Action VERIFICATION = new
-         * CommandAction(ActionIdentifier.verification,GDCommands.LINK); public static final Action
-         * INTERACTIVE = new CommandAction(ActionIdentifier.interactive,GDCommands.LINK); public
-         * static final Action COMMANDLINE = new
-         * CommandAction(ActionIdentifier.commandline,GDCommands.LINK); public static final Action
-         * SHOW_QUEUE = new CommandAction(ActionIdentifier.show_queue,GDCommands.LINK); public
-         * static final Action TEST = new CommandAction(ActionIdentifier.test,GDCommands.LINK);
-         */
-
     }
 
     /**
@@ -1009,30 +999,18 @@ public class ActionLibrary {
     public static class WindowActions {
 
         /** Aktiviert die parallele Darstellung der (Teil-)Modelle */
-        public static final Action MODELS_PARALLEL_ARRANGEMENT = new StaticAction(ActionIdentifier.models_parallel_arrangement) {
-
+        public static final Action ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 getTool().fensterNebeneinander();
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return hasInternalFrames();
             }
         };
 
         /** Aktiviert das überlappende Darstellen der (Teil-)Modelle */
-        public static final Action MODELS_OVERLAPPING_ARRANGEMENT = new StaticAction(ActionIdentifier.overlapping_arrangement) {
-
+        public static final Action ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT) {
             @Override
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed() {
                 getTool().fensterUeberlappen();
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return hasInternalFrames();
             }
         };
     }

@@ -320,7 +320,7 @@ public class MenuCollection {
 
         public WindowMenu() {
             super(title);
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(true, ActionLibrary.WindowActions.MODELS_PARALLEL_ARRANGEMENT, ActionLibrary.WindowActions.MODELS_OVERLAPPING_ARRANGEMENT, new JSeparator()));
+            MenuCreator.addAll(this, MenuCreator.createMenuEntries(true, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT, new JSeparator()));
             firstFrameIndex = getItemCount();
             //firstFrameIndex + 2 weil der jeweils aktive Frame und der darauffolgende JSeparator nicht mitgescrollt werden sollen
             MenuScroller.setScrollerFor(this, scrollItemCount, 125, firstFrameIndex + 2, 0);

@@ -78,8 +78,8 @@ public enum ActionIdentifier {
     ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,
 
     // window
-    models_parallel_arrangement,
-    overlapping_arrangement,
+    ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT,
+    ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT,
 
     // help
     ACTION_OPEN_HELP_DIALOG,
