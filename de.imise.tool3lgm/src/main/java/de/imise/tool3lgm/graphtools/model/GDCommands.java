@@ -59,9 +59,6 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT,
     MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT,
 
-    AUFKLAPPEN,
-    ZUKLAPPEN,
-
     MODEL_ACTION_INSERT_BENDING_POINT,
 
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER,
@@ -82,6 +79,9 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
     MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
+
+    MODEL_ACTION_SET_ELEMENT_EXPANDED,
+    MODEL_ACTION_SET_ELEMENT_COLLAPSED,
 
     SET_USER_FIELD_VALUE,
     SET_USER_FIELD_WEIGHT_REPLACEMENT,

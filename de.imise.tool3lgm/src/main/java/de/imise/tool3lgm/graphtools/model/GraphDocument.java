@@ -851,19 +851,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case AUFKLAPPEN:
+        case MODEL_ACTION_SET_ELEMENT_EXPANDED:
             if (argc == 2) {
-                aufklappen(gdcoll, argv[0], argv[1], pid);
+                expand(gdcoll, argv[0], argv[1], pid);
             } else {
-                aufklappen(pid);
+                expand(pid);
             }
             break;
 
-        case ZUKLAPPEN:
+        case MODEL_ACTION_SET_ELEMENT_COLLAPSED:
             if (argc == 2) {
-                zuklappen(gdcoll, argv[0], argv[1], true, pid);
+                collapse(gdcoll, argv[0], argv[1], true, pid);
             } else {
-                zuklappen(pid);
+                collapse(pid);
             }
             break;
 
@@ -2378,10 +2378,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * für vergröbern und verfeinern
      */
-    public final void aufklappen(final int pid) {
+    public final void expand(final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            aufklappen(gdcoll, hashString, ec.getHashString(), pid);
+            expand(gdcoll, hashString, ec.getHashString(), pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -2405,7 +2405,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param elementHash
      * @param pid
      */
-    private static final void aufklappen(final GDCollection gdcoll, final String szenHash, final String elementHash, final int pid) {
+    private static final void expand(final GDCollection gdcoll, final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2423,15 +2423,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         tmpExpansionLevel++;
         tmpExpandedElements.add(ec);
         szen.start_transaction(pid);
-        szen.addRedoCommand(GDCommands.AUFKLAPPEN + " " + szenHash + " " + elementHash, pid);
-        szen.addUndoCommand(GDCommands.ZUKLAPPEN + " " + szenHash + " " + elementHash, pid);
+        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANDED + " " + szenHash + " " + elementHash, pid);
+        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_COLLAPSED + " " + szenHash + " " + elementHash, pid);
 
         ec.setExpanded(true);
         ModelElement me = ec.getElement();
         for (ElementContainer c : me.getDirectPartContainer(szen)) {
             c.setVisible(true);
             if (c.isExpanded()) {
-                aufklappen(gdcoll, szenHash, c.getHashString(), pid);
+                expand(gdcoll, szenHash, c.getHashString(), pid);
             }
         }
         // Anpassen der Kanten
@@ -2453,10 +2453,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *
      * @param pid
      */
-    public final void zuklappen(final int pid) {
+    public final void collapse(final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            zuklappen(gdcoll, hashString, ec.getHashString(), true, pid);
+            collapse(gdcoll, hashString, ec.getHashString(), true, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -2471,7 +2471,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param doCollapse
      * @param pid
      */
-    private static final void zuklappen(final GDCollection gdcoll, final String szenHash, final String elementHash, final boolean doCollapse, final int pid) {
+    private static final void collapse(final GDCollection gdcoll, final String szenHash, final String elementHash, final boolean doCollapse, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2496,8 +2496,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         tmpExpandedElements.add(ec);
 
         szen.start_transaction(pid);
-        szen.addRedoCommand(GDCommands.ZUKLAPPEN + " " + szenHash + " " + elementHash, pid);
-        szen.addUndoCommand(GDCommands.AUFKLAPPEN + " " + szenHash + " " + elementHash, pid);
+        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_COLLAPSED + " " + szenHash + " " + elementHash, pid);
+        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANDED + " " + szenHash + " " + elementHash, pid);
 
         if (doCollapse) {
             ec.setExpanded(false);
@@ -2510,7 +2510,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             c.setVisible(false);
             if (c.isExpanded()) {
-                zuklappen(gdcoll, szenHash, c.getHashString(), false, pid);
+                collapse(gdcoll, szenHash, c.getHashString(), false, pid);
             }
         }
 
@@ -2525,18 +2525,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *
      * @param pid
      */
-    public final void auf_zuklappen(final int pid) {
+    public final void switchExpandedAndCollapsed(final int pid) {
         start_transaction(pid);
-        boolean oldBulkMode = gdcoll.isBulkMode();
-        gdcoll.setBulkMode(true);
         for (ElementContainer ec : selectedContainer) {
             if (ec.isExpanded()) {
-                zuklappen(gdcoll, hashString, ec.getHashString(), true, pid);
+                collapse(gdcoll, hashString, ec.getHashString(), true, pid);
             } else {
-                aufklappen(gdcoll, hashString, ec.getHashString(), pid);
+                expand(gdcoll, hashString, ec.getHashString(), pid);
             }
         }
-        gdcoll.setBulkMode(oldBulkMode);
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }

@@ -24,7 +24,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.AUFKLAPPEN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_GLOBAL_MAPPING;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
@@ -37,6 +36,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLLAPSED;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANDED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL;
@@ -48,7 +49,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.ZUKLAPPEN;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -170,7 +170,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JMenuItem aufklappen, zuklappen;
+    private JMenuItem expand, collapse;
 
     /**
      * COMMENTME
@@ -334,8 +334,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
         layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS);
-        aufklappen = getItem("aufklappen", AUFKLAPPEN);
-        zuklappen = getItem("zuklappen", ZUKLAPPEN);
+        expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANDED);
+        collapse = getItem(MODEL_ACTION_SET_ELEMENT_COLLAPSED);
 
         JMenu linienstil = new JMenu(getResString("linestyle"));
 
@@ -586,16 +586,16 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     if (me.canHaveParts()) {
                         // menu.addSeparator();
                         if (me.hasDirectPartContainer(doc)) {
-                            aufklappen.setEnabled(true);
-                            zuklappen.setEnabled(true);
+                            expand.setEnabled(true);
+                            collapse.setEnabled(true);
                         } else {
-                            aufklappen.setEnabled(false);
-                            zuklappen.setEnabled(false);
+                            expand.setEnabled(false);
+                            collapse.setEnabled(false);
                         }
                         if (!ec.isExpanded()) {
-                            menu.add(aufklappen);
+                            menu.add(expand);
                         } else {
-                            menu.add(zuklappen);
+                            menu.add(collapse);
                         }
                     }
                     menu.addSeparator();
@@ -900,16 +900,16 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     menu.addSeparator();
                 }
                 if (lastSelected.hasDirectPartContainer(doc)) {
-                    aufklappen.setEnabled(true);
-                    zuklappen.setEnabled(true);
+                    expand.setEnabled(true);
+                    collapse.setEnabled(true);
                 } else {
-                    aufklappen.setEnabled(false);
-                    zuklappen.setEnabled(false);
+                    expand.setEnabled(false);
+                    collapse.setEnabled(false);
                 }
                 if (!doc.getLastSelected().isExpanded()) {
-                    menu.add(aufklappen);
+                    menu.add(expand);
                 } else {
-                    menu.add(zuklappen);
+                    menu.add(collapse);
                 }
                 menu.addSeparator();
                 menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
