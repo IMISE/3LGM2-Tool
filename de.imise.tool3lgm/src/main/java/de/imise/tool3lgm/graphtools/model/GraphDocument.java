@@ -880,7 +880,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             gdcoll.setInteractiveMode(false);
             break;
 
-        case INSERT_BENDING_POINT:
+        case MODEL_ACTION_INSERT_BENDING_POINT:
             //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
             gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
             break;
