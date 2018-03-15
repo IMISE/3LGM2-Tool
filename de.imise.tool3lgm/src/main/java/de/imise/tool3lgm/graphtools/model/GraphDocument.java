@@ -852,18 +852,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case MODEL_ACTION_SET_ELEMENT_EXPANSION_ON:
-            if (argc == 2) {
-                expand(gdcoll, argv[0], argv[1], pid);
-            } else {
-                expand(pid);
-            }
-            break;
-
         case MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF:
+            boolean expand = command == GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
             if (argc == 2) {
-                collapse(gdcoll, argv[0], argv[1], true, pid);
+                setExpanded(expand, gdcoll, argv[0], argv[1], !expand, pid);
             } else {
-                collapse(pid);
+                setExpanded(expand, pid);
             }
             break;
 
@@ -2376,18 +2370,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     // --- Methoden auf Node --- Ende ---
 
     /**
-     * für vergröbern und verfeinern
-     */
-    public final void expand(final int pid) {
-        start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
-            expand(gdcoll, hashString, ec.getHashString(), pid);
-        }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-    }
-
-    /**
      * Das rekursive Auf- und Zuklappen merkt sich über diese Liste, welche Elemente bereits in einem
      * Durchgang angefasst wurden.
      */
@@ -2402,61 +2384,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * für vergröbern und verfeinern
      *
-     * @param elementHash
      * @param pid
      */
-    private static final void expand(final GDCollection gdcoll, final String szenHash, final String elementHash, final int pid) {
-        GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
-        if (!(szen instanceof Szenario)) {
-            return;
-        }
-        if (tmpExpansionLevel == 0) {
-            tmpExpandedElements.clear();
-        }
-        ElementContainer ec = szen.findContainerCoded(elementHash);
-        if (ec == null) {
-            return;
-        }
-        if (tmpExpandedElements.contains(ec)) {
-            return;
-        }
-        tmpExpansionLevel++;
-        tmpExpandedElements.add(ec);
-        szen.start_transaction(pid);
-        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON + " " + szenHash + " " + elementHash, pid);
-        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF + " " + szenHash + " " + elementHash, pid);
-
-        ec.setExpanded(true);
-        ModelElement me = ec.getElement();
-        for (ElementContainer c : me.getDirectPartContainer(szen)) {
-            c.setVisible(true);
-            if (c.isExpanded()) {
-                expand(gdcoll, szenHash, c.getHashString(), pid);
-            }
-        }
-        // Anpassen der Kanten
-        for (Edge edge : ec.getElement().getEdges()) {
-            EdgeContainer kc = (EdgeContainer) edge.getContainer(szen);
-            if (kc == null) {
-                continue;
-            }
-            kc.computeBorderPoints();
-        }
-
-        szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-        tmpExpansionLevel--;
-    }
-
-    /**
-     * für vergröbern und verfeinern
-     *
-     * @param pid
-     */
-    public final void collapse(final int pid) {
+    public final void setExpanded(final boolean expand, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            collapse(gdcoll, hashString, ec.getHashString(), true, pid);
+            setExpanded(expand, gdcoll, hashString, ec.getHashString(), !expand, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -2465,13 +2398,29 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * für vergröbern und verfeinern
      *
+     * @param pid
+     */
+    public final void switchExpansionState(final int pid) {
+        start_transaction(pid);
+        for (ElementContainer ec : selectedContainer) {
+            boolean expand = !ec.isExpanded();
+            setExpanded(expand, gdcoll, hashString, ec.getHashString(), !expand, pid);
+        }
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
+     * für vergröbern und verfeinern
+     *
+     * @param expand
      * @param gdcoll
      * @param szenHash
      * @param elementHash
      * @param doCollapse
      * @param pid
      */
-    private static final void collapse(final GDCollection gdcoll, final String szenHash, final String elementHash, final boolean doCollapse, final int pid) {
+    private static final void setExpanded(final boolean expand, final GDCollection gdcoll, final String szenHash, final String elementHash, final boolean doCollapse, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2496,22 +2445,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         tmpExpandedElements.add(ec);
 
         szen.start_transaction(pid);
-        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF + " " + szenHash + " " + elementHash, pid);
-        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON + " " + szenHash + " " + elementHash, pid);
+        String expandCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON + " " + szenHash + " " + elementHash;
+        String collapseCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF + " " + szenHash + " " + elementHash;
+        szen.addRedoCommand(expand ? expandCommand : collapseCommand, pid);
+        szen.addUndoCommand(expand ? collapseCommand : expandCommand, pid);
 
-        if (doCollapse) {
-            ec.setExpanded(false);
-        }
-        ModelElement me = ec.getElement();
-        List<ElementContainer> all = me.getDirectPartContainer(szen);
-        for (ElementContainer c : all) {
-            if (tmpExpandedElements.contains(c)) {
-                continue;
-            }
-            c.setVisible(false);
-            if (c.isExpanded()) {
-                collapse(gdcoll, szenHash, c.getHashString(), false, pid);
-            }
+        if (expand) {
+            expand(szen, ec, pid);
+        } else {
+            collapse(szen, ec, doCollapse, pid);
         }
 
         szen.finish_transaction(pid);
@@ -2520,22 +2462,39 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         tmpExpansionLevel--;
     }
 
-    /**
-     * für vergröbern und verfeinern
-     *
-     * @param pid
-     */
-    public final void switchExpandedAndCollapsed(final int pid) {
-        start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
-            if (ec.isExpanded()) {
-                collapse(gdcoll, hashString, ec.getHashString(), true, pid);
-            } else {
-                expand(gdcoll, hashString, ec.getHashString(), pid);
+    private static final void expand(final GraphDocument szen, final ElementContainer ec, final int pid) {
+        ec.setExpanded(true);
+        ModelElement me = ec.getElement();
+        for (ElementContainer c : me.getDirectPartContainer(szen)) {
+            c.setVisible(true);
+            if (c.isExpanded()) {
+                setExpanded(true, szen.getCollection(), szen.getHashString(), c.getHashString(), false, pid);
             }
         }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+        // Anpassen der Kanten
+        for (Edge edge : ec.getElement().getEdges()) {
+            EdgeContainer kc = (EdgeContainer) edge.getContainer(szen);
+            if (kc == null) {
+                continue;
+            }
+            kc.computeBorderPoints();
+        }
+    }
+
+    private static final void collapse(final GraphDocument szen, final ElementContainer ec, final boolean doCollapse, final int pid) {
+        if (doCollapse) {
+            ec.setExpanded(false);
+        }
+        ModelElement me = ec.getElement();
+        for (ElementContainer c : me.getDirectPartContainer(szen)) {
+            if (tmpExpandedElements.contains(c)) {
+                continue;
+            }
+            c.setVisible(false);
+            if (c.isExpanded()) {
+                setExpanded(false, szen.getCollection(), szen.getHashString(), c.getHashString(), false, pid);
+            }
+        }
     }
 
     // --- Event-Verwaltung --- Anfang ---

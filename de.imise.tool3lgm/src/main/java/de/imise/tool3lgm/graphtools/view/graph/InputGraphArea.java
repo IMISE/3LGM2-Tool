@@ -445,7 +445,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         // Teilobjekte zeigen oder verstecken
         if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
-            szenario.switchExpandedAndCollapsed(TransactionManager.STANDARD_PID);
+            szenario.switchExpansionState(TransactionManager.STANDARD_PID);
             return;
         }
         // Knickpunkte bei Doppelklicks löschen

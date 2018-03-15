@@ -79,7 +79,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
         // Teilobjkete zeigen oder verstecken
         if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
-            doc.switchExpandedAndCollapsed(DynamicTree.PID);
+            doc.switchExpansionState(DynamicTree.PID);
             return;
         }
 
