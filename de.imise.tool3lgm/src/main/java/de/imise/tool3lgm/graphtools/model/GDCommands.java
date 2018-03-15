@@ -23,7 +23,9 @@ public enum GDCommands implements ActionSource {
 
     SET_VISIBLE,
 
-    SET_NAME,
+    MODEL_ACTION_SET_ELEMENT_NAME,
+    MODEL_ACTION_SET_ELEMENT_DESCRIPTION,
+
     //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
     CHANGE_FORM,
     MODEL_ACTION_SET_ELEMENT_POSITION,
@@ -85,7 +87,6 @@ public enum GDCommands implements ActionSource {
 
     SET_USER_FIELD_VALUE,
     SET_USER_FIELD_WEIGHT_REPLACEMENT,
-    SET_DESCRIPTION,
 
     INTERACTIVE_MODE_OFF,
     INTERACTIVE_MODE_ON,

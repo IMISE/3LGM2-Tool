@@ -805,7 +805,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case SET_NAME:
+        case MODEL_ACTION_SET_ELEMENT_NAME:
             switch (argc) {
             case 2:
                 //[0] = elementHash, [1] = newName
@@ -816,7 +816,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case SET_DESCRIPTION:
+        case MODEL_ACTION_SET_ELEMENT_DESCRIPTION:
             //[1] = ElementHashString, [2] = Beschreibung
             setDescription(findElementCoded(argv[0]), argv[1], pid);
             break;
@@ -4048,8 +4048,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         start_transaction(pid);
         //falls in derselben Transaction der Name mehrfach geändert wird, soll das nur 1 Mal geloggt werden
-        addRedoCommandOrReplace(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(newName), pid);
-        addUndoCommandIfNotExist(GDCommands.SET_NAME + " " + me.getHashString(), getParseSaveString(me.getName()), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + me.getHashString(), getParseSaveString(newName), pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + me.getHashString(), getParseSaveString(me.getName()), pid);
         //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
         //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
         //		List<ModelElement> connected = me.getConnectedElements(ModelElement.class);
@@ -4079,8 +4079,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.SET_DESCRIPTION + " " + me.getHashString(), getParseSaveString(newDescr), pid);
-        addUndoCommandIfNotExist(GDCommands.SET_DESCRIPTION + " " + me.getHashString(), getParseSaveString(me.getDescription()), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + me.getHashString(), getParseSaveString(newDescr), pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + me.getHashString(), getParseSaveString(me.getDescription()), pid);
         me.setDescription(getDecodedParseSaveString(newDescr));
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
