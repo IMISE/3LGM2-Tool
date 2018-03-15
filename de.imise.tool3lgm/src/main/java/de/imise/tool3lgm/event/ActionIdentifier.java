@@ -71,16 +71,7 @@ public enum ActionIdentifier {
     // layout
     ACTION_OPEN_GLOBAL_LAYOUT_EDITOR,
 
-    // options
-    // General
-    // browserOptions
-    submodel_specific,
-    show_userdefinded_properties,
-    // graphicOptions
     ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR,
-    // localeOptions
-    german,
-    english,
 
     // extras
     ACTION_OPEN_USERFIELD_DEFINITION_DIALOG,
@@ -100,58 +91,6 @@ public enum ActionIdentifier {
     ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY,
     ACTION_OPEN_ABOUT_DIALOG,
     ACTION_IMPORT_LICENSE_FILE,
-
-    // context
-    property_dialog,
-
-    link_has_part,
-    link_is_part_of,
-    link_is_used_by,
-    link_is_updated_by,
-    link_uses,
-    link_updates,
-    link_owns_interface,
-    link_owns_dbs,
-    link_sends_to,
-    link_receives_from,
-    link_is_connected_with,
-
-    unlink_hasPart,
-    unlink_isPartOf,
-    unlink_is_used_by,
-    unlink_is_updated_by,
-    unlink_uses,
-    unlink_updates,
-    unlink_ownsInterface,
-    unlink_ownsDBS,
-    unlink_sendsTo,
-    unlink_receivesFrom,
-    unlink_isConnectedWith,
-
-    take_over_in_submodel,
-    link_with_submodel,
-
-    set_element_visible,
-    set_element_invisible,
-
-    expand_element,
-    collapse_element,
-
-    element_analysis,
-
-    join,
-
-    create_textfield,
-
-    set_configurations_visible,
-    set_configurations_invisible,
-
-    internal,
-    verification,
-    interactive,
-    commandline,
-    show_queue,
-    test
 
     ;
 
