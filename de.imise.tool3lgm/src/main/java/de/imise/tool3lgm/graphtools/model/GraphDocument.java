@@ -446,10 +446,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (command == null) {
         } else if (command.equals(GDCommands.PRINT_QUEUE.toString())) {
             getCollection().getTman().printQueue(10);
-        } else if (command.startsWith(GDCommands.UNDO.toString())) {
-            undo();
-        } else if (command.startsWith(GDCommands.REDO.toString())) {
-            redo();
         } else if (command.startsWith(GDCommands.COMMAND_LINE.toString())) {
             String answer = (String) JOptionPane.showInputDialog(null, "Befehlseingabe", "Tool3lgm", JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (answer != null && !answer.equals("") && !answer.equals("COMMAND_LINE")) {

@@ -92,9 +92,6 @@ public enum GDCommands implements ActionSource {
     VERIFY_OFF,
     VERIFY_ON,
 
-    UNDO,
-    REDO,
-
     CHANGE_LINE_STYLE,
 
     MODEL_ACTION_CREATE_SZENARIO,
