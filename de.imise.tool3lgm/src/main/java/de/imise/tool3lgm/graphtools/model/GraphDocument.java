@@ -851,7 +851,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_EXPANDED:
+        case MODEL_ACTION_SET_ELEMENT_EXPANSION_ON:
             if (argc == 2) {
                 expand(gdcoll, argv[0], argv[1], pid);
             } else {
@@ -859,7 +859,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_COLLAPSED:
+        case MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF:
             if (argc == 2) {
                 collapse(gdcoll, argv[0], argv[1], true, pid);
             } else {
@@ -2423,8 +2423,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         tmpExpansionLevel++;
         tmpExpandedElements.add(ec);
         szen.start_transaction(pid);
-        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANDED + " " + szenHash + " " + elementHash, pid);
-        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_COLLAPSED + " " + szenHash + " " + elementHash, pid);
+        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON + " " + szenHash + " " + elementHash, pid);
+        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF + " " + szenHash + " " + elementHash, pid);
 
         ec.setExpanded(true);
         ModelElement me = ec.getElement();
@@ -2496,8 +2496,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         tmpExpandedElements.add(ec);
 
         szen.start_transaction(pid);
-        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_COLLAPSED + " " + szenHash + " " + elementHash, pid);
-        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANDED + " " + szenHash + " " + elementHash, pid);
+        szen.addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF + " " + szenHash + " " + elementHash, pid);
+        szen.addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON + " " + szenHash + " " + elementHash, pid);
 
         if (doCollapse) {
             ec.setExpanded(false);

@@ -80,8 +80,8 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
 
-    MODEL_ACTION_SET_ELEMENT_EXPANDED,
-    MODEL_ACTION_SET_ELEMENT_COLLAPSED,
+    MODEL_ACTION_SET_ELEMENT_EXPANSION_ON,
+    MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF,
 
     SET_USER_FIELD_VALUE,
     SET_USER_FIELD_WEIGHT_REPLACEMENT,

@@ -36,8 +36,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLLAPSED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANDED;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL;
@@ -334,8 +334,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
         layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS);
-        expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANDED);
-        collapse = getItem(MODEL_ACTION_SET_ELEMENT_COLLAPSED);
+        expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_ON);
+        collapse = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF);
 
         JMenu linienstil = new JMenu(getResString("linestyle"));
 
