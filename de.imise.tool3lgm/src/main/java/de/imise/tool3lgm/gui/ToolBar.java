@@ -19,7 +19,7 @@ import javax.swing.ToolTipManager;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
-import de.imise.tool3lgm.event.action.StaticActionNew;
+import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -285,11 +285,11 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
             undo.setToolTipText(queue);
             redo.setToolTipText(queue);
         } else {
-            String identifier = undo.getAction().getValue(StaticActionNew.IDENTIFIER_KEY).toString();
-            undo.setToolTipText(getResString(StaticActionNew.TOOLTIP_RESSOURCE_PREFIX + identifier));
+            String identifier = undo.getAction().getValue(StaticAction.IDENTIFIER_KEY).toString();
+            undo.setToolTipText(getResString(StaticAction.TOOLTIP_RESSOURCE_PREFIX + identifier));
 
-            identifier = redo.getAction().getValue(StaticActionNew.IDENTIFIER_KEY).toString();
-            redo.setToolTipText(getResString(StaticActionNew.TOOLTIP_RESSOURCE_PREFIX + identifier));
+            identifier = redo.getAction().getValue(StaticAction.IDENTIFIER_KEY).toString();
+            redo.setToolTipText(getResString(StaticAction.TOOLTIP_RESSOURCE_PREFIX + identifier));
         }
     }
 
@@ -344,7 +344,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
             super(a);
             setText(null);
             //Diesen value muss es bei diesen Actions immer geben
-            CSH.setHelpIDString(this, a.getValue(StaticActionNew.IDENTIFIER_KEY).toString());
+            CSH.setHelpIDString(this, a.getValue(StaticAction.IDENTIFIER_KEY).toString());
         }
 
         @Override

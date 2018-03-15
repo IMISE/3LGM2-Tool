@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
  *
  * @author AXS 04.12.2017
  */
-public abstract class GlobalOptionAction extends StaticActionNew {
+public abstract class GlobalOptionAction extends StaticAction {
 
     private final GDCollectionChangeType changeType;
 

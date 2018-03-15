@@ -32,7 +32,7 @@ import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
-import de.imise.tool3lgm.event.action.StaticActionNew;
+import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
@@ -109,7 +109,7 @@ public class ActionLibrary {
     public static class FileActions {
 
         /** Öffnen eines neuen Models */
-        public static final Action ACTION_NEW_MODEL = new StaticActionNew(ActionIdentifier.ACTION_NEW_MODEL) {
+        public static final Action ACTION_NEW_MODEL = new StaticAction(ActionIdentifier.ACTION_NEW_MODEL) {
             @Override
             protected void actionPerformed() {
                 getTool().openFile(false);
@@ -117,7 +117,7 @@ public class ActionLibrary {
         };
 
         /** Öffnen eines bestehenden Models */
-        public static final Action ACTION_OPEN_MODEL = new StaticActionNew(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
+        public static final Action ACTION_OPEN_MODEL = new StaticAction(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
             @Override
             protected void actionPerformed() {
                 getTool().openFile(true);
@@ -297,7 +297,7 @@ public class ActionLibrary {
          */
 
         /** Beenden des Programms */
-        public static final Action ACTION_EXIT = new StaticActionNew(ActionIdentifier.ACTION_EXIT) {
+        public static final Action ACTION_EXIT = new StaticAction(ActionIdentifier.ACTION_EXIT) {
             @Override
             protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
@@ -314,7 +314,7 @@ public class ActionLibrary {
     public static class AnalysisActions {
 
         /** Zeigt das XMLAnalyse-Repository an */
-        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, PPP) {
+        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, PPP) {
             @Override
             protected void actionPerformed() {
                 AnalyseRepositoryFrame.showDialog();
@@ -322,7 +322,7 @@ public class ActionLibrary {
         };
 
         /** Öffnet den XMLAnalyse-Editor */
-        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
+        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
             @Override
             protected void actionPerformed() {
                 AnalyseEditor.showDialog(getTool());
@@ -349,7 +349,7 @@ public class ActionLibrary {
          * Zeigt einen ColorChooser zum auswählen der Farbe, mit der Analyseergnisse in der
          * Grafik hervorgehovben werden
          */
-        public static final Action ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR = new StaticActionNew(ActionIdentifier.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, PPP) {
+        public static final Action ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, PPP) {
             @Override
             public void actionPerformed() {
                 NodeRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), NodeRenderer.analysisColor);
@@ -593,7 +593,7 @@ public class ActionLibrary {
     public static class HelpActions {
 
         /** Funktioniert nicht */
-        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticActionNew(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
+        public static final ExtendedAction ACTION_OPEN_HELP_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_HELP_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
                 Help.showHelp();
@@ -601,7 +601,7 @@ public class ActionLibrary {
         };
 
         /** Aktiviert die Direkthilfe */
-        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticActionNew(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
+        public static final ExtendedAction ACTION_ACTIVATE_DIRECT_HELP = new StaticAction(ActionIdentifier.ACTION_ACTIVATE_DIRECT_HELP) {
             @Override
             public void actionPerformedWithEvent(final ActionEvent e) {
                 Help.getHelp().getDisplayHelpAfterTracking().actionPerformed(e);
@@ -609,7 +609,7 @@ public class ActionLibrary {
         };
 
         /** Zeigt eine lokale Webseite mit Themen zur weiteren Modellnutzung an */
-        public static final ExtendedAction ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL = new StaticActionNew(ActionIdentifier.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, PPP) {
+        public static final ExtendedAction ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL = new StaticAction(ActionIdentifier.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, PPP) {
             @Override
             public void actionPerformed() {
                 BrowseUtils.browseRelativeFileFromResource("auswhilfe_datei");
@@ -617,7 +617,7 @@ public class ActionLibrary {
         };
 
         /** öffnet die Online-Hilfe-Seite */
-        public static final ExtendedAction ACTION_SHOW_ONLINE_HELP = new StaticActionNew(ActionIdentifier.ACTION_SHOW_ONLINE_HELP, PPP) {
+        public static final ExtendedAction ACTION_SHOW_ONLINE_HELP = new StaticAction(ActionIdentifier.ACTION_SHOW_ONLINE_HELP, PPP) {
             @Override
             public void actionPerformed() {
                 BrowseUtils.browseUrlFromResource("3lgm2tool_support_website");
@@ -625,7 +625,7 @@ public class ActionLibrary {
         };
 
         /** öffnet die 3lgm-Homepage */
-        public static final ExtendedAction ACTION_SHOW_3LGM_WEB_SITE = new StaticActionNew(ActionIdentifier.ACTION_SHOW_3LGM_WEB_SITE, PPP) {
+        public static final ExtendedAction ACTION_SHOW_3LGM_WEB_SITE = new StaticAction(ActionIdentifier.ACTION_SHOW_3LGM_WEB_SITE, PPP) {
             @Override
             public void actionPerformed() {
                 BrowseUtils.browseUrlFromResource("3lgm2_website");
@@ -633,7 +633,7 @@ public class ActionLibrary {
         };
 
         /** öffnet das Beispielmodell */
-        public static final ExtendedAction ACTION_OPEN_EXAMPLE_MODEL_FILE = new StaticActionNew(ActionIdentifier.ACTION_OPEN_EXAMPLE_MODEL_FILE) {
+        public static final ExtendedAction ACTION_OPEN_EXAMPLE_MODEL_FILE = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MODEL_FILE) {
             @Override
             public void actionPerformed() {
                 Static.getTool().openFile(false, Tool3lgmConstants.EXAMPLE_MODEL_FILE);
@@ -641,7 +641,7 @@ public class ActionLibrary {
         };
 
         /** Öffnet den Ordner mit dem Beispielmodellen bzw die sog. Modellbibliothek mit Modellen von Standards */
-        public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticActionNew(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
+        public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticAction(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
             public void actionPerformed() {
                 BrowseUtils.browseRelativeFileFromResource("modlib_verz");
@@ -649,7 +649,7 @@ public class ActionLibrary {
         };
 
         /** Zeigt die Programm-Info an */
-        public static final ExtendedAction ACTION_OPEN_ABOUT_DIALOG = new StaticActionNew(ActionIdentifier.ACTION_OPEN_ABOUT_DIALOG, PPP) {
+        public static final ExtendedAction ACTION_OPEN_ABOUT_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_ABOUT_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
                 ToolSplashScreen.getInfoDialog();
@@ -658,9 +658,8 @@ public class ActionLibrary {
 
         //        /** öffnet ein Fenster zum Import von Lizenzdateien */
         //        public static final ExtendedAction ACTION_IMPORT_LICENSE_FILE = new StaticAction(ActionIdentifier.ACTION_IMPORT_LICENSE_FILE) {
-        //
         //            @Override
-        //            public void actionPerformed(final ActionEvent e) {
+        //            public void actionPerformed() {
         //                Static.getTool().importLicenseFile();
         //            }
         //        };
@@ -733,7 +732,7 @@ public class ActionLibrary {
                 AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
                 SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
                 //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
-                Action[] returnActions = new StaticActionNew[simpleRedundancyAnalysisDefinition.size()];
+                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
                     SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
@@ -769,7 +768,7 @@ public class ActionLibrary {
         public static class Graphics {
 
             /** Öffnet ein Fenster für allgemeine Grafik-Einstellungen */
-            public static final Action ACTION_PROPERTY_INT_RENDER_SETTINGS = new StaticActionNew(IntProperty.PROPERTY_INT_RENDER_SETTINGS, PPP) {
+            public static final Action ACTION_PROPERTY_INT_RENDER_SETTINGS = new StaticAction(IntProperty.PROPERTY_INT_RENDER_SETTINGS, PPP) {
                 @Override
                 public void actionPerformed() {
                     GraphicPropertyDialog dialog = new GraphicPropertyDialog(getTool());
@@ -826,7 +825,7 @@ public class ActionLibrary {
         }
 
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
-        public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticActionNew(IntProperty.PROPERTY_INT_RMI_PORT, PPP) {
+        public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticAction(IntProperty.PROPERTY_INT_RMI_PORT, PPP) {
 
             @Override
             public void actionPerformed() {
@@ -871,7 +870,7 @@ public class ActionLibrary {
             };
 
             /** (De-)aktiviert die Standard-Toolbar */
-            public static final Action OPTION_SHOW_STANDARD_TOOLBAR = new StaticActionNew(ActionIdentifier.OPTION_SHOW_STANDARD_TOOLBAR, true) {
+            public static final Action OPTION_SHOW_STANDARD_TOOLBAR = new StaticAction(ActionIdentifier.OPTION_SHOW_STANDARD_TOOLBAR, true) {
                 @Override
                 protected void actionPerformed() {
                     //TODO: das hier müsste eigentlich ein Funktionaufruf in Tool3lgm sein. Die Action muss nicht das Tool revalidaten!
@@ -889,7 +888,7 @@ public class ActionLibrary {
         }
 
         /** (De-)Aktiviert das Anzeigen des ModelBrowsers */
-        public static final Action OPTION_MODEL_BROWSER_SHOW = new StaticActionNew(ActionIdentifier.OPTION_MODEL_BROWSER_SHOW, true) {
+        public static final Action OPTION_MODEL_BROWSER_SHOW = new StaticAction(ActionIdentifier.OPTION_MODEL_BROWSER_SHOW, true) {
             @Override
             protected void actionPerformed() {
                 getTool().showModelBrowser(isSelected());

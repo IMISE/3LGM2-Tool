@@ -29,14 +29,14 @@ import de.imise.util.swing.event.ExtendedAction;
  * <p>
  * Außerdem ist es möglich, ein Überprüfen des gerade ausgewählten {@link GraphDocument}s zu aktivieren, sowie einen initialen Selektionszustand für
  * die Anwendung bei {@link JCheckBoxMenuItem}s bzw. {@link JRadioButtonMenuItem}s zu setzen.<br>
- * Der Zugriff auf diese Attribute wird durch die Schlüssel {@link StaticActionNew#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
+ * Der Zugriff auf diese Attribute wird durch die Schlüssel {@link StaticAction#ENABLED_WHEN_SELECTED_DOC_NOT_NULL_KEY} bzw.
  * {@link Action#SELECTED_KEY} über {@link #getValue(String)} ermöglicht.
  *
  * @see ActionIdentifier
  * @see ExtendedAction
  * @author fstephan, AXS
  */
-public abstract class StaticActionNew extends ExtendedAction {
+public abstract class StaticAction extends ExtendedAction {
 
     /** "..."-Suffix Actions */
     public static final String PPP = "...";
@@ -60,7 +60,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param identifier
      *            eindeutiger Identifier für diese Action
      */
-    public StaticActionNew(final Object identifier) {
+    public StaticAction(final Object identifier) {
         this(identifier, null, null, null, null);
     }
 
@@ -76,7 +76,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param textSuffix
      *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
      */
-    public StaticActionNew(final Object identifier, final String textSuffix) {
+    public StaticAction(final Object identifier, final String textSuffix) {
         this(identifier, null, null, textSuffix, null);
     }
 
@@ -100,7 +100,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param initialSelectionState
      *            initialer Selektionszustand
      */
-    public StaticActionNew(final Object identifier, final Boolean initialSelectionState) {
+    public StaticAction(final Object identifier, final Boolean initialSelectionState) {
         this(identifier, null, null, null, initialSelectionState);
     }
 
@@ -119,7 +119,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param text
      *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
      */
-    public StaticActionNew(final Object identifier, final String arguments, final String text) {
+    public StaticAction(final Object identifier, final String arguments, final String text) {
         this(identifier, arguments, text, null, null);
     }
 
@@ -140,7 +140,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      * @param textSuffix
      *            Suffix für die Text-Property
      */
-    public StaticActionNew(final Object identifier, final String arguments, final String text, final String textSuffix) {
+    public StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix) {
         this(identifier, arguments, text, textSuffix, null);
     }
 
@@ -164,7 +164,7 @@ public abstract class StaticActionNew extends ExtendedAction {
      *            initialer Selektionszustand. Wird hier ein Wert != <code>null</code> übergeben, dann wird die Action als optionAction angesehen.
      * @see de.imise.util.swing.event.ExtendedAction#isOptionAction()
      */
-    private StaticActionNew(final Object identifier, final String arguments, final String text, final String textSuffix, final Boolean initialSelectionState) {
+    private StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix, final Boolean initialSelectionState) {
         //wenn darunter das try-catch schief geht, dann ist der Text = dem übergebenen identifier.toString()
         super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""), initialSelectionState);
         putValue(IDENTIFIER_KEY, identifier);
@@ -214,7 +214,7 @@ public abstract class StaticActionNew extends ExtendedAction {
 
     private void setIcons(final String command) {
         //LargeIcon laden (wenn vorhanden)
-        String iconName = StaticActionNew.ICON_LARGE_PREFIX + command + ".gif";
+        String iconName = StaticAction.ICON_LARGE_PREFIX + command + ".gif";
         //erst localized suchen
         Icon icon = Tool3lgmConstants.getLocalizedIcon(iconName);
         if (icon != null) {
@@ -223,7 +223,7 @@ public abstract class StaticActionNew extends ExtendedAction {
             setLargeIcon(Tool3lgmConstants.getIcon(iconName));
         }
         //SmallIcon laden (wenn vorhanden)
-        iconName = StaticActionNew.ICON_SMALL_PREFIX + command + ".gif";
+        iconName = StaticAction.ICON_SMALL_PREFIX + command + ".gif";
         icon = Tool3lgmConstants.getLocalizedIcon(iconName);
         if (icon != null) {
             setSmallIcon(icon);

@@ -7,7 +7,7 @@ import de.imise.tool3lgm.Static;
  *
  * @author AXS
  */
-public class GraphDocumentAction extends StaticActionNew {
+public class GraphDocumentAction extends StaticAction {
 
     /**
      * @param identifier

@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.event;
 
-import de.imise.tool3lgm.event.action.StaticActionNew;
+import de.imise.tool3lgm.event.action.StaticAction;
 
 /**
- * Identifiers für {@link StaticActionNew}
+ * Identifiers für {@link StaticAction}
  * <p>
- * Über diese Identifier, können {@link StaticActionNew} ihre Attribute bekommen.
+ * Über diese Identifier, können {@link StaticAction} ihre Attribute bekommen.
  */
 public enum ActionIdentifier {
 
