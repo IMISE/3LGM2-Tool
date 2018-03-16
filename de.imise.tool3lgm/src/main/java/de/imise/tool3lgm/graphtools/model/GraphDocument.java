@@ -237,8 +237,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //wenn der Wert sich geändert hat, dann die UNDO/REDO-Kommandos hinzufügen
         if (logUndoRedo) {
             start_transaction(pid);
-            addUndoCommandIfNotExist(GDCommands.CHANGE_LAYER_SIZE_FACTOR + " " + hashString, oldPageSizeFactor, pid);
-            addRedoCommandOrReplace(GDCommands.CHANGE_LAYER_SIZE_FACTOR + " " + hashString, newPageSizeFactor, pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + hashString, oldPageSizeFactor, pid);
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + hashString, newPageSizeFactor, pid);
             finish_transaction(pid);
         }
         pageSizeFactor = newPageSizeFactor;
@@ -753,7 +753,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             changeLayerAlpha(GraphElementLayout.TRANSPARENCY_NONE, pid);
             break;
 
-        case CHANGE_LAYER_SIZE_FACTOR:
+        case MODEL_ACTION_SET_LAYER_SIZE_FACTOR:
             try {
                 GraphDocument szen = gdcoll.getGraphDocumentCoded(argv[0]);
                 szen.setPageSizeFactor(Double.parseDouble(argv[1]), Double.parseDouble(argv[1]), true, TransactionManager.STANDARD_PID);
