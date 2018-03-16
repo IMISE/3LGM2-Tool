@@ -16,10 +16,10 @@ public enum GDCommands implements ActionSource {
 
     MODEL_ACTION_CREATE_NODE,
     LINK,
-    ADDICT,
+    MODEL_ACTION_CREATE_ADDICTED, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat keinen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
+    MODEL_ACTION_ADDICT, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
     UNLINK,
-    SWAP_EDGE_POSITIONS,
-    CREATE_ADDICTED,
+    MODEL_ACTION_SWAP_EDGE_POSITIONS,
 
     SET_VISIBLE,
 

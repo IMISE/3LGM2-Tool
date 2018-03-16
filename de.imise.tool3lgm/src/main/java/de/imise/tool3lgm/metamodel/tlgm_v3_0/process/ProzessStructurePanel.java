@@ -659,7 +659,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                    node = (LGMTreeNode) lroot.getChildAt(pos1 - 1);
     //                    node.setText("[" + pos1 + "] " + node.getUserObject());
     //                    //das switchen in den connections vom Prozess ausführen
-    //                    doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1 + " " + (pos1 - 1), dialog.getTransactionID());
+    //                    doc.swapEdgePositions(modelElement, pos1, pos1 - 1, dialog.getTransactionID())
     //                }
     //            }
     //            ltree.repaint();
@@ -695,7 +695,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //                    node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
     //                    node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
     //                    node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
-    //                    doc.exec("SWAP_EDGE_POSITIONS " + modelElement.getHashString() + " " + pos1 + " " + (pos1 + 1), dialog.getTransactionID());
+    //                    doc.swapEdgePositions(modelElement, pos1, pos1 + 1, dialog.getTransactionID())
     //                }
     //            }
     //            ltree.repaint();

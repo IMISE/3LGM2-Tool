@@ -13,8 +13,9 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.GROUP_ORDER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.USER_FIELD_VALUE_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.ADDICT;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -624,7 +625,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case SWAP_EDGE_POSITIONS:
+        case MODEL_ACTION_SWAP_EDGE_POSITIONS:
             switch (argc) {
             case 3:
                 swapEdgePositions(argv[0], argv[1], argv[2], pid);
@@ -632,7 +633,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case ADDICT:
+        case MODEL_ACTION_ADDICT:
             position = -1;
             try {
                 position = Integer.parseInt(argv[5]);
@@ -642,7 +643,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addict(argv[0], argv[1], argv[2], argv[3], argv[4], position, pid);
             break;
 
-        case CREATE_ADDICTED:
+        case MODEL_ACTION_CREATE_ADDICTED:
             GraphDocument doc = getCollection().getGraphDocumentCoded(argv[0]);
             ModelElement master = doc.findElementCoded(argv[1]);
             edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
@@ -3465,7 +3466,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (slaveContainer != null) {
             Dimension pos = calculateAddictPosition(masterContainer);
 
-            addRedoCommand(ADDICT + " " + szenHash + " " + edgeClassName + " " + k.getHashString() + " " + masterElement.getHashString() + " " + slaveElement.getHashString() + " " + position, pid);
+            addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + k.getHashString() + " " + masterElement.getHashString() + " " + slaveElement.getHashString() + " " + position, pid);
             addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveElement.getHashString() + " " + slaveContainer.getX() + " " + slaveContainer.getY() + " " + slaveContainer.getWidth() + " " + slaveContainer.getHeight(), pid);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveContainer.getWidth(), slaveContainer.getHeight());
 
@@ -3721,8 +3722,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         start_transaction(pid);
         if (me.swapEdges(edgeIndex2, edgeIndex2)) {
-            addRedoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex1 + " " + edgeIndex2, pid);
-            addUndoCommand(GDCommands.SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex2 + " " + edgeIndex1, pid);
+            addRedoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex1 + " " + edgeIndex2, pid);
+            addUndoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex2 + " " + edgeIndex1, pid);
         }
         /*
          * if (knot.isSpecialInfoKnot()){
