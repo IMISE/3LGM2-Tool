@@ -38,7 +38,6 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -1069,11 +1068,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             } else if (argc == 3) {
                 changeLineStyle(argv[0], argv[1], lineStyle, pid);
             }
-            break;
-
-        case CHANGE_GLOBAL_MAPPING:
-            //Der Konstruktoraufruf zeigt den Editor auch gleich an
-            new LayoutEditor(new javax.swing.JFrame(), this);
             break;
 
         case MODEL_ACTION_CREATE_SZENARIO:

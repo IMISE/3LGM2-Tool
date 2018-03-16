@@ -24,7 +24,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_GLOBAL_MAPPING;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
@@ -125,7 +124,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JMenuItem properties, change_layout;
+    private JMenuItem properties;
 
     /**
      * COMMENTME
@@ -288,8 +287,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         delete_selected_from_szenario = getItem(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL);
 
         join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
-
-        change_layout = getItem("global_layout", CHANGE_GLOBAL_MAPPING);
 
         verify = new JCheckBoxMenuItem(getResString("verif"));
         verify.addActionListener(this);
@@ -1127,7 +1124,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         menu.addSeparator();
         menu.add(layout_layer);
-        menu.add(change_layout);
+        menu.add(ActionLibrary.LayoutActions.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR);
         menu.addSeparator();
         menu.add(getInternalsMenu());
         return menu;
