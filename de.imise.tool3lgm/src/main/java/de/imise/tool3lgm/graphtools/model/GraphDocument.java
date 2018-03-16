@@ -453,7 +453,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (answer != null && !answer.equals("") && !answer.equals("COMMAND_LINE")) {
                 exec(answer, "", pid, log);
             }
-        } else if (command.equals(GDCommands.CHECK_CONSISTENCY.toString())) {
+        } else if (command.equals(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY.toString())) {
             //            GraphDocument doc = gdcoll.getMainGraphDocument();
             //            List<ModelElement> elements = doc.getModelItems(Aufgabe.class, false);
             //            for (ModelElement me : elements) {
@@ -822,13 +822,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             setDescription(findElementCoded(argv[0]), argv[1], pid);
             break;
 
-        case SET_USER_FIELD_VALUE:
+        case MODEL_ACTION_SET_USER_FIELD_VALUE:
             if (argc == 3) {
                 setUserFieldValue(argv[0], argv[1], argv[2], pid);
             }
             break;
 
-        case SET_USER_FIELD_WEIGHT_REPLACEMENT:
+        case MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT:
             if (argc == 3) {
                 setUserFieldWeightReplacement(argv[0], argv[1], argv[2], pid);
             }
@@ -4105,8 +4105,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public void setUserFieldValue(final ModelElement me, final UserField userField, final String newValue, final int pid) {
         start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(newValue, true), pid);
-        addUndoCommandIfNotExist(GDCommands.SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(userField.getValue(me), true), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(newValue, true), pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(userField.getValue(me), true), pid);
         me.setUserFieldInputValue(userField, getDecodedParseSaveString(newValue));
         finish_transaction(pid);
         distributeEvent(USER_FIELD_VALUE_CHANGED, pid);
@@ -4166,8 +4166,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //UNDO und REDO Commands schreiben
         start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, hashReplacement, pid);
-        addUndoCommandIfNotExist(GDCommands.SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, oldUserFieldHashReplacement, pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, hashReplacement, pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, oldUserFieldHashReplacement, pid);
         finish_transaction(pid);
 
     }

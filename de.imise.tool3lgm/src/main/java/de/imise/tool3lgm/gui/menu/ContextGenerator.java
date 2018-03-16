@@ -25,7 +25,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
@@ -295,7 +294,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         command_line = getItem("befehl", COMMAND_LINE);
         queue = getItem("queue", PRINT_QUEUE);
-        consistency = getItem("konsistenz", CHECK_CONSISTENCY);
+        consistency = getItem(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 
         internals = new JMenu(getResString("intern"));
         internals.add(verify);

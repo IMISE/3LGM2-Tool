@@ -125,7 +125,7 @@ public enum GDCommands implements ActionSource {
     //spezielle Kommandos
     COMMAND_LINE,
     PRINT_QUEUE,
-    CHECK_CONSISTENCY;
+    MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;
 
     //Ungültige Werte für alle Kommandos
     public static final int INVALID_POSITION_X = -1;
