@@ -15,6 +15,9 @@ import de.imise.util.swing.event.ActionSource;
 public enum GDCommands implements ActionSource {
 
     MODEL_ACTION_CREATE_NODE,
+    MODEL_ACTION_DELETE,
+    MODEL_ACTION_DELETE_FROM_SUBMODEL,
+    MODEL_ACTION_DELETE_FROM_MODEL,
     LINK,
     MODEL_ACTION_CREATE_ADDICTED, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat keinen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
     MODEL_ACTION_ADDICT, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
@@ -36,16 +39,18 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF,
     MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL,
     MODEL_ACTION_SET_ELEMENT_ICON_NONE,
+    MODEL_ACTION_SET_ELEMENT_ICON,
+
     MODEL_ACTION_SET_LAYER_COLOR,
     MODEL_ACTION_SET_LAYER_ALPHA, //Für diesen Identifier gibt es keine Action, weil das über SetColor läuft. Man braucht ihn nur für das UNDO von MODEL_ACTION_SET_LAYER_TRANSPARENCY_XXX
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE,
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF,
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL,
     MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY,
-    MODEL_ACTION_SET_ELEMENT_ICON,
     CHANGE_LAYER_SIZE_FACTOR,
     CHANGE_GLOBAL_NAME,
     CHANGE_GLOBAL_MAPPING,
+
     MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP,
     MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN,
     MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION,
@@ -98,9 +103,6 @@ public enum GDCommands implements ActionSource {
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
     SHOW_SZENARIO,
-    MODEL_ACTION_DELETE,
-    MODEL_ACTION_DELETE_FROM_SUBMODEL,
-    MODEL_ACTION_DELETE_FROM_MODEL,
 
     JOIN_SELECTED,
 
