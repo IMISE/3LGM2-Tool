@@ -30,11 +30,11 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
@@ -42,10 +42,9 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
@@ -326,8 +325,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ELEMENT_CONFIGS);
         hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ELEMENT_CONFIGS);
-        set_visible = getItem("einbl", SET_VISIBLE, "true");
-        set_invisible = getItem("ausbl", SET_VISIBLE, "false");
+        set_visible = getItem(GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON);
+        set_invisible = getItem(GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF);
 
         layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
         layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);

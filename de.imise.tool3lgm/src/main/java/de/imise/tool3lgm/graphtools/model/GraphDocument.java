@@ -15,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTIO
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
 
 import java.awt.Color;
@@ -557,11 +558,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             remove(argv, pid);
             break;
 
-        case SET_VISIBLE:
-            //argv[0] = visible = "true" oder "false"
-            //argv[1] = szenHash (optional)
-            //argv[2..n] = elementHashes (optional)
-            setVisible(argv, pid);
+        case MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON:
+        case MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF:
+            //argv[0] = szenHash (optional)
+            //argv[1..n] = elementHashes (optional)
+            setVisible(command == MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, argv, pid);
             break;
 
         case MODEL_ACTION_CREATE_NODE:
@@ -2717,25 +2718,20 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param args
      * @param pid
      */
-    private final void setVisible(final String[] args, final int pid) {
-        //argv[0] = visible = "true" oder "false"
-        //argv[1] = szenHash (optional)
-        //argv[2..n] = elementHashes (optional)
-        if (args.length < 1) {
-            return;
-        }
-        boolean visible = Boolean.valueOf(args[0]).booleanValue();
-        if (args.length == 1) {
+    private final void setVisible(final boolean visible, final String[] args, final int pid) {
+        //argv[0] = szenHash (optional)
+        //argv[1..n] = elementHashes (optional)
+        if (args.length == 0) {
             setVisible(visible, pid);
             return;
         }
-        String szenHash = args[1];
+        String szenHash = args[0];
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
         }
         szen.deselectAll(false);
-        for (int i = 2; i < args.length; i++) {
+        for (int i = 1; i < args.length; i++) {
             szen.addToSelection(args[i], pid);
         }
         szen.setVisible(visible, pid);
@@ -2746,7 +2742,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     private final void setVisible(final boolean visible, final int pid) {
-        setVisible(hashString, selectedContainer, visible, pid);
+        setVisible(visible, hashString, selectedContainer, pid);
     }
 
     /**
@@ -2755,7 +2751,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param visible
      * @param pid
      */
-    private final void setVisible(final String szenHash, final Collection<ElementContainer> container, final boolean visible, final int pid) {
+    private final void setVisible(final boolean visible, final String szenHash, final Collection<ElementContainer> container, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2770,8 +2766,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             sb.append(" ");
             sb.append(ec.getHashString());
         }
-        szen.addUndoCommand(GDCommands.SET_VISIBLE + " " + !visible + " " + szenHash + sb, pid);
-        szen.addRedoCommand(GDCommands.SET_VISIBLE + " " + visible + " " + szenHash + sb, pid);
+        szen.addUndoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON) + " " + szenHash + sb, pid);
+        szen.addRedoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF) + " " + szenHash + sb, pid);
         szen.finish_transaction(pid);
         szen.distributeEvent(DATA_CHANGED, pid);
     }
