@@ -46,10 +46,6 @@ public enum GDCommands implements ActionSource {
     CHANGE_LAYER_SIZE_FACTOR,
     CHANGE_GLOBAL_NAME,
     CHANGE_GLOBAL_MAPPING,
-    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
-    HIDE_ELEM,
-    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
-    UNHIDE_ELEM,
     MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP,
     MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN,
     MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION,
