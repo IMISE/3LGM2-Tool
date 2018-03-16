@@ -27,8 +27,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_NAME,
     MODEL_ACTION_SET_ELEMENT_DESCRIPTION,
 
-    //TODO: Dieses Kommando wird im Moment nicht ausgeführt, also dispatch_command kann mit diesem Kommando nichts anfangen
-    CHANGE_FORM,
+    MODEL_ACTION_SET_ELEMENT_SHAPE, //dieses Kommando wird nicht beachtet. Das ist auch in Ordnung, weil man den Shape für einzelne Elemente nicht ändern können sollte. Wir sind kein freies Modellierungstool :)
     MODEL_ACTION_SET_ELEMENT_POSITION,
     MODEL_ACTION_SET_ELEMENT_FONT,
     MODEL_ACTION_SET_ELEMENT_COLOR,
