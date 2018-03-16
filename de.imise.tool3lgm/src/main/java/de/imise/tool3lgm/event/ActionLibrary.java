@@ -391,12 +391,12 @@ public class ActionLibrary {
             };
         }
 
-        public static final Action MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS = createMODEL_ACTION_SHOW_HIDE_LAYER_CONFIGS(false);
+        public static final Action MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(true);
 
-        public static final Action MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS = createMODEL_ACTION_SHOW_HIDE_LAYER_CONFIGS(true);
+        public static final Action MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(false);
 
-        public static final Action createMODEL_ACTION_SHOW_HIDE_LAYER_CONFIGS(final boolean show) {
-            return new GraphFrameAction(show ? GDCommands.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS : GDCommands.MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS) {
+        private static final Action createMODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean visible) {
+            return new GraphFrameAction(visible ? GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
                     if (!super.isEnabled()) {
@@ -406,12 +406,12 @@ public class ActionLibrary {
                     for (ElementContainer ec : lc.getKnoten()) {
                         if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
                             boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
-                            if (show != hasVisibleConfigs) {
+                            if (visible != hasVisibleConfigs) {
                                 return true;
                             }
                         }
                     }
-                    return show != lc.isShowInterLayerConnections();
+                    return visible != lc.isShowInterLayerConnections();
                 }
             };
         }

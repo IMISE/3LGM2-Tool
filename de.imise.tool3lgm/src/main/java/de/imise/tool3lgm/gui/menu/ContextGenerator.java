@@ -332,8 +332,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         set_visible = getItem("einbl", SET_VISIBLE, "true");
         set_invisible = getItem("ausbl", SET_VISIBLE, "false");
 
-        layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
-        layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS);
+        layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+        layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
         expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_ON);
         collapse = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF);
 

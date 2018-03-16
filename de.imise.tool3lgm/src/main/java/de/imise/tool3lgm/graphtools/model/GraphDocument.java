@@ -1207,9 +1207,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             joinSelected(pid);
             break;
 
-        case MODEL_ACTION_HIDE_ALL_LAYER_CONFIGS:
-        case MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS:
-            layer[gdcoll.getActiveLayer()].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SHOW_ALL_LAYER_CONFIGS);
+        case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
+        case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF:
+            layer[gdcoll.getActiveLayer()].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         case MODEL_ACTION_SHOW_ELEMENT_CONFIGS:
