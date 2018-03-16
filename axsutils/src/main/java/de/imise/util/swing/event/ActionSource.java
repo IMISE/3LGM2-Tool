@@ -1,5 +1,6 @@
 package de.imise.util.swing.event;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,11 +38,26 @@ public interface ActionSource {
         }
     }
 
+    /**
+     * Actions bei denen irgendwie ein Dialog nach dem Aufruf angezeigt wird, sollten über diese put-Funktion geadded werden.
+     * Einzige Auswirkung ist, dass sie im Menü 3 Punkte hinter ihren Namen bekommen.
+     * 
+     * @param actionClass
+     * @param actionSources
+     */
+    public static void putInteractive(final Class<? extends Action> actionClass, final ActionSource... actionSources) {
+        put(actionClass, actionSources);
+        setInteractive(actionSources);
+    }
     public default Class<? extends Action> getActionClass() {
         return ACTION_CLASS.get(this);
     }
 
     public static final Set<ActionSource> INTERACTIVE_ACTIONS = new HashSet<>();
+
+    public static void setInteractive(final ActionSource... interactiveActionSources) {
+        INTERACTIVE_ACTIONS.addAll(Arrays.asList(interactiveActionSources));
+    }
 
     /**
      * Bei allen Actions, die eine Benutzerinteraktion (z.B. über einen Dialog vorraussetzen,
