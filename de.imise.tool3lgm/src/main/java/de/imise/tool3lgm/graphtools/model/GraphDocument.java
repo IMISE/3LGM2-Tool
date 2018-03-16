@@ -590,7 +590,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case LINK:
+        case MODEL_ACTION_LINK:
             switch (argc) {
             case 2:
                 linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
@@ -607,7 +607,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case UNLINK:
+        case MODEL_ACTION_UNLINK:
             int position = -1;
             Class<? extends Edge> edgeClass = null;
             switch (argc) {

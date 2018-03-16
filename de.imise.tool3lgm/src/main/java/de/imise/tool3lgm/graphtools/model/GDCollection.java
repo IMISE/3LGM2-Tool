@@ -45,7 +45,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
@@ -64,7 +64,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.getDecodedParseSaveString;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.getParseSaveString;
@@ -870,16 +870,16 @@ public final class GDCollection extends UserFieldTarget {
                     int direction = edge.getDirection();
                     switch (direction) {
                     case FORWARD:
-                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
+                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
                         doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     case BACKWARD:
-                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
+                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
                         doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     case DOUBLE:
-                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
-                        doc.addUndoCommand(LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
+                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
+                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
                         doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     }
@@ -1312,8 +1312,8 @@ public final class GDCollection extends UserFieldTarget {
                 edge.setDirection(DOUBLE);
                 String startHash = startElement.getHashString();
                 String endHash = endElement.getHashString();
-                doc.addRedoCommand(LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
+                doc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                doc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
             } else {
                 try {
                     edge = edgeClass.newInstance();
@@ -1370,8 +1370,8 @@ public final class GDCollection extends UserFieldTarget {
                 }
                 String startHash = startElement.getHashString();
                 String endHash = endElement.getHashString();
-                doc.addRedoCommand(LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
+                doc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+                doc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
@@ -1508,7 +1508,7 @@ public final class GDCollection extends UserFieldTarget {
         String me2Hash = me2.getHashString();
         String edgeClassName = edgeClass == null ? "null" : edgeClass.getName();
         doc.start_transaction(pid);
-        doc.addRedoCommand(UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + me1EdgeIndex, pid);
+        doc.addRedoCommand(MODEL_ACTION_UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + me1EdgeIndex, pid);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
@@ -1516,10 +1516,10 @@ public final class GDCollection extends UserFieldTarget {
         if (isDoubleMeaningEdge(absoluteEdgeClass)) {
             if (edge.getDirection() == DOUBLE) {
                 if (edge.getStart() == me1) {
-                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
+                    doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
                     edge.setDirection(BACKWARD);
                 } else {
-                    doc.addUndoCommand(LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
+                    doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
                     edge.setDirection(FORWARD);
                 }
             } else {

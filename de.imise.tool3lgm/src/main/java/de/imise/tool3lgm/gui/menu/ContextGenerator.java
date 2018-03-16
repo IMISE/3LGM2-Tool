@@ -30,7 +30,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
@@ -45,7 +45,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SET_VISIBLE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.UNLINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
@@ -677,8 +677,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         if (isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
                             String label = getBackwardMetaAssociationName(edgeClass, false, true);
@@ -699,8 +699,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
@@ -723,8 +723,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                             actDir = BACKWARD;
                             label = getMetaAssociationName(edgeClass, false, actDir, false, true);
@@ -745,8 +745,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         // Doppeldeutige Kanten mit identischer Start- und
                         // Endklasse brauchen nur 1x angeboten werden
@@ -770,8 +770,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                             actDir = BACKWARD;
                             label = getMetaAssociationName(edgeClass, true, actDir, false, true);
@@ -792,8 +792,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 }
                             }
 
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + actDir, verbindung_anlegen, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + actDir, verbindung_trennen, disconnectable, toolTip), label));
 
                         }
                         //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
@@ -824,10 +824,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 break;
                             }
                         }
-                        connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectableForward, toolTipForward), labelForward));
-                        disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectableForward, toolTipForward), labelForward));
-                        connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectableBackward, toolTipBackward), labelBackward));
-                        disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectableBackward, toolTipBackward), labelBackward));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectableForward, toolTipForward), labelForward));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectableForward, toolTipForward), labelForward));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectableBackward, toolTipBackward), labelBackward));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectableBackward, toolTipBackward), labelBackward));
 
                     } else /* if (Edge.isConnecting(edgeClass, me1Class, me2Class)) */ {
                         String label = isStartClass(edgeClass, lastSelectedClass) ? getForwardMetaAssociationName(edgeClass, false, true) : getBackwardMetaAssociationName(edgeClass, false, true);
@@ -847,8 +847,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 break;
                             }
                         }
-                        connectableItems.add(new NamedObjectContainer<>(getItem(label, LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                     }
                 }
             }
