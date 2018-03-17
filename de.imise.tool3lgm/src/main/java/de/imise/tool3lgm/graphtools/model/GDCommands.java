@@ -87,11 +87,6 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_USER_FIELD_VALUE,
     MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT,
 
-    INTERACTIVE_MODE_OFF,
-    INTERACTIVE_MODE_ON,
-    VERIFY_OFF,
-    VERIFY_ON,
-
     CHANGE_LINE_STYLE,
 
     MODEL_ACTION_CREATE_SZENARIO,
@@ -125,7 +120,11 @@ public enum GDCommands implements ActionSource {
     //spezielle Kommandos
     COMMAND_LINE,
     PRINT_QUEUE,
-    MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;
+    MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
+    INTERACTIVE_MODE_OFF,
+    INTERACTIVE_MODE_ON,
+    VERIFY_ON,
+    VERIFY_OFF;
 
     //Ungültige Werte für alle Kommandos
     public static final int INVALID_POSITION_X = -1;
