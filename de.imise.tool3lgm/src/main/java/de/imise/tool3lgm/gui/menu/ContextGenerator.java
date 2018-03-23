@@ -97,6 +97,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
+import de.imise.util.swing.menu.DynamicMenu;
 import de.imise.util.swing.menu.MenuScroller;
 
 /**
@@ -288,7 +289,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         verify = new JCheckBoxMenuItem(getResString("verif"));
         verify.addActionListener(this);
-
         interactive = new JCheckBoxMenuItem(getResString("intera"));
         interactive.addActionListener(this);
 
@@ -296,7 +296,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         queue = getItem("queue", PRINT_QUEUE);
         consistency = getItem(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 
-        internals = new JMenu(getResString("intern"));
+        internals = new DynamicMenu(getResString("intern"));
         internals.add(verify);
         internals.add(interactive);
         internals.addSeparator();
@@ -1132,22 +1132,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getInternalsMenu() {
-        if (!doc.isVerificationMode()) {
-            verify.setState(false);
-            verify.setActionCommand(VERIFY_ON.toString());
-        } else {
-            verify.setState(true);
-            verify.setActionCommand(VERIFY_OFF.toString());
-        }
-
-        if (!doc.getCollection().isInteractiveMode()) {
-            interactive.setState(false);
-            interactive.setActionCommand(INTERACTIVE_MODE_ON.toString());
-        } else {
-            interactive.setState(true);
-            interactive.setActionCommand(INTERACTIVE_MODE_OFF.toString());
-        }
+        updateModelOptionCheckBox(verify, doc.isVerificationMode(), VERIFY_OFF, VERIFY_ON);
+        updateModelOptionCheckBox(interactive, doc.getCollection().isInteractiveMode(), INTERACTIVE_MODE_OFF, INTERACTIVE_MODE_ON);
         return internals;
+    }
+
+    private void updateModelOptionCheckBox(final JCheckBoxMenuItem item, final boolean isSelected, final GDCommands selectedCommand, final GDCommands unselectedCommand) {
+        item.setSelected(isSelected);
+        item.setActionCommand(isSelected ? selectedCommand.toString() : unselectedCommand.toString());
     }
 
     /**
@@ -2044,7 +2036,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        doc.getCollection().getSelectedDoc().exec(e.getActionCommand(), STANDARD_PID);
+        doc.exec(e.getActionCommand(), STANDARD_PID);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------
