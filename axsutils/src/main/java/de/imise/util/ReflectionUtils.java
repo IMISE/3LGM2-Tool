@@ -396,4 +396,18 @@ public class ReflectionUtils {
         return returnClasses.build();
     }
 
+    /**
+     * Liefert auch im statischen Kontext das, was getClass() im Objekt-Kontext liefert.
+     */
+    public static class CurrentClassGetter extends SecurityManager {
+
+        public String getClassName() {
+            return getClassContext()[1].getName();
+        }
+
+        public Class<?> getCurrentClass() {
+            return getClassContext()[1];
+        }
+    }
+
 }
