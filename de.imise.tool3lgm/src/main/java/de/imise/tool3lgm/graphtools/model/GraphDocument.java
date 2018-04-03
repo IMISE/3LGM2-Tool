@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +70,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
+import de.imise.util.OptionsSupport;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.ImageChooser;
 
@@ -78,6 +78,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
+
+    public final OptionsSupport optionsSupport = new OptionsSupport();
 
     /**
      * COMMENTME
@@ -123,11 +125,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * COMMENTME
      */
     protected String hashString = "";
-
-    /**
-     * Wenn eine MODEL_OPTION für dieses GraphDocument true ist, dann muss das zugehörige GDCommand in dieser Collection sein.
-     */
-    private final Collection<GDCommands> trueOptions = new HashSet<>();
 
     /**
      * COMMENTME
@@ -866,9 +863,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         case MODEL_OPTION_GDOC_VERIFICATION_MODE:
             if (argc == 0) {
-                switchOption(MODEL_OPTION_GDOC_VERIFICATION_MODE);
+                optionsSupport.switchOption(MODEL_OPTION_GDOC_VERIFICATION_MODE);
             } else {
-                setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
+                optionsSupport.setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
             }
             break;
         case INTERACTIVE_MODE_ON:
@@ -1375,36 +1372,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
     }
 
-    public boolean isOptionTrue(final GDCommands option) {
-        return trueOptions.contains(option);
-    }
-
-    public boolean setOption(final GDCommands option, final boolean value) {
-        if (!value) {
-            return trueOptions.remove(option);
-        }
-        boolean oldValue = isOptionTrue(option);
-        if (!oldValue) {
-            trueOptions.add(option);
-        }
-        return oldValue;
-    }
-
-    /**
-     * Dreht den Wert einer Boolean-Option um.
-     *
-     * @param option
-     * @return den neuen Wert der Option
-     */
-    private boolean switchOption(final GDCommands option) {
-        return !setOption(option, !isOptionTrue(option));
-    }
-
     /**
      * @return
      */
     public boolean isVerificationMode() {
-        return isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE) || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
+        return optionsSupport.isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE) || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
     }
 
     // --- Transaktions-Verwaltung --- Ende ---

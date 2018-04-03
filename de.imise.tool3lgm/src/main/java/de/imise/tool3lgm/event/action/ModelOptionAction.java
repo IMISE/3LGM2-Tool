@@ -29,7 +29,7 @@ public class ModelOptionAction extends GraphDocumentAction implements OptionActi
     @Override
     public boolean isSelected() {
         GraphDocument doc = Static.getSelectedDoc();
-        return doc != null && doc.isOptionTrue(option);
+        return doc != null && doc.optionsSupport.isOptionTrue(option);
     }
 
 }
