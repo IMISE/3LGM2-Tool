@@ -26,8 +26,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_OFF;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.INTERACTIVE_MODE_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
@@ -141,7 +139,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JCheckBoxMenuItem interactive;
+    private JMenuItem interactive;
 
     private JMenuItem verify;
 
@@ -288,8 +286,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
 
         verify = getItem(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        interactive = new JCheckBoxMenuItem(getResString("intera"));
-        interactive.addActionListener(this);
+        interactive = getItem(GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
 
         command_line = getItem("befehl", COMMAND_LINE);
         queue = getItem("queue", PRINT_QUEUE);
@@ -1126,21 +1123,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.add(layout_layer);
         menu.add(ActionLibrary.LayoutActions.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR);
         menu.addSeparator();
-        menu.add(getInternalsMenu());
+        menu.add(internals);
         return menu;
-    }
-
-    /**
-     * @return
-     */
-    private JMenu getInternalsMenu() {
-        updateModelOptionCheckBox(interactive, doc.getCollection().isInteractiveMode(), INTERACTIVE_MODE_OFF, INTERACTIVE_MODE_ON);
-        return internals;
-    }
-
-    private void updateModelOptionCheckBox(final JCheckBoxMenuItem item, final boolean isSelected, final GDCommands selectedCommand, final GDCommands unselectedCommand) {
-        item.setSelected(isSelected);
-        item.setActionCommand(isSelected ? selectedCommand.toString() : unselectedCommand.toString());
     }
 
     /**

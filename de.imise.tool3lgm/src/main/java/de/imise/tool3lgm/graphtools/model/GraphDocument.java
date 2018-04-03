@@ -868,13 +868,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 optionsSupport.setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
             }
             break;
-        case INTERACTIVE_MODE_ON:
-            gdcoll.setInteractiveMode(true);
+        case MODEL_OPTION_GDCOLL_INTERACTIVE_MODE:
+            boolean isInteractiveMode = argc == 0 ? !gdcoll.isInteractiveMode() : Boolean.parseBoolean(argv[0]);
+            gdcoll.setInteractiveMode(isInteractiveMode);
             break;
-        case INTERACTIVE_MODE_OFF:
-            gdcoll.setInteractiveMode(false);
-            break;
-
         case MODEL_ACTION_INSERT_BENDING_POINT:
             //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
             gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);

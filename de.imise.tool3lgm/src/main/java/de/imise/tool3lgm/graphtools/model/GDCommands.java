@@ -122,8 +122,7 @@ public enum GDCommands implements ActionSource {
     COMMAND_LINE,
     PRINT_QUEUE,
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
-    INTERACTIVE_MODE_OFF,
-    INTERACTIVE_MODE_ON,
+    MODEL_OPTION_GDCOLL_INTERACTIVE_MODE,
     MODEL_OPTION_GDOC_VERIFICATION_MODE;
 
     //Ungültige Werte für alle Kommandos
@@ -208,6 +207,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SZENARIO);
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SZENARIO);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
+        ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
     }
 
 }
