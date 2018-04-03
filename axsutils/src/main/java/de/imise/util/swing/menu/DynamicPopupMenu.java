@@ -33,7 +33,6 @@ public class DynamicPopupMenu extends JPopupMenu {
      * implementiert werden, da dies bereits über {@link #fireMenuSelected()} erfolgt.
      */
     protected void updateItems() {
-        MenuCreator.checkEnabledAndSelected(this);
     }
 
     /**

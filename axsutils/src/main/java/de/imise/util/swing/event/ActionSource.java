@@ -46,9 +46,6 @@ public interface ActionSource {
         if (isInteractiveAction()) {
             action.putValue(Action.NAME, action.getValue(Action.NAME).toString() + PPP);
         }
-        if (isSelected()) {
-            action.setSelected(true);
-        }
         return action;
     }
 

@@ -7,10 +7,10 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import de.imise.util.Pair;
 
@@ -25,8 +25,6 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /** Source für das Ausführen der Aktion über ein neu generiertes {@link ActionEvent} */
     private static JButton button = new JButton();
-
-    private boolean isOptionAction = false;
 
     /**
      * Konstruktor
@@ -43,25 +41,14 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param shortDescription
      * @param longDescription
      * @param actionCommand
-     * @param initialSelectionState
-     *            Initialer Selektionszustand für die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s. Wenn hier ein
-     *            nicht-null-Boolean übergeben wird, dann wird isOptionAction auf true gesetzt, um zu markieren, dass es sich um eine Option zum
-     *            Umschalten handelt.
      */
-    public ExtendedAction(final String text, final Icon smallIcon, final Icon largeIcon, final KeyStroke keyStroke, final String shortDescription, final String longDescription, final String actionCommand, final Boolean initialSelectionState) {
+    public ExtendedAction(final String text, final Icon smallIcon, final Icon largeIcon, final KeyStroke keyStroke, final String shortDescription, final String longDescription, final String actionCommand) {
         super(text, smallIcon);
         setLargeIcon(largeIcon);
         setKeyStroke(keyStroke);
         setShortDescription(shortDescription);
         setLongDescription(longDescription);
         setActionCommand(actionCommand);
-        if (initialSelectionState != null) {
-            isOptionAction = true;
-            setSelected(initialSelectionState);
-        } else {
-            isOptionAction = false;
-            setSelected(false);
-        }
     }
 
     /**
@@ -74,7 +61,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param smallIcon
      */
     public ExtendedAction(final String text, final Icon smallIcon) {
-        this(text, smallIcon, null, null, null, null, null, null);
+        this(text, smallIcon, null, null, null, null, null);
     }
 
     /**
@@ -86,30 +73,14 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param text
      */
     public ExtendedAction(final String text) {
-        this(text, null, null, null, null, null, null, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine Instanz dieser Klasse mit dem spezifizierten Property-Wert ({@link Action}).
-     * </p>
-     *
-     * @param text
-     * @param initialSelectionState
-     *            Initialer Selektionszustand für die Verwendung bei {@link JCheckBoxMenuItem}s und {@link JRadioButtonMenuItem}s. Wenn hier ein
-     *            nicht-null-Boolean übergeben wird, dann wird isOptionAction auf true gesetzt, um zu markieren, dass es sich um eine Option zum
-     *            Umschalten handelt.
-     */
-    public ExtendedAction(final String text, final Boolean initialSelectionState) {
-        this(text, null, null, null, null, null, null, initialSelectionState);
+        this(text, null, null, null, null, null, null);
     }
 
     /**
      * Konstruktor
      */
     public ExtendedAction() {
-        this(null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null);
     }
 
     /**
@@ -197,60 +168,9 @@ public abstract class ExtendedAction extends AbstractAction {
         putValue(ACTION_COMMAND_KEY, actionCommand);
     }
 
-    /**
-     * Setzt den Selektionszustand dieser Action. (Zur Verwendung bei {@link JRadioButtonMenuItem} und {@link JCheckBoxMenuItem})
-     *
-     * @param b
-     */
-    public void setSelected(final boolean b) {
-        putValue(SELECTED_KEY, b);
-    }
-
-    /**
-     * Setzt den Selektionszustand dieser Action. (Zur Verwendung bei {@link JRadioButtonMenuItem} und {@link JCheckBoxMenuItem}). Bei
-     * <code>null</code> wird <code>false</code> gesetzt.
-     *
-     * @param b
-     */
-    public void setSelected(final Boolean b) {
-        setSelected(b != null ? b : false);
-    }
-
     @Override
     public void putValue(final String key, final Object value) {
         super.putValue(key, value);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die Action mit einem initialSelectionState initialisiert wurde und
-     * als Option gilt.
-     *
-     * @return
-     */
-    public boolean isOptionAction() {
-        return isOptionAction;
-    }
-
-    /**
-     * Liefert für den key {@link Action#SELECTED_KEY} den Wert von {@link ExtendedAction#isSelected()} zurück, verhält
-     * sich sonst aber wie {@link AbstractAction#getValue(String)}. <br>
-     * Durch Überschreiben von {@link ExtendedAction#isSelected()} kann der Selektionzustand dynamisch festgelegt
-     * werden, sodass ein manuelles Setzen mittels {@link ExtendedAction#putValue(String, Object)} entfällt.
-     *
-     * @see javax.swing.AbstractAction#getValue(java.lang.String)
-     */
-    @Override
-    public Object getValue(final String key) {
-        // Ermöglicht das Überschreiben von isSelected() sodass beim Überprüfen
-        // des Selektionszustandes dieser Action durch eine Component,
-        // der Wert der isSelected()-Methode genommen wird, statt
-        // dem Wert im ArrayTable.
-        // Wird isSelected() nicht überschrieben, bleibt das Standardverhalten erhalten,
-        // d.h. es wird der Wert aus dem ArrayTable zurückgegeben.
-        if (key == SELECTED_KEY) {
-            return isSelected();
-        }
-        return super.getValue(key);
     }
 
     /**
@@ -328,20 +248,6 @@ public abstract class ExtendedAction extends AbstractAction {
     }
 
     /**
-     * Gibt den Selektionszustand dieser Action wieder. (Zur Verwendung bei {@link JRadioButtonMenuItem} und {@link JCheckBoxMenuItem}) <br>
-     * Falls kein Selektionszustand gesetzt wurde, wird <code>false</code> zurückgegeben.
-     * <p>
-     * Durch Überschreiben dieser Methode kann der Selektionszustand dynamisch festgelegt werden. Allerdings ist dann eine Beeinflussung durch
-     * {@link #putValue(String, Object)} nicht mehr möglich.
-     *
-     * @param b
-     */
-    public boolean isSelected() {
-        Boolean b = (Boolean) super.getValue(SELECTED_KEY);
-        return b != null && b;
-    }
-
-    /**
      * Legt die spezifizierten {@link Pair}s auf die Attribute-Map von {@link AbstractAction}. <br>
      *
      * @see AbstractAction#putValue(String, Object)
@@ -398,10 +304,6 @@ public abstract class ExtendedAction extends AbstractAction {
         actionPerformed(new ActionEvent(button, ActionEvent.ACTION_PERFORMED, getText()));
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -417,10 +319,24 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /** Unterklassen können diese Funktion überschreiben und gleich ein passendes MenuItem erzeugen */
     public JMenuItem createMenuItem() {
-        if (isOptionAction) {
-            return new JCheckBoxMenuItem(this);
-        }
-        return new JMenuItem(this);
-    };
+        JMenuItem item = new JMenuItem(this);
+        item.addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorRemoved(final AncestorEvent event) {
+            }
+            @Override
+            public void ancestorMoved(final AncestorEvent event) {
+            }
+            @Override
+            public void ancestorAdded(final AncestorEvent event) {
+                //diese Funktion wird beim Anzeigen des MenuItems ausgelöst. Dabei muss der Selektionszustand
+                //des Items noch einmal geprüft werden, falls die zu grunde liegende Property woanders als über
+                //dieses Item geändert wurde
+                //updateSelection();
+                item.setEnabled(isEnabled());
+            }
+        });
+        return item;
+    }
 
 }

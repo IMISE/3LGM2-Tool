@@ -17,6 +17,7 @@ import javax.swing.JRadioButtonMenuItem;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
+import de.imise.util.swing.event.OptionAction;
 
 /**
  * Util-Klasse zur Erzeugung von {@link JMenu}s.
@@ -206,11 +207,7 @@ public class MenuCreator {
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JMenu createMenu(final String title, final Object[] menuEntries, final boolean setMnemonics) {
-        JMenu menu = new DynamicMenu(title) {
-            @Override
-            protected void updateItems() {
-            }
-        };
+        JMenu menu = new DynamicMenu(title);
         addAll(menu, createMenuEntries(menuEntries, setMnemonics));
         return menu;
     }
@@ -242,11 +239,7 @@ public class MenuCreator {
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JPopupMenu createPopupMenu(final String title, final boolean setMnemonics, final Object... menuEntries) {
-        JPopupMenu menu = new DynamicPopupMenu(title) {
-            @Override
-            protected void updateItems() {
-            }
-        };
+        JPopupMenu menu = new DynamicPopupMenu(title);
         addAll(menu, createMenuEntries(setMnemonics, menuEntries));
         return menu;
     }
@@ -411,20 +404,7 @@ public class MenuCreator {
      * {@link Action}.
      */
     public static void checkEnabledAndSelected(final JPopupMenu menu) {
-        JMenuItem[] items = MenuCreator.getAllItems(menu);
-        for (JMenuItem item : items) {
-            if (item == null) {
-                continue;
-            }
-            Action a = item.getAction();
-            if (a != null) {
-                item.setEnabled(a.isEnabled());
-                Boolean isSelected = (Boolean) a.getValue(Action.SELECTED_KEY);
-                if (isSelected != null) {
-                    item.setSelected(isSelected);
-                }
-            }
-        }
+        checkEnabledAndSelected(getAllItems(menu));
     }
 
     /**
@@ -432,7 +412,14 @@ public class MenuCreator {
      * {@link Action}.
      */
     public static void checkEnabledAndSelected(final JMenu menu) {
-        JMenuItem[] items = MenuCreator.getAllItems(menu);
+        checkEnabledAndSelected(getAllItems(menu));
+    }
+
+    /**
+     * Setzt die Attribute <code>isSelected</code> und <code>isEnabled</code> aller Einträge entsprechend der jeweiligen
+     * {@link Action}.
+     */
+    private static void checkEnabledAndSelected(final JMenuItem[] items) {
         for (JMenuItem item : items) {
             if (item == null) {
                 continue;
@@ -440,11 +427,12 @@ public class MenuCreator {
             Action a = item.getAction();
             if (a != null) {
                 item.setEnabled(a.isEnabled());
-                Boolean isSelected = (Boolean) a.getValue(Action.SELECTED_KEY);
-                if (isSelected != null) {
-                    item.setSelected(isSelected);
+                if (a instanceof OptionAction) {
+                    OptionAction optionAction = (OptionAction) a;
+                    item.setSelected(optionAction.isSelected());
                 }
             }
         }
     }
+
 }
