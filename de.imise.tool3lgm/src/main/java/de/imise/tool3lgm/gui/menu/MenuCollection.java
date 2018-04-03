@@ -8,8 +8,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAY
 import java.awt.Component;
 
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.Static;
@@ -22,11 +24,9 @@ import de.imise.tool3lgm.event.ActionLibrary.FileActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ExportActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions.ImportActions;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions;
-import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
-import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Locale;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
-import de.imise.tool3lgm.event.ActionLibrary.ViewActions.ToolbarActions;
+import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -57,7 +57,7 @@ public class MenuCollection {
             GDCommands.MODEL_ACTION_CUT, GDCommands.MODEL_ACTION_PASTE, new JSeparator(), GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, ViewActions.OPTION_MODEL_BROWSER_SHOW, new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
+    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_MODEL_BROWSER_SHOW, new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
             ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(),
             ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
@@ -73,7 +73,7 @@ public class MenuCollection {
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
             BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, AnalysisActions.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY,
-            ModelConstants.getAnalysisDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
+            ModelConstants.getAnalysisDefinition().getAnalysisActions()/* , Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS */);
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.ACTION_PROPERTY_INT_RMI_PORT, OptionsSubMenus.LOCALE_MENU);
@@ -103,7 +103,7 @@ public class MenuCollection {
     static class ViewSubMenus {
 
         /** Das Symbolleisten-Menu */
-        public static final JMenu TOOLBAR_MENU = createMenu("toolbarMenu", ToolbarActions.OPTION_SHOW_PAINTING_TOOLBAR, ToolbarActions.OPTION_SHOW_STANDARD_TOOLBAR);
+        public static final JMenu TOOLBAR_MENU = createMenu("toolbarMenu", BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR, BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR);
     }
 
     /** Sammlung der Unter-Menus des Format-Menus */
@@ -160,16 +160,15 @@ public class MenuCollection {
 
         /** Methode erzeugt das Sprachen-Menu */
         private static final DynamicMenu createLocaleMenu() {
-            Action[] actions = Locale.CHANGE_LOCALE_ACTIONS;
-            DynamicMenu localeMenu = new DynamicMenu(getResString("localeOptionsMenu")) {
-                @Override
-                protected void updateItems() {
-                }
-            };
-            for (Action action : actions) {
-                localeMenu.add(MenuCreator.createRadioButtonMenuItem(action));
+            ChangeLocaleAction[] actions = ChangeLocaleAction.getAllActions();
+            DynamicMenu localeMenu = new DynamicMenu(getResString("localeOptionsMenu"));
+            ButtonGroup bg = new ButtonGroup();
+            for (ChangeLocaleAction action : actions) {
+                JRadioButtonMenuItem languageButton = MenuCreator.createRadioButtonMenuItem(action);
+                bg.add(languageButton);
+                localeMenu.add(languageButton);
+                languageButton.setSelected(action.isSelected());
             }
-
             return localeMenu;
         }
     }

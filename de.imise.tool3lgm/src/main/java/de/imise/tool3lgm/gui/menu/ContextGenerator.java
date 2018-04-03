@@ -44,8 +44,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_OFF;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.VERIFY_ON;
 import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -143,7 +141,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JCheckBoxMenuItem verify, interactive;
+    private JCheckBoxMenuItem interactive;
+
+    private JMenuItem verify;
 
     /**
      * COMMENTME
@@ -287,8 +287,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
 
-        verify = new JCheckBoxMenuItem(getResString("verif"));
-        verify.addActionListener(this);
+        verify = getItem(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE);
         interactive = new JCheckBoxMenuItem(getResString("intera"));
         interactive.addActionListener(this);
 
@@ -409,6 +408,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenuItem getItem(final GDCommands command) {
+        if (command.isModelOption()) {
+            return new JCheckBoxMenuItem(command.getAction());
+        }
         return getItem(command.name(), command);
     }
 
@@ -1132,7 +1134,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getInternalsMenu() {
-        updateModelOptionCheckBox(verify, doc.isVerificationMode(), VERIFY_OFF, VERIFY_ON);
         updateModelOptionCheckBox(interactive, doc.getCollection().isInteractiveMode(), INTERACTIVE_MODE_OFF, INTERACTIVE_MODE_ON);
         return internals;
     }

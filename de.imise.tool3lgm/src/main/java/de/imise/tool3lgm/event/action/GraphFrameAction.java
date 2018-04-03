@@ -33,14 +33,6 @@ public class GraphFrameAction extends GraphDocumentAction {
         super(identifier, null, null, textSuffix);
     }
 
-    /**
-     * @param identifier
-     * @param initialSelectionState
-     */
-    public GraphFrameAction(final Object identifier, final Boolean initialSelectionState) {
-        super(identifier, initialSelectionState);
-    }
-
     @Override
     public boolean isEnabled() {
         return super.isEnabled() && Static.isActiveFrameGraphFrame();

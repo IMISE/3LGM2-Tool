@@ -3,6 +3,7 @@ package de.imise.tool3lgm;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -240,6 +241,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
         KeyStrokes.registerPublicKeyStrokes(getRootPane());
         setJMenuBar(menuBar);
+
+        setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
+        showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
+
         setVisible(visible);
         toolbar.selectedDocChanged();
 
@@ -566,7 +571,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (ignoreDocSelection) {
             return;
         }
-        boolean isCheckConsistency = isCheckConsistency();
+        boolean isCheckConsistency = UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY);
 
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
         //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
@@ -674,6 +679,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             state = false;
         }
         if (!state) {
+            ConsistencyChecker checker = getConsistencyChecker();
+            if (checker != null) {
+                checker.resetConsistencyDefinition();
+            }
             if (verticalSplitPane.getParent() == workarea) {
                 return;
             }
@@ -701,6 +710,17 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         }
         workarea.revalidate();
         repaint();
+    }
+
+    private void setShowStandardToolbar(final boolean showStandardToolbar) {
+        Container contentPane = getContentPane();
+        ToolBar toolBar = getToolBar();
+        if (showStandardToolbar) {
+            contentPane.add(toolBar, BorderLayout.NORTH);
+        } else {
+            contentPane.remove(toolBar);
+        }
+        getWorkArea().revalidate();
     }
 
     /** ordnet alle InternalFrames neu an (überlappt) */
@@ -1036,9 +1056,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void internalFrameActivated(final InternalFrameEvent e) {
-
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
-
         LGMGraphDocument doc = activeFrame.getGraphDocument();
         doc.addGraphDocumentListener(graphAreaToolbarManager);
         graphAreaToolbarManager.updateToolBar();
@@ -1230,7 +1248,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /** (De-)Aktiviert den ModelBrowser */
-    public void showModelBrowser(final boolean b) {
+    private void showModelBrowser(final boolean b) {
         if (b) {
             getVerticalSplitPane().setLeftComponent(getModelBrowserPanel());
             getVerticalSplitPane().setDividerLocation(200);
@@ -1426,19 +1444,14 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (UserProperties.isPropertyChange(BooleanProperty.OPTION_CHECK_CONSISTENCY, evt)) {
-            boolean checkConsistency = isCheckConsistency();
-            if (!checkConsistency) {
-                ConsistencyChecker checker = getConsistencyChecker();
-                if (checker != null) {
-                    checker.resetConsistencyDefinition();
-                }
-            }
-            setCheckConsistencyState(checkConsistency);
+            setCheckConsistencyState(UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY));
+        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR, evt)) {
+            graphAreaToolbarManager.setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
+        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR, evt)) {
+            setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
+        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MODEL_BROWSER_SHOW, evt)) {
+            showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
         }
-    }
-
-    private boolean isCheckConsistency() {
-        return UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY);
     }
 
 }

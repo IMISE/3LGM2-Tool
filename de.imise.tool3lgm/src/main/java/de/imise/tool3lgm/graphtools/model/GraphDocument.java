@@ -17,6 +17,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -123,9 +125,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected String hashString = "";
 
     /**
-     * COMMENTME
+     * Wenn eine MODEL_OPTION für dieses GraphDocument true ist, dann muss das zugehörige GDCommand in dieser Collection sein.
      */
-    private boolean verify_mode = false;
+    private final Collection<GDCommands> trueOptions = new HashSet<>();
 
     /**
      * COMMENTME
@@ -862,11 +864,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case VERIFY_ON:
-            setVerificationMode(true);
-            break;
-        case VERIFY_OFF:
-            setVerificationMode(false);
+        case MODEL_OPTION_GDOC_VERIFICATION_MODE:
+            if (argc == 0) {
+                switchOption(MODEL_OPTION_GDOC_VERIFICATION_MODE);
+            } else {
+                setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
+            }
             break;
         case INTERACTIVE_MODE_ON:
             gdcoll.setInteractiveMode(true);
@@ -1372,18 +1375,36 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
     }
 
+    public boolean isOptionTrue(final GDCommands option) {
+        return trueOptions.contains(option);
+    }
+
+    public boolean setOption(final GDCommands option, final boolean value) {
+        if (!value) {
+            return trueOptions.remove(option);
+        }
+        boolean oldValue = isOptionTrue(option);
+        if (!oldValue) {
+            trueOptions.add(option);
+        }
+        return oldValue;
+    }
+
     /**
-     * @param flag
+     * Dreht den Wert einer Boolean-Option um.
+     *
+     * @param option
+     * @return den neuen Wert der Option
      */
-    public void setVerificationMode(final boolean flag) {
-        verify_mode = flag;
+    private boolean switchOption(final GDCommands option) {
+        return !setOption(option, !isOptionTrue(option));
     }
 
     /**
      * @return
      */
     public boolean isVerificationMode() {
-        return verify_mode || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
+        return isOptionTrue(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE) || Tool3lgmConstants.LOG_READABLE_UNDO_REDO_COMMANDS;
     }
 
     // --- Transaktions-Verwaltung --- Ende ---

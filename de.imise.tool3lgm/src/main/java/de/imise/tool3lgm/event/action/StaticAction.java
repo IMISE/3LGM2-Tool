@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.event.ActionEvent;
 import java.util.MissingResourceException;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
@@ -61,7 +60,7 @@ public abstract class StaticAction extends ExtendedAction {
      *            eindeutiger Identifier für diese Action
      */
     public StaticAction(final Object identifier) {
-        this(identifier, null, null, null, null);
+        this(identifier, null, null, null);
     }
 
     /**
@@ -77,31 +76,7 @@ public abstract class StaticAction extends ExtendedAction {
      *            Suffix für die Text-Property (in der Regel werden 3 Punkte angehängt, wenn die Aktion einen Dialog öffnet)
      */
     public StaticAction(final Object identifier, final String textSuffix) {
-        this(identifier, null, null, textSuffix, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
-     * {@link JRadioButtonMenuItem}s genutzt werden.
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param textSuffix
-     *            Suffix für die Text-Property
-     * @param enabledWhenSelectedDocNotNull
-     *            <br>
-     *            = <code>true</code>: {@link #isEnabled()} gibt <code>true</code> zurück, wenn ein selektiertes {@link GraphDocument} existiert,
-     *            sonst <code>false</code> <br>
-     *            = <code>false</code>: {@link #isEnabled()} gibt Standardwert zurück (durch {@link AbstractAction} bestimmt)
-     * @param initialSelectionState
-     *            initialer Selektionszustand
-     */
-    public StaticAction(final Object identifier, final Boolean initialSelectionState) {
-        this(identifier, null, null, null, initialSelectionState);
+        this(identifier, null, null, textSuffix);
     }
 
     /**
@@ -120,7 +95,7 @@ public abstract class StaticAction extends ExtendedAction {
      *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
      */
     public StaticAction(final Object identifier, final String arguments, final String text) {
-        this(identifier, arguments, text, null, null);
+        this(identifier, arguments, text, null);
     }
 
     /**
@@ -139,34 +114,11 @@ public abstract class StaticAction extends ExtendedAction {
      *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
      * @param textSuffix
      *            Suffix für die Text-Property
-     */
-    public StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix) {
-        this(identifier, arguments, text, textSuffix, null);
-    }
-
-    /**
-     * Konstruktor
-     * <p>
-     * Erzeugt eine durch den spezifizierten {@link ActionIdentifier} identifizierte Instanz dieser Klasse mit den dazugehörigen Attributen.
-     * <p>
-     * Der initiale Selektionszustand wird auf den spezifizierten Wert gesetz und kann bei {@link JCheckBoxMenuItem}s bzw.
-     * {@link JRadioButtonMenuItem}s genutzt werden. Die Action wird
-     *
-     * @param identifier
-     *            eindeutiger Identifier für diese Action
-     * @param arguments
-     *            Argumente des Kommandos
-     * @param text
-     *            Anzeigetext der Action, wenn sie auf einem Button oder MenuItem liegt
-     * @param textSuffix
-     *            Suffix für die Text-Property
-     * @param initialSelectionState
-     *            initialer Selektionszustand. Wird hier ein Wert != <code>null</code> übergeben, dann wird die Action als optionAction angesehen.
      * @see de.imise.util.swing.event.ExtendedAction#isOptionAction()
      */
-    private StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix, final Boolean initialSelectionState) {
+    public StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix) {
         //wenn darunter das try-catch schief geht, dann ist der Text = dem übergebenen identifier.toString()
-        super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""), initialSelectionState);
+        super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""));
         putValue(IDENTIFIER_KEY, identifier);
 
         String command = setActionCommand(identifier, arguments);

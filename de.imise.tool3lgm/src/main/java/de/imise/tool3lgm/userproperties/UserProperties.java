@@ -325,18 +325,26 @@ public class UserProperties {
         OPTION_CHECK_CONSISTENCY,
         /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
         OPTION_SHOW_REMOVE_WARNING,
+
+        OPTION_SHOW_PAINTING_TOOLBAR,
+        OPTION_SHOW_STANDARD_TOOLBAR,
+        OPTION_MODEL_BROWSER_SHOW,
+
         /**
          * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
          * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer eingeschaltet.
          */
         TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
 
-        private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_ENABLE_SUBMODEL_BROWSER,
-                OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
+        private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_SHOW_PAINTING_TOOLBAR,
+                OPTION_SHOW_STANDARD_TOOLBAR, OPTION_MODEL_BROWSER_SHOW, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING,
+                TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
 
         private boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);
         }
+
+        private UserPropertyBooleanChangeAction action;
 
         @Override
         public UserPropertyBooleanChangeAction getAction() {
@@ -346,7 +354,10 @@ public class UserProperties {
             //überscheiben und die UserPropertyBooleanChangeAction.class zurück geben. Das funktioniert
             //ganz genauso, wie das hier, außer dass hier der Konstuktor direkt und nicht über Reflection
             //aufgerufen wird und Eclipse und der Compiler diesen Aufruf als direkt Code-Referenz erkennen.
-            return new UserPropertyBooleanChangeAction(this);
+            if (action == null) {
+                action = new UserPropertyBooleanChangeAction(this);
+            }
+            return action;
         }
 
     }

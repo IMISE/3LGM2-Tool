@@ -13,6 +13,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGraphAreaChangeListener {
@@ -47,6 +49,7 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                         addToolBar();
                     }
                 }
+                setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
             } else if (activeFrame instanceof MatrixViewInternalFrame) {
                 MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) activeFrame;
                 if (currentToolBar == null || !(currentToolBar instanceof MatrixViewPathSelectorToolBar)) {
@@ -60,7 +63,6 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                 if (matrixViewToolBar.getParent() == null) {
                     addToolBar();
                 }
-
             } else {
                 removeToolBar();
             }

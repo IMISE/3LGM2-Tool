@@ -5,6 +5,7 @@ import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
+import de.imise.tool3lgm.event.action.ModelOptionAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
@@ -123,8 +124,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
     INTERACTIVE_MODE_OFF,
     INTERACTIVE_MODE_ON,
-    VERIFY_ON,
-    VERIFY_OFF;
+    MODEL_OPTION_GDOC_VERIFICATION_MODE;
 
     //Ungültige Werte für alle Kommandos
     public static final int INVALID_POSITION_X = -1;
@@ -152,6 +152,14 @@ public enum GDCommands implements ActionSource {
         //viel kürzer ist als der Komandoname und somit nicht soviel Speicher verbraucht
         //beim Loggen der Undo-redo-Kommandos
         return Integer.toString(ordinal());
+    }
+
+    public static final boolean isModelOption(final GDCommands command) {
+        return command.name().startsWith("MODEL_OPTION_");
+    }
+
+    public final boolean isModelOption() {
+        return isModelOption(this);
     }
 
     static {
@@ -199,6 +207,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SZENARIO);
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SZENARIO);
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SZENARIO);
+        ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
     }
 
 }

@@ -83,15 +83,12 @@ public class ChangeLocaleAction extends ExtendedAction {
         setSelected(true);
     }
 
-    @Override
-    public void setSelected(final boolean b) {
-        if (b && selectedAction != this) {
-            if (selectedAction != null) {
-                selectedAction.setSelected(false);
-            }
-            selectedAction = this;
-        }
-        super.setSelected(b);
+    private void setSelected(final boolean b) {
+        selectedAction = this;
+    }
+
+    public boolean isSelected() {
+        return selectedAction == this;
     }
 
     /** Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten Sprache wieder */

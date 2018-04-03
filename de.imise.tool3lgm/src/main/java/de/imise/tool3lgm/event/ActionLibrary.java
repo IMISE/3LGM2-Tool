@@ -7,8 +7,6 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getGraphViewDefinition;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -26,8 +24,6 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.event.action.ChangeLocaleAction;
-import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
@@ -37,8 +33,6 @@ import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
-import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
-import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.GraphViewOptionsDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
@@ -46,16 +40,11 @@ import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
-import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
-import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -65,9 +54,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataExportModule;
@@ -723,42 +710,46 @@ public class ActionLibrary {
          *
          * @author fstephan
          */
-        public static class Analysis {
-
-            public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
-
-            private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {
-                //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
-                AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
-                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
-                //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
-                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
-                for (int i = 0; i < returnActions.length; i++) {
-                    //Definition einer der aktuellen SimpleRedundancyAnalysis holen
-                    SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
-                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, false, GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED) {
-                        @Override
-                        public void changeOption() {
-                            for (GDCollection gdcoll : getTool().getCollections()) {
-                                gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
-                                for (Szenario szenario : gdcoll.getSzenarios()) {
-                                    szenario.switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
-                                }
-                            }
-                        }
-                    };
-                    String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
-                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
-                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
-                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
-                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
-                    action.setText(fullActionDisplayName);
-                    returnActions[i] = action;
-                }
-                return returnActions;
-            }
-
-        }
+        //        public static class Analysis {
+        //
+        //            public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
+        //
+        //            private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {
+        //                //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
+        //                AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
+        //                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
+        //                //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
+        //                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
+        //                for (int i = 0; i < returnActions.length; i++) {
+        //                    //Definition einer der aktuellen SimpleRedundancyAnalysis holen
+        //                    SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
+        //                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED) {
+        //                        @Override
+        //                        public void changeOption() {
+        //                            for (GDCollection gdcoll : getTool().getCollections()) {
+        //                                gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
+        //                                for (Szenario szenario : gdcoll.getSzenarios()) {
+        //                                    szenario.switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
+        //                                }
+        //                            }
+        //                        }
+        //                        @Override
+        //                        public boolean isSelected() {
+        //                            return ???;
+        //                        }
+        //                    };
+        //                    String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
+        //                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
+        //                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
+        //                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
+        //                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
+        //                    action.setText(fullActionDisplayName);
+        //                    returnActions[i] = action;
+        //                }
+        //                return returnActions;
+        //            }
+        //
+        //        }
 
         /**
          * Graphik-Optionen
@@ -813,17 +804,6 @@ public class ActionLibrary {
 
         }
 
-        /**
-         * Sprach-Optionen
-         *
-         * @author fstephan
-         */
-        public static class Locale {
-
-            /** Array aller Actions, die das Umschalten auf eine andere Sprache ermöglichen */
-            public static final Action[] CHANGE_LOCALE_ACTIONS = ChangeLocaleAction.getAllActions();
-        }
-
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
         public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticAction(IntProperty.PROPERTY_INT_RMI_PORT, PPP) {
 
@@ -851,49 +831,6 @@ public class ActionLibrary {
      * @author fstephan
      */
     public static class ViewActions {
-
-        /**
-         * Actions für das (De-)aktivieren der Zeichnen- und Standard-Toolbar
-         *
-         * @author fstephan
-         */
-        public static class ToolbarActions {
-
-            /** (De-)aktiviert die Zeichnen-Toolbar */
-            public static final Action OPTION_SHOW_PAINTING_TOOLBAR = new GraphFrameAction(ActionIdentifier.OPTION_SHOW_PAINTING_TOOLBAR, true) {
-                @Override
-                protected void actionPerformed() {
-                    Tool3lgm tool = getTool();
-                    GraphAreaToolbarManager graphAreaToolBarManager = tool.getGraphAreaToolBarManager();
-                    graphAreaToolBarManager.setToolBarVisible(isSelected());
-                }
-            };
-
-            /** (De-)aktiviert die Standard-Toolbar */
-            public static final Action OPTION_SHOW_STANDARD_TOOLBAR = new StaticAction(ActionIdentifier.OPTION_SHOW_STANDARD_TOOLBAR, true) {
-                @Override
-                protected void actionPerformed() {
-                    //TODO: das hier müsste eigentlich ein Funktionaufruf in Tool3lgm sein. Die Action muss nicht das Tool revalidaten!
-                    Tool3lgm tool = getTool();
-                    Container contentPane = tool.getContentPane();
-                    ToolBar toolBar = tool.getToolBar();
-                    if (isSelected()) {
-                        contentPane.add(toolBar, BorderLayout.NORTH);
-                    } else {
-                        contentPane.remove(toolBar);
-                    }
-                    tool.getWorkArea().revalidate();
-                }
-            };
-        }
-
-        /** (De-)Aktiviert das Anzeigen des ModelBrowsers */
-        public static final Action OPTION_MODEL_BROWSER_SHOW = new StaticAction(ActionIdentifier.OPTION_MODEL_BROWSER_SHOW, true) {
-            @Override
-            protected void actionPerformed() {
-                getTool().showModelBrowser(isSelected());
-            }
-        };
 
         /** Wechselt zur Ein-Ebenen-Ansicht */
         private static final ExtendedAction ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE) {

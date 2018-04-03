@@ -3,25 +3,28 @@ package de.imise.tool3lgm.event.action;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+import javax.swing.JCheckBoxMenuItem;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
+import de.imise.util.swing.event.OptionAction;
 
 /**
  * Eine Action, die für globale Boolean-Optionen ist. Die ganzen Optionen der UserProperties können hiermit behandelt werden.
  *
  * @author AXS 04.12.2017
  */
-public abstract class GlobalOptionAction extends StaticAction {
+public abstract class GlobalOptionAction extends StaticAction implements OptionAction {
 
     private final GDCollectionChangeType changeType;
 
-    public GlobalOptionAction(final Object identifier, final Boolean initialSelectionState) {
-        this(identifier, initialSelectionState, GDCollectionChangeType.DATA_CHANGED);
+    public GlobalOptionAction(final Object identifier) {
+        this(identifier, GDCollectionChangeType.DATA_CHANGED);
     }
 
-    public GlobalOptionAction(final Object identifier, final Boolean initialSelectionState, final GDCollectionChangeType changeType) {
-        super(identifier, initialSelectionState);
+    public GlobalOptionAction(final Object identifier, final GDCollectionChangeType changeType) {
+        super(identifier);
         this.changeType = changeType;
     }
 
@@ -34,8 +37,6 @@ public abstract class GlobalOptionAction extends StaticAction {
     @Override
     protected final void actionPerformedWithEvent(final ActionEvent e) {
     }
-
-    protected abstract void changeOption();
 
     /** Benachrichtigt das Tool über eine Ändeung der Daten */
     private void distributeDataChanged() {
@@ -50,5 +51,12 @@ public abstract class GlobalOptionAction extends StaticAction {
             col.distribute(eventCode);
         }
     }
+
+    @Override
+    public JCheckBoxMenuItem createMenuItem() {
+        return OptionAction.super.createMenuItem();
+    }
+
+    public abstract void changeOption();
 
 }
