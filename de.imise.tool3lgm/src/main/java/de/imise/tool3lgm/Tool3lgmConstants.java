@@ -511,7 +511,7 @@ public abstract class Tool3lgmConstants {
      * @return String with value of resource
      */
     public static String getResString(final Object key, final String... replacements) {
-        return getReplacedString(key.toString(), replacements);
+        return getReplacedString(getResStringWithoutError(key.toString()), replacements);
     }
 
     /**
@@ -520,7 +520,7 @@ public abstract class Tool3lgmConstants {
      * einzusetztenden Replacements festgelegt.
      * Beispiel: der Res-String liefert "Alle {0} ersetzen" und als replacement wird ein
      * Parameter "Aufgaben" übergeben. Der Ergebnisstring ist dann "Alle Aufgaben ersetzen".
-     * 
+     *
      * @param org
      * @param replacements
      * @return
