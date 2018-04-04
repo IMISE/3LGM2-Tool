@@ -99,18 +99,31 @@ public class LGMGraphDocument extends GraphDocument {
      *
      * @param singleSimpleRedundancyDefinition
      */
-    public final void switchSimpleRedundancyAnalysisState(final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition) {
+    public final void setSimpleRedundancyAnalysisState(final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition, final boolean state) {
         for (int i = simpleRedundancyAnalysis.size() - 1; i >= 0; i--) {
             SimpleRedundancyAnalysis analyse = simpleRedundancyAnalysis.get(i);
             if (analyse.hasDefinition(singleSimpleRedundancyDefinition)) {
+                if (state) {
+                    return;
+                }
                 analyse.removeGraphTexts();
                 simpleRedundancyAnalysis.remove(i);
-                return;
             }
         }
-        SimpleRedundancyAnalysis analyse = new SimpleRedundancyAnalysis(singleSimpleRedundancyDefinition, this);
-        simpleRedundancyAnalysis.add(analyse);
-        analyse.computeRedundancy();
+        if (state) {
+            SimpleRedundancyAnalysis analyse = new SimpleRedundancyAnalysis(singleSimpleRedundancyDefinition, this);
+            simpleRedundancyAnalysis.add(analyse);
+            analyse.computeRedundancy();
+        }
+    }
+
+    public boolean isSimpleRedundancyAnalysis(final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition) {
+        for (SimpleRedundancyAnalysis analysis : simpleRedundancyAnalysis) {
+            if (analysis.hasDefinition(singleSimpleRedundancyDefinition)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

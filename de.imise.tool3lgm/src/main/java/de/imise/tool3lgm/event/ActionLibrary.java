@@ -24,6 +24,7 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
@@ -33,6 +34,8 @@ import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
+import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.GraphViewOptionsDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
@@ -40,11 +43,16 @@ import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
+import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -710,46 +718,51 @@ public class ActionLibrary {
          *
          * @author fstephan
          */
-        //        public static class Analysis {
-        //
-        //            public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
-        //
-        //            private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {
-        //                //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
-        //                AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
-        //                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
-        //                //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
-        //                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
-        //                for (int i = 0; i < returnActions.length; i++) {
-        //                    //Definition einer der aktuellen SimpleRedundancyAnalysis holen
-        //                    SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
-        //                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED) {
-        //                        @Override
-        //                        public void changeOption() {
-        //                            for (GDCollection gdcoll : getTool().getCollections()) {
-        //                                gdcoll.getMainGraphDocument().switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
-        //                                for (Szenario szenario : gdcoll.getSzenarios()) {
-        //                                    szenario.switchSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition);
-        //                                }
-        //                            }
-        //                        }
-        //                        @Override
-        //                        public boolean isSelected() {
-        //                            return ???;
-        //                        }
-        //                    };
-        //                    String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
-        //                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
-        //                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
-        //                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
-        //                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
-        //                    action.setText(fullActionDisplayName);
-        //                    returnActions[i] = action;
-        //                }
-        //                return returnActions;
-        //            }
-        //
-        //        }
+        public static class Analysis {
+
+            public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
+
+            private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {
+                //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
+                AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
+                SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
+                //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
+                Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
+                for (int i = 0; i < returnActions.length; i++) {
+                    //Definition einer der aktuellen SimpleRedundancyAnalysis holen
+                    final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
+                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED) {
+                        @Override
+                        public void changeOption() {
+                            boolean oldState = isSelected();
+                            for (GDCollection gdcoll : getTool().getCollections()) {
+                                gdcoll.getMainGraphDocument().setSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition, !oldState);
+                                for (Szenario szenario : gdcoll.getSzenarios()) {
+                                    szenario.setSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition, !oldState);
+                                }
+                            }
+                        }
+                        @Override
+                        public boolean isSelected() {
+                            return isEnabled() && getSelectedDoc().isSimpleRedundancyAnalysis(singleSimpleRedundancyDefinition);
+                        }
+                        @Override
+                        public boolean isEnabled() {
+                            return super.isEnabled() && Static.getSelectedDoc() != null;
+                        }
+                    };
+                    String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
+                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
+                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
+                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
+                    String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
+                    action.setText(fullActionDisplayName);
+                    returnActions[i] = action;
+                }
+                return returnActions;
+            }
+
+        }
 
         /**
          * Graphik-Optionen
