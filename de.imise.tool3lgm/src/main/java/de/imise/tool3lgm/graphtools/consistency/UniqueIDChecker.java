@@ -49,23 +49,25 @@ public class UniqueIDChecker {
                     userFieldTargetClassElements = doc.getModelItems(userFieldTargetClass.asSubclass(ModelElement.class));
                 }
             }
-            //für alle Elemente mit dem UserField
-            for (ModelElement me : userFieldTargetClassElements) {
-                String idValue = me.getUserFieldInputValue(idUserField);
-                if (UserField.EMPTY_STRING.equals(idValue)) {
-                    AbstractIDError idError = new IDEmptyError(me, idUserField, gdcoll);
-                    idErrors.add(idError);
-                } else {
-                    idValueToElements.put(idValue, me);
-                }
-            }
-            for (String idValue : idValueToElements.keySet()) {
-                Collection<ModelElement> elementsWithSameID = idValueToElements.get(idValue);
-                if (elementsWithSameID.size() > 1) {
-                    for (ModelElement me : elementsWithSameID) {
-                        Collection<ModelElement> allWithSameID = new ArrayList<>(elementsWithSameID);
-                        AbstractIDError idError = new IDNotUniqueError(me, idUserField, gdcoll, allWithSameID);
+            if (userFieldTargetClassElements != null) {
+                //für alle Elemente mit dem UserField
+                for (ModelElement me : userFieldTargetClassElements) {
+                    String idValue = me.getUserFieldInputValue(idUserField);
+                    if (UserField.EMPTY_STRING.equals(idValue)) {
+                        AbstractIDError idError = new IDEmptyError(me, idUserField, gdcoll);
                         idErrors.add(idError);
+                    } else {
+                        idValueToElements.put(idValue, me);
+                    }
+                }
+                for (String idValue : idValueToElements.keySet()) {
+                    Collection<ModelElement> elementsWithSameID = idValueToElements.get(idValue);
+                    if (elementsWithSameID.size() > 1) {
+                        for (ModelElement me : elementsWithSameID) {
+                            Collection<ModelElement> allWithSameID = new ArrayList<>(elementsWithSameID);
+                            AbstractIDError idError = new IDNotUniqueError(me, idUserField, gdcoll, allWithSameID);
+                            idErrors.add(idError);
+                        }
                     }
                 }
             }
