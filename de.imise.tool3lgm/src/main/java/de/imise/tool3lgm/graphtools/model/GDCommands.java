@@ -88,9 +88,9 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_USER_FIELD_VALUE,
     MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT,
 
-    MODEL_ACTION_CREATE_SZENARIO,
-    MODEL_ACTION_DELETE_SZENARIO,
-    MODEL_ACTION_RENAME_SZENARIO,
+    MODEL_ACTION_CREATE_SUBMODEL,
+    MODEL_ACTION_DELETE_SUBMODEL,
+    MODEL_ACTION_RENAME_SUBMODEL,
 
     ADD_ELEMENT_TO_SZENARIO,
     ADD_SELECTED_TO_SZENARIO,
@@ -201,9 +201,9 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
-        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SZENARIO);
-        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SZENARIO);
-        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SZENARIO);
+        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SUBMODEL);
+        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL);
+        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
     }

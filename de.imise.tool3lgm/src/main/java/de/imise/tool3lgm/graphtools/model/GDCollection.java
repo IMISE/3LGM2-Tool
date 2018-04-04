@@ -44,14 +44,14 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INSERT_BENDING_POINT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_MOVE_ORDER;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_RENAME_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_RENAME_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
@@ -336,8 +336,8 @@ public final class GDCollection extends UserFieldTarget {
         activeGraphDocumentsList.add(szenario);
         if (log) {
             doc.start_transaction(pid);
-            doc.addUndoCommand(MODEL_ACTION_DELETE_SZENARIO + " " + szenario.getHashString(), pid);
-            doc.addRedoCommand(MODEL_ACTION_CREATE_SZENARIO + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
+            doc.addUndoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szenario.getHashString(), pid);
+            doc.addRedoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
         szenario.addGraphDocumentListener(userFieldDefinitions);
@@ -385,8 +385,8 @@ public final class GDCollection extends UserFieldTarget {
             doc.addUndoCommand(MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
             doc.addUndoCommand(MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
         }
-        doc.addUndoCommand(MODEL_ACTION_CREATE_SZENARIO + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
-        doc.addRedoCommand(MODEL_ACTION_DELETE_SZENARIO + " " + szen.hashString, pid);
+        doc.addUndoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
+        doc.addRedoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szen.hashString, pid);
         //wenn das Beschreibungsfenster offen ist -> den Tab des zu löschenden Teimodells löschen
         if (descriptionFrame != null) {
             descriptionFrame.update();
@@ -412,8 +412,8 @@ public final class GDCollection extends UserFieldTarget {
         }
         doc.start_transaction(pid);
         szen.setTitle(szenTitle);
-        doc.addUndoCommand(MODEL_ACTION_RENAME_SZENARIO + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
-        doc.addRedoCommand(MODEL_ACTION_RENAME_SZENARIO + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
+        doc.addUndoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
+        doc.addRedoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
 
         //sowas hier müsste eigentlich über Liestener laufen!
         Static.getTool().szenarioRenamed((Szenario) szen);

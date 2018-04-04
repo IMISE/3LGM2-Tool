@@ -1047,7 +1047,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case MODEL_ACTION_CREATE_SZENARIO:
+        case MODEL_ACTION_CREATE_SUBMODEL:
             Szenario szen;
             if (argc == 0) {
                 szen = gdcoll.createSzenario(true);
@@ -1063,7 +1063,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addElementsToSzenario(szen.getHashString(), new ArrayList<>(selectedContainer), pid);
             break;
 
-        case MODEL_ACTION_DELETE_SZENARIO: {
+        case MODEL_ACTION_DELETE_SUBMODEL: {
             String szenHash = null;
             if (argc == 0) {
                 LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
@@ -1074,7 +1074,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             gdcoll.deleteSzenario(szenHash, pid);
             break;
         }
-        case MODEL_ACTION_RENAME_SZENARIO: {
+        case MODEL_ACTION_RENAME_SUBMODEL: {
             String szenHash = null;
             String newName = null;
             if (argc == 0) {
