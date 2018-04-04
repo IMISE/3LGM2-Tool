@@ -14,6 +14,7 @@ import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -53,6 +54,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -374,10 +376,17 @@ public class ActionLibrary {
                         return false;
                     }
                     for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
-                        if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
-                            boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
-                            if (show != hasVisibleConfigs) {
-                                return true;
+                        if (ec instanceof InterLayerConnectedNodeContainer) {
+                            ModelElement me = ec.getElement();
+                            MetaPath interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
+                            if (interLayerMetaPath != null) {
+                                Set<ModelElement> interLayerConnectedElements = PathFinder.getDirectConnectedElements(me, interLayerMetaPath);
+                                if (!interLayerConnectedElements.isEmpty()) {
+                                    boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
+                                    if (show != hasVisibleConfigs) {
+                                        return true;
+                                    }
+                                }
                             }
                         }
                     }
