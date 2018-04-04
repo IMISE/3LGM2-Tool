@@ -317,8 +317,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         layout_layer.add(color_layer);
         layout_layer.add(trans_layer);
 
-        show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SHOW_ELEMENT_CONFIGS);
-        hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_HIDE_ELEMENT_CONFIGS);
+        show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+        hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
         set_visible = getItem(GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON);
         set_invisible = getItem(GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF);
 

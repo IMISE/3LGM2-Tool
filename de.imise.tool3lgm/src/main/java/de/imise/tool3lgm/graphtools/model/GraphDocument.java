@@ -1183,11 +1183,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             layer[gdcoll.getActiveLayer()].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
-        case MODEL_ACTION_SHOW_ELEMENT_CONFIGS:
-        case MODEL_ACTION_HIDE_ELEMENT_CONFIGS:
+        case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
+        case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF:
             for (ElementContainer ec : selectedContainer) {
                 if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
-                    ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SHOW_ELEMENT_CONFIGS);
+                    ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
                 }
             }
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);

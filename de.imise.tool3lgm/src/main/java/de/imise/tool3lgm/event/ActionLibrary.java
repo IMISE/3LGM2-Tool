@@ -364,12 +364,12 @@ public class ActionLibrary {
             }
         };
 
-        public static final Action MODEL_ACTION_HIDE_ELEMENT_CONFIGS = createMODEL_ACTION_SHOW_HIDE_ELEMENT_CONFIGS(false);
+        public static final Action MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(false);
 
-        public static final Action MODEL_ACTION_SHOW_ELEMENT_CONFIGS = createMODEL_ACTION_SHOW_HIDE_ELEMENT_CONFIGS(true);
+        public static final Action MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON = createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(true);
 
-        public static final Action createMODEL_ACTION_SHOW_HIDE_ELEMENT_CONFIGS(final boolean show) {
-            return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SHOW_ELEMENT_CONFIGS : GDCommands.MODEL_ACTION_HIDE_ELEMENT_CONFIGS) {
+        public static final Action createMODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY(final boolean show) {
+            return new GraphSelectedRealNodeAction(show ? GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF) {
                 @Override
                 public boolean isEnabled() {
                     if (!super.isEnabled()) {
