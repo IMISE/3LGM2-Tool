@@ -24,7 +24,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.CHANGE_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
@@ -327,18 +326,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
         expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_ON);
         collapse = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF);
-
-        JMenu linienstil = new JMenu(getResString("linestyle"));
-
-        JMenuItem[] linestyles = new JMenuItem[2];
-        linestyles[0] = new JMenuItem(getResString("linestyle_normal"));
-        linestyles[0].setActionCommand(CHANGE_LINE_STYLE + " normal");
-        linestyles[1] = new JMenuItem(getResString("linestyle_dashed"));
-        linestyles[1].setActionCommand(CHANGE_LINE_STYLE + " dashes");
-        for (JMenuItem jItem : linestyles) {
-            jItem.addActionListener(this);
-            linienstil.add(jItem);
-        }
 
     }
 

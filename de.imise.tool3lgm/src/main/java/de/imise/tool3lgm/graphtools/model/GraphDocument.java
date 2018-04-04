@@ -1047,27 +1047,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case CHANGE_LINE_STYLE:
-            String style = argv[argc - 1];
-            int lineStyle = 0; //= normal
-            if (style.equals("normal")) {
-                lineStyle = 0;
-            } else if (style.equals("dashes")) {
-                lineStyle = 1;
-            } else {
-                try {
-                    lineStyle = Integer.parseInt(style);
-                } catch (Exception e) {
-                    Log(e);
-                }
-            }
-            if (argc == 1) {
-                changeLineStyle(lineStyle, pid);
-            } else if (argc == 3) {
-                changeLineStyle(argv[0], argv[1], lineStyle, pid);
-            }
-            break;
-
         case MODEL_ACTION_CREATE_SZENARIO:
             Szenario szen;
             if (argc == 0) {
@@ -2060,45 +2039,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     changeFont(ec, font, pid);
                 }
             }
-        }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-    }
-
-    /**
-     * @param hashString
-     * @param lineStyle
-     * @param pid
-     */
-    public final void changeLineStyle(final String szenHash, final String hashString, final int lineStyle, final int pid) {
-        GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
-        if (!(szen instanceof Szenario)) {
-            return;
-        }
-        if (lineStyle < 0 || lineStyle > 1) {
-            return;
-        }
-        ElementContainer mc = szen.findContainerCoded(hashString);
-        if (mc == null) {
-            return;
-        }
-        szen.start_transaction(pid);
-        String commandPrefix = GDCommands.CHANGE_LINE_STYLE + " " + szenHash + " " + mc.getHashString();
-        addUndoCommandIfNotExist(commandPrefix, mc.getLineStyle(), pid);
-        addRedoCommandOrReplace(commandPrefix, lineStyle, pid);
-        mc.setLineStyle(lineStyle);
-        szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
-    }
-
-    /**
-     * @param lineStyle
-     * @param pid
-     */
-    public final void changeLineStyle(final int lineStyle, final int pid) {
-        start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
-            changeLineStyle(hashString, ec.getHashString(), lineStyle, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
