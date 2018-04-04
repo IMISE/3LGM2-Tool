@@ -475,6 +475,30 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
+     * Gibt den Linienstil zurueck
+     */
+    public final int getLineStyle() {
+        if (layout != null) {
+            return layout.line_style;
+        }
+        return 0;
+    }
+
+    /**
+     * Setzt den Linienstil
+     *
+     * @param c
+     */
+    public final void setLineStyle(final int c) {
+        if (layout == null) {
+            return;
+        }
+        if (c <= 1 && c >= 0) {
+            layout.line_style = c;
+        }
+    }
+
+    /**
      * Gibt die Linienstaerke zurueck
      */
     public final int getStrokeWidth() {
