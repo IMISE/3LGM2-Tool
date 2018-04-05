@@ -1170,10 +1170,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case SHOW_SZENARIO:
-            Static.getTool().createSzenarioFrame(gdcoll.getSzenario(Integer.parseInt(argv[argc - 1])));
-            break;
-
         case JOIN_SELECTED:
             joinSelected(pid);
             break;
