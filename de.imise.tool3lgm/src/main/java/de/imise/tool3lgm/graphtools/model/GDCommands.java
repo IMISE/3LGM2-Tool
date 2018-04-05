@@ -94,9 +94,9 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_RENAME_SUBMODEL,
 
     MODEL_ACTION_ADD_ELEMENT_TO_SZENARIO, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
-    MODEL_ACTION_ADD_SELECTED_TO_SZENARIO,
-    MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO,
-    ADD_SELECTED_TO_ALL_SZENARIOS,
+    MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL,
+    MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL,
+    MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS,
 
     SHOW_SZENARIO,
     JOIN_SELECTED,
@@ -207,7 +207,9 @@ public enum GDCommands implements ActionSource {
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
-        ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_SZENARIO);
+        ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL);
+        ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
+        ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
     }
 
 }

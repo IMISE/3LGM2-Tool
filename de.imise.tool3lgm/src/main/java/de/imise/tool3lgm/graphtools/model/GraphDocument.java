@@ -1100,7 +1100,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case MODEL_ACTION_ADD_SELECTED_TO_SZENARIO:
+        case MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL:
             if (argc != 1) {
                 return;
             }
@@ -1108,12 +1108,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addElementsToSzenario(argv[0], getSelectionInGraphOrder(), pid);
             break;
 
-        case MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO:
+        case MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL:
             //Selection clonen, weil sie sich während der Ausführung ändert!
             addContainerToNewSzenario(getSelectionInGraphOrder(), pid);
             break;
 
-        case ADD_SELECTED_TO_ALL_SZENARIOS:
+        case MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS:
             //Selection clonen, weil sie sich während der Ausführung ändert!
             addContainerToAllSzenarios(getSelectionInGraphOrder(), pid);
             break;

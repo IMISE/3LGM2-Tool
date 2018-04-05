@@ -21,13 +21,13 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
@@ -449,7 +449,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getAddToSzenarioMenu() {
         JMenu szenario_menu = new JMenu(getResString("inszenario"));
-        JMenuItem item = getItem(MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO);
+        JMenuItem item = getItem(MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         szenario_menu.add(item);
         szenario_menu.add(new JSeparator());
 
@@ -466,10 +466,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
 
             item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+            item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL + " " + szen.getHashString());
         }
 
-        item = getItem("in_all_szenarios", ADD_SELECTED_TO_ALL_SZENARIOS);
+        item = getItem(MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
         szenario_menu.add(new JSeparator());
         szenario_menu.add(item);
 
