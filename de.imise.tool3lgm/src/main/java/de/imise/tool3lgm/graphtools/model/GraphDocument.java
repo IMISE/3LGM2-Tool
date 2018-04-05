@@ -1092,9 +1092,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //argv[1] = Element-Hash
             if (argc == 2) {
                 addElementToSzenario(null, argv[0], argv[1], pid);
-            //argv[0] = Quell-GraphDocument-Hash (kann auch das Hauptdokument sein)
-            //argv[1] = Ziel-Szenario-Hash
-            //argv[2] = Element-Hash
+                //argv[0] = Quell-GraphDocument-Hash (kann auch das Hauptdokument sein)
+                //argv[1] = Ziel-Szenario-Hash
+                //argv[2] = Element-Hash
             } else if (argc == 3) {
                 addElementToSzenario(argv[0], argv[1], argv[2], pid);
             }
@@ -1108,7 +1108,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addElementsToSzenario(argv[0], getSelectionInGraphOrder(), pid);
             break;
 
-        case ADD_SELECTED_TO_NEW_SZENARIO:
+        case MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO:
             //Selection clonen, weil sie sich während der Ausführung ändert!
             addContainerToNewSzenario(getSelectionInGraphOrder(), pid);
             break;

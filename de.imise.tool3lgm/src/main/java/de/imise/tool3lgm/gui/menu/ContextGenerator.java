@@ -22,12 +22,12 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
@@ -449,7 +449,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getAddToSzenarioMenu() {
         JMenu szenario_menu = new JMenu(getResString("inszenario"));
-        JMenuItem item = getItem("inneuszenario", ADD_SELECTED_TO_NEW_SZENARIO);
+        JMenuItem item = getItem(MODEL_ACTION_ADD_SELECTED_TO_NEW_SZENARIO);
         szenario_menu.add(item);
         szenario_menu.add(new JSeparator());
 
