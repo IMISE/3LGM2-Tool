@@ -23,7 +23,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingF
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_ALL_SZENARIOS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_NEW_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.ADD_SELECTED_TO_SZENARIO;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
@@ -466,7 +466,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
 
             item.addActionListener(this);
-            item.setActionCommand(ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+            item.setActionCommand(MODEL_ACTION_ADD_SELECTED_TO_SZENARIO + " " + szen.getHashString());
         }
 
         item = getItem("in_all_szenarios", ADD_SELECTED_TO_ALL_SZENARIOS);
