@@ -92,7 +92,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_DELETE_SUBMODEL,
     MODEL_ACTION_RENAME_SUBMODEL,
 
-    MODEL_ACTION_ADD_ELEMENT_TO_SZENARIO,
+    MODEL_ACTION_ADD_ELEMENT_TO_SZENARIO, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_ADD_SELECTED_TO_SZENARIO,
     ADD_SELECTED_TO_NEW_SZENARIO,
     ADD_SELECTED_TO_ALL_SZENARIOS,
@@ -206,6 +206,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        ActionSource.put(SelectionAction.class, MODEL_ACTION_ADD_SELECTED_TO_SZENARIO); //eigentlich müsste das hier eine bisher nicht existierende SelectedRealNodeAction.class sein (also nicht nur im Graph gehen, aber nur für Knoten). Da die Action aber nur im Kontextmenü selektierter Knoten auftaucht, ist die actionClass eigentlich egal. Sollte sie auch im Mneü auftauchen, müsste man die speizielle Action-Klasse anlegen
     }
 
 }
