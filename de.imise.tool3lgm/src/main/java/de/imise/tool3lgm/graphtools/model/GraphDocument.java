@@ -1059,8 +1059,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 return;
             }
             Static.getTool().createSzenarioFrame(szen);
-            //Selection clonen, weil sie sich während der Ausführung ändert!
-            addElementsToSzenario(szen.getHashString(), new ArrayList<>(selectedContainer), pid);
             break;
 
         case MODEL_ACTION_DELETE_SUBMODEL: {
