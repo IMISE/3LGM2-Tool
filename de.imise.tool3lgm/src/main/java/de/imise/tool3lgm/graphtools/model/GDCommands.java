@@ -93,17 +93,17 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_DELETE_SUBMODEL,
     MODEL_ACTION_RENAME_SUBMODEL,
 
-    MODEL_ACTION_ADD_ELEMENT_TO_SZENARIO, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
+    MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS,
-
-    JOIN_SELECTED,
 
     LINK_SELECTED_TO_NEW_SZENARIO,
     LINK_SELECTED_TO_SZENARIO,
     LINK_ELEMENT_TO_SZENARIO,
     SELECT_LINKED_SZENARIO,
+
+    JOIN_SELECTED,
 
     //Die Kommandos ab hier werden in LGMGraphDocument ausgewertet
     MODEL_ACTION_COPY,

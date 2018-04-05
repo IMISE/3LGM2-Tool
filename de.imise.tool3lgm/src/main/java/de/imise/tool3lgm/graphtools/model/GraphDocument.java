@@ -1087,7 +1087,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             gdcoll.renameSzenario(szenHash, newName, pid);
             break;
         }
-        case MODEL_ACTION_ADD_ELEMENT_TO_SZENARIO:
+        case MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL:
             //argv[0] = Ziel-Szenario-Hash
             //argv[1] = Element-Hash
             if (argc == 2) {
@@ -4268,7 +4268,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (nc != ec) {
                 szen.addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + szenHash + " " + ec.getHashString(), pid);
                 //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) Hash des Elementes
-                szen.addRedoCommand(GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SZENARIO + " " + ec.getGraphDocument().getHashString() + " " + szenHash + " " + ec.getHashString(), pid);
+                szen.addRedoCommand(GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL + " " + ec.getGraphDocument().getHashString() + " " + szenHash + " " + ec.getHashString(), pid);
                 szen.createEdgeContainer(nc, ec.getGraphDocument(), true, pid);
             }
             szen.addToSelection(nc, pid);
