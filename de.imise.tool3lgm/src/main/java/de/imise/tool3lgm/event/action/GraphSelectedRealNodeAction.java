@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * Eine Action die enabled ist, wenn eine Grafik aktiv ist und in dieser Grafik wenigstens
@@ -10,22 +8,13 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author imise
  */
-public class GraphSelectedRealNodeAction extends GraphFrameAction {
+public class GraphSelectedRealNodeAction extends SelectedRealNodeAction {
 
     /**
      * @param identifier
      */
     public GraphSelectedRealNodeAction(final Object identifier) {
         super(identifier);
-    }
-
-    /**
-     * @param identifier
-     * @param arguments
-     * @param textSuffix
-     */
-    public GraphSelectedRealNodeAction(final Object identifier, final String arguments, final String textSuffix) {
-        super(identifier, arguments, textSuffix);
     }
 
     @Override
@@ -35,13 +24,7 @@ public class GraphSelectedRealNodeAction extends GraphFrameAction {
         if (!super.isEnabled()) {
             return false;
         }
-        for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
-            //TODO: testen, ob visible hier reicht
-            if (!ec.isUnpaintable() && ec.isVisible() || ModelConstants.hasSortedEdgesToPaintable(ec.getElement().getClass())) {
-                return true;
-            }
-        }
-        return false;
+        return Static.isActiveFrameGraphFrame();
     }
 
 }
