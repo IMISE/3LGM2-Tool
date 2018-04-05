@@ -1123,7 +1123,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             linkElementToSzenario(argv[0], argv[1], pid);
             break;
 
-        case SELECT_LINKED_SZENARIO:
+        case MODEL_ACTION_SELECT_LINKED_SUBMODEL:
             Static.getTool().changeToLinked(this);
             break;
 

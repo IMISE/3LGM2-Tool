@@ -34,6 +34,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INTERNA
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SELECT_LINKED_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
@@ -48,7 +49,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
@@ -284,7 +284,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG);
         unlinkToSzenario = getItem(MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL);
-        selectLinkedSzenario = getItem("selectLinkedSzenario", SELECT_LINKED_SZENARIO);
+        selectLinkedSzenario = getItem("selectLinkedSzenario", MODEL_ACTION_SELECT_LINKED_SUBMODEL);
         delete_selected = getItem(MODEL_ACTION_DELETE_FROM_MODEL);
         // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
         delete_selected_from_szenario = getItem(MODEL_ACTION_DELETE_FROM_SUBMODEL);
