@@ -23,25 +23,32 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingF
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.SELECT_LINKED_SZENARIO;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
@@ -276,20 +283,20 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         new_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, Textfield.class.getName());
 
         properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG);
-        unlinkToSzenario = getItem("unlinkToSzenario", LINK_SELECTED_TO_SZENARIO, GDCOMMAND_TEXT_SURROUNDER + "null" + GDCOMMAND_TEXT_SURROUNDER);
+        unlinkToSzenario = getItem(MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL);
         selectLinkedSzenario = getItem("selectLinkedSzenario", SELECT_LINKED_SZENARIO);
-        delete_selected = getItem(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
+        delete_selected = getItem(MODEL_ACTION_DELETE_FROM_MODEL);
         // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
-        delete_selected_from_szenario = getItem(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL);
+        delete_selected_from_szenario = getItem(MODEL_ACTION_DELETE_FROM_SUBMODEL);
 
         join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
 
-        verify = getItem(GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        interactive = getItem(GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
+        interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
 
         command_line = getItem("befehl", COMMAND_LINE);
         queue = getItem("queue", PRINT_QUEUE);
-        consistency = getItem(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
+        consistency = getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 
         internals = new DynamicMenu(getResString("intern"));
         internals.add(verify);
@@ -319,8 +326,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
         hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
-        set_visible = getItem(GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON);
-        set_invisible = getItem(GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF);
+        set_visible = getItem(MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON);
+        set_invisible = getItem(MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF);
 
         layer_show_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
         layer_hide_configs = getItem(ActionLibrary.ContextActions.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF);
@@ -501,7 +508,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
 
             item.addActionListener(this);
-            item.setActionCommand(LINK_SELECTED_TO_SZENARIO + " " + szen.getHashString());
+            item.setActionCommand(MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL + " " + szen.getHashString());
             link_to_szenario_menu.add(item);
         }
         return link_to_szenario_menu;

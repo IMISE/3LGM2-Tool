@@ -1129,7 +1129,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             Static.getTool().changeToLinked(this);
             break;
 
-        case LINK_SELECTED_TO_SZENARIO:
+        case MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL:
             if (argc < 1) {
                 return;
             }
@@ -1140,6 +1140,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             default:
                 linkElementToSzenario(argv[0], argv[1], pid);
             }
+            break;
+
+        case MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL:
+            linkElementsToSzenario(null, new ArrayList<>(selectedContainer), pid);
             break;
 
         case MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL:
@@ -4285,13 +4289,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void linkElementToSzenario(final String szenHashString, final ElementContainer ec, final int pid) {
-
         if (ec.getElement() instanceof Edge) {
             return;
         }
         start_transaction(pid);
         String oldSzen = ((NodeContainer) ec).getKnoten().getAssociatedDoc();
-        ((NodeContainer) ec).getKnoten().setAssociatedDoc(szenHashString.equals("null") ? null : szenHashString);
+        ((NodeContainer) ec).getKnoten().setAssociatedDoc("null".equals(szenHashString) ? null : szenHashString);
 
         String oldSzenHash = oldSzen == null ? "null" : oldSzen;
         addUndoCommand(GDCommands.LINK_ELEMENT_TO_SZENARIO + " " + oldSzenHash + " " + ec.getHashString(), pid);
