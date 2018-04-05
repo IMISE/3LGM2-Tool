@@ -1116,7 +1116,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addContainerToAllSzenarios(getSelectionInGraphOrder(), pid);
             break;
 
-        case LINK_ELEMENT_TO_SZENARIO:
+        case MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL:
             if (argc < 2) {
                 return;
             }
@@ -4295,8 +4295,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         ((NodeContainer) ec).getKnoten().setAssociatedDoc("null".equals(szenHashString) ? null : szenHashString);
 
         String oldSzenHash = oldSzen == null ? "null" : oldSzen;
-        addUndoCommand(GDCommands.LINK_ELEMENT_TO_SZENARIO + " " + oldSzenHash + " " + ec.getHashString(), pid);
-        addRedoCommand(GDCommands.LINK_ELEMENT_TO_SZENARIO + " " + szenHashString + " " + ec.getHashString(), pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + oldSzenHash + " " + ec.getHashString(), pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + szenHashString + " " + ec.getHashString(), pid);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, ec, null, 0);
     }
