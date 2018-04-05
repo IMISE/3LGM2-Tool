@@ -23,7 +23,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingF
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_NEW_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.LINK_SELECTED_TO_SZENARIO;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
@@ -31,6 +30,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SEL
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
@@ -487,7 +487,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getLinkToSzenarioMenu() {
         JMenu link_to_szenario_menu = new JMenu(getResString("verkn_mit_szen"));
-        JMenuItem item = getItem("verkn_neuszenario", LINK_SELECTED_TO_NEW_SZENARIO);
+        JMenuItem item = getItem(MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL);
         link_to_szenario_menu.add(item);
         link_to_szenario_menu.add(new JSeparator());
 

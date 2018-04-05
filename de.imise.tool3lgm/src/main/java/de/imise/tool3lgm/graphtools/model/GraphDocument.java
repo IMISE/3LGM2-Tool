@@ -1142,7 +1142,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case LINK_SELECTED_TO_NEW_SZENARIO:
+        case MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL:
             linkElementsToNewSzenario(new ArrayList<>(selectedContainer), pid);
             break;
 
