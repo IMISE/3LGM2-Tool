@@ -209,6 +209,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
+        ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL);
     }
 
 }
