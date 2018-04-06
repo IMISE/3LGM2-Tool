@@ -21,10 +21,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
@@ -294,7 +294,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
         interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
 
-        command_line = getItem("befehl", COMMAND_LINE);
+        command_line = getItem(MODEL_ACTION_COMMAND_LINE);
         queue = getItem("queue", PRINT_QUEUE);
         consistency = getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 

@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResStringWithoutError;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
@@ -447,8 +448,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (command == null) {
         } else if (command.equals(GDCommands.PRINT_QUEUE.toString())) {
             getCollection().getTman().printQueue(10);
-        } else if (command.startsWith(GDCommands.COMMAND_LINE.toString())) {
-            String answer = (String) JOptionPane.showInputDialog(null, "Befehlseingabe", "Tool3lgm", JOptionPane.QUESTION_MESSAGE, null, null, null);
+        } else if (command.startsWith(GDCommands.MODEL_ACTION_COMMAND_LINE.toString())) {
+            String title = getResStringWithoutError("tool3lgm");
+            String message = getResStringWithoutError(GDCommands.MODEL_ACTION_COMMAND_LINE.name());
+            String answer = (String) JOptionPane.showInputDialog(Static.getTool(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (answer != null && !answer.equals("") && !answer.equals("COMMAND_LINE")) {
                 exec(answer, "", pid, log);
             }
