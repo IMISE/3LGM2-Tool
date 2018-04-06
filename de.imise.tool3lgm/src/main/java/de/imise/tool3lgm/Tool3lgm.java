@@ -79,11 +79,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     public static final void init() {
     }
 
-    /**
-     * Schaltet allerlei Ausgaben an
-     */
-    public static final boolean DEBUG = false;
-
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
 

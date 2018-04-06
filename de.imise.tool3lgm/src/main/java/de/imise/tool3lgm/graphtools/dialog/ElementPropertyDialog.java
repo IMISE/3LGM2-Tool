@@ -22,7 +22,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
@@ -320,9 +319,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @Override
     public void dataChanged(final GraphDocument source, final int pid) {
-        if (Tool3lgm.DEBUG) {
-            System.err.println(getClass().getSimpleName() + "dataChanged() " + modelElement + " " + source + " " + pid);
-        }
         update();
     }
 

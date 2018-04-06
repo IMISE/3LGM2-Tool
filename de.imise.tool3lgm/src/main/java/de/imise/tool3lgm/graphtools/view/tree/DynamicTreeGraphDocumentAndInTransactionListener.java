@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
@@ -25,9 +24,6 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDo
     @Override
     public void dataChanged(final GraphDocument source) {
         if (active) {
-            if (Tool3lgm.DEBUG) {
-                System.err.println(getClass().getSimpleName() + " dataChanged() " + source);
-            }
             tree.buildTree();
         }
     }
