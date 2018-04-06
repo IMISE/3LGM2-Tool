@@ -177,12 +177,6 @@ public abstract class Tool3lgmConstants {
     /** BaseName der lokalisierten Ressourcendateien eines Metamodells. Gesamtname ist dann z.B. "metamodel.tlgm_v3_0.MetamodelResources" */
     public static final String METAMODEL_RESOURCE_BASE_NAME = "MetamodelResources";
 
-    // die beiden ResourceBundles laden. Davor unbedingt die UserProperties initialisieren, damit die richige Locale gesetzt ist
-
-    static {
-        UserProperties.init();
-    }
-
     /**
      * Haupt-<code>ResoruceBundle</code> mit allen Resourcen außer ein paar speziellen Fehlermeldungen.<br>
      * Fehlermeldungen sollten in errorBundle abgelegt werden.

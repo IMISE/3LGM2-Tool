@@ -49,6 +49,9 @@ public class Tool3lgmMain {
         //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
         ToolSplashScreen.update();
 
+        //UserProperties initialisieren, damit die richige Locale gesetzt ist
+        UserProperties.init();
+
         //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
         //die Ressourcen gefunden werden
         Tool3lgm.init();
