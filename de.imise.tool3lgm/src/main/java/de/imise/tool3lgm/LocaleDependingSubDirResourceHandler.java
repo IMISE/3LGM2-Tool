@@ -21,7 +21,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  *
  * @author AXS
  */
-public class ResourceHandler {
+public class LocaleDependingSubDirResourceHandler {
 
     public static final String DEV_RESOURCE_BASE_DIR_NAME = APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
 

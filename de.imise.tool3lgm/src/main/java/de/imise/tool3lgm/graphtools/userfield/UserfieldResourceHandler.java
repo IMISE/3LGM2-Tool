@@ -5,11 +5,11 @@ import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_DEFAULT_USERPROPE
 
 import java.net.URL;
 
-import de.imise.tool3lgm.ResourceHandler;
+import de.imise.tool3lgm.LocaleDependingSubDirResourceHandler;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.log.Log;
 
-public class UserfieldResourceHandler extends ResourceHandler {
+public class UserfieldResourceHandler extends LocaleDependingSubDirResourceHandler {
 
     private static final String DEV_RESOURCE_BASE_USERPROPERTIES_DIR_NAME = DEV_RESOURCE_BASE_DIR_NAME + RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME;
 

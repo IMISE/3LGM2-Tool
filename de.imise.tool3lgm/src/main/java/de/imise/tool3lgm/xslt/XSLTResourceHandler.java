@@ -5,9 +5,9 @@ import static de.imise.tool3lgm.Tool3lgmConstants.RESOUCE_BASE_XSL_SCRIPT_DIR_NA
 
 import java.util.ArrayList;
 
-import de.imise.tool3lgm.ResourceHandler;
+import de.imise.tool3lgm.LocaleDependingSubDirResourceHandler;
 
-public class XSLTResourceHandler extends ResourceHandler {
+public class XSLTResourceHandler extends LocaleDependingSubDirResourceHandler {
 
     /** URL with standard-scripts for xslt-export */
     private final ArrayList<XSLTScript> standardXSLT;
