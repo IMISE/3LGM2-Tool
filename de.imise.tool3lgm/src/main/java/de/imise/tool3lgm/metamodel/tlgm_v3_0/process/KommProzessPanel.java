@@ -288,6 +288,53 @@ public class KommProzessPanel extends ElementDialogPanel {
     private final long lastDocModificationTime = System.currentTimeMillis();
 
     /**
+     * Gibt fuer eine ArrayList von NodeContainern oder ModelElements einen String des Inhalts zurück. Ist insertNewLines==false, wird
+     * eine kommaseparierte Liste zurückgegeben.
+     *
+     * @param ArrayList
+     * @param boolean
+     * @param boolean TODO:AXS:in eine eigene Klasse verlegen
+     */
+    public static String getElementListString(final List<?> list, final boolean showSzenarios, final boolean insertNewLines) {
+        StringBuilder serversBuf = new StringBuilder();
+        if (list == null) {
+            return serversBuf.toString();
+        }
+
+        // diese Form mag blöd aussehen, aber so müssen nicht in jedem Schleifendurchlauf die Bedingungen neu geprüft werden
+        if (showSzenarios) {
+            if (insertNewLines) {
+                // Namen der Container durch \n getrennt einfügen
+                for (int i = 0; i < list.size(); i++) {
+                    serversBuf.append(list.get(i).toString().replace('\n', ' '));
+                    serversBuf.append('\n');
+                }
+            } else {
+                // Namen der Container durch ein Leerzeichen und Komma getrennt einfügen
+                return list.toString().replace('\n', ' ');
+            }
+        } else {
+            String separator = insertNewLines ? "\n" : ", ";
+            // Namen der Elemente durch \n oder ", " getrennt einfügen
+            for (Object o : list) {
+                if (o instanceof ElementContainer) {
+                    o = ((ElementContainer) o).getElement();
+                }
+                serversBuf.append(o.toString().replace('\n', ' '));
+                serversBuf.append(separator);
+            }
+        }
+        // das zuletzt angehängten Zeichen (Komma+Leerzeichen oder Newline) nicht mit zurückgeben
+        if (serversBuf.length() > 0) {
+            if (insertNewLines) {
+                return serversBuf.deleteCharAt(serversBuf.length() - 1).toString();
+            }
+            return serversBuf.deleteCharAt(serversBuf.length() - 2).toString();
+        }
+        return serversBuf.toString();
+    }
+
+    /**
      * @param checkRowCount
      */
     public void updateTable(final boolean checkRowCount) {
@@ -374,7 +421,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                                                      // Startkonfiguration
                     if (me != null) {
                         // Startkonfigurationsbausteine
-                        table.setValueAt(Tool3lgmConstants.getElementListString(step.getStartAufgabeKonfBausteine(), false, false), i, START_COMPONENTS);
+                        table.setValueAt(getElementListString(step.getStartAufgabeKonfBausteine(), false, false), i, START_COMPONENTS);
                         // Startorganisationseinheit
                         table.setValueAt(step.getStartAufOrgKombination().getConnectedElements(Organisationseinheit.class), i, START_ORGUNIT);
                     } else {
@@ -386,7 +433,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     me = step.getEndAufgabeKonf(); // Endkonfiguration
                     if (me != null) {
                         // Endkonfigurationsbausteine
-                        table.setValueAt(Tool3lgmConstants.getElementListString(step.getEndAufgabeKonfBausteine(), false, false), i, END_COMPONENTS);
+                        table.setValueAt(getElementListString(step.getEndAufgabeKonfBausteine(), false, false), i, END_COMPONENTS);
                         // Endorganisationseinheit
                         table.setValueAt(step.getEndAufOrgKombination().getConnectedElements(Organisationseinheit.class), i, END_ORGUNIT);
                     } else {
@@ -394,7 +441,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                         table.setValueAt(null, i, END_ORGUNIT);
                     }
                     // Schnittstellen
-                    table.setValueAt(Tool3lgmConstants.getElementListString(step.getKommProzessSchnittstellen(), false, false), i, INTERFACES);
+                    table.setValueAt(getElementListString(step.getKommProzessSchnittstellen(), false, false), i, INTERFACES);
                 }
                 // Teilmodelle anzeigen -> Namen der Container anzeigen
             } else {

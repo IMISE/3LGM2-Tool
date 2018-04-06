@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -17,12 +16,9 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -257,53 +253,6 @@ public abstract class Tool3lgmConstants {
     public static int getDebugGraphicsOption() {
         System.out.println(debugGraphicsOption);
         return debugGraphicsOption;
-    }
-
-    /**
-     * Gibt fuer eine ArrayList von {@link NodeContainer}n oder {@link ModelElement}s einen String des Inhalts zurück. Ist insertNewLines==false, wird
-     * eine kommaseparierte Liste zurückgegeben.
-     *
-     * @param ArrayList
-     * @param boolean
-     * @param boolean TODO:AXS:in eine eigene Klasse verlegen
-     */
-    public static String getElementListString(final List<?> list, final boolean showSzenarios, final boolean insertNewLines) {
-        StringBuilder serversBuf = new StringBuilder();
-        if (list == null) {
-            return serversBuf.toString();
-        }
-
-        // diese Form mag blöd aussehen, aber so müssen nicht in jedem Schleifendurchlauf die Bedingungen neu geprüft werden
-        if (showSzenarios) {
-            if (insertNewLines) {
-                // Namen der Container durch \n getrennt einfügen
-                for (int i = 0; i < list.size(); i++) {
-                    serversBuf.append(list.get(i).toString().replace('\n', ' '));
-                    serversBuf.append('\n');
-                }
-            } else {
-                // Namen der Container durch ein Leerzeichen und Komma getrennt einfügen
-                return list.toString().replace('\n', ' ');
-            }
-        } else {
-            String separator = insertNewLines ? "\n" : ", ";
-            // Namen der Elemente durch \n oder ", " getrennt einfügen
-            for (Object o : list) {
-                if (o instanceof ElementContainer) {
-                    o = ((ElementContainer) o).getElement();
-                }
-                serversBuf.append(o.toString().replace('\n', ' '));
-                serversBuf.append(separator);
-            }
-        }
-        // das zuletzt angehängten Zeichen (Komma+Leerzeichen oder Newline) nicht mit zurückgeben
-        if (serversBuf.length() > 0) {
-            if (insertNewLines) {
-                return serversBuf.deleteCharAt(serversBuf.length() - 1).toString();
-            }
-            return serversBuf.deleteCharAt(serversBuf.length() - 2).toString();
-        }
-        return serversBuf.toString();
     }
 
     /**
