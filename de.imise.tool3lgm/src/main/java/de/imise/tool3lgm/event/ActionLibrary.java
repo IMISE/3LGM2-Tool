@@ -790,7 +790,7 @@ public class ActionLibrary {
             };
 
             /** Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde. */
-            public static final GraphFrameAction HIDE_UNHIDE_UNASSOCIATED[] = create_HIDE_UNHIDE_UNASSOCIATED_Actions();
+            public static final GraphFrameAction MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED[] = create_MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED_Actions();
 
             /**
              * Erzeugt das Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde.
@@ -798,7 +798,7 @@ public class ActionLibrary {
              * @param hide
              * @return
              */
-            private static final GraphFrameAction[] create_HIDE_UNHIDE_UNASSOCIATED_Actions() {
+            private static final GraphFrameAction[] create_MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED_Actions() {
                 List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = getGraphViewDefinition().getHidableIfNotConnected();
                 if (hidableIfNotConnected == null || hidableIfNotConnected.isEmpty()) {
                     return null;
@@ -811,10 +811,10 @@ public class ActionLibrary {
                     GDCommands command;
                     String arguments;
                     if (hide) {
-                        command = GDCommands.HIDE_UNASSOCIATED;
+                        command = GDCommands.MODEL_ACTION_HIDE_UNASSOCIATED;
                         arguments = elementClass.getSimpleName() + " " + hidable.getSecondItem().getSimpleName();
                     } else {
-                        command = GDCommands.UNHIDE_ALL;
+                        command = GDCommands.MODEL_ACTION_UNHIDE_ALL;
                         arguments = elementClass.getSimpleName();
                     }
                     GraphFrameAction hideAction = new GraphFrameAction(command, arguments, null);

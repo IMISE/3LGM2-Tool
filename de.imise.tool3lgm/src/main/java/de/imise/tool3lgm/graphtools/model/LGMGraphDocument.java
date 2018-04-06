@@ -65,7 +65,7 @@ public class LGMGraphDocument extends GraphDocument {
             pasteClipboard();
             break;
 
-        case HIDE_UNASSOCIATED: {
+        case MODEL_ACTION_HIDE_UNASSOCIATED: {
             Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
             Class<? extends Edge> egdeClass = getClassForName(argv[1]).asSubclass(Edge.class);
             for (ElementContainer ec : getElementContainer(elementClass, true)) {
@@ -78,7 +78,7 @@ public class LGMGraphDocument extends GraphDocument {
             distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
-        case UNHIDE_ALL: {
+        case MODEL_ACTION_UNHIDE_ALL: {
             Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
             for (ElementContainer ec : getElementContainer(elementClass, true)) {
                 ec.setVisible(true);

@@ -151,7 +151,7 @@ public class MenuCollection {
 
         /** Das Grafik-Optionen-Menu */
         public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", BooleanProperty.OPTION_USE_RASTER, BooleanProperty.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
-                BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.HIDE_UNHIDE_UNASSOCIATED, BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS,
+                BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED, BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS,
                 BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, Graphics.ACTION_PROPERTY_INT_RENDER_SETTINGS
         //createCheckBoxItem(Graphics.TOOLTIPS)
         );
