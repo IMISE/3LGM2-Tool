@@ -34,6 +34,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_JOIN_SE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SELECT_LINKED_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
@@ -48,7 +49,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.PRINT_QUEUE;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
@@ -295,7 +295,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
-        queue = getItem("queue", PRINT_QUEUE);
+        queue = getItem(MODEL_ACTION_PRINT_QUEUE);
         consistency = getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 
         internals = new DynamicMenu(getResString("intern"));

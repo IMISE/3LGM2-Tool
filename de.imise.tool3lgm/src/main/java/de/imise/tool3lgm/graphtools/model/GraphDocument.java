@@ -446,7 +446,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         if (command == null) {
-        } else if (command.equals(GDCommands.PRINT_QUEUE.toString())) {
+        } else if (command.equals(GDCommands.MODEL_ACTION_PRINT_QUEUE.toString())) {
             getCollection().getTman().printQueue(10);
         } else if (command.startsWith(GDCommands.MODEL_ACTION_COMMAND_LINE.toString())) {
             String title = getResStringWithoutError("tool3lgm");
