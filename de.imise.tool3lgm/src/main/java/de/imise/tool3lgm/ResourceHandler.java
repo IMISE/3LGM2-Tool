@@ -14,12 +14,16 @@ import java.util.jar.JarFile;
 
 import de.imise.tool3lgm.userproperties.UserProperties;
 
+/**
+ * Klasse zum Laden von Resourcen, die in sprachabhängigen Unterverzeichnissen in den Resoruces liegen.
+ * Diese Klasse bietet im Grunde nur eine Funktion, die den Zugriff auf diese Resourcen zur Laufzeit aus der Entwicklungsumgebung heraus
+ * und aus dem deploiten jar-File heraus managed.
+ *
+ * @author AXS
+ */
 public class ResourceHandler {
 
     public static final String DEV_RESOURCE_BASE_DIR_NAME = APPLICATION_DIR + DEV_RESOURCE_DIR_NAME;
-
-    public ResourceHandler() {
-    }
 
     /**
      * Liefert eine Liste der relativen Pfade aller Dateien mit der übergebenen Endung im Resourcenverzeichnis der aktuellen Locale. Werden für die
@@ -27,7 +31,7 @@ public class ResourceHandler {
      *
      * @return Liste aller Dateien mit der angegebenen Endung im angegebenen Resourcenverzeichnis
      */
-    protected final String[] getFileNames(final String fileExtension, final String devTimeResourceBaseDirName, final String jarResourceBaseDirName) {
+    public static final String[] getFileNames(final String fileExtension, final String devTimeResourceBaseDirName, final String jarResourceBaseDirName) {
         // Zur Entwicklungszeit liegen die Dateien in einem Ordner -> Dateien von dort laden, ABER
         // bei Herausgabe des Tools liegen die Dateien in der jar-Datei im Resourcenpfad -> catch-Fall
         try {
