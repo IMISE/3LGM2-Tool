@@ -1172,7 +1172,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
 
-        case JOIN_SELECTED:
+        case MODEL_ACTION_JOIN_SELECTED:
             joinSelected(pid);
             break;
 
@@ -4341,6 +4341,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (ElementContainer ec : new ArrayList<>(selection)) {
                 joinElements(ec.getHashString(), targetHash, pid);
             }
+            //nach dem Join kann man kein Undo mehr machen -> alle Undo-Kommandos davor auch löschen
+            gdcoll.getTransStackTable().clear();
         }
     }
 

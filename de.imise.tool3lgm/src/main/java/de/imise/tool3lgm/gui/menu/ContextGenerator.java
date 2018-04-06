@@ -22,7 +22,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.COMMAND_LINE;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
@@ -31,6 +30,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_JOIN_SELECTED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL;
@@ -289,7 +289,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         // der leere Argumentstring bewirkt, dass am Ende ein Leerzeichen angehängt wird, hinter das dann die Hashes der zulöschenden Elemnte kommen
         delete_selected_from_szenario = getItem(MODEL_ACTION_DELETE_FROM_SUBMODEL);
 
-        join_selected = getItem("elemente_vereinigen", JOIN_SELECTED);
+        join_selected = getItem(MODEL_ACTION_JOIN_SELECTED);
 
         verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
         interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
