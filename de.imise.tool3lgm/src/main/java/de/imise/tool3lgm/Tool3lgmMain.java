@@ -2,20 +2,22 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.io.File;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import javax.swing.DebugGraphics;
 import javax.swing.JOptionPane;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
 
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_service.TLGMServiceMetaModel;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -23,8 +25,13 @@ import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 public class Tool3lgmMain {
 
-    //public static final Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class;
-    public static final Class<? extends MetaModel> metaModelClass = TLGMServiceMetaModel.class;
+    public static final Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class;
+    //public static final Class<? extends MetaModel> metaModelClass = TLGMServiceMetaModel.class;
+
+    /**
+     * Debug- Optionen fuer Swing-Komponenten; muss fuer Komponente mit setDebugGraphicsOption(int) gesetzt werden
+     */
+    private static int debugGraphicsOption = DebugGraphics.NONE_OPTION;
 
     /**
      * Main-Routine
@@ -52,13 +59,14 @@ public class Tool3lgmMain {
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
 
+        setUIDefaults();
+
         //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
         //die Ressourcen gefunden werden
         Tool3lgm.init();
 
         // Erkennbare Argumente
         boolean visible = true;
-
         for (String arg : args) {
             //			String[] a = StringUtils.tokenize(arg, " ", false);
             String[] a = arg.split(" ");
@@ -72,9 +80,39 @@ public class Tool3lgmMain {
             }
         }
 
-        Tool3lgmConstants.setClipboardPath(System.getProperty("user.home") + File.separator + ".3lgm_clipboard");
-        Tool3lgmConstants.setDebugGraphicsOption(false, false, false, 0);
+        setDebugGraphicsOption(false, false, false, 0);
 
+        setLookAndFeel();
+
+        activateRMI(args, visible);
+    }
+
+    private static final void setUIDefaults() {
+        /* table of defaults for Swing components */
+        UIDefaults defaults = UIManager.getDefaults();
+        defaults.put("FileChooser.openButtonText", getResString("open"));
+        defaults.put("FileChooser.cancelButtonText", getResString("cancel"));
+        defaults.put("FileChooser.filesOfTypeLabelText", getResString("filesOfTypeLabelText"));
+        defaults.put("FileChooser.fileNameLabelText", getResString("fileNameLabelText"));
+        defaults.put("FileChooser.lookInLabelText", getResString("lookInLabelText"));
+
+        defaults.put("ColorChooser.cancelText", getResString("cancel"));
+        defaults.put("ColorChooser.sampleText", getResString("sampleText"));
+        defaults.put("ColorChooser.rgbGreenText", getResString("green"));
+        defaults.put("ColorChooser.previewText", getResString("previewText"));
+        defaults.put("ColorChooser.rgbRedText", getResString("red"));
+        defaults.put("ColorChooser.resetText", getResString("resetText"));
+        defaults.put("ColorChooser.rgbBlueText", getResString("blue"));
+        defaults.put("ColorChooser.swatchesNameText", getResString("swatchesNameText"));
+        defaults.put("ColorChooser.swatchesRecentText", getResString("swatchesRecentText"));
+
+        defaults.put("OptionPane.okButtonText", getResString("ok"));
+        defaults.put("OptionPane.cancelButtonText", getResString("cancel"));
+        defaults.put("OptionPane.noButtonText", getResString("no"));
+        defaults.put("OptionPane.yesButtonText", getResString("yes"));
+    }
+
+    private static void setLookAndFeel() {
         try {
             if (System.getProperty("os.name").startsWith("Windows")) {
                 javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
@@ -89,7 +127,6 @@ public class Tool3lgmMain {
             Log.show(Log.FATAL, getResString("LookAndFeelLadenException"), ex);
             System.exit(-1);
         }
-        activateRMI(args, visible);
     }
 
     /**
@@ -238,6 +275,42 @@ public class Tool3lgmMain {
             return false;
         }
         return true;
+    }
+
+    /**
+     * gibt die Debug-Option fuer Swing-Komponenten zurueck
+     *
+     * @return int
+     */
+    public static int getDebugGraphicsOption() {
+        System.out.println(debugGraphicsOption);
+        return debugGraphicsOption;
+    }
+
+    /**
+     * setzt die Debug-Optionen fuer Swing-Komponenten
+     *
+     * @param LOG
+     *            boolean; Ausgabe der Ereignisse?
+     * @param FLASH
+     *            boolean; Aufleuchten der Aenderungen?
+     * @param BUFFERED
+     *            boolean; Anzeige des Buffers?
+     * @param flashTime
+     *            int; Dauer des FLASH
+     */
+    public static void setDebugGraphicsOption(final boolean LOG, final boolean FLASH, final boolean BUFFERED, final int flashTime) {
+        debugGraphicsOption = 0;
+        if (LOG) {
+            debugGraphicsOption |= DebugGraphics.LOG_OPTION;
+        }
+        if (FLASH) {
+            debugGraphicsOption |= DebugGraphics.FLASH_OPTION;
+            DebugGraphics.setFlashTime(flashTime);
+        }
+        if (BUFFERED) {
+            debugGraphicsOption |= DebugGraphics.BUFFERED_OPTION;
+        }
     }
 
 }

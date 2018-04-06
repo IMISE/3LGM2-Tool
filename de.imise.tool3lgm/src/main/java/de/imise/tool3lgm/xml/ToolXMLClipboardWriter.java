@@ -28,7 +28,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
     final GraphDocument selectedDoc;
 
     private ToolXMLClipboardWriter(final GraphDocument selectedDoc) throws XMLStreamException, FactoryConfigurationError, IOException {
-        super(selectedDoc.getCollection(), new File(Tool3lgmConstants.getClipboardPath()));
+        super(selectedDoc.getCollection(), new File(Tool3lgmConstants.CLIPBOARD_PATH));
         this.selectedDoc = selectedDoc;
     }
 
@@ -109,4 +109,5 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeEndElement(); //</images>
         writeEndElement(); //</tool3lgm_clipboard>
     }
+
 }

@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.swing.DebugGraphics;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -60,7 +59,7 @@ public abstract class Tool3lgmConstants {
     public static final boolean LOG_READABLE_UNDO_REDO_COMMANDS = false;
 
     /** filename with path for internal clipboard */
-    private static String clipboardPath = "/";
+    public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm_clipboard";
 
     /** Pfad zum Installationsverzeichnis der Anwendung */
     public static final File APPLICATION_DIR = getApplicationDir();
@@ -212,11 +211,6 @@ public abstract class Tool3lgmConstants {
     public static final Locale START_LOCALE = UserProperties.getLocale();
 
     /**
-     * Debug- Optionen fuer Swing-Komponenten; muss fuer Komponente mit setDebugGraphicsOption(int) gesetzt werden
-     */
-    private static int debugGraphicsOption = DebugGraphics.NONE_OPTION;
-
-    /**
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
@@ -234,25 +228,6 @@ public abstract class Tool3lgmConstants {
             e.printStackTrace();
         }
         return f;
-    }
-
-    /**
-     * gibt String für die Dateiangabe des programminternen Zwischenspeichers zurück
-     *
-     * @return String mit Verzeichnis- und Dateiangabe des Zwischenspeichers
-     */
-    public static String getClipboardPath() {
-        return clipboardPath;
-    }
-
-    /**
-     * gibt die Debug-Option fuer Swing-Komponenten zurueck
-     *
-     * @return int
-     */
-    public static int getDebugGraphicsOption() {
-        System.out.println(debugGraphicsOption);
-        return debugGraphicsOption;
     }
 
     /**
@@ -525,41 +500,5 @@ public abstract class Tool3lgmConstants {
          * FileLock lock = raf.getChannel().tryLock();
          * lock.release(); raf.close(); testFile.delete(); } catch (Exception e) { return false; } return true;
          */}
-
-    /**
-     * setzt die Dateiangabe des programminternen Zwischenspeichers
-     *
-     * @param _path
-     *            String mit Verzeichnis- und Dateiangabe des Zwischenspeichers
-     */
-    public static void setClipboardPath(final String _path) {
-        clipboardPath = _path;
-    }
-
-    /**
-     * setzt die Debug-Optionen fuer Swing-Komponenten
-     *
-     * @param LOG
-     *            boolean; Ausgabe der Ereignisse?
-     * @param FLASH
-     *            boolean; Aufleuchten der Aenderungen?
-     * @param BUFFERED
-     *            boolean; Anzeige des Buffers?
-     * @param flashTime
-     *            int; Dauer des FLASH
-     */
-    public static void setDebugGraphicsOption(final boolean LOG, final boolean FLASH, final boolean BUFFERED, final int flashTime) {
-        debugGraphicsOption = 0;
-        if (LOG) {
-            debugGraphicsOption |= DebugGraphics.LOG_OPTION;
-        }
-        if (FLASH) {
-            debugGraphicsOption |= DebugGraphics.FLASH_OPTION;
-            DebugGraphics.setFlashTime(flashTime);
-        }
-        if (BUFFERED) {
-            debugGraphicsOption |= DebugGraphics.BUFFERED_OPTION;
-        }
-    }
 
 }

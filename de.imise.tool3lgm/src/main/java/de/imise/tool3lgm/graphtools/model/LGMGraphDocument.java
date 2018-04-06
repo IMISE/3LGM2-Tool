@@ -159,21 +159,10 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
-     *
-     */
-    private synchronized final void clearClipboard() {
-        File f = new File(Tool3lgmConstants.getClipboardPath());
-        if (f.exists()) {
-            f.delete();
-        }
-        distributeEventIntern(GDCollectionChangeType.SELECTION_CHANGED, null, null, TransactionManager.STANDARD_PID);
-    }
-
-    /**
      * @return
      */
     public static synchronized final boolean isClipboardAvailable() {
-        return new File(Tool3lgmConstants.getClipboardPath()).exists();
+        return new File(Tool3lgmConstants.CLIPBOARD_PATH).exists();
     }
 
     public final List<ElementContainer> getSortedSelection() {
@@ -188,7 +177,7 @@ public class LGMGraphDocument extends GraphDocument {
      *
      */
     private synchronized void pasteClipboard() {
-        File file = new File(Tool3lgmConstants.getClipboardPath());
+        File file = new File(Tool3lgmConstants.CLIPBOARD_PATH);
         if (!file.exists()) {
             return;
         }

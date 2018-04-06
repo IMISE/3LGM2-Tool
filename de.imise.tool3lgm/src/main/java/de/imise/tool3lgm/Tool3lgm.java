@@ -27,8 +27,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
@@ -170,29 +168,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         contextGenerator = new ContextGenerator();
         modelBrowserPanel = new ModelBrowserPanel();
-
-        /* table of defaults for Swing components */
-        UIDefaults defaults = UIManager.getDefaults();
-        defaults.put("FileChooser.openButtonText", getResString("open"));
-        defaults.put("FileChooser.cancelButtonText", getResString("cancel"));
-        defaults.put("FileChooser.filesOfTypeLabelText", getResString("filesOfTypeLabelText"));
-        defaults.put("FileChooser.fileNameLabelText", getResString("fileNameLabelText"));
-        defaults.put("FileChooser.lookInLabelText", getResString("lookInLabelText"));
-
-        defaults.put("ColorChooser.cancelText", getResString("cancel"));
-        defaults.put("ColorChooser.sampleText", getResString("sampleText"));
-        defaults.put("ColorChooser.rgbGreenText", getResString("green"));
-        defaults.put("ColorChooser.previewText", getResString("previewText"));
-        defaults.put("ColorChooser.rgbRedText", getResString("red"));
-        defaults.put("ColorChooser.resetText", getResString("resetText"));
-        defaults.put("ColorChooser.rgbBlueText", getResString("blue"));
-        defaults.put("ColorChooser.swatchesNameText", getResString("swatchesNameText"));
-        defaults.put("ColorChooser.swatchesRecentText", getResString("swatchesRecentText"));
-
-        defaults.put("OptionPane.okButtonText", getResString("ok"));
-        defaults.put("OptionPane.cancelButtonText", getResString("cancel"));
-        defaults.put("OptionPane.noButtonText", getResString("no"));
-        defaults.put("OptionPane.yesButtonText", getResString("yes"));
 
         //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
@@ -1103,7 +1078,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             } catch (Exception ex) {
             }
         }
-        new File(Tool3lgmConstants.getClipboardPath()).delete();
+        new File(Tool3lgmConstants.CLIPBOARD_PATH).delete();
 
         File temp = new File(Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html");
         if (temp.exists()) {
