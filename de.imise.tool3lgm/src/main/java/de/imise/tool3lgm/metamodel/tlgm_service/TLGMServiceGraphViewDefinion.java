@@ -18,6 +18,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.InvokingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
@@ -42,6 +43,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
                 ProvidingInterface.class,
                 PhysicalDataProcessingComponent.class,
                 IheActorOfIntegrationProfile.class,
+                IheActorApplicationSystem.class,
         };
         return graphViewVisibleNodes;
     }
@@ -72,6 +74,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(ProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
         setDefaultLayout(PhysicalDataProcessingComponent.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
         setDefaultLayout(IheActorOfIntegrationProfile.class, GraphElementLayout.SHAPE.wabe, GraphElementLayout.COLORS[GraphElementLayout.LIGHTPURPLE]);
+        setDefaultLayout(IheActorApplicationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
     }
 
 }

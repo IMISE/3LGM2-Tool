@@ -19,6 +19,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_Physic
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_SupportLink_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorApplicationSystem_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.DataTransmissionLink_Edge;
@@ -27,7 +28,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_IsPartOfEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorOfIntegrationProfile_ApplicationSystem_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorOfIntegrationProfile_IheActorApplicationSystem_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActorOfIntegrationProfile_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
@@ -59,6 +60,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheConcept;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheDomain;
@@ -170,6 +172,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
             //IHE-Konzepte
             IheActorOfIntegrationProfile.class,
+            IheActorApplicationSystem.class,
             IheConcept.class,
             IheDomain.class,
             IheIntegrationProfile.class,
@@ -218,7 +221,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     @Override
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
         return new Class[] {
-                //nur bei Anwendungsbausteinen soll die abstrakte Oberklasse im Baum angezeigt werden
+                //nur bei Anwendungsbausteinen und IIH-Konzepten soll die abstrakte Oberklasse im Baum angezeigt werden
                 ApplicationComponent.class, IheConcept.class,
         };
     }
@@ -258,7 +261,8 @@ public class TLGMServiceMetaModel extends MetaModel {
                 Service_ServiceClass_Edge.class,
                 ServiceUses_Edge.class,
                 //IHE-Kanten
-                IheActorOfIntegrationProfile_ApplicationSystem_Edge.class,
+                IheActorOfIntegrationProfile_IheActorApplicationSystem_Edge.class,
+                ApplicationSystem_IheActorApplicationSystem_Edge.class,
                 IheConcept_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class,
                 IheIntegrationProfile_IheTransaction_Edge.class,

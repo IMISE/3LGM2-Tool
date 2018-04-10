@@ -84,7 +84,9 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
 
     public static final int LIGHTPURPLE = 10;
 
-    public static final Color[] COLORS = new Color[11];
+    public static final int LIGHTBLUE = 11;
+
+    public static final Color[] COLORS = new Color[12];
     static {
         COLORS[WHITE] = Color.white;
         COLORS[YELLOW] = Color.yellow;
@@ -97,9 +99,10 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         COLORS[LIGHTRED] = new Color(255, 153, 102);
         COLORS[LIGHTGREEN] = new Color(204, 255, 204);
         COLORS[LIGHTPURPLE] = new Color(229, 203, 255);
+        COLORS[LIGHTBLUE] = new Color(0, 204, 255);
     }
 
-    public static final String[] COLOR_NAMES = new String[11];
+    public static final String[] COLOR_NAMES = new String[12];
     static {
         COLOR_NAMES[WHITE] = getResString("white");
         COLOR_NAMES[YELLOW] = getResString("yellow");
@@ -112,6 +115,7 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         COLOR_NAMES[LIGHTRED] = getResString("lightred");
         COLOR_NAMES[LIGHTGREEN] = getResString("lightgreen");
         COLOR_NAMES[LIGHTPURPLE] = getResString("lightpurple");
+        COLOR_NAMES[LIGHTBLUE] = getResString("lightblue");
     }
 
     /** Transparenzwert für nicht transparent (Alpha = 255) */

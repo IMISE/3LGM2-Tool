@@ -5,13 +5,13 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
 
 /**
  * @author AXS (31.01.2018)
  */
-public class IheActorOfIntegrationProfile_ApplicationSystem_Edge extends SimpleEdge {
+public class IheActorOfIntegrationProfile_IheActorApplicationSystem_Edge extends SimpleEdge {
 
     public static final Class<? extends ModelElement> stcl = IheActorOfIntegrationProfile.class;
 
@@ -19,6 +19,6 @@ public class IheActorOfIntegrationProfile_ApplicationSystem_Edge extends SimpleE
 
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
-    public static final Class<? extends ModelElement> etcl = ApplicationSystem.class;
+    public static final Class<? extends ModelElement> etcl = IheActorApplicationSystem.class;
 
 }
