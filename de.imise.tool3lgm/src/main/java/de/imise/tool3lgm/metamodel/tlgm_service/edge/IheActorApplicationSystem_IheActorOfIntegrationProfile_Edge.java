@@ -11,14 +11,14 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfil
 /**
  * @author AXS (31.01.2018)
  */
-public class IheActorOfIntegrationProfile_IheActorApplicationSystem_Edge extends SimpleEdge {
+public class IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheActorOfIntegrationProfile.class;
+    public static final Class<? extends ModelElement> stcl = IheActorApplicationSystem.class;
 
     public static final EdgeCardinality scard = ZERO_UNIMITED;
 
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
-    public static final Class<? extends ModelElement> etcl = IheActorApplicationSystem.class;
+    public static final Class<? extends ModelElement> etcl = IheActorOfIntegrationProfile.class;
 
 }
