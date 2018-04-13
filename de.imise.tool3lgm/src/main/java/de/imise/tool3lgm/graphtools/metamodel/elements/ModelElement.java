@@ -1155,9 +1155,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten Teilelemente
      */
     public List<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
-        Class<? extends IsPartOfEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
+        Class<? extends HasPartEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         List<ElementContainer> returnList = new ArrayList<>();
-        for (Class<? extends IsPartOfEdge> c : hasPartsEdgeClasses) {
+        for (Class<? extends HasPartEdge> c : hasPartsEdgeClasses) {
             returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, Edge.FORWARD));
         }
         return returnList;
@@ -1170,9 +1170,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten oberelemente
      */
     public List<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
-        Class<? extends IsPartOfEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
+        Class<? extends HasPartEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         List<ElementContainer> returnList = new ArrayList<>();
-        for (Class<? extends IsPartOfEdge> c : isPartEdgeClasses) {
+        for (Class<? extends HasPartEdge> c : isPartEdgeClasses) {
             returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, Edge.BACKWARD));
         }
         return returnList;
@@ -1352,10 +1352,10 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     private final void getParentElementsRecursive(final Set<ModelElement> result) {
         for (Edge edge : getEdges()) {
-            if (!(edge instanceof IsPartOfEdge)) {
+            if (!(edge instanceof HasPartEdge)) {
                 continue;
             }
-            ModelElement parent = ((IsPartOfEdge) edge).getParent();
+            ModelElement parent = ((HasPartEdge) edge).getParent();
             if (this != parent && result.add(parent)) {
                 parent.getParentElementsRecursive(result);
             }
@@ -1374,10 +1374,10 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     private final void getPartElementsRecursive(final Set<ModelElement> result) {
         for (Edge edge : getEdges()) {
-            if (!(edge instanceof IsPartOfEdge)) {
+            if (!(edge instanceof HasPartEdge)) {
                 continue;
             }
-            ModelElement part = ((IsPartOfEdge) edge).getPart();
+            ModelElement part = ((HasPartEdge) edge).getPart();
             if (this != part && result.add(part)) {
                 part.getPartElementsRecursive(result);
             }
@@ -1442,9 +1442,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectPartElements() {
-        Class<? extends IsPartOfEdge>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
+        Class<? extends HasPartEdge>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         List<ModelElement> returnList = new ArrayList<>();
-        for (Class<? extends IsPartOfEdge> c : hasPartEdgeClasses) {
+        for (Class<? extends HasPartEdge> c : hasPartEdgeClasses) {
             returnList.addAll(getConnectedElements(ModelElement.class, c, BACKWARD));
         }
         return returnList;
@@ -1456,9 +1456,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectParentElements() {
-        Class<? extends IsPartOfEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
+        Class<? extends HasPartEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         List<ModelElement> returnList = new ArrayList<>();
-        for (Class<? extends IsPartOfEdge> c : isPartEdgeClasses) {
+        for (Class<? extends HasPartEdge> c : isPartEdgeClasses) {
             returnList.addAll(getConnectedElements(ModelElement.class, c, FORWARD));
         }
         return returnList;
@@ -1558,10 +1558,10 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public final boolean isDirectParentOf(final ModelElement me) {
         for (Edge edge : getEdges()) {
-            if (!(edge instanceof IsPartOfEdge)) {
+            if (!(edge instanceof HasPartEdge)) {
                 continue;
             }
-            if (((IsPartOfEdge) edge).getPart() == me) {
+            if (((HasPartEdge) edge).getPart() == me) {
                 return true;
             }
         }
@@ -2026,7 +2026,7 @@ public abstract class ModelElement extends UserFieldTarget {
             }
         }
         //wenn es eine PartOfVerbindung ist -> this darf kein Teil von me sein
-        if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
+        if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             //wenn die beiden Elemente bereits in einer PartOfVerbindung stehen, die der jetzt zu verknüpfenden Richtung widerspricht
             if (me.isPartOf(this)) {
                 return false;

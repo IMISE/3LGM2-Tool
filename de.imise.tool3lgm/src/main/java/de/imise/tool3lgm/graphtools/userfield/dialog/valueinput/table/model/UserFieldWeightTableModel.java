@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
@@ -87,7 +87,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      */
     private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction, final ModelElement columnElement) {
         List<Edge> edges;
-        if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
+        if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             if (direction == FORWARD) {
                 edges = columnElement.getEdgesFrom(getStartClass(edgeClass), edgeClass);
             } else {
@@ -150,7 +150,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                 ModelElement ce = columnElements.get(c);
                 Edge edge = null;
 
-                if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
+                if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
                     if (direction == FORWARD) {
                         edge = re.getEdgeTo(ce, edgeClass);
                     } else {

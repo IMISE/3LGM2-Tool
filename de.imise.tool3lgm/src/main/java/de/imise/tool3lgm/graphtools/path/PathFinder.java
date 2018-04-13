@@ -18,7 +18,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
@@ -172,7 +172,7 @@ public final class PathFinder {
                 } else if (element1.isConnectedTo(element2, edgeClass)) {
                     return reverse && metaPath.isDirectional() ? BACKWARD : FORWARD;
                 } else if (element1.isConnectedFrom(element2, edgeClass)) {
-                    return reverse && metaPath.isDirectional() ? FORWARD : IsPartOfEdge.class.isAssignableFrom(edgeClass) ? NOTCONNECTED : BACKWARD;
+                    return reverse && metaPath.isDirectional() ? FORWARD : HasPartEdge.class.isAssignableFrom(edgeClass) ? NOTCONNECTED : BACKWARD;
                 }
             } else {
                 switch (isConnected(element1, element2, metaPath, 0, pathIndex)) {

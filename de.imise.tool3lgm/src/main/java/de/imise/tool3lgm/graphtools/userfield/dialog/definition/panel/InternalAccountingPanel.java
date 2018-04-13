@@ -23,7 +23,7 @@ import javax.swing.JRadioButton;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -74,13 +74,13 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         dirComboBox.addItem(UserField.DIRECTION_FROM_PART_TO_WHOLE, getResString("part_to_whole"));
         dirComboBox.addItem(UserField.DIRECTION_FROM_WHOLE_TO_PART, getResString("whole_to_part"));
 
-        HashSet<Class<? extends IsPartOfEdge>> poClasses = new HashSet<>();
+        HashSet<Class<? extends HasPartEdge>> poClasses = new HashSet<>();
         Class<? extends UserFieldTarget> userFieldTargetClass = userField.getTargetClass();
         if (ModelElement.class.isAssignableFrom(userFieldTargetClass)) {
             Class<? extends ModelElement> elementClass = userFieldTargetClass.asSubclass(ModelElement.class);
             poClasses.addAll(Arrays.asList(ModelConstants.getIsPartOfEdgeClasses(elementClass)));
             poClasses.addAll(Arrays.asList(ModelConstants.getHasPartsEdgeClasses(elementClass)));
-            for (Class<? extends IsPartOfEdge> poClass : poClasses) {
+            for (Class<? extends HasPartEdge> poClass : poClasses) {
                 vgComboBox.addItem(UNIFORMLY_DISTRIBUTED);
                 vgComboBox.addSeparator(false);
                 for (UserField uf : definitions.getUserFields(poClass)) {

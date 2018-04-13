@@ -4,13 +4,13 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
 
 /**
  * @author AXS (06.04.2004)
  */
-public final class OrgOrgVerbindung extends IsPartOfEdge {
+public final class OrgOrgVerbindung extends HasPartEdge {
 
     public static final Class<? extends ModelElement> stcl = Organisationseinheit.class;
 

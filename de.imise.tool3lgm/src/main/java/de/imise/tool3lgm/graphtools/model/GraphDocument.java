@@ -46,7 +46,7 @@ import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -2234,7 +2234,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * der Selektion waren.
      *
      * @param addAllParts
-     *            Wenn <code>true</code> werden alle über {@link IsPartOfEdge}en verbunden Elemente
+     *            Wenn <code>true</code> werden alle über {@link HasPartEdge}en verbunden Elemente
      *            in die Selektion mit aufgenommen.
      * @param addAllSlaves
      *            Wenn <code>true</code> werden alle über {@link CompositionEdge}s verbunden Elemente

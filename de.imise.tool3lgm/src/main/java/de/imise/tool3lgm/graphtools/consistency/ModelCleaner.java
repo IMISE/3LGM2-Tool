@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -565,9 +565,9 @@ public class ModelCleaner {
      */
     public static final void switchIsEdgesToHasPartEdges(final GDCollection gdcoll) {
         LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        List<ModelElement> hasPartEdges = mainDoc.getModelItems(IsPartOfEdge.class, true);
+        List<ModelElement> hasPartEdges = mainDoc.getModelItems(HasPartEdge.class, true);
         for (ModelElement edge : hasPartEdges) {
-            IsPartOfEdge hasPartEdge = (IsPartOfEdge) edge;
+            HasPartEdge hasPartEdge = (HasPartEdge) edge;
             ModelElement part = hasPartEdge.getStart(); // ist ja noch falsch herum
             ModelElement parent = hasPartEdge.getEnd(); // ist ja noch falsch herum
             hasPartEdge.setKnots(parent, part, false);

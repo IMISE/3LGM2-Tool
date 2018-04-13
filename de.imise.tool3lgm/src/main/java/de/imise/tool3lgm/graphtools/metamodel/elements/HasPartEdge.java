@@ -4,7 +4,7 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
  * Die PartOf-Beziehung ist eine Bezihung zwischen zwei Elementen, die von der selben Elementklasse sind. Start der Edge ist immer das Kindelement,
  * das Ende der Edge ist immer das Elternelement. Dir Richtung der Edge ist immer forward.
  */
-public abstract class IsPartOfEdge extends SubordinationEdge {
+public abstract class HasPartEdge extends SubordinationEdge {
 
     /**
      * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.

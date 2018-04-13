@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -254,7 +254,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 continue;
             }
             if (startClass.isAssignableFrom(userField.getTargetClass())) {
-                if (IsPartOfEdge.class.isAssignableFrom(tmpEdgeClass)) {
+                if (HasPartEdge.class.isAssignableFrom(tmpEdgeClass)) {
                     associationBox.addItem(tmpEdgeClass, getResString("part_to_whole") + " (" + forwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, forwardName);
@@ -262,7 +262,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             }
             //das hier darf nicht als else-if geschrieben werden!
             if (endClass.isAssignableFrom(userField.getTargetClass())) {
-                if (IsPartOfEdge.class.isAssignableFrom(tmpEdgeClass)) {
+                if (HasPartEdge.class.isAssignableFrom(tmpEdgeClass)) {
                     associationBox.addItem(tmpEdgeClass, getResString("whole_to_part") + " (" + backwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, backwardName);
@@ -309,7 +309,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         //wenn eine Part-Of-beziehung ausgewählt wurde, dann die Richtung
         // merken
-        if (IsPartOfEdge.class.isAssignableFrom(edgeClass)) {
+        if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             sb.append(" | ");
             if (associationBox.getSelectedItem().toString().equals(getResString("part_to_whole") + " (" + getFullForwardMetaAssociationName(edgeClass) + ")")) {
                 sb.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);

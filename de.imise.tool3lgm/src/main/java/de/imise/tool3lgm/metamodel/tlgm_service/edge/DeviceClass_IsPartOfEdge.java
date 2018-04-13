@@ -4,14 +4,14 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_ONE;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 
 /**
  * @author AXS (22.12.2017)
  */
-public final class DeviceClass_IsPartOfEdge extends IsPartOfEdge {
+public final class DeviceClass_IsPartOfEdge extends HasPartEdge {
 
     public static final Class<? extends ModelElement> stcl = DeviceClass.class;
 

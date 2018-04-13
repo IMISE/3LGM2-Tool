@@ -36,7 +36,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
@@ -187,17 +187,17 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     /**
-     * Liefert alle {@link IsPartOfEdge}en, bei denen die Kindelemente auch wieder Kindelemente haben können (also wo die
+     * Liefert alle {@link HasPartEdge}en, bei denen die Kindelemente auch wieder Kindelemente haben können (also wo die
      * Start- und Endklasse der PartOBeziehung gleich ist).
      *
      * @return
      */
-    private List<Class<? extends IsPartOfEdge>> getRealPartOfs() {
+    private List<Class<? extends HasPartEdge>> getRealPartOfs() {
         Class<? extends ModelElement> elementClass = modelElement.getClass();
-        Class<? extends IsPartOfEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
-        Class<? extends IsPartOfEdge>[] isPartOfEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
-        List<Class<? extends IsPartOfEdge>> realPartOfs = new ArrayList<>();
-        for (Class<? extends IsPartOfEdge> partOf : isPartOfEdgeClasses) {
+        Class<? extends HasPartEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
+        Class<? extends HasPartEdge>[] isPartOfEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
+        List<Class<? extends HasPartEdge>> realPartOfs = new ArrayList<>();
+        for (Class<? extends HasPartEdge> partOf : isPartOfEdgeClasses) {
             if (CollectionUtils.arrayContains(hasPartsEdgeClasses, partOf)) {
                 realPartOfs.add(partOf);
             }
@@ -206,7 +206,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     private void addPartOfStructurePanel() {
-        List<Class<? extends IsPartOfEdge>> realPartOfs = getRealPartOfs();
+        List<Class<? extends HasPartEdge>> realPartOfs = getRealPartOfs();
         if (realPartOfs.size() == 1) {
             StructurePanel structurePanel = new StructurePanel(this, realPartOfs.get(0));
             structurePanel.setName(getResString("strukt"));
