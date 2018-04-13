@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-public abstract class IsAEdge extends HierarchyEdge {
+public abstract class SpecialisationEdge extends SubordinationEdge {
 
     public final ModelElement getSpecializedElement() {
         return getSubElement();

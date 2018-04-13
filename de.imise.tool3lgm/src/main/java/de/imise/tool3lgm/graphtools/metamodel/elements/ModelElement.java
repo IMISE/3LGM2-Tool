@@ -596,14 +596,22 @@ public abstract class ModelElement extends UserFieldTarget {
         return true;
     }
 
-    /** Entfernt die angegebene Edge vom Node. */
-    public final void removeEdge(final Edge kante) {
+    /**
+     * Entfernt die angegebene Edge vom Node.
+     *
+     * @return index, an dem sich die entfernte Kante befand
+     */
+    public final int removeEdge(final Edge edge) {
         if (edges != null) {
-            edges.remove(kante);
-            if (edges.size() == 0) {
-                edges = null;
+            int edgeIndex = edges.indexOf(edge);
+            if (edgeIndex >= 0) {
+                edges.remove(edge);
+                if (edges.size() == 0) {
+                    edges = null;
+                }
             }
         }
+        return -1;
     }
 
     /* --- Funktionen im Netzwerk --- Ende --- */
@@ -1150,7 +1158,7 @@ public abstract class ModelElement extends UserFieldTarget {
         Class<? extends IsPartOfEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         List<ElementContainer> returnList = new ArrayList<>();
         for (Class<? extends IsPartOfEdge> c : hasPartsEdgeClasses) {
-            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, IsPartOfEdge.PARENT_TO_PART_DIRECTION));
+            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, Edge.FORWARD));
         }
         return returnList;
     }
@@ -1165,7 +1173,7 @@ public abstract class ModelElement extends UserFieldTarget {
         Class<? extends IsPartOfEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         List<ElementContainer> returnList = new ArrayList<>();
         for (Class<? extends IsPartOfEdge> c : isPartEdgeClasses) {
-            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, IsPartOfEdge.PART_TO_PARENT_DIRECTION));
+            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, Edge.BACKWARD));
         }
         return returnList;
     }
@@ -1372,6 +1380,58 @@ public abstract class ModelElement extends UserFieldTarget {
             ModelElement part = ((IsPartOfEdge) edge).getPart();
             if (this != part && result.add(part)) {
                 part.getPartElementsRecursive(result);
+            }
+        }
+    }
+
+    public boolean isSubElementOf(final ModelElement me) {
+        return isSubElementOf(me, SubordinationEdge.class);
+    }
+
+    public boolean isSuperElementOf(final ModelElement me) {
+        return isSuperElementOf(me, SubordinationEdge.class);
+    }
+
+    public boolean isSubElementOf(final ModelElement me, final Class<? extends SubordinationEdge> subordinationEdgeClass) {
+        return me.getSubElements(subordinationEdgeClass).contains(this);
+    }
+
+    public boolean isSuperElementOf(final ModelElement me, final Class<? extends SubordinationEdge> subordinationEdgeClass) {
+        return getSubElements(subordinationEdgeClass).contains(me);
+    }
+
+    public final Set<ModelElement> getSubElements(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
+        return getSubOrSuperElements(subordinationEdgeClass, true);
+    }
+
+    public final Set<ModelElement> getSuperElements(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
+        return getSubOrSuperElements(subordinationEdgeClass, false);
+    }
+
+    /**
+     * @param subordinationEdgeClass
+     * @param subElements
+     * @return
+     */
+    private final Set<ModelElement> getSubOrSuperElements(final Class<? extends SubordinationEdge> subordinationEdgeClass, final boolean subElements) {
+        Set<ModelElement> recursiveConnected = new HashSet<>();
+        getSubOrSuperElementsRecursive(recursiveConnected, subordinationEdgeClass, true);
+        return recursiveConnected;
+    }
+
+    /**
+     * @param result
+     * @param edgeClass
+     * @param subElements
+     */
+    private final void getSubOrSuperElementsRecursive(final Set<ModelElement> result, final Class<? extends SubordinationEdge> edgeClass, final boolean subElements) {
+        for (Edge edge : getEdges()) {
+            if (!edgeClass.isAssignableFrom(edge.getClass())) {
+                continue;
+            }
+            ModelElement connected = subElements ? ((SubordinationEdge) edge).getSubElement() : ((SubordinationEdge) edge).getSuperElement();
+            if (this != connected && result.add(connected)) {
+                connected.getSubOrSuperElementsRecursive(result, edgeClass, subElements);
             }
         }
     }

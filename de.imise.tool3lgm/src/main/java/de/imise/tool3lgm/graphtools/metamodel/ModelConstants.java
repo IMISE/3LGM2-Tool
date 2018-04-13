@@ -1093,7 +1093,7 @@ public final class ModelConstants {
                 if (IsPartOfEdge.class.isAssignableFrom(c)) {
                     Class<? extends IsPartOfEdge>[] edgeClasses = null;
                     Class<? extends IsPartOfEdge> poClass = c.asSubclass(IsPartOfEdge.class);
-                    if (IsPartOfEdge.isParentClass(poClass, ALL_NODES[i])) {
+                    if (IsPartOfEdge.isSuperClass(poClass, ALL_NODES[i])) {
                         edgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(ALL_NODES[i]);
                         if (edgeClasses == null) {
                             edgeClasses = new Class[1];
@@ -1106,7 +1106,7 @@ public final class ModelConstants {
                             ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
                         }
                     }
-                    if (IsPartOfEdge.isPartClass(poClass, ALL_NODES[i])) {
+                    if (IsPartOfEdge.isSubClass(poClass, ALL_NODES[i])) {
                         edgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(ALL_NODES[i]);
                         if (edgeClasses == null) {
                             edgeClasses = new Class[1];

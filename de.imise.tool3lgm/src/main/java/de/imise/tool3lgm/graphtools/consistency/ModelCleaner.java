@@ -25,11 +25,13 @@ import com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.IsPartOfEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -38,6 +40,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.HashStringGenerator;
 
 /**
@@ -273,8 +276,7 @@ public class ModelCleaner {
         // die ganzen irgendwann beim Zusammenführen mal sinnlos reingekommenen LeerZeichen und
         // Leeerzeilen sowie das "-ZUSAMMENGEFÜHRT-" oder "-JOINED-" löschen
         final String[] superflousStrings = {
-                "-ZUSAMMENGEFÜHRT-",
-                "-JOINED-"
+                "-ZUSAMMENGEFÜHRT-", "-JOINED-"
         };
         for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(ModelElement.class, true)) {
             // Element-Namen und Beschreibungen bereinigen
@@ -548,6 +550,29 @@ public class ModelCleaner {
             }
         }
         return returnList;
+    }
+
+    /**
+     * Bis Datei-Version 3.4 (siehe {@link ToolXMLParser}) gab es IsPartOfBeziehungen, bei denen das Teil-Element StartElement
+     * und das Oberelement EndElement der Kante war. Bei den anderen existierenden Unterordnungsbeziehungen, den Compositions,
+     * war das genau andersrum, also das Oberelement war Start und das Unterelement EndElement.<br>
+     * Das wurde dahingehend vereinheitlicht, dass die IsPartOfEdges zu HasPartEdges geändert wurden, bei denen genau wie bei
+     * den Compositions das Oberelement nun das Startelement ist und beide Klasse dieselbe Oberklasse SubordinationEdge haben
+     * können, die jetzt dafür verantwortlich ist, ob verbundene Elemente in der Grafik mitbewegt werden können und die eventuelle
+     * Kreise in diesen Unterordnungen checkt, die unzulässig sind.
+     *
+     * @param gdcoll
+     */
+    public static final void switchIsEdgesToHasPartEdges(final GDCollection gdcoll) {
+        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        List<ModelElement> hasPartEdges = mainDoc.getModelItems(IsPartOfEdge.class, true);
+        for (ModelElement edge : hasPartEdges) {
+            IsPartOfEdge hasPartEdge = (IsPartOfEdge) edge;
+            ModelElement part = hasPartEdge.getStart(); // ist ja noch falsch herum
+            ModelElement parent = hasPartEdge.getEnd(); // ist ja noch falsch herum
+            hasPartEdge.setKnots(parent, part, false);
+        }
+
     }
 
 }

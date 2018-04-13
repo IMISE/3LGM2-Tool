@@ -49,29 +49,27 @@ public class ToolXMLParser {
 
     /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
     private static String[] supportedXMLVersions = {
-            "<?xml version='1.0' encoding='utf-8'?>",
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            "<?xml version='1.0' encoding='utf-8'?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     };
 
     private static String[] supportedFileVersions = {
-            "<!--Tool3lgmFile version='1.0'-->",
-            "<!--Tool3lgmFile version='1.1'-->",
-            "<!--Tool3lgmFile version='1.2'-->",
-            "<!--Tool3lgmFile version='2.0'-->",
-            "<!--Tool3lgmFile version='3.0'-->",
-            "<!--Tool3lgmFile version='3.1'-->",
-            "<!--Tool3lgmFile version='3.2'-->",
-            "<!--Tool3lgmFile version='3.3'-->",
-            "<!--Tool3lgmFile version='3.4'-->",
-            "<!--Tool3lgmFile version='3.5'-->",
-            //            "<!--Tool3lgmFile version='3.6'-->",
+            "<!--Tool3lgmFile version='1.0'-->", //0
+            "<!--Tool3lgmFile version='1.1'-->", //1
+            "<!--Tool3lgmFile version='1.2'-->", //2
+            "<!--Tool3lgmFile version='2.0'-->", //3
+            "<!--Tool3lgmFile version='3.0'-->", //4
+            "<!--Tool3lgmFile version='3.1'-->", //5
+            "<!--Tool3lgmFile version='3.2'-->", //6
+            "<!--Tool3lgmFile version='3.3'-->", //7
+            "<!--Tool3lgmFile version='3.4'-->", //8
+            "<!--Tool3lgmFile version='3.5'-->",//9
+            //            "<!--Tool3lgmFile version='3.6'-->",//10
     };
 
     private final SAXParser parser;
 
     private int[] version = {
-            -1,
-            -1
+            -1, -1
     };
 
     private final InputStream parseStream;
@@ -133,12 +131,8 @@ public class ToolXMLParser {
 
         default:
             throw new SAXException("angegebenes Dateiformat wird nicht unterstützt");
-
-            //			if (version[1]<8)
-            //TODO:+++				//drehe alle KommBezETNTVBerbindungen! ACHTUNG: beim Modellieren muss das auch gedreht werden
-            //				ModelCleaner.correctModel();
-
         }
+
     }
 
     public void parseDocument() throws SAXException, IOException {
@@ -247,6 +241,13 @@ public class ToolXMLParser {
         // */
 
         Static.setProgressDialogStatusLabel("labelCleanModel");
+
+        //in Verison 3.5 wurden die IsPartOfEdges zu HasPartEdges gedreht, damit sie sich genauso verhalten wie die
+        //CompositionEgdes, bei denen auch das Oberelement Start und das Unterlement EndElement ist.
+        if (version[1] < 9) {
+            ModelCleaner.switchIsEdgesToHasPartEdges(gdcoll);
+        }
+
         new ModelCleaner(gdcoll).cleanModel();
 
         //beim Einlesen werden Elemente mit generierten Namen evtl. nicht richtig eingelesen, weil
@@ -314,8 +315,7 @@ public class ToolXMLParser {
     private static int[] getVersion(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         String line;
         int[] version = {
-                -1,
-                -1
+                -1, -1
         };
 
         ///*
