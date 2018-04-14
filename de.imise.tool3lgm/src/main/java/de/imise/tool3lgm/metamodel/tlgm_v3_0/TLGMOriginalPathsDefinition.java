@@ -5,7 +5,7 @@ import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKawbVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbAwbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
@@ -126,7 +126,7 @@ public class TLGMOriginalPathsDefinition extends PathsDefinition {
                 {
                         RawbRawbVerbindung.class
                 }, {
-                        AwbKawbVerbindung.class
+                        KawbAwbVerbindung.class
                 }
         }, "text_teil_von", true));
 

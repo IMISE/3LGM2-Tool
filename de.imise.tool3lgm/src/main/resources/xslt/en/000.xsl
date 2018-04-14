@@ -617,7 +617,7 @@
 	count(key('anzahlObjekte', 'EtntEtVerbindung')) +
 	count(key('anzahlObjekte', 'EtntKommstVerbindung')) +
 	count(key('anzahlObjekte', 'EtntNatVerbindung')) +
-	count(key('anzahlObjekte', 'AwbKawbVerbindung')) +
+	count(key('anzahlObjekte', 'KawbAwbVerbindung')) +
 	count(key('anzahlObjekte', 'KawbDoksVerbindung')) +
 	count(key('anzahlObjekte', 'KawbOrgpVerbindung')) +
 	count(key('anzahlObjekte', 'KommbezEtntVerbindung')) +

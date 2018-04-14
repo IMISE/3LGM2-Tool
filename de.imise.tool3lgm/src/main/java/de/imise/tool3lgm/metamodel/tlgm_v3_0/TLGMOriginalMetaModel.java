@@ -16,7 +16,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKawbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
@@ -31,6 +30,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntDotVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntEtVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntKommstVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbAwbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbDoksVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbOrgpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
@@ -106,6 +106,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
         putOldToNewClassName("EtdtKombination", "EreignisDokumentenTyp");
         putOldToNewClassName("ETNTKombination", "EreignisNachrichtenTyp");
         putOldToNewClassName("ETDTKombination", "EreignisDokumentenTyp");
+        putOldToNewClassName("AwbKawbVerbindung", "KawbAwbVerbindung");
     }
 
     /////////////////////
@@ -273,7 +274,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
                 ObjReprVerbindung.class,
                 SwpAufVerbindung.class,
                 //LWE
-                AwbKawbVerbindung.class,
+                KawbAwbVerbindung.class,
                 AwbKommssVerbindung.class,
                 AwpSwpVerbindung.class,
                 BssEtntVerbindung.class,
