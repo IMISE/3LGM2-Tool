@@ -1445,7 +1445,7 @@ public abstract class ModelElement extends UserFieldTarget {
         Class<? extends HasPartEdge>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
         List<ModelElement> returnList = new ArrayList<>();
         for (Class<? extends HasPartEdge> c : hasPartEdgeClasses) {
-            returnList.addAll(getConnectedElements(ModelElement.class, c, BACKWARD));
+            returnList.addAll(getConnectedElements(ModelElement.class, c, FORWARD));
         }
         return returnList;
     }
@@ -1459,7 +1459,7 @@ public abstract class ModelElement extends UserFieldTarget {
         Class<? extends HasPartEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
         List<ModelElement> returnList = new ArrayList<>();
         for (Class<? extends HasPartEdge> c : isPartEdgeClasses) {
-            returnList.addAll(getConnectedElements(ModelElement.class, c, FORWARD));
+            returnList.addAll(getConnectedElements(ModelElement.class, c, BACKWARD));
         }
         return returnList;
     }

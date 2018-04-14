@@ -38,6 +38,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -1144,6 +1145,16 @@ public final class ModelConstants {
 
     public static final boolean isPartOfEdge(final Class<? extends Edge> edgeClass) {
         return HasPartEdge.class.isAssignableFrom(edgeClass);
+    }
+
+    public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
+        Class<? extends ModelElement> startClass = getStartClass(edgeClass);
+        Class<? extends ModelElement> endClass = getEndClass(edgeClass);
+        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
+    }
+
+    public static boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
+        return SubordinationEdge.class.isAssignableFrom(edgeClass) && isRecursive(edgeClass);
     }
 
     /**

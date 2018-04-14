@@ -12,7 +12,6 @@ import java.util.Arrays;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HierarchyEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -500,16 +499,16 @@ public class MetaPath {
      *
      * @return
      */
-    public boolean isHierarchyPath() {
+    public boolean isRecursiveSubordinationPath() {
         for (Class<? extends Edge>[] singlePath : associations) {
-            boolean singlePathHasHierarchyEdge = false;
+            boolean singlePathHasRecursiveSubordinatioEdge = false;
             for (Class<? extends Edge> association : singlePath) {
-                if (HierarchyEdge.class.isAssignableFrom(association)) {
-                    singlePathHasHierarchyEdge = true;
+                if (ModelConstants.isRecursiveSubordination(association)) {
+                    singlePathHasRecursiveSubordinatioEdge = true;
                     break;
                 }
             }
-            if (!singlePathHasHierarchyEdge) {
+            if (!singlePathHasRecursiveSubordinatioEdge) {
                 return false;
             }
         }

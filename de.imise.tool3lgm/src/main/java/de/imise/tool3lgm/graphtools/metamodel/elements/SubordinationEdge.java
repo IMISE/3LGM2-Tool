@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -178,9 +179,7 @@ public abstract class SubordinationEdge extends Edge {
      * @return
      */
     public final boolean isRecursive() {
-        Class<? extends ModelElement> startClass = getStartClass();
-        Class<? extends ModelElement> endClass = getEndClass();
-        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
+        return ModelConstants.isRecursiveSubordination(getClass());
     }
 
 }
