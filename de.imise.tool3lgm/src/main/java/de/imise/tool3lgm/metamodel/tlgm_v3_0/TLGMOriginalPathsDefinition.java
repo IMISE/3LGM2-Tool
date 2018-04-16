@@ -5,7 +5,6 @@ import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbAwbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
@@ -14,6 +13,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.BssKommstVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntDotVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntNatVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbAwbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
@@ -128,7 +128,7 @@ public class TLGMOriginalPathsDefinition extends PathsDefinition {
                 }, {
                         KawbAwbVerbindung.class
                 }
-        }, "text_teil_von", true));
+        }, "text_hat_teil", true));
 
         put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
                 {
