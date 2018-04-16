@@ -658,7 +658,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 if (lastSelected == me2) {
                                     continue;
                                 }
-                                if (!lastSelected.isPartOf(me2) && !lastSelected.isParentOf(me2)) {
+                                if (!lastSelected.isPartOf(me2) && !lastSelected.isDirectParentOf(me2)) {
                                     connectable = true;
                                 }
                                 if (lastSelected.isDirectParentOf(me2)) {
@@ -680,7 +680,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 if (lastSelected == me2) {
                                     continue;
                                 }
-                                if (!me2.isPartOf(lastSelected) && !me2.isParentOf(lastSelected)) {
+                                if (!me2.isPartOf(lastSelected) && !me2.isDirectParentOf(lastSelected)) {
                                     connectable = true;
                                 }
                                 if (me2.isDirectParentOf(lastSelected)) {
