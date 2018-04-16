@@ -120,8 +120,8 @@ public abstract class SubordinationEdge extends Edge {
     public void setKnotsAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
         ModelElement oldStartElement = k1;
         ModelElement oldEndElement = k2;
-        int oldStartElementEdgeIndex = oldStartElement.removeEdge(this);
-        int oldEndElementEdgeIndex = oldEndElement.removeEdge(this);
+        int oldStartElementEdgeIndex = oldStartElement == null ? 0 : oldStartElement.removeEdge(this);
+        int oldEndElementEdgeIndex = oldEndElement == null ? 0: oldEndElement.removeEdge(this);
         k1 = startElement;
         k2 = endElement;
         startElement.insertEdge(this, startElementEdgeIndex);
