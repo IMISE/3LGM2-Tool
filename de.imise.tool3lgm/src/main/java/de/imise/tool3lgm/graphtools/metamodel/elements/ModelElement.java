@@ -1287,7 +1287,6 @@ public abstract class ModelElement extends UserFieldTarget {
             al.add(ec);
         }
         getPartOrParentContainer(al, doc, true, false);
-        al.remove(0);
         return al;
     }
 
