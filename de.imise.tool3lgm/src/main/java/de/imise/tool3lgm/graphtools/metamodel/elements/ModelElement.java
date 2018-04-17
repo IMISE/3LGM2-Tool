@@ -1342,46 +1342,12 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
     public final Set<ModelElement> getParentElements() {
-        Set<ModelElement> list = new HashSet<>();
-        getParentElementsRecursive(list);
-        return list;
-    }
-
-    /**
-     * @param result
-     */
-    private final void getParentElementsRecursive(final Set<ModelElement> result) {
-        for (Edge edge : getEdges()) {
-            if (!(edge instanceof HasPartEdge)) {
-                continue;
-            }
-            ModelElement parent = ((HasPartEdge) edge).getParent();
-            if (this != parent && result.add(parent)) {
-                parent.getParentElementsRecursive(result);
-            }
-        }
+        return getSubOrSuperElements(HasPartEdge.class, false);
     }
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
     public final Set<ModelElement> getPartElements() {
-        Set<ModelElement> list = new HashSet<>();
-        getPartElementsRecursive(list);
-        return list;
-    }
-
-    /**
-     * @param result
-     */
-    private final void getPartElementsRecursive(final Set<ModelElement> result) {
-        for (Edge edge : getEdges()) {
-            if (!(edge instanceof HasPartEdge)) {
-                continue;
-            }
-            ModelElement part = ((HasPartEdge) edge).getPart();
-            if (this != part && result.add(part)) {
-                part.getPartElementsRecursive(result);
-            }
-        }
+        return getSubOrSuperElements(HasPartEdge.class, true);
     }
 
     public boolean isSubElementOf(final ModelElement me) {
@@ -1415,7 +1381,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     private final Set<ModelElement> getSubOrSuperElements(final Class<? extends SubordinationEdge> subordinationEdgeClass, final boolean subElements) {
         Set<ModelElement> recursiveConnected = new HashSet<>();
-        getSubOrSuperElementsRecursive(recursiveConnected, subordinationEdgeClass, true);
+        getSubOrSuperElementsRecursive(recursiveConnected, subordinationEdgeClass, subElements);
         return recursiveConnected;
     }
 
@@ -1530,7 +1496,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
     public final boolean isParentOf(final ModelElement me) {
-        return this.getPartElements().contains(me);
+        return getPartElements().contains(me);
     }
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
