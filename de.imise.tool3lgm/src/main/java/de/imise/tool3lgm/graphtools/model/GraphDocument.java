@@ -2247,7 +2247,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
             ModelElement me = nc.getElement();
             if (addAllParts) {
-                for (ElementContainer partNc : me.getPartContainer(this, false)) {
+                for (ElementContainer partNc : me.getPartContainer(this)) {
                     if (!isSelected(partNc)) {
                         container2Select.add(partNc);
                     }

@@ -1234,11 +1234,8 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
         List<ElementContainer> partsOrParents = null;
-        if (parts) {
-            partsOrParents = returnList.get(returnList.size() - 1).getElement().getDirectPartContainer(doc);
-        } else {
-            partsOrParents = returnList.get(returnList.size() - 1).getElement().getDirectParentContainer(doc);
-        }
+        ModelElement lastResultElement = returnList.get(returnList.size() - 1).getElement();
+        partsOrParents = parts ? lastResultElement.getDirectPartContainer(doc) : lastResultElement.getDirectParentContainer(doc);
         for (int i = 0; i < partsOrParents.size(); i++) {
             boolean found = false;
             ElementContainer pp = partsOrParents.get(i);
@@ -1278,49 +1275,20 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Liefert alle Eltern, Kinder und Geschwister dieses Elementes und das Element selbst. Es werden also alle Elemente gesucht, die mit diesem
-     * Element über eine beliebigen Pfad von PartOfVerbindungen zusammenhängen.
-     *
-     * @param doc <code>GraphDocument</code> in dem gesucht werden soll
-     * @return Liste mit <code>ElementContainer</code>n
-     */
-    public final List<ElementContainer> getPartAndParentContainer(final GraphDocument doc) {
-        List<ModelElement> partsAndParents = getPartAndParentElements();
-        List<ElementContainer> returnList = new ArrayList<>(partsAndParents.size());
-        for (ModelElement me : partsAndParents) {
-            ElementContainer ec = me.getContainer(doc);
-            if (ec != null) {
-                returnList.add(ec);
-            }
-        }
-        return returnList;
-    }
-
-    /**
-     * @param doc
-     * @param addMeAsFirst
-     * @return
-     */
-    private final List<ElementContainer> getPartOrParentContainer(GraphDocument doc, final boolean addMeAsFirst, final boolean parts) {
-        doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
-        List<ElementContainer> al = new ArrayList<>();
-        al.add(getContainer(doc));
-        getPartOrParentContainer(al, doc, parts, false);
-        if (!addMeAsFirst) {
-            al.remove(0);
-        }
-        return al;
-    }
-
-    /**
      * Gibt die Parts in Form von <code>ElementContainer</code> zurück.
      *
      * @param doc
-     * @param addMeAsFirst
      * @return Eine <code>List</code> gefüllt mit <code>ElementContainer</code>n.
      */
-    public final List<ElementContainer> getPartContainer(final GraphDocument doc, final boolean addMeAsFirst) {
-        return getPartOrParentContainer(doc, addMeAsFirst, true);
+    public final List<ElementContainer> getPartContainer(final GraphDocument doc) {
+        List<ElementContainer> al = new ArrayList<>();
+        ElementContainer ec = getContainer(doc);
+        if (ec != null) {
+            al.add(ec);
+        }
+        getPartOrParentContainer(al, doc, true, false);
+        al.remove(0);
+        return al;
     }
 
     /**
@@ -1428,17 +1396,6 @@ public abstract class ModelElement extends UserFieldTarget {
             returnList.addAll(getConnectedElements(ModelElement.class, c, BACKWARD));
         }
         return returnList;
-    }
-
-    /**
-     * Gibt die Parents in Form von <code>ElementContainer</code> zurück.
-     *
-     * @param doc
-     * @param addMeAsFirst
-     * @return Eine <code>List</code> gefüllt mit <code>ElementContainer</code>n.
-     */
-    public final List<ElementContainer> getParentContainer(final GraphDocument doc, final boolean addMeAsFirst) {
-        return getPartOrParentContainer(doc, addMeAsFirst, false);
     }
 
     /**
