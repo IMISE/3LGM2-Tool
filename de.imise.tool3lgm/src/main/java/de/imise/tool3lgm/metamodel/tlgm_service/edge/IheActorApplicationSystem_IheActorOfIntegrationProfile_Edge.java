@@ -4,14 +4,14 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
 
 /**
  * @author AXS (31.01.2018)
  */
-public class IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge extends SimpleEdge {
+public class IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge extends SubordinationEdge {
 
     public static final Class<? extends ModelElement> stcl = IheActorApplicationSystem.class;
 

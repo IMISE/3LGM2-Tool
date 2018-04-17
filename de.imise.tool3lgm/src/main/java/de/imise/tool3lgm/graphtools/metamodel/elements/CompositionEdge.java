@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
  *
  * @author AXS
  */
-public abstract class CompositionEdge extends Edge {
+public abstract class CompositionEdge extends SubordinationEdge {
 
     /**
      * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
