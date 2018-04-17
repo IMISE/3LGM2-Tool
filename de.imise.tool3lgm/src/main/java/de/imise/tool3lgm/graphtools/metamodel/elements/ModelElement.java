@@ -1595,43 +1595,6 @@ public abstract class ModelElement extends UserFieldTarget {
     ////////////////////////
 
     /**
-     * @return
-     */
-    public final List<? extends ModelElement> getDirectCompositionSlaveElements() {
-        List<ModelElement> retVal = new ArrayList<>();
-        for (Edge edge : getEdges()) {
-            if (edge instanceof CompositionEdge) {
-                CompositionEdge comp = (CompositionEdge) edge;
-                if (comp.getMaster() == this) {
-                    retVal.add(comp.getSlave());
-                }
-            }
-        }
-        return retVal;
-    }
-
-    /**
-     * Liefert eine Liste aller Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine {@link CompositionEdge}
-     * verbunden
-     * sind, wobei das verbundene Element diesem Element übergeordnet ist.
-     *
-     * @return
-     */
-    public final List<? extends ModelElement> getDirectCompositionMasterElements() {
-        //meistens ist es genau ein Master
-        List<ModelElement> retVal = new ArrayList<>(1);
-        for (Edge edge : getEdges()) {
-            if (edge instanceof CompositionEdge) {
-                CompositionEdge comp = (CompositionEdge) edge;
-                if (comp.getSlave() == this) {
-                    retVal.add(comp.getMaster());
-                }
-            }
-        }
-        return retVal;
-    }
-
-    /**
      * Liefert eine Liste aller Container der Slaveelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
      * {@link CompositionEdge} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
      *
@@ -1639,35 +1602,20 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ElementContainer> getDirectCompositionSlaveContainer(final GraphDocument doc) {
-        return getContainer(getDirectCompositionSlaveElements(), doc);
-    }
-
-    /**
-     * Liefert eine Liste aller Container der Masterelemente dieses Elementes, also aller Elemente, die mit diesem Element über eine
-     * {@link CompositionEdge} verbunden sind, wobei das verbundene Element diesem Element übergeordnet ist.
-     *
-     * @param doc {@link GraphDocument} in dem die Container liegen sollen
-     * @return
-     */
-    public final List<ElementContainer> getDirectCompositionMasterContainer(final GraphDocument doc) {
-        return getContainer(getDirectCompositionMasterElements(), doc);
-    }
-
-    /**
-     * Liefert eine Liste mit allen Containern, die die übergebenen Elemente im übergebenen {@link GraphDocument} haben. Wenn ein Element der
-     * übergebenen Collection keinen Container im {@link GraphDocument} hat, dann wird auch kein Eintrag in der
-     * Rückgabeliste hinzugefügt. Die Rückgabeliste kann also kleiner sein, als die übergebene Liste.
-     *
-     * @param elements
-     * @param doc
-     * @return
-     */
-    public static final List<ElementContainer> getContainer(final List<? extends ModelElement> elements, final GraphDocument doc) {
-        List<ElementContainer> container = new ArrayList<>(elements.size());
-        for (ModelElement me : elements) {
-            container.add(me.getContainer(doc));
+        List<ElementContainer> retVal = new ArrayList<>();
+        for (Edge edge : getEdges()) {
+            if (edge instanceof CompositionEdge) {
+                CompositionEdge comp = (CompositionEdge) edge;
+                if (comp.getMaster() == this) {
+                    ModelElement slave = comp.getSlave();
+                    ElementContainer slaveContainer = slave.getContainer(doc);
+                    if (slaveContainer != null) {
+                        retVal.add(slaveContainer);
+                    }
+                }
+            }
         }
-        return container;
+        return retVal;
     }
 
     //////////////////////
