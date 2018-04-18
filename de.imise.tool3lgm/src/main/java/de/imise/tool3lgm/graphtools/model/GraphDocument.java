@@ -2119,7 +2119,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
         boolean moveSubelements = UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);
-        List<ElementContainer> selection = expandSelection(moveSubelements, true);
+        List<ElementContainer> selection = expandSelection(moveSubelements);
         for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
                 coordinateKnot(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
@@ -2236,36 +2236,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param addAllParts
      *            Wenn <code>true</code> werden alle über {@link HasPartEdge}en verbunden Elemente
      *            in die Selektion mit aufgenommen.
-     * @param addAllSlaves
-     *            Wenn <code>true</code> werden alle über {@link CompositionEdge}s verbunden Elemente
-     *            in die Selektion mit aufgenommen.
      * @return <code>null</code>, wenn keine Erweiterung der bestehenden Selektion nötig war, sonst
      *         die alte Selektion
      */
-    private List<ElementContainer> expandSelection(final boolean addAllParts, final boolean addAllSlaves) {
+    private List<ElementContainer> expandSelection(final boolean addAllParts) {
         List<ElementContainer> container2Select = new ArrayList<>();
         for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
             ModelElement me = nc.getElement();
-            if (addAllParts) {
-                for (ElementContainer partNc : me.getPartContainer(this)) {
-                    if (!isSelected(partNc)) {
-                        container2Select.add(partNc);
-                    }
-                    //Slaves des Parts auch alle zur Selektion hinzufügen
-                    if (addAllSlaves) {
-                        for (ElementContainer slaveNc : partNc.getElement().getDirectCompositionSlaveContainer(this)) {
-                            if (!isSelected(slaveNc)) {
-                                container2Select.add(slaveNc);
-                            }
-                        }
-                    }
-                }
-            }
-            if (addAllSlaves) {
-                for (ElementContainer slaveNc : me.getDirectCompositionSlaveContainer(this)) {
-                    if (!isSelected(slaveNc)) {
-                        container2Select.add(slaveNc);
-                    }
+            for (ElementContainer partNc : me.getSubordinatedContainer(this, addAllParts)) {
+                if (!isSelected(partNc)) {
+                    container2Select.add(partNc);
                 }
             }
         }

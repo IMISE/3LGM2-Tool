@@ -1205,36 +1205,33 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param returnList Liste mit <code>ElementContainer</code>n
      * @param doc (Teil-)Modell in dem gesucht werden soll
-     * @param parts Wenn <code>true</code> wird nach allen Teilen gesucht, sonst nach allen Oberelementen
-     * @param testonly Wenn <code>true</code> wird beim ersten gefundenen Element abgerochen und <code>true</code> zurück gegeben
-     * @return <code>true</code>, wenn mind. ein Element gefunden wurde, das in die Rückgabeliste gehört
+     * @param withParts
      */
-    private final boolean getPartOrParentContainer(final List<ElementContainer> returnList, GraphDocument doc, final boolean parts, final boolean testonly) {
-        if (returnList == null || returnList.size() == 0 || returnList.get(0) == null) {
-            return false;
-        }
-        doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
-        List<ElementContainer> partsOrParents = null;
-        ModelElement lastResultElement = returnList.get(returnList.size() - 1).getElement();
-        partsOrParents = parts ? lastResultElement.getDirectPartContainer(doc) : lastResultElement.getDirectParentContainer(doc);
-        for (int i = 0; i < partsOrParents.size(); i++) {
-            boolean found = false;
-            ElementContainer pp = partsOrParents.get(i);
-            for (int j = 0; j < returnList.size(); j++) {
-                if (pp == returnList.get(j)) {
-                    found = true;
-                    if (testonly) {
-                        return true;
-                    }
-                    break;
-                }
-            }
-            if (!found) {
-                returnList.add(pp);
-                getPartOrParentContainer(returnList, doc, parts, testonly);
+    private final void getSubordinatedContainer(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc, final boolean withParts) {
+        Class<? extends SubordinationEdge> subordinationEdgeClass = withParts ? SubordinationEdge.class : CompositionEdge.class;
+        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainer(ModelElement.class, doc, subordinationEdgeClass, FORWARD)) {
+            if (!returnSet.contains(subEc)) {
+                returnSet.add(subEc);
+                getSubordinatedContainer(returnSet, subEc.getElement(), doc, withParts);
             }
         }
-        return false;
+    }
+
+    /**
+     * Gibt die <code>ElementContainer</code> aller rekursiv untergeordneten Elemente zurück.
+     *
+     * @param doc
+     * @param withParts
+     * @return Ein <code>Set</code> gefüllt mit <code>ElementContainer</code>n der untergeorndeten Elemente.
+     */
+    public final Set<ElementContainer> getSubordinatedContainer(final GraphDocument doc, final boolean withParts) {
+        Set<ElementContainer> subordinated = new HashSet<>();
+        ElementContainer ec = getContainer(doc);
+        if (ec != null) {
+            subordinated.add(ec);
+        }
+        getSubordinatedContainer(subordinated, this, doc, withParts);
+        return subordinated;
     }
 
     /////////////////////////////
@@ -1257,22 +1254,6 @@ public abstract class ModelElement extends UserFieldTarget {
             returnSet.add(this);
         }
         return new ArrayList<>(returnSet);
-    }
-
-    /**
-     * Gibt die Parts in Form von <code>ElementContainer</code> zurück.
-     *
-     * @param doc
-     * @return Eine <code>List</code> gefüllt mit <code>ElementContainer</code>n.
-     */
-    public final List<ElementContainer> getPartContainer(final GraphDocument doc) {
-        List<ElementContainer> al = new ArrayList<>();
-        ElementContainer ec = getContainer(doc);
-        if (ec != null) {
-            al.add(ec);
-        }
-        getPartOrParentContainer(al, doc, true, false);
-        return al;
     }
 
     /**

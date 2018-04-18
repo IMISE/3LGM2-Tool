@@ -328,7 +328,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /**
      * Füllt die 3 {@link Rectangle} {@link #grabbedElementsFullRect}, {@link #grabbedElementsRasteredRect} und {@link #grabbedElementsRealRect} mit
-     * den Koordinaten in abhängigkeit von der Selektion. Wenn eine
+     * den Koordinaten in Abhängigkeit von der Selektion. Wenn eine
      * Einzelebenenansicht eingeschaltet ist, dann werden nur Elemente der aktuellen Ebene einbezogen sonst alle.
      */
     private void findIncludingRectangles() {
@@ -348,21 +348,19 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     continue;
                 }
                 grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
-                if (UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS)) {
-                    for (ElementContainer ec : kc.getElement().getPartContainer(szenario)) {
-                        if (!ec.isVisible() || !multiView && kc.layerFor() != ebene) {
-                            continue;
-                        }
-                        if (grabbedElementsFullRect == null) {
-                            grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
-                        }
-                        grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
-                        for (Edge edge : ec.getElement().getEdgesWith(ka.getElement())) {
-                            EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szenario);
-                            if (edgeC != null) {
-                                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
-                                    grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
-                                }
+                for (ElementContainer ec : kc.getElement().getSubordinatedContainer(szenario, UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS))) {
+                    if (!ec.isVisible() || !multiView && kc.layerFor() != ebene) {
+                        continue;
+                    }
+                    if (grabbedElementsFullRect == null) {
+                        grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
+                    }
+                    grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
+                    for (Edge edge : ec.getElement().getEdgesWith(ka.getElement())) {
+                        EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szenario);
+                        if (edgeC != null) {
+                            for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                                grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
                             }
                         }
                     }
