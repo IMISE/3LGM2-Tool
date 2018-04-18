@@ -1063,6 +1063,10 @@ public abstract class ModelElement extends UserFieldTarget {
     // Beginn Part-Of //
     ////////////////////
 
+    //////////////////////////////
+    // Beginn Part-Of Container //
+    //////////////////////////////
+
     /**
      * Liefert eine Liste aller Elemente der angegebenen Art, die über irgendeine Kantenart mit den direkten und indirekten Teilelementen dieses
      * Elementes verbunden sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht:
@@ -1074,19 +1078,6 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
         return getPartConnectedContainer(searchElementClass, doc, null, ANY);
-    }
-
-    /**
-     * Liefert eine Liste aller Elemente die über die übergebene Kantenart mit den direkten und indirekten Teilelementen dieses Elementes verbunden
-     * sind. Es wird nur in dem angegebenen <code>GraphDocument</code> gesucht:
-     *
-     * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
-     * @param searchEdgeClass Kantenart nach der gesucht werden soll
-     * @return Liste mit verbundenen <code>ModelElement</code>s
-     * @see #getPartConnectedContainer(Class, GraphDocument, Class, int)
-     */
-    public final List<ElementContainer> getPartConnectedContainer(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass) {
-        return getPartConnectedContainer(ModelElement.class, doc, searchEdgeClass, ANY);
     }
 
     /**
@@ -1155,12 +1146,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten Teilelemente
      */
     public List<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
-        Class<? extends HasPartEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
-        List<ElementContainer> returnList = new ArrayList<>();
-        for (Class<? extends HasPartEdge> c : hasPartsEdgeClasses) {
-            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, Edge.FORWARD));
-        }
-        return returnList;
+        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, Edge.FORWARD);
     }
 
     /**
@@ -1170,12 +1156,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten oberelemente
      */
     public List<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
-        Class<? extends HasPartEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
-        List<ElementContainer> returnList = new ArrayList<>();
-        for (Class<? extends HasPartEdge> c : isPartEdgeClasses) {
-            returnList.addAll(getConnectedContainer(ModelElement.class, doc, c, Edge.BACKWARD));
-        }
-        return returnList;
+        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, Edge.BACKWARD);
     }
 
     /**
@@ -1255,6 +1236,10 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         return false;
     }
+
+    /////////////////////////////
+    // Beginn Part-Of Elements //
+    /////////////////////////////
 
     /**
      * Liefert alle Eltern, Kinder und Geschwister dieses Elementes und das Element selbst. Es werden also alle Elemente gesucht, die mit diesem
@@ -1375,12 +1360,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectPartElements() {
-        Class<? extends HasPartEdge>[] hasPartEdgeClasses = ModelConstants.getHasPartsEdgeClasses(getClass());
-        List<ModelElement> returnList = new ArrayList<>();
-        for (Class<? extends HasPartEdge> c : hasPartEdgeClasses) {
-            returnList.addAll(getConnectedElements(ModelElement.class, c, FORWARD));
-        }
-        return returnList;
+        return getConnectedElements(ModelElement.class, HasPartEdge.class, FORWARD);
     }
 
     /**
@@ -1389,12 +1369,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectParentElements() {
-        Class<? extends HasPartEdge>[] isPartEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(getClass());
-        List<ModelElement> returnList = new ArrayList<>();
-        for (Class<? extends HasPartEdge> c : isPartEdgeClasses) {
-            returnList.addAll(getConnectedElements(ModelElement.class, c, BACKWARD));
-        }
-        return returnList;
+        return getConnectedElements(ModelElement.class, HasPartEdge.class, BACKWARD);
     }
 
     /**
@@ -1437,17 +1412,6 @@ public abstract class ModelElement extends UserFieldTarget {
             parts = partParts;
         }
         return returnSet;
-    }
-
-    /**
-     * @param doc
-     * @return
-     */
-    public final boolean isInPartOfCyle(GraphDocument doc) {
-        doc = isUnique() ? doc.getCollection().getMainGraphDocument() : doc;
-        List<ElementContainer> al = new ArrayList<>();
-        al.add(getContainer(doc));
-        return getPartOrParentContainer(al, doc, true, true);
     }
 
     /** rekursiv über alle ist-Teil-von-Beziehungen */
