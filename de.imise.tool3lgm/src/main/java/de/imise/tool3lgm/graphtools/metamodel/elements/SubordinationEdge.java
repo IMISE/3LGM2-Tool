@@ -16,6 +16,12 @@ import de.imise.tool3lgm.log.Log;
  */
 public abstract class SubordinationEdge extends Edge {
 
+    /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
+    public static final int SUPER_TO_SUB_DIRECTION = FORWARD;
+
+    /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
+    public static final int SUB_TO_SUPER_DIRECTION = BACKWARD;
+
     public ModelElement getSubElement() {
         return k2;
     }
@@ -121,7 +127,7 @@ public abstract class SubordinationEdge extends Edge {
         ModelElement oldStartElement = k1;
         ModelElement oldEndElement = k2;
         int oldStartElementEdgeIndex = oldStartElement == null ? 0 : oldStartElement.removeEdge(this);
-        int oldEndElementEdgeIndex = oldEndElement == null ? 0: oldEndElement.removeEdge(this);
+        int oldEndElementEdgeIndex = oldEndElement == null ? 0 : oldEndElement.removeEdge(this);
         k1 = startElement;
         k2 = endElement;
         startElement.insertEdge(this, startElementEdgeIndex);

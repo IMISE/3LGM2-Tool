@@ -1146,7 +1146,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten Teilelemente
      */
     public List<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
-        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, Edge.FORWARD);
+        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUPER_TO_SUB_DIRECTION);
     }
 
     /**
@@ -1156,7 +1156,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten oberelemente
      */
     public List<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
-        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, Edge.BACKWARD);
+        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUB_TO_SUPER_DIRECTION);
     }
 
     /**
@@ -1209,7 +1209,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     private final void getSubordinatedContainer(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc, final boolean withParts) {
         Class<? extends SubordinationEdge> subordinationEdgeClass = withParts ? SubordinationEdge.class : CompositionEdge.class;
-        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainer(ModelElement.class, doc, subordinationEdgeClass, FORWARD)) {
+        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainer(ModelElement.class, doc, subordinationEdgeClass, SubordinationEdge.SUPER_TO_SUB_DIRECTION)) {
             if (!returnSet.contains(subEc)) {
                 returnSet.add(subEc);
                 getSubordinatedContainer(returnSet, subEc.getElement(), doc, withParts);
@@ -1341,7 +1341,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectPartElements() {
-        return getConnectedElements(ModelElement.class, HasPartEdge.class, FORWARD);
+        return getConnectedElements(ModelElement.class, HasPartEdge.class, SubordinationEdge.SUPER_TO_SUB_DIRECTION);
     }
 
     /**
@@ -1350,7 +1350,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectParentElements() {
-        return getConnectedElements(ModelElement.class, HasPartEdge.class, BACKWARD);
+        return getConnectedElements(ModelElement.class, HasPartEdge.class, SubordinationEdge.SUB_TO_SUPER_DIRECTION);
     }
 
     /**
