@@ -7,8 +7,8 @@ import java.util.HashSet;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * Regeln, die statt der im Metamodell vorgegebenen Regeln angegeben werden können, was bei der
@@ -61,10 +61,8 @@ public class ConsistencyDefinition {
         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             return;
         }
-        // nur bei Elementen, die auch Teil-Von-Beziehungen haben können, ist es sinnvoll, sie sich
-        // zu merken
-        Class<? extends HasPartEdge>[] edges2parts = ModelConstants.getHasPartsEdgeClasses(elementClass);
-        if (edges2parts.length == 0) {
+        // nur bei Elementen, die auch Teil-Von-Beziehungen haben können, ist es sinnvoll, sie sich zu merken
+        if (!ModelConstants.canHaveParts(elementClass)) {
             return;
         }
         Collection<Class<? extends Edge>> leafAllowedEdgeClasses = elementToOnlyLeafAllowedEdgeClasses.get(elementClass);
