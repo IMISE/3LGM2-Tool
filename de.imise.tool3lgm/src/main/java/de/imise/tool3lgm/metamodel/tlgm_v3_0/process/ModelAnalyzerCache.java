@@ -20,7 +20,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Repraesentationsform;
 
 /**
  * Stellt Funktionen bereit, um 'teure' Anfragen an ein Model effizient wiederholen zu können.
- * 
+ *
  * @author AXS Created on 15.07.2008
  */
 
@@ -39,50 +39,50 @@ public class ModelAnalyzerCache {
      * anderen AWBs übergehen, die mit dem AWB über einen beliebigen Pfad aus Teil-Von-Beziehungen
      * verbunden sind.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> appSysToInterfaceSet = new HashMap<ModelElement, Set<ModelElement>>();
+    private final HashMap<ModelElement, Set<ModelElement>> appSysToInterfaceSet = new HashMap<>();
 
     /**
      * Mappt für jeden <code>Anwendungsbaustein</code> auf die Liste aller seiner Eltern, Kinder und
      * Geschwister - also aller Anwendungsbausteine, mit denen er eine Einheit bildet.
      */
-    private final HashMap<ModelElement, Collection<ModelElement>> appSysToSameAppSysCollection = new HashMap<ModelElement, Collection<ModelElement>>();
+    private final HashMap<ModelElement, Collection<ModelElement>> appSysToSameAppSysCollection = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf eine <code>Collection</code>, die ihn selbst und alle seine
      * übergeordneten Objekttypen enthält.
      */
-    private final HashMap<ModelElement, Collection<ModelElement>> objectTypeToObjectTypeAndParentsCollection = new HashMap<ModelElement, Collection<ModelElement>>();
+    private final HashMap<ModelElement, Collection<ModelElement>> objectTypeToObjectTypeAndParentsCollection = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf alle Anwendungsbausteine, auf denen er als gespeichert gilt.
      * Dies sind alle Eltern, Kindern und Geschwister der Anwendungssysteme, die den Objekttypen
      * direkt speichern.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToFullStoringAppSysSet = new HashMap<ModelElement, Set<ModelElement>>();
+    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToFullStoringAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf alle Anwendungsbausteine, auf denen er direkt gespeichert wird.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectStoringAppSysSet = new HashMap<ModelElement, Set<ModelElement>>();
+    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectStoringAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf alle Anwendungsbausteine mit, die den Objekttyp als Master
      * speichern und alle Eltern, Kindern und Geschwister dieses Knotens.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToFullMasterAppSysSet = new HashMap<ModelElement, Set<ModelElement>>();
+    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToFullMasterAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf ein Set alle Anwendungsbausteine die den Objekttyp oder einen
      * seiner Parent-Objekttypen als Master speichern. Dies darf aus Konsistenzgründen eigentlich
      * immer nur einer sein.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectMasterAppSysSet = new HashMap<ModelElement, Set<ModelElement>>();
+    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectMasterAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf seine Master-Datenbanksysteme (das darf eigentlich immer nur 1
      * sein)
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToMasterDBSSet = new HashMap<ModelElement, Set<ModelElement>>();
+    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToMasterDBSSet = new HashMap<>();
 
     /**
      * @param gdcoll Modell, für das ein Analyzer angelegt werden soll
@@ -95,7 +95,7 @@ public class ModelAnalyzerCache {
     /**
      * Liefert alle Anwendungssysteme, die diesen Objekttyp oder einen Oberobjekttyp von ihm als
      * Master speichern, sowie alle Teil- und Oberanwendungssysteme davon.
-     * 
+     *
      * @param objectType
      * @return
      */
@@ -113,7 +113,7 @@ public class ModelAnalyzerCache {
      * Liefert alle Anwendungssysteme, die den Objekttyp speichern. Die Master-Eigenschaft zählt
      * dabei nicht. Es sind alle Teile und alle Oberbausteine der Baustein enthalten, die den
      * Objekttyp eigentlich speichern.
-     * 
+     *
      * @param objectType
      * @return
      */
@@ -147,7 +147,7 @@ public class ModelAnalyzerCache {
      * verbundenen Elemente enthalten sind.
      */
     public Set<ModelElement> expandPartOfElementSet(final Collection<ModelElement> modelElements) {
-        HashSet<ModelElement> returnSet = new HashSet<ModelElement>(modelElements.size() * 2);
+        HashSet<ModelElement> returnSet = new HashSet<>(modelElements.size() * 2);
         for (ModelElement me : modelElements) {
             if (me instanceof Anwendungsbaustein) {
                 returnSet.addAll(getSameApplicationSystems(me));
@@ -160,7 +160,7 @@ public class ModelAnalyzerCache {
 
     /**
      * Liefert das Modell des Caches
-     * 
+     *
      * @return
      */
     public GDCollection getCollection() {
@@ -170,14 +170,14 @@ public class ModelAnalyzerCache {
     /**
      * Liefert die Menge aller Anwendungssysteme, auf denen der Objekttyp direkt gespeichert wird
      * oder die direkt Master des Objekttyps sind.
-     * 
+     *
      * @param objectType
      * @return
      */
     public Set<ModelElement> getDirectMasterAndStorageApplicationSystems(final Objekttyp objectType) {
         Set<ModelElement> master = getDirectMasterApplicationSystems(objectType);
         Set<ModelElement> storage = getDirectStorageApplicationSystems(objectType);
-        HashSet<ModelElement> returnSet = new HashSet<ModelElement>(master.size() + storage.size());
+        HashSet<ModelElement> returnSet = new HashSet<>(master.size() + storage.size());
         returnSet.addAll(master);
         returnSet.addAll(storage);
         return returnSet;
@@ -186,7 +186,7 @@ public class ModelAnalyzerCache {
     /**
      * Liefert alle Anwendungssysteme, die diesen Objekttyp oder einen Oberobjekttyp von ihm direkt
      * als Master speichern.
-     * 
+     *
      * @param objectType
      * @return
      */
@@ -203,7 +203,7 @@ public class ModelAnalyzerCache {
      * Liefert alle Anwendungssysteme, die den Objekttyp direkt speichern. Die Master-Eigenschaft
      * zählt dabei nicht. Direktes Speichern bedeutet dabei, dass der Objekttyp selbst oder einer
      * seiner übergeordneten Objekttypen gespeichert wird.
-     * 
+     *
      * @param objectType
      * @return
      */
@@ -228,7 +228,7 @@ public class ModelAnalyzerCache {
         Collection<ModelElement> sameAWBCol = getSameApplicationSystems(applicationSystem);
 
         // neue Schnittstellenliste, die für jeden Einzel-AWB eines Gesamt-AWB identisch sein wird
-        Set<ModelElement> sameInterfaceSet = new HashSet<ModelElement>();
+        Set<ModelElement> sameInterfaceSet = new HashSet<>();
         for (ModelElement sameAWB : sameAWBCol) {
             // hole alle seine Schnittstellen und füge sie zur Gesamtliste hinzu
             sameInterfaceSet.addAll(sameAWB.getConnectedElementsByEdge(AwbKommssVerbindung.class));
@@ -240,7 +240,7 @@ public class ModelAnalyzerCache {
 
     /**
      * Liefert alle Elemente der angegebenen Art, die mehr als einen Parent besitzen.
-     * 
+     *
      * @param elementClass
      * @return
      */
@@ -259,7 +259,7 @@ public class ModelAnalyzerCache {
 
     /**
      * Returns a collection with the given objecttype and all of his parents
-     * 
+     *
      * @param objectType
      * @return <code>Collection</code> with the given objecttype and all of his parents
      */
@@ -278,7 +278,7 @@ public class ModelAnalyzerCache {
     /**
      * Returns a collection of all parts, parents and brothers of the given application system. The
      * collection includes the given application system, too.
-     * 
+     *
      * @param applicationSystem
      * @return <code>Collection</code> of all application systems at the same application system
      */
@@ -299,11 +299,11 @@ public class ModelAnalyzerCache {
      */
     private void initOTStorageAndMaster(final Objekttyp objectType) {
         Collection<ModelElement> otAndParents = getObjectTypeAndParents(objectType);
-        HashSet<ModelElement> fullStoreAWB = new HashSet<ModelElement>();
-        HashSet<ModelElement> directStoreAWB = new HashSet<ModelElement>();
-        HashSet<ModelElement> fullMasterAWBs = new HashSet<ModelElement>();
-        HashSet<ModelElement> directMasterAWBs = new HashSet<ModelElement>();
-        HashSet<ModelElement> allMasterDBS = new HashSet<ModelElement>();
+        HashSet<ModelElement> fullStoreAWB = new HashSet<>();
+        HashSet<ModelElement> directStoreAWB = new HashSet<>();
+        HashSet<ModelElement> fullMasterAWBs = new HashSet<>();
+        HashSet<ModelElement> directMasterAWBs = new HashSet<>();
+        HashSet<ModelElement> allMasterDBS = new HashSet<>();
         for (ModelElement otOrParent : otAndParents) {
             // hole das Master-DBS oder Dok-Sammlung
             for (ModelElement master : otOrParent.getConnectedElements(ModelElement.class, ObjLogspVerbindung.class)) {
