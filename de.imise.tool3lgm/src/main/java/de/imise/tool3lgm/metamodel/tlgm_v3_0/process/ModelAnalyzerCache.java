@@ -7,7 +7,6 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;
@@ -245,9 +244,8 @@ public class ModelAnalyzerCache {
      * @return
      */
     public Set<ModelElement> getMultipleParentElements(final Class<? extends ModelElement> elementClass) {
-        HashSet<ModelElement> returnSet = new HashSet<ModelElement>();
-        Class<? extends HasPartEdge>[] hierarchyEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
-        if (hierarchyEdgeClasses.length > 0) {
+        HashSet<ModelElement> returnSet = new HashSet<>();
+        if (ModelConstants.canHaveParts(elementClass)) {
             for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, true, true)) {
                 if (me.getDirectParentElements().size() > 1) {
                     returnSet.add(me);
