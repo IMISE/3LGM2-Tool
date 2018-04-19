@@ -44,7 +44,7 @@ public abstract class SubordinationEdge extends Edge {
      * @param subordinationEdgeClass
      * @return
      */
-    public static Class<? extends ModelElement> getSubClass(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
+    public static final Class<? extends ModelElement> getSubClass(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
         return getEndClass(subordinationEdgeClass);
     }
 
@@ -54,7 +54,7 @@ public abstract class SubordinationEdge extends Edge {
      * @param subordinationEdgeClass
      * @return
      */
-    public static Class<? extends ModelElement> getSuperClass(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
+    public static final Class<? extends ModelElement> getSuperClass(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
         return getEndClass(subordinationEdgeClass);
     }
 
@@ -65,7 +65,7 @@ public abstract class SubordinationEdge extends Edge {
      * @param meClass
      * @return
      */
-    public static boolean isSubClass(final Class<? extends SubordinationEdge> subordinationEdgeClass, final Class<? extends ModelElement> meClass) {
+    public static final boolean isSubClass(final Class<? extends SubordinationEdge> subordinationEdgeClass, final Class<? extends ModelElement> meClass) {
         return getSubClass(subordinationEdgeClass).isAssignableFrom(meClass);
     }
 
@@ -77,7 +77,7 @@ public abstract class SubordinationEdge extends Edge {
      * @param meClass
      * @return
      */
-    public static boolean isSuperClass(final Class<? extends SubordinationEdge> subordinationEdgeClass, final Class<? extends ModelElement> meClass) {
+    public static final boolean isSuperClass(final Class<? extends SubordinationEdge> subordinationEdgeClass, final Class<? extends ModelElement> meClass) {
         return getSuperClass(subordinationEdgeClass).isAssignableFrom(meClass);
     }
 
