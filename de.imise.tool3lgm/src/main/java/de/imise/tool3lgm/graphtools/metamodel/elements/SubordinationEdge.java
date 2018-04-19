@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * Interface, um Kanten zu markern, die ein Element einem anderen unterorden. Dieses Interface geht an mehreren Stellen davon aus,
+ * Oberklasse aller Kanten, die ein Element einem anderen unterorden. Dieses Interface geht an mehreren Stellen davon aus,
  * dass die eigentliche Klasse, an der es hängt, auf jeden Fall eine Unterklasse von {@link Edge} ist. Es finden keine Checks statt,
  * um an dieser Stelle CastExceptions abzufangen.
  *
