@@ -290,21 +290,16 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
     @Override
     protected void drawTable() {
         table.removeFromLayoutContainer();
-
         if (!hasSelectedItem()) {
             return;
         }
         Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
-
-        if (ModelConstants.getHasPartsEdgeClasses(selectedClass).length > 0 || ModelConstants.getIsPartOfEdgeClasses(selectedClass).length > 0) {
+        if (ModelConstants.canHavePartsOrParents(selectedClass)) {
             hierarchyTypeFilterPane.setVisible(true);
         }
-
         AbstractUserFieldTableModel uftm = getTableModel();
-
         //falls SubClasses andere Controller brauchen, müssen sie die getTableController überschreiben
         UserFieldTableController uftc = getTableController(uftm);
-
         super.modifyTable(uftm, uftc);
     }
 
