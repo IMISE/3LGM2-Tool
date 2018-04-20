@@ -425,14 +425,20 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat.
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse die übergebene Kantenart hat. Es wird Zuweisungskompatibilität gerpüft.
      *
      * @param elementClass
      * @param edgeClass
      * @return
      */
     public static final boolean hasEdgeType(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return CollectionUtils.arrayContains(getEdgeTypes(elementClass), edgeClass);
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
+        for (Class<? extends Edge> edgeType : edgeTypes) {
+            if (edgeClass.isAssignableFrom(edgeType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
