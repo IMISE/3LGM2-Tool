@@ -90,17 +90,11 @@ public final class ModelConstants {
     public static final int DOMAIN_LAYER = 4;
 
     public static final int[] LAYERS = {
-            PHYSICAL_LAYER,
-            INTER_LOGICAL_PHYSICAL_LAYER,
-            LOGICAL_LAYER,
-            INTER_DOMAIN_LOGICAL_LAYER,
-            DOMAIN_LAYER
+            PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER
     };
 
     public static final int[] VISIBLE_LAYERS = {
-            DOMAIN_LAYER,
-            LOGICAL_LAYER,
-            PHYSICAL_LAYER
+            DOMAIN_LAYER, LOGICAL_LAYER, PHYSICAL_LAYER
     };
 
     public static final int MIN_LAYER_INDEX = PHYSICAL_LAYER;
