@@ -19,8 +19,8 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -255,7 +255,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             }
             if (startClass.isAssignableFrom(userField.getTargetClass())) {
                 if (HasPartEdge.class.isAssignableFrom(tmpEdgeClass)) {
-                    associationBox.addItem(tmpEdgeClass, getResString("part_to_whole") + " (" + forwardName + ")");
+                    associationBox.addItem(tmpEdgeClass, getResString("whole_to_part") + " (" + forwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, forwardName);
                 }
@@ -263,7 +263,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //das hier darf nicht als else-if geschrieben werden!
             if (endClass.isAssignableFrom(userField.getTargetClass())) {
                 if (HasPartEdge.class.isAssignableFrom(tmpEdgeClass)) {
-                    associationBox.addItem(tmpEdgeClass, getResString("whole_to_part") + " (" + backwardName + ")");
+                    associationBox.addItem(tmpEdgeClass, getResString("part_to_whole") + " (" + backwardName + ")");
                 } else {
                     associationBox.addItem(tmpEdgeClass, backwardName);
                 }
@@ -311,7 +311,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         // merken
         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             sb.append(" | ");
-            if (associationBox.getSelectedItem().toString().equals(getResString("part_to_whole") + " (" + getFullForwardMetaAssociationName(edgeClass) + ")")) {
+            if (associationBox.getSelectedItem().toString().startsWith(getResString("part_to_whole"))) {
                 sb.append(UserField.DIRECTION_FROM_PART_TO_WHOLE);
             } else {
                 sb.append(UserField.DIRECTION_FROM_WHOLE_TO_PART);
