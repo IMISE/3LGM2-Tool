@@ -172,7 +172,7 @@ public abstract class PathsDefinition {
             for (Class<?> end : allEndClasses) {
                 Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
                 MetaPath metaPath = null;
-                if (ModelConstants.isPartOfEdge(edgeClass)) {
+                if (ModelConstants.isHasPartEdge(edgeClass)) {
                     metaPath = new MetaPath(startClass, endClass, new Class[][] {
                             {
                                     edgeClass

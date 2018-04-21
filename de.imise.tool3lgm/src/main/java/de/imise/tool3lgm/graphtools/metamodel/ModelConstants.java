@@ -1147,7 +1147,7 @@ public final class ModelConstants {
         return canHaveParts(elementClass) || canHaveParents(elementClass);
     }
 
-    public static final boolean isPartOfEdge(final Class<? extends Edge> edgeClass) {
+    public static final boolean isHasPartEdge(final Class<? extends Edge> edgeClass) {
         return HasPartEdge.class.isAssignableFrom(edgeClass);
     }
 

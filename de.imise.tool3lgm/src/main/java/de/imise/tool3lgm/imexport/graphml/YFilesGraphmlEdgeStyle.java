@@ -32,7 +32,7 @@ public class YFilesGraphmlEdgeStyle {
         sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "TRIANGLE" : null;
         targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "TRIANGLE" : null;
         smoothingLength = "0";
-        isDashed = ModelConstants.isPartOfEdge(edge.getClass());
+        isDashed = ModelConstants.isHasPartEdge(edge.getClass());
         if (isDashed) {
             strokeFill = "BLACK";
             strokeDashStyle = "Dash";

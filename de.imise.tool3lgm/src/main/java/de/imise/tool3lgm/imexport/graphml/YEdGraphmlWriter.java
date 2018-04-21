@@ -332,7 +332,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     private String getEdgeType(final EdgeContainer ec) {
         Edge edge = ec.getEdge();
         Class<? extends Edge> edgeClass = edge.getClass();
-        String type = ModelConstants.isComposition(edgeClass) || ModelConstants.isPartOfEdge(edgeClass) ? "dashed" : "line";
+        String type = ModelConstants.isComposition(edgeClass) || ModelConstants.isHasPartEdge(edgeClass) ? "dashed" : "line";
         return type;
     }
 
