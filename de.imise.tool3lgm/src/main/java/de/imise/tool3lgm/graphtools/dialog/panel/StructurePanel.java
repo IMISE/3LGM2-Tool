@@ -22,8 +22,8 @@ import javax.swing.tree.TreeSelectionModel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -53,9 +53,10 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
     /**
      * @param dialog
+     * @param hasPartEdgeClass
      */
-    public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends HasPartEdge> partOfEdgeClass) {
-        super(dialog, true, dialog.getModelElement().getClass(), partOfEdgeClass);
+    public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
+        super(dialog, true, dialog.getModelElement().getClass(), hasPartEdgeClass);
         internalInit();
     }
 
@@ -123,10 +124,10 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         JButton luaddButton = new JButton();
         JButton luremoveButton = new JButton();
 
-        loaddAction = getConnectAction(rtree, lotree, true);
-        loremoveAction = getDisconnectAction(lotree, rtree, true);
-        luaddAction = getConnectAction(rtree, lutree, false);
-        luremoveAction = getDisconnectAction(lutree, rtree, false);
+        loaddAction = getConnectAction(rtree, lotree, false);
+        loremoveAction = getDisconnectAction(lotree, rtree, false);
+        luaddAction = getConnectAction(rtree, lutree, true);
+        luremoveAction = getDisconnectAction(lutree, rtree, true);
 
         loaddButton.setAction(loaddAction);
         loremoveButton.setAction(loremoveAction);
@@ -236,29 +237,18 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
          * alle Aktionen zwischen lotree <-> lutree
          */
         DragNDropInitializer.DragNDropActionChain tac5 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
-                lotree,
-                rtree,
-                lutree
+                lotree, rtree, lutree
         }, new LGMAction[] {
-                loremoveAction,
-                luaddAction
+                loremoveAction, luaddAction
         });
         DragNDropInitializer.DragNDropActionChain tac6 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
-                lutree,
-                rtree,
-                lotree
+                lutree, rtree, lotree
         }, new LGMAction[] {
-                luremoveAction,
-                loaddAction
+                luremoveAction, loaddAction
         });
 
         DragNDropInitializer.DragNDropActionChain[] allDndActionChains = new DragNDropInitializer.DragNDropActionChain[] {
-                tac1,
-                tac2,
-                tac3,
-                tac4,
-                tac5,
-                tac6
+                tac1, tac2, tac3, tac4, tac5, tac6
         };
 
         return allDndActionChains;
@@ -268,9 +258,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     @Override
     public LGMTree[] getAllDragNDropTrees() {
         return new LGMTree[] {
-                rtree,
-                lotree,
-                lutree
+                rtree, lotree, lutree
         };
     }
 
