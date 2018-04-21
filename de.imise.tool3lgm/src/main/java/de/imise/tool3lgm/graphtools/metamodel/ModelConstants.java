@@ -1070,77 +1070,38 @@ public final class ModelConstants {
         return sb.toString();
     }
 
-    /**
-     * Mappt von einer Elementart auf die Klassen der {@link HasPartEdge}en, über die der Elementart Teilemente untergeordnet werden kann.
-     */
-    private static final Map<Class<? extends ModelElement>, Class<? extends HasPartEdge>[]> ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES = new HashMap<>(5);
+    public static final Set<Class<? extends ModelElement>> ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES = new HashSet<>();
 
-    /**
-     * Mappt von einer Elementart auf die Klassen der {@link HasPartEdge}en, über die die Elementart als Teilement untergeordnet werden kann.
-     */
-    private static final Map<Class<? extends ModelElement>, Class<? extends HasPartEdge>[]> ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES = new HashMap<>(5);
-    //die Funktion mit dem komischen Namen ist nur dazu da, dass die @SuppressWarnings("unchecked") nicht über die
-    //gesamt Datei geschrieben werden muss (wenn man den Funktionsinhalt einfach in einen static-Block schreibt,
-    //kann man die Warnungen nur für die ganze Datei unterdrücken
+    public static final Set<Class<? extends ModelElement>> ELEMENT_CLASSES_WITH_PART_OF_EDGE_CLASSES = new HashSet<>();
+
     static {
-        fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES();
+        fill_ELEMENT_CLASSES_WITH_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES();
     }
 
-    @SuppressWarnings("unchecked")
-    private static final void fill_ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES() {
+    private static final void fill_ELEMENT_CLASSES_WITH_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES() {
         for (int i = 0; i < ALL_NODES.length; i++) {
             //Hole alle Kantenklassen der Zielklasse und suche alle IsPartOfEdgeen
             for (Class<? extends Edge> c : getEdgeTypes(ALL_NODES[i])) {
                 if (HasPartEdge.class.isAssignableFrom(c)) {
-                    Class<? extends HasPartEdge>[] edgeClasses = null;
                     Class<? extends HasPartEdge> poClass = c.asSubclass(HasPartEdge.class);
                     if (HasPartEdge.isParentClass(poClass, ALL_NODES[i])) {
-                        edgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(ALL_NODES[i]);
-                        if (edgeClasses == null) {
-                            edgeClasses = new Class[1];
-                            edgeClasses[0] = poClass;
-                            ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
-                        } else {
-                            Class<? extends HasPartEdge>[] newEdgeClasses = new Class[edgeClasses.length + 1];
-                            System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
-                            newEdgeClasses[edgeClasses.length] = poClass;
-                            ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
-                        }
+                        ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES.add(ALL_NODES[i]);
                     }
                     if (HasPartEdge.isPartClass(poClass, ALL_NODES[i])) {
-                        edgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(ALL_NODES[i]);
-                        if (edgeClasses == null) {
-                            edgeClasses = new Class[1];
-                            edgeClasses[0] = poClass;
-                            ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], edgeClasses);
-                        } else {
-                            Class<? extends HasPartEdge>[] newEdgeClasses = new Class[edgeClasses.length + 1];
-                            System.arraycopy(edgeClasses, 0, newEdgeClasses, 0, edgeClasses.length);
-                            newEdgeClasses[edgeClasses.length] = poClass;
-                            ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.put(ALL_NODES[i], newEdgeClasses);
-                        }
+                        ELEMENT_CLASSES_WITH_PART_OF_EDGE_CLASSES.add(ALL_NODES[i]);
+                        break;
                     }
                 }
             }
         }
-        //		System.err.println("ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES");
-        //		for (Class<? extends ModelElement> meClass : ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.keySet()){
-        //			System.err.println(meClass.getSimpleName() + " " + Arrays.asList(ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(meClass)));
-        //		}
-        //		System.err.println();
-        //		System.err.println("ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES");
-        //		for (Class<? extends ModelElement> meClass : ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.keySet()){
-        //			System.err.println(meClass.getSimpleName() + " " + Arrays.asList(ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(meClass)));
-        //		}
-
     }
 
     public static final boolean canHaveParts(final Class<? extends ModelElement> elementClass) {
-        return getHasPartsEdgeClasses(elementClass).length > 0;
+        return ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES.contains(elementClass);
     }
 
     public static final boolean canHaveParents(final Class<? extends ModelElement> elementClass) {
-        return getIsPartOfEdgeClasses(elementClass).length > 0;
+        return ELEMENT_CLASSES_WITH_PART_OF_EDGE_CLASSES.contains(elementClass);
     }
 
     public static final boolean canHavePartsOrParents(final Class<? extends ModelElement> elementClass) {
@@ -1157,32 +1118,12 @@ public final class ModelConstants {
         return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
     }
 
-    public static boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
+    public static boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {
         return SubordinationEdge.class.isAssignableFrom(edgeClass) && isRecursive(edgeClass);
     }
 
-    /**
-     * Liefert die Klassen von <code>IsPartOfEdge</code>, über die der übergebenen Elementart andere Elemente als Teile untergeordnet werden
-     * können.
-     *
-     * @return Leeres Array, wenn es keine {@link HasPartEdge} gibt, aosnsten ein Array aller dieser Kantenklassen
-     */
-    @SuppressWarnings("unchecked")
-    public static Class<? extends HasPartEdge>[] getHasPartsEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        Class<? extends HasPartEdge>[] hasPartEdgeClasses = ELEMENT_CLASS_TO_HAS_PART_EDGE_CLASSES.get(elementClass);
-        return hasPartEdgeClasses == null ? new Class[0] : hasPartEdgeClasses;
-    }
-
-    /**
-     * Liefert die Klassen von <code>IsPartOfEdge</code>, über die die übergebenen Elementart anderen Elementen als Teilelement untergeordnet
-     * werden kann.
-     *
-     * @return Leeres Array, wenn es keine {@link HasPartEdge} gibt, aosnsten ein Array aller dieser Kantenklassen
-     */
-    @SuppressWarnings("unchecked")
-    public static Class<? extends HasPartEdge>[] getIsPartOfEdgeClasses(final Class<? extends ModelElement> elementClass) {
-        Class<? extends HasPartEdge>[] isPartOfEdgeClasses = ELEMENT_CLASS_TO_PART_OF_EDGE_CLASSES.get(elementClass);
-        return isPartOfEdgeClasses == null ? new Class[0] : isPartOfEdgeClasses;
+    public static boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
+        return SubordinationEdge.class.isAssignableFrom(edgeClass) && isRecursive(edgeClass);
     }
 
     /*******************/

@@ -44,7 +44,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
@@ -192,21 +191,19 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
      *
      * @return
      */
-    private List<Class<? extends HasPartEdge>> getRealPartOfs() {
+    private List<Class<? extends HasPartEdge>> getRecursiveHasPartEdges() {
+        List<Class<? extends HasPartEdge>> recursiveHasPartEdges = new ArrayList<>();
         Class<? extends ModelElement> elementClass = modelElement.getClass();
-        Class<? extends HasPartEdge>[] hasPartsEdgeClasses = ModelConstants.getHasPartsEdgeClasses(elementClass);
-        Class<? extends HasPartEdge>[] isPartOfEdgeClasses = ModelConstants.getIsPartOfEdgeClasses(elementClass);
-        List<Class<? extends HasPartEdge>> realPartOfs = new ArrayList<>();
-        for (Class<? extends HasPartEdge> partOf : isPartOfEdgeClasses) {
-            if (CollectionUtils.arrayContains(hasPartsEdgeClasses, partOf)) {
-                realPartOfs.add(partOf);
+        for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
+            if (ModelConstants.isRecursiveHasPartEdge(edgeClass)) {
+                recursiveHasPartEdges.add(edgeClass.asSubclass(HasPartEdge.class));
             }
         }
-        return realPartOfs;
+        return recursiveHasPartEdges;
     }
 
     private void addPartOfStructurePanel() {
-        List<Class<? extends HasPartEdge>> realPartOfs = getRealPartOfs();
+        List<Class<? extends HasPartEdge>> realPartOfs = getRecursiveHasPartEdges();
         if (realPartOfs.size() == 1) {
             StructurePanel structurePanel = new StructurePanel(this, realPartOfs.get(0));
             structurePanel.setName(getResString("strukt"));
