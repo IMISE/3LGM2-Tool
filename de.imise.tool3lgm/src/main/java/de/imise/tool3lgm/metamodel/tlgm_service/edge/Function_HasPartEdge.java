@@ -10,7 +10,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
 /**
  * @author AXS (31.12.2017)
  */
-public final class Function_IsPartOfEdge extends HasPartEdge {
+public final class Function_HasPartEdge extends HasPartEdge {
 
     public static final Class<? extends ModelElement> stcl = Function.class;
 

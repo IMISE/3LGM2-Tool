@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_IsPartOfEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
@@ -23,8 +23,8 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorA
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.DataTransmissionLink_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.DeviceClass_IsPartOfEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_IsPartOfEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.DeviceClass_HasPartEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
@@ -35,14 +35,14 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTr
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransaction_Service_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.Location_IsPartOfEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ObjectType_IsPartOfEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_IsPartOfEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.Location_HasPartEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ObjectType_HasPartEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_Use_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.PhysicalDataProcessingComponentVirtualises_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.PhysicalDataProcessingComponent_DeviceClass_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.PhysicalDataProcessingComponent_IsPartOfEdge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.PhysicalDataProcessingComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.PhysicalDataProcessingComponent_Location_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Process_Function_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ServiceUses_Edge;
@@ -234,11 +234,11 @@ public class TLGMServiceMetaModel extends MetaModel {
     public Class[] getAllEdges() {
         return new Class[] {
                 //FE
-                Function_IsPartOfEdge.class,
+                Function_HasPartEdge.class,
                 Function_ObjectType_Edge.class,
                 Function_Use_Edge.class,
-                ObjectType_IsPartOfEdge.class,
-                OrganisationalUnit_IsPartOfEdge.class,
+                ObjectType_HasPartEdge.class,
+                OrganisationalUnit_HasPartEdge.class,
                 OrganisationalUnit_Use_Edge.class,
                 Process_Function_Edge.class,
                 //FE - LWE
@@ -252,7 +252,7 @@ public class TLGMServiceMetaModel extends MetaModel {
                 //LWE
                 ApplicationComponent_CommunicationInterface_Edge.class,
                 ApplicationComponent_CommunicationLink_Edge.class,
-                ApplicationComponent_IsPartOfEdge.class,
+                ApplicationComponent_HasPartEdge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
                 Service_CommunicationLink_Edge.class,
@@ -275,10 +275,10 @@ public class TLGMServiceMetaModel extends MetaModel {
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class,
                 //PWE
                 DataTransmissionLink_Edge.class,
-                DeviceClass_IsPartOfEdge.class,
-                Location_IsPartOfEdge.class,
+                DeviceClass_HasPartEdge.class,
+                Location_HasPartEdge.class,
                 PhysicalDataProcessingComponent_DeviceClass_Edge.class,
-                PhysicalDataProcessingComponent_IsPartOfEdge.class,
+                PhysicalDataProcessingComponent_HasPartEdge.class,
                 PdvbVirtualPdvbVerbindung.class,
                 PhysicalDataProcessingComponent_Location_Edge.class,
                 PhysicalDataProcessingComponentVirtualises_Edge.class,

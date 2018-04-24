@@ -244,7 +244,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //prüfen, ob die Start- und Endklassen gleich ist ->
             //wenn ja, darf diese Edge nur für Verrechnungen genutzt werden, wenn sie
             //in Vorwärts- und Rückwartsrichtung unterschiedliche Bedeutungen (also eine
-            //unterscheidliche Bezeichnung) hat. Bei IsPartOfEdgeen sind die Start und
+            //unterscheidliche Bezeichnung) hat. Bei HasPartEdges sind die Start und
             //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
             //sind unterscheidlich. Bei der Beziehung "Phys.-DV-Baustein ist verbunden mit
             //Phys.-DV-Baustein" kann man keine eindeutige Richtung zuordnen.

@@ -11,7 +11,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 /**
  * @author AXS (22.12.2017)
  */
-public final class DeviceClass_IsPartOfEdge extends HasPartEdge {
+public final class PhysicalDataProcessingComponent_HasPartEdge extends HasPartEdge {
 
     public static final Class<? extends ModelElement> stcl = DeviceClass.class;
 

@@ -16,7 +16,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
  * Ein {@link PathConnectionPanel}, das statt im linken bzw. einzigen Baum den ganzen Pfad anzuzeigen immer
- * nur die Blätter unter root anzeigt, wobei diese "Blätter" dann noch ihre Teile (über IsPartOfEdgeen)
+ * nur die Blätter unter root anzeigt, wobei diese "Blätter" dann noch ihre Teile (über HasPartEdges)
  * angehängt bekommen. Es werden also nur die End-Elemente des Pfades angezeigt und keine Zwischenelemente.
  *
  * @author astruebi

@@ -35,7 +35,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ACTIVE_L
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_DELETED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS_NAME;
@@ -43,6 +42,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_X;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_POSITION_Y;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
@@ -1333,7 +1333,7 @@ public final class GDCollection extends UserFieldTarget {
                 //                Class<? extends ModelElement> endClass = endElement.getClass();
                 //                boolean doubleDir = edgeStartClass.isAssignableFrom(startClass) && edgeStartClass.isAssignableFrom(endClass);
                 //                doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
-                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(IsPartOfEdge.class);
+                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(HasPartEdge.class);
                 //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
                 //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
                 //AXS: nochmal geändert am 30.01.2018: jetzt sind nur alle einfachen Kanten, die im Moment absolut dieselbe Elementart verbinden

@@ -318,12 +318,12 @@ public final class ModelConstants {
     //    /**
     //     * Prüft, ob bei der Edge die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
     //     * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die dieselben
-    //     * Elementarten verbinden sowie keine DoubleMeaningEdges, keine IsPartOfEdgeen und keine Compositions sind.
+    //     * Elementarten verbinden sowie keine DoubleMeaningEdges, keine HasPartEdges und keine Compositions sind.
     //     *
     //     * @return
     //     */
     //    public static final boolean isAlwaysDoubleConnectedEdge(final Class<? extends Edge> edgeClass) {
-    //        //        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !(isDoubleMeaningEdge(edgeClass) || IsPartOfEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
+    //        //        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !(isDoubleMeaningEdge(edgeClass) || HasPartEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
     //        //nochmal geändert: wenn die Kante dieselbe Elementart verbindet und in beide Richtungen gleich heißt -> immer doppelt
     //        //return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
     //        //return !isDirectedEdge(edgeClass);
@@ -1080,7 +1080,7 @@ public final class ModelConstants {
 
     private static final void fill_ELEMENT_CLASSES_WITH_PART_OF_EDGE_CLASSES_and_ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES() {
         for (int i = 0; i < ALL_NODES.length; i++) {
-            //Hole alle Kantenklassen der Zielklasse und suche alle IsPartOfEdgeen
+            //Hole alle Kantenklassen der Zielklasse und suche alle HasPartEdges
             for (Class<? extends Edge> c : getEdgeTypes(ALL_NODES[i])) {
                 if (HasPartEdge.class.isAssignableFrom(c)) {
                     Class<? extends HasPartEdge> poClass = c.asSubclass(HasPartEdge.class);

@@ -11,7 +11,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
 /**
  * @author AXS (31.12.2017)
  */
-public final class ObjectType_IsPartOfEdge extends HasPartEdge {
+public final class ObjectType_HasPartEdge extends HasPartEdge {
 
     public static final Class<? extends ModelElement> stcl = ObjectType.class;
 

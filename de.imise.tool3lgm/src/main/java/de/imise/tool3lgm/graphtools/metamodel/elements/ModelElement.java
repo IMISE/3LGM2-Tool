@@ -1406,7 +1406,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Liefert <code>true</code>, wenn <code>this</code> und <code>me</code> direkt über eine <code>IsPartOfEdge</code> verbunden sind und
+     * Liefert <code>true</code>, wenn <code>this</code> und <code>me</code> direkt über eine {@link HasPartEdge} verbunden sind und
      * <code>this</code> ein Teil von <code>me</code> ist.
      *
      * @param me
@@ -1417,7 +1417,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Liefert <code>true</code>, wenn <code>me</code> und <code>this</code> direkt über eine <code>IsPartOfEdge</code> verbunden sind und
+     * Liefert <code>true</code>, wenn <code>me</code> und <code>this</code> direkt über eine {@link HasPartEdge} verbunden sind und
      * <code>me</code> ein Teil von <code>this</code> ist.
      *
      * @param me
@@ -1806,14 +1806,14 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @return <code>true</code>, wenn die Elementart eine IsPartOfEdge hat
+     * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge} hat
      */
     public final boolean canHaveParts() {
         return ModelConstants.canHaveParts(getClass());
     }
 
     /**
-     * @return <code>true</code>, wenn die Elementart eine IsPartOfEdge hat
+     * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge} hat
      */
     public final boolean canHaveParents() {
         return ModelConstants.canHaveParents(getClass());
