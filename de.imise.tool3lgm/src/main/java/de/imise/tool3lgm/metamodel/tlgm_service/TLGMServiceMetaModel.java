@@ -29,6 +29,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorOfIntegrationProfile_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActorOfIntegrationProfile_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
@@ -65,6 +66,9 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfil
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheConcept;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheIntegrationProfile;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInterface;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInvokingInterface;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheTransaction;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.InvokingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Location;
@@ -82,8 +86,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Use;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbVirtualPdvbVerbindung;
 
 @SuppressWarnings({
-        "unchecked",
-        "rawtypes"
+        "unchecked", "rawtypes"
 })
 public class TLGMServiceMetaModel extends MetaModel {
 
@@ -177,6 +180,9 @@ public class TLGMServiceMetaModel extends MetaModel {
             IheDomain.class,
             IheIntegrationProfile.class,
             IheTransaction.class,
+            IheInterface.class,
+            IheInvokingInterface.class,
+            IheProvidingInterface.class,
             //IHE-Assoziationsklassen
             IheTransactionLink_Edge.class,
     };
@@ -262,6 +268,7 @@ public class TLGMServiceMetaModel extends MetaModel {
                 ServiceUses_Edge.class,
                 //IHE-Kanten
                 IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class,
+                IheActorOfIntegrationProfile_IheInterface_Edge.class,
                 ApplicationSystem_IheActorApplicationSystem_Edge.class,
                 IheConcept_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class,
