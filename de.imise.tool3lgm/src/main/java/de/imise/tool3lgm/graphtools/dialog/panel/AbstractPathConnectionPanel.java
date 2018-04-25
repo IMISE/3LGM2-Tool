@@ -449,14 +449,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         }
 
         ModelElement createdDependent;
-
+        ElementContainer createdContainer = null;
         //wenn ein gültiges startElement übergeben wurde und die Kantenart eine Composition ist
         if (startElement != null && isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
             //erzeuge ein untergeordnetes Element
             createdDependent = GraphDocument.createAddicted(doc, startElement, edgeClassToNewElement.asSubclass(CompositionEdge.class), elementClass2Create, pid);
         } else {
             //das neue Element gleich mit Container im doc anlegen
-            ElementContainer createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
+            createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
             if (createdContainer == null) {
                 return null;
             }
@@ -468,6 +468,20 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 link(gdcoll, startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
             }
         }
+
+        //falls hier beim Anlegen irgendwas schief gegangen ist -> raus
+        if (createdDependent == null) {
+            return null;
+        }
+
+        //wenn das neu angelegte Element ein übergerodnetes Element von dem startElement ist, dann sollte es in der Grafik unter dem startElement liegen
+        if (startElement.isSubElementOf(createdDependent)) {
+            if (createdContainer == null) {
+                createdContainer = createdDependent.getContainer(doc);
+            }
+            doc.raiseSlaves(createdContainer);
+        }
+
         //alle Kantentpyen der neu angelegten Elementart holen
         Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
         //für jede dieser Kantenarten
