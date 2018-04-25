@@ -820,16 +820,33 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectableBackward, toolTipBackward), labelBackward));
                         disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectableBackward, toolTipBackward), labelBackward));
 
-                    } else /* if (Edge.isConnecting(edgeClass, me1Class, me2Class)) */ {
-                        String label = isStartClass(edgeClass, lastSelectedClass) ? getForwardMetaAssociationName(edgeClass, false, true) : getBackwardMetaAssociationName(edgeClass, false, true);
-                        String toolTip = isStartClass(edgeClass, lastSelectedClass) ? getFullForwardMetaAssociationName(edgeClass) : getFullBackwardMetaAssociationName(edgeClass);
+                    } else /* if (Edge.isConnecting(edgeClass, lastSelectedClass, me2Class)) */ {
+                        int direction;
+                        String label;
+                        String toolTip;
+                        if (isStartClass(edgeClass, lastSelectedClass)) {
+                            direction = FORWARD;
+                            label = getForwardMetaAssociationName(edgeClass, false, true);
+                            toolTip = getFullForwardMetaAssociationName(edgeClass);
+                        } else {
+                            direction = BACKWARD;
+                            label = getBackwardMetaAssociationName(edgeClass, false, true);
+                            toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                        }
                         boolean connectable = false;
                         boolean disconnectable = false;
-                        for (ModelElement me2 : selectedElements) {
-                            if (lastSelected == me2) {
+                        for (ModelElement selected : selectedElements) {
+                            if (lastSelected == selected) {
                                 continue;
                             }
-                            if (!lastSelected.isConnectedWith(me2, edgeClass)) {
+                            Class<? extends ModelElement> selectedClass = selected.getClass();
+                            if (direction == FORWARD && !Edge.isConnectingForward(edgeClass, lastSelectedClass, selectedClass)) {
+                                continue;
+                            }
+                            if (direction == BACKWARD && !Edge.isConnectingForward(edgeClass, selectedClass, lastSelectedClass)) {
+                                continue;
+                            }
+                            if (!lastSelected.isConnectedWith(selected, edgeClass)) {
                                 connectable = true;
                             } else {
                                 disconnectable = true;
@@ -838,8 +855,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 break;
                             }
                         }
-                        connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                        connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + direction, verbindung_anlegen, connectable, toolTip), label));
+                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, verbindung_trennen, disconnectable, toolTip), label));
                     }
                 }
             }
