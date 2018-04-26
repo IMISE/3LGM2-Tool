@@ -315,21 +315,21 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     // ###################################################################################
 
     @Override
-    public void dataChanged(final GraphDocument source, final int pid) {
+    public final void dataChanged(final GraphDocument source, final int pid) {
         update();
     }
 
     @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    public final void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
     }
 
     @Override
-    public void elementNameChanged(final ElementContainer ec) {
+    public final void elementNameChanged(final ElementContainer ec) {
         update();
     }
 
     @Override
-    public void userFieldValueChanged(final ElementContainer ec) {
+    public final void userFieldValueChanged(final ElementContainer ec) {
         update();
     }
 
