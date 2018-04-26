@@ -27,8 +27,8 @@ import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
@@ -36,7 +36,6 @@ import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
@@ -210,16 +209,6 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         if (!gdcoll.getTman().isInTransaction()) {
             updateErrorTable();
         }
-    }
-
-    @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        dataChanged(source);
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        dataChanged(source);
     }
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */

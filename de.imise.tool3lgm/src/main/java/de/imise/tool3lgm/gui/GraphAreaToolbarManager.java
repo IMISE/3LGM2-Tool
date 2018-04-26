@@ -135,14 +135,6 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
     public void groupOrderChanged(final GraphDocument source) {
     }
 

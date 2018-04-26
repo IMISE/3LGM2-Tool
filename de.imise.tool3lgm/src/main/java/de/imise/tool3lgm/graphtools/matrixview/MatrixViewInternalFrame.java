@@ -210,16 +210,6 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     }
 
     @Override
-    public final void elementAdded(final GraphDocument source, final ElementContainer element) {
-        dataChanged(source);
-    }
-
-    @Override
-    public final void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        dataChanged(source);
-    }
-
-    @Override
     public void elementNameChanged(final ElementContainer ec) {
         dataChanged(ec.getGraphDocument());
     }

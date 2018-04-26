@@ -7,7 +7,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * @author AXS
@@ -47,10 +46,11 @@ public abstract class UserFieldDefinitionChangeHandler extends GraphDocumentAdap
      * Über diese Funktion kann dem Calculator mitgeteilt werden, dass sich mind. eine Kennzahl geändert hat. Nachdem alle Kennzahlen geändert wurden,
      * kann dann die Funktion reset() aufgerufen werden, in der alle Kennzahlen neu berechnet werden. Der Calculator ist selbst kein
      * <code>GraphDocumentListener</code>, der auf <code>DATA_CHANGED</code> hört, weil er sonst bei jeder Änderung immer alles neu berechen würde.
-     * Das <code>GraphDocument</code> setzt den <code>boolen reset</code> auf <code>true</code>, wenn das Kommando <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code>
+     * Das <code>GraphDocument</code> setzt den <code>boolen reset</code> auf <code>true</code>, wenn das Kommando
+     * <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code>
      * ausgeführt wurde. Ein Aufruf der Funktion <code>reset()</code> nach dem <code>true</code>-setzen, führt dann tatsächlich zu der Neuberechnung.
      * Das macht aber nicht das <code>GraphDocument</code>, sondern das muss man selber machen, nachdem man alle Kennzahlen geändert hat.
-     * 
+     *
      * @see PropertyDialogUserFieldPanel#commit()
      */
     public final void initReset() {
@@ -74,13 +74,4 @@ public abstract class UserFieldDefinitionChangeHandler extends GraphDocumentAdap
         initReset();
     }
 
-    @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        initReset();
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        initReset();
-    }
 }

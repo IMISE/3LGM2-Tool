@@ -45,22 +45,6 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDo
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        //      System.out.println("elementAdded");
-        if (active) {
-            tree.buildTree();
-        }
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        //      System.out.println("elementDeleted");
-        if (active) {
-            tree.buildTree();
-        }
-    }
-
-    @Override
     public void groupOrderChanged(final GraphDocument source) {
         if (active) {
             //      System.out.println("groupOrderChanged");

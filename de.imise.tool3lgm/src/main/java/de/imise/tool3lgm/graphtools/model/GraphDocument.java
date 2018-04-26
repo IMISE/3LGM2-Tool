@@ -2475,16 +2475,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         itl.dataChanged(this, pid);
                     }
                     break;
-                case ELEMENT_ADDED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementAdded(this, last_elem);
-                    }
-                    break;
-                case ELEMENT_DELETED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementDeleted(this, last_elem);
-                    }
-                    break;
                 case ELEMENT_GRAPHICS_CHANGED:
                     for (InTransactionListener itl : inlistener) {
                         itl.elementGraphicsChanged(this, last_elem);
@@ -2533,16 +2523,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                         itl.dataChanged(this, pid);
                     }
                     break;
-                case ELEMENT_ADDED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementAdded(this, last_elem);
-                    }
-                    break;
-                case ELEMENT_DELETED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementDeleted(this, last_elem);
-                    }
-                    break;
                 case ELEMENT_GRAPHICS_CHANGED:
                     for (InTransactionListener itl : inlistener) {
                         itl.elementGraphicsChanged(this, last_elem);
@@ -2586,16 +2566,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case LAYOUT_CHANGED:
             for (GraphDocumentListener gdl : listener) {
                 gdl.layoutChanged(this);
-            }
-            break;
-        case ELEMENT_ADDED:
-            for (GraphDocumentListener gdl : listener) {
-                gdl.elementAdded(this, last_elem);
-            }
-            break;
-        case ELEMENT_DELETED:
-            for (GraphDocumentListener gdl : listener) {
-                gdl.elementDeleted(this, last_elem);
             }
             break;
         case GROUP_ORDER_CHANGED:

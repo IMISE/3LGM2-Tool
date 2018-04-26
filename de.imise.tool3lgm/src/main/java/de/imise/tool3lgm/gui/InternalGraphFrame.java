@@ -131,16 +131,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        area.revalidateRepaint(element);
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        area.revalidateRepaint();
-    }
-
-    @Override
     public void groupOrderChanged(final GraphDocument source) {
         area.revalidateRepaint();
     }

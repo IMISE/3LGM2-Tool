@@ -33,7 +33,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingF
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_DELETED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
@@ -951,7 +950,7 @@ public final class GDCollection extends UserFieldTarget {
         szen.addUndoCommand(MODEL_ACTION_INSERT_BENDING_POINT + " " + szen.getHashString() + " " + edgeC.getHashString() + " " + bendpointContainer.getHashString() + " " + bendpointContainer.getX() + " " + bendpointContainer.getY() + " " + oldIndex, pid);
         szen.finish_transaction(pid);
         LayerContainer lc = doc.layer[bendpoint.layerFor()];
-        szen.distributeEvent(ELEMENT_DELETED, bendpointContainer, lc, pid);
+        szen.distributeEvent(DATA_CHANGED, bendpointContainer, lc, pid);
         szen.distributeEvent(SELECTION_CHANGED, bendpointContainer, lc, pid);
     }
 
@@ -2126,16 +2125,6 @@ public final class GDCollection extends UserFieldTarget {
         case LAYOUT_CHANGED:
             for (GraphDocumentListener l : listener) {
                 l.layoutChanged(source);
-            }
-            break;
-        case ELEMENT_ADDED:
-            for (GraphDocumentListener l : listener) {
-                l.elementAdded(source, last_elem);
-            }
-            break;
-        case ELEMENT_DELETED:
-            for (GraphDocumentListener l : listener) {
-                l.elementDeleted(source, last_elem);
             }
             break;
         case GROUP_ORDER_CHANGED:

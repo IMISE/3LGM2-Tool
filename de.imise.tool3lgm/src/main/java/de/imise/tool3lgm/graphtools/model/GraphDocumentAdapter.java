@@ -8,14 +8,14 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * Abstracte Implementeirung von <code>GraphDocumentListener</code>. In keiner
  * der Methoden wird etwas ausgeführt.
- * 
+ *
  * @author AXS
  */
 public abstract class GraphDocumentAdapter implements GraphDocumentListener {
 
     /**
-	 * 
-	 */
+     * 
+     */
     public GraphDocumentAdapter() {
         super();
     }
@@ -30,14 +30,6 @@ public abstract class GraphDocumentAdapter implements GraphDocumentListener {
 
     @Override
     public void layoutChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
     }
 
     @Override

@@ -11,12 +11,6 @@ public interface InTransactionListener {
     /** Hier reagiert bisher niemand, da Dialogen sowas egal ist */
     public void elementGraphicsChanged(GraphDocument source, ElementContainer ec);
 
-    /** Hier reagieren alle -> erneuern */
-    public void elementAdded(GraphDocument source, ElementContainer ec);
-
-    /** Hier reagieren alle -> erneuern */
-    public void elementDeleted(GraphDocument source, ElementContainer ec);
-
     /** Hier reagieren alle, die den Namen anzeigen */
     public void elementNameChanged(ElementContainer ec);
 

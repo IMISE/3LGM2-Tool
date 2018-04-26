@@ -320,16 +320,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        update();
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        update();
-    }
-
-    @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
     }
 

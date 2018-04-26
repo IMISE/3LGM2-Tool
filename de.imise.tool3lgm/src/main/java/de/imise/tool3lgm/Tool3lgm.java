@@ -1137,16 +1137,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        source.getCollection().setChanged(true);
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        source.getCollection().setChanged(true);
-    }
-
-    @Override
     public void groupOrderChanged(final GraphDocument source) {
         source.getCollection().setChanged(true);
     }

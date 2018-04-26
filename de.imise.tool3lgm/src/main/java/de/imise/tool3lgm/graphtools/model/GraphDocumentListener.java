@@ -12,12 +12,6 @@ public interface GraphDocumentListener {
     /** Wenn sich das Standard-GraphElementLayout geaendert hat (nur GraphArea) */
     public void layoutChanged(GraphDocument source);
 
-    /** Hier reagieren GraphArea und ModelBrowser */
-    public void elementAdded(GraphDocument source, ElementContainer element);
-
-    /** Hier reagieren GraphArea und ModelBrowser */
-    public void elementDeleted(GraphDocument source, ElementContainer element);
-
     /** Hier "sollte" sich meiner Ansicht nach der ModelBrowser erneuern */
     public void groupOrderChanged(GraphDocument source);
 

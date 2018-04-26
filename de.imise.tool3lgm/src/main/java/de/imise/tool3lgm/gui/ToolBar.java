@@ -309,16 +309,6 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-        updateButtons();
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-        updateButtons();
-    }
-
-    @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
         updateButtons();
     }

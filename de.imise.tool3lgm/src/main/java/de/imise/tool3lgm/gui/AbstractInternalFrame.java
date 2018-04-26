@@ -93,14 +93,6 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
     }
 
     @Override
-    public void elementAdded(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
-    public void elementDeleted(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
     public void groupOrderChanged(final GraphDocument source) {
     }
 
