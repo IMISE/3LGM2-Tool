@@ -118,8 +118,8 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
             connectedElementsBox.addItem(" ");
-            //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle
-            List<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : mainDoc.getElementContainer(searchElementClass);
+            //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionPath verbunden sind
+            List<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : getAvailableConnectables();
 
             //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
             //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen

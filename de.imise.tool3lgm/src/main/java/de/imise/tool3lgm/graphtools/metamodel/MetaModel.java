@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.InvalidPathException;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -317,6 +318,19 @@ public abstract class MetaModel {
             }
         }
         return sortedEdges.build();
+    }
+
+    /**
+     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
+     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+        //aus Performancegründen sollte hier keine Map zum Einsatz kommen. Es wird für die allerwenigsten Kanten einen solchen Pfad geben
+        //und Unterklasse sollten das einfach über eine if-then-Abfrage regeln
+        return null;
     }
 
     /**

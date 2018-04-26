@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_HasPartEdge;
@@ -348,6 +349,23 @@ public class TLGMServiceMetaModel extends MetaModel {
                 //vorwärts1: hat als Ergebnis; rückwärts1: ist Ergebnis von
                 //vorwärts2: hat als Parameter; rückwärts2: ist Parameter von
                 Service_ObjectType_Edge.class);
+    }
+
+    //IheInvokingInterface_InvokingInterface_Edge
+    public static final MetaPath CONDITION_METAPATH_1 = new MetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class),
+            IheActorOfIntegrationProfile_IheInterface_Edge.class, IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+    //IheProvidingInterface_ProvidingInterface_Edge
+    public static final MetaPath CONDITION_METAPATH_2 = new MetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
+            IheActorOfIntegrationProfile_IheInterface_Edge.class, IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+
+    @Override
+    public final MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+        if (IheInvokingInterface_InvokingInterface_Edge.class.isAssignableFrom(edgeClass)) {
+            return CONDITION_METAPATH_1;
+        } else if (IheProvidingInterface_ProvidingInterface_Edge.class.isAssignableFrom(edgeClass)) {
+            return CONDITION_METAPATH_2;
+        }
+        return null;
     }
 
     ///////////////////////////////////////////////////////////////////

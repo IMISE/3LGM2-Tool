@@ -356,7 +356,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         rtree.saveSelection();
         rroot.removeAllChildren();
         rtree.reset();
-        for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass, true, true)) {
+        for (ElementContainer ec : getAvailableConnectables()) {
             rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, true);
         }
         rmodel.reload();
@@ -370,8 +370,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         DragNDropActionChain dndAC2 = DragNDropInitializer.createNewDragNDropActionChain(ltree, rtree, removeAction);
 
         return new DragNDropActionChain[] {
-                dndAC1,
-                dndAC2
+                dndAC1, dndAC2
         };
 
     }
@@ -379,8 +378,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     @Override
     public final LGMTree[] getAllDragNDropTrees() {
         return new LGMTree[] {
-                rtree,
-                ltree
+                rtree, ltree
         };
     }
 

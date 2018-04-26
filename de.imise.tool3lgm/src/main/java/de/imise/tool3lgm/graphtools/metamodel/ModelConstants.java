@@ -40,6 +40,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -338,6 +339,17 @@ public final class ModelConstants {
      */
     public static final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
         return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || !getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
+    }
+
+    /**
+     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
+     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public static MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+        return metaModel.getConditionPath(edgeClass);
     }
 
     ///////////////////////////////////////////////////////////////////

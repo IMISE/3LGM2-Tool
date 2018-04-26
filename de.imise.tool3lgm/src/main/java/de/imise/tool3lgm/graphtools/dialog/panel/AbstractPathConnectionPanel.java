@@ -13,8 +13,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JLabel;
 
@@ -30,6 +32,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.PathFinder;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
@@ -293,7 +297,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         int pathLength = edgeClasses.length;
         for (int edgeIndex = 0; edgeIndex < pathLength; edgeIndex++) {
             Class<? extends ModelElement> class2Create = getPathStepEndElementClass(edgeIndex);
-            if (ModelConstants.isAbstract(class2Create)) {
+            if (ModelConstants.isAbstract(class2Create) || ModelConstants.getConditionPath(edgeClasses[edgeIndex]) != null) {
                 return false;
             }
         }
@@ -302,8 +306,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /**
      * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
-     * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebarucht, um zu entscheiden, ob ein neu
-     * angelegtes EndElement des Pfades imemr sofort verbunden werden muss.
+     * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
+     * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
      *
      * @return
      */
@@ -622,6 +626,38 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 doc.showPropertyDialog(selected.getElement());
             }
         }
+    }
+
+    /**
+     * Liefert eine Liste aller Elementcontainer, die zum Verbinden zur Verfügung stehen. In der Regel sind das alle Elemente der
+     * <code>searrchElementClass</code>. Besteht, der Pfad des Panels aber nur aus einer einzigen Kante und diese hat zusätlich einen
+     * ConditionPath (also einen Pfad, über den das startElement außerdem noch mit den Zielelementen verbunden sein muss), dann
+     * werden nur diese Zielelemente als zum Verbinden verfügbare Elemente zurück gegeben, die auch über diesen ConditonPath verbunden sind.
+     *
+     * @return
+     */
+    protected List<ElementContainer> getAvailableConnectables() {
+        List<ElementContainer> available = null;
+        //Pfad des Panels besteht aus genau einer Kante
+        if (edgeClasses.length == 1) {
+            Class<? extends Edge> edgeClass = edgeClasses[0];
+            MetaPath conditionPath = ModelConstants.getConditionPath(edgeClass);
+            //für diese eine Kante ist ein ConditionPath angegeben
+            if (conditionPath != null) {
+                if (directions[0] == BACKWARD) {
+                    conditionPath = conditionPath.getReversePath();
+                }
+                Set<ModelElement> conditionElements = PathFinder.getDirectConnectedElements(getModelElement(), conditionPath);
+                available = new ArrayList<>(conditionElements.size());
+                for (ModelElement conditionElement : conditionElements) {
+                    available.add(conditionElement.getContainer(mainDoc));
+                }
+            }
+        }
+        if (available == null) {
+            available = mainDoc.getElementContainer(searchElementClass, true, true);
+        }
+        return available;
     }
 
 }
