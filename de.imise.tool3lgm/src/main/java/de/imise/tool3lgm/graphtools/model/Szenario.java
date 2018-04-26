@@ -182,7 +182,6 @@ public class Szenario extends LGMGraphDocument {
      * @param pid
      */
     public void createEdgeContainer(final ElementContainer egdeStartOrEndContainer, final GraphDocument sourceDoc, final boolean select, final int pid) {
-
         start_transaction(pid, false);
         //wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
         if (egdeStartOrEndContainer != null && !egdeStartOrEndContainer.getElement().isUnique()) {
@@ -217,77 +216,7 @@ public class Szenario extends LGMGraphDocument {
                     }
                 }
             }
-            //wenn das Element, dessen Kanten hinzugefügt werden sollen, leer oder einmalig ist
         }
-        //AXS 05.09.2008: else-Fall mal heraus genommen, weil der nur irgendwelche Symptome bei Inkonsistenzen mit dem
-        //  Holzhammer behebt. wenn alles richtig läuft, darf das hier meiner meinung gar nicht auftreten
-        //
-        //
-        //		else {
-        //			//für jede Ebene dieses Szenarios
-        //			for (LayerContainer lc : layer) {
-        //				//für alle Node der Ebene (das können im Schleifendurchlauf mehr werden -> nicht über den Iterator gehen)
-        //				for (int j = 0; j < lc.getKnotenCount(); j++) {
-        //					egdeStartOrEndContainer = lc.getNodeContainer(j);
-        //					ModelElement el = egdeStartOrEndContainer.getElement();
-        //					//einmalige Elemente überspringen
-        //					if (el.isUnique())
-        //						continue;
-        //					//für alle Kanten des Elementes
-        //					for (Edge ka : el.getEdges()) {
-        //						//wenn die aktuelle Edge noch nicht in diesem Szenario ist
-        //						if (!isMyElement(ka)) {
-        //							//wenn es sich um eine Composition handelt
-        //							if (ka instanceof Composition)
-        //								//bringe die Slave-Container ins Szenario (wenn sie nicht unique sind)
-        //								updateSlaveContainers((Composition)ka, sourceDoc);
-        //							//wenn Start- und Endelement jetzt in diesem Szenario sind
-        //							if ((endsAreMine(ka))) {
-        //								//hole den Container der Edge aus dem Quelldokument
-        //								EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
-        //								//wenn es keine gab
-        //								if (oldKC == null){
-        //									//hole den Container der Edge aus dem hauptdokument des Quelldokuments (das muss nicht dasslebe
-        //									//Hauptdokument dieses Szenarios sein
-        //									oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
-        //								}
-        //								//füge eine Kopie des Edge-Containers in dieses Szenario ein
-        //								EdgeContainer kc = (EdgeContainer)addContainerCopy(oldKC);
-        //								if (kc == null)
-        //									continue;
-        //								kc.refreshText();
-        //								if (select)
-        //									addToSelection(kc, pid);
-        //							}
-        //						}
-        //					}
-        //				}
-        //				//für alle Kanten des aktuellen Layers
-        //				for (int j = 0; j < lc.getKantenCount(); j++) {
-        //					//
-        //					egdeStartOrEndContainer = lc.getEdgeContainer(j);
-        //					ModelElement el = egdeStartOrEndContainer.getElement();
-        //					if (el.isUnique())
-        //						continue;
-        //					for (Edge ka : el.getEdges()) {
-        //						if (!isMyElement(ka)) {
-        //							if ((endsAreMine(ka))) {
-        //								EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
-        //								if (oldKC == null)
-        //									oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
-        //								EdgeContainer kc = (EdgeContainer)addContainerCopy(oldKC);
-        //								if (kc == null)
-        //									continue;
-        //								kc.refreshText();
-        //								if (select)
-        //									addToSelection(kc, pid);
-        //							}
-        //						}
-        //					}
-        //				}
-        //			}
-        //		}
-
         finish_transaction(pid, false);
         distributeEvent(GDCollectionChangeType.DATA_CHANGED);
     }
