@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndC
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Collections;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -56,6 +57,8 @@ public class MetaPath {
     private static final String[] defaultPathName = {
             ModelConstants.getForwardMetaAssociationName(Edge.class)
     };
+
+    private MetaPath reversePath;
 
     /**
      * Erzeugt einen MetaPath, der zu dem übergebenen MetaPath identisch ist, nur mit der neuen übergebenen Start- und Endklasse.
@@ -513,6 +516,21 @@ public class MetaPath {
             }
         }
         return true;
+    }
+
+    public MetaPath getReversePath() {
+        if (reversePath == null) {
+            Class<? extends Edge>[][] reverseAssociations = Arrays.copyOf(associations, associations.length);
+            for (int subPathIndex = 0; subPathIndex < reverseAssociations.length; subPathIndex++) {
+                Class<? extends Edge>[] subPath = reverseAssociations[subPathIndex];
+                Class<? extends Edge>[] reverseSubPathAssociations = Arrays.copyOf(subPath, subPath.length);
+                Collections.reverse(Arrays.asList(reverseSubPathAssociations));
+                reverseAssociations[subPathIndex] = reverseSubPathAssociations;
+            }
+            reversePath = new MetaPath(endClass, startClass, reverseAssociations);
+            reversePath.reversePath = this;
+        }
+        return reversePath;
     }
 
 }
