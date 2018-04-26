@@ -258,11 +258,22 @@ public final class PathFinder {
         Set<ModelElement> startElements = new HashSet<>();
         startElements.add(me);
         Set<ModelElement> endElements = new HashSet<>();
-        for (int assoIndex = 0; assoIndex < metaPath.getLength(); assoIndex++) {
+        int pathLength = metaPath.getLength();
+        for (int assoIndex = 0; assoIndex < pathLength; assoIndex++) {
             for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
                 endElements.clear();
+                Class<? extends Edge>[] subPathEdgeClasses = metaPath.getEdgeClasses(pathIndex);
+                Class<? extends Edge> subPathEdgeClass = subPathEdgeClasses[assoIndex];
                 for (ModelElement startElem : startElements) {
-                    endElements.addAll(startElem.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[assoIndex]));
+                    Class<? extends ModelElement> pathStepEndClass = Edge.getOther(subPathEdgeClass, startElem.getClass());
+                    //bei der letzten Kanten muss man gucken, ob die verbundene Klasse der Kante oder das Endelement des Pfades spezieller ist und die speziellere Klasse als Endklasse nehmen
+                    if (assoIndex == pathLength - 1) {
+                        Class<? extends ModelElement> metaPathEndClass = metaPath.getEndClass();
+                        if (pathStepEndClass.isAssignableFrom(metaPathEndClass)) {
+                            pathStepEndClass = metaPathEndClass;
+                        }
+                    }
+                    endElements.addAll(startElem.getConnectedElementsByEdge(pathStepEndClass, subPathEdgeClass));
                 }
             }
             startElements.clear();
