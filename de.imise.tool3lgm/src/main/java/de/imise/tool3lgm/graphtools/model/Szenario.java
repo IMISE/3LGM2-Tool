@@ -122,55 +122,6 @@ public class Szenario extends LGMGraphDocument {
         }
     }
 
-    //	/**
-    //	 * Erzeugt alle Kanten für den übergebenen ElementContainer.
-    //	 *
-    //	 * @param egdeStartOrEndContainer
-    //	 * @param sourceDoc
-    //	 * 			Haupt- oder Teilmodell, aus dem das Element und die Kanten übernommen werden sollen
-    //	 * @param select
-    //	 * 			wenn <code>true</code> sind alle neuen Kanten- und Element-Container nach dieser Aktion selektiert (zusätzlich
-    //	 * 			zur ursprünglichen Selektion)
-    //	 * @param pid
-    //	 */
-    //	public void createEdgeContainer(ElementContainer egdeStartOrEndContainer, GraphDocument sourceDoc, boolean select, int pid) {
-    //
-    //		Diese Version der Funktion funktioniert nicht richtig -> es werdfen keine Kanten auf dem Layer hinzugefügt -> die alte Version wieder eingebaut
-    //
-    //		start_transaction(pid, false);
-    //		//wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
-    //		if ((egdeStartOrEndContainer != null) && (!egdeStartOrEndContainer.getElement().isUnique())) {
-    //			//für alle Kanten des Elements
-    //			for (Edge ka : egdeStartOrEndContainer.getElement().getEdges()) {
-    //				ElementContainer edgeCont = ka.getContainer(this);
-    //
-    //				//wenn die Edge nicht bereits in diesem Szenario vorkommt
-    //				if (edgeCont != null) {
-    //					//bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
-    //					if (ka instanceof Composition)
-    //						updateSlaveContainers((Composition)ka, sourceDoc);
-    //					//wenn Start und End-Element der Edge einen Container in diesem Szenario haben
-    //					if ((endsAreMine(ka))) {
-    //						//hole den Container der Edge aus dem Quelldokument
-    //						EdgeContainer oldKC = (EdgeContainer)ka.getContainer(sourceDoc);
-    //						//wenn es keinen gibt, hole den Container aus dem Hauptmodell
-    //						if (oldKC == null)
-    //							oldKC = (EdgeContainer)ka.getContainer(sourceDoc.getCollection().getGraphDocument());
-    //						//füge eine Kopie des Edge-Containers in dieses Szenario ein
-    //						edgeCont = (EdgeContainer)addContainerCopy(oldKC);
-    //						if (edgeCont == null)
-    //							continue;
-    //						edgeCont.refreshText();
-    //						if (select)
-    //							addToSelection(edgeCont, pid);
-    //					}
-    //				}
-    //			}
-    //		}
-    //		finish_transaction(pid, false);
-    //		distributeEvent(DATA_CHANGED);
-    //	}
-
     /**
      * Erzeugt alle Kanten für den übergebenen ElementContainer.
      *
