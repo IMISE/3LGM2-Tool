@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
@@ -35,6 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -240,8 +242,74 @@ public final class ModelConstants {
 
     public static final Set<Class<? extends ModelElement>> ELEMENTS_WITH_NAME_EXTENSIONS = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, ALL_ELEMENTS);
 
-    public static final boolean hasSortedEdgesToPaintable(final Class<? extends ModelElement> elementClass) {
-        return getGraphViewDefinition().hasSortedEdgeClassesToPaintable(elementClass);
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse in der Grafik als Knoten oder Kante gezeichnet wird.
+     *
+     * @param elementClass
+     * @return
+     */
+    public static final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
+        return getGraphViewDefinition().isPaintable(elementClass);
+    }
+
+    private static Set<Class<? extends ModelElement>> elementClassesWithLayout;
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse ein LAyout besitzt (und damit nicht unique ist).
+     * Das trifft auf alle Elemenklassen zu, die paintable sind oder ihre Kantennummern an paintable-Elemente schreiben.
+     * Auérdem brauchen die Layer-Knoten ein Layout.
+     *
+     * @param elementClass
+     * @return
+     */
+    public static final boolean hasLayout(final Class<? extends ModelElement> elementClass) {
+        if (elementClassesWithLayout == null) {
+            ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithLayoutBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
+            for (Class<? extends ModelElement> clazz : ALL_NODES) {
+                if (getGraphViewDefinition().isPaintable(clazz)) {
+                    elementClassesWithLayoutBuilder.add(clazz);
+                    continue;
+                }
+                if (hasSortedEdgeClassesToPaintable(clazz)) {
+                    elementClassesWithLayoutBuilder.add(clazz);
+                    continue;
+                }
+            }
+            elementClassesWithLayoutBuilder.add(LayerKnoten.class);
+            elementClassesWithLayout = elementClassesWithLayoutBuilder.build();
+        }
+        return elementClassesWithLayout.contains(elementClass);
+    }
+
+    private static Set<Class<? extends ModelElement>> elementClassesWithSortedEdges;
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse Kanten bei denen die Reihenfolge relevant ist,
+     * zu anderen Elementarten hat, die selbst paintable sind. Wenn das der Fall ist, dann kann an diese
+     * anderen Elemente die Nummer(n) der Kanten geschrieben werden. In welcher Farbe das geschieht, bestimmt
+     * das Layout des Ausgangselementes.
+     *
+     * @return
+     */
+    public static final boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
+        if (elementClassesWithSortedEdges == null) {
+            ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithSortedEdgesBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
+            for (Class<? extends ModelElement> clazz : ALL_NODES) {
+                Set<Class<? extends Edge>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(clazz);
+                if (sortedEdgeClasses != null) {
+                    GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
+                    for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
+                        Class<? extends ModelElement> other = getOther(edgeClass, clazz);
+                        if (graphViewDefinition.isPaintable(other)) {
+                            elementClassesWithSortedEdgesBuilder.add(clazz);
+                            break;
+                        }
+                    }
+                }
+            }
+            elementClassesWithSortedEdges = elementClassesWithSortedEdgesBuilder.build();
+        }
+        return elementClassesWithSortedEdges.contains(elementClass);
     }
 
     /**
@@ -555,16 +623,6 @@ public final class ModelConstants {
             return isUnique(Edge.getStartClass(edgeClass)) || isUnique(Edge.getEndClass(edgeClass));
         }
         return UNIQUE_NODES.contains(elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse in der Grafik darstellbar ist.
-     *
-     * @param elementClass
-     * @return
-     */
-    public static final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
-        return getGraphViewDefinition().isPaintable(elementClass);
     }
 
     /**

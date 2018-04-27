@@ -61,7 +61,7 @@ public final class NodeRenderer {
     /////////////////////////////////////////
 
     public static final void render(final Graphics g, final NodeContainer kc, final GraphDocument doc) {
-        if (kc.isUnpaintable() || !kc.isVisible()) {
+        if (!kc.getElement().isPaintable() || !kc.isVisible()) {
             return;
         }
 
@@ -490,7 +490,7 @@ public final class NodeRenderer {
      * @return <code>int</code>-Code des Grenzbereiches
      */
     public static final int getResizeCursor(final NodeContainer container, final int xi, final int yi) {
-        if (container.getKnoten().isUnpaintable()) {
+        if (!container.getElement().isPaintable()) {
             return Cursor.DEFAULT_CURSOR;
         }
 

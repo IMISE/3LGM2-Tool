@@ -562,7 +562,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     addMenuItem(menu, show_configs);
                     addMenuItem(menu, hide_configs);
                 }
-                if (me.isPaintable() || ModelConstants.hasSortedEdgesToPaintable(me.getClass())) {
+                if (ModelConstants.hasLayout(me.getClass())) {
                     menu.addSeparator();
                     if (!ec.isVisible()) {
                         menu.add(set_visible);

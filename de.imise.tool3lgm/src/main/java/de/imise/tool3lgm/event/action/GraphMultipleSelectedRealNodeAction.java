@@ -28,7 +28,7 @@ public class GraphMultipleSelectedRealNodeAction extends GraphFrameAction {
         int selected = 0;
         for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
             //TODO: testen, ob visible hier reicht
-            if (!ec.isUnpaintable() && ec.isVisible()) {
+            if (ec.getElement().isPaintable() && ec.isVisible()) {
                 if (++selected == 2) {
                     return true;
                 }

@@ -64,7 +64,7 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
             ImageIcon icon = container.getTreeIcon();
             if (icon == null) {
                 ModelElement me = container.getElement();
-                GraphElementLayout.SHAPE form = me.isUnpaintable() ? null : doc.getMapping().getStandardForm(container);
+                GraphElementLayout.SHAPE form = me.isPaintable() ? doc.getMapping().getStandardForm(container) : null;
                 if (form != null) {
                     switch (form) {
                     case rechteck:

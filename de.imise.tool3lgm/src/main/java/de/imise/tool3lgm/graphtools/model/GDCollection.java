@@ -107,7 +107,6 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -487,8 +486,7 @@ public final class GDCollection extends UserFieldTarget {
             if (dialogPosition == null) {
                 dialogPosition = new Point(100, 100);
             }
-            GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
-            boolean showColorChooser = graphViewDefinition.hasSortedEdgeClassesToPaintable(me.getClass());
+            boolean showColorChooser = ModelConstants.hasSortedEdgeClassesToPaintable(me.getClass());
             d.showDialog(getResString("name_eing"), me.toString(), dialogPosition.x, dialogPosition.y, showColorChooser);
             String inputString = d.getInputString();
             if (inputString == null) {

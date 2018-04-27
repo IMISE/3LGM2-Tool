@@ -2058,7 +2058,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void coordinateKnot(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
-        if (nc == null || nc.isUnpaintable()) {
+        if (nc == null || !nc.getElement().isPaintable()) {
             return;
         }
         start_transaction(pid);
@@ -2168,7 +2168,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public boolean isAlignable() {
         //Mehrfach selektierte Node, wobei der zuletzt selektierte ein richtiger Node sein muss (also
         //kein Knickpunkt) und der zuletzt selektierte Node zeichenbar sein muss
-        return isMultipleNodeSelection() && getLastSelected() instanceof NodeContainer && !getLastSelected().isUnpaintable();
+        if (!isMultipleNodeSelection()) {
+            return false;
+        }
+        ElementContainer lastSelected = getLastSelected();
+        return lastSelected instanceof NodeContainer && lastSelected.getElement().isPaintable();
     }
 
     /**
@@ -2678,7 +2682,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         deselectAll(true);
         //alle Node im angegebenen Bereich selektieren
         for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getKnoten()) {
-            if (kn.getElement().isUnpaintable()) {
+            if (!kn.getElement().isPaintable()) {
                 continue;
             }
             if (kn.getX() < right_x && kn.getX() > left_x && kn.getY() < right_y && kn.getY() > left_y && !kn.isSelected()) {
@@ -2689,14 +2693,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (EdgeContainer ka : layer[gdcoll.getActiveLayer()].getKanten()) {
             ElementContainer start = ka.getEdge().getStart().getContainer(this);
             ElementContainer end = ka.getEdge().getEnd().getContainer(this);
-            if (start == null || start.getElement().isUnpaintable()) {
+            if (start == null || !start.getElement().isPaintable()) {
                 continue;
             }
-
-            if (end == null || end.getElement().isUnpaintable()) {
+            if (end == null || !end.getElement().isPaintable()) {
                 continue;
             }
-
             if (start.getX() < right_x && start.getX() > left_x && start.getY() < right_y && start.getY() > left_y && end.getX() < right_x && end.getX() > left_x && end.getY() < right_y && end.getY() > left_y && !ka.isSelected()) {
                 addToSelection(ka, PID);
             }
@@ -3369,7 +3371,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (Edge edge : me.getEdges()) {
             if (edge instanceof CompositionEdge) {
                 ModelElement slave = ((CompositionEdge) edge).getSlave();
-                if (slave != me && !slave.isUnpaintable()) {
+                if (slave != me && slave.isPaintable()) {
                     wieviele++;
                 }
             }

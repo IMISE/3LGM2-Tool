@@ -18,10 +18,10 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -565,31 +565,46 @@ public class EdgeContainer extends ElementContainer {
      * @return
      */
     public boolean isVisible(final boolean createSurrogates, final boolean ignoreOverlapping) {
-        ModelElement me1 = getEdge().getStart();
-        ModelElement me2 = getEdge().getEnd();
-        if (me1 == null || me2 == null) {
+        Edge edge = getEdge();
+        ModelElement me1 = edge.getStart();
+        if (me1 == null) {
             return false;
         }
-
+        ModelElement me2 = edge.getEnd();
+        if (me2 == null) {
+            return false;
+        }
         ElementContainer kc1 = me1.getContainer(doc);
+        if (kc1 == null) {
+            return false;
+        }
         ElementContainer kc2 = me2.getContainer(doc);
-        if (kc1 == null || kc2 == null || kc1.isUnpaintable() || kc2.isUnpaintable() || kc1.getElement().layerFor() != kc2.getElement().layerFor()) {
+        if (kc2 == null) {
+            return false;
+        }
+        ModelElement k1 = kc1.getElement();
+        if (!k1.isPaintable()) {
+            return false;
+        }
+        ModelElement k2 = kc1.getElement();
+        if (!k2.isPaintable()) {
+            return false;
+        }
+        if (k1.layerFor() != k2.layerFor()) {
             return false;
         }
         if (!kc1.isVisible() || !kc2.isVisible()) {
             Class<? extends ModelElement> startClass = me1.getClass();
-            Class<? extends ModelElement> endClass = me1.getClass();
+            Class<? extends ModelElement> endClass = me2.getClass();
             //bei Bausteinschnittsellen sollen keine surrogates gemalt werden. Vorher stand hier bei der 2. Bedingung: !(me instanceof KommBeziehung)
             if (createSurrogates && !(ModelConstants.isSlaveType(startClass) && ModelConstants.isSlaveType(endClass))) {
                 createSurrogateContainers(kc1, kc2);
             }
             return false;
         }
-
         if (!ignoreOverlapping && isOverLapping()) {
             return false;
         }
-
         return true;
     }
 

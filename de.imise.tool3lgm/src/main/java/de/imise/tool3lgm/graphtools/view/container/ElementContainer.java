@@ -352,7 +352,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      */
     @Override
     public String toString() {
-        return !me.isUnpaintable() && isVisible() && doc instanceof Szenario ? me.toString() : getResString("ausgebl") + " " + me.toString();
+        return me.isPaintable() && isVisible() && doc instanceof Szenario ? me.toString() : getResString("ausgebl") + " " + me.toString();
     }
 
     /* -------- GraphElementLayout - Funktionen aus dem ModelElement -------------- */
@@ -805,7 +805,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param addInNewLine
      */
     public void addSpecialInfoToThisContainer(final AdditionalLabelTextGenerator infoOwner, final String info, final int preferredPosition, final boolean addInNewLine) {
-        if (me.isUnpaintable()) {
+        if (!me.isPaintable()) {
             return;
         }
         if (infoOwner == null) {
@@ -863,7 +863,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * @param preferredPosition
      */
     public void removeSpecialInfoFromThisContainer(final Object infoOwner, final int preferredPosition) {
-        if (me.isUnpaintable()) {
+        if (!me.isPaintable()) {
             return;
         }
 
@@ -939,12 +939,5 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
 
     //	 ENDE Funktionen für Container als SpecialInfoTargets ///////////////////////////////////////////////////////
     //	##########################################################################################################
-
-    /**
-     * @return <code>true</code>, wenn das Element nicht gezeichnet wird, sonst <code>false</code>
-     */
-    public boolean isUnpaintable() {
-        return getElement().isUnpaintable();
-    }
 
 }

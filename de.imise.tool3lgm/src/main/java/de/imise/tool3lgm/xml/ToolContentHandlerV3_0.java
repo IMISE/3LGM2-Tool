@@ -723,7 +723,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("layout")) {
                 if (container != null) {
                     Class<? extends ModelElement> elementClass = container.getElement().getClass();
-                    if (ModelConstants.hasSortedEdgesToPaintable(elementClass)) {
+                    if (ModelConstants.hasSortedEdgeClassesToPaintable(elementClass)) {
                         container.checkTreeIcon();
                     }
                 }

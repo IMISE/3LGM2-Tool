@@ -762,7 +762,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         NodeContainer k;
         for (counter = lc.getKnotenCount() - 1; counter >= 0; counter--) {
             k = lc.getNodeContainer(counter);
-            if (k.getKnoten().isUnpaintable()) {
+            if (!k.getElement().isPaintable()) {
                 continue;
             }
             if (!k.isVisible()) {
@@ -791,7 +791,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         if (!UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS)) {
             for (counter = lc.getKnickpunkteCount() - 1; counter >= 0; counter--) {
                 BendpointContainer k = lc.getBendpointContainer(counter);
-                if (k.getElement().isUnpaintable()) {
+                if (!k.getElement().isPaintable()) {
                     continue;
                 }
                 if (!k.isVisible()) {
@@ -805,10 +805,19 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 EdgeContainer k = lc.getEdgeContainer(counter);
                 Edge ka = k.getEdge();
                 ModelElement s = ka.getStart();
+                if (!s.isPaintable()) {
+                    continue;
+                }
                 ModelElement e = ka.getEnd();
+                if (!e.isPaintable()) {
+                    continue;
+                }
                 ElementContainer sc = s.getContainer(szenario);
+                if (sc == null || !sc.isVisible()) {
+                    continue;
+                }
                 ElementContainer ec = e.getContainer(szenario);
-                if (s.isUnpaintable() || e.isUnpaintable() || sc == null || !sc.isVisible() || ec == null || !ec.isVisible()) {
+                if (ec == null || !ec.isVisible()) {
                     continue;
                 }
                 if (k.isInside(x, y)) {
@@ -818,7 +827,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         for (counter = lc.getKnotenCount() - 1; counter >= 0; counter--) {
             NodeContainer k = lc.getNodeContainer(counter);
-            if (k.getElement().isUnpaintable()) {
+            if (!k.getElement().isPaintable()) {
                 continue;
             }
             if (!k.isVisible()) {

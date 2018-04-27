@@ -738,9 +738,9 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public final boolean isUnpaintable() {
+    public final boolean isPaintable() {
         if (k1 != null && k2 != null) {
-            return k1.isUnpaintable() && k2.isUnpaintable();
+            return k1.isPaintable() && k2.isPaintable();
         }
         return false;
     }

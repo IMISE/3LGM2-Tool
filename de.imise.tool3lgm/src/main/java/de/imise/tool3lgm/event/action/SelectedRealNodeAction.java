@@ -27,7 +27,7 @@ public class SelectedRealNodeAction extends GraphDocumentAction {
         }
         for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
             //TODO: testen, ob visible hier reicht
-            if (!ec.isUnpaintable() && ec.isVisible() || ModelConstants.hasSortedEdgesToPaintable(ec.getElement().getClass())) {
+            if (ec.getElement().isPaintable() && ec.isVisible() || ModelConstants.hasSortedEdgeClassesToPaintable(ec.getElement().getClass())) {
                 return true;
             }
         }

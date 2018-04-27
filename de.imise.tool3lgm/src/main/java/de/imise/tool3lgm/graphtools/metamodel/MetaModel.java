@@ -266,13 +266,12 @@ public abstract class MetaModel {
      */
     public final Set<Class<? extends Node>> getUniqueNodes() {
         ImmutableSet.Builder<Class<? extends Node>> uniqueNodes = new ImmutableSet.Builder<>();
-        GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
         for (Class<? extends ModelElement> elementClass : getAllNodes()) {
             //keine abstrakten Klassen zu diesem Set hinzufügen
             if (!Modifier.isAbstract(elementClass.getModifiers())) {
                 //nur Knotenklassen nehmen (dort können auch Assoziationsklassen drin sein)
                 if (Node.class.isAssignableFrom(elementClass)) {
-                    if (!graphViewDefinition.hasLayout(elementClass)) {
+                    if (!ModelConstants.hasLayout(elementClass)) {
                         uniqueNodes.add(elementClass.asSubclass(Node.class));
                     }
                 }

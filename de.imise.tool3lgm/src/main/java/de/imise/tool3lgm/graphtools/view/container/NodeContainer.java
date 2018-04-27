@@ -124,7 +124,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         if (doc == null) {
             return;
         }
-        if (ModelConstants.getGraphViewDefinition().hasSortedEdgeClassesToPaintable(me.getClass())) {
+        if (ModelConstants.hasSortedEdgeClassesToPaintable(me.getClass())) {
             //			registerAsGraphDocumentListener();
             if (layout == null) {
                 layout = new GraphElementLayout();
@@ -166,11 +166,10 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     @Override
     public final void setLocation(final int x, final int y) {
-        if (me.isUnpaintable()) {
-            return;
+        if (layout != null) {
+            layout.x = x;
+            layout.y = y;
         }
-        layout.x = x;
-        layout.y = y;
     }
 
     /**
@@ -196,23 +195,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     @Override
     public int getX() {
-        if (me.isUnpaintable()) {
-            return 0;
-            //		if (me instanceof AufOrgKombination) {
-            //			AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
-            //			if (!(frame instanceof InternalGraphFrame))
-            //				return 0;
-            //			GraphDocument doc = frame.getGraphDocument();
-            //			if (doc != null) {
-            //				ArrayList<ElementContainer> aufg = me.getConnectedContainer(Aufgabe.class, doc);
-            //				if (aufg.size() > 0)
-            //					return ((NodeContainer) aufg.get(0)).getX();
-            //			}
-            //			return 0;
-            //		}
-        }
-
-        return layout.x;
+        return layout == null ? 0 : layout.x;
     }
 
     /**
@@ -222,23 +205,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     @Override
     public int getY() {
-        if (me.isUnpaintable()) {
-            return 0;
-            //		if (me instanceof AufOrgKombination) {
-            //			AbstractInternalFrame frame = Tool3lgm.tool.getActiveFrame();
-            //			if (!(frame instanceof InternalGraphFrame))
-            //				return 0;
-            //			GraphDocument doc = frame.getGraphDocument();
-            //			if (doc != null) {
-            //				ArrayList<ElementContainer> aufg = me.getConnectedContainer(Aufgabe.class, doc);
-            //				if (aufg.size() > 0)
-            //					return ((NodeContainer) aufg.get(0)).getY();
-            //			}
-            //			return 0;
-            //		}
-        }
-
-        return layout.y;
+        return layout == null ? 0 : layout.y;
     }
 
     @Override
@@ -251,7 +218,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @param ImageTable
      */
     public void setIcon(final String name, final Map<String, byte[]> ImageTable) {
-        if (me.isUnpaintable()) {
+        if (layout == null) {
             return;
         }
         if (name == null || name.trim().equals("") || name.equals("none") || name.equals("null")) {
@@ -278,10 +245,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @return
      */
     public String getIconString() {
-        if (me.isUnpaintable()) {
-            return null;
-        }
-        return layout.icon;
+        return layout == null ? null : layout.icon;
     }
 
     /**
@@ -291,10 +255,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     @Override
     public int getWidth() {
-        if (me.isUnpaintable()) {
-            return 0;
-        }
-        return layout.width;
+        return layout == null ? 0 : layout.width;
     }
 
     /**
@@ -304,10 +265,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     @Override
     public int getHeight() {
-        if (me.isUnpaintable()) {
-            return 0;
-        }
-        return layout.height;
+        return layout == null ? 0 : layout.height;
     }
 
     /**
@@ -336,7 +294,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     @Override
     public final void setSize(final int w, final int h) {
         //		System.err.println(w + " " + h);
-        if (me.isUnpaintable()) {
+        if (layout == null) {
             return;
         }
         if (w >= MIN_X_SIZE && w <= MAX_X_SIZE) {
@@ -358,7 +316,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @param h
      */
     public final void setSizeForButtons(final int w, final int h) {
-        if (me.isUnpaintable()) {
+        if (layout == null) {
             return;
         }
         layout.width = w;
@@ -527,13 +485,9 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     @Override
     public void refreshText() {
-        if (me.isUnpaintable()) {
-            return;
-        }
         if (layout == null) {
             return;
         }
-
         if (hideText()) {
             setText(null);
         } else {
@@ -544,7 +498,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     @Override
     public String toString() {
         String nameWithSzens = me.getNameWithSzens();
-        if (!me.isUnpaintable() && !isVisible() && doc instanceof Szenario) {
+        if (me.isPaintable() && !isVisible() && doc instanceof Szenario) {
             nameWithSzens = getResString("ausgebl") + " " + nameWithSzens;
         }
         if (additionalTextRightDownLines == null) {

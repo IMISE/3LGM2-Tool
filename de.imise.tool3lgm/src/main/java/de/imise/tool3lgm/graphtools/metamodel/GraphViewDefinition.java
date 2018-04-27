@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
-
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +10,6 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
-import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
@@ -65,38 +62,11 @@ public abstract class GraphViewDefinition {
         return allPaintableNodes.size();
     }
 
-    public final boolean hasLayout(final Class<? extends ModelElement> elementClass) {
-        if (isPaintable(elementClass)) {
-            return true;
-        }
-        if (LayerKnoten.class.isAssignableFrom(elementClass)) {
-            return true;
-        }
-        return hasSortedEdgeClassesToPaintable(elementClass);
-    }
-
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse Kanten bei denen die Reihenfolge relevant ist,
-     * zu anderen Elementarten hat, die selbst paintable sind. Wenn das der Fall ist, dann kann an diese
-     * anderen Elemente die Nummer(n) der Kanten geschrieben werden. In welcher Farbe das geschieht, bestimmt
-     * das Layout des Ausgangselementes.
+     * Liefert die MetaPfade, die als Interebenenbeziehungen dargestellt werden sollen
      *
      * @return
      */
-    public boolean hasSortedEdgeClassesToPaintable(final Class<? extends ModelElement> elementClass) {
-        Set<Class<? extends Edge>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(elementClass);
-        if (sortedEdgeClasses == null) {
-            return false;
-        }
-        for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
-            Class<? extends ModelElement> other = getOther(edgeClass, elementClass);
-            if (isPaintable(other)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     protected abstract MetaPath[] getConfigurationPaths();
 
     public MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {

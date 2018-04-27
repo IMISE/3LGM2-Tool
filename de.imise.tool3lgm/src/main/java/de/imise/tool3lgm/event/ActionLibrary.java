@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getGraphViewDefinition;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -799,7 +798,7 @@ public class ActionLibrary {
              * @return
              */
             private static final GraphFrameAction[] create_MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED_Actions() {
-                List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = getGraphViewDefinition().getHidableIfNotConnected();
+                List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = ModelConstants.getGraphViewDefinition().getHidableIfNotConnected();
                 if (hidableIfNotConnected == null || hidableIfNotConnected.isEmpty()) {
                     return null;
                 }

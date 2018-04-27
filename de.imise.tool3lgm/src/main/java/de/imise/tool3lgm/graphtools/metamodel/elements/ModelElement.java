@@ -395,7 +395,7 @@ public abstract class ModelElement extends UserFieldTarget {
                 }
             }
         }
-        if (isUnpaintable()) {
+        if (!isPaintable()) {
             return;
         }
         updateHTMLName();
@@ -1790,19 +1790,13 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * @return
      */
-    public boolean isUnpaintable() {
-        return !isPaintable();
-    }
-
-    /**
-     * @return
-     */
-    public final boolean isPaintable() {
+    public boolean isPaintable() {
+        //diese Funktion wird sehr oft augerufen und der Aufruf über getGraphViewDefinition() ist eine Stufe kürzer als direkt über die "Abkürzungsfunktion" in ModelConstants
         return ModelConstants.getGraphViewDefinition().isPaintable(getClass());
     }
 
     public final boolean hasLayout() {
-        return ModelConstants.getGraphViewDefinition().hasLayout(getClass());
+        return ModelConstants.hasLayout(getClass());
     }
 
     /**

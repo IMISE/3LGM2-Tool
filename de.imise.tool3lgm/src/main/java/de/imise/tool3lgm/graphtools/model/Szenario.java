@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.model;
 
 import java.util.Date;
 
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -55,7 +56,7 @@ public class Szenario extends LGMGraphDocument {
         }
 
         ModelElement me = ec.getElement();
-
+        Class<? extends ModelElement> meClass = me.getClass();
         ElementContainer retVal = me.getContainer(this);
         if (retVal != null) {
             return retVal;
@@ -69,13 +70,13 @@ public class Szenario extends LGMGraphDocument {
             retVal.setFont(null);
             retVal.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
             retVal.setForm(null);
-            retVal.setSize(mapping.getStandardWidth(retVal.getElement().getClass()), mapping.getStandardHeight(retVal.getElement().getClass()));
+            retVal.setSize(mapping.getStandardWidth(meClass), mapping.getStandardHeight(meClass));
         }
 
         retVal.setParent(null);
         int layernum = ((LayerContainer) ec.getParent()).getLayerNumber();
         layer[layernum].add(retVal);
-        if (retVal instanceof EdgeContainer && !retVal.getElement().isUnpaintable()) {
+        if (retVal instanceof EdgeContainer && ModelConstants.getGraphViewDefinition().isPaintable(meClass)) {
             for (BendpointContainer kpC : ((EdgeContainer) retVal).iterateBendpointContainers()) {
                 layer[layernum].add(kpC);
                 getCollection().addNodeToMainDoc(kpC, layernum);
