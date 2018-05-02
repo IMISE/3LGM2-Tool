@@ -3055,22 +3055,28 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (userFieldName == null || value == null) {
             return null;
         }
-        //first loop for nodes, second for edges
-        for (int i = 0; i < 2; i++) {
-            for (LayerContainer lc : layer) {
-                int elementCount = i == 0 ? lc.getNodeContainerCount() : lc.getEdgeContainerCount();
-                for (int c = 0; c < elementCount; c++) {
-                    ElementContainer ec = i == 0 ? lc.getNodeContainer(c) : lc.getEdgeContainer(c);
-                    ModelElement me = ec.getElement();
-                    UserFieldDefinitions ufd = getCollection().getUserFieldDefinitions();
-                    UserField uf = ufd.getUserField(me.getClass(), userFieldName);
-                    if (uf == null) {
-                        continue;
-                    }
-                    if (value.equals(me.getUserFieldInputValue(uf))) {
-                        return me;
-                    }
-                }
+        for (LayerContainer lc : layer) {
+            ModelElement me = findElementWithUserField(lc.getNodeContainersAlphabetical(), userFieldName, value);
+            if (me == null) {
+                me = findElementWithUserField(lc.getEdgeContainers(), userFieldName, value);
+            }
+            if (me != null) {
+                return me;
+            }
+        }
+        return null;
+    }
+
+    private ModelElement findElementWithUserField(final Iterable<? extends ElementContainer> elementContainers, final String userFieldName, final String value) {
+        for (ElementContainer ec : elementContainers) {
+            ModelElement me = ec.getElement();
+            UserFieldDefinitions ufd = getCollection().getUserFieldDefinitions();
+            UserField uf = ufd.getUserField(me.getClass(), userFieldName);
+            if (uf == null) {
+                continue;
+            }
+            if (value.equals(me.getUserFieldInputValue(uf))) {
+                return me;
             }
         }
         return null;
