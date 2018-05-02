@@ -14,6 +14,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -167,22 +168,32 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
+     * Zählt Alle Elemente der übergebenen Art. Die Klasse wird auf Idenittät geprüft, nicht auf Zuweisungskompatibilität.
+     *
      * @param elementClass
      * @return
      */
     public int countType(final Class<? extends ModelElement> elementClass) {
         int counter = 0;
-        if (Node.class.isAssignableFrom(elementClass)) {
-            for (int c = 0; c < getNodeContainerCount(); c++) {
-                if (getNodeContainer(c).getKnoten().getClass() == elementClass) {
-                    counter++;
+
+        if (ReflectionUtils.isAssignable(elementClass, Node.class)) {
+            counter += countType(alphabeticalNodeContainer, Node.class);
                 }
+        if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
+            counter += countType(edgeContainer, Edge.class);
             }
-        } else if (Edge.class.isAssignableFrom(elementClass)) {
-            for (int c = 0; c < getEdgesContainerCount(); c++) {
-                if (getEdgeContainer(c).getElement().getClass() == elementClass) {
-                    counter++;
+        if (ReflectionUtils.isAssignable(elementClass, Knickpunkt.class)) {
+            counter += countType(bendpointContainer, Knickpunkt.class);
                 }
+        return counter;
+    }
+
+    private static int countType(final Iterable<? extends ElementContainer> iterableContainers, final Class<? extends ModelElement> elementClass) {
+        int counter = 0;
+        for (ElementContainer nc : iterableContainers) {
+            ModelElement me = nc.getElement();
+            if (me.getClass() == elementClass) {
+                counter++;
             }
         }
         return counter;
