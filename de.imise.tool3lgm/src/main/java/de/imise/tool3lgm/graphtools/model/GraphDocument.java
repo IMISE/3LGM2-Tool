@@ -2738,18 +2738,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(PID, false);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
-            for (int c = 0; c < layer[i].getNodeContainerCount(); c++) {
-                addToSelection(layer[i].getNodeContainer(c), PID);
+            for (ElementContainer ec : layer[i].getNodeContainersAlphabetical()) {
+                gdcoll.addToSelection(ec);
             }
-            for (int c = 0; c < layer[i].getEdgesContainerCount(); c++) {
-                addToSelection(layer[i].getEdgeContainer(c), PID);
+            for (ElementContainer ec : layer[i].getEdgeContainers()) {
+                gdcoll.addToSelection(ec);
             }
-            for (int c = 0; c < layer[i].getBendpointContainerCount(); c++) {
-                addToSelection(layer[i].getBendpointContainer(c), PID);
+            for (ElementContainer ec : layer[i].getBendpointContainers()) {
+                gdcoll.addToSelection(ec);
             }
         }
         gdcoll.selectAllUniques();
-
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
     }
