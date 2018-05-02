@@ -1,8 +1,3 @@
-/*
- * Created on 15.06.2003
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package de.imise.tool3lgm.graphtools.view.container;
 
 import java.awt.BasicStroke;
@@ -33,9 +28,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 
 /**
- * @author Thomas
- *         To change the template for this generated type comment go to
- *         Window>Preferences>Java>Code Generation>Code and Comments
+ * @author Thomas (15.06.2003), AXS
  */
 public class LayerContainer extends ElementContainer {
 
@@ -75,7 +68,7 @@ public class LayerContainer extends ElementContainer {
     private List<BendpointContainer> bendpointContainer;
 
     /**
-     * sortElements enthaelt alle Node(Container), fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
+     * Liste aller NodeContainer, fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
      */
     private List<NodeContainer> numberedEdgesNodeContainer;
 
@@ -383,8 +376,7 @@ public class LayerContainer extends ElementContainer {
                 //kann man auch höher setzen
                 float dashWidth = 1.0f;
                 float dash[] = {
-                        dashWidth,
-                        rasterWidth - dashWidth
+                        dashWidth, rasterWidth - dashWidth
                 };
                 Stroke rasterStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0.0f, dash, 0.0f);
                 int diff = (int) dashWidth / 2;
@@ -619,8 +611,8 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * Sortiert die KantenContainer in kanten so um, dass ihre Reihenfolge für alle Node(Container)
-     * in sortKnot der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
+     * Sortiert die EdgeContainer in der Liste aller EdgeContainer so um, dass ihre Reihenfolge für alle NodeContainer
+     * mit Kanten, deren Reihenfolge eine Bedeutung hat, der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
      */
     public void sortEdges() {
         //fuer alle NodeContainer in numberedEdgesNodeContainer
