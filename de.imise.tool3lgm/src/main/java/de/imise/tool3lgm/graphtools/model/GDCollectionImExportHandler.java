@@ -107,7 +107,7 @@ public final class GDCollectionImExportHandler {
         LGMGraphDocument collectionMainDoc = sourceGDColl.getMainGraphDocument();
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = collectionMainDoc.getLayer(ModelConstants.LAYERS[i]);
-            size += lc.getNodeContainerCount() + lc.getEdgesContainerCount() + lc.getBendpointContainerCount();
+            size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();
         }
 
         /* ModellElemente, die kopiert werden müssen */
@@ -214,7 +214,7 @@ public final class GDCollectionImExportHandler {
             GraphDocument mainDoc = gdcoll.getMainGraphDocument();
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer lc = mainDoc.getLayer(ModelConstants.LAYERS[i]);
-                size += lc.getNodeContainerCount() + lc.getEdgesContainerCount() + lc.getBendpointContainerCount();
+                size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();
             }
             // hastStrings aller ModellElemente, die kopiert werden müssen
             List<ModelElement> elements = new ArrayList<>(size);

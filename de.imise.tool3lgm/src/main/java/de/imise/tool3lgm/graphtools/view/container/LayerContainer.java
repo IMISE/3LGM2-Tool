@@ -178,13 +178,13 @@ public class LayerContainer extends ElementContainer {
 
         if (ReflectionUtils.isAssignable(elementClass, Node.class)) {
             counter += countType(alphabeticalNodeContainer, Node.class);
-                }
+        }
         if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
             counter += countType(edgeContainer, Edge.class);
-            }
+        }
         if (ReflectionUtils.isAssignable(elementClass, Knickpunkt.class)) {
             counter += countType(bendpointContainer, Knickpunkt.class);
-                }
+        }
         return counter;
     }
 
@@ -724,15 +724,15 @@ public class LayerContainer extends ElementContainer {
     /**
      * @return
      */
-    public int getEdgesContainerCount() {
-        return edgeContainer.size();
+    public int getNodeContainerCount() {
+        return nodeContainer.size();
     }
 
     /**
      * @return
      */
-    public int getNodeContainerCount() {
-        return nodeContainer.size();
+    public int getEdgeContainerCount() {
+        return edgeContainer.size();
     }
 
     /**

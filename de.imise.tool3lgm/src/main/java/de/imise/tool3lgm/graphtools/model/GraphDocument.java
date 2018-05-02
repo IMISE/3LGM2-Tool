@@ -3058,7 +3058,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //first loop for nodes, second for edges
         for (int i = 0; i < 2; i++) {
             for (LayerContainer lc : layer) {
-                int elementCount = i == 0 ? lc.getNodeContainerCount() : lc.getEdgesContainerCount();
+                int elementCount = i == 0 ? lc.getNodeContainerCount() : lc.getEdgeContainerCount();
                 for (int c = 0; c < elementCount; c++) {
                     ElementContainer ec = i == 0 ? lc.getNodeContainer(c) : lc.getEdgeContainer(c);
                     ModelElement me = ec.getElement();

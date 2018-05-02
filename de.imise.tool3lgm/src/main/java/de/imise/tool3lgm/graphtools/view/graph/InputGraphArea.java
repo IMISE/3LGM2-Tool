@@ -801,7 +801,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     return k;
                 }
             }
-            for (counter = lc.getEdgesContainerCount() - 1; counter >= 0; counter--) {
+            for (counter = lc.getEdgeContainerCount() - 1; counter >= 0; counter--) {
                 EdgeContainer k = lc.getEdgeContainer(counter);
                 Edge ka = k.getEdge();
                 ModelElement s = ka.getStart();
