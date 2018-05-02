@@ -439,7 +439,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
 
             /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten */
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getKanten()) {
+                for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getEdgeContainers()) {
                     kc.getEdge().decodeHashStrings(doc);
                 }
             }

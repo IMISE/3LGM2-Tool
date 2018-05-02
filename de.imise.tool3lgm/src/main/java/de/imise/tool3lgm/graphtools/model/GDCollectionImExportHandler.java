@@ -107,7 +107,7 @@ public final class GDCollectionImExportHandler {
         LGMGraphDocument collectionMainDoc = sourceGDColl.getMainGraphDocument();
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = collectionMainDoc.getLayer(ModelConstants.LAYERS[i]);
-            size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
+            size += lc.getNodeContainerCount() + lc.getEdgesContainerCount() + lc.getBendpointContainerCount();
         }
 
         /* ModellElemente, die kopiert werden müssen */
@@ -144,7 +144,7 @@ public final class GDCollectionImExportHandler {
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer importLayerContainer = importDoc.getLayer(ModelConstants.LAYERS[i]);
                 newSzenario.getLayer(ModelConstants.LAYERS[i]).set3LGMLayout(importLayerContainer.get3LGMLayout());
-                for (NodeContainer importKC : importLayerContainer.getKnoten()) {
+                for (NodeContainer importKC : importLayerContainer.getNodeContainers()) {
                     ModelElement element = mainDoc.findKnotenCoded(importKC.getElement().getHashString());
                     ElementContainer container = element.createContainer(newSzenario);
                     container.set3LGMLayout(importKC.get3LGMLayout());
@@ -155,7 +155,7 @@ public final class GDCollectionImExportHandler {
                     container.refreshText();
                 }
 
-                for (EdgeContainer importKC : importLayerContainer.getKanten()) {
+                for (EdgeContainer importKC : importLayerContainer.getEdgeContainers()) {
                     ModelElement element = mainDoc.findKanteCoded(importKC.getElement().getHashString());
                     if (element == null) {
                         continue;
@@ -170,7 +170,7 @@ public final class GDCollectionImExportHandler {
                     container.refreshText();
                 }
 
-                for (BendpointContainer importKC : importLayerContainer.getKnickpunkte()) {
+                for (BendpointContainer importKC : importLayerContainer.getBendpointContainers()) {
                     ModelElement element = mainDoc.findKnickpunktCoded(importKC.getElement().getHashString());
                     EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Knickpunkt) element).getKantenHash());
                     if (kc == null) {
@@ -214,7 +214,7 @@ public final class GDCollectionImExportHandler {
             GraphDocument mainDoc = gdcoll.getMainGraphDocument();
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer lc = mainDoc.getLayer(ModelConstants.LAYERS[i]);
-                size += lc.getKnotenCount() + lc.getKantenCount() + lc.getKnickpunkteCount();
+                size += lc.getNodeContainerCount() + lc.getEdgesContainerCount() + lc.getBendpointContainerCount();
             }
             // hastStrings aller ModellElemente, die kopiert werden müssen
             List<ModelElement> elements = new ArrayList<>(size);

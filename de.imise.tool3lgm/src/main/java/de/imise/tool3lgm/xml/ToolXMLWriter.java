@@ -362,14 +362,14 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         } else {
             LGMGraphDocument doc = gdcoll.getMainGraphDocument();
             for (LayerContainer lc : doc.getLayers()) {
-                for (NodeContainer kc : lc.getKnoten()) {
+                for (NodeContainer kc : lc.getNodeContainers()) {
                     writeModelElement(kc.getElement());
                 }
                 doc.sortKanten();
-                for (EdgeContainer kc : lc.getKanten()) {
+                for (EdgeContainer kc : lc.getEdgeContainers()) {
                     writeModelElement(kc.getElement());
                 }
-                for (BendpointContainer kc : lc.getKnickpunkte()) {
+                for (BendpointContainer kc : lc.getBendpointContainers()) {
                     writeModelElement(kc.getElement());
                 }
             }
@@ -482,17 +482,17 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
             writeGraphElementLayout(null, lc.get3LGMLayout(), true);
-            for (NodeContainer kc : lc.getKnoten()) {
+            for (NodeContainer kc : lc.getNodeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }
             }
-            for (EdgeContainer kc : lc.getKanten()) {
+            for (EdgeContainer kc : lc.getEdgeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }
             }
-            for (BendpointContainer kc : lc.getKnickpunkte()) {
+            for (BendpointContainer kc : lc.getBendpointContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }

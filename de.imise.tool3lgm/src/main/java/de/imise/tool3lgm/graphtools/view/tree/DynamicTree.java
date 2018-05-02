@@ -486,7 +486,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             if (isInterLayer(ebene)) {
                 continue;
             }
-            for (NodeContainer nc : maindoc.getLayer(ebene).getKnotenAlphabetical()) {
+            for (NodeContainer nc : maindoc.getLayer(ebene).getNodeContainersAlphabetical()) {
                 ModelElement me = nc.getElement();
                 if (isEnableSubmodelBrowser) {
                     if (me.isUnique()) {

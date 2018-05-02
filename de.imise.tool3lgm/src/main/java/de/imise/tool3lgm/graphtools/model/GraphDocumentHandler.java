@@ -156,15 +156,15 @@ public class GraphDocumentHandler {
             List<List<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
             if (searchBendpoints) {
-                layerElements.add(lc.getKnickpunkte());
+                layerElements.add(lc.getBendpointContainers());
             }
             //Node, die keine Knickpunkte sind
             if (searchNodes) {
-                layerElements.add(alphabetical ? lc.getKnotenAlphabetical() : lc.getKnoten());
+                layerElements.add(alphabetical ? lc.getNodeContainersAlphabetical() : lc.getNodeContainers());
             }
             //Kanten
             if (searchEdges) {
-                layerElements.add(lc.getKanten());
+                layerElements.add(lc.getEdgeContainers());
             }
             //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
             for (List<? extends ElementContainer> ecList : layerElements) {

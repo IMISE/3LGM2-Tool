@@ -596,7 +596,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                     }
                 } else {
                     for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
-                        for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getKanten()) {
+                        for (EdgeContainer kc : doc.getLayer(ModelConstants.LAYERS[i]).getEdgeContainers()) {
                             kc.getEdge().decodeHashStrings(doc);
                         }
                     }

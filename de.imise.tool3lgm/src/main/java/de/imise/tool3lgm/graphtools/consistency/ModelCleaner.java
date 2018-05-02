@@ -94,9 +94,9 @@ public class ModelCleaner {
         // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
             for (LayerContainer lc : doc.getLayers()) {
-                List<ElementContainer> allEc = new ArrayList<>(lc.getKnoten());
-                allEc.addAll(lc.getKanten());
-                allEc.addAll(lc.getKnickpunkte());
+                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainers());
+                allEc.addAll(lc.getEdgeContainers());
+                allEc.addAll(lc.getBendpointContainers());
                 // für alle Container des aktuellen GraphDocuments
                 for (ElementContainer layerElemCont : allEc) {
                     ModelElement layerElemMe = layerElemCont.getElement();
@@ -152,21 +152,21 @@ public class ModelCleaner {
                     ElementContainer ec = me.getContainer(doc);
                     LayerContainer lc = doc.getLayer(me.layerFor());
                     if (me instanceof Knickpunkt) {
-                        if (!lc.getKnickpunkte().contains(ec)) {
+                        if (!lc.getBendpointContainers().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 4);
                             }
                             lc.add(ec);
                         }
                     } else if (me instanceof Node) {
-                        if (!lc.getKnoten().contains(ec)) {
+                        if (!lc.getNodeContainers().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 5);
                             }
                             lc.add(ec);
                         }
                     } else if (me instanceof Edge) {
-                        if (!lc.getKanten().contains(ec)) {
+                        if (!lc.getEdgeContainers().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 6);
                             }
@@ -186,7 +186,7 @@ public class ModelCleaner {
         allDocs.add(mainDoc);
         for (GraphDocument doc : allDocs) {
             for (LayerContainer lc : doc.getLayers()) {
-                List<BendpointContainer> benpoints = lc.getKnickpunkte();
+                List<BendpointContainer> benpoints = lc.getBendpointContainers();
                 for (int i = benpoints.size() - 1; i >= 0; i--) {
                     boolean ok = true;
                     BendpointContainer bpc = benpoints.get(i);
@@ -256,13 +256,13 @@ public class ModelCleaner {
                 if (lc == null) {
                     break;
                 }
-                for (int j = lc.getKnotenCount() - 1; j >= 0; j--) {
+                for (int j = lc.getNodeContainerCount() - 1; j >= 0; j--) {
                     NodeContainer kc = lc.getNodeContainer(j);
                     if (kc.getKnoten() == null) {
                         gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
                     }
                 }
-                for (int j = lc.getKantenCount() - 1; j >= 0; j--) {
+                for (int j = lc.getEdgesContainerCount() - 1; j >= 0; j--) {
                     EdgeContainer kc = lc.getEdgeContainer(j);
                     Edge edge = kc.getEdge();
                     if (edge == null || edge.getStart() == null || edge.getEnd() == null || edge.getStart().getContainer(szen) == null || edge.getEnd().getContainer(szen) == null) {

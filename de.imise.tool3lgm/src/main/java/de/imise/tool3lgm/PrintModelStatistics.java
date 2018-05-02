@@ -51,21 +51,21 @@ public class PrintModelStatistics {
                 //Anzahl der ElementContainer der Modellelemente im Gesamtmodell hochzählen
                 for (GraphDocument doc : docs) {
                     for (LayerContainer lcc : doc.getLayers()) {
-                        for (ElementContainer layerEc : lcc.getKnickpunkte()) {
+                        for (ElementContainer layerEc : lcc.getBendpointContainers()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
                                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
                                 class2ContainerCountFromGraphDocuments.put(meClass, count);
                             }
                         }
-                        for (ElementContainer layerEc : lcc.getKnoten()) {
+                        for (ElementContainer layerEc : lcc.getNodeContainers()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
                                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
                                 class2ContainerCountFromGraphDocuments.put(meClass, count);
                             }
                         }
-                        for (ElementContainer layerEc : lcc.getKanten()) {
+                        for (ElementContainer layerEc : lcc.getEdgeContainers()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
                                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);

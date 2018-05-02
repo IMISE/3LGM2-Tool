@@ -760,7 +760,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         int counter;
         NodeContainer k;
-        for (counter = lc.getKnotenCount() - 1; counter >= 0; counter--) {
+        for (counter = lc.getNodeContainerCount() - 1; counter >= 0; counter--) {
             k = lc.getNodeContainer(counter);
             if (!k.getElement().isPaintable()) {
                 continue;
@@ -789,7 +789,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         int counter;
         if (!UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS)) {
-            for (counter = lc.getKnickpunkteCount() - 1; counter >= 0; counter--) {
+            for (counter = lc.getBendpointContainerCount() - 1; counter >= 0; counter--) {
                 BendpointContainer k = lc.getBendpointContainer(counter);
                 if (!k.getElement().isPaintable()) {
                     continue;
@@ -801,7 +801,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     return k;
                 }
             }
-            for (counter = lc.getKantenCount() - 1; counter >= 0; counter--) {
+            for (counter = lc.getEdgesContainerCount() - 1; counter >= 0; counter--) {
                 EdgeContainer k = lc.getEdgeContainer(counter);
                 Edge ka = k.getEdge();
                 ModelElement s = ka.getStart();
@@ -825,7 +825,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
             }
         }
-        for (counter = lc.getKnotenCount() - 1; counter >= 0; counter--) {
+        for (counter = lc.getNodeContainerCount() - 1; counter >= 0; counter--) {
             NodeContainer k = lc.getNodeContainer(counter);
             if (!k.getElement().isPaintable()) {
                 continue;

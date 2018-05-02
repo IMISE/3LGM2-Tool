@@ -42,12 +42,12 @@ public class LayerContainer extends ElementContainer {
     /**
      *
      */
-    private static BasicStroke dick = new BasicStroke((float) 3.0);
+    private static BasicStroke stroke_thick = new BasicStroke((float) 3.0);
 
     /**
      *
      */
-    private static BasicStroke duenn = new BasicStroke((float) 1.0);
+    private static BasicStroke stroke_thin = new BasicStroke((float) 1.0);
 
     /**
      *
@@ -180,13 +180,13 @@ public class LayerContainer extends ElementContainer {
     public int countType(final Class<? extends ModelElement> elementClass) {
         int counter = 0;
         if (Node.class.isAssignableFrom(elementClass)) {
-            for (int c = 0; c < getKnotenCount(); c++) {
+            for (int c = 0; c < getNodeContainerCount(); c++) {
                 if (getNodeContainer(c).getKnoten().getClass() == elementClass) {
                     counter++;
                 }
             }
         } else if (Edge.class.isAssignableFrom(elementClass)) {
-            for (int c = 0; c < getKantenCount(); c++) {
+            for (int c = 0; c < getEdgesContainerCount(); c++) {
                 if (getEdgeContainer(c).getElement().getClass() == elementClass) {
                     counter++;
                 }
@@ -357,9 +357,9 @@ public class LayerContainer extends ElementContainer {
             Graphics2D gc = (Graphics2D) g;
 
             if (this == doc.getActiveLayer() && paintState == PaintState.REGULAR) {
-                gc.setStroke(dick);
+                gc.setStroke(stroke_thick);
                 g.drawRect(-page_width / 2 + 1, -page_height / 2 + 1, page_width - 2, page_height - 2);
-                gc.setStroke(duenn);
+                gc.setStroke(stroke_thin);
             }
 
             if (UserProperties.is(BooleanProperty.OPTION_SHOW_RASTER) && paintState != PaintState.WEBEXPORT) {
@@ -622,7 +622,7 @@ public class LayerContainer extends ElementContainer {
      * Sortiert die KantenContainer in kanten so um, dass ihre Reihenfolge für alle Node(Container)
      * in sortKnot der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
      */
-    public void sortKanten() {
+    public void sortEdges() {
         //fuer alle NodeContainer in numberedEdgesNodeContainer
         for (NodeContainer kc : numberedEdgesNodeContainer) {
             //fuer jede seiner Kanten
@@ -656,28 +656,28 @@ public class LayerContainer extends ElementContainer {
     /**
      * @return
      */
-    public List<NodeContainer> getKnotenAlphabetical() {
+    public List<NodeContainer> getNodeContainersAlphabetical() {
         return alphabeticalNodeContainer;
     }
 
     /**
      * @return
      */
-    public List<NodeContainer> getKnoten() {
+    public List<NodeContainer> getNodeContainers() {
         return nodeContainer;
     }
 
     /**
      * @return
      */
-    public List<EdgeContainer> getKanten() {
+    public List<EdgeContainer> getEdgeContainers() {
         return edgeContainer;
     }
 
     /**
      * @return
      */
-    public List<BendpointContainer> getKnickpunkte() {
+    public List<BendpointContainer> getBendpointContainers() {
         return bendpointContainer;
     }
 
@@ -721,21 +721,21 @@ public class LayerContainer extends ElementContainer {
     /**
      * @return
      */
-    public int getKantenCount() {
+    public int getEdgesContainerCount() {
         return edgeContainer.size();
     }
 
     /**
      * @return
      */
-    public int getKnotenCount() {
+    public int getNodeContainerCount() {
         return nodeContainer.size();
     }
 
     /**
      * @return
      */
-    public int getKnickpunkteCount() {
+    public int getBendpointContainerCount() {
         return bendpointContainer.size();
     }
 

@@ -36,16 +36,16 @@ public class GDCollectionPrinter {
         appendln(doc.getClass().getSimpleName()).append(": ").append(doc);
         for (int layerIndex : ModelConstants.LAYERS) {
             LayerContainer lc = doc.getLayer(layerIndex);
-            appendln("Layer ", layerIndex, " Knoten: ", lc.getKnotenCount(), " Kanten: ", lc.getKantenCount(), " Knickpunkte: ", lc.getKnickpunkteCount());
+            appendln("Layer ", layerIndex, " Knoten: ", lc.getNodeContainerCount(), " Kanten: ", lc.getEdgesContainerCount(), " Knickpunkte: ", lc.getBendpointContainerCount());
             appendln("Knoten");
             increaseIndent();
-            for (NodeContainer nc : lc.getKnoten()) {
+            for (NodeContainer nc : lc.getNodeContainers()) {
                 appendElementContainer(nc);
             }
             decreaseIndent();
             appendln("Kanten");
             increaseIndent();
-            for (EdgeContainer ec : lc.getKanten()) {
+            for (EdgeContainer ec : lc.getEdgeContainers()) {
                 appendElementContainer(ec);
             }
             decreaseIndent();

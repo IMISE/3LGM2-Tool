@@ -448,7 +448,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         i.bottom = layerHeight / 2;
         for (int layer : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = szenario.getLayer(layer);
-            for (NodeContainer nc : lc.getKnoten()) {
+            for (NodeContainer nc : lc.getNodeContainers()) {
                 int x = nc.getX();
                 int wHalf = nc.getWidth() / 2;
                 int y = nc.getY();

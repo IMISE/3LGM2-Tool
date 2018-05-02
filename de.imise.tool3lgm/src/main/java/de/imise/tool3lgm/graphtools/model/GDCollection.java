@@ -360,7 +360,7 @@ public final class GDCollection extends UserFieldTarget {
         //bei allen Elementen, die mit dem zu löschenden Teilmodell verknüpft sind
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
         for (LayerContainer layer : doc.getLayers()) {
-            for (NodeContainer nc : layer.getKnoten()) {
+            for (NodeContainer nc : layer.getNodeContainers()) {
                 Node node = nc.getKnoten();
                 String associatedDoc = node.getAssociatedDoc();
                 if (associatedDoc != null && associatedDoc.equals(szenHash)) {
@@ -371,9 +371,9 @@ public final class GDCollection extends UserFieldTarget {
         //alle Elemente des Szenarios löschen -> das kann man dann auch wieder zurück nehmen
         List<ElementContainer> elementsToDelete = new ArrayList<>();
         for (LayerContainer layer : szen.getLayers()) {
-            elementsToDelete.addAll(layer.getKnickpunkte());
-            elementsToDelete.addAll(layer.getKanten());
-            elementsToDelete.addAll(layer.getKnoten());
+            elementsToDelete.addAll(layer.getBendpointContainers());
+            elementsToDelete.addAll(layer.getEdgeContainers());
+            elementsToDelete.addAll(layer.getNodeContainers());
         }
         removeContainerFromSubmodel(elementsToDelete, pid);
         szenarios.remove(szen);
@@ -1893,7 +1893,7 @@ public final class GDCollection extends UserFieldTarget {
     public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (LayerContainer lc : doc.getLayers()) {
-            for (NodeContainer nc : lc.getKnoten()) {
+            for (NodeContainer nc : lc.getNodeContainers()) {
                 Node node = nc.getKnoten();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(node)) {
@@ -1909,7 +1909,7 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-            for (EdgeContainer ec : lc.getKanten()) {
+            for (EdgeContainer ec : lc.getEdgeContainers()) {
                 Edge edge = ec.getEdge();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(edge)) {
@@ -1920,7 +1920,7 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-            for (BendpointContainer bc : lc.getKnickpunkte()) {
+            for (BendpointContainer bc : lc.getBendpointContainers()) {
                 Knickpunkt bendpoint = bc.getKnickpunktKnoten();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(bendpoint)) {
@@ -1964,7 +1964,7 @@ public final class GDCollection extends UserFieldTarget {
             userFields.add(userField);
         }
         if (me instanceof Edge) {
-            for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getKnickpunkte()) {
+            for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getBendpointContainers()) {
                 Knickpunkt kp = kpC.getKnickpunktKnoten();
                 String kantenHash = kp.getKantenHash();
                 if (kantenHash != null && kantenHash.equals(me.getHashString())) {
