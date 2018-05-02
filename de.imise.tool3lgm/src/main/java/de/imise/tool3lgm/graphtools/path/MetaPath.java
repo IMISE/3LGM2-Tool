@@ -310,6 +310,28 @@ public class MetaPath {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die Startklasse und die übergebene Klasse irgendwie in der
+     * Vererbungshierarchie zusammen hängen, also die eine Klasse die Oberklasse der anderen ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public boolean hasAssignableStartClass(final Class<? extends ModelElement> elementClass) {
+        return ReflectionUtils.isAssignable(startClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die Endklasse und die übergebene Klasse irgendwie in der
+     * Vererbungshierarchie zusammen hängen, also die eine Klasse die Oberklasse der anderen ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public boolean hasAssignableEndClass(final Class<? extends ModelElement> elementClass) {
+        return ReflectionUtils.isAssignable(endClass, elementClass);
+    }
+
+    /**
      * Liefert die Klasse des Endelementtyps dieses Pfades im ersten ElementarMetaPath
      *
      * @param edgeIndex Index der Edge im Elementarpfad, dessen Endklasse ermittelt werden soll
@@ -494,7 +516,48 @@ public class MetaPath {
      * @return
      */
     public boolean hasAssignableStartEndClass() {
-        return ReflectionUtils.isAssingable(startClass, endClass);
+        return ReflectionUtils.isAssignable(startClass, endClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn dieser Pfad die übergebene Kantenklasse enthält (und zwar genau diese).
+     *
+     * @param edgeClass
+     * @return
+     */
+    public boolean containsSameEdgeClass(final Class<? extends Edge> edgeClass) {
+        return containsEdgeClass(edgeClass, false);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn dieser Pfad eine Kantenklasse enthält, die Ober- oder Unterklasse der übergebenen Kantenklasse ist
+     *
+     * @param edgeClass
+     * @return
+     */
+    public boolean containsAssignableEdgeClass(final Class<? extends Edge> edgeClass) {
+        return containsEdgeClass(edgeClass, true);
+    }
+
+    private boolean containsEdgeClass(final Class<? extends Edge> edgeClass, final boolean checkAssignable) {
+        for (int i = 0; i < countPathes(); i++) {
+            Class<? extends Edge>[] subPath = associations[i];
+            for (int j = 0; j < subPath.length; j++) {
+                if (checkAssignable) {
+                    if (edgeClass.isAssignableFrom(subPath[j])) {
+                        return true;
+                    }
+                    if (subPath[j].isAssignableFrom(edgeClass)) {
+                        return true;
+                    }
+                } else {
+                    if (edgeClass == subPath[j]) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
