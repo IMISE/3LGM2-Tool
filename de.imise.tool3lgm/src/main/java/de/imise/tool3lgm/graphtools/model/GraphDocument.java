@@ -4419,7 +4419,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Ebene holen
             LayerContainer lc = document.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
-            List<List<? extends ElementContainer>> layerElements = new ArrayList<>();
+            List<Iterable<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
             if (clazz == Knickpunkt.class) {
                 layerElements.add(lc.getBendpointContainers());
@@ -4443,7 +4443,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 //wenn eine Unterklasse von ModelElement gesucht werden soll
             } else {
                 //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
-                for (List<? extends ElementContainer> ecList : layerElements) {
+                for (Iterable<? extends ElementContainer> ecList : layerElements) {
                     //für jede dieser ElementContainerlisten
                     for (ElementContainer ec : ecList) {
                         //wenn das ModelElement des Conatainers der gesuchten Klasse entspricht
