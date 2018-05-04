@@ -758,10 +758,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         if (lc == null) {
             return null;
         }
-        int counter;
-        NodeContainer k;
-        for (counter = lc.getNodeContainerCount() - 1; counter >= 0; counter--) {
-            k = lc.getNodeContainer(counter);
+        for (NodeContainer k : lc.getNodeContainersBackward()) {
             if (!k.getElement().isPaintable()) {
                 continue;
             }
@@ -801,8 +798,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     return k;
                 }
             }
-            for (counter = lc.getEdgeContainerCount() - 1; counter >= 0; counter--) {
-                EdgeContainer k = lc.getEdgeContainer(counter);
+            for (EdgeContainer k : lc.getEdgeContainersBackward()) {
                 Edge ka = k.getEdge();
                 ModelElement s = ka.getStart();
                 if (!s.isPaintable()) {
@@ -825,8 +821,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
             }
         }
-        for (counter = lc.getNodeContainerCount() - 1; counter >= 0; counter--) {
-            NodeContainer k = lc.getNodeContainer(counter);
+        for (NodeContainer k : lc.getNodeContainersBackward()) {
             if (!k.getElement().isPaintable()) {
                 continue;
             }
