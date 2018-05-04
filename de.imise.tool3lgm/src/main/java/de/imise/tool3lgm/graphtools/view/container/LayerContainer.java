@@ -178,13 +178,13 @@ public class LayerContainer extends ElementContainer {
         int counter = 0;
 
         if (ReflectionUtils.isAssignable(elementClass, Node.class)) {
-            counter += countType(alphabeticalNodeContainers, Node.class);
+            counter += countType(treeNodeContainers, elementClass);
         }
         if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
-            counter += countType(edgeContainers, Edge.class);
+            counter += countType(edgeContainers, elementClass);
         }
         if (ReflectionUtils.isAssignable(elementClass, Knickpunkt.class)) {
-            counter += countType(bendpointContainers, Knickpunkt.class);
+            counter += countType(bendpointContainers, elementClass);
         }
         return counter;
     }
