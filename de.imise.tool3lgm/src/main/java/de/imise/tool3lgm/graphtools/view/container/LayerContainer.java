@@ -27,6 +27,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author Thomas (15.06.2003), AXS
@@ -684,12 +685,28 @@ public class LayerContainer extends ElementContainer {
         return bendpointContainer;
     }
 
+    public Iterable<NodeContainer> getNodeContainer() {
+        return () -> nodeContainer.listIterator();
+    }
+
+    public Iterable<NodeContainer> getNodeContainersBackward() {
+        return CollectionUtils.getBackwardIterable(nodeContainer);
+    }
+
+    public Iterable<EdgeContainer> getEdgeContainer() {
+        return () -> edgeContainer.listIterator();
+    }
+
+    public Iterable<EdgeContainer> getEdgeContainersBackward() {
+        return CollectionUtils.getBackwardIterable(edgeContainer);
+    }
+
     /**
      * @param i
      * @return
      */
     public NodeContainer getNodeContainer(final int i) {
-        return nodeContainer.get(i);
+        return getNodeContainersAlphabetical().get(i);
     }
 
     /**
