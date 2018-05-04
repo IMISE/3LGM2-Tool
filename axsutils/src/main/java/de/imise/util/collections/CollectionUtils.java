@@ -6,12 +6,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
+import de.imise.util.Sys;
 
 /**
  * Stellt Funktionen für Objektsammlungen bereit, die <code>Arrays</code> und <code>Collections</code> nicht bieten.
@@ -787,6 +790,64 @@ public abstract class CollectionUtils {
         return getCommonIterable(build);
     }
 
+    /**
+     * Liefert ein Iterable-Objekt, das rückwärts durch die gegebene Liste iteriert.
+     *
+     * @param list
+     * @return
+     */
+    public static final <T> Iterable<T> getBackwardIterable(final List<T> list) {
+        return () -> new ListIterator<T>() {
+
+            private final ListIterator<T> originalIterator = list.listIterator(list.size());
+
+            @Override
+            public boolean hasNext() {
+                return originalIterator.hasPrevious();
+            }
+
+            @Override
+            public T next() {
+                return originalIterator.previous();
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return originalIterator.hasNext();
+            }
+
+            @Override
+            public T previous() {
+                return originalIterator.previous();
+            }
+
+            @Override
+            public int nextIndex() {
+                return originalIterator.previousIndex();
+            }
+
+            @Override
+            public int previousIndex() {
+                return originalIterator.nextIndex();
+            }
+
+            @Override
+            public void remove() {
+                originalIterator.remove();
+            }
+
+            @Override
+            public void set(final T e) {
+                originalIterator.set(e);
+            }
+
+            @Override
+            public void add(final T e) {
+                originalIterator.add(e);
+            }
+        };
+    }
+
     private enum MapKey {
         ONE,
         TWO,
@@ -830,11 +891,11 @@ public abstract class CollectionUtils {
         ints.add(new Integer(1));
         ints.add(new Integer(2));
         ints.add(new Integer(3));
+        List<Object> empty = new ArrayList<>();
         List<?>[] lists = {
-                strings,
-                ints
+                strings, empty, ints
         };
-        for (Object o : getCommonIterable(strings, ints)) {
+        for (Object o : getCommonIterable(strings, empty, ints)) {
             System.err.println(o);
         }
         for (Object o : getCommonIterable(lists)) {
@@ -843,7 +904,59 @@ public abstract class CollectionUtils {
     }
 
     public static void main(final String[] args) {
-        testMapIterable();
+        testCommonIterable();
+        //        Sys.err1(new CollectionUtils.Sub(500).clone().toString());
+    }
+
+    public static class Super implements Cloneable {
+
+        protected boolean isSuper = true;
+
+        protected Map<String, String> map = new HashMap<>();
+
+        public Super() {
+            map.put("Papa", "Alex");
+        }
+
+        @Override
+        protected Super clone() {
+            Super s;
+            try {
+                s = (Super) super.clone();
+            } catch (Exception e) {
+                Sys.err1("Fehler bei Super" + e);
+                return null;
+            }
+            return s;
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " isSuper=" + isSuper + " " + map.keySet().iterator().next() + " -> " + map.get(map.keySet().iterator().next());
+        }
+    }
+
+    public static class Sub extends Super {
+
+        public int i = 0;
+
+        public Sub(final int i) {
+            this.i = i;
+        }
+
+        @Override
+        protected Sub clone() {
+            Sub s = (Sub) super.clone();
+            //            s.map = (HashMap<String, String>) ((HashMap<String, String>) map).clone();
+            s.map = new HashMap<>(map);
+            return s;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString() + " i=" + i;
+        }
+
     }
 
 }
